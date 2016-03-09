@@ -30,6 +30,7 @@ namespace MoreRain
 
 
         [Subscribe]
+        //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
         public void InitializeCallback(InitializeEvent @event)
         {
             var configLocation = Path.Combine(PathOnDisk, "Config.json");
@@ -37,7 +38,6 @@ namespace MoreRain
             {
                 Console.WriteLine("The config file for MoreRain was not found, guess I'll create it...");
                 ModConfig = new Config();
-                //ModConfig.EnableDiagonalMovementSpeedFix = true;
                 ModConfig.RainChance = 30;
                 ModConfig.ThunderChance = 10;
                 File.WriteAllBytes(configLocation, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ModConfig)));
@@ -68,13 +68,12 @@ namespace MoreRain
 
             if (randomNumber <= ModConfig.RainChance) //if the random variable is less than or equal to the chance for rain.
             {
-                //@event.Root.ChanceToRainTomorrow=ModConfig.RainChance*100;
+           
                 @event.Root.WeatherForTomorrow=weather_rain;
                      Console.WriteLine("It will rain tomorrow.");
                     }
                     else
                     {
-                // @event.Root.ChanceToRainTomorrow = 0;//sets sunny weather tomorrow
                 @event.Root.WeatherForTomorrow = weather_sunny;
                 Console.WriteLine("It will not rain tomorrow.");
                     }
@@ -92,7 +91,6 @@ namespace MoreRain
                         }
                     }
             Console.WriteLine("RainMod has updated.");
-           // RainUpdate = true;
         }
                 
         }
@@ -100,7 +98,6 @@ namespace MoreRain
 
         public class Config
         {
-            //public bool EnableDiagonalMovementSpeedFix { get; set; }
             public int RainChance { get; set; }
             public int ThunderChance { get; set; }
         }
