@@ -36,6 +36,7 @@ namespace MoreRain
             var configLocation = Path.Combine(PathOnDisk, "Config.json");
             if (!File.Exists(configLocation))
             {
+                
                 Console.WriteLine("The config file for MoreRain was not found, guess I'll create it...");
                 ModConfig = new Config();
                 ModConfig.RainChance = 30;
@@ -55,13 +56,13 @@ namespace MoreRain
         }
 
         [Subscribe]
-        public void UpdateCallback(Storm.StardewValley.Event.NewDayEvent @event)
+        public void UpdateCallback(Storm.StardewValley.Event.BeforeNewDayEvent @event)
         {
-            
-          //  Console.WriteLine(ModConfig.RainChance);
-          // Console.WriteLine(ModConfig.ThunderChance);
-           
-                Random random = new Random();
+           // Logging.LogToFile("THIS IS A SUPER LARGE TEST");
+            //  Console.WriteLine(ModConfig.RainChance);
+            // Console.WriteLine(ModConfig.ThunderChance);
+
+            Random random = new Random();
                 int randomNumber = random.Next(0, 100); //sets ran variable to some num between 0 and 100
                 Random thunder_random = new Random();
                 int thunder_randomNumber = random.Next(0, 100);
