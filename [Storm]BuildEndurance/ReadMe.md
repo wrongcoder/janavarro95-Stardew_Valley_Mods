@@ -8,7 +8,7 @@ Ways to increase maximum stamina:
 
 2. Eating Food.
 
-3.Sleeping!
+3. Sleeping!
 
 I'm up to a few more suggestions as well that can add to this list.
 
