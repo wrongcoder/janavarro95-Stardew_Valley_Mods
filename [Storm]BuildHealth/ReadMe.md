@@ -18,4 +18,4 @@ All of the can be set up/edited in BuildHealth_Config.tx. If you want to increas
 
 All data values currently associated with the character can also be change around with BuildHealth_data.txt
 
-NOTE! If at any time you want to remove/reverse the properties set by this mod, open up the BuildHealth_data.txt file and set the value associated with reseting the mod data to true! This will revert the player's max health to the value initially stored when the mod was installed/ the value associate with old health.
+NOTE! If at any time you want to remove/reverse the properties set by this mod, open up the BuildHealth_data.txt file and set the value associated with resetting the mod data to true! This will revert the player's max health to the value initially stored when the mod was installed/ the value associate with old health.
