@@ -2,7 +2,7 @@
 
 -Initial Release
 
-This is the BuildEndurance mod, which can increase your max stamina in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp! points, your max stamina will increase
+This is the BuildEndurance mod, which can increase your max stamina in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp points, your max stamina will increase!
 
 Ways to increase maximum stamina:
 
