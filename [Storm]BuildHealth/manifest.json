@@ -1,0 +1,8 @@
+{
+    "displayName": "[Storm]BuildHealth",
+    "author": "Alpha_Omegasis",
+    "version": "0.0.0.1",
+    "description": "Allows you to increase your max Health by doing different tasks.",
+
+    "assemblyFileName": "Storm_BuildHealth.dll"
+}

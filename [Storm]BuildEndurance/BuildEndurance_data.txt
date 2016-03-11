@@ -1,0 +1,20 @@
+Player: Build Endurance Data. Modification can cause errors. Edit at your own risk.
+====================================================================================
+Player Current Level:
+1
+Player Current XP:
+10
+Xp to next Level:
+23
+Initial Stam Bonus:
+0
+Additional Stam Bonus:
+1
+=======================================================================================
+RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.
+False
+OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.
+392
+
+
+

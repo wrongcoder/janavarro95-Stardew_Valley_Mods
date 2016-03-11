@@ -1,0 +1,20 @@
+Player: Build Health Data. Modification can cause errors. Edit at your own risk.
+====================================================================================
+Player Current Level:
+1
+Player Current XP:
+10
+Xp to next Level:
+23
+Initial health Bonus:
+0
+Additional health Bonus:
+1
+=======================================================================================
+RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.
+False
+OLD health AMOUNT: This is the initial value of the Player's health before this mod took over.
+119
+
+
+
