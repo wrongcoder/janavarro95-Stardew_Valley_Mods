@@ -2,7 +2,7 @@
 
 -Initial Release
 
-This is the BuildHealth mod, which can increase your max health in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp points, your max health will increase
+This is the BuildHealth mod, which can increase your max health in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp points, your max health will increase!
 
 Ways to increase maximum health
 
