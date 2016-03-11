@@ -1,4 +1,6 @@
-[Storm]MoreRain -v0.0.2 3/9/16 4:56 PM PST -Updated to more recent version of Storm API
+[Storm]BuildEndurance -v0.0.1 3/10/16 7:45 PM PST
+
+-Initial Release
 
 This is the BuildEndurance mod, which can increase your max stamina in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp! points, your max stamina will increase
 
