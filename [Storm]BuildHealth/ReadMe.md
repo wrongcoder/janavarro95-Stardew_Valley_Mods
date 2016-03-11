@@ -14,7 +14,7 @@ Ways to increase maximum health
 
 I'm up to a few more suggestions as well that can add to this list.
 
-All of the can be set up/edited in BuildHealth_Config.tx. If you want to increase/decrease any of the values such as the xp to level up, the maximum level, or even the amount of health you gain upon level up can be found here.
+All of the data can be set up/edited in BuildHealth_Config.tx. If you want to increase/decrease any of the values such as the xp to level up, the maximum level, or even the amount of health you gain upon level up can be found here.
 
 All data values currently associated with the character can also be change around with BuildHealth_data.txt
 
