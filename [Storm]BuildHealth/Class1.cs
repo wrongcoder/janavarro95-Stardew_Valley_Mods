@@ -107,10 +107,10 @@ namespace BuildHealth
             if (data_clear_mod_effects == true)
             {
                 player.MaxHealth = data_old_health;
-                data_xp_nextlvl = 0;
-                data_xp_current = 0;
+                data_xp_nextlvl = ModConfig.xp_nextlvl;
+                data_xp_current = ModConfig.xp_current;
                 data_health_bonus_acumulated = 0;
-                data_old_health = 0;
+                data_old_health = player.MaxHealth;
                 data_ini_health_bonus = 0;
                 data_current_lvl = 0;
                 Logging.LogToFile("BuildHealth Reset!");
