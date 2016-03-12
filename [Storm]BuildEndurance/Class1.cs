@@ -107,10 +107,10 @@ namespace BuildEndurance
             if (BuildEndurance_data_clear_mod_effects == true)
             {
                 player.MaxStamina = BuildEndurance_data_old_stamina;
-                BuildEndurance_data_xp_nextlvl = 0;
-                BuildEndurance_data_xp_current = 0;
+                BuildEndurance_data_xp_nextlvl = ModConfig.BuildEndurance_xp_nextlvl;
+                BuildEndurance_data_xp_current = ModConfig.BuildEndurance_xp_current;
                 BuildEndurance_data_stam_bonus_acumulated = 0;
-                BuildEndurance_data_old_stamina = 0;
+                BuildEndurance_data_old_stamina = player.MaxStamina;
                 BuildEndurance_data_ini_stam_bonus = 0;
                 BuildEndurance_data_current_lvl = 0;
                 Logging.LogToFile("BuildEndurance Reset!");
