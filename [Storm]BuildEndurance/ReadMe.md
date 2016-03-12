@@ -1,8 +1,10 @@
 [Storm]BuildEndurance 
 
--v0.0.2 3/11/16 5:52 PM PST
+-v0.0.3 3/11/16 10:32 PM PST
 
 -Updated to Stardew Valley 1.0.5 and Storm 0.1.1
+
+-Fixed a bug where reseting data would cause the game to crash.
 
 This is the BuildEndurance mod, which can increase your max stamina in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp points, your max stamina will increase!
 
