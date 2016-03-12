@@ -1,4 +1,6 @@
-[Storm]BuildEndurance -v0.0.2 3/10/16 7:45 PM PST
+[Storm]BuildEndurance 
+
+-v0.0.2 3/11/16 5:52 PM PST
 
 -Updated to Stardew Valley 1.0.5 and Storm 0.1.1
 
