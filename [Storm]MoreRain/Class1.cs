@@ -56,7 +56,7 @@ namespace MoreRain
         }
 
         [Subscribe]
-        public void UpdateCallback(Storm.StardewValley.Event.BeforeNewDayEvent @event)
+        public void UpdateCallback(Storm.StardewValley.Event.PreNewDayEvent @event)
         {
            // Logging.LogToFile("THIS IS A SUPER LARGE TEST");
             //  Console.WriteLine(ModConfig.RainChance);
