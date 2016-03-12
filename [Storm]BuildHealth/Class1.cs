@@ -91,7 +91,7 @@ namespace BuildHealth
         }
 
         [Subscribe]
-        public void SleepCallback(Storm.StardewValley.Event.BeforeNewDayEvent @event)
+        public void SleepCallback(Storm.StardewValley.Event.PreNewDayEvent @event)
         {
             Clear_DataLoader();
             //This will run when the character goes to sleep. It will increase their sleeping skill.
@@ -143,7 +143,7 @@ namespace BuildHealth
         }
 
         [Subscribe]
-        public void LoadingCallBack(Storm.StardewValley.Event.AfterGameLoadedEvent @event)
+        public void LoadingCallBack(Storm.StardewValley.Event.PostGameLoadedEvent @event)
         {
             DataLoader();
             MyWritter();
