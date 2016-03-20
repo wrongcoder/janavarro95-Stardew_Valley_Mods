@@ -2,7 +2,7 @@
 
 -v0.0.4 3/19/16 9:45 PM PST
 
--Fixed the issues where old stamina was not being ste properly causing all sorts of awkward boosts.
+-Fixed the issues where old stamina was not being set properly causing all sorts of awkward boosts.
 
 -Fixed an issue where stardrop stamina boosts were being ignored.
 
