@@ -128,10 +128,13 @@ namespace BuildEndurance
                     player.MaxStamina += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
                     BuildEndurance_data_stam_bonus_acumulated += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
                 }
-                if (player.MaxStamina != BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus)
+
+                /*
+                    if (player.MaxStamina != BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus)
                 {
                     player.MaxStamina = BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus;
                 }
+                */
 
 
             }

@@ -1,7 +1,7 @@
 {
     "displayName": "[Storm]BuildEndurance",
     "author": "Alpha_Omegasis",
-    "version": "0.0.0.1",
+    "version": "0.0.0.4",
     "description": "Allows you to increase your max Stamina by doing different tasks.",
 
     "assemblyFileName": "Storm_BuildEndurance.dll"
