@@ -1,10 +1,12 @@
 [Storm]BuildHealth
 
--v0.0.3 3/11/16 10:32 PM PST
+-v0.0.4 3/19/16 9:45 PM PST
 
--Updated to Stardew Valley 1.0.5 and Storm 0.1.1
+-Fixed the issues where old health was not being set properly causing all sorts of awkward boosts.
 
--Fixed a bug where reseting data would cause the game to crash.
+-Fixed an issue where health boosts from in-game items was being ignored.
+
+-Just drop the contents of this folder into %appdata%/StardewValley/Mods/[Storm]BuildHealth
 
 This is the BuildHealth mod, which can increase your max health in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp points, your max health will increase!
 
