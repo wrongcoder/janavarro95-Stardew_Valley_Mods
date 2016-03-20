@@ -129,11 +129,13 @@ namespace BuildHealth
                         player.MaxHealth += ModConfig.health_increase_upon_lvl_up;
                         data_health_bonus_acumulated += ModConfig.health_increase_upon_lvl_up;
                     }
+
+                    /*
                     if (player.MaxHealth != data_old_health + data_health_bonus_acumulated + data_ini_health_bonus)
                     {
                         player.MaxHealth = data_old_health + data_health_bonus_acumulated + data_ini_health_bonus;
                     }
-
+                    */
 
                 }
             }
