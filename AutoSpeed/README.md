@@ -8,7 +8,7 @@ v0.0.4 3/27/16
 
 -General code clean up.
 
-This is a simple .dll mod for SVAPI which automatically changes the character's speed value referenced in AutoSpeed.txt.
+This is a simple .dll mod for SMAPI which automatically changes the character's speed value referenced in AutoSpeed.txt.
 This basically just bypasses having to type in the command everytime you load SMAPI.
 
 Install in by putting it into Stardew Valley/Mods/AutoSpeed!
