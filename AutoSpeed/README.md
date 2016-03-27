@@ -1,11 +1,14 @@
 # AutoSpeed_Mod
-v0.0.3 3/6/16
--Updated to SMAPI 0.0.7
+v0.0.4 3/27/16
+-Updated to SMAPI 0.3.9.1
 
--You will need the trainer mod that comes with SMAPI for this to run!
+-Updated to the most recent version of SMAPI.
+
+-No longer requires the trainer mod to run!
+
+-General code clean up.
 
 This is a simple .dll mod for SVAPI which automatically changes the character's speed value referenced in AutoSpeed.txt.
-This basically just bypasses having to type in the command everytime you load SVAPI.
+This basically just bypasses having to type in the command everytime you load SMAPI.
 
-This must be loaded into Stardew Valley/Mods
-where Stardew Valley is the directory where StardewModdingAPI.exe is located.
+Install in by putting it into Stardew Valley/Mods/AutoSpeed!
