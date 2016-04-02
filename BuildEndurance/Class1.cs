@@ -132,22 +132,14 @@ namespace BuildEndurance
         }
 
        
-    
 
         public void LoadingCallBack(object sender, EventArgs e)
         {
-
-         //   Log.Info("GamessssssssLoaded");
-           // Console.WriteLine("entering loading callback");
             if (StardewModdingAPI.Inheritance.SGame.hasLoadedGame == true)
             {
-                Log.Info("CharacterLoaded");
-                //   Console.WriteLine("Penetrated loading callback");
-                //Log.Info(StardewValley.Game1.player.name);
                 DataLoader();
                 MyWritter();
                 upon_loading = true;
-                Log.Info("writers passed");
                 //runs when the player is loaded.
 
 
@@ -174,11 +166,7 @@ namespace BuildEndurance
 
         public void SleepCallback(object sender, EventArgs e)
         {
-            Log.Info("SLEEP CALLBACK");
-           
-            Log.Info("CLEAR DATA PASSED");
             //This will run when the character goes to sleep. It will increase their sleeping skill.
-            //Console.WriteLine("Is this being hit?");
 
             if (upon_loading == true)
             {
@@ -239,7 +227,7 @@ namespace BuildEndurance
 
                 MyWritter();
             }
-            else Log.Info("Lazy programming");
+            //else Log.Info("Safely Loading.");
         }
 
 
