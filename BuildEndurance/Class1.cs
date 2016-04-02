@@ -3,52 +3,55 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 using Microsoft.Xna.Framework;
-
+using System.Windows;
 namespace BuildEndurance
 {
 
     public class BuildEndurance : Mod
     {
-        public double BuildEndurance_data_xp_nextlvl;
-        public double BuildEndurance_data_xp_current;
+        public static double BuildEndurance_data_xp_nextlvl=20;
+        public static double BuildEndurance_data_xp_current=0;
 
-        public int BuildEndurance_data_current_lvl;
+        public static int BuildEndurance_data_current_lvl=0;
 
-        public int BuildEndurance_data_stam_bonus_acumulated;
+        public static int BuildEndurance_data_stam_bonus_acumulated=0;
 
-        public int BuildEndurance_data_ini_stam_bonus;
+        public static int BuildEndurance_data_ini_stam_bonus=0;
 
-        public bool BuildEndurance_data_clear_mod_effects = false;
+        public static bool BuildEndurance_data_clear_mod_effects = false;
 
-        public int BuildEndurance_data_old_stamina = 0;
+        public static int BuildEndurance_data_old_stamina = 0;
 
-        public bool tool_cleaner = false;
+        public static bool tool_cleaner = false;
 
-        public bool fed = false;
+        public static bool fed = false;
 
         public Config ModConfig { get; set; }
 
+        public static bool upon_loading = false;
 
         //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
         public override void Entry(params object[] objects)
         {
-
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += SleepCallback;
+            Log.Info("HEYO WORLD");
+            
             StardewModdingAPI.Events.GameEvents.UpdateTick += EatingCallBack; //sloppy again but it'll do.
 
             StardewModdingAPI.Events.GameEvents.OneSecondTick += Tool_Cleanup;
               StardewModdingAPI.Events.GameEvents.UpdateTick += ToolCallBack;
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += LoadingCallBack;
+            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += SleepCallback;
 
             var configLocation = Path.Combine(PathOnDisk, "BuildEnduranceConfig.json");
             if (!File.Exists(configLocation))
             {
-                Console.WriteLine("The config file for BuildEndurance was not found, guess I'll create it...");
+                Console.WriteLine("Initial configuration file setup.");
                 ModConfig = new Config();
 
                 ModConfig.BuildEndurance_current_lvl = 0;
@@ -75,9 +78,10 @@ namespace BuildEndurance
                 ModConfig = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configLocation)));
                 Console.WriteLine("Found BuildEndurance config file.");
             }
-
-            DataLoader();
-            MyWritter();
+            
+           // DataLoader();
+           // MyWritter();  //hopefully loading these after the game is loaded will prevent wierd issues.
+            
             Console.WriteLine("BuildEndurance Initialization Completed");
         }
     
@@ -128,71 +132,25 @@ namespace BuildEndurance
         }
 
        
-        public void SleepCallback(object sender, EventArgs e)
-        {
-            Clear_DataLoader();
-            //This will run when the character goes to sleep. It will increase their sleeping skill.
-            var player = StardewValley.Game1.player;
-
-            BuildEndurance_data_xp_current += ModConfig.BuildEndurance_xp_sleeping;
-
-            if (BuildEndurance_data_old_stamina == 0)
-            {
-                BuildEndurance_data_old_stamina = player.MaxStamina; //grab the initial stamina value
-            }
-
-            if (BuildEndurance_data_clear_mod_effects == true)
-            {
-                player.MaxStamina = BuildEndurance_data_old_stamina;
-                BuildEndurance_data_xp_nextlvl = ModConfig.BuildEndurance_xp_nextlvl;
-                BuildEndurance_data_xp_current = ModConfig.BuildEndurance_xp_current;
-                BuildEndurance_data_stam_bonus_acumulated = 0;
-                BuildEndurance_data_old_stamina = player.MaxStamina;
-                BuildEndurance_data_ini_stam_bonus = 0;
-                BuildEndurance_data_current_lvl = 0;
-                Console.WriteLine("BuildEndurance Reset!");
-            }
-
-
-            if (BuildEndurance_data_clear_mod_effects == false)
-            {
-                if (BuildEndurance_data_current_lvl < ModConfig.BuildEndurance_max_lvl) { 
-                while (BuildEndurance_data_xp_current >= BuildEndurance_data_xp_nextlvl)
-                {
-                        BuildEndurance_data_current_lvl += 1;
-                        BuildEndurance_data_xp_current = BuildEndurance_data_xp_current - BuildEndurance_data_xp_nextlvl;
-                        BuildEndurance_data_xp_nextlvl = (ModConfig.BuildEndurance_xp_curve * BuildEndurance_data_xp_nextlvl);
-                    player.MaxStamina += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
-                    BuildEndurance_data_stam_bonus_acumulated += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
-                }
-
-                /*
-                    if (player.MaxStamina != BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus)
-                {
-                    player.MaxStamina = BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus;
-                }
-                */
-
-
-            }
-            }
-            BuildEndurance_data_clear_mod_effects = false;
-
-            MyWritter();
-        }
-
+    
 
         public void LoadingCallBack(object sender, EventArgs e)
         {
 
+         //   Log.Info("GamessssssssLoaded");
            // Console.WriteLine("entering loading callback");
             if (StardewModdingAPI.Inheritance.SGame.hasLoadedGame == true)
             {
-             //   Console.WriteLine("Penetrated loading callback");
-
+                Log.Info("CharacterLoaded");
+                //   Console.WriteLine("Penetrated loading callback");
+                //Log.Info(StardewValley.Game1.player.name);
                 DataLoader();
                 MyWritter();
+                upon_loading = true;
+                Log.Info("writers passed");
                 //runs when the player is loaded.
+
+
                 var player = StardewValley.Game1.player;
                 
                 if (BuildEndurance_data_old_stamina == 0)
@@ -213,6 +171,78 @@ namespace BuildEndurance
             }
 
         }
+
+        public void SleepCallback(object sender, EventArgs e)
+        {
+            Log.Info("SLEEP CALLBACK");
+           
+            Log.Info("CLEAR DATA PASSED");
+            //This will run when the character goes to sleep. It will increase their sleeping skill.
+            //Console.WriteLine("Is this being hit?");
+
+            if (upon_loading == true)
+            {
+                Clear_DataLoader();
+                //because this doesn't work propperly at first anyways.
+
+                //return;
+
+
+
+                var player = StardewValley.Game1.player;
+
+                BuildEndurance_data_xp_current += ModConfig.BuildEndurance_xp_sleeping;
+
+                if (BuildEndurance_data_old_stamina == 0)
+                {
+                    BuildEndurance_data_old_stamina = player.MaxStamina; //grab the initial stamina value
+                }
+
+                if (BuildEndurance_data_clear_mod_effects == true)
+                {
+                    player.MaxStamina = BuildEndurance_data_old_stamina;
+                    BuildEndurance_data_xp_nextlvl = ModConfig.BuildEndurance_xp_nextlvl;
+                    BuildEndurance_data_xp_current = ModConfig.BuildEndurance_xp_current;
+                    BuildEndurance_data_stam_bonus_acumulated = 0;
+                    BuildEndurance_data_old_stamina = player.MaxStamina;
+                    BuildEndurance_data_ini_stam_bonus = 0;
+                    BuildEndurance_data_current_lvl = 0;
+                    Console.WriteLine("BuildEndurance Reset!");
+                }
+
+
+                if (BuildEndurance_data_clear_mod_effects == false)
+                {
+                    if (BuildEndurance_data_current_lvl < ModConfig.BuildEndurance_max_lvl)
+                    {
+                        while (BuildEndurance_data_xp_current >= BuildEndurance_data_xp_nextlvl)
+                        {
+                            BuildEndurance_data_current_lvl += 1;
+                            BuildEndurance_data_xp_current = BuildEndurance_data_xp_current - BuildEndurance_data_xp_nextlvl;
+                            BuildEndurance_data_xp_nextlvl = (ModConfig.BuildEndurance_xp_curve * BuildEndurance_data_xp_nextlvl);
+                            player.MaxStamina += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
+                            BuildEndurance_data_stam_bonus_acumulated += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
+                            Log.Info("IF YOU SEE THIS TOO MUCH THIS IS AN INFINITE LOOP. CRAP");
+                        }
+
+                        /*
+                            if (player.MaxStamina != BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus)
+                        {
+                            player.MaxStamina = BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus;
+                        }
+                        */
+
+
+                    }
+                }
+                BuildEndurance_data_clear_mod_effects = false;
+
+                MyWritter();
+            }
+            else Log.Info("Lazy programming");
+        }
+
+
         //Mod config data.
         public class Config
         {
@@ -238,23 +268,28 @@ namespace BuildEndurance
 
         void Clear_DataLoader()
         {
+            DataLoader();
+            MyWritter();
             //loads the data to the variables upon loading the game.
-            var mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data.txt");
-           // string[] mystring = new string[20];
-            if (!File.Exists(mylocation)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data_");
+           string mylocation2 = mylocation+myname;
+           string mylocation3 = mylocation2+".txt";
+            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                Console.WriteLine("The config file for BuildEndurance was not found, guess I'll create it...");
+                Console.WriteLine("Clear Data Loaded could not find the correct file.");
 
 
                 BuildEndurance_data_clear_mod_effects = false;
                 BuildEndurance_data_old_stamina = 0;
                 BuildEndurance_data_ini_stam_bonus = 0;
+                //return;
             }
 
             else
             {
                 //loads the BuildEndurance_data upon loading the mod
-                string[] readtext = File.ReadAllLines(mylocation);
+                string[] readtext = File.ReadAllLines(mylocation3);
                 BuildEndurance_data_ini_stam_bonus = Convert.ToInt32(readtext[9]);
                 BuildEndurance_data_clear_mod_effects = Convert.ToBoolean(readtext[14]);
                 BuildEndurance_data_old_stamina = Convert.ToInt32(readtext[16]);
@@ -268,11 +303,13 @@ namespace BuildEndurance
         void DataLoader()
         {
             //loads the data to the variables upon loading the game.
-            var mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data.txt");
-            //string[] mystring = new string[20];
-            if (!File.Exists(mylocation)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data_");
+            string mylocation2 = mylocation + myname;
+            string mylocation3 = mylocation2 + ".txt";
+            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                Console.WriteLine("The config file for BuildEndurance was not found, guess I'll create it...");
+                Console.WriteLine("DataLoading");
                 BuildEndurance_data_xp_nextlvl = ModConfig.BuildEndurance_xp_nextlvl;
                 BuildEndurance_data_xp_current = ModConfig.BuildEndurance_xp_current;
                 BuildEndurance_data_current_lvl = ModConfig.BuildEndurance_current_lvl;
@@ -288,7 +325,7 @@ namespace BuildEndurance
         //        Console.WriteLine("HEY THERE IM LOADING DATA");
 
                 //loads the BuildEndurance_data upon loading the mod
-                string[] readtext = File.ReadAllLines(mylocation);
+                string[] readtext = File.ReadAllLines(mylocation3);
                 BuildEndurance_data_current_lvl = Convert.ToInt32(readtext[3]);
                 BuildEndurance_data_xp_nextlvl = Convert.ToDouble(readtext[7]);  //these array locations refer to the lines in BuildEndurance_data.json
                 BuildEndurance_data_xp_current = Convert.ToDouble(readtext[5]);
@@ -303,9 +340,12 @@ namespace BuildEndurance
         void MyWritter()
         {
             //saves the BuildEndurance_data at the end of a new day;
-            var mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data.txt");
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data_");
+            string mylocation2 = mylocation + myname;
+            string mylocation3 = mylocation2 + ".txt";
             string[] mystring3= new string[20];
-            if (!File.Exists(mylocation))
+            if (!File.Exists(mylocation3))
             {
                 Console.WriteLine("The data file for BuildEndurance was not found, guess I'll create it when you sleep.");
 
@@ -335,8 +375,7 @@ namespace BuildEndurance
                 mystring3[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
                 mystring3[16] = BuildEndurance_data_old_stamina.ToString();
 
-
-                File.WriteAllLines(mylocation, mystring3);
+                File.WriteAllLines(mylocation3, mystring3);
             }
         
             else
@@ -369,7 +408,7 @@ namespace BuildEndurance
                 mystring3[16] = BuildEndurance_data_old_stamina.ToString();
 
 
-                File.WriteAllLines(mylocation, mystring3);
+                File.WriteAllLines(mylocation3, mystring3);
             }
         }
 
