@@ -14,14 +14,14 @@ namespace BuildHealth
 
     public class BuildHealth : Mod
     {
-        public double BuildHealth_data_xp_nextlvl;
-        public double BuildHealth_data_xp_current;
+        public double BuildHealth_data_xp_nextlvl=20;
+        public double BuildHealth_data_xp_current=0;
 
-        public int BuildHealth_data_current_lvl;
+        public int BuildHealth_data_current_lvl=0;
 
-        public int BuildHealth_data_health_bonus_acumulated;
+        public int BuildHealth_data_health_bonus_acumulated=0;
 
-        public int BuildHealth_data_ini_health_bonus;
+        public int BuildHealth_data_ini_health_bonus=0;
 
         public bool BuildHealth_data_clear_mod_effects = false;
 
@@ -33,6 +33,7 @@ namespace BuildHealth
 
         public Config ModConfig { get; set; }
 
+		public static bool upon_loading = false;
 
         //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
         public override void Entry(params object[] objects)
@@ -76,8 +77,8 @@ namespace BuildHealth
                 Console.WriteLine("Found BuildHealth config file.");
             }
 
-            DataLoader();
-            MyWritter();
+         //   DataLoader();
+         //   MyWritter();
             Console.WriteLine("BuildHealth Initialization Completed");
         }
 
@@ -130,6 +131,8 @@ namespace BuildHealth
 
         public void SleepCallback(object sender, EventArgs e)
         {
+			if(upon_loading ==true){
+			
             Clear_DataLoader();
             //This will run when the character goes to sleep. It will increase their sleeping skill.
             var player = StardewValley.Game1.player;
@@ -174,6 +177,7 @@ namespace BuildHealth
 
             MyWritter();
         }
+		}
 
 
         public void LoadingCallBack(object sender, EventArgs e)
@@ -186,6 +190,7 @@ namespace BuildHealth
 
                 DataLoader();
                 MyWritter();
+				upon_loading=true;
                 //runs when the player is loaded.
                 var player = StardewValley.Game1.player;
 
@@ -233,9 +238,11 @@ namespace BuildHealth
         void Clear_DataLoader()
         {
             //loads the data to the variables upon loading the game.
-            var mylocation = Path.Combine(PathOnDisk, "BuildHealth_data.txt");
-            // string[] mystring = new string[20];
-            if (!File.Exists(mylocation)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+          string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
+           string mylocation2 = mylocation+myname;
+           string mylocation3 = mylocation2+".txt";
+            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
                 Console.WriteLine("The config file for BuildHealth was not found, guess I'll create it...");
 
@@ -248,7 +255,7 @@ namespace BuildHealth
             else
             {
                 //loads the BuildHealth_data upon loading the mod
-                string[] readtext = File.ReadAllLines(mylocation);
+                string[] readtext = File.ReadAllLines(mylocation3);
                 BuildHealth_data_ini_health_bonus = Convert.ToInt32(readtext[9]);
                 BuildHealth_data_clear_mod_effects = Convert.ToBoolean(readtext[14]);
                 BuildHealth_data_old_health = Convert.ToInt32(readtext[16]);
@@ -262,9 +269,11 @@ namespace BuildHealth
         void DataLoader()
         {
             //loads the data to the variables upon loading the game.
-            var mylocation = Path.Combine(PathOnDisk, "BuildHealth_data.txt");
-            //string[] mystring = new string[20];
-            if (!File.Exists(mylocation)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
+           string mylocation2 = mylocation+myname;
+           string mylocation3 = mylocation2+".txt";
+            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
                 Console.WriteLine("The config file for BuildHealth was not found, guess I'll create it...");
                 BuildHealth_data_xp_nextlvl = ModConfig.BuildHealth_xp_nextlvl;
@@ -282,7 +291,7 @@ namespace BuildHealth
                 //        Console.WriteLine("HEY THERE IM LOADING DATA");
 
                 //loads the BuildHealth_data upon loading the mod
-                string[] readtext = File.ReadAllLines(mylocation);
+                string[] readtext = File.ReadAllLines(mylocation3);
                 BuildHealth_data_current_lvl = Convert.ToInt32(readtext[3]);
                 BuildHealth_data_xp_nextlvl = Convert.ToDouble(readtext[7]);  //these array locations refer to the lines in BuildHealth_data.json
                 BuildHealth_data_xp_current = Convert.ToDouble(readtext[5]);
@@ -297,9 +306,12 @@ namespace BuildHealth
         void MyWritter()
         {
             //saves the BuildHealth_data at the end of a new day;
-            var mylocation = Path.Combine(PathOnDisk, "BuildHealth_data.txt");
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
+           string mylocation2 = mylocation+myname;
+           string mylocation3 = mylocation2+".txt";
             string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation))
+            if (!File.Exists(mylocation3))
             {
                 Console.WriteLine("The data file for BuildHealth was not found, guess I'll create it when you sleep.");
 
@@ -330,7 +342,7 @@ namespace BuildHealth
                 mystring3[16] = BuildHealth_data_old_health.ToString();
 
 
-                File.WriteAllLines(mylocation, mystring3);
+                File.WriteAllLines(mylocation3, mystring3);
             }
 
             else
@@ -363,7 +375,7 @@ namespace BuildHealth
                 mystring3[16] = BuildHealth_data_old_health.ToString();
 
 
-                File.WriteAllLines(mylocation, mystring3);
+                File.WriteAllLines(mylocation3, mystring3);
             }
         }
 
