@@ -1,8 +1,9 @@
 [SMAPI]CustomShopMod
 
--v0.0.1 4/3/16 1:53 AM PST (I need to seriously stop programming so late).
+-v0.0.2 4/3/16 1:53 AM PST (I need to seriously stop programming so late).
 
 -Initial alpha release. Works as is, could use some improvement.
+  -Just fixed a bug where I wasn't calculating max items correctly. leading to a false error.
 
 This is the CustomShop mod! What it does is add in a simple command called shop_mod that reads shop data from (store_name).txt located in StardewV Valley/Mods/CustomShopMod!
 
