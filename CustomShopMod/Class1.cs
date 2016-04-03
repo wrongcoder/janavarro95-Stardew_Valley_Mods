@@ -89,7 +89,7 @@ namespace CustomShopMod
                             count = Convert.ToInt32(string_count_id_arr[i]);
                             price = Convert.ToInt32(string_price_id);
                             i++;
-                            if (quantity * price <= 999)
+                            if (quantity * count <= 999)
                             {
                                 if (StardewModdingAPI.Entities.SPlayer.Player.money >= quantity * price)
                                 {
