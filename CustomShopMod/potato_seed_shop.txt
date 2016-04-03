@@ -1,4 +1,4 @@
-Welcome to ShopMod! This is Josh's_Shop! //command example shop_mod Josh's_Shop (Shop_List_ID/Name) Quantity
+Welcome to ShopMod! This is potato_seed_shop! //command example shop_mod potato_seed_shop (Shop_List_ID) Quantity
 These are the items for sale:
 =============================================================================================================================
 Shop_List_ID:
