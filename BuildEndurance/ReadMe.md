@@ -1,8 +1,8 @@
 [SMAPI]BuildEndurance
 
--v0.0.2 3/27/16 12:31 AM PST
+-v1.0.0 4/10/16 10:40 PM PST
 
--Updated to support per-character data. I'll have to see if per-character configs are possible.
+-Fixed the glitch where eating and using tools would not net you xp.
 
 This is the BuildEndurance mod, which can increase your max stamina in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp points, your max stamina will increase!
 
