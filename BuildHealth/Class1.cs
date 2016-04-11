@@ -89,7 +89,7 @@ namespace BuildHealth
             if (tool_cleaner == true) return;
 
 
-            if (StardewModdingAPI.Entities.SPlayer.CurrentFarmer.usingTool == true)
+            if (StardewValley.Game1.player.usingTool == true)
             {
                 //Console.WriteLine("Tool is being used");
                 BuildHealth_data_xp_current += ModConfig.BuildHealth_xp_tooluse;
@@ -132,9 +132,9 @@ namespace BuildHealth
         public void SleepCallback(object sender, EventArgs e)
         {
 			if(upon_loading ==true){
-			
-            Clear_DataLoader();
-            //This will run when the character goes to sleep. It will increase their sleeping skill.
+
+                Clear_Checker();
+
             var player = StardewValley.Game1.player;
 
             BuildHealth_data_xp_current += ModConfig.BuildHealth_xp_sleeping;
@@ -146,7 +146,9 @@ namespace BuildHealth
 
             if (BuildHealth_data_clear_mod_effects == true)
             {
-                player.maxHealth = BuildHealth_data_old_health;
+                    Clear_DataLoader();
+                    //This will run when the character goes to sleep. It will increase their sleeping skill.
+                    player.maxHealth = BuildHealth_data_old_health;
                 BuildHealth_data_xp_nextlvl = ModConfig.BuildHealth_xp_nextlvl;
                 BuildHealth_data_xp_current = ModConfig.BuildHealth_xp_current;
                 BuildHealth_data_health_bonus_acumulated = 0;
@@ -263,7 +265,31 @@ namespace BuildHealth
             }
         }
 
+        void Clear_Checker()
+        {
+            //loads the data to the variables upon loading the game.
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
+            string mylocation2 = mylocation + myname;
+            string mylocation3 = mylocation2 + ".txt";
+            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            {
+                Console.WriteLine("The config file for BuildHealth was not found, guess I'll create it...");
 
+
+                BuildHealth_data_clear_mod_effects = false;
+                BuildHealth_data_old_health = 0;
+                BuildHealth_data_ini_health_bonus = 0;
+            }
+
+            else
+            {
+                //loads the BuildHealth_data upon loading the mod
+                string[] readtext = File.ReadAllLines(mylocation3);
+                BuildHealth_data_clear_mod_effects = Convert.ToBoolean(readtext[14]);
+
+            }
+        }
 
 
         void DataLoader()
