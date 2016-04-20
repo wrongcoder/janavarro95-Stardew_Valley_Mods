@@ -15,6 +15,12 @@ namespace BuildEndurance
 
     public class BuildEndurance : Mod
     {
+
+        static bool exhausted_check = false;
+        static bool collapse_check = false;
+
+
+
         static double BuildEndurance_data_xp_nextlvl = 20;
         static double BuildEndurance_data_xp_current = 0;
 
@@ -36,6 +42,10 @@ namespace BuildEndurance
 
         static bool upon_loading = false;
 
+
+        static int nightly_stamina_value = 0;
+
+
         //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
         public override void Entry(params object[] objects)
         {
@@ -47,6 +57,9 @@ namespace BuildEndurance
             StardewModdingAPI.Events.GameEvents.UpdateTick += ToolCallBack;
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += LoadingCallBack;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += SleepCallback;
+
+            StardewModdingAPI.Events.GameEvents.UpdateTick += Exhaustion_callback;
+            StardewModdingAPI.Events.GameEvents.UpdateTick += Collapse_Callback;
 
             var configLocation = Path.Combine(PathOnDisk, "BuildEnduranceConfig.json");
             if (!File.Exists(configLocation))
@@ -70,6 +83,10 @@ namespace BuildEndurance
                 ModConfig.BuildEndurance_ini_stam_boost = 0;
 
                 ModConfig.BuildEndurance_stam_accumulated = 0;
+
+                ModConfig.BuildEndurance_Exhaustion_XP = 25;
+                ModConfig.BuildEndurance_Pass_Out_XP = 50;
+
 
                 File.WriteAllBytes(configLocation, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ModConfig)));
             }
@@ -135,6 +152,35 @@ namespace BuildEndurance
         }
 
 
+        public void Exhaustion_callback(object sender, EventArgs e) //if the player is exhausted add xp.
+        {
+
+            if (exhausted_check == false)
+            {
+                if (StardewValley.Game1.player.exhausted)
+                {
+                    BuildEndurance_data_xp_current += ModConfig.BuildEndurance_Exhaustion_XP;
+                    exhausted_check = true;
+                    Log.Info("The player is exhausted");
+                }
+            }
+
+
+        }
+
+        public void Collapse_Callback(object sender, EventArgs e) //if the player stays up too late add some xp.
+        {
+            if (collapse_check == false)
+            {
+                if (StardewValley.Game1.timeOfDay==2600)
+                {
+                    BuildEndurance_data_xp_current += ModConfig.BuildEndurance_Pass_Out_XP;
+                    collapse_check = true;
+                    Log.Info("The player has collapsed!");
+                }
+            }
+        }
+
 
         public void LoadingCallBack(object sender, EventArgs e)
         {
@@ -153,8 +199,13 @@ namespace BuildEndurance
                     BuildEndurance_data_old_stamina = player.MaxStamina; //grab the initial stamina value
                 }
 
-                player.MaxStamina = BuildEndurance_data_ini_stam_bonus + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_old_stamina; //incase the ini stam bonus is loaded in. 
 
+                player.MaxStamina = nightly_stamina_value;
+
+                if (nightly_stamina_value == 0)
+                {
+                    player.MaxStamina = BuildEndurance_data_ini_stam_bonus + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_old_stamina; //incase the ini stam bonus is loaded in. 
+                }
                 if (BuildEndurance_data_clear_mod_effects == true)
                 {
                     player.MaxStamina = BuildEndurance_data_old_stamina;
@@ -170,7 +221,8 @@ namespace BuildEndurance
         public void SleepCallback(object sender, EventArgs e)
         {
             //This will run when the character goes to sleep. It will increase their sleeping skill.
-
+            exhausted_check = false;
+            collapse_check = false;
             if (upon_loading == true)
             {
 
@@ -180,7 +232,9 @@ namespace BuildEndurance
                 Clear_Checker();
                 Log.Info("CLEAR???");
                 Log.Info(BuildEndurance_data_clear_mod_effects);
-                
+
+               
+
                 //Clear_DataLoader();
                 //because this doesn't work propperly at first anyways.
 
@@ -242,7 +296,7 @@ namespace BuildEndurance
                     }
                 }
                 BuildEndurance_data_clear_mod_effects = false;
-
+                nightly_stamina_value = StardewValley.Game1.player.maxStamina;
                 MyWritter();
             }
             //else Log.Info("Safely Loading.");
@@ -268,6 +322,9 @@ namespace BuildEndurance
             public int BuildEndurance_ini_stam_boost { get; set; }
 
             public int BuildEndurance_stam_accumulated { get; set; }
+
+         public int   BuildEndurance_Exhaustion_XP { get; set; }
+         public int       BuildEndurance_Pass_Out_XP { get; set; }
 
         }
 
@@ -367,7 +424,7 @@ namespace BuildEndurance
                 BuildEndurance_data_stam_bonus_acumulated = Convert.ToInt32(readtext[11]);
                 BuildEndurance_data_clear_mod_effects = Convert.ToBoolean(readtext[14]);
                 BuildEndurance_data_old_stamina = Convert.ToInt32(readtext[16]);
-
+                nightly_stamina_value = Convert.ToInt32(readtext[18]); //this should grab the nightly stamina values
             }
         }
 
@@ -409,6 +466,10 @@ namespace BuildEndurance
                 mystring3[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
                 mystring3[16] = BuildEndurance_data_old_stamina.ToString();
 
+                mystring3[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
+                mystring3[18] = nightly_stamina_value.ToString(); //this should save the player's stamina upon sleeping.
+
+
                 File.WriteAllLines(mylocation3, mystring3);
             }
 
@@ -441,6 +502,8 @@ namespace BuildEndurance
                 mystring3[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
                 mystring3[16] = BuildEndurance_data_old_stamina.ToString();
 
+                mystring3[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
+                mystring3[18] = nightly_stamina_value.ToString();
 
                 File.WriteAllLines(mylocation3, mystring3);
             }
