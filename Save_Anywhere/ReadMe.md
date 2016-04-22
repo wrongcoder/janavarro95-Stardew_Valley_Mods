@@ -1,3 +1,9 @@
+Stardew Valley Save_Anywhere Mod v 1.0.0
+
+For SDV[1.07] and SMAPI [0.40]
+
+Posted at 4:55 P.M on 4/22/16
+
 Good afternoon everyone, and today I'd like to announce my biggest project yet, the Save_Anywhere mod! 
 
 Now before you get super excited let me go over the basics of what this mod does.
