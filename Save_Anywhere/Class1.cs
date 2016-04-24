@@ -9,36 +9,24 @@ using StardewValley.Menus;
 using System.IO;
 using System.Timers;
 using System.Windows.Input;
+using StardewValley.Characters;
+using Microsoft.Xna.Framework;
 
-
-//how to simulate npc movement?
 
 /*
 TO DO:
 
-    Can't seem to restore NPC location upon custom loading...
-
-
-SAVE NPC INFO TO EXTERNAL TXT DATA FILE
-read in npc data and warp them upon loading
-SIMULATE TIME TO THAT POINT IN THE DAY TO MAKE SURE NPCS GET PLACED PROPPERLY  //alternative if warping breaks
-
-
-??? ANYTHING ELSE THAT COMES UP???
-
-
-Save the player's map and tile location and warp them there upon loading the game.
 */
 namespace Stardew_Save_Anywhere_Mod
 {
     public class Class1 : Mod
     {
-        string save_path="";
+       // string save_path="";
 
         string key_binding="K";
 
         bool game_loaded = false;
-        string player_map_name = "false";
+        string player_map_name;
         int player_tile_x;
         int player_tile_Y;
         bool player_flop = false;
@@ -49,6 +37,10 @@ namespace Stardew_Save_Anywhere_Mod
         bool timer = true;
 
         bool game_updated_and_loaded = true;
+
+
+        bool simulate_time = true;
+        bool warp_character = true;
 
 
         Timer aTimer = new Timer(3500); //fires every X miliseconds. 3500 is 4 times faster than the game's normal speed //originally this was 2000
@@ -75,12 +67,7 @@ namespace Stardew_Save_Anywhere_Mod
         {
             if (game_loaded == true)
             {
-                if (File.Exists(save_path)) //delete the custom save when going to bed.
-                {
-                    File.Delete(save_path);
-                    save_path = "";
-                   
-                }
+         //       file_clean_up();
                 game_time = 600; //resets the game time so that simulation doesn't happen every day.
                 game_updated_and_loaded = true; //prevents the next day from being updated
                 StardewValley.Game1.player.canMove = true;  //do I even use this?
@@ -101,16 +88,31 @@ namespace Stardew_Save_Anywhere_Mod
             
             if (game_loaded == true)
             {
-            
+                DataLoader_Player(); //warps the character and changes the game time. WTF HOW DID THIS BREAK???
+                DataLoader_Settings(); //load up the mod config file.
+              DataLoader_Horse();
+
+
+                if (simulate_time == true)
+                {
+                    timer = false;
+                }
+                else timer = true;
+
+                if (warp_character == true)
+                {
+                    warped = false;
+
+                }
+                else warped = true;
+
+
+
                 if (warped == false)
                 {
-                    DataLoader_Player(); //warps the character and changes the game time.
-                    DataLoader_Settings(); //load up the mod config file.
-
-
 
                     game_updated_and_loaded = false;
-                    if (StardewValley.Game1.player.currentLocation.name != player_map_name)
+                    if (StardewValley.Game1.player.currentLocation.name != player_map_name  && warped==false)
                     {
 
                         DataLoader_NPC(false); //loads the NPC's with original location info
@@ -118,15 +120,15 @@ namespace Stardew_Save_Anywhere_Mod
                         warped = true; 
                         StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. //Just incase I run this a couple of times.
                         StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. //probably bad programming practice.
-                        StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. 
-
+                       StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. 
                         Log.Success("WARPED");
-                        timer = false; //activate my timer. False means that it hasn't been initialized.
+                        //timer = false; //activate my timer. False means that it hasn't been initialized.
 
-                    }
+
+                      }
 
                 }
-                
+               
 
 
 
@@ -238,37 +240,12 @@ namespace Stardew_Save_Anywhere_Mod
         public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
         {
             game_loaded = true;
+            DataLoader_Settings();
             MyWritter_Settings();
         }
 
 
-        void DataLoader_Player()
-        {
-         //   DataLoader_Settings();
-            //loads the data to the variables upon loading the game.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "Player_Save_Info_");
-            string mylocation2 = mylocation + myname;
-            string mylocation3 = mylocation2 + ".txt";
-            save_path = mylocation3;
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
-              //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
-
-            }
-
-            else
-            {
-                //        Console.WriteLine("HEY THERE IM LOADING DATA");
-                string[] readtext = File.ReadAllLines(mylocation3);
-                game_time = Convert.ToInt32(readtext[3]);
-                player_map_name = Convert.ToString(readtext[5]);
-                player_tile_x = Convert.ToInt32(readtext[7]);
-                player_tile_Y = Convert.ToInt32(readtext[9]);
-
-
-            }
-        }
+    
 
         void DataLoader_Settings()
         {
@@ -291,7 +268,11 @@ namespace Stardew_Save_Anywhere_Mod
                 //        Console.WriteLine("HEY THERE IM LOADING DATA");
                 string[] readtext = File.ReadAllLines(mylocation3);
                 key_binding = Convert.ToString(readtext[3]);
-            //    timer_interval = Convert.ToDouble(readtext[5]);
+               timer_interval = Convert.ToDouble(readtext[5]);
+                simulate_time = Convert.ToBoolean(readtext[7]);
+                warp_character = Convert.ToBoolean(readtext[9]);
+
+
                 // Log.Info(key_binding);
                 // Log.Info(Convert.ToString(readtext[3]));
 
@@ -308,7 +289,7 @@ namespace Stardew_Save_Anywhere_Mod
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
            
-            string[] mystring3 = new string[10];
+            string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
                 Console.WriteLine("The custom character save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
@@ -321,6 +302,12 @@ namespace Stardew_Save_Anywhere_Mod
 
                 mystring3[4] = "Timer interval for NPCs. Default 3500 which simulates game time at 4x speed.";
                 mystring3[5] = timer_interval.ToString();
+
+                mystring3[6] = "Simulate game time? Game time will be sped up until restored before saving";
+                mystring3[7] = simulate_time.ToString();
+
+                mystring3[8] = "Warp player when loading?";
+                mystring3[9] = warp_character.ToString();
 
 
                 File.WriteAllLines(mylocation3, mystring3);
@@ -341,6 +328,12 @@ namespace Stardew_Save_Anywhere_Mod
                 mystring3[4] = "Timer interval for NPCs. Default 3500 which simulates game time at 4x speed.";
                 mystring3[5] = timer_interval.ToString();
 
+                mystring3[6] = "Simulate game time? Game time will be sped up until restored before saving";
+                mystring3[7] = simulate_time.ToString();
+
+                mystring3[8] = "Warp player when loading?";
+                mystring3[9] = warp_character.ToString();
+
                 File.WriteAllLines(mylocation3, mystring3);
             }
         }
@@ -354,7 +347,6 @@ namespace Stardew_Save_Anywhere_Mod
             string mylocation = Path.Combine(PathOnDisk, "Player_Save_Info_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
-            save_path = mylocation3;
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
@@ -405,6 +397,158 @@ namespace Stardew_Save_Anywhere_Mod
             }
         }
 
+        void DataLoader_Player()
+        {
+            //   DataLoader_Settings();
+            //loads the data to the variables upon loading the game.
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "Player_Save_Info_");
+            string mylocation2 = mylocation + myname;
+            string mylocation3 = mylocation2 + ".txt";
+
+            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            {
+                //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
+                warped = true;
+            }
+
+            else
+            {
+                //        Console.WriteLine("HEY THERE IM LOADING DATA");
+
+                string[] readtext = File.ReadAllLines(mylocation3);
+                game_time = Convert.ToInt32(readtext[3]);
+                player_map_name = Convert.ToString(readtext[5]);
+                player_tile_x = Convert.ToInt32(readtext[7]);
+                player_tile_Y = Convert.ToInt32(readtext[9]);
+
+
+            }
+        }
+
+
+        void MyWritter_Horse()
+        {
+
+            Horse horse = Utility.findHorse();
+
+
+            if (horse == null)
+            {
+                //Game1.getFarm().characters.Add((NPC)new Horse(this.player_tile_x + 1, this.player_tile_Y + 1));
+                Log.Info("NEIGH: No horse exists");
+                return;
+            }
+           // else
+             //   Game1.warpCharacter((NPC)horse, Game1.player.currentLocation.name, StardewValley.Game1.player.getTileLocationPoint(), false, true);
+
+
+
+
+            string myname = StardewValley.Game1.player.name;
+
+            string mylocation = Path.Combine(PathOnDisk, "Horse_Save_Info_");
+            string mylocation2 = mylocation + myname;
+            string mylocation3 = mylocation2 + ".txt";
+            string[] mystring3 = new string[20];
+            if (!File.Exists(mylocation3))
+            {
+ 
+
+                Console.WriteLine("The custom character save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
+                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
+
+                mystring3[0] = "Horse: Save_Anywhere Info. Editing this might break some things.";
+                mystring3[1] = "====================================================================================";
+
+                mystring3[2] = "Player Current Map Name";
+                mystring3[3] = horse.currentLocation.name.ToString();
+
+                mystring3[4] = "Player X Position";
+                mystring3[5] = horse.getTileX().ToString();
+
+                mystring3[6] = "Player Y Position";
+                mystring3[7] = horse.getTileY().ToString();
+
+
+
+                File.WriteAllLines(mylocation3, mystring3);
+            }
+
+            else
+            {
+             //   Console.WriteLine("The custom character save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
+                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
+
+                mystring3[0] = "Horse: Save_Anywhere Info. Editing this might break some things.";
+                mystring3[1] = "====================================================================================";
+
+                mystring3[2] = "Player Current Map Name";
+                mystring3[3] = horse.currentLocation.name.ToString();
+
+                mystring3[4] = "Player X Position";
+                mystring3[5] = horse.getTileX().ToString();
+
+                mystring3[6] = "Player Y Position";
+                mystring3[7] = horse.getTileY().ToString();
+
+
+
+                File.WriteAllLines(mylocation3, mystring3);
+            }
+        }
+
+        void DataLoader_Horse()
+        {
+            Horse horse = Utility.findHorse();
+            if (horse == null)
+            {
+                //Game1.getFarm().characters.Add((NPC)new Horse(this.player_tile_x + 1, this.player_tile_Y + 1));
+                Log.Info("NEIGH: No horse exists");
+                return;
+            }
+            // else
+               //Game1.warpCharacter((NPC)horse, Game1.player.currentLocation.name, StardewValley.Game1.player.getTileLocationPoint(), false, true);
+
+
+
+
+
+            //   DataLoader_Settings();
+            //loads the data to the variables upon loading the game.
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "Horse_Save_Info_");
+            string mylocation2 = mylocation + myname;
+            string mylocation3 = mylocation2 + ".txt";
+            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            {
+                //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
+
+            }
+
+            else
+            {
+                string horse_map_name = "";
+                int horse_x;
+                int horse_y;
+
+                Point horse_point;
+
+                //        Console.WriteLine("HEY THERE IM LOADING DATA");
+                string[] readtext = File.ReadAllLines(mylocation3);
+                horse_map_name = Convert.ToString(readtext[3]);
+               horse_x = Convert.ToInt32(readtext[5]);
+               horse_y = Convert.ToInt32(readtext[7]);
+
+                horse_point.X = horse_x;
+                horse_point.Y = horse_y;
+
+                Game1.warpCharacter((NPC)horse, horse_map_name, horse_point, false, true);
+
+            }
+        }
+
+
         void my_save()
         {
 
@@ -429,6 +573,7 @@ namespace Stardew_Save_Anywhere_Mod
 
             MyWritter_NPC(false); //redundant??? I think so. Ohh well.
 
+            MyWritter_Horse();
 
             DataLoader_Settings();  //load settings. Prevents acidental overwrite.
             MyWritter_Settings(); //save settings. 
@@ -437,6 +582,31 @@ namespace Stardew_Save_Anywhere_Mod
 
             //so this is essentially the basics of the code...
            // Log.Error("IS THIS BREAKING?");
+        }
+
+
+        void file_clean_up()
+        {
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(PathOnDisk, "Player_Save_Info_");
+            string mylocation2 = mylocation + myname;
+            string mylocation3 = mylocation2 + ".txt";
+
+            if (File.Exists(mylocation3)) //delete the custom save when going to bed.
+            {
+                File.Delete(mylocation3); //clean up the player's save info
+            }
+
+
+             mylocation = Path.Combine(PathOnDisk, "Horse_Save_Info_");
+             mylocation2 = mylocation + myname;
+             mylocation3 = mylocation2 + ".txt";
+
+            if (File.Exists(mylocation3)) //delete the custom save when going to bed.
+            {
+                File.Delete(mylocation3); //clean up the player's horse save info
+            }
+
         }
 
 
@@ -514,8 +684,8 @@ namespace Stardew_Save_Anywhere_Mod
                 {
                     var NPClocationd = (GameLocation)asdf;
                     Log.Error(asdf.name); //show the loaded location's name.
-                    System.Threading.Thread.Sleep(10); //prevent the game from loading characters too quickly by delaying time 10 miliseconds.
-
+                    System.Threading.Thread.Sleep(50); //prevent the game from loading characters too quickly by delaying time 10 miliseconds.
+                    if (asdf.name == "Farm") continue;
 
                     foreach (StardewValley.NPC obj in NPClocationd.characters)
                     {
