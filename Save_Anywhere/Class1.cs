@@ -75,7 +75,7 @@ namespace Stardew_Save_Anywhere_Mod
         {
             if (game_loaded == true)
             {
-                if (save_path != "") //delete the custom save when going to bed.
+                if (File.Exists(save_path)) //delete the custom save when going to bed.
                 {
                     File.Delete(save_path);
                     save_path = "";
@@ -101,12 +101,6 @@ namespace Stardew_Save_Anywhere_Mod
             
             if (game_loaded == true)
             {
-
-                if (save_path == "")
-                {
-                    warped = true; //prevent premature warping
-                }
-
             
                 if (warped == false)
                 {
@@ -125,6 +119,7 @@ namespace Stardew_Save_Anywhere_Mod
                         StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. //Just incase I run this a couple of times.
                         StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. //probably bad programming practice.
                         StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. 
+
                         Log.Success("WARPED");
                         timer = false; //activate my timer. False means that it hasn't been initialized.
 
@@ -255,6 +250,7 @@ namespace Stardew_Save_Anywhere_Mod
             string mylocation = Path.Combine(PathOnDisk, "Player_Save_Info_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
+            save_path = mylocation3;
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
               //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
