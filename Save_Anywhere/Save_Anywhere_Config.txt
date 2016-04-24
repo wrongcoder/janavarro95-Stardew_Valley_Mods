@@ -5,9 +5,9 @@ K
 Timer interval for NPCs. Default 3500 which simulates game time at 4x speed.
 3500
 Simulate game time? Game time will be sped up until restored before saving
-False
+True
 Warp player when loading?
-False
+True
 
 
 
