@@ -2,3 +2,9 @@ Config: Save_Anywhere Info. Feel free to mess with these settings.
 ====================================================================================
 Key binding for saving anywhere. Press this key to save anywhere!
 K
+Timer interval for NPCs. Default 3500 which simulates game time at 4x speed.
+3500
+
+
+
+
