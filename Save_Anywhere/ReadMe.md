@@ -1,18 +1,18 @@
-Stardew Valley Save_Anywhere Mod v 1.0.1
+Stardew Valley Save_Anywhere Mod v 1.0.3
 
 For SDV[1.07] and SMAPI [0.40]
 
-Updated at 10:07 A.M on 4/24/16
+Updated at 3:15 A.M on 4/24/16
 
--Fixed glitch regarding game time constantly being simulated on new days.
+-Horse now warps to original position.
 
--Updated NPC's to move a little bit slower so that they don't fly through walls.
+-Fixed a nasty issue where the player would warp forever.
 
--Slowed down game time simulation to run every 3.5 seconds, which is 4x the normal game speed. (Configurable in the config file.)
+-You can now chose wither or not to simulate time and warp upon loading. All in the config file.
 
 -Known Issues.
 
-         -The horse does not warp to the character when the farmer is warped. I'll need to figure this out.
+         -None ATM
 
 Good afternoon everyone, and today I'd like to announce my biggest project yet, the Save_Anywhere mod! 
 
