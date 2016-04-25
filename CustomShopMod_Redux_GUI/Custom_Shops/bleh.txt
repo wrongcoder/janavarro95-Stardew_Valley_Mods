@@ -1,0 +1,20 @@
+Custom Shop Name: Josh's Shop
+Items for sale:
+=============================================================================
+Object ID
+345
+Is it a Recipe?
+false
+Price of item. (In_game price = this value *2)
+350
+Quality of the item (0= normal, 1 = silver, 2=gold)
+0
+=============================================================================
+Object ID
+346
+Is it a Recipe?
+false
+Price of item. (In_game price = this value *2)
+500
+Quality of the item (0= normal, 1 = silver, 2=gold)
+0
