@@ -5,6 +5,9 @@ using System.IO;
 using StardewValley.Menus;
 using System.Collections.Generic;
 using System.Linq;
+using StardewValley.Objects;
+using Microsoft.Xna.Framework;
+using StardewValley.Tools;
 /*
 TO DO:
 
@@ -13,6 +16,9 @@ namespace Custom_Shop_Mod_Redux
 {
     public class Class1 : Mod
     {
+      static  int j = 0;
+     static   Dictionary<Item, int[]> list_price = new Dictionary<Item, int[]>();
+
         static string master_path;
         List<string> myoptions = new List<string>();
         string key_binding = "U";
@@ -186,6 +192,7 @@ namespace Custom_Shop_Mod_Redux
         static void shop_file_call(string s)
         {
             List<Item> list = new List<Item>();
+            
 
             string mylocation = Path.Combine(master_path , s);
            
@@ -207,26 +214,163 @@ namespace Custom_Shop_Mod_Redux
 
             int i = 4;
 
-            int obj_id;
+            int obj_id = 0;
             bool is_recipe;
             int price;
             int quality;
 
+            string obj_type;
+
+            obj_type = Convert.ToString(readtext[i]);
+            i += 2;
+
+           
+
             while (i < lineCount)
             {
-                obj_id=Convert.ToInt32(readtext[i]);
+                //read in a line for obj type here
+                Log.Info(i);
+                Log.Info(obj_type);
+                if (obj_type == "item" || obj_type == "Item" || obj_type == "Object" || obj_type == "object")
+                {
+
+                    obj_id = Convert.ToInt16(readtext[i]);
+                    i += 2;
+                    is_recipe = Convert.ToBoolean(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    quality = Convert.ToInt32(readtext[i]);
+                    // if (quality > 2) quality = 0;
+
+
+                    if (price == -1)
+                    {
+                        StardewValley.Object myobj = new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality);
+
+                     //   Log.Info("MYPRICE");
+                     //   Log.Info(myobj.salePrice());
+                        price = myobj.salePrice();
+
+                    }
+
+                   
+                    //   list.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality));
+                    list_price.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality), new int[2] {price, int.MaxValue});
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+                if (obj_type == "Furniture" || obj_type == "furniture")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+
+                    //  list.Add((Item)new Furniture(obj_id, Vector2.Zero)); //ADD FUNCTIONALITY TO SHOP FILES TO TEST IF FURNITURE OR NOT.
+                    list_price.Add((Item)new Furniture(obj_id, Vector2.Zero), new int[2] { price, int.MaxValue });
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+
+
+
+                }
+
+                if (obj_type == "Boots" || obj_type == "boots" || obj_type == "shoe" || obj_type == "Shoe")  //just incase someone forgets it's called boots and they type shoe.
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price= Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Boots(obj_id),new int[2] { price, int.MaxValue });
+                    if (i + 3 > lineCount) break;
+                    //master iteration while loop.
+                    i += 3;
+
+                }
+
+                if (obj_type == "WallPaper" || obj_type == "Wallpaper" || obj_type == "wallPaper" || obj_type == "wallpaper")  //just incase someone forgets it's called boots and they type shoe.
+                {
+                    if (i + 3 > lineCount) break;
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, false), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+
+                }
+
+                if (obj_type == "Carpet" || obj_type == "carpet" || obj_type == "Floor" || obj_type == "floor" || obj_type == "Rug" || obj_type == "rug")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, true), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+                if (obj_type == "Ring" || obj_type == "ring")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Ring(obj_id), new int[2] { price, int.MaxValue });
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+                if (obj_type == "Lamp" || obj_type == "lamp" || obj_type == "Torch" || obj_type == "torch")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Torch(Vector2.Zero, obj_id, true), new int[2] { price, int.MaxValue });
+
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+                if (obj_type == "Sword" || obj_type == "sword" || obj_type == "Weapon" || obj_type == "weapon")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new MeleeWeapon(obj_id), new int[2] { price, int.MaxValue });
+
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+                if (obj_type == "Hat" || obj_type == "hat" || obj_type == "Hats" || obj_type == "hats")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new Hat(obj_id), new int[2] { price, int.MaxValue });
+
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+                
+                //TODO:
+                //add in support for colored objects
+                //add in support for tools
+
+                if (i + 2 > lineCount) break;
+
+                obj_type = Convert.ToString(readtext[i]);
                 i += 2;
-                is_recipe = Convert.ToBoolean(readtext[i]);
-                i += 2;
-                price = Convert.ToInt32(readtext[i]);
-                i += 2;
-                quality = Convert.ToInt32(readtext[i]);
-                // if (quality > 2) quality = 0;
-                list.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality));
-                i += 3;
             }
 
-            Game1.activeClickableMenu = (IClickableMenu)new ShopMenu(list, 0, "Pierre");
+
+            //NEED TO TEST ALL DATA FILES TO SEE WHAT CAN AND CANT BE ADDED
+            //list.Add((Item)new StardewValley.Objects.ColoredObject(475,300, Color.Aqua));
+         //   Game1.activeClickableMenu = (IClickableMenu)new ShopMenu(list, 0, "Pierre");
+
+
+
+
+            Game1.activeClickableMenu = (IClickableMenu)new ShopMenu(list_price, 0, "Pierre");
 
         }
 
@@ -234,6 +378,7 @@ namespace Custom_Shop_Mod_Redux
         static void external_shop_file_call(string path, string filename)
         {
             List<Item> list = new List<Item>();
+
 
             string mylocation = Path.Combine(path, filename);
 
@@ -247,28 +392,171 @@ namespace Custom_Shop_Mod_Redux
 
             //          Log.Info(lineCount);
 
+            if (filename == "Custom_Shop_Redux_Config.txt")
+            {
+                Log.Info("Silly human. The config file is not a shop.");
+                return;
+            }
+
             int i = 4;
 
-            int obj_id;
+            int obj_id = 0;
             bool is_recipe;
             int price;
             int quality;
 
+            string obj_type;
+
+            obj_type = Convert.ToString(readtext[i]);
+            i += 2;
+
+
+
             while (i < lineCount)
             {
-                obj_id = Convert.ToInt32(readtext[i]);
+                //read in a line for obj type here
+                Log.Info(i);
+                Log.Info(obj_type);
+                if (obj_type == "item" || obj_type == "Item" || obj_type == "Object" || obj_type == "object")
+                {
+
+                    obj_id = Convert.ToInt16(readtext[i]);
+                    i += 2;
+                    is_recipe = Convert.ToBoolean(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    quality = Convert.ToInt32(readtext[i]);
+                    // if (quality > 2) quality = 0;
+
+
+                    if (price == -1)
+                    {
+                        StardewValley.Object myobj = new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality);
+
+                        //   Log.Info("MYPRICE");
+                        //   Log.Info(myobj.salePrice());
+                        price = myobj.salePrice();
+
+                    }
+
+
+                    //   list.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality));
+                    list_price.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality), new int[2] { price, int.MaxValue });
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+                if (obj_type == "Furniture" || obj_type == "furniture")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+
+                    //  list.Add((Item)new Furniture(obj_id, Vector2.Zero)); //ADD FUNCTIONALITY TO SHOP FILES TO TEST IF FURNITURE OR NOT.
+                    list_price.Add((Item)new Furniture(obj_id, Vector2.Zero), new int[2] { price, int.MaxValue });
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+
+
+
+                }
+
+                if (obj_type == "Boots" || obj_type == "boots" || obj_type == "shoe" || obj_type == "Shoe")  //just incase someone forgets it's called boots and they type shoe.
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Boots(obj_id), new int[2] { price, int.MaxValue });
+                    if (i + 3 > lineCount) break;
+                    //master iteration while loop.
+                    i += 3;
+
+                }
+
+                if (obj_type == "WallPaper" || obj_type == "Wallpaper" || obj_type == "wallPaper" || obj_type == "wallpaper")  //just incase someone forgets it's called boots and they type shoe.
+                {
+                    if (i + 3 > lineCount) break;
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, false), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+
+                }
+
+                if (obj_type == "Carpet" || obj_type == "carpet" || obj_type == "Floor" || obj_type == "floor" || obj_type == "Rug" || obj_type == "rug")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, true), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+                if (obj_type == "Ring" || obj_type == "ring")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Objects.Ring(obj_id), new int[2] { price, int.MaxValue });
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+                if (obj_type == "Lamp" || obj_type == "lamp" || obj_type == "Torch" || obj_type == "torch")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new StardewValley.Torch(Vector2.Zero, obj_id, true), new int[2] { price, int.MaxValue });
+
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+                if (obj_type == "Sword" || obj_type == "sword" || obj_type == "Weapon" || obj_type == "weapon")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new MeleeWeapon(obj_id), new int[2] { price, int.MaxValue });
+
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+                if (obj_type == "Hat" || obj_type == "hat" || obj_type == "Hats" || obj_type == "hats")
+                {
+                    obj_id = Convert.ToInt32(readtext[i]);
+                    i += 2;
+                    price = Convert.ToInt32(readtext[i]);
+                    list_price.Add((Item)new Hat(obj_id), new int[2] { price, int.MaxValue });
+
+                    if (i + 3 > lineCount) break;
+                    i += 3;
+                }
+
+
+                //TODO:
+                //add in support for colored objects
+                //add in support for tools
+
+                if (i + 2 > lineCount) break;
+
+                obj_type = Convert.ToString(readtext[i]);
                 i += 2;
-                is_recipe = Convert.ToBoolean(readtext[i]);
-                i += 2;
-                price = Convert.ToInt32(readtext[i]);
-                i += 2;
-                quality = Convert.ToInt32(readtext[i]);
-                // if (quality > 2) quality = 0;
-                list.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality));
-                i += 3;
             }
 
-            Game1.activeClickableMenu = (IClickableMenu)new ShopMenu(list, 0, "Pierre");
+
+            //NEED TO TEST ALL DATA FILES TO SEE WHAT CAN AND CANT BE ADDED
+            //list.Add((Item)new StardewValley.Objects.ColoredObject(475,300, Color.Aqua));
+            //   Game1.activeClickableMenu = (IClickableMenu)new ShopMenu(list, 0, "Pierre");
+
+
+
+
+            Game1.activeClickableMenu = (IClickableMenu)new ShopMenu(list_price, 0, "Pierre");
 
         }
 
