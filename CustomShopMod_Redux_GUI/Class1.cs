@@ -318,14 +318,13 @@ namespace Custom_Shop_Mod_Redux
                     if (i + 3 > lineCount) break;
                     i += 3;
                 }
-                if (obj_type == "Lamp" || obj_type == "lamp" || obj_type == "Torch" || obj_type == "torch")
+                if (obj_type == "Lamp" || obj_type == "lamp" || obj_type == "Torch" || obj_type == "torch" || obj_type == "Craftable" || obj_type == "craftable" || obj_type == "BigCraftable" || obj_type == "bigcraftable")
                 {
                     obj_id = Convert.ToInt32(readtext[i]);
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Torch(Vector2.Zero, obj_id, true), new int[2] { price, int.MaxValue });
 
-                    if (i + 3 > lineCount) break;
                     i += 3;
                 }
 
@@ -345,12 +344,16 @@ namespace Custom_Shop_Mod_Redux
                     obj_id = Convert.ToInt32(readtext[i]);
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
-                    list_price.Add((Item)new Hat(obj_id), new int[2] { price, int.MaxValue });
-
+                    //  list_price.Add((Item)new Hat(obj_id), new int[2] { price, int.MaxValue });
+                   list_price.Add((Item)new Hat(obj_id), new int[2]
+                   {
+          price,
+          int.MaxValue
+  });
                     if (i + 3 > lineCount) break;
                     i += 3;
                 }
-
+                
                 
                 //TODO:
                 //add in support for colored objects
