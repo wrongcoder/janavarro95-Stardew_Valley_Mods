@@ -101,19 +101,24 @@ namespace Stardew_Save_Anywhere_Mod
                     DataLoader_Horse();
                     DataLoader_NPC(false); //loads the NPC's with original location info
                     initialize = true;
+
+
+                    if (simulate_time == true)
+                    {
+                        timer = false;
+                        simulate_time = false;
+                    }
+                    else timer = true;
+
+                    if (warp_character == true && game_updated_and_loaded == false)
+                    {
+                        warped = false;
+                        //warp_character = false;
+                    }
+
                 }
 
-                if (simulate_time == true)
-                {
-                    timer = false;
-                }
-                else timer = true;
-
-                if (warp_character == true && game_updated_and_loaded == false)
-                {
-                    warped = false;
-                    //warp_character = false;
-                }
+               
                 else warped = true;
 
                 DataLoader_Player(); //warps the character and changes the game time. WTF HOW DID THIS BREAK???
@@ -561,8 +566,22 @@ namespace Stardew_Save_Anywhere_Mod
 
         void my_save()
         {
+            if (Game1.player.currentLocation.name == "CommunityCenter")
+            {
+                Log.Error("There is an issue saving in the community center. Blame the Junimos not being saved to the player's save file.");
+                Log.Error("Your data has not been saved. Sorry for the issue.");
+               return;
+            }
 
-             //if a player has shipped an item, run this code.
+            if (Game1.player.currentLocation.name == "Sewer")
+            {
+                Log.Error("There is an issue saving in the Sewer. Blame the animals for not being saved to the player's save file.");
+                Log.Error("Your data has not been saved. Sorry for the issue.");
+                return;
+            }
+
+
+            //if a player has shipped an item, run this code.
             if (Enumerable.Count<Item>((IEnumerable<Item>)Game1.getFarm().shippingBin) > 0)
             {
                 Game1.endOfNightMenus.Push((IClickableMenu)new ShippingMenu(Game1.getFarm().shippingBin));
@@ -581,14 +600,13 @@ namespace Stardew_Save_Anywhere_Mod
 
             MyWritter_Player(); //write my info to a text file
 
-            MyWritter_NPC(false); //redundant??? I think so. Ohh well.
 
             MyWritter_Horse();
 
             DataLoader_Settings();  //load settings. Prevents acidental overwrite.
             MyWritter_Settings(); //save settings. 
 
-            Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //refresh the player's location just incase. That will prove that they character's info was valid.
+            //Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //refresh the player's location just incase. That will prove that they character's info was valid.
 
             //so this is essentially the basics of the code...
            // Log.Error("IS THIS BREAKING?");
@@ -696,7 +714,7 @@ namespace Stardew_Save_Anywhere_Mod
                     Log.Error(asdf.name); //show the loaded location's name.
                     System.Threading.Thread.Sleep(50); //prevent the game from loading characters too quickly by delaying time 10 miliseconds.
                     if (asdf.name == "Farm") continue;
-
+                    if (asdf.name == "CommunityCenter") continue;
                     foreach (StardewValley.NPC obj in NPClocationd.characters)
                     {
                         Log.Success(obj.name);
@@ -828,7 +846,12 @@ namespace Stardew_Save_Anywhere_Mod
                 {
                     NPClocation = (GameLocation)asdf;
 
+                    if (NPClocation.name == "CommunityCenter")
+                    {
+                        continue;
+                    }
 
+                  
                     foreach (StardewValley.NPC obj in NPClocation.characters)
                     {
                         //grab all of the NPC INFO.
