@@ -15,3 +15,12 @@ You can access these custom shops by pressing a key. (The U key by default, whic
 Make sure the formatting is correct otherwise you will get errors!
 
 Have fun with this one! I hope to see all of the custom shops that you all put out!
+
+
+If you wish to call this mod in your own mod without the menu the code would be
+
+Custom_Shop_Mod_Redux.Class1.external_shop_file_call(path, filename);
+
+Where path is the directory path of the desired text file, and filename is the name of the file inside of the path directory.
+
+*Note that path will not include the file itself. The code will take care of that for you.
