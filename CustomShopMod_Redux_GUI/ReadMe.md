@@ -10,6 +10,8 @@ This is the custom_shop_mod_redux which is a second, much better attempt at addi
 
 Basically making a custom shop is as simple as following the formatting in the pre-existsing custom_shops in a new text file.
 
+You can access these custom shops by pressing a key. (The U key by default, which is configurable in the config file)
+
 Make sure the formatting is correct otherwise you will get errors!
 
 Have fun with this one! I hope to see all of the custom shops that you all put out!
