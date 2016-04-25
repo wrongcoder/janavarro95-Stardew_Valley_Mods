@@ -1,0 +1,20 @@
+Config: Save_Anywhere Info. Feel free to mess with these settings.
+====================================================================================
+Key binding for saving anywhere. Press this key to save anywhere!
+R
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
