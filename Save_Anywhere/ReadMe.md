@@ -1,18 +1,14 @@
-Stardew Valley Save_Anywhere Mod v 1.0.3
+Stardew Valley Save_Anywhere Mod v 1.0.4
 
 For SDV[1.07] and SMAPI [0.40]
 
-Updated at 3:15 A.M on 4/24/16
+Updated at 3:30 P.M on 4/25/16
 
--Horse now warps to original position.
-
--Fixed a nasty issue where the player would warp forever.
-
--You can now chose wither or not to simulate time and warp upon loading. All in the config file.
+-Patched a bug where you would crash when saving in the sewers or community center...but...
 
 -Known Issues.
 
-         -None ATM
+         -Can't save in the Community Center or Sewer due to some serializable issues outside of my control. Sorry. =(
 
 Good afternoon everyone, and today I'd like to announce my biggest project yet, the Save_Anywhere mod! 
 
