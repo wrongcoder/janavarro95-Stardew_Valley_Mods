@@ -21,7 +21,10 @@ namespace Stardew_Save_Anywhere_Mod
 {
     public class Class1 : Mod
     {
-       // string save_path="";
+        // string save_path="";
+
+        bool initialize = false;
+
 
         string key_binding="K";
 
@@ -30,17 +33,19 @@ namespace Stardew_Save_Anywhere_Mod
         int player_tile_x;
         int player_tile_Y;
         bool player_flop = false;
-        bool warped = false;
+        
         int game_time;
         double timer_interval = 3500;
 
         bool timer = true;
 
-        bool game_updated_and_loaded = true;
+        bool game_updated_and_loaded = false;
 
 
-        bool simulate_time = true;
-        bool warp_character = true;
+        bool warped = false;
+
+        bool simulate_time;
+        bool warp_character;
 
 
         Timer aTimer = new Timer(3500); //fires every X miliseconds. 3500 is 4 times faster than the game's normal speed //originally this was 2000
@@ -67,7 +72,7 @@ namespace Stardew_Save_Anywhere_Mod
         {
             if (game_loaded == true)
             {
-         //       file_clean_up();
+               file_clean_up();
                 game_time = 600; //resets the game time so that simulation doesn't happen every day.
                 game_updated_and_loaded = true; //prevents the next day from being updated
                 StardewValley.Game1.player.canMove = true;  //do I even use this?
@@ -76,7 +81,7 @@ namespace Stardew_Save_Anywhere_Mod
 
         public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-            DataLoader_Settings(); //update the key if players changed it while playing.
+            //DataLoader_Settings(); //update the key if players changed it while playing.
             if (e.KeyPressed.ToString() ==key_binding) //if the key is pressed, load my cusom save function
             {
                 my_save();
@@ -85,13 +90,18 @@ namespace Stardew_Save_Anywhere_Mod
 
         public void GameEvents_OneSecondTick(object sender, EventArgs e)
         { //updates the info every second
-            
+           
             if (game_loaded == true)
             {
-                DataLoader_Player(); //warps the character and changes the game time. WTF HOW DID THIS BREAK???
-                DataLoader_Settings(); //load up the mod config file.
-              DataLoader_Horse();
 
+                if (initialize == false)
+                {
+                    
+                 //   DataLoader_Settings(); //load up the mod config file.
+                    DataLoader_Horse();
+                    DataLoader_NPC(false); //loads the NPC's with original location info
+                    initialize = true;
+                }
 
                 if (simulate_time == true)
                 {
@@ -99,14 +109,14 @@ namespace Stardew_Save_Anywhere_Mod
                 }
                 else timer = true;
 
-                if (warp_character == true)
+                if (warp_character == true && game_updated_and_loaded == false)
                 {
                     warped = false;
-
+                    //warp_character = false;
                 }
                 else warped = true;
 
-
+                DataLoader_Player(); //warps the character and changes the game time. WTF HOW DID THIS BREAK???
 
                 if (warped == false)
                 {
@@ -115,7 +125,7 @@ namespace Stardew_Save_Anywhere_Mod
                     if (StardewValley.Game1.player.currentLocation.name != player_map_name  && warped==false)
                     {
 
-                        DataLoader_NPC(false); //loads the NPC's with original location info
+                        
                         MyWritter_NPC(true); //writes in the NPC's info. May be redundant?
                         warped = true; 
                         StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. //Just incase I run this a couple of times.
@@ -123,7 +133,7 @@ namespace Stardew_Save_Anywhere_Mod
                        StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. 
                         Log.Success("WARPED");
                         //timer = false; //activate my timer. False means that it hasn't been initialized.
-
+                        game_updated_and_loaded = true;
 
                       }
 
@@ -136,8 +146,6 @@ namespace Stardew_Save_Anywhere_Mod
                 if (warped == true && timer == false)
                 {
                     //load config info for the timer here.
-
-                    DataLoader_Settings();
 
                     aTimer.Interval = timer_interval; //this should update the timer to run at the config amount of seconds.
 
@@ -260,6 +268,8 @@ namespace Stardew_Save_Anywhere_Mod
 
                 key_binding = "K";
                 timer_interval = 3500;
+                warp_character = true;
+                simulate_time = true;
               //  Log.Info("KEY TIME");
              }
 
