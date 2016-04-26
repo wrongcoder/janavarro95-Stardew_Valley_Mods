@@ -10,7 +10,16 @@ using Microsoft.Xna.Framework;
 using StardewValley.Tools;
 /*
 TO DO:
-
+Items
+furniture
+swords -
+hats -
+boots   -
+wallpapers -
+carpets -
+ring -
+lamp-
+craftables-
 */
 namespace Custom_Shop_Mod_Redux
 {
@@ -228,6 +237,10 @@ namespace Custom_Shop_Mod_Redux
 
             while (i < lineCount)
             {
+                if (i >= lineCount) break;
+                if (obj_type == "") break;
+                if (readtext[i] == "") break;
+
                 //read in a line for obj type here
                 Log.Info(i);
                 Log.Info(obj_type);
@@ -236,10 +249,15 @@ namespace Custom_Shop_Mod_Redux
 
                     obj_id = Convert.ToInt16(readtext[i]);
                     i += 2;
+
+                    Log.Info(i);
                     is_recipe = Convert.ToBoolean(readtext[i]);
                     i += 2;
+                    Log.Info(i);
                     price = Convert.ToInt32(readtext[i]);
                     i += 2;
+                    Log.Info(i);
+
                     quality = Convert.ToInt32(readtext[i]);
                     // if (quality > 2) quality = 0;
 
@@ -257,8 +275,8 @@ namespace Custom_Shop_Mod_Redux
                    
                     //   list.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality));
                     list_price.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality), new int[2] {price, int.MaxValue});
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
                 if (obj_type == "Furniture" || obj_type == "furniture")
                 {
@@ -268,8 +286,9 @@ namespace Custom_Shop_Mod_Redux
 
                     //  list.Add((Item)new Furniture(obj_id, Vector2.Zero)); //ADD FUNCTIONALITY TO SHOP FILES TO TEST IF FURNITURE OR NOT.
                     list_price.Add((Item)new Furniture(obj_id, Vector2.Zero), new int[2] { price, int.MaxValue });
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i>= lineCount) break;
+                    
 
 
 
@@ -281,9 +300,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price= Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Boots(obj_id),new int[2] { price, int.MaxValue });
-                    if (i + 3 > lineCount) break;
-                    //master iteration while loop.
                     i += 3;
+                    if (i >= lineCount) break;
 
                 }
 
@@ -294,8 +312,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, false), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
 
                 }
 
@@ -305,8 +323,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, true), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
 
                 if (obj_type == "Ring" || obj_type == "ring")
@@ -315,8 +333,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Ring(obj_id), new int[2] { price, int.MaxValue });
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
                 if (obj_type == "Lamp" || obj_type == "lamp" || obj_type == "Torch" || obj_type == "torch" || obj_type == "Craftable" || obj_type == "craftable" || obj_type == "BigCraftable" || obj_type == "bigcraftable")
                 {
@@ -324,8 +342,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Torch(Vector2.Zero, obj_id, true), new int[2] { price, int.MaxValue });
-
                     i += 3;
+                    if (i >= lineCount) break;
                 }
 
                 if (obj_type == "Sword" || obj_type == "sword" || obj_type == "Weapon" || obj_type == "weapon")
@@ -335,8 +353,8 @@ namespace Custom_Shop_Mod_Redux
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new MeleeWeapon(obj_id), new int[2] { price, int.MaxValue });
 
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
 
                 if (obj_type == "Hat" || obj_type == "hat" || obj_type == "Hats" || obj_type == "hats")
@@ -350,19 +368,20 @@ namespace Custom_Shop_Mod_Redux
           price,
           int.MaxValue
   });
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
-                
-                
+
+
                 //TODO:
                 //add in support for colored objects
                 //add in support for tools
-
-                if (i + 2 > lineCount) break;
-
-                obj_type = Convert.ToString(readtext[i]);
-                i += 2;
+                Log.Success(i);
+                if (i >= lineCount) break;
+                else {
+                    obj_type = Convert.ToString(readtext[i]);
+                    i += 2;
+                }
             }
 
 
@@ -378,12 +397,12 @@ namespace Custom_Shop_Mod_Redux
         }
 
 
-        static void external_shop_file_call(string path, string filename)
+        static void external_shop_file_call(string path, string fileName)
         {
             List<Item> list = new List<Item>();
 
 
-            string mylocation = Path.Combine(path, filename);
+            string mylocation = Path.Combine(path, fileName);
 
             ///      Log.Info(mylocation);
 
@@ -394,12 +413,6 @@ namespace Custom_Shop_Mod_Redux
 
 
             //          Log.Info(lineCount);
-
-            if (filename == "Custom_Shop_Redux_Config.txt")
-            {
-                Log.Info("Silly human. The config file is not a shop.");
-                return;
-            }
 
             int i = 4;
 
@@ -417,6 +430,10 @@ namespace Custom_Shop_Mod_Redux
 
             while (i < lineCount)
             {
+                if (i >= lineCount) break;
+                if (obj_type == "") break;
+                if (readtext[i] == "") break;
+
                 //read in a line for obj type here
                 Log.Info(i);
                 Log.Info(obj_type);
@@ -425,10 +442,15 @@ namespace Custom_Shop_Mod_Redux
 
                     obj_id = Convert.ToInt16(readtext[i]);
                     i += 2;
+
+                    Log.Info(i);
                     is_recipe = Convert.ToBoolean(readtext[i]);
                     i += 2;
+                    Log.Info(i);
                     price = Convert.ToInt32(readtext[i]);
                     i += 2;
+                    Log.Info(i);
+
                     quality = Convert.ToInt32(readtext[i]);
                     // if (quality > 2) quality = 0;
 
@@ -446,8 +468,8 @@ namespace Custom_Shop_Mod_Redux
 
                     //   list.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality));
                     list_price.Add((Item)new StardewValley.Object(obj_id, int.MaxValue, is_recipe, price, quality), new int[2] { price, int.MaxValue });
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
                 if (obj_type == "Furniture" || obj_type == "furniture")
                 {
@@ -457,8 +479,9 @@ namespace Custom_Shop_Mod_Redux
 
                     //  list.Add((Item)new Furniture(obj_id, Vector2.Zero)); //ADD FUNCTIONALITY TO SHOP FILES TO TEST IF FURNITURE OR NOT.
                     list_price.Add((Item)new Furniture(obj_id, Vector2.Zero), new int[2] { price, int.MaxValue });
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
+
 
 
 
@@ -470,9 +493,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Boots(obj_id), new int[2] { price, int.MaxValue });
-                    if (i + 3 > lineCount) break;
-                    //master iteration while loop.
                     i += 3;
+                    if (i >= lineCount) break;
 
                 }
 
@@ -483,8 +505,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, false), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
 
                 }
 
@@ -494,8 +516,8 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Wallpaper(obj_id, true), new int[2] { price, int.MaxValue }); //add in support for wallpapers and carpets
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
 
                 if (obj_type == "Ring" || obj_type == "ring")
@@ -504,18 +526,17 @@ namespace Custom_Shop_Mod_Redux
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Objects.Ring(obj_id), new int[2] { price, int.MaxValue });
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
-                if (obj_type == "Lamp" || obj_type == "lamp" || obj_type == "Torch" || obj_type == "torch")
+                if (obj_type == "Lamp" || obj_type == "lamp" || obj_type == "Torch" || obj_type == "torch" || obj_type == "Craftable" || obj_type == "craftable" || obj_type == "BigCraftable" || obj_type == "bigcraftable")
                 {
                     obj_id = Convert.ToInt32(readtext[i]);
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new StardewValley.Torch(Vector2.Zero, obj_id, true), new int[2] { price, int.MaxValue });
-
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
 
                 if (obj_type == "Sword" || obj_type == "sword" || obj_type == "Weapon" || obj_type == "weapon")
@@ -525,8 +546,8 @@ namespace Custom_Shop_Mod_Redux
                     price = Convert.ToInt32(readtext[i]);
                     list_price.Add((Item)new MeleeWeapon(obj_id), new int[2] { price, int.MaxValue });
 
-                    if (i + 3 > lineCount) break;
                     i += 3;
+                    if (i >= lineCount) break;
                 }
 
                 if (obj_type == "Hat" || obj_type == "hat" || obj_type == "Hats" || obj_type == "hats")
@@ -534,21 +555,26 @@ namespace Custom_Shop_Mod_Redux
                     obj_id = Convert.ToInt32(readtext[i]);
                     i += 2;
                     price = Convert.ToInt32(readtext[i]);
-                    list_price.Add((Item)new Hat(obj_id), new int[2] { price, int.MaxValue });
-
-                    if (i + 3 > lineCount) break;
+                    //  list_price.Add((Item)new Hat(obj_id), new int[2] { price, int.MaxValue });
+                    list_price.Add((Item)new Hat(obj_id), new int[2]
+                    {
+          price,
+          int.MaxValue
+   });
                     i += 3;
+                    if (i >= lineCount) break;
                 }
 
 
                 //TODO:
                 //add in support for colored objects
                 //add in support for tools
-
-                if (i + 2 > lineCount) break;
-
-                obj_type = Convert.ToString(readtext[i]);
-                i += 2;
+                Log.Success(i);
+                if (i >= lineCount) break;
+                else {
+                    obj_type = Convert.ToString(readtext[i]);
+                    i += 2;
+                }
             }
 
 
