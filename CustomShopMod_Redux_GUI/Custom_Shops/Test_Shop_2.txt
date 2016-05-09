@@ -51,13 +51,6 @@ Price
 999
 ========================NEW ITEM======================
 Object_Type
-Furniture
-Object ID
-168
-Price
-500
-========================NEW ITEM======================
-Object_Type
 Item
 Object ID
 475
