@@ -10,6 +10,20 @@ Remember that this mod is an example/template. Use the Class.cs as a starting po
 
 If you wish to make your NPC more complex and such feel free, but this is where I'm satisfied.
 
+Here is the documentation for how to call the custom shop with full functionality.
+
+Custom_Shop_Mod_Redux.Class1.external_shop_file_call(path, filename, shop_chat, myNPC);
+  
+Where
+
+(string)path=path to the folder where the shop is stored.
+
+(string)filename= the name of the shop file. Ex "MyShop.txt"
+
+(string)shop_chat= the dialogue the npc says while in the shop.
+
+(NPC)myNPC= the NPC that the shop uses as the base for the portrait.
+
 -Good luck
 
 -Alpha Omegasis
