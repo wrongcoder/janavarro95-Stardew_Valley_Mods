@@ -1,8 +1,12 @@
-Custom_Shop_Mod_Redux_GUI v 1.1.0
+Custom_Shop_Mod_Redux_GUI v 1.2.0
 
 For SDV 1.0.7 and SMAPI v0.40
 
-Posted at 8:36 PM PST 4/25/16
+Posted at 9:15 PM PST 5/8/16
+
+-Updated to be able to be called from other mods for NPC shop binding and soforth.
+
+-Fixed a bug where pressing the U key on the main menu causes the game to crash.
 
 Good evening everyone. At this point I don't even know how I'm creating mods so quickly, but I think I'll strike while the iron is hot. Here is my third release of the day, the Custom Shops Mod Redux!
 
