@@ -19,3 +19,7 @@ will play according to the name of the file.txt
 Video Link:
 
 Nexus Link:http://www.nexusmods.com/stardewvalley/mods/425/?
+
+Tutorial Link:
+
+Stardew Valley Forum Link:
