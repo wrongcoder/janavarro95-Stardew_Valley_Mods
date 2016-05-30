@@ -16,10 +16,6 @@ and
 Stardew Valley/Mods/Stardew_Symphony/Music_Files/(music_pack_name)/Seasons
 will play according to the name of the file.txt
 
-Video Link:
-
 Nexus Link:http://www.nexusmods.com/stardewvalley/mods/425/?
 
-Tutorial Link:
-
-Stardew Valley Forum Link:
+Stardew Valley Forum Link:http://community.playstarbound.com/threads/stardew-symphony-add-music-packs-to-stardew-valley.115686/
