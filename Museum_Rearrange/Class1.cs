@@ -26,7 +26,9 @@ namespace Stardew_Save_Anywhere_Mod
 
         public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-
+            if (Game1.player == null) return;
+            if (Game1.player.currentLocation == null) return;
+            if (game_loaded == false) return;
            
                 if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
                 {
