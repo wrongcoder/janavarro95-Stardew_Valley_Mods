@@ -1,8 +1,8 @@
-Stardew Symphony 1.0.0
+Stardew Symphony 1.0.1
 
 Published at 10:56 on 5/30/26
 
--Initial Release
+-Fixed a bug where music pack music and the default music of SDV would play at the same time.
 
 This is Stardew Symphony
 
