@@ -1167,10 +1167,12 @@ namespace Stardew_Music_Expansion_API
 
             if (StardewValley.Game1.isFestival() == true)
             {
+                stop_sound();
                 return; //replace with festival music if I decide to support it.
             }
             if (StardewValley.Game1.eventUp == true)
             {
+                stop_sound();
                 return; //replace with event music if I decide to support it/people request it.
             }
 
