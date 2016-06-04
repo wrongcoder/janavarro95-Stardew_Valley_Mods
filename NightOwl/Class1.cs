@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using StardewValley;
 using StardewModdingAPI;
 using System.IO;
-
 /*TODO:
 */
 /*
@@ -15,6 +14,11 @@ Issues:
 -Lighting transition does not work if it is raining.
     -set the weather to clear if you are stayig up late.
         -transition still doesnt work. However atleast it is dark now.
+
+-Known glitched
+    -player passes out when going to bed
+    -money not being propperly calculated after shipments
+
 */
 
 
@@ -35,6 +39,9 @@ namespace Stardew_NightOwl
         int pre_health;
 
 
+        int safety_cash;
+        
+
         bool lighting_transition; //if true transition happens. If false, game starts out bright at 2AM. Good to remove that awkward change from dark to bright.
         bool warp;
         bool stay_up;
@@ -46,11 +53,36 @@ namespace Stardew_NightOwl
 
         bool game_loaded;
 
+        bool once;
+        bool up_late;
+        int very_old_money;
+
+
+
         public override void Entry(params object[] objects)
         {
             StardewModdingAPI.Events.TimeEvents.TimeOfDayChanged += TimeEvents_TimeOfDayChanged;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.GameEvents.FourthUpdateTick += GameEvents_FourthUpdateTick;
+        }
+
+        public void GameEvents_FourthUpdateTick(object sender, EventArgs e)
+        {
+            if (game_loaded == false) return;
+
+            if (Game1.timeOfDay == 600)
+            {
+                if (once==true)
+                {
+                  //  Log.AsyncM("NEW MONEY" + Game1.player.money);
+                    Game1.player.money = Game1.player.money + post_money;
+                    once = false;
+                }
+
+            }
+
+
         }
 
         public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
@@ -58,6 +90,8 @@ namespace Stardew_NightOwl
             DataLoader();
             MyWritter();
             game_loaded = true;
+            once = false;
+            up_late = false;
         }
 
         public void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
@@ -65,17 +99,30 @@ namespace Stardew_NightOwl
             if (game_loaded == false) return;
             DataLoader();
             MyWritter();
-            List<string> newmail = new List<string>();
+            //List<string> newmail = new List<string>();
+            up_late = false;
+
             if (time_reset == true)
             {
                 was_raining = false;
                 if (persistant_stamina==true) Game1.player.stamina = pre_stam; //reset health and stam upon collapsing
                 if (persistant_health == true) Game1.player.health = pre_health;
-                post_money = Game1.player.money;
-                if (protect_money == true) Game1.player.money += (prior_money - post_money); //add the money back from colapsing.
+                //post_money = Game1.player.money;
+                if (protect_money == true) {
+
+                    //grab the amount subtracted
+                    once = true;
+                    
+                   // Log.AsyncM("OLD MONEY:" + very_old_money);
+
+                } //add the money back from colapsing.
                 time_reset = false; //reset my bool.
                 if(warp==true)Game1.warpFarmer(prior_map, player_x, player_y, false);
+               // very_old_money = (safety_cash - Game1.player.money);
+                //Game1.player.money += very_old_money;
             }
+
+      
             /*
             if (wipe_mail == true)
             {
@@ -115,9 +162,9 @@ namespace Stardew_NightOwl
             {
                 if (Game1.timeOfDay > 200 && Game1.timeOfDay < 1100)
                 {
-                        color_mod = (1100 - Game1.timeOfDay) / 1000f; //.7f
-                        Game1.outdoorLight = Game1.ambientLight * color_mod;
-                    
+                    color_mod = (1100 - Game1.timeOfDay) / 1000f; //.7f
+                    Game1.outdoorLight = Game1.ambientLight * color_mod;
+
                 }
             }
 
@@ -131,14 +178,25 @@ namespace Stardew_NightOwl
                         was_raining = true;
                         StardewValley.Game1.isRaining = false; //regardless make sure I change the weather. Otherwise lighting gets screwy.
                     }
-                        StardewValley.Game1.updateWeatherIcon();
+                    StardewValley.Game1.updateWeatherIcon();
                     Game1.timeOfDay = 150; //change it from 1:50 am late, to 1:50 am early
                 }
             }
 
-            if(Game1.timeOfDay == 600)
+
+            if (Game1.timeOfDay == 550)
             {
-                //if (time_reset == false) return;
+                up_late = true;
+            }
+
+            if (Game1.timeOfDay == 600)
+            {
+                if (up_late == false)
+                {
+                        return;
+                }
+
+                //if (time_reset == false)  return;
                 time_reset = true;
                 Game1.farmerShouldPassOut = true; //make the farmer collapse.
                 player_x = Game1.player.getTileX();
@@ -147,10 +205,19 @@ namespace Stardew_NightOwl
                 pre_stam = Game1.player.stamina;
                 pre_health = Game1.player.health;
                 prior_money = Game1.player.money;
+
+                if (Game1.player.money <= 10000)
+                {
+                    post_money = prior_money / 10;
+                }
+                else
+                {
+                    post_money = 1000;
+                }
             }
 
-        }
-
+           
+            }
         
 
         void MyWritter()
