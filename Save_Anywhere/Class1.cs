@@ -39,8 +39,8 @@ namespace Stardew_Save_Anywhere_Mod
 
         bool timer = true;
 
-        bool game_updated_and_loaded = false;
-
+        bool game_updated_and_loaded;
+        bool time_updated;
 
         bool warped = false;
 
@@ -106,7 +106,7 @@ namespace Stardew_Save_Anywhere_Mod
                     if (simulate_time == true)
                     {
                         timer = false;
-                        simulate_time = false;
+                       // simulate_time = false;
                     }
                     else timer = true;
 
@@ -129,8 +129,6 @@ namespace Stardew_Save_Anywhere_Mod
                     game_updated_and_loaded = false;
                     if (StardewValley.Game1.player.currentLocation.name != player_map_name  && warped==false)
                     {
-
-                        
                         MyWritter_NPC(true); //writes in the NPC's info. May be redundant?
                         warped = true; 
                         StardewValley.Game1.warpFarmer(player_map_name, player_tile_x, player_tile_Y, player_flop); //player flop is always false. //Just incase I run this a couple of times.
@@ -175,7 +173,7 @@ namespace Stardew_Save_Anywhere_Mod
 
         public void ATimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (game_updated_and_loaded == true) return;
+            if (time_updated == true) return;
             if (Game1.timeOfDay < game_time)
             {
                 Game1.performTenMinuteClockUpdate();
@@ -202,7 +200,7 @@ namespace Stardew_Save_Anywhere_Mod
 
             if (Game1.timeOfDay >= game_time)
             {
-                game_updated_and_loaded = true;
+                time_updated = true;
                 Game1.player.canMove = true;
                 game_time = 600; //reset the game_time so that oversimulation doesn't happen again while playing.
             }
@@ -255,6 +253,7 @@ namespace Stardew_Save_Anywhere_Mod
             game_loaded = true;
             DataLoader_Settings();
             MyWritter_Settings();
+            if (simulate_time == true) aTimer = new Timer(timer_interval);
         }
 
 
