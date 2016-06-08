@@ -1,10 +1,10 @@
-Stardew Valley Save_Anywhere Mod v 1.0.4
+Stardew Valley Save_Anywhere Mod v 1.0.5
 
 For SDV[1.07] and SMAPI [0.40]
 
-Updated at 3:30 P.M on 4/25/16
+Updated at 9:22 P.M on 6/8/16
 
--Patched a bug where you would crash when saving in the sewers or community center...but...
+-Fixed it where time simulation wouldn't happen at all. Now it propperly works again.
 
 -Known Issues.
 
