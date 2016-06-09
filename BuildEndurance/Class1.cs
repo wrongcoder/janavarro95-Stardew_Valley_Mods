@@ -49,8 +49,6 @@ namespace BuildEndurance
         //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
         public override void Entry(params object[] objects)
         {
-            Log.Info("HEYO WORLD");
-
             StardewModdingAPI.Events.GameEvents.UpdateTick += EatingCallBack; //sloppy again but it'll do.
 
             StardewModdingAPI.Events.GameEvents.OneSecondTick += Tool_Cleanup;
@@ -64,7 +62,7 @@ namespace BuildEndurance
             var configLocation = Path.Combine(PathOnDisk, "BuildEnduranceConfig.json");
             if (!File.Exists(configLocation))
             {
-                Console.WriteLine("Initial configuration file setup.");
+                Log.Info("Initial configuration file setup.");
                 ModConfig = new Config();
 
                 ModConfig.BuildEndurance_current_lvl = 0;
@@ -93,17 +91,14 @@ namespace BuildEndurance
             else
             {
                 ModConfig = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configLocation)));
-                Console.WriteLine("Found BuildEndurance config file.");
+                Log.Info("Found BuildEndurance config file.");
             }
 
             // DataLoader();
             // MyWritter();  //hopefully loading these after the game is loaded will prevent wierd issues.
 
-            Console.WriteLine("BuildEndurance Initialization Completed");
+            Log.Info("BuildEndurance Initialization Completed");
         }
-
-
-
         public void ToolCallBack(object sender, EventArgs e) //ultra quick response for checking if a tool is used.
         {
             if (tool_cleaner == true) return;
@@ -127,7 +122,7 @@ namespace BuildEndurance
             if (tool_cleaner == true) tool_cleaner = false;
             else return;
         }
-
+        
         public void EatingCallBack(object sender, EventArgs e)
         {
 
@@ -164,19 +159,24 @@ namespace BuildEndurance
                     Log.Info("The player is exhausted");
                 }
             }
-
+            
 
         }
+        
+
 
         public void Collapse_Callback(object sender, EventArgs e) //if the player stays up too late add some xp.
         {
             if (collapse_check == false)
             {
-                if (StardewValley.Game1.timeOfDay==2600)
+
+                if (StardewValley.Game1.farmerShouldPassOut == true)
                 {
+
                     BuildEndurance_data_xp_current += ModConfig.BuildEndurance_Pass_Out_XP;
                     collapse_check = true;
                     Log.Info("The player has collapsed!");
+                    return;
                 }
             }
         }
@@ -209,7 +209,7 @@ namespace BuildEndurance
                 if (BuildEndurance_data_clear_mod_effects == true)
                 {
                     player.MaxStamina = BuildEndurance_data_old_stamina;
-                    Console.WriteLine("BuildEndurance Reset!");
+                   // Console.WriteLine("BuildEndurance Reset!");
                 }
 
                 DataLoader();
@@ -226,11 +226,11 @@ namespace BuildEndurance
             if (upon_loading == true)
             {
 
-                Log.Info("THIS IS MY NEW DAY CALL BACK XP version 1");
+                //Log.Info("THIS IS MY NEW DAY CALL BACK XP version 1");
                 Log.Info(BuildEndurance_data_xp_current);
 
                 Clear_Checker();
-                Log.Info("CLEAR???");
+                //Log.Info("CLEAR???");
                 Log.Info(BuildEndurance_data_clear_mod_effects);
 
                
@@ -263,7 +263,7 @@ namespace BuildEndurance
                     BuildEndurance_data_current_lvl = 0;
                    
                     //because this doesn't work propperly at first anyways.
-                    Console.WriteLine("BuildEndurance Reset!");
+                  //  Console.WriteLine("BuildEndurance Reset!");
                 }
 
 
@@ -280,9 +280,9 @@ namespace BuildEndurance
                             BuildEndurance_data_stam_bonus_acumulated += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
 
 
-                            Log.Info("THIS IS MY NEW DAY CALL BACK XP version 2!");
-                            Log.Info(BuildEndurance_data_xp_current);
-                            Log.Info("IF YOU SEE THIS TOO MUCH THIS IS AN INFINITE LOOP. CRAP");
+                            //Log.Info("THIS IS MY NEW DAY CALL BACK XP version 2!");
+                          //  Log.Info(BuildEndurance_data_xp_current);
+                           // Log.Info("IF YOU SEE THIS TOO MUCH THIS IS AN INFINITE LOOP. CRAP");
                         }
 
                         /*

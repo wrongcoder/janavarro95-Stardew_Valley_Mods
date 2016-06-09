@@ -31,9 +31,18 @@ namespace BuildHealth
 
         public bool fed = false;
 
+
+        public int old_health;
+
+        public int new_health;
+
+
+
         public Config ModConfig { get; set; }
 
 		public static bool upon_loading = false;
+
+        public bool collapse_check;
 
         //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
         public override void Entry(params object[] objects)
@@ -45,11 +54,14 @@ namespace BuildHealth
             StardewModdingAPI.Events.GameEvents.OneSecondTick += Tool_Cleanup;
             StardewModdingAPI.Events.GameEvents.UpdateTick += ToolCallBack;
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += LoadingCallBack;
+            StardewModdingAPI.Events.GameEvents.UpdateTick += Collapse_Callback;
+
+            StardewModdingAPI.Events.GameEvents.UpdateTick += damage_check;
 
             var configLocation = Path.Combine(PathOnDisk, "BuildHealthConfig.json");
             if (!File.Exists(configLocation))
             {
-                Console.WriteLine("The config file for BuildHealth was not found, guess I'll create it...");
+                Log.Info("The config file for BuildHealth was not found, guess I'll create it...");
                 ModConfig = new Config();
 
                 ModConfig.BuildHealth_current_lvl = 0;
@@ -74,12 +86,12 @@ namespace BuildHealth
             else
             {
                 ModConfig = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configLocation)));
-                Console.WriteLine("Found BuildHealth config file.");
+                Log.Info("Found BuildHealth config file.");
             }
 
          //   DataLoader();
          //   MyWritter();
-            Console.WriteLine("BuildHealth Initialization Completed");
+            Log.Info("BuildHealth Initialization Completed");
         }
 
 
@@ -129,9 +141,35 @@ namespace BuildHealth
         }
 
 
+
+        public void damage_check(object sender, EventArgs e)
+        {
+            var player = StardewValley.Game1.player;
+
+            if (old_health > player.health)
+            {
+                BuildHealth_data_xp_current += (old_health - player.health);
+                //Log.Info(old_health - player.health);
+                old_health = (player.health);
+                
+            }
+            if (old_health < player.health)
+            {
+                old_health = player.health;
+            }
+           
+
+
+            return;
+        }
+
+
+
+
         public void SleepCallback(object sender, EventArgs e)
         {
-			if(upon_loading ==true){
+            collapse_check = false;
+            if (upon_loading ==true){
 
                 Clear_Checker();
 
@@ -179,7 +217,11 @@ namespace BuildHealth
 
             MyWritter();
         }
-		}
+
+            old_health = StardewValley.Game1.player.maxHealth;
+
+
+        }
 
 
         public void LoadingCallBack(object sender, EventArgs e)
@@ -212,8 +254,27 @@ namespace BuildHealth
                 DataLoader();
                 MyWritter();
             }
-
+            old_health = StardewValley.Game1.player.maxHealth;
         }
+
+
+        public void Collapse_Callback(object sender, EventArgs e) //if the player stays up too late add some xp.
+        {
+            if (collapse_check == false)
+            {
+
+                if (StardewValley.Game1.farmerShouldPassOut == true)
+                {
+
+                    BuildHealth_data_xp_current += ModConfig.BuildHealth_Pass_Out_XP;
+                    collapse_check = true;
+                    Log.Info("The player has collapsed!");
+                    return;
+                }
+            }
+        }
+
+
         //Mod config data.
         public class Config
         {
@@ -233,6 +294,8 @@ namespace BuildHealth
             public int BuildHealth_ini_Health_boost { get; set; }
 
             public int BuildHealth_Health_accumulated { get; set; }
+
+            public int BuildHealth_Pass_Out_XP { get; set; }
 
         }
 
