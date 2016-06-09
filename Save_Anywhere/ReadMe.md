@@ -1,10 +1,10 @@
-Stardew Valley Save_Anywhere Mod v 1.0.5
+Stardew Valley Save_Anywhere Mod v 1.0.6
 
 For SDV[1.07] and SMAPI [0.40]
 
-Updated at 9:22 P.M on 6/8/16
+Updated at 8:38 P.M on 6/9/16
 
--Fixed it where time simulation wouldn't happen at all. Now it propperly works again.
+-Fixed a bug that casued the game to crash when loading different save files.
 
 -Known Issues.
 
