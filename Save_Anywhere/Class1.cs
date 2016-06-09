@@ -641,12 +641,12 @@ namespace Stardew_Save_Anywhere_Mod
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "NPC_Original_Save_Info_");
-            string mylocation_save = Path.Combine(PathOnDisk, "NPC_Original_Save_Info_");
+            string mylocation = Path.Combine(PathOnDisk, "NPC_Original_Save_Info_"+myname);
+            string mylocation_save = Path.Combine(PathOnDisk, "NPC_Original_Save_Info_"+myname);
 
             if (sleep == true)
             {
-                mylocation = Path.Combine(PathOnDisk, "NPC_Save_Info_");
+                mylocation = Path.Combine(PathOnDisk, "NPC_Save_Info_"+myname);
             }
 
             string myloc2B = mylocation_save;
@@ -676,7 +676,7 @@ namespace Stardew_Save_Anywhere_Mod
 
             if (sleep == true)
             {
-                mylocation = Path.Combine(PathOnDisk, "NPC_Save_Info_");
+                mylocation = Path.Combine(PathOnDisk, "NPC_Save_Info_"+myname);
             }
 
             if (!File.Exists(myloc3B)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -805,12 +805,12 @@ namespace Stardew_Save_Anywhere_Mod
             string mylocation2;
             if (sleep == false)
             {
-                 mylocation = Path.Combine(PathOnDisk, "NPC_Save_Info_");
+                 mylocation = Path.Combine(PathOnDisk, "NPC_Save_Info_"+myname);
                 mylocation2 = mylocation;
             }
             else
             {
-                mylocation = Path.Combine(PathOnDisk, "NPC_Original_Save_Info_");
+                mylocation = Path.Combine(PathOnDisk, "NPC_Original_Save_Info_"+myname);
                 mylocation2 = mylocation;
             }
             
