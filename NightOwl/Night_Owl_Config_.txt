@@ -12,8 +12,8 @@ Keep stamina when staying up? When the farmer passes out at 6, should their stam
 True
 Keep health when staying up? When the farmer passes out at 6, should their health be their health before collapsing?
 True
-
-
+Clean out charges mail?: Get rid of the annoying We charged X gold for your health fees, etc.
+True
 
 
 
