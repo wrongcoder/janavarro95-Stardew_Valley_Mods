@@ -338,7 +338,8 @@ namespace Stardew_NightOwl
                 protect_money = Convert.ToBoolean(readtext[9]); //Is their money safe from stealing?
                 persistant_stamina = Convert.ToBoolean(readtext[11]); //Does the player have the same stam when collapsing?
                 persistant_health = Convert.ToBoolean(readtext[13]); //Ditto but with health.
-                wipe_mail = Convert.ToBoolean(readtext[15]); //will I clean out their mailbox?
+                if (readtext[15] == "") wipe_mail = true;
+               else wipe_mail = Convert.ToBoolean(readtext[15]); //will I clean out their mailbox?
             }
         }
     }
