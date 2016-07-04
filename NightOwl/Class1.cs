@@ -86,10 +86,18 @@ namespace Stardew_NightOwl
                 if (warp == true)
                 {
                     Log.Info("Warping!!!");
+                    if (prior_map == null)
+                    {
+                        warped_check = true;
+                        super_map_warping_check = true;
+                        return;
+                    }
                     Game1.warpFarmer(prior_map, player_x, player_y, false);
                     warped_check = true;
                     super_map_warping_check = true;
+                    prior_map = null;
                 }
+
                 }
 
         }
@@ -120,7 +128,7 @@ namespace Stardew_NightOwl
                 first_check = false;
                 Log.Info("Second");
             }
-            Game1.farmerShouldPassOut = false; //make the farmer collapse.
+          if(Game1.farmerShouldPassOut== true)  Game1.farmerShouldPassOut = false; //make the farmer collapse.
            
             reset_check = false;
             //Game1.farmerShouldPassOut = false; //make the farmer collapse.
@@ -171,6 +179,7 @@ namespace Stardew_NightOwl
                 }
             }
             warped_check = false;
+            //prior_map==null; //prevents multiple warping when sleeping
         }
 
 
