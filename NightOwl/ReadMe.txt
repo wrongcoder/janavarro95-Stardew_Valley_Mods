@@ -1,8 +1,7 @@
-Stardew Valley Night Owl 1.0.2
-Updated at 10:34 AM on 6/29/16
+Stardew Valley Night Owl 1.0.3
+Updated at 1:37 PM on 7/4/16
  
- -Added in the functionality where charges mail is automatically deleted now.
- -Fixed a glicth where fishing after the time the player needed to collapse would cause all sorts of issues.
+ -Fixed a glitch where the game would crash when trying to save.
   
   
   Stardew Valley Night Owl is a mod that allows players to stay up a full 24 hours instead of being restricted to 2AM.
