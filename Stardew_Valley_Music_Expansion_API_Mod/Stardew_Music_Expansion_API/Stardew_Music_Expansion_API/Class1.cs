@@ -836,6 +836,10 @@ namespace Stardew_Music_Expansion_API
 
         public static Info_Class current_info_class;
 
+
+        public static bool farm_player;
+        public static bool is_farm;
+
         public override void Entry(params object[] objects)
         {
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
@@ -938,6 +942,8 @@ namespace Stardew_Music_Expansion_API
         {
             if (game_loaded == false) return;
             // Log.Info("NEW LOCATION");
+            if (Game1.player.currentLocation.name == "Farm") is_farm = true;
+            else is_farm = false;
             music_selector();
 
         }
@@ -1165,6 +1171,11 @@ namespace Stardew_Music_Expansion_API
             bool night_time=false;
             bool rainy = Game1.isRaining;
 
+            if (is_farm == true)
+            {
+                farm_music_selector();
+                return;
+            }
             if (StardewValley.Game1.isFestival() == true)
             {
                 stop_sound();
@@ -1315,6 +1326,157 @@ namespace Stardew_Music_Expansion_API
             //end of function. Natural return;
             return;
         }
+
+
+        public static void farm_music_selector()
+        {
+            
+            if (game_loaded == false)
+            {
+                return;
+            }
+            //  no_music = false;
+            //if at any time the music for an area can't be played for some unknown reason, the game should default to playing the Stardew Valley Soundtrack.
+            bool night_time = false;
+            bool rainy = Game1.isRaining;
+
+            Log.Info("Loading farm music.");
+            if (StardewValley.Game1.isFestival() == true)
+            {
+                stop_sound();
+                return; //replace with festival music if I decide to support it.
+            }
+            if (StardewValley.Game1.eventUp == true)
+            {
+                stop_sound();
+                return; //replace with event music if I decide to support it/people request it.
+            }
+
+
+            if (Game1.timeOfDay < 600 || Game1.timeOfDay > Game1.getModeratelyDarkTime())
+            {
+                night_time = true;
+            }
+            else
+            {
+                night_time = false;
+            }
+
+                Log.Info("Loading Default Seasonal Music");
+
+                if (master_list.Count == 0)
+                {
+                    Log.Error("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                    reset();
+                    return;
+
+                }
+
+                //add in seasonal stuff here
+                if (Game1.IsSpring == true)
+                {
+                    if (rainy == true)
+                    {
+                        spring_rain_songs();
+                    }
+                    else
+                    {
+                        spring_songs();
+                    }
+                }
+                if (Game1.IsSummer == true)
+                {
+                    if (rainy == true)
+                    {
+                        summer_rain_songs();
+                    }
+                    else
+                    {
+                        summer_songs();
+                    }
+                }
+                if (Game1.IsFall == true)
+                {
+                    if (rainy == true)
+                    {
+                        fall_rain_songs();
+                    }
+                    else
+                    {
+                        fall_songs();
+                    }
+                }
+                if (Game1.IsWinter == true)
+                {
+                    if (Game1.isSnowing == true)
+                    {
+                        winter_snow_songs();
+                    }
+                    else
+                    {
+                        winter_songs();
+                    }
+                }
+                //end seasonal songs
+            if (cueball != null)
+            {
+                if (cueball.IsPlaying == true)
+                {
+                    return;
+                }
+            }
+            //start locational songs
+            if (rainy == true && night_time == true)
+                {
+                    music_player_rain_night(); //some really awful heirarchy type thing I made up to help ensure that music plays all the time
+                    if (no_music == true)
+                    {
+                        music_player_rain();
+                        if (no_music == true)
+                        {
+                            music_player_night();
+                            if (no_music == true)
+                            {
+                                music_player_location();
+
+                            }
+                        }
+                    }
+
+                }
+                if (rainy == true && night_time == false)
+                {
+                    music_player_rain();
+                    if (no_music == true)
+                    {
+                        music_player_night();
+                        if (no_music == true)
+                        {
+                            music_player_location();
+
+                        }
+                    }
+
+                }
+                if (rainy == false && night_time == true)
+                {
+                    music_player_night();
+                    if (no_music == true)
+                    {
+                        music_player_location();
+
+                    }
+
+                }
+                if (rainy == false && night_time == false)
+                {
+                    music_player_location();
+                }
+
+            //end of function. Natural return;
+            return;
+        }
+
         public static void music_player_location()
         {
             if (game_loaded == false)
@@ -1871,6 +2033,7 @@ namespace Stardew_Music_Expansion_API
                 Log.Info("Location is null");
             }
         }//end music player
+
         public static void spring_songs()
         {
 
@@ -1938,7 +2101,7 @@ namespace Stardew_Music_Expansion_API
                 else
                 {
                     stop_sound();
-                    cueball = current_info_class.fall_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
+                    cueball = current_info_class.spring_night_song_list.ElementAt(randomNumber); //grab a random song from the spring song list
                     Game1.soundBank = current_info_class.new_sound_bank; //access my new sound table
                     Game1.waveBank = current_info_class.newwave;
                     cueball = Game1.soundBank.GetCue(cueball.Name);
@@ -1946,7 +2109,7 @@ namespace Stardew_Music_Expansion_API
                 if (cueball != null)
                 {
                     no_music = false;
-                    Log.Info("Now listening to: " + cueball.Name + " from the music pack located at: " + current_info_class.path_loc + " while it is spring and night time. Check the seasons folder for more info");
+                    Log.Info("Now listening to: " + cueball.Name + " from the music pack located at: " + current_info_class.path_loc + " while it is a Spring Night. Check the seasons folder for more info");
                     cueball.Play();
                     Class1.reset();
                     return;
@@ -1994,7 +2157,7 @@ namespace Stardew_Music_Expansion_API
             else
             {
                 stop_sound();
-                cueball = current_info_class.fall_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
+                cueball = current_info_class.spring_song_list.ElementAt(randomNumber); //grab a random song from the spring song list
                 Game1.soundBank = current_info_class.new_sound_bank; //access my new sound table
                 Game1.waveBank = current_info_class.newwave;
                 cueball = Game1.soundBank.GetCue(cueball.Name);
@@ -2069,7 +2232,7 @@ namespace Stardew_Music_Expansion_API
                 else
                 {
                     stop_sound();
-                    cueball = current_info_class.fall_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
+                    cueball = current_info_class.spring_rain_night_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
                     Game1.soundBank = current_info_class.new_sound_bank; //access my new sound table
                     Game1.waveBank = current_info_class.newwave;
                     cueball = Game1.soundBank.GetCue(cueball.Name);
@@ -2127,7 +2290,7 @@ namespace Stardew_Music_Expansion_API
             else
             {
                 stop_sound();
-                cueball = current_info_class.fall_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
+                cueball = current_info_class.spring_rain_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
                 Game1.soundBank = current_info_class.new_sound_bank; //access my new sound table
                 Game1.waveBank = current_info_class.newwave;
                 cueball = Game1.soundBank.GetCue(cueball.Name);
@@ -2265,10 +2428,14 @@ namespace Stardew_Music_Expansion_API
             Game1.waveBank = current_info_class.newwave;
             cueball = current_info_class.summer_song_list.ElementAt(randomNumber); //grab a random song from the summer song list
             cueball = Game1.soundBank.GetCue(cueball.Name);
-            Log.Info("Now listening to: " + cueball.Name + " from the music pack located at: " + current_info_class.path_loc + " while it is a Summer day. Check the Seasons folder for more info.");
-            no_music = false;
-            cueball.Play();
-            Class1.reset();
+            if (cueball != null)
+            {
+                Log.Info("Now listening to: " + cueball.Name + " from the music pack located at: " + current_info_class.path_loc + " while it is a Fall day. Check the Seasons folder for more info.");
+                // System.Threading.Thread.Sleep(30000);
+                no_music = false;
+                cueball.Play();
+                Class1.reset();
+            }      
             return;
 
         } //plays the songs associated with summer time
@@ -2335,7 +2502,7 @@ namespace Stardew_Music_Expansion_API
                 else
                 {
                     stop_sound();
-                    cueball = current_info_class.fall_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
+                    cueball = current_info_class.summer_rain_night_song_list.ElementAt(randomNumber); //grab a random song from the summer song list
                     Game1.soundBank = current_info_class.new_sound_bank; //access my new sound table
                     Game1.waveBank = current_info_class.newwave;
                     cueball = Game1.soundBank.GetCue(cueball.Name);
@@ -2393,7 +2560,7 @@ namespace Stardew_Music_Expansion_API
             else
             {
                 stop_sound();
-                cueball = current_info_class.fall_song_list.ElementAt(randomNumber); //grab a random song from the fall song list
+                cueball = current_info_class.summer_rain_song_list.ElementAt(randomNumber); //grab a random song from the summer song list
                 Game1.soundBank = current_info_class.new_sound_bank; //access my new sound table
                 Game1.waveBank = current_info_class.newwave;
                 cueball = Game1.soundBank.GetCue(cueball.Name);
@@ -3014,7 +3181,8 @@ namespace Stardew_Music_Expansion_API
                 mystring3[8] = "Seasonal_Music? Setting this value to true will play the seasonal music from the music packs instead of defaulting to the Stardew Valley Soundtrack.";
                 mystring3[9] = seasonal_music.ToString();
 
-
+                mystring3[10] = "Prioritize seasonal music on the Farm? If true the game will check for seasonal music before checking for locational music.";
+                mystring3[11] = farm_player.ToString();
                 //   mystring3[8] = "Clean out charges mail?: Get rid of the annoying We charged X gold for your health fees, etc.";
                 //    mystring3[9] = wipe_mail.ToString();
 
@@ -3053,6 +3221,9 @@ namespace Stardew_Music_Expansion_API
                 mystring3[8] = "Seasonal_Music? Setting this value to true will play the seasonal music from the music packs instead of defaulting to the Stardew Valley Soundtrack.";
                 mystring3[9] = seasonal_music.ToString();
 
+                mystring3[10] = "Prioritize seasonal music on the Farm? If true the game will check for seasonal music before checking for locational music.";
+                mystring3[11] = farm_player.ToString();
+
                 // mystring3[8] = "Clean out charges mail?: Get rid of the annoying We charged X gold for your health fees, etc.";
                 //  mystring3[9] = wipe_mail.ToString();
 
@@ -3084,7 +3255,7 @@ namespace Stardew_Music_Expansion_API
                 delay_time_max = 30000;
                 silent_rain = false;
                 seasonal_music = true;
-
+                farm_player = true;
             }
 
             else
@@ -3094,14 +3265,12 @@ namespace Stardew_Music_Expansion_API
 
                 //loads the BuildEndurance_data upon loading the mod
                 string[] readtext = File.ReadAllLines(mylocation3);
-               delay_time_min = Convert.ToInt32(readtext[3]);
+                delay_time_min = Convert.ToInt32(readtext[3]);
                 delay_time_max = Convert.ToInt32(readtext[5]);  //these array locations refer to the lines in BuildEndurance_data.json
-               silent_rain = Convert.ToBoolean(readtext[7]);
+                silent_rain = Convert.ToBoolean(readtext[7]);
                 seasonal_music = Convert.ToBoolean(readtext[9]);
-
-
-
-
+                if (readtext[11] == "") farm_player = true;
+                else farm_player = Convert.ToBoolean(readtext[11]);
 
             }
         }
