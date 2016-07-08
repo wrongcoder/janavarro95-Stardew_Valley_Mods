@@ -8,8 +8,8 @@ Silent rain? Setting this value to false plays the default ambient rain music al
 False
 Seasonal_Music? Setting this value to true will play the seasonal music from the music packs instead of defaulting to the Stardew Valley Soundtrack.
 True
-
-
+Prioritize seasonal music on the Farm? If true the game will check for seasonal music before checking for locational music.
+True
 
 
 
