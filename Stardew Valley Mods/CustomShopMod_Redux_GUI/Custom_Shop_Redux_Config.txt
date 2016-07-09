@@ -1,0 +1,20 @@
+Config: Custom_Shop_Redux. Feel free to mess with these settings.
+====================================================================================
+Key binding for saving anywhere. Press this key to save anywhere!
+U
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
