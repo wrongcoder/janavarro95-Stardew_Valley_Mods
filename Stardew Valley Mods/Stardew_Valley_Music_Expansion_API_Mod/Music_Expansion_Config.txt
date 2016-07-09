@@ -1,0 +1,20 @@
+Player: Stardew Valley Music Expansion Config. Feel free to edit.
+====================================================================================
+Minimum delay time: This is the minimal amout of time(in miliseconds!!!) that will pass before another song will play. 0 means a song will play immediately, 1000 means a second will pass, etc. Used in RNG to determine a random delay between songs.
+10000
+Maximum delay time: This is the maximum amout of time(in miliseconds!!!) that will pass before another song will play. 0 means a song will play immediately, 1000 means a second will pass, etc. Used in RNG to determine a random delay between songs.
+30000
+Silent rain? Setting this value to false plays the default ambient rain music along side whatever songs are set in rain music. Setting this to true will disable the ambient rain music. It's up to the soundpack creators wither or not they want to mix their music with rain prior to loading it in here.
+False
+Seasonal_Music? Setting this value to true will play the seasonal music from the music packs instead of defaulting to the Stardew Valley Soundtrack.
+True
+Prioritize seasonal music on the Farm? If true the game will check for seasonal music before checking for locational music.
+True
+
+
+
+
+
+
+
+
