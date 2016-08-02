@@ -216,8 +216,7 @@ namespace StardewValley.Menus
             {
                 if (Game1.player.money > new_item.salePrice() * Buy_Back_Collectables.Class1.cost)
                 {
-                    int amount = (int)(this.value * Buy_Back_Collectables.Class1.cost);
-                    Game1.player.money -= amount;
+                    Game1.player.money -= value;
                     Game1.player.addItemByMenuIfNecessary(new_item);
                 }
                
@@ -230,8 +229,8 @@ namespace StardewValley.Menus
             {
                 if (Game1.player.money > new_item.salePrice() * Buy_Back_Collectables.Class1.cost)
                 {
-                    int amount = (int)(this.value * Buy_Back_Collectables.Class1.cost);
-                    Game1.player.money -= amount;
+                  
+                    Game1.player.money -= value;
                     Game1.player.addItemByMenuIfNecessary(new_item);
                 }
 
@@ -356,6 +355,7 @@ namespace StardewValley.Menus
                     text = text + "Number Shipped: " + (Game1.player.basicShipped.ContainsKey(index) ? Game1.player.basicShipped[index] : 0);
                 }
                 this.value = Convert.ToInt32(array2[1]);
+                this.value =(int)(this.value * Buy_Back_Collectables.Class1.cost);
             }
             return text;
         }
