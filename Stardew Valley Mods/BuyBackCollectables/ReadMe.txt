@@ -12,6 +12,8 @@ Stardew Valley 1.0.7 Windows
 
 SMAPI 0.40.0
 
+Description:
+
 A simple mod that allows you to buy back any collectable that you have already shiped at 3 times the shipping price. (Configurable in the config file)
 
 Usage: Press B to open up the buy back menu.
