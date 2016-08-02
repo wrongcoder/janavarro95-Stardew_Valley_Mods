@@ -20,4 +20,4 @@ Usage: Press B to open up the buy back menu.
 
 Update Info: 1.0.1
 
--Changed price display in buy back menu.
+-Changed price display in buy back menu to propperly reflect buy back price.
