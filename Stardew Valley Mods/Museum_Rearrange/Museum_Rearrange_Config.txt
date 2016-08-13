@@ -1,6 +1,6 @@
-Config: Save_Anywhere Info. Feel free to mess with these settings.
+Config: Museum_Rearranger. Feel free to mess with these settings.
 ====================================================================================
-Key binding for saving anywhere. Press this key to save anywhere!
+Key binding for rearranging the museum.
 R
 
 

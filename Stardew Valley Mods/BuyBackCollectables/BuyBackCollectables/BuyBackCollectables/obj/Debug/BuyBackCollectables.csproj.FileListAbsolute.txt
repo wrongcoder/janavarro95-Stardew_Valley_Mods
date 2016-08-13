@@ -1,0 +1,22 @@
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\BuyBackCollectables.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\BuyBackCollectables.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Stardew Valley.exe
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\StardewModdingAPI.exe
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\xTile.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Game.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Graphics.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Lidgren.Network.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Xact.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Steamworks.NET.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.GamerServices.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Input.Touch.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Game.xml
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Graphics.xml
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.xml
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Xact.xml
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.GamerServices.xml
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\bin\Debug\Microsoft.Xna.Framework.Input.Touch.xml
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\obj\Debug\BuyBackCollectables.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\obj\Debug\BuyBackCollectables.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\BuyBackCollectables\BuyBackCollectables\obj\Debug\BuyBackCollectables.pdb
