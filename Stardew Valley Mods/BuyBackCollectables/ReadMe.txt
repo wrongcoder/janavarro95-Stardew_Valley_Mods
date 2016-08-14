@@ -1,6 +1,7 @@
 !!!!THIS IS AN OUTDATED VERSION!!!!
 
-Please go here: 
+Please go here:  https://github.com/janavarro95/Stardew_Valley_Mods/tree/master/Stardew_Valley_Mods/BuyBackCollectables
+
 
 
 
