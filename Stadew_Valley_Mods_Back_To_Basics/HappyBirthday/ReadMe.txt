@@ -1,10 +1,10 @@
 Happy Birthday
 
-Version:1.0.0
+Version:1.0.1
 
 Published: 8/18/16 11:21 AM
 
-Updated: 8/18/16 12:50 AM
+Updated: 8/18/16 11:34 AM
 
 Compatability:
 
@@ -43,6 +43,9 @@ Note: This mod was built with custom NPCs in mind. You can either add in your cu
 Have fun!
 
 Update Info: 
+1.0.1
+-Fixed a dialogue error with Shane
+-Stopped spamming info to the SMAPI console.
 
 1.0.0
 -Initial Release
