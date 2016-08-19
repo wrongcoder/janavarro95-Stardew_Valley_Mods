@@ -1,10 +1,10 @@
 Happy Birthday
 
-Version:1.0.2
+Version:1.0.3
 
 Published: 8/18/16 11:21 AM
 
-Updated: 8/18/16 11:53 AM
+Updated: 8/18/16 8:54 PM
 
 Compatability:
 
@@ -43,6 +43,9 @@ Note: This mod was built with custom NPCs in mind. You can either add in your cu
 Have fun!
 
 Update Info: 
+
+1.0.3
+-Fixed a bug where you could "talk" to your pet.
 
 1.0.2
 -Deleted some old data. all good now.
