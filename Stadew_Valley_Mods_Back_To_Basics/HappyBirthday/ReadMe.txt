@@ -1,6 +1,6 @@
 Happy Birthday
 
-Version:1.0.3
+Version:1.0.4
 
 Published: 8/18/16 11:21 AM
 
@@ -43,6 +43,10 @@ Note: This mod was built with custom NPCs in mind. You can either add in your cu
 Have fun!
 
 Update Info: 
+
+1.0.4
+
+-Fixed a bug where everyone would wish you a happy birthday every day. Opps
 
 1.0.3
 -Fixed a bug where you could "talk" to your pet.
