@@ -1,10 +1,10 @@
 Happy Birthday
 
-Version:1.0.4
+Version:1.0.5
 
 Published: 8/18/16 11:21 AM
 
-Updated: 8/19/16 3:34 PM
+Updated: 8/20/16 9:27 AM
 
 Compatability:
 
@@ -44,8 +44,10 @@ Have fun!
 
 Update Info: 
 
-1.0.4
+1.0.5
+-Fixed a bug where NPCs wouldn't wish you a happy birthday but give you  a gift.
 
+1.0.4
 -Fixed a bug where everyone would wish you a happy birthday every day. Opps
 
 1.0.3
