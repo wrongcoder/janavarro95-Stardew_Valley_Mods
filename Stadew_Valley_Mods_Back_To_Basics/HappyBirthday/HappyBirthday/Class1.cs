@@ -176,6 +176,7 @@ namespace HappyBirthday
             if (Game1.player == null) return;
             if(has_input_birthday == true) MyWritter_Birthday();
             MyWritter_Settings();
+            once = false;
         }
 
         public virtual void birthday_gift()
