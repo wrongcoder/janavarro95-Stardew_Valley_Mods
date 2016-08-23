@@ -67,6 +67,7 @@ namespace HappyBirthday
             if (game_loaded == false) return;
             if (Game1.player.isMoving()==true && once == false)
             {
+                Log.AsyncM("Is it my birthday? "+isplayersbirthday());
                 if (isplayersbirthday() == true)
                 {
                     foreach (var location in Game1.locations)
@@ -91,11 +92,13 @@ namespace HappyBirthday
                     }
                     //end birthday check
                 }
+                once = true;
                 if (player_birthday_season == "" || player_birthday_season == null || player_birthday_date == 0)
                 {
                     Game1.activeClickableMenu = new StardewValley.Menus.Birthday_Menu();
+                    once = false;
                 }
-                once = true;
+                
                 
               }
             if (Game1.currentSpeaker != null)
