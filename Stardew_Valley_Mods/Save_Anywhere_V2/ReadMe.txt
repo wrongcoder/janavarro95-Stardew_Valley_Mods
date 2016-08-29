@@ -1,10 +1,10 @@
 Save Anywhere V2
 
-Version:2.0.0
+Version:2.0.1
 
 Published: 8/26/16 8:46 AM
 
-Updated: 8/26/16 8:46 AM
+Updated: 8/29/16 9:08 AM
 
 Compatability:
 
@@ -58,5 +58,8 @@ If you have any bugs/comments/etc please post them in the new discussion form ta
 Thanks and have fun!
 
 Update Info: 
+2.0.1
+-Fixed a glitch that would cause the game to crash if you don't have a horse.
+
 2.0.0
 -Initial rewritten release.
