@@ -92,6 +92,7 @@ namespace Save_Anywhere_V2
                         }
                     if (npc.name == Game1.player.getPetName()) continue;
                     Horse horse = StardewValley.Utility.findHorse();
+                    if (horse == null) continue;
                     if (npc.name == horse.name) continue;
                    // Log.Info("THIS IS MY NPC" + npc.name);
                       //  Log.AsyncC("NO SCHEDULE FOUND FOR " + npc.name);
