@@ -4,7 +4,7 @@ Version:2.0.1
 
 Published: 8/26/16 8:46 AM
 
-Updated: 8/29/16 9:08 AM
+Updated: 9/5/16 1:16 PM
 
 Compatability:
 
@@ -58,6 +58,11 @@ If you have any bugs/comments/etc please post them in the new discussion form ta
 Thanks and have fun!
 
 Update Info: 
+2.1.0
+-Added in some bug handling that should prevent the mod from outright crashing. Also it dumps error logs to (thisModDirectory)/Error_Logs
+
+2.0.2
+-Forgot to change the config back to the original state
 2.0.1
 -Fixed a glitch that would cause the game to crash if you don't have a horse.
 
