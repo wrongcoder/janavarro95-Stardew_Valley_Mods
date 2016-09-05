@@ -1,0 +1,14 @@
+{
+  "Name": "Stardew_NightOwl",
+  "Authour": "Alpha_Omegasis",
+  "Version": {
+    "MajorVersion": 1,
+    "MinorVersion": 1,
+    "PatchVersion": 0,
+    "Build": ""
+  },
+  "Description": "Allows the farmer to stay up all night.",
+  "UniqueID": "SaveAnywhere",
+  "PerSaveConfigs": false,
+  "EntryDll": "Stardew_NightOwl.dll"
+}

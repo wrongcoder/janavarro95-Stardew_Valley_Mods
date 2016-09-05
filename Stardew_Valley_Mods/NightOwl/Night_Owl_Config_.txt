@@ -1,0 +1,20 @@
+Player: Night Owl Config. Feel free to edit.
+====================================================================================
+Stay up to 6 AM?: Do you wan't to stay up till 6 AM the next morning?
+True
+Custom Lighting Transition?: Do you want to have a lighting transition from 2AM to 5:50 AM? Setting this to false will keep the world dark until the player passes out or goes to bed.
+True
+Warp to collapse position?: True: Stay in the same place. False: Warp back home.
+True
+Keep Money?: True: Don't be charged for passing out.
+True
+Keep stamina when staying up? When the farmer passes out at 6, should their stamina be their stamina before collapsing?
+True
+Keep health when staying up? When the farmer passes out at 6, should their health be their health before collapsing?
+True
+Clean out charges mail?: Get rid of the annoying We charged X gold for your health fees, etc.
+True
+
+
+
+
