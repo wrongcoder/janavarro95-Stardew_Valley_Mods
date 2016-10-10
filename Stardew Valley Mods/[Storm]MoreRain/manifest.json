@@ -1,8 +1,0 @@
-{
-    "displayName": "[Storm]MoreRain",
-    "author": "Alpha_Omegasis",
-    "version": "0.0.0.1",
-    "description": "Allows you to edit the chance for raining and lightning.",
-
-    "assemblyFileName": "Storm_MoreRain.dll"
-}
