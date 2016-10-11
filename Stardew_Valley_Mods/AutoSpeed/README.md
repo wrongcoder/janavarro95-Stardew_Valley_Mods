@@ -1,13 +1,19 @@
 # AutoSpeed_Mod
-v0.0.4 3/27/16
--Updated to SMAPI 0.3.9.1
 
--Updated to the most recent version of SMAPI.
 
--No longer requires the trainer mod to run!
+Initial Post: 3/27/16
+Updated: v1.1.0 10/11/16
 
--General code clean up.
+Compatability:
+Windows
+SDV 1.1
 
+Changelog:
+1.1.0
+-Updated to SDv 1.1
+-Updated to SMAPI 0.40.0 1.1-3
+
+Description:
 This is a simple .dll mod for SMAPI which automatically changes the character's speed value referenced in AutoSpeed.txt.
 This basically just bypasses having to type in the command everytime you load SMAPI.
 

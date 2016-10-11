@@ -1,4 +1,14 @@
 [SMAPI]BuildEndurance
+Posted: 10/11/16 12:24 AM
+Updated: 10/11/16 12:24 AM
+
+Compatability:
+SDV 1.1.0
+SMAPI 0.40.0 1.1-3
+
+Updates:
+1.1.0
+-Updatd to SDV 1.1
 
 -v1.0.0 4/10/16 10:40 PM PST
 

@@ -73,15 +73,15 @@ namespace StardewValley.Menus
             for (int index = 0; index < 6; ++index)
             {
                 List<ClickableTextureComponent> list = this.categories;
-                ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.centerX + this.totalWidth / 2 - this.plusButtonWidth, this.centerY - 25 * Game1.pixelZoom * 3 + index * 27 * Game1.pixelZoom, this.plusButtonWidth, 11 * Game1.pixelZoom), "", this.getCategoryName(index), Game1.mouseCursors, new Rectangle(392, 361, 10, 11), (float)Game1.pixelZoom, false);
+                ClickableTextureComponent textureComponent1 = new ClickableTextureComponent("texture"+Convert.ToString(index),new Rectangle(this.centerX + this.totalWidth / 2 - this.plusButtonWidth, this.centerY - 25 * Game1.pixelZoom * 3 + index * 27 * Game1.pixelZoom, this.plusButtonWidth, 11 * Game1.pixelZoom), "", this.getCategoryName(index), Game1.mouseCursors, new Rectangle(392, 361, 10, 11), (float)Game1.pixelZoom, false);
                 textureComponent1.visible = index < 5 && Enumerable.Count<Item>((IEnumerable<Item>)this.categoryItems[index]) > 0;
                 ClickableTextureComponent textureComponent2 = textureComponent1;
                 list.Add(textureComponent2);
             }
             this.dayPlaqueY = this.categories[0].bounds.Y - Game1.tileSize * 2;
-            this.okButton = new ClickableTextureComponent( new Rectangle(this.centerX + this.totalWidth / 2 - this.itemAndPlusButtonWidth + Game1.tileSize / 2, this.centerY + 25 * Game1.pixelZoom * 3 - Game1.tileSize, Game1.tileSize, Game1.tileSize), (string)null, "Done", Game1.mouseCursors, new Rectangle(128, 256, 64, 64), 1f, false);
-            this.backButton = new ClickableTextureComponent( new Rectangle(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen + this.height - 16 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), (string)null, "", Game1.mouseCursors, new Rectangle(352, 495, 12, 11), (float)Game1.pixelZoom, false);
-            this.forwardButton = new ClickableTextureComponent( new Rectangle(this.xPositionOnScreen + this.width - Game1.tileSize / 2 - 12 * Game1.pixelZoom, this.yPositionOnScreen + this.height - 16 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), (string)null, "", Game1.mouseCursors, new Rectangle(365, 495, 12, 11), (float)Game1.pixelZoom, false);
+            this.okButton = new ClickableTextureComponent("Done", new Rectangle(this.centerX + this.totalWidth / 2 - this.itemAndPlusButtonWidth + Game1.tileSize / 2, this.centerY + 25 * Game1.pixelZoom * 3 - Game1.tileSize, Game1.tileSize, Game1.tileSize), (string)null, "Done", Game1.mouseCursors, new Rectangle(128, 256, 64, 64), 1f, false);
+            this.backButton = new ClickableTextureComponent("Back", new Rectangle(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen + this.height - 16 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), (string)null, "", Game1.mouseCursors, new Rectangle(352, 495, 12, 11), (float)Game1.pixelZoom, false);
+            this.forwardButton = new ClickableTextureComponent("forward", new Rectangle(this.xPositionOnScreen + this.width - Game1.tileSize / 2 - 12 * Game1.pixelZoom, this.yPositionOnScreen + this.height - 16 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), (string)null, "", Game1.mouseCursors, new Rectangle(365, 495, 12, 11), (float)Game1.pixelZoom, false);
             if (Game1.dayOfMonth == 25 && Game1.currentSeason.Equals("winter"))
             {
                 Vector2 position = new Vector2((float)Game1.viewport.Width, (float)Game1.random.Next(0, 200));
