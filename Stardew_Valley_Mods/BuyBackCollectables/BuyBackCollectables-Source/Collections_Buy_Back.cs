@@ -46,21 +46,21 @@ namespace StardewValley.Menus
 
         public Collections_Buy_Back(int x, int y, int width, int height) : base(x, y, width, height, false)
         {
-            this.sideTabs.Add(new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4 + CollectionsPage.widthToMoveActiveTab, this.yPositionOnScreen + Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), "", "Items Shipped (Farm & Forage)", Game1.mouseCursors, new Rectangle(640, 80, 16, 16), (float)Game1.pixelZoom));
+            this.sideTabs.Add(new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4 + CollectionsPage.widthToMoveActiveTab, this.yPositionOnScreen + Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), "", "Items Shipped (Farm & Forage)", Game1.mouseCursors, new Rectangle(640, 80, 16, 16), (float)Game1.pixelZoom));
             this.collections.Add(0, new List<List<ClickableTextureComponent>>());
-            this.sideTabs.Add(new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 3, Game1.tileSize, Game1.tileSize), "", "Fish", Game1.mouseCursors, new Rectangle(640, 64, 16, 16), (float)Game1.pixelZoom));
+            this.sideTabs.Add(new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 3, Game1.tileSize, Game1.tileSize), "", "Fish", Game1.mouseCursors, new Rectangle(640, 64, 16, 16), (float)Game1.pixelZoom));
             this.collections.Add(1, new List<List<ClickableTextureComponent>>());
-            this.sideTabs.Add(new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 4, Game1.tileSize, Game1.tileSize), "", "Artifacts", Game1.mouseCursors, new Rectangle(656, 64, 16, 16), (float)Game1.pixelZoom));
+            this.sideTabs.Add(new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 4, Game1.tileSize, Game1.tileSize), "", "Artifacts", Game1.mouseCursors, new Rectangle(656, 64, 16, 16), (float)Game1.pixelZoom));
             this.collections.Add(2, new List<List<ClickableTextureComponent>>());
-            this.sideTabs.Add(new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 5, Game1.tileSize, Game1.tileSize), "", "Minerals", Game1.mouseCursors, new Rectangle(672, 64, 16, 16), (float)Game1.pixelZoom));
+            this.sideTabs.Add(new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 5, Game1.tileSize, Game1.tileSize), "", "Minerals", Game1.mouseCursors, new Rectangle(672, 64, 16, 16), (float)Game1.pixelZoom));
             this.collections.Add(3, new List<List<ClickableTextureComponent>>());
-            this.sideTabs.Add(new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 6, Game1.tileSize, Game1.tileSize), "", "Cooking", Game1.mouseCursors, new Rectangle(688, 64, 16, 16), (float)Game1.pixelZoom));
+            this.sideTabs.Add(new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 6, Game1.tileSize, Game1.tileSize), "", "Cooking", Game1.mouseCursors, new Rectangle(688, 64, 16, 16), (float)Game1.pixelZoom));
             this.collections.Add(4, new List<List<ClickableTextureComponent>>());
-            this.sideTabs.Add(new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 7, Game1.tileSize, Game1.tileSize), "", "Achievements", Game1.mouseCursors, new Rectangle(656, 80, 16, 16), (float)Game1.pixelZoom));
+            this.sideTabs.Add(new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 7, Game1.tileSize, Game1.tileSize), "", "Achievements", Game1.mouseCursors, new Rectangle(656, 80, 16, 16), (float)Game1.pixelZoom));
             this.collections.Add(5, new List<List<ClickableTextureComponent>>());
             Collections_Buy_Back.widthToMoveActiveTab = Game1.tileSize / 8;
-            this.backButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 3 / 4, this.yPositionOnScreen + height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), "", "", Game1.mouseCursors, new Rectangle(352, 495, 12, 11), (float)Game1.pixelZoom, false, false);
-            this.forwardButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width - Game1.tileSize / 2 - 15 * Game1.pixelZoom, this.yPositionOnScreen + height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), "", "", Game1.mouseCursors, new Rectangle(365, 495, 12, 11), (float)Game1.pixelZoom, false, false);
+            this.backButton = new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen + Game1.tileSize * 3 / 4, this.yPositionOnScreen + height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), "", "", Game1.mouseCursors, new Rectangle(352, 495, 12, 11), (float)Game1.pixelZoom, false);
+            this.forwardButton = new ClickableTextureComponent("",new Rectangle(this.xPositionOnScreen + width - Game1.tileSize / 2 - 15 * Game1.pixelZoom, this.yPositionOnScreen + height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), "", "", Game1.mouseCursors, new Rectangle(365, 495, 12, 11), (float)Game1.pixelZoom, false);
             int[] array = new int[this.sideTabs.Count<ClickableTextureComponent>()];
             int num = this.xPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearSideBorder;
             int num2 = this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4;
@@ -142,7 +142,7 @@ namespace StardewValley.Menus
                 {
                     this.collections[num4].Add(new List<ClickableTextureComponent>());
                 }
-                this.collections[num4].Last<List<ClickableTextureComponent>>().Add(new ClickableTextureComponent(new Rectangle(x2, num5, Game1.tileSize, Game1.tileSize), current.Key + " " + flag, "", Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, current.Key, 16, 16), (float)Game1.pixelZoom, false, flag));
+                this.collections[num4].Last<List<ClickableTextureComponent>>().Add(new ClickableTextureComponent("",new Rectangle(x2, num5, Game1.tileSize, Game1.tileSize), current.Key + " " + flag, "", Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, current.Key, 16, 16), (float)Game1.pixelZoom, false));
                 array[num4]++;
             }
             if (this.collections[5].Count<List<ClickableTextureComponent>>() == 0)
@@ -160,7 +160,7 @@ namespace StardewValley.Menus
                 {
                     int x3 = num + array[5] % num3 * (Game1.tileSize + 4);
                     int y2 = num2 + array[5] / num3 * (Game1.tileSize + 4);
-                    this.collections[5][0].Add(new ClickableTextureComponent(new Rectangle(x3, y2, Game1.tileSize, Game1.tileSize), current2.Key + " " + flag2, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 25, -1, -1), 1f, false, false));
+                    this.collections[5][0].Add(new ClickableTextureComponent("",new Rectangle(x3, y2, Game1.tileSize, Game1.tileSize), current2.Key + " " + flag2, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 25, -1, -1), 1f, false));
                     array[5]++;
                 }
             }
@@ -254,39 +254,55 @@ namespace StardewValley.Menus
             this.descriptionText = "";
             this.hoverText = "";
             this.value = -1;
-            foreach (ClickableTextureComponent current in this.sideTabs)
-            {
-                if (current.containsPoint(x, y))
+
+            try {
+                foreach (ClickableTextureComponent current in this.sideTabs)
                 {
-                    this.hoverText = current.hoverText;
-                    return;
+                    if (current.containsPoint(x, y))
+                    {
+                        this.hoverText = current.hoverText;
+                        return;
+                    }
                 }
             }
-            foreach (ClickableTextureComponent current2 in this.collections[this.currentTab][this.currentPage])
+            catch (Exception e)
             {
-                if (current2.containsPoint(x, y))
+                Log.AsyncG(e);
+                 
+            }
+            try {
+                foreach (ClickableTextureComponent current2 in this.collections[this.currentTab][this.currentPage])
                 {
-                    current2.scale = Math.Min(current2.scale + 0.02f, current2.baseScale + 0.1f);
-                    if (Convert.ToBoolean(current2.name.Split(new char[]
+                    if (current2.containsPoint(x, y))
                     {
-                        ' '
-                    })[1]) || this.currentTab == 5)
-                    {
-                        this.hoverText = this.createDescription(Convert.ToInt32(current2.name.Split(new char[]
+                        current2.scale = Math.Min(current2.scale + 0.02f, current2.baseScale + 0.1f);
+                        if (Convert.ToBoolean(current2.name.Split(new char[]
                         {
+                        ' '
+                        })[1]) || this.currentTab == 5)
+                        {
+                            this.hoverText = this.createDescription(Convert.ToInt32(current2.name.Split(new char[]
+                            {
                             ' '
-                        })[0]));
+                            })[0]));
+                        }
+                        else
+                        {
+                            this.hoverText = "???";
+                            this.new_item = null;
+                        }
                     }
                     else
                     {
-                        this.hoverText = "???";
-                        this.new_item = null;
+                        current2.scale = Math.Max(current2.scale - 0.02f, current2.baseScale);
                     }
                 }
-                else
-                {
-                    current2.scale = Math.Max(current2.scale - 0.02f, current2.baseScale);
-                }
+            }
+            catch(Exception e)
+            {
+                Log.AsyncM(this.currentTab);
+                Log.AsyncM(this.currentPage);
+                Log.AsyncM(e);
             }
             this.forwardButton.tryHover(x, y, 0.5f);
             this.backButton.tryHover(x, y, 0.5f);
@@ -375,43 +391,51 @@ namespace StardewValley.Menus
 
         public override void draw(SpriteBatch b)
         {
-            foreach (ClickableTextureComponent current in this.sideTabs)
-            {
-                current.draw(b);
-            }
-            if (this.currentPage > 0)
-            {
-                this.backButton.draw(b);
-            }
-            if (this.currentPage < this.collections[this.currentTab].Count<List<ClickableTextureComponent>>() - 1)
-            {
-                this.forwardButton.draw(b);
-            }
-            b.End();
-            b.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null);
-            foreach (ClickableTextureComponent current2 in this.collections[this.currentTab][this.currentPage])
-            {
-                bool flag = Convert.ToBoolean(current2.name.Split(new char[]
+            
+                foreach (ClickableTextureComponent current in this.sideTabs)
                 {
-                    ' '
-                })[1]);
-                current2.draw(b, flag ? Color.White : (Color.Black * 0.2f), 0.86f);
-                if (this.currentTab == 5 && flag)
-                {
-                    int num = new Random(Convert.ToInt32(current2.name.Split(new char[]
-                    {
-                        ' '
-                    })[0])).Next(12);
-                    b.Draw(Game1.mouseCursors, new Vector2((float)(current2.bounds.X + 16 + Game1.tileSize / 4), (float)(current2.bounds.Y + 20 + Game1.tileSize / 4)), new Rectangle?(new Rectangle(256 + num % 6 * Game1.tileSize / 2, 128 + num / 6 * Game1.tileSize / 2, Game1.tileSize / 2, Game1.tileSize / 2)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 4), (float)(Game1.tileSize / 4)), current2.scale, SpriteEffects.None, 0.88f);
+                    current.draw(b);
                 }
-            }
-            b.End();
-            b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            if (!this.hoverText.Equals(""))
+                if (this.currentPage > 0)
+                {
+                    this.backButton.draw(b);
+                }
+                if (this.currentPage < this.collections[this.currentTab].Count<List<ClickableTextureComponent>>() - 1)
+                {
+                    this.forwardButton.draw(b);
+                }
+                b.End();
+                b.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null);
+            try
             {
-                IClickableMenu.drawHoverText(b, this.hoverText, Game1.smallFont, 0, 0, this.value, null, -1, null, null, 0, -1, -1, -1, -1, 1f, null);
+                foreach (ClickableTextureComponent current2 in this.collections[1][0])
+                {
+                    bool flag = Convert.ToBoolean(current2.name.Split(new char[]
+                    {
+                    ' '
+                    })[1]);
+                    current2.draw(b, flag ? Color.White : (Color.Black * 0.2f), 0.86f);
+                    if (this.currentTab == 5 && flag)
+                    {
+                        int num = new Random(Convert.ToInt32(current2.name.Split(new char[]
+                        {
+                        ' '
+                        })[0])).Next(12);
+                        b.Draw(Game1.mouseCursors, new Vector2((float)(current2.bounds.X + 16 + Game1.tileSize / 4), (float)(current2.bounds.Y + 20 + Game1.tileSize / 4)), new Rectangle?(new Rectangle(256 + num % 6 * Game1.tileSize / 2, 128 + num / 6 * Game1.tileSize / 2, Game1.tileSize / 2, Game1.tileSize / 2)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 4), (float)(Game1.tileSize / 4)), current2.scale, SpriteEffects.None, 0.88f);
+                    }
+                }
+                b.End();
+                b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+                if (!this.hoverText.Equals(""))
+                {
+                    IClickableMenu.drawHoverText(b, this.hoverText, Game1.smallFont, 0, 0, this.value, null, -1, null, null, 0, -1, -1, -1, -1, 1f, null);
+                }
+                b.Draw(Game1.mouseCursors, new Vector2((float)Game1.getOldMouseX(), (float)Game1.getOldMouseY()), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.gamepadControls ? 44 : 0, 16, 16)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
             }
-            b.Draw(Game1.mouseCursors, new Vector2((float)Game1.getOldMouseX(), (float)Game1.getOldMouseY()), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.gamepadControls ? 44 : 0, 16, 16)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
-        }
+            catch(Exception e)
+            {
+                Log.AsyncY(e);
+            }
+            }
     }
 }

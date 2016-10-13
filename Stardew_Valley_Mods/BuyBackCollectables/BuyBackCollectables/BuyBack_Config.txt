@@ -1,0 +1,20 @@
+Config: Buy Back Collections. Feel free to mess with these settings.
+====================================================================================
+Key binding
+Y
+Collectables Multiplier Cost: Sell Value * value listed below
+3
+
+
+
+
+
+
+
+
+
+
+
+
+
+

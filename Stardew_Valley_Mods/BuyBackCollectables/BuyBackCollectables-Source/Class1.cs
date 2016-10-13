@@ -30,7 +30,7 @@ namespace Buy_Back_Collectables
                 if (Game1.activeClickableMenu != null) return;
                 else
                 {
-                    Game1.activeClickableMenu = new Collections_Buy_Back(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2);
+                    Game1.activeClickableMenu = new StardewValley.Menus.UpdatedCollectionsPage(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2);
                 }
             }
         }
