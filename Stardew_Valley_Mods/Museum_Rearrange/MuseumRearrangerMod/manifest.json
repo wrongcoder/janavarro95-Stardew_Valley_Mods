@@ -1,0 +1,14 @@
+{
+  "Name": "Museum Rearranger",
+  "Authour": "Omegasis",
+  "Version": {
+    "MajorVersion": 0,
+    "MinorVersion": 0,
+    "PatchVersion": 0,
+    "Build": ""
+  },
+  "Description": "Allows the user to rearrange the Museum without the need for something to donate.",
+  "UniqueID": "7ad4f6f7-c3de-4729-a40f-7a11d2b2a358",
+  "PerSaveConfigs": false,
+  "EntryDll": "Museum_Rearranger.dll"
+}

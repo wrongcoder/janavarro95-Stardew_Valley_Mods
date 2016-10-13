@@ -1,9 +1,18 @@
-Museum Rearranger 1.0.2
+Museum Rearranger 1.1.0
 
-For SDV 1.07 and SMAPI 0.40 (Should work as long as the api isn't dramatically changed)
+Initial Release 7/12/16 1:52 AM
+Updated: 10/11/16 11:51 PM
 
-Posted on 1:52 AM PST on 7/12/16
+Compatability:
+SDV 1.1
+Windows
 
+Updates:
+1.1.0
+-Updated to SDV 1.1
+-Added in a new key config for toggling if the inventory displays while rearranging the museum. Press T by default to toggle showing the menu.
+
+1.0.2
 -Massively rewrote some code because it was super necessary.
 -Fixed some typoes with the config files.
 

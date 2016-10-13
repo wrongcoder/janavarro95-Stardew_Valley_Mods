@@ -7,6 +7,8 @@ namespace Museum_Rearranger
     public class Class1 : Mod
     {
         string key_binding = "R";
+        string key_binding2 = "T";
+        public static bool showMenu;
         bool game_loaded = false;
 
         public override void Entry(params object[] objects)
@@ -25,14 +27,21 @@ namespace Museum_Rearranger
             if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
             {
                 if (Game1.activeClickableMenu != null) return;
-                if (StardewValley.Game1.player.currentLocation.name == "ArchaeologyHouse") Game1.activeClickableMenu = new StardewValley.Menus.MuseumMenu();
+                if (StardewValley.Game1.player.currentLocation.name == "ArchaeologyHouse") Game1.activeClickableMenu = new StardewValley.Menus.NewMuseumMenu();
                 else Log.Info("You can't rearrange the museum here!");
            }
+            if (e.KeyPressed.ToString() == key_binding2) //if the key is pressed, load my cusom save function
+            {
+                if (showMenu == true) showMenu = false;
+                else showMenu = true;
+              //  Log.AsyncC(showMenu);
+            }
         }
 
         public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
         {
             game_loaded = true;
+            showMenu = true;
             DataLoader_Settings();
             MyWritter_Settings();
         }
@@ -47,12 +56,14 @@ namespace Museum_Rearranger
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
                 key_binding = "R";
+                key_binding2 = "T";
             }
 
             else
             {
                 string[] readtext = File.ReadAllLines(mylocation3);
                 key_binding = Convert.ToString(readtext[3]);
+                key_binding2 = Convert.ToString(readtext[5]);
             }
         }
 
@@ -72,6 +83,8 @@ namespace Museum_Rearranger
                 mystring3[1] = "====================================================================================";
                 mystring3[2] = "Key binding for rearranging the museum.";
                 mystring3[3] = key_binding.ToString();
+                mystring3[4] = "Key binding for showing the menu when rearranging the museum.";
+                mystring3[5] = key_binding2.ToString();
                 File.WriteAllLines(mylocation3, mystring3);
             }
             else
@@ -81,6 +94,8 @@ namespace Museum_Rearranger
                 mystring3[1] = "====================================================================================";
                 mystring3[2] = "Key binding for rearranging the museum.";
                 mystring3[3] = key_binding.ToString();
+                mystring3[4] = "Key binding for showing the menu when rearranging the museum.";
+                mystring3[5] = key_binding2.ToString();
                 File.WriteAllLines(mylocation3, mystring3);
             }
         }
