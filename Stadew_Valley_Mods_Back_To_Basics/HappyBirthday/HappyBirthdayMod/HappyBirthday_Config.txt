@@ -1,0 +1,20 @@
+Config: HappyBirthday Info. Feel free to mess with these settings.
+====================================================================================
+Key binding for opening the birthday menu. Press this key to do so.
+O
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

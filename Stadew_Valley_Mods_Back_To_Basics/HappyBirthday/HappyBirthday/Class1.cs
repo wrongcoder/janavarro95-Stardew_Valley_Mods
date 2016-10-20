@@ -28,6 +28,7 @@ namespace HappyBirthday
         public override void Entry(params object[] objects)
         {
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Day_Update;
+            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
@@ -38,6 +39,23 @@ namespace HappyBirthday
             {
                 Directory.CreateDirectory(birthdays_path);
             }
+        }
+
+        public void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
+        {
+            //Log.AsyncC("I cant tell");
+            if (isplayersbirthday() == true)
+            {
+               
+                //Log.AsyncC("YES");
+                 //Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %");
+                 //Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %");
+            }
+           // Log.AsyncC("Maybe?");
+            if (Game1.player == null) return;
+            if (has_input_birthday == true) MyWritter_Birthday();
+            MyWritter_Settings();
+            once = false;
         }
 
         public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -67,9 +85,17 @@ namespace HappyBirthday
             if (game_loaded == false) return;
             if (Game1.player.isMoving()==true && once == false)
             {
-                Log.AsyncM("Is it my birthday? "+isplayersbirthday());
+               //Log.AsyncM("Is it my birthday? "+isplayersbirthday());
                 if (isplayersbirthday() == true)
                 {
+                    OmegasisUtility.Messages.showStarMessage("It's your birthday today! Happy birthday!");
+
+                    //  Game1.addMailForTomorrow("birthdayMom", false, false);
+                    //  Game1.addMailForTomorrow("birthdayDad", false, false);
+                    //  Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %");
+                    //  Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %");
+                    Game1.mailbox.Enqueue("birthdayMom");
+                    Game1.mailbox.Enqueue("birthdayDad");
                     foreach (var location in Game1.locations)
                     {
                         foreach (NPC npc in location.characters)
@@ -153,7 +179,8 @@ namespace HappyBirthday
 
         public void Day_Update(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
         {
-           // foreach (var bleh in npc_name_list) npc_name_list.Remove(bleh);
+          //  Log.AsyncC("is this running?");
+            // foreach (var bleh in npc_name_list) npc_name_list.Remove(bleh);
             foreach (var location in Game1.locations)
             {
                 foreach (NPC npc in location.characters)
@@ -162,24 +189,11 @@ namespace HappyBirthday
                     if (npc is StardewValley.Monsters.Bat || npc is StardewValley.Monsters.BigSlime || npc is StardewValley.Monsters.Bug || npc is StardewValley.Monsters.Cat || npc is StardewValley.Monsters.Crow || npc is StardewValley.Monsters.Duggy || npc is StardewValley.Monsters.DustSpirit || npc is StardewValley.Monsters.Fireball || npc is StardewValley.Monsters.Fly || npc is StardewValley.Monsters.Ghost || npc is StardewValley.Monsters.GoblinPeasant || npc is StardewValley.Monsters.GoblinWizard || npc is StardewValley.Monsters.GreenSlime || npc is StardewValley.Monsters.Grub || npc is StardewValley.Monsters.LavaCrab || npc is StardewValley.Monsters.MetalHead || npc is StardewValley.Monsters.Monster || npc is StardewValley.Monsters.Mummy || npc is StardewValley.Monsters.RockCrab || npc is StardewValley.Monsters.RockGolem || npc is StardewValley.Monsters.Serpent || npc is StardewValley.Monsters.ShadowBrute || npc is StardewValley.Monsters.ShadowGirl || npc is StardewValley.Monsters.ShadowGuy || npc is StardewValley.Monsters.ShadowShaman || npc is StardewValley.Monsters.Skeleton || npc is StardewValley.Monsters.SkeletonMage || npc is StardewValley.Monsters.SkeletonWarrior || npc is StardewValley.Monsters.Spiker || npc is StardewValley.Monsters.SquidKid) return;
                     if (npc_name_list.Contains(npc.name)) continue;
                     npc_name_list.Add(npc.name);
-                    //Log.AsyncM(npc.name);
-
-
-
+                    
                     }
-                
-                
-            }
-            if (isplayersbirthday() == true)
-            {
-               // Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %");
-               // Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %");
+                //Log.AsyncM("NO SERIOUSLY");
             }
 
-            if (Game1.player == null) return;
-            if(has_input_birthday == true) MyWritter_Birthday();
-            MyWritter_Settings();
-            once = false;
         }
 
         public virtual void birthday_gift()
@@ -218,7 +232,7 @@ namespace HappyBirthday
                 //Game1.player.addItemByMenuIfNecessaryElseHoldUp(farmers_birthday_gift);
             }
             this.possible_birthday_gifts.Clear();
-            Log.AsyncO("IS THIS EVER WORKING????");
+           // Log.AsyncO("IS THIS EVER WORKING????");
             return;
         }
 
