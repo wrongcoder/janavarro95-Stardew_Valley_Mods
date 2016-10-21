@@ -127,7 +127,7 @@ namespace Stardew_NightOwl
                     {
                         using (Newtonsoft.Json.JsonWriter writer2 = new Newtonsoft.Json.JsonTextWriter(sw))
                         {
-                            serializer.Serialize(writer2, this, typeof(Stardew_NightOwl.Class1));
+                            serializer.Serialize(writer2, this);
                         }
                     }
                 }
@@ -237,7 +237,7 @@ namespace Stardew_NightOwl
                     {
                         using (Newtonsoft.Json.JsonWriter writer2 = new Newtonsoft.Json.JsonTextWriter(sw))
                         {
-                            serializer.Serialize(writer2, this, typeof(Stardew_NightOwl.Class1));
+                            serializer.Serialize(writer2, this);
                         }
                     }
                 }
@@ -346,7 +346,7 @@ namespace Stardew_NightOwl
                     {
                         using (Newtonsoft.Json.JsonWriter writer2 = new Newtonsoft.Json.JsonTextWriter(sw))
                         {
-                            serializer.Serialize(writer2, this, typeof(Stardew_NightOwl.Class1));
+                            serializer.Serialize(writer2, this);
                         }
                     }
                 }
