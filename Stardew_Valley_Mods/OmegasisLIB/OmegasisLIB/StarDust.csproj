@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E17855AD-DBAF-49BD-B3E2-9899403252F6}</ProjectGuid>
+    <ProjectGuid>{18F4BA11-AF6C-40FB-A544-AE08DE61E187}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Save_Anywhere_V2</RootNamespace>
-    <AssemblyName>Save_Anywhere_V2</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>StarDustCore</RootNamespace>
+    <AssemblyName>StarDustCore</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,22 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553" />
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Graphics.dll</HintPath>
+    <Reference Include="Stardew Valley">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Stardew Valley.exe</HintPath>
     </Reference>
-    <Reference Include="Stardew Valley, Version=1.0.6124.25603, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SerializerUtilRedux\SerializerUtils\bin\Debug\Stardew Valley.exe</HintPath>
-    </Reference>
-    <Reference Include="StardewModdingAPI, Version=0.40.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SerializerUtilRedux\SerializerUtils\bin\Debug\StardewModdingAPI.exe</HintPath>
-    </Reference>
-    <Reference Include="StarDustCore">
-      <HintPath>..\..\OmegasisLIB\OmegasisLIB\bin\Debug\StarDustCore.dll</HintPath>
+    <Reference Include="StardewModdingAPI">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewModdingAPI.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,19 +45,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="xTile, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animal_Utilities.cs" />
-    <Compile Include="Config_Utilities.cs" />
-    <Compile Include="Horse_Utility.cs" />
-    <Compile Include="Mod_Core.cs" />
-    <Compile Include="GameUtilities.cs" />
-    <Compile Include="New_Shipping_Menu.cs" />
-    <Compile Include="NPC_Utilities.cs" />
-    <Compile Include="Pet_Utilities.cs" />
-    <Compile Include="Player_Utilities.cs" />
+    <Compile Include="Messages\HudWithIcon.cs" />
+    <Compile Include="Messages\HudWithoutIcon.cs" />
+    <Compile Include="StarDust.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializerUtility.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
