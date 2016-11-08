@@ -1,10 +1,10 @@
 Happy Birthday
 
-Version:1.1.0
+Version:1.1.1
 
 Published: 8/18/16 11:21 AM
 
-Updated: 10/20/16 12:09 AM
+Updated: 11/8/16 1:17 AM
 
 Compatability:
 
@@ -43,6 +43,12 @@ Note: This mod was built with custom NPCs in mind. You can either add in your cu
 Have fun!
 
 Update Info: 
+1.1.1
+-Balanced some gifts to be a bit less op. (Like 25 rabit foots);
+-Fixed the birthday menu to force you to choose a season and date before you are allowed to exit the menu.
+-Hopefully fixed the ???, Error Item, and useless rocks from showing up as possible gifts.
+-Implemented a cheep fix to hopefully prevent the game from crashing when inside an event. It gives priority to the event over your birthday in worst case scenario.
+
 1.1.0
 -Updated to SDV 1.1
 -Added a popup that wishes you happy birthday on your birthday

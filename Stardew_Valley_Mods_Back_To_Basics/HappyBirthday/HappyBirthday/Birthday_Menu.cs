@@ -37,6 +37,8 @@ namespace StardewValley.Menus
 
         public List<ClickableComponent> seasonButtons = new List<ClickableComponent>();
 
+        public List<ClickableComponent> seasonTitleButtons = new List<ClickableComponent>();
+
         public ClickableTextureComponent okButton;
 
         public ClickableTextureComponent skipIntroButton;
@@ -87,10 +89,10 @@ namespace StardewValley.Menus
             //new ClickableComponent(new Rectangle(x2, y, Game1.tileSize * 3 / 4 - 4, Game1.tileSize * 3 / 4 - 4), string.Concat((object) (index * 5))) //allows you to make numbers into buttons: Taken from elevator menu
             this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8, 1, 1),"Birthday Season: "+ HappyBirthday.Class1.player_birthday_season));
             this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize, Game1.tileSize * 2, Game1.tileSize), "Birthday Date: " + HappyBirthday.Class1.player_birthday_date));
-            this.seasonButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(188, 438, 32, 9), (float)Game1.pixelZoom, false));
-            this.seasonButtons.Add(new ClickableTextureComponent("Summer", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(220, 438, 32, 8), (float)Game1.pixelZoom, false));
-            this.seasonButtons.Add(new ClickableTextureComponent("Fall", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(188, 447, 32, 10), (float)Game1.pixelZoom, false));
-            this.seasonButtons.Add(new ClickableTextureComponent("Winter", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(220, 448, 32, 8), (float)Game1.pixelZoom, false));
+            this.seasonTitleButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(188, 438, 32, 9), (float)Game1.pixelZoom, false));
+            this.seasonTitleButtons.Add(new ClickableTextureComponent("Summer", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(220, 438, 32, 8), (float)Game1.pixelZoom, false));
+            this.seasonTitleButtons.Add(new ClickableTextureComponent("Fall", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(188, 447, 32, 10), (float)Game1.pixelZoom, false));
+            this.seasonTitleButtons.Add(new ClickableTextureComponent("Winter", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize*2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(220, 448, 32, 8), (float)Game1.pixelZoom, false));
 
 
             this.seasonButtons.Add(new ClickableTextureComponent("1", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), (float)Game1.pixelZoom, false));
@@ -176,8 +178,9 @@ namespace StardewValley.Menus
                 }
          
 
-              else  if (name == "OK")
+              else  if (name == "OK" && (HappyBirthday.Class1.player_birthday_date >= 1 || HappyBirthday.Class1.player_birthday_date <= 28))
                 {
+                    
                     if (!this.canLeaveMenu())
                     {
                         return;
@@ -216,34 +219,6 @@ namespace StardewValley.Menus
         {
             if (name != null)
             {
-                if (name == "Skin")
-                {
-                    Game1.player.changeSkinColor(Game1.player.skin + change);
-                    Game1.playSound("skeletonStep");
-                    return;
-                }
-                if (name == "Hair")
-                {
-                    Game1.player.changeHairStyle(Game1.player.hair + change);
-                    Game1.playSound("grassyStep");
-                    return;
-                }
-                if (name == "Shirt")
-                {
-                    Game1.player.changeShirt(Game1.player.shirt + change);
-                    Game1.playSound("coin");
-                    return;
-                }
-                if (name == "Acc")
-                {
-                    Game1.player.changeAccessory(Game1.player.accessory + change);
-                    Game1.playSound("purchase");
-                    return;
-                }
-                if (!(name == "Direction"))
-                {
-                    return;
-                }
                 Game1.player.faceDirection((Game1.player.facingDirection - change + 4) % 4);
                 Game1.player.FarmerSprite.StopAnimation();
                 Game1.player.completelyStopAnimatingOrDoingAction();
@@ -263,7 +238,15 @@ namespace StardewValley.Menus
                     current2.scale = Math.Max(3.5f, current2.scale);
                 }
             }
-
+            foreach (ClickableComponent current2 in this.seasonTitleButtons)
+            {
+                if (current2.containsPoint(x, y))
+                {
+                    this.optionButtonClick(current2.name);
+                    current2.scale -= 0.5f;
+                    current2.scale = Math.Max(3.5f, current2.scale);
+                }
+            }
 
             if (this.okButton.containsPoint(x, y) && this.canLeaveMenu())
             {
@@ -320,6 +303,22 @@ namespace StardewValley.Menus
                         }
                     }
                 }
+
+                using (List<ClickableComponent>.Enumerator enumerator4 = this.seasonTitleButtons.GetEnumerator())
+                {
+                    while (enumerator4.MoveNext())
+                    {
+                        ClickableTextureComponent clickableTextureComponent4 = (ClickableTextureComponent)enumerator4.Current;
+                        if (clickableTextureComponent4.containsPoint(x, y))
+                        {
+                            clickableTextureComponent4.scale = Math.Min(clickableTextureComponent4.scale + 0.02f, clickableTextureComponent4.baseScale + 0.1f);
+                        }
+                        else
+                        {
+                            clickableTextureComponent4.scale = Math.Max(clickableTextureComponent4.scale - 0.02f, clickableTextureComponent4.baseScale);
+                        }
+                    }
+                }
             }
             if (this.okButton.containsPoint(x, y) && this.canLeaveMenu())
             {
@@ -345,10 +344,17 @@ namespace StardewValley.Menus
             if (!this.wizardSource)
             {
                
-                foreach (ClickableTextureComponent textureComponent in this.seasonButtons)
+                if(HappyBirthday.Class1.player_birthday_season=="spring" || HappyBirthday.Class1.player_birthday_season == "summer" || HappyBirthday.Class1.player_birthday_season == "fall" || HappyBirthday.Class1.player_birthday_season == "winter"){
+                    foreach (ClickableTextureComponent textureComponent in this.seasonButtons)
+                    {
+                        textureComponent.draw(b);
+                        // b.Draw(Game1.mouseCursors, textureComponent.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 34, -1, -1)), Color.White);
+                    }
+                }
+                foreach (ClickableTextureComponent textureComponent in this.seasonTitleButtons)
                 {
                     textureComponent.draw(b);
-                       // b.Draw(Game1.mouseCursors, textureComponent.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 34, -1, -1)), Color.White);
+                    // b.Draw(Game1.mouseCursors, textureComponent.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 34, -1, -1)), Color.White);
                 }
                 foreach (ClickableComponent clickableComponent in this.labels)
                 {
@@ -406,7 +412,7 @@ namespace StardewValley.Menus
             
             if (this.canLeaveMenu())
             {
-                this.okButton.draw(b);
+               if(HappyBirthday.Class1.player_birthday_date!=0 && HappyBirthday.Class1.player_birthday_season!="") this.okButton.draw(b);
             }
             else
             {
