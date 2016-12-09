@@ -42,3 +42,9 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance\SMAPI_BuildEndurance\bin\Debug\Microsoft.Xna.Framework.GamerServices.xml
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance\SMAPI_BuildEndurance\bin\Debug\Microsoft.Xna.Framework.Input.Touch.xml
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance\SMAPI_BuildEndurance\bin\Debug\Microsoft.Xna.Framework.Xact.xml
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance-Source\SMAPI_BuildEndurance\bin\Debug\SMAPI_BuildEndurance.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance-Source\SMAPI_BuildEndurance\bin\Debug\SMAPI_BuildEndurance.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance-Source\SMAPI_BuildEndurance\bin\Debug\Newtonsoft.Json.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance-Source\SMAPI_BuildEndurance\obj\Debug\SMAPI_BuildEndurance.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance-Source\SMAPI_BuildEndurance\obj\Debug\SMAPI_BuildEndurance.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuildEndurance\SMAPI_BuildEndurance-Source\SMAPI_BuildEndurance\obj\Debug\SMAPI_BuildEndurance.pdb

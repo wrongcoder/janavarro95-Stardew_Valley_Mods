@@ -20,7 +20,7 @@ namespace MoreRain
 
         bool suppress_log;
 
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
            // set_up();
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
@@ -47,13 +47,13 @@ namespace MoreRain
 
             if (Game1.weatherForTomorrow == Game1.weather_festival )
             {
-                if(suppress_log==false)Log.Info("There is a festival tomorrow, therefore it will not rain.");
+                if(suppress_log==false)Monitor.Log("There is a festival tomorrow, therefore it will not rain.");
                 return;
             }
 
             if(Game1.weatherForTomorrow== Game1.weather_wedding)
             {
-                if(suppress_log==false)Log.Info("There is a wedding tomorrow and rain on your wedding day will not happen.");
+                if(suppress_log==false)Monitor.Log("There is a wedding tomorrow and rain on your wedding day will not happen.");
                 return;
             }
 
@@ -68,11 +68,11 @@ namespace MoreRain
                 if (randomNumber <= rainint) //if the random variable is less than or equal to the chance for rain.
                 {
                     StardewValley.Game1.weatherForTomorrow = StardewValley.Game1.weather_rain; //sets rainy weather tomorrow
-                    if(suppress_log==false)Log.Info("It will rain tomorrow.");
+                    if(suppress_log==false)Monitor.Log("It will rain tomorrow.");
                 }
                 else {
                     StardewValley.Game1.weatherForTomorrow = StardewValley.Game1.weather_sunny;//sets sunny weather tomorrow
-                    if(suppress_log==false)Log.Info("It will not rain tomorrow.");
+                    if(suppress_log==false)Monitor.Log("It will not rain tomorrow.");
                 }
 
                 if (StardewValley.Game1.weatherForTomorrow == StardewValley.Game1.weather_rain)
@@ -80,33 +80,33 @@ namespace MoreRain
                     if (randomNumber <= thunderint) //if the random variable is less than or equal to the chance for rain.
                     {
                         StardewValley.Game1.weatherForTomorrow = StardewValley.Game1.weather_lightning; //sets rainy weather tomorrow
-                        if(suppress_log==false)Log.Info("It will be stormy tomorrow.");
+                        if(suppress_log==false)Monitor.Log("It will be stormy tomorrow.");
                     }
                     else
                     {
                         StardewValley.Game1.weatherForTomorrow = StardewValley.Game1.weather_rain;//sets sunny weather tomorrow
-                        if(suppress_log==false)Log.Info("There will be no lightning tomorrow.");
+                        if(suppress_log==false)Monitor.Log("There will be no lightning tomorrow.");
                     }
                 }
             }
             else
             {
-              //  if(suppress_log==false)Log.Info("The weather for tomorrow is not rainy, stormy, or sunny. Must be something special.");
+              //  if(suppress_log==false)Monitor.Log("The weather for tomorrow is not rainy, stormy, or sunny. Must be something special.");
             }
-            if(suppress_log==false)Log.Info("More Rain has updated.");
+            if(suppress_log==false)Monitor.Log("More Rain has updated.");
         }
 
 
         void MyWritter()
         {
             //saves the BuildEndurance_data at the end of a new day;
-            string mylocation = Path.Combine(PathOnDisk, "More_Rain_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "More_Rain_Config");
             //string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation + ".txt";
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
-                Log.Info("The data file for More Rain wasn't found. Time to create it!");
+                Monitor.Log("The data file for More Rain wasn't found. Time to create it!");
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
                 mystring3[0] = "Player: More Rain Config. Feel free to edit.";
                 mystring3[1] = "====================================================================================";
@@ -139,7 +139,7 @@ namespace MoreRain
         void DataLoader()
         {
             //loads the data to the variables upon loading the game.
-            string mylocation = Path.Combine(PathOnDisk, "More_Rain_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "More_Rain_Config");
             //string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.

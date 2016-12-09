@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewModdingAPI;
 using StardewValley;
-using SerializerUtils;
 using StardewModdingAPI.Events;
 
-namespace StarDust
+namespace StarDustCore
 {
-    public class Core : Mod
+    public class Base : Mod
     {
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
+
             //GameEvents.GameLoaded += new EventHandler(SerializerUtility.Event_GameLoaded);
             //Command.RegisterCommand("include_types", "Includes types to serialize", (string[])null).CommandFired += new EventHandler<EventArgsCommand>(SerializerUtility.Command_IncludeTypes);
         }

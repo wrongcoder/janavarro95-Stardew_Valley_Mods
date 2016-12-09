@@ -1,33 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Timers;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
-using Microsoft.Xna.Framework;
-using System.Windows;
 namespace BuildEndurance
 {
 
     public class BuildEndurance : Mod
     {
-
         static bool exhausted_check = false;
         static bool collapse_check = false;
-
-
-
         static double BuildEndurance_data_xp_nextlvl = 20;
         static double BuildEndurance_data_xp_current = 0;
-
         static int BuildEndurance_data_current_lvl = 0;
-
         static int BuildEndurance_data_stam_bonus_acumulated = 0;
-
+  
          static int BuildEndurance_data_ini_stam_bonus = 0;
 
         static bool BuildEndurance_data_clear_mod_effects = false;
@@ -47,7 +34,7 @@ namespace BuildEndurance
 
 
         //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.GameEvents.UpdateTick += EatingCallBack; //sloppy again but it'll do.
 
@@ -59,10 +46,10 @@ namespace BuildEndurance
             StardewModdingAPI.Events.GameEvents.UpdateTick += Exhaustion_callback;
             StardewModdingAPI.Events.GameEvents.UpdateTick += Collapse_Callback;
 
-            var configLocation = Path.Combine(PathOnDisk, "BuildEnduranceConfig.json");
+            var configLocation = Path.Combine(helper.DirectoryPath, "BuildEnduranceConfig.json");
             if (!File.Exists(configLocation))
             {
-                Log.Info("Initial configuration file setup.");
+                Monitor.Log("Initial configuration file setup.");
                 ModConfig = new Config();
 
                 ModConfig.BuildEndurance_current_lvl = 0;
@@ -91,13 +78,13 @@ namespace BuildEndurance
             else
             {
                 ModConfig = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configLocation)));
-                Log.Info("Found BuildEndurance config file.");
+                Monitor.Log("Found BuildEndurance config file.");
             }
 
             // DataLoader();
             // MyWritter();  //hopefully loading these after the game is loaded will prevent wierd issues.
 
-            Log.Info("BuildEndurance Initialization Completed");
+            Monitor.Log("BuildEndurance Initialization Completed");
         }
         public void ToolCallBack(object sender, EventArgs e) //ultra quick response for checking if a tool is used.
         {
@@ -156,7 +143,7 @@ namespace BuildEndurance
                 {
                     BuildEndurance_data_xp_current += ModConfig.BuildEndurance_Exhaustion_XP;
                     exhausted_check = true;
-                    Log.Info("The player is exhausted");
+                    Monitor.Log("The player is exhausted");
                 }
             }
             
@@ -175,7 +162,7 @@ namespace BuildEndurance
 
                     BuildEndurance_data_xp_current += ModConfig.BuildEndurance_Pass_Out_XP;
                     collapse_check = true;
-                    Log.Info("The player has collapsed!");
+                    Monitor.Log("The player has collapsed!");
                     return;
                 }
             }
@@ -227,20 +214,10 @@ namespace BuildEndurance
             {
 
                 //Log.Info("THIS IS MY NEW DAY CALL BACK XP version 1");
-                Log.Info(BuildEndurance_data_xp_current);
+                Monitor.Log(BuildEndurance_data_xp_current.ToString());
 
                 Clear_Checker();
-                //Log.Info("CLEAR???");
-                Log.Info(BuildEndurance_data_clear_mod_effects);
-
-               
-
-                //Clear_DataLoader();
-                //because this doesn't work propperly at first anyways.
-
-                //return;
-              
-
+                Monitor.Log(BuildEndurance_data_clear_mod_effects.ToString());
 
                 var player = StardewValley.Game1.player;
 
@@ -279,20 +256,7 @@ namespace BuildEndurance
                             player.MaxStamina += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
                             BuildEndurance_data_stam_bonus_acumulated += ModConfig.BuildEndurance_stam_increase_upon_lvl_up;
 
-
-                            //Log.Info("THIS IS MY NEW DAY CALL BACK XP version 2!");
-                          //  Log.Info(BuildEndurance_data_xp_current);
-                           // Log.Info("IF YOU SEE THIS TOO MUCH THIS IS AN INFINITE LOOP. CRAP");
                         }
-
-                        /*
-                            if (player.MaxStamina != BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus)
-                        {
-                            player.MaxStamina = BuildEndurance_data_old_stamina + BuildEndurance_data_stam_bonus_acumulated + BuildEndurance_data_ini_stam_bonus;
-                        }
-                        */
-
-
                     }
                 }
                 BuildEndurance_data_clear_mod_effects = false;
@@ -333,9 +297,9 @@ namespace BuildEndurance
         {
             DataLoader();
             MyWritter();
-            //loads the data to the variables upon loading the game.
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data_");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildEndurance_data_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -362,10 +326,11 @@ namespace BuildEndurance
 
         void Clear_Checker()
         {
-           
+
             //loads the data to the variables upon loading the game.
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data_");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildEndurance_data_"); ;
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -393,9 +358,10 @@ namespace BuildEndurance
 
         void DataLoader()
         {
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data_");
+            string mylocation = Path.Combine(Helper.DirectoryPath,"PlayerData", "BuildEndurance_data_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -431,8 +397,9 @@ namespace BuildEndurance
         void MyWritter()
         {
             //saves the BuildEndurance_data at the end of a new day;
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildEndurance_data_");
+            string mylocation = Path.Combine(Helper.DirectoryPath,"PlayerData", "BuildEndurance_data_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
             string[] mystring3 = new string[20];

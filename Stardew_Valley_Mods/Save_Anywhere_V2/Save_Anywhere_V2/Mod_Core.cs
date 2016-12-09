@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
-using SerializerUtils;
 using StardewModdingAPI.Events;
 using System.Reflection;
 using System.Globalization;
@@ -28,7 +27,7 @@ namespace Save_Anywhere_V2
         public static bool once;
         public static bool new_day;
         Dictionary<string, string> npc_key_value_pair;
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
             try {
                 StardewModdingAPI.Events.ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
@@ -39,12 +38,12 @@ namespace Save_Anywhere_V2
                 StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
                 StardewModdingAPI.Events.TimeEvents.OnNewDay += TimeEvents_OnNewDay;
                 Command.RegisterCommand("include_types", "Includes types to serialize").CommandFired += Command_IncludeTypes;
-                mod_path = PathOnDisk;
+                mod_path = Helper.DirectoryPath;
                 npc_key_value_pair = new Dictionary<string, string>();
             }
             catch(Exception x)
             {
-                Log.AsyncM(x);
+                Monitor.Log(x.ToString());
             }
         }
         //done
@@ -62,7 +61,7 @@ namespace Save_Anywhere_V2
             }
             catch(Exception err)
             {
-                Log.AsyncC(err);
+                Monitor.Log(err.ToString());
             }
         }
 
@@ -79,21 +78,31 @@ namespace Save_Anywhere_V2
                     {
 
                        if(!npc_key_value_pair.ContainsKey(character.name)) npc_key_value_pair.Add(character.name, parseSchedule(character));
-                      //  Log.AsyncM(parseSchedule(character));
+                      //  Monitor.Log(parseSchedule(character));
                     }
                 }
             }
             catch(Exception err)
             {
-                Log.AsyncC(err);
+                Monitor.Log(err.ToString());
             }
         }
 
         private void NPC_scheduel_update(object sender, EventArgs e)
         {
-            
 
-
+            if (Game1.weatherIcon == 4)
+            {
+                return;
+            }
+            if (Game1.isFestival() == true)
+            {
+                return;
+            }
+            if (Game1.eventUp == true)
+            {
+                return;
+            }
                 //if (once == true) return;
                 //FieldInfo field = typeof(NPC).GetField("scheduleTimeToTry", BindingFlags.NonPublic | BindingFlags.Instance);
                 // MethodInfo dynMethod = typeof(NPC).GetMethod("prepareToDisembarkOnNewSchedulePath",BindingFlags.NonPublic | BindingFlags.Instance);
@@ -122,7 +131,7 @@ namespace Save_Anywhere_V2
                             if (npc.name == horse.name) continue;
                         }
                         // Log.Info("THIS IS MY NPC" + npc.name);
-                        //  Log.AsyncC("NO SCHEDULE FOUND FOR " + npc.name);
+                        //  Monitor.Log("NO SCHEDULE FOUND FOR " + npc.name);
 
 
                         //  npc.checkSchedule(Game1.timeOfDay);
@@ -169,12 +178,10 @@ namespace Save_Anywhere_V2
                         int x;
                         int y;
                         int end_dir;
-                        string behavior;
-                        string message;
                         npc_key_value_pair.TryGetValue(npc.name, out key_value);
                         if (key_value == "" || key_value == null)
                         {
-                            Log.AsyncC("THIS IS AWKWARD");
+                            Monitor.Log("THIS IS AWKWARD");
                             continue;
                         }
                         dictionary.TryGetValue(key_value, out value);
@@ -221,13 +228,13 @@ namespace Save_Anywhere_V2
                         }
                         catch (Exception err)
                         {
-                           // Log.AsyncC(npc.name);
+                           // Monitor.Log(npc.name);
                             foreach(var v in valueArray2)
                             {
-                                //Log.AsyncC(v);
+                                //Monitor.Log(v);
                             }
                             schedulePathDescription = null;
-                           // Log.AsyncC(err);
+                           // Monitor.Log(err);
                         }
 
                             if (schedulePathDescription == null) continue;
@@ -257,13 +264,13 @@ namespace Save_Anywhere_V2
             foreach (var key in npc_key_value_pair)
             {
                 NPC npc = Game1.getCharacterFromName(key.Key);
-                Log.AsyncC(npc.name);
+                Monitor.Log(npc.name);
                 Dictionary<int, SchedulePathDescription> sch =npc.getSchedule(Game1.dayOfMonth);
                 if (sch == null) continue;
                 foreach (var ehh in sch)
                 {
-                    Log.AsyncC(ehh.Key);
-                    Log.AsyncC(ehh.Value);
+                    Monitor.Log(ehh.Key);
+                    Monitor.Log(ehh.Value);
                 }
             }
 
@@ -277,12 +284,12 @@ namespace Save_Anywhere_V2
 
             if (npc_warp == false)
             {
-                Log.AsyncC("LOL WHUT");
+                Monitor.Log("LOL WHUT");
                 return;
             }
             if (new_day == true)
             {
-                Log.AsyncC("Interesting");
+                Monitor.Log("Interesting");
                 return;
             }
                 List<StardewValley.Characters.Child> child_list = new List<StardewValley.Characters.Child>();
@@ -294,7 +301,7 @@ namespace Save_Anywhere_V2
                     // if (npc.DirectionsToNewLocation != null) continue;
                     if (npc.isMoving() == true)
                     {
-                        Log.AsyncC("I AM MOVING");
+                        Monitor.Log("I AM MOVING");
                         continue;
                     }
                     //if (npc.Schedule == null) continue;
@@ -302,14 +309,14 @@ namespace Save_Anywhere_V2
                     {
                         if (npc.name == child_name.name)
                         {
-                            Log.AsyncC("I AM A CHILD");
+                            Monitor.Log("I AM A CHILD");
                             continue;
                         }
                     }
                     if (Game1.player.hasPet() == true) {
                         if (npc.name == Game1.player.getPetName())
                         {
-                            Log.AsyncC("I AM A PET");
+                            Monitor.Log("I AM A PET");
                             continue;
                         }
                     }
@@ -326,7 +333,7 @@ namespace Save_Anywhere_V2
 
 
                     // Log.Info("THIS IS MY NPC" + npc.name);
-                    //  Log.AsyncC("NO SCHEDULE FOUND FOR " + npc.name);
+                    //  Monitor.Log("NO SCHEDULE FOUND FOR " + npc.name);
 
 
                     //  npc.checkSchedule(Game1.timeOfDay);
@@ -364,8 +371,8 @@ namespace Save_Anywhere_V2
                     catch (Exception ex)
                     {
                         // dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
-                        //Log.AsyncC(ex);
-                        //Log.AsyncC("YOU FIX THIS NOW");
+                        //Monitor.Log(ex);
+                        //Monitor.Log("YOU FIX THIS NOW");
                         continue;
                     }
                     // Log.Info("Does this break here 2");
@@ -381,7 +388,7 @@ namespace Save_Anywhere_V2
                         npc_key_value_pair.TryGetValue(npc.name, out key_value);
                         if (key_value == "" || key_value == null)
                         {
-                            Log.AsyncC("NO KEYBLADE");
+                            Monitor.Log("NO KEYBLADE");
                             continue;
                         }
                         dictionary.TryGetValue(key_value, out value);
@@ -406,7 +413,7 @@ namespace Save_Anywhere_V2
 
                             if (schedulePathDescription == null)
                             {
-                                Log.AsyncC("WHY???");
+                                Monitor.Log("WHY???");
                             }
                             //  Log.Info("This works 2");
                             // Utility.getGameLocationOfCharacter(npc);
@@ -422,14 +429,14 @@ namespace Save_Anywhere_V2
                             {
                                 Log.AsyncR("CRY");
                             }
-                            Log.AsyncM("IS THIS RUNNING?");
-                            if (npc.name == "Shane") Log.AsyncM("IS THIS RUNNING WITH BOOZE?");
+                            Monitor.Log("IS THIS RUNNING?");
+                            if (npc.name == "Shane") Monitor.Log("IS THIS RUNNING WITH BOOZE?");
                             npc.warpToPathControllerDestination();
                         }
                     }
                     catch(Exception err)
                     {
-                       // Log.AsyncC(err);
+                       // Monitor.Log(err);
                         continue;
                     }
                     }
@@ -515,7 +522,7 @@ namespace Save_Anywhere_V2
             }
             catch(Exception err)
             {
-                Log.AsyncC(err);
+                Monitor.Log(err.ToString());
                 return null;
             }
         }
@@ -650,7 +657,6 @@ namespace Save_Anywhere_V2
                 }
                 return null;
             }
-            return result;
 
 
         }
@@ -664,7 +670,7 @@ namespace Save_Anywhere_V2
             }
             catch(Exception err)
             {
-                Log.AsyncC(err);
+                Monitor.Log(err.ToString());
             }
         }
 
@@ -690,7 +696,7 @@ namespace Save_Anywhere_V2
             }
             catch (Exception err)
             {
-                Log.AsyncC(err);
+                Monitor.Log(err.ToString());
             }
         }
 
@@ -703,21 +709,14 @@ namespace Save_Anywhere_V2
                 Save_Anywhere_V2.Save_Utilities.Config_Utilities.MyWritter_Settings();
             }
             catch (Exception err) {
-                Log.AsyncC(err);
+                Monitor.Log(err.ToString());
             }
         }
 
         //done
         private static void Command_IncludeTypes(object sender, EventArgsCommand e)
         {
-            try {
-                SerializerUtility.AddType(typeof(StardewValley.Characters.Junimo)); //Adds a type to SaveGame.serializer
-                                                                                    // SerializerUtility.AddFarmerType(typeof(/*Class2NameHere*/)); //Adds a type to SaveGame.farmerSerializer
-            }
-            catch(Exception err)
-            {
-                Log.AsyncC(err);
-            }
+
             }
 
         public void KeyPressed_Save_Load_Menu(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -728,8 +727,8 @@ namespace Save_Anywhere_V2
                 try {
                     Save_Anywhere_V2.Save_Utilities.GameUtilities.save_game();
                 }
-                catch
-                {
+                catch(Exception exe)
+                { 
 
                 }
 
@@ -1016,7 +1015,6 @@ namespace Save_Anywhere_V2
                 }
                 return null;
             }
-            return result;
         }
         private bool changeScheduleForLocationAccessibility(NPC npc,ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
         {

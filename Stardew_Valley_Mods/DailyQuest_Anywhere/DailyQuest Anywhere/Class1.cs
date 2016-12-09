@@ -15,7 +15,7 @@ namespace DailyQuest_Anywhere
 
         bool game_loaded = false;
 
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
             //set up all of my events here
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
@@ -52,7 +52,7 @@ namespace DailyQuest_Anywhere
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "DailyQuest_Anywhere_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -82,14 +82,14 @@ namespace DailyQuest_Anywhere
             //write all of my info to a text file.
             string myname = StardewValley.Game1.player.name;
 
-            string mylocation = Path.Combine(PathOnDisk, "DailyQuest_Anywhere_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
 
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
-                Log.Info("DailyQuest_Anywhere: The DailyQuest Anywhere Config doesn't exist. Creating it now.");
+                Monitor.Log("DailyQuest_Anywhere: The DailyQuest Anywhere Config doesn't exist. Creating it now.");
 
                 mystring3[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
                 mystring3[1] = "====================================================================================";

@@ -249,6 +249,7 @@ namespace StardewValley.Menus
             }
         }
 
+
         public override void performHoverAction(int x, int y)
         {
             this.descriptionText = "";
@@ -267,8 +268,7 @@ namespace StardewValley.Menus
             }
             catch (Exception e)
             {
-                Log.AsyncG(e);
-                 
+                Buy_Back_Collectables.Class1.debugList.Add(e.ToString());
             }
             try {
                 foreach (ClickableTextureComponent current2 in this.collections[this.currentTab][this.currentPage])

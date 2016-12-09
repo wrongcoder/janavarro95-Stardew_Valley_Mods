@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StarDust.Messages
+namespace StarDustCore.Messages
 {
     public class HudWithoutIcon
     {

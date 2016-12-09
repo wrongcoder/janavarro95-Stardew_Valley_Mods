@@ -3,6 +3,7 @@ using StardewValley;
 using StardewModdingAPI;
 using System.IO;
 using StardewValley.Menus;
+using System.Collections.Generic;
 
 namespace Buy_Back_Collectables
 {
@@ -12,11 +13,26 @@ namespace Buy_Back_Collectables
        public static double cost = 3.0;
         bool game_loaded = false;
 
-        public override void Entry(params object[] objects)
+
+        public static List<String> debugList;
+
+        public override void Entry(IModHelper helper)
         {
             //set up all of my events here
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            StardewModdingAPI.Events.GameEvents.OneSecondTick += GameEvents_OneSecondTick;
+            debugList = new List<string>();
+        }
+
+        private void GameEvents_OneSecondTick(object sender, EventArgs e)
+        {
+            if (debugList.Count == 0) return;
+           foreach(var v in debugList)
+            {
+                this.Monitor.Log(v);
+            }
+            debugList.Clear();
         }
 
         public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -46,7 +62,7 @@ namespace Buy_Back_Collectables
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuyBack_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "BuyBack_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -67,13 +83,13 @@ namespace Buy_Back_Collectables
         {
             //write all of my info to a text file.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuyBack_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "BuyBack_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
-                Log.Info("BuyBack Collections: Config not found. Creating it now.");
+                Monitor.Log("BuyBack Collections: Config not found. Creating it now.");
 
                 mystring3[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
                 mystring3[1] = "====================================================================================";
@@ -95,6 +111,12 @@ namespace Buy_Back_Collectables
                 File.WriteAllLines(mylocation3, mystring3);
             }
         }
+
+        public void debugMessage(string s)
+        {
+            this.Monitor.Log(s);
+        }
+
     }
 }
 //end class

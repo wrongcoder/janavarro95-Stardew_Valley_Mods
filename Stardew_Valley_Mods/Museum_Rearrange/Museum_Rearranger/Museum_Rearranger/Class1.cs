@@ -11,7 +11,7 @@ namespace Museum_Rearranger
         public static bool showMenu;
         bool game_loaded = false;
 
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
             //set up all of my events here
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
@@ -28,7 +28,7 @@ namespace Museum_Rearranger
             {
                 if (Game1.activeClickableMenu != null) return;
                 if (StardewValley.Game1.player.currentLocation.name == "ArchaeologyHouse") Game1.activeClickableMenu = new StardewValley.Menus.NewMuseumMenu();
-                else Log.Info("You can't rearrange the museum here!");
+                else Monitor.Log("You can't rearrange the museum here!");
            }
             if (e.KeyPressed.ToString() == key_binding2) //if the key is pressed, load my cusom save function
             {
@@ -50,7 +50,7 @@ namespace Museum_Rearranger
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "Museum_Rearrange_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "Museum_Rearrange_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -71,13 +71,13 @@ namespace Museum_Rearranger
         {
             //write all of my info to a text file.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "Museum_Rearrange_Config");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "Museum_Rearrange_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
-                Log.Info("Museum Rearranger: Config not found. Creating it now.");
+                Monitor.Log("Museum Rearranger: Config not found. Creating it now.");
 
                 mystring3[0] = "Config: Museum_Rearranger. Feel free to mess with these settings.";
                 mystring3[1] = "====================================================================================";

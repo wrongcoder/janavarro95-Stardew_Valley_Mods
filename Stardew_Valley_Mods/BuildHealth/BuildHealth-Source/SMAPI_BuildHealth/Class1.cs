@@ -45,7 +45,7 @@ namespace BuildHealth
         public bool collapse_check;
 
         //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
 
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += SleepCallback;
@@ -58,10 +58,10 @@ namespace BuildHealth
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += damage_check;
 
-            var configLocation = Path.Combine(PathOnDisk, "BuildHealthConfig.json");
+            var configLocation = Path.Combine(helper.DirectoryPath, "BuildHealthConfig.json");
             if (!File.Exists(configLocation))
             {
-                Log.Info("The config file for BuildHealth was not found, guess I'll create it...");
+                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
                 ModConfig = new Config();
 
                 ModConfig.BuildHealth_current_lvl = 0;
@@ -86,12 +86,12 @@ namespace BuildHealth
             else
             {
                 ModConfig = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configLocation)));
-                Log.Info("Found BuildHealth config file.");
+                Monitor.Log("Found BuildHealth config file.");
             }
 
          //   DataLoader();
          //   MyWritter();
-            Log.Info("BuildHealth Initialization Completed");
+            Monitor.Log("BuildHealth Initialization Completed");
         }
 
 
@@ -103,7 +103,7 @@ namespace BuildHealth
 
             if (StardewValley.Game1.player.usingTool == true)
             {
-                //Console.WriteLine("Tool is being used");
+                //Monitor.Log("Tool is being used");
                 BuildHealth_data_xp_current += ModConfig.BuildHealth_xp_tooluse;
                 tool_cleaner = true;
             }
@@ -123,7 +123,7 @@ namespace BuildHealth
 
             if (StardewValley.Game1.isEating == true)
             {
-                // Console.WriteLine("NOM NOM NOM");
+                // Monitor.Log("NOM NOM NOM");
                 fed = true;
 
                 //this code will run when the player eats an object. I.E. increases their eating skills.
@@ -131,7 +131,7 @@ namespace BuildHealth
             //I'm going to assume they ate the food.
             if ((StardewValley.Game1.isEating == false) && fed == true)
             {
-                // Console.WriteLine("NOM NOM NOM");
+                // Monitor.Log("NOM NOM NOM");
                 BuildHealth_data_xp_current += ModConfig.BuildHealth_xp_eating;
                 fed = false;
             }
@@ -193,7 +193,7 @@ namespace BuildHealth
                 BuildHealth_data_old_health = player.maxHealth;
                 BuildHealth_data_ini_health_bonus = 0;
                 BuildHealth_data_current_lvl = 0;
-                Console.WriteLine("BuildHealth Reset!");
+               Monitor.Log("BuildHealth Reset!");
             }
 
 
@@ -227,10 +227,10 @@ namespace BuildHealth
         public void LoadingCallBack(object sender, EventArgs e)
         {
 
-         //   Console.WriteLine("entering loading callback");
+         //   Monitor.Log("entering loading callback");
             if (StardewModdingAPI.Inheritance.SGame.hasLoadedGame == true)
             {
-           //     Console.WriteLine("Penetrated loading callback");
+           //     Monitor.Log("Penetrated loading callback");
 
                 DataLoader();
                 MyWritter();
@@ -248,7 +248,7 @@ namespace BuildHealth
                 if (BuildHealth_data_clear_mod_effects == true)
                 {
                     player.maxHealth = BuildHealth_data_old_health;
-                    Console.WriteLine("BuildHealth Reset!");
+                    Monitor.Log("BuildHealth Reset!");
                 }
 
                 DataLoader();
@@ -268,7 +268,7 @@ namespace BuildHealth
 
                     BuildHealth_data_xp_current += ModConfig.BuildHealth_Pass_Out_XP;
                     collapse_check = true;
-                    Log.Info("The player has collapsed!");
+                    Monitor.Log("The player has collapsed!");
                     return;
                 }
             }
@@ -302,14 +302,14 @@ namespace BuildHealth
 
         void Clear_DataLoader()
         {
-            //loads the data to the variables upon loading the game.
-          string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
-           string mylocation2 = mylocation+myname;
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
+            string myname = StardewValley.Game1.player.name;
+            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
+            string mylocation2 = mylocation+myname;
            string mylocation3 = mylocation2+".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                Console.WriteLine("The config file for BuildHealth was not found, guess I'll create it...");
+                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
 
 
                 BuildHealth_data_clear_mod_effects = false;
@@ -331,13 +331,14 @@ namespace BuildHealth
         void Clear_Checker()
         {
             //loads the data to the variables upon loading the game.
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                Console.WriteLine("The config file for BuildHealth was not found, guess I'll create it...");
+                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
 
 
                 BuildHealth_data_clear_mod_effects = false;
@@ -357,14 +358,14 @@ namespace BuildHealth
 
         void DataLoader()
         {
-            //loads the data to the variables upon loading the game.
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
-           string mylocation2 = mylocation+myname;
+            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
+            string mylocation2 = mylocation+myname;
            string mylocation3 = mylocation2+".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                Console.WriteLine("The config file for BuildHealth was not found, guess I'll create it...");
+                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
                 BuildHealth_data_xp_nextlvl = ModConfig.BuildHealth_xp_nextlvl;
                 BuildHealth_data_xp_current = ModConfig.BuildHealth_xp_current;
                 BuildHealth_data_current_lvl = ModConfig.BuildHealth_current_lvl;
@@ -377,7 +378,7 @@ namespace BuildHealth
 
             else
             {
-                //        Console.WriteLine("HEY THERE IM LOADING DATA");
+                //        Monitor.Log("HEY THERE IM LOADING DATA");
 
                 //loads the BuildHealth_data upon loading the mod
                 string[] readtext = File.ReadAllLines(mylocation3);
@@ -394,15 +395,15 @@ namespace BuildHealth
 
         void MyWritter()
         {
-            //saves the BuildHealth_data at the end of a new day;
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "BuildHealth_data_");
-           string mylocation2 = mylocation+myname;
+            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
+            string mylocation2 = mylocation+myname;
            string mylocation3 = mylocation2+".txt";
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
-                Console.WriteLine("The data file for BuildHealth was not found, guess I'll create it when you sleep.");
+                Monitor.Log("The data file for BuildHealth was not found, guess I'll create it when you sleep.");
 
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
 
@@ -436,7 +437,7 @@ namespace BuildHealth
 
             else
             {
-                //    Console.WriteLine("HEY IM SAVING DATA");
+                //    Monitor.Log("HEY IM SAVING DATA");
 
                 //write out the info to a text file at the end of a day.
                 mystring3[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";

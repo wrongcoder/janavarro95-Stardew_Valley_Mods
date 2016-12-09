@@ -62,14 +62,14 @@ namespace Stardew_NightOwl
 
        public static string ModPath;
        public static string Error_Path;
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.TimeEvents.TimeOfDayChanged += TimeEvents_TimeOfDayChanged;
             StardewModdingAPI.Events.TimeEvents.OnNewDay += TimeEvents_DayOfMonthChanged;
 
             StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.GameEvents.FourthUpdateTick += GameEvents_FourthUpdateTick;
-            ModPath = PathOnDisk;
+            ModPath =Helper.DirectoryPath;
             Error_Path = Path.Combine(ModPath, "Error_Logs");
         }
 
@@ -99,7 +99,7 @@ namespace Stardew_NightOwl
             {
                 if (warp == true)
                 {
-                    Log.Info("Warping!!!");
+                    Monitor.Log("Warping!!!");
                     if (prior_map == null)
                     {
                         warped_check = true;
@@ -133,9 +133,8 @@ namespace Stardew_NightOwl
                 }
                 catch (Exception exc)
                 {
-                    Log.Info(exc);
+                    Monitor.Log(exc.ToString());
                 }
-                Stardew_Omegasis_Utilities.Mod.Error_Handling.Log_Error(new List<string>(), ex);
             }
         }
 
@@ -163,13 +162,13 @@ namespace Stardew_NightOwl
             if (first_check == false)
             {
                 first_check = true;
-                Log.Info("first");
+                Monitor.Log("first");
                 return;
             }
             else
             {
                 first_check = false;
-                Log.Info("Second");
+                Monitor.Log("Second");
             }
           if(Game1.farmerShouldPassOut== true)  Game1.farmerShouldPassOut = false; //make the farmer collapse.
            
@@ -205,11 +204,11 @@ namespace Stardew_NightOwl
             {
                 foreach (var i in Game1.mailbox) //delete those annoying charge messages. If only I could do this with mail IRL.
                 { 
-                    Log.Info(i);
+                    Monitor.Log(i);
 
                     if (i.Contains("passedOut"))
                     {
-                        Log.Info("Found bad mail");
+                        Monitor.Log("Found bad mail");
                     }
                     else {
                         newmail.Enqueue(i);
@@ -243,9 +242,8 @@ namespace Stardew_NightOwl
                 }
                 catch (Exception exc)
                 {
-                    Log.Info(exc);
+                    Monitor.Log(exc.ToString());
                 }
-                Stardew_Omegasis_Utilities.Mod.Error_Handling.Log_Error(new List<string>(), ex);
             }
         }
 
@@ -310,9 +308,9 @@ namespace Stardew_NightOwl
                     player_y = Game1.player.getTileY();
                     prior_map = Game1.player.currentLocation.name;
 
-                    Log.Info(prior_map);
-                    Log.Info(player_x);
-                    Log.Info(player_y);
+                    Monitor.Log(prior_map);
+                    Monitor.Log(player_x.ToString());
+                    Monitor.Log(player_y.ToString());
                     super_map_warping_check = false;
 
 
@@ -352,9 +350,8 @@ namespace Stardew_NightOwl
                 }
                 catch (Exception exc)
                 {
-                    Log.Info(exc);
+                    Monitor.Log(exc.ToString());
                 }
-                Stardew_Omegasis_Utilities.Mod.Error_Handling.Log_Error(new List<string>(), ex);
             }
         }
         
@@ -363,13 +360,13 @@ namespace Stardew_NightOwl
         {
             //saves the BuildEndurance_data at the end of a new day;
             string myname = Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "Night_Owl_Config_");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "Night_Owl_Config_");
             //string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation + ".txt";
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
-              Log.Info("The data file for Night Owl wasn't found. Time to create it!");
+              Monitor.Log("The data file for Night Owl wasn't found. Time to create it!");
                 mystring3[0] = "Player: Night Owl Config. Feel free to edit.";
                 mystring3[1] = "====================================================================================";
                 mystring3[2] = "Stay up to 6 AM?: Do you wan't to stay up till 6 AM the next morning?";
@@ -417,12 +414,12 @@ namespace Stardew_NightOwl
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(PathOnDisk, "Night_Owl_Config_");
+            string mylocation = Path.Combine(Helper.DirectoryPath, "Night_Owl_Config_");
             //string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-               Log.Info("Loading Night_Owl_Config");
+               Monitor.Log("Loading Night_Owl_Config");
                 lighting_transition = true;
                 warp = true;
                 stay_up = true;
