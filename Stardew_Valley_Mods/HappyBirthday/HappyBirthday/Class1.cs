@@ -232,7 +232,7 @@ namespace HappyBirthday
 
         public virtual void birthday_gift()
         {
-
+           
             //grab 0~3 hearts  //Neutral
             //grab 4~6       //Good
             //grab 7~10       //Best
