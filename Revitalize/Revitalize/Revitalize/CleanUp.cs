@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Linq;
 using Revitalize;
 using Revitalize.Objects;
+using Revitalize.Resources;
+using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -64,24 +66,17 @@ namespace Revitalize
                 }
                 string s = Convert.ToString((d.GetType()));
 
-                if (s.Contains("Decoration"))
+                if (Dictionaries.acceptedTypes.ContainsKey(s))
                 {
-                    Serialize.WriteToJsonFile(Path.Combine(InvPath,d.Name+".json"),(Decoration)d);
-                    removalList.Add(d);
-                }
+                    SerializerDataNode t;
 
-                if (s.Contains("Light"))
-                {
-                    Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Light)d);
-                    removalList.Add(d);
+                   bool works= Dictionaries.acceptedTypes.TryGetValue(s, out t);
+                    if (works == true)
+                    {
+                        t.serialize.Invoke(d);
+                        removalList.Add(d);
+                    }
                 }
-
-                if (s.Contains("shopObject"))
-                {
-                    Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (shopObject)d);
-                    removalList.Add(d);
-                }
-
             }
             foreach(var i in removalList)
             {
@@ -132,14 +127,14 @@ namespace Revitalize
             string s = b.ElementAt(0);
          //   Log.AsyncC(s);
 
-            if (Util.acceptedTypes.ContainsKey(s))
+            if (Dictionaries.acceptedTypes.ContainsKey(s))
             {
               //  Log.AsyncC("FUUUUU");
-                foreach (KeyValuePair<string, Util.del> pair in Util.acceptedTypes)
+                foreach (KeyValuePair<string, SerializerDataNode> pair in Dictionaries.acceptedTypes)
                 {
                     if (pair.Key == s)
                     {
-                  var  cObj=pair.Value.Invoke(data);
+                        var cObj = pair.Value.parse.Invoke(data);
                         Log.AsyncC("NEED TO HANDLE PUTTING OBJECTS BACK INTO A LOCATION!!!!");
                         if (cObj.thisLocation == null)
                         {

@@ -52,11 +52,15 @@
     <Compile Include="Objects\Decoration.cs" />
     <Compile Include="Objects\Light.cs" />
     <Compile Include="Objects\Machines\Machine.cs" />
+    <Compile Include="Objects\Machines\Quarry.cs" />
     <Compile Include="Objects\Machines\Spawner.cs" />
     <Compile Include="Menus\LightCustomizer.cs" />
     <Compile Include="Objects\shopObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\DataNodes\SerializerDataNode.cs" />
+    <Compile Include="Resources\Dictionaries.cs" />
     <Compile Include="Resources\LightColors.cs" />
+    <Compile Include="Resources\DataNodes\QuarryDataNode.cs" />
     <Compile Include="Serialize.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

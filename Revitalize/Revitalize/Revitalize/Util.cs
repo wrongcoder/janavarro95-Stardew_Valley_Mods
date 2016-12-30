@@ -12,19 +12,8 @@ namespace Revitalize
     class Util
     {
 
-        public delegate CoreObject del(string data);
 
-        public static Dictionary<string, del> acceptedTypes;
-
-
-        public static void addAllAcceptedTypes()
-        {
-            acceptedTypes.Add("Revitalize.Objects.Decoration", new del(Serialize.parseDecoration));
-            acceptedTypes.Add("Revitalize.Objects.Light", new del(Serialize.parseLight));
-            acceptedTypes.Add("Revitalize.Objects.shopObject", new del(Serialize.parseShopObject));
-
-
-        }
+     
 
         public static Microsoft.Xna.Framework.Rectangle parseRectFromJson(string s){
 
@@ -46,7 +35,7 @@ namespace Revitalize
         {
             if (Game1.player.isInventoryFull() == false)
             {
-                Game1.player.addItemToInventory(I);
+                Game1.player.addItemToInventoryBool(I, false);
                 return true;
             }
             else {

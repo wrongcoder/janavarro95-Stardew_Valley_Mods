@@ -224,7 +224,7 @@ namespace Revitalize
                     //  Game1.player.removeItemFromInventory(heldObject);
                 }
                 //this.minutesUntilReady = 30;
-                Log.AsyncC("placed item!");
+              //  Log.AsyncC("placed item!");
             }
             else
             {
@@ -399,12 +399,12 @@ namespace Revitalize
                 this.heldObject.tileLocation = this.tileLocation;
                 this.heldObject.boundingBox.X = this.boundingBox.X;
                 this.heldObject.boundingBox.Y = this.boundingBox.Y;
-                Log.AsyncO(getDefaultBoundingBoxForType((dropIn as CoreObject).Decoration_type));
+               // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as CoreObject).Decoration_type));
                 this.heldObject.performDropDownAction(who);
                 if (!probe)
                 {
                     Game1.playSound("woodyStep");
-                    Log.AsyncC("HUH?");
+                  //  Log.AsyncC("HUH?");
                     if (who != null)
                     {
                         who.reduceActiveItemByOne();
@@ -430,7 +430,7 @@ namespace Revitalize
                     Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
                     this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, lightColor, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
                     Game1.currentLightSources.Add(this.lightSource);
-                    Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
+                   // Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
                     return;
                 }
             }
@@ -485,7 +485,7 @@ namespace Revitalize
                     this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, c, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
                     // this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\BlueLight");
                     Game1.currentLightSources.Add(this.lightSource);
-                    Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
+                  //  Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
                     return;
                 }
             }
@@ -801,8 +801,8 @@ namespace Revitalize
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-            Log.AsyncC(x);
-            Log.AsyncM(y);
+          //  Log.AsyncC(x);
+          //  Log.AsyncM(y);
            
             if (location is FarmHouse)
             {
@@ -874,9 +874,9 @@ namespace Revitalize
                     }
                 }
                 this.updateDrawPosition();
-                Log.AsyncO(this.boundingBox);
-                Log.AsyncO(x);
-                Log.AsyncY(y);
+              //  Log.AsyncO(this.boundingBox);
+              //  Log.AsyncO(x);
+              //  Log.AsyncY(y);
                 for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
                 {
                     base.placementAction(location, x + 1, y, who);
@@ -1235,8 +1235,8 @@ namespace Revitalize
 
         public virtual bool isInventoryFull()
         {
-            Log.AsyncC("Count" + inventory.Count);
-            Log.AsyncC("size" + inventoryMaxSize);
+         //   Log.AsyncC("Count" + inventory.Count);
+        //    Log.AsyncC("size" + inventoryMaxSize);
             if (inventory.Count >= inventoryMaxSize)
             {
 
@@ -1320,7 +1320,7 @@ namespace Revitalize
             if (lightsOn == false)
             {
 
-                Log.AsyncG("ADD LIGHTS");
+               // Log.AsyncG("ADD LIGHTS");
                 this.Decoration_type = 7;
                 this.type = "Lamp";
 

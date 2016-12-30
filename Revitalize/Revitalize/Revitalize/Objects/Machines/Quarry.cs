@@ -1,108 +1,27 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Resources;
+using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.Menus;
 using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Revitalize.Objects.Machines
 {
-    /// <summary>
-    /// Revitalize Machine Class. This is a core class and should only be extended upon.
-    /// </summary>
-    /// 
-    public class Machine : Revitalize.CoreObject
+    class Quarry : Machine
     {
-        public const int chair = 0;
 
-        public const int bench = 1;
+        public string ResourceName;
+        public StardewValley.Object output;
 
-        public const int couch = 2;
-
-        public const int armchair = 3;
-
-        public const int dresser = 4;
-
-        public const int longTable = 5;
-
-        public const int painting = 6;
-
-        public const int lamp = 7;
-
-        public const int decor = 8;
-
-        public const int other = 9;
-
-        public const int bookcase = 10;
-
-        public const int table = 11;
-
-        public const int rug = 12;
-
-        public const int window = 13;
-
-        public new int price;
-
-        public int Decoration_type;
-
-        public int rotations;
-
-        public int currentRotation;
-
-        public int sourceIndexOffset;
-
-        protected Vector2 drawPosition;
-
-        public Rectangle sourceRect;
-
-        public Rectangle defaultSourceRect;
-
-        public Rectangle defaultBoundingBox;
-
-        public string description;
-
-        public Texture2D TextureSheet;
-
-        public new bool flipped;
-
-        [XmlIgnore]
-        public bool flaggedForPickUp;
-
-        public bool lightGlowAdded;
-
-        public string texturePath;
-
-        public List<Item> inventory;
-
-        public int inventoryMaxSize;
-
-        public bool itemReadyForHarvest;
-
-        public bool lightsOn;
-
-        public GameLocation thisLocation;
-
-        public Color lightColor;
-
-
-        //Extra stuff. May or may not be used.
-        public bool producePollution;
-
-        public bool consumeEnergy;
-
-        public float currentEnergy;
-
-        public float MaxEnergy;
-
-        public float currentPollutionOutput;
-
-        public float maxPollutionOutput;
-
+        public QuarryDataNode dataNode;
 
         public override string Name
         {
@@ -116,33 +35,125 @@ namespace Revitalize.Objects.Machines
             }
         }
 
-        public virtual void InitializeBasics(int InvMaxSize, Vector2 tile)
-        {
-            this.inventory = new List<Item>();
-            this.inventoryMaxSize = InvMaxSize;
-            this.tileLocation = tile;
-            lightsOn = false;
-       
-            lightColor = Color.Black;
-        }
 
-        public Machine()
+
+
+        public Quarry()
         {
             this.updateDrawPosition();
         }
 
-        public Machine(bool f)
+        public Quarry(bool f)
         {
             //does nothng
         }
 
-        public Machine(int which, Vector2 Tile, int InventoryMaxSize)
+
+        public Quarry(int which, Vector2 Tile, int InventoryMaxSize, string resourceName )
         {
+            if (Dictionaries.quarryList.ContainsKey(resourceName))
+            {
+                QuarryDataNode t;
+                bool works= Dictionaries.quarryList.TryGetValue(resourceName, out t);
+                if (works == false)
+                {
+                    Log.AsyncR("ERROR, invalid resource type for quarry.");
+                    return;
+                }
+                else
+                {
+                    //this.output = t;
+                    ResourceName = resourceName;
+                }
+            }
+
             InitializeBasics(InventoryMaxSize, Tile);
+            this.thisType = this.GetType();
             if (TextureSheet == null)
             {
                 TextureSheet = Game1.content.Load<Texture2D>("TileSheets\\furniture");
                 texturePath = "TileSheets\\furniture";
+            }
+            Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
+            string[] array = dictionary[which].Split(new char[]
+            {
+                '/'
+            });
+            this.name = array[0];
+            this.Decoration_type = this.getTypeNumberFromName(array[1]);
+            this.description = "Can be placed inside your house.";
+            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
+            if (array[2].Equals("-1"))
+            {
+                this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
+                this.defaultSourceRect = this.sourceRect;
+            }
+            else
+            {
+                this.defaultSourceRect.Width = Convert.ToInt32(array[2].Split(new char[]
+                {
+                    ' '
+                })[0]);
+                this.defaultSourceRect.Height = Convert.ToInt32(array[2].Split(new char[]
+                {
+                    ' '
+                })[1]);
+                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.defaultSourceRect = this.sourceRect;
+            }
+            this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
+            if (array[3].Equals("-1"))
+            {
+                this.boundingBox = this.getDefaultBoundingBoxForType(this.Decoration_type);
+                this.defaultBoundingBox = this.boundingBox;
+            }
+            else
+            {
+                this.defaultBoundingBox.Width = Convert.ToInt32(array[3].Split(new char[]
+                {
+                    ' '
+                })[0]);
+                this.defaultBoundingBox.Height = Convert.ToInt32(array[3].Split(new char[]
+                {
+                    ' '
+                })[1]);
+                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
+                this.defaultBoundingBox = this.boundingBox;
+            }
+            this.updateDrawPosition();
+            this.rotations = Convert.ToInt32(array[4]);
+            this.price = Convert.ToInt32(array[5]);
+            this.parentSheetIndex = which;
+        }
+
+        //TODO: Add in path for loading in this machine type plus it's name
+
+
+        public Quarry(int which, Vector2 Tile, string TexturePath, int InventoryMaxSize, string resourceName)
+        {
+            if (Dictionaries.quarryList.ContainsKey(resourceName))
+            {
+                QuarryDataNode t;
+                bool works = Dictionaries.quarryList.TryGetValue(resourceName, out t);
+                if (works == false)
+                {
+                    Log.AsyncR("ERROR, invalid resource type for quarry.");
+                    return;
+                }
+                else
+                {
+                    //this.output = t;
+                    ResourceName = resourceName;
+                }
+            }
+
+
+
+            InitializeBasics(InventoryMaxSize, Tile);
+            if (TextureSheet == null)
+            {
+                TextureSheet = Game1.content.Load<Texture2D>(texturePath);
+                texturePath = TexturePath;
             }
             Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
             string[] array = dictionary[which].Split(new char[]
@@ -224,54 +235,129 @@ namespace Revitalize.Objects.Machines
                 // Game1.showRedMessage("YOOO");
                 //do some stuff when the right button is down
                 // rotate();
-                if (this.heldObject != null)
+                if (this.output != null)
                 {
-                  //  Game1.player.addItemByMenuIfNecessary(this.heldObject);
-                   // this.heldObject = null;
+                   // Game1.player.addItemByMenuIfNecessary(this.output);
+                    this.output = null;
+                    this.itemReadyForHarvest = false;
                 }
+
                 else {
-                 //   this.heldObject = Game1.player.ActiveObject;
-                  //  Game1.player.removeItemFromInventory(heldObject);
+                    if (Game1.player.ActiveObject != null)
+                    {
+                      //  var I = Game1.player.ActiveObject.getOne();
+                      //  Game1.player.reduceActiveItemByOne();
+                      //  this.output = (StardewValley.Object)I;
+                    }
+                    else
+                    {
+                        // this.toggleLights();
+                    }
+                    //  Game1.player.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(30, this.tileLocation * (float)Game1.tileSize + new Vector2(0f, (float)(-(float)Game1.tileSize / 4)), Color.White, 4, false, 50f, 10, Game1.tileSize, (this.tileLocation.Y + 1f) * (float)Game1.tileSize / 10000f + 0.0001f, -1, 0));
+                    //  Game1.player.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(Game1.animations, new Microsoft.Xna.Framework.Rectangle(256, 1856, 64, 128), 80f, 6, 999999, this.tileLocation * (float)Game1.tileSize + new Vector2(0f, (float)(-(float)Game1.tileSize * 2)), false, false, (this.tileLocation.Y + 1f) * (float)Game1.tileSize / 10000f + 0.0001f, 0f, Color.Yellow, 1f, 0f, 0f, 0f, false));
                 }
-                    //this.minutesUntilReady = 30;
-               // Log.AsyncC("placed item!");
             }
             else
             {
                 //Game1.showRedMessage("CRY");
             }
 
+            if (output == null)
+            {
+
+                if (Dictionaries.quarryList.ContainsKey(ResourceName))
+                {
+                    QuarryDataNode t;
+                    bool works = Dictionaries.quarryList.TryGetValue(ResourceName, out t);
+                    if (works == false)
+                    {
+                        Log.AsyncR("ERROR, invalid resource type for quarry.");
+                        return false;
+                    }
+                    else
+                    {
+                        this.output = t.Output;
+                        this.minutesUntilReady = t.TimeToProcess;
+                        this.dataNode = t;
+                    }
+                }
+            }
+
+            /*
+            if (this.output != null)
+            {
+              //  Log.AsyncC(this.output.name);
+               // Log.AsyncC(this.minutesUntilReady);
+            }
+            */
+
             if (justCheckingForActivity)
             {
                 return true;
             }
+
             return this.clicked(who);
         }
 
-        //DONT USE THIS BASE IT IS TERRIBLE
         public override bool clicked(Farmer who)
         {
 
             //  Game1.showRedMessage("THIS IS CLICKED!!!");
             Game1.haltAfterCheck = false;
 
-            if (this.heldObject != null)
+            /*
+            if (this.output != null)
             {
-                this.spillInventoryEverywhere();
+                this.showUI();
                 return false;
             }
+            */
 
-            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is Machine)))
+            if ((who.ActiveObject == null || !(who.ActiveObject is Quarry)))
             {
+
+                ///REALLY SHITTY MAKESHIFT CODE UNTIL THE REAL UI IS DONE
+                if (inventory.Count != 0)
+                {
+
+
+                    bool clear = true;
+                    foreach (var v in inventory)
+                    {
+                        if (v == null)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            clear = false;
+                        }
+                    }
+                    if (clear == true)
+                    {
+                        inventory.Clear();
+                      //  if (this.output != null) Util.addItemToInventoryElseDrop(this.output.getOne());
+                        //this.output = new Quarry(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
+                        Util.addItemToInventoryElseDrop(this);
+                        this.output = null;
+                        this.flaggedForPickUp = true;
+                        this.thisLocation = null;
+                        return true;
+                    }
+                    this.showUI();
+                    return false;
+                }
+
+
                 if (Game1.player.currentLocation is FarmHouse)
                 {
                     // Game1.showRedMessage("Why2?");
-                    //  this.spillInventoryEverywhere();
+                    //  this.showUI();
 
-                    if (this.heldObject != null) Util.addItemToInventoryElseDrop(this.heldObject.getOne());
-                    this.heldObject = new Machine(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
-                    Util.addItemToInventoryElseDrop(this.heldObject.getOne());
-                    this.heldObject = null;
+                    //if (this.output != null) Util.addItemToInventoryElseDrop(this.output.getOne());
+                    this.output = this;
+                    Util.addItemToInventoryElseDrop(this);
+                    this.output = null;
                     this.flaggedForPickUp = true;
                     this.thisLocation = null;
                     return true;
@@ -283,18 +369,18 @@ namespace Revitalize.Objects.Machines
                     this.flaggedForPickUp = true;
                     if (this is TV)
                     {
-                        // this.heldObject = new TV(parentSheetIndex, Vector2.Zero);
+                        // this.output = new TV(parentSheetIndex, Vector2.Zero);
                     }
                     else {
 
-                        //    Util.addItemToInventoryElseDrop(this.heldObject);
+                        //    Util.addItemToInventoryElseDrop(this.output);
 
-                        var obj = new Machine(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
+                        var obj = this;
                         Util.addItemToInventoryElseDrop(obj);
-                        //     this.spillInventoryEverywhere();
-                        if (this.heldObject != null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
+                        //     this.showUI();
+                      //  if (this.output != null) this.output.performRemoveAction(this.tileLocation, who.currentLocation);
 
-                        this.heldObject = null;
+                        this.output = null;
                         Game1.playSound("coin");
                         this.thisLocation = null;
                         return true;
@@ -302,15 +388,15 @@ namespace Revitalize.Objects.Machines
 
                 }
             }
-            if (this.heldObject != null && who.addItemToInventoryBool(this.heldObject, false))
+            if (this.output != null && who.addItemToInventoryBool(this.output, false))
             {
                 // Game1.showRedMessage("Why3?");
-                // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
-                // this.spillInventoryEverywhere();
-                var obj = new Machine(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
+                // if(this.output!=null) Game1.player.addItemByMenuIfNecessary((Item)this.output);
+                // this.showUI();
+                var obj = this;
                 Util.addItemToInventoryElseDrop(obj);
-                if (this.heldObject != null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
-                this.heldObject = null;
+               // if (this.output != null) this.output.performRemoveAction(this.tileLocation, who.currentLocation);
+                this.output = null;
                 Game1.playSound("coin");
                 this.thisLocation = null;
                 return true;
@@ -327,36 +413,42 @@ namespace Revitalize.Objects.Machines
             this.lightGlowAdded = false;
             if (!Game1.isDarkOut() || (Game1.newDay && !Game1.isRaining))
             {
-                this.removeLights(location);
+                // this.removeLights(location);
                 return;
             }
-            this.addLights(location);
+
+            // this.addLights(thisLocation, lightColor);
+            // this.addLights(thisLocation, lightColor);
         }
 
-        public virtual void resetOnPlayerEntry(GameLocation environment)
+        public override void resetOnPlayerEntry(GameLocation environment)
         {
             this.removeLights(environment);
             if (Game1.isDarkOut())
             {
-                this.addLights(environment);
+
+                //   this.addLights(thisLocation, lightColor);
+                //this.addLights(thisLocation, lightColor);
             }
         }
 
         public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, Farmer who)
         {
-           // Log.AsyncG("HEY!");
-            if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.heldObject == null && !dropIn.bigCraftable && (!(dropIn is Machine) || ((dropIn as Machine).getTilesWide() == 1 && (dropIn as Machine).getTilesHigh() == 1)))
+            // Log.AsyncG("HEY!");
+
+            if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.output == null && !dropIn.bigCraftable && (!(dropIn is Quarry) || ((dropIn as Quarry).getTilesWide() == 1 && (dropIn as Quarry).getTilesHigh() == 1)))
             {
-                this.heldObject = (StardewValley.Object)dropIn.getOne();
-                this.heldObject.tileLocation = this.tileLocation;
-                this.heldObject.boundingBox.X = this.boundingBox.X;
-                this.heldObject.boundingBox.Y = this.boundingBox.Y;
-               // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as Machine).Decoration_type));
-                this.heldObject.performDropDownAction(who);
+                this.output = (StardewValley.Object)dropIn.getOne();
+                this.output.tileLocation = this.tileLocation;
+                this.output.boundingBox.X = this.boundingBox.X;
+                this.output.boundingBox.Y = this.boundingBox.Y;
+               // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as Quarry).Decoration_type));
+                this.output.performDropDownAction(who);
+                this.output = null;
                 if (!probe)
                 {
                     Game1.playSound("woodyStep");
-                  //  Log.AsyncC("HUH?");
+                    // Log.AsyncC("HUH?");
                     if (who != null)
                     {
                         who.reduceActiveItemByOne();
@@ -367,7 +459,7 @@ namespace Revitalize.Objects.Machines
             return false;
         }
 
-        public virtual void addLights(GameLocation environment)
+        public override void addLights(GameLocation environment)
         {
             if (this.Decoration_type == 7)
             {
@@ -380,9 +472,9 @@ namespace Revitalize.Objects.Machines
                 if (this.lightSource == null)
                 {
                     Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, lightColor, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
+                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, Color.Black, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
                     Game1.currentLightSources.Add(this.lightSource);
-                   // Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
+                    // Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
                     return;
                 }
             }
@@ -400,28 +492,9 @@ namespace Revitalize.Objects.Machines
                     this.lightGlowAdded = false;
                 }
             }
-            else
-            {
-                
-                    if (this.sourceIndexOffset == 0)
-                    {
-                        this.sourceRect = this.defaultSourceRect;
-                        this.sourceRect.X = this.sourceRect.X + this.sourceRect.Width;
-                    }
-                    this.sourceIndexOffset = 1;
-                    if (this.lightSource == null)
-                    {
-                        Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                        this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, lightColor, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                        Game1.currentLightSources.Add(this.lightSource);
-                        return;
-                    }
-                
-            }
         }
 
-
-        public virtual void addLights(GameLocation environment, Color c)
+        public override void addLights(GameLocation environment, Color c)
         {
             if (this.Decoration_type == 7)
             {
@@ -435,9 +508,9 @@ namespace Revitalize.Objects.Machines
                 {
                     Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
                     this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, c, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                   // this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\BlueLight");
+                    // this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\BlueLight");
                     Game1.currentLightSources.Add(this.lightSource);
-                   // Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
+                    // Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
                     return;
                 }
             }
@@ -474,8 +547,8 @@ namespace Revitalize.Objects.Machines
 
             }
         }
-        
-        public void removeLights(GameLocation environment)
+
+        private void removeLights(GameLocation environment)
         {
             if (this.Decoration_type == 7)
             {
@@ -508,26 +581,24 @@ namespace Revitalize.Objects.Machines
                 }
                 this.lightGlowAdded = true;
             }
-
-            if (this.sourceIndexOffset == 1)
-            {
-                this.sourceRect = this.defaultSourceRect;
-            }
-            this.sourceIndexOffset = 0;
-            Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-            this.lightSource = null;
-            return;
         }
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
-           // Log.Info("minutes passed in"+minutes);
-          //  Log.Info("minues remaining" + this.minutesUntilReady);
+            // Log.Info("minutes passed in" + minutes);
+            //  if(this.lightSource!=null)   Log.AsyncO(this.lightSource.color.ToString());
+            //   Log.Info(this.Decoration_type);
+            if (this.lightSource != null) this.lightSource.color = new Color(0, 255, 255, 255);  //THE COLORS ARE REVERSED!!!!!!!!!!!!
             this.minutesUntilReady = (this.minutesUntilReady - minutes);
+             Log.Info("minues remaining" + this.minutesUntilReady);
+
+            // if(this.output!= null) Log.Info("stack size"+this.output.stack);
             if (Game1.isDarkOut())
             {
-                // this.addLights(environment,this.lightColor);
-                 this.addLights(environment);
+
+                // this.addLights(thisLocation, lightColor);
+                //  this.addLights(thisLocation, lightColor);
+                //  if (this.lightSource != null) this.lightSource.color = Color.DarkMagenta;
             }
             else
             {
@@ -537,10 +608,16 @@ namespace Revitalize.Objects.Machines
             if (minutesUntilReady == 0)
             {
                // Log.AsyncC(this.name + "Is ready!");
-               // Log.AsyncC(Game1.player.getStandingPosition());
-               // Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
-                //Game1.createItemDebris((Item)this.heldObject, v2, Game1.player.getDirection());
-              // minutesUntilReady = 30;
+              //  Log.AsyncC(Game1.player.getStandingPosition());
+                Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
+               // Log.AsyncC(v2);
+                //Game1.createItemDebris((Item)this.output, v2, Game1.player.getDirection());
+                
+                    addItemToInventoryElseDrop(this.output.getOne());
+
+                minutesUntilReady = this.dataNode.TimeToProcess;
+                    this.itemReadyForHarvest = true;
+                
             }
 
             return false;
@@ -554,11 +631,10 @@ namespace Revitalize.Objects.Machines
                 environment.lightGlows.Remove(new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y + Game1.tileSize)));
                 this.lightGlowAdded = false;
             }
-            this.spillInventoryEverywhere();
             base.performRemoveAction(tileLocation, environment);
         }
 
-        public virtual void rotate()
+        public override void rotate()
         {
             if (this.rotations < 2)
             {
@@ -662,7 +738,7 @@ namespace Revitalize.Objects.Machines
             this.updateDrawPosition();
         }
 
-        public virtual bool isGroundFurniture()
+        public override bool isGroundFurniture()
         {
             return this.Decoration_type != 13 && this.Decoration_type != 6 && this.Decoration_type != 13;
         }
@@ -686,10 +762,10 @@ namespace Revitalize.Objects.Machines
                         foreach (KeyValuePair<Vector2, StardewValley.Object> something in l.objects)
                         {
                             StardewValley.Object obj = something.Value;
-                            if ((obj.GetType()).ToString().Contains("Machine"))
+                            if ((obj.GetType()).ToString().Contains("Quarry"))
                             {
-                                Machine current = (Machine)obj;
-                                if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
+                                Quarry current = (Quarry)obj;
+                                if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.output == null && this.getTilesWide() == 1)
                                 {
                                     bool result = true;
                                     return result;
@@ -716,9 +792,9 @@ namespace Revitalize.Objects.Machines
                         vector.X += (float)(Game1.tileSize / 2);
                         vector.Y += (float)(Game1.tileSize / 2);
                         /*
-                        foreach (Machine current in (l as FarmHouse).Machine)
+                        foreach (Quarry current in (l as FarmHouse).Quarry)
                         {
-                            if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
+                            if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.output == null && this.getTilesWide() == 1)
                             {
                                 bool result = true;
                                 return result;
@@ -736,25 +812,27 @@ namespace Revitalize.Objects.Machines
             }
         }
 
-        public virtual void updateDrawPosition()
+        public override void updateDrawPosition()
         {
             this.drawPosition = new Vector2((float)this.boundingBox.X, (float)(this.boundingBox.Y - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)));
         }
 
-        public virtual int getTilesWide()
+        public override int getTilesWide()
         {
             return this.boundingBox.Width / Game1.tileSize;
         }
 
-        public virtual int getTilesHigh()
+        public override int getTilesHigh()
         {
             return this.boundingBox.Height / Game1.tileSize;
         }
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-          //  Log.AsyncC(x);
-          //  Log.AsyncM(y);
+
+
+
+
             if (location is FarmHouse)
             {
                 Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
@@ -804,10 +882,10 @@ namespace Revitalize.Objects.Machines
                 foreach (KeyValuePair<Vector2, StardewValley.Object> c in location.objects)
                 {
                     StardewValley.Object ehh = c.Value;
-                    if (((ehh.GetType()).ToString()).Contains("Machine"))
+                    if (((ehh.GetType()).ToString()).Contains("Quarry"))
                     {
-                        Machine current2 = (Machine)ehh;
-                        if (current2.Decoration_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
+                        Quarry current2 = (Quarry)ehh;
+                        if (current2.Decoration_type == 11 && current2.output == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
                         {
                             current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
                             bool result = true;
@@ -825,8 +903,8 @@ namespace Revitalize.Objects.Machines
                     }
                 }
                 this.updateDrawPosition();
-             //   Log.AsyncO(this.boundingBox);
-             //   Log.AsyncO(x);
+            //    Log.AsyncO(this.boundingBox);
+            //    Log.AsyncO(x);
             //    Log.AsyncY(y);
                 for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
                 {
@@ -891,7 +969,7 @@ namespace Revitalize.Objects.Machines
                 /*
                 foreach (Furniture current2 in (location as FarmHouse).furniture)
                 {
-                    if (current2.furniture_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
+                    if (current2.furniture_type == 11 && current2.output == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
                     {
                         current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
                         bool result = true;
@@ -909,7 +987,7 @@ namespace Revitalize.Objects.Machines
                     }
                 }
                 this.updateDrawPosition();
-                thisLocation = Game1.player.currentLocation;
+                this.thisLocation = Game1.player.currentLocation;
                 return base.placementAction(location, x, y, who);
             }
 
@@ -1135,7 +1213,8 @@ namespace Revitalize.Objects.Machines
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
-            base.drawWhenHeld(spriteBatch, objectPosition, f);
+            spriteBatch.Draw(TextureSheet, objectPosition, Color.White);
+            //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
@@ -1153,26 +1232,37 @@ namespace Revitalize.Objects.Machines
             {
                 spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
-            if (this.heldObject != null)
+            /*
+            if (this.output != null)
             {
-                if (this.heldObject is Machine)
+                if (this.output is Quarry)
                 {
-                    (this.heldObject as Machine).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as Machine).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
+                    (this.output as Quarry).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.output as Quarry).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
                 spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.output.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+            }
+            */
+            if (this.itemReadyForHarvest)
+            {
+                if (this.output != null)
+                {
+                    float num = 4f * (float)Math.Round(Math.Sin(DateTime.Now.TimeOfDay.TotalMilliseconds / 250.0), 2);
+                    spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize - 8), (float)(y * Game1.tileSize - Game1.tileSize * 3 / 2 - 16) + num)), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(141, 465, 20, 24)), Color.White * 0.75f, 0f, Vector2.Zero, 4f, SpriteEffects.None, (float)((y + 1) * Game1.tileSize) / 10000f + 1E-06f + this.tileLocation.X / 10000f + ((this.parentSheetIndex == 105) ? 0.0015f : 0f));
+                    spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize + Game1.tileSize / 2), (float)(y * Game1.tileSize - Game1.tileSize - Game1.tileSize / 8) + num)), new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, this.output.parentSheetIndex, 16, 16)), Color.White * 0.75f, 0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)((y + 1) * Game1.tileSize) / 10000f + 1E-05f + this.tileLocation.X / 10000f + ((this.parentSheetIndex == 105) ? 0.0015f : 0f));
+                }
             }
         }
 
-        public virtual void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
+        public override void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
             spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         public override Item getOne()
         {
-            Machine Machine = new Machine(this.parentSheetIndex, this.tileLocation, this.inventoryMaxSize);
+            Quarry machine = new Quarry(this.parentSheetIndex, this.tileLocation, this.inventoryMaxSize, this.ResourceName);
             /*
             drawPosition = this.drawPosition;
             defaultBoundingBox = this.defaultBoundingBox;
@@ -1181,113 +1271,7 @@ namespace Revitalize.Objects.Machines
             rotations = this.rotations;
             rotate();
             */
-            return Machine;
-        }
-
-        public virtual bool isInventoryFull()
-        {
-           // Log.AsyncC("Count" + inventory.Count);
-          //  Log.AsyncC("size" + inventoryMaxSize);
-            if (inventory.Count >= inventoryMaxSize)
-            {
-               
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-
-        public virtual bool addItemToInventory(Item I)
-        {
-            if (isInventoryFull() == false)
-            {
-                inventory.Add(I.getOne());
-                return true;
-            }
-            else return false;
-        }
-
-        public virtual void showUI()
-        {
-            Game1.activeClickableMenu = new StorageContainer(this.inventory, this.inventoryMaxSize,3);
-            this.itemReadyForHarvest = false;
-            /*
-            Log.AsyncC("DROPPING INVENTORY!");
-
-            Random random = new Random(inventory.Count);
-            int i = random.Next();
-            i = i % 4;
-            Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
-            foreach (var I in inventory)
-            {
-                Log.AsyncY(I.Name);
-                Log.AsyncO(I.getStack());
-                Log.AsyncM(I.Stack);
-                Log.AsyncC("Dropping an item!");
-                Game1.createItemDebris(I, v2, i);
-            }
-            inventory.Clear();
-            */
-        }
-
-       public virtual bool addItemToInventoryElseDrop(Item I)
-        {
-
-            if (isInventoryFull() == false)
-            {
-                foreach (Item C in inventory)
-                {
-                    if (C == null) continue;
-                    if (I.canStackWith(C) == true)
-                    {
-                        C.addToStack(I.Stack);
-                        return true;
-                    }
-                    else
-                    {
-                        inventory.Add(I.getOne());
-                        return true;
-                    }
-                }
-                inventory.Add(I.getOne());
-                return true;
-            }
-            else {
-                Random random = new Random(inventory.Count);
-                int i = random.Next();
-                i = i % 4;
-                Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
-                Game1.createItemDebris(I.getOne(), v2, i);
-                return false;
-            }
-        }
-
-        public virtual void toggleLights()
-        {
-           
-            if (lightsOn == false)
-            {
-                
-              //  Log.AsyncG("ADD LIGHTS");
-            //    this.Decoration_type = 7;
-             //   this.type = "Lamp";
-
-                //     this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\Lantern");
-                // this.lightSource.position = tileLocation;
-
-                // this.addLights(thisLocation, lightColor);
-                this.addLights(thisLocation, lightColor);
-                lightsOn = true;
-            }
-            if (lightsOn == true)
-            {
-                this.removeLights(Game1.player.currentLocation);
-                lightsOn = false;
-            }
-
+            return machine;
         }
 
 
