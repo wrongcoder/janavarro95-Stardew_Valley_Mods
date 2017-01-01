@@ -54,7 +54,7 @@ namespace Revitalize.Objects
 
         private int sourceIndexOffset;
 
-        protected Vector2 drawPosition;
+        public Vector2 drawPosition;
 
         public Rectangle sourceRect;
 
@@ -99,7 +99,7 @@ namespace Revitalize.Objects
             //does nothng
         }
 
-        public Decoration(int which, Vector2 tile, bool isRemovable=true)
+        public Decoration(int which, Vector2 tile, bool isRemovable = true)
         {
             removable = isRemovable;
             this.thisType = GetType();
@@ -185,7 +185,7 @@ namespace Revitalize.Objects
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
             var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-           if(mState.RightButton==Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 // Game1.showRedMessage("YOOO");
                 //do some stuff when the right button is down
@@ -211,20 +211,20 @@ namespace Revitalize.Objects
 
         public override bool clicked(Farmer who)
         {
-            
+
             if (removable == false) return false;
-         //   Game1.showRedMessage("THIS IS CLICKED!!!");
+            //   Game1.showRedMessage("THIS IS CLICKED!!!");
             Game1.haltAfterCheck = false;
             if (this.Decoration_type == 11 && who.ActiveObject != null && who.ActiveObject != null && this.heldObject == null)
             {
-               //  Game1.showRedMessage("Why1?");
+                //  Game1.showRedMessage("Why1?");
                 return false;
             }
             if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is Decoration)))
             {
                 if (Game1.player.currentLocation is FarmHouse)
                 {
-                  //   Game1.showRedMessage("Why2?");
+                    //   Game1.showRedMessage("Why2?");
                     this.heldObject = new Decoration(parentSheetIndex, Vector2.Zero);
                     Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
                     this.flaggedForPickUp = true;
@@ -233,8 +233,8 @@ namespace Revitalize.Objects
                 }
                 else
                 {
-                   // return true;
-                    
+                    // return true;
+
                     this.flaggedForPickUp = true;
                     if (this is TV)
                     {
@@ -243,18 +243,18 @@ namespace Revitalize.Objects
                     else {
                         this.heldObject = new Decoration(parentSheetIndex, Vector2.Zero);
                         Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
-                      //  this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
-                     //   this.heldObject = null;
+                        //  this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
+                        //   this.heldObject = null;
                         Game1.playSound("coin");
                         this.thisLocation = null;
                         return true;
                     }
-                    
+
                 }
             }
             if (this.heldObject != null && who.addItemToInventoryBool(this.heldObject, false))
             {
-               // Game1.showRedMessage("Why3?");
+                // Game1.showRedMessage("Why3?");
                 this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.heldObject = null;
                 Game1.player.addItemByMenuIfNecessary((Item)this);
@@ -264,7 +264,7 @@ namespace Revitalize.Objects
             }
 
 
-            
+
             return false;
         }
 
@@ -297,12 +297,12 @@ namespace Revitalize.Objects
                 this.heldObject.tileLocation = this.tileLocation;
                 this.heldObject.boundingBox.X = this.boundingBox.X;
                 this.heldObject.boundingBox.Y = this.boundingBox.Y;
-              //  Log.AsyncO(getDefaultBoundingBoxForType((dropIn as Decoration).Decoration_type));
+                //  Log.AsyncO(getDefaultBoundingBoxForType((dropIn as Decoration).Decoration_type));
                 this.heldObject.performDropDownAction(who);
                 if (!probe)
                 {
                     Game1.playSound("woodyStep");
-                 //   Log.AsyncC("HUH?");
+                    //   Log.AsyncC("HUH?");
                     if (who != null)
                     {
                         who.reduceActiveItemByOne();
@@ -315,7 +315,7 @@ namespace Revitalize.Objects
 
         private void addLights(GameLocation environment)
         {
-           // this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\lantern");
+            // this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\lantern");
 
             if (this.Decoration_type == 7)
             {
@@ -536,19 +536,20 @@ namespace Revitalize.Objects
                         foreach (KeyValuePair<Vector2, StardewValley.Object> something in l.objects)
                         {
                             StardewValley.Object obj = something.Value;
-                            if ((obj.GetType()).ToString().Contains("Decoration")) {
+                            if ((obj.GetType()).ToString().Contains("Decoration"))
+                            {
                                 Decoration current = (Decoration)obj;
-                            if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
-                            {
-                                bool result = true;
-                                return result;
+                                if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
+                                {
+                                    bool result = true;
+                                    return result;
+                                }
+                                if ((current.Decoration_type != 12 || this.Decoration_type == 12) && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y))
+                                {
+                                    bool result = false;
+                                    return result;
+                                }
                             }
-                            if ((current.Decoration_type != 12 || this.Decoration_type == 12) && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y))
-                            {
-                                bool result = false;
-                                return result;
-                            }
-                        }
                         }
                     }
                 }
@@ -602,10 +603,10 @@ namespace Revitalize.Objects
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-          //  Log.AsyncC(x);
-         //   Log.AsyncM(y);
+            //  Log.AsyncC(x);
+            //   Log.AsyncM(y);
 
-           
+
             if (location is FarmHouse)
             {
                 Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
@@ -676,16 +677,16 @@ namespace Revitalize.Objects
                     }
                 }
                 this.updateDrawPosition();
-                Log.AsyncO(this.boundingBox);
-                Log.AsyncO(x);
-                Log.AsyncY(y);
+             //   Log.AsyncO(this.boundingBox);
+              //  Log.AsyncO(x);
+             //   Log.AsyncY(y);
                 for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
                 {
-                    base.placementAction(location, x+1, y, who);
+                    base.placementAction(location, x + 1, y, who);
                 }
-                for (int i = 0; i <= this.boundingBox.Y/ Game1.tileSize; i++)
+                for (int i = 0; i <= this.boundingBox.Y / Game1.tileSize; i++)
                 {
-                    base.placementAction(location, x, y+1, who);
+                    base.placementAction(location, x, y + 1, who);
                 }
                 return true;
             }
@@ -761,7 +762,7 @@ namespace Revitalize.Objects
                 }
                 this.updateDrawPosition();
                 this.thisLocation = Game1.player.currentLocation;
-                return base.placementAction(location,x,y,who);
+                return base.placementAction(location, x, y, who);
             }
 
         }
@@ -1024,7 +1025,7 @@ namespace Revitalize.Objects
         public override Item getOne()
         {
             Decoration Decoration = new Decoration(this.parentSheetIndex, this.tileLocation);
-         
+
             /*
             drawPosition = this.drawPosition;
             defaultBoundingBox = this.defaultBoundingBox;

@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Resources;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -1288,6 +1289,17 @@ namespace Revitalize.Objects.Machines
                 lightsOn = false;
             }
 
+        }
+
+        public override string getCategoryName()
+        {
+            return "Machine";
+            //  return base.getCategoryName();
+        }
+
+        public override Color getCategoryColor()
+        {
+            return Util.invertColor(LightColors.Black);
         }
 
 

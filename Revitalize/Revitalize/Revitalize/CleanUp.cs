@@ -66,6 +66,9 @@ namespace Revitalize
                 }
                 string s = Convert.ToString((d.GetType()));
 
+              
+
+
                 if (Dictionaries.acceptedTypes.ContainsKey(s))
                 {
                     SerializerDataNode t;
@@ -90,6 +93,7 @@ namespace Revitalize
         public static void restoreInventory()
         {
             createDirectories();
+         //   Log.AsyncG(InvPath);
             ProcessDirectory(InvPath);
         }
 
@@ -117,6 +121,8 @@ namespace Revitalize
         {
             string[] ehh = File.ReadAllLines(path);
             string data = ehh[0];
+
+            Log.AsyncC(data);
             dynamic obj = JObject.Parse(data);
 
 

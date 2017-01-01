@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Resources;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -980,6 +981,16 @@ namespace Revitalize.Objects
             return Light;
         }
 
+        public override string getCategoryName()
+        {
+            return "Adjustable Light";
+            //  return base.getCategoryName();
+        }
+
+        public override Color getCategoryColor()
+        {
+            return Util.invertColor(LightColors.LightCoral);
+        }
 
     }
 }

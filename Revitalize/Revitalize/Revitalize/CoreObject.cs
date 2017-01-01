@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Resources;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -849,7 +850,7 @@ namespace Revitalize
                         }
                     }
                 }
-                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+                this.boundingBox = new Rectangle(x, y, this.boundingBox.Width, this.boundingBox.Height);
                 foreach (KeyValuePair<Vector2, StardewValley.Object> c in location.objects)
                 {
                     StardewValley.Object ehh = c.Value;
@@ -936,7 +937,7 @@ namespace Revitalize
                         }
                     }
                 }
-                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+                this.boundingBox = new Rectangle(x, y, this.boundingBox.Width, this.boundingBox.Height);
                 /*
                 foreach (Furniture current2 in (location as FarmHouse).furniture)
                 {
@@ -1337,6 +1338,17 @@ namespace Revitalize
                 lightsOn = false;
             }
 
+        }
+
+        public override string getCategoryName()
+        {
+            return "Core Mod Object";
+            //  return base.getCategoryName();
+        }
+
+        public override Color getCategoryColor()
+        {
+            return Util.invertColor(LightColors.Black);
         }
 
 

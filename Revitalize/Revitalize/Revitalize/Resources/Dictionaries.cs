@@ -15,10 +15,8 @@ namespace Revitalize.Resources
         public delegate CoreObject par(string data);
         public delegate void ser(Item item);
         public static Dictionary<string, SerializerDataNode> acceptedTypes;
-
-
-
         public static   Dictionary<string, QuarryDataNode> quarryList;
+
 
 
         public static void initializeDictionaries()
@@ -55,6 +53,8 @@ namespace Revitalize.Resources
             quarryList.Add("irridium", new QuarryDataNode("irridium", new StardewValley.Object(386, 1, false), 4320));
 
         }
+
+
 
 
     }

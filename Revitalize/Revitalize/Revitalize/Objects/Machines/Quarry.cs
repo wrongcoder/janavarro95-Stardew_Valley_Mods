@@ -1274,6 +1274,16 @@ namespace Revitalize.Objects.Machines
             return machine;
         }
 
+        public override string getCategoryName()
+        {
+            return "Quarry";
+            //  return base.getCategoryName();
+        }
+
+        public override Color getCategoryColor()
+        {
+            return Util.invertColor(LightColors.Sienna);
+        }
 
     }
 }

@@ -29,7 +29,7 @@ namespace Revitalize
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 //settings.TypeNameHandling = TypeNameHandling.Auto;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
+              //  settings.Formatting = Formatting.Indented;
                 var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, settings);
                 int i = 0;
                 string s = filePath;
@@ -63,6 +63,7 @@ namespace Revitalize
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                // settings.TypeNameHandling = TypeNameHandling.Auto;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //settings.Formatting = Formatting.Indented;
                 return JsonConvert.DeserializeObject<T>(fileContents,settings);
             }
             finally
@@ -171,7 +172,7 @@ namespace Revitalize
             d.inventory = array.ToObject<List<Item>>();
 
 
-            d.inventoryMaxSize = obj.inventoryMaxSize;
+           d.inventoryMaxSize = obj.inventoryMaxSize;
             d.itemReadyForHarvest = obj.itemReadyForHarvest;
             d.lightsOn = obj.lightsOn;
             d.thisLocation = obj.thisLocation;

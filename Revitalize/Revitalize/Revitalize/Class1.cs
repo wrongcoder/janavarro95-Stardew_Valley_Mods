@@ -52,6 +52,7 @@ namespace Revitalize
         private void GameEvents_GameLoaded(object sender, EventArgs e)
         {
             Dictionaries.initializeDictionaries();
+           
         }
 
         private void BedCleanUpCheck(object sender, EventArgs e)
@@ -61,6 +62,13 @@ namespace Revitalize
             if (Game1.hasLoadedGame == false) return;
             if (Game1.player == null) return;
             //Log.Info(Game1.activeClickableMenu.GetType());
+
+
+            if ((Game1.player.ActiveObject as Decoration) != null)
+            {
+                Log.AsyncM((Game1.player.ActiveObject as Decoration).drawPosition);
+            }
+
             if (Game1.player.currentLocation.name == "FarmHouse")
             {
                 Vector2 playerAdj = Game1.player.mostRecentBed;
@@ -91,6 +99,9 @@ namespace Revitalize
 
         private void ShopCall(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
+
+            Log.AsyncG(Game1.tileSize);
+
             //Game1.timeOfDay = 2500;
             if (Game1.activeClickableMenu != null) return;
             if (e.KeyPressed.ToString() == key_binding)
@@ -98,7 +109,8 @@ namespace Revitalize
 
                 List<Item> objShopList = new List<Item>();
 
-                objShopList.Add(new Quarry(3,Vector2.Zero,9,"copper"));
+                objShopList.Add(new Decoration(1120,Vector2.Zero));
+                objShopList.Add(new Furniture(1120, Vector2.Zero));
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                 objShopList.Add(new Light(3, Vector2.Zero, LightColors.Aquamarine));
 
