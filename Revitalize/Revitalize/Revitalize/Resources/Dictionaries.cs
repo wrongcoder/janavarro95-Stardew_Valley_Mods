@@ -42,6 +42,8 @@ namespace Revitalize.Resources
             acceptedTypes.Add("Revitalize.Objects.Machines.Quarry", new SerializerDataNode(new ser(Serialize.serializeQuarry), new par(Serialize.parseQuarry)));
 
         }
+
+
         public static void fillQuaryList()
         {
             quarryList.Add("clay", new QuarryDataNode("clay", new StardewValley.Object(330, 1, false), 60));

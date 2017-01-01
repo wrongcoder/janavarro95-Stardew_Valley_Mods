@@ -50,6 +50,11 @@
     <Compile Include="Class1.cs" />
     <Compile Include="CleanUp.cs" />
     <Compile Include="CoreObject.cs" />
+    <Compile Include="GameLoc.cs" />
+    <Compile Include="Locations\ModTown.cs" />
+    <Compile Include="Menus\Billboard.cs" />
+    <Compile Include="Menus\GameMenu.cs" />
+    <Compile Include="Menus\InventoryPage.cs" />
     <Compile Include="Objects\Decoration.cs" />
     <Compile Include="Objects\Light.cs" />
     <Compile Include="Objects\Machines\Machine.cs" />

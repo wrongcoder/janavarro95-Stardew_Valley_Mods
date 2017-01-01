@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Objects;
 using Revitalize.Resources;
 using StardewModdingAPI;
 using StardewValley;
@@ -752,7 +753,7 @@ namespace Revitalize
                         }
                     }
                 }
-                return base.canBePlacedHere(l, tile);
+                return Util.canBePlacedHere(this,l, tile);
             }
             else
             {
@@ -781,7 +782,7 @@ namespace Revitalize
                         */
                     }
                 }
-                return base.canBePlacedHere(l, tile);
+                return Util.canBePlacedHere(this,l, tile);
             }
         }
 
@@ -799,7 +800,7 @@ namespace Revitalize
         {
             return this.boundingBox.Height / Game1.tileSize;
         }
-
+        /*
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
           //  Log.AsyncC(x);
@@ -907,6 +908,172 @@ namespace Revitalize
                             break;
                         }
                     }
+                    
+                    if (!flag2)
+                    {
+                        Game1.showRedMessage("Must be placed on wall");
+                        return false;
+                    }
+                    flag = true;
+                }
+                for (int i = point.X; i < point.X + this.getTilesWide(); i++)
+                {
+                    for (int j = point.Y; j < point.Y + this.getTilesHigh(); j++)
+                    {
+                        if (location.doesTileHaveProperty(i, j, "NoFurniture", "Back") != null)
+                        {
+                            Game1.showRedMessage("Furniture can't be placed here");
+                            return false;
+                        }
+                        /*
+                        if (!flag && Utility.pointInRectangles(walls, i, j))
+                        {
+                            Game1.showRedMessage("Can't place on wall");
+                            return false;
+                        }
+                        
+                        if (location.getTileIndexAt(i, j, "Buildings") != -1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                this.boundingBox = new Rectangle(x, y, this.boundingBox.Width, this.boundingBox.Height);
+                /*
+                foreach (Furniture current2 in (location as FarmHouse).furniture)
+                {
+                    if (current2.furniture_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
+                    {
+                        current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
+                        bool result = true;
+                        return result;
+                    }
+                }
+                
+                foreach (Farmer current3 in location.getFarmers())
+                {
+                    if (current3.GetBoundingBox().Intersects(this.boundingBox))
+                    {
+                        Game1.showRedMessage("Can't place on top of a person.");
+                        bool result = false;
+                        return result;
+                    }
+                }
+                this.updateDrawPosition();
+                thisLocation = Game1.player.currentLocation;
+                return base.placementAction(location, x, y, who);
+            }
+
+        }
+        */
+        public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
+        {
+
+
+
+
+            if (location is FarmHouse)
+            {
+                Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
+                List<Rectangle> walls = FarmHouse.getWalls((location as FarmHouse).upgradeLevel);
+                this.tileLocation = new Vector2((float)point.X, (float)point.Y);
+                bool flag = false;
+                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.parentSheetIndex == 1293)
+                {
+                    int num = (this.parentSheetIndex == 1293) ? 3 : 0;
+                    bool flag2 = false;
+                    foreach (Rectangle current in walls)
+                    {
+                        if ((this.Decoration_type == 6 || this.Decoration_type == 13 || num != 0) && current.Y + num == point.Y && current.Contains(point.X, point.Y - num))
+                        {
+                            flag2 = true;
+                            break;
+                        }
+                    }
+                    if (!flag2)
+                    {
+                        Game1.showRedMessage("Must be placed on wall");
+                        return false;
+                    }
+                    flag = true;
+                }
+                for (int i = point.X; i < point.X + this.getTilesWide(); i++)
+                {
+                    for (int j = point.Y; j < point.Y + this.getTilesHigh(); j++)
+                    {
+                        if (location.doesTileHaveProperty(i, j, "NoFurniture", "Back") != null)
+                        {
+                            Game1.showRedMessage("Furniture can't be placed here");
+                            return false;
+                        }
+                        if (!flag && Utility.pointInRectangles(walls, i, j))
+                        {
+                            Game1.showRedMessage("Can't place on wall");
+                            return false;
+                        }
+                        if (location.getTileIndexAt(i, j, "Buildings") != -1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+                foreach (KeyValuePair<Vector2, StardewValley.Object> c in location.objects)
+                {
+                    StardewValley.Object ehh = c.Value;
+                    if (((ehh.GetType()).ToString()).Contains("Spawner"))
+                    {
+                        CoreObject current2 = (Decoration)ehh;
+                        if (current2.Decoration_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
+                        {
+                            current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
+                            bool result = true;
+                            return result;
+                        }
+                    }
+                }
+                foreach (Farmer current3 in location.getFarmers())
+                {
+                    if (current3.GetBoundingBox().Intersects(this.boundingBox))
+                    {
+                        Game1.showRedMessage("Can't place on top of a person.");
+                        bool result = false;
+                        return result;
+                    }
+                }
+                this.updateDrawPosition();
+                //  Log.AsyncO(this.boundingBox);
+                //   Log.AsyncO(x);
+                //   Log.AsyncY(y);
+                for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
+                {
+                    base.placementAction(location, x + 1, y, who);
+                }
+                for (int i = 0; i <= this.boundingBox.Y / Game1.tileSize; i++)
+                {
+                    base.placementAction(location, x, y + 1, who);
+                }
+                return true;
+            }
+            else
+            {
+                Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
+                //  List<Rectangle> walls = FarmHouse.getWalls((location as FarmHouse).upgradeLevel);
+                this.tileLocation = new Vector2((float)point.X, (float)point.Y);
+                bool flag = false;
+                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.parentSheetIndex == 1293)
+                {
+                    int num = (this.parentSheetIndex == 1293) ? 3 : 0;
+                    bool flag2 = false;
+                    /*
+                    foreach (Rectangle current in walls)
+                    {
+                        if ((this.Decoration_type == 6 || this.Decoration_type == 13 || num != 0) && current.Y + num == point.Y && current.Contains(point.X, point.Y - num))
+                        {
+                            flag2 = true;
+                            break;
+                        }
+                    }
                     */
                     if (!flag2)
                     {
@@ -937,7 +1104,7 @@ namespace Revitalize
                         }
                     }
                 }
-                this.boundingBox = new Rectangle(x, y, this.boundingBox.Width, this.boundingBox.Height);
+                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
                 /*
                 foreach (Furniture current2 in (location as FarmHouse).furniture)
                 {
@@ -959,13 +1126,12 @@ namespace Revitalize
                     }
                 }
                 this.updateDrawPosition();
-                thisLocation = Game1.player.currentLocation;
-                return base.placementAction(location, x, y, who);
+                this.thisLocation = Game1.player.currentLocation;
+                return base.placementAction(location, x*Game1.tileSize, y*Game1.tileSize, who);
             }
-
         }
 
-        public override bool isPlaceable()
+public override bool isPlaceable()
         {
             return true;
         }
@@ -1223,14 +1389,14 @@ namespace Revitalize
         public override Item getOne()
         {
             CoreObject CoreObject = new CoreObject(this.parentSheetIndex, this.tileLocation, this.inventoryMaxSize);
-            /*
-            drawPosition = this.drawPosition;
-            defaultBoundingBox = this.defaultBoundingBox;
-            boundingBox = this.boundingBox;
-            currentRotation = this.currentRotation - 1;
-            rotations = this.rotations;
-            rotate();
-            */
+            
+           CoreObject. drawPosition = this.drawPosition;
+            CoreObject.defaultBoundingBox = this.defaultBoundingBox;
+            CoreObject.boundingBox = this.boundingBox;
+            CoreObject.currentRotation = this.currentRotation - 1;
+            CoreObject.rotations = this.rotations;
+            //rotate();
+            
             return CoreObject;
         }
 

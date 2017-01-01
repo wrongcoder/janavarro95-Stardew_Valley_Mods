@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Revitalize.Objects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -69,10 +70,10 @@ namespace Revitalize
         }
 
 
-        public static bool placementAction(CoreObject cObj,GameLocation location, int x, int y, Farmer who = null)
+        public static bool placementAction(CoreObject cObj, GameLocation location, int x, int y, Farmer who = null)
         {
-            Vector2 vector = new Vector2((float)(x/Game1.tileSize ), (float)(y/Game1.tileSize ));
-          //  cObj.health = 10;
+            Vector2 vector = new Vector2((float)(x / Game1.tileSize), (float)(y / Game1.tileSize));
+            //  cObj.health = 10;
             if (who != null)
             {
                 cObj.owner = who.uniqueMultiplayerID;
@@ -81,7 +82,7 @@ namespace Revitalize
             {
                 cObj.owner = Game1.player.uniqueMultiplayerID;
             }
-            /*
+
             if (!cObj.bigCraftable && !(cObj is Furniture))
             {
                 int num = cObj.ParentSheetIndex;
@@ -604,7 +605,7 @@ namespace Revitalize
             }
             else
             {
-            */
+
                 Game1.showRedMessage("STEP 1");
 
                 if (cObj.category == -74)
@@ -613,7 +614,7 @@ namespace Revitalize
                 }
                 if (!cObj.performDropDownAction(who))
                 {
-                    StardewValley.Object @object = (StardewValley.Object)cObj.getOne();
+                    CoreObject @object = (CoreObject)cObj.getOne();
                     @object.shakeTimer = 50;
                     @object.tileLocation = vector;
                     @object.performDropDownAction(who);
@@ -625,24 +626,31 @@ namespace Revitalize
                             location.objects[vector] = @object;
                         }
                     }
-                    else if (@object is Furniture)
-                    {
-                       // (location as DecoratableLocation).furniture.Add(cObj as Furniture);
-                    }
+
                     else
                     {
                         Game1.showRedMessage("STEP 2");
                         Log.Info(vector);
-                      
+
                         Vector2 newVec = new Vector2(vector.X, vector.Y);
-                   // cObj.boundingBox.Inflate(32, 32);
+                        // cObj.boundingBox.Inflate(32, 32);
                         location.objects.Add(newVec, cObj);
                     }
                     @object.initializeLightSource(vector);
                 }
                 Game1.playSound("woodyStep");
                 return true;
-            
+
+            }
         }
+
+
+
+        public static bool canBePlacedHere(CoreObject cObj,GameLocation l, Vector2 tile)
+        {
+            return (cObj.parentSheetIndex == 710 && l.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") != null && !l.objects.ContainsKey(tile) && l.doesTileHaveProperty((int)tile.X + 1, (int)tile.Y, "Water", "Back") != null && l.doesTileHaveProperty((int)tile.X - 1, (int)tile.Y, "Water", "Back") != null) || (l.doesTileHaveProperty((int)tile.X, (int)tile.Y + 1, "Water", "Back") != null && l.doesTileHaveProperty((int)tile.X, (int)tile.Y - 1, "Water", "Back") != null) || (cObj.parentSheetIndex == 105  && l.terrainFeatures.ContainsKey(tile) && l.terrainFeatures[tile] is Tree && !l.objects.ContainsKey(tile)) || (cObj.name != null && cObj.name.Contains("Bomb") && (!l.isTileOccupiedForPlacement(tile, cObj) || l.isTileOccupiedByFarmer(tile) != null)) || !l.isTileOccupiedForPlacement(tile, cObj);
+        }
+
+     
     }
 }
