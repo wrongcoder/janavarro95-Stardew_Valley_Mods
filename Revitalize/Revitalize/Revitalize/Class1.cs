@@ -21,6 +21,7 @@ using Revitalize.Objects.Machines;
 using StardewValley.Locations;
 using Revitalize.Locations;
 using Revitalize.Menus;
+using Microsoft.Xna.Framework.Input;
 
 namespace Revitalize
 {
@@ -41,6 +42,8 @@ namespace Revitalize
         bool hasCleanedUp;
         const int range = 1;
 
+        bool mouseAction;
+
         bool gametick;
 
         bool mapWipe;
@@ -50,6 +53,7 @@ namespace Revitalize
         public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
+            StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick +=gameMenuCall;
             StardewModdingAPI.Events.GameEvents.UpdateTick += BedCleanUpCheck;
             StardewModdingAPI.Events.GameEvents.GameLoaded += GameEvents_GameLoaded;
@@ -60,13 +64,51 @@ namespace Revitalize
             newLoc = new List<GameLoc>();
         }
 
+        private void ControlEvents_MouseChanged(object sender, EventArgsMouseStateChanged e)
+        {
+          
+            if (Game1.activeClickableMenu != null) return;
+            if (Game1.eventUp == true) return;
+
+            if (mouseAction == true) return;
+
+
+            var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+
+
+            if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed || mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            {
+                
+                Log.AsyncG("LAME");
+
+                // Game1.showRedMessage("YOOO");
+                //do some stuff when the right button is down
+                // rotate();
+                if (Game1.player.ActiveObject != null)
+                {
+                    mouseAction = true;
+                    if (Game1.player.ActiveObject as GiftPackage != null) (Game1.player.ActiveObject as GiftPackage).getContents();
+
+                }
+                else {
+                    return;
+                }
+                //this.minutesUntilReady = 30;
+            }
+
+            if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released || mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
+            {
+                mouseAction = false;
+                //this.minutesUntilReady = 30;
+            }
+        }
 
         private void GameEvents_GameLoaded(object sender, EventArgs e)
         {
             Dictionaries.initializeDictionaries();
            
 
-            mapWipe = true;
+            mapWipe = false;
 
         }
 
@@ -117,14 +159,6 @@ namespace Revitalize
             if (Game1.player == null) return;
             if (Game1.player.currentLocation == null) return;
             //Log.Info(Game1.activeClickableMenu.GetType());
-            Vector2 vec = new Vector2(Game1.getMouseX()/Game1.tileSize, Game1.getMouseY()/Game1.tileSize);
-           // Log.AsyncY(vec);
-            //if (Game1.player.ActiveObject as Light != null) Log.AsyncO((Game1.player.ActiveObject as Light).canBePlacedHere(Game1.player.currentLocation,vec ));
-
-            if ((Game1.player.ActiveObject as Decoration) != null)
-            {
-                Log.AsyncM((Game1.player.ActiveObject as Decoration).drawPosition);
-            }
 
             if (Game1.player.currentLocation.name == "FarmHouse")
             {
@@ -180,13 +214,23 @@ namespace Revitalize
             {
 
                 List<Item> objShopList = new List<Item>();
+                List<Item> newInventory = new List<Item>();
 
                
-                objShopList.Add(new Decoration(1120, Vector2.Zero));
+           
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                 objShopList.Add(new Light(3, Vector2.Zero, LightColors.Aquamarine));
+                objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));
+                objShopList.Add(new Decoration(3, Vector2.Zero));
 
-               // my_shop_list.Add((new Decoration(1120, Vector2.Zero)));
+                foreach(var v in objShopList)
+                {
+                    newInventory.Add(v);
+                    Log.AsyncG("GRRR");
+                }
+                objShopList.Add(new GiftPackage(1120, Vector2.Zero,newInventory));
+
+                // my_shop_list.Add((new Decoration(1120, Vector2.Zero)));
                 Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(objShopList, 0, null);
                 
                 if (Game1.player == null) return;
@@ -203,8 +247,11 @@ namespace Revitalize
             //    string load = Path.Combine(PathOnDisk, "this_thing.json");
             //    Game1.player=ReadFromJsonFile<StardewValley.Farmer>(load);
             }
-            
-            }
+
+        
+
+
+        }
             
 
     }

@@ -53,6 +53,14 @@ namespace Revitalize
             }
         }
 
+
+        public static bool addItemToInventoryElseUseMenu (List<Item> I)
+        {
+          
+            Game1.player.addItemsByMenuIfNecessary(I);
+            return true;
+        }
+
         public static Color invertColor(Color c)
         {
             int r;
@@ -606,7 +614,7 @@ namespace Revitalize
             else
             {
 
-                Game1.showRedMessage("STEP 1");
+                //Game1.showRedMessage("STEP 1");
 
                 if (cObj.category == -74)
                 {
@@ -629,7 +637,7 @@ namespace Revitalize
 
                     else
                     {
-                        Game1.showRedMessage("STEP 2");
+                     //   Game1.showRedMessage("STEP 2");
                         Log.Info(vector);
 
                         Vector2 newVec = new Vector2(vector.X, vector.Y);

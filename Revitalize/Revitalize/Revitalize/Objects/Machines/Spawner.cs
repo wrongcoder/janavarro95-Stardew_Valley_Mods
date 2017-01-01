@@ -811,7 +811,7 @@ namespace Revitalize.Objects.Machines
                         }
                     }
                 }
-                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+                this.boundingBox = new Rectangle(x / Game1.tileSize * Game1.tileSize, y / Game1.tileSize * Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
                 foreach (KeyValuePair<Vector2, StardewValley.Object> c in location.objects)
                 {
                     StardewValley.Object ehh = c.Value;
@@ -841,11 +841,11 @@ namespace Revitalize.Objects.Machines
                 Log.AsyncY(y);
                 for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
                 {
-                    base.placementAction(location, x + 1, y, who);
+                    return Util.placementAction(this, location, x+1, y, who);
                 }
                 for (int i = 0; i <= this.boundingBox.Y / Game1.tileSize; i++)
                 {
-                    base.placementAction(location, x, y + 1, who);
+                    return Util.placementAction(this, location, x, y+1, who);
                 }
                 return true;
             }
@@ -898,7 +898,7 @@ namespace Revitalize.Objects.Machines
                         }
                     }
                 }
-                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+                this.boundingBox = new Rectangle(x / Game1.tileSize * Game1.tileSize, y / Game1.tileSize * Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
                 /*
                 foreach (Furniture current2 in (location as FarmHouse).furniture)
                 {
@@ -921,7 +921,7 @@ namespace Revitalize.Objects.Machines
                 }
                 this.updateDrawPosition();
                 this.thisLocation = Game1.player.currentLocation;
-                return base.placementAction(location, x, y, who);
+                return Util.placementAction(this,location, x, y, who);
             }
 
         }
