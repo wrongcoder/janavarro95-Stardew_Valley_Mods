@@ -47,7 +47,7 @@ namespace Revitalize
         bool gametick;
 
         bool mapWipe;
-        
+      public static  bool hasLoadedTerrainList;
         List<GameLoc> newLoc;
 
         public override void Entry(IModHelper helper)
@@ -58,10 +58,34 @@ namespace Revitalize
             StardewModdingAPI.Events.GameEvents.UpdateTick += BedCleanUpCheck;
             StardewModdingAPI.Events.GameEvents.GameLoaded += GameEvents_GameLoaded;
             StardewModdingAPI.Events.GameEvents.OneSecondTick += MapWipe;
+            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.ResetAllDailyBooleans;
+            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+
+            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+
+            //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
 
             hasCleanedUp = true;
+            hasLoadedTerrainList = false;
             path = Helper.DirectoryPath;
             newLoc = new List<GameLoc>();
+        }
+
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        {
+            if (Game1.player.isMoving() == true && hasLoadedTerrainList == false)
+            {
+                Lists.loadAllLists();
+                Log.AsyncC("CHEEZNIPS!");
+                Util.WaterAllCropsInAllLocations();
+            }
+
+        }
+
+        private void PlayerEvents_LoadedGame(object sender, EventArgsLoadedGameChanged e)
+        {
+            
+           
         }
 
         private void ControlEvents_MouseChanged(object sender, EventArgsMouseStateChanged e)
@@ -78,16 +102,19 @@ namespace Revitalize
 
             if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed || mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-                
-                Log.AsyncG("LAME");
-
-                // Game1.showRedMessage("YOOO");
-                //do some stuff when the right button is down
-                // rotate();
                 if (Game1.player.ActiveObject != null)
                 {
                     mouseAction = true;
-                    if (Game1.player.ActiveObject as GiftPackage != null) (Game1.player.ActiveObject as GiftPackage).getContents();
+
+                    string s = Game1.player.ActiveObject.getCategoryName();
+
+                    if (Dictionaries.interactionTypes.ContainsKey(s))
+                    {
+                        Dictionaries.interactFunction f;
+                        Dictionaries.interactionTypes.TryGetValue(s,out f);
+                        f.Invoke();
+                    }
+                    
 
                 }
                 else {
@@ -106,7 +133,7 @@ namespace Revitalize
         private void GameEvents_GameLoaded(object sender, EventArgs e)
         {
             Dictionaries.initializeDictionaries();
-           
+            Lists.initializeAllLists();
 
             mapWipe = false;
 
@@ -174,13 +201,13 @@ namespace Revitalize
                     if (hasCleanedUp == false)
                     {
                         Log.AsyncC("CleanUp!");
-                        CleanUp.cleanUpInventory();
+                        Serialize.cleanUpInventory();
                         hasCleanedUp = true;
                     }
                 }
                     else
                     {
-                    CleanUp.restoreInventory();
+                    Serialize.restoreInventory();
                         hasCleanedUp = false;
                     }     
             }
@@ -206,7 +233,7 @@ namespace Revitalize
         private void ShopCall(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
             Game1.player.money = 9999;
-            Log.AsyncG(Game1.tileSize);
+          //  Log.AsyncG(Game1.tileSize);
 
             //Game1.timeOfDay = 2500;
             if (Game1.activeClickableMenu != null) return;
@@ -222,11 +249,15 @@ namespace Revitalize
                 objShopList.Add(new Light(3, Vector2.Zero, LightColors.Aquamarine));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));
                 objShopList.Add(new Decoration(3, Vector2.Zero));
-
-                foreach(var v in objShopList)
+                objShopList.Add(new StardewValley.Object(495, 1));
+                objShopList.Add(new StardewValley.Object(496, 1));
+                objShopList.Add(new StardewValley.Object(497, 1));
+                objShopList.Add(new StardewValley.Object(498, 1));
+                objShopList.Add(new StardewValley.Object(770, 1));
+                foreach (var v in objShopList)
                 {
                     newInventory.Add(v);
-                    Log.AsyncG("GRRR");
+                 //   Log.AsyncG("GRRR");
                 }
                 objShopList.Add(new GiftPackage(1120, Vector2.Zero,newInventory));
 

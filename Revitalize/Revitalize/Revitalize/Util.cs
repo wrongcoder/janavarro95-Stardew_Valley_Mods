@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Revitalize.Objects;
+using Revitalize.Resources;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -16,9 +18,19 @@ namespace Revitalize
 {
     class Util
     {
+        public static bool hasWateredAllCropsToday;
 
+        public static void ResetAllDailyBooleans(object sender, EventArgsIntChanged e)
+        {
+            Serialize.createDirectories();
+            hasWateredAllCropsToday = false;
+            if (Lists.trackedTerrainFeatures != null)
+            {
+             if(Class1.hasLoadedTerrainList== true)   Serialize.serializeTrackedTerrainDataNodeList(Lists.trackedTerrainFeatures);
+            }
 
-     
+            Util.WaterAllCropsInAllLocations();
+        }
 
         public static Microsoft.Xna.Framework.Rectangle parseRectFromJson(string s){
 
@@ -659,6 +671,71 @@ namespace Revitalize
             return (cObj.parentSheetIndex == 710 && l.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Water", "Back") != null && !l.objects.ContainsKey(tile) && l.doesTileHaveProperty((int)tile.X + 1, (int)tile.Y, "Water", "Back") != null && l.doesTileHaveProperty((int)tile.X - 1, (int)tile.Y, "Water", "Back") != null) || (l.doesTileHaveProperty((int)tile.X, (int)tile.Y + 1, "Water", "Back") != null && l.doesTileHaveProperty((int)tile.X, (int)tile.Y - 1, "Water", "Back") != null) || (cObj.parentSheetIndex == 105  && l.terrainFeatures.ContainsKey(tile) && l.terrainFeatures[tile] is Tree && !l.objects.ContainsKey(tile)) || (cObj.name != null && cObj.name.Contains("Bomb") && (!l.isTileOccupiedForPlacement(tile, cObj) || l.isTileOccupiedByFarmer(tile) != null)) || !l.isTileOccupiedForPlacement(tile, cObj);
         }
 
-     
+
+        public static void plantCropHere()
+        {
+            HoeDirt t;
+            TerrainFeature r;
+            bool plant = Game1.player.currentLocation.terrainFeatures.TryGetValue(Game1.currentCursorTile, out r);
+            t = (r as HoeDirt);
+            if (t is HoeDirt)
+            {
+                if ((t as HoeDirt).crop == null)
+                {
+                    (t as HoeDirt).crop = new Crop(Game1.player.ActiveObject.parentSheetIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y);
+                    Game1.player.reduceActiveItemByOne();
+                    Game1.playSound("dirtyHit");
+                    Revitalize.Resources.Lists.trackedTerrainFeatures.Add(new Resources.DataNodes.TrackedTerrainDataNode(Game1.player.currentLocation,t,new Vector2((int)Game1.currentCursorTile.X,(int)Game1.currentCursorTile.Y)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Static wrapper;
+        /// </summary>
+        public static void getGiftPackageContents()
+        {
+            if (Game1.player.ActiveObject as GiftPackage != null)
+            {
+                (Game1.player.ActiveObject as GiftPackage).getContents();
+            }
+
+        }
+
+
+        public static void WaterAllCropsInAllLocations()
+        {
+           
+            Game1.weatherForTomorrow = Game1.weather_rain;
+            
+            List<Revitalize.Resources.DataNodes.TrackedTerrainDataNode> removalList = new List<Resources.DataNodes.TrackedTerrainDataNode>();
+            if (Game1.isRaining)
+            {
+                // Log.AsyncC("WHY");
+
+               
+                foreach (var v in Lists.trackedTerrainFeatures)
+                {
+                    if ((v.terrainFeature as HoeDirt).crop==null)
+                    {
+                        removalList.Add(v);
+                        Log.AsyncR("WHY REMOVE???");
+                        continue;
+                    }
+                    if ((v.terrainFeature as HoeDirt).state == 0) (v.terrainFeature as HoeDirt).state = 1;
+                    hasWateredAllCropsToday = true;
+
+                }
+
+                foreach (var v in removalList)
+                {
+                    Lists.trackedTerrainFeatures.Remove(v);
+                }
+                removalList.Clear();
+            }
+        }
+
+
+
     }
 }

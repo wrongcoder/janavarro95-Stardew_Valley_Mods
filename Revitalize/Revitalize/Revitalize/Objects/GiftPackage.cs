@@ -1015,22 +1015,24 @@ namespace Revitalize.Objects
             return Util.invertColor(LightColors.Magenta);
         }
 
+
+
         public virtual void getContents()
         {
             List<Item> removalList = new List<Item>();
 
-           // Log.AsyncC("step 1");
-            foreach(var v in this.inventory)
+            // Log.AsyncC("step 1");
+            foreach (var v in this.inventory)
             {
                 if (Game1.player.isInventoryFull() == true) break;
                 //  Log.AsyncC("ok");
                 v.hasBeenInInventory = true;
                 Util.addItemToInventoryElseDrop(v);
                 removalList.Add(v);
-               
+
             }
 
-            foreach(var v in removalList)
+            foreach (var v in removalList)
             {
                 this.inventory.Remove(v);
             }

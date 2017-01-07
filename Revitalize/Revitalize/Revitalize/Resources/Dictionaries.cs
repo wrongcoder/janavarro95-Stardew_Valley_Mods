@@ -14,22 +14,26 @@ namespace Revitalize.Resources
 
         public delegate CoreObject par(string data);
         public delegate void ser(Item item);
-        public static Dictionary<string, SerializerDataNode> acceptedTypes;
-        public static   Dictionary<string, QuarryDataNode> quarryList;
+        public delegate void interactFunction();
 
+        public static Dictionary<string, SerializerDataNode> acceptedTypes;
+        public static Dictionary<string, interactFunction> interactionTypes;
+        public static   Dictionary<string, QuarryDataNode> quarryList;
+        
 
 
         public static void initializeDictionaries()
         {
             acceptedTypes = new Dictionary<string, SerializerDataNode>();
             quarryList = new Dictionary<string, QuarryDataNode>();
-
+            interactionTypes = new Dictionary<string, interactFunction>();
             fillAllDictionaries();
        }
 
         public static void fillAllDictionaries()
         {
             addAllAcceptedTypes();
+            addAllInteractionTypes();
             fillQuaryList();
         }
      
@@ -44,6 +48,13 @@ namespace Revitalize.Resources
             acceptedTypes.Add("Revitalize.Objects.GiftPackage", new SerializerDataNode(new ser(Serialize.serializeGiftPackage), new par(Serialize.parseGiftPackage)));
         }
 
+        public static void addAllInteractionTypes()
+        {
+            interactionTypes.Add("Seed", Util.plantCropHere);
+            interactionTypes.Add("Gift Package", Util.getGiftPackageContents);
+        }
+
+       
 
         public static void fillQuaryList()
         {

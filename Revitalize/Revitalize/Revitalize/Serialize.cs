@@ -8,6 +8,7 @@ using Revitalize.Resources;
 using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,150 @@ namespace Revitalize
 {
     class Serialize
     {
+        public static string InvPath;
+
+        public static string PlayerDataPath;
+        public static string DataDirectoryPath;
+
+        public static string TrackedTerrainDataPath;
+
+
+        public static void createDirectories()
+        {
+
+            DataDirectoryPath = Path.Combine(Class1.path, "PlayerData");
+            PlayerDataPath = Path.Combine(DataDirectoryPath, Game1.player.name);
+            InvPath = Path.Combine(PlayerDataPath, "Inventory");
+          
+
+            Log.AsyncC(TrackedTerrainDataPath);
+
+            if (!Directory.Exists(DataDirectoryPath))
+            {
+                Directory.CreateDirectory(DataDirectoryPath);
+            }
+            if (!Directory.Exists(PlayerDataPath))
+            {
+                Directory.CreateDirectory(PlayerDataPath);
+            }
+            if (!Directory.Exists(InvPath))
+            {
+                Directory.CreateDirectory(InvPath);
+            }
+        }
+
+        public static void cleanUpInventory()
+        {
+           
+
+
+            List<Item> removalList = new List<Item>();
+            foreach (Item d in Game1.player.items)
+            {
+                try
+                {
+                    if (d == null)
+                    {
+                        //Log.AsyncG("WTF");
+                        continue;
+                    }
+                    // Log.AsyncC(d.GetType());
+                }
+                catch (Exception e)
+                {
+
+                }
+                string s = Convert.ToString((d.GetType()));
+
+
+
+
+                if (Dictionaries.acceptedTypes.ContainsKey(s))
+                {
+                    SerializerDataNode t;
+
+                    bool works = Dictionaries.acceptedTypes.TryGetValue(s, out t);
+                    if (works == true)
+                    {
+                        t.serialize.Invoke(d);
+                        removalList.Add(d);
+                    }
+                }
+            }
+            foreach (var i in removalList)
+            {
+                Game1.player.removeItemFromInventory(i);
+            }
+            removalList.Clear();
+
+            Log.AsyncM("Done cleaning inventory!");
+        }
+
+        public static void restoreInventory()
+        {
+          
+            //   Log.AsyncG(InvPath);
+            ProcessDirectoryForCleanUp(InvPath);
+        }
+
+
+
+        public static void ProcessDirectoryForCleanUp(string targetDirectory)
+        {
+            // Process the list of files found in the directory.
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            foreach (string fileName in fileEntries)
+            {
+                ProcessFileForCleanUp(fileName);
+                File.Delete(fileName);
+            }
+
+            // Recurse into subdirectories of this directory.
+            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            foreach (string subdirectory in subdirectoryEntries)
+                ProcessDirectoryForCleanUp(subdirectory);
+
+        }
+
+        // Insert logic for processing found files here.
+        public static void ProcessFileForCleanUp(string path)
+        {
+            string[] ehh = File.ReadAllLines(path);
+            string data = ehh[0];
+
+            Log.AsyncC(data);
+            dynamic obj = JObject.Parse(data);
+
+
+            //   Log.AsyncC(obj.thisType);
+
+            string a = obj.thisType;
+            string[] b = a.Split(',');
+            string s = b.ElementAt(0);
+            //   Log.AsyncC(s);
+
+            if (Dictionaries.acceptedTypes.ContainsKey(s))
+            {
+                //  Log.AsyncC("FUUUUU");
+                foreach (KeyValuePair<string, SerializerDataNode> pair in Dictionaries.acceptedTypes)
+                {
+                    if (pair.Key == s)
+                    {
+                        var cObj = pair.Value.parse.Invoke(data);
+                        Log.AsyncC("NEED TO HANDLE PUTTING OBJECTS BACK INTO A LOCATION!!!!");
+                        if (cObj.thisLocation == null)
+                        {
+                            Game1.player.addItemToInventory(cObj);
+                            return;
+                        }
+                    }
+                }
+            }
+
+
+
+
+        }
 
 
         public static void WriteToJsonFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
@@ -195,7 +340,7 @@ namespace Revitalize
         }
         public static void serializeDecoration(Item d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(CleanUp.InvPath, d.Name + ".json"), (Decoration)d);
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Decoration)d);
         }
 
 
@@ -291,7 +436,7 @@ namespace Revitalize
         }
         public static void serializeSpawner(Item d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(CleanUp.InvPath, d.Name + ".json"), (Spawner)d);
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Spawner)d);
         }
 
 
@@ -387,7 +532,7 @@ namespace Revitalize
         }
         public static void serializeGiftPackage(Item d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(CleanUp.InvPath, d.Name + ".json"), (GiftPackage)d);
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (GiftPackage)d);
         }
 
 
@@ -483,7 +628,7 @@ namespace Revitalize
         }
         public static void serializeLight(Item d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(CleanUp.InvPath, d.Name + ".json"), (Light)d);
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Light)d);
         }
 
         public static Quarry parseQuarry(string data)
@@ -579,7 +724,7 @@ namespace Revitalize
         }
         public static void serializeQuarry(Item d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(CleanUp.InvPath, d.Name + ".json"), (Quarry)d);
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Quarry)d);
         }
 
         public static shopObject parseShopObject(string data)
@@ -675,8 +820,56 @@ namespace Revitalize
         }
         public static void serializeShopObject(Item d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(CleanUp.InvPath, d.Name + ".json"), (shopObject)d);
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (shopObject)d);
         }
+
+        public static void parseTrackedTerrainDataNodeList(string data)
+        {
+            if (File.Exists(data))
+            {
+                 Lists.trackedTerrainFeaturesDummyList = ReadFromJsonFile<List<TrackedTerrainDummyDataNode>>(data);
+                foreach(var v in Lists.trackedTerrainFeaturesDummyList)
+                {
+                    GameLocation location = Game1.getLocationFromName(v.location);
+                    Vector2 position = v.position;
+                   
+                    TerrainFeature t;
+                     bool ehh = location.terrainFeatures.TryGetValue(position, out t);
+
+                    if (t == null)
+                    {
+                        Log.AsyncC("BOOOOO");
+                    }
+
+                    Lists.trackedTerrainFeatures.Add(new TrackedTerrainDataNode(location, (HoeDirt)t, position));
+                   // Log.AsyncG("YAY");
+                }
+                Lists.trackedTerrainFeaturesDummyList.Clear();
+            }
+        }
+        public static void serializeTrackedTerrainDataNodeList(List<TrackedTerrainDataNode> list)
+        {
+            Lists.trackedTerrainFeaturesDummyList.Clear();
+            foreach(var v in list)
+            {
+                Lists.trackedTerrainFeaturesDummyList.Add(new TrackedTerrainDummyDataNode(v.location.name, v.position));
+            }
+
+
+            if (File.Exists(Path.Combine(PlayerDataPath, "TrackedTerrainFeaturesList.json")))
+            {
+                File.Delete(Path.Combine(PlayerDataPath, "TrackedTerrainFeaturesList.json"));
+            }
+            if (Lists.trackedTerrainFeaturesDummyList.Count == 0)
+            {
+                File.Delete(Path.Combine(PlayerDataPath, "TrackedTerrainFeaturesList.json"));
+                return;
+            }
+
+            WriteToJsonFile<List<TrackedTerrainDummyDataNode>>(Path.Combine(PlayerDataPath, "TrackedTerrainFeaturesList.json"), Lists.trackedTerrainFeaturesDummyList);
+        }
+
+
 
         public static List<Item> parseInventoryList(JArray array)
         {
