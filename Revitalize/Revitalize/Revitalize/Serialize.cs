@@ -850,7 +850,25 @@ namespace Revitalize
         public static void serializeTrackedTerrainDataNodeList(List<TrackedTerrainDataNode> list)
         {
             Lists.trackedTerrainFeaturesDummyList.Clear();
-            foreach(var v in list)
+            List<TrackedTerrainDataNode> removalList = new List<TrackedTerrainDataNode>();
+            foreach (var v in Lists.trackedTerrainFeatures)
+            {
+                if ((v.terrainFeature as HoeDirt).crop == null)
+                {
+                    removalList.Add(v);
+                   // Log.AsyncR("WHY REMOVE???");
+                    continue;
+                }
+
+            }
+
+            foreach(var v in removalList)
+            {
+                Lists.trackedTerrainFeatures.Remove(v);
+            }
+            removalList.Clear();
+
+            foreach (var v in list)
             {
                 Lists.trackedTerrainFeaturesDummyList.Add(new TrackedTerrainDummyDataNode(v.location.name, v.position));
             }

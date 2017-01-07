@@ -706,7 +706,7 @@ namespace Revitalize
         public static void WaterAllCropsInAllLocations()
         {
            
-            Game1.weatherForTomorrow = Game1.weather_rain;
+           // Game1.weatherForTomorrow = Game1.weather_rain;
             
             List<Revitalize.Resources.DataNodes.TrackedTerrainDataNode> removalList = new List<Resources.DataNodes.TrackedTerrainDataNode>();
             if (Game1.isRaining)

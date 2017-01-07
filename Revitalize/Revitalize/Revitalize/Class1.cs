@@ -76,7 +76,7 @@ namespace Revitalize
             if (Game1.player.isMoving() == true && hasLoadedTerrainList == false)
             {
                 Lists.loadAllLists();
-                Log.AsyncC("CHEEZNIPS!");
+               // Log.AsyncC("CHEEZNIPS!");
                 Util.WaterAllCropsInAllLocations();
             }
 
