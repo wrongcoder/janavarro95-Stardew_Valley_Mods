@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Revitalize.Objects;
 using Revitalize.Resources;
+using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -686,6 +687,30 @@ namespace Revitalize
                     Game1.player.reduceActiveItemByOne();
                     Game1.playSound("dirtyHit");
                     Revitalize.Resources.Lists.trackedTerrainFeatures.Add(new Resources.DataNodes.TrackedTerrainDataNode(Game1.player.currentLocation,t,new Vector2((int)Game1.currentCursorTile.X,(int)Game1.currentCursorTile.Y)));
+                }
+            }
+        }
+
+
+        public static void plantExtraCropHere()
+        {
+            //Log.AsyncC("HELLO");
+            HoeDirt t;
+            TerrainFeature r;
+            bool plant = Game1.player.currentLocation.terrainFeatures.TryGetValue(Game1.currentCursorTile, out r);
+            t = (r as HoeDirt);
+            if (t is HoeDirt)
+            {
+                if ((t as HoeDirt).crop == null)
+                {
+                //    Log.AsyncG("BOOP");
+                    SeedDataNode f;
+                    bool g =Dictionaries.seedList.TryGetValue(((ExtraSeeds)Game1.player.ActiveObject).name, out f);
+
+                    (t as HoeDirt).crop = new Crop(f.cropIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y);
+                    Game1.player.reduceActiveItemByOne();
+                    Game1.playSound("dirtyHit");
+                    Revitalize.Resources.Lists.trackedTerrainFeatures.Add(new Resources.DataNodes.TrackedTerrainDataNode(Game1.player.currentLocation, t, new Vector2((int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y)));
                 }
             }
         }

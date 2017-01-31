@@ -107,7 +107,7 @@ namespace Revitalize
                     mouseAction = true;
 
                     string s = Game1.player.ActiveObject.getCategoryName();
-
+                   // Log.AsyncC(s);
                     if (Dictionaries.interactionTypes.ContainsKey(s))
                     {
                         Dictionaries.interactFunction f;
@@ -262,6 +262,7 @@ namespace Revitalize
                 objShopList.Add(new GiftPackage(1120, Vector2.Zero,newInventory));
 
                 // my_shop_list.Add((new Decoration(1120, Vector2.Zero)));
+                objShopList.Add(new ExtraSeeds(1, Vector2.Zero));
                 Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(objShopList, 0, null);
                 
                 if (Game1.player == null) return;

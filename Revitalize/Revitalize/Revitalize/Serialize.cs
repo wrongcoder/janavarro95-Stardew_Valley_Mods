@@ -36,7 +36,7 @@ namespace Revitalize
             InvPath = Path.Combine(PlayerDataPath, "Inventory");
           
 
-            Log.AsyncC(TrackedTerrainDataPath);
+           // Log.AsyncC(TrackedTerrainDataPath);
 
             if (!Directory.Exists(DataDirectoryPath))
             {
@@ -131,7 +131,7 @@ namespace Revitalize
             string[] ehh = File.ReadAllLines(path);
             string data = ehh[0];
 
-            Log.AsyncC(data);
+          //  Log.AsyncC(data);
             dynamic obj = JObject.Parse(data);
 
 
@@ -330,7 +330,7 @@ namespace Revitalize
             }
             catch(Exception e)
             {
-                Log.AsyncM(e);
+               // Log.AsyncM(e);
                 return null;
             }
             
@@ -426,7 +426,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+               // Log.AsyncM(e);
                 return null;
             }
 
@@ -522,7 +522,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+              //  Log.AsyncM(e);
                 return null;
             }
 
@@ -533,6 +533,101 @@ namespace Revitalize
         public static void serializeGiftPackage(Item d)
         {
             Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (GiftPackage)d);
+        }
+
+        public static ExtraSeeds parseExtraSeeds(string data)
+        {
+
+            dynamic obj = JObject.Parse(data);
+
+
+            //  Log.AsyncC(obj.thisType);
+
+
+            ExtraSeeds d = new ExtraSeeds(false);
+
+            d.price = obj.price;
+            d.Decoration_type = obj.Decoration_type;
+            d.rotations = obj.rotations;
+            d.currentRotation = obj.currentRotation;
+            string s1 = Convert.ToString(obj.sourceRect);
+            d.sourceRect = Util.parseRectFromJson(s1);
+            string s2 = Convert.ToString(obj.defaultSourceRect);
+            d.defaultSourceRect = Util.parseRectFromJson(s2);
+            string s3 = Convert.ToString(obj.defaultBoundingBox);
+            d.defaultBoundingBox = Util.parseRectFromJson(s3);
+            d.description = obj.description;
+            d.flipped = obj.flipped;
+            d.flaggedForPickUp = obj.flaggedForPickUp;
+            d.tileLocation = obj.tileLocation;
+            d.parentSheetIndex = obj.parentSheetIndex;
+            d.owner = obj.owner;
+            d.name = obj.name;
+            d.type = obj.type;
+            d.canBeSetDown = obj.canBeSetDown;
+            d.canBeGrabbed = obj.canBeGrabbed;
+            d.isHoedirt = obj.isHoedirt;
+            d.isSpawnedObject = obj.isSpawnedObject;
+            d.questItem = obj.questItem;
+            d.isOn = obj.isOn;
+            d.fragility = obj.fragility;
+            d.edibility = obj.edibility;
+            d.stack = obj.stack;
+            d.quality = obj.quality;
+            d.bigCraftable = obj.bigCraftable;
+            d.setOutdoors = obj.setOutdoors;
+            d.setIndoors = obj.setIndoors;
+            d.readyForHarvest = obj.readyForHarvest;
+            d.showNextIndex = obj.showNextIndex;
+            d.hasBeenPickedUpByFarmer = obj.hasBeenPickedUpByFarmer;
+            d.isRecipe = obj.isRecipe;
+            d.isLamp = obj.isLamp;
+            d.heldObject = obj.heldObject;
+            d.minutesUntilReady = obj.minutesUntilReady;
+            string s4 = Convert.ToString(obj.boundingBox);
+            d.boundingBox = Util.parseRectFromJson(s4);
+            d.scale = obj.scale;
+            d.lightSource = obj.lightSource;
+            d.shakeTimer = obj.shakeTimer;
+            d.internalSound = obj.internalSound;
+            d.specialVariable = obj.specialVariable;
+            d.category = obj.category;
+            d.specialItem = obj.specialItem;
+            d.hasBeenInInventory = obj.hasBeenInInventory;
+            string t = obj.texturePath;
+            d.TextureSheet = Game1.content.Load<Texture2D>(t);
+            d.texturePath = t;
+
+
+            JArray array = obj.inventory;
+            d.inventory = array.ToObject<List<Item>>();
+
+
+            d.inventoryMaxSize = obj.inventoryMaxSize;
+            d.itemReadyForHarvest = obj.itemReadyForHarvest;
+            d.lightsOn = obj.lightsOn;
+            d.thisLocation = obj.thisLocation;
+            d.lightColor = obj.lightColor;
+            d.thisType = obj.thisType;
+            d.removable = obj.removable;
+
+            try
+            {
+                return d;
+            }
+            catch (Exception e)
+            {
+             //   Log.AsyncM(e);
+                return null;
+            }
+
+
+
+
+        }
+        public static void serializeExtraSeeds(Item d)
+        {
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (ExtraSeeds)d);
         }
 
 
@@ -714,7 +809,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+              //  Log.AsyncM(e);
                 return null;
             }
 
@@ -810,7 +905,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+                //Log.AsyncM(e);
                 return null;
             }
 
@@ -838,7 +933,7 @@ namespace Revitalize
 
                     if (t == null)
                     {
-                        Log.AsyncC("BOOOOO");
+                      //  Log.AsyncC("BOOOOO");
                     }
 
                     Lists.trackedTerrainFeatures.Add(new TrackedTerrainDataNode(location, (HoeDirt)t, position));
