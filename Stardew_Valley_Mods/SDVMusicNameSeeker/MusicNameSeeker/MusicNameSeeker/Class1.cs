@@ -15,7 +15,9 @@ namespace MusicNameSeeker
         public List<char> charList;
         public static char[] name;
         public List<string> successfulMusic;
+
         public List<string> processedMusic;
+        public List<string> failedCues;
         public static System.Timers.Timer aTimer;
 
 
@@ -29,6 +31,7 @@ namespace MusicNameSeeker
             StardewModdingAPI.Command.RegisterCommand("whereami", "see where the name is").CommandFired += Class1_CommandFired;
             processedMusic = new List<string>();
             successfulMusic = new List<string>();
+            failedCues = new List<string>();
             name = new char[16];
             charList = new List<char>();
             charList.Add( Convert.ToChar(0));
@@ -163,10 +166,11 @@ namespace MusicNameSeeker
                 catch (Exception r)
                 {
                     Log.AsyncC(r);
+                    failedCues.Add(v);
                 }
             }
             File.WriteAllLines(Path.Combine(Helper.DirectoryPath, "StardewWorkingCueNames.txt"), processedMusic);
-
+            File.WriteAllLines(Path.Combine(Helper.DirectoryPath, "StardewFailedCueNames.txt"), failedCues);
         }
 
 
