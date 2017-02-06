@@ -188,7 +188,7 @@ namespace Revitalize.Objects
                 if (Game1.player.currentLocation is FarmHouse)
                 {
                     //       
-                            Game1.player.addItemByMenuIfNecessary(this);
+                    Util.addItemToInventoryAndCleanTrackedList(this);
                     removeLights(this.thisLocation);
                     this.lightsOn = false;
                     Game1.playSound("coin");
@@ -199,9 +199,9 @@ namespace Revitalize.Objects
                 else
                 {
                     // return true;
-                   // this.heldObject = new Light(parentSheetIndex, Vector2.Zero, this.lightColor, this.inventoryMaxSize);
-                    Game1.player.addItemByMenuIfNecessary(this);
-                  removeLights(this.thisLocation);
+                    // this.heldObject = new Light(parentSheetIndex, Vector2.Zero, this.lightColor, this.inventoryMaxSize);
+                    Util.addItemToInventoryAndCleanTrackedList(this);
+                    removeLights(this.thisLocation);
                     this.lightsOn = false;
                     Game1.playSound("coin");
                     thisLocation = null;
@@ -213,8 +213,8 @@ namespace Revitalize.Objects
             {
                 //    Game1.showRedMessage("Why3?");
                 // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
-                 Util.addItemToInventoryElseDrop(this);
-                 this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
+                Util.addItemToInventoryAndCleanTrackedList(this);
+                this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.heldObject = null;
                 Game1.playSound("coin");
                  removeLights(this.thisLocation);

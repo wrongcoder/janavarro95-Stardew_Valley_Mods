@@ -66,6 +66,25 @@ namespace Revitalize
             }
         }
 
+        public static bool addItemToInventoryAndCleanTrackedList(CoreObject I)
+        {
+            if (Game1.player.isInventoryFull() == false)
+            {
+                Game1.player.addItemToInventoryBool(I, false);
+                Lists.trackedObjectList.Remove(I);
+                return true;
+            }
+            else
+            {
+                Random random = new Random(129);
+                int i = random.Next();
+                i = i % 4;
+                Vector2 v2 = new Vector2(Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
+                Game1.createItemDebris(I, v2, i);
+                return false;
+            }
+        }
+
 
         public static bool addItemToInventoryElseUseMenu (List<Item> I)
         {
@@ -91,7 +110,7 @@ namespace Revitalize
         }
 
 
-        public static bool placementAction(CoreObject cObj, GameLocation location, int x, int y, Farmer who = null)
+        public static bool placementAction(CoreObject cObj, GameLocation location, int x, int y, Farmer who = null, bool playSound=true)
         {
             Vector2 vector = new Vector2((float)(x / Game1.tileSize), (float)(y / Game1.tileSize));
             //  cObj.health = 10;
@@ -659,7 +678,11 @@ namespace Revitalize
                     }
                     @object.initializeLightSource(vector);
                 }
-                Game1.playSound("woodyStep");
+              if(playSound==true)  Game1.playSound("woodyStep");
+              else
+                {
+                    Log.AsyncG("restoring item from file");
+                }
                 //Log.AsyncM("Placed and object");
                 cObj.locationsName = location.name;
                 Lists.trackedObjectList.Add(cObj);

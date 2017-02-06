@@ -288,7 +288,7 @@ namespace Revitalize.Objects.Machines
 
                   if(this.heldObject!=null)  Util.addItemToInventoryElseDrop(this.heldObject.getOne());
                     this.heldObject = new Spawner(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
-                    Util.addItemToInventoryElseDrop(this.heldObject.getOne());
+                    Util.addItemToInventoryAndCleanTrackedList(this);
                     this.heldObject = null;
                     this.flaggedForPickUp = true;
                     this.thisLocation = null;
@@ -308,9 +308,9 @@ namespace Revitalize.Objects.Machines
                         //    Util.addItemToInventoryElseDrop(this.heldObject);
 
                         var obj = new Spawner(parentSheetIndex, Vector2.Zero,this.inventoryMaxSize);
-                        Util.addItemToInventoryElseDrop(obj);
-                   //     this.spillInventoryEverywhere();
-                       if(this.heldObject!=null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
+                        Util.addItemToInventoryAndCleanTrackedList(this);
+                        //     this.spillInventoryEverywhere();
+                        if (this.heldObject!=null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
 
                         this.heldObject = null;
                         Game1.playSound("coin");
@@ -326,8 +326,8 @@ namespace Revitalize.Objects.Machines
                 // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
                // this.spillInventoryEverywhere();
                 var obj = new Spawner(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
-                Util.addItemToInventoryElseDrop(obj);
-                 if(this.heldObject!=null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
+                Util.addItemToInventoryAndCleanTrackedList(this);
+                if (this.heldObject!=null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.heldObject = null;
                 Game1.playSound("coin");
                 this.thisLocation = null;

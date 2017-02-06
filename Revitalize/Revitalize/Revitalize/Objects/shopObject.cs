@@ -180,7 +180,7 @@ namespace Revitalize.Objects
                 {
                     //   Game1.showRedMessage("Why2?");
                     //this.heldObject = new shopObject(parentSheetIndex, Vector2.Zero);
-                    Game1.player.addItemByMenuIfNecessary(this);
+                    Util.addItemToInventoryAndCleanTrackedList(this);
                     this.flaggedForPickUp = true;
                     this.thisLocation = null;
                     return true;
@@ -196,7 +196,7 @@ namespace Revitalize.Objects
                     }
                     else {
                        // this.heldObject = new shopObject(parentSheetIndex, Vector2.Zero);
-                        Game1.player.addItemByMenuIfNecessary(this);
+                        Util.addItemToInventoryAndCleanTrackedList(this);
                         //  this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                         //   this.heldObject = null;
                         Game1.playSound("coin");
@@ -211,7 +211,7 @@ namespace Revitalize.Objects
                 // Game1.showRedMessage("Why3?");
                 this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.heldObject = null;
-                Game1.player.addItemByMenuIfNecessary((Item)this);
+                Util.addItemToInventoryAndCleanTrackedList(this);
                 Game1.playSound("coin");
                 this.thisLocation = null;
                 return true;

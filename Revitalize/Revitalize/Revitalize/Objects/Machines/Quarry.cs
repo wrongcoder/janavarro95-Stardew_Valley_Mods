@@ -336,9 +336,9 @@ namespace Revitalize.Objects.Machines
                     if (clear == true)
                     {
                         inventory.Clear();
-                      //  if (this.output != null) Util.addItemToInventoryElseDrop(this.output.getOne());
+                        //  if (this.output != null) Util.addItemToInventoryElseDrop(this.output.getOne());
                         //this.output = new Quarry(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
-                        Util.addItemToInventoryElseDrop(this);
+                        Util.addItemToInventoryAndCleanTrackedList(this);
                         this.output = null;
                         this.flaggedForPickUp = true;
                         this.thisLocation = null;
@@ -356,7 +356,7 @@ namespace Revitalize.Objects.Machines
 
                     //if (this.output != null) Util.addItemToInventoryElseDrop(this.output.getOne());
                     this.output = this;
-                    Util.addItemToInventoryElseDrop(this);
+                    Util.addItemToInventoryAndCleanTrackedList(this);
                     this.output = null;
                     this.flaggedForPickUp = true;
                     this.thisLocation = null;
@@ -376,9 +376,9 @@ namespace Revitalize.Objects.Machines
                         //    Util.addItemToInventoryElseDrop(this.output);
 
                         var obj = this;
-                        Util.addItemToInventoryElseDrop(obj);
+                        Util.addItemToInventoryAndCleanTrackedList(this);
                         //     this.showUI();
-                      //  if (this.output != null) this.output.performRemoveAction(this.tileLocation, who.currentLocation);
+                        //  if (this.output != null) this.output.performRemoveAction(this.tileLocation, who.currentLocation);
 
                         this.output = null;
                         Game1.playSound("coin");
@@ -394,8 +394,8 @@ namespace Revitalize.Objects.Machines
                 // if(this.output!=null) Game1.player.addItemByMenuIfNecessary((Item)this.output);
                 // this.showUI();
                 var obj = this;
-                Util.addItemToInventoryElseDrop(obj);
-               // if (this.output != null) this.output.performRemoveAction(this.tileLocation, who.currentLocation);
+                Util.addItemToInventoryAndCleanTrackedList(this);
+                // if (this.output != null) this.output.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.output = null;
                 Game1.playSound("coin");
                 this.thisLocation = null;

@@ -160,14 +160,18 @@ namespace Revitalize
             Log.AsyncM("Done cleaning inventory!");
         }
 
-        public static void restoreInventory()
+        /// <summary>
+        /// Restore all of the serialized mod objects from the mod's player's data folders to either the player's inventory or the game world depending where the object was located when it was serialized.
+        /// </summary>
+        public static void restoreAllModObjects()
         {
           
             //   Log.AsyncG(InvPath);
             ProcessDirectoryForCleanUp(InvPath);
             try
             {
-                ProcessDirectoryForCleanUp(objectsInWorldPath);
+                Lists.trackedObjectList.Clear(); //clear whatever mod objects I'm tracking
+                ProcessDirectoryForCleanUp(objectsInWorldPath); //restore whatever I'm tracking here when I replace the object back into the world. This also works when loading up the game, not just when saving/loading
             }
             catch(Exception e)
             {
@@ -175,6 +179,10 @@ namespace Revitalize
             }
         }
 
+        /// <summary>
+        /// Cleans up the mod files by deleting possible old files for objects that may/may not exist. Aka delete everything before serializing everything again.
+        /// </summary>
+        /// <param name="targetDirectory"></param>
         public static void ProcessDirectoryForDeletion(string targetDirectory)
         {
             // Process the list of files found in the directory.
@@ -188,7 +196,7 @@ namespace Revitalize
             // Recurse into subdirectories of this directory.
             string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
             foreach (string subdirectory in subdirectoryEntries)
-                ProcessDirectoryForCleanUp(subdirectory);
+                ProcessDirectoryForDeletion(subdirectory);
 
         }
 
@@ -245,13 +253,13 @@ namespace Revitalize
                         }
                         else
                         {
-                            cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
+                           cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
+                            Lists.trackedObjectList.Add(cObj);
+                            //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
                         }
                     }
                 }
             }
-
-
 
 
         }

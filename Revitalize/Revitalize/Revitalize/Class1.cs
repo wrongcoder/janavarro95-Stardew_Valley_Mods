@@ -58,7 +58,7 @@ namespace Revitalize
             StardewModdingAPI.Events.GameEvents.GameLoaded += GameEvents_GameLoaded;
             StardewModdingAPI.Events.GameEvents.OneSecondTick += MapWipe;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.ResetAllDailyBooleans;
-
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
 
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
@@ -72,20 +72,25 @@ namespace Revitalize
             newLoc = new List<GameLoc>();
         }
 
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            
+        }
+
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
             Serialize.createDirectories();
-            Serialize.restoreInventory();
+            Serialize.restoreAllModObjects();
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            Serialize.cleanUpInventory();
+            Serialize.cleanUpInventory(); 
             foreach(var v in Lists.trackedObjectList)
             {
                 Log.AsyncC(v.name);
             }
-            Serialize.cleanUpWorld();
+            Serialize.cleanUpWorld(); //grabs all of the items that im tracking and serializes them
         }
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
