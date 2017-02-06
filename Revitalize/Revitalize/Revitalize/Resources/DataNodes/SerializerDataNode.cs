@@ -11,11 +11,13 @@ namespace Revitalize.Resources.DataNodes
     {
         public Dictionaries.ser serialize;
         public Dictionaries.par parse;
+        public Dictionaries.world worldObj;
 
-        public SerializerDataNode(Dictionaries.ser ser, Dictionaries.par par)
+        public SerializerDataNode(Dictionaries.ser ser, Dictionaries.par par,Dictionaries.world wor)
         {
             serialize = ser;
             parse = par;
+            worldObj = wor;
         }
     }
 }

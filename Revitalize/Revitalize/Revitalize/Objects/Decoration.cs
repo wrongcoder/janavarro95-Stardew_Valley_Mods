@@ -604,8 +604,10 @@ namespace Revitalize.Objects
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-            
-                Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
+
+           
+
+            Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
             
           
                 this.tileLocation = new Vector2((float)point.X, (float)point.Y);

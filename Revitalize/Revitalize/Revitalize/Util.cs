@@ -660,6 +660,9 @@ namespace Revitalize
                     @object.initializeLightSource(vector);
                 }
                 Game1.playSound("woodyStep");
+                //Log.AsyncM("Placed and object");
+                cObj.locationsName = location.name;
+                Lists.trackedObjectList.Add(cObj);
                 return true;
 
             }

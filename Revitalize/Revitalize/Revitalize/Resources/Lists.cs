@@ -13,11 +13,13 @@ namespace Revitalize.Resources
       public static  List<Revitalize.Resources.DataNodes.TrackedTerrainDataNode> trackedTerrainFeatures;
         public static List<Revitalize.Resources.DataNodes.TrackedTerrainDummyDataNode> trackedTerrainFeaturesDummyList;
 
+        public static List<Revitalize.CoreObject> trackedObjectList;
+
         public static void initializeAllLists()
         {
             trackedTerrainFeatures = new List<DataNodes.TrackedTerrainDataNode>();
             trackedTerrainFeaturesDummyList = new List<DataNodes.TrackedTerrainDummyDataNode>();
-           
+            trackedObjectList = new List<CoreObject>();
         }
 
         public static void loadAllLists()

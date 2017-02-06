@@ -95,6 +95,8 @@ namespace Revitalize
 
         public bool removable;
 
+        public string locationsName;
+
         public override string Name
         {
             get
@@ -969,7 +971,10 @@ namespace Revitalize
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
 
-
+            if (base.placementAction(location, x, y, who) == true)
+            {
+                Lists.trackedObjectList.Add(this);
+            }
 
 
             if (location is FarmHouse)

@@ -25,6 +25,8 @@ namespace Revitalize
         public static string PlayerDataPath;
         public static string DataDirectoryPath;
 
+        public static string objectsInWorldPath;
+
         public static string TrackedTerrainDataPath;
 
 
@@ -34,7 +36,7 @@ namespace Revitalize
             DataDirectoryPath = Path.Combine(Class1.path, "PlayerData");
             PlayerDataPath = Path.Combine(DataDirectoryPath, Game1.player.name);
             InvPath = Path.Combine(PlayerDataPath, "Inventory");
-          
+            objectsInWorldPath = Path.Combine(PlayerDataPath, "objects");
 
            // Log.AsyncC(TrackedTerrainDataPath);
 
@@ -50,11 +52,70 @@ namespace Revitalize
             {
                 Directory.CreateDirectory(InvPath);
             }
+            if (!Directory.Exists(objectsInWorldPath))
+            {
+                Directory.CreateDirectory(InvPath);
+            }
+
+            foreach(GameLocation loc in Game1.locations)
+            {
+                if (!Directory.Exists(Path.Combine(objectsInWorldPath,loc.name)))
+                {
+                    Directory.CreateDirectory(Path.Combine(objectsInWorldPath, loc.name));
+                }
+
+            }
         }
+
+
+
+        public static void cleanUpWorld()
+        {
+            ProcessDirectoryForDeletion(objectsInWorldPath);
+            List<CoreObject> removalList = new List<CoreObject>();
+            foreach (CoreObject d in Lists.trackedObjectList)
+            {
+                try
+                {
+                    if (d == null)
+                    {
+                        //Log.AsyncG("WTF");
+                        continue;
+                    }
+                    // Log.AsyncC(d.GetType());
+                }
+                catch (Exception e)
+                {
+
+                }
+                string s = Convert.ToString((d.GetType()));
+
+                if (Dictionaries.acceptedTypes.ContainsKey(s))
+                {
+                    SerializerDataNode t;
+
+                    bool works = Dictionaries.acceptedTypes.TryGetValue(s, out t);
+                    if (works == true)
+                    {
+                        t.worldObj.Invoke(d);
+                        removalList.Add(d);
+                    }
+                }
+            }
+            foreach (var i in removalList)
+            {
+                i.thisLocation.removeObject(i.tileLocation, false);
+            }
+            removalList.Clear();
+
+            Log.AsyncM("Done cleaning world!");
+
+        }
+        
 
         public static void cleanUpInventory()
         {
-           
+            ProcessDirectoryForDeletion(InvPath);
 
 
             List<Item> removalList = new List<Item>();
@@ -104,6 +165,31 @@ namespace Revitalize
           
             //   Log.AsyncG(InvPath);
             ProcessDirectoryForCleanUp(InvPath);
+            try
+            {
+                ProcessDirectoryForCleanUp(objectsInWorldPath);
+            }
+            catch(Exception e)
+            {
+                Serialize.createDirectories();
+            }
+        }
+
+        public static void ProcessDirectoryForDeletion(string targetDirectory)
+        {
+            // Process the list of files found in the directory.
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            foreach (string fileName in fileEntries)
+            {
+                File.Delete(fileName);
+                // File.Delete(fileName);
+            }
+
+            // Recurse into subdirectories of this directory.
+            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            foreach (string subdirectory in subdirectoryEntries)
+                ProcessDirectoryForCleanUp(subdirectory);
+
         }
 
 
@@ -115,7 +201,7 @@ namespace Revitalize
             foreach (string fileName in fileEntries)
             {
                 ProcessFileForCleanUp(fileName);
-                File.Delete(fileName);
+               // File.Delete(fileName);
             }
 
             // Recurse into subdirectories of this directory.
@@ -150,11 +236,16 @@ namespace Revitalize
                     if (pair.Key == s)
                     {
                         var cObj = pair.Value.parse.Invoke(data);
+                        cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
                         Log.AsyncC("NEED TO HANDLE PUTTING OBJECTS BACK INTO A LOCATION!!!!");
                         if (cObj.thisLocation == null)
                         {
                             Game1.player.addItemToInventory(cObj);
                             return;
+                        }
+                        else
+                        {
+                            cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
                         }
                     }
                 }
@@ -324,6 +415,7 @@ namespace Revitalize
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
+            d.locationsName = obj.locationsName;
 
             try {
                 return d;
@@ -341,6 +433,10 @@ namespace Revitalize
         public static void serializeDecoration(Item d)
         {
             Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Decoration)d);
+        }
+        public static void serializeDecorationFromWorld(CoreObject d)
+        {
+            Serialize.WriteToJsonFile(Path.Combine(objectsInWorldPath,d.thisLocation.name, d.Name + ".json"), (Decoration)d);
         }
 
 
@@ -419,7 +515,7 @@ namespace Revitalize
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
-
+            d.locationsName = obj.locationsName;
             try
             {
                 return d;
@@ -434,9 +530,14 @@ namespace Revitalize
 
 
         }
+
         public static void serializeSpawner(Item d)
         {
             Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Spawner)d);
+        }
+        public static void serializeSpawnerFromWorld(CoreObject d)
+        {
+            Serialize.WriteToJsonFile(Path.Combine(objectsInWorldPath, d.thisLocation.name, d.Name + ".json"), (Spawner)d);
         }
 
 
@@ -515,7 +616,7 @@ namespace Revitalize
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
-
+            d.locationsName = obj.locationsName;
             try
             {
                 return d;
@@ -610,7 +711,7 @@ namespace Revitalize
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
-
+            d.locationsName = obj.locationsName;
             try
             {
                 return d;
@@ -637,6 +738,7 @@ namespace Revitalize
 
             dynamic obj = JObject.Parse(data);
 
+           // Log.AsyncC(data);
 
           //  Log.AsyncC(obj.thisType);
 
@@ -701,12 +803,14 @@ namespace Revitalize
             d.inventory = array.ToObject<List<Item>>();
             d.inventoryMaxSize = obj.inventoryMaxSize;
             d.itemReadyForHarvest = obj.itemReadyForHarvest;
-            d.lightsOn = obj.lightsOn;
-            d.thisLocation = obj.thisLocation;
+            d.lightsOn = obj.lightsOn;      
+           // d.thisLocation = Game1.getLocationFromName(loc);
+            // d.thisLocation = obj.thisLocation;
+            Log.AsyncC(d.thisLocation);
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
-
+            d.locationsName = obj.locationsName;
             try
             {
                 return d;
@@ -724,6 +828,10 @@ namespace Revitalize
         public static void serializeLight(Item d)
         {
             Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Light)d);
+        }
+        public static void serializeLightFromWorld(CoreObject d)
+        {
+            Serialize.WriteToJsonFile(Path.Combine(objectsInWorldPath, d.thisLocation.name, d.Name + ".json"), (Light)d);
         }
 
         public static Quarry parseQuarry(string data)
@@ -803,6 +911,7 @@ namespace Revitalize
 
             d.ResourceName = obj.ResourceName;
             d.dataNode = obj.dataNode;
+            d.locationsName = obj.locationsName;
             try
             {
                 return d;
@@ -820,6 +929,10 @@ namespace Revitalize
         public static void serializeQuarry(Item d)
         {
             Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Quarry)d);
+        }
+        public static void serializeQuarryFromWorld(CoreObject d)
+        {
+            Serialize.WriteToJsonFile(Path.Combine(objectsInWorldPath, d.thisLocation.name, d.Name + ".json"), (Quarry)d);
         }
 
         public static shopObject parseShopObject(string data)
@@ -898,7 +1011,7 @@ namespace Revitalize
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
-
+            d.locationsName = obj.locationsName;
             try
             {
                 return d;
@@ -916,6 +1029,10 @@ namespace Revitalize
         public static void serializeShopObject(Item d)
         {
             Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (shopObject)d);
+        }
+        public static void serializeShopObjectFromWorld(CoreObject d)
+        {
+            Serialize.WriteToJsonFile(Path.Combine(objectsInWorldPath, d.thisLocation.name, d.Name + ".json"), (shopObject)d);
         }
 
         public static void parseTrackedTerrainDataNodeList(string data)

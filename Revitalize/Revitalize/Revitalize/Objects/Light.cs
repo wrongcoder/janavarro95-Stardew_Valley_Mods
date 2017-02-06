@@ -561,7 +561,7 @@ namespace Revitalize.Objects
         {
 
 
-
+        
 
             if (location is FarmHouse)
             {

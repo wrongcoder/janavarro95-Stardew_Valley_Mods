@@ -559,7 +559,7 @@ namespace Revitalize.Objects
         {
             //  Log.AsyncC(x);
             //   Log.AsyncM(y);
-
+         
 
             if (location is FarmHouse)
             {
@@ -631,9 +631,7 @@ namespace Revitalize.Objects
                     }
                 }
                 this.updateDrawPosition();
-                Log.AsyncO(this.boundingBox);
-                Log.AsyncO(x);
-                Log.AsyncY(y);
+
                 for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
                 {
                     base.placementAction(location, x + 1, y, who);
@@ -716,7 +714,7 @@ namespace Revitalize.Objects
                 }
                 this.updateDrawPosition();
                 this.thisLocation = Game1.player.currentLocation;
-                return base.placementAction(location, x, y, who);
+                return Util.placementAction(this,location, x, y, who);
             }
 
         }

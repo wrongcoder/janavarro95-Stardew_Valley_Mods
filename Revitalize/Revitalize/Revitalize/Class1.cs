@@ -39,7 +39,6 @@ namespace Revitalize
         public static string key_binding="P";
         public static string key_binding2 = "E";
         public static string path;
-        bool hasCleanedUp;
         const int range = 1;
 
         bool mouseAction;
@@ -55,20 +54,38 @@ namespace Revitalize
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
             StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick +=gameMenuCall;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += BedCleanUpCheck;
+           //  StardewModdingAPI.Events.GameEvents.UpdateTick += BedCleanUpCheck;
             StardewModdingAPI.Events.GameEvents.GameLoaded += GameEvents_GameLoaded;
             StardewModdingAPI.Events.GameEvents.OneSecondTick += MapWipe;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.ResetAllDailyBooleans;
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+
+
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
+            StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterSave;
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
 
             //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
-
-            hasCleanedUp = true;
             hasLoadedTerrainList = false;
             path = Helper.DirectoryPath;
             newLoc = new List<GameLoc>();
+        }
+
+        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        {
+            Serialize.createDirectories();
+            Serialize.restoreInventory();
+        }
+
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            Serialize.cleanUpInventory();
+            foreach(var v in Lists.trackedObjectList)
+            {
+                Log.AsyncC(v.name);
+            }
+            Serialize.cleanUpWorld();
         }
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
@@ -76,17 +93,12 @@ namespace Revitalize
             if (Game1.player.isMoving() == true && hasLoadedTerrainList == false)
             {
                 Lists.loadAllLists();
-               // Log.AsyncC("CHEEZNIPS!");
                 Util.WaterAllCropsInAllLocations();
             }
 
         }
 
-        private void PlayerEvents_LoadedGame(object sender, EventArgsLoadedGameChanged e)
-        {
-            
-           
-        }
+    
 
         private void ControlEvents_MouseChanged(object sender, EventArgsMouseStateChanged e)
         {
@@ -178,6 +190,7 @@ namespace Revitalize
             
         }
 
+        /*
         private void BedCleanUpCheck(object sender, EventArgs e)
         {
             //Game1.options.menuButton = null;
@@ -212,7 +225,7 @@ namespace Revitalize
                     }     
             }
         }
-
+        */
        
 
         private void gameMenuCall(object sender, EventArgs e)
@@ -273,11 +286,6 @@ namespace Revitalize
             if (e.KeyPressed.ToString() == key_binding2)
             {
                 gametick = true;
-            
-             
-
-            //    string load = Path.Combine(PathOnDisk, "this_thing.json");
-            //    Game1.player=ReadFromJsonFile<StardewValley.Farmer>(load);
             }
 
         
