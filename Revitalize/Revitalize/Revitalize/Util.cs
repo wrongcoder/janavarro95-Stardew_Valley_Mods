@@ -770,7 +770,6 @@ namespace Revitalize
                     if ((v.terrainFeature as HoeDirt).crop==null)
                     {
                         removalList.Add(v);
-                        Log.AsyncR("WHY REMOVE???");
                         continue;
                     }
                     if ((v.terrainFeature as HoeDirt).state == 0) (v.terrainFeature as HoeDirt).state = 1;
@@ -785,10 +784,6 @@ namespace Revitalize
                 removalList.Clear();
             }
         }
-
-        
-
-
 
     }
 }
