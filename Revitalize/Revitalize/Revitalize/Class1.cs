@@ -262,6 +262,7 @@ namespace Revitalize
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                 objShopList.Add(new Light(3, Vector2.Zero, LightColors.Aquamarine));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));
+                objShopList.Add(new Quarry(3, Vector2.Zero, 9, "iron"));
                 objShopList.Add(new Decoration(3, Vector2.Zero));
                 objShopList.Add(new StardewValley.Object(495, 1));
                 objShopList.Add(new StardewValley.Object(496, 1));
