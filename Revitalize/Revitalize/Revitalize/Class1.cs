@@ -86,10 +86,6 @@ namespace Revitalize
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             Serialize.cleanUpInventory(); 
-            foreach(var v in Lists.trackedObjectList)
-            {
-                Log.AsyncC(v.name);
-            }
             Serialize.cleanUpWorld(); //grabs all of the items that im tracking and serializes them
         }
 
@@ -281,6 +277,7 @@ namespace Revitalize
 
                 // my_shop_list.Add((new Decoration(1120, Vector2.Zero)));
                 objShopList.Add(new ExtraSeeds(1, Vector2.Zero));
+                objShopList.Add(new ExtraSeeds(2, Vector2.Zero));
                 Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(objShopList, 0, null);
                 
                 if (Game1.player == null) return;

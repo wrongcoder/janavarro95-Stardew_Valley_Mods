@@ -67,13 +67,54 @@ namespace Revitalize.Objects
                 texturePath = "Revitalize\\CropsNSeeds\\Graphics\\seeds";
             }
             Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Revitalize\\CropsNSeeds\\Data\\seeds");
+
+            //Log.AsyncC(which);
             string[] array = dictionary[which].Split(new char[]
             {
                 '/'
             });
             this.name = array[0];
             this.Decoration_type = this.getTypeNumberFromName(array[1]);
-            this.description = "Some seeds. Maybe you should plant them.";
+
+            try
+            {
+                this.description = array[6];
+                this.description += "\nGrown in ";
+                Crop c = parseCropInfo(which);
+                int trackCount = 0;
+                foreach (var v in c.seasonsToGrowIn)
+                {
+                    if (c.seasonsToGrowIn.Count > 1)
+                    {
+                        trackCount++;
+                        if (trackCount != c.seasonsToGrowIn.Count) description += v + ", ";
+                        else description += "and " + v;
+                    }
+                    else description += v;
+                }
+                this.description += ".\n";
+                this.description += "Takes ";
+                int totalDaysToGrow = 0;
+                foreach (var v in c.phaseDays)
+                {
+                    totalDaysToGrow += v;
+                }
+                totalDaysToGrow -= 99999;
+                this.description += Convert.ToString(totalDaysToGrow) + " days to mature.\n";
+                
+                try
+                {
+                    this.description += array[7];
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            catch(Exception e)
+            {
+                this.description = "Some seeds! Maybe you should plant them.";
+            }
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
             if (array[2].Equals("-1"))
             {
@@ -1023,6 +1064,82 @@ namespace Revitalize.Objects
         public override int maximumStackSize()
         {
             return base.maximumStackSize();
+        }
+
+        public static Crop parseCropInfo(int seedIndex)
+        {
+            Crop c = new Crop() ;
+            Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+            if (seedIndex == 770)
+            {
+                seedIndex = Crop.getRandomLowGradeCropForThisSeason(Game1.currentSeason);
+                if (seedIndex == 473)
+                {
+                    seedIndex--;
+                }
+            }
+            if (dictionary.ContainsKey(seedIndex))
+            {
+                string[] array = dictionary[seedIndex].Split(new char[]
+                {
+                    '/'
+                });
+                string[] array2 = array[0].Split(new char[]
+                {
+                    ' '
+                });
+                for (int i = 0; i < array2.Length; i++)
+                {
+                    c.phaseDays.Add(Convert.ToInt32(array2[i]));
+                }
+                c.phaseDays.Add(99999);
+                string[] array3 = array[1].Split(new char[]
+                {
+                    ' '
+                });
+                for (int j = 0; j < array3.Length; j++)
+                {
+                    c.seasonsToGrowIn.Add(array3[j]);
+                }
+                c.rowInSpriteSheet = Convert.ToInt32(array[2]);
+                c.indexOfHarvest = Convert.ToInt32(array[3]);
+                c.regrowAfterHarvest = Convert.ToInt32(array[4]);
+                c.harvestMethod = Convert.ToInt32(array[5]);
+                string[] array4 = array[6].Split(new char[]
+                {
+                    ' '
+                });
+                if (array4.Length != 0 && array4[0].Equals("true"))
+                {
+                    c.minHarvest = Convert.ToInt32(array4[1]);
+                    c.maxHarvest = Convert.ToInt32(array4[2]);
+                    c.maxHarvestIncreasePerFarmingLevel = Convert.ToInt32(array4[3]);
+                    c.chanceForExtraCrops = Convert.ToDouble(array4[4]);
+                }
+                c.raisedSeeds = Convert.ToBoolean(array[7]);
+                string[] array5 = array[8].Split(new char[]
+                {
+                    ' '
+                });
+                if (array5.Length != 0 && array5[0].Equals("true"))
+                {
+                    List<Color> list = new List<Color>();
+                    for (int k = 1; k < array5.Length; k += 3)
+                    {
+                        list.Add(new Color((int)Convert.ToByte(array5[k]), (int)Convert.ToByte(array5[k + 1]), (int)Convert.ToByte(array5[k + 2])));
+                    }
+                    Random random = new Random(seedIndex * 1000 + Game1.timeOfDay + Game1.dayOfMonth);
+                    c.tintColor = list[random.Next(list.Count)];
+                    c.programColored = true;
+                }
+                c.flip = (Game1.random.NextDouble() < 0.5);
+            }
+            if (c.rowInSpriteSheet == 23)
+            {
+                c.whichForageCrop = seedIndex;
+            }
+
+            return c;
         }
 
     }

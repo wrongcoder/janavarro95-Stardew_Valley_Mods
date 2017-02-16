@@ -78,9 +78,9 @@ namespace Revitalize.Resources
         public static void fillSeedList()
         {
             //crop row number is actually counts row 0 on upper left and row right on upper right.
-            //parentsheetindex,actualCropNumber
-            seedList.Add("Pink Turnip Seeds", new SeedDataNode(1,1)); //new potato seeds. Need to make actual thing.
-
+            //parentsheetindex for seeds image, actualCropNumber from crops.xnb
+            seedList.Add("Pink Turnip Seeds", new SeedDataNode(1,1)); 
+            seedList.Add("Blue Charm Seeds", new SeedDataNode(2, 2));
         }
 
 

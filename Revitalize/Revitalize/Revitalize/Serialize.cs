@@ -73,6 +73,7 @@ namespace Revitalize
         {
             ProcessDirectoryForDeletion(objectsInWorldPath);
             List<CoreObject> removalList = new List<CoreObject>();
+            int countProcessed = 0;
             foreach (CoreObject d in Lists.trackedObjectList)
             {
                 try
@@ -97,7 +98,9 @@ namespace Revitalize
                     bool works = Dictionaries.acceptedTypes.TryGetValue(s, out t);
                     if (works == true)
                     {
+                        countProcessed++;
                         t.worldObj.Invoke(d);
+                        Log.AsyncC("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
                         removalList.Add(d);
                     }
                 }
@@ -108,7 +111,7 @@ namespace Revitalize
             }
             removalList.Clear();
 
-            Log.AsyncM("Done cleaning world!");
+            Log.AsyncM("Revitalize: Done cleaning world for saving.");
 
         }
         
@@ -157,7 +160,7 @@ namespace Revitalize
             }
             removalList.Clear();
 
-            Log.AsyncM("Done cleaning inventory!");
+            Log.AsyncM("Revitalize: Done cleaning inventory!");
         }
 
         /// <summary>
@@ -245,7 +248,6 @@ namespace Revitalize
                     {
                         var cObj = pair.Value.parse.Invoke(data);
                         cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
-                        Log.AsyncC("NEED TO HANDLE PUTTING OBJECTS BACK INTO A LOCATION!!!!");
                         if (cObj.thisLocation == null)
                         {
                             Game1.player.addItemToInventory(cObj);
