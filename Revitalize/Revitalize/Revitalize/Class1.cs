@@ -22,6 +22,7 @@ using StardewValley.Locations;
 using Revitalize.Locations;
 using Revitalize.Menus;
 using Microsoft.Xna.Framework.Input;
+using xTile;
 
 namespace Revitalize
 {
@@ -72,9 +73,22 @@ namespace Revitalize
             newLoc = new List<GameLoc>();
         }
 
+        /// <summary>
+        /// Used to load in information post load such as custom farm maps.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             
+            foreach(GameLocation v in Game1.locations)
+            {
+                if (v.name == "Farm")
+                {
+                    v.map =(Game1.content.Load<Map>("Maps\\" + Farm.getMapNameFromTypeInt(1)));//change this to  v.map =(Game1.content.Load<Map>("Path.Combine("Maps,"Farms",folderName,"Farm")));
+                    Log.AsyncG("Sucesfully injected custom farm map");
+                }
+            }
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
@@ -291,7 +305,18 @@ namespace Revitalize
                 gametick = true;
             }
 
-        
+            if (e.KeyPressed.ToString() == "J")
+            {
+                //if(Game1.activeclickablemenu is TitleMenu or CharacterCreationMenu
+                if (Game1.player.currentLocation.name != "Farm")
+                {
+                    Game1.activeClickableMenu = new FarmOptionsMenu();
+                }
+                else
+                {
+                    Game1.showRedMessage("Can't change farm map here!");
+                }
+            }
 
 
         }
