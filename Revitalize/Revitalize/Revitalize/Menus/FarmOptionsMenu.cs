@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Revitalize.Persistance;
 using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
 using StardewValley;
@@ -79,6 +80,7 @@ namespace Revitalize.Menus
         public List<FarmOptionsDataNode> farmsToAdd;
 
         private int count;
+        private ClickableComponent nameLabel;
 
         public FarmOptionsMenu(bool wizardSource = false) : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize, false)
         {
@@ -123,11 +125,12 @@ namespace Revitalize.Menus
             this.okButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1), 1f, false);
             this.nameBox = new TextBox(Game1.content.Load<Texture2D>("LooseSprites\\textBox"), null, Game1.smallFont, Game1.textColor)
             {
-                X = this.xPositionOnScreen + Game1.tileSize + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 4,
+                X = this.xPositionOnScreen + Game1.tileSize + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth - Game1.tileSize * 1,
                 Y = this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4,
                 Text = ""
             };
-
+            this.nameBox.Width = this.nameBox.Width * 3;
+            this.labels.Add(this.nameLabel = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 6 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth - Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 10, 1, 1), "Farm Name"));
             if (!this.wizardSource)
             {
                 Point point = new Point((this.xPositionOnScreen + this.width + Game1.pixelZoom + Game1.tileSize / 8)/3, this.yPositionOnScreen + IClickableMenu.borderWidth * 2);
@@ -149,6 +152,16 @@ namespace Revitalize.Menus
             {
                 if (!this.wizardSource)
                 {
+                    string g = Path.Combine("Maps", "Farm_Combat");
+                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    whichFarm = 4;
+                    Log.AsyncG("MAP SWAP!");
+                    Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
+                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    Serialize.serializeMapSwapData(Class1.persistentMapSwap);
+
+
                     Game1.whichFarm = 4;
                     Game1.spawnMonstersAtNight = true;
                 }
@@ -159,6 +172,15 @@ namespace Revitalize.Menus
             {
                 if (!this.wizardSource)
                 {
+                    string g = Path.Combine("Maps", "Farm");
+                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Log.AsyncG("MAP SWAP!");
+                    Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
+                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    Serialize.serializeMapSwapData(Class1.persistentMapSwap);
+
+
                     Game1.whichFarm = 0;
                     whichFarm = 0;
                     Game1.spawnMonstersAtNight = false;
@@ -168,6 +190,14 @@ namespace Revitalize.Menus
             {
                 if (!this.wizardSource)
                 {
+                    string g = Path.Combine("Maps", "Farm_Fishing");
+                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Log.AsyncG("MAP SWAP!");
+                    Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
+                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    Serialize.serializeMapSwapData(Class1.persistentMapSwap);
+
                     Game1.whichFarm = 1;
                     whichFarm = 1;
                     Game1.spawnMonstersAtNight = false;
@@ -196,6 +226,14 @@ namespace Revitalize.Menus
             {
                 if (!this.wizardSource)
                 {
+                    string g = Path.Combine("Maps", "Farm_Mining");
+                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Log.AsyncG("MAP SWAP!");
+                    Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
+                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    Serialize.serializeMapSwapData(Class1.persistentMapSwap);
+
                     Game1.whichFarm = 3;
                     whichFarm = 3;
                     Game1.spawnMonstersAtNight = false;
@@ -206,6 +244,15 @@ namespace Revitalize.Menus
             {
                 if (!this.wizardSource)
                 {
+                    string g = Path.Combine("Maps", "Farm_Foraging");
+                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Log.AsyncG("MAP SWAP!");
+                    Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
+                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    Serialize.serializeMapSwapData(Class1.persistentMapSwap);
+
+
                     Game1.whichFarm = 2;
                     whichFarm = 2;
                     Game1.spawnMonstersAtNight = false;
@@ -223,10 +270,14 @@ namespace Revitalize.Menus
                             {
                                 if (c.name == "Farm")
                                 {
-                                    c.map = v.map;
+
+                            Util.removeAllWaterTilesFromMap(c);
+                            c.map = v.map;
                                     whichFarm = count;
                                     Log.AsyncG("MAP SWAP!");
-                           // this.nameBox.Text = v.clicky.name;
+                         Class1.persistentMapSwap.mapPath= Path.Combine(Game1.content.RootDirectory,"Maps","Farms", v.clicky.name,v.clicky.name);
+                            Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                            Serialize.serializeMapSwapData(Class1.persistentMapSwap);
                                 }
                             }
                         }
@@ -502,31 +553,29 @@ namespace Revitalize.Menus
                 }
             }
     */
-    /*
+    
                 foreach (ClickableComponent current in this.labels)
                 {
                     string text = "";
                     Color color = Game1.textColor;
-                     if (current == this.farmLabel)
+                    if (current == this.nameLabel)
                     {
-                        color = ((Game1.player.farmName.Length < 1) ? Color.Red : Game1.textColor);
+                        color = ((Game1.player.name.Length < 1) ? Color.Red : Game1.textColor);
                         if (this.wizardSource)
                         {
                             continue;
                         }
                     }
-                    else
-                    {
-                        color = Game1.textColor;
-                    }
+                    color = Game1.textColor;
+                    
                     Utility.drawTextWithShadow(b, current.name, Game1.smallFont, new Vector2((float)current.bounds.X, (float)current.bounds.Y), color, 1f, -1f, -1, -1, 1f, 3);
                     if (text.Length > 0)
                     {
                         Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2((float)(current.bounds.X + Game1.tileSize / 3) - Game1.smallFont.MeasureString(text).X / 2f, (float)(current.bounds.Y + Game1.tileSize / 2)), color, 1f, -1f, -1, -1, 1f, 3);
                     }
                 }
-                */
-                /*
+                
+                
                 using (List<ClickableComponent>.Enumerator enumerator = this.rightSelectionButtons.GetEnumerator())
                 {
                     while (enumerator.MoveNext())
@@ -534,7 +583,7 @@ namespace Revitalize.Menus
                         ((ClickableTextureComponent)enumerator.Current).draw(b);
                     }
                 }
-                */
+                
             }
             
             if (!this.wizardSource)
@@ -574,7 +623,7 @@ namespace Revitalize.Menus
                     //this.skipIntroButton.draw(b);
                    // Utility.drawTextWithShadow(b, Game1.content.LoadString("Strings\\UI:Character_SkipIntro", new object[0]), Game1.smallFont, new Vector2((float)(this.skipIntroButton.bounds.X + this.skipIntroButton.bounds.Width + Game1.pixelZoom * 2), (float)(this.skipIntroButton.bounds.Y + Game1.pixelZoom * 2)), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
                 }
-                //Utility.drawTextWithShadow(b, Game1.content.LoadString("Strings\\UI:Character_FarmNameSuffix", new object[0]), Game1.smallFont, new Vector2((float)(this.farmnameBox.X + this.farmnameBox.Width + Game1.pixelZoom * 2), (float)(this.farmnameBox.Y + Game1.pixelZoom * 3)), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
+            //    Utility.drawTextWithShadow(b, , Game1.smallFont, new Vector2((float)(this.farmnameBox.X + this.farmnameBox.Width + Game1.pixelZoom * 2), (float)(this.farmnameBox.Y + Game1.pixelZoom * 3)), Game1.textColor, 1f, -1f, -1, -1, 1f, 3);
                 //this.favThingBox.Draw(b);
             }
             if (this.hoverText != null && this.hoverTitle != null && this.hoverText.Count<char>() > 0)
@@ -603,10 +652,16 @@ namespace Revitalize.Menus
                fileName= Path.Combine(v.Remove(0, 8),s);
                 try
                 {
-                    farmsToAdd.Add(new FarmOptionsDataNode(new ClickableTextureComponent(s, new Microsoft.Xna.Framework.Rectangle((int)(point.X * (.25f * ((farmsToAdd.Count/5)+2))), point.Y + 22 * Game1.pixelZoom * 1* ((farmsToAdd.Count % 5)+1), 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, this.getFarmDescription(v), Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(0, 324, 22, 20), (float)Game1.pixelZoom, false), (Game1.content.Load<Map>(fileName))));
+                    if (v.ToString().Contains("FarmIcons")) continue;
+                    Rectangle r = new Rectangle();
+                    if (this.getFarmIcon(v) != Game1.mouseCursors) r = new Microsoft.Xna.Framework.Rectangle(0, 0, 22, 20);
+                    else r= new Microsoft.Xna.Framework.Rectangle(0, 324, 22, 20);
+
+                    farmsToAdd.Add(new FarmOptionsDataNode(new ClickableTextureComponent(s, new Microsoft.Xna.Framework.Rectangle((int)(point.X * (.25f * ((farmsToAdd.Count / 5) + 2))), point.Y + 22 * Game1.pixelZoom * 1 * ((farmsToAdd.Count % 5) + 1), 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, this.getFarmDescription(v), this.getFarmIcon(v), r, (float)Game1.pixelZoom, false), (Game1.content.Load<Map>(fileName))));
                 }
                 catch(Exception e)
                 {
+                    if (e.ToString().Contains("FarmIcons")) continue;
                     Log.AsyncR(e);
                 }
                 }
@@ -621,7 +676,10 @@ namespace Revitalize.Menus
                 fileName = Path.Combine(f.Remove(0,8), Path.GetFileNameWithoutExtension(v));
                 try
                 {
-                    farmsToAdd.Add(new FarmOptionsDataNode(new ClickableTextureComponent(Path.GetFileNameWithoutExtension(v), new Microsoft.Xna.Framework.Rectangle((int)(point.X * (.25f * ((farmsToAdd.Count / 5) + 2))), point.Y + 22 * Game1.pixelZoom * 1 * ((farmsToAdd.Count % 5) + 1), 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, "A custom farm map.", Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(0, 324, 22, 20), (float)Game1.pixelZoom, false), (Game1.content.Load<Map>(fileName))));
+                    Rectangle r = new Rectangle();
+                    if (this.getFarmIcon(v) != Game1.mouseCursors) r = new Microsoft.Xna.Framework.Rectangle(0, 0, 22, 20);
+                    else r =new Microsoft.Xna.Framework.Rectangle(0, 324, 22, 20);
+                    farmsToAdd.Add(new FarmOptionsDataNode(new ClickableTextureComponent(Path.GetFileNameWithoutExtension(v), new Microsoft.Xna.Framework.Rectangle((int)(point.X * (.25f * ((farmsToAdd.Count / 5) + 2))), point.Y + 22 * Game1.pixelZoom * 1 * ((farmsToAdd.Count % 5) + 1), 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, "A custom farm map.", Game1.mouseCursors, r, (float)Game1.pixelZoom, false), (Game1.content.Load<Map>(fileName))));
                     //compile data node
                 }
                 catch(Exception e)
@@ -652,6 +710,23 @@ namespace Revitalize.Menus
             {
                 return "A custom farm map.";
             }
+        }
+
+        public Texture2D getFarmIcon(string s)
+        {
+            string y = s.Remove(0, 8);
+            try
+            {
+              
+                return Game1.content.Load<Texture2D>(Path.Combine(y,"icon"));//File.ReadAllText(Path.Combine(s, "description.txt");
+            }
+
+            catch(Exception e)
+            {
+                Log.AsyncO(e);
+                return Game1.mouseCursors;
+            }
+
         }
     }
 

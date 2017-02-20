@@ -5,4 +5,5 @@ xcopy /e /v /y RevitalizeProjectDecompiled "C:\Users\owner\Documents\Visual Stud
 xcopy /e /v /y RevitalizeProjectCompiled "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Content"
 SET COPYCMD=/Y
 copy "C:\Users\owner\Desktop\games\Stardew_stuff\XNB\UpdateAndRunStardew.bat" "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Revitalize\UpdateAndRunStardew.bat"
+cd "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\"
 start "StardewModdingAPI" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\StardewModdingAPI.exe"

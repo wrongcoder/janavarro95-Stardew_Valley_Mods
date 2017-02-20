@@ -23,6 +23,7 @@ using Revitalize.Locations;
 using Revitalize.Menus;
 using Microsoft.Xna.Framework.Input;
 using xTile;
+using Revitalize.Persistance;
 
 namespace Revitalize
 {
@@ -41,6 +42,8 @@ namespace Revitalize
         public static string key_binding2 = "E";
         public static string path;
         const int range = 1;
+
+      public static  MapSwapData persistentMapSwap;
 
         bool mouseAction;
 
@@ -80,16 +83,10 @@ namespace Revitalize
         /// <param name="e"></param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            
-            foreach(GameLocation v in Game1.locations)
-            {
-                if (v.name == "Farm")
-                {
-                    v.map =(Game1.content.Load<Map>("Maps\\" + Farm.getMapNameFromTypeInt(1)));//change this to  v.map =(Game1.content.Load<Map>("Path.Combine("Maps,"Farms",folderName,"Farm")));
-                    Log.AsyncG("Sucesfully injected custom farm map");
-                }
-            }
-        }
+            Serialize.createDirectories();
+            Util.loadMapSwapData();
+          
+        }//end of function;
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {

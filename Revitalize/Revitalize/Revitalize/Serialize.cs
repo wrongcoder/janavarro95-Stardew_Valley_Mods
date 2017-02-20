@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Revitalize.Objects;
 using Revitalize.Objects.Machines;
+using Revitalize.Persistance;
 using Revitalize.Resources;
 using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
@@ -320,8 +321,27 @@ namespace Revitalize
         }
 
 
+        public static void serializeMapSwapData(MapSwapData d)
+        {
+            if(File.Exists(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"))){
 
+                File.Delete(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"));
+            }
+            Serialize.WriteToJsonFile(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"), (MapSwapData)d);
+        }
 
+        public static MapSwapData parseMapSwapData()
+        {
+            try
+            {
+             return Serialize.ReadFromJsonFile<MapSwapData>(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"));
+            }
+            catch(Exception e)
+            {
+                Log.AsyncR(e);
+                return null;
+            }
+        }
 
 
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Revitalize.Objects;
+using Revitalize.Persistance;
 using Revitalize.Resources;
 using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
@@ -766,7 +767,7 @@ namespace Revitalize
             if (Game1.isRaining)
             {
                 // Log.AsyncC("WHY");
-
+                
                
                 foreach (var v in Lists.trackedTerrainFeatures)
                 {
@@ -788,7 +789,64 @@ namespace Revitalize
             }
         }
 
-    
+    public static void loadMapSwapData()
+        {
+            Map m = new Map();
+            Class1.persistentMapSwap = Serialize.parseMapSwapData();
+            if (Class1.persistentMapSwap == null)
+            {
+                Log.AsyncG("IS NULL");
+                Class1.persistentMapSwap = new MapSwapData();
+            }
+            else
+            {
+                try
+                {
+                    Log.AsyncM(parseOutContent(Class1.persistentMapSwap.mapPath));
+                    m = Game1.content.Load<Map>(parseOutContent(Class1.persistentMapSwap.mapPath));
+                    Log.AsyncG("Successfully loaded custom farm map.");
+                }
+                catch (Exception err)
+                {
+                    m = null;
+                    Log.AsyncM(err);
+
+
+                }
+                if (m != null)
+                {
+                    foreach (GameLocation v in Game1.locations)
+                    {
+                        if (v.name == "Farm")
+                        {
+                            v.map = m;//change this to  v.map =(Game1.content.Load<Map>("Path.Combine("Maps,"Farms",folderName,"Farm")));
+                            Log.AsyncG("Sucesfully injected custom farm map");
+                        }
+                    }
+                }
+                else
+                {
+                    Log.AsyncM("WTF");
+                }
+            }
+        }
+
+        public static string parseOutContent(string s)
+        {
+            return s.Remove(0, 8);
+        }
+
+        public static void removeAllWaterTilesFromMap(GameLocation c)
+        {
+            for (int i = 0; i < c.map.Layers[0].LayerWidth; i++)
+            {
+                for (int j = 0; j < c.map.Layers[0].LayerHeight; j++)
+                {
+                        c.waterTiles[i, j] = false; 
+                }
+            }
+            Log.AsyncC("Removed All Water Tiles from "+c.name );
+        }
 
     }
 }

@@ -17,6 +17,7 @@ namespace Revitalize.Resources.DataNodes
         {
             clicky = component;
             map = m;
+          
         }
 
 
