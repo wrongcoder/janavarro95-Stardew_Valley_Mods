@@ -123,7 +123,6 @@ namespace Revitalize
 
             if (mouseAction == true) return;
 
-
             var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
 
@@ -316,6 +315,11 @@ namespace Revitalize
                 {
                     Game1.showRedMessage("Can't change farm map here!");
                 }
+            }
+
+            if (e.KeyPressed.ToString() == "P")
+            {
+                Game1.showEndOfNightStuff();
             }
 
 
