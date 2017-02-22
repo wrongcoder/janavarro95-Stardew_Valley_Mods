@@ -35,6 +35,7 @@ namespace ClassLibrary1
             if (!File.Exists(mylocation)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
                Monitor.Log("The config file for AutoSpeed was not found, guess I'll create it...",LogLevel.Warn);
+                MyWritter();
             }
             else
             {

@@ -18,7 +18,7 @@ namespace DailyQuest_Anywhere
         public override void Entry(IModHelper helper)
         {
             //set up all of my events here
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
         }
 
@@ -38,7 +38,7 @@ namespace DailyQuest_Anywhere
             //DataLoader_Settings(); //update the key if players changed it while playing.
         }
 
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             game_loaded = true;
             DataLoader_Settings();

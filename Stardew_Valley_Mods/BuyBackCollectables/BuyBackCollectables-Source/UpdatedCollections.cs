@@ -376,6 +376,7 @@ namespace StardewValley.Menus
 
         public override void draw(SpriteBatch b)
         {
+            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, null, false);
             using (List<ClickableTextureComponent>.Enumerator enumerator = this.sideTabs.GetEnumerator())
             {
                 while (enumerator.MoveNext())
@@ -419,6 +420,7 @@ namespace StardewValley.Menus
             {
                 b.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 0, 16, 16)), Color.White * Game1.mouseCursorTransparency, 0f, Vector2.Zero, (float)Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
             }
+            
         }
     }
 }

@@ -842,7 +842,7 @@ namespace Stardew_Music_Expansion_API
 
         public override void Entry(IModHelper helper)
         {
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad+= PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
@@ -913,7 +913,7 @@ namespace Stardew_Music_Expansion_API
             night_time = Game1.getModeratelyDarkTime();  //not sure I even really use this...
             music_selector();
         }
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             DataLoader();
             MyWritter();
@@ -3183,21 +3183,6 @@ namespace Stardew_Music_Expansion_API
 
                 mystring3[10] = "Prioritize seasonal music on the Farm? If true the game will check for seasonal music before checking for locational music.";
                 mystring3[11] = farm_player.ToString();
-                //   mystring3[8] = "Clean out charges mail?: Get rid of the annoying We charged X gold for your health fees, etc.";
-                //    mystring3[9] = wipe_mail.ToString();
-
-                //mystring3[8] = "Keep Money?: True: Don't be charged for passing out.";
-                //mystring3[9] = protect_money.ToString();
-
-                //mystring3[10] = "Keep stamina when staying up? When the farmer passes out at 6, should their stamina be their stamina before collapsing?";
-                //mystring3[11] = persistant_stamina.ToString();
-                //mystring3[12] = "Keep health when staying up? When the farmer passes out at 6, should their health be their health before collapsing?";
-                //mystring3[13] = persistant_health.ToString();
-
-                /*
-                mystring3[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
-                mystring3[18] = nightly_stamina_value.ToString(); //this should save the player's stamina upon sleeping.
-                */
 
                 File.WriteAllLines(mylocation3, mystring3);
             }
@@ -3223,22 +3208,6 @@ namespace Stardew_Music_Expansion_API
 
                 mystring3[10] = "Prioritize seasonal music on the Farm? If true the game will check for seasonal music before checking for locational music.";
                 mystring3[11] = farm_player.ToString();
-
-                // mystring3[8] = "Clean out charges mail?: Get rid of the annoying We charged X gold for your health fees, etc.";
-                //  mystring3[9] = wipe_mail.ToString();
-
-                //mystring3[8] = "Keep Money?: True: Don't be charged for passing out.";
-                //mystring3[9] = protect_money.ToString();
-
-                //mystring3[10] = "Keep stamina when staying up? When the farmer passes out at 6, should their stamina be their stamina before collapsing?";
-                //mystring3[11] = persistant_stamina.ToString();
-                //mystring3[12] = "Keep health when staying up? When the farmer passes out at 6, should their health be their health before collapsing?";
-                //mystring3[13] = persistant_health.ToString();
-
-                /*
-                mystring3[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
-                mystring3[18] = nightly_stamina_value.ToString(); //this should save the player's stamina upon sleeping.
-                */
 
                 File.WriteAllLines(mylocation3, mystring3);
             }

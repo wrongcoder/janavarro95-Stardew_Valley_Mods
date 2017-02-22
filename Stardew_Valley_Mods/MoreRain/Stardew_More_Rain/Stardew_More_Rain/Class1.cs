@@ -23,10 +23,9 @@ namespace MoreRain
         public override void Entry(IModHelper helper)
         {
            // set_up();
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             DataLoader();
-            MyWritter();
         }
 
         public void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
@@ -35,7 +34,7 @@ namespace MoreRain
             New_day_Update();
         }
 
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             gameloaded = true;
             
@@ -147,6 +146,7 @@ namespace MoreRain
                 rainint = 15;
                 thunderint = 5;
                 suppress_log = true;
+                MyWritter();
             }
             else
             {

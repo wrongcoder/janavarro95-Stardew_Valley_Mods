@@ -53,7 +53,7 @@ namespace BuildHealth
 
             StardewModdingAPI.Events.GameEvents.OneSecondTick += Tool_Cleanup;
             StardewModdingAPI.Events.GameEvents.UpdateTick += ToolCallBack;
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += LoadingCallBack;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += LoadingCallBack;
             StardewModdingAPI.Events.GameEvents.UpdateTick += Collapse_Callback;
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += damage_check;

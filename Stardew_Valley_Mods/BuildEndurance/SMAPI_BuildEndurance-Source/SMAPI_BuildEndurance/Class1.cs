@@ -40,7 +40,7 @@ namespace BuildEndurance
 
             StardewModdingAPI.Events.GameEvents.OneSecondTick += Tool_Cleanup;
             StardewModdingAPI.Events.GameEvents.UpdateTick += ToolCallBack;
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += LoadingCallBack;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += LoadingCallBack;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += SleepCallback;
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += Exhaustion_callback;

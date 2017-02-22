@@ -31,12 +31,12 @@ namespace Save_Anywhere_V2
         {
             try {
                 StardewModdingAPI.Events.ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
-                StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+                StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
                 StardewModdingAPI.Events.GameEvents.UpdateTick += Warp_Check;
                 StardewModdingAPI.Events.GameEvents.UpdateTick += ShippingCheck;
                 StardewModdingAPI.Events.TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
                 StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
-                StardewModdingAPI.Events.TimeEvents.OnNewDay += TimeEvents_OnNewDay;
+                StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
                 Command.RegisterCommand("include_types", "Includes types to serialize").CommandFired += Command_IncludeTypes;
                 mod_path = Helper.DirectoryPath;
                 npc_key_value_pair = new Dictionary<string, string>();
@@ -47,7 +47,7 @@ namespace Save_Anywhere_V2
             }
         }
         //done
-        private void TimeEvents_OnNewDay(object sender, EventArgsNewDay e)
+        private void TimeEvents_OnNewDay(object sender, EventArgsIntChanged e)
         {
             try {
                 //Log.Info("Day of Month Changed");
@@ -701,7 +701,7 @@ namespace Save_Anywhere_V2
         }
 
         //done
-        private void PlayerEvents_LoadedGame(object sender, EventArgsLoadedGameChanged e)
+        private void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             try {
                 Save_Anywhere_V2.Save_Utilities.Player_Utilities.load_player_info();

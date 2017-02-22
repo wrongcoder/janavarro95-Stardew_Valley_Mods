@@ -13,10 +13,10 @@ namespace NoMorePets
         public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
         }
 
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             game_loaded = true;
         }

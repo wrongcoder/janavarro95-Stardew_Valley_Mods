@@ -74,6 +74,9 @@ namespace Revitalize
             hasLoadedTerrainList = false;
             path = Helper.DirectoryPath;
             newLoc = new List<GameLoc>();
+
+
+            Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
         }
 
         /// <summary>

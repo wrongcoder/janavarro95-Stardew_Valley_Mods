@@ -33,7 +33,8 @@ namespace HappyBirthday
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Day_Update;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame1;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             npc_name_list = new List<string>();
             possible_birthday_gifts = new List<Item>();
@@ -42,6 +43,11 @@ namespace HappyBirthday
             {
                 Directory.CreateDirectory(birthdays_path);
             }
+        }
+
+        private void PlayerEvents_LoadedGame1(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        {
+
         }
 
         public void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
@@ -69,7 +75,7 @@ namespace HappyBirthday
             //DataLoader_Settings(); //update the key if players changed it while playing.
         }
 
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             game_loaded = true;
             DataLoader_Birthday();
@@ -85,22 +91,33 @@ namespace HappyBirthday
             if (Game1.player == null) return;
             if (game_loaded == false) return;
             if (Game1.player.isMoving()==true && once == false)
+
             {
                //Log.AsyncM("Is it my birthday? "+isplayersbirthday());
                 if (isplayersbirthday() == true)
                 {
                     OmegasisUtility.Messages.showStarMessage("It's your birthday today! Happy birthday!");
-
                     //  Game1.addMailForTomorrow("birthdayMom", false, false);
                     //  Game1.addMailForTomorrow("birthdayDad", false, false);
                     //  Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %");
                     //  Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %");
                     Game1.mailbox.Enqueue("birthdayMom");
                     Game1.mailbox.Enqueue("birthdayDad");
+
+                    try
+                    {
+                        updateNPCList();
+                    }
+                    catch(Exception eee)
+                    {
+                        Log.AsyncR(eee);
+                    }
                     foreach (var location in Game1.locations)
                     {
+                  //      Log.AsyncC(location.name);
                         foreach (NPC npc in location.characters)
                         {
+                    //        Log.AsyncC(npc.name);
                             try
                             {
                                 if (npc is StardewValley.Characters.Cat || npc is StardewValley.Characters.Child || npc is StardewValley.Characters.Dog || npc is StardewValley.Characters.Horse || npc is StardewValley.Characters.Junimo || npc is StardewValley.Characters.Pet) continue;
@@ -164,6 +181,8 @@ namespace HappyBirthday
             {
                 if (isplayersbirthday()==true)
                 {
+
+                   // Log.AsyncC("ITS MY BIRTDHAY");
                     try
                     {
                         //Game1.currentSpeaker.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[Game1.currentSpeaker.name], true, false);
@@ -171,8 +190,17 @@ namespace HappyBirthday
                         {
                             if (ehh == Game1.currentSpeaker.name)
                             {
-                                birthday_gift();
-                                npc_name_list.Remove(Game1.currentSpeaker.name);
+                                try
+                                {
+                                    birthday_gift();
+                               //     Log.AsyncG("GOT THE GIFT");
+                                    npc_name_list.Remove(Game1.currentSpeaker.name);
+                                }
+                                catch(Exception r)
+                                {
+                                    Log.AsyncR(r);
+                                }
+                               
                             }
                         }
                     }
@@ -190,6 +218,7 @@ namespace HappyBirthday
                     }
                 }
             }
+
             if (birthday_gift_to_receive != null && Game1.currentSpeaker==null)
             {
                 while (birthday_gift_to_receive.Name=="Error Item"|| birthday_gift_to_receive.Name=="Rock"|| birthday_gift_to_receive.Name == "???")
@@ -213,21 +242,35 @@ namespace HappyBirthday
 
         public void Day_Update(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
         {
-          //  Log.AsyncC("is this running?");
+            //  Log.AsyncC("is this running?");
             // foreach (var bleh in npc_name_list) npc_name_list.Remove(bleh);
+
+        }
+
+
+        public void updateNPCList()
+
+        {
+            //Log.AsyncO("Step 1");
+            npc_name_list.Clear();
+           
             foreach (var location in Game1.locations)
             {
-                foreach (NPC npc in location.characters)
+             //   Log.AsyncO("Step 2" + location.name);
+                foreach (var npc in location.characters)
                 {
-                    if (npc is StardewValley.Characters.Cat || npc is StardewValley.Characters.Child || npc is StardewValley.Characters.Dog || npc is StardewValley.Characters.Horse || npc is StardewValley.Characters.Junimo || npc is StardewValley.Characters.Pet) return;
-                    if (npc is StardewValley.Monsters.Bat || npc is StardewValley.Monsters.BigSlime || npc is StardewValley.Monsters.Bug || npc is StardewValley.Monsters.Cat || npc is StardewValley.Monsters.Crow || npc is StardewValley.Monsters.Duggy || npc is StardewValley.Monsters.DustSpirit || npc is StardewValley.Monsters.Fireball || npc is StardewValley.Monsters.Fly || npc is StardewValley.Monsters.Ghost || npc is StardewValley.Monsters.GoblinPeasant || npc is StardewValley.Monsters.GoblinWizard || npc is StardewValley.Monsters.GreenSlime || npc is StardewValley.Monsters.Grub || npc is StardewValley.Monsters.LavaCrab || npc is StardewValley.Monsters.MetalHead || npc is StardewValley.Monsters.Monster || npc is StardewValley.Monsters.Mummy || npc is StardewValley.Monsters.RockCrab || npc is StardewValley.Monsters.RockGolem || npc is StardewValley.Monsters.Serpent || npc is StardewValley.Monsters.ShadowBrute || npc is StardewValley.Monsters.ShadowGirl || npc is StardewValley.Monsters.ShadowGuy || npc is StardewValley.Monsters.ShadowShaman || npc is StardewValley.Monsters.Skeleton || npc is StardewValley.Monsters.SkeletonMage || npc is StardewValley.Monsters.SkeletonWarrior || npc is StardewValley.Monsters.Spiker || npc is StardewValley.Monsters.SquidKid) return;
-                    if (npc_name_list.Contains(npc.name)) continue;
-                    npc_name_list.Add(npc.name);
-                    
+                //    Log.AsyncO("Step 3  " + npc.name);
+                    if (npc is StardewValley.Characters.Cat || npc is StardewValley.Characters.Child || npc is StardewValley.Characters.Dog || npc is StardewValley.Characters.Horse || npc is StardewValley.Characters.Junimo || npc is StardewValley.Characters.Pet) continue;
+                    if (npc is StardewValley.Monsters.Bat || npc is StardewValley.Monsters.BigSlime || npc is StardewValley.Monsters.Bug || npc is StardewValley.Monsters.Cat || npc is StardewValley.Monsters.Crow || npc is StardewValley.Monsters.Duggy || npc is StardewValley.Monsters.DustSpirit || npc is StardewValley.Monsters.Fireball || npc is StardewValley.Monsters.Fly || npc is StardewValley.Monsters.Ghost || npc is StardewValley.Monsters.GoblinPeasant || npc is StardewValley.Monsters.GoblinWizard || npc is StardewValley.Monsters.GreenSlime || npc is StardewValley.Monsters.Grub || npc is StardewValley.Monsters.LavaCrab || npc is StardewValley.Monsters.MetalHead || npc is StardewValley.Monsters.Monster || npc is StardewValley.Monsters.Mummy || npc is StardewValley.Monsters.RockCrab || npc is StardewValley.Monsters.RockGolem || npc is StardewValley.Monsters.Serpent || npc is StardewValley.Monsters.ShadowBrute || npc is StardewValley.Monsters.ShadowGirl || npc is StardewValley.Monsters.ShadowGuy || npc is StardewValley.Monsters.ShadowShaman || npc is StardewValley.Monsters.Skeleton || npc is StardewValley.Monsters.SkeletonMage || npc is StardewValley.Monsters.SkeletonWarrior || npc is StardewValley.Monsters.Spiker || npc is StardewValley.Monsters.SquidKid) continue;
+                    if (npc_name_list.Contains(npc.name))
+                    {
+                        continue;
                     }
+                    npc_name_list.Add(npc.name);
+              //      Log.AsyncO("Added in " + npc.name);
+                }
                 //Log.AsyncM("NO SERIOUSLY");
             }
-
         }
 
         public virtual void birthday_gift()

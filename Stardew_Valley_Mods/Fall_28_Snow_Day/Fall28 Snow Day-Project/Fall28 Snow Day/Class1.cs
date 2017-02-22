@@ -10,7 +10,7 @@ namespace Fall28_Snow_Day
 {
     public class Class1:Mod
     {
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
         }
@@ -19,7 +19,7 @@ namespace Fall28_Snow_Day
         {
             if (StardewValley.Game1.dayOfMonth == 27 && Game1.IsFall == true)
             {
-                Log.Success("Weather checker now!!!");
+              //  Log.Success("Weather checker now!!!");
                 Game1.weatherForTomorrow = Game1.weather_snow;
             }
         }

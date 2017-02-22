@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using StardewModdingAPI;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +31,18 @@ namespace Save_Anywhere_V2.Save_Utilities
              //   Game1.showEndOfNightStuff(); //shows the nightly shipping menu.
             //    Game1.getFarm().shippingBin.Clear(); //clears out the shipping bin to prevent exploits
             }
-            
-            Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu(); //This command is what allows the player to save anywhere as it calls the saving function.
+
+            try
+            {
+                Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
+            }
+            catch(Exception rrr)
+            {
+                Game1.showRedMessage("Can't save here. See log for error.");
+                Log.AsyncR(rrr);
+            }
+
+           // Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu(); //This command is what allows the player to save anywhere as it calls the saving function.
 
             Save_Anywhere_V2.Save_Utilities.Player_Utilities.save_player_info();
             Save_Anywhere_V2.Save_Utilities.Animal_Utilities.save_animal_info();

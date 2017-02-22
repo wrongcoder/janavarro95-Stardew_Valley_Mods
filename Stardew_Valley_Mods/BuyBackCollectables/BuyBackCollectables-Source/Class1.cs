@@ -19,7 +19,7 @@ namespace Buy_Back_Collectables
         public override void Entry(IModHelper helper)
         {
             //set up all of my events here
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad+= PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             StardewModdingAPI.Events.GameEvents.OneSecondTick += GameEvents_OneSecondTick;
             debugList = new List<string>();
@@ -51,7 +51,7 @@ namespace Buy_Back_Collectables
             }
         }
 
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             game_loaded = true;
             DataLoader_Settings();

@@ -7,6 +7,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using System;
@@ -264,7 +265,15 @@ namespace StardewValley.Menus
                         {
                             if (this.saveGameMenu != null)
                                 return;
-                            this.saveGameMenu = new SaveGameMenu();
+                            try
+                            {
+                                Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
+                            }
+                            catch (Exception rrr)
+                            {
+                                Game1.showRedMessage("Can't save here. See log for error.");
+                                Log.AsyncR(rrr);
+                            }
                             return;
                         }
                     }

@@ -14,7 +14,7 @@ namespace Museum_Rearranger
         public override void Entry(IModHelper helper)
         {
             //set up all of my events here
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
         }
 
@@ -38,7 +38,7 @@ namespace Museum_Rearranger
             }
         }
 
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             game_loaded = true;
             showMenu = true;
