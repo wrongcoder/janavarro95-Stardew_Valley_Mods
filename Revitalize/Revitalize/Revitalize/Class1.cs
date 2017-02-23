@@ -24,6 +24,7 @@ using Revitalize.Menus;
 using Microsoft.Xna.Framework.Input;
 using xTile;
 using Revitalize.Persistance;
+using Revitalize.Draw;
 
 namespace Revitalize
 {
@@ -53,6 +54,9 @@ namespace Revitalize
       public static  bool hasLoadedTerrainList;
         List<GameLoc> newLoc;
 
+
+        bool gameLoaded;
+
         public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
@@ -70,14 +74,28 @@ namespace Revitalize
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
 
+            StardewModdingAPI.Events.GraphicsEvents.OnPreRenderHudEvent += GraphicsEvents_OnPreRenderHudEvent;
+            
+
             //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
             hasLoadedTerrainList = false;
             path = Helper.DirectoryPath;
             newLoc = new List<GameLoc>();
 
 
+            PlayerVariables.initializePlayerVariables();
             Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
         }
+
+        private void GraphicsEvents_OnPreRenderHudEvent(object sender, EventArgs e)
+        {
+            if (gameLoaded == true)
+            {
+                ThingsToDraw.drawMagicMeter();
+            }
+        }
+
+
 
         /// <summary>
         /// Used to load in information post load such as custom farm maps.
@@ -88,7 +106,7 @@ namespace Revitalize
         {
             Serialize.createDirectories();
             Util.loadMapSwapData();
-          
+            gameLoaded = true; 
         }//end of function;
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
@@ -111,6 +129,8 @@ namespace Revitalize
                 Util.WaterAllCropsInAllLocations();
             }
 
+
+        
         }
 
     
@@ -317,9 +337,10 @@ namespace Revitalize
                 }
             }
 
-            if (e.KeyPressed.ToString() == "P")
+            if (e.KeyPressed.ToString() == "V")
             {
-                Game1.showEndOfNightStuff();
+                // Game1.showEndOfNightStuff();
+                PlayerVariables.CurrentMagic -= 5;
             }
 
 
