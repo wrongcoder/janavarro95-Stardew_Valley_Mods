@@ -1,7 +1,38 @@
-# Stardew_Valley_Mods
+The beginnings of Stardew Valley Revitalize.
 
-Notice!!!: As of July 8th 2016 All of my old work has been put into the Stardew Valley Mods folder and can be found there. I have started a new modding approach based off my original goal of modding, making content I actually want to see in the game. This approach could include anything from small 20 line code projects to something a bit more serious. These more personal projects can be found in the Stadew Valley Mods-Back to Basics folder if you want them.
++:add
+~:Edit
+-:Remove
 
-Here is a list/home of all of my works that I have done for Stardew Valley. Feel free to use them however you like, and if you use my code in making another mod please make sure to give credit to me as it helps get the word out about my work. Seriously, go have fun and stop reading this.
+Implemented.
 
-You have credit to do whatever you wish with these files incase I go MIA for some reason. Untill then I'll handle them myself.
+0.3.0 2/22/17
++crops anywhere: Crops can now be placed anywhere where dirt can be tilled.
++Custom Seeds: Now exist in seperate .xnb
+~Objects.xnb: Add in new crops
++Crops
+  +Pink Turnip:Spring
+  +Blue Charm:Fall
++Farm Swap Menu: Allows the user to have multiple custom farms loaded in without replacing original farm.xnb files, and allows them to choose one.
++Custom Inventory Game Menu: Will allow for more edits of the game menu in the future. Possibly adding in more tabs, and equipment options.
++Gift Packages: Now receive multiple objects from a single item. Good for gifts/rewards/etc.
++Shop Objects: Objects that can be placed in the world, and when interacted with call a shop menu.
+
+
+0.2.0 Alpha 12/30/16 2:52 AM
++Quarry machines. Drills I suppose you could call them?
+
+0.1.0 Alpha 12/15/16
++Custom Shop Objects
++Ground work done for new machines
++Customizable lights
++Preset Lighting Class with 100+ different light colors.
+
+Planned:
+TBD
+More Crops
+More Weapons
+More Areas?
+More Machines: Assembly Lines, Power, Pollution, etc
+Verbose Magic System: Runes, More Junimos, Magic Spells/Books, Crystals, Alchemy, Potions
+Mail system? Sending mail to npcs for friendship+gifts?
