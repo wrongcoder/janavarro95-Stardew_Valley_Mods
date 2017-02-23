@@ -44,9 +44,11 @@ namespace Revitalize
         public static string path;
         const int range = 1;
 
+        public static MouseState mState;
+
       public static  MapSwapData persistentMapSwap;
 
-        bool mouseAction;
+      public static bool mouseAction;
 
         bool gametick;
 
@@ -55,7 +57,7 @@ namespace Revitalize
         List<GameLoc> newLoc;
 
 
-        bool gameLoaded;
+      public static  bool gameLoaded;
 
         public override void Entry(IModHelper helper)
         {
@@ -91,7 +93,7 @@ namespace Revitalize
         {
             if (gameLoaded == true)
             {
-                ThingsToDraw.drawMagicMeter();
+                ThingsToDraw.drawAllHuds();
             }
         }
 
@@ -128,48 +130,40 @@ namespace Revitalize
                 Lists.loadAllLists();
                 Util.WaterAllCropsInAllLocations();
             }
-
-
-        
         }
-
-    
+   
 
         private void ControlEvents_MouseChanged(object sender, EventArgsMouseStateChanged e)
         {
           
             if (Game1.activeClickableMenu != null) return;
             if (Game1.eventUp == true) return;
-
-            if (mouseAction == true) return;
-
-            var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-
+             mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
             if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed || mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 if (Game1.player.ActiveObject != null)
                 {
-                    mouseAction = true;
-
                     string s = Game1.player.ActiveObject.getCategoryName();
                    // Log.AsyncC(s);
                     if (Dictionaries.interactionTypes.ContainsKey(s))
                     {
                         Dictionaries.interactFunction f;
                         Dictionaries.interactionTypes.TryGetValue(s,out f);
-                        f.Invoke();
+                        if (mouseAction == false)
+                        {
+                            f.Invoke();
+                            mouseAction = true;
+                            return;
+                        }  
                     }
-                    
-
                 }
                 else {
                     return;
                 }
                 //this.minutesUntilReady = 30;
             }
-
-            if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released || mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
+            else if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Released && mState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
             {
                 mouseAction = false;
                 //this.minutesUntilReady = 30;
@@ -302,6 +296,7 @@ namespace Revitalize
                 objShopList.Add(new StardewValley.Object(497, 1));
                 objShopList.Add(new StardewValley.Object(498, 1));
                 objShopList.Add(new StardewValley.Object(770, 1));
+                objShopList.Add(new Spell(0, Vector2.Zero, new Resources.DataNodes.SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.showRedMessage),1)));
                 foreach (var v in objShopList)
                 {
                     newInventory.Add(v);
@@ -340,7 +335,7 @@ namespace Revitalize
             if (e.KeyPressed.ToString() == "V")
             {
                 // Game1.showEndOfNightStuff();
-                PlayerVariables.CurrentMagic -= 5;
+                Magic.MagicMonitor.consumeMagic(5);
             }
 
 

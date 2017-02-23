@@ -761,6 +761,24 @@ namespace Revitalize
             Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (ExtraSeeds)d);
         }
 
+        public static Spell parseSpell(string data)
+        {
+
+            dynamic obj = JObject.Parse(data);
+            Spell d = new Spell();
+            d.parentSheetIndex = obj.parentSheetIndex;
+            Spell spell = new Spell();
+            bool b = Dictionaries.spellList.TryGetValue(d.parentSheetIndex, out spell);
+
+            Spell k =(Spell) spell.getOne();
+            if (b == true) return k;
+            else return null;
+
+        }
+        public static void serializeSpell(Item d)
+        {
+            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (Spell)d);
+        }
 
 
         public static Light parseLight(string data)

@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 using Revitalize.Resources.DataNodes;
+using Revitalize.Objects;
+using Microsoft.Xna.Framework;
+using StardewModdingAPI;
 
 namespace Revitalize.Resources
 {
@@ -20,9 +23,9 @@ namespace Revitalize.Resources
 
         public static Dictionary<string, SerializerDataNode> acceptedTypes;
         public static Dictionary<string, interactFunction> interactionTypes;
-        public static   Dictionary<string, QuarryDataNode> quarryList;
+        public static Dictionary<string, QuarryDataNode> quarryList;
         public static Dictionary<string, SeedDataNode> seedList;
-
+        public static Dictionary<int, Spell> spellList;
 
         public static void initializeDictionaries()
         {
@@ -30,6 +33,7 @@ namespace Revitalize.Resources
             quarryList = new Dictionary<string, QuarryDataNode>();
             interactionTypes = new Dictionary<string, interactFunction>();
             seedList = new Dictionary<string, SeedDataNode>();
+            spellList = new Dictionary<int, Spell>();
             fillAllDictionaries();
        }
 
@@ -39,6 +43,7 @@ namespace Revitalize.Resources
             addAllInteractionTypes();
             fillQuaryList();
             fillSeedList();
+            fillSpellList();
         }
      
 
@@ -51,6 +56,7 @@ namespace Revitalize.Resources
             acceptedTypes.Add("Revitalize.Objects.Machines.Spawner", new SerializerDataNode(new ser(Serialize.serializeSpawner), new par(Serialize.parseSpawner), new world(Serialize.serializeSpawnerFromWorld)));
             acceptedTypes.Add("Revitalize.Objects.GiftPackage", new SerializerDataNode(new ser(Serialize.serializeGiftPackage), new par(Serialize.parseGiftPackage),null));
             acceptedTypes.Add("Revitalize.Objects.ExtraSeeds", new SerializerDataNode(new ser(Serialize.serializeExtraSeeds), new par(Serialize.parseExtraSeeds),null));
+            acceptedTypes.Add("Revitalize.Objects.Spell", new SerializerDataNode(new ser(Serialize.serializeSpell), new par(Serialize.parseSpell), null));
         }
 
         public static void addAllInteractionTypes()
@@ -58,8 +64,10 @@ namespace Revitalize.Resources
             interactionTypes.Add("Seed", Util.plantCropHere); //for generic stardew seeds
             interactionTypes.Add("Seeds", Util.plantExtraCropHere); //for modded stardew seeds
             interactionTypes.Add("Gift Package", Util.getGiftPackageContents);
+            interactionTypes.Add("Spell", Magic.MagicFunctions.castMagic);
 
         }
+
 
        
 
@@ -83,6 +91,18 @@ namespace Revitalize.Resources
             seedList.Add("Blue Charm Seeds", new SeedDataNode(2, 2));
         }
 
+        public static void fillSpellList()
+        {
+            Spell book;
+            book = new Spell(0, Vector2.Zero, new SpellFunctionDataNode(null,1));
+            book.magicToCast.Clear();
+            book.magicToCast.Add(new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.showRedMessage), 1));
+            spellList.Add(book.parentSheetIndex, book);
+            Log.AsyncC(book.parentSheetIndex);
+
+
+
+        }
 
     }
 }

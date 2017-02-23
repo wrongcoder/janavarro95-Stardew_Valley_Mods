@@ -55,6 +55,9 @@
     <Compile Include="Draw\ThingsToDraw.cs" />
     <Compile Include="GameLoc.cs" />
     <Compile Include="Locations\ModTown.cs" />
+    <Compile Include="Magic\MagicFunctions.cs" />
+    <Compile Include="Magic\MagicMonitor.cs" />
+    <Compile Include="Magic\Spell.cs" />
     <Compile Include="Menus\Billboard.cs" />
     <Compile Include="Menus\FarmOptionsMenu.cs" />
     <Compile Include="Menus\GameMenu.cs" />
@@ -74,6 +77,7 @@
     <Compile Include="Resources\DataNodes\FarmOptionsDataNode.cs" />
     <Compile Include="Resources\DataNodes\SeedDataNode.cs" />
     <Compile Include="Resources\DataNodes\SerializerDataNode.cs" />
+    <Compile Include="Resources\DataNodes\SpellFunctionDataNode.cs" />
     <Compile Include="Resources\DataNodes\TrackedTerrainDataNode.cs" />
     <Compile Include="Resources\DataNodes\TrackedTerrainDummyDataNode.cs" />
     <Compile Include="Resources\Dictionaries.cs" />
@@ -84,7 +88,6 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder1\" />
     <Folder Include="Persistance\Configs\" />
     <Folder Include="TerrainFeatures\" />
   </ItemGroup>
