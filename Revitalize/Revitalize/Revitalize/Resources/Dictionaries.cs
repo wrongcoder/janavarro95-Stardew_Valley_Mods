@@ -93,12 +93,14 @@ namespace Revitalize.Resources
 
         public static void fillSpellList()
         {
+            
             Spell book;
+            //add in a single spell book to my system
             book = new Spell(0, Vector2.Zero, new SpellFunctionDataNode(null,1));
             book.magicToCast.Clear();
             book.magicToCast.Add(new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.showRedMessage), 1));
             spellList.Add(book.parentSheetIndex, book);
-            Log.AsyncC(book.parentSheetIndex);
+            //finish adding in a single spell book
 
 
 
