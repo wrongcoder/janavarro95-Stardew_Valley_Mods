@@ -8,6 +8,7 @@ using StardewModdingAPI;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using System.IO;
+using StardewValley.Locations;
 
 namespace MultipleBedLocations
 {
@@ -36,6 +37,7 @@ namespace MultipleBedLocations
         Dictionary<string, List<Point>> bedLocations;
      public bool hasFarmerLeftPoint;
         public static PlayerData playerData;
+        public static bool sleepingWarp;
 
         public static bool warpOnce;
 
@@ -44,10 +46,11 @@ namespace MultipleBedLocations
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.GraphicsEvents.OnPreRenderHudEvent += warpPlayer;
+            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             warpOnce = false;
             hasFarmerLeftPoint = true;
             playerData = new PlayerData();
-
+            sleepingWarp = false;
             bedLocations = new Dictionary<string, List<Point>>();
 
             bedLocations.Add("BusStop", new List<Point>()
@@ -62,6 +65,21 @@ namespace MultipleBedLocations
            
         }
 
+        private void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
+        {
+            if (Game1.player == null) return;
+
+            if((Game1.player.currentLocation is FarmHouse)){
+                File.Delete(Path.Combine(playerDataPath, fileName));
+            }
+
+            if (sleepingWarp == true)
+            {
+                loadConfigForWarp();
+                sleepingWarp = false;
+            }
+        }
+
         private void warpPlayer(object sender, EventArgs e)
         {
             if (warpOnce == false)
@@ -69,7 +87,7 @@ namespace MultipleBedLocations
                 if (Game1.player.currentLocation.name != playerData.gameLocationName && Game1.player.getTileX() != playerData.xPos && playerData.yPos != Game1.player.getTileY() && playerData.gameLocationName != "")
                 {
                     hasFarmerLeftPoint = false;
-                    Game1.warpFarmer(playerData.gameLocationName, playerData.xPos, playerData.yPos, false);
+                    Game1.warpFarmer(playerData.gameLocationName, playerData.xPos, playerData.yPos, playerData.direction);
                     Game1.player.faceDirection(playerData.direction);
                     Game1.player.facingDirection = playerData.direction;
                 }
@@ -83,6 +101,26 @@ namespace MultipleBedLocations
                 warpOnce = true;
             }
         }
+
+        public static void loadConfigForWarp()
+        {
+            try
+            {
+                string[] fileContents = File.ReadAllLines(Path.Combine(playerDataPath, fileName));
+                playerData.gameLocationName = fileContents[1];
+                playerData.xPos = Convert.ToInt32(fileContents[3]);
+                playerData.yPos = Convert.ToInt32(fileContents[5]);
+                playerData.direction = Convert.ToInt32(fileContents[7]);
+                Game1.warpFarmer(playerData.gameLocationName, playerData.xPos, playerData.yPos, false);
+                Game1.player.faceDirection(0);
+            }
+            catch (Exception err)
+            {
+
+            }
+            warpOnce = false;
+        }
+
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
@@ -143,7 +181,7 @@ namespace MultipleBedLocations
         public void question(Point p)
         {
             Log.AsyncC("YAY YOU ARE HERE!");
-            Question.createQuestionDialogue("Sleep here?", new Response[2] { new Response("Yes", "Yes"), new Response("No", "No") }, (a, b) =>
+            Question.createQuestionDialogue("Sleep here?", new Response[3] { new Response("Yes", "Yes"), new Response("No", "No"), new Response("ElseWhere","ElseWhere") }, (a, b) =>
             {
               if (b.ToString() == "Yes")
                 {                  
@@ -155,10 +193,75 @@ namespace MultipleBedLocations
                     Log.AsyncG(b.ToString());
                     return "No";
                 }
+                if (b.ToString() == "ElseWhere")
+                {
+
+                    return "ElseWhere";
+                }
                 Log.AsyncG("NULL");
                 return "";
             });
 
+        }
+
+        public static void sleepHere(string mapLocationName,Point p)
+        {
+            Log.AsyncC(Path.Combine(Class1.playerDataPath, Class1.fileName));
+            try
+            {
+                string[] fileContents = new string[8]
+                {
+                            "Location Name:",
+                          mapLocationName,
+                            "xPosition:",
+                          p.X.ToString(),
+                            "yPosition",
+                          p.Y.ToString(),
+                           "Direction",
+                           Game1.player.facingDirection.ToString()
+                };
+                File.WriteAllLines(Path.Combine(Class1.playerDataPath, Class1.fileName), fileContents);
+            }
+            catch (Exception e)
+            {
+                Log.AsyncColour(e, ConsoleColor.DarkCyan);
+            }
+            Game1.player.currentLocation.lastQuestionKey = "";
+            Farmer.doSleepEmote(Game1.player);
+            Game1.NewDay(600f);
+            Game1.player.mostRecentBed = StardewValley.Utility.PointToVector2(p);
+        }
+
+        public static void sleepElseWhere(string mapLocationName, Point p, int facingDirection)
+        {
+            Game1.warpFarmer(mapLocationName, p.X, p.Y, Game1.player.facingDirection);
+            Log.AsyncC(Path.Combine(Class1.playerDataPath, Class1.fileName));
+            try
+            {
+                string[] fileContents = new string[8]
+                {
+                            "Location Name:",
+                          mapLocationName,
+                            "xPosition:",
+                          p.X.ToString(),
+                            "yPosition",
+                          p.Y.ToString(),
+                           "Direction",
+                           facingDirection.ToString()
+                };
+                File.WriteAllLines(Path.Combine(Class1.playerDataPath, Class1.fileName), fileContents);
+            }
+            catch (Exception e)
+            {
+                Log.AsyncColour(e, ConsoleColor.DarkCyan);
+            }
+
+            Game1.player.currentLocation.lastQuestionKey = "";
+            Farmer.doSleepEmote(Game1.player);
+            Game1.NewDay(600f);
+            Game1.player.mostRecentBed = StardewValley.Utility.PointToVector2(p);
+            //loadConfigForWarp();
+            sleepingWarp = true;
         }
     }
 }

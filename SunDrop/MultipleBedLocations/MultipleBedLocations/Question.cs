@@ -994,6 +994,11 @@ public virtual bool answerDialogueAction(string questionAndAnswer, string[] ques
             {
 
             }
+            if (a == "ElseWhere")
+            {
+                Class1.sleepElseWhere("BusStop", new Microsoft.Xna.Framework.Point(20, 20),3);
+                Log.AsyncG("ELSEWHERE");
+            }
             return true;
           //  return base.answerDialogue(answer);
         }
