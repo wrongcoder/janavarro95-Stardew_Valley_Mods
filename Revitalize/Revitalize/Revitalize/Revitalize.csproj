@@ -50,7 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aesthetics\WeatherDebrisPlus.cs" />
+    <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisPlus.cs" />
+    <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="CoreObject.cs" />
     <Compile Include="Draw\ThingsToDraw.cs" />

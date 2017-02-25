@@ -1,4 +1,5 @@
 ﻿using Revitalize.Aesthetics;
+using Revitalize.Aesthetics.WeatherDebris;
 using StardewModdingAPI;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,14 @@ namespace Revitalize.Resources
 
         public static List<Revitalize.CoreObject> trackedObjectList;
 
-        public static List<WeatherDebrisPlus> thisWeatherDebris;
+  
 
         public static void initializeAllLists()
         {
             trackedTerrainFeatures = new List<DataNodes.TrackedTerrainDataNode>();
             trackedTerrainFeaturesDummyList = new List<DataNodes.TrackedTerrainDummyDataNode>();
             trackedObjectList = new List<CoreObject>();
-            thisWeatherDebris = new List<WeatherDebrisPlus>();
+            WeatherDebrisSystem.thisWeatherDebris = new List<WeatherDebrisPlus>();
         }
 
         public static void loadAllLists()

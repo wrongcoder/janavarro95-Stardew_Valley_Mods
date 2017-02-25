@@ -26,6 +26,7 @@ using xTile;
 using Revitalize.Persistance;
 using Revitalize.Draw;
 using Revitalize.Aesthetics;
+using Revitalize.Aesthetics.WeatherDebris;
 
 namespace Revitalize
 {
@@ -94,10 +95,7 @@ namespace Revitalize
 
         private void draw(object sender, EventArgs e)
         {
-            foreach(WeatherDebrisPlus w in Lists.thisWeatherDebris)
-            {
-                w.draw(Game1.spriteBatch);
-            }
+            WeatherDebrisSystem.draw();
         }
 
         private void GraphicsEvents_OnPreRenderHudEvent(object sender, EventArgs e)
@@ -141,11 +139,7 @@ namespace Revitalize
                 Lists.loadAllLists();
                 Util.WaterAllCropsInAllLocations();
             }
-            foreach(WeatherDebrisPlus w in Lists.thisWeatherDebris)
-            {
-               // Log.AsyncM("COUNT" + Lists.thisWeatherDebris.Count);
-                w.update();
-            }
+            WeatherDebrisSystem.update();
 
         }
    
@@ -368,8 +362,8 @@ namespace Revitalize
             //   Game1.debrisWeather.Add(new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f));
             // WeatherDebris w = new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f);
             WeatherDebrisPlus w= new WeatherDebrisPlus(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), new Rectangle(338, 400, 8, 8), 0, 4, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f,true);
-
-            Lists.thisWeatherDebris.Add(w);
+            WeatherDebrisSystem.addMultipleDebrisFromSingleType(new weatherNode(w, 20));
+           // WeatherDebrisSystem.thisWeatherDebris.Add(w);
 
             Game1.isDebrisWeather = true;
          //   Game1.updateDebrisWeatherForMovement(Game1.debrisWeather);

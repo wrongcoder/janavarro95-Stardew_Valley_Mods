@@ -5,7 +5,7 @@ using StardewValley;
 using System;
 using System.Collections.Generic;
 
-namespace Revitalize.Aesthetics
+namespace Revitalize.Aesthetics.WeatherDebris
 {
     
 
@@ -18,11 +18,16 @@ namespace Revitalize.Aesthetics
         public Rectangle sourceRect;
 
         public bool blowing;
-        private Vector2 position;
-        private int which;
-        private float dx;
-        private float dy;
-        private int animationIntervalOffset;
+        public Vector2 position;
+        public int which;
+        public float dx;
+        public float dy;
+        public int animationIntervalOffset;
+
+        public WeatherDebrisPlus()
+        {
+
+        }
 
         public WeatherDebrisPlus(Vector2 position,Rectangle SourceRect, int animationOffset, int which, float rotationVelocity, float dx, float dy) 
         {
@@ -34,7 +39,7 @@ namespace Revitalize.Aesthetics
             animationIntervalOffset = animationOffset;
         }
 
-        public WeatherDebrisPlus(Vector2 position, Rectangle SourceRect, int animationOffset, int which, float rotationVelocity, float dx, float dy,bool yup)
+        public WeatherDebrisPlus(Vector2 position, Rectangle SourceRect, int animationOffset, int which, float rotationVelocity, float dx, float dy,bool specificSetUp)
         {
             this.position = position;
             this.which = which;
@@ -79,7 +84,7 @@ namespace Revitalize.Aesthetics
 
         public new void update(bool slow)
         {
-            this.position.X = this.position.X + (this.dx + (slow ? 0f : WeatherDebris.globalWind));
+            this.position.X = this.position.X + (this.dx + (slow ? 0f :StardewValley.WeatherDebris.globalWind));
             this.position.Y = this.position.Y + (this.dy - (slow ? 0f : -0.5f));
             if (this.dy < 0f && !this.blowing)
             {
