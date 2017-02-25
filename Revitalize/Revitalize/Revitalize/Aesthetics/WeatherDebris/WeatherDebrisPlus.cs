@@ -12,25 +12,35 @@ namespace Revitalize.Aesthetics.WeatherDebris
 
     public class WeatherDebrisPlus
     {
-       
-
-
         public Rectangle sourceRect;
-
         public bool blowing;
         public Vector2 position;
         public int which;
         public float dx;
         public float dy;
         public int animationIntervalOffset;
+        public Texture2D debrisTexture;
 
         public WeatherDebrisPlus()
         {
 
         }
-
-        public WeatherDebrisPlus(Vector2 position,Rectangle SourceRect, int animationOffset, int which, float rotationVelocity, float dx, float dy) 
+        
+        /// <summary>
+        /// Create a new debris particle to be shown across the screen.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="SourceRect">Source on the texture sprite sheet.</param>
+        /// <param name="animationOffset"></param>
+        /// <param name="which">Not really used, but can be used for default list.</param>
+        /// <param name="rotationVelocity"></param>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        /// <param name="texture">If NULL, then Game1.mouseCursors is used.</param>
+        public WeatherDebrisPlus(Vector2 position,Rectangle SourceRect, int animationOffset, int which, float rotationVelocity, float dx, float dy, Texture2D texture=null) 
         {
+            if (texture == null) debrisTexture = Game1.mouseCursors;
+            else debrisTexture = texture;
             this.position = position;
             this.which = which;
             this.dx = dx;
@@ -39,7 +49,17 @@ namespace Revitalize.Aesthetics.WeatherDebris
             animationIntervalOffset = animationOffset;
         }
 
-        public WeatherDebrisPlus(Vector2 position, Rectangle SourceRect, int animationOffset, int which, float rotationVelocity, float dx, float dy,bool specificSetUp)
+        /// <summary>
+        /// Default system that uses some presets. Might or might not use.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="SourceRect">Source on the texture sprite sheet.</param>
+        /// <param name="animationOffset"></param>
+        /// <param name="which">Not really used, but can be used for default list.</param>
+        /// <param name="rotationVelocity"></param>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        public WeatherDebrisPlus(Vector2 position, Rectangle SourceRect, int animationOffset, int which, float rotationVelocity, float dx, float dy)
         {
             this.position = position;
             this.which = which;
@@ -47,10 +67,6 @@ namespace Revitalize.Aesthetics.WeatherDebris
             this.dy = dy;
           //  sourceRect = SourceRect;
             animationIntervalOffset = animationOffset;
-
-            Log.AsyncC(this.dx);
-            Log.AsyncC(this.dy);
-
             switch (which)
             {
                 case 0:
@@ -129,7 +145,7 @@ namespace Revitalize.Aesthetics.WeatherDebris
 
         public void draw(SpriteBatch b)
         {
-            b.Draw(Game1.mouseCursors, this.position, new Rectangle?(this.sourceRect), Color.White, 0f, Vector2.Zero, 3f, SpriteEffects.None, 1E-06f);
+            b.Draw(this.debrisTexture, this.position, new Rectangle?(this.sourceRect), Color.White, 0f, Vector2.Zero, 3f, SpriteEffects.None, 1E-06f);
 
         }
     }

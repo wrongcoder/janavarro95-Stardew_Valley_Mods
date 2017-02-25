@@ -350,7 +350,10 @@ namespace Revitalize
                 newDebris();
             }
 
-
+            if (e.KeyPressed.ToString() == "G")
+            {
+                WeatherDebrisSystem.speedUpWindAndClear(0.001f);
+            }
         }
             
 
@@ -361,14 +364,9 @@ namespace Revitalize
             //  WeatherDebris w = new WeatherDebris();
             //   Game1.debrisWeather.Add(new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f));
             // WeatherDebris w = new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f);
-            WeatherDebrisPlus w= new WeatherDebrisPlus(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), new Rectangle(338, 400, 8, 8), 0, 4, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f,true);
+            WeatherDebrisPlus w= new WeatherDebrisPlus(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), new Rectangle(338, 400, 8, 8), 0, 4, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f);
             WeatherDebrisSystem.addMultipleDebrisFromSingleType(new weatherNode(w, 20));
-           // WeatherDebrisSystem.thisWeatherDebris.Add(w);
-
-            Game1.isDebrisWeather = true;
-         //   Game1.updateDebrisWeatherForMovement(Game1.debrisWeather);
-           // Game1.windGust = 0.15f;
-            Log.AsyncC("WIND");
+           Game1.isDebrisWeather = true;
 
         }
 
