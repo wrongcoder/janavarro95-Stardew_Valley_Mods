@@ -27,6 +27,8 @@ namespace Revitalize.Resources
         public static Dictionary<string, SeedDataNode> seedList;
         public static Dictionary<int, Spell> spellList;
 
+        public static Dictionary<string, WeatherDebris> weatherDebrisDictionary;
+
         public static void initializeDictionaries()
         {
             acceptedTypes = new Dictionary<string, SerializerDataNode>();
@@ -34,6 +36,7 @@ namespace Revitalize.Resources
             interactionTypes = new Dictionary<string, interactFunction>();
             seedList = new Dictionary<string, SeedDataNode>();
             spellList = new Dictionary<int, Spell>();
+            weatherDebrisDictionary = new Dictionary<string, WeatherDebris>();
             fillAllDictionaries();
        }
 
@@ -44,6 +47,7 @@ namespace Revitalize.Resources
             fillQuaryList();
             fillSeedList();
             fillSpellList();
+            fillWeatherDebrisList();
         }
      
 
@@ -96,13 +100,20 @@ namespace Revitalize.Resources
             
             Spell book;
             //add in a single spell book to my system
-            book = new Spell(0, Vector2.Zero, new SpellFunctionDataNode(null,1));
+            book = new Spell(0, Vector2.Zero, new SpellFunctionDataNode(null,1),Color.Aqua,0);
             book.magicToCast.Clear();
             book.magicToCast.Add(new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.showRedMessage), 1));
-            spellList.Add(book.parentSheetIndex, book);
+            spellList.Add(0, book);
             //finish adding in a single spell book
 
 
+
+        }
+
+        public static void fillWeatherDebrisList()
+        {
+            WeatherDebris w = new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f);
+            weatherDebrisDictionary.Add("Pink Flower Petal", w);
 
         }
 

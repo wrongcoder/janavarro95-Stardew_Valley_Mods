@@ -25,6 +25,7 @@ using Microsoft.Xna.Framework.Input;
 using xTile;
 using Revitalize.Persistance;
 using Revitalize.Draw;
+using Revitalize.Aesthetics;
 
 namespace Revitalize
 {
@@ -77,6 +78,8 @@ namespace Revitalize
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
 
             StardewModdingAPI.Events.GraphicsEvents.OnPreRenderHudEvent += GraphicsEvents_OnPreRenderHudEvent;
+
+            StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += draw;
             
 
             //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
@@ -87,6 +90,14 @@ namespace Revitalize
 
             PlayerVariables.initializePlayerVariables();
             Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
+        }
+
+        private void draw(object sender, EventArgs e)
+        {
+            foreach(WeatherDebrisPlus w in Lists.thisWeatherDebris)
+            {
+                w.draw(Game1.spriteBatch);
+            }
         }
 
         private void GraphicsEvents_OnPreRenderHudEvent(object sender, EventArgs e)
@@ -130,6 +141,12 @@ namespace Revitalize
                 Lists.loadAllLists();
                 Util.WaterAllCropsInAllLocations();
             }
+            foreach(WeatherDebrisPlus w in Lists.thisWeatherDebris)
+            {
+               // Log.AsyncM("COUNT" + Lists.thisWeatherDebris.Count);
+                w.update();
+            }
+
         }
    
 
@@ -296,7 +313,9 @@ namespace Revitalize
                 objShopList.Add(new StardewValley.Object(497, 1));
                 objShopList.Add(new StardewValley.Object(498, 1));
                 objShopList.Add(new StardewValley.Object(770, 1));
-                objShopList.Add(new Spell(0, Vector2.Zero, new Resources.DataNodes.SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.showRedMessage),1)));
+                Spell k;
+                Dictionaries.spellList.TryGetValue(0, out k);
+                objShopList.Add(k);
                 foreach (var v in objShopList)
                 {
                     newInventory.Add(v);
@@ -334,13 +353,30 @@ namespace Revitalize
 
             if (e.KeyPressed.ToString() == "V")
             {
-                // Game1.showEndOfNightStuff();
-                Magic.MagicMonitor.consumeMagic(5);
+                newDebris();
             }
 
 
         }
             
+
+        public void newDebris()
+        {
+            //  Game1.debrisWeather.Add(new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f));
+            //  Game1.debrisWeather.Add(new WeatherDebrisPlus(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), new Rectangle(338, 400, 8, 8),0,999, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f));
+            //  WeatherDebris w = new WeatherDebris();
+            //   Game1.debrisWeather.Add(new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f));
+            // WeatherDebris w = new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f);
+            WeatherDebrisPlus w= new WeatherDebrisPlus(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), new Rectangle(338, 400, 8, 8), 0, 4, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f,true);
+
+            Lists.thisWeatherDebris.Add(w);
+
+            Game1.isDebrisWeather = true;
+         //   Game1.updateDebrisWeatherForMovement(Game1.debrisWeather);
+           // Game1.windGust = 0.15f;
+            Log.AsyncC("WIND");
+
+        }
 
     }
 }

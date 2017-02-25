@@ -26,7 +26,8 @@ namespace Revitalize.Objects
         public int spellCostModifierInt;
         public float spellCostModifierPercent;
 
-
+       public Color bookColor;
+        public int spellIndex;
         public override string Name
         {
             get
@@ -48,6 +49,7 @@ namespace Revitalize.Objects
             lightsOn = false;
             lightColor = Color.Black;
             thisType = this.GetType();
+            
         }
 
         public Spell()
@@ -56,10 +58,11 @@ namespace Revitalize.Objects
         }
 
 
-        public Spell(int which, Vector2 Tile, SpellFunctionDataNode spellFunction, int InventoryMaxSize = 0, bool isRemovable = true)
+        public Spell(int which,Vector2 Tile, SpellFunctionDataNode spellFunction, Color tomeColor,int textureIndex=0, int InventoryMaxSize = 0, bool isRemovable = true)
         {
             InitializeBasics(InventoryMaxSize, Tile);
-
+            spellIndex = which;
+            bookColor = tomeColor;
             magicToCast.Add(spellFunction);
             removable = isRemovable;
             this.lightColor = Color.Black;
@@ -117,7 +120,7 @@ namespace Revitalize.Objects
             this.updateDrawPosition();
             this.rotations = Convert.ToInt32(array[4]);
             this.price = Convert.ToInt32(array[5]);
-            this.parentSheetIndex = which;
+            this.parentSheetIndex = textureIndex ;
 
             try
             {
@@ -135,9 +138,10 @@ namespace Revitalize.Objects
 
         }
 
-        public Spell(int which, Vector2 Tile, List<SpellFunctionDataNode> spellFunctions, int InventoryMaxSize = 0, bool isRemovable = true)
+        public Spell(int which, Vector2 Tile, List<SpellFunctionDataNode> spellFunctions,Color tomeColor,int textureIndex=0, int InventoryMaxSize = 0, bool isRemovable = true)
         {
-           
+            bookColor = tomeColor;
+            spellIndex = which;
             InitializeBasics(InventoryMaxSize, Tile);
 
             foreach(var v in spellFunctions) {
@@ -200,7 +204,7 @@ namespace Revitalize.Objects
             this.updateDrawPosition();
             this.rotations = Convert.ToInt32(array[4]);
             this.price = Convert.ToInt32(array[5]);
-            this.parentSheetIndex = which;
+            this.parentSheetIndex = textureIndex;
 
             try
             {
@@ -276,25 +280,18 @@ namespace Revitalize.Objects
         //DONT USE THIS BASE IT IS TERRIBLE
         public override bool clicked(Farmer who)
         {
-          //  castMagic();
-            // Game1.showRedMessage("THIS IS CLICKED!!!");
-            //var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-
-
             if (removable == false) return false;
-
-
             Game1.haltAfterCheck = false;
             if (this.Decoration_type == 11 && who.ActiveObject != null && who.ActiveObject != null && this.heldObject == null)
             {
-                //    Game1.showRedMessage("Why1?");
+                
                 return false;
             }
             if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is Spell)))
             {
                 if (Game1.player.currentLocation is FarmHouse)
                 {
-                    //       
+                         
                     Util.addItemToInventoryAndCleanTrackedList(this);
                     removeLights(this.thisLocation);
                     this.lightsOn = false;
@@ -305,8 +302,6 @@ namespace Revitalize.Objects
                 }
                 else
                 {
-                    // return true;
-                    // this.heldObject = new Spell(parentSheetIndex, Vector2.Zero, this.lightColor, this.inventoryMaxSize);
                     Util.addItemToInventoryAndCleanTrackedList(this);
                     removeLights(this.thisLocation);
                     this.lightsOn = false;
@@ -318,8 +313,6 @@ namespace Revitalize.Objects
             }
             if (this.heldObject != null && who.addItemToInventoryBool(this.heldObject, false))
             {
-                //    Game1.showRedMessage("Why3?");
-                // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
                 Util.addItemToInventoryAndCleanTrackedList(this);
                 this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.heldObject = null;
@@ -330,63 +323,11 @@ namespace Revitalize.Objects
                 return true;
             }
 
-
-
             return false;
         }
 
         public virtual bool RightClicked(Farmer who)
         {
-
-           // castMagic();
-            // Game1.showRedMessage("THIS IS CLICKED!!!");
-            //var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            /*
-
-            Game1.haltAfterCheck = false;
-            if (this.Decoration_type == 11 && who.ActiveObject != null && who.ActiveObject != null && this.heldObject == null)
-            {
-                //    Game1.showRedMessage("Why1?");
-                return false;
-            }
-            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is Spell)))
-            {
-                if (Game1.player.currentLocation is FarmHouse)
-                {
-                    //       
-                    Game1.player.addItemByMenuIfNecessary(this);
-                    removeLights(this.thisLocation);
-                    this.lightsOn = false;
-                    Game1.playSound("coin");
-                    //        this.flaggedForPickUp = true;
-                    return true;
-                }
-                else
-                {
-                    // return true;
-                    // this.heldObject = new Spell(parentSheetIndex, Vector2.Zero, this.lightColor, this.inventoryMaxSize);
-                    Game1.player.addItemByMenuIfNecessary(this);
-                    removeLights(this.thisLocation);
-                    this.lightsOn = false;
-                    Game1.playSound("coin");
-                    return true;
-
-                }
-            }
-            if (this.heldObject != null && who.addItemToInventoryBool(this.heldObject, false))
-            {
-                //    Game1.showRedMessage("Why3?");
-                // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
-                Util.addItemToInventoryElseDrop(this);
-                this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
-                this.heldObject = null;
-                Game1.playSound("coin");
-                removeLights(this.thisLocation);
-                this.lightsOn = false;
-                return true;
-            }
-
-            */
 
             return false;
         }
@@ -1056,7 +997,7 @@ namespace Revitalize.Objects
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
-            spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), this.bookColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
                 spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
@@ -1074,18 +1015,19 @@ namespace Revitalize.Objects
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
-            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
+ 
+            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect),this.bookColor, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
         }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             if (x == -1)
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), this.bookColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             else
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), this.bookColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             if (this.heldObject != null)
             {
@@ -1094,19 +1036,20 @@ namespace Revitalize.Objects
                     (this.heldObject as Spell).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as Spell).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
-                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), this.bookColor * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
+                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), this.bookColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
             }
         }
 
         public override void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
-            spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), this.bookColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         public override Item getOne()
         {
-            Spell Spell = new Spell(this.parentSheetIndex, this.tileLocation, magicToCast , this.inventoryMaxSize);
+            Spell Spell = new Spell(this.spellIndex, this.tileLocation, magicToCast ,this.bookColor, this.parentSheetIndex);
+            Log.AsyncG(this.bookColor);
             /*
             drawPosition = this.drawPosition;
             defaultBoundingBox = this.defaultBoundingBox;

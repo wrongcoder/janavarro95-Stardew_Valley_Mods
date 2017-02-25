@@ -766,9 +766,9 @@ namespace Revitalize
 
             dynamic obj = JObject.Parse(data);
             Spell d = new Spell();
-            d.parentSheetIndex = obj.parentSheetIndex;
+            d.spellIndex = obj.spellIndex;
             Spell spell = new Spell();
-            bool b = Dictionaries.spellList.TryGetValue(d.parentSheetIndex, out spell);
+            bool b = Dictionaries.spellList.TryGetValue(d.spellIndex, out spell);
 
             Spell k =(Spell) spell.getOne();
             if (b == true) return k;
