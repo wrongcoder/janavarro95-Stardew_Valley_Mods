@@ -97,6 +97,8 @@ namespace Revitalize
 
         public string locationsName;
 
+        public Color drawColor;
+
         public override string Name
         {
             get

@@ -54,8 +54,8 @@
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="CoreObject.cs" />
-    <Compile Include="Draw\ThingsToDraw.cs" />
-    <Compile Include="GameLoc.cs" />
+    <Compile Include="Aesthetics\Draw\ThingsToDraw.cs" />
+    <Compile Include="Locations\GameLoc.cs" />
     <Compile Include="Locations\ModTown.cs" />
     <Compile Include="Magic\MagicFunctions.cs" />
     <Compile Include="Magic\MagicMonitor.cs" />

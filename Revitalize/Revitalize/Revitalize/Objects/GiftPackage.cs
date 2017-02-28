@@ -7,6 +7,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace Revitalize.Objects
@@ -39,6 +40,7 @@ namespace Revitalize.Objects
             lightsOn = false;
             lightColor = Color.Black;
             thisType = this.GetType();
+          //  this.drawColor = Color.White;
         }
 
         public GiftPackage()
@@ -51,68 +53,41 @@ namespace Revitalize.Objects
             //does nothng
         }
 
-        public GiftPackage(int which, Vector2 Tile, List<Item> Inventory, int InventoryMaxSize = 0, bool isRemovable = true)
+        public GiftPackage(int which, string ItemName, Vector2 Tile, List<Item> Inventory,int cost, Color DrawColor, int InventoryMaxSize = 0, bool isRemovable = true)
         {
-
             InitializeBasics(InventoryMaxSize, Tile);
-
+            drawColor = DrawColor;
+           // Log.AsyncC(this.drawColor);
             inventory = Inventory;
             removable = isRemovable;
             this.lightColor = Color.Black;
             if (TextureSheet == null)
             {
-                TextureSheet = Game1.content.Load<Texture2D>("TileSheets\\furniture");
-                texturePath = "TileSheets\\furniture";
+                TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize","LooseSprites","GiftPackage"));
+                texturePath = Path.Combine("Revitalize", "LooseSprites", "GiftPackage");
             }
-            Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
-            string[] array = dictionary[which].Split(new char[]
+            this.name = ItemName;
+            this.Decoration_type = 0;
+            this.description = "A bundle of objects that contains,\n";
+            int j = 0;
+            for(j=0; j<this.inventory.Count-1;j++)
             {
-                '/'
-            });
-            this.name = array[0];
-            this.Decoration_type = this.getTypeNumberFromName(array[1]);
-            this.description = "Can be placed inside your house.";
+                Item d = this.inventory[j];
+                description += d.Name + ",\n";
+            }
+            Item v = this.inventory[j];
+            description += v.Name + "\n";
+
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
-            if (array[2].Equals("-1"))
-            {
-                this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
-                this.defaultSourceRect = this.sourceRect;
-            }
-            else
-            {
-                this.defaultSourceRect.Width = Convert.ToInt32(array[2].Split(new char[]
-                {
-                    ' '
-                })[0]);
-                this.defaultSourceRect.Height = Convert.ToInt32(array[2].Split(new char[]
-                {
-                    ' '
-                })[1]);
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
-                this.defaultSourceRect = this.sourceRect;
-            }
-            this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
-            if (array[3].Equals("-1"))
-            {
-                this.boundingBox = this.getDefaultBoundingBoxForType(this.Decoration_type);
-                this.defaultBoundingBox = this.boundingBox;
-            }
-            else
-            {
-                this.defaultBoundingBox.Width = Convert.ToInt32(array[3].Split(new char[]
-                {
-                    ' '
-                })[0]);
-                this.defaultBoundingBox.Height = Convert.ToInt32(array[3].Split(new char[]
-                {
-                    ' '
-                })[1]);
-                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
-                this.defaultBoundingBox = this.boundingBox;
-            }
+            this.defaultSourceRect.Width = 1;
+            this.defaultSourceRect.Height = 1;
+
+            this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+            this.defaultSourceRect = this.sourceRect;
+
+
             this.updateDrawPosition();
-            this.rotations = Convert.ToInt32(array[4]);
-            this.price = Convert.ToInt32(array[5]);
+            this.price = Convert.ToInt32(cost);
             this.parentSheetIndex = which;
             
         }
@@ -238,55 +213,6 @@ namespace Revitalize.Objects
         {
         
 
-            // Game1.showRedMessage("THIS IS CLICKED!!!");
-            //var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            /*
-
-            Game1.haltAfterCheck = false;
-            if (this.Decoration_type == 11 && who.ActiveObject != null && who.ActiveObject != null && this.heldObject == null)
-            {
-                //    Game1.showRedMessage("Why1?");
-                return false;
-            }
-            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is GiftPackage)))
-            {
-                if (Game1.player.currentLocation is FarmHouse)
-                {
-                    //       
-                    Game1.player.addItemByMenuIfNecessary(this);
-                    removeLights(this.thisLocation);
-                    this.lightsOn = false;
-                    Game1.playSound("coin");
-                    //        this.flaggedForPickUp = true;
-                    return true;
-                }
-                else
-                {
-                    // return true;
-                    // this.heldObject = new GiftPackage(parentSheetIndex, Vector2.Zero, this.lightColor, this.inventoryMaxSize);
-                    Game1.player.addItemByMenuIfNecessary(this);
-                    removeLights(this.thisLocation);
-                    this.lightsOn = false;
-                    Game1.playSound("coin");
-                    return true;
-
-                }
-            }
-            if (this.heldObject != null && who.addItemToInventoryBool(this.heldObject, false))
-            {
-                //    Game1.showRedMessage("Why3?");
-                // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
-                Util.addItemToInventoryElseDrop(this);
-                this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
-                this.heldObject = null;
-                Game1.playSound("coin");
-                removeLights(this.thisLocation);
-                this.lightsOn = false;
-                return true;
-            }
-
-            */
-
             return false;
         }
 
@@ -369,109 +295,6 @@ namespace Revitalize.Objects
             base.performRemoveAction(tileLocation, environment);
         }
 
-        public override void rotate()
-        {
-            if (this.rotations < 2)
-            {
-                return;
-            }
-            int num = (this.rotations == 4) ? 1 : 2;
-            this.currentRotation += num;
-            this.currentRotation %= 4;
-            this.flipped = false;
-            Point point = default(Point);
-            int num2 = this.Decoration_type;
-            switch (num2)
-            {
-                case 2:
-                    point.Y = 1;
-                    point.X = -1;
-                    break;
-                case 3:
-                    point.X = -1;
-                    point.Y = 1;
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    point.Y = 0;
-                    point.X = -1;
-                    break;
-                default:
-                    if (num2 == 12)
-                    {
-                        point.X = 0;
-                        point.Y = 0;
-                    }
-                    break;
-            }
-            bool flag = this.Decoration_type == 5 || this.Decoration_type == 12 || this.parentSheetIndex == 724 || this.parentSheetIndex == 727;
-            bool flag2 = this.defaultBoundingBox.Width != this.defaultBoundingBox.Height;
-            if (flag && this.currentRotation == 2)
-            {
-                this.currentRotation = 1;
-            }
-            if (flag2)
-            {
-                int height = this.boundingBox.Height;
-                switch (this.currentRotation)
-                {
-                    case 0:
-                    case 2:
-                        this.boundingBox.Height = this.defaultBoundingBox.Height;
-                        this.boundingBox.Width = this.defaultBoundingBox.Width;
-                        break;
-                    case 1:
-                    case 3:
-                        this.boundingBox.Height = this.boundingBox.Width + point.X * Game1.tileSize;
-                        this.boundingBox.Width = height + point.Y * Game1.tileSize;
-                        break;
-                }
-            }
-            Point point2 = default(Point);
-            int num3 = this.Decoration_type;
-            if (num3 == 12)
-            {
-                point2.X = 1;
-                point2.Y = -1;
-            }
-            if (flag2)
-            {
-                switch (this.currentRotation)
-                {
-                    case 0:
-                        this.sourceRect = this.defaultSourceRect;
-                        break;
-                    case 1:
-                        this.sourceRect = new Rectangle(this.defaultSourceRect.X + this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Height - 16 + point.Y * 16 + point2.X * 16, this.defaultSourceRect.Width + 16 + point.X * 16 + point2.Y * 16);
-                        break;
-                    case 2:
-                        this.sourceRect = new Rectangle(this.defaultSourceRect.X + this.defaultSourceRect.Width + this.defaultSourceRect.Height - 16 + point.Y * 16 + point2.X * 16, this.defaultSourceRect.Y, this.defaultSourceRect.Width, this.defaultSourceRect.Height);
-                        break;
-                    case 3:
-                        this.sourceRect = new Rectangle(this.defaultSourceRect.X + this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Height - 16 + point.Y * 16 + point2.X * 16, this.defaultSourceRect.Width + 16 + point.X * 16 + point2.Y * 16);
-                        this.flipped = true;
-                        break;
-                }
-            }
-            else
-            {
-                this.flipped = (this.currentRotation == 3);
-                if (this.rotations == 2)
-                {
-                    this.sourceRect = new Rectangle(this.defaultSourceRect.X + ((this.currentRotation == 2) ? 1 : 0) * this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Width, this.defaultSourceRect.Height);
-                }
-                else
-                {
-                    this.sourceRect = new Rectangle(this.defaultSourceRect.X + ((this.currentRotation == 3) ? 1 : this.currentRotation) * this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Width, this.defaultSourceRect.Height);
-                }
-            }
-            if (flag && this.currentRotation == 1)
-            {
-                this.currentRotation = 2;
-            }
-            this.updateDrawPosition();
-        }
 
         public override bool isGroundFurniture()
         {
@@ -878,40 +701,6 @@ namespace Revitalize.Objects
             return new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, num * Game1.tileSize, num2 * Game1.tileSize);
         }
 
-        private int getTypeNumberFromName(string typeName)
-        {
-            string key;
-            switch (key = typeName.ToLower())
-            {
-                case "chair":
-                    return 0;
-                case "bench":
-                    return 1;
-                case "couch":
-                    return 2;
-                case "armchair":
-                    return 3;
-                case "dresser":
-                    return 4;
-                case "long table":
-                    return 5;
-                case "painting":
-                    return 6;
-                case "lamp":
-                    return 7;
-                case "decor":
-                    return 8;
-                case "bookcase":
-                    return 10;
-                case "table":
-                    return 11;
-                case "rug":
-                    return 12;
-                case "window":
-                    return 13;
-            }
-            return 9;
-        }
 
         public override int salePrice()
         {
@@ -955,23 +744,37 @@ namespace Revitalize.Objects
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
-            base.drawWhenHeld(spriteBatch, objectPosition, f);
+            spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), this.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
+            {
+                spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
+                {
+                    return;
+                }
+                Game1.starCropShimmerPause += 0.04f;
+                if (Game1.starCropShimmerPause >= 0.8f)
+                {
+                    Game1.starCropShimmerPause = -0.8f;
+                }
+            }
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
-            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
+
+            spriteBatch.Draw(this.TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), this.drawColor, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
         }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             if (x == -1)
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), this.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             else
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), this.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             if (this.heldObject != null)
             {
@@ -980,19 +783,20 @@ namespace Revitalize.Objects
                     (this.heldObject as GiftPackage).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as GiftPackage).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
-                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), this.drawColor , 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
+                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), this.drawColor , 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
             }
         }
 
         public override void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
-            spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), this.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         public override Item getOne()
         {
-            GiftPackage GiftPackage = new GiftPackage(this.parentSheetIndex, this.tileLocation, this.inventory, this.inventoryMaxSize);
+            GiftPackage GiftPackage = new GiftPackage(this.parentSheetIndex, this.name,this.tileLocation, this.inventory,this.price,this.drawColor, this.inventoryMaxSize);
+          //  Log.AsyncM("BOO  " + drawColor);
             /*
             drawPosition = this.drawPosition;
             defaultBoundingBox = this.defaultBoundingBox;

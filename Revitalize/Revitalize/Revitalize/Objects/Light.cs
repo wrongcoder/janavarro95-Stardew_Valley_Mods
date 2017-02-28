@@ -19,7 +19,7 @@ namespace Revitalize.Objects
     public class Light : Revitalize.CoreObject
     {
 
-
+        public bool areLightAndDrawColorsDifferent;
         public override string Name
         {
             get
@@ -52,11 +52,13 @@ namespace Revitalize.Objects
             //does nothng
         }
 
-        public Light(int which, Vector2 Tile, Color C, int InventoryMaxSize =0, bool isRemovable=true)
+        public Light(int which, Vector2 Tile, Color LightColor,Color DrawColor, bool differentColors=true, int InventoryMaxSize =0, bool isRemovable=true)
         {
             removable = isRemovable;
             InitializeBasics(InventoryMaxSize, Tile);
-            this.lightColor = C;
+            this.lightColor = LightColor;
+            this.drawColor = DrawColor;
+            areLightAndDrawColorsDifferent = differentColors;
             if (TextureSheet == null)
             {
                 TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize","Lights","AdjustableLights","Graphics","AdjustableLights"));
@@ -68,7 +70,7 @@ namespace Revitalize.Objects
                 '/'
             });
             this.name = array[0];
-            this.Decoration_type = this.getTypeNumberFromName(array[1]);
+            this.Decoration_type = 1;
 
             try
             {
@@ -252,55 +254,6 @@ namespace Revitalize.Objects
         {
             Game1.activeClickableMenu = new Revitalize.Menus.LightCustomizer(this);
 
-            // Game1.showRedMessage("THIS IS CLICKED!!!");
-            //var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
-            /*
-
-            Game1.haltAfterCheck = false;
-            if (this.Decoration_type == 11 && who.ActiveObject != null && who.ActiveObject != null && this.heldObject == null)
-            {
-                //    Game1.showRedMessage("Why1?");
-                return false;
-            }
-            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is Light)))
-            {
-                if (Game1.player.currentLocation is FarmHouse)
-                {
-                    //       
-                    Game1.player.addItemByMenuIfNecessary(this);
-                    removeLights(this.thisLocation);
-                    this.lightsOn = false;
-                    Game1.playSound("coin");
-                    //        this.flaggedForPickUp = true;
-                    return true;
-                }
-                else
-                {
-                    // return true;
-                    // this.heldObject = new Light(parentSheetIndex, Vector2.Zero, this.lightColor, this.inventoryMaxSize);
-                    Game1.player.addItemByMenuIfNecessary(this);
-                    removeLights(this.thisLocation);
-                    this.lightsOn = false;
-                    Game1.playSound("coin");
-                    return true;
-
-                }
-            }
-            if (this.heldObject != null && who.addItemToInventoryBool(this.heldObject, false))
-            {
-                //    Game1.showRedMessage("Why3?");
-                // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
-                Util.addItemToInventoryElseDrop(this);
-                this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
-                this.heldObject = null;
-                Game1.playSound("coin");
-                removeLights(this.thisLocation);
-                this.lightsOn = false;
-                return true;
-            }
-
-            */
-
             return false;
         }
 
@@ -345,9 +298,7 @@ namespace Revitalize.Objects
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
-            // Log.Info("minutes passed in"+minutes);
-            //  Log.Info("minues remaining" + this.minutesUntilReady);
-           // Log.Info(this.lightColor);
+
             this.minutesUntilReady = (this.minutesUntilReady - minutes);
 
             if (Game1.isDarkOut() || Game1.timeOfDay <= 500)
@@ -357,11 +308,6 @@ namespace Revitalize.Objects
 
             if (minutesUntilReady == 0)
             {
-                // Log.AsyncC(this.name + "Is ready!");
-                // Log.AsyncC(Game1.player.getStandingPosition());
-                // Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
-                //Game1.createItemDebris((Item)this.heldObject, v2, Game1.player.getDirection());
-                // minutesUntilReady = 30;
             }
 
             return false;
@@ -433,21 +379,7 @@ namespace Revitalize.Objects
                         Vector2 vector = tile * (float)Game1.tileSize + new Vector2((float)i, (float)j) * (float)Game1.tileSize;
                         vector.X += (float)(Game1.tileSize / 2);
                         vector.Y += (float)(Game1.tileSize / 2);
-                        /*
-                        foreach (Light current in (l as FarmHouse).Light)
-                        {
-                            if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
-                            {
-                                bool result = true;
-                                return result;
-                            }
-                            if ((current.Decoration_type != 12 || this.Decoration_type == 12) && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y))
-                            {
-                                bool result = false;
-                                return result;
-                            }
-                        }
-                        */
+
                     }
                 }
                 return Util.canBePlacedHere(this,l, tile);
@@ -565,16 +497,6 @@ namespace Revitalize.Objects
                 {
                     int num = (this.parentSheetIndex == 1293) ? 3 : 0;
                     bool flag2 = false;
-                    /*
-                    foreach (Rectangle current in walls)
-                    {
-                        if ((this.Decoration_type == 6 || this.Decoration_type == 13 || num != 0) && current.Y + num == point.Y && current.Contains(point.X, point.Y - num))
-                        {
-                            flag2 = true;
-                            break;
-                        }
-                    }
-                    */
                     if (!flag2)
                     {
                         Game1.showRedMessage("Must be placed on wall");
@@ -605,17 +527,7 @@ namespace Revitalize.Objects
                     }
                 }
                 this.boundingBox = new Rectangle(x / Game1.tileSize * Game1.tileSize, y / Game1.tileSize * Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
-                /*
-                foreach (Furniture current2 in (location as FarmHouse).furniture)
-                {
-                    if (current2.furniture_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
-                    {
-                        current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
-                        bool result = true;
-                        return result;
-                    }
-                }
-                */
+
                 foreach (Farmer current3 in location.getFarmers())
                 {
                     if (current3.GetBoundingBox().Intersects(this.boundingBox))
@@ -627,9 +539,6 @@ namespace Revitalize.Objects
                 }
                 this.updateDrawPosition();
                 this.thisLocation = Game1.player.currentLocation;
-              //  Log.AsyncC(x);
-             //   Log.AsyncY(y);
-             //   Log.AsyncY(this.drawPosition);
                 return Util.placementAction(this,location, x , y, who);
             }
 
@@ -775,40 +684,6 @@ namespace Revitalize.Objects
             return new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, num * Game1.tileSize, num2 * Game1.tileSize);
         }
 
-        private int getTypeNumberFromName(string typeName)
-        {
-            string key;
-            switch (key = typeName.ToLower())
-            {
-                case "chair":
-                    return 0;
-                case "bench":
-                    return 1;
-                case "couch":
-                    return 2;
-                case "armchair":
-                    return 3;
-                case "dresser":
-                    return 4;
-                case "long table":
-                    return 5;
-                case "painting":
-                    return 6;
-                case "lamp":
-                    return 7;
-                case "decor":
-                    return 8;
-                case "bookcase":
-                    return 10;
-                case "table":
-                    return 11;
-                case "rug":
-                    return 12;
-                case "window":
-                    return 13;
-            }
-            return 9;
-        }
 
         public override int salePrice()
         {
@@ -855,7 +730,13 @@ namespace Revitalize.Objects
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
-            spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)),Util.invertColor(this.lightColor), 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+        if(areLightAndDrawColorsDifferent==false)    spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)),Util.invertColor(this.lightColor), 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+        else
+            {
+                spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Util.invertColor(this.drawColor), 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            }
+
+        /*
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
                 spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
@@ -869,44 +750,60 @@ namespace Revitalize.Objects
                     Game1.starCropShimmerPause = -0.8f;
                 }
             }
+            */
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
 
-            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Util.invertColor(this.lightColor), 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
+            if (areLightAndDrawColorsDifferent == false) spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Util.invertColor(this.lightColor), 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
+            else
+            {
+                spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Util.invertColor(this.drawColor), 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
+            }
         }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             if (x == -1)
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                if (areLightAndDrawColorsDifferent == false) spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                else spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Util.invertColor(this.drawColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             else
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                if (areLightAndDrawColorsDifferent == false) spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                else spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Util.invertColor(this.drawColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             if (this.heldObject != null)
             {
-                if (this.heldObject is Spell)
+                if (this.heldObject is Light)
                 {
-                    (this.heldObject as Spell).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as Spell).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
+                    (this.heldObject as Light).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as Spell).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
-                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Util.invertColor(this.lightColor) * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                if (areLightAndDrawColorsDifferent == false)
+                {
+                    spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Util.invertColor(this.lightColor) * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
+                    spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                }
+                else
+                {
+                    spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Util.invertColor(this.drawColor) * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
+                    spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Util.invertColor(this.drawColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                }
+
             }
         }
 
         public override void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
-            spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Util.invertColor(this.drawColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         public override Item getOne()
         {
-            Light Light = new Light(this.parentSheetIndex, this.tileLocation, this.lightColor, this.inventoryMaxSize);
+            Light Light = new Light(this.parentSheetIndex, this.tileLocation, this.lightColor,this.drawColor,this.areLightAndDrawColorsDifferent);
             /*
             drawPosition = this.drawPosition;
             defaultBoundingBox = this.defaultBoundingBox;

@@ -299,7 +299,7 @@ namespace Revitalize
                
            
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
-                objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine));
+                objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine,LightColors.Aquamarine,false));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));
                 objShopList.Add(new Quarry(3, Vector2.Zero, 9, "iron"));
                 objShopList.Add(new Decoration(3, Vector2.Zero));
@@ -316,7 +316,7 @@ namespace Revitalize
                     newInventory.Add(v);
                  //   Log.AsyncG("GRRR");
                 }
-                objShopList.Add(new GiftPackage(1120, Vector2.Zero,newInventory));
+                objShopList.Add(new GiftPackage(1,"Generic Gift Package",Vector2.Zero,newInventory,1000,Util.invertColor(LightColors.Orange)));
 
                 // my_shop_list.Add((new Decoration(1120, Vector2.Zero)));
                 objShopList.Add(new ExtraSeeds(1, Vector2.Zero));
