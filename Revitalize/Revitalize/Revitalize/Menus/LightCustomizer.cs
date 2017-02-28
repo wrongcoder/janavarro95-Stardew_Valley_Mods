@@ -259,14 +259,14 @@ namespace Revitalize.Menus
                 if (colorChanged == false)
                 {
                     Game1.exitActiveMenu();
-                    StardewModdingAPI.Log.Info("HEY!");
+                   // StardewModdingAPI.Log.Info("HEY!");
                     return;
                 }
-                StardewModdingAPI.Log.AsyncC(this.LightObject.lightColor);
+              //  StardewModdingAPI.Log.AsyncC(this.LightObject.lightColor);
 
                 this.lightColorPicker.setColor(LightObject.lightColor);
 
-                StardewModdingAPI.Log.AsyncC(this.LightObject.lightColor);
+              //  StardewModdingAPI.Log.AsyncC(this.LightObject.lightColor);
 
                 
                 //UTIL FUNCTION TO GET CORRECT COLOR
