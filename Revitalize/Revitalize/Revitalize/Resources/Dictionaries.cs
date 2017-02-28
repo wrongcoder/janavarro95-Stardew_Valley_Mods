@@ -68,7 +68,7 @@ namespace Revitalize.Resources
             interactionTypes.Add("Seed", Util.plantCropHere); //for generic stardew seeds
             interactionTypes.Add("Seeds", Util.plantExtraCropHere); //for modded stardew seeds
             interactionTypes.Add("Gift Package", Util.getGiftPackageContents);
-            interactionTypes.Add("Spell", Magic.MagicFunctions.castMagic);
+            interactionTypes.Add("Spell", Magic.MagicMonitor.castMagic);
 
         }
 
@@ -96,16 +96,53 @@ namespace Revitalize.Resources
         }
 
         public static void fillSpellList()
-        {
-            
+        {            
             Spell book;
             //add in a single spell book to my system
-            book = new Spell(0, Vector2.Zero, new SpellFunctionDataNode(null,1),Color.Aqua,0);
-            book.magicToCast.Clear();
-            book.magicToCast.Add(new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.showRedMessage), 1));
-            spellList.Add(0, book);
-            //finish adding in a single spell book
 
+            //testing
+            book = new Spell(0, Vector2.Zero,new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.TestingSpells.showRedMessage),1),Color.Aqua,0);
+            spellList.Add(0, book);
+
+            //crops
+            book = new Spell(1, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.CropSpells.cropGrowthSpell), 1), Color.ForestGreen,0);
+            spellList.Add(1, book);
+            book = new Spell(2, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.CropSpells.waterCropSpell), 1), Color.Aquamarine,0);
+            spellList.Add(2, book);
+
+            //Utility Spells
+            book = new Spell(3, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.UtilitySpells.warpHome), 1), Color.Gray, 0);
+            spellList.Add(3, book);
+
+            //weather
+            book = new Spell(4, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.UtilitySpells.sunnyWeather), 1), Color.LightYellow, 0);
+            spellList.Add(4, book);
+            book = new Spell(5, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.UtilitySpells.rainyWeather), 1), Color.Blue, 0);
+            spellList.Add(5, book);
+            book = new Spell(6, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.UtilitySpells.stormyWeather), 1), Color.DarkBlue, 0);
+            spellList.Add(6, book);
+
+            //health restoring
+            book = new Spell(7, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.firstAide), 1), Util.invertColor(LightColors.LightCoral), 0);
+            spellList.Add(7, book);
+            book = new Spell(8, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.heal), 1), Color.LightPink, 0);
+            spellList.Add(8, book);
+            book = new Spell(9, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.cure), 1), Color.PaleVioletRed, 0);
+            spellList.Add(9, book);
+            book = new Spell(10, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.mend), 1), Color.DarkRed, 0);
+            spellList.Add(10, book);
+
+            //stamina restoring
+            book = new Spell(11, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.deepBreaths), 1), Color.LightCyan, 0);
+            spellList.Add(11, book);
+            book = new Spell(12, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.refresh), 1), Color.LightGreen, 0);
+            spellList.Add(12, book);
+            book = new Spell(13, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.replenish), 1), Util.invertColor(LightColors.LightSeaGreen), 0);
+            spellList.Add(13, book);
+            book = new Spell(14, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.rejuvinate), 1), Util.invertColor(LightColors.LightSkyBlue), 0);
+            spellList.Add(14, book);
+            book = new Spell(15, Vector2.Zero, new SpellFunctionDataNode(new Spell.spellFunction(Magic.MagicFunctions.PlayerSpecificSpells.revitalize), 1), Util.invertColor(LightColors.LightSteelBlue), 0);
+            spellList.Add(15, book);
 
 
         }
@@ -114,7 +151,6 @@ namespace Revitalize.Resources
         {
             WeatherDebris w = new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f);
             weatherDebrisDictionary.Add("Pink Flower Petal", w);
-
         }
 
     }

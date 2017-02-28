@@ -79,14 +79,7 @@ namespace Revitalize.Objects
             this.name = array[0];
             this.Decoration_type = this.getTypeNumberFromName(array[1]);
             this.description = "Can be placed inside your house.";
-            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
-            if (array[2].Equals("-1"))
-            {
-                this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
-                this.defaultSourceRect = this.sourceRect;
-            }
-            else
-            {
+            this.defaultSourceRect = new Rectangle(textureIndex * 16 % TextureSheet.Width, textureIndex * 16 / TextureSheet.Width * 16, 1, 1);
                 this.defaultSourceRect.Width = Convert.ToInt32(array[2].Split(new char[]
                 {
                     ' '
@@ -95,9 +88,9 @@ namespace Revitalize.Objects
                 {
                     ' '
                 })[1]);
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.sourceRect = new Rectangle(textureIndex * 16 % TextureSheet.Width, textureIndex * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
-            }
+            
             this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
             if (array[3].Equals("-1"))
             {
@@ -121,6 +114,7 @@ namespace Revitalize.Objects
             this.rotations = Convert.ToInt32(array[4]);
             this.price = Convert.ToInt32(array[5]);
             this.parentSheetIndex = textureIndex ;
+            this.ParentSheetIndex = textureIndex;
 
             try
             {
@@ -163,7 +157,7 @@ namespace Revitalize.Objects
             this.name = array[0];
             this.Decoration_type = this.getTypeNumberFromName(array[1]);
             this.description = "Can be placed inside your house.";
-            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
+            this.defaultSourceRect = new Rectangle(textureIndex * 16 % TextureSheet.Width, textureIndex * 16 / TextureSheet.Width * 16, 1, 1);
             if (array[2].Equals("-1"))
             {
                 this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
@@ -179,7 +173,7 @@ namespace Revitalize.Objects
                 {
                     ' '
                 })[1]);
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.sourceRect = new Rectangle(textureIndex * 16 % TextureSheet.Width, textureIndex * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
             }
             this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
@@ -411,109 +405,6 @@ namespace Revitalize.Objects
             base.performRemoveAction(tileLocation, environment);
         }
 
-        public override void rotate()
-        {
-            if (this.rotations < 2)
-            {
-                return;
-            }
-            int num = (this.rotations == 4) ? 1 : 2;
-            this.currentRotation += num;
-            this.currentRotation %= 4;
-            this.flipped = false;
-            Point point = default(Point);
-            int num2 = this.Decoration_type;
-            switch (num2)
-            {
-                case 2:
-                    point.Y = 1;
-                    point.X = -1;
-                    break;
-                case 3:
-                    point.X = -1;
-                    point.Y = 1;
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    point.Y = 0;
-                    point.X = -1;
-                    break;
-                default:
-                    if (num2 == 12)
-                    {
-                        point.X = 0;
-                        point.Y = 0;
-                    }
-                    break;
-            }
-            bool flag = this.Decoration_type == 5 || this.Decoration_type == 12 || this.parentSheetIndex == 724 || this.parentSheetIndex == 727;
-            bool flag2 = this.defaultBoundingBox.Width != this.defaultBoundingBox.Height;
-            if (flag && this.currentRotation == 2)
-            {
-                this.currentRotation = 1;
-            }
-            if (flag2)
-            {
-                int height = this.boundingBox.Height;
-                switch (this.currentRotation)
-                {
-                    case 0:
-                    case 2:
-                        this.boundingBox.Height = this.defaultBoundingBox.Height;
-                        this.boundingBox.Width = this.defaultBoundingBox.Width;
-                        break;
-                    case 1:
-                    case 3:
-                        this.boundingBox.Height = this.boundingBox.Width + point.X * Game1.tileSize;
-                        this.boundingBox.Width = height + point.Y * Game1.tileSize;
-                        break;
-                }
-            }
-            Point point2 = default(Point);
-            int num3 = this.Decoration_type;
-            if (num3 == 12)
-            {
-                point2.X = 1;
-                point2.Y = -1;
-            }
-            if (flag2)
-            {
-                switch (this.currentRotation)
-                {
-                    case 0:
-                        this.sourceRect = this.defaultSourceRect;
-                        break;
-                    case 1:
-                        this.sourceRect = new Rectangle(this.defaultSourceRect.X + this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Height - 16 + point.Y * 16 + point2.X * 16, this.defaultSourceRect.Width + 16 + point.X * 16 + point2.Y * 16);
-                        break;
-                    case 2:
-                        this.sourceRect = new Rectangle(this.defaultSourceRect.X + this.defaultSourceRect.Width + this.defaultSourceRect.Height - 16 + point.Y * 16 + point2.X * 16, this.defaultSourceRect.Y, this.defaultSourceRect.Width, this.defaultSourceRect.Height);
-                        break;
-                    case 3:
-                        this.sourceRect = new Rectangle(this.defaultSourceRect.X + this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Height - 16 + point.Y * 16 + point2.X * 16, this.defaultSourceRect.Width + 16 + point.X * 16 + point2.Y * 16);
-                        this.flipped = true;
-                        break;
-                }
-            }
-            else
-            {
-                this.flipped = (this.currentRotation == 3);
-                if (this.rotations == 2)
-                {
-                    this.sourceRect = new Rectangle(this.defaultSourceRect.X + ((this.currentRotation == 2) ? 1 : 0) * this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Width, this.defaultSourceRect.Height);
-                }
-                else
-                {
-                    this.sourceRect = new Rectangle(this.defaultSourceRect.X + ((this.currentRotation == 3) ? 1 : this.currentRotation) * this.defaultSourceRect.Width, this.defaultSourceRect.Y, this.defaultSourceRect.Width, this.defaultSourceRect.Height);
-                }
-            }
-            if (flag && this.currentRotation == 1)
-            {
-                this.currentRotation = 2;
-            }
-            this.updateDrawPosition();
-        }
 
         public override bool isGroundFurniture()
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Objects;
 using Revitalize.Persistance;
 using StardewModdingAPI;
 using StardewValley;
@@ -137,6 +138,11 @@ namespace Revitalize.Magic
 
             Game1.addHUDMessage(new HUDMessage("Magic Leveled Up!", 1));
 
+        }
+
+        public static void castMagic()
+        {
+            if (Game1.player.ActiveObject as Spell != null) (Game1.player.ActiveObject as Spell).castMagic();
         }
 
     }

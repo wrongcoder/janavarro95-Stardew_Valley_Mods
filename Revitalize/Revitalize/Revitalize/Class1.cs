@@ -284,6 +284,7 @@ namespace Revitalize
 
         private void ShopCall(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
+            Game1.currentSeason = "spring";
             Game1.player.money = 9999;
           //  Log.AsyncG(Game1.tileSize);
 
@@ -307,9 +308,9 @@ namespace Revitalize
                 objShopList.Add(new StardewValley.Object(497, 1));
                 objShopList.Add(new StardewValley.Object(498, 1));
                 objShopList.Add(new StardewValley.Object(770, 1));
-                Spell k;
-                Dictionaries.spellList.TryGetValue(0, out k);
-                objShopList.Add(k);
+
+                
+                objShopList.Add(new StardewValley.Object(475, 1));
                 foreach (var v in objShopList)
                 {
                     newInventory.Add(v);
@@ -320,6 +321,13 @@ namespace Revitalize
                 // my_shop_list.Add((new Decoration(1120, Vector2.Zero)));
                 objShopList.Add(new ExtraSeeds(1, Vector2.Zero));
                 objShopList.Add(new ExtraSeeds(2, Vector2.Zero));
+
+
+                foreach(KeyValuePair<int,Spell> v in Dictionaries.spellList)
+                {
+                    objShopList.Add(v.Value);
+                }
+
                 Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(objShopList, 0, null);
                 
                 if (Game1.player == null) return;
@@ -353,6 +361,12 @@ namespace Revitalize
             if (e.KeyPressed.ToString() == "G")
             {
                 WeatherDebrisSystem.speedUpWindAndClear(0.001f);
+            }
+
+            if (e.KeyPressed.ToString() == "J")
+            {
+                Log.AsyncC("Player Position " + Game1.player.getTileLocation());
+                Log.AsyncC("Mouse Position " + Game1.currentCursorTile);
             }
         }
             
