@@ -94,6 +94,15 @@ namespace Revitalize.Objects
 
         public override string getDescription()
         {
+            this.description = "A bundle of objects that contains,\n";
+            int j = 0;
+            for (j = 0; j < this.inventory.Count - 1; j++)
+            {
+                Item d = this.inventory[j];
+                description += d.Name + ",\n";
+            }
+            Item v = this.inventory[j];
+            description += v.Name + "\n";
             return this.description;
         }
 
@@ -105,11 +114,13 @@ namespace Revitalize.Objects
 
         public override void hoverAction()
         {
+
             base.hoverAction();
             if (!Game1.player.isInventoryFull())
             {
                 Game1.mouseCursor = 2;
             }
+
         }
 
      
@@ -254,6 +265,7 @@ namespace Revitalize.Objects
             return false;
         }
 
+       
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
