@@ -27,15 +27,15 @@ content:  #!Dictionary<Int32,String>
     4: "Book of Sunshine/chair/1 1/1 1/4/750/0/100/A spell book that causes the weather for tomorrow to be sunny." #!String
     5: "Book of Raining/chair/1 1/1 1/4/750/0/100/A spell book that causes the weather for tomorrow to be rainy." #!String
     6: "Book of Storming/chair/1 1/1 1/4/750/0/100/A spell book that causes the weather for tomorrow to be stormy." #!String
-    7: "First Aide/chair/1 1/1 1/4/750/0/100/A spell book that heals you for 10% of your health." #!String
-    8: "Heal/chair/1 1/1 1/4/750/0/110/A spell book that heals you for 30% of your health." #!String
-    9: "Cure/chair/1 1/1 1/4/750/0/120/A spell book that heals you for 50% of your health." #!String
-    10: "Mend/chair/1 1/1 1/4/750/0/130/A spell book that heals you for 70% of your health." #!String
-    11: "Deep Breaths/chair/1 1/1 1/4/750/0/130/A spell book that restores 10% of your stamina." #!String
-    12: "Refresh/chair/1 1/1 1/4/750/0/130/A spell book that restores 30% of your stamina." #!String
-    13: "Replenish/chair/1 1/1 1/4/750/0/130/A spell book that restores 50% of your stamina." #!String
-    14: "Rejuvinate/chair/1 1/1 1/4/750/0/130/A spell book that restores 70% of your stamina." #!String
-    15: "Revitalize/chair/1 1/1 1/4/750/0/130/A spell book that restores 100% of your stamina." #!String
+    7: "First Aide/chair/1 1/1 1/4/750/0/100/A spell book that heals you for 10% of your health. Band-Aides to the rescue!" #!String
+    8: "Heal/chair/1 1/1 1/4/750/0/110/A spell book that heals you for 30% of your health. Heal some of your wounds to keep going." #!String
+    9: "Cure/chair/1 1/1 1/4/750/0/120/A spell book that heals you for 50% of your health. Cure yourself of your aliments!" #!String
+    10: "Mend/chair/1 1/1 1/4/750/0/130/A spell book that heals you for 70% of your health. Mend your injuries from past encounters." #!String
+    11: "Deep Breaths/chair/1 1/1 1/4/750/0/130/A spell book that restores 10% of your stamina by helping you breath better." #!String
+    12: "Refresh/chair/1 1/1 1/4/750/0/130/A spell book that restores 30% of your stamina. with a refreshing breeze." #!String
+    13: "Replenish/chair/1 1/1 1/4/750/0/130/A spell book that restores 50% of your stamina by replenishing your motivation." #!String
+    14: "Rejuvinate/chair/1 1/1 1/4/750/0/130/A spell book that restores 70% of your stamina by rejuvinating you with the laughs of junimos." #!String
+    15: "Revitalize/chair/1 1/1 1/4/750/0/130/A spell book that restores 100% of your stamina by revitalizes your very being." #!String
     18: "Country Chair/chair/-1/-1/4/750" #!String
     21: "Breakfast Chair/chair/-1/-1/4/750" #!String
     24: "Pink Office Chair/chair/-1/-1/4/500" #!String
