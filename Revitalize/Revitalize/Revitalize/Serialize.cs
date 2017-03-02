@@ -338,7 +338,7 @@ namespace Revitalize
             }
             catch(Exception e)
             {
-                Log.AsyncR(e);
+               // Log.AsyncR(e);
                 return null;
             }
         }
@@ -647,6 +647,9 @@ namespace Revitalize
             d.thisType = obj.thisType;
             d.removable = obj.removable;
             d.locationsName = obj.locationsName;
+
+            d.drawColor = obj.drawColor;
+
             try
             {
                 return d;
@@ -859,6 +862,9 @@ namespace Revitalize
             d.thisType = obj.thisType;
             d.removable = obj.removable;
             d.locationsName = obj.locationsName;
+
+            d.drawColor = obj.drawColor;
+
             try
             {
                 return d;
