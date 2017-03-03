@@ -1,10 +1,13 @@
-Stardew Valley MoreRain 1.1.0
+Stardew Valley MoreRain 1.2.0
 
 
 Initial Release:v1.0.0 posted on 6/7/16 at 11:34 AM
-Updated: 10/14/16 12:16 AM
+Updated: 3/2/16 6:51 PM
 
 Updates:
+1.2.0
+Updated the mod to have configurable rain and storm chances for every season except winter. Winter gets a snow chance.
+
 1.1.0
 -Updated to SDV 1.1
 
