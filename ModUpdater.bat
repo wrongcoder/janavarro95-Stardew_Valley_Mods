@@ -52,6 +52,9 @@ call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual St
 call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\StardewSymphony\StardewSymphony\StardewSymphony.sln"
 call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\StardewSymphony\StardewSymphony.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\Stardew_Symphony"
 
+call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\TimeFreeze\TimeFreeze\TimeFreeze.sln"
+call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\TimeFreeze\TimeFreeze.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\TimeFreeze"
+
 cd "C:\Users\owner\Desktop\games\Stardew_stuff\XNB"
 call "UpdateAndRunStardew.bat"
 
