@@ -87,8 +87,6 @@ namespace Revitalize
 
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += draw;
 
-            StardewModdingAPI.Events.GameEvents.UpdateTick += MenuCompatability;
-            StardewModdingAPI.Events.GraphicsEvents.Resize += GraphicsEvents_Resize;
 
             //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
             hasLoadedTerrainList = false;
@@ -98,60 +96,12 @@ namespace Revitalize
 
             PlayerVariables.initializePlayerVariables();
             Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
-            Menus.Compatability.CompatabilityManager.doUpdate = false;
+          
             useMenuFocus = true;
             
         }
 
-        private void GraphicsEvents_Resize(object sender, EventArgs e)
-        {
-            if (Menus.Compatability.CompatabilityManager.compatabilityMenu != null)
-            {
-                Menus.Compatability.CompatabilityManager.compatabilityMenu.resize();
-            }
-        }
 
-        private void MenuCompatability(object sender, EventArgs e)
-        {
-           // if (Game1.options.gamepadControls == false && useMenuFocus==false) return;
-            if (Menus.Compatability.CompatabilityManager.doUpdate==true)
-            {
-                Menus.Compatability.CompatabilityManager.compatabilityMenu.Compatability();
-                Menus.Compatability.CompatabilityManager.compatabilityMenu.Update();
-                return;
-            }
-            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.characterCustomizer==false)
-            {
-                if (Menus.Compatability.CompatabilityManager.doUpdate == false)
-                {
-                    Menus.Compatability.CompatabilityManager.compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
-                    Menus.Compatability.CompatabilityManager.doUpdate = true;
-                }
-                
-            }
-            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.characterCustomizer == true)
-            {
-               // compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
-              //  compatabilityMenu.Compatability();
-            }
-            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.loadMenu == true)
-            {
-                // compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
-                //  compatabilityMenu.Compatability();
-            }
-            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.aboutMenu == true)
-            {
-                Log.AsyncO("BOOOO");
-                Menus.Compatability.CompatabilityManager.compatabilityMenu = new Menus.Compatability.Vanilla.AboutMenu();
-                Menus.Compatability.CompatabilityManager.doUpdate = true;
-                //  compatabilityMenu.Compatability();
-            }
-            else
-            {
-               // compatabilityMenu = null;
-            }
-            
-        }
 
         private void draw(object sender, EventArgs e)
         {
