@@ -8,6 +8,8 @@ using Revitalize.Resources.DataNodes;
 using Revitalize.Objects;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
+using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace Revitalize.Resources
 {
@@ -26,6 +28,7 @@ namespace Revitalize.Resources
         public static Dictionary<string, QuarryDataNode> quarryList;
         public static Dictionary<string, SeedDataNode> seedList;
         public static Dictionary<int, Spell> spellList;
+        public static Dictionary<string, TextureDataNode> spriteFontList;
 
         public static Dictionary<string, WeatherDebris> weatherDebrisDictionary;
 
@@ -37,6 +40,7 @@ namespace Revitalize.Resources
             seedList = new Dictionary<string, SeedDataNode>();
             spellList = new Dictionary<int, Spell>();
             weatherDebrisDictionary = new Dictionary<string, WeatherDebris>();
+            spriteFontList = new Dictionary<string, TextureDataNode>();
             fillAllDictionaries();
        }
 
@@ -48,6 +52,7 @@ namespace Revitalize.Resources
             fillSeedList();
             fillSpellList();
             fillWeatherDebrisList();
+            fillSpriteFontList();
         }
      
 
@@ -55,6 +60,7 @@ namespace Revitalize.Resources
         {
             acceptedTypes.Add("Revitalize.Objects.Decoration", new SerializerDataNode(new ser(Serialize.serializeDecoration) ,new par(Serialize.parseDecoration),new world(Serialize.serializeDecorationFromWorld)));
             acceptedTypes.Add("Revitalize.Objects.Light", new SerializerDataNode(new ser(Serialize.serializeLight), new par(Serialize.parseLight),new world(Serialize.serializeLightFromWorld)));
+            acceptedTypes.Add("Revitalize.Objects.SpriteFontObject", new SerializerDataNode(new ser(Serialize.serializeSpriteFontObject), new par(Serialize.parseSpriteFontObject), new world(Serialize.serializeSpriteFontObjectFromWorld)));
             acceptedTypes.Add("Revitalize.Objects.shopObject", new SerializerDataNode(new ser(Serialize.serializeShopObject), new par(Serialize.parseShopObject), new world(Serialize.serializeShopObjectFromWorld)));
             acceptedTypes.Add("Revitalize.Objects.Machines.Quarry", new SerializerDataNode(new ser(Serialize.serializeQuarry), new par(Serialize.parseQuarry),new world(Serialize.serializeQuarryFromWorld)));
             acceptedTypes.Add("Revitalize.Objects.Machines.Spawner", new SerializerDataNode(new ser(Serialize.serializeSpawner), new par(Serialize.parseSpawner), new world(Serialize.serializeSpawnerFromWorld)));
@@ -151,6 +157,13 @@ namespace Revitalize.Resources
         {
             WeatherDebris w = new WeatherDebris(new Vector2((float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Width), (float)Game1.random.Next(0, Game1.graphics.GraphicsDevice.Viewport.Height)), 0, (float)Game1.random.Next(15) / 500f, (float)Game1.random.Next(-10, 0) / 50f, (float)Game1.random.Next(10) / 50f);
             weatherDebrisDictionary.Add("Pink Flower Petal", w);
+        }
+
+        public static void fillSpriteFontList()
+        {
+            spriteFontList.Add("0", new TextureDataNode(Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "0")), Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "0")));
+
+
         }
 
     }

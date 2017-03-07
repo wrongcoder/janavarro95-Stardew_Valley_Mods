@@ -64,6 +64,7 @@
     <Compile Include="Menus\FarmOptionsMenu.cs" />
     <Compile Include="Menus\GameMenu.cs" />
     <Compile Include="Menus\InventoryPage.cs" />
+    <Compile Include="Menus\SpriteKeyboard.cs" />
     <Compile Include="Objects\Decoration.cs" />
     <Compile Include="Objects\ExtraSeeds.cs" />
     <Compile Include="Objects\GiftPackage.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Objects\Machines\Spawner.cs" />
     <Compile Include="Menus\LightCustomizer.cs" />
     <Compile Include="Objects\shopObject.cs" />
+    <Compile Include="Objects\SpriteFontObject.cs" />
     <Compile Include="Persistance\MapSwapData.cs" />
     <Compile Include="Persistance\PlayerVariables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Resources\DataNodes\SeedDataNode.cs" />
     <Compile Include="Resources\DataNodes\SerializerDataNode.cs" />
     <Compile Include="Resources\DataNodes\SpellFunctionDataNode.cs" />
+    <Compile Include="Resources\DataNodes\TextureDataNode.cs" />
     <Compile Include="Resources\DataNodes\TrackedTerrainDataNode.cs" />
     <Compile Include="Resources\DataNodes\TrackedTerrainDummyDataNode.cs" />
     <Compile Include="Resources\Dictionaries.cs" />

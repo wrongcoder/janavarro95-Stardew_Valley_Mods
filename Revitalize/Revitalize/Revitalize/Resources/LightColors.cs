@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -319,6 +320,15 @@ namespace Revitalize.Resources
         //Custom Colors go beneath here
 
 
+        public static Color randomColor()
+        {
+            Random r = new Random(Game1.player.money + Game1.tileSize + Game1.dayOfMonth);
+            int R = r.Next(0, 255);
+            int G = r.Next(0, 255);
+            int B = r.Next(0, 255);
+            int A = 255;
+            return new Color(R, G, B, A);
+        }
 
     }
 }

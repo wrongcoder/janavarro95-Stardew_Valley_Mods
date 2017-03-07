@@ -29,6 +29,7 @@ using Revitalize.Aesthetics;
 using Revitalize.Aesthetics.WeatherDebris;
 using System.Reflection;
 using StardewValley.Menus;
+using Revitalize.Resources.DataNodes;
 
 namespace Revitalize
 {
@@ -305,8 +306,10 @@ namespace Revitalize
                 List<Item> objShopList = new List<Item>();
                 List<Item> newInventory = new List<Item>();
 
-               
-           
+                TextureDataNode font;
+                Dictionaries.spriteFontList.TryGetValue("0", out font);
+                objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
+
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                 objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine,LightColors.Aquamarine,false));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));
