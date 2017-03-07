@@ -10,7 +10,7 @@ using StardewModdingAPI;
 
 namespace Revitalize.Menus.Compatability
 {
-    class MenuCompatabilityBase : Revitalize.Menus.Compatability.CompatInterface
+    class MenuCompatabilityBase : CompatInterface
     {
 
         public static Point startingPositionIndex = new Point(0, 1);
@@ -24,6 +24,7 @@ namespace Revitalize.Menus.Compatability
         public int maxY;
         public int minY;
 
+        public bool doUpdate;
 
         public static int millisecondMoveDelay;
         public static System.Timers.Timer movementTimer;
@@ -57,6 +58,7 @@ namespace Revitalize.Menus.Compatability
             movementTimer.Enabled = false;
            // movementTimer.Dispose();
             canMoveInMenu = true;
+          
     }
 
     public Dictionary<Point, Rectangle> ComponentList
@@ -73,6 +75,8 @@ namespace Revitalize.Menus.Compatability
                 // throw new NotImplementedException();
             }
         }
+
+  
 
         public virtual void Compatability()
         {

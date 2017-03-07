@@ -97,8 +97,8 @@ namespace Revitalize.Menus.Compatability.Vanilla
             GamePadState currentState = GamePad.GetState(PlayerIndex.One);
             if (currentState.Buttons.A ==ButtonState.Pressed && CurrentLocationIndex.X==2 && CurrentLocationIndex.Y==2)
             {
-               
-                Class1.compatabilityMenu = null;
+
+                Menus.Compatability.CompatabilityManager.doUpdate = false;
                 CompatabilityManager.characterCustomizer = true;
 
                // Log.AsyncC("A pressed");
@@ -108,7 +108,7 @@ namespace Revitalize.Menus.Compatability.Vanilla
             if (currentState.Buttons.A == ButtonState.Pressed && CurrentLocationIndex.X == 3 && CurrentLocationIndex.Y == 2)
             {
 
-                Class1.compatabilityMenu = null;
+                Menus.Compatability.CompatabilityManager.doUpdate = false;
                 CompatabilityManager.loadMenu = true;
 
                 // Log.AsyncC("A pressed");
@@ -118,7 +118,7 @@ namespace Revitalize.Menus.Compatability.Vanilla
             if (currentState.Buttons.A == ButtonState.Pressed && CurrentLocationIndex.X == 5 && CurrentLocationIndex.Y == 2)
             {
 
-                Class1.compatabilityMenu = null;
+                Menus.Compatability.CompatabilityManager.doUpdate = false;
                 CompatabilityManager.aboutMenu = true;
 
                 // Log.AsyncC("A pressed");
@@ -215,7 +215,7 @@ namespace Revitalize.Menus.Compatability.Vanilla
 
         public override void resize()
         {
-            Class1.compatabilityMenu = new TitleMenu();
+            Menus.Compatability.CompatabilityManager.compatabilityMenu = new TitleMenu();
         }
 
     }

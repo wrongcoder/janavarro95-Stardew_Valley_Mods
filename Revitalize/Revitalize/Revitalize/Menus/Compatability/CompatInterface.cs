@@ -17,7 +17,7 @@ namespace Revitalize.Menus.Compatability
             set;
         }
 
-    void Compatability();
+        void Compatability();
         void Update();
         void moveLeft();
         void moveRight();

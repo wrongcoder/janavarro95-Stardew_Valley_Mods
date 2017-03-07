@@ -62,7 +62,7 @@ namespace Revitalize
       public static  bool hasLoadedTerrainList;
         List<GameLoc> newLoc;
 
-        public static Menus.Compatability.CompatInterface compatabilityMenu;
+       
 
       public static  bool gameLoaded;
 
@@ -98,32 +98,35 @@ namespace Revitalize
 
             PlayerVariables.initializePlayerVariables();
             Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
-            compatabilityMenu = null;
+            Menus.Compatability.CompatabilityManager.doUpdate = false;
             useMenuFocus = true;
             
         }
 
         private void GraphicsEvents_Resize(object sender, EventArgs e)
         {
-            if (compatabilityMenu != null)
+            if (Menus.Compatability.CompatabilityManager.compatabilityMenu != null)
             {
-                compatabilityMenu.resize();
+                Menus.Compatability.CompatabilityManager.compatabilityMenu.resize();
             }
         }
 
         private void MenuCompatability(object sender, EventArgs e)
         {
-            if (Game1.options.gamepadControls == false && useMenuFocus==false) return;
-            if (compatabilityMenu != null)
+           // if (Game1.options.gamepadControls == false && useMenuFocus==false) return;
+            if (Menus.Compatability.CompatabilityManager.doUpdate==true)
             {
-                compatabilityMenu.Compatability();
-                compatabilityMenu.Update();
+                Menus.Compatability.CompatabilityManager.compatabilityMenu.Compatability();
+                Menus.Compatability.CompatabilityManager.compatabilityMenu.Update();
                 return;
             }
             if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.characterCustomizer==false)
             {
-              if(compatabilityMenu==null)  compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
-             
+                if (Menus.Compatability.CompatabilityManager.doUpdate == false)
+                {
+                    Menus.Compatability.CompatabilityManager.compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
+                    Menus.Compatability.CompatabilityManager.doUpdate = true;
+                }
                 
             }
             if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.characterCustomizer == true)
@@ -138,6 +141,7 @@ namespace Revitalize
             }
             if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.aboutMenu == true)
             {
+                Log.AsyncO("BOOOO");
                 // compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
                 //  compatabilityMenu.Compatability();
             }
