@@ -30,6 +30,8 @@ namespace MenuControllerCompatability
 
         private void MenuCompatability(object sender, EventArgs e)
         {
+            if (Game1.activeClickableMenu == null) return;
+            //Log.AsyncC(Game1.activeClickableMenu.GetType());
             GamePadState currentState = GamePad.GetState(PlayerIndex.One);
             if (currentState.IsConnected == false||Game1.options.gamepadControls==false) return;
             // if (Game1.options.gamepadControls == false && useMenuFocus==false) return;

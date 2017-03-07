@@ -155,7 +155,7 @@ namespace Compatability
         public virtual void updateMouse(Point p)
         {
             
-            if (p.X == 0 && p.Y == 0) p = startingPositionIndex;
+            if (p.X == 0 || p.Y == 0) p = startingPositionIndex;
                 Game1.setMousePosition(p);
             
         }

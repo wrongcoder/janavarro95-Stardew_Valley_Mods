@@ -23,7 +23,11 @@ namespace Compatability.Vanilla
 
             componentList = new Dictionary<Point, Rectangle>();
 
-            CurrentLocationIndex = startingPositionIndex = new Point(1, 1);
+            componentList.Add(new Point(-1, -1), new Rectangle(-999, -999, 2, 2));
+            CurrentLocationIndex = new Point(-1, -1);
+            startingPositionIndex = new Point(1, 1);
+
+
             componentList.Clear();
             Vector2 topLeftPositionForCenteringOnScreen = Utility.getTopLeftPositionForCenteringOnScreen(800, 600, 0, 0);
             componentList.Add(new Point(1, 1), new Rectangle((int)topLeftPositionForCenteringOnScreen.X + Game1.tileSize / 2, (int)topLeftPositionForCenteringOnScreen.Y + 600 - 100 - Game1.tileSize * 3 - Game1.pixelZoom * 4, 800 - Game1.tileSize, Game1.tileSize));

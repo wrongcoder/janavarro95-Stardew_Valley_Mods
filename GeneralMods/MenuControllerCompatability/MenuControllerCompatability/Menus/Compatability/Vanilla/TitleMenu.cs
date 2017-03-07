@@ -25,8 +25,10 @@ namespace Compatability.Vanilla
 
             componentList = new Dictionary<Point, Rectangle>();
 
-            CurrentLocationIndex =startingPositionIndex= new Point(2, 2);
 
+            componentList.Add(new Point(-1, -1), new Rectangle(-999, -999, 2, 2));
+            CurrentLocationIndex = new Point(-1, -1);
+            startingPositionIndex = new Point(2, 2);
 
             componentList.Clear();
             componentList.Add(new Point(2, 2), new Rectangle(width / 2 - 333 - 48, height - 174 - 24, 222, 174));//play

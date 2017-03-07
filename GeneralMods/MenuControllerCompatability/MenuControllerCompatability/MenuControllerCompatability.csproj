@@ -47,6 +47,7 @@
     <Compile Include="Menus\Compatability\CompatInterface.cs" />
     <Compile Include="Menus\Compatability\MenuCompatabilityBase.cs" />
     <Compile Include="Menus\Compatability\Vanilla\AboutMenu.cs" />
+    <Compile Include="Menus\Compatability\Vanilla\LoadGameMenu.cs" />
     <Compile Include="Menus\Compatability\Vanilla\TitleMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,12 +70,12 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-  <PropertyGroup>
-     <ModPath>$(GamePath)\Mods\$(TargetName)</ModPath>
-  </PropertyGroup>
-  <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFolder="$(ModPath)" />
-  <Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).pdb')" />
-  <Copy SourceFiles="$(TargetDir)\$(TargetName).dll.mdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).dll.mdb')" />
-  <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFolder="$(ModPath)" />
-</Target>
+    <PropertyGroup>
+      <ModPath>$(GamePath)\Mods\$(TargetName)</ModPath>
+    </PropertyGroup>
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFolder="$(ModPath)" />
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).pdb')" />
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll.mdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).dll.mdb')" />
+    <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFolder="$(ModPath)" />
+  </Target>
 </Project>
