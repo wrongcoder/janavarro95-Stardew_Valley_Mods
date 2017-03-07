@@ -142,7 +142,8 @@ namespace Revitalize
             if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.aboutMenu == true)
             {
                 Log.AsyncO("BOOOO");
-                // compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
+                Menus.Compatability.CompatabilityManager.compatabilityMenu = new Menus.Compatability.Vanilla.AboutMenu();
+                Menus.Compatability.CompatabilityManager.doUpdate = true;
                 //  compatabilityMenu.Compatability();
             }
             else

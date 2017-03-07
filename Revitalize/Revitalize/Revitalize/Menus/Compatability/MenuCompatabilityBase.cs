@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework;
 using StardewValley;
 using System.Timers;
 using StardewModdingAPI;
+using Microsoft.Xna.Framework.Input;
 
 namespace Revitalize.Menus.Compatability
 {
     class MenuCompatabilityBase : CompatInterface
     {
 
-        public static Point startingPositionIndex = new Point(0, 1);
+        public static Point startingPositionIndex;
         public static Point CurrentLocationIndex;
         public Dictionary<Point, Rectangle> componentList;
         public int width;
@@ -80,24 +81,75 @@ namespace Revitalize.Menus.Compatability
 
         public virtual void Compatability()
         {
-           // throw new NotImplementedException();
+            GamePadState currentState = GamePad.GetState(PlayerIndex.One);
+            if ((double)currentState.ThumbSticks.Left.X < 0 || currentState.IsButtonDown(Buttons.LeftThumbstickLeft))
+            {
+                moveLeft();
+            }
+            if ((double)currentState.ThumbSticks.Left.X > 0 || currentState.IsButtonDown(Buttons.LeftThumbstickRight))
+            {
+                moveRight();
+            }
+
+            if ((double)currentState.ThumbSticks.Left.Y < 0 || currentState.IsButtonDown(Buttons.LeftThumbstickRight))
+            {
+                moveDown();
+            }
+
+            if ((double)currentState.ThumbSticks.Left.Y > 0 || currentState.IsButtonDown(Buttons.LeftThumbstickRight))
+            {
+                moveUp();
+            }
+
+            Update();
         }
 
         
 
         public virtual void moveLeft()
         {
-          //  throw new NotImplementedException();
+            if (canMoveInMenu == false) return;
+            activateTimer();
+            CurrentLocationIndex.X--;
+
+            Rectangle p;
+            if (CurrentLocationIndex.X <= minX)
+            {
+                CurrentLocationIndex.X = minX;
+            }
+            //  Log.AsyncC("CRY");
+            componentList.TryGetValue(CurrentLocationIndex, out p);
+
+
+
+            updateMouse(getComponentCenter(p));
         }
 
         public virtual void moveRight()
         {
-            //throw new NotImplementedException();
+            if (canMoveInMenu == false) return;
+            activateTimer();
+            CurrentLocationIndex.X++;
+
+            Rectangle p;
+
+            if (CurrentLocationIndex.X >= maxX)
+            {
+                CurrentLocationIndex.X = maxX;
+            }
+
+
+
+            //  Log.AsyncC("CRY");
+            componentList.TryGetValue(CurrentLocationIndex, out p);
+            updateMouse(getComponentCenter(p));
         }
 
         public virtual void Update()
         {
-           // throw new NotImplementedException();
+            Rectangle p;
+            componentList.TryGetValue(CurrentLocationIndex, out p);
+            updateMouse(getComponentCenter(p));
         }
 
         public virtual void updateMouse(Point p)
@@ -116,12 +168,39 @@ namespace Revitalize.Menus.Compatability
 
         public virtual void moveUp()
         {
-          //  throw new NotImplementedException();
+            if (canMoveInMenu == false) return;
+            activateTimer();
+            CurrentLocationIndex.Y--;
+
+            Rectangle p;
+
+            //  Log.AsyncC("CRY");
+            componentList.TryGetValue(CurrentLocationIndex, out p);
+
+            if (CurrentLocationIndex.Y < minY)
+            {
+                CurrentLocationIndex.Y = minY;
+            }
+
+            updateMouse(getComponentCenter(p));
         }
 
         public virtual void moveDown()
         {
-           // throw new NotImplementedException();
+            if (canMoveInMenu == false) return;
+            activateTimer();
+            CurrentLocationIndex.Y++;
+
+            Rectangle p;
+            if (CurrentLocationIndex.Y > maxY)
+            {
+                CurrentLocationIndex.Y = maxY;
+            }
+            //  Log.AsyncC("CRY");
+            componentList.TryGetValue(CurrentLocationIndex, out p);
+
+
+            updateMouse(getComponentCenter(p));
         }
 
         public virtual void resize()

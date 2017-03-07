@@ -64,6 +64,7 @@
     <Compile Include="Menus\Compatability\CompatabilityManager.cs" />
     <Compile Include="Menus\Compatability\CompatInterface.cs" />
     <Compile Include="Menus\Compatability\MenuCompatabilityBase.cs" />
+    <Compile Include="Menus\Compatability\Vanilla\AboutMenu.cs" />
     <Compile Include="Menus\Compatability\Vanilla\TitleMenu.cs" />
     <Compile Include="Menus\FarmOptionsMenu.cs" />
     <Compile Include="Menus\GameMenu.cs" />
