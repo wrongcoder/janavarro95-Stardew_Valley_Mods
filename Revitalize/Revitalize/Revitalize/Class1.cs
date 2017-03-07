@@ -27,6 +27,8 @@ using Revitalize.Persistance;
 using Revitalize.Draw;
 using Revitalize.Aesthetics;
 using Revitalize.Aesthetics.WeatherDebris;
+using System.Reflection;
+using StardewValley.Menus;
 
 namespace Revitalize
 {
@@ -43,6 +45,8 @@ namespace Revitalize
     {
         public static string key_binding="P";
         public static string key_binding2 = "E";
+        public static string key_binding3 = "F";
+      public static  bool useMenuFocus;
         public static string path;
         const int range = 1;
 
@@ -58,6 +62,7 @@ namespace Revitalize
       public static  bool hasLoadedTerrainList;
         List<GameLoc> newLoc;
 
+        public static Menus.Compatability.CompatInterface compatabilityMenu;
 
       public static  bool gameLoaded;
 
@@ -81,7 +86,9 @@ namespace Revitalize
             StardewModdingAPI.Events.GraphicsEvents.OnPreRenderHudEvent += GraphicsEvents_OnPreRenderHudEvent;
 
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += draw;
-            
+
+            StardewModdingAPI.Events.GameEvents.UpdateTick += MenuCompatability;
+            StardewModdingAPI.Events.GraphicsEvents.Resize += GraphicsEvents_Resize;
 
             //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
             hasLoadedTerrainList = false;
@@ -91,6 +98,54 @@ namespace Revitalize
 
             PlayerVariables.initializePlayerVariables();
             Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
+            compatabilityMenu = null;
+            useMenuFocus = true;
+            
+        }
+
+        private void GraphicsEvents_Resize(object sender, EventArgs e)
+        {
+            if (compatabilityMenu != null)
+            {
+                compatabilityMenu.resize();
+            }
+        }
+
+        private void MenuCompatability(object sender, EventArgs e)
+        {
+            if (Game1.options.gamepadControls == false && useMenuFocus==false) return;
+            if (compatabilityMenu != null)
+            {
+                compatabilityMenu.Compatability();
+                compatabilityMenu.Update();
+                return;
+            }
+            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.characterCustomizer==false)
+            {
+              if(compatabilityMenu==null)  compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
+             
+                
+            }
+            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.characterCustomizer == true)
+            {
+               // compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
+              //  compatabilityMenu.Compatability();
+            }
+            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.loadMenu == true)
+            {
+                // compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
+                //  compatabilityMenu.Compatability();
+            }
+            if (Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && Revitalize.Menus.Compatability.CompatabilityManager.aboutMenu == true)
+            {
+                // compatabilityMenu = new Menus.Compatability.Vanilla.TitleMenu();
+                //  compatabilityMenu.Compatability();
+            }
+            else
+            {
+               // compatabilityMenu = null;
+            }
+            
         }
 
         private void draw(object sender, EventArgs e)
@@ -140,7 +195,6 @@ namespace Revitalize
                 Util.WaterAllCropsInAllLocations();
             }
             WeatherDebrisSystem.update();
-
         }
    
 
@@ -275,7 +329,7 @@ namespace Revitalize
             {
                // System.Threading.Thread.Sleep(1);
                
-                   Game1.activeClickableMenu = new GameMenu();
+                   Game1.activeClickableMenu = new  Revitalize.Menus.GameMenu();
             }
             gametick = false;
             
@@ -284,7 +338,7 @@ namespace Revitalize
 
         private void ShopCall(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-            Game1.currentSeason = "spring";
+           // Game1.currentSeason = "spring";
             Game1.player.money = 9999;
           //  Log.AsyncG(Game1.tileSize);
 

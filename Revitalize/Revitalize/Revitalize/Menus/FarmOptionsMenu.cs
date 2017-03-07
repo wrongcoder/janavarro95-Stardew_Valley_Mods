@@ -270,15 +270,18 @@ namespace Revitalize.Menus
                             {
                                 if (c.name == "Farm")
                                 {
-
-                            Util.removeAllWaterTilesFromMap(c);
-                            c.map = v.map;
+                         
+                                Util.removeAllWaterTilesFromMap(c);
+                            
+                          
+                                c.map = v.map;
                                     whichFarm = count;
                                     Log.AsyncG("MAP SWAP!");
                          Class1.persistentMapSwap.mapPath= Path.Combine(Game1.content.RootDirectory,"Maps","Farms", v.clicky.name,v.clicky.name);
                             Log.AsyncG(Class1.persistentMapSwap.mapPath);
                             Serialize.serializeMapSwapData(Class1.persistentMapSwap);
-                                }
+                            Util.removeAllWaterTilesFromMap(c);
+                        }
                             }
                         }
 

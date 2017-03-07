@@ -838,11 +838,21 @@ namespace Revitalize
 
         public static void removeAllWaterTilesFromMap(GameLocation c)
         {
+            Log.AsyncM(c.map.Layers[0].LayerWidth);
+            Log.AsyncM(c.map.Layers[0].LayerWidth);
             for (int i = 0; i < c.map.Layers[0].LayerWidth; i++)
             {
                 for (int j = 0; j < c.map.Layers[0].LayerHeight; j++)
                 {
-                        c.waterTiles[i, j] = false; 
+                    try
+                    {
+                        Log.AsyncY(i + " " + j);
+                        c.waterTiles[i, j] = false;
+                    }
+                    catch(Exception e)
+                    {
+                        
+                    }
                 }
             }
             Log.AsyncC("Removed All Water Tiles from "+c.name );

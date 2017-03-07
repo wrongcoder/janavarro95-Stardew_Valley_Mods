@@ -94,6 +94,7 @@ namespace Revitalize.Menus
 			Game1.player.FarmerSprite.StopAnimation();
             this.LightObject = Obj;
             colorChanged = false;
+            this.height = this.height / 3;
 		}
 
 		public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
@@ -111,9 +112,9 @@ namespace Revitalize.Menus
 
 			this.leftSelectionButtons.Clear();
 			this.rightSelectionButtons.Clear();
-			this.okButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1), 1f, false);
-
-            this.cancelButton = new ClickableTextureComponent("Cancel", new Rectangle(this.xPositionOnScreen +this.width/4  - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 47, -1, -1), 1f, false);
+			this.okButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, (this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4)/3, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1), 1f, false);
+            
+            this.cancelButton = new ClickableTextureComponent("Cancel", new Rectangle(this.xPositionOnScreen +this.width/4  - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, (this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4)/3, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 47, -1, -1), 1f, false);
             /*
             this.nameBox = new TextBox(Game1.content.Load<Texture2D>("LooseSprites\\textBox"), null, Game1.smallFont, Game1.textColor)
 			{
@@ -271,7 +272,7 @@ namespace Revitalize.Menus
                 
                 //UTIL FUNCTION TO GET CORRECT COLOR
                 LightObject.lightColor = this.lightColorPicker.getSelectedColor();
-                LightObject.lightColor = Util.invertColor(LightObject.lightColor);
+                //LightObject.lightColor = Util.invertColor(LightObject.lightColor);
 
                 this.LightObject.removeLights(this.LightObject.thisLocation);
                 this.LightObject.addLights(this.LightObject.thisLocation,this.LightObject.lightColor);
@@ -451,8 +452,9 @@ namespace Revitalize.Menus
             //}
             else if (this.lightColorPicker.containsPoint(x, y))
 			{
-               
-               LightObject.lightColor =this.lightColorPicker.click(x, y);
+
+                LightObject.lightColor = this.lightColorPicker.click(x, y);
+                LightObject.lightColor = Util.invertColor(LightObject.lightColor);
                // LightObject.lightColor = Util.invertColor(LightObject.lightColor);
                 this.lastHeldColorPicker = this.lightColorPicker;
                 colorChanged = true;
@@ -617,8 +619,10 @@ namespace Revitalize.Menus
                // c2 = Util.invertColor(c2);
                 colorChanged = true;
                 this.lightColorPicker.setColor(c2);
-                this.LightObject.lightColor = c2;
-               // LightObject.lightColor = Util.invertColor(LightObject.lightColor);
+                this.LightObject.lightColor =Util.invertColor( c2);
+                this.LightObject.removeLights(this.LightObject.thisLocation);
+                this.LightObject.addLights(this.LightObject.thisLocation, this.LightObject.lightColor);
+                // LightObject.lightColor = Util.invertColor(LightObject.lightColor);
                 //this.eyeColorPicker.setColor(Game1.player.newEyeColor);
                 //this.hairColorPicker.setColor(Game1.player.hairstyleColor);
             }
@@ -635,8 +639,11 @@ namespace Revitalize.Menus
 					if (this.lastHeldColorPicker.Equals(this.lightColorPicker))
 					{
                         colorChanged = true;
-                        this.LightObject.lightColor=this.lightColorPicker.clickHeld(x, y);
-                     //   LightObject.lightColor = Util.invertColor(LightObject.lightColor);
+                        this.LightObject.lightColor=Util.invertColor(this.lightColorPicker.clickHeld(x, y));
+                        this.LightObject.removeLights(this.LightObject.thisLocation);
+                        this.LightObject.addLights(this.LightObject.thisLocation, this.LightObject.lightColor);
+
+                        //   LightObject.lightColor = Util.invertColor(LightObject.lightColor);
                     }
 				}
 				this.colorPickerTimer = 100;
@@ -805,8 +812,8 @@ namespace Revitalize.Menus
 		public override void draw(SpriteBatch b)
 		{
 			Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, null, false);
-			b.Draw(Game1.daybg, new Vector2((float)(this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
-			Game1.player.FarmerRenderer.draw(b, Game1.player.FarmerSprite.CurrentAnimationFrame, Game1.player.FarmerSprite.CurrentFrame, Game1.player.FarmerSprite.SourceRect, new Vector2((float)(this.xPositionOnScreen - 2 + Game1.tileSize * 2 / 3 + Game1.tileSize * 2 - Game1.tileSize / 2), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth - Game1.tileSize / 4 + IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 2)), Vector2.Zero, 0.8f, Color.White, 0f, 1f, Game1.player);
+			//b.Draw(Game1.daybg, new Vector2((float)(this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
+			//Game1.player.FarmerRenderer.draw(b, Game1.player.FarmerSprite.CurrentAnimationFrame, Game1.player.FarmerSprite.CurrentFrame, Game1.player.FarmerSprite.SourceRect, new Vector2((float)(this.xPositionOnScreen - 2 + Game1.tileSize * 2 / 3 + Game1.tileSize * 2 - Game1.tileSize / 2), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth - Game1.tileSize / 4 + IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 2)), Vector2.Zero, 0.8f, Color.White, 0f, 1f, Game1.player);
 			if (!this.wizardSource)
 			{/*
 				using (List<ClickableComponent>.Enumerator enumerator = this.genderButtons.GetEnumerator())
@@ -838,13 +845,7 @@ namespace Revitalize.Menus
 			//	Game1.player.favoriteThing = this.favThingBox.Text;
 				//Game1.player.farmName = this.farmnameBox.Text;
 			}
-			using (List<ClickableComponent>.Enumerator enumerator = this.leftSelectionButtons.GetEnumerator())
-			{
-				while (enumerator.MoveNext())
-				{
-					((ClickableTextureComponent)enumerator.Current).draw(b);
-				}
-			}
+
 			foreach (ClickableComponent current in this.labels)
 			{
 				string text = "";
@@ -900,13 +901,6 @@ namespace Revitalize.Menus
 				if (text.Length > 0)
 				{
 					Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2((float)(current.bounds.X + Game1.tileSize / 3) - Game1.smallFont.MeasureString(text).X / 2f, (float)(current.bounds.Y + Game1.tileSize / 2)), color, 1f, -1f, -1, -1, 1f, 3);
-				}
-			}
-			using (List<ClickableComponent>.Enumerator enumerator = this.rightSelectionButtons.GetEnumerator())
-			{
-				while (enumerator.MoveNext())
-				{
-					((ClickableTextureComponent)enumerator.Current).draw(b);
 				}
 			}
 			if (!this.wizardSource)
