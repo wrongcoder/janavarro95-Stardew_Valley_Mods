@@ -285,7 +285,7 @@ namespace Revitalize
             {
                // System.Threading.Thread.Sleep(1);
                
-                   Game1.activeClickableMenu = new  Revitalize.Menus.GameMenu();
+                 //  Game1.activeClickableMenu = new  Revitalize.Menus.GameMenu();
             }
             gametick = false;
             
@@ -294,7 +294,12 @@ namespace Revitalize
 
         private void ShopCall(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-           // Game1.currentSeason = "spring";
+            if (e.KeyPressed.ToString() == "J")
+            {
+                Log.AsyncC("Mouse Position " + Game1.getMousePosition());
+            }
+
+            // Game1.currentSeason = "spring";
             Game1.player.money = 9999;
           //  Log.AsyncG(Game1.tileSize);
 
@@ -309,7 +314,7 @@ namespace Revitalize
                 TextureDataNode font;
                 Dictionaries.spriteFontList.TryGetValue("0", out font);
                 objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
-
+                objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<Item>(),3, Color.White));
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                 objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine,LightColors.Aquamarine,false));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));

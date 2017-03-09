@@ -67,7 +67,8 @@ namespace Revitalize.Resources
             acceptedTypes.Add("Revitalize.Objects.GiftPackage", new SerializerDataNode(new ser(Serialize.serializeGiftPackage), new par(Serialize.parseGiftPackage),null));
             acceptedTypes.Add("Revitalize.Objects.ExtraSeeds", new SerializerDataNode(new ser(Serialize.serializeExtraSeeds), new par(Serialize.parseExtraSeeds),null));
             acceptedTypes.Add("Revitalize.Objects.Spell", new SerializerDataNode(new ser(Serialize.serializeSpell), new par(Serialize.parseSpell), null));
-        }
+            acceptedTypes.Add("Revitalize.Magic.Alchemy.Objects.BagofHolding", new SerializerDataNode(new ser(Serialize.serializeBagOfHolding), new par(Serialize.parseBagOfHolding), null));
+                }
 
         public static void addAllInteractionTypes()
         {
@@ -75,7 +76,7 @@ namespace Revitalize.Resources
             interactionTypes.Add("Seeds", Util.plantExtraCropHere); //for modded stardew seeds
             interactionTypes.Add("Gift Package", Util.getGiftPackageContents);
             interactionTypes.Add("Spell", Magic.MagicMonitor.castMagic);
-
+            interactionTypes.Add("Bag of Holding", Revitalize.Magic.Alchemy.Objects.BagofHolding.OpenBag);
         }
 
 

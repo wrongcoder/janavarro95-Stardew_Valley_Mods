@@ -53,8 +53,62 @@ namespace Revitalize
             return new Microsoft.Xna.Framework.Rectangle(Convert.ToInt32(parsed[2]), Convert.ToInt32(parsed[4]), Convert.ToInt32(parsed[6]), Convert.ToInt32(parsed[8]));
             }
 
+        public static bool addItemToOtherInventory(List<Item> inventory, Item I)
+        {
+            if (I == null) return false;
+            if (isInventoryFull(inventory) == false)
+            {
+                
+                for (int i=0; i<inventory.Capacity;i++)
+                {
+                    
+                    if (inventory == null)
+                    {
+                        Log.AsyncC("WHY NULL???");
+                    }
+                    if (inventory.Count == 0)
+                    {
+                        inventory.Add(I);
+                        return true;
+                    }
+                    if (inventory[i] == null)
+                    {
+                        inventory[i] = I;
+                        continue;
+                    }
+                    if (inventory.ElementAt(i).canStackWith(I))
+                    {
+                        I.addToStack(I.getStack());
+                        return true;
+                    }
+                    else
+                    {
+                        inventory.Add(I);
+                        return true;
+                    }
+                }
+                
+                inventory.Add(I);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool isInventoryFull(List<Item> inventory)
+        {
+          //  Log.AsyncG("size "+inventory.Count);
+          //  Log.AsyncG("max "+inventory.Capacity);
+            if (inventory.Count == inventory.Capacity) return true;
+            else return false;
+        }
+
+
+
         public static bool addItemToInventoryElseDrop(Item I)
         {
+            if (I == null) return false;
             if (Game1.player.isInventoryFull() == false)
             {
                 Game1.player.addItemToInventoryBool(I, false);
@@ -69,6 +123,27 @@ namespace Revitalize
                 return false;
             }
         }
+
+        public static bool addItemToInventorySilently(Item I)
+        {
+            if (I == null) return false;
+            if (Game1.player.isInventoryFull() == false)
+            {
+                Game1.player.addItemToInventory(I);
+                return true;
+            }
+            else
+            {
+                Random random = new Random(129);
+                int i = random.Next();
+                i = i % 4;
+                Vector2 v2 = new Vector2(Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
+                Game1.createItemDebris(I, v2, i);
+                return false;
+            }
+        }
+
+
 
         public static bool addItemToInventoryAndCleanTrackedList(CoreObject I)
         {
