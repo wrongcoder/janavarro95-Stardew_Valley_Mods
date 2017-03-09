@@ -314,7 +314,7 @@ namespace Revitalize
                 TextureDataNode font;
                 Dictionaries.spriteFontList.TryGetValue("0", out font);
                 objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
-                objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<Item>(),3, Color.White));
+                objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<Item>(),10, Color.White));
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                 objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine,LightColors.Aquamarine,false));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));

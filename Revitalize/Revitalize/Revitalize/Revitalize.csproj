@@ -54,7 +54,7 @@
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
     <Compile Include="Magic\Alchemy\Objects\BagofHolding.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="CoreObject.cs" />
+    <Compile Include="Objects\Generic\CoreObject.cs" />
     <Compile Include="Aesthetics\Draw\ThingsToDraw.cs" />
     <Compile Include="Locations\GameLoc.cs" />
     <Compile Include="Locations\ModTown.cs" />
@@ -70,6 +70,7 @@
     <Compile Include="Menus\StorageContainer.cs" />
     <Compile Include="Objects\Decoration.cs" />
     <Compile Include="Objects\ExtraSeeds.cs" />
+    <Compile Include="Objects\Generic\ExpandableInventoryObject.cs" />
     <Compile Include="Objects\GiftPackage.cs" />
     <Compile Include="Objects\Light.cs" />
     <Compile Include="Objects\Machines\Machine.cs" />

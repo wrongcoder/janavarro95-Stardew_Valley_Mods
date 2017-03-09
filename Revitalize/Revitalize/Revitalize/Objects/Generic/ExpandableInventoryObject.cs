@@ -11,13 +11,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Revitalize.Magic.Alchemy.Objects
+namespace Revitalize.Objects.Generic
 {
     /// <summary>
     /// Original Stardew Furniture Class but rewritten to be placed anywhere.
     /// </summary>
-    public class BagofHolding : Revitalize.Objects.Generic.ExpandableInventoryObject
+    public class ExpandableInventoryObject : CoreObject
     {
+
         public new bool flipped;
 
         [XmlIgnore]
@@ -27,7 +28,8 @@ namespace Revitalize.Magic.Alchemy.Objects
 
         public string texturePath;
 
-
+        List<List<Item>> allInventories;
+        int inventoryIndex;
 
         public override string Name
         {
@@ -41,33 +43,38 @@ namespace Revitalize.Magic.Alchemy.Objects
             }
         }
 
-        public BagofHolding()
+        public ExpandableInventoryObject()
         {
             this.updateDrawPosition();
         }
 
-        public BagofHolding(bool f)
+        public ExpandableInventoryObject(bool f)
         {
             //does nothng
         }
 
-        public BagofHolding(int which, Vector2 tile, List<Item> Inventory,int InventorySize, Color DrawColor)
+        public ExpandableInventoryObject(int which, Vector2 tile, List<List<Item>> inventories, int InventorySize, Color DrawColor,int InventoryIndex=0)
         {
             which = 0;
-            
+           
             this.drawColor = DrawColor;
             this.tileLocation = tile;
             this.inventory = new List<Item>();
             this.InitializeBasics(0, tile);
 
-
-            this.inventory = Inventory;
+            foreach(var v in inventories)
+            {
+                this.allInventories.Add(v);
+            }
+            this.inventoryIndex = InventoryIndex;
+            if (inventories!=null)  this.inventory = inventories[inventoryIndex];
+           
             this.inventoryMaxSize = InventorySize;
             this.inventory.Capacity = inventoryMaxSize;
             if (TextureSheet == null)
             {
                 TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds"));
-                texturePath = Path.Combine("Revitalize","CropsNSeeds","Graphics","seeds");
+                texturePath = Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds");
             }
             Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
             string[] array = dictionary[which].Split(new char[]
@@ -150,7 +157,7 @@ namespace Revitalize.Magic.Alchemy.Objects
                 //do some stuff when the right button is down
                 // Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(this.inventory);
                 // rotate();
-                this.openBag();
+                this.openInventory();
                 Game1.playSound("coin");
                 return true;
             }
@@ -177,12 +184,12 @@ namespace Revitalize.Magic.Alchemy.Objects
                 //  Game1.showRedMessage("Why1?");
                 return false;
             }
-            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is BagofHolding)))
+            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is ExpandableInventoryObject)))
             {
                 if (Game1.player.currentLocation is FarmHouse)
                 {
                     //   Game1.showRedMessage("Why2?");
-                    //this.heldObject = new BagofHolding(parentSheetIndex, Vector2.Zero);
+                    //this.heldObject = new ExpandableInventoryObject(parentSheetIndex, Vector2.Zero);
                     Util.addItemToInventoryAndCleanTrackedList(this);
                     this.flaggedForPickUp = true;
                     this.thisLocation = null;
@@ -199,7 +206,7 @@ namespace Revitalize.Magic.Alchemy.Objects
                     }
                     else
                     {
-                        // this.heldObject = new BagofHolding(parentSheetIndex, Vector2.Zero);
+                        // this.heldObject = new ExpandableInventoryObject(parentSheetIndex, Vector2.Zero);
                         Util.addItemToInventoryAndCleanTrackedList(this);
                         //  this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                         //   this.heldObject = null;
@@ -249,13 +256,13 @@ namespace Revitalize.Magic.Alchemy.Objects
 
         public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, Farmer who)
         {
-            if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.heldObject == null && !dropIn.bigCraftable && (!(dropIn is BagofHolding) || ((dropIn as BagofHolding).getTilesWide() == 1 && (dropIn as BagofHolding).getTilesHigh() == 1)))
+            if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.heldObject == null && !dropIn.bigCraftable && (!(dropIn is ExpandableInventoryObject) || ((dropIn as ExpandableInventoryObject).getTilesWide() == 1 && (dropIn as ExpandableInventoryObject).getTilesHigh() == 1)))
             {
                 this.heldObject = (StardewValley.Object)dropIn.getOne();
                 this.heldObject.tileLocation = this.tileLocation;
                 this.heldObject.boundingBox.X = this.boundingBox.X;
                 this.heldObject.boundingBox.Y = this.boundingBox.Y;
-                //  Log.AsyncO(getDefaultBoundingBoxForType((dropIn as BagofHolding).Decoration_type));
+                //  Log.AsyncO(getDefaultBoundingBoxForType((dropIn as ExpandableInventoryObject).Decoration_type));
                 this.heldObject.performDropDownAction(who);
                 if (!probe)
                 {
@@ -386,9 +393,9 @@ namespace Revitalize.Magic.Alchemy.Objects
                         foreach (KeyValuePair<Vector2, StardewValley.Object> something in l.objects)
                         {
                             StardewValley.Object obj = something.Value;
-                            if ((obj.GetType()).ToString().Contains("BagofHolding"))
+                            if ((obj.GetType()).ToString().Contains("ExpandableInventoryObject"))
                             {
-                                BagofHolding current = (BagofHolding)obj;
+                                ExpandableInventoryObject current = (ExpandableInventoryObject)obj;
                                 if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
                                 {
                                     bool result = true;
@@ -416,7 +423,7 @@ namespace Revitalize.Magic.Alchemy.Objects
                         vector.X += (float)(Game1.tileSize / 2);
                         vector.Y += (float)(Game1.tileSize / 2);
                         /*
-                        foreach (BagofHolding current in (l as FarmHouse).BagofHolding)
+                        foreach (ExpandableInventoryObject current in (l as FarmHouse).ExpandableInventoryObject)
                         {
                             if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
                             {
@@ -506,9 +513,9 @@ namespace Revitalize.Magic.Alchemy.Objects
                 foreach (KeyValuePair<Vector2, StardewValley.Object> c in location.objects)
                 {
                     StardewValley.Object ehh = c.Value;
-                    if (((ehh.GetType()).ToString()).Contains("BagofHolding"))
+                    if (((ehh.GetType()).ToString()).Contains("ExpandableInventoryObject"))
                     {
-                        BagofHolding current2 = (BagofHolding)ehh;
+                        ExpandableInventoryObject current2 = (ExpandableInventoryObject)ehh;
                         if (current2.Decoration_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
                         {
                             current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
@@ -855,9 +862,9 @@ namespace Revitalize.Magic.Alchemy.Objects
             }
             if (this.heldObject != null)
             {
-                if (this.heldObject is BagofHolding)
+                if (this.heldObject is ExpandableInventoryObject)
                 {
-                    (this.heldObject as BagofHolding).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as BagofHolding).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
+                    (this.heldObject as ExpandableInventoryObject).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as ExpandableInventoryObject).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
                 spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), this.drawColor * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
@@ -872,7 +879,7 @@ namespace Revitalize.Magic.Alchemy.Objects
 
         public override Item getOne()
         {
-            BagofHolding BagofHolding = new BagofHolding(this.parentSheetIndex, this.tileLocation, this.inventory,this.inventoryMaxSize,this.drawColor);
+            ExpandableInventoryObject ExpandableInventoryObject = new ExpandableInventoryObject(this.parentSheetIndex, this.tileLocation, this.allInventories,inventoryMaxSize, this.drawColor);
 
             /*
             drawPosition = this.drawPosition;
@@ -882,7 +889,7 @@ namespace Revitalize.Magic.Alchemy.Objects
             rotations = this.rotations;
             rotate();
             */
-            return BagofHolding;
+            return ExpandableInventoryObject;
         }
 
         public override string getCategoryName()
@@ -896,10 +903,10 @@ namespace Revitalize.Magic.Alchemy.Objects
             return Util.invertColor(LightColors.Silver);
         }
 
-        public virtual void openBag()
+        public virtual void openInventory()
         {
-            Game1.activeClickableMenu = new Revitalize.Menus.ItemGrabMenu(this.inventory,3);
-          //  this.itemReadyForHarvest = false;
+            Game1.activeClickableMenu = new Revitalize.Menus.ItemGrabMenu(this.inventory, 3);
+            //  this.itemReadyForHarvest = false;
             /*
             Log.AsyncC("DROPPING INVENTORY!");
 
@@ -919,9 +926,9 @@ namespace Revitalize.Magic.Alchemy.Objects
             */
         }
 
-        public static void OpenBag()
+        public static void OpenInventory()
         {
-           if( (Game1.player.ActiveObject as BagofHolding!=null)) (Game1.player.ActiveObject as BagofHolding).openBag();
+            if ((Game1.player.ActiveObject as ExpandableInventoryObject != null)) (Game1.player.ActiveObject as ExpandableInventoryObject).openInventory();
         }
     }
 }

@@ -66,9 +66,12 @@ namespace Revitalize.Menus
 
         public int capacity;
 
-        public ItemGrabMenu(List<Item> inventory) : base(null, true, true, 0, 0)
+        public int Rows;
+
+        public ItemGrabMenu(List<Item> inventory,int rows) : base(null, true, true, 0, 0)
         {
-            this.ItemsToGrabMenu = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen, false, inventory, null, inventory.Capacity, 3, 0, 0, true);
+            Rows = rows;
+            this.ItemsToGrabMenu = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen, false, inventory, null, inventory.Capacity, Rows, 0, 0, true);
             capacity = inventory.Capacity;
           //  Log.AsyncO("MAX LOAD"+this.capacity);
             this.reverseGrab = true;
@@ -78,7 +81,7 @@ namespace Revitalize.Menus
             this.inventory.showGrayedOutSlots = true;
         }
 
-        public ItemGrabMenu(List<Item> inventory, bool reverseGrab, bool showReceivingMenu, InventoryMenu.highlightThisItem highlightFunction, ItemGrabMenu.behaviorOnItemSelect behaviorOnItemSelectFunction, string message, ItemGrabMenu.behaviorOnItemSelect behaviorOnItemGrab = null, bool snapToBottom = false, bool canBeExitedWithKey = false, bool playRightClickSound = true, bool allowRightClick = true, bool showOrganizeButton = false, int source = 0, Item sourceItem = null) : base(highlightFunction, true, true, 0, 0)
+        public ItemGrabMenu(List<Item> inventory,int rows, bool reverseGrab, bool showReceivingMenu, InventoryMenu.highlightThisItem highlightFunction, ItemGrabMenu.behaviorOnItemSelect behaviorOnItemSelectFunction, string message, ItemGrabMenu.behaviorOnItemSelect behaviorOnItemGrab = null, bool snapToBottom = false, bool canBeExitedWithKey = false, bool playRightClickSound = true, bool allowRightClick = true, bool showOrganizeButton = false, int source = 0, Item sourceItem = null) : base(highlightFunction, true, true, 0, 0)
         {
             this.source = source;
             this.message = message;
@@ -88,6 +91,7 @@ namespace Revitalize.Menus
             this.allowRightClick = allowRightClick;
             this.inventory.showGrayedOutSlots = true;
             this.sourceItem = sourceItem;
+            this.Rows = rows;
             if (source == 1 && sourceItem != null && sourceItem is Chest)
             {
                 this.chestColorPicker = new DiscreteColorPicker(this.xPositionOnScreen, this.yPositionOnScreen - Game1.tileSize - IClickableMenu.borderWidth * 2, 0, new Chest(true));
@@ -103,7 +107,7 @@ namespace Revitalize.Menus
                 base.movePosition(0, Game1.viewport.Height - (this.yPositionOnScreen + this.height - IClickableMenu.spaceToClearTopBorder));
                 this.snappedtoBottom = true;
             }
-            this.ItemsToGrabMenu = new InventoryMenu(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen, false, inventory, highlightFunction, inventory.Capacity, 3, 0, 0, true);
+            this.ItemsToGrabMenu = new InventoryMenu(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen, false, inventory, highlightFunction, inventory.Capacity, Rows, 0, 0, true);
             this.behaviorFunction = behaviorOnItemSelectFunction;
             this.behaviorOnItemGrab = behaviorOnItemGrab;
             this.canExitOnKey = canBeExitedWithKey;
@@ -264,7 +268,7 @@ namespace Revitalize.Menus
                     if (this.okButton.containsPoint(x, y) == false && this.organizeButton.containsPoint(x, y) == false && f == false)
                     {
                         //  
-                        Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
+                        Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory,this.Rows, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
                         Game1.playSound("Ship");
 
                     }
@@ -302,7 +306,7 @@ namespace Revitalize.Menus
                //   j=  this.ItemsToGrabMenu.leftClick(x, y, this.heldItem, false);
                     Util.addItemToOtherInventory(this.ItemsToGrabMenu.actualInventory, i);
                     Log.AsyncG("item swap");
-                    Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
+                    Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory,this.Rows, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
                     Game1.playSound("Ship");
                     this.heldItem = null;
                     return;
@@ -325,7 +329,7 @@ namespace Revitalize.Menus
                         
                     }
                 }
-                Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
+                Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory,this.Rows, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
                 Game1.playSound("Ship");
 
             }
@@ -432,7 +436,7 @@ namespace Revitalize.Menus
             if (this.organizeButton != null && this.organizeButton.containsPoint(x, y))
             {
                 ItemGrabMenu.organizeItemsInList(this.ItemsToGrabMenu.actualInventory);
-                Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
+                Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory,this.Rows, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
                 Game1.playSound("Ship");
                 return;
             }
