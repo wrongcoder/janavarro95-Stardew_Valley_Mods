@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -236,27 +237,79 @@ namespace Revitalize
                 ProcessDirectoryForCleanUp(subdirectory);
 
         }
+        
+        public static string ParseXMLType(string path)
+        {
+            string[] s = File.ReadAllLines(path);
+            string returnString="";
+            foreach(string v in s)
+            {
+             //   Log.AsyncC(v);
+                if (v.Contains("thisType"))
+                {                  
+                  returnString=  v.Remove(0, 12);                  
+                 returnString=   returnString.Remove(returnString.Length - 11, 11);
+                }
+
+            }
+            return returnString;
+        }
+
 
         // Insert logic for processing found files here.
         public static void ProcessFileForCleanUp(string path)
         {
             string[] ehh = File.ReadAllLines(path);
             string data = ehh[0];
-
+            Revitalize.CoreObject cObj;
+            string a;
+            string[] b;
+            string s="";
             //  Log.AsyncC(data);
-            //   dynamic obj = JObject.Parse(data);
+            try
+            {
+                dynamic obj = JObject.Parse(data);
 
 
-            //   Log.AsyncC(obj.thisType);
+                //   Log.AsyncC(obj.thisType);
 
-            //  string a = obj.thisType;
-            //  string[] b = a.Split(',');
-            // string s = b.ElementAt(0);
-            //   Log.AsyncC(s);
+                 a = obj.thisType;
+                b = a.Split(',');
+                s = b.ElementAt(0);
+                //   Log.AsyncC(s);
+            }
+            catch(Exception e)
+            {
 
 
-            var cObj = parseBagOfHolding(path); //pair.Value.parse.Invoke(path);
-           cObj.TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds"));
+                foreach (KeyValuePair<string, SerializerDataNode> pair in Dictionaries.acceptedTypes)
+                {
+                   var word = ParseXMLType(path);
+                    if (pair.Key == word.ToString() )
+                    {
+                        cObj = pair.Value.parse.Invoke(path);
+                        cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
+                        cObj.resetTexture();
+                        if (cObj.thisLocation == null)
+                        {
+                            Game1.player.addItemToInventory(cObj);
+                            return;
+                        }
+                        else
+                        {
+                            cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
+                            Lists.trackedObjectList.Add(cObj);
+                            //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+                        }
+                    }
+                }
+                        
+                Log.AsyncG("attempting to parse from path");
+            }
+
+            // var cObj = parseBagOfHolding(path); //pair.Value.parse.Invoke(path);
+            //  cObj.TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds"));
+            /*
             cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
             if (cObj.thisLocation == null)
             {
@@ -269,7 +322,7 @@ namespace Revitalize
                 Lists.trackedObjectList.Add(cObj);
                 //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
             }
-            /*
+            */
             if (Dictionaries.acceptedTypes.ContainsKey(s))
             {
                 //  Log.AsyncC("FUUUUU");
@@ -279,8 +332,15 @@ namespace Revitalize
                     {
                         try
                         {
-                            var cObj = pair.Value.parse.Invoke(data);
-                            cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
+                            //parse from Json Style
+                        
+                   
+                                cObj = pair.Value.parse.Invoke(data);
+                                cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
+                            
+  
+                            
+
                             if (cObj.thisLocation == null)
                             {
                                 Game1.player.addItemToInventory(cObj);
@@ -300,7 +360,7 @@ namespace Revitalize
                     }
                 }
             }
-            */
+            
 
         }
 
@@ -1264,7 +1324,7 @@ namespace Revitalize
         }
         public static void serializeBagOfHolding(Item d)
         {
-            WriteToXMLFile<BagofHolding>(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
+            WriteToXMLFile<BagofHolding>(Path.Combine(InvPath, d.Name + ".xml"), (BagofHolding)d);
            // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
         }
 

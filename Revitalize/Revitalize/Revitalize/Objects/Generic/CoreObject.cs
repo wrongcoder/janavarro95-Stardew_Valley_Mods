@@ -1534,6 +1534,11 @@ public override bool isPlaceable()
 
         }
 
+        public virtual void resetTexture()
+        {
+            TextureSheet = Game1.content.Load<Texture2D>(this.texturePath);
+        }
+
         public override string getCategoryName()
         {
             return "Core Mod Object";
