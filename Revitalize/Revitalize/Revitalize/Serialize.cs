@@ -265,6 +265,7 @@ namespace Revitalize
             string a;
             string[] b;
             string s="";
+            Log.AsyncC(path);
             //  Log.AsyncC(data);
             try
             {
@@ -304,7 +305,7 @@ namespace Revitalize
                     }
                 }
                         
-                Log.AsyncG("attempting to parse from path");
+                Log.AsyncG("attempting to parse from path and value of s is " + s);
             }
 
             // var cObj = parseBagOfHolding(path); //pair.Value.parse.Invoke(path);

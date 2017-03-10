@@ -18,7 +18,7 @@ namespace Revitalize
     ///  Revitalize CoreObject Class. This is a core class and should only be extended upon.
     /// </summary>
     /// 
-    [XmlInclude(typeof(Revitalize.Objects.Light))]
+    [XmlInclude(typeof(Revitalize.Objects.Light)),XmlInclude(typeof(Revitalize.Objects.SpriteFontObject))]
     public class CoreObject : StardewValley.Object
     {
         public const int chair = 0;
