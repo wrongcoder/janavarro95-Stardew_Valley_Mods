@@ -23,7 +23,7 @@ namespace Revitalize.Magic.Alchemy.Objects
         [XmlIgnore]
         public bool flaggedForPickUp;
 
-        private bool lightGlowAdded;
+        public bool lightGlowAdded;
 
         public string texturePath;
 
@@ -46,28 +46,54 @@ namespace Revitalize.Magic.Alchemy.Objects
             this.updateDrawPosition();
         }
 
-        public BagofHolding(bool f)
-        {
-            //does nothng
-        }
 
-        public BagofHolding(int which, Vector2 tile, List<Item> Inventory,int InventorySize, Color DrawColor)
+
+        public BagofHolding(int which, Vector2 tile, List<List<Item>> InventoriesToAdd, Color DrawColor, int InventoryIndex=0)
         {
             which = 0;
-            
+
             this.drawColor = DrawColor;
             this.tileLocation = tile;
             this.inventory = new List<Item>();
             this.InitializeBasics(0, tile);
+            this.allInventories = new List<List<Item>>();
+            this.allInventoriesCapacities = new List<int>();
+            foreach (var v in InventoriesToAdd)
+            {
+                this.allInventories.Add(v);
+                this.allInventoriesCapacities.Add(v.Capacity);
+            }
+            this.inventoryIndex = InventoryIndex;
 
+            try
+            {
+                if (InventoriesToAdd != null)
+                {
+                    this.inventory = InventoriesToAdd[inventoryIndex];
+                    this.inventory.Capacity = InventoriesToAdd[InventoryIndex].Capacity;
+                }
+            }
+            catch(Exception e)
+            {
+                if (InventoriesToAdd != null)
+                {
+                    this.inventory = InventoriesToAdd[0];
+                    this.inventory.Capacity = InventoriesToAdd[0].Capacity;
+                    // this.allInventoriesCapacities.Add(this.inventory.Capacity);
+                    Log.AsyncC("WHT THE SNAG");
+                    foreach (var v in InventoriesToAdd)
+                    {
+                     //   this.allInventories.Add(v);
+                        this.allInventoriesCapacities.Add(v.Capacity);
+                    }
+                }
 
-            this.inventory = Inventory;
-            this.inventoryMaxSize = InventorySize;
-            this.inventory.Capacity = inventoryMaxSize;
+            }
+            
             if (TextureSheet == null)
             {
                 TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds"));
-                texturePath = Path.Combine("Revitalize","CropsNSeeds","Graphics","seeds");
+                texturePath = Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds");
             }
             Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
             string[] array = dictionary[which].Split(new char[]
@@ -93,7 +119,7 @@ namespace Revitalize.Magic.Alchemy.Objects
                 {
                     ' '
                 })[1]);
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16,  16,  16);
                 this.defaultSourceRect = this.sourceRect;
             }
             this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
@@ -112,7 +138,7 @@ namespace Revitalize.Magic.Alchemy.Objects
                 {
                     ' '
                 })[1]);
-                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
+                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, 1 * Game1.tileSize, 1 * Game1.tileSize);
                 this.defaultBoundingBox = this.boundingBox;
             }
             this.updateDrawPosition();
@@ -120,6 +146,7 @@ namespace Revitalize.Magic.Alchemy.Objects
             this.price = Convert.ToInt32(array[5]);
             this.parentSheetIndex = which;
         }
+
 
         public override string getDescription()
         {
@@ -627,45 +654,47 @@ namespace Revitalize.Magic.Alchemy.Objects
 
         private Rectangle getDefaultSourceRectForType(int tileIndex, int type)
         {
+            return new Rectangle(tileIndex * 16 % TextureSheet.Width, tileIndex * 16 / TextureSheet.Width * 16,1 * 16, 1 * 16);
+
             int num;
             int num2;
             switch (type)
             {
                 case 0:
                     num = 1;
-                    num2 = 2;
+                    num2 = 1;
                     goto IL_94;
                 case 1:
-                    num = 2;
-                    num2 = 2;
+                    num = 1;
+                    num2 = 1;
                     goto IL_94;
                 case 2:
-                    num = 3;
-                    num2 = 2;
+                    num = 1;
+                    num2 = 1;
                     goto IL_94;
                 case 3:
-                    num = 2;
-                    num2 = 2;
+                    num = 1;
+                    num2 = 1;
                     goto IL_94;
                 case 4:
-                    num = 2;
-                    num2 = 2;
+                    num = 1;
+                    num2 = 1;
                     goto IL_94;
                 case 5:
-                    num = 5;
-                    num2 = 3;
+                    num = 1;
+                    num2 = 1;
                     goto IL_94;
                 case 6:
-                    num = 2;
-                    num2 = 2;
+                    num = 1;
+                    num2 = 1;
                     goto IL_94;
                 case 7:
                     num = 1;
-                    num2 = 3;
+                    num2 = 1;
                     goto IL_94;
                 case 8:
                     num = 1;
-                    num2 = 2;
+                    num2 = 1;
                     goto IL_94;
                 case 10:
                     num = 2;
@@ -872,7 +901,7 @@ namespace Revitalize.Magic.Alchemy.Objects
 
         public override Item getOne()
         {
-            BagofHolding BagofHolding = new BagofHolding(this.parentSheetIndex, this.tileLocation, this.inventory,this.inventoryMaxSize,this.drawColor);
+            BagofHolding BagofHolding = new BagofHolding(this.parentSheetIndex, this.tileLocation, this.allInventories,this.drawColor);
 
             /*
             drawPosition = this.drawPosition;
@@ -898,25 +927,8 @@ namespace Revitalize.Magic.Alchemy.Objects
 
         public virtual void openBag()
         {
-            Game1.activeClickableMenu = new Revitalize.Menus.ItemGrabMenu(this.inventory,3);
-          //  this.itemReadyForHarvest = false;
-            /*
-            Log.AsyncC("DROPPING INVENTORY!");
+            Game1.activeClickableMenu = new Revitalize.Magic.Alchemy.Menus.ExpandableItemGrabMenu(this,this.inventory,3);
 
-            Random random = new Random(inventory.Count);
-            int i = random.Next();
-            i = i % 4;
-            Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
-            foreach (var I in inventory)
-            {
-                Log.AsyncY(I.Name);
-                Log.AsyncO(I.getStack());
-                Log.AsyncM(I.Stack);
-                Log.AsyncC("Dropping an item!");
-                Game1.createItemDebris(I, v2, i);
-            }
-            inventory.Clear();
-            */
         }
 
         public static void OpenBag()

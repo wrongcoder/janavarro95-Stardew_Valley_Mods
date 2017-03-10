@@ -164,7 +164,8 @@ namespace Revitalize.Resources
         {
             spriteFontList.Add("0", new TextureDataNode(Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "0")), Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "0")));
 
-
+            spriteFontList.Add("leftArrow", new TextureDataNode(Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "leftArrow")), Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "leftArrow")));
+            spriteFontList.Add("rightArrow", new TextureDataNode(Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "rightArrow")), Path.Combine("Revitalize", "Fonts", "colorlessSpriteFont", "vanilla", "rightArrow")));
         }
 
     }

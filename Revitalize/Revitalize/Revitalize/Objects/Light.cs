@@ -39,7 +39,7 @@ namespace Revitalize.Objects
             this.tileLocation = tile;
             lightsOn = false;        
             lightColor = Color.Black;
-            thisType = this.GetType();
+            //thisType = this.GetType();
         }
 
         public Light()
@@ -59,11 +59,8 @@ namespace Revitalize.Objects
             this.lightColor = LightColor;
             this.drawColor = DrawColor;
             areLightAndDrawColorsDifferent = differentColors;
-            if (TextureSheet == null)
-            {
-                TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize","Lights","AdjustableLights","Graphics","AdjustableLights"));
-                texturePath = Path.Combine("Revitalize", "Lights", "AdjustableLights", "Graphics", "AdjustableLights");
-            }
+            TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Lights", "AdjustableLights", "Graphics", "AdjustableLights"));
+            texturePath = Path.Combine("Revitalize", "Lights", "AdjustableLights", "Graphics", "AdjustableLights");
             Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Revitalize", "Lights", "AdjustableLights", "Data", "AdjustableLights"));
             string[] array = dictionary[which].Split(new char[]
             {
@@ -730,7 +727,11 @@ namespace Revitalize.Objects
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
-        if(areLightAndDrawColorsDifferent==false)    spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)),Util.invertColor(this.lightColor), 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            if (TextureSheet == null)
+            {
+                TextureSheet = Game1.content.Load<Texture2D>(texturePath);
+            }
+            if (areLightAndDrawColorsDifferent==false)    spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)),Util.invertColor(this.lightColor), 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
         else
             {
                 spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Util.invertColor(this.drawColor), 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
@@ -755,7 +756,10 @@ namespace Revitalize.Objects
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
-
+            if (TextureSheet == null)
+            {
+                TextureSheet = Game1.content.Load<Texture2D>(texturePath);
+            }
             if (areLightAndDrawColorsDifferent == false) spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Util.invertColor(this.lightColor), 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
             else
             {
@@ -765,6 +769,10 @@ namespace Revitalize.Objects
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
+            if (TextureSheet == null)
+            {
+                TextureSheet = Game1.content.Load<Texture2D>(texturePath);
+            }
             if (x == -1)
             {
                 if (areLightAndDrawColorsDifferent == false) spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Util.invertColor(this.lightColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
@@ -798,6 +806,10 @@ namespace Revitalize.Objects
 
         public override void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
+            if (TextureSheet == null)
+            {
+                TextureSheet = Game1.content.Load<Texture2D>(texturePath);
+            }
             spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Util.invertColor(this.drawColor) * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 

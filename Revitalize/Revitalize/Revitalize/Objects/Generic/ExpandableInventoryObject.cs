@@ -28,8 +28,9 @@ namespace Revitalize.Objects.Generic
 
         public string texturePath;
 
-        List<List<Item>> allInventories;
-        int inventoryIndex;
+       public List<List<Item>> allInventories;
+       public int inventoryIndex;
+        public List<int> allInventoriesCapacities;
 
         public override string Name
         {

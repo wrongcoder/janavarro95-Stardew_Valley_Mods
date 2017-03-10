@@ -103,7 +103,7 @@ namespace Revitalize.Objects
         public Decoration(int which, Vector2 tile, bool isRemovable = true)
         {
             removable = isRemovable;
-            this.thisType = GetType();
+           // this.thisType = GetType();
             this.tileLocation = tile;
             this.InitializeBasics(0, tile);
             if (TextureSheet == null)

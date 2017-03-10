@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisPlus.cs" />
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
+    <Compile Include="Magic\Alchemy\Menus\ExpandableItemGrabMenu.cs" />
     <Compile Include="Magic\Alchemy\Objects\BagofHolding.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Objects\Generic\CoreObject.cs" />

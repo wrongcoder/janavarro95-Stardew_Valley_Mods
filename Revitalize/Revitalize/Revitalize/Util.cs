@@ -58,33 +58,33 @@ namespace Revitalize
             if (I == null) return false;
             if (isInventoryFull(inventory) == false)
             {
-                
+                if (inventory == null)
+                {
+                    return false;
+                }
+                if (inventory.Count == 0)
+                {
+                    inventory.Add(I);
+                    return true;
+                }
                 for (int i=0; i<inventory.Capacity;i++)
                 {
-                    
-                    if (inventory == null)
+                 //   Log.AsyncC("OK????");
+
+                    foreach (var v in inventory)
                     {
-                        Log.AsyncC("WHY NULL???");
-                    }
-                    if (inventory.Count == 0)
-                    {
-                        inventory.Add(I);
-                        return true;
-                    }
-                    if (inventory[i] == null)
-                    {
-                        inventory[i] = I;
-                        continue;
-                    }
-                    if (inventory.ElementAt(i).canStackWith(I))
-                    {
-                        I.addToStack(I.getStack());
-                        return true;
-                    }
-                    else
-                    {
-                        inventory.Add(I);
-                        return true;
+                        
+                        if (inventory.Count == 0)
+                        {
+                            addItemToOtherInventory(inventory, I);
+                            return true;
+                        }
+                        if (v == null) continue;
+                        if (v.canStackWith(I))
+                        {
+                            v.addToStack(I.getStack());
+                            return true;
+                        }
                     }
                 }
                 

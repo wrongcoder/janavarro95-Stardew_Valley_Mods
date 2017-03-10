@@ -47,7 +47,7 @@ namespace Revitalize.Objects
             this.tileLocation = tile;
             lightsOn = false;
             lightColor = Color.Black;
-            thisType = this.GetType();
+            //thisType = this.GetType();
             
         }
 

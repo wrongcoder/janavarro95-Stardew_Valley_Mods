@@ -99,6 +99,7 @@ namespace Revitalize
             Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
           
             useMenuFocus = true;
+            Lists.loadAllListsAtEntry();
             
         }
 
@@ -147,7 +148,7 @@ namespace Revitalize
         {
             if (Game1.player.isMoving() == true && hasLoadedTerrainList == false)
             {
-                Lists.loadAllLists();
+                Lists.loadAllListsAfterMovement();
                 Util.WaterAllCropsInAllLocations();
             }
             WeatherDebrisSystem.update();
@@ -314,7 +315,21 @@ namespace Revitalize
                 TextureDataNode font;
                 Dictionaries.spriteFontList.TryGetValue("0", out font);
                 objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
-                objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<Item>(),10, Color.White));
+                objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<List<Item>>()
+                {
+                    new List<Item>()
+                    {
+                        Capacity=6
+                    },
+                    new List<Item>()
+                    {
+                        Capacity=10
+                    },
+                    new List<Item>()
+                    {
+                        Capacity=15
+                    }
+                }, Color.White));
                 //  objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                 objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine,LightColors.Aquamarine,false));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));

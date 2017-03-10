@@ -18,6 +18,7 @@ namespace Revitalize
     ///  Revitalize CoreObject Class. This is a core class and should only be extended upon.
     /// </summary>
     /// 
+    [XmlInclude(typeof(Revitalize.Objects.Light))]
     public class CoreObject : StardewValley.Object
     {
         public const int chair = 0;
@@ -68,6 +69,7 @@ namespace Revitalize
 
         public string description;
 
+        [XmlIgnore]
         public Texture2D TextureSheet;
 
         public new bool flipped;
@@ -91,7 +93,7 @@ namespace Revitalize
 
         public Color lightColor;
 
-        public Type thisType;
+        public string thisType;
 
         public bool removable;
 
@@ -119,7 +121,7 @@ namespace Revitalize
             lightsOn = false;
            
             lightColor = Color.Black;
-            thisType = this.GetType();
+            thisType = this.GetType().ToString();
         }
 
         public CoreObject()

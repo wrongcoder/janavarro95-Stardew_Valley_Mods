@@ -68,7 +68,7 @@ namespace Revitalize.Objects.Machines
             }
 
             InitializeBasics(InventoryMaxSize, Tile);
-            this.thisType = this.GetType();
+           // this.thisType = this.GetType();
             if (TextureSheet == null)
             {
                 TextureSheet = Game1.content.Load<Texture2D>("TileSheets\\furniture");

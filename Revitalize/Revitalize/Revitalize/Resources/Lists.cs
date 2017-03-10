@@ -17,6 +17,7 @@ namespace Revitalize.Resources
 
         public static List<Revitalize.CoreObject> trackedObjectList;
 
+        public static List<Type> serializerTypes;
   
 
         public static void initializeAllLists()
@@ -24,15 +25,31 @@ namespace Revitalize.Resources
             trackedTerrainFeatures = new List<DataNodes.TrackedTerrainDataNode>();
             trackedTerrainFeaturesDummyList = new List<DataNodes.TrackedTerrainDummyDataNode>();
             trackedObjectList = new List<CoreObject>();
+           
             WeatherDebrisSystem.thisWeatherDebris = new List<WeatherDebrisPlus>();
         }
 
-        public static void loadAllLists()
+        public static void loadAllListsAfterMovement()
         {
             Serialize.parseTrackedTerrainDataNodeList(Path.Combine( Serialize.PlayerDataPath ,"TrackedTerrainFeaturesList.json"));
               
             Class1.hasLoadedTerrainList = true;
-          //  Log.AsyncC(Path.Combine(Serialize.PlayerDataPath, "TrackedTerrainFeaturesList.json"));
+            //  Log.AsyncC(Path.Combine(Serialize.PlayerDataPath, "TrackedTerrainFeaturesList.json"));
+           
         }
+        public static void loadAllListsAtEntry()
+        {
+            serializerTypes = new List<Type>();
+            loadSerializerTypesList();
+        }
+
+        public static void loadSerializerTypesList()
+        {
+            serializerTypes.Add(typeof(StardewValley.Item));
+            serializerTypes.Add(typeof(StardewValley.Tool));
+            serializerTypes.Add(typeof(Revitalize.Objects.Light));
+            serializerTypes.Add(typeof(Revitalize.CoreObject));
+        }
+
     }
 }

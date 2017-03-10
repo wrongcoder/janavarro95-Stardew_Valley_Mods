@@ -18,6 +18,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace Revitalize
 {
@@ -32,6 +34,8 @@ namespace Revitalize
 
         public static string TrackedTerrainDataPath;
 
+        public static string SerializerTrashPath;
+
 
         public static void createDirectories()
         {
@@ -40,8 +44,11 @@ namespace Revitalize
             PlayerDataPath = Path.Combine(DataDirectoryPath, Game1.player.name);
             InvPath = Path.Combine(PlayerDataPath, "Inventory");
             objectsInWorldPath = Path.Combine(PlayerDataPath, "objects");
+            SerializerTrashPath = Path.Combine(Class1.path, "SerializerTrash");
 
-           // Log.AsyncC(TrackedTerrainDataPath);
+
+            
+            // Log.AsyncC(TrackedTerrainDataPath);
 
             if (!Directory.Exists(DataDirectoryPath))
             {
@@ -59,10 +66,14 @@ namespace Revitalize
             {
                 Directory.CreateDirectory(InvPath);
             }
-
-            foreach(GameLocation loc in Game1.locations)
+            if (!Directory.Exists(SerializerTrashPath))
             {
-                if (!Directory.Exists(Path.Combine(objectsInWorldPath,loc.name)))
+                Directory.CreateDirectory(SerializerTrashPath);
+            }
+
+            foreach (GameLocation loc in Game1.locations)
+            {
+                if (!Directory.Exists(Path.Combine(objectsInWorldPath, loc.name)))
                 {
                     Directory.CreateDirectory(Path.Combine(objectsInWorldPath, loc.name));
                 }
@@ -117,12 +128,13 @@ namespace Revitalize
             Log.AsyncM("Revitalize: Done cleaning world for saving.");
 
         }
-        
+
 
         public static void cleanUpInventory()
         {
             ProcessDirectoryForDeletion(InvPath);
 
+            ProcessDirectoryForDeletion(SerializerTrashPath);
 
             List<Item> removalList = new List<Item>();
             foreach (Item d in Game1.player.items)
@@ -171,7 +183,7 @@ namespace Revitalize
         /// </summary>
         public static void restoreAllModObjects()
         {
-          
+
             //   Log.AsyncG(InvPath);
             ProcessDirectoryForCleanUp(InvPath);
             try
@@ -179,7 +191,7 @@ namespace Revitalize
                 Lists.trackedObjectList.Clear(); //clear whatever mod objects I'm tracking
                 ProcessDirectoryForCleanUp(objectsInWorldPath); //restore whatever I'm tracking here when I replace the object back into the world. This also works when loading up the game, not just when saving/loading
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Serialize.createDirectories();
             }
@@ -215,7 +227,7 @@ namespace Revitalize
             foreach (string fileName in fileEntries)
             {
                 ProcessFileForCleanUp(fileName);
-               // File.Delete(fileName);
+                // File.Delete(fileName);
             }
 
             // Recurse into subdirectories of this directory.
@@ -231,17 +243,33 @@ namespace Revitalize
             string[] ehh = File.ReadAllLines(path);
             string data = ehh[0];
 
-          //  Log.AsyncC(data);
-            dynamic obj = JObject.Parse(data);
+            //  Log.AsyncC(data);
+            //   dynamic obj = JObject.Parse(data);
 
 
             //   Log.AsyncC(obj.thisType);
 
-            string a = obj.thisType;
-            string[] b = a.Split(',');
-            string s = b.ElementAt(0);
+            //  string a = obj.thisType;
+            //  string[] b = a.Split(',');
+            // string s = b.ElementAt(0);
             //   Log.AsyncC(s);
 
+
+            var cObj = parseBagOfHolding(path); //pair.Value.parse.Invoke(path);
+           cObj.TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds"));
+            cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
+            if (cObj.thisLocation == null)
+            {
+                Game1.player.addItemToInventory(cObj);
+                return;
+            }
+            else
+            {
+                cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
+                Lists.trackedObjectList.Add(cObj);
+                //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+            }
+            /*
             if (Dictionaries.acceptedTypes.ContainsKey(s))
             {
                 //  Log.AsyncC("FUUUUU");
@@ -249,23 +277,30 @@ namespace Revitalize
                 {
                     if (pair.Key == s)
                     {
-                        var cObj = pair.Value.parse.Invoke(data);
-                        cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
-                        if (cObj.thisLocation == null)
+                        try
                         {
-                            Game1.player.addItemToInventory(cObj);
-                            return;
+                            var cObj = pair.Value.parse.Invoke(data);
+                            cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
+                            if (cObj.thisLocation == null)
+                            {
+                                Game1.player.addItemToInventory(cObj);
+                                return;
+                            }
+                            else
+                            {
+                                cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
+                                Lists.trackedObjectList.Add(cObj);
+                                //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+                            }
                         }
-                        else
+                        catch (Exception e)
                         {
-                           cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
-                            Lists.trackedObjectList.Add(cObj);
-                            //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+                        
                         }
                     }
                 }
             }
-
+            */
 
         }
 
@@ -278,7 +313,8 @@ namespace Revitalize
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 //settings.TypeNameHandling = TypeNameHandling.Auto;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-              //  settings.Formatting = Formatting.Indented;
+                settings.TypeNameHandling = TypeNameHandling.Auto;
+                //  settings.Formatting = Formatting.Indented;
                 var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, settings);
                 int i = 0;
                 string s = filePath;
@@ -290,8 +326,8 @@ namespace Revitalize
                 }
                 filePath = s;
 
-                 writer = new StreamWriter(filePath, append);
-               
+                writer = new StreamWriter(filePath, append);
+
                 writer.Write(contentsToWriteToFile);
             }
             finally
@@ -306,14 +342,16 @@ namespace Revitalize
             TextReader reader = null;
             try
             {
+                Log.AsyncC(filePath);
                 reader = new StreamReader(filePath);
                 var fileContents = reader.ReadToEnd();
 
                 JsonSerializerSettings settings = new JsonSerializerSettings();
-               // settings.TypeNameHandling = TypeNameHandling.Auto;
+                // settings.TypeNameHandling = TypeNameHandling.Auto;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                settings.TypeNameHandling = TypeNameHandling.Auto;
                 //settings.Formatting = Formatting.Indented;
-                return JsonConvert.DeserializeObject<T>(fileContents,settings);
+                return JsonConvert.DeserializeObject<T>(fileContents, settings);
             }
             finally
             {
@@ -323,9 +361,107 @@ namespace Revitalize
         }
 
 
+        public static void WriteToXMLFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
+        {
+            // Create an instance of the XmlSerializer class;
+            // specify the type of object to serialize.
+            XmlSerializer serializer =
+            new XmlSerializer(typeof(T));
+            
+            TextWriter writer = new StreamWriter(filePath);
+            serializer.Serialize(writer, objectToWrite);
+            writer.Close();
+
+
+
+            // XElement school = doc.Element("School");
+            // school.Add(new XAttribute("ID", "ID_Value"));
+
+
+
+        }
+
+        public static bool WriteToXMLFileSafetyCheck(string filePath, Item objectToWrite, bool append = false)
+        {
+            // Create an instance of the XmlSerializer class;
+            // specify the type of object to serialize.
+            int j = 0;
+            foreach (var v in Lists.serializerTypes)
+            {
+                j++;
+             //   Log.AsyncG("HELLO");
+                try
+                {
+                    XmlSerializer serializer =
+                    new XmlSerializer(v);
+                    
+                    TextWriter writer = new StreamWriter(Path.Combine(SerializerTrashPath,objectToWrite.Name+j));
+                        serializer.Serialize(writer, objectToWrite);
+  
+                    writer.Close();
+                    File.Delete(Path.Combine(SerializerTrashPath, objectToWrite.Name + j));
+
+                 //   Log.AsyncC("return results");
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    
+                //    Log.AsyncR(e);
+                    continue;
+                }
+            }
+
+          
+
+            Log.AsyncC("CHECK RESULTS " + false);
+            return false;
+
+            // XElement school = doc.Element("School");
+            // school.Add(new XAttribute("ID", "ID_Value"));
+
+
+
+        }
+
+        public static T ReadFromXMLFile<T>(string filePath) where T : new()
+        {
+            // Create an instance of the XmlSerializer class;
+            // specify the type of object to be deserialized.
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            /* If the XML document has been altered with unknown 
+            nodes or attributes, handle them with the 
+            UnknownNode and UnknownAttribute events.*/
+            /*
+            serializer.UnknownNode += new
+            XmlNodeEventHandler(serializer_UnknownNode);
+            serializer.UnknownAttribute += new
+            XmlAttributeEventHandler(serializer_UnknownAttribute);
+            */
+            // A FileStream is needed to read the XML document.
+            FileStream fs = new FileStream(filePath, FileMode.Open);
+            // Declare an object variable of the type to be deserialized.
+          
+            /* Use the Deserialize method to restore the object's state with
+            data from the XML document. */
+           return (T)serializer.Deserialize(fs);
+
+        }
+
+        private static void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
+        {
+            Log.AsyncR(e);
+        }
+
+        private static void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
+        {
+            Log.AsyncR(e);
+        }
+
         public static void serializeMapSwapData(MapSwapData d)
         {
-            if(File.Exists(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"))){
+            if (File.Exists(Path.Combine(PlayerDataPath, "ChosenMap" + ".json")))
+            {
 
                 File.Delete(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"));
             }
@@ -336,11 +472,11 @@ namespace Revitalize
         {
             try
             {
-             return Serialize.ReadFromJsonFile<MapSwapData>(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"));
+                return Serialize.ReadFromJsonFile<MapSwapData>(Path.Combine(PlayerDataPath, "ChosenMap" + ".json"));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-               // Log.AsyncR(e);
+                // Log.AsyncR(e);
                 return null;
             }
         }
@@ -350,7 +486,7 @@ namespace Revitalize
         public static Item parseItemFromJson(string data)
         {
 
-            dynamic obj = JObject.Parse(data);            
+            dynamic obj = JObject.Parse(data);
             string a = obj.thisType;
             string[] b = a.Split(',');
             string s = b.ElementAt(0);
@@ -361,25 +497,26 @@ namespace Revitalize
                 {
                     if (pair.Key == s)
                     {
-                     var   cObj = pair.Value.parse.Invoke(data);
+                        var cObj = pair.Value.parse.Invoke(data);
                         return cObj;
                     }
                 }
             }
 
+
             return null;
-           // return cObj;
-            
+            // return cObj;
+
         }
 
         public static Decoration parseDecoration(string data)
         {
-            
+
             dynamic obj = JObject.Parse(data);
 
 
-          //  Log.AsyncC(obj.thisType);
-            
+            //  Log.AsyncC(obj.thisType);
+
 
             Decoration d = new Decoration(false);
 
@@ -388,7 +525,7 @@ namespace Revitalize
             d.rotations = obj.rotations;
             d.currentRotation = obj.currentRotation;
             string s1 = Convert.ToString(obj.sourceRect);
-            d.sourceRect=Util.parseRectFromJson(s1);
+            d.sourceRect = Util.parseRectFromJson(s1);
             string s2 = Convert.ToString(obj.defaultSourceRect);
             d.defaultSourceRect = Util.parseRectFromJson(s2);
             string s3 = Convert.ToString(obj.defaultBoundingBox);
@@ -440,7 +577,7 @@ namespace Revitalize
             d.inventory = array.ToObject<List<Item>>();
 
 
-           d.inventoryMaxSize = obj.inventoryMaxSize;
+            d.inventoryMaxSize = obj.inventoryMaxSize;
             d.itemReadyForHarvest = obj.itemReadyForHarvest;
             d.lightsOn = obj.lightsOn;
             d.thisLocation = obj.thisLocation;
@@ -449,15 +586,16 @@ namespace Revitalize
             d.removable = obj.removable;
             d.locationsName = obj.locationsName;
 
-            try {
+            try
+            {
                 return d;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-               // Log.AsyncM(e);
+                // Log.AsyncM(e);
                 return null;
             }
-            
+
 
 
 
@@ -468,7 +606,7 @@ namespace Revitalize
         }
         public static void serializeDecorationFromWorld(CoreObject d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(objectsInWorldPath,d.thisLocation.name, d.Name + ".json"), (Decoration)d);
+            Serialize.WriteToJsonFile(Path.Combine(objectsInWorldPath, d.thisLocation.name, d.Name + ".json"), (Decoration)d);
         }
 
 
@@ -554,7 +692,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-               // Log.AsyncM(e);
+                // Log.AsyncM(e);
                 return null;
             }
 
@@ -658,7 +796,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-              //  Log.AsyncM(e);
+                //  Log.AsyncM(e);
                 return null;
             }
 
@@ -753,7 +891,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-             //   Log.AsyncM(e);
+                //   Log.AsyncM(e);
                 return null;
             }
 
@@ -775,7 +913,7 @@ namespace Revitalize
             Spell spell = new Spell();
             bool b = Dictionaries.spellList.TryGetValue(d.spellIndex, out spell);
 
-            Spell k =(Spell) spell.getOne();
+            Spell k = (Spell)spell.getOne();
             if (b == true) return k;
             else return null;
 
@@ -791,9 +929,9 @@ namespace Revitalize
 
             dynamic obj = JObject.Parse(data);
 
-           // Log.AsyncC(data);
+            // Log.AsyncC(data);
 
-          //  Log.AsyncC(obj.thisType);
+            //  Log.AsyncC(obj.thisType);
 
 
             Light d = new Light(false);
@@ -848,7 +986,7 @@ namespace Revitalize
             d.hasBeenInInventory = obj.hasBeenInInventory;
             string t = obj.texturePath;
 
-          //  Log.AsyncC(t);
+            //  Log.AsyncC(t);
 
             d.TextureSheet = Game1.content.Load<Texture2D>(t);
             d.texturePath = t;
@@ -856,8 +994,8 @@ namespace Revitalize
             d.inventory = array.ToObject<List<Item>>();
             d.inventoryMaxSize = obj.inventoryMaxSize;
             d.itemReadyForHarvest = obj.itemReadyForHarvest;
-            d.lightsOn = obj.lightsOn;      
-           // d.thisLocation = Game1.getLocationFromName(loc);
+            d.lightsOn = obj.lightsOn;
+            // d.thisLocation = Game1.getLocationFromName(loc);
             // d.thisLocation = obj.thisLocation;
             Log.AsyncC(d.thisLocation);
             d.lightColor = obj.lightColor;
@@ -996,12 +1134,22 @@ namespace Revitalize
 
         public static BagofHolding parseBagOfHolding(string data)
         {
+            BagofHolding h= ReadFromXMLFile<BagofHolding>(data);
+
+            for (int i = 0; i <= h.allInventoriesCapacities.Count - 1; i++)
+            {
+                h.allInventories[i].Capacity = h.allInventoriesCapacities[i];
+            }
+            h.inventory = h.allInventories[h.inventoryIndex];
+
+            return h;
+
 
             dynamic obj = JObject.Parse(data);
 
             // Log.AsyncC(data);
 
-            //  Log.AsyncC(obj.thisType);
+             // Log.AsyncC(obj.thisType);
 
 
             BagofHolding d = new BagofHolding();
@@ -1060,8 +1208,33 @@ namespace Revitalize
 
             d.TextureSheet = Game1.content.Load<Texture2D>(t);
             d.texturePath = t;
-            JArray array = obj.inventory;
-            d.inventory = array.ToObject<List<Item>>();
+
+            JArray allInvCapacities = obj.allInventoriesCapacities;
+            d.allInventoriesCapacities = allInvCapacities.ToObject<List<int>>();
+
+            JArray allInv = obj.allInventories;
+            d.allInventories = new List<List<Item>>();
+
+            foreach (var v in allInv)
+            {
+                JArray currentObj = v.ToObject<JArray>();
+
+
+                List<Item> l = parseInventoryList(currentObj);
+                d.allInventories.Add(l);
+
+            }
+
+            //  d.allInventories = allInv.ToObject<List<List<Item>>>();
+            d.inventoryIndex = obj.inventoryIndex;
+
+            d.inventory = d.allInventories[d.inventoryIndex];
+
+            for (int i = 0; i <= d.allInventoriesCapacities.Count - 1; i++)
+            {
+                d.allInventories[i].Capacity = d.allInventoriesCapacities[i];
+            }
+
             d.inventoryMaxSize = obj.inventoryMaxSize;
             d.itemReadyForHarvest = obj.itemReadyForHarvest;
             d.lightsOn = obj.lightsOn;
@@ -1091,7 +1264,14 @@ namespace Revitalize
         }
         public static void serializeBagOfHolding(Item d)
         {
-            Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
+            WriteToXMLFile<BagofHolding>(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
+           // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
+        }
+
+        public static void serializeGeneric(Item d)
+        {
+            WriteToXMLFile<BagofHolding>(Path.Combine(InvPath, d.Name + ".json"),(BagofHolding)d);
+            // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
         }
 
         public static Quarry parseQuarry(string data)
@@ -1178,7 +1358,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-              //  Log.AsyncM(e);
+                //  Log.AsyncM(e);
                 return null;
             }
 
@@ -1201,7 +1381,7 @@ namespace Revitalize
             dynamic obj = JObject.Parse(data);
 
 
-         //   Log.AsyncC(obj.thisType);
+            //   Log.AsyncC(obj.thisType);
 
 
             shopObject d = new shopObject(false);
@@ -1262,7 +1442,7 @@ namespace Revitalize
             d.inventory = parseInventoryList(array);
 
 
-          //  Log.AsyncC(array);
+            //  Log.AsyncC(array);
 
             d.inventoryMaxSize = obj.inventoryMaxSize;
             d.itemReadyForHarvest = obj.itemReadyForHarvest;
@@ -1299,22 +1479,22 @@ namespace Revitalize
         {
             if (File.Exists(data))
             {
-                 Lists.trackedTerrainFeaturesDummyList = ReadFromJsonFile<List<TrackedTerrainDummyDataNode>>(data);
-                foreach(var v in Lists.trackedTerrainFeaturesDummyList)
+                Lists.trackedTerrainFeaturesDummyList = ReadFromJsonFile<List<TrackedTerrainDummyDataNode>>(data);
+                foreach (var v in Lists.trackedTerrainFeaturesDummyList)
                 {
                     GameLocation location = Game1.getLocationFromName(v.location);
                     Vector2 position = v.position;
-                   
+
                     TerrainFeature t;
-                     bool ehh = location.terrainFeatures.TryGetValue(position, out t);
+                    bool ehh = location.terrainFeatures.TryGetValue(position, out t);
 
                     if (t == null)
                     {
-                      //  Log.AsyncC("BOOOOO");
+                        //  Log.AsyncC("BOOOOO");
                     }
 
                     Lists.trackedTerrainFeatures.Add(new TrackedTerrainDataNode(location, (HoeDirt)t, position));
-                   // Log.AsyncG("YAY");
+                    // Log.AsyncG("YAY");
                 }
                 Lists.trackedTerrainFeaturesDummyList.Clear();
             }
@@ -1328,13 +1508,13 @@ namespace Revitalize
                 if ((v.terrainFeature as HoeDirt).crop == null)
                 {
                     removalList.Add(v);
-                   // Log.AsyncR("WHY REMOVE???");
+                    // Log.AsyncR("WHY REMOVE???");
                     continue;
                 }
 
             }
 
-            foreach(var v in removalList)
+            foreach (var v in removalList)
             {
                 Lists.trackedTerrainFeatures.Remove(v);
             }
@@ -1366,19 +1546,19 @@ namespace Revitalize
 
             if (array == null)
             {
-               // Log.AsyncC("WTF");
+                // Log.AsyncC("WTF");
                 return new List<Item>();
 
             }
 
             List<Item> inventory = new List<Item>();
 
-            foreach(var v in array)
+            foreach (var v in array)
             {
                 string data = v.ToString();
                 if (data != null)
                 {
-                  //  Log.AsyncM(data);
+                    //  Log.AsyncM(data);
                     inventory.Add(parseItemFromJson(data));
                 }
             }
@@ -1387,6 +1567,119 @@ namespace Revitalize
 
             return inventory;
 
+        }
+
+
+
+        public abstract class JsonCreationConverter<T> : JsonConverter
+        {
+            /// <summary>
+            /// Create an instance of objectType, based properties in the JSON object
+            /// </summary>
+            /// <param name="objectType">type of object expected</param>
+            /// <param name="jObject">
+            /// contents of JSON object that will be deserialized
+            /// </param>
+            /// <returns></returns>
+            protected abstract T Create(Type objectType, JObject jObject);
+
+            public override bool CanConvert(Type objectType)
+            {
+                return typeof(T).IsAssignableFrom(objectType);
+            }
+
+            public override bool CanWrite
+            {
+                get { return false; }
+            }
+
+            public override object ReadJson(JsonReader reader,
+                                            Type objectType,
+                                             object existingValue,
+                                             JsonSerializer serializer)
+            {
+                // Load JObject from stream
+                JObject jObject = JObject.Load(reader);
+
+                // Create target object based on JObject
+                T target = Create(objectType, jObject);
+
+                // Populate the object properties
+                serializer.Populate(jObject.CreateReader(), target);
+
+                return target;
+            }
+
+
+
+        }
+
+        public class RectangleConverter : JsonCreationConverter<Microsoft.Xna.Framework.Rectangle>
+        {
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+
+               
+               // throw new NotImplementedException();
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                serializer.TypeNameHandling = TypeNameHandling.Auto;
+                serializer.NullValueHandling = NullValueHandling.Ignore;
+                Log.AsyncG("DESERIALIZE THE WORLD");
+                return base.ReadJson(reader, objectType, existingValue, serializer);
+            }
+
+            protected override Rectangle Create(Type objectType, JObject jObject)
+            {
+                /*
+                if (FieldExists("Skill", jObject))
+                {
+                    return new Artist();
+                }
+                else if (FieldExists("Department", jObject))
+                {
+                    return new Employee();
+                }
+                else
+                {
+                    return new Person();
+                }
+                */
+
+                return new Rectangle(0,0,0,0);
+            }
+
+            private bool FieldExists(string fieldName, JObject jObject)
+            {
+                return jObject[fieldName] != null;
+            }
+
+           
+        }
+
+        public static T deserializeObjectWithRectangles<T>(string filePath) where T : new()
+        {
+            TextReader reader = null;
+            try
+            {
+                Log.AsyncC(filePath);
+                reader = new StreamReader(filePath);
+                var fileContents = reader.ReadToEnd();
+
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                // settings.TypeNameHandling = TypeNameHandling.Auto;
+                //settings.Formatting = Formatting.Indented;
+                return JsonConvert.DeserializeObject<T>(fileContents,new RectangleConverter());
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+            }
         }
     }
 }
