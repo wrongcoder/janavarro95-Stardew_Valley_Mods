@@ -780,6 +780,14 @@ namespace Revitalize
 
         public static void plantCropHere()
         {
+          Log.AsyncY(Game1.player.ActiveObject.name);
+            if (Lists.saplingNames.Contains(Game1.player.ActiveObject.name))
+            {
+                Log.AsyncY("PLANT THE SAPLING");
+                bool f = plantSappling();
+
+                if (f == true) return;
+            }
             HoeDirt t;
             TerrainFeature r;
             bool plant = Game1.player.currentLocation.terrainFeatures.TryGetValue(Game1.currentCursorTile, out r);
@@ -799,6 +807,12 @@ namespace Revitalize
 
         public static void plantExtraCropHere()
         {
+            if (Lists.saplingNames.Contains(Game1.player.ActiveObject.name))
+            {
+                bool f = plantSappling();
+                if (f == true) return;
+            }
+
             //Log.AsyncC("HELLO");
             HoeDirt t;
             TerrainFeature r;
@@ -819,6 +833,76 @@ namespace Revitalize
                 }
             }
         }
+
+
+        public static bool plantSappling()
+        {
+
+            if (Lists.saplingNames.Contains(Game1.player.ActiveObject.name))
+            {
+                Vector2 vector = Game1.currentCursorTile;
+                GameLocation location = Game1.player.currentLocation;
+                Vector2 key = default(Vector2);
+                for (int i = (int)vector.X / Game1.tileSize - 2; i <= vector.X / Game1.tileSize + 2; i++)
+                {
+                    for (int j = (int)vector.Y / Game1.tileSize - 2; j <= vector.Y / Game1.tileSize + 2; j++)
+                    {
+                        key.X = (float)i;
+                        key.Y = (float)j;
+                        if (location.terrainFeatures.ContainsKey(key) && (location.terrainFeatures[key] is Tree || location.terrainFeatures[key] is FruitTree))
+                        {
+                            Game1.showRedMessage("Too close to another tree");
+                            return false;
+                        }
+                    }
+                }
+                if (location.terrainFeatures.ContainsKey(vector))
+                {
+                    if (!(location.terrainFeatures[vector] is HoeDirt) || (location.terrainFeatures[vector] as HoeDirt).crop != null)
+                    {
+                      //  Log.AsyncC("UMMM BUT BUT BUT");
+                        return false;
+                    }
+                    location.terrainFeatures.Remove(vector);
+                }
+                if (location is Farm && (location.doesTileHaveProperty((int)vector.X, (int)vector.Y, "Diggable", "Back") != null || location.doesTileHavePropertyNoNull((int)vector.X, (int)vector.Y, "Type", "Back").Equals("Grass")))
+                {
+                    Game1.playSound("dirtyHit");
+                    DelayedAction.playSoundAfterDelay("coin", 100);
+                    location.terrainFeatures.Add(vector, new FruitTree(Game1.player.ActiveObject.parentSheetIndex));
+                    return true;
+                }
+                else
+                {
+                    // Game1.playSound("dirtyHit");
+
+
+                    int which = 1;
+                    int num = Game1.player.ActiveObject.parentSheetIndex;
+                    if (num != 310)
+                    {
+                        if (num == 311)
+                        {
+                            which = 3;
+                        }
+                    }
+                    else
+                    {
+                        which = 2;
+                    }
+                    location.terrainFeatures.Remove(vector);
+                    location.terrainFeatures.Add(vector, new Tree(which, 0));
+                    Game1.player.reduceActiveItemByOne();
+                    Game1.playSound("dirtyHit");
+                    DelayedAction.playSoundAfterDelay("coin", 100);
+                }
+                Game1.showRedMessage("Can't be planted here.");
+                return false;
+            }
+            Log.AsyncR("MAKES NO SENSE");
+            return false;
+        }
+
 
         /// <summary>
         /// Static wrapper;

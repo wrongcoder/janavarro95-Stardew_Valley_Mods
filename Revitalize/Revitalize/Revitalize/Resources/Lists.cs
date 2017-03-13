@@ -18,7 +18,7 @@ namespace Revitalize.Resources
         public static List<Revitalize.CoreObject> trackedObjectList;
 
         public static List<Type> serializerTypes;
-  
+        public static List<string> saplingNames;
 
         public static void initializeAllLists()
         {
@@ -40,7 +40,9 @@ namespace Revitalize.Resources
         public static void loadAllListsAtEntry()
         {
             serializerTypes = new List<Type>();
+            saplingNames = new List<string>();
             loadSerializerTypesList();
+            addSaplingNames();
         }
 
         public static void loadSerializerTypesList()
@@ -49,6 +51,19 @@ namespace Revitalize.Resources
             serializerTypes.Add(typeof(StardewValley.Tool));
             serializerTypes.Add(typeof(Revitalize.Objects.Light));
             serializerTypes.Add(typeof(Revitalize.CoreObject));
+        }
+
+        public static void addSaplingNames()
+        {
+            saplingNames.Add("Pine Cone");
+            saplingNames.Add("Maple Seed");
+            saplingNames.Add("Acorn");
+            saplingNames.Add("Apricot Sapling");
+            saplingNames.Add("Cherry Sapling");
+            saplingNames.Add("Orange Sapling");
+            saplingNames.Add("Peach Sapling");
+            saplingNames.Add("Apple Sapling");
+            saplingNames.Add("Pomegranate Sapling");
         }
 
     }

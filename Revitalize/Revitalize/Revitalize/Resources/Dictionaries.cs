@@ -77,6 +77,7 @@ namespace Revitalize.Resources
             interactionTypes.Add("Gift Package", Util.getGiftPackageContents);
             interactionTypes.Add("Spell", Magic.MagicMonitor.castMagic);
             interactionTypes.Add("Bag of Holding", Revitalize.Magic.Alchemy.Objects.BagofHolding.OpenBag);
+          
         }
 
 
