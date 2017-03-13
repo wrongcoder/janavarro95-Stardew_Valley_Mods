@@ -865,7 +865,7 @@ namespace Revitalize
                     }
                     location.terrainFeatures.Remove(vector);
                 }
-                if (location is Farm && (location.doesTileHaveProperty((int)vector.X, (int)vector.Y, "Diggable", "Back") != null || location.doesTileHavePropertyNoNull((int)vector.X, (int)vector.Y, "Type", "Back").Equals("Grass")))
+                if ( (location.doesTileHaveProperty((int)vector.X, (int)vector.Y, "Diggable", "Back") != null || location.doesTileHavePropertyNoNull((int)vector.X, (int)vector.Y, "Type", "Back").Equals("Grass")))
                 {
                     Game1.playSound("dirtyHit");
                     DelayedAction.playSoundAfterDelay("coin", 100);
