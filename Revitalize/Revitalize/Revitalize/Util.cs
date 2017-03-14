@@ -174,6 +174,7 @@ namespace Revitalize
 
         public static Color invertColor(Color c)
         {
+            
             int r;
             int g;
             int b;

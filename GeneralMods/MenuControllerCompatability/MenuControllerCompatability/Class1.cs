@@ -10,17 +10,28 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using StardewValley.Menus;
 using System.Reflection;
+using Microsoft.Xna.Framework.Graphics;
+using System.IO;
 
 namespace MenuControllerCompatability
 {
     public class Class1 : Mod
     {
-
+        public static IClickableMenu overlayMenu;
         public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.GameEvents.UpdateTick += MenuCompatability;
             StardewModdingAPI.Events.GraphicsEvents.Resize += GraphicsEvents_Resize;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += GraphicsEvents_OnPostRenderHudEvent;
+        }
+
+        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
+        {
+            if (overlayMenu != null)
+            {
+                overlayMenu.draw(Game1.spriteBatch);
+            }
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -42,7 +53,7 @@ namespace MenuControllerCompatability
         
             if (e.KeyPressed.ToString() == "R")
             {
-                Game1.activeClickableMenu = new SpriteKeyboard();
+                changeSubMenuTitleScreen();
             }
         }
 
@@ -75,6 +86,49 @@ namespace MenuControllerCompatability
 
             }
             nameBox.GetType().GetField("_text", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(nameBox, "fuck");
+        }
+
+        private void changeSubMenuTitleScreen()
+        {
+
+            try
+            {
+                object F = Game1.activeClickableMenu;
+                object G = (StardewValley.Menus.CharacterCustomization)Game1.activeClickableMenu.GetType().GetField("subMenu", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Game1.activeClickableMenu);
+                F.GetType().GetField("subMenu", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(Game1.activeClickableMenu, new SpriteKeyboard());
+            }
+            catch(Exception e)
+            {
+                Log.AsyncY("BOOM SOMETHING WENT WRONG");
+                Log.AsyncR(e);
+            }
+            /*
+            object l = new CharacterCustomization(null, null, null, false);
+            object nameBox = new StardewValley.Menus.TextBox(null, null, Game1.smoothFont, Color.White);
+            object text = new string(new char[5] { 'a', 'b', 'c', 'd', 'e' });
+            l = (StardewValley.Menus.CharacterCustomization)Game1.activeClickableMenu.GetType().GetField("subMenu", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Game1.activeClickableMenu);
+            Log.AsyncM(l);
+            if (l == null)
+            {
+                Log.AsyncC("cry");
+            }
+            nameBox = (TextBox)l.GetType().GetField("nameBox", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(l);
+            if (nameBox == null)
+            {
+                Log.AsyncM("BLARG");
+
+            }
+            Log.AsyncG(nameBox);
+
+
+            text = (string)nameBox.GetType().GetField("_text", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(nameBox);
+            if ((text as string) == "")
+            {
+                Log.AsyncM("WTF");
+
+            }
+            nameBox.GetType().GetField("_text", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(nameBox, "fuck");
+            */
         }
 
 
@@ -130,6 +184,12 @@ namespace MenuControllerCompatability
                 // compatabilityMenu = null;
             }
 
+        }
+
+        public static Texture2D loadTexture(string s)
+        {
+            string f = Path.Combine("ControllerCompatabilityFonts", "colorlessSpriteFont", s);
+            return Game1.content.Load<Texture2D>(f);
         }
 
 

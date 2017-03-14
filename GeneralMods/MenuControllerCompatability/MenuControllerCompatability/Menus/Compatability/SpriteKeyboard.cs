@@ -1,12 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Menus;
 using StardewValley.Minigames;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StardewValley.Menus
+namespace MenuControllerCompatability
 {
     public class SpriteKeyboard : IClickableMenu
     {
@@ -17,6 +20,7 @@ namespace StardewValley.Menus
         public List<ClickableTextureComponent> keyboardButtonsLowerCase;
         public List<ClickableTextureComponent> keyboardButtonsUpperCase;
 
+        bool upperCase;
 
         private ClickableTextureComponent okButton;
 
@@ -30,14 +34,16 @@ namespace StardewValley.Menus
 
         private ClickableComponent nameLabel;
 
+        public static float textureScale = 4.0f;
+
 
         public SpriteKeyboard() : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize, false)
         {
             keyboardButtonsLowerCase = new List<ClickableTextureComponent>();
             keyboardButtonsUpperCase = new List<ClickableTextureComponent>();
             this.setUpPositions();
-            Game1.player.faceDirection(2);
-            Game1.player.FarmerSprite.StopAnimation();
+           // Game1.player.faceDirection(2);
+           // Game1.player.FarmerSprite.StopAnimation();
         }
 
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
@@ -56,7 +62,7 @@ namespace StardewValley.Menus
 
             this.keyboardButtonsLowerCase.Clear();
             this.keyboardButtonsUpperCase.Clear();
-
+            upperCase = false;
 
             this.okButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1), 1f, false);
             this.nameBox = new TextBox(Game1.content.Load<Texture2D>("LooseSprites\\textBox"), null, Game1.smallFont, Game1.textColor)
@@ -66,37 +72,18 @@ namespace StardewValley.Menus
                 Text = Game1.player.name
             };
             this.labels.Add(this.nameLabel = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8, 1, 1), Game1.content.LoadString("Strings\\UI:Character_Name", new object[0])));
-                 
-            int num = Game1.tileSize * 2;
-       
-  
-         
-            num = Game1.tileSize * 4 + 8;
 
-             //   Point point = new Point(this.xPositionOnScreen + this.width + Game1.pixelZoom + Game1.tileSize / 8, this.yPositionOnScreen + IClickableMenu.borderWidth * 2);
-             //   this.farmTypeButtons.Add(new ClickableTextureComponent("Standard", new Rectangle(point.X, point.Y + 22 * Game1.pixelZoom, 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, Game1.content.LoadString("Strings\\UI:Character_FarmStandard", new object[0]), Game1.mouseCursors, new Rectangle(0, 324, 22, 20), (float)Game1.pixelZoom, false));
-             //   this.farmTypeButtons.Add(new ClickableTextureComponent("Riverland", new Rectangle(point.X, point.Y + 22 * Game1.pixelZoom * 2, 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, Game1.content.LoadString("Strings\\UI:Character_FarmFishing", new object[0]), Game1.mouseCursors, new Rectangle(22, 324, 22, 20), (float)Game1.pixelZoom, false));
-             //   this.farmTypeButtons.Add(new ClickableTextureComponent("Forest", new Rectangle(point.X, point.Y + 22 * Game1.pixelZoom * 3, 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, Game1.content.LoadString("Strings\\UI:Character_FarmForaging", new object[0]), Game1.mouseCursors, new Rectangle(44, 324, 22, 20), (float)Game1.pixelZoom, false));
-             //   this.farmTypeButtons.Add(new ClickableTextureComponent("Hills", new Rectangle(point.X, point.Y + 22 * Game1.pixelZoom * 4, 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, Game1.content.LoadString("Strings\\UI:Character_FarmMining", new object[0]), Game1.mouseCursors, new Rectangle(66, 324, 22, 20), (float)Game1.pixelZoom, false));
-             //   this.farmTypeButtons.Add(new ClickableTextureComponent("Wilderness", new Rectangle(point.X, point.Y + 22 * Game1.pixelZoom * 5, 22 * Game1.pixelZoom, 20 * Game1.pixelZoom), null, Game1.content.LoadString("Strings\\UI:Character_FarmCombat", new object[0]), Game1.mouseCursors, new Rectangle(88, 324, 22, 20), (float)Game1.pixelZoom, false));
-            
-           // this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + num + 16, 1, 1), Game1.content.LoadString("Strings\\UI:Character_EyeColor", new object[0])));
 
-            num += Game1.tileSize + 8;
-      
-          // this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + num + 16, 1, 1), Game1.content.LoadString("Strings\\UI:Character_HairColor", new object[0])));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("a", new Rectangle(xPositionOnScreen + (Game1.tileSize *2) +Game1.tileSize/2, this.yPositionOnScreen +(Game1.tileSize*5), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseA"),new Rectangle(0,0,16,16),textureScale,false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("s", new Rectangle(xPositionOnScreen + (Game1.tileSize *3)+Game1.tileSize/2, this.yPositionOnScreen + (Game1.tileSize * 5), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseS"), new Rectangle(0, 0, 16, 16), textureScale, false));
 
-            num += Game1.tileSize + 8;
-       
-          // this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + num + 16, 1, 1), Game1.content.LoadString("Strings\\UI:Character_PantsColor", new object[0])));
 
-           
-            num += Game1.tileSize + 8;
-       
-       }
+        }
 
         private void optionButtonClick(string name)
         {
+            Log.AsyncC(name);
+
             if (name == "OK")
             {
                 if (!this.canLeaveMenu())
@@ -104,14 +91,21 @@ namespace StardewValley.Menus
                     return;
                 }
                 Game1.player.Name = this.nameBox.Text.Trim();
-                    Game1.exitActiveMenu();
+                   // Game1.exitActiveMenu();
                 if (Game1.currentMinigame != null && Game1.currentMinigame is Intro)
                 {
                     (Game1.currentMinigame as Intro).doneCreatingCharacter();
-                }
-        
-                
+                }        
             }
+            else
+            {
+                if(name!="BackSpace" || name != "Back" ||name!="Shift"||name!="Caps")
+                {
+                    this.nameBox.Text += name;
+                }
+            }
+
+
             Game1.playSound("coin");
         }
 
@@ -153,28 +147,15 @@ namespace StardewValley.Menus
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            /*
-            foreach (ClickableComponent current in this.genderButtons)
-            {
-                if (current.containsPoint(x, y))
-                {
-                    this.optionButtonClick(current.name);
-                    current.scale -= 0.5f;
-                    current.scale = Math.Max(3.5f, current.scale);
-                }
-            }
-            */
-            /*
-            foreach (ClickableComponent current4 in this.leftSelectionButtons)
+
+
+            foreach (ClickableComponent current4 in this.keyboardButtonsLowerCase)
             {
                 if (current4.containsPoint(x, y))
                 {
-                    this.selectionClick(current4.name, -1);
-                    current4.scale -= 0.25f;
-                    current4.scale = Math.Max(0.75f, current4.scale);
+                    optionButtonClick(current4.name);
                 }
-            }*/
-
+            }
 
             if (this.okButton.containsPoint(x, y) && this.canLeaveMenu())
             {
@@ -294,48 +275,7 @@ namespace StardewValley.Menus
         public override void draw(SpriteBatch b)
         {
             Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, null, false);
-            b.Draw(Game1.daybg, new Vector2((float)(this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
-          //  Game1.player.FarmerRenderer.draw(b, Game1.player.FarmerSprite.CurrentAnimationFrame, Game1.player.FarmerSprite.CurrentFrame, Game1.player.FarmerSprite.SourceRect, new Vector2((float)(this.xPositionOnScreen - 2 + Game1.tileSize * 2 / 3 + Game1.tileSize * 2 - Game1.tileSize / 2), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth - Game1.tileSize / 4 + IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 2)), Vector2.Zero, 0.8f, Color.White, 0f, 1f, Game1.player);
-            
-           
-            /*    
-                using (List<ClickableComponent>.Enumerator enumerator = this.genderButtons.GetEnumerator())
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        ClickableTextureComponent clickableTextureComponent = (ClickableTextureComponent)enumerator.Current;
-                        clickableTextureComponent.draw(b);
-                        if ((clickableTextureComponent.name.Equals("Male") && Game1.player.isMale) || (clickableTextureComponent.name.Equals("Female") && !Game1.player.isMale))
-                        {
-                            b.Draw(Game1.mouseCursors, clickableTextureComponent.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 34, -1, -1)), Color.White);
-                        }
-                    }
-                }
-                
-                using (List<ClickableComponent>.Enumerator enumerator = this.petButtons.GetEnumerator())
-                {
-                    while (enumerator.MoveNext())
-                    {
-                        ClickableTextureComponent clickableTextureComponent2 = (ClickableTextureComponent)enumerator.Current;
-                        clickableTextureComponent2.draw(b);
-                        if ((clickableTextureComponent2.name.Equals("Cat") && Game1.player.catPerson) || (clickableTextureComponent2.name.Equals("Dog") && !Game1.player.catPerson))
-                        {
-                            b.Draw(Game1.mouseCursors, clickableTextureComponent2.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 34, -1, -1)), Color.White);
-                        }
-                    }
-                }
-                */
-                Game1.player.name = this.nameBox.Text;
-            
-            /*
-            using (List<ClickableComponent>.Enumerator enumerator = this.leftSelectionButtons.GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                {
-                    ((ClickableTextureComponent)enumerator.Current).draw(b);
-                }
-            }
-            */
+           Game1.player.name = this.nameBox.Text;
             foreach (ClickableComponent current in this.labels)
             {
                 string text = "";
@@ -356,24 +296,8 @@ namespace StardewValley.Menus
                 }
             }
 
-            /*
-            if (!this.wizardSource)
-            {
-                IClickableMenu.drawTextureBox(b, this.farmTypeButtons[0].bounds.X - Game1.pixelZoom * 4, this.farmTypeButtons[0].bounds.Y - Game1.pixelZoom * 5, 30 * Game1.pixelZoom, 110 * Game1.pixelZoom + Game1.pixelZoom * 9, Color.White);
-                for (int i = 0; i < this.farmTypeButtons.Count; i++)
-                {
-                    this.farmTypeButtons[i].draw(b, this.farmTypeButtons[i].name.Contains("Gray") ? (Color.Black * 0.5f) : Color.White, 0.88f);
-                    if (this.farmTypeButtons[i].name.Contains("Gray"))
-                    {
-                        b.Draw(Game1.mouseCursors, new Vector2((float)(this.farmTypeButtons[i].bounds.Center.X - Game1.pixelZoom * 3), (float)(this.farmTypeButtons[i].bounds.Center.Y - Game1.pixelZoom * 2)), new Rectangle?(new Rectangle(107, 442, 7, 8)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, 0.89f);
-                    }
-                    if (i == Game1.whichFarm)
-                    {
-                        IClickableMenu.drawTextureBox(b, Game1.mouseCursors, new Rectangle(375, 357, 3, 3), this.farmTypeButtons[i].bounds.X, this.farmTypeButtons[i].bounds.Y - Game1.pixelZoom, this.farmTypeButtons[i].bounds.Width, this.farmTypeButtons[i].bounds.Height + Game1.pixelZoom * 2, Color.White, (float)Game1.pixelZoom, false);
-                    }
-                }
-            }
-            */
+            
+            
             if (this.canLeaveMenu())
             {
                 this.okButton.draw(b, Color.White, 0.75f);
@@ -390,6 +314,20 @@ namespace StardewValley.Menus
             if (this.hoverText != null && this.hoverTitle != null && this.hoverText.Count<char>() > 0)
             {
                 IClickableMenu.drawHoverText(b, Game1.parseText(this.hoverText, Game1.smallFont, Game1.tileSize * 4), Game1.smallFont, 0, 0, -1, this.hoverTitle, -1, null, null, 0, -1, -1, -1, -1, 1f, null);
+            }
+            if (upperCase == false)
+            {
+                foreach (var v in keyboardButtonsLowerCase)
+                {
+                    v.draw(b);
+                }
+            }
+            else
+            {
+                foreach (var v in keyboardButtonsUpperCase)
+                {
+                    v.draw(b);
+                }
             }
             base.drawMouse(b);
         }
