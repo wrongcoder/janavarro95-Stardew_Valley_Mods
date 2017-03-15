@@ -19,7 +19,7 @@ namespace MenuControllerCompatability
 
         public List<ClickableTextureComponent> keyboardButtonsLowerCase;
         public List<ClickableTextureComponent> keyboardButtonsUpperCase;
-
+        public List<Color> randomList;
         bool upperCase;
 
         private ClickableTextureComponent okButton;
@@ -41,6 +41,7 @@ namespace MenuControllerCompatability
         {
             keyboardButtonsLowerCase = new List<ClickableTextureComponent>();
             keyboardButtonsUpperCase = new List<ClickableTextureComponent>();
+            randomList = new List<Color>();
             this.setUpPositions();
            // Game1.player.faceDirection(2);
            // Game1.player.FarmerSprite.StopAnimation();
@@ -74,9 +75,131 @@ namespace MenuControllerCompatability
             this.labels.Add(this.nameLabel = new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8, 1, 1), Game1.content.LoadString("Strings\\UI:Character_Name", new object[0])));
 
 
-            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("a", new Rectangle(xPositionOnScreen + (Game1.tileSize *2) +Game1.tileSize/2, this.yPositionOnScreen +(Game1.tileSize*5), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseA"),new Rectangle(0,0,16,16),textureScale,false));
-            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("s", new Rectangle(xPositionOnScreen + (Game1.tileSize *3)+Game1.tileSize/2, this.yPositionOnScreen + (Game1.tileSize * 5), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseS"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            int row1 = 4;
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("1", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("1"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("2", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("2"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("3", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("3"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("4", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("4"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("5", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("5"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("6", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("6"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("7", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("7"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("8", new Rectangle(xPositionOnScreen + (Game1.tileSize * 8), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("8"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("9", new Rectangle(xPositionOnScreen + (Game1.tileSize * 9), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("9"), new Rectangle(0, 0, 16, 16), textureScale, false));
 
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("1", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("1"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("2", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("2"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("3", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("3"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("4", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("4"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("5", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("5"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("6", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("6"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("7", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("7"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("8", new Rectangle(xPositionOnScreen + (Game1.tileSize * 8), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("8"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("9", new Rectangle(xPositionOnScreen + (Game1.tileSize * 9), this.yPositionOnScreen + (Game1.tileSize * row1), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("9"), new Rectangle(0, 0, 16, 16), textureScale, false));
+
+
+            int row2 = 5;
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("q", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseQ"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("w", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseW"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("e", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseE"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("r", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseR"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("t", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseT"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("y", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseY"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("u", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseU"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("i", new Rectangle(xPositionOnScreen + (Game1.tileSize * 8), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseI"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("o", new Rectangle(xPositionOnScreen + (Game1.tileSize * 9), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseO"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("p", new Rectangle(xPositionOnScreen + (Game1.tileSize * 10), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseP"), new Rectangle(0, 0, 16, 16), textureScale, false));
+
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("Q", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalQ"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("W", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalW"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("E", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalE"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("R", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalR"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("T", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalT"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("Y", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalY"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("U", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalU"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("I", new Rectangle(xPositionOnScreen + (Game1.tileSize * 8), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalI"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("O", new Rectangle(xPositionOnScreen + (Game1.tileSize * 9), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalO"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("P", new Rectangle(xPositionOnScreen + (Game1.tileSize * 10), this.yPositionOnScreen + (Game1.tileSize * row2), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalP"), new Rectangle(0, 0, 16, 16), textureScale, false));
+
+
+            int row3 = 6;
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("a", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseA"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("s", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseS"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("d", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseD"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("f", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseF"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("g", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseG"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("h", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseH"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("j", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseJ"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("k", new Rectangle(xPositionOnScreen + (Game1.tileSize * 8), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseK"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("l", new Rectangle(xPositionOnScreen + (Game1.tileSize * 9), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseL"), new Rectangle(0, 0, 16, 16), textureScale, false));
+
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("A", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalA"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("S", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalS"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("D", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalD"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("F", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalF"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("G", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalG"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("H", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalH"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("J", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalJ"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("K", new Rectangle(xPositionOnScreen + (Game1.tileSize * 8), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalK"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("L", new Rectangle(xPositionOnScreen + (Game1.tileSize * 9), this.yPositionOnScreen + (Game1.tileSize * row3), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalL"), new Rectangle(0, 0, 16, 16), textureScale, false));
+
+
+            int row4 = 7;
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("z", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseZ"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("x", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseX"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("c", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseC"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("v", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseV"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("b", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseB"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("n", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseN"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsLowerCase.Add(new ClickableTextureComponent("m", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("lowercaseM"), new Rectangle(0, 0, 16, 16), textureScale, false));
+
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("Z", new Rectangle(xPositionOnScreen + (Game1.tileSize * 1), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalZ"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("X", new Rectangle(xPositionOnScreen + (Game1.tileSize * 2), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalX"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("C", new Rectangle(xPositionOnScreen + (Game1.tileSize * 3), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalC"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("V", new Rectangle(xPositionOnScreen + (Game1.tileSize * 4), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalV"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("B", new Rectangle(xPositionOnScreen + (Game1.tileSize * 5), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalB"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("N", new Rectangle(xPositionOnScreen + (Game1.tileSize * 6), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalN"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            this.keyboardButtonsUpperCase.Add(new ClickableTextureComponent("M", new Rectangle(xPositionOnScreen + (Game1.tileSize * 7), this.yPositionOnScreen + (Game1.tileSize * row4), Game1.tileSize, Game1.tileSize), null, null, Class1.loadTexture("capitalM"), new Rectangle(0, 0, 16, 16), textureScale, false));
+            Random r;
+            try
+            {
+                int s = 0;
+                List<string> nameList = new List<string>();
+                foreach (var v in Game1.locations)
+                {
+                    foreach (var c in v.characters)
+                    {
+                        nameList.Add(c.name);
+                    }
+                }
+                foreach (var v in nameList)
+                {
+                    try
+                    {
+                        s += Game1.player.getFriendshipLevelForNPC(v);
+                    }
+                    catch(Exception err)
+                    {
+                        continue;
+                    }
+                }
+
+                 r = new Random(Game1.player.money + (int)Game1.player.totalMoneyEarned * Game1.timeOfDay + s+Game1.random.Next());
+            }
+            catch(Exception e)
+            {
+                r = new Random(Game1.weather_debris + Game1.realMilliSecondsPerGameTenMinutes+Game1.random.Next());
+            }
+
+            foreach (var v in keyboardButtonsLowerCase)
+            {
+                int R = r.Next(0, 255);
+                int G = r.Next(0, 255);
+                int B = r.Next(0, 255);
+                int A = 255;
+                Color c = new Color(R, G, B, A);
+
+                randomList.Add(c);
+            }
 
         }
 
@@ -274,7 +397,7 @@ namespace MenuControllerCompatability
 
         public override void draw(SpriteBatch b)
         {
-            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, null, false);
+            Game1.drawDialogueBox(this.xPositionOnScreen/2, this.yPositionOnScreen, (int)(this.width*1.5f), this.height, false, true, null, false);
            Game1.player.name = this.nameBox.Text;
             foreach (ClickableComponent current in this.labels)
             {
@@ -317,16 +440,16 @@ namespace MenuControllerCompatability
             }
             if (upperCase == false)
             {
-                foreach (var v in keyboardButtonsLowerCase)
+               for(int i=0; i < keyboardButtonsLowerCase.Count; i++)
                 {
-                    v.draw(b);
+                    keyboardButtonsLowerCase[i].draw(b, randomList[i], 0);
                 }
             }
             else
             {
-                foreach (var v in keyboardButtonsUpperCase)
+                for (int i = 0; i < keyboardButtonsUpperCase.Count; i++)
                 {
-                    v.draw(b);
+                    keyboardButtonsUpperCase[i].draw(b, randomList[i], 0);
                 }
             }
             base.drawMouse(b);
