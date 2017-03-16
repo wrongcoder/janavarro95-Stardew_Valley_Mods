@@ -42,7 +42,21 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.warpFarmer("Farm", 64, 16, false);
             MagicMonitor.consumeMagic(cost);
+            MagicMonitor.consumeUsage(s);
         }
+
+        public static void warpHorse(Spell s)
+        {
+         NPC horse= Utility.findHorse();
+         if (horse == null) return;
+            const int baseCost = 20;
+            //calculate all costs then factor in player proficiency
+            int cost = (int)(((((baseCost) + s.spellCostModifierInt) * s.spellCostModifierPercent) * (1f - PlayerVariables.MagicProficiency)) - PlayerVariables.MagicLevel); //+s.extraCostInt-s.spellSaveInt * (1f- PlayerVariables.MagicProficiency) / s.extraCostPercent* s.spellSavePercent;
+            MagicMonitor.consumeMagic(cost);
+            MagicMonitor.consumeUsage(s);
+            Game1.warpCharacter(horse, Game1.player.currentLocation.name, Game1.player.getTileLocationPoint(), false, true);
+        }
+
 
         public static void sunnyWeather(Spell s)
         {
@@ -54,12 +68,13 @@ namespace Revitalize.Magic.MagicFunctions
             {
                 Game1.weatherForTomorrow = Game1.weather_sunny;
                 MagicMonitor.consumeMagic(cost);
+                MagicMonitor.consumeUsage(s);
             }
             else
             {
                 Game1.showGlobalMessage("It's already going to be sunny tomorrow.");
             }
-
+           
         }
 
         public static void rainyWeather(Spell s)
@@ -72,12 +87,13 @@ namespace Revitalize.Magic.MagicFunctions
             {
                 Game1.weatherForTomorrow = Game1.weather_rain;
                 MagicMonitor.consumeMagic(cost);
+                MagicMonitor.consumeUsage(s);
             }
             else
             {
                 Game1.showGlobalMessage("It's already going to be rainy tomorrow.");
             }
-
+            
         }
 
         public static void stormyWeather(Spell s)
@@ -90,12 +106,13 @@ namespace Revitalize.Magic.MagicFunctions
             {
                 Game1.weatherForTomorrow = Game1.weather_lightning;
                 MagicMonitor.consumeMagic(cost);
+                MagicMonitor.consumeUsage(s);
             }
             else
             {
                 Game1.showGlobalMessage("It's already going to be stormy tomorrow.");
             }
-
+          
         }
     }
 
@@ -109,6 +126,7 @@ namespace Revitalize.Magic.MagicFunctions
             int cost = (int)(((((baseCost) + s.spellCostModifierInt) * s.spellCostModifierPercent) * (1f - PlayerVariables.MagicProficiency)) - PlayerVariables.MagicLevel); //+s.extraCostInt-s.spellSaveInt * (1f- PlayerVariables.MagicProficiency) / s.extraCostPercent* s.spellSavePercent;
             Game1.showRedMessage("MAGIC WORKS");
             MagicMonitor.consumeMagic(cost);
+            MagicMonitor.consumeUsage(s);
         }
 
        
@@ -131,6 +149,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.health += healAmount;
             MagicMonitor.consumeMagic(cost);
+            MagicMonitor.consumeUsage(s);
 
         }
         /// <summary>
@@ -148,6 +167,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.health += healAmount;
             MagicMonitor.consumeMagic(cost);
+            MagicMonitor.consumeUsage(s);
 
         }
         /// <summary>
@@ -165,7 +185,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.health += healAmount;
             MagicMonitor.consumeMagic(cost);
-
+            MagicMonitor.consumeUsage(s);
         }
         /// <summary>
         /// Restore 70% of health.
@@ -182,7 +202,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.health += healAmount;
             MagicMonitor.consumeMagic(cost);
-
+            MagicMonitor.consumeUsage(s);
         }
         /// <summary>
         /// Restore 10% of stamina.
@@ -199,7 +219,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.stamina += healAmount;
             MagicMonitor.consumeMagic(cost);
-
+            MagicMonitor.consumeUsage(s);
 
         }
         /// <summary>
@@ -217,7 +237,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.stamina += healAmount;
             MagicMonitor.consumeMagic(cost);
-
+            MagicMonitor.consumeUsage(s);
         }
         /// <summary>
         /// Restore 50% of stamina.
@@ -234,7 +254,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.stamina += healAmount;
             MagicMonitor.consumeMagic(cost);
-
+            MagicMonitor.consumeUsage(s);
         }
         /// <summary>
         /// Restore 70% of stamina.
@@ -251,7 +271,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.stamina += healAmount;
             MagicMonitor.consumeMagic(cost);
-
+            MagicMonitor.consumeUsage(s);
         }
         /// <summary>
         /// Restore 100% of stamina.
@@ -268,7 +288,7 @@ namespace Revitalize.Magic.MagicFunctions
 
             Game1.player.stamina += healAmount;
             MagicMonitor.consumeMagic(cost);
-
+            MagicMonitor.consumeUsage(s);
         }
     }
 
@@ -296,6 +316,7 @@ namespace Revitalize.Magic.MagicFunctions
 
                     }
                     MagicMonitor.consumeMagic(cost);
+                    MagicMonitor.consumeUsage(s);
                 }
                 catch (Exception e)
                 {
@@ -327,6 +348,7 @@ namespace Revitalize.Magic.MagicFunctions
                         Game1.playSound("slosh");
                         DelayedAction.playSoundAfterDelay("glug", 250);
                         MagicMonitor.consumeMagic(cost);
+                        MagicMonitor.consumeUsage(s);
                     }
                 }
                 catch (Exception e)

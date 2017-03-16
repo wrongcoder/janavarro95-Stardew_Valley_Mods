@@ -119,6 +119,23 @@ namespace Revitalize.Magic
 
         }
 
+        public static void consumeUsage(Spell s)
+        {
+            if (s.usesRemaining == -1) return;
+            else
+            {
+                s.usesRemaining -= 1;
+                if (s.usesRemaining == 0)
+                {
+                    Game1.player.reduceActiveItemByOne();
+                }
+                else
+                {
+                    s.description = s.vanillaDescription += "\nUses Remaining: " + s.usesRemaining;
+                }
+            }
+        }
+
         public static void gainMagicExperience(int f)
         {
             PlayerVariables.MagicExperience += f;

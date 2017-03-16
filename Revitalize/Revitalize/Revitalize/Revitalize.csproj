@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aesthetics\Paint\Objects\Canvas.cs" />
+    <Compile Include="Aesthetics\Paint\PaintMenu.cs" />
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisPlus.cs" />
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
     <Compile Include="Magic\Alchemy\Menus\ExpandableItemGrabMenu.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Aesthetics\Paint\Utilities\" />
     <Folder Include="Persistance\Configs\" />
     <Folder Include="TerrainFeatures\" />
   </ItemGroup>

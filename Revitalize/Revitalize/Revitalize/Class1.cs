@@ -341,6 +341,7 @@ namespace Revitalize
                 objShopList.Add(new StardewValley.Object(498, 1));
                 objShopList.Add(new StardewValley.Object(770, 1));
 
+                objShopList.Add(new Canvas(0, Vector2.Zero, Canvas.blankTexture));
                 
                 objShopList.Add(new StardewValley.Object(475, 1));
                 foreach (var v in objShopList)
