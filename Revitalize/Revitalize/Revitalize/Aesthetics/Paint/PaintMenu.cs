@@ -14,7 +14,9 @@ using System.IO;
 using System.Drawing.Imaging;
 
 namespace Revitalize.Menus
-{
+{/// <summary>
+/// TODO: Positioning, TOP/MID/Bottom Sections, Serialization, Color Picking Tool, Simple Presets, Possibly add in sprite preview when swapping pages, or an update button
+/// </summary>
     public class Pixel
     {
         public Color color;
@@ -239,14 +241,19 @@ namespace Revitalize.Menus
                     ClickableTextureComponent clickableTextureComponent3 = (ClickableTextureComponent)enumerator.Current.component;
                     if (clickableTextureComponent3.containsPoint(x, y))
                     {
-                        enumerator.Current.color = lightColorPicker.getSelectedColor();
-                        enumerator.Current.color.A = (byte)Convert.ToInt32(this.numbersSelectBox.Text);
-                  
-                            enumerator.Current.color.B = ((Byte)( enumerator.Current.color.B /(float)(255/enumerator.Current.color.A)));
-                        enumerator.Current.color.R = ((Byte)(enumerator.Current.color.R / (float)(255 / enumerator.Current.color.A)));
-                        enumerator.Current.color.G = ((Byte)(enumerator.Current.color.G / (float)(255 / enumerator.Current.color.A)));
-
-                        Log.AsyncC(enumerator.Current.color);
+                        if (enumerator.Current.color.A == 0)
+                        {
+                            enumerator.Current.color.B = 0;
+                            enumerator.Current.color.G = 0;
+                            enumerator.Current.color.R = 0;
+                        }
+                        else
+                        {
+                            enumerator.Current.color.B = ((Byte)(enumerator.Current.color.B / (float)(255 / enumerator.Current.color.A)));
+                            enumerator.Current.color.R = ((Byte)(enumerator.Current.color.R / (float)(255 / enumerator.Current.color.A)));
+                            enumerator.Current.color.G = ((Byte)(enumerator.Current.color.G / (float)(255 / enumerator.Current.color.A)));
+                        }
+                      //  Log.AsyncC(enumerator.Current.color);
                         // Log.AsyncM("WOOOOOO");
                         //  clickableTextureComponent3.scale = Math.Min(clickableTextureComponent3.scale + 0.02f, clickableTextureComponent3.baseScale + 0.1f);
                     }
@@ -460,10 +467,19 @@ namespace Revitalize.Menus
                     {
                         enumerator.Current.color = lightColorPicker.getSelectedColor();
                         enumerator.Current.color.A =(byte) Convert.ToInt32(this.numbersSelectBox.Text);
-                        enumerator.Current.color.B = ((Byte)(enumerator.Current.color.B / (float)(255 / enumerator.Current.color.A)));
-                        enumerator.Current.color.R = ((Byte)(enumerator.Current.color.R / (float)(255 / enumerator.Current.color.A)));
-                        enumerator.Current.color.G = ((Byte)(enumerator.Current.color.G / (float)(255 / enumerator.Current.color.A)));
-                        Log.AsyncM(enumerator.Current.color);
+                        if (enumerator.Current.color.A == 0)
+                        {
+                            enumerator.Current.color.B = 0;
+                            enumerator.Current.color.G = 0;
+                            enumerator.Current.color.R = 0;
+                        }
+                        else
+                        {
+                            enumerator.Current.color.B = ((Byte)(enumerator.Current.color.B / (float)(255 / enumerator.Current.color.A)));
+                            enumerator.Current.color.R = ((Byte)(enumerator.Current.color.R / (float)(255 / enumerator.Current.color.A)));
+                            enumerator.Current.color.G = ((Byte)(enumerator.Current.color.G / (float)(255 / enumerator.Current.color.A)));
+                        }
+                        //Log.AsyncM(enumerator.Current.color);
                         // Log.AsyncM("WOOOOOO");
                         //  clickableTextureComponent3.scale = Math.Min(clickableTextureComponent3.scale + 0.02f, clickableTextureComponent3.baseScale + 0.1f);
                     }
@@ -637,23 +653,23 @@ namespace Revitalize.Menus
             if(File.Exists(decompiled + ".yaml"))
             {
                 File.Delete(decompiled + ".yaml");
-                Log.AsyncC("DELETE THE YAML");
+             //   Log.AsyncC("DELETE THE YAML");
             }
             if (File.Exists(decompiled + ".png"))
             {
                 File.Delete(decompiled + ".png");
-                Log.AsyncC("DELETE THE PNG");
+            //    Log.AsyncC("DELETE THE PNG");
             }
             if (File.Exists(compiled + ".xnb"))
             {
                 File.Delete(compiled + ".xnb");
-                Log.AsyncC("DELETE THE XNB");
+              //  Log.AsyncC("DELETE THE XNB");
             }
 
             List<string> failure = new List<string>();
             foreach(string s22 in Directory.GetFiles(b1))
             {
-                Log.AsyncC(s22);
+              //  Log.AsyncC(s22);
                 failure.Add(s22);
             }
             foreach(var v in failure)
@@ -708,7 +724,7 @@ namespace Revitalize.Menus
                     {
                         Color r = Util.invertColor(v.color,v.color.A);
                         r = Util.invertColor(r,r.A);
-                        Log.AsyncM(r + " THIS IS MY TRUE COLOR POWER. FEAR ME");
+                       // Log.AsyncM(r + " THIS IS MY TRUE COLOR POWER. FEAR ME");
                         j++;
                       //  Log.AsyncM(j);
                         System.Drawing.Color c= System.Drawing.Color.FromArgb(r.A, r.R, r.G, r.B);
@@ -728,19 +744,19 @@ namespace Revitalize.Menus
            
             // Enter in the command line arguments, everything you would enter after the executable name itself
             start.Arguments = arguments;
-            Log.AsyncC(arguments);
+          //  Log.AsyncC(arguments);
             // Enter the executable to run, including the complete path
             start.FileName = "xnb_node.cmd";
 
-            Log.AsyncM(start.FileName + " I HATE THIS STUPID GARBAGE");
+          //  Log.AsyncM(start.FileName + " I HATE THIS STUPID GARBAGE");
 
             if(File.Exists(Path.Combine(Class1.path, "xnb_node.cmd")))
             {
-                Log.AsyncG("YAY");
+               // Log.AsyncG("YAY");
             }
             else
             {
-                Log.AsyncM("NOOOO");
+              //  Log.AsyncM("NOOOO");
             }
             // Do you want to show a console window?
             start.RedirectStandardOutput = true;
@@ -758,7 +774,7 @@ namespace Revitalize.Menus
                 {
                     string line = proc.StandardOutput.ReadLine();
                     // do something with line
-                    Log.AsyncY(line);
+                  //  Log.AsyncY(line);
                 }
 
                 proc.WaitForExit();
@@ -766,7 +782,7 @@ namespace Revitalize.Menus
                 // Retrieve the app's exit code
                 exitCode = proc.ExitCode;
             }
-            Log.AsyncM(hate);
+          //  Log.AsyncM(hate);
 
             //  CanvasObject.TextureSheet.Dispose();
             CanvasObject.contentManager.Unload();
