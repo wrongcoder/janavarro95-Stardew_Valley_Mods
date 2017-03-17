@@ -172,19 +172,22 @@ namespace Revitalize
             return true;
         }
 
-        public static Color invertColor(Color c)
+        public static Color invertColor(Color c,int Alpha=255)
         {
             
             int r;
             int g;
             int b;
-            int a=255;
+            int a=Alpha;
 
             r = 255-c.R;
             g = 255-c.G;
             b = 255 - c.B;
-           // a = 255 - c.A;
-
+            // a = 255 - c.A;
+            if (a == 0)
+            {
+                return new Color(0, 0, 0, 0);
+            }
             return new Color(r, g, b, a);
 
         }

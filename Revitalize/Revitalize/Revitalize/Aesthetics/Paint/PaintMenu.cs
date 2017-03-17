@@ -86,6 +86,9 @@ namespace Revitalize.Menus
 
         public bool clean;
 
+
+        public TextBox numbersSelectBox;
+
         public PaintMenu(Canvas Obj, bool Clean=true) : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize, false)
         {
             clean = Clean;
@@ -111,6 +114,7 @@ namespace Revitalize.Menus
             this.leftSelectionButtons.Clear();
             this.rightSelectionButtons.Clear();
             this.pixels = new List<Pixel>();
+           
             this.okButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, (this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4) / 3, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1), 1f, false);
 
             this.cancelButton = new ClickableTextureComponent("Cancel", new Rectangle(this.xPositionOnScreen + this.width / 4 - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, (this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4) / 3, Game1.tileSize, Game1.tileSize), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 47, -1, -1), 1f, false);
@@ -120,7 +124,7 @@ namespace Revitalize.Menus
             this.rightSelectionButtons.Add(new ClickableTextureComponent("Direction", new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 2, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + num, Game1.tileSize, Game1.tileSize), null, "", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 33, -1, -1), 1f, false));
             if (!this.wizardSource)
             {
-                //this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8 + Game1.tileSize * 3, 1, 1), Game1.content.LoadString("Strings\\UI:Character_Animal", new object[0])));
+                //this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8 + Game1.tileSize * 3, 1, 1), Class1.modContent.LoadString("Strings\\UI:Character_Animal", new object[0])));
             }
             this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 16, 1, 1), "Color"));
             this.lightColorPicker = new ColorPicker(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + Game1.tileSize * 5 + Game1.tileSize * 3 / 4 + IClickableMenu.borderWidth, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder);
@@ -135,6 +139,7 @@ namespace Revitalize.Menus
                     }
 
                 }
+                CanvasObject.pixels = this.pixels;
             }
             else
             {
@@ -146,11 +151,29 @@ namespace Revitalize.Menus
 
             once = false;
             this.lightColorPicker.setColor(Color.White);
+
+            this.nameBox = new TextBox(Game1.content.Load<Texture2D>("LooseSprites\\textBox"), null, Game1.smallFont, Game1.textColor)
+            {
+                X = this.xPositionOnScreen + Game1.tileSize + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1,
+                Y = this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4,
+                Text = "Untitled"
+            };
+            this.nameBox.Text = CanvasObject.name;
+
+
+            this.numbersSelectBox = new TextBox(Game1.content.Load<Texture2D>("LooseSprites\\textBox"), null, Game1.smallFont, Game1.textColor)
+            {
+                X = this.xPositionOnScreen,
+                Y = this.yPositionOnScreen + IClickableMenu.borderWidth + this.height / 2,
+                Text = 255.ToString(),
+                numbersOnly = true,
+                textLimit = string.Concat(255).Length
+            };
         }
 
         private void optionButtonClick(string name)
         {
-
+          
             if (name == "Cancel")
             {
                 Game1.exitActiveMenu();
@@ -176,7 +199,7 @@ namespace Revitalize.Menus
                 this.CanvasObject.isPainted = true;
                 this.CanvasObject.pixels = this.pixels;
 
-                this.compileImage("motherOfRootBeer");
+                this.compileImage(this.nameBox.Text);
 
                     Game1.exitActiveMenu();
                     if (Game1.currentMinigame != null && Game1.currentMinigame is Intro)
@@ -198,6 +221,17 @@ namespace Revitalize.Menus
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
+            this.nameBox.Update();
+            this.numbersSelectBox.Update();
+            if (Convert.ToInt32(this.numbersSelectBox.Text)> 255){
+                this.numbersSelectBox.Text = 255.ToString();
+            }
+            if (Convert.ToInt32(this.numbersSelectBox.Text) < 0)
+            {
+                this.numbersSelectBox.Text = 0.ToString();
+            }
+            this.numbersSelectBox.Update();
+            
             using (List<Pixel>.Enumerator enumerator = pixels.GetEnumerator())
             {
                 while (enumerator.MoveNext())
@@ -206,7 +240,14 @@ namespace Revitalize.Menus
                     if (clickableTextureComponent3.containsPoint(x, y))
                     {
                         enumerator.Current.color = lightColorPicker.getSelectedColor();
-                       // Log.AsyncM("WOOOOOO");
+                        enumerator.Current.color.A = (byte)Convert.ToInt32(this.numbersSelectBox.Text);
+                  
+                            enumerator.Current.color.B = ((Byte)( enumerator.Current.color.B /(float)(255/enumerator.Current.color.A)));
+                        enumerator.Current.color.R = ((Byte)(enumerator.Current.color.R / (float)(255 / enumerator.Current.color.A)));
+                        enumerator.Current.color.G = ((Byte)(enumerator.Current.color.G / (float)(255 / enumerator.Current.color.A)));
+
+                        Log.AsyncC(enumerator.Current.color);
+                        // Log.AsyncM("WOOOOOO");
                         //  clickableTextureComponent3.scale = Math.Min(clickableTextureComponent3.scale + 0.02f, clickableTextureComponent3.baseScale + 0.1f);
                     }
                     else
@@ -235,7 +276,7 @@ namespace Revitalize.Menus
             {
 
                 CanvasObject.drawColor = this.lightColorPicker.click(x, y);
-                CanvasObject.drawColor = Util.invertColor(CanvasObject.drawColor);
+                CanvasObject.drawColor = Util.invertColor(CanvasObject.drawColor, Convert.ToInt32(this.numbersSelectBox.Text));
                 // LightObject.lightColor = Util.invertColor(LightObject.lightColor);
                 this.lastHeldColorPicker = this.lightColorPicker;
                 colorChanged = true;
@@ -387,7 +428,7 @@ namespace Revitalize.Menus
                 // c2 = Util.invertColor(c2);
                 colorChanged = true;
                 this.lightColorPicker.setColor(c2);
-                this.CanvasObject.drawColor = Util.invertColor(c2);
+                this.CanvasObject.drawColor = Util.invertColor(c2, Convert.ToInt32(this.numbersSelectBox.Text));
 
             }
         }
@@ -403,7 +444,8 @@ namespace Revitalize.Menus
                     if (this.lastHeldColorPicker.Equals(this.lightColorPicker))
                     {
                         colorChanged = true;
-                        this.CanvasObject.drawColor = Util.invertColor(this.lightColorPicker.clickHeld(x, y));
+                        this.CanvasObject.drawColor = Util.invertColor(this.lightColorPicker.clickHeld(x, y),Convert.ToInt32(this.numbersSelectBox.Text));
+                        
                     }
                 }
                 this.colorPickerTimer = 100;
@@ -417,6 +459,11 @@ namespace Revitalize.Menus
                     if (clickableTextureComponent3.containsPoint(x, y))
                     {
                         enumerator.Current.color = lightColorPicker.getSelectedColor();
+                        enumerator.Current.color.A =(byte) Convert.ToInt32(this.numbersSelectBox.Text);
+                        enumerator.Current.color.B = ((Byte)(enumerator.Current.color.B / (float)(255 / enumerator.Current.color.A)));
+                        enumerator.Current.color.R = ((Byte)(enumerator.Current.color.R / (float)(255 / enumerator.Current.color.A)));
+                        enumerator.Current.color.G = ((Byte)(enumerator.Current.color.G / (float)(255 / enumerator.Current.color.A)));
+                        Log.AsyncM(enumerator.Current.color);
                         // Log.AsyncM("WOOOOOO");
                         //  clickableTextureComponent3.scale = Math.Min(clickableTextureComponent3.scale + 0.02f, clickableTextureComponent3.baseScale + 0.1f);
                     }
@@ -450,6 +497,7 @@ namespace Revitalize.Menus
                     this.nameBox.Selected = false;
                     return;
                 }
+
                 if (this.farmnameBox.Selected)
                 {
                     this.farmnameBox.Selected = false;
@@ -526,7 +574,7 @@ namespace Revitalize.Menus
 
         public override void draw(SpriteBatch b)
         {
-            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, null, false);
+           // Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, null, false);
             foreach (ClickableComponent current in this.labels)
             {
                 string text = "";
@@ -565,12 +613,13 @@ namespace Revitalize.Menus
 
             if (once == false)
             {
-                Color c = Util.invertColor(CanvasObject.drawColor);
+                Color c = Util.invertColor(CanvasObject.drawColor,Convert.ToInt32(this.numbersSelectBox.Text));
 
                 this.lightColorPicker.setColor(c);
                 once = true;
             }
-
+            this.nameBox.Draw(b);
+            this.numbersSelectBox.Draw(b);
             base.drawMouse(b);
         }
 
@@ -588,11 +637,63 @@ namespace Revitalize.Menus
             if(File.Exists(decompiled + ".yaml"))
             {
                 File.Delete(decompiled + ".yaml");
+                Log.AsyncC("DELETE THE YAML");
             }
             if (File.Exists(decompiled + ".png"))
             {
                 File.Delete(decompiled + ".png");
+                Log.AsyncC("DELETE THE PNG");
             }
+            if (File.Exists(compiled + ".xnb"))
+            {
+                File.Delete(compiled + ".xnb");
+                Log.AsyncC("DELETE THE XNB");
+            }
+
+            List<string> failure = new List<string>();
+            foreach(string s22 in Directory.GetFiles(b1))
+            {
+                Log.AsyncC(s22);
+                failure.Add(s22);
+            }
+            foreach(var v in failure)
+            {
+                while (File.Exists(v))
+                {
+                    File.Delete(v);
+                }
+            }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            /*
+            if (File.Exists(compiled + ".xnb"))
+            {
+                int i = 0;
+                List<string> fileList = new List<string>();
+                //fileList.Add(Path.Combine(Class1.contentPath, Game1.content.RootDirectory, CanvasObject.texturePath));
+                while (File.Exists(compiled + i + ".xnb"))
+                {
+                    fileList.Add(compiled + i + ".xnb");
+                    fileList.Add(decompiled + i + ".yaml");
+                    fileList.Add(decompiled + i + ".png");
+                    i++;
+
+                    Log.AsyncG("INTERESTING");
+                }
+                foreach(var v in fileList)
+                {
+                    File.Delete(v);
+                    Log.AsyncM("DELETING THE THING");
+                    Log.AsyncO(v);
+                }
+                hate += i;
+                a1 += i;
+                b1 += i;
+                decompiled += i;
+               // File.Delete(compiled + ".xnb");
+                //Log.AsyncC("DELETE");
+            }
+            */
             File.Copy(Path.Combine(Game1.content.RootDirectory, "Revitalize", "Paint", "cleanYAML.yaml"), decompiled+".yaml");
             using (System.Drawing.Bitmap b = new System.Drawing.Bitmap(16, 16))
             {
@@ -600,15 +701,16 @@ namespace Revitalize.Menus
                 {
                     int i = 16 * 16;
                     int j = 0;
-                    Log.AsyncY(i);
+                  //  Log.AsyncY(i);
 
                    
                     foreach(var v in pixels)
                     {
-                        Color r = Util.invertColor(v.color);
-                        r = Util.invertColor(r);
+                        Color r = Util.invertColor(v.color,v.color.A);
+                        r = Util.invertColor(r,r.A);
+                        Log.AsyncM(r + " THIS IS MY TRUE COLOR POWER. FEAR ME");
                         j++;
-                        Log.AsyncM(j);
+                      //  Log.AsyncM(j);
                         System.Drawing.Color c= System.Drawing.Color.FromArgb(r.A, r.R, r.G, r.B);
                         b.SetPixel(v.position.X, v.position.Y, c);
                     }
@@ -665,9 +767,15 @@ namespace Revitalize.Menus
                 exitCode = proc.ExitCode;
             }
             Log.AsyncM(hate);
-            CanvasObject.TextureSheet = Game1.content.Load<Texture2D>(hate);
-            CanvasObject.texturePath = compiled;
 
+            //  CanvasObject.TextureSheet.Dispose();
+            CanvasObject.contentManager.Unload();
+          //  Class1.modContent.Dispose();
+            CanvasObject.TextureSheet = CanvasObject.contentManager.Load<Texture2D>(hate);
+  
+            CanvasObject.texturePath = hate;
+            CanvasObject.name = this.nameBox.Text;
+            CanvasObject.isPainted = true;
         }
     }
 }

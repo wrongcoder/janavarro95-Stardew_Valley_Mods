@@ -69,9 +69,13 @@ namespace Revitalize
 
       public static  bool gameLoaded;
 
+       public static List<LocalizedContentManager> modContent;
+
+
         public override void Entry(IModHelper helper)
         {
-          string first=StardewModdingAPI.Program.StardewAssembly.Location;
+           
+            string first=StardewModdingAPI.Program.StardewAssembly.Location;
             contentPath= first.Remove(first.Length - 19, 19);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
             StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
@@ -92,6 +96,7 @@ namespace Revitalize
 
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += draw;
 
+          
 
             //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
             hasLoadedTerrainList = false;
@@ -209,6 +214,7 @@ namespace Revitalize
 
         private void GameEvents_GameLoaded(object sender, EventArgs e)
         {
+            modContent = new List<LocalizedContentManager>();//new LocalizedContentManager(Game1.content.ServiceProvider, Game1.content.RootDirectory);
             Dictionaries.initializeDictionaries();
             Lists.initializeAllLists();
 
@@ -356,7 +362,7 @@ namespace Revitalize
                 objShopList.Add(new StardewValley.Object(498, 1));
                 objShopList.Add(new StardewValley.Object(770, 1));
 
-                objShopList.Add(Canvas.addCanvasWithCheck(0, Vector2.Zero, Canvas.blankTexture, new List<Pixel>()));
+                objShopList.Add(Canvas.addCanvasWithCheck(0, Vector2.Zero, Canvas.blankTexture, null));
                 
                 objShopList.Add(new StardewValley.Object(475, 1));
                 foreach (var v in objShopList)
