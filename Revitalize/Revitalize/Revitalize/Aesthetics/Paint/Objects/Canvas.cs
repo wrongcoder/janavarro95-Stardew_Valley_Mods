@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Menus;
 using Revitalize.Resources;
 using StardewModdingAPI;
 using StardewValley;
@@ -19,6 +20,8 @@ namespace Revitalize.Objects
     public class Canvas : CoreObject
     {
         public new bool flipped;
+
+        public List<Pixel> pixels;
 
         [XmlIgnore]
         public bool flaggedForPickUp;
@@ -54,9 +57,13 @@ namespace Revitalize.Objects
             //does nothng
         }
 
-        public Canvas(int which, Vector2 tile, string TexturePath)
+        public Canvas(int which, Vector2 tile, string TexturePath, List<Pixel> PixelList)
         {
-
+            pixels = PixelList;
+            if (pixels == null)
+            {
+                pixels = new List<Pixel>();
+            }
             this.tileLocation = tile;
             this.InitializeBasics(0, tile);
             if (TextureSheet == null)
@@ -142,7 +149,7 @@ namespace Revitalize.Objects
             if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 //ACTIVATE PAINT MODE HERE!!!
-                Game1.activeClickableMenu = new Revitalize.Menus.PaintMenu(this);
+                Game1.activeClickableMenu = new Revitalize.Menus.PaintMenu(this,false);
                 // Game1.showRedMessage("YOOO");
                 //do some stuff when the right button is down
              //   Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(this.inventory);
@@ -561,7 +568,13 @@ namespace Revitalize.Objects
             //   Log.AsyncM(y);
             if (isPainted == false)
             {
-                Game1.activeClickableMenu = new Revitalize.Menus.PaintMenu(this);
+                Game1.activeClickableMenu = new Revitalize.Menus.PaintMenu(this,true);
+
+                return false;
+            }
+            else
+            {
+                Game1.activeClickableMenu = new Revitalize.Menus.PaintMenu(this, false);
 
                 return false;
             }
@@ -981,7 +994,7 @@ namespace Revitalize.Objects
 
         public override Item getOne()
         {
-            Canvas Canvas = new Canvas(this.parentSheetIndex, this.tileLocation, this.texturePath);
+            Canvas Canvas = new Canvas(this.parentSheetIndex, this.tileLocation, this.texturePath, this.pixels);
 
             /*
             drawPosition = this.drawPosition;
@@ -1004,5 +1017,12 @@ namespace Revitalize.Objects
         {
             return Util.invertColor(LightColors.Indigo);
         }
+
+        public static Canvas addCanvasWithCheck(int which, Vector2 tile, string TexturePath, List<Pixel> PixelList)
+        {
+            if (Class1.paintEnabled == true) return new Canvas(which, tile, TexturePath, PixelList);
+            else return null;
+        }
+
     }
 }

@@ -49,6 +49,7 @@ namespace Revitalize
         public static string key_binding3 = "F";
       public static  bool useMenuFocus;
         public static string path;
+        public static string contentPath;
         const int range = 1;
 
         public static MouseState mState;
@@ -63,12 +64,15 @@ namespace Revitalize
       public static  bool hasLoadedTerrainList;
         List<GameLoc> newLoc;
 
-       
+
+        public static bool paintEnabled;
 
       public static  bool gameLoaded;
 
         public override void Entry(IModHelper helper)
         {
+          string first=StardewModdingAPI.Program.StardewAssembly.Location;
+            contentPath= first.Remove(first.Length - 19, 19);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
             StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick +=gameMenuCall;
@@ -100,7 +104,18 @@ namespace Revitalize
           
             useMenuFocus = true;
             Lists.loadAllListsAtEntry();
-            
+
+            if (File.Exists(Path.Combine(path, "xnb_node.cmd")))
+            {
+                paintEnabled = true;
+                Log.AsyncG("Revitalize: Paint Module Enabled");
+            }
+            else
+            {
+                paintEnabled = false;
+                Log.AsyncG("Revitalize: Paint Module Disabled");
+            }
+
         }
 
 
@@ -341,7 +356,7 @@ namespace Revitalize
                 objShopList.Add(new StardewValley.Object(498, 1));
                 objShopList.Add(new StardewValley.Object(770, 1));
 
-                objShopList.Add(new Canvas(0, Vector2.Zero, Canvas.blankTexture));
+                objShopList.Add(Canvas.addCanvasWithCheck(0, Vector2.Zero, Canvas.blankTexture, new List<Pixel>()));
                 
                 objShopList.Add(new StardewValley.Object(475, 1));
                 foreach (var v in objShopList)

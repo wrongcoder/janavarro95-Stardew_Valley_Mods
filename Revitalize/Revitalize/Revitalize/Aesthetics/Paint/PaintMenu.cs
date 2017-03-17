@@ -9,6 +9,9 @@ using System.Linq;
 using System;
 using Revitalize.Objects;
 using StardewModdingAPI;
+using System.Diagnostics;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace Revitalize.Menus
 {
@@ -16,17 +19,20 @@ namespace Revitalize.Menus
     {
         public Color color;
         public ClickableTextureComponent component;
+        public Point position;
 
-      public  Pixel(ClickableTextureComponent newComponent, Color newColor)
+      public  Pixel(ClickableTextureComponent newComponent, Color newColor, Point newPosition)
         {
             component = newComponent;
             color = newColor;
+            position = newPosition;
         }
 
-        public Pixel(ClickableTextureComponent newComponent, int Red = 255, int Green = 255, int Blue = 255, int Alpha = 255)
+        public Pixel(ClickableTextureComponent newComponent, Point newPosition, int Red = 255, int Green = 255, int Blue = 255, int Alpha = 255)
         {
             component = newComponent;
             color = new Color(Red, Green, Blue, Alpha);
+            position = newPosition;
         }
     }
 
@@ -78,10 +84,13 @@ namespace Revitalize.Menus
 
         public bool once;
 
-        public PaintMenu(Canvas Obj) : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize, false)
+        public bool clean;
+
+        public PaintMenu(Canvas Obj, bool Clean=true) : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize, false)
         {
-            this.setUpPositions();
+            clean = Clean;
             this.CanvasObject = Obj;
+            this.setUpPositions(clean);
             colorChanged = false;
           //  this.height = this.height ;
         }
@@ -91,10 +100,10 @@ namespace Revitalize.Menus
             base.gameWindowSizeChanged(oldBounds, newBounds);
             this.xPositionOnScreen = Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2;
             this.yPositionOnScreen = Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize;
-            this.setUpPositions();
+            this.setUpPositions(clean);
         }
 
-        private void setUpPositions()
+        private void setUpPositions(bool Clean)
         {
 
             this.labels.Clear();
@@ -116,15 +125,24 @@ namespace Revitalize.Menus
             this.labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 16, 1, 1), "Color"));
             this.lightColorPicker = new ColorPicker(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + Game1.tileSize * 5 + Game1.tileSize * 3 / 4 + IClickableMenu.borderWidth, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder);
             num += Game1.tileSize + 8;
-            for(int x=1; x<=8; x++)
+            if (Clean == true)
             {
-                for(int y=1; y<=8; y++)
+                for (int x = 1; x <= 16; x++)
                 {
-                    this.pixels.Add(new Pixel(new ClickableTextureComponent("pixel", new Rectangle((int)(this.xPositionOnScreen*1.2f) + ((Game1.tileSize/2) * x),(int)( this.yPositionOnScreen *-2.0f)+ ((Game1.tileSize/2) * y) , Game1.tileSize/2, Game1.tileSize/2), null, null, Game1.content.Load<Texture2D>(Canvas.whiteTexture), new Rectangle(0, 0, 8, 8), 4f, false), Color.White));
-                }
+                    for (int y = 1; y <= 16; y++)
+                    {
+                        this.pixels.Add(new Pixel(new ClickableTextureComponent("pixel", new Rectangle((int)(this.xPositionOnScreen * 1.2f) + ((Game1.tileSize / 2) * x), (int)(this.yPositionOnScreen * -2.0f) + ((Game1.tileSize / 2) * y)+Game1.tileSize*1, Game1.tileSize / 2, Game1.tileSize / 2), null, null, Game1.content.Load<Texture2D>(Canvas.whiteTexture), new Rectangle(0, 0, 8, 8), 4f, false), Color.White, new Point(x - 1, y - 1)));
+                    }
 
+                }
             }
-          
+            else
+            {
+                if (this.pixels == null) Log.AsyncC("this pixels null");
+                if (CanvasObject == null) Log.AsyncC("cnvas object is null");
+                if (CanvasObject.pixels == null) Log.AsyncC("this canvas object ==null");
+                this.pixels = CanvasObject.pixels;
+            }
 
             once = false;
             this.lightColorPicker.setColor(Color.White);
@@ -141,11 +159,6 @@ namespace Revitalize.Menus
 
             if (name == "OK")
             {
-                if (colorChanged == false)
-                {
-                    Game1.exitActiveMenu();
-                    return;
-                }
                 //  StardewModdingAPI.Log.AsyncC(this.LightObject.lightColor);
 
                 this.lightColorPicker.setColor(CanvasObject.drawColor);
@@ -157,14 +170,14 @@ namespace Revitalize.Menus
                 CanvasObject.drawColor = this.lightColorPicker.getSelectedColor();
                 //LightObject.lightColor = Util.invertColor(LightObject.lightColor);
 
-                if (!this.canLeaveMenu())
-                {
-                    return;
-                }
                 //Game1.player.Name = this.nameBox.Text.Trim();
                 //	Game1.player.favoriteThing = this.favThingBox.Text.Trim();
  
-                    this.CanvasObject.isPainted = true;
+                this.CanvasObject.isPainted = true;
+                this.CanvasObject.pixels = this.pixels;
+
+                this.compileImage("motherOfRootBeer");
+
                     Game1.exitActiveMenu();
                     if (Game1.currentMinigame != null && Game1.currentMinigame is Intro)
                     {
@@ -395,6 +408,25 @@ namespace Revitalize.Menus
                 }
                 this.colorPickerTimer = 100;
             }
+            //THIS MIGHT CRASH SOME STUFF
+            using (List<Pixel>.Enumerator enumerator = pixels.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    ClickableTextureComponent clickableTextureComponent3 = (ClickableTextureComponent)enumerator.Current.component;
+                    if (clickableTextureComponent3.containsPoint(x, y))
+                    {
+                        enumerator.Current.color = lightColorPicker.getSelectedColor();
+                        // Log.AsyncM("WOOOOOO");
+                        //  clickableTextureComponent3.scale = Math.Min(clickableTextureComponent3.scale + 0.02f, clickableTextureComponent3.baseScale + 0.1f);
+                    }
+                    else
+                    {
+
+                        //  clickableTextureComponent3.scale = Math.Max(clickableTextureComponent3.scale - 0.02f, clickableTextureComponent3.baseScale);
+                    }
+                }
+            }
         }
 
         public override void releaseLeftClick(int x, int y)
@@ -540,6 +572,102 @@ namespace Revitalize.Menus
             }
 
             base.drawMouse(b);
+        }
+
+
+        public void compileImage(string s)
+        {
+            string a1 = Path.Combine(Class1.contentPath, Game1.content.RootDirectory, "Revitalize", "Paint", "decompiled");
+            string b1 = Path.Combine(Class1.contentPath, Game1.content.RootDirectory, "Revitalize", "Paint", "compiled");
+
+            string decompiled = Path.Combine(Class1.contentPath,Game1.content.RootDirectory,"Revitalize", "Paint", "decompiled",s);
+            string compiled = Path.Combine(Class1.contentPath,Game1.content.RootDirectory, "Revitalize", "Paint", "compiled",s);
+            string hate = Path.Combine("Revitalize", "Paint", "compiled", s);
+
+            string arguments = "pack " + "\""+a1+"\"" +" " +"\""+b1+"\"";
+            if(File.Exists(decompiled + ".yaml"))
+            {
+                File.Delete(decompiled + ".yaml");
+            }
+            if (File.Exists(decompiled + ".png"))
+            {
+                File.Delete(decompiled + ".png");
+            }
+            File.Copy(Path.Combine(Game1.content.RootDirectory, "Revitalize", "Paint", "cleanYAML.yaml"), decompiled+".yaml");
+            using (System.Drawing.Bitmap b = new System.Drawing.Bitmap(16, 16))
+            {
+                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(b))
+                {
+                    int i = 16 * 16;
+                    int j = 0;
+                    Log.AsyncY(i);
+
+                   
+                    foreach(var v in pixels)
+                    {
+                        Color r = Util.invertColor(v.color);
+                        r = Util.invertColor(r);
+                        j++;
+                        Log.AsyncM(j);
+                        System.Drawing.Color c= System.Drawing.Color.FromArgb(r.A, r.R, r.G, r.B);
+                        b.SetPixel(v.position.X, v.position.Y, c);
+                    }
+                    //    g.Clear(System.Drawing.Color.Green);
+                }
+                if (File.Exists(decompiled + ".png"))
+                {
+                    File.Delete(decompiled + ".png");
+                }
+                b.Save(decompiled+".png", ImageFormat.Png);
+            }
+
+            ProcessStartInfo start = new ProcessStartInfo();
+
+           
+            // Enter in the command line arguments, everything you would enter after the executable name itself
+            start.Arguments = arguments;
+            Log.AsyncC(arguments);
+            // Enter the executable to run, including the complete path
+            start.FileName = "xnb_node.cmd";
+
+            Log.AsyncM(start.FileName + " I HATE THIS STUPID GARBAGE");
+
+            if(File.Exists(Path.Combine(Class1.path, "xnb_node.cmd")))
+            {
+                Log.AsyncG("YAY");
+            }
+            else
+            {
+                Log.AsyncM("NOOOO");
+            }
+            // Do you want to show a console window?
+            start.RedirectStandardOutput = true;
+            start.WindowStyle = ProcessWindowStyle.Normal;
+            start.CreateNoWindow =false;
+            start.UseShellExecute = false;
+            int exitCode;
+
+
+
+            // Run the external process & wait for it to finish
+            using (Process proc = Process.Start(start))
+            {
+                while (!proc.StandardOutput.EndOfStream)
+                {
+                    string line = proc.StandardOutput.ReadLine();
+                    // do something with line
+                    Log.AsyncY(line);
+                }
+
+                proc.WaitForExit();
+
+                // Retrieve the app's exit code
+                exitCode = proc.ExitCode;
+            }
+            Log.AsyncM(hate);
+            CanvasObject.TextureSheet = Game1.content.Load<Texture2D>(hate);
+            CanvasObject.texturePath = compiled;
+
         }
     }
 }
