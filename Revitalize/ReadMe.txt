@@ -6,6 +6,14 @@ The beginnings of Stardew Valley Revitalize.
 
 Implemented.
 
+0.4.0 5/3/5
++ Spells and Magic!
+	+Spells regarding healing, some utilities, and stamina are added in.
+	+Bag of Holding
+		-hold more objects
++Colored Font Objects. Good for making messages?
++Canvas Object Prototype: Similar to Animal Crossing Patterns.
+
 0.3.0 2/22/17
 +crops anywhere: Crops can now be placed anywhere where dirt can be tilled.
 +Custom Seeds: Now exist in seperate .xnb
