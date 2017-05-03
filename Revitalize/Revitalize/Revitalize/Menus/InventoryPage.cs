@@ -152,14 +152,17 @@ namespace Revitalize.Menus
             }
         }
 
-        public override int moveCursorInDirection(int direction)
+        public new void moveCursorInDirection(int direction)
         {
+            int num = 0;
+             base.moveCursorInDirection(direction);
+            return;
             if (this.currentRegion == 0)
             {
-                int num = this.inventory.moveCursorInDirection(direction);
+                //int num = this.inventory.moveCursorInDirection(direction);
                 if (num == 0)
                 {
-                    return 0;
+                    return;
                 }
                 if (num == 2)
                 {
@@ -215,7 +218,7 @@ namespace Revitalize.Menus
                 this.currentRegion = 3;
                 this.equipmentIcons[2].snapMouseCursor();
             }
-            return -1;
+            return;
         }
 
         public override void setUpForGamePadMode()

@@ -24,3 +24,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Save_Anywhere_V2\Save_Anywhere_V2\obj\Debug\Save_Anywhere_V2.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Save_Anywhere_V2\Save_Anywhere_V2\obj\Debug\Save_Anywhere_V2.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Save_Anywhere_V2\Save_Anywhere_V2\obj\Debug\Save_Anywhere_V2.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Save_Anywhere_V2\Save_Anywhere_V2\bin\Debug\Save_Anywhere_V2.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Save_Anywhere_V2\Save_Anywhere_V2\bin\Debug\Save_Anywhere_V2.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Save_Anywhere_V2\Save_Anywhere_V2\obj\Debug\Save_Anywhere_V2.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Save_Anywhere_V2\Save_Anywhere_V2\obj\Debug\Save_Anywhere_V2.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Save_Anywhere_V2\Save_Anywhere_V2\obj\Debug\Save_Anywhere_V2.pdb

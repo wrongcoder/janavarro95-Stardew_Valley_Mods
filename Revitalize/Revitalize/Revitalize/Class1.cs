@@ -19,7 +19,6 @@ using Revitalize.Resources;
 using Revitalize.Objects;
 using Revitalize.Objects.Machines;
 using StardewValley.Locations;
-using Revitalize.Locations;
 using Revitalize.Menus;
 using Microsoft.Xna.Framework.Input;
 using xTile;
@@ -75,7 +74,8 @@ namespace Revitalize
         public override void Entry(IModHelper helper)
         {
            
-            string first=StardewModdingAPI.Program.StardewAssembly.Location;
+            //string first=StardewModdingAPI.Program.StardewAssembly.Location;
+            string first = StardewModdingAPI.Constants.ExecutionPath;
             contentPath= first.Remove(first.Length - 19, 19);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
             StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
@@ -241,7 +241,7 @@ namespace Revitalize
                     if (R.name == "Town" || R.name == "town")
                     {
                         Log.AsyncO("Adding Town");
-                        R = new ModTown(v.Map, v.name);
+                       // R = new ModTown(v.Map, v.name);
                     }
                     newLoc.Add(R);
                     Log.AsyncC("DONE1");
@@ -332,7 +332,7 @@ namespace Revitalize
 
                 List<Item> objShopList = new List<Item>();
                 List<Item> newInventory = new List<Item>();
-
+                
                 TextureDataNode font;
                 Dictionaries.spriteFontList.TryGetValue("0", out font);
                 objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
@@ -362,7 +362,7 @@ namespace Revitalize
                 objShopList.Add(new StardewValley.Object(498, 1));
                 objShopList.Add(new StardewValley.Object(770, 1));
 
-                objShopList.Add(Canvas.addCanvasWithCheck(0, Vector2.Zero, Canvas.blankTexture, null));
+                //objShopList.Add(Canvas.addCanvasWithCheck(0, Vector2.Zero, Canvas.blankTexture, null));
                 
                 objShopList.Add(new StardewValley.Object(475, 1));
                 foreach (var v in objShopList)
@@ -380,6 +380,17 @@ namespace Revitalize
                 foreach(KeyValuePair<int,Spell> v in Dictionaries.spellList)
                 {
                     objShopList.Add(v.Value);
+                }
+
+                List<StardewValley.Item> trash = new List<StardewValley.Item>();
+                foreach(var v in objShopList)
+                {
+                    if (v == null) trash.Add(v);
+                }
+                foreach(var v in trash)
+                {
+                    Log.AsyncC("TRASH");
+                    objShopList.Remove(v);
                 }
 
                 Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(objShopList, 0, null);

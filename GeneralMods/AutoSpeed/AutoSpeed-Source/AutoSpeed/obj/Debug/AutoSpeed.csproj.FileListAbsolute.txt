@@ -72,3 +72,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\AutoSpeed\AutoSpeed-Source\AutoSpeed\obj\Debug\AutoSpeed.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\AutoSpeed\AutoSpeed-Source\AutoSpeed\obj\Debug\AutoSpeed.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\AutoSpeed\AutoSpeed-Source\AutoSpeed\obj\Debug\AutoSpeed.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\AutoSpeed\AutoSpeed-Source\AutoSpeed\bin\Debug\AutoSpeed.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\AutoSpeed\AutoSpeed-Source\AutoSpeed\bin\Debug\AutoSpeed.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\AutoSpeed\AutoSpeed-Source\AutoSpeed\obj\Debug\AutoSpeed.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\AutoSpeed\AutoSpeed-Source\AutoSpeed\obj\Debug\AutoSpeed.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\AutoSpeed\AutoSpeed-Source\AutoSpeed\obj\Debug\AutoSpeed.pdb

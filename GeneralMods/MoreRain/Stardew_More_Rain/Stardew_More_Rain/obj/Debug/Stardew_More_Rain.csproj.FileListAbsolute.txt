@@ -22,3 +22,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\obj\Debug\Stardew_More_Rain.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\obj\Debug\Stardew_More_Rain.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\obj\Debug\Stardew_More_Rain.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\bin\Debug\Stardew_More_Rain.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\bin\Debug\Stardew_More_Rain.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\obj\Debug\Stardew_More_Rain.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\obj\Debug\Stardew_More_Rain.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\MoreRain\Stardew_More_Rain\Stardew_More_Rain\obj\Debug\Stardew_More_Rain.pdb

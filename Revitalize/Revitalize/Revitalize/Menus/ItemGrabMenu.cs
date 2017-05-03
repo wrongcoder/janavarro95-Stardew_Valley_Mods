@@ -12,7 +12,7 @@ namespace Revitalize.Menus
 {
     public class ItemGrabMenu : MenuWithInventory
     {
-        public delegate void behaviorOnItemSelect(Item item, Farmer who);
+        public delegate void behaviorOnItemSelect(Item item, StardewValley.Farmer who);
 
         public const int source_none = 0;
 

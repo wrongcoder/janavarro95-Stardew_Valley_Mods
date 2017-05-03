@@ -226,12 +226,6 @@ namespace BuildHealth
 
         public void LoadingCallBack(object sender, EventArgs e)
         {
-
-         //   Monitor.Log("entering loading callback");
-            if (StardewModdingAPI.Inheritance.SGame.hasLoadedGame == true)
-            {
-           //     Monitor.Log("Penetrated loading callback");
-
                 DataLoader();
                 MyWritter();
 				upon_loading=true;
@@ -253,7 +247,7 @@ namespace BuildHealth
 
                 DataLoader();
                 MyWritter();
-            }
+            
             old_health = StardewValley.Game1.player.maxHealth;
         }
 

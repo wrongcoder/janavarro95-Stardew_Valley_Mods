@@ -24,10 +24,6 @@ namespace Revitalize.Objects.Machines
             {
                 return this.name;
             }
-            set
-            {
-                this.name = value;
-            }
         }
 
 
@@ -173,7 +169,7 @@ namespace Revitalize.Objects.Machines
             return this.description;
         }
 
-        public override bool performDropDownAction(Farmer who)
+        public override bool performDropDownAction(StardewValley.Farmer who)
         {
             this.resetOnPlayerEntry((who == null) ? Game1.currentLocation : who.currentLocation);
             return false;
@@ -188,7 +184,7 @@ namespace Revitalize.Objects.Machines
             }
         }
 
-        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
+        public override bool checkForAction(StardewValley.Farmer who, bool justCheckingForActivity = false)
         {
             var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
@@ -233,7 +229,7 @@ namespace Revitalize.Objects.Machines
             return this.clicked(who);
         }
 
-        public override bool clicked(Farmer who)
+        public override bool clicked(StardewValley.Farmer who)
         {
 
           //  Game1.showRedMessage("THIS IS CLICKED!!!");
@@ -364,7 +360,7 @@ namespace Revitalize.Objects.Machines
             }
         }
 
-        public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, Farmer who)
+        public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, StardewValley.Farmer who)
         {
             // Log.AsyncG("HEY!");
 
@@ -760,7 +756,7 @@ namespace Revitalize.Objects.Machines
             return this.boundingBox.Height / Game1.tileSize;
         }
 
-        public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
+        public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
             
 
@@ -826,7 +822,7 @@ namespace Revitalize.Objects.Machines
                         }
                     }
                 }
-                foreach (Farmer current3 in location.getFarmers())
+                foreach (StardewValley.Farmer current3 in location.getFarmers())
                 {
                     if (current3.GetBoundingBox().Intersects(this.boundingBox))
                     {
@@ -910,7 +906,7 @@ namespace Revitalize.Objects.Machines
                     }
                 }
                 */
-                foreach (Farmer current3 in location.getFarmers())
+                foreach (StardewValley.Farmer current3 in location.getFarmers())
                 {
                     if (current3.GetBoundingBox().Intersects(this.boundingBox))
                     {
@@ -1144,7 +1140,7 @@ namespace Revitalize.Objects.Machines
             return 0.1f;
         }
 
-        public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
+        public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
             spriteBatch.Draw(TextureSheet, objectPosition ,Color.White);
             //base.drawWhenHeld(spriteBatch, objectPosition, f);

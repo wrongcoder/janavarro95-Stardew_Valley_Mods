@@ -68,3 +68,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\HappyBirthday\HappyBirthday\obj\Debug\HappyBirthday.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\HappyBirthday\HappyBirthday\obj\Debug\HappyBirthday.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\HappyBirthday\HappyBirthday\obj\Debug\HappyBirthday.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\HappyBirthday\HappyBirthday\bin\Debug\HappyBirthday.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\HappyBirthday\HappyBirthday\bin\Debug\HappyBirthday.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\HappyBirthday\HappyBirthday\obj\Debug\HappyBirthday.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\HappyBirthday\HappyBirthday\obj\Debug\HappyBirthday.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\HappyBirthday\HappyBirthday\obj\Debug\HappyBirthday.pdb

@@ -44,3 +44,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuyBackCollectables\BuyBackCollectables-Source\obj\Debug\BuyBackCollectables.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuyBackCollectables\BuyBackCollectables-Source\obj\Debug\BuyBackCollectables.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\BuyBackCollectables\BuyBackCollectables-Source\obj\Debug\BuyBackCollectables.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables-Source\bin\Debug\BuyBackCollectables.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables-Source\bin\Debug\BuyBackCollectables.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables-Source\obj\Debug\BuyBackCollectables.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables-Source\obj\Debug\BuyBackCollectables.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables-Source\obj\Debug\BuyBackCollectables.pdb

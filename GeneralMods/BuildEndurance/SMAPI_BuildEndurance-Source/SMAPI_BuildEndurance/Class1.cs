@@ -3,6 +3,9 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using StardewModdingAPI;
+using StardewValley;
+using Microsoft.Xna.Framework;
+
 namespace BuildEndurance
 {
 
@@ -46,6 +49,7 @@ namespace BuildEndurance
             StardewModdingAPI.Events.GameEvents.UpdateTick += Exhaustion_callback;
             StardewModdingAPI.Events.GameEvents.UpdateTick += Collapse_Callback;
 
+
             var configLocation = Path.Combine(helper.DirectoryPath, "BuildEnduranceConfig.json");
             if (!File.Exists(configLocation))
             {
@@ -86,6 +90,8 @@ namespace BuildEndurance
 
             Monitor.Log("BuildEndurance Initialization Completed");
         }
+
+
         public void ToolCallBack(object sender, EventArgs e) //ultra quick response for checking if a tool is used.
         {
             if (tool_cleaner == true) return;
@@ -171,13 +177,11 @@ namespace BuildEndurance
 
         public void LoadingCallBack(object sender, EventArgs e)
         {
-            if (StardewModdingAPI.Inheritance.SGame.hasLoadedGame == true)
-            {
+            
                 DataLoader();
                 MyWritter();
                 upon_loading = true;
                 //runs when the player is loaded.
-
 
                 var player = StardewValley.Game1.player;
 
@@ -201,8 +205,6 @@ namespace BuildEndurance
 
                 DataLoader();
                 MyWritter();
-            }
-
         }
 
         public void SleepCallback(object sender, EventArgs e)

@@ -22,3 +22,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\obj\Debug\Stardew_Save_Backup.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\obj\Debug\Stardew_Save_Backup.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\obj\Debug\Stardew_Save_Backup.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\bin\Debug\Stardew_Save_Backup.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\bin\Debug\Stardew_Save_Backup.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\obj\Debug\Stardew_Save_Backup.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\obj\Debug\Stardew_Save_Backup.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Stardew_Save_Backup\Stardew_Save_Backup\Stardew_Save_Backup\obj\Debug\Stardew_Save_Backup.pdb

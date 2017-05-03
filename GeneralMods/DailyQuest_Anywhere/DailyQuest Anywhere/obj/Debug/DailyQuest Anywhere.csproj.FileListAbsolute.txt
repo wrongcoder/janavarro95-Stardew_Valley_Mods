@@ -25,3 +25,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\DailyQuest_Anywhere\DailyQuest Anywhere\obj\Debug\DailyQuest Anywhere.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\DailyQuest_Anywhere\DailyQuest Anywhere\obj\Debug\DailyQuest_Anywhere.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\DailyQuest_Anywhere\DailyQuest Anywhere\obj\Debug\DailyQuest_Anywhere.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\DailyQuest_Anywhere\DailyQuest Anywhere\bin\Debug\DailyQuest_Anywhere.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\DailyQuest_Anywhere\DailyQuest Anywhere\bin\Debug\DailyQuest_Anywhere.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\DailyQuest_Anywhere\DailyQuest Anywhere\obj\Debug\DailyQuest Anywhere.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\DailyQuest_Anywhere\DailyQuest Anywhere\obj\Debug\DailyQuest_Anywhere.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\DailyQuest_Anywhere\DailyQuest Anywhere\obj\Debug\DailyQuest_Anywhere.pdb

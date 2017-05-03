@@ -26,3 +26,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\CurrentLocationPopUp\CurrentLocationPopUp\obj\Debug\CurrentLocationPopUp.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\CurrentLocationPopUp\CurrentLocationPopUp\obj\Debug\CurrentLocationPopUp.pdb
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\CurrentLocationPopUp\CurrentLocationPopUp\obj\Debug\CurrentLocationPopUp.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\CurrentLocationPopUp\CurrentLocationPopUp\bin\Debug\CurrentLocationPopUp.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\CurrentLocationPopUp\CurrentLocationPopUp\bin\Debug\CurrentLocationPopUp.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\CurrentLocationPopUp\CurrentLocationPopUp\obj\Debug\CurrentLocationPopUp.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\CurrentLocationPopUp\CurrentLocationPopUp\obj\Debug\CurrentLocationPopUp.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\CurrentLocationPopUp\CurrentLocationPopUp\obj\Debug\CurrentLocationPopUp.pdb

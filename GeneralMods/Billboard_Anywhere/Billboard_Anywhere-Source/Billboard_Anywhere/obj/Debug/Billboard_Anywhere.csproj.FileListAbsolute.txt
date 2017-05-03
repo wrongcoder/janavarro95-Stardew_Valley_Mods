@@ -80,3 +80,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\obj\Debug\Billboard_Anywhere.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\obj\Debug\Billboard_Anywhere.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\obj\Debug\Billboard_Anywhere.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\bin\Debug\Billboard_Anywhere.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\bin\Debug\Billboard_Anywhere.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\obj\Debug\Billboard_Anywhere.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\obj\Debug\Billboard_Anywhere.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere\obj\Debug\Billboard_Anywhere.pdb

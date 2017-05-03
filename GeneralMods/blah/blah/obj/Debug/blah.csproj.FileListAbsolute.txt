@@ -1,5 +1,0 @@
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\blah\blah\bin\Debug\blah.dll
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\blah\blah\bin\Debug\blah.pdb
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\blah\blah\obj\Debug\blah.csprojResolveAssemblyReference.cache
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\blah\blah\obj\Debug\blah.dll
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\blah\blah\obj\Debug\blah.pdb

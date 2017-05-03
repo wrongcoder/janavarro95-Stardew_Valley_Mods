@@ -193,7 +193,7 @@ namespace Revitalize
         }
 
 
-        public static bool placementAction(CoreObject cObj, GameLocation location, int x, int y, Farmer who = null, bool playSound=true)
+        public static bool placementAction(CoreObject cObj, GameLocation location, int x, int y, StardewValley.Farmer who = null, bool playSound=true)
         {
             Vector2 vector = new Vector2((float)(x / Game1.tileSize), (float)(y / Game1.tileSize));
             //  cObj.health = 10;

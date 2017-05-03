@@ -259,7 +259,7 @@ namespace Revitalize
             }
             if (isFarmer)
             {
-                if (this.currentEvent != null && this.currentEvent.checkForCollision(position, (character != null) ? (character as Farmer) : Game1.player))
+                if (this.currentEvent != null && this.currentEvent.checkForCollision(position, (character != null) ? (character as StardewValley.Farmer) : Game1.player))
                 {
                     return true;
                 }
@@ -620,7 +620,7 @@ namespace Revitalize
         }
 
 
-        public new bool performAction(string action, Farmer who, Location tileLocation)
+        public new bool performAction(string action, StardewValley.Farmer who, Location tileLocation)
         {
             Log.AsyncG("WHY???");
 
@@ -644,7 +644,7 @@ namespace Revitalize
 
                 if (text == "Billboard")
                 {
-                    Game1.activeClickableMenu = new Revitalize.Menus.Billboard(array[1].Equals("3"));
+                   // Game1.activeClickableMenu = new Revitalize.Menus.Billboard(array[1].Equals("3"));
                 }
                 if (text == "Warp")
                 {
@@ -666,7 +666,7 @@ namespace Revitalize
            // return base.performAction(action, who, tileLocation);
         }
         /*
-        public bool performAction(string action, Farmer who, Location tileLocation)
+        public bool performAction(string action, StardewValley.Farmer who, Location tileLocation)
         {
             if (action != null && who.IsMainPlayer)
             {
@@ -2278,7 +2278,7 @@ namespace Revitalize
             return false;
         }
         */
-        public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
+        public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, StardewValley.Farmer who)
         {
             Log.AsyncG("BASLLS");
 

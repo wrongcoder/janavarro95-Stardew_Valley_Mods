@@ -17,12 +17,6 @@ namespace Revitalize.Objects
     /// </summary>
     public class SpriteFontObject : CoreObject
     {
-
-
-
-
-
-
         public new bool flipped;
 
         [XmlIgnore]
@@ -32,17 +26,11 @@ namespace Revitalize.Objects
 
         public string texturePath;
 
-
-
         public override string Name
         {
             get
             {
                 return this.name;
-            }
-            set
-            {
-                this.name = value;
             }
         }
 
@@ -127,7 +115,7 @@ namespace Revitalize.Objects
             return this.description;
         }
 
-        public override bool performDropDownAction(Farmer who)
+        public override bool performDropDownAction(StardewValley.Farmer who)
         {
             this.resetOnPlayerEntry((who == null) ? Game1.currentLocation : who.currentLocation);
             return false;
@@ -142,7 +130,7 @@ namespace Revitalize.Objects
             }
         }
 
-        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
+        public override bool checkForAction(StardewValley.Farmer who, bool justCheckingForActivity = false)
         {
             var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
@@ -167,7 +155,7 @@ namespace Revitalize.Objects
             return this.clicked(who);
         }
 
-        public override bool clicked(Farmer who)
+        public override bool clicked(StardewValley.Farmer who)
         {
 
             //   Game1.showRedMessage("THIS IS CLICKED!!!");
@@ -247,7 +235,7 @@ namespace Revitalize.Objects
             }
         }
 
-        public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, Farmer who)
+        public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, StardewValley.Farmer who)
         {
             if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.heldObject == null && !dropIn.bigCraftable && (!(dropIn is SpriteFontObject) || ((dropIn as SpriteFontObject).getTilesWide() == 1 && (dropIn as SpriteFontObject).getTilesHigh() == 1)))
             {
@@ -455,7 +443,7 @@ namespace Revitalize.Objects
             return this.boundingBox.Height / Game1.tileSize;
         }
 
-        public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
+        public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
 
             if (location is FarmHouse)
@@ -518,7 +506,7 @@ namespace Revitalize.Objects
                         }
                     }
                 }
-                foreach (Farmer current3 in location.getFarmers())
+                foreach (StardewValley.Farmer current3 in location.getFarmers())
                 {
                     if (current3.GetBoundingBox().Intersects(this.boundingBox))
                     {
@@ -582,7 +570,7 @@ namespace Revitalize.Objects
                 }
                 this.boundingBox = new Rectangle(x / Game1.tileSize * Game1.tileSize, y / Game1.tileSize * Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
 
-                foreach (Farmer current3 in location.getFarmers())
+                foreach (StardewValley.Farmer current3 in location.getFarmers())
                 {
                     if (current3.GetBoundingBox().Intersects(this.boundingBox))
                     {
@@ -757,7 +745,7 @@ namespace Revitalize.Objects
             return 0.1f;
         }
 
-        public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
+        public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
          
                 spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Util.invertColor(this.drawColor), 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));

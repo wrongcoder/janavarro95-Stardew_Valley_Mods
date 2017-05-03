@@ -52,3 +52,8 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\obj\Debug\Fall28 Snow Day.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\obj\Debug\Fall28 Snow Day.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\obj\Debug\Fall28 Snow Day.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\bin\Debug\Fall28 Snow Day.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\bin\Debug\Fall28 Snow Day.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\obj\Debug\Fall28 Snow Day.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\obj\Debug\Fall28 Snow Day.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall_28_Snow_Day\Fall28 Snow Day-Project\Fall28 Snow Day\obj\Debug\Fall28 Snow Day.pdb
