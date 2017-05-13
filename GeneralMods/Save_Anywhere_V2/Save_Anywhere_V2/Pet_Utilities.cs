@@ -17,7 +17,6 @@ namespace Save_Anywhere_V2.Save_Utilities.Animals
         public static int pet_tile_x;
         public static int pet_tile_y;
         public static bool is_pet_outside;
-        public static bool has_pet_warped_yet;
        public static  Microsoft.Xna.Framework.Point pet_point;
 
         public static void save_pet_info()
@@ -48,8 +47,7 @@ namespace Save_Anywhere_V2.Save_Utilities.Animals
             if (!File.Exists(mylocation3))
             {
 
-
-                Log.Info("Save Anywhere: The pet save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
+                Mod_Core.thisMonitor.Log("Save Anywhere: The pet save info doesn't exist. It will be created when the custom saving method is run. Which is now.", LogLevel.Debug);
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
 
                 mystring3[0] = "Pet: Save_Anywhere Info. Editing this might break some things.";

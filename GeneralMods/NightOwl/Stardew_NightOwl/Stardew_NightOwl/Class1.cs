@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 Issues:
 -Mail can't be wiped without destroying all mail.
 -Lighting transition does not work if it is raining.
-    -set the weather to clear if you are stayig up late.
+        -set the weather to clear if you are stayig up late.
         -transition still doesnt work. However atleast it is dark now.
 
 -Known glitched
@@ -66,12 +66,12 @@ namespace Stardew_NightOwl
         {
             StardewModdingAPI.Events.TimeEvents.TimeOfDayChanged += TimeEvents_TimeOfDayChanged;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
-
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
             StardewModdingAPI.Events.GameEvents.FourthUpdateTick += GameEvents_FourthUpdateTick;
             ModPath =Helper.DirectoryPath;
             Error_Path = Path.Combine(ModPath, "Error_Logs");
         }
+
 
         public void GameEvents_FourthUpdateTick(object sender, EventArgs e)
         {
@@ -138,7 +138,7 @@ namespace Stardew_NightOwl
             }
         }
 
-        public void PlayerEvents_LoadedGame(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
+        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             DataLoader();
             MyWritter();
@@ -261,9 +261,9 @@ namespace Stardew_NightOwl
           
             if (lighting_transition == true)
             {
-                if (Game1.timeOfDay > 200 && Game1.timeOfDay < 1100)
+                if (Game1.timeOfDay > 400 && Game1.timeOfDay < 600)
                 {
-                    color_mod = (1100 - Game1.timeOfDay) / 1000f; //.7f
+                    color_mod = (1300 - Game1.timeOfDay) / 1000f; //.7f
                     Game1.outdoorLight = Game1.ambientLight * color_mod;
 
                 }

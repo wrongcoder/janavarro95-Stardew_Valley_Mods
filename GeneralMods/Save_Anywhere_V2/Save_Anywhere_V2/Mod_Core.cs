@@ -12,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using StardewValley.Characters;
 using Microsoft.Xna.Framework;
+using Save_Anywhere_V2.Save_Utilities;
 
 namespace Save_Anywhere_V2
 {
@@ -27,25 +28,38 @@ namespace Save_Anywhere_V2
         public static bool once;
         public static bool new_day;
         Dictionary<string, string> npc_key_value_pair;
+
+        public static IMonitor thisMonitor;
+
         public override void Entry(IModHelper helper)
         {
             try {
                 StardewModdingAPI.Events.ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
                 StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
                 StardewModdingAPI.Events.GameEvents.UpdateTick += Warp_Check;
-                StardewModdingAPI.Events.GameEvents.UpdateTick += ShippingCheck;
+                StardewModdingAPI.Events.GameEvents.UpdateTick += PassiveSaveChecker;
                 StardewModdingAPI.Events.TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
                 StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
                 StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
-                Command.RegisterCommand("include_types", "Includes types to serialize").CommandFired += Command_IncludeTypes;
                 mod_path = Helper.DirectoryPath;
                 npc_key_value_pair = new Dictionary<string, string>();
+                thisMonitor = Monitor;
             }
             catch(Exception x)
             {
                 Monitor.Log(x.ToString());
             }
         }
+
+        private void PassiveSaveChecker(object sender, EventArgs e)
+        {
+            if (GameUtilities.passiveSave == true && Game1.activeClickableMenu==null)
+            {
+                Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
+                GameUtilities.passiveSave = false;
+            }
+        }
+
         //done
         private void TimeEvents_OnNewDay(object sender, EventArgsIntChanged e)
         {
@@ -54,10 +68,7 @@ namespace Save_Anywhere_V2
                 new_day = true;
                 string name = Game1.player.name;
                 Save_Anywhere_V2.Mod_Core.player_path = Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Data", name);
-                if (Directory.Exists(player_path))
-                {
-                    Directory.Delete(player_path, true);
-                }
+              
             }
             catch(Exception err)
             {
@@ -168,6 +179,7 @@ namespace Save_Anywhere_V2
                         }
                         catch (Exception ex)
                         {
+                        this.Monitor.Log(ex.ToString(), LogLevel.Error);
                             // dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
                             continue;
                         }
@@ -228,8 +240,9 @@ namespace Save_Anywhere_V2
                         }
                         catch (Exception err)
                         {
-                           // Monitor.Log(npc.name);
-                            foreach(var v in valueArray2)
+                            this.Monitor.Log(err.ToString(), LogLevel.Error);
+                            // Monitor.Log(npc.name);
+                            foreach (var v in valueArray2)
                             {
                                 //Monitor.Log(v);
                             }
@@ -462,6 +475,7 @@ namespace Save_Anywhere_V2
                 }
                 catch (Exception ex)
                 {
+                    this.Monitor.Log(ex.ToString(), LogLevel.Error);
                     dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
                 }
                 if (dictionary.ContainsKey(Game1.currentSeason + "_" + Convert.ToString(Game1.dayOfMonth)))
@@ -683,10 +697,16 @@ namespace Save_Anywhere_V2
                 Save_Anywhere_V2.Mod_Core.player_path = Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Data", name);
                 if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.player_path))
                 {
+                    //Log.AsyncM(Save_Anywhere_V2.Mod_Core.player_path);
+                    //Log.AsyncC("WOOPS");
                     return;
                 }
+
+               // Log.AsyncY(Player_Utilities.has_player_warped_yet);
+
                 if (Save_Anywhere_V2.Save_Utilities.Player_Utilities.has_player_warped_yet == false && Game1.player.isMoving() == true)
                 {
+                    //Log.AsyncM("Ok Good"); 
                     Save_Anywhere_V2.Save_Utilities.Player_Utilities.warp_player();
                     Save_Anywhere_V2.Save_Utilities.Animal_Utilities.load_animal_info();
                     Save_Anywhere_V2.Save_Utilities.NPC_Utilities.Load_NPC_Info();
@@ -696,6 +716,7 @@ namespace Save_Anywhere_V2
             }
             catch (Exception err)
             {
+                //7Log.AsyncO("THIS DOESNT MAKE SENSE");
                 Monitor.Log(err.ToString());
             }
         }
@@ -713,12 +734,6 @@ namespace Save_Anywhere_V2
             }
         }
 
-        //done
-        private static void Command_IncludeTypes(object sender, EventArgsCommand e)
-        {
-
-            }
-
         public void KeyPressed_Save_Load_Menu(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
             if (e.KeyPressed.ToString() == Save_Anywhere_V2.Save_Utilities.Config_Utilities.key_binding) //if the key is pressed, load my cusom save function
@@ -728,8 +743,8 @@ namespace Save_Anywhere_V2
                     Save_Anywhere_V2.Save_Utilities.GameUtilities.save_game();
                 }
                 catch(Exception exe)
-                { 
-
+                {
+                    Mod_Core.thisMonitor.Log(exe.ToString(), LogLevel.Error);
                 }
 
                 }
@@ -780,7 +795,7 @@ namespace Save_Anywhere_V2
                     string name = array2[2];
                     int num2 = Convert.ToInt32(array2[3]);
                     bool flag = false;
-                    using (List<Farmer>.Enumerator enumerator = Game1.getAllFarmers().GetEnumerator())
+                    using (List<StardewValley.Farmer>.Enumerator enumerator = Game1.getAllFarmers().GetEnumerator())
                     {
                         while (enumerator.MoveNext())
                         {

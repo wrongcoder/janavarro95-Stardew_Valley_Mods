@@ -59,7 +59,7 @@ namespace Save_Anywhere_V2.Save_Utilities
             string[] mystring3 = new string[20];
             if (!File.Exists(mylocation3))
             {
-                Log.Info("Save Anywhere: The custom character save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
+                Mod_Core.thisMonitor.Log("Save Anywhere: The custom character save info doesn't exist. It will be created when the custom saving method is run. Which is now.", LogLevel.Info);
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
 
                 mystring3[0] = "Player: Save_Anywhere Info. Editing this might break some things.";
@@ -155,8 +155,14 @@ namespace Save_Anywhere_V2.Save_Utilities
             Game1.facingDirectionAfterWarp = player_facing_direction;
             Game1.fadeScreenToBlack();
 
-          //  Game1.warpFarmer(players_current_map_name, player_x_tile, player_y_tile, false);
-          //  Game1.player.faceDirection(player_facing_direction);
+            Game1.warpFarmer(players_current_map_name, player_x_tile, player_y_tile, false);
+            Mod_Core.thisMonitor.Log("WARP THE PLAYER");
+            Game1.player.faceDirection(player_facing_direction);
+
+            if (Directory.Exists(Mod_Core.player_path))
+            {
+                // Directory.Delete(player_path, true);
+            }
         }
 
     }

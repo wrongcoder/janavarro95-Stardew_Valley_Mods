@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="MusicHexProcessor.cs" />
+    <Compile Include="MusicManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -60,12 +62,12 @@
   </Target>
   -->
   <Target Name="AfterBuild">
-  <PropertyGroup>
-     <ModPath>$(GamePath)\Mods\$(TargetName)</ModPath>
-  </PropertyGroup>
-  <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFolder="$(ModPath)" />
-  <Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).pdb')" />
-  <Copy SourceFiles="$(TargetDir)\$(TargetName).dll.mdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).dll.mdb')" />
-  <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFolder="$(ModPath)" />
-</Target>
+    <PropertyGroup>
+      <ModPath>$(GamePath)\Mods\$(TargetName)</ModPath>
+    </PropertyGroup>
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFolder="$(ModPath)" />
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).pdb')" />
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll.mdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).dll.mdb')" />
+    <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFolder="$(ModPath)" />
+  </Target>
 </Project>

@@ -19,6 +19,8 @@ namespace HappyBirthday
         bool once;
         bool has_input_birthday;
 
+        public static IMonitor thisMonitor;
+
         Dictionary<string, Dialogue> popedDialogue;
 
         bool seenEvent;
@@ -34,7 +36,7 @@ namespace HappyBirthday
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
-            StardewModdingAPI.Events.PlayerEvents.LoadedGame += PlayerEvents_LoadedGame1;
+
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             npc_name_list = new List<string>();
             possible_birthday_gifts = new List<Item>();
@@ -43,11 +45,7 @@ namespace HappyBirthday
             {
                 Directory.CreateDirectory(birthdays_path);
             }
-        }
-
-        private void PlayerEvents_LoadedGame1(object sender, StardewModdingAPI.Events.EventArgsLoadedGameChanged e)
-        {
-
+            thisMonitor = Monitor;
         }
 
         public void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
@@ -110,7 +108,7 @@ namespace HappyBirthday
                     }
                     catch(Exception eee)
                     {
-                        Log.AsyncR(eee);
+                        thisMonitor.Log(eee.ToString(), LogLevel.Error);
                     }
                     foreach (var location in Game1.locations)
                     {
@@ -159,6 +157,7 @@ namespace HappyBirthday
                     }
                     catch (Exception err)
                     {
+                        thisMonitor.Log(err.ToString(), LogLevel.Error);
                         popedDialogue.Add(npcName, npc.CurrentDialogue.ElementAt(0));
                         npc.loadSeasonalDialogue();
                     }
@@ -198,7 +197,7 @@ namespace HappyBirthday
                                 }
                                 catch(Exception r)
                                 {
-                                    Log.AsyncR(r);
+                                    thisMonitor.Log(r.ToString(), LogLevel.Error);
                                 }
                                
                             }

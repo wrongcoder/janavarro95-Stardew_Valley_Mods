@@ -16,9 +16,14 @@ namespace TimeFreeze
         public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
             DataLoader(); //used to load/write to the config.
         }
 
+        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
+        {
+          //  Game1.showGlobalMessage(Game1.player.currentLocation.name);
+        }
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
@@ -32,14 +37,20 @@ namespace TimeFreeze
 
                     if ((Game1.player.swimming == false && (Game1.player.currentLocation) as StardewValley.Locations.BathHousePool == null) && Game1.player.currentLocation.isOutdoors == false)
                     {
-                        Game1.gameTimeInterval = 0;
+                        if (!doesTimePassHere())
+                        {
+                            Game1.gameTimeInterval = 0;
+                        }
                     }
                 }
                 else
                 {
                     if (Game1.player.swimming == false && Game1.player.currentLocation.isOutdoors == false)
                     {
-                        Game1.gameTimeInterval = 0;
+                        if (!doesTimePassHere())
+                        {
+                            Game1.gameTimeInterval = 0;
+                        }
                     }
                 }
             }
@@ -47,11 +58,20 @@ namespace TimeFreeze
             {
                 if (Game1.player.currentLocation.isOutdoors == false)
                 {
-                    Game1.gameTimeInterval = 0;
+                    if (!doesTimePassHere())
+                    {
+                        Game1.gameTimeInterval = 0;
+                    }
                 }
             }
         }
 
+
+        public bool doesTimePassHere()
+        {
+            if (Game1.player.currentLocation.name == "Mine" || Game1.player.currentLocation.name == "SkullCave" || Game1.player.currentLocation.name=="UndergroundMine") return true;
+            return false;
+        }
 
         void MyWritter()
         {

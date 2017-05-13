@@ -24,7 +24,7 @@ namespace Save_Anywhere_V2.Save_Utilities.Animals
             if (horse == null)
             {
                 //Game1.getFarm().characters.Add((NPC)new Horse(this.player_tile_x + 1, this.player_tile_Y + 1));
-                Log.Info("NEIGH: No horse exists");
+                Mod_Core.thisMonitor.Log("NEIGH: No horse exists", LogLevel.Debug);
                 return;
             }
             // else
@@ -42,8 +42,7 @@ namespace Save_Anywhere_V2.Save_Utilities.Animals
             if (!File.Exists(mylocation3))
             {
 
-
-                Log.Info("The horse save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
+                Mod_Core.thisMonitor.Log("The horse save info doesn't exist. It will be created when the custom saving method is run. Which is now.", LogLevel.Debug);
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
 
                 mystring3[0] = "Horse: Save_Anywhere Info. Editing this might break some things.";
@@ -91,7 +90,7 @@ namespace Save_Anywhere_V2.Save_Utilities.Animals
             Horse horse = Utility.findHorse();
             if (horse == null)
             {
-                Log.Info("NEIGH: No horse exists");
+                Mod_Core.thisMonitor.Log("NEIGH: No horse exists", LogLevel.Debug);
                 return;
             }
             //   DataLoader_Settings();

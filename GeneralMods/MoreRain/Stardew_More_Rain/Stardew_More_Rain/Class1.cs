@@ -281,7 +281,7 @@ namespace MoreRain
                     fallRainInt = Convert.ToInt32(readtext[11]);
                     fallThunderInt = Convert.ToInt32(readtext[13]);
                     winterSnowInt = Convert.ToInt32(readtext[15]);
-                    suppress_log = Convert.ToBoolean(readtext[7]);
+                    suppress_log = Convert.ToBoolean(readtext[17]);
                 }
                 catch (Exception e) //something dun goofed
                 {

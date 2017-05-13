@@ -1,5 +1,6 @@
 ﻿using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Save_Anywhere_V2.Save_Utilities
 {
     public class GameUtilities
     {
+        public static bool passiveSave;
         public static bool should_ship;
        public static void save_game()
         {
@@ -34,12 +36,13 @@ namespace Save_Anywhere_V2.Save_Utilities
 
             try
             {
-                Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
+                shipping_check();
+                //  Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
             }
             catch(Exception rrr)
             {
                 Game1.showRedMessage("Can't save here. See log for error.");
-                Log.AsyncR(rrr);
+                Mod_Core.thisMonitor.Log(rrr.ToString(), LogLevel.Error);
             }
 
            // Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu(); //This command is what allows the player to save anywhere as it calls the saving function.
@@ -78,6 +81,11 @@ namespace Save_Anywhere_V2.Save_Utilities
                 should_ship = false;
                 Game1.getFarm().shippingBin.Clear();
                 Game1.getFarm().lastItemShipped = null;
+                passiveSave = true;
+            }
+            else
+            {
+                Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
             }
         }
     }

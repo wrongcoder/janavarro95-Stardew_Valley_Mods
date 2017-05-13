@@ -18,7 +18,7 @@ namespace Save_Anywhere_V2.Save_Utilities
         public static int npc_tile_x;
         public static int npc_tile_y;
         public static string npc_current_map_name;
-     public static System.Collections.Generic.List<List<string>> routesFromLocationToLocation = new List<List<string>>();
+        public static System.Collections.Generic.List<List<string>> routesFromLocationToLocation = new List<List<string>>();
         public static Microsoft.Xna.Framework.Point npc_point;
 
         public static void Save_NPC_Info()
@@ -44,8 +44,7 @@ namespace Save_Anywhere_V2.Save_Utilities
                     string[] mystring3 = new string[20];
                     if (!File.Exists(mylocation3))
                     {
-
-                        Log.Info("Save Anywhere: The NPC save info for " + npc_name + " doesn't exist. It will be created when the custom saving method is run. Which is now.");
+                        Mod_Core.thisMonitor.Log("Save Anywhere: The NPC save info for " + npc_name + " doesn't exist. It will be created when the custom saving method is run. Which is now."); 
                         //write out the info to a text file at the end of a day. This will run if it doesnt exist.
 
                         mystring3[0] = "NPC: Save_Anywhere Info. Editing this might break some things.";
@@ -121,7 +120,7 @@ namespace Save_Anywhere_V2.Save_Utilities
                     string[] mystring3 = new string[20];
                     if (!File.Exists(mylocation3))
                     {
-                    Log.Info("Missing character file?!?");
+                    Mod_Core.thisMonitor.Log("Missing character file?!?", LogLevel.Error);
                         continue;
                     }
 

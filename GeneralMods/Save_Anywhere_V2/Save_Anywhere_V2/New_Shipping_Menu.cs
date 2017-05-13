@@ -7,6 +7,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Save_Anywhere_V2;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
@@ -267,12 +268,12 @@ namespace StardewValley.Menus
                                 return;
                             try
                             {
-                                Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
+                               // Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
                             }
                             catch (Exception rrr)
                             {
                                 Game1.showRedMessage("Can't save here. See log for error.");
-                                Log.AsyncR(rrr);
+                                Mod_Core.thisMonitor.Log(rrr.ToString(), LogLevel.Error);
                             }
                             return;
                         }
@@ -452,7 +453,10 @@ namespace StardewValley.Menus
             if (this.outro && !this.savedYet)
             {
                 if (this.saveGameMenu != null)
-                    ;
+                {
+
+                }
+                    
             }
             else
             {

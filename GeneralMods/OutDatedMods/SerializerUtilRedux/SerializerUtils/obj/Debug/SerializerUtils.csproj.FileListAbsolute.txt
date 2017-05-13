@@ -20,3 +20,6 @@ C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\SerializerUtilRedux\SerializerUtils\obj\Debug\SerializerUtils.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\SerializerUtilRedux\SerializerUtils\obj\Debug\SerializerUtils.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\Stardew_Valley_Mods\Stardew_Valley_Mods\SerializerUtilRedux\SerializerUtils\obj\Debug\SerializerUtils.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\SerializerUtilRedux\SerializerUtils\obj\Debug\SerializerUtils.csprojResolveAssemblyReference.cache
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\SerializerUtilRedux\SerializerUtils\obj\Debug\SerializerUtils.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\SerializerUtilRedux\SerializerUtils\obj\Debug\SerializerUtils.pdb
