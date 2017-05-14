@@ -1,13 +1,13 @@
 {
   "Name": "AutoSpeed",
-  "Authour": "Alpha_Omegasis",
+  "Author": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": 0,
-    "MinorVersion": 0,
-    "PatchVersion": 1,
+    "MajorVersion": 1,
+    "MinorVersion": 3,
+    "PatchVersion": 0,
     "Build": ""
   },
-  "Description": "Updated AutoSpeed to SMAPI .39.1",
+  "Description": "Got to go fast! Updated AutoSpeed to SMAPI 1.12 on 5/14/17.",
   "UniqueID": "4be88c18-b6f3-49b0-ba96-f94b1a5be890",
   "PerSaveConfigs": false,
   "EntryDll": "AutoSpeed.dll"

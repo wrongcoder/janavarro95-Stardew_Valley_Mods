@@ -3,11 +3,11 @@
   "Authour": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 0,
+    "MinorVersion": 2,
     "PatchVersion": 0,
     "Build": ""
   },
-  "Description": "Emulating old HM style games where time is frozen inside.",
+  "Description": "Emulating old HM style games where time is frozen inside. SMAPI 1.12. Updated 5/14/17",
   "UniqueID": "4108e859-333c-4fec-a1a7-d2e18c1019fe",
   "PerSaveConfigs": false,
   "EntryDll": "TimeFreeze.dll"

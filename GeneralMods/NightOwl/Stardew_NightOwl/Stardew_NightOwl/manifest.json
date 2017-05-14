@@ -7,7 +7,7 @@
     "PatchVersion": 0,
     "Build": ""
   },
-  "Description": "Allows the farmer to stay up all night.",
+  "Description": "Allows the farmer to stay up all night. SMAPI 1.12. Updated 5/14/17",
   "UniqueID": "SaveAnywhere",
   "PerSaveConfigs": false,
   "EntryDll": "Stardew_NightOwl.dll"
