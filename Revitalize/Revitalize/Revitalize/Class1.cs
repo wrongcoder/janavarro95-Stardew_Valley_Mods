@@ -172,6 +172,11 @@ namespace Revitalize
                 Util.WaterAllCropsInAllLocations();
             }
             WeatherDebrisSystem.update();
+
+            if (Utilities.MapUtilities.isEditingMap == true)
+            {
+                Utilities.MapUtilities.moveViewPort();
+            }
         }
    
 
@@ -319,6 +324,11 @@ namespace Revitalize
             if (e.KeyPressed.ToString() == "J")
             {
                 Log.AsyncC("Mouse Position " + Game1.getMousePosition());
+            }
+
+            if (e.KeyPressed.ToString() == "O")
+            {
+                Game1.activeClickableMenu = new Revitalize.Menus.CarpenterMenu(false);
             }
 
             // Game1.currentSeason = "spring";

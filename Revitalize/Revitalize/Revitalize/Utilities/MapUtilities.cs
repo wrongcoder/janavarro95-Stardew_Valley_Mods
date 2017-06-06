@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewValley;
 using System;
@@ -8,11 +9,68 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using xTile;
+using xTile.Dimensions;
 
 namespace Revitalize.Utilities
 {
     class MapUtilities
     {
+        public static bool isEditingMap;
+
+        /*TO DO:
+          -Make a menu feature that allows creation of warp points to other maps while in-game. 
+        */
+        public static void setUpForBuildingPlacement()
+        {
+            Game1.currentLocation.cleanupBeforePlayerExit();
+           // this.hoverText = "";
+            Game1.currentLocation = Game1.getLocationFromName("Farm");
+            Game1.currentLocation.resetForPlayerEntry();
+            Game1.globalFadeToClear(null, 0.02f);
+           // this.onFarm = true;
+          //  this.cancelButton.bounds.X = Game1.viewport.Width - Game1.tileSize * 2;
+           // this.cancelButton.bounds.Y = Game1.viewport.Height - Game1.tileSize * 2;
+            Game1.displayHUD = false;
+            Game1.viewportFreeze = false;
+            Game1.viewport.Location = new Location(49 * Game1.tileSize, 5 * Game1.tileSize);
+            Game1.panScreen(0, 0);
+            //this.drawBG = false;
+           // this.freeze = false;
+            Game1.displayFarmer = false;
+            Game1.player.forceCanMove();
+            isEditingMap = true;
+           // if (!this.demolishing && this.CurrentBlueprint.nameOfBuildingToUpgrade != null && this.CurrentBlueprint.nameOfBuildingToUpgrade.Length > 0 && !this.moving)
+           // {
+           //     this.upgrading = true;
+           // }
+        }
+
+        public static void moveViewPort()
+        {
+            KeyboardState newState = Keyboard.GetState();
+            // Is the SPACE key down?
+            int num = Game1.getOldMouseX() + Game1.viewport.X;
+            int num2 = Game1.getOldMouseY() + Game1.viewport.Y;
+            if (num - Game1.viewport.X < Game1.tileSize)
+            {
+                Game1.panScreen(-8, 0);
+            }
+            else if (num - (Game1.viewport.X + Game1.viewport.Width) >= -Game1.tileSize * 2)
+            {
+                Game1.panScreen(8, 0);
+            }
+            if (num2 - Game1.viewport.Y < Game1.tileSize)
+            {
+                Game1.panScreen(0, -8);
+            }
+            else if (num2 - (Game1.viewport.Y + Game1.viewport.Height) >= -Game1.tileSize)
+            {
+                Game1.panScreen(0, 8);
+            }
+
+
+        }
+
 
         public static void loadCustomFarmMap(GameLocation loc, Vector2 oldLoc, bool[,] oldWaterTiles)
         {
