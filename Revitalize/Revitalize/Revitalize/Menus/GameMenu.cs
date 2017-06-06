@@ -62,6 +62,12 @@ namespace Revitalize.Menus
         public ClickableTextureComponent LeftButton;
         public ClickableTextureComponent RightButton;
 
+        /// <summary>
+        /// Creates a custom game menu using specific tabs, which allows a wide variety of options. This is the default form, and is hardcoded by the Revitalize mod.
+        /// </summary>
+        /// <param name="tabsToAdd"></param> The tab components to be added. They must have a "value" field assigned to them otherwise they won't be used. 
+        /// <param name="pagesToAdd"></param> The corresponding menus to add 
+        /// <param name="pageTexturesToAdd"></param> The textures to be used .for the menu sheets. Only assign 1 per 12 tabs used.
         public GameMenu() : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
         {
             //can only hold about 12 tabs per menu page
@@ -122,17 +128,79 @@ namespace Revitalize.Menus
             this.RightButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize, this.yPositionOnScreen / 4, Game1.tileSize, Game1.tileSize), f.texture, new Rectangle(0, 0, 16, 16), 4f, false);
         }
 
+        /// <summary>
+        /// Pretty sure this implementation is broken right now. Woops.
+        /// </summary>
+        /// <param name="tabsToAdd"></param> The tabs to be added to this custom menu.
+        /// <param name="pagesToAdd"></param>  The menus to add
+        /// <param name="pageTexturesToAdd"></param> Only add one page texture for every 12 tabs to ensure correct rendering.
+        public GameMenu(List<List<ClickableComponentExtended>> tabsToAdd, List<List<IClickableMenu>> pagesToAdd, List<List<Texture2D>> pageTexturesToAdd) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
+        {
+            //can only hold about 12 tabs per menu page
+            int i = -1;
+            foreach (var v in tabsToAdd)
+            {
+                foreach (var k in v)
+                {
+                    i++;
+                    k.value = i;
+                    tabs.Add(k);
+                }
+            }
+            foreach (var v in pagesToAdd)
+            {
+                foreach (var k in v)
+                {
+                    pages.Add(k);
+                }
+            }
+            foreach (var v in pageTexturesToAdd)
+            {
+                foreach (var k in v)
+                {
+                    pageTextureSheets.Add(k);
+                }
+            }
+            currentMenuPage = 0;
+            if (Game1.activeClickableMenu == null)
+            {
+                Game1.playSound("bigSelect");
+            }
+            if (Game1.player.hasOrWillReceiveMail("canReadJunimoText") && !Game1.player.hasOrWillReceiveMail("JojaMember") && !Game1.player.hasCompletedCommunityCenter())
+            {
+                this.junimoNoteIcon = new ClickableTextureComponent("", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + Game1.tileSize * 3 / 2, Game1.tileSize, Game1.tileSize), "", Game1.content.LoadString("Strings\\UI:GameMenu_JunimoNote_Hover", new object[0]), Game1.mouseCursors, new Rectangle(331, 374, 15, 14), (float)Game1.pixelZoom, false);
+            }
+            GameMenu.forcePreventClose = false;
+            if (Game1.options.gamepadControls && Game1.isAnyGamePadButtonBeingPressed())
+            {
+                this.setUpForGamePadMode();
+            }
+
+            currentMenuPageMax = (int)(Math.Floor(Convert.ToDouble(this.tabs.Count / 13)));
+            TextureDataNode d;
+            Dictionaries.spriteFontList.TryGetValue("leftArrow", out d);
+            TextureDataNode f;
+            Dictionaries.spriteFontList.TryGetValue("rightArrow", out f);
+            this.LeftButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - (Game1.tileSize * 3), this.yPositionOnScreen / 4, Game1.tileSize, Game1.tileSize), d.texture, new Rectangle(0, 0, 16, 16), 4f, false);
+            this.RightButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize, this.yPositionOnScreen / 4, Game1.tileSize, Game1.tileSize), f.texture, new Rectangle(0, 0, 16, 16), 4f, false);
+        }
+
+        /// <summary>
+        /// Creates a custom game menu using specific tabs, which allows a wide variety of options. Hypothetically should work but would require outside sources to manager their own tab values.
+        /// </summary>
+        /// <param name="tabsToAdd"></param> The tab components to be added. They must have a "value" field assigned to them otherwise they won't be used. 
+        /// <param name="pagesToAdd"></param> The corresponding menus to add 
+        /// <param name="pageTexturesToAdd"></param> The textures to be used .for the menu sheets. Only assign 1 per 12 tabs used.
         public GameMenu(List<ClickableComponentExtended> tabsToAdd, List<IClickableMenu> pagesToAdd, List<Texture2D> pageTexturesToAdd) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
         {
             //can only hold about 12 tabs per menu page
-            
+            int i = 0;
             foreach(var v in tabsToAdd)
             {
+                if (v.value == -1) continue;
                 tabs.Add(v);
-            }
-            foreach(var v in pagesToAdd)
-            {
-                pages.Add(v);
+                pages.Add(pagesToAdd[i]);
+                i++;
             }
             foreach(var v in pageTexturesToAdd)
             {

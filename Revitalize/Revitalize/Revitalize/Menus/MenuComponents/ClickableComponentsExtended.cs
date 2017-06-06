@@ -51,7 +51,7 @@ namespace Revitalize.Menus.MenuComponents
 
         public int myAlternateID = -500;
 
-        public int value;
+        public int value=-1;
 
         public int region;
 
