@@ -55,6 +55,7 @@
     <Compile Include="Aesthetics\Paint\PaintMenu.cs" />
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisPlus.cs" />
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
+    <Compile Include="Utilities\MapUtilities.cs" />
     <Compile Include="Magic\Alchemy\Menus\ExpandableItemGrabMenu.cs" />
     <Compile Include="Magic\Alchemy\Objects\BagofHolding.cs" />
     <Compile Include="Class1.cs" />
@@ -98,10 +99,11 @@
     <Compile Include="Resources\DataNodes\QuarryDataNode.cs" />
     <Compile Include="Resources\Lists.cs" />
     <Compile Include="Serialize.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Utilities\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Aesthetics\Paint\Utilities\" />
+    <Folder Include="Locations\MapUtilities\" />
     <Folder Include="Persistance\Configs\" />
     <Folder Include="TerrainFeatures\" />
   </ItemGroup>

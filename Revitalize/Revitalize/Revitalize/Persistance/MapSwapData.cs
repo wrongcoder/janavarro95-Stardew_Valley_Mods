@@ -9,15 +9,17 @@ namespace Revitalize.Persistance
   public  class MapSwapData
     {
        public string mapPath;
+        public string folderPath;
 
 
         public MapSwapData()
         {
 
         }
-       public MapSwapData(string f)
+       public MapSwapData(string MAP_PATH,string FOLDER_PATH)
         {
-            mapPath = f;
+            mapPath = MAP_PATH;
+            folderPath = FOLDER_PATH;
         }
     }
 }

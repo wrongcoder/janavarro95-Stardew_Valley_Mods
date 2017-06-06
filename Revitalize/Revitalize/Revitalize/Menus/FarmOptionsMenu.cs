@@ -153,8 +153,8 @@ namespace Revitalize.Menus
                 if (!this.wizardSource)
                 {
                     string g = Path.Combine("Maps", "Farm_Combat");
-                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
-                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
                     whichFarm = 4;
                     Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
@@ -173,8 +173,8 @@ namespace Revitalize.Menus
                 if (!this.wizardSource)
                 {
                     string g = Path.Combine("Maps", "Farm");
-                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
-                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
                     Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
                     Log.AsyncG(Class1.persistentMapSwap.mapPath);
@@ -191,8 +191,8 @@ namespace Revitalize.Menus
                 if (!this.wizardSource)
                 {
                     string g = Path.Combine("Maps", "Farm_Fishing");
-                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
-                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
                     Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
                     Log.AsyncG(Class1.persistentMapSwap.mapPath);
@@ -227,8 +227,8 @@ namespace Revitalize.Menus
                 if (!this.wizardSource)
                 {
                     string g = Path.Combine("Maps", "Farm_Mining");
-                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
-                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
                     Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
                     Log.AsyncG(Class1.persistentMapSwap.mapPath);
@@ -245,8 +245,8 @@ namespace Revitalize.Menus
                 if (!this.wizardSource)
                 {
                     string g = Path.Combine("Maps", "Farm_Foraging");
-                    Util.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
-                    Game1.getLocationFromName("Farm").map = Game1.content.Load<Map>(g);
+                    Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
+                    Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
                     Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
                     Log.AsyncG(Class1.persistentMapSwap.mapPath);
@@ -270,17 +270,25 @@ namespace Revitalize.Menus
                             {
                                 if (c.name == "Farm")
                                 {
-                         
-                                Util.removeAllWaterTilesFromMap(c);
-                            
-                          
+
+                             Utilities.MapUtilities.removeAllWaterTilesFromMap(c);
+
+                            Vector2 oldDimenstions = Utilities.MapUtilities.getMapDimensions(c);
+                            bool[,] oldWaterTiles = c.waterTiles;
                                 c.map = v.map;
+                                //
                                     whichFarm = count;
                                     Log.AsyncG("MAP SWAP!");
                          Class1.persistentMapSwap.mapPath= Path.Combine(Game1.content.RootDirectory,"Maps","Farms", v.clicky.name,v.clicky.name);
+                            Class1.persistentMapSwap.folderPath = Path.Combine(Game1.content.RootDirectory, "Maps", "Farms", v.clicky.name);
                             Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                            //Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(Class1.persistentMapSwap.mapPath);
                             Serialize.serializeMapSwapData(Class1.persistentMapSwap);
-                            Util.removeAllWaterTilesFromMap(c);
+                            // Util.removeAllWaterTilesFromMap(c);
+                            Utilities.MapUtilities.transferWaterTiles(c, oldDimenstions, oldWaterTiles);
+                            Utilities.MapUtilities.parseWarpsFromFile(c);
+
+                            
                         }
                             }
                         }

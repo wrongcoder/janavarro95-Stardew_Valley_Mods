@@ -355,6 +355,7 @@ namespace Revitalize
                 objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine,LightColors.Aquamarine,false));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));
                 objShopList.Add(new Quarry(3, Vector2.Zero, 9, "iron"));
+               // objShopList.Add(new StardewValley.Tools.Raft());
                 objShopList.Add(new Decoration(3, Vector2.Zero));
                 objShopList.Add(new StardewValley.Object(495, 1));
                 objShopList.Add(new StardewValley.Object(496, 1));

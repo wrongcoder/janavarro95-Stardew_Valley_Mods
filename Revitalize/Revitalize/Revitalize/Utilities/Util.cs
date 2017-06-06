@@ -982,8 +982,12 @@ namespace Revitalize
                     {
                         if (v.name == "Farm")
                         {
+                            Vector2 oldLocDimensions = Utilities.MapUtilities.getMapDimensions(v);
+                            bool[,] oldWaterTiles = v.waterTiles;
+
                             v.map = m;//change this to  v.map =(Game1.content.Load<Map>("Path.Combine("Maps,"Farms",folderName,"Farm")));
                             Log.AsyncG("Sucesfully injected custom farm map");
+                            Utilities.MapUtilities.loadCustomFarmMap(v, oldLocDimensions, oldWaterTiles);
                         }
                     }
                 }
@@ -999,27 +1003,7 @@ namespace Revitalize
             return s.Remove(0, 8);
         }
 
-        public static void removeAllWaterTilesFromMap(GameLocation c)
-        {
-            Log.AsyncM(c.map.Layers[0].LayerWidth);
-            Log.AsyncM(c.map.Layers[0].LayerWidth);
-            for (int i = 0; i < c.map.Layers[0].LayerWidth; i++)
-            {
-                for (int j = 0; j < c.map.Layers[0].LayerHeight; j++)
-                {
-                    try
-                    {
-                        Log.AsyncY(i + " " + j);
-                        c.waterTiles[i, j] = false;
-                    }
-                    catch(Exception e)
-                    {
-                        
-                    }
-                }
-            }
-            Log.AsyncC("Removed All Water Tiles from "+c.name );
-        }
+
 
     }
 }
