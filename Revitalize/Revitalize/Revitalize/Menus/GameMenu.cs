@@ -40,8 +40,12 @@ namespace Revitalize.Menus
 
         public const int maxTabsPerPage = 11;
 
+        private int maxTabValue;
+
         public int currentMenuPage;
         public int currentMenuPageMax;
+
+        public int currentTabIndex;
 
         private List<ClickableComponentExtended> tabs = new List<ClickableComponentExtended>();
 
@@ -77,16 +81,15 @@ namespace Revitalize.Menus
             this.pages.Add(new OptionsPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
             this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 8, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "exit", Game1.content.LoadString("Strings\\UI:GameMenu_Exit", new object[0]),7));
             this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 9, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "8", 8));
-            this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 10, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "9", 9));
-            this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 11, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "10", 10));
-            this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 12, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "11", 11));
-            this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
+
+
             this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 1, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "12", 12));
             this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
+            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 2, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "13", 13));
+            this.pages.Add(new CollectionsPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
+            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 1, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "24", 24));
+            this.pages.Add(new Revitalize.Menus.InventoryPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height));
+            pageTextureSheets.Add(Game1.mouseCursors);
             pageTextureSheets.Add(Game1.mouseCursors);
             pageTextureSheets.Add(Game1.mouseCursors);
             currentMenuPage = 0;
@@ -103,8 +106,14 @@ namespace Revitalize.Menus
             {
                 this.setUpForGamePadMode();
             }
-
-            currentMenuPageMax =(int)(Math.Floor(Convert.ToDouble(this.tabs.Count / 13)));
+            int i = -1;
+            foreach(var v in this.tabs)
+            {
+                if (v.value > i) i = v.value;
+            }
+            currentTabIndex = 0;
+            currentMenuPageMax =(int)(Math.Floor(Convert.ToDouble(i / 12)));
+            maxTabValue = i;
             TextureDataNode d;
             Dictionaries.spriteFontList.TryGetValue("leftArrow", out d);
             TextureDataNode f;
@@ -217,12 +226,15 @@ namespace Revitalize.Menus
 
             if (!this.invisible && !GameMenu.forcePreventClose)
             {
+                int i = -1;
                 foreach (var current in this.tabs)
                 {
+                    i++;
                     if (current.value > (11 + (12 * currentMenuPage))) continue;
                     if (current.value < (0 + (12 * currentMenuPage))) continue;
-                    if (current.containsPoint(x, y) && this.currentTab != current.value && this.pages[this.currentTab].readyToClose())
-                    {                   
+                    if (current.containsPoint(x, y) && this.currentTab != current.value && this.pages[this.currentTabIndex].readyToClose())
+                    {
+                        currentTabIndex = i;
                         this.changeTab(current.value);
                         return;
                     }
@@ -232,7 +244,14 @@ namespace Revitalize.Menus
                     Game1.activeClickableMenu = new JunimoNoteMenu(true, 1, false);
                 }
             }
-            this.pages[this.currentTab].receiveLeftClick(x, y, true);
+            try
+            {
+                this.pages[this.currentTabIndex].receiveLeftClick(x, y, true);
+            }
+            catch(Exception e)
+            {
+
+            }
         }
 
         public static string getLabelOfTabFromIndex(int index)
@@ -262,20 +281,22 @@ namespace Revitalize.Menus
 
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
-            this.pages[this.currentTab].receiveRightClick(x, y, true);
+            this.pages[this.currentTabIndex].receiveRightClick(x, y, true);
         }
 
         public override void receiveScrollWheelAction(int direction)
         {
             base.receiveScrollWheelAction(direction);
-            this.pages[this.currentTab].receiveScrollWheelAction(direction);
+            if (currentTab >= this.tabs.Count) this.pages[currentTab - (maxTabValue - this.tabs.Count) - 1].receiveScrollWheelAction(direction);
+            else this.pages[this.currentTab].receiveScrollWheelAction(direction);
+
         }
 
         public override void performHoverAction(int x, int y)
         {
             base.performHoverAction(x, y);
             this.hoverText = "";
-            this.pages[this.currentTab].performHoverAction(x, y);
+            this.pages[this.currentTabIndex].performHoverAction(x, y);
             foreach (var current in this.tabs)
             {
                 if (current.value > (11 + (12 * currentMenuPage))) continue;
@@ -303,18 +324,22 @@ namespace Revitalize.Menus
         public override void releaseLeftClick(int x, int y)
         {
             base.releaseLeftClick(x, y);
-            this.pages[this.currentTab].releaseLeftClick(x, y);
+           
+        this.pages[this.currentTabIndex].releaseLeftClick(x, y);
+
         }
 
         public override void leftClickHeld(int x, int y)
         {
             base.leftClickHeld(x, y);
-            this.pages[this.currentTab].leftClickHeld(x, y);
+            this.pages[this.currentTabIndex].leftClickHeld(x, y);
+
         }
 
         public override bool readyToClose()
         {
-            return !GameMenu.forcePreventClose && this.pages[this.currentTab].readyToClose();
+            return this.pages[this.currentTabIndex].readyToClose();
+
         }
 
         public void changeTab(int whichTab)
@@ -331,7 +356,8 @@ namespace Revitalize.Menus
                 ClickableTextureComponent expr_AA_cp_0_cp_0 = this.junimoNoteIcon;
                 expr_AA_cp_0_cp_0.bounds.X = expr_AA_cp_0_cp_0.bounds.X + Game1.tileSize;
             }
-            this.currentTab = this.tabs[whichTab].value;
+            this.currentTab = this.tabs[currentTabIndex].value;
+
             if (this.currentTab == 3)
             {
                 this.invisible = true;
@@ -355,8 +381,13 @@ namespace Revitalize.Menus
                 {
                     b.Draw(Game1.fadeToBlackRect, Game1.graphics.GraphicsDevice.Viewport.Bounds, Color.Black * 0.4f);
                 }
-                Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.pages[this.currentTab].width, this.pages[this.currentTab].height, false, true, null, false);
-                this.pages[this.currentTab].draw(b);
+
+                Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.pages[currentTabIndex].width, this.pages[currentTabIndex].height, false, true, null, false);
+             
+
+
+                this.pages[currentTabIndex].draw(b);
+
                 b.End();
                 b.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null);
                 if (!GameMenu.forcePreventClose)
@@ -408,7 +439,7 @@ namespace Revitalize.Menus
 
         public override bool areGamePadControlsImplemented()
         {
-            return this.pages[this.currentTab].gamePadControlsImplemented;
+                return this.pages[this.currentTabIndex].gamePadControlsImplemented;
         }
 
         public override void receiveKeyPress(Keys key)
@@ -418,7 +449,8 @@ namespace Revitalize.Menus
                 Game1.exitActiveMenu();
                 Game1.playSound("bigDeSelect");
             }
-            this.pages[this.currentTab].receiveKeyPress(key);
+
+             this.pages[this.currentTabIndex].receiveKeyPress(key);
         }
     }
 }
