@@ -4,10 +4,12 @@ using Microsoft.Xna.Framework.Input;
 using Revitalize.Menus.MenuComponents;
 using Revitalize.Resources;
 using Revitalize.Resources.DataNodes;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Revitalize.Menus
@@ -47,11 +49,10 @@ namespace Revitalize.Menus
 
         public int currentTabIndex;
 
-        private List<ClickableComponentExtended> tabs = new List<ClickableComponentExtended>();
+        //change to clickable texture component extended
+        private List <Revitalize.Menus.MenuComponents.ClickableTextureComponentExpanded> tabs = new List<ClickableTextureComponentExpanded>();
 
         private List<IClickableMenu> pages = new List<IClickableMenu>();
-
-        private List<Texture2D> pageTextureSheets = new List<Texture2D>();
 
         public bool invisible;
 
@@ -65,39 +66,35 @@ namespace Revitalize.Menus
         /// <summary>
         /// Creates a custom game menu using specific tabs, which allows a wide variety of options. This is the default form, and is hardcoded by the Revitalize mod.
         /// </summary>
-        /// <param name="tabsToAdd"></param> The tab components to be added. They must have a "value" field assigned to them otherwise they won't be used. 
-        /// <param name="pagesToAdd"></param> The corresponding menus to add 
-        /// <param name="pageTexturesToAdd"></param> The textures to be used .for the menu sheets. Only assign 1 per 12 tabs used.
         public GameMenu() : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
         {
             //can only hold about 12 tabs per menu page
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "inventory", Game1.content.LoadString("Strings\\UI:GameMenu_Inventory", new object[0]),0));
-            this.pages.Add(new Revitalize.Menus.InventoryPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height));            
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 2, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "skills", Game1.content.LoadString("Strings\\UI:GameMenu_Skills", new object[0]),1));
+            this.tabs.Add(new ClickableTextureComponentExpanded("inventory",new Rectangle(this.xPositionOnScreen + Game1.tileSize, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Inventory", "Inventory", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons","InventoryTabIcon")),new Rectangle( 0 * Game1.tileSize ,0*Game1.tileSize,Game1.tileSize,Game1.tileSize),1f,0,false));
+            this.pages.Add(new Revitalize.Menus.InventoryPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height));
+            this.tabs.Add(new ClickableTextureComponentExpanded("Skills", new Rectangle(this.xPositionOnScreen + Game1.tileSize *2, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Skills", "Skills", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons", "BlankTabIcon")), new Rectangle(0 * Game1.tileSize, 0, Game1.tileSize, Game1.tileSize), 1f, 1, false));
             this.pages.Add(new SkillsPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 3, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "social", Game1.content.LoadString("Strings\\UI:GameMenu_Social", new object[0]),2));
+            this.tabs.Add(new ClickableTextureComponentExpanded("Social", new Rectangle(this.xPositionOnScreen + Game1.tileSize *3, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Social", "Social", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons", "SocialTabIcon")), new Rectangle(0 * Game1.tileSize, 0, Game1.tileSize, Game1.tileSize), 1f, 2, false));
             this.pages.Add(new SocialPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 4, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "map", Game1.content.LoadString("Strings\\UI:GameMenu_Map", new object[0]),3));
+            this.tabs.Add(new ClickableTextureComponentExpanded("Map", new Rectangle(this.xPositionOnScreen + Game1.tileSize *4, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Map", "Map", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons", "MapTabIcon")), new Rectangle(0 * Game1.tileSize, 0, Game1.tileSize, Game1.tileSize), 1f, 3, false));
             this.pages.Add(new MapPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 5, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "crafting", Game1.content.LoadString("Strings\\UI:GameMenu_Crafting", new object[0]),4));
+            this.tabs.Add(new ClickableTextureComponentExpanded("Crafting", new Rectangle(this.xPositionOnScreen + Game1.tileSize *5, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Crafting", "Crafting", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons", "CraftingTabIcon")), new Rectangle(0 * Game1.tileSize, 0, Game1.tileSize, Game1.tileSize), 1f, 4, false));
             this.pages.Add(new CraftingPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 6, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "collections", Game1.content.LoadString("Strings\\UI:GameMenu_Collections", new object[0]),5));
+            this.tabs.Add(new ClickableTextureComponentExpanded("Collections", new Rectangle(this.xPositionOnScreen + Game1.tileSize *6, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Collections", "Collections", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons", "CollectionsTabIcon")), new Rectangle(0 * Game1.tileSize, 0, Game1.tileSize, Game1.tileSize), 1f, 5, false));
             this.pages.Add(new CollectionsPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 7, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "options", Game1.content.LoadString("Strings\\UI:GameMenu_Options", new object[0]),6));
+            this.tabs.Add(new ClickableTextureComponentExpanded("Options", new Rectangle(this.xPositionOnScreen + Game1.tileSize *7, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Options", "Options", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons", "OptionsTabIcon")), new Rectangle(0 * Game1.tileSize, 0, Game1.tileSize, Game1.tileSize), 1f, 6, false));
             this.pages.Add(new OptionsPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
-            this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 8, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "exit", Game1.content.LoadString("Strings\\UI:GameMenu_Exit", new object[0]),7));
+            this.tabs.Add(new ClickableTextureComponentExpanded("Exit", new Rectangle(this.xPositionOnScreen + Game1.tileSize *8, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "Exit", "Exit", Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Menus", "GameMenu", "TabIcons", "QuitTabIcon")), new Rectangle(0 * Game1.tileSize, 0, Game1.tileSize, Game1.tileSize), 1f, 7, false));
             this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
 
-
+            /*
             this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 1, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "12", 12));
             this.pages.Add(new ExitPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
             this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 2, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "13", 13));
             this.pages.Add(new CollectionsPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width - Game1.tileSize - Game1.tileSize / 4, this.height));
             this.tabs.Add(new ClickableComponentExtended(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 1, this.yPositionOnScreen + IClickableMenu.tabYPositionRelativeToMenuY + Game1.tileSize, Game1.tileSize, Game1.tileSize), "bungalo", "24", 24));
             this.pages.Add(new Revitalize.Menus.InventoryPage(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height));
-            pageTextureSheets.Add(Game1.mouseCursors);
-            pageTextureSheets.Add(Game1.mouseCursors);
-            pageTextureSheets.Add(Game1.mouseCursors);
+            */
+
             currentMenuPage = 0;
             if (Game1.activeClickableMenu == null)
             {
@@ -128,13 +125,13 @@ namespace Revitalize.Menus
             this.RightButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen - Game1.tileSize, this.yPositionOnScreen / 4, Game1.tileSize, Game1.tileSize), f.texture, new Rectangle(0, 0, 16, 16), 4f, false);
         }
 
+        /*
         /// <summary>
         /// Pretty sure this implementation is broken right now. Woops.
         /// </summary>
         /// <param name="tabsToAdd"></param> The tabs to be added to this custom menu.
         /// <param name="pagesToAdd"></param>  The menus to add
-        /// <param name="pageTexturesToAdd"></param> Only add one page texture for every 12 tabs to ensure correct rendering.
-        public GameMenu(List<List<ClickableComponentExtended>> tabsToAdd, List<List<IClickableMenu>> pagesToAdd, List<List<Texture2D>> pageTexturesToAdd) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
+        public GameMenu(List<List<ClickableTextureComponentExpanded>> tabsToAdd, List<List<IClickableMenu>> pagesToAdd) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
         {
             //can only hold about 12 tabs per menu page
             int i = -1;
@@ -152,13 +149,6 @@ namespace Revitalize.Menus
                 foreach (var k in v)
                 {
                     pages.Add(k);
-                }
-            }
-            foreach (var v in pageTexturesToAdd)
-            {
-                foreach (var k in v)
-                {
-                    pageTextureSheets.Add(k);
                 }
             }
             currentMenuPage = 0;
@@ -190,8 +180,7 @@ namespace Revitalize.Menus
         /// </summary>
         /// <param name="tabsToAdd"></param> The tab components to be added. They must have a "value" field assigned to them otherwise they won't be used. 
         /// <param name="pagesToAdd"></param> The corresponding menus to add 
-        /// <param name="pageTexturesToAdd"></param> The textures to be used .for the menu sheets. Only assign 1 per 12 tabs used.
-        public GameMenu(List<ClickableComponentExtended> tabsToAdd, List<IClickableMenu> pagesToAdd, List<Texture2D> pageTexturesToAdd) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
+        public GameMenu(List<ClickableTextureComponentExpanded> tabsToAdd, List<IClickableMenu> pagesToAdd) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
         {
             //can only hold about 12 tabs per menu page
             int i = 0;
@@ -202,10 +191,7 @@ namespace Revitalize.Menus
                 pages.Add(pagesToAdd[i]);
                 i++;
             }
-            foreach(var v in pageTexturesToAdd)
-            {
-                pageTextureSheets.Add(v);
-            }
+
             currentMenuPage = 0;
             if (Game1.activeClickableMenu == null)
             {
@@ -269,7 +255,7 @@ namespace Revitalize.Menus
                 }
             }
         }
-
+        */
         public override void setUpForGamePadMode()
         {
             base.setUpForGamePadMode();
@@ -298,12 +284,12 @@ namespace Revitalize.Menus
                 foreach (var current in this.tabs)
                 {
                     i++;
-                    if (current.value > (11 + (12 * currentMenuPage))) continue;
-                    if (current.value < (0 + (12 * currentMenuPage))) continue;
-                    if (current.containsPoint(x, y) && this.currentTab != current.value && this.pages[this.currentTabIndex].readyToClose())
+                   // if (current.value > (11 + (12 * currentMenuPage))) continue;
+                   // if (current.value < (0 + (12 * currentMenuPage))) continue;
+                    if (current.containsPoint(x, y)  && this.pages[this.currentTabIndex].readyToClose())
                     {
                         currentTabIndex = i;
-                        this.changeTab(current.value);
+                        this.changeTab(currentTabIndex);
                         return;
                     }
                 }
@@ -372,6 +358,7 @@ namespace Revitalize.Menus
                 if (current.containsPoint(x, y))
                 {
                     this.hoverText = current.label;
+                    Log.AsyncM(current.value);
                     return;
                 }
             }
@@ -424,8 +411,9 @@ namespace Revitalize.Menus
                 ClickableTextureComponent expr_AA_cp_0_cp_0 = this.junimoNoteIcon;
                 expr_AA_cp_0_cp_0.bounds.X = expr_AA_cp_0_cp_0.bounds.X + Game1.tileSize;
             }
-            this.currentTab = this.tabs[currentTabIndex].value;
-
+            this.currentTab = this.tabs[whichTab].value;
+          //  Log.AsyncO("EXCUSE ME!!! " + this.tabs[whichTab].value);
+          //  Log.AsyncO("NO WAY!!! " + whichTab);
             if (this.currentTab == 3)
             {
                 this.invisible = true;
@@ -470,7 +458,7 @@ namespace Revitalize.Menus
                         int num = current.value;
                         string name = current.name;
                         //!!!!!BINGO! HERE ARE THE TEXTURES
-                        b.Draw(pageTextureSheets[currentMenuPage], new Vector2((float)current.bounds.X, (float)(current.bounds.Y + ((this.currentTab == current.value) ? 8 : 0))), new Rectangle?(new Rectangle(num * 16, 368, 16, 16)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, 0.0001f);
+                        b.Draw(current.texture, new Vector2((float)current.bounds.X, (float)(current.bounds.Y)), new Rectangle(0,0,16,16), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, 0.0001f);
                         if (current.name.Equals("skills"))
                         {
                             Game1.player.FarmerRenderer.drawMiniPortrat(b, new Vector2((float)(current.bounds.X + 8), (float)(current.bounds.Y + 12 + ((this.currentTab == current.value) ? 8 : 0))), 0.00011f, 3f, 2, Game1.player);
