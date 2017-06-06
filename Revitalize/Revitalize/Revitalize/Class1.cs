@@ -312,7 +312,7 @@ namespace Revitalize
             {
                // System.Threading.Thread.Sleep(1);
                
-                 //  Game1.activeClickableMenu = new  Revitalize.Menus.GameMenu();
+                   Game1.activeClickableMenu = new  Revitalize.Menus.GameMenu();
             }
             gametick = false;
             

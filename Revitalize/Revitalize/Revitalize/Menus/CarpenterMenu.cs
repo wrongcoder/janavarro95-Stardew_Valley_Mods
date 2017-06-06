@@ -81,6 +81,8 @@ namespace Revitalize.Menus
 
         private string hoverText = "";
 
+        bool flipFlop;
+
         public BluePrint CurrentBlueprint
         {
             get
@@ -302,7 +304,7 @@ namespace Revitalize.Menus
                 this.hoverText = Game1.content.LoadString("Strings\\UI:Carpenter_MoveBuildings", new object[0]);
                 return;
             }
-            if (this.okButton.containsPoint(x, y) && this.CurrentBlueprint.doesFarmerHaveEnoughResourcesToBuild())
+            if (this.okButton.containsPoint(x, y) )
             {
                 this.hoverText = Game1.content.LoadString("Strings\\UI:Carpenter_Build", new object[0]);
                 return;
@@ -338,6 +340,20 @@ namespace Revitalize.Menus
 
         public override void receiveKeyPress(Keys key)
         {
+            KeyboardState newState = Keyboard.GetState();
+
+            // Is the SPACE key down?
+            if (newState.IsKeyDown(Keys.T))
+            {
+                if (flipFlop == false)
+                {
+                    if (this.drawBG) this.drawBG = false;
+                    else this.drawBG = true;
+
+                    flipFlop = true;
+                }
+            }
+            
             if (this.freeze)
             {
                 return;
@@ -381,6 +397,12 @@ namespace Revitalize.Menus
         public override void update(GameTime time)
         {
             base.update(time);
+            KeyboardState newState = Keyboard.GetState();
+            if (flipFlop == true && newState.IsKeyUp(Keys.T))
+            {
+                flipFlop = false;
+            }
+
             if (this.onFarm && !Game1.globalFade)
             {
                 int num = Game1.getOldMouseX() + Game1.viewport.X;
@@ -409,6 +431,8 @@ namespace Revitalize.Menus
                 }
             }
         }
+
+        
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
@@ -472,7 +496,7 @@ namespace Revitalize.Menus
                 this.onFarm = true;
                 this.moving = true;
             }
-            if (this.okButton.containsPoint(x, y) && !this.onFarm && Game1.player.money >= this.price && this.blueprints[this.currentBlueprintIndex].doesFarmerHaveEnoughResourcesToBuild())
+            if (this.okButton.containsPoint(x, y) && !this.onFarm && Game1.player.money >= this.price )
             {
                 Game1.globalFadeToBlack(new Game1.afterFadeFunction(this.setUpForBuildingPlacement), 0.02f);
                 Game1.playSound("smallSelect");
@@ -511,7 +535,7 @@ namespace Revitalize.Menus
                     Building buildingAt2 = ((Farm)Game1.getLocationFromName("Farm")).getBuildingAt(new Vector2((float)((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), (float)((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize)));
                     if (buildingAt2 != null && this.CurrentBlueprint.name != null && buildingAt2.buildingType.Equals(this.CurrentBlueprint.nameOfBuildingToUpgrade))
                     {
-                        this.CurrentBlueprint.consumeResources();
+
                         buildingAt2.daysUntilUpgrade = 2;
                         buildingAt2.showUpgradeAnimation(Game1.getFarm());
                         Game1.playSound("axe");
@@ -565,6 +589,7 @@ namespace Revitalize.Menus
                     }
                     */
                     Game1.addHUDMessage(new HUDMessage(Game1.currentCursorTile.ToString(), Color.Red, 3500f));
+                    Game1.currentLocation.removeObject(Game1.currentCursorTile, false);
                     //Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\UI:Carpenter_CantBuild", new object[0]), Color.Red, 3500f));
                 }
             }
@@ -647,7 +672,7 @@ namespace Revitalize.Menus
         {
             Game1.currentLocation.cleanupBeforePlayerExit();
             this.hoverText = "";
-            Game1.currentLocation = Game1.getLocationFromName("Town");
+            Game1.currentLocation = Game1.getLocationFromName("Farm");
             Game1.currentLocation.resetForPlayerEntry();
             Game1.globalFadeToClear(null, 0.02f);
             this.onFarm = true;
@@ -673,7 +698,7 @@ namespace Revitalize.Menus
 
         public override void draw(SpriteBatch b)
         {
-            if (this.drawBG)
+          if (this.drawBG)
             {
                 b.Draw(Game1.fadeToBlackRect, Game1.graphics.GraphicsDevice.Viewport.Bounds, Color.Black * 0.5f);
             }
@@ -732,7 +757,7 @@ namespace Revitalize.Menus
                 }
                 this.backButton.draw(b);
                 this.forwardButton.draw(b);
-                this.okButton.draw(b, this.blueprints[this.currentBlueprintIndex].doesFarmerHaveEnoughResourcesToBuild() ? Color.White : (Color.Gray * 0.8f), 0.88f);
+                this.okButton.draw(b,  Color.White , 0.88f);
                 this.demolishButton.draw(b);
                 this.moveButton.draw(b);
             }
@@ -788,6 +813,163 @@ namespace Revitalize.Menus
 
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
+            if (this.freeze)
+            {
+                return;
+            }
+            if (!this.onFarm)
+            {
+                base.receiveLeftClick(x, y, playSound);
+            }
+            if (this.cancelButton.containsPoint(x, y))
+            {
+                if (!this.onFarm)
+                {
+                    base.exitThisMenu(true);
+                    Game1.player.forceCanMove();
+                    Game1.playSound("bigDeSelect");
+                }
+                else
+                {
+                    if (this.moving && this.buildingToMove != null)
+                    {
+                        Game1.playSound("cancel");
+                        return;
+                    }
+                    Game1.globalFadeToBlack(new Game1.afterFadeFunction(this.returnToCarpentryMenu), 0.02f);
+                    Game1.playSound("smallSelect");
+                    return;
+                }
+            }
+            if (!this.onFarm && this.backButton.containsPoint(x, y))
+            {
+                this.currentBlueprintIndex--;
+                if (this.currentBlueprintIndex < 0)
+                {
+                    this.currentBlueprintIndex = this.blueprints.Count - 1;
+                }
+                this.setNewActiveBlueprint();
+                Game1.playSound("shwip");
+                this.backButton.scale = this.backButton.baseScale;
+            }
+            if (!this.onFarm && this.forwardButton.containsPoint(x, y))
+            {
+                this.currentBlueprintIndex = (this.currentBlueprintIndex + 1) % this.blueprints.Count;
+                this.setNewActiveBlueprint();
+                this.backButton.scale = this.backButton.baseScale;
+                Game1.playSound("shwip");
+            }
+            if (!this.onFarm && this.demolishButton.containsPoint(x, y))
+            {
+                Game1.globalFadeToBlack(new Game1.afterFadeFunction(this.setUpForBuildingPlacement), 0.02f);
+                Game1.playSound("smallSelect");
+                this.onFarm = true;
+                this.demolishing = true;
+            }
+            if (!this.onFarm && this.moveButton.containsPoint(x, y))
+            {
+                Game1.globalFadeToBlack(new Game1.afterFadeFunction(this.setUpForBuildingPlacement), 0.02f);
+                Game1.playSound("smallSelect");
+                this.onFarm = true;
+                this.moving = true;
+            }
+            if (this.okButton.containsPoint(x, y) && !this.onFarm && Game1.player.money >= this.price )
+            {
+                Game1.globalFadeToBlack(new Game1.afterFadeFunction(this.setUpForBuildingPlacement), 0.02f);
+                Game1.playSound("smallSelect");
+                this.onFarm = true;
+            }
+            if (this.onFarm && !this.freeze && !Game1.globalFade)
+            {
+                if (this.demolishing)
+                {
+                    Building buildingAt = ((Farm)Game1.getLocationFromName("Farm")).getBuildingAt(new Vector2((float)((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), (float)((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize)));
+                    if (buildingAt != null && (buildingAt.daysOfConstructionLeft > 0 || buildingAt.daysUntilUpgrade > 0))
+                    {
+                        Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\UI:Carpenter_CantDemolish_DuringConstruction", new object[0]), Color.Red, 3500f));
+                        return;
+                    }
+                    if (buildingAt != null && buildingAt.indoors != null && buildingAt.indoors is AnimalHouse && (buildingAt.indoors as AnimalHouse).animalsThatLiveHere.Count > 0)
+                    {
+                        Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\UI:Carpenter_CantDemolish_AnimalsHere", new object[0]), Color.Red, 3500f));
+                        return;
+                    }
+                    if (buildingAt != null && ((Farm)Game1.getLocationFromName("Farm")).destroyStructure(buildingAt))
+                    {
+                        int arg_366_0 = buildingAt.tileY;
+                        int arg_36D_0 = buildingAt.tilesHigh;
+                        Game1.flashAlpha = 1f;
+                        buildingAt.showDestroyedAnimation(Game1.getFarm());
+                        Game1.playSound("explosion");
+                        Utility.spreadAnimalsAround(buildingAt, (Farm)Game1.getLocationFromName("Farm"));
+                        DelayedAction.fadeAfterDelay(new Game1.afterFadeFunction(this.returnToCarpentryMenu), 1500);
+                        this.freeze = true;
+                    }
+                    return;
+                }
+                else if (this.upgrading)
+                {
+                    Building buildingAt2 = ((Farm)Game1.getLocationFromName("Farm")).getBuildingAt(new Vector2((float)((Game1.viewport.X + Game1.getOldMouseX()) / Game1.tileSize), (float)((Game1.viewport.Y + Game1.getOldMouseY()) / Game1.tileSize)));
+                    if (buildingAt2 != null && this.CurrentBlueprint.name != null && buildingAt2.buildingType.Equals(this.CurrentBlueprint.nameOfBuildingToUpgrade))
+                    {
+            
+                        buildingAt2.daysUntilUpgrade = 2;
+                        buildingAt2.showUpgradeAnimation(Game1.getFarm());
+                        Game1.playSound("axe");
+                        DelayedAction.fadeAfterDelay(new Game1.afterFadeFunction(this.returnToCarpentryMenuAfterSuccessfulBuild), 1500);
+                        this.freeze = true;
+                        return;
+                    }
+                    if (buildingAt2 != null)
+                    {
+                        Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\UI:Carpenter_CantUpgrade_BuildingType", new object[0]), Color.Red, 3500f));
+                    }
+                    return;
+                }
+                else if (this.moving)
+                {
+                    if (this.buildingToMove == null)
+                    {
+                        this.buildingToMove = ((Farm)Game1.getLocationFromName("Farm")).getBuildingAt(new Vector2((float)((Game1.viewport.X + Game1.getMouseX()) / Game1.tileSize), (float)((Game1.viewport.Y + Game1.getMouseY()) / Game1.tileSize)));
+                        if (this.buildingToMove != null)
+                        {
+                            if (this.buildingToMove.daysOfConstructionLeft > 0)
+                            {
+                                this.buildingToMove = null;
+                                return;
+                            }
+                            ((Farm)Game1.getLocationFromName("Farm")).buildings.Remove(this.buildingToMove);
+                            Game1.playSound("axchop");
+                        }
+                        return;
+                    }
+                    if (((Farm)Game1.getLocationFromName("Farm")).buildStructure(this.buildingToMove, new Vector2((float)((Game1.viewport.X + Game1.getMouseX()) / Game1.tileSize), (float)((Game1.viewport.Y + Game1.getMouseY()) / Game1.tileSize)), false, Game1.player))
+                    {
+                        this.buildingToMove = null;
+                        Game1.playSound("axchop");
+                        DelayedAction.playSoundAfterDelay("dirtyHit", 50);
+                        DelayedAction.playSoundAfterDelay("dirtyHit", 150);
+                        return;
+                    }
+                    Game1.playSound("cancel");
+                    return;
+                }
+                else
+                {
+                    /*
+                    if (this.tryToBuild())
+                    {
+                        this.CurrentBlueprint.consumeResources();
+                        DelayedAction.fadeAfterDelay(new Game1.afterFadeFunction(this.returnToCarpentryMenuAfterSuccessfulBuild), 2000);
+                        this.freeze = true;
+                        return;
+                    }
+                    */
+                    Game1.addHUDMessage(new HUDMessage(Game1.currentCursorTile.ToString(), Color.Red, 3500f));
+                    Game1.currentLocation.removeObject(Game1.currentCursorTile, false);
+                    //Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\UI:Carpenter_CantBuild", new object[0]), Color.Red, 3500f));
+                }
+            }
         }
     }
 }

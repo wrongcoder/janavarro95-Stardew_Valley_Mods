@@ -56,6 +56,7 @@
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisPlus.cs" />
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
     <Compile Include="Menus\CarpenterMenu.cs" />
+    <Compile Include="Menus\MenuComponents\ClickableComponentsExtended.cs" />
     <Compile Include="Utilities\MapUtilities.cs" />
     <Compile Include="Magic\Alchemy\Menus\ExpandableItemGrabMenu.cs" />
     <Compile Include="Magic\Alchemy\Objects\BagofHolding.cs" />
