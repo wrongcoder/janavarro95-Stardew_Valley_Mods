@@ -12,7 +12,7 @@ namespace Revitalize.Settings
 {
     class MachineSettings : SettingsInterface
     {
-        public static bool doMachinesConsumePower;
+        public bool doMachinesConsumePower;
 
         public  MachineSettings()
         {
@@ -47,6 +47,7 @@ namespace Revitalize.Settings
         /// </summary>
         public void SaveSettings()
         {
+            if (File.Exists(Path.Combine(Serialize.SettingsPath, "MachineSettings" + ".json"))) File.Delete(Path.Combine(Serialize.SettingsPath, "MachineSettings" + ".json"));
             Serialize.WriteToJsonFile(Path.Combine(Serialize.SettingsPath, "MachineSettings" + ".json"), (MachineSettings)SettingsManager.machineSettings);
         }
     }

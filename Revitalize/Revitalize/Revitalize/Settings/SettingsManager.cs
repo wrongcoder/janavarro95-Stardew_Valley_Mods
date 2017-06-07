@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Revitalize.Settings
 {
+
     class SettingsManager
     {
 

@@ -37,7 +37,7 @@ namespace Revitalize
     /// Get Time lapse code working so that machines propperly work though the night since I technically remove them.
     /// Art. Lots of Art.
     /// Clean up the freaking code. Geeze it's messy.
-    /// 
+    /// Make a cleaner serializer and parser function to be used with the settings class.
     /// </summary>
 
 
