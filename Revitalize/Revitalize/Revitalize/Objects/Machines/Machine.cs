@@ -92,9 +92,14 @@ namespace Revitalize.Objects.Machines
 
 
         //Extra stuff. May or may not be used.
+
+        
+        
         public bool producePollution;
 
         public bool consumeEnergy;
+
+        public bool doesOverrideGlobalConsumeEnergy;
 
         public float currentEnergy;
 

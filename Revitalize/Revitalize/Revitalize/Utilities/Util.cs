@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Revitalize.Objects;
-using Revitalize.Persistance;
+using Revitalize.Persistence;
 using Revitalize.Resources;
 using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
@@ -27,7 +27,7 @@ namespace Revitalize
 
         public static void ResetAllDailyBooleans(object sender, EventArgsIntChanged e)
         {
-            Serialize.createDirectories();
+            SetUp.createDirectories();
             hasWateredAllCropsToday = false;
             if (Lists.trackedTerrainFeatures != null)
             {

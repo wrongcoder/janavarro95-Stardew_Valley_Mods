@@ -58,6 +58,12 @@
     <Compile Include="Menus\CarpenterMenu.cs" />
     <Compile Include="Menus\MenuComponents\ClickableComponentsExtended.cs" />
     <Compile Include="Menus\MenuComponents\ClickableTextureComponentExpanded.cs" />
+    <Compile Include="Settings\MachineSettings.cs" />
+    <Compile Include="Settings\MagicSettings.cs" />
+    <Compile Include="Settings\PaintSettings.cs" />
+    <Compile Include="Settings\SettingsInterface.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="SetUp.cs" />
     <Compile Include="Utilities\MapUtilities.cs" />
     <Compile Include="Magic\Alchemy\Menus\ExpandableItemGrabMenu.cs" />
     <Compile Include="Magic\Alchemy\Objects\BagofHolding.cs" />
@@ -87,8 +93,8 @@
     <Compile Include="Menus\LightCustomizer.cs" />
     <Compile Include="Objects\shopObject.cs" />
     <Compile Include="Objects\SpriteFontObject.cs" />
-    <Compile Include="Persistance\MapSwapData.cs" />
-    <Compile Include="Persistance\PlayerVariables.cs" />
+    <Compile Include="Persistence\MapSwapData.cs" />
+    <Compile Include="Persistence\PlayerVariables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\DataNodes\FarmOptionsDataNode.cs" />
     <Compile Include="Resources\DataNodes\SeedDataNode.cs" />
@@ -107,7 +113,6 @@
   <ItemGroup>
     <Folder Include="Aesthetics\Paint\Utilities\" />
     <Folder Include="Locations\MapUtilities\" />
-    <Folder Include="Persistance\Configs\" />
     <Folder Include="TerrainFeatures\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

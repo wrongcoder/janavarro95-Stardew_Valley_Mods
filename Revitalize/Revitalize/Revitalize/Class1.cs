@@ -22,13 +22,13 @@ using StardewValley.Locations;
 using Revitalize.Menus;
 using Microsoft.Xna.Framework.Input;
 using xTile;
-using Revitalize.Persistance;
 using Revitalize.Draw;
 using Revitalize.Aesthetics;
 using Revitalize.Aesthetics.WeatherDebris;
 using System.Reflection;
 using StardewValley.Menus;
 using Revitalize.Resources.DataNodes;
+using Revitalize.Persistence;
 
 namespace Revitalize
 {
@@ -46,90 +46,68 @@ namespace Revitalize
         public static string key_binding="P";
         public static string key_binding2 = "E";
         public static string key_binding3 = "F";
-      public static  bool useMenuFocus;
+
         public static string path;
         public static string contentPath;
+        public static List<LocalizedContentManager> modContent;
+        public static IModHelper modHelper;
+
         const int range = 1;
 
         public static MouseState mState;
 
-      public static  MapSwapData persistentMapSwap;
+        public static  MapSwapData persistentMapSwap;
 
-      public static bool mouseAction;
+        public static bool mouseAction;
 
         bool gametick;
 
-        bool mapWipe;
-      public static  bool hasLoadedTerrainList;
-        List<GameLoc> newLoc;
+        public static bool mapWipe;
 
+        public static  bool hasLoadedTerrainList;
+
+        public static List<GameLoc> newLoc;
 
         public static bool paintEnabled;
 
-      public static  bool gameLoaded;
-
-       public static List<LocalizedContentManager> modContent;
+        public static  bool gameLoaded;
 
 
         public override void Entry(IModHelper helper)
         {
-           
-            //string first=StardewModdingAPI.Program.StardewAssembly.Location;
+            modHelper = helper;
             string first = StardewModdingAPI.Constants.ExecutionPath;
             contentPath= first.Remove(first.Length - 19, 19);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
             StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick +=gameMenuCall;
-           //  StardewModdingAPI.Events.GameEvents.UpdateTick += BedCleanUpCheck;
             StardewModdingAPI.Events.GameEvents.GameLoaded += GameEvents_GameLoaded;
             StardewModdingAPI.Events.GameEvents.OneSecondTick += MapWipe;
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.ResetAllDailyBooleans;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
-
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterSave;
-
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-
             StardewModdingAPI.Events.GraphicsEvents.OnPreRenderHudEvent += GraphicsEvents_OnPreRenderHudEvent;
-
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += draw;
-
-          
-
-            //StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.WaterAllCropsInAllLocations;
-            hasLoadedTerrainList = false;
-            path = Helper.DirectoryPath;
-            newLoc = new List<GameLoc>();
-
-
-            PlayerVariables.initializePlayerVariables();
-            Log.AsyncG("Revitalize: Running on API Version: " +StardewModdingAPI.Constants.ApiVersion);
-          
-            useMenuFocus = true;
-            Lists.loadAllListsAtEntry();
-
-            if (File.Exists(Path.Combine(path, "xnb_node.cmd")))
-            {
-                paintEnabled = true;
-                Log.AsyncG("Revitalize: Paint Module Enabled");
-            }
-            else
-            {
-                paintEnabled = false;
-                Log.AsyncG("Revitalize: Paint Module Disabled");
-            }
-
+            SetUp.DuringEntry();
         }
 
-
-
+        /// <summary>
+        /// Draw my weather debris system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void draw(object sender, EventArgs e)
         {
             WeatherDebrisSystem.draw();
         }
 
+        /// <summary>
+        /// Draw all modded huds like the magic meter.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GraphicsEvents_OnPreRenderHudEvent(object sender, EventArgs e)
         {
             if (gameLoaded == true)
@@ -145,19 +123,20 @@ namespace Revitalize
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            Serialize.createDirectories();
-            Util.loadMapSwapData();
-            gameLoaded = true; 
-        }//end of function;
-
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
-            Serialize.createDirectories();
+            SetUp.createDirectories();
+            Util.loadMapSwapData();
             Serialize.restoreAllModObjects();
-        }
+            gameLoaded = true;
+        }//end of function;
 
+
+        /// <summary>
+        /// Makes sure that any modded objects are not floating about the world to prevent the serializer from crashing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             Serialize.cleanUpInventory(); 
@@ -179,7 +158,11 @@ namespace Revitalize
             }
         }
    
-
+        /// <summary>
+        /// Checks to see if certain mod objects have been interacted with, such as the Bag of Holding, or modded seeds.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ControlEvents_MouseChanged(object sender, EventArgsMouseStateChanged e)
         {
           
@@ -219,14 +202,9 @@ namespace Revitalize
 
         private void GameEvents_GameLoaded(object sender, EventArgs e)
         {
-            modContent = new List<LocalizedContentManager>();//new LocalizedContentManager(Game1.content.ServiceProvider, Game1.content.RootDirectory);
-            Dictionaries.initializeDictionaries();
-            Lists.initializeAllLists();
-
-            mapWipe = false;
+            SetUp.AfterGameHasLoaded();
 
         }
-
 
         public void MapWipe(object sender, EventArgs e)
         {

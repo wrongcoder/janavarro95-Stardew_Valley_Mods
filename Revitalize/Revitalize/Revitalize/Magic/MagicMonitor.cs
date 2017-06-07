@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Revitalize.Objects;
-using Revitalize.Persistance;
+using Revitalize.Persistence;
 using StardewModdingAPI;
 using StardewValley;
 using System;

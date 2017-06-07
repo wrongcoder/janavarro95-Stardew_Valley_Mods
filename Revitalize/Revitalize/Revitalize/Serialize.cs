@@ -6,7 +6,7 @@ using Revitalize.Magic.Alchemy;
 using Revitalize.Magic.Alchemy.Objects;
 using Revitalize.Objects;
 using Revitalize.Objects.Machines;
-using Revitalize.Persistance;
+using Revitalize.Persistence;
 using Revitalize.Resources;
 using Revitalize.Resources.DataNodes;
 using StardewModdingAPI;
@@ -37,52 +37,7 @@ namespace Revitalize
 
         public static string SerializerTrashPath;
 
-
-        public static void createDirectories()
-        {
-
-            DataDirectoryPath = Path.Combine(Class1.path, "PlayerData");
-            PlayerDataPath = Path.Combine(DataDirectoryPath, Game1.player.name);
-            InvPath = Path.Combine(PlayerDataPath, "Inventory");
-            objectsInWorldPath = Path.Combine(PlayerDataPath, "objects");
-            SerializerTrashPath = Path.Combine(Class1.path, "SerializerTrash");
-
-
-            
-            // Log.AsyncC(TrackedTerrainDataPath);
-
-            if (!Directory.Exists(DataDirectoryPath))
-            {
-                Directory.CreateDirectory(DataDirectoryPath);
-            }
-            if (!Directory.Exists(PlayerDataPath))
-            {
-                Directory.CreateDirectory(PlayerDataPath);
-            }
-            if (!Directory.Exists(InvPath))
-            {
-                Directory.CreateDirectory(InvPath);
-            }
-            if (!Directory.Exists(objectsInWorldPath))
-            {
-                Directory.CreateDirectory(InvPath);
-            }
-            if (!Directory.Exists(SerializerTrashPath))
-            {
-                Directory.CreateDirectory(SerializerTrashPath);
-            }
-
-            foreach (GameLocation loc in Game1.locations)
-            {
-                if (!Directory.Exists(Path.Combine(objectsInWorldPath, loc.name)))
-                {
-                    Directory.CreateDirectory(Path.Combine(objectsInWorldPath, loc.name));
-                }
-
-            }
-        }
-
-
+        public static string SettingsPath;
 
         public static void cleanUpWorld()
         {
@@ -194,7 +149,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Serialize.createDirectories();
+                SetUp.createDirectories();
             }
         }
 
@@ -218,8 +173,6 @@ namespace Revitalize
                 ProcessDirectoryForDeletion(subdirectory);
 
         }
-
-
 
         public static void ProcessDirectoryForCleanUp(string targetDirectory)
         {
@@ -334,13 +287,8 @@ namespace Revitalize
                         try
                         {
                             //parse from Json Style
-                        
-                   
                                 cObj = pair.Value.parse.Invoke(data);
                                 cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
-                            
-  
-                            
 
                             if (cObj.thisLocation == null)
                             {
@@ -360,11 +308,9 @@ namespace Revitalize
                         }
                     }
                 }
-            }
-            
+            }   
 
         }
-
 
         public static void WriteToJsonFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
         {
@@ -403,7 +349,7 @@ namespace Revitalize
             TextReader reader = null;
             try
             {
-                Log.AsyncC(filePath);
+                //Log.AsyncC(filePath);
                 reader = new StreamReader(filePath);
                 var fileContents = reader.ReadToEnd();
 
@@ -433,12 +379,8 @@ namespace Revitalize
             serializer.Serialize(writer, objectToWrite);
             writer.Close();
 
-
-
             // XElement school = doc.Element("School");
             // school.Add(new XAttribute("ID", "ID_Value"));
-
-
 
         }
 
@@ -472,17 +414,10 @@ namespace Revitalize
                     continue;
                 }
             }
-
-          
-
             Log.AsyncC("CHECK RESULTS " + false);
             return false;
-
             // XElement school = doc.Element("School");
             // school.Add(new XAttribute("ID", "ID_Value"));
-
-
-
         }
 
         public static T ReadFromXMLFile<T>(string filePath) where T : new()
@@ -541,8 +476,6 @@ namespace Revitalize
                 return null;
             }
         }
-
-
 
         public static Item parseItemFromJson(string data)
         {
@@ -673,12 +606,7 @@ namespace Revitalize
 
         public static Spawner parseSpawner(string data)
         {
-
             dynamic obj = JObject.Parse(data);
-
-
-            //  Log.AsyncC(obj.thisType);
-
 
             Spawner d = new Spawner(false);
 
@@ -756,10 +684,6 @@ namespace Revitalize
                 // Log.AsyncM(e);
                 return null;
             }
-
-
-
-
         }
 
         public static void serializeSpawner(Item d)
@@ -774,12 +698,7 @@ namespace Revitalize
 
         public static GiftPackage parseGiftPackage(string data)
         {
-
             dynamic obj = JObject.Parse(data);
-
-
-            //  Log.AsyncC(obj.thisType);
-
 
             GiftPackage d = new GiftPackage(false);
 
@@ -860,10 +779,6 @@ namespace Revitalize
                 //  Log.AsyncM(e);
                 return null;
             }
-
-
-
-
         }
         public static void serializeGiftPackage(Item d)
         {
@@ -874,10 +789,6 @@ namespace Revitalize
         {
 
             dynamic obj = JObject.Parse(data);
-
-
-            //  Log.AsyncC(obj.thisType);
-
 
             ExtraSeeds d = new ExtraSeeds(false);
 
@@ -955,10 +866,6 @@ namespace Revitalize
                 //   Log.AsyncM(e);
                 return null;
             }
-
-
-
-
         }
         public static void serializeExtraSeeds(Item d)
         {
@@ -989,11 +896,6 @@ namespace Revitalize
         {
 
             dynamic obj = JObject.Parse(data);
-
-            // Log.AsyncC(data);
-
-            //  Log.AsyncC(obj.thisType);
-
 
             Light d = new Light(false);
 
@@ -1076,9 +978,6 @@ namespace Revitalize
                 return null;
             }
 
-
-
-
         }
         public static void serializeLight(Item d)
         {
@@ -1093,11 +992,6 @@ namespace Revitalize
         {
 
             dynamic obj = JObject.Parse(data);
-
-            // Log.AsyncC(data);
-
-            //  Log.AsyncC(obj.thisType);
-
 
             SpriteFontObject d = new SpriteFontObject(false);
 
@@ -1179,9 +1073,6 @@ namespace Revitalize
                 Log.AsyncM(e);
                 return null;
             }
-
-
-
 
         }
         public static void serializeSpriteFontObject(Item d)
@@ -1318,10 +1209,6 @@ namespace Revitalize
                 Log.AsyncM(e);
                 return null;
             }
-
-
-
-
         }
         public static void serializeBagOfHolding(Item d)
         {
@@ -1329,21 +1216,10 @@ namespace Revitalize
            // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
         }
 
-        public static void serializeGeneric(Item d)
-        {
-            WriteToXMLFile<BagofHolding>(Path.Combine(InvPath, d.Name + ".json"),(BagofHolding)d);
-            // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
-        }
 
         public static Quarry parseQuarry(string data)
         {
-
             dynamic obj = JObject.Parse(data);
-
-
-            //  Log.AsyncC(obj.thisType);
-
-
             Quarry d = new Quarry(false);
 
             d.price = obj.price;
@@ -1422,10 +1298,6 @@ namespace Revitalize
                 //  Log.AsyncM(e);
                 return null;
             }
-
-
-
-
         }
         public static void serializeQuarry(Item d)
         {
@@ -1440,11 +1312,6 @@ namespace Revitalize
         {
 
             dynamic obj = JObject.Parse(data);
-
-
-            //   Log.AsyncC(obj.thisType);
-
-
             shopObject d = new shopObject(false);
 
             d.price = obj.price;
@@ -1522,10 +1389,6 @@ namespace Revitalize
                 //Log.AsyncM(e);
                 return null;
             }
-
-
-
-
         }
         public static void serializeShopObject(Item d)
         {
@@ -1600,8 +1463,6 @@ namespace Revitalize
             WriteToJsonFile<List<TrackedTerrainDummyDataNode>>(Path.Combine(PlayerDataPath, "TrackedTerrainFeaturesList.json"), Lists.trackedTerrainFeaturesDummyList);
         }
 
-
-
         public static List<Item> parseInventoryList(JArray array)
         {
 
@@ -1629,8 +1490,6 @@ namespace Revitalize
             return inventory;
 
         }
-
-
 
         public abstract class JsonCreationConverter<T> : JsonConverter
         {

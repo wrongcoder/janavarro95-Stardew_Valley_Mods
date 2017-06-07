@@ -370,7 +370,7 @@ namespace Revitalize.Objects.Machines
                 this.heldObject.tileLocation = this.tileLocation;
                 this.heldObject.boundingBox.X = this.boundingBox.X;
                 this.heldObject.boundingBox.Y = this.boundingBox.Y;
-                Log.AsyncO(getDefaultBoundingBoxForType((dropIn as Spawner).Decoration_type));
+               // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as Spawner).Decoration_type));
                 this.heldObject.performDropDownAction(who);
                 this.heldObject = null;
                 if (!probe)
