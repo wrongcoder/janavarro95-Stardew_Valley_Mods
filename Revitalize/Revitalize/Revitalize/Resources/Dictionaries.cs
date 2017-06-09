@@ -68,7 +68,8 @@ namespace Revitalize.Resources
             acceptedTypes.Add("Revitalize.Objects.ExtraSeeds", new SerializerDataNode(new ser(Serialize.serializeExtraSeeds), new par(Serialize.parseExtraSeeds),null));
             acceptedTypes.Add("Revitalize.Objects.Spell", new SerializerDataNode(new ser(Serialize.serializeSpell), new par(Serialize.parseSpell), null));
             acceptedTypes.Add("Revitalize.Magic.Alchemy.Objects.BagofHolding", new SerializerDataNode(new ser(Serialize.serializeBagOfHolding), new par(Serialize.parseBagOfHolding), null));
-                }
+            acceptedTypes.Add("Revitalize.Objects.Machines.TestMachine", new SerializerDataNode(new ser(Revitalize.Objects.Machines.TestMachine.SerializeObject), new par(Objects.Machines.TestMachine.ParseObject), new world(Objects.Machines.TestMachine.SerializeObjectFromWorld)));
+        }
 
         public static void addAllInteractionTypes()
         {

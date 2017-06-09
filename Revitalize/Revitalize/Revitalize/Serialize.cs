@@ -44,6 +44,7 @@ namespace Revitalize
             ProcessDirectoryForDeletion(objectsInWorldPath);
             List<CoreObject> removalList = new List<CoreObject>();
             int countProcessed = 0;
+            List<Item> idk = new List<Item>();
             foreach (CoreObject d in Lists.trackedObjectList)
             {
                 try
@@ -60,7 +61,7 @@ namespace Revitalize
 
                 }
                 string s = Convert.ToString((d.GetType()));
-
+              
                 if (Dictionaries.acceptedTypes.ContainsKey(s))
                 {
                     SerializerDataNode t;
@@ -69,7 +70,14 @@ namespace Revitalize
                     if (works == true)
                     {
                         countProcessed++;
-                        t.worldObj.Invoke(d);
+                        if (d.useXML == false)
+                        {
+                            t.worldObj.Invoke(d);
+                        }
+                        else
+                        {
+                            idk.Add(d);
+                        }
                         Log.AsyncC("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
                         removalList.Add(d);
                     }
@@ -79,8 +87,29 @@ namespace Revitalize
             {
                 i.thisLocation.removeObject(i.tileLocation, false);
             }
-            removalList.Clear();
+            foreach(var v in idk)
+            {
+                string s = Convert.ToString((v.GetType()));
 
+                if (Dictionaries.acceptedTypes.ContainsKey(s))
+                {
+                    SerializerDataNode t;
+
+                    bool works = Dictionaries.acceptedTypes.TryGetValue(s, out t);
+                    if (works == true)
+                    {
+                        countProcessed++;
+                        if ((v as CoreObject).useXML == true)
+                        {
+                            t.worldObj.Invoke(v as CoreObject);
+                        }
+                        Log.AsyncG("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
+                        removalList.Add(v as CoreObject);
+                    }
+                }
+            }
+
+            removalList.Clear();
             Log.AsyncM("Revitalize: Done cleaning world for saving.");
 
         }
@@ -372,8 +401,8 @@ namespace Revitalize
         {
             // Create an instance of the XmlSerializer class;
             // specify the type of object to serialize.
-            XmlSerializer serializer =
-            new XmlSerializer(typeof(T));
+           
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
             
             TextWriter writer = new StreamWriter(filePath);
             serializer.Serialize(writer, objectToWrite);
@@ -1213,9 +1242,8 @@ namespace Revitalize
         public static void serializeBagOfHolding(Item d)
         {
             WriteToXMLFile<BagofHolding>(Path.Combine(InvPath, d.Name + ".xml"), (BagofHolding)d);
-           // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
+            // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
         }
-
 
         public static Quarry parseQuarry(string data)
         {

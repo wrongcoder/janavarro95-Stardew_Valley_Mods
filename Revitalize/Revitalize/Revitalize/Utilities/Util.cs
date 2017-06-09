@@ -96,10 +96,14 @@ namespace Revitalize
                 return false;
             }
         }
-        public static bool isInventoryFull(List<Item> inventory)
+        public static bool isInventoryFull(List<Item> inventory, bool logInfo=false)
         {
-          //  Log.AsyncG("size "+inventory.Count);
-          //  Log.AsyncG("max "+inventory.Capacity);
+            if (logInfo)
+            {
+                Log.AsyncG("size " + inventory.Count);
+                Log.AsyncG("max " + inventory.Capacity);
+            }
+
             if (inventory.Count == inventory.Capacity) return true;
             else return false;
         }

@@ -323,6 +323,7 @@ namespace Revitalize
                 
                 TextureDataNode font;
                 Dictionaries.spriteFontList.TryGetValue("0", out font);
+                objShopList.Add(new TestMachine(3, Vector2.Zero, Util.invertColor(LightColors.White), LightColors.White, false, 9, true));
                 objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
                 objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<List<Item>>()
                 {
@@ -343,6 +344,7 @@ namespace Revitalize
                 objShopList.Add(new Light(0, Vector2.Zero, LightColors.Aquamarine,LightColors.Aquamarine,false));
                 objShopList.Add(new Quarry(3, Vector2.Zero,9,"copper"));
                 objShopList.Add(new Quarry(3, Vector2.Zero, 9, "iron"));
+                objShopList.Add(new Spawner(3, Vector2.Zero, 9));
                // objShopList.Add(new StardewValley.Tools.Raft());
                 objShopList.Add(new Decoration(3, Vector2.Zero));
                 objShopList.Add(new StardewValley.Object(495, 1));
@@ -410,6 +412,11 @@ namespace Revitalize
             if (e.KeyPressed.ToString() == "V")
             {
                 newDebris();
+            }
+
+            if (e.KeyPressed.ToString() == "U")
+            {
+                Serialize.cleanUpWorld();
             }
 
             if (e.KeyPressed.ToString() == "G")

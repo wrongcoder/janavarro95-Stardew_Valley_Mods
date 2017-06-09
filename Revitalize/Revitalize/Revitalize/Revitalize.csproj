@@ -56,8 +56,10 @@
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisPlus.cs" />
     <Compile Include="Aesthetics\WeatherDebris\WeatherDebrisSystem.cs" />
     <Compile Include="Menus\CarpenterMenu.cs" />
+    <Compile Include="Menus\Machines\MachineInventory.cs" />
     <Compile Include="Menus\MenuComponents\ClickableComponentsExtended.cs" />
     <Compile Include="Menus\MenuComponents\ClickableTextureComponentExpanded.cs" />
+    <Compile Include="Objects\Machines\TestMachine.cs" />
     <Compile Include="Settings\MachineSettings.cs" />
     <Compile Include="Settings\MagicSettings.cs" />
     <Compile Include="Settings\PaintSettings.cs" />
@@ -80,7 +82,6 @@
     <Compile Include="Menus\GameMenu.cs" />
     <Compile Include="Menus\InventoryPage.cs" />
     <Compile Include="Menus\ItemGrabMenu.cs" />
-    <Compile Include="Menus\SpriteKeyboard.cs" />
     <Compile Include="Menus\StorageContainer.cs" />
     <Compile Include="Objects\Decoration.cs" />
     <Compile Include="Objects\ExtraSeeds.cs" />

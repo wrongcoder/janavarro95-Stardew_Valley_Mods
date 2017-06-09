@@ -16,11 +16,13 @@ namespace Revitalize.Objects.Machines
     /// Machine Core class. Only extend off of this.
     /// </summary>
     /// 
-    public class Machine : Revitalize.CoreObject
+    public class TestMachine : Revitalize.Objects.Machines.Machine
     {
         public List<Item> inputInventory;
         public List<Item> outputInventory;
         public bool areLightAndDrawColorsDifferent;
+
+     
         public override string Name
         {
             get
@@ -32,31 +34,40 @@ namespace Revitalize.Objects.Machines
         public override void InitializeBasics(int InvMaxSize, Vector2 tile)
         {
             this.inventory = new List<Item>();
-            this.inputInventory = this.inventory;
+            this.inputInventory = new List<Item>();
+            this.inventory = this.inputInventory;
             this.outputInventory = new List<Item>();
             this.inventoryMaxSize = InvMaxSize;
             this.tileLocation = tile;
             lightsOn = false;
             lightColor = Color.Black;
             thisType = this.GetType().ToString();
+
+
+            this.inventory.Capacity = inventoryMaxSize;
+            this.inputInventory.Capacity = inventoryMaxSize;
+            this.outputInventory.Capacity = inventoryMaxSize;
         }
 
-        public Machine()
+
+        public TestMachine()
         {
             this.updateDrawPosition();
         }
 
-        public Machine(bool f)
+        public TestMachine(bool f)
         {
             //does nothng
         }
 
-        public Machine(int which, Vector2 Tile, Color LightColor, Color DrawColor, bool differentColors = true, int InventoryMaxSize = 0, bool isRemovable = true)
+        public TestMachine(int which, Vector2 Tile, Color LightColor, Color DrawColor, bool differentColors = true, int InventoryMaxSize = 0, bool isRemovable = true)
         {
+            this.useXML = true;
             removable = isRemovable;
             this.InitializeBasics(InventoryMaxSize, Tile);
             this.lightColor = LightColor;
             this.drawColor = DrawColor;
+            this.minutesUntilReady = 10;
             areLightAndDrawColorsDifferent = differentColors;
             TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "Lights", "AdjustableLights", "Graphics", "AdjustableLights"));
             texturePath = Path.Combine("Revitalize", "Lights", "AdjustableLights", "Graphics", "AdjustableLights");
@@ -241,15 +252,22 @@ namespace Revitalize.Objects.Machines
                 thisLocation = null;
                 return true;
             }
-
-
-
             return false;
         }
 
         public override bool RightClicked(StardewValley.Farmer who)
         {
             //Game1.activeClickableMenu = new Revitalize.Menus.LightCustomizer(this);
+            if (this.inputInventory == null)
+            {
+                Log.AsyncG(">>>>>>>>??????????????????>>>>>>>>>>>>>");
+            }
+            if (this.outputInventory == null)
+            {
+                Log.AsyncC(">??????????????");
+            }
+            Log.AsyncM(this.GetType());
+           // this.outputInventory.Add(new Revitalize.Objects.Light(0, Vector2.Zero, LightColors.Azure, LightColors.Azure));
             Game1.activeClickableMenu = new Revitalize.Menus.Machines.MachineInventory(this, this.inputInventory, this.outputInventory, 3);
             return false;
         }
@@ -305,6 +323,11 @@ namespace Revitalize.Objects.Machines
 
             if (minutesUntilReady == 0)
             {
+                minutesUntilReady = 10;
+               if(Util.isInventoryFull(this.outputInventory) == false)
+                {
+                    Util.addItemToOtherInventory(this.outputInventory,(Item)(new StardewValley.Object(388, 1)));
+                }
             }
 
             return false;
@@ -815,7 +838,7 @@ namespace Revitalize.Objects.Machines
 
         public override Item getOne()
         {
-            Light Light = new Light(this.parentSheetIndex, this.tileLocation, this.lightColor, this.drawColor, this.areLightAndDrawColorsDifferent);
+            TestMachine Light = new TestMachine(this.parentSheetIndex, this.tileLocation, this.lightColor, this.drawColor, this.areLightAndDrawColorsDifferent);
             /*
             drawPosition = this.drawPosition;
             defaultBoundingBox = this.defaultBoundingBox;
@@ -836,6 +859,21 @@ namespace Revitalize.Objects.Machines
         public override Color getCategoryColor()
         {
             return Util.invertColor(LightColors.Black);
+        }
+
+        public static TestMachine ParseObject(string data)
+        {
+            TestMachine h = Serialize.ReadFromXMLFile<TestMachine>(data);
+            return h;
+        }
+        public static void SerializeObject(Item d)
+        {
+            Serialize.WriteToXMLFile<TestMachine>(Path.Combine(Serialize.InvPath, d.Name + ".xml"), (TestMachine)d);
+            // Serialize.WriteToJsonFile(Path.Combine(InvPath, d.Name + ".json"), (BagofHolding)d);
+        }
+        public static void SerializeObjectFromWorld(CoreObject d)
+        {
+            Serialize.WriteToXMLFile(Path.Combine(Serialize.objectsInWorldPath, d.thisLocation.name, d.Name + ".xml"), (TestMachine)d);
         }
 
     }

@@ -340,7 +340,7 @@ namespace Revitalize.Objects.Machines
                         this.thisLocation = null;
                         return true;
                     }
-                    this.showUI();
+                   // this.showUI();
                     return false;
                 }
 

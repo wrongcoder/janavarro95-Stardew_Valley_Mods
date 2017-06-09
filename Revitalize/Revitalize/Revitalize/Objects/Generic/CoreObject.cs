@@ -18,7 +18,7 @@ namespace Revitalize
     ///  Revitalize CoreObject Class. This is a core class and should only be extended upon.
     /// </summary>
     /// 
-    [XmlInclude(typeof(Revitalize.Objects.Light)),XmlInclude(typeof(Revitalize.Objects.SpriteFontObject))]
+    [XmlInclude(typeof(Revitalize.Objects.Light)),XmlInclude(typeof(Revitalize.Objects.SpriteFontObject)), XmlInclude(typeof(Revitalize.Objects.Machines.Machine)), XmlInclude(typeof(Revitalize.Objects.Machines.TestMachine))]
     public class CoreObject : StardewValley.Object
     {
         public const int chair = 0;
@@ -100,6 +100,8 @@ namespace Revitalize
         public string locationsName;
 
         public Color drawColor;
+
+        public bool useXML;
 
         public override string Name
         {
@@ -1454,7 +1456,7 @@ public override bool isPlaceable()
 
         public virtual void spillInventoryEverywhere()
         {
-            Game1.activeClickableMenu = new StorageContainer(this.inventory, this.inventoryMaxSize, 3);
+            Game1.activeClickableMenu = new StorageContainer(this.inventory, 3, 3);
             this.itemReadyForHarvest = false;
             /*
             Log.AsyncC("DROPPING INVENTORY!");
