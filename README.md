@@ -1,3 +1,5 @@
+TODO: Rewrite this readme because I goofed up and put the wrong one here...
+
 The beginnings of Stardew Valley Revitalize.
 
 +:add
