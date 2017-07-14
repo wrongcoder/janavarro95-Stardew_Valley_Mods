@@ -1,16 +1,16 @@
 call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\AutoSpeed\AutoSpeed-Source\AutoSpeed.sln"
 call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\AutoSpeed\AutoSpeed.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\AutoSpeed"
 
-call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\Billboard_Anywhere-Source\Billboard_Anywhere.sln"
-call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\BillboardAnywhere.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\Billboard_Anywhere"
+call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\BillboardAnywhere\BillboardAnywhere.sln"
+call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Billboard_Anywhere\BillboardAnywhere.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\BillboardAnywhere"
 
-call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildEndurance\SMAPI_BuildEndurance-Source\SMAPI_BuildEndurance.sln"
-call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildEndurance\BuildEndurance.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\SMAPI_BuildEndurance"
+call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildEndurance\BuildEndurance\BuildEndurance.sln"
+call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildEndurance\BuildEndurance.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\BuildEndurance"
 
-call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildHealth\BuildHealth-Source\SMAPI_BuildHealth.sln"
-call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildHealth\BuildHealth.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\SMAPI_BuildHealth"
+call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildHealth\BuildHealth\BuildHealth.sln"
+call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuildHealth\BuildHealth.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\BuildHealth"
 
-call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables-Source\BuyBackCollectables.sln"
+call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables-Source\BuyBackCollectables\BuyBackCollectables.sln"
 call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\BuyBackCollectables\BuyBackCollectables.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\BuyBackCollectables"
 
 call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\CurrentLocationPopUp\CurrentLocationPopUp.sln"
@@ -19,8 +19,8 @@ call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual St
 call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\DailyQuest_Anywhere\DailyQuest Anywhere.sln"
 call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\DailyQuest_Anywhere\DailyQuest_Anywhere.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\DailyQuest_Anywhere"
 
-call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall_28_Snow_Day\Fall28 Snow Day.sln"
-call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall_28_Snow_Day\Fall28SnowDay.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\Fall28 Snow Day"
+call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall28SnowDay\Fall28SnowDay\Fall28SnowDay.sln"
+call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\Fall28SnowDay\Fall28SnowDay.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\Fall28SnowDay"
 
 call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\HappyBirthday\HappyBirthday\HappyBirthday.sln"
 call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\HappyBirthday\HappyBirthday.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\HappyBirthday"
@@ -55,5 +55,8 @@ call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual St
 call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\TimeFreeze\TimeFreeze\TimeFreeze.sln"
 call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\GeneralMods\TimeFreeze\TimeFreeze.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\TimeFreeze"
 
-cd "C:\Users\owner\Desktop\games\Stardew_stuff\XNB"
-call "UpdateAndRunStardew.bat"
+call %windir%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\OmegasisCore\OmegasisCore.sln"
+call "C:\Program Files (x86)\7-Zip\7z.exe" a "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\OmegasisCore\OmegasisCore.zip" "C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\OmegasisCore"
+
+
+call "C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Revitalize\RevitalizeUpdater\RevitalizeUpdater\RevitalizeUpdater\bin\Debug\RevitalizeUpdater.exe"

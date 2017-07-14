@@ -2,13 +2,13 @@
   "Name": "Museum Rearranger",
   "Authour": "Omegasis",
   "Version": {
-    "MajorVersion": 1,
-    "MinorVersion": 3,
-    "PatchVersion": 0,
+    "MajorVersion": "2",
+    "MinorVersion": "2",
+    "PatchVersion": "2",
     "Build": ""
   },
   "Description": "Allows the user to rearrange the Museum without the need for something to donate. SMAPI 1.12. Update 5/14/17",
-  "UniqueID": "7ad4f6f7-c3de-4729-a40f-7a11d2b2a358",
+  "UniqueID": "Museum_Rearranger",
   "PerSaveConfigs": false,
   "EntryDll": "Museum_Rearranger.dll"
 }

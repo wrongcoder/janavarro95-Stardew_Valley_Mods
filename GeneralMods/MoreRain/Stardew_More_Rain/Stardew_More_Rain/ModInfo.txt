@@ -1,0 +1,7 @@
+Stardew_More_Rain:
+ModVersion:
+2.2.2.
+SMAPI Compatibilty Version:
+1.12.0
+Date/Time Updated
+7/13/2017 8:20:33 PM

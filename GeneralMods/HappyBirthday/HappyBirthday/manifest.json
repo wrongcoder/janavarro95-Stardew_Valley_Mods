@@ -2,9 +2,9 @@
   "Name": "HappyBirthday",
   "Authour": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": 1,
-    "MinorVersion": 3,
-    "PatchVersion": 0,
+    "MajorVersion": "1",
+    "MinorVersion": "1",
+    "PatchVersion": "1",
     "Build": ""
   },
   "Description": "Adds the farmer's birthday to the game. SMAPI 1.12. Updated 5/14/17",
