@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using StardewModdingAPI;
-using StardewValley;
 using System.IO;
+using System.Linq;
 using System.Timers;
 using Microsoft.Xna.Framework.Audio;
+using StardewModdingAPI;
+using StardewValley;
+
 /*
 TODO:
 0. Add in event handling so that I don;t mute a heart event or wedding music.
@@ -15,7 +16,7 @@ TODO:
 15.add in blank templates for users to make their own wave/sound banks
 
 */
-namespace Stardew_Music_Expansion_API
+namespace Omegasis.StardewSymphony
 {
 
 

@@ -1,13 +1,9 @@
-﻿using StardewModdingAPI;
-using StardewValley;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StardewModdingAPI;
+using StardewValley;
 
-namespace Save_Anywhere_V2.Save_Utilities
+namespace Omegasis.SaveAnywhere
 {
     class Player_Utilities
     {
@@ -46,14 +42,14 @@ namespace Save_Anywhere_V2.Save_Utilities
         {
             get_player_info();
             string name = StardewValley.Game1.player.name;
-            Save_Anywhere_V2.Mod_Core.player_path= Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Data", name);
-            if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.player_path)){
-                Directory.CreateDirectory(Save_Anywhere_V2.Mod_Core.player_path);
+            Mod_Core.player_path= Path.Combine(Mod_Core.mod_path, "Save_Data", name);
+            if (!Directory.Exists(Mod_Core.player_path)){
+                Directory.CreateDirectory(Mod_Core.player_path);
             }
 
 
 
-            string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.player_path, "Player_Save_Info_");
+            string mylocation = Path.Combine(Mod_Core.player_path, "Player_Save_Info_");
             string mylocation2 = mylocation + name;
             string mylocation3 = mylocation2 + ".txt";
             string[] mystring3 = new string[20];
@@ -112,15 +108,15 @@ namespace Save_Anywhere_V2.Save_Utilities
         public static void load_player_info()
         {
             string name = StardewValley.Game1.player.name;
-            Save_Anywhere_V2.Mod_Core.player_path = Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Data", name);
-            if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.player_path))
+            Mod_Core.player_path = Path.Combine(Mod_Core.mod_path, "Save_Data", name);
+            if (!Directory.Exists(Mod_Core.player_path))
             {
-                Directory.CreateDirectory(Save_Anywhere_V2.Mod_Core.player_path);
+                Directory.CreateDirectory(Mod_Core.player_path);
             }
 
 
 
-            string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.player_path, "Player_Save_Info_");
+            string mylocation = Path.Combine(Mod_Core.player_path, "Player_Save_Info_");
             string mylocation2 = mylocation + name;
             string mylocation3 = mylocation2 + ".txt";
             string[] mystring3 = new string[20];
@@ -128,7 +124,7 @@ namespace Save_Anywhere_V2.Save_Utilities
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
                 //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
-                Save_Anywhere_V2.Save_Utilities.Player_Utilities.has_player_warped_yet = true;
+                Player_Utilities.has_player_warped_yet = true;
             }
 
             else

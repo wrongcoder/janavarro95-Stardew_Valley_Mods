@@ -4,18 +4,18 @@
 // MVID: 5E41EDE0-CE7E-41F9-BCB3-07C910BA6113
 // Assembly location: C:\Users\owner\Downloads\steam_cmd\ehh\StardewValley.exe
 
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Save_Anywhere_V2;
-using StardewModdingAPI;
-using StardewValley;
-using StardewValley.BellsAndWhistles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.BellsAndWhistles;
+using StardewValley.Menus;
 
-namespace StardewValley.Menus
+namespace Omegasis.SaveAnywhere
 {
     public class New_Shipping_Menu : IClickableMenu
     {

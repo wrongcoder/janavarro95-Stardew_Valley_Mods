@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using StardewValley;
+using StardewValley.Menus;
 
-namespace StardewValley.Menus
+namespace Omegasis.MuseumRearranger
 {
     public class NewMenuWithInventory : IClickableMenu
     {
@@ -160,7 +162,7 @@ namespace StardewValley.Menus
                 this.trashCan.draw(b);
                 b.Draw(Game1.mouseCursors, new Vector2((float)(this.trashCan.bounds.X + 60), (float)(this.trashCan.bounds.Y + 40)), new Rectangle?(new Rectangle(686, 256, 18, 10)), Color.White, this.trashCanLidRotation, new Vector2(16f, 10f), (float)Game1.pixelZoom, SpriteEffects.None, 0.86f);
             }
-            if (Museum_Rearranger.Class1.showMenu == true)
+            if (Class1.showMenu == true)
             {
                 if (drawUpperPortion)
                 {

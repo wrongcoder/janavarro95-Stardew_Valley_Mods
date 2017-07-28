@@ -1,37 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
-namespace Save_Anywhere_V2.Save_Utilities
+namespace Omegasis.SaveAnywhere
 {
     class Animal_Utilities
     {
 
         public static void save_animal_info()
         {
-            Save_Anywhere_V2.Mod_Core.animal_path = Path.Combine(Save_Anywhere_V2.Mod_Core.player_path, "Animals");
-            if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.animal_path))
+            Mod_Core.animal_path = Path.Combine(Mod_Core.player_path, "Animals");
+            if (!Directory.Exists(Mod_Core.animal_path))
             {
-                Directory.CreateDirectory(Save_Anywhere_V2.Mod_Core.animal_path);
+                Directory.CreateDirectory(Mod_Core.animal_path);
 
             }
-            Save_Anywhere_V2.Save_Utilities.Animals.Horse_Utility.Save_Horse_Info();
-            Save_Anywhere_V2.Save_Utilities.Animals.Pet_Utilities.save_pet_info();
+            Horse_Utility.Save_Horse_Info();
+            Pet_Utilities.save_pet_info();
         }
 
         public static void load_animal_info()
         {
-            Save_Anywhere_V2.Mod_Core.animal_path = Path.Combine(Save_Anywhere_V2.Mod_Core.player_path, "Animals");
-            if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.animal_path))
+            Mod_Core.animal_path = Path.Combine(Mod_Core.player_path, "Animals");
+            if (!Directory.Exists(Mod_Core.animal_path))
             {
-                Directory.CreateDirectory(Save_Anywhere_V2.Mod_Core.animal_path);
+                Directory.CreateDirectory(Mod_Core.animal_path);
 
             }
-            Save_Anywhere_V2.Save_Utilities.Animals.Horse_Utility.Load_Horse_Info();
-            Save_Anywhere_V2.Save_Utilities.Animals.Pet_Utilities.Load_pet_Info();
+            Horse_Utility.Load_Horse_Info();
+            Pet_Utilities.Load_pet_Info();
         }
 
     }

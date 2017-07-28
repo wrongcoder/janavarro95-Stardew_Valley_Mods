@@ -7,7 +7,7 @@
     <ProjectGuid>{07A9EFAA-1759-49C8-8A82-49210047B975}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BillboardAnywhere</RootNamespace>
+    <RootNamespace>Omegasis.BillboardAnywhere</RootNamespace>
     <AssemblyName>BillboardAnywhere</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

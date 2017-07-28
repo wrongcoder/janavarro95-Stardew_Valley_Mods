@@ -1,13 +1,14 @@
 ﻿using System;
-using StardewValley;
-using StardewModdingAPI;
-using System.IO;
-using StardewValley.Menus;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using StardewValley.Objects;
 using Microsoft.Xna.Framework;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Menus;
+using StardewValley.Objects;
 using StardewValley.Tools;
+
 /*
 TO DO:
 Items
@@ -21,7 +22,7 @@ ring -
 lamp-
 craftables-
 */
-namespace Custom_Shop_Mod_Redux
+namespace Omegasis.CustomShopsRedux
 {
     public class Class1 : Mod
     {
@@ -155,7 +156,7 @@ namespace Custom_Shop_Mod_Redux
 
       public  void my_key_call()
         {
-            var modpath = new Custom_Shop_Mod_Redux.Class1();
+            var modpath = new Class1();
             
 
             DirectoryInfo d = new DirectoryInfo(master_path);//Assuming Test is your Folder

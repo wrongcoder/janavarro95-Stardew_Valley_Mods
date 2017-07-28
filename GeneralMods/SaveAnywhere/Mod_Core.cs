@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Menus;
-using StardewModdingAPI.Events;
-using System.Reflection;
-using System.Globalization;
 using System.IO;
-using StardewValley.Characters;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
-using Save_Anywhere_V2.Save_Utilities;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Characters;
 
-namespace Save_Anywhere_V2
+namespace Omegasis.SaveAnywhere
 {
     public class Mod_Core : StardewModdingAPI.Mod
     {
@@ -67,7 +62,7 @@ namespace Save_Anywhere_V2
                 //Log.Info("Day of Month Changed");
                 new_day = true;
                 string name = Game1.player.name;
-                Save_Anywhere_V2.Mod_Core.player_path = Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Data", name);
+                Mod_Core.player_path = Path.Combine(Mod_Core.mod_path, "Save_Data", name);
               
             }
             catch(Exception err)
@@ -680,7 +675,7 @@ namespace Save_Anywhere_V2
         {
             try {
                 if (Game1.activeClickableMenu != null) return;
-                Save_Anywhere_V2.Save_Utilities.GameUtilities.shipping_check();
+                GameUtilities.shipping_check();
             }
             catch(Exception err)
             {
@@ -694,8 +689,8 @@ namespace Save_Anywhere_V2
             try
             {
                 string name = StardewValley.Game1.player.name;
-                Save_Anywhere_V2.Mod_Core.player_path = Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Data", name);
-                if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.player_path))
+                Mod_Core.player_path = Path.Combine(Mod_Core.mod_path, "Save_Data", name);
+                if (!Directory.Exists(Mod_Core.player_path))
                 {
                     //Log.AsyncM(Save_Anywhere_V2.Mod_Core.player_path);
                     //Log.AsyncC("WOOPS");
@@ -704,13 +699,13 @@ namespace Save_Anywhere_V2
 
                // Log.AsyncY(Player_Utilities.has_player_warped_yet);
 
-                if (Save_Anywhere_V2.Save_Utilities.Player_Utilities.has_player_warped_yet == false && Game1.player.isMoving() == true)
+                if (Player_Utilities.has_player_warped_yet == false && Game1.player.isMoving() == true)
                 {
                     //Log.AsyncM("Ok Good"); 
-                    Save_Anywhere_V2.Save_Utilities.Player_Utilities.warp_player();
-                    Save_Anywhere_V2.Save_Utilities.Animal_Utilities.load_animal_info();
-                    Save_Anywhere_V2.Save_Utilities.NPC_Utilities.Load_NPC_Info();
-                    Save_Anywhere_V2.Save_Utilities.Player_Utilities.has_player_warped_yet = true;
+                    Player_Utilities.warp_player();
+                    Animal_Utilities.load_animal_info();
+                    NPC_Utilities.Load_NPC_Info();
+                    Player_Utilities.has_player_warped_yet = true;
 
                 }
             }
@@ -725,9 +720,9 @@ namespace Save_Anywhere_V2
         private void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
             try {
-                Save_Anywhere_V2.Save_Utilities.Player_Utilities.load_player_info();
-                Save_Anywhere_V2.Save_Utilities.Config_Utilities.DataLoader_Settings();
-                Save_Anywhere_V2.Save_Utilities.Config_Utilities.MyWritter_Settings();
+                Player_Utilities.load_player_info();
+                Config_Utilities.DataLoader_Settings();
+                Config_Utilities.MyWritter_Settings();
             }
             catch (Exception err) {
                 Monitor.Log(err.ToString());
@@ -736,11 +731,11 @@ namespace Save_Anywhere_V2
 
         public void KeyPressed_Save_Load_Menu(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-            if (e.KeyPressed.ToString() == Save_Anywhere_V2.Save_Utilities.Config_Utilities.key_binding) //if the key is pressed, load my cusom save function
+            if (e.KeyPressed.ToString() == Config_Utilities.key_binding) //if the key is pressed, load my cusom save function
             {
                 if (Game1.activeClickableMenu != null) return;
                 try {
-                    Save_Anywhere_V2.Save_Utilities.GameUtilities.save_game();
+                    GameUtilities.save_game();
                 }
                 catch(Exception exe)
                 {

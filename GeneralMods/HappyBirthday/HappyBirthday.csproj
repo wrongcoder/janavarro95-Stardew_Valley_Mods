@@ -7,7 +7,7 @@
     <ProjectGuid>{A7A4B67B-3CD7-421F-A4A7-2D656F0AB4D9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HappyBirthday</RootNamespace>
+    <RootNamespace>Omegasis.HappyBirthday</RootNamespace>
     <AssemblyName>HappyBirthday</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

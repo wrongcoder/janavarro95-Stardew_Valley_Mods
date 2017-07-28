@@ -7,7 +7,7 @@
     <ProjectGuid>{C7E7043F-C823-4FDD-9F4E-7CC255751246}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NightOwl</RootNamespace>
+    <RootNamespace>Omegasis.NightOwl</RootNamespace>
     <AssemblyName>NightOwl</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

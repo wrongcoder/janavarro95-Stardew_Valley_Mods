@@ -7,7 +7,7 @@
     <ProjectGuid>{697F7EC8-02C6-4F39-A917-EE45955CFFF9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stardew_Music_Expansion_API</RootNamespace>
+    <RootNamespace>Omegasis.StardewSymphony</RootNamespace>
     <AssemblyName>StardewSymphony</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

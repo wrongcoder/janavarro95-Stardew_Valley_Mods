@@ -7,7 +7,7 @@
     <ProjectGuid>{A19025C4-E194-4CAD-B156-4AC00BDD2AA3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BuyBackCollectables</RootNamespace>
+    <RootNamespace>Omegasis.BuyBackCollectables</RootNamespace>
     <AssemblyName>BuyBackCollectables</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

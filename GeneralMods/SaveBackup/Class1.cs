@@ -1,16 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
-using System.Globalization;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StardewModdingAPI;
-using StardewValley;
 
-
-namespace Stardew_Save_Backup
+namespace Omegasis.SaveBackup
 {
     public class Class1 : Mod
     {

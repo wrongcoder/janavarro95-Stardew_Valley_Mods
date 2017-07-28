@@ -1,9 +1,8 @@
 ﻿using System;
-using StardewModdingAPI;
 using System.IO;
+using StardewModdingAPI;
 
-
-namespace ClassLibrary1
+namespace Omegasis.AutoSpeed
 {
 
     public class AutoSpeed : Mod

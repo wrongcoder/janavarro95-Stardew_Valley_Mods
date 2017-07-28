@@ -7,7 +7,7 @@
     <ProjectGuid>{57E7D17E-C237-448B-A50F-CFB67F9BB146}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoSpeed</RootNamespace>
+    <RootNamespace>Omegasis.AutoSpeed</RootNamespace>
     <AssemblyName>AutoSpeed</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

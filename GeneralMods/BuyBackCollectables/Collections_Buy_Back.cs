@@ -1,10 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
-namespace StardewValley.Menus
+using StardewValley;
+using StardewValley.Menus;
+using Object = StardewValley.Object;
+
+namespace Omegasis.BuyBackCollectables
 {
     public class Collections_Buy_Back : IClickableMenu
     {
@@ -221,7 +225,7 @@ namespace StardewValley.Menus
                 {
                     if (new_item != null)
                     {
-                        if (Game1.player.money > new_item.salePrice() * Buy_Back_Collectables.Class1.cost)
+                        if (Game1.player.money > new_item.salePrice() * Class1.cost)
                         {
                             Game1.player.money -= value;
                             Game1.player.addItemByMenuIfNecessary(new_item);
@@ -239,7 +243,7 @@ namespace StardewValley.Menus
         {
             if (new_item != null)
             {
-                if (Game1.player.money > new_item.salePrice() * Buy_Back_Collectables.Class1.cost)
+                if (Game1.player.money > new_item.salePrice() * Class1.cost)
                 {
                   
                     Game1.player.money -= value;
@@ -268,7 +272,7 @@ namespace StardewValley.Menus
             }
             catch (Exception e)
             {
-                Buy_Back_Collectables.Class1.debugList.Add(e.ToString());
+                Class1.debugList.Add(e.ToString());
             }
             try {
                 foreach (ClickableTextureComponent current2 in this.collections[this.currentTab][this.currentPage])
@@ -384,7 +388,7 @@ namespace StardewValley.Menus
                     text = text + "Number Shipped: " + (Game1.player.basicShipped.ContainsKey(index) ? Game1.player.basicShipped[index] : 0);
                 }
                 this.value = Convert.ToInt32(array2[1]);
-                this.value =(int)(this.value * Buy_Back_Collectables.Class1.cost);
+                this.value =(int)(this.value * Class1.cost);
             }
             return text;
         }

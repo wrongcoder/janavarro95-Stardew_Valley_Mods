@@ -1,15 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Save_Anywhere_V2.Save_Utilities.Animals
+namespace Omegasis.SaveAnywhere
 {
     class Horse_Utility
     {
@@ -35,7 +31,7 @@ namespace Save_Anywhere_V2.Save_Utilities.Animals
 
             string myname = StardewValley.Game1.player.name;
 
-            string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.animal_path, "Horse_Save_Info_");
+            string mylocation = Path.Combine(Mod_Core.animal_path, "Horse_Save_Info_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
             string[] mystring3 = new string[20];
@@ -96,7 +92,7 @@ namespace Save_Anywhere_V2.Save_Utilities.Animals
             //   DataLoader_Settings();
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.animal_path, "Horse_Save_Info_");
+            string mylocation = Path.Combine(Mod_Core.animal_path, "Horse_Save_Info_");
             string mylocation2 = mylocation + myname;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.

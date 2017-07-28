@@ -7,7 +7,7 @@
     <ProjectGuid>{99183BD6-6243-4AE6-B2D8-7CEA915B1278}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BuildHealth</RootNamespace>
+    <RootNamespace>Omegasis.BuildHealth</RootNamespace>
     <AssemblyName>BuildHealth</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

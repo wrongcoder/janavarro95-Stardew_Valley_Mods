@@ -1,8 +1,9 @@
 ﻿using System;
-using StardewValley;
-using StardewModdingAPI;
 using System.IO;
-namespace Museum_Rearranger
+using StardewModdingAPI;
+using StardewValley;
+
+namespace Omegasis.MuseumRearranger
 {
     public class Class1 : Mod
     {
@@ -27,7 +28,7 @@ namespace Museum_Rearranger
             if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
             {
                 if (Game1.activeClickableMenu != null) return;
-                if (StardewValley.Game1.player.currentLocation.name == "ArchaeologyHouse") Game1.activeClickableMenu = new StardewValley.Menus.NewMuseumMenu();
+                if (StardewValley.Game1.player.currentLocation.name == "ArchaeologyHouse") Game1.activeClickableMenu = new NewMuseumMenu();
                 else Monitor.Log("You can't rearrange the museum here!");
            }
             if (e.KeyPressed.ToString() == key_binding2) //if the key is pressed, load my cusom save function

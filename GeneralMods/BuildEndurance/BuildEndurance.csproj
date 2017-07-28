@@ -7,7 +7,7 @@
     <ProjectGuid>{84B4015D-2619-448C-8672-A3FC167F76EA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BuildEndurance</RootNamespace>
+    <RootNamespace>Omegasis.BuildEndurance</RootNamespace>
     <AssemblyName>BuildEndurance</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

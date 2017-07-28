@@ -7,7 +7,7 @@
     <ProjectGuid>{2D41E7D7-B4B7-420F-ACAF-8F687E876008}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NoMorePets</RootNamespace>
+    <RootNamespace>Omegasis.NoMorePets</RootNamespace>
     <AssemblyName>NoMorePets</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

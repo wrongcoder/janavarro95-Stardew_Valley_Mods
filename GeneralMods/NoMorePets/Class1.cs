@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StardewModdingAPI;
 using StardewValley;
-namespace NoMorePets
+
+namespace Omegasis.NoMorePets
 {
     public class Class1 :Mod
     {

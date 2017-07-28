@@ -7,7 +7,7 @@
     <ProjectGuid>{AC4B84F5-31E4-4A55-B13F-A5189C552343}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DailyQuestAnywhere</RootNamespace>
+    <RootNamespace>Omegasis.DailyQuestAnywhere</RootNamespace>
     <AssemblyName>DailyQuestAnywhere</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

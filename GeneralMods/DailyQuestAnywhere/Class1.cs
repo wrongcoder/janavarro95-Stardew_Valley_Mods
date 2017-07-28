@@ -1,13 +1,13 @@
 ﻿using System;
-using StardewValley;
-using StardewModdingAPI;
 using System.IO;
+using StardewModdingAPI;
+using StardewValley;
 
 /*
 TO DO:
 
 */
-namespace DailyQuest_Anywhere
+namespace Omegasis.DailyQuestAnywhere
 {
     public class Class1 : Mod
     {

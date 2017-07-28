@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewModdingAPI;
-using StardewValley;
 using System.IO;
 
-namespace Save_Anywhere_V2.Save_Utilities
+namespace Omegasis.SaveAnywhere
 {
     class Config_Utilities
     {
@@ -17,7 +11,7 @@ namespace Save_Anywhere_V2.Save_Utilities
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Anywhere_Config");
+            string mylocation = Path.Combine(Mod_Core.mod_path, "Save_Anywhere_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -39,7 +33,7 @@ namespace Save_Anywhere_V2.Save_Utilities
             //write all of my info to a text file.
             string myname = StardewValley.Game1.player.name;
 
-            string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.mod_path, "Save_Anywhere_Config");
+            string mylocation = Path.Combine(Mod_Core.mod_path, "Save_Anywhere_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
 

@@ -1,14 +1,10 @@
-﻿using Microsoft.Xna.Framework.Audio;
-using StardewModdingAPI;
-using StardewValley;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using StardewValley;
 
-namespace Stardew_Music_Expansion_API
+namespace Omegasis.StardewSymphony
 {
     class MusicHexProcessor
     {

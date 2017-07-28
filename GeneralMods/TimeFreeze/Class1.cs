@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using StardewModdingAPI;
 using StardewValley;
-using System.IO;
 
-namespace TimeFreeze
+namespace Omegasis.TimeFreeze
 {
     public class Class1 :Mod
     {

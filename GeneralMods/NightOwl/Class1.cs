@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewValley;
-using StardewModdingAPI;
 using System.IO;
 using Newtonsoft.Json;
+using StardewModdingAPI;
+using StardewValley;
+
 /*TODO:
 */
 /*
@@ -22,7 +20,7 @@ Issues:
 
 
 
-namespace Stardew_NightOwl
+namespace Omegasis.NightOwl
 {
     public class Class1 : Mod
     {

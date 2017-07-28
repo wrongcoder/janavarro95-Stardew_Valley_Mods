@@ -1,13 +1,11 @@
-﻿using Microsoft.Xna.Framework.Audio;
-using StardewValley;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Audio;
+using StardewValley;
 
-namespace Stardew_Music_Expansion_API
+namespace Omegasis.StardewSymphony
 {
     //also known as the music_pack
     public class MusicManager

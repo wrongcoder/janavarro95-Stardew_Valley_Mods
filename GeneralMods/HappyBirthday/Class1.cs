@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Omegasis.HappyBirthday.PatchedUtilities;
 using StardewModdingAPI;
 using StardewValley;
-using System.IO;
 
-namespace HappyBirthday
+namespace Omegasis.HappyBirthday
 {
     public class Class1 :Mod
     {
@@ -68,7 +67,7 @@ namespace HappyBirthday
             if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
             {
                 if (Game1.activeClickableMenu != null) return;
-                 Game1.activeClickableMenu = new StardewValley.Menus.Birthday_Menu();
+                 Game1.activeClickableMenu = new Birthday_Menu();
             }
             //DataLoader_Settings(); //update the key if players changed it while playing.
         }
@@ -141,7 +140,7 @@ namespace HappyBirthday
                 once = true;
                 if (player_birthday_season == "" || player_birthday_season == null || player_birthday_date == 0)
                 {
-                    Game1.activeClickableMenu = new StardewValley.Menus.Birthday_Menu();
+                    Game1.activeClickableMenu = new Birthday_Menu();
                     once = false;
                 }
               }
@@ -343,7 +342,7 @@ namespace HappyBirthday
                                 if (Convert.ToInt32(array2[i]) > 0) this.possible_birthday_gifts.Add((Item)new StardewValley.Object(Convert.ToInt32(array2[i]), Convert.ToInt32(array2[i + 1]), false, -1, 0));
                                 else
                                 {
-                                    List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
+                                    List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
                                     foreach (var obj in some_object_list)
                                     {
                                         StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array2[i + 1]), false, -1, 0);
@@ -375,7 +374,7 @@ namespace HappyBirthday
                                 if (Convert.ToInt32(array3[i]) > 0) this.possible_birthday_gifts.Add((Item)new StardewValley.Object(Convert.ToInt32(array3[i]), Convert.ToInt32(array3[i + 1]), false, -1, 0));
                                 else
                                 {
-                                    List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array3[i]));
+                                    List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array3[i]));
                                     foreach (var obj in some_object_list)
                                     {
                                         StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array3[i + 1]), false, -1, 0);
@@ -406,7 +405,7 @@ namespace HappyBirthday
                                 if (Convert.ToInt32(array4[i]) > 0) this.possible_birthday_gifts.Add((Item)new StardewValley.Object(Convert.ToInt32(array4[i]), Convert.ToInt32(array4[i + 1]), false, -1, 0));
                                 else
                                 {
-                                    List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array4[i]));
+                                    List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array4[i]));
                                     foreach (var obj in some_object_list)
                                     {
                                         StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array4[i + 1]), false, -1, 0);
@@ -488,7 +487,7 @@ namespace HappyBirthday
                         int parentSheetIndex = Convert.ToInt32(array[i]);
                         if (parentSheetIndex < 0)
                         {
-                            List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
+                            List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
                             foreach (var obj in some_object_list)
                             {
                                 this.possible_birthday_gifts.Add((Item)obj);
@@ -522,7 +521,7 @@ namespace HappyBirthday
                     int parentSheetIndex = Convert.ToInt32(array[i]);
                     if (parentSheetIndex < 0)
                     {
-                        List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
+                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
                         foreach (var obj in some_object_list)
                         {
                             StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0);
@@ -562,7 +561,7 @@ namespace HappyBirthday
                         int parentSheetIndex = Convert.ToInt32(array[i]);
                         if (parentSheetIndex < 0)
                         {
-                            List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
+                            List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
                             foreach (var obj in some_object_list)
                             {
                                 this.possible_birthday_gifts.Add((Item)obj);
@@ -596,7 +595,7 @@ namespace HappyBirthday
                     int parentSheetIndex = Convert.ToInt32(array[i]);
                     if (parentSheetIndex < 0)
                     {
-                        List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
+                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
                         foreach (var obj in some_object_list)
                         {
                             StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0);
@@ -636,7 +635,7 @@ namespace HappyBirthday
                         int parentSheetIndex = Convert.ToInt32(array[i]);
                         if (parentSheetIndex < 0)
                         {
-                            List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
+                            List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
                             foreach (var obj in some_object_list)
                             {
                                 this.possible_birthday_gifts.Add((Item)obj);
@@ -670,7 +669,7 @@ namespace HappyBirthday
                     int parentSheetIndex = Convert.ToInt32(array[i]);
                     if (parentSheetIndex < 0)
                     {
-                        List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
+                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
                         foreach (var obj in some_object_list)
                         {
                             StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0);
@@ -714,7 +713,7 @@ namespace HappyBirthday
                     int parentSheetIndex = Convert.ToInt32(array2[i]);
                     if (parentSheetIndex < 0)
                     {
-                        List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
+                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
                         foreach (var obj in some_object_list)
                         {
                             this.possible_birthday_gifts.Add((Item)obj);
@@ -755,7 +754,7 @@ namespace HappyBirthday
                     int parentSheetIndex = Convert.ToInt32(array2[i]);
                     if (parentSheetIndex < 0)
                     {
-                        List<StardewValley.Object> some_object_list = StardewValley.PatchedUtilities.ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
+                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
                         foreach (var obj in some_object_list)
                         {
                             this.possible_birthday_gifts.Add((Item)obj);

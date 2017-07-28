@@ -1,13 +1,10 @@
-﻿using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Menus;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StardewModdingAPI;
+using StardewValley;
 
-namespace Save_Anywhere_V2.Save_Utilities
+namespace Omegasis.SaveAnywhere
 {
     public class GameUtilities
     {
@@ -47,9 +44,9 @@ namespace Save_Anywhere_V2.Save_Utilities
 
            // Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu(); //This command is what allows the player to save anywhere as it calls the saving function.
 
-            Save_Anywhere_V2.Save_Utilities.Player_Utilities.save_player_info();
-            Save_Anywhere_V2.Save_Utilities.Animal_Utilities.save_animal_info();
-            Save_Anywhere_V2.Save_Utilities.NPC_Utilities.Save_NPC_Info();
+            Player_Utilities.save_player_info();
+            Animal_Utilities.save_animal_info();
+            NPC_Utilities.Save_NPC_Info();
 
             //grab the player's info
             //  player_map_name = StardewValley.Game1.player.currentLocation.name;
@@ -77,7 +74,7 @@ namespace Save_Anywhere_V2.Save_Utilities
             if (Game1.activeClickableMenu != null) return;
             if (should_ship == true)
             {
-                Game1.activeClickableMenu = new StardewValley.Menus.New_Shipping_Menu(Game1.getFarm().shippingBin);
+                Game1.activeClickableMenu = new New_Shipping_Menu(Game1.getFarm().shippingBin);
                 should_ship = false;
                 Game1.getFarm().shippingBin.Clear();
                 Game1.getFarm().lastItemShipped = null;

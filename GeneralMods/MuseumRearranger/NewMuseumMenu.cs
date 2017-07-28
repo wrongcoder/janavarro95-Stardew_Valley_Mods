@@ -1,12 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
-using System;
+using StardewValley.Menus;
 using xTile.Dimensions;
 
-namespace StardewValley.Menus
+namespace Omegasis.MuseumRearranger
 {
     public class NewMuseumMenu : NewMenuWithInventory
     {

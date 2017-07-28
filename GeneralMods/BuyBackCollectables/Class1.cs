@@ -1,11 +1,11 @@
 ﻿using System;
-using StardewValley;
-using StardewModdingAPI;
-using System.IO;
-using StardewValley.Menus;
 using System.Collections.Generic;
+using System.IO;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Menus;
 
-namespace Buy_Back_Collectables
+namespace Omegasis.BuyBackCollectables
 {
     public class Class1 : Mod
     {
@@ -46,7 +46,7 @@ namespace Buy_Back_Collectables
                 if (Game1.activeClickableMenu != null) return;
                 else
                 {
-                    Game1.activeClickableMenu = new StardewValley.Menus.UpdatedCollectionsPage(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2);
+                    Game1.activeClickableMenu = new UpdatedCollectionsPage(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2);
                 }
             }
         }

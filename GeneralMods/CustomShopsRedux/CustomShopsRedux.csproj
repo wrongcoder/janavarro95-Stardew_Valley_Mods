@@ -7,7 +7,7 @@
     <ProjectGuid>{29F7DE68-4C76-471E-86FB-873794802ADC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CustomShopsRedux</RootNamespace>
+    <RootNamespace>Omegasis.CustomShopsRedux</RootNamespace>
     <AssemblyName>CustomShopsRedux</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

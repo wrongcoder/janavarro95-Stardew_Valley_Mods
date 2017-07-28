@@ -7,7 +7,7 @@
     <ProjectGuid>{12984468-2B79-4B3B-B045-EE917301DEE0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SaveBackup</RootNamespace>
+    <RootNamespace>Omegasis.SaveBackup</RootNamespace>
     <AssemblyName>SaveBackup</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

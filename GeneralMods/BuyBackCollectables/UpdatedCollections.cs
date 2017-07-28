@@ -1,10 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
+using StardewValley.Menus;
+using Object = StardewValley.Object;
 
-namespace StardewValley.Menus
+namespace Omegasis.BuyBackCollectables
 {
     public class UpdatedCollectionsPage : IClickableMenu
     {
@@ -368,7 +371,7 @@ namespace StardewValley.Menus
                     });
                 }
                 this.value = Convert.ToInt32(array2[1]);
-                this.value = (int)(this.value * Buy_Back_Collectables.Class1.cost);
+                this.value = (int)(this.value * Class1.cost);
                 newItemValue = this.value;
             }
             return text;

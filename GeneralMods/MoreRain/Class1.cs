@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewModdingAPI;
 using System.IO;
+using StardewModdingAPI;
 using StardewValley;
 
-
-namespace MoreRain
+namespace Omegasis.MoreRain
 {
 
     public class MoreRain : Mod

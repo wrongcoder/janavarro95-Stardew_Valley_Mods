@@ -1,8 +1,9 @@
 ﻿using System;
-using StardewValley;
-using StardewModdingAPI;
 using System.IO;
-namespace Billboard_Anywhere
+using StardewModdingAPI;
+using StardewValley;
+
+namespace Omegasis.BillboardAnywhere
 {
     public class Class1 : Mod
     {

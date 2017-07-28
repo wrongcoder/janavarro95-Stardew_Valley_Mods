@@ -3,10 +3,8 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using StardewModdingAPI;
-using StardewValley;
-using Microsoft.Xna.Framework;
 
-namespace BuildEndurance
+namespace Omegasis.BuildEndurance
 {
 
     public class BuildEndurance : Mod

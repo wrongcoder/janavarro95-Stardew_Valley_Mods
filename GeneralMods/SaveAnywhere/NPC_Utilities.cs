@@ -1,16 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Buildings;
-using StardewValley.Locations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using StardewModdingAPI;
+using StardewValley;
 
-namespace Save_Anywhere_V2.Save_Utilities
+namespace Omegasis.SaveAnywhere
 {
     class NPC_Utilities
     {
@@ -23,10 +19,10 @@ namespace Save_Anywhere_V2.Save_Utilities
 
         public static void Save_NPC_Info()
         {
-            Save_Anywhere_V2.Mod_Core.npc_path = Path.Combine(Save_Anywhere_V2.Mod_Core.player_path, "NPC_Save_Info");
-            if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.npc_path))
+            Mod_Core.npc_path = Path.Combine(Mod_Core.player_path, "NPC_Save_Info");
+            if (!Directory.Exists(Mod_Core.npc_path))
             {
-                Directory.CreateDirectory(Save_Anywhere_V2.Mod_Core.npc_path);
+                Directory.CreateDirectory(Mod_Core.npc_path);
             }
             foreach (var location in Game1.locations)
             {
@@ -38,7 +34,7 @@ namespace Save_Anywhere_V2.Save_Utilities
                     npc_current_map_name = location.name;
                     npc_tile_x = npc.getTileX();
                     npc_tile_y = npc.getTileY();
-                    string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.npc_path, npc.name);
+                    string mylocation = Path.Combine(Mod_Core.npc_path, npc.name);
                     string mylocation2 = mylocation;
                     string mylocation3 = mylocation2 + ".txt";
                     string[] mystring3 = new string[20];
@@ -109,12 +105,12 @@ namespace Save_Anywhere_V2.Save_Utilities
                     if (npc is StardewValley.Monsters.Bat || npc is StardewValley.Monsters.BigSlime || npc is StardewValley.Monsters.Bug || npc is StardewValley.Monsters.Cat || npc is StardewValley.Monsters.Crow || npc is StardewValley.Monsters.Duggy || npc is StardewValley.Monsters.DustSpirit || npc is StardewValley.Monsters.Fireball || npc is StardewValley.Monsters.Fly || npc is StardewValley.Monsters.Ghost || npc is StardewValley.Monsters.GoblinPeasant || npc is StardewValley.Monsters.GoblinWizard || npc is StardewValley.Monsters.GreenSlime || npc is StardewValley.Monsters.Grub || npc is StardewValley.Monsters.LavaCrab || npc is StardewValley.Monsters.MetalHead || npc is StardewValley.Monsters.Monster || npc is StardewValley.Monsters.Mummy || npc is StardewValley.Monsters.RockCrab || npc is StardewValley.Monsters.RockGolem || npc is StardewValley.Monsters.Serpent || npc is StardewValley.Monsters.ShadowBrute || npc is StardewValley.Monsters.ShadowGirl || npc is StardewValley.Monsters.ShadowGuy || npc is StardewValley.Monsters.ShadowShaman || npc is StardewValley.Monsters.Skeleton || npc is StardewValley.Monsters.SkeletonMage || npc is StardewValley.Monsters.SkeletonWarrior || npc is StardewValley.Monsters.Spiker || npc is StardewValley.Monsters.SquidKid) continue;
 
 
-                Save_Anywhere_V2.Mod_Core.npc_path = Path.Combine(Save_Anywhere_V2.Mod_Core.player_path, "NPC_Save_Info");
-                if (!Directory.Exists(Save_Anywhere_V2.Mod_Core.npc_path))
+                Mod_Core.npc_path = Path.Combine(Mod_Core.player_path, "NPC_Save_Info");
+                if (!Directory.Exists(Mod_Core.npc_path))
                 {
-                    Directory.CreateDirectory(Save_Anywhere_V2.Mod_Core.npc_path);
+                    Directory.CreateDirectory(Mod_Core.npc_path);
                 }
-                string mylocation = Path.Combine(Save_Anywhere_V2.Mod_Core.npc_path, npc.name);
+                string mylocation = Path.Combine(Mod_Core.npc_path, npc.name);
                     string mylocation2 = mylocation;
                     string mylocation3 = mylocation2 + ".txt";
                     string[] mystring3 = new string[20];
@@ -151,7 +147,7 @@ namespace Save_Anywhere_V2.Save_Utilities
 
                 }
                 }
-            Save_Anywhere_V2.Mod_Core.npc_warp = true;
+            Mod_Core.npc_warp = true;
             }
         private static Stack<Point> addToStackForSchedule(Stack<Point> original, Stack<Point> toAdd)
         {
