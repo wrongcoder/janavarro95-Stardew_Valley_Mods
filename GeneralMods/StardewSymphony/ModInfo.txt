@@ -1,7 +1,0 @@
-StardewSymphony:
-ModVersion:
-1.1.1.1
-SMAPI Compatibilty Version:
-1.1.1
-Date/Time Updated
-7/13/2017 4:24:57 PM

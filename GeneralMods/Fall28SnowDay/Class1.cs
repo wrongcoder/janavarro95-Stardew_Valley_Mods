@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewModdingAPI;
+﻿using StardewModdingAPI;
 using StardewValley;
 
-namespace Fall28_Snow_Day
+namespace Omegasis.Fall28SnowDay
 {
     public class Class1:Mod
     {
