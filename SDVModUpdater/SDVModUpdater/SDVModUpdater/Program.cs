@@ -17,23 +17,23 @@ namespace SDVModUpdater
         static void Main(string[] args)
         {
             SupportedMods = new List<string>();
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/AutoSpeed/AutoSpeed-Source/AutoSpeed");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/Billboard_Anywhere/BillboardAnywhere/BillboardAnywhere");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/BuildEndurance/BuildEndurance/BuildEndurance");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/BuildHealth/BuildHealth/BuildHealth");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/BuyBackCollectables/BuyBackCollectables-Source/BuyBackCollectables");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/CurrentLocationPopUp/CurrentLocationPopUp");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/DailyQuest_Anywhere/DailyQuest Anywhere");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/Fall28SnowDay/Fall28SnowDay/Fall28SnowDay");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/HappyBirthday/HappyBirthday");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/MoreRain/Stardew_More_Rain/Stardew_More_Rain");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/Museum_Rearrange/Museum_Rearranger/Museum_Rearranger");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/NightOwl/Stardew_NightOwl/Stardew_NightOwl");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/NoMorePets/NoMorePets/NoMorePets");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/Save_Anywhere_V2/Save_Anywhere_V2");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/Stardew_Save_Backup/Stardew_Save_Backup/Stardew_Save_Backup");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/StardewSymphony/StardewSymphony/StardewSymphony");
-            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/TimeFreeze/TimeFreeze/TimeFreeze");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/AutoSpeed");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/BillboardAnywhere");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/BuildEndurance");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/BuildHealth");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/BuyBackCollectables");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/CurrentLocationPopUp");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/DailyQuestAnywhere");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/Fall28SnowDay");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/HappyBirthday");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/MoreRain");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/MuseumRearranger");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/NightOwl");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/NoMorePets");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/SaveAnywhere");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/SaveBackup");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/StardewSymphony");
+            SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/GeneralMods/TimeFreeze");
 
             SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/OmegasisCore/OmegasisCore");
             SupportedMods.Add("C:/Users/owner/Documents/Visual Studio 2015/Projects/github/StardewValleyMods/Revitalize/Revitalize/Revitalize");

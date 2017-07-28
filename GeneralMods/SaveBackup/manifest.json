@@ -1,0 +1,14 @@
+{
+  "Name": "Stardew_Save_Backup",
+  "Authour": "Alpha_Omegasis",
+  "Version": {
+    "MajorVersion": 1,
+    "MinorVersion": 2,
+    "PatchVersion": 0,
+    "Build": ""
+  },
+  "Description": "Backs up Saves folder upon loading SMAPI. SMAPI 1.12. Updated 5/14/17",
+  "UniqueID": "4be88c18-b6f3-49b0-ba96-f94b1a5be890",
+  "PerSaveConfigs": false,
+  "EntryDll": "SaveBackup.dll"
+}
