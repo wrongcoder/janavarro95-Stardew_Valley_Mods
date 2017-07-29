@@ -2,42 +2,17 @@
 
 namespace Omegasis.HappyBirthday.OmegasisUtility
 {
-    class Messages
+    /// <summary>Provides utility methods for displaying messages to the user.</summary>
+    internal class Messages
     {
-
-        public static void showStarMessage(string message)
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Show a message to the user with a star icon.</summary>
+        /// <param name="message">The message to display.</param>
+        public static void ShowStarMessage(string message)
         {
             Game1.addHUDMessage(new HUDMessage(message, 1));
-            if (!message.Contains("Inventory"))
-            {
-                Game1.playSound("cancel");
-                return;
-            }
-            if (!Game1.player.mailReceived.Contains("BackpackTip"))
-            {
-                Game1.player.mailReceived.Add("BackpackTip");
-                Game1.addMailForTomorrow("pierreBackpack", false, false);
-            }
-        }
-        public static void showMessage2(string message)
-        {
-            Game1.addHUDMessage(new HUDMessage(message, 2));
-            if (!message.Contains("Inventory"))
-            {
-                Game1.playSound("cancel");
-                return;
-            }
-            if (!Game1.player.mailReceived.Contains("BackpackTip"))
-            {
-                Game1.player.mailReceived.Add("BackpackTip");
-                Game1.addMailForTomorrow("pierreBackpack", false, false);
-            }
-        }
-
-
-        public static void showRedMessage(string message)
-        {
-            Game1.addHUDMessage(new HUDMessage(message, 3));
             if (!message.Contains("Inventory"))
             {
                 Game1.playSound("cancel");

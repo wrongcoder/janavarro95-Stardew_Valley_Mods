@@ -1,41 +1,46 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using StardewValley;
 using Object = StardewValley.Object;
 
 namespace Omegasis.HappyBirthday.PatchedUtilities
 {
-    class ObjectUtility
+    /// <summary>Provides utility methods for managing in-game objects.</summary>
+    internal class ObjectUtility
     {
-       public static List<Object> object_list = new List<Object>();
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The cached object data.</summary>
+        private static readonly Object[] ObjectList = ObjectUtility.GetAllObjects().ToArray();
 
-        public static void getAllObjects()
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Get objects with the given category.</summary>
+        /// <param name="category">The category for which to find objects.</param>
+        public static IEnumerable<Object> GetObjectsInCategory(int category)
         {
-            if (object_list.Count > 0) return;
-            Dictionary<int, string> my_dic = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
-            foreach (var key in my_dic.Keys)
+            if (category > 0)
+                yield break;
+
+            foreach (Object obj in ObjectUtility.ObjectList)
             {
-                object_list.Add(new Object(key, 1, false, -1, 0));
-
+                if (obj.category == category)
+                    yield return obj;
             }
-
-        }
-
-        public static List<Object> getAllObjectsAssociatedWithCategory(int category_number)
-        {
-            getAllObjects();
-            List<Object> my_obj_list = new List<Object>();
-            if (category_number > 0) return my_obj_list; ;
-            foreach (var obj in object_list)
-            {
-                if (obj.category == category_number)
-                {
-                    my_obj_list.Add(obj);
-                }
-            }
-
-                return my_obj_list;
         }
 
 
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get all objects defined by the game.</summary>
+        private static IEnumerable<Object> GetAllObjects()
+        {
+            foreach (int key in Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation").Keys)
+                yield return new Object(key, 1);
+        }
     }
 }

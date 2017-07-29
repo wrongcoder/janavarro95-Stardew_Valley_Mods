@@ -2,454 +2,389 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Omegasis.HappyBirthday.OmegasisUtility;
 using Omegasis.HappyBirthday.PatchedUtilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Characters;
+using StardewValley.Monsters;
+using SObject = StardewValley.Object;
 
 namespace Omegasis.HappyBirthday
 {
-    public class Class1 :Mod
+    /// <summary>The mod entry point.</summary>
+    public class HappyBirthday : Mod
     {
-        public List<string> npc_name_list;
-        bool game_loaded;
-        public string key_binding= "O";
-        public List<Item> possible_birthday_gifts;
-        public Item birthday_gift_to_receive;
-        bool once;
-        bool has_input_birthday;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The key which shows the menu.</summary>
+        private string KeyBinding = "O";
 
-        public static IMonitor thisMonitor;
+        /// <summary>Whether the player loaded a save.</summary>
+        private bool IsGameLoaded;
 
-        Dictionary<string, Dialogue> popedDialogue;
+        /// <summary>Whether the player has chosen a birthday.</summary>
+        private bool HasChosenBirthday;
 
-        bool seenEvent;
+        /// <summary>The queue of villagers who haven't given a gift yet.</summary>
+        private List<string> VillagerQueue;
 
-        public string folder_name ="Player_Birthdays";
-        public string birthdays_path;
+        /// <summary>The gifts that villagers can give.</summary>
+        private List<Item> PossibleBirthdayGifts;
 
-        public static int player_birthday_date;
-        public static string player_birthday_season;
+        /// <summary>The next birthday gift the player will receive.</summary>
+        private Item BirthdayGiftToReceive;
+
+        /// <summary>Whether we've already checked for and (if applicable) set up the player's birthday today.</summary>
+        private bool CheckedForBirthday;
+        //private Dictionary<string, Dialogue> Dialogue;
+        //private bool SeenEvent;
+
+        /// <summary>The name of the folder containing birthday data files.</summary>
+        private readonly string FolderName = "Player_Birthdays";
+
+        /// <summary>The full path to the folder containing birthday data files.</summary>
+        private string BirthdayFolderPath;
+
+        /// <summary>The player's current birthday day.</summary>
+        public int BirthdayDay;
+
+        /// <summary>The player's current birthday season.</summary>
+        public string BirthdaySeason;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Day_Update;
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
+            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
 
-            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
-            npc_name_list = new List<string>();
-            possible_birthday_gifts = new List<Item>();
-            birthdays_path = Path.Combine(Helper.DirectoryPath, folder_name);
-            if (!Directory.Exists(birthdays_path))
-            {
-                Directory.CreateDirectory(birthdays_path);
-            }
-            thisMonitor = Monitor;
+            this.VillagerQueue = new List<string>();
+            this.PossibleBirthdayGifts = new List<Item>();
+            this.BirthdayFolderPath = Path.Combine(Helper.DirectoryPath, this.FolderName);
+
+            if (!Directory.Exists(this.BirthdayFolderPath))
+                Directory.CreateDirectory(this.BirthdayFolderPath);
         }
 
-        public void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
         {
-            if (isplayersbirthday() == true)
-            {
-            }
-            if (Game1.player == null) return;
-            if (has_input_birthday == true) MyWritter_Birthday();
-            MyWritter_Settings();
-            once = false;
+            if (Game1.player == null)
+                return;
+
+            if (this.HasChosenBirthday)
+                this.WriteBirthday();
+            this.WriteConfig();
+            this.CheckedForBirthday = false;
         }
 
-        public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.player == null) return;
-            if (Game1.player.currentLocation == null) return;
-            if (game_loaded == false) return;
-            if (has_input_birthday == true) return;
-            if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
-            {
-                if (Game1.activeClickableMenu != null) return;
-                 Game1.activeClickableMenu = new Birthday_Menu();
-            }
-            //DataLoader_Settings(); //update the key if players changed it while playing.
+            if (Game1.player == null || Game1.player.currentLocation == null || !this.IsGameLoaded || this.HasChosenBirthday || Game1.activeClickableMenu != null)
+                return;
+
+            // show birthday selection menu
+            if (e.KeyPressed.ToString() == this.KeyBinding)
+                Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.SetBirthday);
         }
 
-        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
+        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            game_loaded = true;
-            DataLoader_Birthday();
-            DataLoader_Settings();
-            seenEvent = false;
-            popedDialogue = new Dictionary<string, Dialogue>();
+            this.IsGameLoaded = true;
+            this.LoadBirthday();
+            this.LoadConfig();
+            //this.SeenEvent = false;
+            //this.Dialogue = new Dictionary<string, Dialogue>();
         }
 
-        public void GameEvents_UpdateTick(object sender, EventArgs e)
+        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.eventUp == true) return;
-            if (Game1.isFestival() == true) return;
-            if (Game1.player == null) return;
-            if (game_loaded == false) return;
-            if (Game1.player.isMoving()==true && once == false)
+            if (Game1.eventUp || Game1.isFestival() || Game1.player == null || !this.IsGameLoaded)
+                return;
 
+            if (!this.CheckedForBirthday)
             {
-               //Log.AsyncM("Is it my birthday? "+isplayersbirthday());
-                if (isplayersbirthday() == true)
+                this.CheckedForBirthday = true;
+
+                // set up birthday
+                if (this.IsBirthday())
                 {
-                    OmegasisUtility.Messages.showStarMessage("It's your birthday today! Happy birthday!");
-                    //  Game1.addMailForTomorrow("birthdayMom", false, false);
-                    //  Game1.addMailForTomorrow("birthdayDad", false, false);
-                    //  Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %");
-                    //  Game1.mailbox.Enqueue("\n        Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %");
+                    Messages.ShowStarMessage("It's your birthday today! Happy birthday!");
                     Game1.mailbox.Enqueue("birthdayMom");
                     Game1.mailbox.Enqueue("birthdayDad");
 
                     try
                     {
-                        updateNPCList();
+                        this.ResetVillagerQueue();
                     }
-                    catch(Exception eee)
+                    catch (Exception ex)
                     {
-                        thisMonitor.Log(eee.ToString(), LogLevel.Error);
+                        this.Monitor.Log(ex.ToString(), LogLevel.Error);
                     }
-                    foreach (var location in Game1.locations)
+                    foreach (GameLocation location in Game1.locations)
                     {
-                  //      Log.AsyncC(location.name);
                         foreach (NPC npc in location.characters)
                         {
-                    //        Log.AsyncC(npc.name);
+                            if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
+                                continue;
+
                             try
                             {
-                                if (npc is StardewValley.Characters.Cat || npc is StardewValley.Characters.Child || npc is StardewValley.Characters.Dog || npc is StardewValley.Characters.Horse || npc is StardewValley.Characters.Junimo || npc is StardewValley.Characters.Pet) continue;
-                                if (npc is StardewValley.Monsters.Bat || npc is StardewValley.Monsters.BigSlime || npc is StardewValley.Monsters.Bug || npc is StardewValley.Monsters.Cat || npc is StardewValley.Monsters.Crow || npc is StardewValley.Monsters.Duggy || npc is StardewValley.Monsters.DustSpirit || npc is StardewValley.Monsters.Fireball || npc is StardewValley.Monsters.Fly || npc is StardewValley.Monsters.Ghost || npc is StardewValley.Monsters.GoblinPeasant || npc is StardewValley.Monsters.GoblinWizard || npc is StardewValley.Monsters.GreenSlime || npc is StardewValley.Monsters.Grub || npc is StardewValley.Monsters.LavaCrab || npc is StardewValley.Monsters.MetalHead || npc is StardewValley.Monsters.Monster || npc is StardewValley.Monsters.Mummy || npc is StardewValley.Monsters.RockCrab || npc is StardewValley.Monsters.RockGolem || npc is StardewValley.Monsters.Serpent || npc is StardewValley.Monsters.ShadowBrute || npc is StardewValley.Monsters.ShadowGirl || npc is StardewValley.Monsters.ShadowGuy || npc is StardewValley.Monsters.ShadowShaman || npc is StardewValley.Monsters.Skeleton || npc is StardewValley.Monsters.SkeletonMage || npc is StardewValley.Monsters.SkeletonWarrior || npc is StardewValley.Monsters.Spiker || npc is StardewValley.Monsters.SquidKid) continue;
-                                Dialogue d =new Dialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.name], npc);
+                                Dialogue d = new Dialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.name], npc);
                                 npc.CurrentDialogue.Push(d);
                                 if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.name]);
                             }
-                            // npc.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.name], true, false);
                             catch
                             {
-                                if (npc is StardewValley.Characters.Cat || npc is StardewValley.Characters.Child || npc is StardewValley.Characters.Dog || npc is StardewValley.Characters.Horse || npc is StardewValley.Characters.Junimo || npc is StardewValley.Characters.Pet) continue;
-                                if (npc is StardewValley.Monsters.Bat || npc is StardewValley.Monsters.BigSlime || npc is StardewValley.Monsters.Bug || npc is StardewValley.Monsters.Cat || npc is StardewValley.Monsters.Crow || npc is StardewValley.Monsters.Duggy || npc is StardewValley.Monsters.DustSpirit || npc is StardewValley.Monsters.Fireball || npc is StardewValley.Monsters.Fly || npc is StardewValley.Monsters.Ghost || npc is StardewValley.Monsters.GoblinPeasant || npc is StardewValley.Monsters.GoblinWizard || npc is StardewValley.Monsters.GreenSlime || npc is StardewValley.Monsters.Grub || npc is StardewValley.Monsters.LavaCrab || npc is StardewValley.Monsters.MetalHead || npc is StardewValley.Monsters.Monster || npc is StardewValley.Monsters.Mummy || npc is StardewValley.Monsters.RockCrab || npc is StardewValley.Monsters.RockGolem || npc is StardewValley.Monsters.Serpent || npc is StardewValley.Monsters.ShadowBrute || npc is StardewValley.Monsters.ShadowGirl || npc is StardewValley.Monsters.ShadowGuy || npc is StardewValley.Monsters.ShadowShaman || npc is StardewValley.Monsters.Skeleton || npc is StardewValley.Monsters.SkeletonMage || npc is StardewValley.Monsters.SkeletonWarrior || npc is StardewValley.Monsters.Spiker || npc is StardewValley.Monsters.SquidKid) continue;
-                                // npc.setNewDialogue("Happy birthday @!", true, false);
                                 Dialogue d = new Dialogue("Happy Birthday @!", npc);
                                 npc.CurrentDialogue.Push(d);
-                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue("Happy Birthday @!");
+                                if (npc.CurrentDialogue.ElementAt(0) != d)
+                                    npc.setNewDialogue("Happy Birthday @!");
                             }
                         }
                     }
-                    //end birthday check
                 }
-                once = true;
-                if (player_birthday_season == "" || player_birthday_season == null || player_birthday_date == 0)
+
+                // ask for birthday date
+                if ((string.IsNullOrEmpty(this.BirthdaySeason) || this.BirthdayDay == 0) && Game1.activeClickableMenu == null)
                 {
-                    Game1.activeClickableMenu = new Birthday_Menu();
-                    once = false;
-                }
-              }
-
-            if (Game1.eventUp == true)
-            {
-                foreach(string npcName in npc_name_list)
-                {
-                    NPC npc = Game1.getCharacterFromName(npcName);
-
-                    try {
-                        popedDialogue.Add(npcName, npc.CurrentDialogue.Pop());
-                    }
-                    catch (Exception err)
-                    {
-                        thisMonitor.Log(err.ToString(), LogLevel.Error);
-                        popedDialogue.Add(npcName, npc.CurrentDialogue.ElementAt(0));
-                        npc.loadSeasonalDialogue();
-                    }
-
-                    seenEvent = true;
+                    Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.SetBirthday);
+                    this.CheckedForBirthday = false;
                 }
             }
 
-            if (Game1.eventUp == false && seenEvent == true)
-            {
-                foreach (KeyValuePair<string,Dialogue> v in popedDialogue)
-                {
-                    NPC npc = Game1.getCharacterFromName(v.Key);
-                    npc.CurrentDialogue.Push(v.Value);
-                }
-                popedDialogue.Clear();
-                seenEvent = false;
-            }
+            // unreachable since we exit early if Game1.eventUp
+            //if (Game1.eventUp)
+            //{
+            //    foreach (string npcName in this.VillagerQueue)
+            //    {
+            //        NPC npc = Game1.getCharacterFromName(npcName);
+
+            //        try
+            //        {
+            //            this.Dialogue.Add(npcName, npc.CurrentDialogue.Pop());
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            this.Monitor.Log(ex.ToString(), LogLevel.Error);
+            //            this.Dialogue.Add(npcName, npc.CurrentDialogue.ElementAt(0));
+            //            npc.loadSeasonalDialogue();
+            //        }
+
+            //        this.SeenEvent = true;
+            //    }
+            //}
+
+            //if (!Game1.eventUp && this.SeenEvent)
+            //{
+            //    foreach (KeyValuePair<string, Dialogue> v in this.Dialogue)
+            //    {
+            //        NPC npc = Game1.getCharacterFromName(v.Key);
+            //        npc.CurrentDialogue.Push(v.Value);
+            //    }
+            //    this.Dialogue.Clear();
+            //    this.SeenEvent = false;
+            //}
+
+            // set birthday gift
             if (Game1.currentSpeaker != null)
             {
-                if (isplayersbirthday()==true)
+                string name = Game1.currentSpeaker.name;
+                if (this.IsBirthday() && this.VillagerQueue.Contains(name))
                 {
-
-                   // Log.AsyncC("ITS MY BIRTDHAY");
                     try
                     {
-                        //Game1.currentSpeaker.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[Game1.currentSpeaker.name], true, false);
-                        foreach (var ehh in npc_name_list)
-                        {
-                            if (ehh == Game1.currentSpeaker.name)
-                            {
-                                try
-                                {
-                                    birthday_gift();
-                               //     Log.AsyncG("GOT THE GIFT");
-                                    npc_name_list.Remove(Game1.currentSpeaker.name);
-                                }
-                                catch(Exception r)
-                                {
-                                    thisMonitor.Log(r.ToString(), LogLevel.Error);
-                                }
-                               
-                            }
-                        }
+                        this.SetNextBirthdayGift(Game1.currentSpeaker.name);
+                        this.VillagerQueue.Remove(Game1.currentSpeaker.name);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                       // Game1.currentSpeaker.setNewDialogue("Happy birthday @!", true, false);
-                        foreach (var ehh in npc_name_list)
-                        {
-                            if (ehh == Game1.currentSpeaker.name)
-                            {
-                                birthday_gift();
-                                npc_name_list.Remove(Game1.currentSpeaker.name);
-                            }
-                        }
+                        this.Monitor.Log(ex.ToString(), LogLevel.Error);
                     }
                 }
             }
-
-            if (birthday_gift_to_receive != null && Game1.currentSpeaker==null)
+            if (this.BirthdayGiftToReceive != null && Game1.currentSpeaker != null)
             {
-                while (birthday_gift_to_receive.Name=="Error Item"|| birthday_gift_to_receive.Name=="Rock"|| birthday_gift_to_receive.Name == "???")
-                {
-                    birthday_gift();
-                }
-                Game1.player.addItemByMenuIfNecessaryElseHoldUp(birthday_gift_to_receive);
-                birthday_gift_to_receive = null;
+                while (this.BirthdayGiftToReceive.Name == "Error Item" || this.BirthdayGiftToReceive.Name == "Rock" || this.BirthdayGiftToReceive.Name == "???")
+                    this.SetNextBirthdayGift(Game1.currentSpeaker.name);
+                Game1.player.addItemByMenuIfNecessaryElseHoldUp(this.BirthdayGiftToReceive);
+                this.BirthdayGiftToReceive = null;
             }
 
-            if (player_birthday_season != "" && player_birthday_season != null && player_birthday_date != 0)
+            // update settings
+            if (!this.HasChosenBirthday && !string.IsNullOrEmpty(this.BirthdaySeason) && this.BirthdayDay != 0)
             {
-                if (has_input_birthday == false)
-                {
-                    MyWritter_Settings();
-                    MyWritter_Birthday();
-                    has_input_birthday = true;
-                }
+                this.WriteConfig();
+                this.WriteBirthday();
+                this.HasChosenBirthday = true;
             }
         }
 
-        public void Day_Update(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
+        /// <summary>Set the player's birtday/</summary>
+        /// <param name="season">The birthday season.</param>
+        /// <param name="day">The birthday day.</param>
+        private void SetBirthday(string season, int day)
         {
-            //  Log.AsyncC("is this running?");
-            // foreach (var bleh in npc_name_list) npc_name_list.Remove(bleh);
-
+            this.BirthdaySeason = season;
+            this.BirthdayDay = day;
         }
 
-
-        public void updateNPCList()
-
+        /// <summary>Reset the queue of villager names.</summary>
+        private void ResetVillagerQueue()
         {
-            //Log.AsyncO("Step 1");
-            npc_name_list.Clear();
-           
-            foreach (var location in Game1.locations)
+            this.VillagerQueue.Clear();
+
+            foreach (GameLocation location in Game1.locations)
             {
-             //   Log.AsyncO("Step 2" + location.name);
-                foreach (var npc in location.characters)
+                foreach (NPC npc in location.characters)
                 {
-                //    Log.AsyncO("Step 3  " + npc.name);
-                    if (npc is StardewValley.Characters.Cat || npc is StardewValley.Characters.Child || npc is StardewValley.Characters.Dog || npc is StardewValley.Characters.Horse || npc is StardewValley.Characters.Junimo || npc is StardewValley.Characters.Pet) continue;
-                    if (npc is StardewValley.Monsters.Bat || npc is StardewValley.Monsters.BigSlime || npc is StardewValley.Monsters.Bug || npc is StardewValley.Monsters.Cat || npc is StardewValley.Monsters.Crow || npc is StardewValley.Monsters.Duggy || npc is StardewValley.Monsters.DustSpirit || npc is StardewValley.Monsters.Fireball || npc is StardewValley.Monsters.Fly || npc is StardewValley.Monsters.Ghost || npc is StardewValley.Monsters.GoblinPeasant || npc is StardewValley.Monsters.GoblinWizard || npc is StardewValley.Monsters.GreenSlime || npc is StardewValley.Monsters.Grub || npc is StardewValley.Monsters.LavaCrab || npc is StardewValley.Monsters.MetalHead || npc is StardewValley.Monsters.Monster || npc is StardewValley.Monsters.Mummy || npc is StardewValley.Monsters.RockCrab || npc is StardewValley.Monsters.RockGolem || npc is StardewValley.Monsters.Serpent || npc is StardewValley.Monsters.ShadowBrute || npc is StardewValley.Monsters.ShadowGirl || npc is StardewValley.Monsters.ShadowGuy || npc is StardewValley.Monsters.ShadowShaman || npc is StardewValley.Monsters.Skeleton || npc is StardewValley.Monsters.SkeletonMage || npc is StardewValley.Monsters.SkeletonWarrior || npc is StardewValley.Monsters.Spiker || npc is StardewValley.Monsters.SquidKid) continue;
-                    if (npc_name_list.Contains(npc.name))
-                    {
+                    if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
                         continue;
-                    }
-                    npc_name_list.Add(npc.name);
-              //      Log.AsyncO("Added in " + npc.name);
+                    if (this.VillagerQueue.Contains(npc.name))
+                        continue;
+                    this.VillagerQueue.Add(npc.name);
                 }
-                //Log.AsyncM("NO SERIOUSLY");
             }
         }
 
-        public virtual void birthday_gift()
+        /// <summary>Set the next birthday gift the player will receive.</summary>
+        /// <param name="name">The villager's name who's giving the gift.</param>
+        /// <remarks>This returns gifts based on the speaker's heart level towards the player: neutral for 0-3, good for 4-6, and best for 7-10.</remarks>
+        private void SetNextBirthdayGift(string name)
         {
-           
-            //grab 0~3 hearts  //Neutral
-            //grab 4~6       //Good
-            //grab 7~10       //Best
-            Item farmers_birthday_gift;
-            if (this.possible_birthday_gifts.Count > 0)
+            Item gift;
+            if (this.PossibleBirthdayGifts.Count > 0)
             {
-                Random rnd = new Random();
-                int r = rnd.Next(this.possible_birthday_gifts.Count);
-                farmers_birthday_gift = this.possible_birthday_gifts.ElementAt(r);
-                if (Game1.player.isInventoryFull() == true)
-                {
-                    Game1.createItemDebris(farmers_birthday_gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-                }
-                else {
-                    birthday_gift_to_receive = farmers_birthday_gift;
-                }
+                Random random = new Random();
+                int index = random.Next(this.PossibleBirthdayGifts.Count);
+                gift = this.PossibleBirthdayGifts[index];
+                if (Game1.player.isInventoryFull())
+                    Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
+                else
+                    this.BirthdayGiftToReceive = gift;
                 return;
             }
 
-            this.get_default_birthday_gifts();
+            this.PossibleBirthdayGifts.AddRange(this.GetDefaultBirthdayGifts(name));
 
             Random rnd2 = new Random();
-            int r2 = rnd2.Next(this.possible_birthday_gifts.Count);
-            farmers_birthday_gift = this.possible_birthday_gifts.ElementAt(r2);
-            if (Game1.player.isInventoryFull() == true)
-            {
-                Game1.createItemDebris(farmers_birthday_gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-            }
-            else {
-                birthday_gift_to_receive = farmers_birthday_gift;
-                //Game1.player.addItemByMenuIfNecessaryElseHoldUp(farmers_birthday_gift);
-            }
-            this.possible_birthday_gifts.Clear();
-           // Log.AsyncO("IS THIS EVER WORKING????");
-            return;
+            int r2 = rnd2.Next(this.PossibleBirthdayGifts.Count);
+            gift = this.PossibleBirthdayGifts.ElementAt(r2);
+            if (Game1.player.isInventoryFull())
+                Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
+            else
+                this.BirthdayGiftToReceive = gift;
+
+            this.PossibleBirthdayGifts.Clear();
         }
 
-        public virtual void get_default_birthday_gifts()
+        /// <summary>Get the default gift items.</summary>
+        /// <param name="name">The villager's name.</param>
+        private IEnumerable<SObject> GetDefaultBirthdayGifts(string name)
         {
-            Dictionary<string, string> dictionary = null;
+            List<SObject> gifts = new List<SObject>();
             try
             {
-                dictionary = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-
-
+                // read from birthday gifts file
+                IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
                 string text;
-                dictionary.TryGetValue(Game1.currentSpeaker.name, out text);
+                data.TryGetValue(name, out text);
                 if (text != null)
                 {
-                    string[] array = text.Split(new char[]
-                    {
-                    '/'
-                    });
-                    //love
-                    if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 7)
-                    {
+                    string[] fields = text.Split('/');
 
-                        string[] array2 = array[1].Split(new char[]
-                        {
-                    ' '
-                        });
-                        for (int i = 0; i < array2.Count<string>(); i += 2)
+                    // love
+                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 7)
+                    {
+                        string[] loveFields = fields[1].Split(' ');
+                        for (int i = 0; i < loveFields.Length; i += 2)
                         {
                             try
                             {
-                                if (Convert.ToInt32(array2[i]) > 0) this.possible_birthday_gifts.Add((Item)new StardewValley.Object(Convert.ToInt32(array2[i]), Convert.ToInt32(array2[i + 1]), false, -1, 0));
-                                else
-                                {
-                                    List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
-                                    foreach (var obj in some_object_list)
-                                    {
-                                        StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array2[i + 1]), false, -1, 0);
-                                        this.possible_birthday_gifts.Add((Item)new_obj);
-                                    }
-                                }
-                                // this.itemsRequired.Add(Convert.ToInt32(array2[i]), Convert.ToInt32(array2[i + 1]));
+                                gifts.AddRange(this.GetItems(Convert.ToInt32(loveFields[i]), Convert.ToInt32(loveFields[i + 1])));
                             }
-                            catch
-                            {
-
-                            }
+                            catch { }
                         }
                     }
-                    //Like
-                    if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) <= 6)
-                    {
 
-                        string[] array3 = array[3].Split(new char[]
+                    // like
+                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 6)
                     {
-                    ' '
-                    });
-                        for (int i = 0; i < array3.Count<string>(); i += 2)
+                        string[] likeFields = fields[3].Split(' ');
+                        for (int i = 0; i < likeFields.Length; i += 2)
                         {
                             try
                             {
-
-
-                                if (Convert.ToInt32(array3[i]) > 0) this.possible_birthday_gifts.Add((Item)new StardewValley.Object(Convert.ToInt32(array3[i]), Convert.ToInt32(array3[i + 1]), false, -1, 0));
-                                else
-                                {
-                                    List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array3[i]));
-                                    foreach (var obj in some_object_list)
-                                    {
-                                        StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array3[i + 1]), false, -1, 0);
-                                        this.possible_birthday_gifts.Add((Item)new_obj);
-                                    }
-                                }
-                                // this.itemsRequired.Add(Convert.ToInt32(array2[i]), Convert.ToInt32(array2[i + 1]));
+                                gifts.AddRange(this.GetItems(Convert.ToInt32(likeFields[i]), Convert.ToInt32(likeFields[i + 1])));
                             }
-                            catch
-                            {
-
-                            }
+                            catch { }
                         }
                     }
-                    //Neutral
-                    if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) <= 3)
+
+                    // neutral
+                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 3)
                     {
+                        string[] neutralFields = fields[5].Split(' ');
 
-                        string[] array4 = array[5].Split(new char[]
-                   {
-                    ' '
-                   });
-
-                        for (int i = 0; i < array4.Count<string>(); i += 2)
+                        for (int i = 0; i < neutralFields.Length; i += 2)
                         {
                             try
                             {
-                                if (Convert.ToInt32(array4[i]) > 0) this.possible_birthday_gifts.Add((Item)new StardewValley.Object(Convert.ToInt32(array4[i]), Convert.ToInt32(array4[i + 1]), false, -1, 0));
-                                else
-                                {
-                                    List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array4[i]));
-                                    foreach (var obj in some_object_list)
-                                    {
-                                        StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array4[i + 1]), false, -1, 0);
-                                        this.possible_birthday_gifts.Add((Item)new_obj);
-                                    }
-                                }
-                                // this.itemsRequired.Add(Convert.ToInt32(array2[i]), Convert.ToInt32(array2[i + 1]));
+                                gifts.AddRange(this.GetItems(Convert.ToInt32(neutralFields[i]), Convert.ToInt32(neutralFields[i + 1])));
                             }
-                            catch
-                            {
-
-                            }
+                            catch { }
                         }
                     }
-                } //text !=null
-                //grabs from //Data//PossibleBirthdayGifts
-                if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 7) getAllUniversalLovedItems(true);
-                if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) <= 6) getAllUniversalLikedItems(true);
-                if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) <= 3) getAllUniversalNeutralItems(true);
-                return;
+                }
 
-
+                // get NPC's preferred gifts
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 7)
+                    gifts.AddRange(this.GetUniversalItems("Love", true));
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 6)
+                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Like", true));
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 3)
+                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Neutral", true));
             }
             catch
             {
-                //grabs from NPCGiftTastes               
-                if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 7)
+                // get NPC's preferred gifts
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 7)
                 {
-                    getAllUniversalLovedItems(false);
-                    getAllSpecifiedLovedItems();
+                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Love", false));
+                    this.PossibleBirthdayGifts.AddRange(this.GetLovedItems(name));
                 }
-                if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) <= 6)
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 6)
                 {
-                    getAllSpecifiedLikedItems();
-                    getAllUniversalLikedItems(false);
+                    this.PossibleBirthdayGifts.AddRange(this.GetLikedItems(name));
+                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Like", false));
                 }
-                if (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.name) <= 3)
-                {
-                    getAllUniversalNeutralItems(false);
-                }
-                return;
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 3)
+                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Neutral", false));
             }
-
-
             //TODO: Make different tiers of gifts depending on the friendship, and if it is the spouse.
             /*
                 this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(198, 1));
@@ -466,464 +401,200 @@ namespace Omegasis.HappyBirthday
                 this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(773, 1));
                 */
 
+            return gifts;
         }
-        public virtual void getAllUniversalNeutralItems(bool is_birthday_gift_list)
+
+        /// <summary>Get the items loved by all villagers.</summary>
+        /// <param name="group">The group to get (one of <c>Like</c>, <c>Love</c>, <c>Neutral</c>).</param>
+        /// <param name="isBirthdayGiftList">Whether to get data from <c>Data\PossibleBirthdayGifts.xnb</c> instead of the game data.</param>
+        private IEnumerable<SObject> GetUniversalItems(string group, bool isBirthdayGiftList)
         {
+            if (!isBirthdayGiftList)
+            {
+                // get raw data
+                string text;
+                Game1.NPCGiftTastes.TryGetValue($"Universal_{group}", out text);
+                if (text == null)
+                    yield break;
+
+                // parse
+                string[] neutralIDs = text.Split(' ');
+                foreach (string neutralID in neutralIDs)
+                {
+                    foreach (SObject obj in this.GetItems(Convert.ToInt32(neutralID)))
+                        yield return obj;
+                }
+            }
+            else
+            {
+                // get raw data
+                Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
+                string text;
+                data.TryGetValue($"Universal_{group}_Gift", out text);
+                if (text == null)
+                    yield break;
+
+                // parse
+                string[] array = text.Split(' ');
+                for (int i = 0; i < array.Length; i += 2)
+                {
+                    foreach (SObject obj in this.GetItems(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1])))
+                        yield return obj;
+                }
+            }
+        }
+
+        /// <summary>Get a villager's loved items.</summary>
+        /// <param name="name">The villager's name.</param>
+        private IEnumerable<SObject> GetLikedItems(string name)
+        {
+            // get raw data
             string text;
-            if (is_birthday_gift_list == false)
+            Game1.NPCGiftTastes.TryGetValue(name, out text);
+            if (text == null)
+                yield break;
+
+            // parse
+            string[] data = text.Split('/');
+            string[] likedIDs = data[3].Split(' ');
+            foreach (string likedID in likedIDs)
             {
-                Game1.NPCGiftTastes.TryGetValue("Universal_Neutral", out text);
-                if (text != null)
-                {
-
-                    string[] array = text.Split(new char[]
-                    {
-                    ' '
-                    });
-
-
-                    for (int i = 0; i < array.Count<string>(); i++)
-                    {
-                        int parentSheetIndex = Convert.ToInt32(array[i]);
-                        if (parentSheetIndex < 0)
-                        {
-                            List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
-                            foreach (var obj in some_object_list)
-                            {
-                                this.possible_birthday_gifts.Add((Item)obj);
-                            }
-                            continue;
-                        }
-                        else
-                        {
-                            this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, 1, false, -1, 0));
-                        }
-                        //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                    }
-
-
-                    return;// new SytardewValley.Object(parentSheetIndex, 1, false, -1, 0);
-                }
+                foreach (SObject obj in this.GetItems(Convert.ToInt32(likedID)))
+                    yield return obj;
             }
-            else
-            {
-                Dictionary<string, string> dictionary = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-                string text2;
-                dictionary.TryGetValue("Universal_Neutral_Gift", out text2);
-                string[] array = text2.Split(new char[]
-                                    {
-                    ' '
-                                    });
-
-
-                for (int i = 0; i < array.Count<string>(); i += 2)
-                {
-                    int parentSheetIndex = Convert.ToInt32(array[i]);
-                    if (parentSheetIndex < 0)
-                    {
-                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
-                        foreach (var obj in some_object_list)
-                        {
-                            StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0);
-                            this.possible_birthday_gifts.Add((Item)new_obj);
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0));
-                    }
-                    //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                }
-
-
-                return;// new StardewValley.Object(parentSheetIndex, 1, false, -1, 0);
-            }
-            return;// null;
         }
-        public virtual void getAllUniversalLikedItems(bool is_birthday_gift_list)
+
+        /// <summary>Get a villager's loved items.</summary>
+        /// <param name="name">The villager's name.</param>
+        private IEnumerable<SObject> GetLovedItems(string name)
         {
+            // get raw data
             string text;
-            if (is_birthday_gift_list == false)
+            Game1.NPCGiftTastes.TryGetValue(name, out text);
+            if (text == null)
+                yield break;
+
+            // parse
+            string[] data = text.Split('/');
+            string[] lovedIDs = data[1].Split(' ');
+            foreach (string lovedID in lovedIDs)
             {
-                Game1.NPCGiftTastes.TryGetValue("Universal_Like", out text);
-                if (text != null)
-                {
+                foreach (SObject obj in this.GetItems(Convert.ToInt32(lovedID)))
+                    yield return obj;
+            }
+        }
 
-                    string[] array = text.Split(new char[]
-                    {
-                    ' '
-                    });
+        /// <summary>Get the items matching the given ID.</summary>
+        /// <param name="id">The category or item ID.</param>
+        private IEnumerable<SObject> GetItems(int id)
+        {
+            return id < 0
+                ? ObjectUtility.GetObjectsInCategory(id)
+                : new[] { new SObject(id, 1) };
+        }
 
+        /// <summary>Get the items matching the given ID.</summary>
+        /// <param name="id">The category or item ID.</param>
+        /// <param name="stack">The stack size.</param>
+        private IEnumerable<SObject> GetItems(int id, int stack)
+        {
+            foreach (SObject obj in this.GetItems(id))
+                yield return new SObject(obj.parentSheetIndex, stack);
+        }
 
-                    for (int i = 0; i < array.Count<string>(); i++)
-                    {
-                        int parentSheetIndex = Convert.ToInt32(array[i]);
-                        if (parentSheetIndex < 0)
-                        {
-                            List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
-                            foreach (var obj in some_object_list)
-                            {
-                                this.possible_birthday_gifts.Add((Item)obj);
-                            }
-                            continue;
-                        }
-                        else
-                        {
-                            this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, 1, false, -1, 0));
-                        }
-                        //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                    }
+        /// <summary>Get whether today is the player's birthday.</summary>
+        private bool IsBirthday()
+        {
+            return
+                this.BirthdayDay == Game1.dayOfMonth
+                && this.BirthdaySeason == Game1.currentSeason;
+        }
 
+        /// <summary>Load the configuration settings.</summary>
+        private void LoadConfig()
+        {
+            string path = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config.txt");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+                this.KeyBinding = "O";
+            else
+            {
+                string[] text = File.ReadAllLines(path);
+                this.KeyBinding = Convert.ToString(text[3]);
+            }
+        }
 
-                    return;// new StardewValley.Object(parentSheetIndex, 1, false, -1, 0);
-                }
+        /// <summary>Save the configuration settings.</summary>
+        private void WriteConfig()
+        {
+            string path = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config.txt");
+            string[] text = new string[20];
+            if (!File.Exists(path))
+            {
+                this.Monitor.Log("HappyBirthday: The HappyBirthday Config doesn't exist. Creating it now.");
+
+                text[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
+
+                text[2] = "Key binding for opening the birthday menu. Press this key to do so.";
+                text[3] = this.KeyBinding;
+
+                File.WriteAllLines(path, text);
             }
             else
             {
-                Dictionary<string, string> dictionary = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-                string text2;
-                dictionary.TryGetValue("Universal_Like_Gift", out text2);
-                string[] array = text2.Split(new char[]
-                                    {
-                    ' '
-                                    });
+                text[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
 
+                text[2] = "Key binding for opening the birthday menu. Press this key to do so.";
+                text[3] = this.KeyBinding;
 
-                for (int i = 0; i < array.Count<string>(); i += 2)
-                {
-                    int parentSheetIndex = Convert.ToInt32(array[i]);
-                    if (parentSheetIndex < 0)
-                    {
-                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
-                        foreach (var obj in some_object_list)
-                        {
-                            StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0);
-                            this.possible_birthday_gifts.Add((Item)new_obj);
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0));
-                    }
-                    //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                }
-
-
-                return;// new StardewValley.Object(parentSheetIndex, 1, false, -1, 0);
+                File.WriteAllLines(path, text);
             }
-            return;// null;
         }
-        public virtual void getAllUniversalLovedItems(bool is_birthday_gift_list)
+
+        /// <summary>Load the player's birthday from the config file.</summary>
+        private void LoadBirthday()
         {
-            string text;
-            if (is_birthday_gift_list == false)
+            string path = Path.Combine(this.BirthdayFolderPath, $"HappyBirthday_{Game1.player.name}.txt");
+            if (File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                Game1.NPCGiftTastes.TryGetValue("Universal_Neutral", out text);
-                if (text != null)
-                {
+                string[] text = File.ReadAllLines(path);
+                this.BirthdaySeason = Convert.ToString(text[3]);
+                this.BirthdayDay = Convert.ToInt32(text[5]);
+            }
+        }
 
-                    string[] array = text.Split(new char[]
-                    {
-                    ' '
-                    });
+        /// <summary>Write the player's birthday to the config file.</summary>
+        private void WriteBirthday()
+        {
+            string path = Path.Combine(this.BirthdayFolderPath, $"HappyBirthday_{Game1.player.name}.txt");
+            string[] text = new string[20];
+            if (!File.Exists(path))
+            {
+                this.Monitor.Log("HappyBirthday: The HappyBirthday Player Info doesn't exist. Creating it now.");
 
+                text[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
+                text[1] = "====================================================================================";
 
-                    for (int i = 0; i < array.Count<string>(); i++)
-                    {
-                        int parentSheetIndex = Convert.ToInt32(array[i]);
-                        if (parentSheetIndex < 0)
-                        {
-                            List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
-                            foreach (var obj in some_object_list)
-                            {
-                                this.possible_birthday_gifts.Add((Item)obj);
-                            }
-                            continue;
-                        }
-                        else
-                        {
-                            this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, 1, false, -1, 0));
-                        }
-                        //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                    }
+                text[2] = "Player's Birthday Season";
+                text[3] = this.BirthdaySeason;
+                text[4] = "Player's Birthday Date";
+                text[5] = this.BirthdayDay.ToString();
 
-
-                    return;// new StardewValley.Object(parentSheetIndex, 1, false, -1, 0);
-                }
+                File.WriteAllLines(path, text);
             }
             else
             {
-                Dictionary<string, string> dictionary = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-                string text2;
-                dictionary.TryGetValue("Universal_Love_Gift", out text2);
-                string[] array = text2.Split(new char[]
-                                    {
-                    ' '
-                                    });
+                text[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
+                text[1] = "====================================================================================";
 
+                text[2] = "Player's Birthday Season";
+                text[3] = this.BirthdaySeason;
+                text[4] = "Player's Birthday Date";
+                text[5] = this.BirthdayDay.ToString();
 
-                for (int i = 0; i < array.Count<string>(); i += 2)
-                {
-                    int parentSheetIndex = Convert.ToInt32(array[i]);
-                    if (parentSheetIndex < 0)
-                    {
-                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array[i]));
-                        foreach (var obj in some_object_list)
-                        {
-                            StardewValley.Object new_obj = new StardewValley.Object(obj.parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0);
-                            this.possible_birthday_gifts.Add((Item)new_obj);
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, Convert.ToInt32(array[i + 1]), false, -1, 0));
-                    }
-                    //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                }
-
-
-                return;// new StardewValley.Object(parentSheetIndex, 1, false, -1, 0);
-            }
-            return;// null;
-        }
-
-
-        public virtual void getAllSpecifiedLikedItems()
-        {
-            string text;
-            Game1.NPCGiftTastes.TryGetValue(Game1.currentSpeaker.name, out text);
-            if (text != null)
-            {
-
-                string[] array = text.Split(new char[]
-                {
-                    '/'
-                });
-
-                string[] array2 = array[3].Split(new char[]
-                {
-                    ' '
-                });
-
-                for (int i = 0; i < array2.Count<string>(); i++)
-                {
-                    int parentSheetIndex = Convert.ToInt32(array2[i]);
-                    if (parentSheetIndex < 0)
-                    {
-                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
-                        foreach (var obj in some_object_list)
-                        {
-                            this.possible_birthday_gifts.Add((Item)obj);
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, 1, false, -1, 0));
-                    }
-                    //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                }
-
-
-                return;// new Object(parentSheetIndex, 1, false, -1, 0);
-            }
-            return;// null;
-        }
-        public virtual void getAllSpecifiedLovedItems()
-        {
-            string text;
-            Game1.NPCGiftTastes.TryGetValue(Game1.currentSpeaker.name, out text);
-            if (text != null)
-            {
-
-                string[] array = text.Split(new char[]
-                {
-                    '/'
-                });
-
-                string[] array2 = array[1].Split(new char[]
-                {
-                    ' '
-                });
-
-                for (int i = 0; i < array2.Count<string>(); i++)
-                {
-                    int parentSheetIndex = Convert.ToInt32(array2[i]);
-                    if (parentSheetIndex < 0)
-                    {
-                        List<StardewValley.Object> some_object_list = ObjectUtility.getAllObjectsAssociatedWithCategory(Convert.ToInt32(array2[i]));
-                        foreach (var obj in some_object_list)
-                        {
-                            this.possible_birthday_gifts.Add((Item)obj);
-                        }
-                        continue;
-                    }
-                    else
-                    {
-                        this.possible_birthday_gifts.Add((Item)new StardewValley.Object(parentSheetIndex, 1, false, -1, 0));
-                    }
-                    //this.itemsRequired.Add(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1]));
-                }
-
-
-                return;// new StardewValley.Object(parentSheetIndex, 1, false, -1, 0);
-            }
-            return;// null;
-        }
-
-        public virtual bool isplayersbirthday()
-        {
-            if (player_birthday_date.Equals(Game1.dayOfMonth) && player_birthday_season.Equals(Game1.currentSeason)) return true;
-            else return false;
-        }
-        
-        void DataLoader_Settings()
-        {
-            //loads the data to the variables upon loading the game.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
-                //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
-
-                key_binding = "O";
-                //  Monitor.Log("KEY TIME");
-            }
-
-            else
-            {
-                //        Console.WriteLine("HEY THERE IM LOADING DATA");
-                string[] readtext = File.ReadAllLines(mylocation3);
-                key_binding = Convert.ToString(readtext[3]);
-
-
-                // Monitor.Log(key_binding);
-                // Monitor.Log(Convert.ToString(readtext[3]));
-
+                File.WriteAllLines(path, text);
             }
         }
-
-        void MyWritter_Settings()
-        {
-
-            //write all of my info to a text file.
-            string myname = StardewValley.Game1.player.name;
-
-            string mylocation = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-
-            string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation3))
-            {
-                Monitor.Log("HappyBirthday: The HappyBirthday Config doesn't exist. Creating it now.");
-
-                mystring3[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
-
-                mystring3[2] = "Key binding for opening the birthday menu. Press this key to do so.";
-                mystring3[3] = key_binding.ToString();
-
-
-
-                File.WriteAllLines(mylocation3, mystring3);
-
-            }
-
-            else
-            {
-
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-
-                mystring3[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
-
-                mystring3[2] = "Key binding for opening the birthday menu. Press this key to do so.";
-                mystring3[3] = key_binding.ToString();
-
-                File.WriteAllLines(mylocation3, mystring3);
-            }
-        }
-
-
-
-        void DataLoader_Birthday()
-        {
-            //loads the data to the variables upon loading the game.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(birthdays_path, "HappyBirthday_");
-            string mylocation2 = mylocation+myname;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
-                //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
-
-                
-                //  Monitor.Log("KEY TIME");
-            }
-
-            else
-            {
-                //        Console.WriteLine("HEY THERE IM LOADING DATA");
-                string[] readtext = File.ReadAllLines(mylocation3);
-                player_birthday_season = Convert.ToString(readtext[3]);
-                player_birthday_date = Convert.ToInt32(readtext[5]);
-
-                // Monitor.Log(key_binding);
-                // Monitor.Log(Convert.ToString(readtext[3]));
-
-            }
-        }
-
-        void MyWritter_Birthday()
-        {
-         
-            //write all of my info to a text file.
-            string myname = StardewValley.Game1.player.name;
-            
-            string mylocation = Path.Combine(birthdays_path, "HappyBirthday_");
-            string mylocation2 = mylocation + myname;
-            string mylocation3 = mylocation2 + ".txt";
-           
-            string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation3))
-            {
-                Monitor.Log("HappyBirthday: The HappyBirthday Player Info doesn't exist. Creating it now.");
-
-                mystring3[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
-                mystring3[1] = "====================================================================================";
-
-                mystring3[2] = "Player's Birthday Season";
-                mystring3[3] = player_birthday_season;
-                mystring3[4] = "Player's Birthday Date";
-                mystring3[5] = player_birthday_date.ToString();
-
-                File.WriteAllLines(mylocation3, mystring3);
-
-            }
-
-            else
-            {
-
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-
-                mystring3[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
-                mystring3[1] = "====================================================================================";
-
-                mystring3[2] = "Player's Birthday Season";
-                mystring3[3] = player_birthday_season.ToString();
-                mystring3[4] = "Player's Birthday Date";
-                mystring3[5] = player_birthday_date.ToString();
-
-                File.WriteAllLines(mylocation3, mystring3);
-            }
-        }
-        
-
     }
 }
