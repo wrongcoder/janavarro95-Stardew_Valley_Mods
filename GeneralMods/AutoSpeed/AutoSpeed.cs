@@ -1,74 +1,91 @@
 ﻿using System;
 using System.IO;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley;
 
 namespace Omegasis.AutoSpeed
 {
-
+    /// <summary>The mod entry point.</summary>
     public class AutoSpeed : Mod
     {
-        int speed_int = 5;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The speed multiplier.</summary>
+        private int Speed = 5;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            //StardewModdingAPI.Events.GameEvents.UpdateTick += Events_UpdateTick;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-            var configLocation = Path.Combine(helper.DirectoryPath, "AutoSpeed_Data.txt");
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+
+            string configLocation = Path.Combine(helper.DirectoryPath, "AutoSpeed_Data.txt");
             if (!File.Exists(configLocation))
-            {
-                 speed_int = 1;
-            }
-            DataLoader();
-           // MyWritter();
-            Monitor.Log("AutoSpeed Initialization Completed",LogLevel.Info);           
+                this.Speed = 1;
+
+            this.LoadConfig();
+            this.Monitor.Log("AutoSpeed Initialization Completed", LogLevel.Info);
         }
 
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            StardewValley.Game1.player.addedSpeed = speed_int;
+            Game1.player.addedSpeed = Speed;
         }
 
-        void DataLoader()
+        /// <summary>Load the configuration settings.</summary>
+        private void LoadConfig()
         {
-            //loads the data to the variables upon loading the game.
-            var mylocation = Path.Combine(Helper.DirectoryPath, "AutoSpeed_data.txt");
-            if (!File.Exists(mylocation)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            string path = Path.Combine(this.Helper.DirectoryPath, "AutoSpeed_data.txt");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-               Monitor.Log("The config file for AutoSpeed was not found, guess I'll create it...",LogLevel.Warn);
-                MyWritter();
+                this.Monitor.Log("The config file for AutoSpeed was not found, guess I'll create it...", LogLevel.Warn);
+                this.WriteConfig();
             }
             else
             {
-                string[] readtext = File.ReadAllLines(mylocation);
-                speed_int = Convert.ToInt32(readtext[3]);
+                string[] text = File.ReadAllLines(path);
+                this.Speed = Convert.ToInt32(text[3]);
             }
         }
-  
-        void MyWritter()
-        {
-            //saves the BuildEndurance_data at the end of a new day;
-            var mylocation = Path.Combine(Helper.DirectoryPath, "AutoSpeed_data.txt");
-            string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation))
-            {
-                Monitor.Log("The data file for AutoSpeed was not found, guess I'll create it when you sleep.",LogLevel.Info);
 
-                mystring3[0] = "Player: AutoSpeed Config:";
-                mystring3[1] = "====================================================================================";
-                mystring3[2] = "Player Added Speed:";
-                mystring3[3] = speed_int.ToString();
-                File.WriteAllLines(mylocation, mystring3);
+        /// <summary>Save the configuration settings.</summary>
+        void WriteConfig()
+        {
+            string path = Path.Combine(this.Helper.DirectoryPath, "AutoSpeed_data.txt");
+            string[] text = new string[20];
+            if (!File.Exists(path))
+            {
+                Monitor.Log("The data file for AutoSpeed was not found, guess I'll create it when you sleep.", LogLevel.Info);
+
+                text[0] = "Player: AutoSpeed Config:";
+                text[1] = "====================================================================================";
+                text[2] = "Player Added Speed:";
+                text[3] = Speed.ToString();
+                File.WriteAllLines(path, text);
             }
             else
             {
-                mystring3[0] = "Player: AutoSpeed Config:";
-                mystring3[1] = "====================================================================================";
+                text[0] = "Player: AutoSpeed Config:";
+                text[1] = "====================================================================================";
 
-                mystring3[2] = "Player Added Speed:";
-                mystring3[3] = speed_int.ToString();
+                text[2] = "Player Added Speed:";
+                text[3] = Speed.ToString();
 
-                File.WriteAllLines(mylocation, mystring3);
+                File.WriteAllLines(path, text);
             }
         }
-
-    } //end my function
+    }
 }
