@@ -1,96 +1,101 @@
 ﻿using System;
 using System.IO;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Omegasis.BillboardAnywhere
 {
-    public class Class1 : Mod
+    /// <summary>The mod entry point.</summary>
+    public class BillboardAnywhere : Mod
     {
-        string key_binding = "B";
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The key which shows the billboard menu.</summary>
+        private string KeyBinding = "B";
 
-        bool game_loaded = false;
+        /// <summary>Whether the player loaded a save.</summary>
+        private bool IsGameLoaded;
 
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            //set up all of my events here
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += SecondPlayerEvents_LoadedGame;
-            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
-        private void SecondPlayerEvents_LoadedGame(object sender, EventArgs e)
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            game_loaded = true;
-            DataLoader_Settings();
+            this.IsGameLoaded = true;
+            this.LoadConfig();
         }
 
-        public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.player == null) return;
-            if (Game1.player.currentLocation == null) return;
-            if (game_loaded == false) return;
+            if (Game1.player == null || Game1.player.currentLocation == null || this.IsGameLoaded == false || Game1.activeClickableMenu != null)
+                return;
 
-            if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
+            // load menu if key pressed
+            if (e.KeyPressed.ToString() == this.KeyBinding)
+                Game1.activeClickableMenu = new Billboard();
+        }
+
+        /// <summary>Load the configuration settings.</summary>
+        void LoadConfig()
+        {
+            string path = Path.Combine(this.Helper.DirectoryPath, "Billboard_Anywhere_Config.txt");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                if (Game1.activeClickableMenu != null) return;
-                my_menu();
+                this.KeyBinding = "B";
+                this.WriteConfig();
             }
-        }
-
-        void DataLoader_Settings()
-        {
-            //loads the data to the variables upon loading the game.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "Billboard_Anywhere_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
-                //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
-                key_binding = "B";
-                MyWritter_Settings();
-            }
-
             else
             {
-                string[] readtext = File.ReadAllLines(mylocation3);
-                key_binding = Convert.ToString(readtext[3]);
+                string[] text = File.ReadAllLines(path);
+                this.KeyBinding = Convert.ToString(text[3]);
             }
         }
 
-        void MyWritter_Settings()
+        /// <summary>Save the configuration settings.</summary>
+        void WriteConfig()
         {
-            //write all of my info to a text file.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "Billboard_Anywhere_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation3))
+            string path = Path.Combine(Helper.DirectoryPath, "Billboard_Anywhere_Config.txt");
+            string[] text = new string[20];
+            if (!File.Exists(path))
             {
                 Monitor.Log("Billboard_Anywhere: The Billboard Anywhere Config doesn't exist. Creating it now.");
-                mystring3[0] = "Config: Billboard_Anywhere. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
-                mystring3[2] = "Key binding for opening the billboard anywhere. Press this key to do so";
-                mystring3[3] = key_binding.ToString();
-                File.WriteAllLines(mylocation3, mystring3);
+                text[0] = "Config: Billboard_Anywhere. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
+                text[2] = "Key binding for opening the billboard anywhere. Press this key to do so";
+                text[3] = this.KeyBinding;
+                File.WriteAllLines(path, text);
             }
 
             else
             {
-                mystring3[0] = "Config: Billboard_Anywhere Info. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
-                mystring3[2] = "Key binding for opening the billboard anywhere. Press this key to do so";
-                mystring3[3] = key_binding.ToString();
-                File.WriteAllLines(mylocation3, mystring3);
+                text[0] = "Config: Billboard_Anywhere Info. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
+                text[2] = "Key binding for opening the billboard anywhere. Press this key to do so";
+                text[3] = this.KeyBinding;
+                File.WriteAllLines(path, text);
             }
         }
-
-        void my_menu()
-        {
-            Game1.activeClickableMenu = new StardewValley.Menus.Billboard();
-        }
-
     }
 }
-//end class
