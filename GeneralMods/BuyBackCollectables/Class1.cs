@@ -1,122 +1,111 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Menus;
 
 namespace Omegasis.BuyBackCollectables
 {
-    public class Class1 : Mod
+    /// <summary>The mod entry point.</summary>
+    public class BuyBackCollectables : Mod
     {
-        string key_binding = "B";
-       public static double cost = 3.0;
-        bool game_loaded = false;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The key which shows the menu.</summary>
+        private string KeyBinding = "B";
+
+        /// <summary>The multiplier applied to the cost of buying back a collectable.</summary>
+        private double CostMultiplier = 3.0;
+
+        /// <summary>Whether the player loaded a save.</summary>
+        private bool IsGameLoaded;
 
 
-        public static List<String> debugList;
-
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            //set up all of my events here
-            StardewModdingAPI.Events.SaveEvents.AfterLoad+= PlayerEvents_LoadedGame;
-            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
-            StardewModdingAPI.Events.GameEvents.OneSecondTick += GameEvents_OneSecondTick;
-            debugList = new List<string>();
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
-        private void GameEvents_OneSecondTick(object sender, EventArgs e)
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            if (debugList.Count == 0) return;
-           foreach(var v in debugList)
-            {
-                this.Monitor.Log(v);
-            }
-            debugList.Clear();
+            this.IsGameLoaded = true;
+            this.LoadConfig();
+            this.WriteConfig();
         }
 
-        public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.player == null) return;
-            if (Game1.player.currentLocation == null) return;
-            if (game_loaded == false) return;
+            if (Game1.player == null || Game1.player.currentLocation == null || !this.IsGameLoaded || Game1.activeClickableMenu != null)
+                return;
 
-            if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
-            {
-                if (Game1.activeClickableMenu != null) return;
-                else
-                {
-                    Game1.activeClickableMenu = new UpdatedCollectionsPage(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2);
-                }
-            }
+            if (e.KeyPressed.ToString() == this.KeyBinding)
+                Game1.activeClickableMenu = new BuyBackMenu(this.CostMultiplier);
         }
 
-        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
-        {
-            game_loaded = true;
-            DataLoader_Settings();
-            MyWritter_Settings();
-        }
-
-        void DataLoader_Settings()
+        /// <summary>Load the configuration settings.</summary>
+        private void LoadConfig()
         {
             //loads the data to the variables upon loading the game.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "BuyBack_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            string path = Path.Combine(Helper.DirectoryPath, "BuyBack_Config.txt");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                key_binding = "B";
-                cost = 3.0;
+                this.KeyBinding = "B";
+                this.CostMultiplier = 3.0;
             }
-
             else
             {
-                string[] readtext = File.ReadAllLines(mylocation3);
-                key_binding = Convert.ToString(readtext[3]);
-                cost = Convert.ToDouble(readtext[5]);
+                string[] text = File.ReadAllLines(path);
+                this.KeyBinding = Convert.ToString(text[3]);
+                this.CostMultiplier = Convert.ToDouble(text[5]);
             }
         }
 
-        void MyWritter_Settings()
+        /// <summary>Save the configuration settings.</summary>
+        private void WriteConfig()
         {
             //write all of my info to a text file.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "BuyBack_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation3))
+            string path = Path.Combine(Helper.DirectoryPath, "BuyBack_Config.txt");
+            string[] text = new string[20];
+            if (!File.Exists(path))
             {
-                Monitor.Log("BuyBack Collections: Config not found. Creating it now.");
+                this.Monitor.Log("BuyBack Collections: Config not found. Creating it now.");
 
-                mystring3[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
-                mystring3[2] = "Key binding";
-                mystring3[3] = key_binding.ToString();
-                mystring3[4] = "Collectables Multiplier Cost: Sell Value * value listed below";
-                mystring3[5] = cost.ToString();
-                File.WriteAllLines(mylocation3, mystring3);
+                text[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
+                text[2] = "Key binding";
+                text[3] = this.KeyBinding;
+                text[4] = "Collectables Multiplier Cost: Sell Value * value listed below";
+                text[5] = this.CostMultiplier.ToString();
+                File.WriteAllLines(path, text);
             }
             else
             {
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-                mystring3[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
-                mystring3[2] = "Key binding";
-                mystring3[3] = key_binding.ToString();
-                mystring3[4] = "Collectables Multiplier Cost: Sell Value * value listed below";
-                mystring3[5] = cost.ToString();
-                File.WriteAllLines(mylocation3, mystring3);
+                text[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
+                text[2] = "Key binding";
+                text[3] = this.KeyBinding;
+                text[4] = "Collectables Multiplier Cost: Sell Value * value listed below";
+                text[5] = this.CostMultiplier.ToString();
+                File.WriteAllLines(path, text);
             }
         }
-
-        public void debugMessage(string s)
-        {
-            this.Monitor.Log(s);
-        }
-
     }
 }
-//end class
