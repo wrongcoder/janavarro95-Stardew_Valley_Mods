@@ -80,7 +80,7 @@ namespace Omegasis.BillboardAnywhere
             string[] text = new string[20];
             if (!File.Exists(path))
             {
-                Monitor.Log("Billboard_Anywhere: The Billboard Anywhere Config doesn't exist. Creating it now.");
+                this.Monitor.Log("Billboard_Anywhere: The Billboard Anywhere Config doesn't exist. Creating it now.");
                 text[0] = "Config: Billboard_Anywhere. Feel free to mess with these settings.";
                 text[1] = "====================================================================================";
                 text[2] = "Key binding for opening the billboard anywhere. Press this key to do so";

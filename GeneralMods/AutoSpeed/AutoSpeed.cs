@@ -68,7 +68,7 @@ namespace Omegasis.AutoSpeed
             string[] text = new string[20];
             if (!File.Exists(path))
             {
-                Monitor.Log("The data file for AutoSpeed was not found, guess I'll create it when you sleep.", LogLevel.Info);
+                this.Monitor.Log("The data file for AutoSpeed was not found, guess I'll create it when you sleep.", LogLevel.Info);
 
                 text[0] = "Player: AutoSpeed Config:";
                 text[1] = "====================================================================================";

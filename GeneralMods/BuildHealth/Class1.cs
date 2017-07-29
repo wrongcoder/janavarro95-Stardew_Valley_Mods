@@ -3,460 +3,378 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley;
 
 namespace Omegasis.BuildHealth
 {
-
+    /// <summary>The mod entry point.</summary>
     public class BuildHealth : Mod
     {
-        public double BuildHealth_data_xp_nextlvl=20;
-        public double BuildHealth_data_xp_current=0;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The mod settings and player data.</summary>
+        private Config Config;
 
-        public int BuildHealth_data_current_lvl=0;
+        /// <summary>The XP points needed to reach the next level.</summary>
+        private double ExpToNextLevel = 20;
 
-        public int BuildHealth_data_health_bonus_acumulated=0;
+        /// <summary>The player's current XP points.</summary>
+        private double CurrentExp;
 
-        public int BuildHealth_data_ini_health_bonus=0;
+        /// <summary>The player's current level.</summary>
+        private int CurrentLevel;
 
-        public bool BuildHealth_data_clear_mod_effects = false;
+        /// <summary>The health points to add to the player's base health due to their current level.</summary>
+        private int CurrentLevelHealthBonus;
 
-        public int BuildHealth_data_old_health = 0;
+        /// <summary>The initial health bonus to apply regardless of the player's level, from the config file.</summary>
+        private int BaseHealthBonus;
 
-        public bool tool_cleaner = false;
+        /// <summary>Whether to reset all changes by the mod to the default values (i.e. start over).</summary>
+        private bool ClearModEffects;
 
-        public bool fed = false;
+        /// <summary>The player's original max health value, excluding mod effects.</summary>
+        private int OriginalMaxHealth;
+
+        /// <summary>Whether the player recently gained XP for tool use.</summary>
+        private bool HasRecentToolExp;
+
+        /// <summary>Whether the player was eating last time we checked.</summary>
+        private bool WasEating;
+
+        /// <summary>The player's health last time we checked it.</summary>
+        private int LastHealth;
+
+        /// <summary>Whether the player has loaded a save.</summary>
+        private bool IsLoaded;
+
+        /// <summary>Whether the player has collapsed today.</summary>
+        private bool WasCollapsed;
 
 
-        public int old_health;
-
-        public int new_health;
-
-
-
-        public Config ModConfig { get; set; }
-
-		public static bool upon_loading = false;
-
-        public bool collapse_check;
-
-        //Credit goes to Zoryn for pieces of this config generation that I kinda repurposed.
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
 
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += SleepCallback;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += EatingCallBack; //sloppy again but it'll do.
+            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoaded;
 
-            StardewModdingAPI.Events.GameEvents.OneSecondTick += Tool_Cleanup;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += ToolCallBack;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += LoadingCallBack;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += Collapse_Callback;
-
-            StardewModdingAPI.Events.GameEvents.UpdateTick += damage_check;
-
-            var configLocation = Path.Combine(helper.DirectoryPath, "BuildHealthConfig.json");
-            if (!File.Exists(configLocation))
+            var configPath = Path.Combine(helper.DirectoryPath, "BuildHealthConfig.json");
+            if (!File.Exists(configPath))
             {
-                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
-                ModConfig = new Config();
-
-                ModConfig.BuildHealth_current_lvl = 0;
-                ModConfig.BuildHealth_max_lvl = 100;
-
-                ModConfig.BuildHealth_Health_increase_upon_lvl_up = 1;
-
-                ModConfig.BuildHealth_xp_current = 0;
-                ModConfig.BuildHealth_xp_nextlvl = 20;
-                ModConfig.BuildHealth_xp_curve = 1.15;
-
-                ModConfig.BuildHealth_xp_eating = 2;
-                ModConfig.BuildHealth_xp_sleeping = 10;
-                ModConfig.BuildHealth_xp_tooluse = 1;
-
-                ModConfig.BuildHealth_ini_Health_boost = 0;
-
-                ModConfig.BuildHealth_Health_accumulated = 0;
-
-                File.WriteAllBytes(configLocation, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ModConfig)));
+                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
+                this.Config = new Config
+                {
+                    CurrentLevel = 0,
+                    MaxLevel = 100,
+                    HealthIncreasePerLevel = 1,
+                    CurrentExp = 0,
+                    ExpToNextLevel = 20,
+                    ExpCurve = 1.15,
+                    ExpForEating = 2,
+                    ExpForSleeping = 10,
+                    ExpForToolUse = 1,
+                    BaseHealthBonus = 0,
+                    CurrentLevelHealthBonus = 0
+                };
+                File.WriteAllBytes(configPath, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.Config)));
             }
             else
             {
-                ModConfig = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configLocation)));
-                Monitor.Log("Found BuildHealth config file.");
+                this.Config = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configPath)));
+                this.Monitor.Log("Found BuildHealth config file.");
             }
 
-         //   DataLoader();
-         //   MyWritter();
-            Monitor.Log("BuildHealth Initialization Completed");
+            this.Monitor.Log("BuildHealth Initialization Completed");
         }
 
-
-
-        public void ToolCallBack(object sender, EventArgs e) //ultra quick response for checking if a tool is used.
+        /// <summary>The method invoked once per second during a game update.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void GameEvents_OneSecondTick(object sender, EventArgs e)
         {
-            if (tool_cleaner == true) return;
-
-
-            if (StardewValley.Game1.player.usingTool == true)
-            {
-                //Monitor.Log("Tool is being used");
-                BuildHealth_data_xp_current += ModConfig.BuildHealth_xp_tooluse;
-                tool_cleaner = true;
-            }
-            else return;
+            // nerf how quickly tool xp is gained (I hope)
+            if (this.HasRecentToolExp)
+                this.HasRecentToolExp = false;
         }
 
-        public void Tool_Cleanup(object sender, EventArgs e) //nerfs how quickly xp is actually gained. I hope.
+        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            // give XP when player finishes eating
+            if (Game1.isEating)
+                this.WasEating = true;
+            else if (this.WasEating)
+            {
+                this.CurrentExp += this.Config.ExpForEating;
+                this.WasEating = false;
+            }
 
-            if (tool_cleaner == true) tool_cleaner = false;
-            else return;
+            // give XP when player uses tool
+            if (!this.HasRecentToolExp && Game1.player.usingTool)
+            {
+                this.CurrentExp += this.Config.ExpForToolUse;
+                this.HasRecentToolExp = true;
+            }
+
+            // give XP for taking damage
+            var player = Game1.player;
+            if (this.LastHealth > player.health)
+            {
+                this.CurrentExp += this.LastHealth - player.health;
+                this.LastHealth = player.health;
+            }
+            else if (this.LastHealth < player.health)
+                this.LastHealth = player.health;
+
+            // give XP when player stays up too late or collapses
+            if (!this.WasCollapsed && Game1.farmerShouldPassOut)
+            {
+                this.CurrentExp += this.Config.ExpForCollapsing;
+                this.WasCollapsed = true;
+                this.Monitor.Log("The player has collapsed!");
+            }
         }
 
-        public void EatingCallBack(object sender, EventArgs e)
+        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void TimeEvents_DayOfMonthChanged(object sender, EventArgs e)
         {
+            // reset data
+            this.LastHealth = Game1.player.maxHealth;
+            this.WasCollapsed = false;
+            if (!this.IsLoaded)
+                return;
 
-
-            if (StardewValley.Game1.isEating == true)
-            {
-                // Monitor.Log("NOM NOM NOM");
-                fed = true;
-
-                //this code will run when the player eats an object. I.E. increases their eating skills.
-            }
-            //I'm going to assume they ate the food.
-            if ((StardewValley.Game1.isEating == false) && fed == true)
-            {
-                // Monitor.Log("NOM NOM NOM");
-                BuildHealth_data_xp_current += ModConfig.BuildHealth_xp_eating;
-                fed = false;
-            }
-
-
-            return;
-        }
-
-
-
-        public void damage_check(object sender, EventArgs e)
-        {
-            var player = StardewValley.Game1.player;
-
-            if (old_health > player.health)
-            {
-                BuildHealth_data_xp_current += (old_health - player.health);
-                //Log.Info(old_health - player.health);
-                old_health = (player.health);
-                
-            }
-            if (old_health < player.health)
-            {
-                old_health = player.health;
-            }
-           
-
-
-            return;
-        }
-
-
-
-
-        public void SleepCallback(object sender, EventArgs e)
-        {
-            collapse_check = false;
-            if (upon_loading ==true){
-
-                Clear_Checker();
+            // update settings
+            this.UpdateClearSetting();
 
             var player = StardewValley.Game1.player;
+            this.CurrentExp += this.Config.ExpForSleeping;
+            if (this.OriginalMaxHealth == 0)
+                this.OriginalMaxHealth = player.maxHealth; //grab the initial Health value
 
-            BuildHealth_data_xp_current += ModConfig.BuildHealth_xp_sleeping;
-
-            if (BuildHealth_data_old_health == 0)
+            if (this.ClearModEffects)
             {
-                BuildHealth_data_old_health = player.maxHealth; //grab the initial Health value
+                this.LoadClearSettings();
+                //This will run when the character goes to sleep. It will increase their sleeping skill.
+                player.maxHealth = this.OriginalMaxHealth;
+                this.ExpToNextLevel = this.Config.ExpToNextLevel;
+                this.CurrentExp = this.Config.CurrentExp;
+                this.CurrentLevelHealthBonus = 0;
+                this.OriginalMaxHealth = player.maxHealth;
+                this.BaseHealthBonus = 0;
+                this.CurrentLevel = 0;
+                this.Monitor.Log("BuildHealth Reset!");
             }
 
-            if (BuildHealth_data_clear_mod_effects == true)
+            if (!this.ClearModEffects && this.CurrentLevel < this.Config.MaxLevel)
             {
-                    Clear_DataLoader();
-                    //This will run when the character goes to sleep. It will increase their sleeping skill.
-                    player.maxHealth = BuildHealth_data_old_health;
-                BuildHealth_data_xp_nextlvl = ModConfig.BuildHealth_xp_nextlvl;
-                BuildHealth_data_xp_current = ModConfig.BuildHealth_xp_current;
-                BuildHealth_data_health_bonus_acumulated = 0;
-                BuildHealth_data_old_health = player.maxHealth;
-                BuildHealth_data_ini_health_bonus = 0;
-                BuildHealth_data_current_lvl = 0;
-               Monitor.Log("BuildHealth Reset!");
-            }
-
-
-            if (BuildHealth_data_clear_mod_effects == false)
-            {
-                if (BuildHealth_data_current_lvl < ModConfig.BuildHealth_max_lvl)
+                while (this.CurrentExp >= this.ExpToNextLevel)
                 {
-                    while (BuildHealth_data_xp_current >= BuildHealth_data_xp_nextlvl)
-                    {
-                        BuildHealth_data_current_lvl += 1;
-                        BuildHealth_data_xp_current = BuildHealth_data_xp_current - BuildHealth_data_xp_nextlvl;
-                        BuildHealth_data_xp_nextlvl = (ModConfig.BuildHealth_xp_curve * BuildHealth_data_xp_nextlvl);
-                        player.maxHealth += ModConfig.BuildHealth_Health_increase_upon_lvl_up;
-                        BuildHealth_data_health_bonus_acumulated += ModConfig.BuildHealth_Health_increase_upon_lvl_up;
-                    }
-
-
+                    this.CurrentLevel += 1;
+                    this.CurrentExp = this.CurrentExp - this.ExpToNextLevel;
+                    this.ExpToNextLevel =
+                        (this.Config.ExpCurve * this.ExpToNextLevel);
+                    player.maxHealth += this.Config.HealthIncreasePerLevel;
+                    this.CurrentLevelHealthBonus += this.Config.HealthIncreasePerLevel;
                 }
             }
-            BuildHealth_data_clear_mod_effects = false;
+            this.ClearModEffects = false;
 
-            MyWritter();
+            this.WriteConfig();
         }
 
-            old_health = StardewValley.Game1.player.maxHealth;
-
-
-        }
-
-
-        public void LoadingCallBack(object sender, EventArgs e)
+        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void SaveEvents_AfterLoaded(object sender, EventArgs e)
         {
-                DataLoader();
-                MyWritter();
-				upon_loading=true;
-                //runs when the player is loaded.
-                var player = StardewValley.Game1.player;
+            // initialise
+            this.LoadConfig();
+            this.WriteConfig();
+            this.IsLoaded = true;
 
-                if (BuildHealth_data_old_health == 0)
-                {
-                    BuildHealth_data_old_health = player.maxHealth; //grab the initial health value
-                }
+            // grab initial health
+            var player = Game1.player;
+            if (this.OriginalMaxHealth == 0)
+                this.OriginalMaxHealth = player.maxHealth;
 
-                player.maxHealth = BuildHealth_data_ini_health_bonus + BuildHealth_data_health_bonus_acumulated + BuildHealth_data_old_health; //incase the ini stam bonus is loaded in. 
+            // set max health
+            player.maxHealth = this.BaseHealthBonus + this.CurrentLevelHealthBonus + this.OriginalMaxHealth;
 
-                if (BuildHealth_data_clear_mod_effects == true)
-                {
-                    player.maxHealth = BuildHealth_data_old_health;
-                    Monitor.Log("BuildHealth Reset!");
-                }
-
-                DataLoader();
-                MyWritter();
-            
-            old_health = StardewValley.Game1.player.maxHealth;
-        }
-
-
-        public void Collapse_Callback(object sender, EventArgs e) //if the player stays up too late add some xp.
-        {
-            if (collapse_check == false)
+            // reset if needed
+            if (this.ClearModEffects)
             {
-
-                if (StardewValley.Game1.farmerShouldPassOut == true)
-                {
-
-                    BuildHealth_data_xp_current += ModConfig.BuildHealth_Pass_Out_XP;
-                    collapse_check = true;
-                    Monitor.Log("The player has collapsed!");
-                    return;
-                }
-            }
-        }
-
-
-        //Mod config data.
-        public class Config
-        {
-            public double BuildHealth_xp_nextlvl { get; set; }
-            public double BuildHealth_xp_current { get; set; }
-            public double BuildHealth_xp_curve { get; set; }
-
-            public int BuildHealth_current_lvl { get; set; }
-            public int BuildHealth_max_lvl { get; set; }
-
-            public int BuildHealth_Health_increase_upon_lvl_up { get; set; }
-
-            public int BuildHealth_xp_tooluse { get; set; }
-            public int BuildHealth_xp_eating { get; set; }
-            public int BuildHealth_xp_sleeping { get; set; }
-
-            public int BuildHealth_ini_Health_boost { get; set; }
-
-            public int BuildHealth_Health_accumulated { get; set; }
-
-            public int BuildHealth_Pass_Out_XP { get; set; }
-
-        }
-
-
-        void Clear_DataLoader()
-        {
-            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
-            string mylocation2 = mylocation+myname;
-           string mylocation3 = mylocation2+".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
-                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
-
-
-                BuildHealth_data_clear_mod_effects = false;
-                BuildHealth_data_old_health = 0;
-                BuildHealth_data_ini_health_bonus = 0;
+                player.maxHealth = this.OriginalMaxHealth;
+                this.Monitor.Log("BuildHealth Reset!");
             }
 
+            // save config
+            this.LastHealth = Game1.player.maxHealth;
+            this.LoadConfig();
+            this.WriteConfig();
+        }
+
+        /// <summary>Update the settings needed for <see cref="ClearModEffects"/> from the latest config file on disk.</summary>
+        void LoadClearSettings()
+        {
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
+                Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
+
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            {
+                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
+
+                this.ClearModEffects = false;
+                this.OriginalMaxHealth = 0;
+                this.BaseHealthBonus = 0;
+            }
             else
             {
                 //loads the BuildHealth_data upon loading the mod
-                string[] readtext = File.ReadAllLines(mylocation3);
-                BuildHealth_data_ini_health_bonus = Convert.ToInt32(readtext[9]);
-                BuildHealth_data_clear_mod_effects = Convert.ToBoolean(readtext[14]);
-                BuildHealth_data_old_health = Convert.ToInt32(readtext[16]);
-
+                string[] text = File.ReadAllLines(path);
+                this.BaseHealthBonus = Convert.ToInt32(text[9]);
+                this.ClearModEffects = Convert.ToBoolean(text[14]);
+                this.OriginalMaxHealth = Convert.ToInt32(text[16]);
             }
         }
 
-        void Clear_Checker()
+        /// <summary>Update <see cref="ClearModEffects"/> based on the latest config file on disk.</summary>
+        private void UpdateClearSetting()
         {
-            //loads the data to the variables upon loading the game.
-            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
-            string mylocation2 = mylocation + myname;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
+                Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
+
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
+                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
 
-
-                BuildHealth_data_clear_mod_effects = false;
-                BuildHealth_data_old_health = 0;
-                BuildHealth_data_ini_health_bonus = 0;
+                this.ClearModEffects = false;
+                this.OriginalMaxHealth = 0;
+                this.BaseHealthBonus = 0;
             }
+            else
+            {
+                string[] text = File.ReadAllLines(path);
+                this.ClearModEffects = Convert.ToBoolean(text[14]);
+            }
+        }
 
+        /// <summary>Load the configuration settings.</summary>
+        private void LoadConfig()
+        {
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
+                Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
+
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txr");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            {
+                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
+                this.ExpToNextLevel = this.Config.ExpToNextLevel;
+                this.CurrentExp = this.Config.CurrentExp;
+                this.CurrentLevel = this.Config.CurrentLevel;
+                this.BaseHealthBonus = this.Config.BaseHealthBonus;
+                this.CurrentLevelHealthBonus = this.Config.CurrentLevelHealthBonus;
+                this.ClearModEffects = false;
+                this.OriginalMaxHealth = 0;
+            }
             else
             {
                 //loads the BuildHealth_data upon loading the mod
-                string[] readtext = File.ReadAllLines(mylocation3);
-                BuildHealth_data_clear_mod_effects = Convert.ToBoolean(readtext[14]);
-
+                string[] text = File.ReadAllLines(path);
+                this.CurrentLevel = Convert.ToInt32(text[3]);
+                this.ExpToNextLevel = Convert.ToDouble(text[7]);  //these array locations refer to the lines in BuildHealth_data.json
+                this.CurrentExp = Convert.ToDouble(text[5]);
+                this.BaseHealthBonus = Convert.ToInt32(text[9]);
+                this.CurrentLevelHealthBonus = Convert.ToInt32(text[11]);
+                this.ClearModEffects = Convert.ToBoolean(text[14]);
+                this.OriginalMaxHealth = Convert.ToInt32(text[16]);
             }
         }
 
-
-        void DataLoader()
+        /// <summary>Save the configuration settings.</summary>
+        private void WriteConfig()
         {
-            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
-            string mylocation2 = mylocation+myname;
-           string mylocation3 = mylocation2+".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
+                Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
+
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
+            string[] text = new string[20];
+            if (!File.Exists(path))
             {
-                Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
-                BuildHealth_data_xp_nextlvl = ModConfig.BuildHealth_xp_nextlvl;
-                BuildHealth_data_xp_current = ModConfig.BuildHealth_xp_current;
-                BuildHealth_data_current_lvl = ModConfig.BuildHealth_current_lvl;
-                BuildHealth_data_ini_health_bonus = ModConfig.BuildHealth_ini_Health_boost;
-                BuildHealth_data_health_bonus_acumulated = ModConfig.BuildHealth_Health_accumulated;
-                BuildHealth_data_clear_mod_effects = false;
-                BuildHealth_data_old_health = 0;
-
-            }
-
-            else
-            {
-                //        Monitor.Log("HEY THERE IM LOADING DATA");
-
-                //loads the BuildHealth_data upon loading the mod
-                string[] readtext = File.ReadAllLines(mylocation3);
-                BuildHealth_data_current_lvl = Convert.ToInt32(readtext[3]);
-                BuildHealth_data_xp_nextlvl = Convert.ToDouble(readtext[7]);  //these array locations refer to the lines in BuildHealth_data.json
-                BuildHealth_data_xp_current = Convert.ToDouble(readtext[5]);
-                BuildHealth_data_ini_health_bonus = Convert.ToInt32(readtext[9]);
-                BuildHealth_data_health_bonus_acumulated = Convert.ToInt32(readtext[11]);
-                BuildHealth_data_clear_mod_effects = Convert.ToBoolean(readtext[14]);
-                BuildHealth_data_old_health = Convert.ToInt32(readtext[16]);
-
-            }
-        }
-
-        void MyWritter()
-        {
-            if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData"))) Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "PlayerData", "BuildHealth_data_");
-            string mylocation2 = mylocation+myname;
-           string mylocation3 = mylocation2+".txt";
-            string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation3))
-            {
-                Monitor.Log("The data file for BuildHealth was not found, guess I'll create it when you sleep.");
+                this.Monitor.Log("The data file for BuildHealth was not found, guess I'll create it when you sleep.");
 
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
 
-                mystring3[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
-                mystring3[1] = "====================================================================================";
+                text[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
+                text[1] = "====================================================================================";
 
-                mystring3[2] = "Player Current Level:";
-                mystring3[3] = BuildHealth_data_current_lvl.ToString();
+                text[2] = "Player Current Level:";
+                text[3] = this.CurrentLevel.ToString();
 
-                mystring3[4] = "Player Current XP:";
-                mystring3[5] = BuildHealth_data_xp_current.ToString();
+                text[4] = "Player Current XP:";
+                text[5] = this.CurrentExp.ToString();
 
-                mystring3[6] = "Xp to next Level:";
-                mystring3[7] = BuildHealth_data_xp_nextlvl.ToString();
+                text[6] = "Xp to next Level:";
+                text[7] = this.ExpToNextLevel.ToString();
 
-                mystring3[8] = "Initial Health Bonus:";
-                mystring3[9] = BuildHealth_data_ini_health_bonus.ToString();
+                text[8] = "Initial Health Bonus:";
+                text[9] = this.BaseHealthBonus.ToString();
 
-                mystring3[10] = "Additional Health Bonus:";
-                mystring3[11] = BuildHealth_data_health_bonus_acumulated.ToString();
+                text[10] = "Additional Health Bonus:";
+                text[11] = this.CurrentLevelHealthBonus.ToString();
 
-                mystring3[12] = "=======================================================================================";
-                mystring3[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
-                mystring3[14] = BuildHealth_data_clear_mod_effects.ToString();
-                mystring3[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
-                mystring3[16] = BuildHealth_data_old_health.ToString();
+                text[12] = "=======================================================================================";
+                text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
+                text[14] = this.ClearModEffects.ToString();
+                text[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
+                text[16] = this.OriginalMaxHealth.ToString();
 
-
-                File.WriteAllLines(mylocation3, mystring3);
+                File.WriteAllLines(path, text);
             }
-
             else
             {
-                //    Monitor.Log("HEY IM SAVING DATA");
-
                 //write out the info to a text file at the end of a day.
-                mystring3[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
-                mystring3[1] = "====================================================================================";
+                text[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
+                text[1] = "====================================================================================";
 
-                mystring3[2] = "Player Current Level:";
-                mystring3[3] = BuildHealth_data_current_lvl.ToString();
+                text[2] = "Player Current Level:";
+                text[3] = this.CurrentLevel.ToString();
 
-                mystring3[4] = "Player Current XP:";
-                mystring3[5] = BuildHealth_data_xp_current.ToString();
+                text[4] = "Player Current XP:";
+                text[5] = this.CurrentExp.ToString();
 
-                mystring3[6] = "Xp to next Level:";
-                mystring3[7] = BuildHealth_data_xp_nextlvl.ToString();
+                text[6] = "Xp to next Level:";
+                text[7] = this.ExpToNextLevel.ToString();
 
-                mystring3[8] = "Initial Health Bonus:";
-                mystring3[9] = BuildHealth_data_ini_health_bonus.ToString();
+                text[8] = "Initial Health Bonus:";
+                text[9] = this.BaseHealthBonus.ToString();
 
-                mystring3[10] = "Additional Health Bonus:";
-                mystring3[11] = BuildHealth_data_health_bonus_acumulated.ToString();
+                text[10] = "Additional Health Bonus:";
+                text[11] = this.CurrentLevelHealthBonus.ToString();
 
-                mystring3[12] = "=======================================================================================";
-                mystring3[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
-                mystring3[14] = BuildHealth_data_clear_mod_effects.ToString();
-                mystring3[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
-                mystring3[16] = BuildHealth_data_old_health.ToString();
+                text[12] = "=======================================================================================";
+                text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
+                text[14] = this.ClearModEffects.ToString();
+                text[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
+                text[16] = this.OriginalMaxHealth.ToString();
 
-
-                File.WriteAllLines(mylocation3, mystring3);
+                File.WriteAllLines(path, text);
             }
         }
-
-    } //end my function
+    }
 }
