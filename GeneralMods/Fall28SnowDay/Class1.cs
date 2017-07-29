@@ -1,22 +1,33 @@
 ﻿using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 
 namespace Omegasis.Fall28SnowDay
 {
-    public class Class1:Mod
+    /// <summary>The mod entry point.</summary>
+    public class Fall28SnowDay : Mod
     {
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
+            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
         }
 
-        public void TimeEvents_DayOfMonthChanged(object sender, StardewModdingAPI.Events.EventArgsIntChanged e)
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
         {
-            if (StardewValley.Game1.dayOfMonth == 27 && Game1.IsFall == true)
-            {
-              //  Log.Success("Weather checker now!!!");
+            if (Game1.dayOfMonth == 27 && Game1.IsFall)
                 Game1.weatherForTomorrow = Game1.weather_snow;
-            }
         }
     }
 }
