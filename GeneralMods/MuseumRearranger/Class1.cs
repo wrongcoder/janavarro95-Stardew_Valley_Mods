@@ -99,7 +99,7 @@ namespace Omegasis.MuseumRearranger
             string[] text = new string[20];
             if (!File.Exists(path))
             {
-                Monitor.Log("Museum Rearranger: Config not found. Creating it now.");
+                this.Monitor.Log("Museum Rearranger: Config not found. Creating it now.");
 
                 text[0] = "Config: Museum_Rearranger. Feel free to mess with these settings.";
                 text[1] = "====================================================================================";
