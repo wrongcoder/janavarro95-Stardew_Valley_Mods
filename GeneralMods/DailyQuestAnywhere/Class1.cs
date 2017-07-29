@@ -1,135 +1,104 @@
 ﻿using System;
 using System.IO;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Menus;
 
-/*
-TO DO:
-
-*/
 namespace Omegasis.DailyQuestAnywhere
 {
-    public class Class1 : Mod
+    /// <summary>The mod entry point.</summary>
+    public class DailyQuestAnywhere : Mod
     {
-        string key_binding = "H";
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The key which shows the menu.</summary>
+        private string KeyBinding = "H";
 
-        bool game_loaded = false;
+        /// <summary>Whether the player loaded a save.</summary>
+        private bool IsGameLoaded;
 
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            //set up all of my events here
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
-            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
 
-
-        public void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            if (Game1.player == null) return;
-            if (Game1.player.currentLocation == null) return;
-            if (game_loaded == false) return;
-
-            if (e.KeyPressed.ToString() == key_binding) //if the key is pressed, load my cusom save function
-            {
-                if (Game1.activeClickableMenu != null) return;
-                my_menu();
-            }
-            //DataLoader_Settings(); //update the key if players changed it while playing.
+            this.IsGameLoaded = true;
+            this.LoadConfig();
+            this.WriteConfig();
         }
 
-        public void PlayerEvents_LoadedGame(object sender, EventArgs e)
+        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            game_loaded = true;
-            DataLoader_Settings();
-            MyWritter_Settings();
+            if (Game1.player == null || Game1.player.currentLocation == null || this.IsGameLoaded == false || Game1.activeClickableMenu != null)
+                return;
+
+            if (e.KeyPressed.ToString() == this.KeyBinding)
+                Game1.activeClickableMenu = new Billboard(true);
         }
 
-
-
-
-        void DataLoader_Settings()
+        /// <summary>Load the configuration settings.</summary>
+        void LoadConfig()
         {
-            //loads the data to the variables upon loading the game.
-            string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
-                //  Console.WriteLine("Can't load custom save info since the file doesn't exist.");
-
-                key_binding = "H";
-                //  Log.Info("KEY TIME");
-            }
-
+            string path = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config.txt");
+            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+                this.KeyBinding = "H";
             else
             {
-                //        Console.WriteLine("HEY THERE IM LOADING DATA");
-                string[] readtext = File.ReadAllLines(mylocation3);
-                key_binding = Convert.ToString(readtext[3]);
-
-
-                // Log.Info(key_binding);
-                // Log.Info(Convert.ToString(readtext[3]));
-
+                string[] text = File.ReadAllLines(path);
+                this.KeyBinding = Convert.ToString(text[3]);
             }
         }
 
-        void MyWritter_Settings()
+        /// <summary>Save the configuration settings.</summary>
+        void WriteConfig()
         {
-
-            //write all of my info to a text file.
-            string myname = StardewValley.Game1.player.name;
-
-            string mylocation = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config");
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-
-            string[] mystring3 = new string[20];
-            if (!File.Exists(mylocation3))
+            string path = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config.txt");
+            string[] text = new string[20];
+            if (!File.Exists(path))
             {
-                Monitor.Log("DailyQuest_Anywhere: The DailyQuest Anywhere Config doesn't exist. Creating it now.");
+                this.Monitor.Log("DailyQuest_Anywhere: The DailyQuest Anywhere Config doesn't exist. Creating it now.");
 
-                mystring3[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
+                text[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
 
-                mystring3[2] = "Key binding for opening the billboard for quests anywhere. Press this key to do so";
-                mystring3[3] = key_binding.ToString();
+                text[2] = "Key binding for opening the billboard for quests anywhere. Press this key to do so";
+                text[3] = this.KeyBinding;
 
-
-
-                File.WriteAllLines(mylocation3, mystring3);
-
+                File.WriteAllLines(path, text);
             }
-
             else
             {
-
                 //write out the info to a text file at the end of a day. This will run if it doesnt exist.
 
-                mystring3[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
-                mystring3[1] = "====================================================================================";
+                text[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
+                text[1] = "====================================================================================";
 
-                mystring3[2] = "Key binding for opening the billboard for quests anywhere. Press this key to do so";
-                mystring3[3] = key_binding.ToString();
+                text[2] = "Key binding for opening the billboard for quests anywhere. Press this key to do so";
+                text[3] = this.KeyBinding;
 
-                File.WriteAllLines(mylocation3, mystring3);
+                File.WriteAllLines(path, text);
             }
         }
-
-
-
-
-        void my_menu()
-        {
-
-            //   Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu(); //This command is what allows the player to save anywhere as it calls the saving function.
-
-
-            Game1.activeClickableMenu = new StardewValley.Menus.Billboard(true);
-        }
-
     }
 }
-//end class
