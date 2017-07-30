@@ -16,6 +16,9 @@ namespace Omegasis.SaveAnywhere
         /*********
         ** Properties
         *********/
+        /// <summary>Simplifies access to game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
         public bool passiveSave;
         public bool should_ship;
         
@@ -45,13 +48,20 @@ namespace Omegasis.SaveAnywhere
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="reflection">Simplifies access to game code.</param>
+        public SaveManager(IReflectionHelper reflection)
+        {
+            this.Reflection = reflection;
+        }
+
         public void shipping_check()
         {
 
             if (Game1.activeClickableMenu != null) return;
             if (this.should_ship)
             {
-                Game1.activeClickableMenu = new NewShippingMenu(Game1.getFarm().shippingBin);
+                Game1.activeClickableMenu = new NewShippingMenu(Game1.getFarm().shippingBin, this.Reflection);
                 this.should_ship = false;
                 Game1.getFarm().shippingBin.Clear();
                 Game1.getFarm().lastItemShipped = null;

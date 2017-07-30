@@ -31,7 +31,7 @@ namespace Omegasis.SaveAnywhere
         public override void Entry(IModHelper helper)
         {
             this.ConfigUtilities = new ConfigUtilities();
-            this.SaveManager = new SaveManager();
+            this.SaveManager = new SaveManager(this.Helper.Reflection);
 
             ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
             SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
