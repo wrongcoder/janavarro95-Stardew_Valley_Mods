@@ -1,113 +1,97 @@
 ﻿using System;
 using System.IO;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Locations;
 
 namespace Omegasis.TimeFreeze
 {
-    public class Class1 :Mod
+    /// <summary>The mod entry point.</summary>
+    public class TimeFreeze : Mod
     {
-        string doVanillaCheck; //used to check for bathing in just the default BathHouse
-        string doBathingCheck; //used to check if time passes while bathing.
+        /*********
+        ** Properties
+        *********/
+        /// <summary>Whether time should be unfrozen while the player is swimming.</summary>
+        private bool PassTimeWhileSwimming = true;
+
+        /// <summary>Whether time should be unfrozen while the player is swimming in the vanilla bathhouse.</summary>
+        private bool PassTimeWhileSwimmingInBathhouse = true;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-            StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
-            DataLoader(); //used to load/write to the config.
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            this.LoadConfig();
         }
 
-        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
-        {
-          //  Game1.showGlobalMessage(Game1.player.currentLocation.name);
-        }
-
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.player == null || Game1.player.currentLocation == null) return;
-            //if the player isn't bathing and the location is inside.
+            if (Game1.player == null || Game1.player.currentLocation == null)
+                return;
 
-            if (doBathingCheck == "True")
+            if (this.ShouldFreezeTime(Game1.player, Game1.player.currentLocation))
+                Game1.gameTimeInterval = 0;
+        }
+
+        /// <summary>Get whether time should be frozen for the player at the given location.</summary>
+        /// <param name="player">The player to check.</param>
+        /// <param name="location">The location to check.</param>
+        private bool ShouldFreezeTime(StardewValley.Farmer player, GameLocation location)
+        {
+            if (location.name == "Mine" || location.name == "SkullCave" || location.name == "UndergroundMine" || location.isOutdoors)
+                return false;
+            if (player.swimming)
             {
-                if (doVanillaCheck == "True")
-                {
+                if (this.PassTimeWhileSwimmingInBathhouse && location is BathHousePool)
+                    return false;
+                if (this.PassTimeWhileSwimming)
+                    return false;
+            }
+            return true;
+        }
 
-                    if ((Game1.player.swimming == false && (Game1.player.currentLocation) as StardewValley.Locations.BathHousePool == null) && Game1.player.currentLocation.isOutdoors == false)
-                    {
-                        if (!doesTimePassHere())
-                        {
-                            Game1.gameTimeInterval = 0;
-                        }
-                    }
-                }
-                else
-                {
-                    if (Game1.player.swimming == false && Game1.player.currentLocation.isOutdoors == false)
-                    {
-                        if (!doesTimePassHere())
-                        {
-                            Game1.gameTimeInterval = 0;
-                        }
-                    }
-                }
+        /// <summary>Save the configuration settings.</summary>
+        private void WriteConfig()
+        {
+            string path = Path.Combine(Helper.DirectoryPath, "ModConfig.txt");
+            string[] text = new string[6];
+            text[0] = "Player: TimeFreeze Config";
+            text[1] = "====================================================================================";
+            text[2] = "Whether to unfreeze time while swimming in the vanilla bathhouse.";
+            text[3] = this.PassTimeWhileSwimmingInBathhouse.ToString();
+            text[4] = "Whether to unfreeze time while swimming anywhere.";
+            text[5] = this.PassTimeWhileSwimming.ToString();
+            File.WriteAllLines(path, text);
+        }
+
+        /// <summary>Load the configuration settings.</summary>
+        private void LoadConfig()
+        {
+            string path = Path.Combine(Helper.DirectoryPath, "ModConfig.txt");
+            if (!File.Exists(path))
+            {
+                this.PassTimeWhileSwimming = true;
+                this.PassTimeWhileSwimmingInBathhouse = true;
+                this.WriteConfig();
             }
             else
             {
-                if (Game1.player.currentLocation.isOutdoors == false)
-                {
-                    if (!doesTimePassHere())
-                    {
-                        Game1.gameTimeInterval = 0;
-                    }
-                }
-            }
-        }
-
-
-        public bool doesTimePassHere()
-        {
-            if (Game1.player.currentLocation.name == "Mine" || Game1.player.currentLocation.name == "SkullCave" || Game1.player.currentLocation.name=="UndergroundMine") return true;
-            return false;
-        }
-
-        void MyWritter()
-        {
-            string mylocation = Path.Combine(Helper.DirectoryPath, "ModConfig.txt");
-            string[] mystring3 = new string[6];
-            if (!File.Exists(mylocation))
-            {
-                mystring3[0] = "Player: TimeFreeze Config";
-                mystring3[1] = "====================================================================================";
-                mystring3[2] = "Unfreeze time in only vanilla bathhouse: True means that time will pass when the player is bathing when in the bathhouse. False means that time will pass when the player is swimming indoors. Use this to rebalance some custom maps.";
-                mystring3[3] = doVanillaCheck.ToString();
-                mystring3[4] = "Does time pass while bathing? True means yes, no means that time is still frozen while bathing indoors.";
-                mystring3[5] = doVanillaCheck.ToString();
-                File.WriteAllLines(mylocation, mystring3);
-            }
-            else
-            {
-                mystring3[0] = "Player: TimeFreeze Config";
-                mystring3[1] = "====================================================================================";
-                mystring3[2] = "Unfreeze time in only vanilla bathhouse: True means that time will pass when the player is bathing when in the bathhouse. False means that time will pass when the player is swimming indoors. Use this to rebalance some custom maps.";
-                mystring3[3] = "True";
-                mystring3[4] = "Does time pass while bathing? True means yes, no means that time is still frozen while bathing indoors.";
-                mystring3[5] = doVanillaCheck.ToString();
-                File.WriteAllLines(mylocation, mystring3);
-            }
-        }
-        void DataLoader()
-        {
-            string mylocation = Path.Combine(Helper.DirectoryPath, "ModConfig.txt");
-            if (!File.Exists(mylocation)) 
-            {
-                doVanillaCheck = "True";
-                doBathingCheck = "True";
-                MyWritter();
-            }
-            else
-            {
-                string[] readtext = File.ReadAllLines(mylocation);
-                doVanillaCheck = readtext[3];
-                doBathingCheck=readtext[5];
+                string[] text = File.ReadAllLines(path);
+                this.PassTimeWhileSwimming = Convert.ToBoolean(text[3]);
+                this.PassTimeWhileSwimmingInBathhouse = Convert.ToBoolean(text[5]);
             }
         }
     }
