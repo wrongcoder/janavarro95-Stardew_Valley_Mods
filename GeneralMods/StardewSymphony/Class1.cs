@@ -227,22 +227,22 @@ namespace Omegasis.StardewSymphony
 
             // load all of the info files here. This is some deep magic I worked at 4 AM. I almost forgot how the heck this worked when I woke up.
             MusicManager manager = new MusicManager(wave, sound, rootDir);
-            manager.Music_Loader_Seasons("spring", this.SongWaveReference);
-            manager.Music_Loader_Seasons("summer", this.SongWaveReference);
-            manager.Music_Loader_Seasons("fall", this.SongWaveReference);
-            manager.Music_Loader_Seasons("winter", this.SongWaveReference);
-            manager.Music_Loader_Seasons("spring_night", this.SongWaveReference);
-            manager.Music_Loader_Seasons("summer_night", this.SongWaveReference);
-            manager.Music_Loader_Seasons("fall_night", this.SongWaveReference);
-            manager.Music_Loader_Seasons("winter_night", this.SongWaveReference);
-            manager.Music_Loader_Seasons("spring_rain", this.SongWaveReference);
-            manager.Music_Loader_Seasons("summer_rain", this.SongWaveReference);
-            manager.Music_Loader_Seasons("fall_rain", this.SongWaveReference);
-            manager.Music_Loader_Seasons("winter_snow", this.SongWaveReference);
-            manager.Music_Loader_Seasons("spring_rain_night", this.SongWaveReference);
-            manager.Music_Loader_Seasons("summer_rain_night", this.SongWaveReference);
-            manager.Music_Loader_Seasons("fall_rain_night", this.SongWaveReference);
-            manager.Music_Loader_Seasons("winter_snow_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("spring", this.SongWaveReference);
+            manager.LoadSeasonalSongs("summer", this.SongWaveReference);
+            manager.LoadSeasonalSongs("fall", this.SongWaveReference);
+            manager.LoadSeasonalSongs("winter", this.SongWaveReference);
+            manager.LoadSeasonalSongs("spring_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("summer_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("fall_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("winter_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("spring_rain", this.SongWaveReference);
+            manager.LoadSeasonalSongs("summer_rain", this.SongWaveReference);
+            manager.LoadSeasonalSongs("fall_rain", this.SongWaveReference);
+            manager.LoadSeasonalSongs("winter_snow", this.SongWaveReference);
+            manager.LoadSeasonalSongs("spring_rain_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("summer_rain_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("fall_rain_night", this.SongWaveReference);
+            manager.LoadSeasonalSongs("winter_snow_night", this.SongWaveReference);
 
             // load location music
             foreach (GameLocation location in this.GameLocations)
@@ -288,6 +288,18 @@ namespace Omegasis.StardewSymphony
             // check subdirectories
             foreach (string childDir in Directory.GetDirectories(dirPath))
                 this.ProcessDirectory(childDir, musicPacks);
+        }
+
+        /// <summary>Get the current in-game season.</summary>
+        private Season GetSeason()
+        {
+            if (Game1.IsSpring)
+                return Season.Spring;
+            if (Game1.IsSummer)
+                return Season.Summer;
+            if (Game1.IsFall)
+                return Season.Fall;
+            return Season.Winter;
         }
 
         /// <summary>Select music for the current location.</summary>
@@ -377,38 +389,14 @@ namespace Omegasis.StardewSymphony
                 //add in seasonal stuff here
                 if (this.HasNoMusic)
                 {
-                    if (Game1.IsSpring)
-                    {
-                        if (isRaining)
-                            spring_rain_songs();
-                        else
-                            spring_songs();
-                    }
-                    else if (Game1.IsSummer)
-                    {
-                        if (isRaining)
-                            summer_rain_songs();
-                        else
-                            summer_songs();
-                    }
-                    else if (Game1.IsFall)
-                    {
-                        if (isRaining)
-                            fall_rain_songs();
-                        else
-                            fall_songs();
-                    }
-                    else if (Game1.IsWinter)
-                    {
-                        if (Game1.isSnowing)
-                            winter_snow_songs();
-                        else
-                            winter_songs();
-                    }
+                    Season season = this.GetSeason();
+                    if (isRaining)
+                        this.StartRainySong(season);
+                    else
+                        this.StartDefaultSong(season);
                 }
             }
         }
-
 
         public void farm_music_selector()
         {
@@ -453,50 +441,12 @@ namespace Omegasis.StardewSymphony
             }
 
             //add in seasonal stuff here
-            if (Game1.IsSpring)
-            {
-                if (rainy)
-                {
-                    spring_rain_songs();
-                }
-                else
-                {
-                    spring_songs();
-                }
-            }
-            if (Game1.IsSummer)
-            {
-                if (rainy)
-                {
-                    summer_rain_songs();
-                }
-                else
-                {
-                    summer_songs();
-                }
-            }
-            if (Game1.IsFall)
-            {
-                if (rainy)
-                {
-                    fall_rain_songs();
-                }
-                else
-                {
-                    fall_songs();
-                }
-            }
-            if (Game1.IsWinter)
-            {
-                if (Game1.isSnowing)
-                {
-                    winter_snow_songs();
-                }
-                else
-                {
-                    winter_songs();
-                }
-            }
+            Season season = this.GetSeason();
+            if (rainy)
+                this.StartRainySong(season);
+            else
+                this.StartDefaultSong(season);
+
             //end seasonal songs
             if (this.CurrentSong != null)
             {
@@ -1082,1054 +1032,252 @@ namespace Omegasis.StardewSymphony
             {
                 Monitor.Log("Location is null");
             }
-        }//end music player
-
-        public void spring_songs()
-        {
-            if (!this.IsGameLoaded)
-            {
-                this.StartMusicDelay();
-                return;
-            }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (!this.MasterList.Any())
-            {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
-                this.Reset();
-                return;
-
-            }
-
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
-            {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SpringNightSongs.Count); //random number between 0 and n. 0 not includes
-
-                if (this.CurrentSoundInfo.SpringNightSongs.Count == 0) //nightly spring songs
-                {
-                    Monitor.Log("The spring night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
-                    {
-                        if (this.CurrentSoundInfo.SpringNightSongs.Count > 0)
-                        {
-                            this.StopSound();
-                            Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                            Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                            this.CurrentSong = this.CurrentSoundInfo.SpringNightSongs.ElementAt(randomNumber); //grab a random song from the spring song list
-                            this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                            break;
-
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
-                        }
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-
-                            return;
-
-                            //break;
-                        }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
-                    }
-                }
-
-
-                else
-                {
-                    this.StopSound();
-                    this.CurrentSong = this.CurrentSoundInfo.SpringNightSongs.ElementAt(randomNumber); //grab a random song from the spring song list
-                    Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                    Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                    this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                }
-                if (this.CurrentSong != null)
-                {
-                    this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a Spring Night. Check the seasons folder for more info");
-                    this.CurrentSong.Play();
-                    this.Reset();
-                    return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly spring songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SpringSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.SpringSongs.Count == 0)
-            {
-                Monitor.Log("The spring night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.SpringNightSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = this.CurrentSoundInfo.SpringSongs.ElementAt(randomNumber); //grab a random song from the spring song list
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-                    if (master_helper > this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
-                }
-            }
-            else
-            {
-                this.StopSound();
-                this.CurrentSong = this.CurrentSoundInfo.SpringSongs.ElementAt(randomNumber); //grab a random song from the spring song list
-                Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            }
-            if (this.CurrentSong == null) return;
-            this.HasNoMusic = false;
-            Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "while it is Spring Time. Check the seasons folder for more info");
-            this.CurrentSong.Play();
-            this.Reset();
-            return;
-
-        } //plays the songs associated with spring time
-        public void spring_rain_songs()
-        {
-            if (!this.IsGameLoaded)
-            {
-                this.StartMusicDelay();
-                return;
-            }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (!this.MasterList.Any())
-            {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
-                this.Reset();
-                return;
-
-            }
-
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
-            {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SpringRainNightSongs.Count); //random number between 0 and n. 0 not includes
-
-                if (this.CurrentSoundInfo.SpringRainNightSongs.Count == 0) //nightly spring_rain songs
-                {
-                    Monitor.Log("The spring_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
-                    {
-                        if (this.CurrentSoundInfo.SpringRainNightSongs.Count > 0)
-                        {
-                            this.StopSound();
-                            Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                            Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                            this.CurrentSong = this.CurrentSoundInfo.SpringRainNightSongs.ElementAt(randomNumber); //grab a random song from the spring_rain song list
-                            this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                            break;
-
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
-                        }
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-                            return;
-                        }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
-                    }
-                }
-                else
-                {
-                    this.StopSound();
-                    this.CurrentSong = this.CurrentSoundInfo.SpringRainNightSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                    Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                    Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                    this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                }
-
-
-                if (this.CurrentSong != null)
-                {
-                    this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "while it is a rainy Spring night. Check the Seasons folder for more info");
-                    this.CurrentSong.Play();
-                    this.Reset();
-                    return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly spring_rain songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SpringRainSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.SpringRainSongs.Count == 0)
-            {
-                Monitor.Log("The spring_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.SpringRainSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = this.CurrentSoundInfo.SpringRainSongs.ElementAt(randomNumber); //grab a random song from the spring_rain song list
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-                    if (master_helper > this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
-                }
-            }
-            else
-            {
-                this.StopSound();
-                this.CurrentSong = this.CurrentSoundInfo.SpringRainSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            }
-            if (this.CurrentSong == null) return;
-            this.HasNoMusic = false;
-            Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "while it is a rainy Spring Day. Check the seasons folder for more info");
-            this.CurrentSong.Play();
-            this.Reset();
         }
 
-        public void summer_songs()
+        /// <summary>Start a default song for the given season.</summary>
+        /// <param name="season">The season for which to play music.</param>
+        private void StartDefaultSong(Season season)
         {
+            // check exit conditions
             if (!this.IsGameLoaded)
             {
                 this.StartMusicDelay();
                 return;
             }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (this.MasterList.Count == 0)
+            if (!this.MasterList.Any())
             {
                 Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
-
             }
 
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
+            // get random song from available music packs
+            this.CurrentSoundInfo = this.MasterList[this.Random.Next(0, this.MasterList.Count)];
 
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
+            // pick night music
+            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())
             {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SummerNightSongs.Count); //random number between 0 and n. 0 not includes
+                int randomSongIndex = this.Random.Next(0, this.CurrentSoundInfo.NightSongs[season].Count);
 
-                if (this.CurrentSoundInfo.SummerNightSongs.Count == 0) //nightly summer songs
+                if (!this.CurrentSoundInfo.NightSongs[season].Any())
                 {
-                    Monitor.Log("The summer night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
+                    this.Monitor.Log($"The {season} night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
+
+                    int minIndex = 0;
+                    for (; minIndex < this.MasterList.Count; minIndex++)
                     {
-                        if (this.CurrentSoundInfo.SummerNightSongs.Count > 0)
+                        if (this.CurrentSoundInfo.NightSongs[season].Count > 0)
                         {
                             this.StopSound();
                             Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
                             Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                            this.CurrentSong = this.CurrentSoundInfo.SummerNightSongs.ElementAt(randomNumber); //grab a random song from the summer song list
+                            this.CurrentSong = this.CurrentSoundInfo.NightSongs[season].ElementAt(randomSongIndex); //grab a random song from the seasonal song list
                             this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
                             break;
 
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
                         }
-                        if (master_helper > this.MasterList.Count)
+
+                        if (minIndex == this.MasterList.Count - 1)
                         {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                            this.Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
                             this.HasNoMusic = true;
                             return;
                         }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
+                        int randomIndex = (minIndex + randomSongIndex) % this.MasterList.Count;
+                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.
                     }
                 }
                 else
                 {
                     this.StopSound();
+                    this.CurrentSong = this.CurrentSoundInfo.NightSongs[season].ElementAt(randomSongIndex); //grab a random song from the seasonal song list
                     Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
                     Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                    this.CurrentSong = this.CurrentSoundInfo.SummerNightSongs.ElementAt(randomNumber); //grab a random song from the summer song list
                     this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-
                 }
 
-
-
+                // play selected song
                 if (this.CurrentSong != null)
                 {
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a Summer Night. Check the Seasons folder for more info.");
                     this.HasNoMusic = false;
+                    Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a {season} Night. Check the seasons folder for more info");
                     this.CurrentSong.Play();
                     this.Reset();
                     return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly summer songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SummerSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.SummerSongs.Count == 0)
-            {
-                Monitor.Log("The summer night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.SummerNightSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = this.CurrentSoundInfo.SummerSongs.ElementAt(randomNumber); //grab a random song from the summer song list
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-                    if (master_helper > this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
                 }
             }
-            if (this.CurrentSong == null) return;
-            this.StopSound();
-            Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-            Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-            this.CurrentSong = this.CurrentSoundInfo.SummerSongs.ElementAt(randomNumber); //grab a random song from the summer song list
-            this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            if (this.CurrentSong != null)
-            {
-                Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a Fall day. Check the Seasons folder for more info.");
-                // System.Threading.Thread.Sleep(30000);
-                this.HasNoMusic = false;
-                this.CurrentSong.Play();
-                this.Reset();
-            }
-            return;
 
-        } //plays the songs associated with summer time
-        public void summer_rain_songs()
+            // else pick default music
+            {
+                int randomSongIndex = this.Random.Next(0, this.CurrentSoundInfo.DefaultSongs[season].Count); //random number between 0 and n. 0 not includes
+                if (!this.CurrentSoundInfo.DefaultSongs[season].Any())
+                {
+                    this.Monitor.Log($"The {season} night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
+
+                    int minIndex = 0;
+                    for (; minIndex < this.MasterList.Count; minIndex++)
+                    {
+                        if (this.CurrentSoundInfo.NightSongs[season].Count > 0)
+                        {
+                            this.StopSound();
+                            Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
+                            Game1.waveBank = this.CurrentSoundInfo.Wavebank;
+                            this.CurrentSong = this.CurrentSoundInfo.DefaultSongs[season].ElementAt(randomSongIndex); //grab a random song from the seasonal song list
+                            this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
+                            break;
+                        }
+
+                        if (minIndex == this.MasterList.Count - 1)
+                        {
+                            this.Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                            this.HasNoMusic = true;
+                            return;
+                        }
+                        int randomIndex = (minIndex + randomSongIndex) % this.MasterList.Count;
+                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.
+                    }
+                }
+                else
+                {
+                    this.StopSound();
+                    this.CurrentSong = this.CurrentSoundInfo.DefaultSongs[season].ElementAt(randomSongIndex); //grab a random song from the seasonal song list
+                    Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
+                    Game1.waveBank = this.CurrentSoundInfo.Wavebank;
+                    this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
+                }
+
+                // play selected song
+                if (this.CurrentSong != null)
+                {
+                    this.HasNoMusic = false;
+                    this.Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is {season} Time. Check the seasons folder for more info");
+                    this.CurrentSong.Play();
+                    this.Reset();
+                }
+            }
+        }
+
+        /// <summary>Start a song for rainy days in the given season.</summary>
+        /// <param name="season">The season for which to play music.</param>
+        private void StartRainySong(Season season)
         {
+            // check exit conditions
             if (!this.IsGameLoaded)
             {
                 this.StartMusicDelay();
                 return;
             }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (this.MasterList.Count == 0)
+            if (!this.MasterList.Any())
             {
                 Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
-
             }
 
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
+            // get random song from available music packs
+            this.CurrentSoundInfo = this.MasterList[this.Random.Next(0, this.MasterList.Count)];
 
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
+            // pick night song
+            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())
             {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SummerRainNightSongs.Count); //random number between 0 and n. 0 not includes
+                int randomNumber = this.Random.Next(0, this.CurrentSoundInfo.RainyNightSongs[season].Count);
 
-                if (this.CurrentSoundInfo.SummerRainNightSongs.Count == 0) //nightly summer_rain songs
+                if (this.CurrentSoundInfo.RainyNightSongs[season].Count == 0)
                 {
-                    Monitor.Log("The summer_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
+                    Monitor.Log($"The {season}_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
+
+                    int minIndex = 0;
+                    for (; minIndex < this.MasterList.Count; minIndex++)
                     {
-                        if (this.CurrentSoundInfo.SummerRainNightSongs.Count > 0)
+                        if (this.CurrentSoundInfo.RainyNightSongs[season].Count > 0)
                         {
                             this.StopSound();
                             Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
                             Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                            this.CurrentSong = this.CurrentSoundInfo.SummerRainNightSongs.ElementAt(randomNumber); //grab a random song from the summer_rain song list
+                            this.CurrentSong = this.CurrentSoundInfo.RainyNightSongs[season].ElementAt(randomNumber); //grab a random song from the seasonal rain song list
                             this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
                             break;
-
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
                         }
-                        if (master_helper > this.MasterList.Count)
+
+                        if (minIndex == this.MasterList.Count - 1)
                         {
                             Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
                             this.HasNoMusic = true;
                             return;
                         }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
-                    }
-                }
-
-                else
-                {
-                    this.StopSound();
-                    this.CurrentSong = this.CurrentSoundInfo.SummerRainNightSongs.ElementAt(randomNumber); //grab a random song from the summer song list
-                    Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                    Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                    this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                }
-
-                if (this.CurrentSong != null)
-                {
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a rainy Summer Night. Check the Seasons folder for more info.");
-                    this.HasNoMusic = false;
-                    this.CurrentSong.Play();
-                    this.Reset();
-                    return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly summer_rain songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.SummerRainSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.SummerRainSongs.Count == 0)
-            {
-                Monitor.Log("The summer_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.SummerRainSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = this.CurrentSoundInfo.SummerRainSongs.ElementAt(randomNumber); //grab a random song from the summer_rain song list
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-                    if (master_helper > this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
-                }
-            }
-
-            else
-            {
-                this.StopSound();
-                this.CurrentSong = this.CurrentSoundInfo.SummerRainSongs.ElementAt(randomNumber); //grab a random song from the summer song list
-                Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            }
-
-            if (this.CurrentSong == null) return;
-            Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a rainy Summer day. Check the Seasons folder for more info.");
-            this.HasNoMusic = false;
-            this.CurrentSong.Play();
-            this.Reset();
-
-        } //plays the songs associated with summer time
-        public void fall_songs()
-        {
-            if (!this.IsGameLoaded)
-                return;
-
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (this.MasterList.Count == 0)
-            {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
-                // System.Threading.Thread.Sleep(3000);
-                this.Reset();
-                return;
-
-            }
-
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
-            {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.FallNightSongs.Count); //random number between 0 and n. 0 not includes
-
-                if (this.CurrentSoundInfo.FallNightSongs.Count == 0) //nightly fall songs
-                {
-                    Monitor.Log("The fall night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                                                                                                      //   System.Threading.Thread.Sleep(3000);
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
-                    {
-                        if (this.CurrentSoundInfo.FallNightSongs.Count > 0)
-                        {
-                            this.StopSound();
-                            this.CurrentSong = this.CurrentSoundInfo.FallNightSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                            Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                            Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-
-                            this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                            break;
-
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
-                        }
-                        if (master_helper >= this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            //         System.Threading.Thread.Sleep(3000);
-                            this.HasNoMusic = true;
-                            return;
-                            // cueball = null;
-                        }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
+                        int randomIndex = (minIndex + randomNumber) % this.MasterList.Count;
+                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.
                     }
                 }
                 else
                 {
                     this.StopSound();
-
-                    this.CurrentSong = this.CurrentSoundInfo.FallNightSongs.ElementAt(randomNumber); //grab a random song from the fall song list
+                    this.CurrentSong = this.CurrentSoundInfo.RainyNightSongs[season].ElementAt(randomNumber); //grab a random song from the seasonal song list
                     Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
                     Game1.waveBank = this.CurrentSoundInfo.Wavebank;
                     this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
                 }
 
-
+                // play selected song
                 if (this.CurrentSong != null)
                 {
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a Fall Night. Check the Seasons folder for more info.");
-
-                    //System.Threading.Thread.Sleep(30000);
                     this.HasNoMusic = false;
+                    Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a rainy {season} night. Check the Seasons folder for more info");
                     this.CurrentSong.Play();
                     this.Reset();
                     return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly fall songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.FallSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.FallSongs.Count == 0)
-            {
-                Monitor.Log("The fall night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                                                                                                  // System.Threading.Thread.Sleep(3000);
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.FallSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        this.CurrentSong = this.CurrentSoundInfo.FallSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-
-                    if (master_helper >= this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        //       System.Thr1eading.Thread.Sleep(3000);
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
                 }
             }
-            else
+
+            // pick default song
             {
-                this.StopSound();
-                this.CurrentSong = this.CurrentSoundInfo.FallSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            }
-            if (this.CurrentSong != null)
-            {
-                Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a Fall day. Check the Seasons folder for more info.");
-                // System.Threading.Thread.Sleep(30000);
-                this.HasNoMusic = false;
-                this.CurrentSong.Play();
-                this.Reset();
-            }
-            return;
+                int randomNumber = this.Random.Next(0, this.CurrentSoundInfo.RainySongs[season].Count);
 
-        } //plays the songs associated with fall time
-        public void fall_rain_songs()
-        {
-            if (!this.IsGameLoaded)
-            {
-                this.StartMusicDelay();
-                return;
-            }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (this.MasterList.Count == 0)
-            {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
-                this.Reset();
-                return;
-
-            }
-
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
-            {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.FallRainNightSongs.Count); //random number between 0 and n. 0 not includes
-
-                if (this.CurrentSoundInfo.FallRainNightSongs.Count == 0) //nightly fall_rain songs
+                if (this.CurrentSoundInfo.RainySongs[season].Count == 0)
                 {
-                    Monitor.Log("The fall_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
+                    Monitor.Log($"The {season}_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
+                    int minIndex = 0;
+                    for (; minIndex < this.MasterList.Count; minIndex++)
                     {
-                        if (this.CurrentSoundInfo.FallRainNightSongs.Count > 0)
+                        if (this.CurrentSoundInfo.RainySongs[Season.Spring].Count > 0)
                         {
                             this.StopSound();
                             Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
                             Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                            this.CurrentSong = this.CurrentSoundInfo.FallRainNightSongs.ElementAt(randomNumber); //grab a random song from the fall_rain song list
+                            this.CurrentSong = this.CurrentSoundInfo.RainySongs[Season.Spring].ElementAt(randomNumber); //grab a random song from the spring_rain song list
                             this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-
                             break;
-
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
                         }
-                        if (master_helper > this.MasterList.Count)
+
+                        if (minIndex > this.MasterList.Count)
                         {
                             Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
                             this.HasNoMusic = true;
                             return;
                         }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
+                        int randomIndex = (minIndex + randomNumber) % this.MasterList.Count;
                         this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
                     }
                 }
                 else
                 {
                     this.StopSound();
-                    this.CurrentSong = this.CurrentSoundInfo.FallRainNightSongs.ElementAt(randomNumber); //grab a random song from the fall song list
+                    this.CurrentSong = this.CurrentSoundInfo.RainySongs[Season.Spring].ElementAt(randomNumber); //grab a random song from the fall song list
                     Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
                     Game1.waveBank = this.CurrentSoundInfo.Wavebank;
                     this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
                 }
 
-
+                // play selected song
                 if (this.CurrentSong != null)
                 {
                     this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a rainy Fall Night. Check the Seasons folder for more info.");
+                    Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a rainy {season} Day. Check the seasons folder for more info");
                     this.CurrentSong.Play();
                     this.Reset();
-                    return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly fall_rain songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.FallRainSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.FallRainSongs.Count == 0)
-            {
-                Monitor.Log("The fall_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.FallRainSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = this.CurrentSoundInfo.FallRainSongs.ElementAt(randomNumber); //grab a random song from the fall_rain song list
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-                    if (master_helper > this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
                 }
             }
-            else
-            {
-                this.StopSound();
-                this.CurrentSong = this.CurrentSoundInfo.FallRainSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            }
-
-            if (this.CurrentSong == null) return;
-            Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a rainy Fall day. Check the Seasons folder for more info.");
-            this.HasNoMusic = false;
-            this.CurrentSong.Play();
-            this.Reset();
-
-        } //plays the songs associated with fall time
-        public void winter_songs()
-        {
-            if (!this.IsGameLoaded)
-            {
-                this.StartMusicDelay();
-                return;
-            }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (this.MasterList.Count == 0)
-            {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
-                this.Reset();
-                return;
-
-            }
-
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
-            {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.WinterNightSongs.Count); //random number between 0 and n. 0 not includes
-
-                if (this.CurrentSoundInfo.WinterNightSongs.Count == 0) //nightly winter songs
-                {
-
-                    Monitor.Log("The winter night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
-                    {
-                        if (this.CurrentSoundInfo.WinterNightSongs.Count > 0)
-                        {
-                            this.StopSound();
-                            Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                            Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                            this.CurrentSong = this.CurrentSoundInfo.WinterNightSongs.ElementAt(randomNumber); //grab a random song from the winter song list
-                            this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                            break;
-
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
-                        }
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-                            return;
-                        }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
-                    }
-                }
-
-                else
-                {
-                    this.StopSound();
-                    this.CurrentSong = this.CurrentSoundInfo.WinterNightSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                    Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                    Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                    this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                }
-
-                if (this.CurrentSong != null)
-                {
-                    this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a Winter Night. Check the Seasons folder for more info.");
-                    this.CurrentSong.Play();
-                    this.Reset();
-                    return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly winter songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.WinterSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.WinterSongs.Count == 0)
-            {
-                Monitor.Log("The winter night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.WinterNightSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = this.CurrentSoundInfo.WinterSongs.ElementAt(randomNumber); //grab a random song from the winter song list
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-                    if (master_helper > this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
-                }
-            }
-            else
-            {
-                this.StopSound();
-                this.CurrentSong = this.CurrentSoundInfo.WinterSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            }
-            if (this.CurrentSong == null) return;
-            Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a Winter Day. Check the Seasons folder for more info.");
-            this.HasNoMusic = false;
-            this.CurrentSong.Play();
-            this.Reset();
-
-        } //plays the songs associated with winter time
-
-        public void winter_snow_songs()
-        {
-            if (!this.IsGameLoaded)
-            {
-                this.StartMusicDelay();
-                return;
-            }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
-
-            if (this.MasterList.Count == 0)
-            {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
-                this.Reset();
-                return;
-
-            }
-
-            this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay >= Game1.getModeratelyDarkTime())  //expanded upon, just incase my night owl mod is installed.
-            {
-                randomNumber = this.Random.Next(0, this.CurrentSoundInfo.WinterSnowNightSongs.Count); //random number between 0 and n. 0 not includes
-
-                if (this.CurrentSoundInfo.WinterSnowNightSongs.Count == 0) //nightly winter_snow songs
-                {
-                    Monitor.Log("The winter_snow night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                    int master_helper = 0;
-                    while (master_helper != this.MasterList.Count)
-                    {
-                        if (this.CurrentSoundInfo.WinterSnowNightSongs.Count > 0)
-                        {
-                            this.StopSound();
-                            Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                            Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                            this.CurrentSong = this.CurrentSoundInfo.WinterSnowNightSongs.ElementAt(randomNumber); //grab a random song from the winter_snow song list
-                            this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                            break;
-
-                        } //itterate through all of the svalid locations that were stored in this class
-                        else
-                        {
-                            master_helper++;
-                        }
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-                            return;
-                        }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
-                    }
-                }
-
-                else
-                {
-                    this.StopSound();
-                    this.CurrentSong = this.CurrentSoundInfo.WinterSnowNightSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                    Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                    Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                    this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                }
-
-                if (this.CurrentSong != null)
-                {
-                    this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a snowy Winter night. Check the Seasons folder for more info.");
-                    this.CurrentSong.Play();
-                    this.Reset();
-                    return;
-                } //if cueballs is null, aka the song list either wasn't initialized, or it is empty, default to playing the normal songs.
-
-
-            }
-            //not nightly winter_snow songs. AKA default songs
-
-            randomNumber = this.Random.Next(0, this.CurrentSoundInfo.WinterSnowSongs.Count); //random number between 0 and n. 0 not includes
-            if (this.CurrentSoundInfo.WinterSnowSongs.Count == 0)
-            {
-                Monitor.Log("The winter_snow night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
-                int master_helper = 0;
-                while (master_helper != this.MasterList.Count)
-                {
-                    if (this.CurrentSoundInfo.WinterSnowSongs.Count > 0)
-                    {
-                        this.StopSound();
-                        Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                        Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                        this.CurrentSong = this.CurrentSoundInfo.WinterSnowSongs.ElementAt(randomNumber); //grab a random song from the winter_snow song list
-                        this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-                        break;
-
-                    } //itterate through all of the svalid locations that were stored in this class
-                    else
-                    {
-                        master_helper++;
-                    }
-                    if (master_helper > this.MasterList.Count)
-                    {
-                        Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                        this.HasNoMusic = true;
-                        return;
-                        //            cueball = null;
-                    }
-                    int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                    continue;
-                }
-            }
-            else
-            {
-                this.StopSound();
-                this.CurrentSong = this.CurrentSoundInfo.WinterSnowSongs.ElementAt(randomNumber); //grab a random song from the fall song list
-                Game1.soundBank = this.CurrentSoundInfo.Soundbank; //access my new sound table
-                Game1.waveBank = this.CurrentSoundInfo.Wavebank;
-                this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
-            }
-            if (this.CurrentSong == null) return;
-            this.HasNoMusic = false;
-            Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + " while it is a snowy winter day. Check the Seasons folder for more info.");
-            this.CurrentSong.Play();
-            this.Reset();
-            return;
-
-        } //plays the songs associated with spring time
-
+        }
 
         /// <summary>Stop the currently playing sound, if any.</summary>
         public void StopSound()

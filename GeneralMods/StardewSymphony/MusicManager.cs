@@ -13,6 +13,13 @@ namespace Omegasis.StardewSymphony
         /*********
         ** Properties
         *********/
+        /// <summary>The valid season values.</summary>
+        private readonly Season[] Seasons = Enum.GetValues(typeof(Season)).Cast<Season>().ToArray();
+
+
+        /*********
+        ** Accessors
+        *********/
         /// <summary>The directory path containing the music.</summary>
         public string Directory { get; }
 
@@ -28,53 +35,17 @@ namespace Omegasis.StardewSymphony
         /// <summary>The loaded soundbank (if any).</summary>
         public SoundBank Soundbank { get; }
 
-        /// <summary>Songs that play in spring.</summary>
-        public List<Cue> SpringSongs { get; } = new List<Cue>();
+        /// <summary>The default music to play if there isn't a more specific option.</summary>
+        public IDictionary<Season, List<Cue>> DefaultSongs = MusicManager.CreateSeasonalSongList();
 
-        /// <summary>Songs that play in summer.</summary>
-        public List<Cue> SummerSongs { get; } = new List<Cue>();
+        /// <summary>The music to play at night.</summary>
+        public IDictionary<Season, List<Cue>> NightSongs = MusicManager.CreateSeasonalSongList();
 
-        /// <summary>Songs that play in fall.</summary>
-        public List<Cue> FallSongs { get; } = new List<Cue>();
+        /// <summary>The music to play on rainy days.</summary>
+        public IDictionary<Season, List<Cue>> RainySongs = MusicManager.CreateSeasonalSongList();
 
-        /// <summary>Songs that play in winter.</summary>
-        public List<Cue> WinterSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on spring nights.</summary>
-        public List<Cue> SpringNightSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on summer nights.</summary>
-        public List<Cue> SummerNightSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on fall nights.</summary>
-        public List<Cue> FallNightSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on winter nights.</summary>
-        public List<Cue> WinterNightSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy spring days.</summary>
-        public List<Cue> SpringRainSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy summer days.</summary>
-        public List<Cue> SummerRainSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy fall days.</summary>
-        public List<Cue> FallRainSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy winter days.</summary>
-        public List<Cue> WinterSnowSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy spring nights.</summary>
-        public List<Cue> SpringRainNightSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy summer nights.</summary>
-        public List<Cue> SummerRainNightSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy fall nights.</summary>
-        public List<Cue> FallRainNightSongs { get; } = new List<Cue>();
-
-        /// <summary>Songs that play on rainy winter nights.</summary>
-        public List<Cue> WinterSnowNightSongs { get; } = new List<Cue>();
+        /// <summary>The music to play on rainy nights.</summary>
+        public IDictionary<Season, List<Cue>> RainyNightSongs = MusicManager.CreateSeasonalSongList();
 
         /// <summary>Songs that play in specific locations.</summary>
         public Dictionary<string, List<Cue>> LocationSongs { get; } = new Dictionary<string, List<Cue>>();
@@ -122,7 +93,7 @@ namespace Omegasis.StardewSymphony
         /// <summary>Read cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.</summary>
         /// <param name="conditionalName">The conditional file name to read.</param>
         /// <param name="cues">The music list to update.</param>
-        public void Music_Loader_Seasons(string conditionalName, IDictionary<string, MusicManager> cues)
+        public void LoadSeasonalSongs(string conditionalName, IDictionary<string, MusicManager> cues)
         {
             string path = Path.Combine(this.Directory, "Music_Files", "Seasons", conditionalName + ".txt");
             if (!File.Exists(path))
@@ -149,233 +120,59 @@ namespace Omegasis.StardewSymphony
                     if (Convert.ToString(text[i]) == "\n")
                         break;
 
-                    string cueName;
-                    if (conditionalName == "spring")
+                    foreach (Season season in this.Seasons)
                     {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
+                        // default music
+                        if ($"{season}".Equals(conditionalName, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            this.SpringSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.SpringSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "summer")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
+                            string cueName = Convert.ToString(text[i]);
+                            i++;
 
-                        if (!cues.Keys.Contains(cueName))
+                            this.DefaultSongs[season].Add(this.Soundbank.GetCue(cueName));
+                            if (!cues.Keys.Contains(cueName))
+                                cues.Add(cueName, this);
+                        }
+
+                        // night music
+                        if ($"{season}_night".Equals(conditionalName, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            this.SummerSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.SummerSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "fall")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
+                            string cueName = Convert.ToString(text[i]);
+                            i++;
 
-                        if (!cues.Keys.Contains(cueName))
+                            this.NightSongs[season].Add(this.Soundbank.GetCue(cueName));
+                            if (!cues.Keys.Contains(cueName))
+                                cues.Add(cueName, this);
+                        }
+
+                        // rain music
+                        if ($"{season}_rain".Equals(conditionalName, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            this.FallSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.FallSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "winter")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
+                            string cueName = Convert.ToString(text[i]);
+                            i++;
 
-                        if (!cues.Keys.Contains(cueName))
+                            this.RainySongs[season].Add(this.Soundbank.GetCue(cueName));
+                            if (!cues.Keys.Contains(cueName))
+                                cues.Add(cueName, this);
+                        }
+
+                        // rainy night
+                        if ($"{season}_rain_night".Equals(conditionalName, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            this.WinterSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
+                            string cueName = Convert.ToString(text[i]);
+                            i++;
 
+                            this.RainyNightSongs[season].Add(this.Soundbank.GetCue(cueName));
+                            if (!cues.Keys.Contains(cueName))
+                                cues.Add(cueName, this);
                         }
-                        else
-                            this.WinterSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    //add in other stuff here
-                    //========================================================================================================================================================================================
-                    //NIGHTLY SEASONAL LOADERS
-                    if (conditionalName == "spring_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.SpringNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.SpringNightSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "summer_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.SummerNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.SummerNightSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "fall_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.FallNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.FallNightSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "winter_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.WinterNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.WinterNightSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    ////////NOW I"M ADDING THE PART THAT WILL READ IN RAINY SEASONAL SONGS FOR DAY AND NIGHT
-                    if (conditionalName == "spring_rain")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.SpringRainSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.SpringRainSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "summer_rain")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.SummerRainSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.SummerRainSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "fall_rain")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.FallRainSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.FallRainSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "winter_snow")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.WinterSnowSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.WinterSnowSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-
-                    //add in other stuff here
-                    //========================================================================================================================================================================================
-                    //NIGHTLY SEASONAL RAIN LOADERS
-                    if (conditionalName == "spring_rain_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.SpringRainNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-
-                        }
-                        else
-                            this.SpringRainNightSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "summer_rain_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.SummerRainNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.SummerRainNightSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "fall_rain_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.FallRainNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.FallRainNightSongs.Add(this.Soundbank.GetCue(cueName));
-                    }
-                    if (conditionalName == "winter_snow_night")
-                    {
-                        cueName = Convert.ToString(text[i]);
-                        i++;
-
-                        if (!cues.Keys.Contains(cueName))
-                        {
-                            this.WinterSnowNightSongs.Add(this.Soundbank.GetCue(cueName));
-                            cues.Add(cueName, this);
-                        }
-                        else
-                            this.WinterSnowNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
                 }
                 if (i == 2)
                 {
                     //  Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 +" this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
-                    // System.Threading.Thread.Sleep(10);
                     return;
                 }
-                Console.WriteLine("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
+                Console.WriteLine($"Stardew Symohony:The music pack located at: {this.Directory} has successfully processed the song info for the game location {conditionalName}");
             }
         }
 
@@ -596,6 +393,15 @@ namespace Omegasis.StardewSymphony
                     Console.WriteLine("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
+        }
+
+        /// <summary>Create a dictionary of seasonal songs.</summary>
+        private static IDictionary<Season, List<Cue>> CreateSeasonalSongList()
+        {
+            IDictionary<Season, List<Cue>> dict = new Dictionary<Season, List<Cue>>();
+            foreach (Season season in Enum.GetValues(typeof(Season)))
+                dict[season] = new List<Cue>();
+            return dict;
         }
     }
 }
