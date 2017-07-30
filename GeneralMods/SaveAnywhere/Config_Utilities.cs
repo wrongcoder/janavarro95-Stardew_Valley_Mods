@@ -11,7 +11,7 @@ namespace Omegasis.SaveAnywhere
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
-            string mylocation = Path.Combine(Mod_Core.mod_path, "Save_Anywhere_Config");
+            string mylocation = Path.Combine(SaveAnywhere.mod_path, "Save_Anywhere_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
@@ -33,7 +33,7 @@ namespace Omegasis.SaveAnywhere
             //write all of my info to a text file.
             string myname = StardewValley.Game1.player.name;
 
-            string mylocation = Path.Combine(Mod_Core.mod_path, "Save_Anywhere_Config");
+            string mylocation = Path.Combine(SaveAnywhere.mod_path, "Save_Anywhere_Config");
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
 

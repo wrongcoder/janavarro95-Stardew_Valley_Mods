@@ -17,7 +17,7 @@ using StardewValley.Menus;
 
 namespace Omegasis.SaveAnywhere
 {
-    public class New_Shipping_Menu : IClickableMenu
+    public class NewShippingMenu : IClickableMenu
     {
         public int currentPage = -1;
         public int currentTab = 0;
@@ -59,7 +59,7 @@ namespace Omegasis.SaveAnywhere
         private bool savedYet;
         private SaveGameMenu saveGameMenu;
 
-        public New_Shipping_Menu(List<Item> items)
+        public NewShippingMenu(List<Item> items)
           : base(Game1.viewport.Width / 2 - 640, Game1.viewport.Height / 2 - 360, 1280, 720, false)
         {
             this.parseItems(items);
@@ -75,7 +75,7 @@ namespace Omegasis.SaveAnywhere
             for (int index = 0; index < 6; ++index)
             {
                 List<ClickableTextureComponent> list = this.categories;
-                ClickableTextureComponent textureComponent1 = new ClickableTextureComponent("texture"+Convert.ToString(index),new Rectangle(this.centerX + this.totalWidth / 2 - this.plusButtonWidth, this.centerY - 25 * Game1.pixelZoom * 3 + index * 27 * Game1.pixelZoom, this.plusButtonWidth, 11 * Game1.pixelZoom), "", this.getCategoryName(index), Game1.mouseCursors, new Rectangle(392, 361, 10, 11), (float)Game1.pixelZoom, false);
+                ClickableTextureComponent textureComponent1 = new ClickableTextureComponent("texture" + Convert.ToString(index), new Rectangle(this.centerX + this.totalWidth / 2 - this.plusButtonWidth, this.centerY - 25 * Game1.pixelZoom * 3 + index * 27 * Game1.pixelZoom, this.plusButtonWidth, 11 * Game1.pixelZoom), "", this.getCategoryName(index), Game1.mouseCursors, new Rectangle(392, 361, 10, 11), (float)Game1.pixelZoom, false);
                 textureComponent1.visible = index < 5 && Enumerable.Count<Item>((IEnumerable<Item>)this.categoryItems[index]) > 0;
                 ClickableTextureComponent textureComponent2 = textureComponent1;
                 list.Add(textureComponent2);
@@ -268,12 +268,12 @@ namespace Omegasis.SaveAnywhere
                                 return;
                             try
                             {
-                               // Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
+                                // Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
                             }
                             catch (Exception rrr)
                             {
                                 Game1.showRedMessage("Can't save here. See log for error.");
-                                Mod_Core.thisMonitor.Log(rrr.ToString(), LogLevel.Error);
+                                SaveAnywhere.thisMonitor.Log(rrr.ToString(), LogLevel.Error);
                             }
                             return;
                         }
@@ -456,7 +456,7 @@ namespace Omegasis.SaveAnywhere
                 {
 
                 }
-                    
+
             }
             else
             {
@@ -465,8 +465,8 @@ namespace Omegasis.SaveAnywhere
                 base.receiveLeftClick(x, y, playSound);
                 if (this.currentPage == -1 && this.okButton.containsPoint(x, y))
                 {
-                  //  this.outro = true;
-                 //   this.outroFadeTimer = 800;
+                    //  this.outro = true;
+                    //   this.outroFadeTimer = 800;
                     Game1.playSound("bigDeSelect");
                     //    Game1.changeMusicTrack("none");
                     Game1.exitActiveMenu();
@@ -616,7 +616,7 @@ namespace Omegasis.SaveAnywhere
                                 break;
                         }
                         SpriteText.drawString(b, s, (int)location.X + Game1.tileSize * 5 / 4 + SpriteText.getWidthOfString(this.categoryItems[this.currentPage][index].Name + (this.categoryItems[this.currentPage][index].Stack <= 1 ? "" : " x" + (object)this.categoryItems[this.currentPage][index].Stack)), (int)location.Y + Game1.tileSize / 8, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
-                        SpriteText.drawString(b, Convert.ToString(((this.categoryItems[this.currentPage][index] as StardewValley.Object).sellToStorePrice() * (this.categoryItems[this.currentPage][index] as StardewValley.Object).Stack)) +"g", (int)location.X + this.width - Game1.tileSize - SpriteText.getWidthOfString(Convert.ToString(((this.categoryItems[this.currentPage][index] as StardewValley.Object).sellToStorePrice() * (this.categoryItems[this.currentPage][index] as StardewValley.Object).Stack)) + "g"), (int)location.Y + Game1.pixelZoom * 3, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
+                        SpriteText.drawString(b, Convert.ToString(((this.categoryItems[this.currentPage][index] as StardewValley.Object).sellToStorePrice() * (this.categoryItems[this.currentPage][index] as StardewValley.Object).Stack)) + "g", (int)location.X + this.width - Game1.tileSize - SpriteText.getWidthOfString(Convert.ToString(((this.categoryItems[this.currentPage][index] as StardewValley.Object).sellToStorePrice() * (this.categoryItems[this.currentPage][index] as StardewValley.Object).Stack)) + "g"), (int)location.Y + Game1.pixelZoom * 3, 999999, -1, 999999, 1f, 0.88f, false, -1, "", -1);
                         location.Y += (float)(Game1.tileSize + Game1.pixelZoom);
                     }
                 }

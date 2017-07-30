@@ -34,15 +34,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Animal_Utilities.cs" />
+    <Compile Include="SaveUtilities.cs" />
     <Compile Include="Config_Utilities.cs" />
-    <Compile Include="Horse_Utility.cs" />
     <Compile Include="Mod_Core.cs" />
-    <Compile Include="GameUtilities.cs" />
     <Compile Include="New_Shipping_Menu.cs" />
-    <Compile Include="NPC_Utilities.cs" />
-    <Compile Include="Pet_Utilities.cs" />
-    <Compile Include="Player_Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

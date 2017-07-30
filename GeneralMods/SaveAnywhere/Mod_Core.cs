@@ -11,9 +11,9 @@ using StardewValley.Characters;
 
 namespace Omegasis.SaveAnywhere
 {
-    public class Mod_Core : StardewModdingAPI.Mod
+    public class SaveAnywhere : Mod
     {
-        
+
         public static string mod_path;
         public static string player_path;
         public static string animal_path;
@@ -28,19 +28,20 @@ namespace Omegasis.SaveAnywhere
 
         public override void Entry(IModHelper helper)
         {
-            try {
-                StardewModdingAPI.Events.ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
-                StardewModdingAPI.Events.SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
-                StardewModdingAPI.Events.GameEvents.UpdateTick += Warp_Check;
-                StardewModdingAPI.Events.GameEvents.UpdateTick += PassiveSaveChecker;
-                StardewModdingAPI.Events.TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
-                StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
-                StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
-                mod_path = Helper.DirectoryPath;
+            try
+            {
+                ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
+                SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
+                GameEvents.UpdateTick += Warp_Check;
+                GameEvents.UpdateTick += PassiveSaveChecker;
+                TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
+                TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
+                TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
+                SaveAnywhere.mod_path = Helper.DirectoryPath;
                 npc_key_value_pair = new Dictionary<string, string>();
-                thisMonitor = Monitor;
+                SaveAnywhere.thisMonitor = Monitor;
             }
-            catch(Exception x)
+            catch (Exception x)
             {
                 Monitor.Log(x.ToString());
             }
@@ -48,24 +49,25 @@ namespace Omegasis.SaveAnywhere
 
         private void PassiveSaveChecker(object sender, EventArgs e)
         {
-            if (GameUtilities.passiveSave == true && Game1.activeClickableMenu==null)
+            if (SaveUtilities.passiveSave == true && Game1.activeClickableMenu == null)
             {
                 Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
-                GameUtilities.passiveSave = false;
+                SaveUtilities.passiveSave = false;
             }
         }
 
         //done
         private void TimeEvents_OnNewDay(object sender, EventArgsIntChanged e)
         {
-            try {
+            try
+            {
                 //Log.Info("Day of Month Changed");
-                new_day = true;
+                SaveAnywhere.new_day = true;
                 string name = Game1.player.name;
-                Mod_Core.player_path = Path.Combine(Mod_Core.mod_path, "Save_Data", name);
-              
+                SaveAnywhere.player_path = Path.Combine(SaveAnywhere.mod_path, "Save_Data", name);
+
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 Monitor.Log(err.ToString());
             }
@@ -74,7 +76,8 @@ namespace Omegasis.SaveAnywhere
         //done
         private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
         {
-            try {
+            try
+            {
                 //new_day = true;
                 // Log.Info("Day of Month Changed");
                 npc_key_value_pair.Clear();
@@ -83,12 +86,12 @@ namespace Omegasis.SaveAnywhere
                     foreach (var character in loc.characters)
                     {
 
-                       if(!npc_key_value_pair.ContainsKey(character.name)) npc_key_value_pair.Add(character.name, parseSchedule(character));
-                      //  Monitor.Log(parseSchedule(character));
+                        if (!npc_key_value_pair.ContainsKey(character.name)) npc_key_value_pair.Add(character.name, parseSchedule(character));
+                        //  Monitor.Log(parseSchedule(character));
                     }
                 }
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 Monitor.Log(err.ToString());
             }
@@ -109,95 +112,95 @@ namespace Omegasis.SaveAnywhere
             {
                 return;
             }
-                //if (once == true) return;
-                //FieldInfo field = typeof(NPC).GetField("scheduleTimeToTry", BindingFlags.NonPublic | BindingFlags.Instance);
-                // MethodInfo dynMethod = typeof(NPC).GetMethod("prepareToDisembarkOnNewSchedulePath",BindingFlags.NonPublic | BindingFlags.Instance);
-                MethodInfo dynMethod2 = typeof(NPC).GetMethod("pathfindToNextScheduleLocation", BindingFlags.NonPublic | BindingFlags.Instance);
+            //if (once == true) return;
+            //FieldInfo field = typeof(NPC).GetField("scheduleTimeToTry", BindingFlags.NonPublic | BindingFlags.Instance);
+            // MethodInfo dynMethod = typeof(NPC).GetMethod("prepareToDisembarkOnNewSchedulePath",BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo dynMethod2 = typeof(NPC).GetMethod("pathfindToNextScheduleLocation", BindingFlags.NonPublic | BindingFlags.Instance);
 
-                if (npc_warp == false) return;
-                if (new_day == true) return;
-                List<StardewValley.Characters.Child> child_list = new List<StardewValley.Characters.Child>();
-                child_list = StardewValley.Game1.player.getChildren();
-                foreach (var loc in Game1.locations)
+            if (SaveAnywhere.npc_warp == false) return;
+            if (SaveAnywhere.new_day == true) return;
+            List<Child> child_list = new List<Child>();
+            child_list = Game1.player.getChildren();
+            foreach (var loc in Game1.locations)
+            {
+                foreach (var npc in loc.characters)
                 {
-                    foreach (var npc in loc.characters)
-                    {
-                        if (npc.DirectionsToNewLocation != null) continue;
-                        if (npc.isMoving() == true) continue;
-                        if (npc.Schedule == null) continue;
+                    if (npc.DirectionsToNewLocation != null) continue;
+                    if (npc.isMoving() == true) continue;
+                    if (npc.Schedule == null) continue;
                     if (npc.controller != null) continue;
-                        foreach (var child_name in child_list)
-                        {
-                            if (npc.name == child_name.name) continue;
-                        }
-                        if (npc.name == Game1.player.getPetName()) continue;
-                        Horse horse = StardewValley.Utility.findHorse();
-                        if (horse != null)
-                        {
-                            if (npc.name == horse.name) continue;
-                        }
-                        // Log.Info("THIS IS MY NPC" + npc.name);
-                        //  Monitor.Log("NO SCHEDULE FOUND FOR " + npc.name);
+                    foreach (var child_name in child_list)
+                    {
+                        if (npc.name == child_name.name) continue;
+                    }
+                    if (npc.name == Game1.player.getPetName()) continue;
+                    Horse horse = Utility.findHorse();
+                    if (horse != null)
+                    {
+                        if (npc.name == horse.name) continue;
+                    }
+                    // Log.Info("THIS IS MY NPC" + npc.name);
+                    //  Monitor.Log("NO SCHEDULE FOUND FOR " + npc.name);
 
 
-                        //  npc.checkSchedule(Game1.timeOfDay);
-                        SchedulePathDescription schedulePathDescription;
+                    //  npc.checkSchedule(Game1.timeOfDay);
+                    SchedulePathDescription schedulePathDescription;
 
-                        //int myint = (int)field.GetValue(npc);
-                        /*
-                        npc.Schedule.TryGetValue(Game1.timeOfDay, out schedulePathDescription);
-                        int i = 0;
-                        int pseudo_time=0;
+                    //int myint = (int)field.GetValue(npc);
+                    /*
+                    npc.Schedule.TryGetValue(Game1.timeOfDay, out schedulePathDescription);
+                    int i = 0;
+                    int pseudo_time=0;
 
-                        while (schedulePathDescription == null)
-                        {
-                            i += 10;
-                            pseudo_time = Game1.timeOfDay - i;
-                            if (pseudo_time <= 600) { break; }
-                            npc.Schedule.TryGetValue(pseudo_time, out schedulePathDescription);
-                            checking_time = pseudo_time;
-                        }
-                        // npc.directionsToNewLocation = schedulePathDescription;
-                        // npc.prepareToDisembarkOnNewSchedulePath();
+                    while (schedulePathDescription == null)
+                    {
+                        i += 10;
+                        pseudo_time = Game1.timeOfDay - i;
+                        if (pseudo_time <= 600) { break; }
+                        npc.Schedule.TryGetValue(pseudo_time, out schedulePathDescription);
+                        checking_time = pseudo_time;
+                    }
+                    // npc.directionsToNewLocation = schedulePathDescription;
+                    // npc.prepareToDisembarkOnNewSchedulePath();
 
-                        //field.SetValue(npc, 9999999);
+                    //field.SetValue(npc, 9999999);
 
-                        npc.DirectionsToNewLocation = schedulePathDescription;
-                       */
-                        //////////////////////////////////////////
-                        // Log.Info("Does this break here 1");
-                        Dictionary<string, string> dictionary;
-                        string key_value = "";
-                        try
-                        {
-                            dictionary = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name);
-                        }
-                        catch (Exception ex)
-                        {
+                    npc.DirectionsToNewLocation = schedulePathDescription;
+                   */
+                    //////////////////////////////////////////
+                    // Log.Info("Does this break here 1");
+                    Dictionary<string, string> dictionary;
+                    string key_value = "";
+                    try
+                    {
+                        dictionary = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name);
+                    }
+                    catch (Exception ex)
+                    {
                         this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                            // dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
-                            continue;
-                        }
-                        // Log.Info("Does this break here 2");
-                        //////////////////////
-                        string value;
-                        string end_map;
-                        int x;
-                        int y;
-                        int end_dir;
-                        npc_key_value_pair.TryGetValue(npc.name, out key_value);
-                        if (key_value == "" || key_value == null)
-                        {
-                            Monitor.Log("THIS IS AWKWARD");
-                            continue;
-                        }
-                        dictionary.TryGetValue(key_value, out value);
-                        // Log.Info("Does this break here 3");
-                        string[] valueArray1 = value.Split('/');
-                        int count1 = 0;
-                        foreach (var josh in valueArray1)
-                        {
-                            string[] valueArray2 = valueArray1[count1].Split(' ');
+                        // dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
+                        continue;
+                    }
+                    // Log.Info("Does this break here 2");
+                    //////////////////////
+                    string value;
+                    string end_map;
+                    int x;
+                    int y;
+                    int end_dir;
+                    npc_key_value_pair.TryGetValue(npc.name, out key_value);
+                    if (key_value == "" || key_value == null)
+                    {
+                        Monitor.Log("THIS IS AWKWARD");
+                        continue;
+                    }
+                    dictionary.TryGetValue(key_value, out value);
+                    // Log.Info("Does this break here 3");
+                    string[] valueArray1 = value.Split('/');
+                    int count1 = 0;
+                    foreach (var josh in valueArray1)
+                    {
+                        string[] valueArray2 = valueArray1[count1].Split(' ');
 
 
                         if (valueArray2.Contains("GOTO"))
@@ -212,15 +215,16 @@ namespace Omegasis.SaveAnywhere
                                     // Log.Info("Does this break here 3");
                                     string[] valueArray3 = value.Split('/');
                                     int count10 = 0;
-                                    
-                                        string[] valueArray4 = valueArray3[count10].Split(' ');
-                                        valueArray2 = valueArray4;
-                                    
+
+                                    string[] valueArray4 = valueArray3[count10].Split(' ');
+                                    valueArray2 = valueArray4;
+
                                 }
                             }
                         }
 
-                        try {
+                        try
+                        {
                             if (Convert.ToInt32(valueArray2.ElementAt(0)) > Game1.timeOfDay) break;
                             end_map = Convert.ToString(valueArray2.ElementAt(1));
                             x = Convert.ToInt32(valueArray2.ElementAt(2));
@@ -228,9 +232,9 @@ namespace Omegasis.SaveAnywhere
                             end_dir = Convert.ToInt32(valueArray2.ElementAt(4));
                             //MOST RELIABLE    
                             schedulePathDescription = (SchedulePathDescription)dynMethod2.Invoke(npc, new object[] { npc.currentLocation.name, npc.getTileX(), npc.getTileY(), end_map, x, y, end_dir, null, null });
-                            
+
                             //FASTEST
-                             //schedulePathDescription =  pathfindToNextScheduleLocation(npc,npc.currentLocation.name, npc.getTileX(), npc.getTileY(), end_map, x, y, end_dir, null, null );
+                            //schedulePathDescription =  pathfindToNextScheduleLocation(npc,npc.currentLocation.name, npc.getTileX(), npc.getTileY(), end_map, x, y, end_dir, null, null );
                             count1++;
                         }
                         catch (Exception err)
@@ -242,25 +246,25 @@ namespace Omegasis.SaveAnywhere
                                 //Monitor.Log(v);
                             }
                             schedulePathDescription = null;
-                           // Monitor.Log(err);
+                            // Monitor.Log(err);
                         }
 
-                            if (schedulePathDescription == null) continue;
-                            //  Log.Info("This works 2");
-                            // Utility.getGameLocationOfCharacter(npc);
-                            //  Log.Info("This works 3");
+                        if (schedulePathDescription == null) continue;
+                        //  Log.Info("This works 2");
+                        // Utility.getGameLocationOfCharacter(npc);
+                        //  Log.Info("This works 3");
 
-                            npc.DirectionsToNewLocation = schedulePathDescription;
-                            npc.controller = new PathFindController(npc.DirectionsToNewLocation.route, (Character)npc, Utility.getGameLocationOfCharacter(npc))
-                            {
-                                finalFacingDirection = npc.DirectionsToNewLocation.facingDirection,
-                                endBehaviorFunction = null//npc.getRouteEndBehaviorFunction(npc.DirectionsToNewLocation.endOfRouteBehavior, npc.DirectionsToNewLocation.endOfRouteMessage)
-                            };
+                        npc.DirectionsToNewLocation = schedulePathDescription;
+                        npc.controller = new PathFindController(npc.DirectionsToNewLocation.route, (Character)npc, Utility.getGameLocationOfCharacter(npc))
+                        {
+                            finalFacingDirection = npc.DirectionsToNewLocation.facingDirection,
+                            endBehaviorFunction = null//npc.getRouteEndBehaviorFunction(npc.DirectionsToNewLocation.endOfRouteBehavior, npc.DirectionsToNewLocation.endOfRouteMessage)
+                        };
 
-                        }
                     }
                 }
-                once = true;
+            }
+            SaveAnywhere.once = true;
         }
 
 
@@ -529,7 +533,7 @@ namespace Omegasis.SaveAnywhere
 
                 return key_value;
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 Monitor.Log(err.ToString());
                 return null;
@@ -576,8 +580,8 @@ namespace Omegasis.SaveAnywhere
                 if (!Game1.isRaining && dictionary.ContainsKey("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
                     FieldInfo field = typeof(NPC).GetField("nameofTodaysSchedule", BindingFlags.NonPublic | BindingFlags.Instance);
-                   field.SetValue(npc,"marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
-                    return result="marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                    field.SetValue(npc, "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
+                    return result = "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
                 npc.followSchedule = false;
                 return null;
@@ -586,33 +590,33 @@ namespace Omegasis.SaveAnywhere
             {
                 if (dictionary.ContainsKey(Game1.currentSeason + "_" + Game1.dayOfMonth))
                 {
-                    return result=(Game1.currentSeason + "_" + Game1.dayOfMonth);
+                    return result = (Game1.currentSeason + "_" + Game1.dayOfMonth);
                 }
                 int i;
                 for (i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1); i > 0; i--)
                 {
                     if (dictionary.ContainsKey(Game1.dayOfMonth + "_" + i))
                     {
-                        return result=Game1.dayOfMonth + "_" + i;
+                        return result = Game1.dayOfMonth + "_" + i;
                     }
                 }
                 if (dictionary.ContainsKey(string.Empty + Game1.dayOfMonth))
                 {
-                    return result=string.Empty + Game1.dayOfMonth;
+                    return result = string.Empty + Game1.dayOfMonth;
                 }
                 if (npc.name.Equals("Pam") && Game1.player.mailReceived.Contains("ccVault"))
                 {
-                    return result="bus";
+                    return result = "bus";
                 }
                 if (Game1.isRaining)
                 {
                     if (Game1.random.NextDouble() < 0.5 && dictionary.ContainsKey("rain2"))
                     {
-                        return result="rain2";
+                        return result = "rain2";
                     }
                     if (dictionary.ContainsKey("rain"))
                     {
-                        return result="rain";
+                        return result = "rain";
                     }
                 }
                 List<string> list = new List<string>
@@ -626,26 +630,26 @@ namespace Omegasis.SaveAnywhere
                     list.Add(string.Empty + i);
                     if (dictionary.ContainsKey(string.Join("_", list)))
                     {
-                        return result=string.Join("_", list);
+                        return result = string.Join("_", list);
                     }
                     i--;
                     list.RemoveAt(list.Count - 1);
                 }
                 if (dictionary.ContainsKey(string.Join("_", list)))
                 {
-                    return result=string.Join("_", list);
+                    return result = string.Join("_", list);
                 }
                 if (dictionary.ContainsKey(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
-                    return result=Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                    return result = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
                 if (dictionary.ContainsKey(Game1.currentSeason))
                 {
-                    return result=Game1.currentSeason;
+                    return result = Game1.currentSeason;
                 }
                 if (dictionary.ContainsKey("spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
-                    return result="spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                    return result = "spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
                 list.RemoveAt(list.Count - 1);
                 list.Add("spring");
@@ -655,14 +659,14 @@ namespace Omegasis.SaveAnywhere
                     list.Add(string.Empty + i);
                     if (dictionary.ContainsKey(string.Join("_", list)))
                     {
-                        return result=string.Join("_", list);
+                        return result = string.Join("_", list);
                     }
                     i--;
                     list.RemoveAt(list.Count - 1);
                 }
                 if (dictionary.ContainsKey("spring"))
                 {
-                    return result="spring";
+                    return result = "spring";
                 }
                 return null;
             }
@@ -673,11 +677,12 @@ namespace Omegasis.SaveAnywhere
         //done
         private void ShippingCheck(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 if (Game1.activeClickableMenu != null) return;
-                GameUtilities.shipping_check();
+                SaveUtilities.shipping_check();
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 Monitor.Log(err.ToString());
             }
@@ -688,24 +693,24 @@ namespace Omegasis.SaveAnywhere
         {
             try
             {
-                string name = StardewValley.Game1.player.name;
-                Mod_Core.player_path = Path.Combine(Mod_Core.mod_path, "Save_Data", name);
-                if (!Directory.Exists(Mod_Core.player_path))
+                string name = Game1.player.name;
+                SaveAnywhere.player_path = Path.Combine(SaveAnywhere.mod_path, "Save_Data", name);
+                if (!Directory.Exists(SaveAnywhere.player_path))
                 {
                     //Log.AsyncM(Save_Anywhere_V2.Mod_Core.player_path);
                     //Log.AsyncC("WOOPS");
                     return;
                 }
 
-               // Log.AsyncY(Player_Utilities.has_player_warped_yet);
+                // Log.AsyncY(Player_Utilities.has_player_warped_yet);
 
-                if (Player_Utilities.has_player_warped_yet == false && Game1.player.isMoving() == true)
+                if (SaveUtilities.has_player_warped_yet == false && Game1.player.isMoving() == true)
                 {
                     //Log.AsyncM("Ok Good"); 
-                    Player_Utilities.warp_player();
-                    Animal_Utilities.load_animal_info();
-                    NPC_Utilities.Load_NPC_Info();
-                    Player_Utilities.has_player_warped_yet = true;
+                    SaveUtilities.warp_player();
+                    SaveUtilities.load_animal_info();
+                    SaveUtilities.Load_NPC_Info();
+                    SaveUtilities.has_player_warped_yet = true;
 
                 }
             }
@@ -719,30 +724,33 @@ namespace Omegasis.SaveAnywhere
         //done
         private void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
-            try {
-                Player_Utilities.load_player_info();
+            try
+            {
+                SaveUtilities.load_player_info();
                 Config_Utilities.DataLoader_Settings();
                 Config_Utilities.MyWritter_Settings();
             }
-            catch (Exception err) {
+            catch (Exception err)
+            {
                 Monitor.Log(err.ToString());
             }
         }
 
-        public void KeyPressed_Save_Load_Menu(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        public void KeyPressed_Save_Load_Menu(object sender, EventArgsKeyPressed e)
         {
             if (e.KeyPressed.ToString() == Config_Utilities.key_binding) //if the key is pressed, load my cusom save function
             {
                 if (Game1.activeClickableMenu != null) return;
-                try {
-                    GameUtilities.save_game();
-                }
-                catch(Exception exe)
+                try
                 {
-                    Mod_Core.thisMonitor.Log(exe.ToString(), LogLevel.Error);
+                    SaveUtilities.save_game();
+                }
+                catch (Exception exe)
+                {
+                    SaveAnywhere.thisMonitor.Log(exe.ToString(), LogLevel.Error);
                 }
 
-                }
+            }
         }
 
 
@@ -775,7 +783,7 @@ namespace Omegasis.SaveAnywhere
                 }
                 catch (Exception)
                 {
-                    return parseMasterSchedule(npc,Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
+                    return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
                 }
             }
             if (array[0].Contains("NOT"))
@@ -803,7 +811,7 @@ namespace Omegasis.SaveAnywhere
                     }
                     if (flag)
                     {
-                        return parseMasterSchedule(npc,Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
+                        return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
                     }
                     num++;
                 }
@@ -824,7 +832,7 @@ namespace Omegasis.SaveAnywhere
                 });
                 num = 1;
             }
-            
+
             //FieldInfo field = typeof(NPC).GetField("scheduleTimeToTry", BindingFlags.NonPublic | BindingFlags.Instance);
             Point point = npc.isMarried() ? new Point(0, 23) : new Point((int)npc.DefaultPosition.X / Game1.tileSize, (int)npc.DefaultPosition.Y / Game1.tileSize);
             string text3 = npc.isMarried() ? "BusStop" : npc.defaultMap;
@@ -862,13 +870,13 @@ namespace Omegasis.SaveAnywhere
                 {
                     finalFacingDirection = 2;
                 }
-                if (changeScheduleForLocationAccessibility(npc,ref text4, ref num6, ref num7, ref finalFacingDirection))
+                if (changeScheduleForLocationAccessibility(npc, ref text4, ref num6, ref num7, ref finalFacingDirection))
                 {
                     if (Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name).ContainsKey("default"))
                     {
-                        return parseMasterSchedule(npc,Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["default"]);
+                        return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["default"]);
                     }
-                    return parseMasterSchedule(npc,Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
+                    return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
                 }
                 else
                 {
@@ -888,7 +896,7 @@ namespace Omegasis.SaveAnywhere
                             }
                         }
                     }
-                    dictionary.Add(key, pathfindToNextScheduleLocation(npc,text3, point.X, point.Y, text4, num6, num7, finalFacingDirection, endBehavior, endMessage));
+                    dictionary.Add(key, pathfindToNextScheduleLocation(npc, text3, point.X, point.Y, text4, num6, num7, finalFacingDirection, endBehavior, endMessage));
                     point.X = num6;
                     point.Y = num7;
                     text3 = text4;
@@ -898,7 +906,7 @@ namespace Omegasis.SaveAnywhere
             return dictionary;
         }
 
-        public Dictionary<int, SchedulePathDescription> getSchedule(NPC npc,int dayOfMonth)
+        public Dictionary<int, SchedulePathDescription> getSchedule(NPC npc, int dayOfMonth)
         {
             if (!npc.name.Equals("Robin") || Game1.player.currentUpgrade != null)
             {
@@ -971,7 +979,7 @@ namespace Omegasis.SaveAnywhere
                     }
                     if (dictionary.ContainsKey("rain"))
                     {
-                        return parseMasterSchedule(npc,dictionary["rain"]);
+                        return parseMasterSchedule(npc, dictionary["rain"]);
                     }
                 }
                 List<string> list = new List<string>
@@ -985,26 +993,26 @@ namespace Omegasis.SaveAnywhere
                     list.Add(string.Empty + i);
                     if (dictionary.ContainsKey(string.Join("_", list)))
                     {
-                        return parseMasterSchedule(npc,dictionary[string.Join("_", list)]);
+                        return parseMasterSchedule(npc, dictionary[string.Join("_", list)]);
                     }
                     i--;
                     list.RemoveAt(list.Count - 1);
                 }
                 if (dictionary.ContainsKey(string.Join("_", list)))
                 {
-                    return parseMasterSchedule(npc,dictionary[string.Join("_", list)]);
+                    return parseMasterSchedule(npc, dictionary[string.Join("_", list)]);
                 }
                 if (dictionary.ContainsKey(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
-                    return parseMasterSchedule(npc,dictionary[Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)]);
+                    return parseMasterSchedule(npc, dictionary[Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)]);
                 }
                 if (dictionary.ContainsKey(Game1.currentSeason))
                 {
-                    return parseMasterSchedule(npc,dictionary[Game1.currentSeason]);
+                    return parseMasterSchedule(npc, dictionary[Game1.currentSeason]);
                 }
                 if (dictionary.ContainsKey("spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
-                    return parseMasterSchedule(npc,dictionary["spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)]);
+                    return parseMasterSchedule(npc, dictionary["spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)]);
                 }
                 list.RemoveAt(list.Count - 1);
                 list.Add("spring");
@@ -1014,19 +1022,19 @@ namespace Omegasis.SaveAnywhere
                     list.Add(string.Empty + i);
                     if (dictionary.ContainsKey(string.Join("_", list)))
                     {
-                        return parseMasterSchedule(npc,dictionary[string.Join("_", list)]);
+                        return parseMasterSchedule(npc, dictionary[string.Join("_", list)]);
                     }
                     i--;
                     list.RemoveAt(list.Count - 1);
                 }
                 if (dictionary.ContainsKey("spring"))
                 {
-                    return parseMasterSchedule(npc,dictionary["spring"]);
+                    return parseMasterSchedule(npc, dictionary["spring"]);
                 }
                 return null;
             }
         }
-        private bool changeScheduleForLocationAccessibility(NPC npc,ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
+        private bool changeScheduleForLocationAccessibility(NPC npc, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
         {
             string a = locationName;
             if (!(a == "JojaMart") && !(a == "Railroad"))
@@ -1054,7 +1062,7 @@ namespace Omegasis.SaveAnywhere
             return false;
         }
 
-        private SchedulePathDescription pathfindToNextScheduleLocation(NPC npc,string startingLocation, int startingX, int startingY, string endingLocation, int endingX, int endingY, int finalFacingDirection, string endBehavior, string endMessage)
+        private SchedulePathDescription pathfindToNextScheduleLocation(NPC npc, string startingLocation, int startingX, int startingY, string endingLocation, int endingX, int endingY, int finalFacingDirection, string endBehavior, string endMessage)
         {
             Stack<Point> stack = new Stack<Point>();
             Point warpPointTarget = new Point(startingX, startingY);
@@ -1087,7 +1095,7 @@ namespace Omegasis.SaveAnywhere
             return new SchedulePathDescription(stack, finalFacingDirection, endBehavior, endMessage);
         }
 
-        private List<string> getLocationRoute(NPC npc,string startingLocation, string endingLocation)
+        private List<string> getLocationRoute(NPC npc, string startingLocation, string endingLocation)
         {
             FieldInfo field = typeof(NPC).GetField("routesFromLocationToLocation", BindingFlags.NonPublic | BindingFlags.Instance);
             List<List<string>> s = (List<List<string>>)field.GetValue(npc);
