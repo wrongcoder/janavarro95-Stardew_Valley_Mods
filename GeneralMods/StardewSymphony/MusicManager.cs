@@ -8,512 +8,365 @@ using StardewValley;
 namespace Omegasis.StardewSymphony
 {
     //also known as the music_pack
-    public class MusicManager
+    internal class MusicManager
     {
-        public string wave_bank_name;
-        public string sound_bank_name;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The directory path containing the music.</summary>
+        public string Directory { get; }
 
-        public List<Cue> spring_song_list;
-        public int num_of_spring_songs;
-        public List<Cue> summer_song_list;
-        public int num_of_summer_songs;
-        public List<Cue> fall_song_list;
-        public int num_of_fall_songs;
-        public List<Cue> winter_song_list;
-        public int num_of_winter_songs;
+        /// <summary>The name of the wavebank file.</summary>
+        public string WavebankName { get; }
+
+        /// <summary>The name of the soundbank file.</summary>
+        public string SoundbankName { get; }
+
+        /// <summary>The loaded wavebank (if any).</summary>
+        public WaveBank Wavebank { get; }
+
+        /// <summary>The loaded soundbank (if any).</summary>
+        public SoundBank Soundbank { get; }
+
+        /// <summary>Songs that play in spring.</summary>
+        public List<Cue> SpringSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play in summer.</summary>
+        public List<Cue> SummerSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play in fall.</summary>
+        public List<Cue> FallSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play in winter.</summary>
+        public List<Cue> WinterSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on spring nights.</summary>
+        public List<Cue> SpringNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on summer nights.</summary>
+        public List<Cue> SummerNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on fall nights.</summary>
+        public List<Cue> FallNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on winter nights.</summary>
+        public List<Cue> WinterNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy spring days.</summary>
+        public List<Cue> SpringRainSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy summer days.</summary>
+        public List<Cue> SummerRainSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy fall days.</summary>
+        public List<Cue> FallRainSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy winter days.</summary>
+        public List<Cue> WinterSnowSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy spring nights.</summary>
+        public List<Cue> SpringRainNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy summer nights.</summary>
+        public List<Cue> SummerRainNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy fall nights.</summary>
+        public List<Cue> FallRainNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play on rainy winter nights.</summary>
+        public List<Cue> WinterSnowNightSongs { get; } = new List<Cue>();
+
+        /// <summary>Songs that play in specific locations.</summary>
+        public Dictionary<string, List<Cue>> LocationSongs { get; } = new Dictionary<string, List<Cue>>();
+
+        /// <summary>Songs that play in specific locations on rainy days.</summary>
+        public Dictionary<string, List<Cue>> LocationRainSongs { get; } = new Dictionary<string, List<Cue>>();
+
+        /// <summary>Songs that play in specific locations at night.</summary>
+        public Dictionary<string, List<Cue>> LocationNightSongs { get; } = new Dictionary<string, List<Cue>>();
+
+        /// <summary>Songs that play in specific locations on rainy nights.</summary>
+        public Dictionary<string, List<Cue>> LocationRainNightSongs { get; } = new Dictionary<string, List<Cue>>();
 
 
-        public List<Cue> spring_night_song_list;
-        public int num_of_spring_night_songs;
-        public List<Cue> summer_night_song_list;
-        public int num_of_summer_night_songs;
-        public List<Cue> fall_night_song_list;
-        public int num_of_fall_night_songs;
-        public List<Cue> winter_night_song_list;
-        public int num_of_winter_night_songs;
-
-
-        public List<Cue> spring_rain_song_list;
-        public int num_of_spring_rain_songs;
-        public List<Cue> summer_rain_song_list;
-        public int num_of_summer_rain_songs;
-        public List<Cue> fall_rain_song_list;
-        public int num_of_fall_rain_songs;
-        public List<Cue> winter_snow_song_list;
-        public int num_of_winter_snow_songs;
-
-
-        public List<Cue> spring_rain_night_song_list;
-        public int num_of_spring_rain_night_songs;
-        public List<Cue> summer_rain_night_song_list;
-        public int num_of_summer_rain_night_songs;
-        public List<Cue> fall_rain_night_song_list;
-        public int num_of_fall_rain_night_songs;
-        public List<Cue> winter_snow_night_song_list;
-        public int num_of_winter_snow_night_songs;
-
-        public List<Cue> locational_cues;
-        public Dictionary<string, List<Cue>> locational_songs;
-
-
-        public Dictionary<string, List<Cue>> locational_rain_songs;
-        public Dictionary<string, List<Cue>> locational_night_songs;
-        public Dictionary<string, List<Cue>> locational_rain_night_songs;
-
-
-        public WaveBank newwave;
-        public SoundBank new_sound_bank;
-        public string path_loc;
-
-        public MusicManager(string wb, string sb, string directory)
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="wavebank">The name of the wavebank file.</param>
+        /// <param name="soundbank">The name of the soundbank file.</param>
+        /// <param name="directory">The directory path containing the music.</param>
+        public MusicManager(string wavebank, string soundbank, string directory)
         {
-            wave_bank_name = wb;
-            sound_bank_name = sb;
-            wave_bank_name += ".xwb";
-            sound_bank_name += ".xsb";
-            path_loc = directory;
+            // init data
+            this.Directory = directory;
+            this.WavebankName = wavebank + ".xwb";
+            this.SoundbankName = soundbank + ".xsb";
 
-            Console.WriteLine(Path.Combine(path_loc, wave_bank_name));
-            Console.WriteLine(Path.Combine(path_loc, sound_bank_name));
+            // init banks
+            string wavePath = Path.Combine(this.Directory, this.WavebankName);
+            string soundPath = Path.Combine(this.Directory, this.SoundbankName);
 
+            Console.WriteLine(wavePath);
+            Console.WriteLine(soundPath);
 
-            if (File.Exists(Path.Combine(path_loc, wave_bank_name)))
-            {
-                newwave = new WaveBank(Game1.audioEngine, Path.Combine(path_loc, wave_bank_name)); //look for wave bank in sound_pack root directory.
-            }
-            if (File.Exists(Path.Combine(path_loc, sound_bank_name)))
-            {
-                new_sound_bank = new SoundBank(Game1.audioEngine, Path.Combine(path_loc, sound_bank_name)); //look for sound bank in sound_pack root directory.
-            }
+            if (File.Exists(wavePath))
+                this.Wavebank = new WaveBank(Game1.audioEngine, wavePath);
+            if (File.Exists(Path.Combine(this.Directory, this.SoundbankName)))
+                this.Soundbank = new SoundBank(Game1.audioEngine, soundPath);
 
+            // update audio
             Game1.audioEngine.Update();
-
-            spring_song_list = new List<Cue>();
-            num_of_spring_songs = 0;
-            summer_song_list = new List<Cue>();
-            num_of_summer_songs = 0;
-            fall_song_list = new List<Cue>();
-            num_of_fall_songs = 0;
-            winter_song_list = new List<Cue>();
-            num_of_winter_songs = 0;
-
-            spring_night_song_list = new List<Cue>();
-            num_of_spring_night_songs = 0;
-            summer_night_song_list = new List<Cue>();
-            num_of_summer_night_songs = 0;
-            fall_night_song_list = new List<Cue>();
-            num_of_fall_night_songs = 0;
-            winter_night_song_list = new List<Cue>();
-            num_of_winter_night_songs = 0;
-
-
-            //rainy initialization
-            spring_rain_song_list = new List<Cue>();
-            num_of_spring_rain_songs = 0;
-            summer_rain_song_list = new List<Cue>();
-            num_of_summer_rain_songs = 0;
-            fall_rain_song_list = new List<Cue>();
-            num_of_fall_rain_songs = 0;
-            winter_snow_song_list = new List<Cue>();
-            num_of_winter_snow_songs = 0;
-
-            spring_rain_night_song_list = new List<Cue>();
-            num_of_spring_rain_night_songs = 0;
-            summer_rain_night_song_list = new List<Cue>();
-            num_of_summer_rain_night_songs = 0;
-            fall_rain_night_song_list = new List<Cue>();
-            num_of_fall_rain_night_songs = 0;
-            winter_snow_night_song_list = new List<Cue>();
-            num_of_winter_snow_night_songs = 0;
-
-            locational_songs = new Dictionary<string, List<Cue>>();
-            locational_rain_songs = new Dictionary<string, List<Cue>>();
-            locational_night_songs = new Dictionary<string, List<Cue>>();
-            locational_rain_night_songs = new Dictionary<string, List<Cue>>();
         }
 
-        public void Music_Loader_Seasons(string conditional_name, Dictionary<string, MusicManager> reference_dic) //reads in cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.
+        /// <summary>Read cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.</summary>
+        /// <param name="conditionalName">The conditional file name to read.</param>
+        /// <param name="cues">The music list to update.</param>
+        public void Music_Loader_Seasons(string conditionalName, IDictionary<string, MusicManager> cues)
         {
-            //loads the data to the variables upon loading the game.
-            var music_path = path_loc;
-            string mylocation = Path.Combine(music_path, "Music_Files", "Seasons", conditional_name);
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-
-
-            if (!File.Exists(mylocation3)) //check to make sure the file actually exists
+            string path = Path.Combine(this.Directory, "Music_Files", "Seasons", conditionalName + ".txt");
+            if (!File.Exists(path))
             {
+                Console.WriteLine($"Stardew Symohony:The specified music file could not be found. That music file is {conditionalName} which should be located at {path} but don't worry I'll create it for you right now. It's going to be blank though");
+                string[] text = new string[3];
+                text[0] = conditionalName + " music file. This file holds all of the music that will play when there is no music for this game location, or simply put this is default music. Simply type the name of the song below the wall of equal signs.";
+                text[1] = "========================================================================================";
 
-                string error_message = "Stardew Symohony:The specified music file could not be found. That music file is " + conditional_name + " which should be located at " + mylocation3 + " but don't worry I'll create it for you right now. It's going to be blank though";
-                Console.WriteLine(error_message);
-
-                string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditional_name + " music file. This file holds all of the music that will play when there is no music for this game location, or simply put this is default music. Simply type the name of the song below the wall of equal signs.";
-                mystring3[1] = "========================================================================================";
-
-                File.WriteAllLines(mylocation3, mystring3);
+                File.WriteAllLines(path, text);
             }
-
             else
             {
-                Console.WriteLine("Stardew Symphony:The music pack located at: " + path_loc + " is processing the song info for the game location: " + conditional_name);
-                //System.Threading.Thread.Sleep(1000);
-                // add in data here
+                Console.WriteLine($"Stardew Symphony:The music pack located at: {this.Directory} is processing the song info for the game location: {conditionalName}");
 
-                string[] readtext = File.ReadAllLines(mylocation3);
-                string cue_name;
+                string[] text = File.ReadAllLines(path);
                 int i = 2;
-                var lineCount = File.ReadLines(mylocation3).Count();
+                var lineCount = File.ReadLines(path).Count();
 
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
-                    if (Convert.ToString(readtext[i]) == "")
-                    {
-                        //  Monitor.Log("Blank space detected.");
+                    if (Convert.ToString(text[i]) == "")
+                        break;
+                    if (Convert.ToString(text[i]) == "\n")
                         break;
 
-                    }
-                    if (Convert.ToString(readtext[i]) == "\n")
+                    string cueName;
+                    if (conditionalName == "spring")
                     {
-                        break;
-
-                    }
-
-
-                    if (conditional_name == "spring")
-                    {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            spring_song_list.Add(new_sound_bank.GetCue(cue_name));
+                            this.SpringSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
+                        }
+                        else
+                            this.SpringSongs.Add(this.Soundbank.GetCue(cueName));
+                    }
+                    if (conditionalName == "summer")
+                    {
+                        cueName = Convert.ToString(text[i]);
+                        i++;
 
-                            num_of_spring_songs++;
-                            reference_dic.Add(cue_name, this);
+                        if (!cues.Keys.Contains(cueName))
+                        {
+                            this.SummerSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
+                        }
+                        else
+                            this.SummerSongs.Add(this.Soundbank.GetCue(cueName));
+                    }
+                    if (conditionalName == "fall")
+                    {
+                        cueName = Convert.ToString(text[i]);
+                        i++;
+
+                        if (!cues.Keys.Contains(cueName))
+                        {
+                            this.FallSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
+                        }
+                        else
+                            this.FallSongs.Add(this.Soundbank.GetCue(cueName));
+                    }
+                    if (conditionalName == "winter")
+                    {
+                        cueName = Convert.ToString(text[i]);
+                        i++;
+
+                        if (!cues.Keys.Contains(cueName))
+                        {
+                            this.WinterSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
 
                         }
                         else
-                        {
-                            spring_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_spring_songs++;
-                        }
-                        //  Monitor.Log(cue_name);
-                    }
-                    if (conditional_name == "summer")
-                    {
-                        cue_name = Convert.ToString(readtext[i]);
-                        i++;
-
-                        if (!reference_dic.Keys.Contains(cue_name))
-                        {
-                            summer_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_songs++;
-                            reference_dic.Add(cue_name, this);
-
-                        }
-                        else
-                        {
-                            summer_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_songs++;
-                        }
-                    }
-                    if (conditional_name == "fall")
-                    {
-                        cue_name = Convert.ToString(readtext[i]);
-                        i++;
-
-                        if (!reference_dic.Keys.Contains(cue_name))
-                        {
-                            fall_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_songs++;
-                            reference_dic.Add(cue_name, this);
-
-                        }
-                        else
-                        {
-                            fall_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_songs++;
-                        }
-                    }
-                    if (conditional_name == "winter")
-                    {
-                        cue_name = Convert.ToString(readtext[i]);
-                        i++;
-
-                        if (!reference_dic.Keys.Contains(cue_name))
-                        {
-                            winter_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_songs++;
-                            reference_dic.Add(cue_name, this);
-
-                        }
-                        else
-                        {
-                            winter_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_songs++;
-                        }
+                            this.WinterSongs.Add(this.Soundbank.GetCue(cueName));
                     }
                     //add in other stuff here
                     //========================================================================================================================================================================================
                     //NIGHTLY SEASONAL LOADERS
-                    if (conditional_name == "spring_night")
+                    if (conditionalName == "spring_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            spring_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_spring_night_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.SpringNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            spring_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_spring_night_songs++;
-                        }
-                        //  Monitor.Log(cue_name);
+                            this.SpringNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "summer_night")
+                    if (conditionalName == "summer_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            summer_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_night_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.SummerNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            summer_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_night_songs++;
-                        }
+                            this.SummerNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "fall_night")
+                    if (conditionalName == "fall_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            fall_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_night_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.FallNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            fall_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_night_songs++;
-                        }
+                            this.FallNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "winter_night")
+                    if (conditionalName == "winter_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            winter_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_night_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.WinterNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            winter_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_night_songs++;
-                        }
+                            this.WinterNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
                     ////////NOW I"M ADDING THE PART THAT WILL READ IN RAINY SEASONAL SONGS FOR DAY AND NIGHT
-                    if (conditional_name == "spring_rain")
+                    if (conditionalName == "spring_rain")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            spring_rain_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_spring_rain_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.SpringRainSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            spring_rain_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_spring_rain_songs++;
-                        }
-                        //  Monitor.Log(cue_name);
+                            this.SpringRainSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "summer_rain")
+                    if (conditionalName == "summer_rain")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            summer_rain_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_rain_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.SummerRainSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            summer_rain_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_rain_songs++;
-                        }
+                            this.SummerRainSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "fall_rain")
+                    if (conditionalName == "fall_rain")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            fall_rain_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_rain_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.FallRainSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            fall_rain_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_rain_songs++;
-                        }
+                            this.FallRainSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "winter_snow")
+                    if (conditionalName == "winter_snow")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            winter_snow_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_snow_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.WinterSnowSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            winter_snow_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_snow_songs++;
-                        }
+                            this.WinterSnowSongs.Add(this.Soundbank.GetCue(cueName));
                     }
+
                     //add in other stuff here
                     //========================================================================================================================================================================================
                     //NIGHTLY SEASONAL RAIN LOADERS
-                    if (conditional_name == "spring_rain_night")
+                    if (conditionalName == "spring_rain_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            spring_rain_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_spring_rain_night_songs++;
-                            reference_dic.Add(cue_name, this);
+                            this.SpringRainNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
 
                         }
                         else
-                        {
-                            spring_rain_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_spring_rain_night_songs++;
-                        }
-                        //  Monitor.Log(cue_name);
+                            this.SpringRainNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "summer_rain_night")
+                    if (conditionalName == "summer_rain_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            summer_rain_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_rain_night_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.SummerRainNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            summer_rain_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_summer_rain_night_songs++;
-                        }
+                            this.SummerRainNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "fall_rain_night")
+                    if (conditionalName == "fall_rain_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            fall_rain_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_rain_night_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.FallRainNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            fall_rain_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_fall_rain_night_songs++;
-                        }
+                            this.FallRainNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
-                    if (conditional_name == "winter_snow_night")
+                    if (conditionalName == "winter_snow_night")
                     {
-                        cue_name = Convert.ToString(readtext[i]);
+                        cueName = Convert.ToString(text[i]);
                         i++;
 
-                        if (!reference_dic.Keys.Contains(cue_name))
+                        if (!cues.Keys.Contains(cueName))
                         {
-                            winter_snow_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_snow_night_songs++;
-                            reference_dic.Add(cue_name, this);
-
+                            this.WinterSnowNightSongs.Add(this.Soundbank.GetCue(cueName));
+                            cues.Add(cueName, this);
                         }
                         else
-                        {
-                            winter_snow_night_song_list.Add(new_sound_bank.GetCue(cue_name));
-
-                            num_of_winter_snow_night_songs++;
-                        }
+                            this.WinterSnowNightSongs.Add(this.Soundbank.GetCue(cueName));
                     }
                 }
                 if (i == 2)
@@ -522,291 +375,227 @@ namespace Omegasis.StardewSymphony
                     // System.Threading.Thread.Sleep(10);
                     return;
                 }
-                Console.WriteLine("StardewSymohony:The music pack located at: " + path_loc + " has successfully processed the song info for the game location: " + conditional_name);
+                Console.WriteLine("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
             }
         }
-        public void Music_Loader_Locations(string conditional_name, Dictionary<string, MusicManager> reference_dic) //reads in cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.
+
+        /// <summary>Read cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.</summary>
+        /// <param name="conditionalName">The conditional file name to read.</param>
+        /// <param name="cues">The music list to update.</param>
+        public void Music_Loader_Locations(string conditionalName, IDictionary<string, MusicManager> cues)
         {
-            locational_cues = new List<Cue>();
+            List<Cue> locationSongs = new List<Cue>();
             //loads the data to the variables upon loading the game.
-            var music_path = path_loc;
-            string mylocation = Path.Combine(music_path, "Music_Files", "Locations", conditional_name);
+            var musicPath = this.Directory;
+            string mylocation = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName);
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //check to make sure the file actually exists
             {
-                Console.WriteLine("StardewSymohony:A music list for the location " + conditional_name + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                Console.WriteLine("StardewSymohony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
 
                 //Console.WriteLine("Creating the Config file");
                 string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditional_name + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
+                mystring3[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
                 mystring3[1] = "========================================================================================";
 
                 File.WriteAllLines(mylocation3, mystring3);
-                return;
             }
-
             else
             {
-                Console.WriteLine("Stardew Symphony:The music pack located at: " + path_loc + " is processing the song info for the game location: " + conditional_name);
-                //System.Threading.Thread.Sleep(1000);
+                Console.WriteLine("Stardew Symphony:The music pack located at: " + this.Directory + " is processing the song info for the game location: " + conditionalName);
                 string[] readtext = File.ReadAllLines(mylocation3);
-                string cue_name;
                 int i = 2;
                 var lineCount = File.ReadLines(mylocation3).Count();
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
                     if (Convert.ToString(readtext[i]) == "")
-                    {
                         break;
-                    }
                     if (Convert.ToString(readtext[i]) == "\n")
-                    {
                         break;
-                    }
-                    cue_name = Convert.ToString(readtext[i]);
+                    string cueName = Convert.ToString(readtext[i]);
                     i++;
-                    if (!reference_dic.Keys.Contains(cue_name))
+                    if (!cues.Keys.Contains(cueName))
                     {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                        reference_dic.Add(cue_name, this);
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
+                        cues.Add(cueName, this);
                     }
                     else
-                    {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                    }
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
                 }
                 if (i == 2)
                 {
                     //  Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
                     return;
                 }
-                if (locational_cues.Count > 0)
+                if (locationSongs.Count > 0)
                 {
-                    locational_songs.Add(conditional_name, locational_cues);
-                    Console.WriteLine("StardewSymhony:The music pack located at: " + path_loc + " has successfully processed the song info for the game location: " + conditional_name);
-
-                    return;
-                }
-                else
-                {
-                    // Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
-                    return;
+                    this.LocationSongs.Add(conditionalName, locationSongs);
+                    Console.WriteLine("StardewSymhony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
         }
 
-        public void Music_Loader_Locations_Rain(string conditional_name, Dictionary<string, MusicManager> reference_dic) //reads in cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.
+        /// <summary>Read cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.</summary>
+        /// <param name="conditionalName">The conditional file name to read.</param>
+        /// <param name="cues">The music list to update.</param>
+        public void Music_Loader_Locations_Rain(string conditionalName, IDictionary<string, MusicManager> cues)
         {
-            locational_cues = new List<Cue>();
-            var music_path = path_loc;
-            string mylocation = Path.Combine(music_path, "Music_Files", "Locations", conditional_name);
+            List<Cue> locationSongs = new List<Cue>();
+            var musicPath = this.Directory;
+            string mylocation = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName);
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //check to make sure the file actually exists
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditional_name + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
                 string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditional_name + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
+                mystring3[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
                 mystring3[1] = "========================================================================================";
                 File.WriteAllLines(mylocation3, mystring3);
-                return;
             }
-
             else
             {
                 // add in data here
                 string[] readtext = File.ReadAllLines(mylocation3);
-                string cue_name;
                 int i = 2;
                 var lineCount = File.ReadLines(mylocation3).Count();
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
                     if (Convert.ToString(readtext[i]) == "")
-                    {
-                        // Monitor.Log("Blank space detected.");
                         break;
-                    }
                     if (Convert.ToString(readtext[i]) == "\n")
-                    {
-                        // Monitor.Log("end line reached");
                         break;
-                    }
-                    cue_name = Convert.ToString(readtext[i]);
+                    string cueName = Convert.ToString(readtext[i]);
                     i++;
-                    if (!reference_dic.Keys.Contains(cue_name))
+                    if (!cues.Keys.Contains(cueName))
                     {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                        reference_dic.Add(cue_name, this);
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
+                        cues.Add(cueName, this);
                     }
                     else
-                    {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                    }
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
                 }
                 if (i == 2)
                 {
                     // Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
                     return;
                 }
-                if (locational_cues.Count > 0)
+                if (locationSongs.Count > 0)
                 {
-                    locational_rain_songs.Add(conditional_name, locational_cues);
-                    Console.WriteLine("StardewSymohony:The music pack located at: " + path_loc + " has successfully processed the song info for the game location: " + conditional_name);
-                    return;
-                }
-                else
-                {
-                    //  Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
-                    return;
+                    this.LocationRainSongs.Add(conditionalName, locationSongs);
+                    Console.WriteLine("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
         }
-        public void Music_Loader_Locations_Night(string conditional_name, Dictionary<string, MusicManager> reference_dic) //reads in cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.
+
+        /// <summary>Read cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.</summary>
+        /// <param name="conditionalName">The conditional file name to read.</param>
+        /// <param name="cues">The music list to update.</param>
+        public void Music_Loader_Locations_Night(string conditionalName, IDictionary<string, MusicManager> cues)
         {
-            locational_cues = new List<Cue>();
+            List<Cue> locationSongs = new List<Cue>();
             //loads the data to the variables upon loading the game.
-            var music_path = path_loc;
-            string mylocation = Path.Combine(music_path, "Music_Files", "Locations", conditional_name);
+            var musicPath = this.Directory;
+            string mylocation = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName);
             string mylocation2 = mylocation;
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //check to make sure the file actually exists
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditional_name + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
-                //Console.WriteLine("Creating the Config file");
+                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
                 string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditional_name + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
+                mystring3[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
                 mystring3[1] = "========================================================================================";
                 File.WriteAllLines(mylocation3, mystring3);
-                return;
             }
-
             else
             {
                 // add in data here
                 string[] readtext = File.ReadAllLines(mylocation3);
-                string cue_name;
                 int i = 2;
                 var lineCount = File.ReadLines(mylocation3).Count();
 
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
                     if (Convert.ToString(readtext[i]) == "")
-                    {
-                        //    Monitor.Log("Blank space detected.");
                         break;
-
-                    }
                     if (Convert.ToString(readtext[i]) == "\n")
-                    {
-                        //Monitor.Log("end line reached");
                         break;
-
-                    }
-                    cue_name = Convert.ToString(readtext[i]);
+                    string cueName = Convert.ToString(readtext[i]);
                     i++;
-                    if (!reference_dic.Keys.Contains(cue_name))
+                    if (!cues.Keys.Contains(cueName))
                     {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                        reference_dic.Add(cue_name, this);
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
+                        cues.Add(cueName, this);
                     }
                     else
-                    {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                    }
-
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
                 }
                 if (i == 2)
                 {
                     //  Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
                     return;
                 }
-                if (locational_cues.Count > 0)
+                if (locationSongs.Count > 0)
                 {
-                    locational_night_songs.Add(conditional_name, locational_cues);
-                    Console.WriteLine("StardewSymphonyLThe music pack located at: " + path_loc + " has successfully processed the song info for the game location: " + conditional_name);
-                    return;
-                }
-                else
-                {
-                    //  Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
-                    return;
+                    this.LocationNightSongs.Add(conditionalName, locationSongs);
+                    Console.WriteLine("StardewSymphonyLThe music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
         }
-        public void Music_Loader_Locations_Rain_Night(string conditional_name, Dictionary<string, MusicManager> reference_dic) //reads in cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.
+
+        /// <summary>Read cue names from a text file and adds them to a specific list. Morphs with specific conditional name. Conditionals are hardcoded.</summary>
+        /// <param name="conditionalName">The conditional file name to read.</param>
+        /// <param name="cues">The music list to update.</param>
+        public void Music_Loader_Locations_Rain_Night(string conditionalName, IDictionary<string, MusicManager> cues)
         {
-            locational_cues = new List<Cue>();
-            var music_path = path_loc;
+            List<Cue> locationSongs = new List<Cue>();
+            var musicPath = this.Directory;
 
-            string mylocation = Path.Combine(music_path, "Music_Files", "Locations", conditional_name);
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //check to make sure the file actually exists
+            string path = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName + ".txt");
+            if (!File.Exists(path)) //check to make sure the file actually exists
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditional_name + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
-                string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditional_name + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
-                mystring3[1] = "========================================================================================";
-
-                File.WriteAllLines(mylocation3, mystring3);
-
-
-                return;
+                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                string[] text = new string[3];//seems legit.
+                text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
+                text[1] = "========================================================================================";
+                File.WriteAllLines(path, text);
             }
-
             else
             {
                 //load in music stuff from the text files using the code below.
-                string[] readtext = File.ReadAllLines(mylocation3);
-                string cue_name;
+                string[] text = File.ReadAllLines(path);
                 int i = 2;
-                var lineCount = File.ReadLines(mylocation3).Count();
+                var lineCount = File.ReadLines(path).Count();
 
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
-                    if (Convert.ToString(readtext[i]) == "") //if there is ever an empty line, stop processing the music file
-                    {
+                    if (Convert.ToString(text[i]) == "") //if there is ever an empty line, stop processing the music file
                         break;
-                    }
-                    if (Convert.ToString(readtext[i]) == "\n")
-                    {
+                    if (Convert.ToString(text[i]) == "\n")
                         break;
-                    }
-                    cue_name = Convert.ToString(readtext[i]);
+                    string cueName = Convert.ToString(text[i]);
                     i++;
-                    if (!reference_dic.Keys.Contains(cue_name))
+                    if (!cues.Keys.Contains(cueName))
                     {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                        reference_dic.Add(cue_name, this);
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
+                        cues.Add(cueName, this);
                     }
                     else
-                    {
-                        locational_cues.Add(new_sound_bank.GetCue(cue_name));
-                    }
+                        locationSongs.Add(this.Soundbank.GetCue(cueName));
                 }
                 if (i == 2)
-                {
-                    //   Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
-
-                    return;
-                }
-
-                if (locational_cues.Count > 0)
-                {
-                    locational_rain_night_songs.Add(conditional_name, locational_cues);
-
-                    Console.WriteLine("StardewSymohony:The music pack located at: " + path_loc + " has successfully processed the song info for the game location: " + conditional_name);
-                    return;
-                }
-                else
                 {
                     //  Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 + " this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
                     return;
                 }
 
+                if (locationSongs.Count > 0)
+                {
+                    this.LocationRainNightSongs.Add(conditionalName, locationSongs);
+                    Console.WriteLine("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
+                }
             }
         }
-
-    };
+    }
 }

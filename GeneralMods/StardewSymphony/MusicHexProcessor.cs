@@ -6,123 +6,114 @@ using StardewValley;
 
 namespace Omegasis.StardewSymphony
 {
-    class MusicHexProcessor
+    internal class MusicHexProcessor
     {
-        public static List<string> allsoundBanks;
-        public static List<string> allHexDumps;
-        public static List<string> allWaveBanks;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>All of the music/soundbanks and their locations.</summary>
+        private readonly IList<MusicManager> MasterList;
 
-        public static void processHex()
+        /// <summary>The registered soundbanks.</summary>
+        private readonly List<string> SoundBanks = new List<string>();
+
+        /// <summary>The callback to reset the game audio.</summary>
+        private readonly Action Reset;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="masterList">All of the music/soundbanks and their locations.</param>
+        /// <param name="reset">The callback to reset the game audio.</param>
+        public MusicHexProcessor(IList<MusicManager> masterList, Action reset)
+        {
+            this.MasterList = masterList;
+            this.Reset = reset;
+        }
+
+        /// <summary>Add a file path to the list of soundbanks.</summary>
+        /// <param name="path">The soundbank file path.</param>
+        public void AddSoundBank(string path)
+        {
+            this.SoundBanks.Add(path);
+        }
+
+        public void ProcessHex()
         {
             int counter = 0;
-            string HexDumpContents = "";
-            string rawName = "";
-            string rawHexName = "";
-            string cueName = "";
-            List<string> cleanCueNames = new List<string>();
-            foreach (var v in allsoundBanks)
+            foreach (string entry in SoundBanks)
             {
-                cleanCueNames = new List<string>();
-                byte[] array = System.IO.File.ReadAllBytes(v);
-               // Log.AsyncC(HexDump(array));
-                rawName=v.Substring(0,v.Length-4);
-                cueName = (rawName + "CueList.txt");
+                List<string> cleanCueNames = new List<string>();
+                byte[] array = File.ReadAllBytes(entry);
+                string rawName = entry.Substring(0, entry.Length - 4);
+                string cueName = rawName + "CueList.txt";
                 if (File.Exists(cueName)) continue;
 
-                HexDumpContents = HexDump(array);
+                string hexDumpContents = this.HexDump(array);
 
-                rawHexName = rawName + "HexDump.txt";
-                File.WriteAllText(rawHexName, HexDumpContents);
-                // string fileName = (v.Remove(v.Length - 5, v.Length-1));
-                //Log.AsyncM(fileName);
-                allHexDumps.Add(rawHexName);
-            
+                string rawHexName = rawName + "HexDump.txt";
+                File.WriteAllText(rawHexName, hexDumpContents);
+
                 string[] readText = File.ReadAllLines(rawHexName);
-                string largeString="";
+                string largeString = "";
                 foreach (var line in readText)
                 {
-                   // Log.AsyncY(line);
                     try
                     {
                         string newString = "";
                         for (int i = 62; i <= 77; i++)
-                        {
                             newString += line[i];
-                        }
-                        // Log.AsyncG(newString);
                         largeString += newString;
-                        // Log.AsyncC(largeString);
-                        //Log.AsyncG(line.Substring(63, 78));
                     }
-                    catch (Exception e)
-                    {
-                        // Log.AsyncY("WTF");
-                        // Log.AsyncO(line.Length);
-                    }
+                    catch { }
                 }
-                    string[] splits = largeString.Split('ÿ');
-                    string fix = "";
-                    foreach (string s in splits)
+                string[] splits = largeString.Split('ÿ');
+                string fix = "";
+                foreach (string s in splits)
+                {
+                    if (s == "") continue;
+                    fix += s;
+                }
+                splits = fix.Split('.');
+
+                foreach (var split in splits)
+                {
+                    if (split == "") continue;
+
+                    try
                     {
-                        if (s == "") continue;
-                        fix += s;
-                    }
-                    splits = fix.Split('.');
+                        Game1.waveBank = this.MasterList[counter].Wavebank;
+                        Game1.soundBank = this.MasterList[counter].Soundbank;
 
-                    foreach (var split in splits)
-                    {
-                        if (split == "") continue;
-                       // Log.AsyncM(split);
-
-                        try
-                        {
-
-
-
-                        // Game1.playSound(split);
-                        Game1.waveBank = Class1.master_list[counter].newwave;
-                        Game1.soundBank = Class1.master_list[counter].new_sound_bank;
-                        
-                       
                         if (Game1.soundBank.GetCue(split) != null)
-                        {
-                            //Game1.playSound(split);
                             cleanCueNames.Add(split);
-                           // Log.AsyncG("Sucessfully added " + split + " to the list of successful songs to play.");
-                        }
 
-                        Class1.reset();
-
-                        }
-                        catch(Exception e)
-                        {
-                         //   Log.AsyncR(e);
-                        }
-
+                        this.Reset();
                     }
+                    catch { }
+                }
 
-                cueName = (rawName + "CueList.txt");
-               // Log.AsyncM(cueName);
+                cueName = rawName + "CueList.txt";
                 cleanCueNames.Sort();
                 File.WriteAllLines(cueName, cleanCueNames);
                 counter++;
             }
-             
-            }
-
-           
+        }
 
 
-
-
-        
-
-        public static string HexDump(byte[] bytes, int bytesPerLine = 16)
+        /*********
+        ** Private methods
+        *********/
+        private string HexDump(byte[] bytes, int bytesPerLine = 16)
         {
-            if (bytes == null) return "<null>";
+            if (bytes == null)
+                return "<null>";
+
             int bytesLength = bytes.Length;
 
-            char[] HexChars = "0123456789ABCDEF".ToCharArray();
+            char[] hexChars = "0123456789ABCDEF".ToCharArray();
 
             int firstHexColumn =
                   8                   // 8 characters for the address
@@ -143,14 +134,14 @@ namespace Omegasis.StardewSymphony
 
             for (int i = 0; i < bytesLength; i += bytesPerLine)
             {
-                line[0] = HexChars[(i >> 28) & 0xF];
-                line[1] = HexChars[(i >> 24) & 0xF];
-                line[2] = HexChars[(i >> 20) & 0xF];
-                line[3] = HexChars[(i >> 16) & 0xF];
-                line[4] = HexChars[(i >> 12) & 0xF];
-                line[5] = HexChars[(i >> 8) & 0xF];
-                line[6] = HexChars[(i >> 4) & 0xF];
-                line[7] = HexChars[(i >> 0) & 0xF];
+                line[0] = hexChars[(i >> 28) & 0xF];
+                line[1] = hexChars[(i >> 24) & 0xF];
+                line[2] = hexChars[(i >> 20) & 0xF];
+                line[3] = hexChars[(i >> 16) & 0xF];
+                line[4] = hexChars[(i >> 12) & 0xF];
+                line[5] = hexChars[(i >> 8) & 0xF];
+                line[6] = hexChars[(i >> 4) & 0xF];
+                line[7] = hexChars[(i >> 0) & 0xF];
 
                 int hexColumn = firstHexColumn;
                 int charColumn = firstCharColumn;
@@ -167,9 +158,9 @@ namespace Omegasis.StardewSymphony
                     else
                     {
                         byte b = bytes[i + j];
-                        line[hexColumn] = HexChars[(b >> 4) & 0xF];
-                        line[hexColumn + 1] = HexChars[b & 0xF];
-                        line[charColumn] = asciiSymbol(b);
+                        line[hexColumn] = hexChars[(b >> 4) & 0xF];
+                        line[hexColumn + 1] = hexChars[b & 0xF];
+                        line[charColumn] = this.GetAsciiSymbol(b);
                     }
                     hexColumn += 3;
                     charColumn++;
@@ -178,20 +169,17 @@ namespace Omegasis.StardewSymphony
             }
             return result.ToString();
         }
-        static char asciiSymbol(byte val)
+
+        private char GetAsciiSymbol(byte ch)
         {
-            if (val < 32) return '.';  // Non-printable ASCII
-            if (val < 127) return (char)val;   // Normal ASCII
+            if (ch < 32) return '.';  // Non-printable ASCII
+            if (ch < 127) return (char)ch;   // Normal ASCII
             // Handle the hole in Latin-1
-            if (val == 127) return '.';
-            if (val < 0x90) return "€.‚ƒ„…†‡ˆ‰Š‹Œ.Ž."[val & 0xF];
-            if (val < 0xA0) return ".‘’“”•–—˜™š›œ.žŸ"[val & 0xF];
-            if (val == 0xAD) return '.';   // Soft hyphen: this symbol is zero-width even in monospace fonts
-            return (char)val;   // Normal Latin-1
+            if (ch == 127) return '.';
+            if (ch < 0x90) return "€.‚ƒ„…†‡ˆ‰Š‹Œ.Ž."[ch & 0xF];
+            if (ch < 0xA0) return ".‘’“”•–—˜™š›œ.žŸ"[ch & 0xF];
+            if (ch == 0xAD) return '.';   // Soft hyphen: this symbol is zero-width even in monospace fonts
+            return (char)ch;   // Normal Latin-1
         }
-    
-
-
-
-}
+    }
 }
