@@ -38,11 +38,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Custom_Shops\My_Streaming_Shop.txt" />
-    <Content Include="Custom_Shops\Test_Shop_1.txt" />
-    <Content Include="Custom_Shops\Test_Shop_2.txt" />
+    <Content Include="Custom_Shops\My_Streaming_Shop.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Custom_Shops\Test_Shop_1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Custom_Shops\Test_Shop_2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Custom_Shop_Redux_Config.txt" />
-    <Content Include="Mod_readme.txt" />
+    <Content Include="Mod_readme.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

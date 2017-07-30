@@ -43,9 +43,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Data\FarmerBirthdayDialogue.xnb" />
-    <None Include="Content\Data\mail.xnb" />
-    <None Include="Content\Data\PossibleBirthdayGifts.xnb" />
+    <None Include="Content\Data\FarmerBirthdayDialogue.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\mail.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Data\PossibleBirthdayGifts.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="manifest.json" />
     <None Include="packages.config" />
   </ItemGroup>
