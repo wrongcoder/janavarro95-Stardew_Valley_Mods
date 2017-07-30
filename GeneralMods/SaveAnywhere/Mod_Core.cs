@@ -13,6 +13,8 @@ namespace Omegasis.SaveAnywhere
 {
     public class SaveAnywhere : Mod
     {
+        private SaveManager SaveManager;
+        private ConfigUtilities ConfigUtilities;
 
         public static string mod_path;
         public static string player_path;
@@ -28,31 +30,27 @@ namespace Omegasis.SaveAnywhere
 
         public override void Entry(IModHelper helper)
         {
-            try
-            {
-                ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
-                SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
-                GameEvents.UpdateTick += Warp_Check;
-                GameEvents.UpdateTick += PassiveSaveChecker;
-                TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
-                TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
-                TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
-                SaveAnywhere.mod_path = Helper.DirectoryPath;
-                npc_key_value_pair = new Dictionary<string, string>();
-                SaveAnywhere.thisMonitor = Monitor;
-            }
-            catch (Exception x)
-            {
-                Monitor.Log(x.ToString());
-            }
+            this.ConfigUtilities = new ConfigUtilities();
+            this.SaveManager = new SaveManager();
+
+            ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
+            SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
+            GameEvents.UpdateTick += Warp_Check;
+            GameEvents.UpdateTick += PassiveSaveChecker;
+            TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
+            TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
+            TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
+            SaveAnywhere.mod_path = Helper.DirectoryPath;
+            npc_key_value_pair = new Dictionary<string, string>();
+            SaveAnywhere.thisMonitor = Monitor;
         }
 
         private void PassiveSaveChecker(object sender, EventArgs e)
         {
-            if (SaveUtilities.passiveSave == true && Game1.activeClickableMenu == null)
+            if (this.SaveManager.passiveSave && Game1.activeClickableMenu == null)
             {
                 Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
-                SaveUtilities.passiveSave = false;
+                this.SaveManager.passiveSave = false;
             }
         }
 
@@ -679,8 +677,8 @@ namespace Omegasis.SaveAnywhere
         {
             try
             {
-                if (Game1.activeClickableMenu != null) return;
-                SaveUtilities.shipping_check();
+                if (Game1.activeClickableMenu == null)
+                    this.SaveManager.shipping_check();
             }
             catch (Exception err)
             {
@@ -704,13 +702,13 @@ namespace Omegasis.SaveAnywhere
 
                 // Log.AsyncY(Player_Utilities.has_player_warped_yet);
 
-                if (SaveUtilities.has_player_warped_yet == false && Game1.player.isMoving() == true)
+                if (this.SaveManager.has_player_warped_yet == false && Game1.player.isMoving() == true)
                 {
                     //Log.AsyncM("Ok Good"); 
-                    SaveUtilities.warp_player();
-                    SaveUtilities.load_animal_info();
-                    SaveUtilities.Load_NPC_Info();
-                    SaveUtilities.has_player_warped_yet = true;
+                    this.SaveManager.warp_player();
+                    this.SaveManager.load_animal_info();
+                    this.SaveManager.Load_NPC_Info();
+                    this.SaveManager.has_player_warped_yet = true;
 
                 }
             }
@@ -726,9 +724,9 @@ namespace Omegasis.SaveAnywhere
         {
             try
             {
-                SaveUtilities.load_player_info();
-                Config_Utilities.DataLoader_Settings();
-                Config_Utilities.MyWritter_Settings();
+                this.SaveManager.load_player_info();
+                this.ConfigUtilities.DataLoader_Settings();
+                this.ConfigUtilities.MyWritter_Settings();
             }
             catch (Exception err)
             {
@@ -738,12 +736,12 @@ namespace Omegasis.SaveAnywhere
 
         public void KeyPressed_Save_Load_Menu(object sender, EventArgsKeyPressed e)
         {
-            if (e.KeyPressed.ToString() == Config_Utilities.key_binding) //if the key is pressed, load my cusom save function
+            if (e.KeyPressed.ToString() == this.ConfigUtilities.key_binding) //if the key is pressed, load my cusom save function
             {
                 if (Game1.activeClickableMenu != null) return;
                 try
                 {
-                    SaveUtilities.save_game();
+                    this.SaveManager.save_game();
                 }
                 catch (Exception exe)
                 {

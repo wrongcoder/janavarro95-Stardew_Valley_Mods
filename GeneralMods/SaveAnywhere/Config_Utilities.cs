@@ -3,11 +3,12 @@ using System.IO;
 
 namespace Omegasis.SaveAnywhere
 {
-    class Config_Utilities
+    internal class ConfigUtilities
     {
-        public static string key_binding = "K";
-        public static bool warp_character;
-       public static void DataLoader_Settings()
+        public string key_binding = "K";
+        public bool warp_character;
+
+        public void DataLoader_Settings()
         {
             //loads the data to the variables upon loading the game.
             string myname = StardewValley.Game1.player.name;
@@ -16,7 +17,7 @@ namespace Omegasis.SaveAnywhere
             string mylocation3 = mylocation2 + ".txt";
             if (!File.Exists(mylocation3)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-              key_binding = "K";
+                key_binding = "K";
                 warp_character = true;
             }
 
@@ -27,7 +28,7 @@ namespace Omegasis.SaveAnywhere
             }
         }
 
-       public static void MyWritter_Settings()
+        public void MyWritter_Settings()
         {
 
             //write all of my info to a text file.
