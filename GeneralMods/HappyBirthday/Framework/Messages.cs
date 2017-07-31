@@ -1,6 +1,6 @@
 ﻿using StardewValley;
 
-namespace Omegasis.HappyBirthday.OmegasisUtility
+namespace Omegasis.HappyBirthday.Framework
 {
     /// <summary>Provides utility methods for displaying messages to the user.</summary>
     internal class Messages

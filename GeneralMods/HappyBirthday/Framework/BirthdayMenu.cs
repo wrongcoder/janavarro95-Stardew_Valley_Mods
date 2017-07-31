@@ -5,10 +5,10 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Omegasis.HappyBirthday
+namespace Omegasis.HappyBirthday.Framework
 {
     /// <summary>The menu which lets the player choose their birthday.</summary>
-    public class BirthdayMenu : IClickableMenu
+    internal class BirthdayMenu : IClickableMenu
     {
         /*********
         ** Properties

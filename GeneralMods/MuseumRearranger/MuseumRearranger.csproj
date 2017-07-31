@@ -36,8 +36,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="NewMuseumMenu.cs" />
+    <Compile Include="MuseumRearranger.cs" />
+    <Compile Include="Framework\NewMuseumMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,41 +2,48 @@
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using Omegasis.BuildEndurance.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 
-namespace Omegasis.BuildHealth
+namespace Omegasis.BuildEndurance
 {
     /// <summary>The mod entry point.</summary>
-    public class BuildHealth : Mod
+    public class BuildEndurance : Mod
     {
         /*********
         ** Properties
         *********/
         /// <summary>The mod settings and player data.</summary>
-        private Config Config;
+        private ModConfig Config;
 
-        /// <summary>The XP points needed to reach the next level.</summary>
+        /// <summary>Whether the player has been exhausted today.</summary>
+        private bool WasExhausted;
+
+        /// <summary>Whether the player has collapsed today.</summary>
+        private bool WasCollapsed;
+
+        /// <summary>The XP points needed to reach the next endurance level.</summary>
         private double ExpToNextLevel = 20;
 
-        /// <summary>The player's current XP points.</summary>
+        /// <summary>The player's current endurance XP points.</summary>
         private double CurrentExp;
 
-        /// <summary>The player's current level.</summary>
+        /// <summary>The player's current endurance level.</summary>
         private int CurrentLevel;
 
-        /// <summary>The health points to add to the player's base health due to their current level.</summary>
-        private int CurrentLevelHealthBonus;
+        /// <summary>The stamina points to add to the player's base stamina due to their current endurance level.</summary>
+        private int CurrentLevelStaminaBonus;
 
-        /// <summary>The initial health bonus to apply regardless of the player's level, from the config file.</summary>
-        private int BaseHealthBonus;
+        /// <summary>The initial stamina bonus to apply regardless of the player's endurance level, from the config file.</summary>
+        private int BaseStaminaBonus;
 
         /// <summary>Whether to reset all changes by the mod to the default values (i.e. start over).</summary>
         private bool ClearModEffects;
 
-        /// <summary>The player's original max health value, excluding mod effects.</summary>
-        private int OriginalMaxHealth;
+        /// <summary>The player's original stamina value, excluding mod effects.</summary>
+        private int OriginalStamina;
 
         /// <summary>Whether the player recently gained XP for tool use.</summary>
         private bool HasRecentToolExp;
@@ -44,14 +51,11 @@ namespace Omegasis.BuildHealth
         /// <summary>Whether the player was eating last time we checked.</summary>
         private bool WasEating;
 
-        /// <summary>The player's health last time we checked it.</summary>
-        private int LastHealth;
-
         /// <summary>Whether the player has loaded a save.</summary>
         private bool IsLoaded;
 
-        /// <summary>Whether the player has collapsed today.</summary>
-        private bool WasCollapsed;
+        /// <summary>The player's stamina last time they slept.</summary>
+        private int NightlyStamina;
 
 
         /*********
@@ -63,37 +67,38 @@ namespace Omegasis.BuildHealth
         {
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
-
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoaded;
 
-            var configPath = Path.Combine(helper.DirectoryPath, "BuildHealthConfig.json");
+            string configPath = Path.Combine(helper.DirectoryPath, "BuildEnduranceConfig.json");
             if (!File.Exists(configPath))
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
-                this.Config = new Config
+                this.Monitor.Log("Initial configuration file setup.");
+                this.Config = new ModConfig
                 {
                     CurrentLevel = 0,
                     MaxLevel = 100,
-                    HealthIncreasePerLevel = 1,
+                    StaminaIncreasePerLevel = 1,
                     CurrentExp = 0,
                     ExpToNextLevel = 20,
                     ExpCurve = 1.15,
                     ExpForEating = 2,
                     ExpForSleeping = 10,
                     ExpForToolUse = 1,
-                    BaseHealthBonus = 0,
-                    CurrentLevelHealthBonus = 0
+                    BaseStaminaBonus = 0,
+                    CurrentLevelStaminaBonus = 0,
+                    ExpForExhaustion = 25,
+                    ExpForCollapsing = 50
                 };
                 File.WriteAllBytes(configPath, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.Config)));
             }
             else
             {
-                this.Config = JsonConvert.DeserializeObject<Config>(Encoding.UTF8.GetString(File.ReadAllBytes(configPath)));
-                this.Monitor.Log("Found BuildHealth config file.");
+                this.Config = JsonConvert.DeserializeObject<ModConfig>(Encoding.UTF8.GetString(File.ReadAllBytes(configPath)));
+                this.Monitor.Log("Found BuildEndurance config file.");
             }
 
-            this.Monitor.Log("BuildHealth Initialization Completed");
+            this.Monitor.Log("BuildEndurance Initialization Completed");
         }
 
         /// <summary>The method invoked once per second during a game update.</summary>
@@ -127,15 +132,13 @@ namespace Omegasis.BuildHealth
                 this.HasRecentToolExp = true;
             }
 
-            // give XP for taking damage
-            var player = Game1.player;
-            if (this.LastHealth > player.health)
+            // give XP when exhausted
+            if (!this.WasExhausted && Game1.player.exhausted)
             {
-                this.CurrentExp += this.LastHealth - player.health;
-                this.LastHealth = player.health;
+                this.CurrentExp += this.Config.ExpForExhaustion;
+                this.WasExhausted = true;
+                this.Monitor.Log("The player is exhausted");
             }
-            else if (this.LastHealth < player.health)
-                this.LastHealth = player.health;
 
             // give XP when player stays up too late or collapses
             if (!this.WasCollapsed && Game1.farmerShouldPassOut)
@@ -146,37 +149,66 @@ namespace Omegasis.BuildHealth
             }
         }
 
+        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            // initialise
+            this.LoadConfig();
+            this.WriteConfig();
+            this.IsLoaded = true;
+
+            // grab initial stamina
+            var player = Game1.player;
+            if (this.OriginalStamina == 0)
+                this.OriginalStamina = player.MaxStamina;
+
+            // set nightly stamina
+            player.MaxStamina = this.NightlyStamina;
+            if (this.NightlyStamina == 0)
+                player.MaxStamina = this.BaseStaminaBonus + this.CurrentLevelStaminaBonus + this.OriginalStamina;
+
+            // reset if needed
+            if (this.ClearModEffects)
+                player.MaxStamina = this.OriginalStamina;
+
+            // save config
+            this.LoadConfig();
+            this.WriteConfig();
+        }
+
         /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         public void TimeEvents_DayOfMonthChanged(object sender, EventArgs e)
         {
             // reset data
-            this.LastHealth = Game1.player.maxHealth;
+            this.WasExhausted = false;
             this.WasCollapsed = false;
             if (!this.IsLoaded)
                 return;
 
             // update settings
+            this.Monitor.Log(this.CurrentExp.ToString());
             this.UpdateClearSetting();
+            this.Monitor.Log(this.ClearModEffects.ToString());
 
-            var player = StardewValley.Game1.player;
+            var player = Game1.player;
             this.CurrentExp += this.Config.ExpForSleeping;
-            if (this.OriginalMaxHealth == 0)
-                this.OriginalMaxHealth = player.maxHealth; //grab the initial Health value
+            if (this.OriginalStamina == 0)
+                this.OriginalStamina = player.MaxStamina; //grab the initial stamina value
 
             if (this.ClearModEffects)
             {
                 this.LoadClearSettings();
-                //This will run when the character goes to sleep. It will increase their sleeping skill.
-                player.maxHealth = this.OriginalMaxHealth;
+                player.MaxStamina = this.OriginalStamina;
                 this.ExpToNextLevel = this.Config.ExpToNextLevel;
                 this.CurrentExp = this.Config.CurrentExp;
-                this.CurrentLevelHealthBonus = 0;
-                this.OriginalMaxHealth = player.maxHealth;
-                this.BaseHealthBonus = 0;
+                this.CurrentLevelStaminaBonus = 0;
+                this.OriginalStamina = player.MaxStamina;
+                this.BaseStaminaBonus = 0;
                 this.CurrentLevel = 0;
-                this.Monitor.Log("BuildHealth Reset!");
             }
 
             if (!this.ClearModEffects && this.CurrentLevel < this.Config.MaxLevel)
@@ -185,70 +217,42 @@ namespace Omegasis.BuildHealth
                 {
                     this.CurrentLevel += 1;
                     this.CurrentExp = this.CurrentExp - this.ExpToNextLevel;
-                    this.ExpToNextLevel =
-                        (this.Config.ExpCurve * this.ExpToNextLevel);
-                    player.maxHealth += this.Config.HealthIncreasePerLevel;
-                    this.CurrentLevelHealthBonus += this.Config.HealthIncreasePerLevel;
+                    this.ExpToNextLevel = (this.Config.ExpCurve * this.ExpToNextLevel);
+                    player.MaxStamina += this.Config.StaminaIncreasePerLevel;
+                    this.CurrentLevelStaminaBonus += this.Config.StaminaIncreasePerLevel;
+
                 }
             }
             this.ClearModEffects = false;
-
-            this.WriteConfig();
-        }
-
-        /// <summary>The method invoked after the player loads a save.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        public void SaveEvents_AfterLoaded(object sender, EventArgs e)
-        {
-            // initialise
-            this.LoadConfig();
-            this.WriteConfig();
-            this.IsLoaded = true;
-
-            // grab initial health
-            var player = Game1.player;
-            if (this.OriginalMaxHealth == 0)
-                this.OriginalMaxHealth = player.maxHealth;
-
-            // set max health
-            player.maxHealth = this.BaseHealthBonus + this.CurrentLevelHealthBonus + this.OriginalMaxHealth;
-
-            // reset if needed
-            if (this.ClearModEffects)
-            {
-                player.maxHealth = this.OriginalMaxHealth;
-                this.Monitor.Log("BuildHealth Reset!");
-            }
-
-            // save config
-            this.LastHealth = Game1.player.maxHealth;
-            this.LoadConfig();
+            this.NightlyStamina = Game1.player.maxStamina;
             this.WriteConfig();
         }
 
         /// <summary>Update the settings needed for <see cref="ClearModEffects"/> from the latest config file on disk.</summary>
         void LoadClearSettings()
         {
+            this.LoadConfig();
+            this.WriteConfig();
+
             if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
-            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
+                Console.WriteLine("Clear Data Loaded could not find the correct file.");
 
                 this.ClearModEffects = false;
-                this.OriginalMaxHealth = 0;
-                this.BaseHealthBonus = 0;
+                this.OriginalStamina = 0;
+                this.BaseStaminaBonus = 0;
             }
             else
             {
-                //loads the BuildHealth_data upon loading the mod
+                //loads the BuildEndurance_data upon loading the mod
                 string[] text = File.ReadAllLines(path);
-                this.BaseHealthBonus = Convert.ToInt32(text[9]);
+                this.BaseStaminaBonus = Convert.ToInt32(text[9]);
                 this.ClearModEffects = Convert.ToBoolean(text[14]);
-                this.OriginalMaxHealth = Convert.ToInt32(text[16]);
+                this.OriginalStamina = Convert.ToInt32(text[16]);
             }
         }
 
@@ -258,14 +262,14 @@ namespace Omegasis.BuildHealth
             if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
-            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
+                Console.WriteLine("Clear Data Loaded could not find the correct file.");
 
                 this.ClearModEffects = false;
-                this.OriginalMaxHealth = 0;
-                this.BaseHealthBonus = 0;
+                this.OriginalStamina = 0;
+                this.BaseStaminaBonus = 0;
             }
             else
             {
@@ -275,52 +279,51 @@ namespace Omegasis.BuildHealth
         }
 
         /// <summary>Load the configuration settings.</summary>
-        private void LoadConfig()
+        void LoadConfig()
         {
             if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
-            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txr");
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
                 this.ExpToNextLevel = this.Config.ExpToNextLevel;
                 this.CurrentExp = this.Config.CurrentExp;
                 this.CurrentLevel = this.Config.CurrentLevel;
-                this.BaseHealthBonus = this.Config.BaseHealthBonus;
-                this.CurrentLevelHealthBonus = this.Config.CurrentLevelHealthBonus;
+                this.BaseStaminaBonus = this.Config.BaseStaminaBonus;
+                this.CurrentLevelStaminaBonus = this.Config.CurrentLevelStaminaBonus;
                 this.ClearModEffects = false;
-                this.OriginalMaxHealth = 0;
+                this.OriginalStamina = 0;
             }
             else
             {
-                //loads the BuildHealth_data upon loading the mod
+                // loads the BuildEndurance_data upon loading the mod
                 string[] text = File.ReadAllLines(path);
                 this.CurrentLevel = Convert.ToInt32(text[3]);
-                this.ExpToNextLevel = Convert.ToDouble(text[7]);  //these array locations refer to the lines in BuildHealth_data.json
+                this.ExpToNextLevel = Convert.ToDouble(text[7]);  //these array locations refer to the lines in BuildEndurance_data.json
                 this.CurrentExp = Convert.ToDouble(text[5]);
-                this.BaseHealthBonus = Convert.ToInt32(text[9]);
-                this.CurrentLevelHealthBonus = Convert.ToInt32(text[11]);
+                this.BaseStaminaBonus = Convert.ToInt32(text[9]);
+                this.CurrentLevelStaminaBonus = Convert.ToInt32(text[11]);
                 this.ClearModEffects = Convert.ToBoolean(text[14]);
-                this.OriginalMaxHealth = Convert.ToInt32(text[16]);
+                this.OriginalStamina = Convert.ToInt32(text[16]);
+                this.NightlyStamina = Convert.ToInt32(text[18]); //this should grab the nightly stamina values
             }
         }
 
         /// <summary>Save the configuration settings.</summary>
-        private void WriteConfig()
+        void WriteConfig()
         {
+            // saves the BuildEndurance_data at the end of a new day
             if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
-            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
+            string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             string[] text = new string[20];
             if (!File.Exists(path))
             {
-                this.Monitor.Log("The data file for BuildHealth was not found, guess I'll create it when you sleep.");
+                Console.WriteLine("The data file for BuildEndurance was not found, guess I'll create it when you sleep.");
 
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-
-                text[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
+                text[0] = "Player: Build Endurance Data. Modification can cause errors. Edit at your own risk.";
                 text[1] = "====================================================================================";
 
                 text[2] = "Player Current Level:";
@@ -332,24 +335,26 @@ namespace Omegasis.BuildHealth
                 text[6] = "Xp to next Level:";
                 text[7] = this.ExpToNextLevel.ToString();
 
-                text[8] = "Initial Health Bonus:";
-                text[9] = this.BaseHealthBonus.ToString();
+                text[8] = "Initial Stam Bonus:";
+                text[9] = this.BaseStaminaBonus.ToString();
 
-                text[10] = "Additional Health Bonus:";
-                text[11] = this.CurrentLevelHealthBonus.ToString();
+                text[10] = "Additional Stam Bonus:";
+                text[11] = this.CurrentLevelStaminaBonus.ToString();
 
                 text[12] = "=======================================================================================";
                 text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
                 text[14] = this.ClearModEffects.ToString();
-                text[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
-                text[16] = this.OriginalMaxHealth.ToString();
+                text[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
+                text[16] = this.OriginalStamina.ToString();
+
+                text[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
+                text[18] = this.NightlyStamina.ToString(); //this should save the player's stamina upon sleeping.
 
                 File.WriteAllLines(path, text);
             }
             else
             {
-                //write out the info to a text file at the end of a day.
-                text[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
+                text[0] = "Player: Build Endurance Data. Modification can cause errors. Edit at your own risk.";
                 text[1] = "====================================================================================";
 
                 text[2] = "Player Current Level:";
@@ -361,17 +366,20 @@ namespace Omegasis.BuildHealth
                 text[6] = "Xp to next Level:";
                 text[7] = this.ExpToNextLevel.ToString();
 
-                text[8] = "Initial Health Bonus:";
-                text[9] = this.BaseHealthBonus.ToString();
+                text[8] = "Initial Stam Bonus:";
+                text[9] = this.BaseStaminaBonus.ToString();
 
-                text[10] = "Additional Health Bonus:";
-                text[11] = this.CurrentLevelHealthBonus.ToString();
+                text[10] = "Additional Stam Bonus:";
+                text[11] = this.CurrentLevelStaminaBonus.ToString();
 
                 text[12] = "=======================================================================================";
                 text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
                 text[14] = this.ClearModEffects.ToString();
-                text[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
-                text[16] = this.OriginalMaxHealth.ToString();
+                text[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
+                text[16] = this.OriginalStamina.ToString();
+
+                text[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
+                text[18] = this.NightlyStamina.ToString();
 
                 File.WriteAllLines(path, text);
             }

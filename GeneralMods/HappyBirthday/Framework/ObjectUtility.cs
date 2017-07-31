@@ -3,7 +3,7 @@ using System.Linq;
 using StardewValley;
 using Object = StardewValley.Object;
 
-namespace Omegasis.HappyBirthday.PatchedUtilities
+namespace Omegasis.HappyBirthday.Framework
 {
     /// <summary>Provides utility methods for managing in-game objects.</summary>
     internal class ObjectUtility

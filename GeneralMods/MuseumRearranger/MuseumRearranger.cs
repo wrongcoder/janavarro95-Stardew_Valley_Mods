@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Omegasis.MuseumRearranger.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;

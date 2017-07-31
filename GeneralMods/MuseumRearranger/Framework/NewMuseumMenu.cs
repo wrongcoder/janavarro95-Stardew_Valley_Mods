@@ -5,10 +5,10 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
-namespace Omegasis.MuseumRearranger
+namespace Omegasis.MuseumRearranger.Framework
 {
     /// <summary>A subclass of <see cref="MuseumMenu"/> which adds support for toggling the inventory box.</summary>
-    public class NewMuseumMenu : MuseumMenu
+    internal class NewMuseumMenu : MuseumMenu
     {
         /*********
         ** Properties

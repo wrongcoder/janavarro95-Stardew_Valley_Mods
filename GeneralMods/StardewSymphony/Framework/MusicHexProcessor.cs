@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using StardewValley;
 
-namespace Omegasis.StardewSymphony
+namespace Omegasis.StardewSymphony.Framework
 {
     internal class MusicHexProcessor
     {
@@ -43,7 +43,7 @@ namespace Omegasis.StardewSymphony
         public void ProcessHex()
         {
             int counter = 0;
-            foreach (string entry in SoundBanks)
+            foreach (string entry in this.SoundBanks)
             {
                 List<string> cleanCueNames = new List<string>();
                 byte[] array = File.ReadAllBytes(entry);

@@ -1,4 +1,4 @@
-﻿namespace Omegasis.StardewSymphony
+﻿namespace Omegasis.StardewSymphony.Framework
 {
     /// <summary>In-game season values.</summary>
     internal enum Season

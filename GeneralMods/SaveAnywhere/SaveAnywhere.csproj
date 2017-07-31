@@ -34,10 +34,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SaveUtilities.cs" />
-    <Compile Include="Config_Utilities.cs" />
-    <Compile Include="Mod_Core.cs" />
-    <Compile Include="New_Shipping_Menu.cs" />
+    <Compile Include="Framework\SaveManager.cs" />
+    <Compile Include="Framework\ConfigUtilities.cs" />
+    <Compile Include="SaveAnywhere.cs" />
+    <Compile Include="Framework\NewShippingMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Omegasis.SaveAnywhere
+namespace Omegasis.SaveAnywhere.Framework
 {
     /// <summary>Provides methods for reading and writing the config file.</summary>
     internal class ConfigUtilities

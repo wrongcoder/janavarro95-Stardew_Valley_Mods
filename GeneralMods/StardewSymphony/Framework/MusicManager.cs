@@ -5,9 +5,9 @@ using System.Linq;
 using Microsoft.Xna.Framework.Audio;
 using StardewValley;
 
-namespace Omegasis.StardewSymphony
+namespace Omegasis.StardewSymphony.Framework
 {
-    //also known as the music_pack
+    /// <summary>Data and metadata for a music pack.</summary>
     internal class MusicManager
     {
         /*********

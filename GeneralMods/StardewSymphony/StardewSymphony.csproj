@@ -34,11 +34,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="MusicHexProcessor.cs" />
-    <Compile Include="MusicManager.cs" />
+    <Compile Include="StardewSymphony.cs" />
+    <Compile Include="Framework\MusicHexProcessor.cs" />
+    <Compile Include="Framework\MusicManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Season.cs" />
+    <Compile Include="Framework\Season.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

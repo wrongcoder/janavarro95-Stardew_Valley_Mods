@@ -34,9 +34,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BuyBackCollectables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpdatedCollections.cs" />
+    <Compile Include="Framework\BuyBackMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

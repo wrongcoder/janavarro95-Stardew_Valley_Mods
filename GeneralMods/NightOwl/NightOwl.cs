@@ -19,7 +19,7 @@ Issues:
 namespace Omegasis.NightOwl
 {
     /// <summary>The mod entry point.</summary>
-    public class Class1 : Mod
+    public class NightOwl : Mod
     {
         /*********
         ** Properties

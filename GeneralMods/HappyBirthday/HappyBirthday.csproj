@@ -36,10 +36,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Birthday_Menu.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="OmegasisUtility\Messages.cs" />
-    <Compile Include="PatchedUtilities\ObjectUtility.cs" />
+    <Compile Include="Framework\BirthdayMenu.cs" />
+    <Compile Include="HappyBirthday.cs" />
+    <Compile Include="Framework\Messages.cs" />
+    <Compile Include="Framework\ObjectUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

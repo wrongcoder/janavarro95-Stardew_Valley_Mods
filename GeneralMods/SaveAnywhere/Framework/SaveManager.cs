@@ -9,7 +9,7 @@ using StardewValley.Menus;
 using StardewValley.Monsters;
 using SFarmer = StardewValley.Farmer;
 
-namespace Omegasis.SaveAnywhere
+namespace Omegasis.SaveAnywhere.Framework
 {
     /// <summary>Provides methods for saving and loading game data.</summary>
     internal class SaveManager

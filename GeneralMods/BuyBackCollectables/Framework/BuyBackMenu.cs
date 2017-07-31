@@ -7,7 +7,7 @@ using StardewValley;
 using StardewValley.Menus;
 using Object = StardewValley.Object;
 
-namespace Omegasis.BuyBackCollectables
+namespace Omegasis.BuyBackCollectables.Framework
 {
     /// <summary>The clickable menu which lets the player buy back collectables.</summary>
     internal class BuyBackMenu : IClickableMenu
@@ -94,8 +94,8 @@ namespace Omegasis.BuyBackCollectables
             this.Collections.Add(BuyBackMenu.CookingTab, new List<List<ClickableTextureComponent>>());
             this.SideTabs.Add(new ClickableTextureComponent("", new Rectangle(this.xPositionOnScreen - Game1.tileSize * 3 / 4, this.yPositionOnScreen + Game1.tileSize * 7, Game1.tileSize, Game1.tileSize), "", Game1.content.LoadString("Strings\\UI:Collections_Achievements"), Game1.mouseCursors, new Rectangle(656, 80, 16, 16), Game1.pixelZoom));
             this.Collections.Add(BuyBackMenu.AchievementsTab, new List<List<ClickableTextureComponent>>());
-            this.BackButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 3 / 4, this.yPositionOnScreen + height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), Game1.pixelZoom);
-            this.ForwardButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width - Game1.tileSize / 2 - 15 * Game1.pixelZoom, this.yPositionOnScreen + height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), Game1.pixelZoom);
+            this.BackButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize * 3 / 4, this.yPositionOnScreen + this.height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), Game1.pixelZoom);
+            this.ForwardButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width - Game1.tileSize / 2 - 15 * Game1.pixelZoom, this.yPositionOnScreen + this.height - 20 * Game1.pixelZoom, 12 * Game1.pixelZoom, 11 * Game1.pixelZoom), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), Game1.pixelZoom);
             int[] array = new int[this.SideTabs.Count];
             int num = this.xPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearSideBorder;
             int num2 = this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4;
@@ -143,7 +143,7 @@ namespace Omegasis.BuyBackCollectables
                 }
                 int x2 = num + array[selectedTab] % num3 * (Game1.tileSize + 4);
                 int num5 = num2 + array[selectedTab] / num3 * (Game1.tileSize + 4);
-                if (num5 > this.yPositionOnScreen + height - 128)
+                if (num5 > this.yPositionOnScreen + this.height - 128)
                 {
                     this.Collections[selectedTab].Add(new List<ClickableTextureComponent>());
                     array[selectedTab] = 0;

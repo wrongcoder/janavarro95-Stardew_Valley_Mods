@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Timers;
 using Microsoft.Xna.Framework.Audio;
+using Omegasis.StardewSymphony.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;

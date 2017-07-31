@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Omegasis.HappyBirthday.OmegasisUtility;
-using Omegasis.HappyBirthday.PatchedUtilities;
+using Omegasis.HappyBirthday.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;

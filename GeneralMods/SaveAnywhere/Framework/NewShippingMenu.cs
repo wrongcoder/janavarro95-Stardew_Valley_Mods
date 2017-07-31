@@ -4,7 +4,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Omegasis.SaveAnywhere
+namespace Omegasis.SaveAnywhere.Framework
 {
     /// <summary>A subclass of <see cref="ShippingMenu"/> that does everything except save.</summary>
     internal class NewShippingMenu : ShippingMenu
