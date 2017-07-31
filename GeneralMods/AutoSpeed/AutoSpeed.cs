@@ -49,11 +49,8 @@ namespace Omegasis.AutoSpeed
         private void LoadConfig()
         {
             string path = Path.Combine(this.Helper.DirectoryPath, "AutoSpeed_data.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
-                this.Monitor.Log("The config file for AutoSpeed was not found, guess I'll create it...", LogLevel.Warn);
+            if (!File.Exists(path))
                 this.WriteConfig();
-            }
             else
             {
                 string[] text = File.ReadAllLines(path);
@@ -66,26 +63,11 @@ namespace Omegasis.AutoSpeed
         {
             string path = Path.Combine(this.Helper.DirectoryPath, "AutoSpeed_data.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("The data file for AutoSpeed was not found, guess I'll create it when you sleep.", LogLevel.Info);
-
-                text[0] = "Player: AutoSpeed Config:";
-                text[1] = "====================================================================================";
-                text[2] = "Player Added Speed:";
-                text[3] = Speed.ToString();
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                text[0] = "Player: AutoSpeed Config:";
-                text[1] = "====================================================================================";
-
-                text[2] = "Player Added Speed:";
-                text[3] = Speed.ToString();
-
-                File.WriteAllLines(path, text);
-            }
+            text[0] = "Player: AutoSpeed Config:";
+            text[1] = "====================================================================================";
+            text[2] = "Player Added Speed:";
+            text[3] = Speed.ToString();
+            File.WriteAllLines(path, text);
         }
     }
 }

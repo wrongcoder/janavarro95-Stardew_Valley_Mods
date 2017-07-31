@@ -80,7 +80,7 @@ namespace Omegasis.MuseumRearranger
         private void LoadConfig()
         {
             string path = Path.Combine(Helper.DirectoryPath, "Museum_Rearrange_Config.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
                 this.ShowMenuKey = "R";
                 this.ToggleInventoryKey = "T";
@@ -98,29 +98,13 @@ namespace Omegasis.MuseumRearranger
         {
             string path = Path.Combine(Helper.DirectoryPath, "Museum_Rearrange_Config.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("Museum Rearranger: Config not found. Creating it now.");
-
-                text[0] = "Config: Museum_Rearranger. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-                text[2] = "Key binding for rearranging the museum.";
-                text[3] = this.ShowMenuKey;
-                text[4] = "Key binding for showing the menu when rearranging the museum.";
-                text[5] = this.ToggleInventoryKey;
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-                text[0] = "Config: Save_Anywhere Info. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-                text[2] = "Key binding for rearranging the museum.";
-                text[3] = this.ShowMenuKey;
-                text[4] = "Key binding for showing the menu when rearranging the museum.";
-                text[5] = this.ToggleInventoryKey;
-                File.WriteAllLines(path, text);
-            }
+            text[0] = "Config: Museum_Rearranger. Feel free to mess with these settings.";
+            text[1] = "====================================================================================";
+            text[2] = "Key binding for rearranging the museum.";
+            text[3] = this.ShowMenuKey;
+            text[4] = "Key binding for showing the menu when rearranging the museum.";
+            text[5] = this.ToggleInventoryKey;
+            File.WriteAllLines(path, text);
         }
     }
 }

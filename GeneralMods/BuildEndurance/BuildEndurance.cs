@@ -238,7 +238,7 @@ namespace Omegasis.BuildEndurance
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
                 Console.WriteLine("Clear Data Loaded could not find the correct file.");
 
@@ -248,7 +248,6 @@ namespace Omegasis.BuildEndurance
             }
             else
             {
-                //loads the BuildEndurance_data upon loading the mod
                 string[] text = File.ReadAllLines(path);
                 this.BaseStaminaBonus = Convert.ToInt32(text[9]);
                 this.ClearModEffects = Convert.ToBoolean(text[14]);
@@ -263,7 +262,7 @@ namespace Omegasis.BuildEndurance
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
                 Console.WriteLine("Clear Data Loaded could not find the correct file.");
 
@@ -285,7 +284,7 @@ namespace Omegasis.BuildEndurance
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
                 this.ExpToNextLevel = this.Config.ExpToNextLevel;
                 this.CurrentExp = this.Config.CurrentExp;
@@ -297,92 +296,54 @@ namespace Omegasis.BuildEndurance
             }
             else
             {
-                // loads the BuildEndurance_data upon loading the mod
                 string[] text = File.ReadAllLines(path);
                 this.CurrentLevel = Convert.ToInt32(text[3]);
-                this.ExpToNextLevel = Convert.ToDouble(text[7]);  //these array locations refer to the lines in BuildEndurance_data.json
+                this.ExpToNextLevel = Convert.ToDouble(text[7]);
                 this.CurrentExp = Convert.ToDouble(text[5]);
                 this.BaseStaminaBonus = Convert.ToInt32(text[9]);
                 this.CurrentLevelStaminaBonus = Convert.ToInt32(text[11]);
                 this.ClearModEffects = Convert.ToBoolean(text[14]);
                 this.OriginalStamina = Convert.ToInt32(text[16]);
-                this.NightlyStamina = Convert.ToInt32(text[18]); //this should grab the nightly stamina values
+                this.NightlyStamina = Convert.ToInt32(text[18]);
             }
         }
 
         /// <summary>Save the configuration settings.</summary>
         void WriteConfig()
         {
-            // saves the BuildEndurance_data at the end of a new day
             if (!Directory.Exists(Path.Combine(Helper.DirectoryPath, "PlayerData")))
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                Console.WriteLine("The data file for BuildEndurance was not found, guess I'll create it when you sleep.");
+            text[0] = "Player: Build Endurance Data. Modification can cause errors. Edit at your own risk.";
+            text[1] = "====================================================================================";
 
-                text[0] = "Player: Build Endurance Data. Modification can cause errors. Edit at your own risk.";
-                text[1] = "====================================================================================";
+            text[2] = "Player Current Level:";
+            text[3] = this.CurrentLevel.ToString();
 
-                text[2] = "Player Current Level:";
-                text[3] = this.CurrentLevel.ToString();
+            text[4] = "Player Current XP:";
+            text[5] = this.CurrentExp.ToString();
 
-                text[4] = "Player Current XP:";
-                text[5] = this.CurrentExp.ToString();
+            text[6] = "Xp to next Level:";
+            text[7] = this.ExpToNextLevel.ToString();
 
-                text[6] = "Xp to next Level:";
-                text[7] = this.ExpToNextLevel.ToString();
+            text[8] = "Initial Stam Bonus:";
+            text[9] = this.BaseStaminaBonus.ToString();
 
-                text[8] = "Initial Stam Bonus:";
-                text[9] = this.BaseStaminaBonus.ToString();
+            text[10] = "Additional Stam Bonus:";
+            text[11] = this.CurrentLevelStaminaBonus.ToString();
 
-                text[10] = "Additional Stam Bonus:";
-                text[11] = this.CurrentLevelStaminaBonus.ToString();
+            text[12] = "=======================================================================================";
+            text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
+            text[14] = this.ClearModEffects.ToString();
+            text[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
+            text[16] = this.OriginalStamina.ToString();
 
-                text[12] = "=======================================================================================";
-                text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
-                text[14] = this.ClearModEffects.ToString();
-                text[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
-                text[16] = this.OriginalStamina.ToString();
+            text[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
+            text[18] = this.NightlyStamina.ToString();
 
-                text[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
-                text[18] = this.NightlyStamina.ToString(); //this should save the player's stamina upon sleeping.
-
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                text[0] = "Player: Build Endurance Data. Modification can cause errors. Edit at your own risk.";
-                text[1] = "====================================================================================";
-
-                text[2] = "Player Current Level:";
-                text[3] = this.CurrentLevel.ToString();
-
-                text[4] = "Player Current XP:";
-                text[5] = this.CurrentExp.ToString();
-
-                text[6] = "Xp to next Level:";
-                text[7] = this.ExpToNextLevel.ToString();
-
-                text[8] = "Initial Stam Bonus:";
-                text[9] = this.BaseStaminaBonus.ToString();
-
-                text[10] = "Additional Stam Bonus:";
-                text[11] = this.CurrentLevelStaminaBonus.ToString();
-
-                text[12] = "=======================================================================================";
-                text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
-                text[14] = this.ClearModEffects.ToString();
-                text[15] = "OLD STAMINA AMOUNT: This is the initial value of the Player's Stamina before this mod took over.";
-                text[16] = this.OriginalStamina.ToString();
-
-                text[17] = "Nightly Stamina Value: This is the value of the player's stamina that was saved when the player slept.";
-                text[18] = this.NightlyStamina.ToString();
-
-                File.WriteAllLines(path, text);
-            }
+            File.WriteAllLines(path, text);
         }
     }
 }

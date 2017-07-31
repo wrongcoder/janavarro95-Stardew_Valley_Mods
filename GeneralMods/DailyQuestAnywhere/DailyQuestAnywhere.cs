@@ -61,7 +61,7 @@ namespace Omegasis.DailyQuestAnywhere
         void LoadConfig()
         {
             string path = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
                 this.KeyBinding = "H";
             else
             {
@@ -75,30 +75,13 @@ namespace Omegasis.DailyQuestAnywhere
         {
             string path = Path.Combine(Helper.DirectoryPath, "DailyQuest_Anywhere_Config.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("DailyQuest_Anywhere: The DailyQuest Anywhere Config doesn't exist. Creating it now.");
+            text[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
+            text[1] = "====================================================================================";
 
-                text[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
+            text[2] = "Key binding for opening the billboard for quests anywhere. Press this key to do so";
+            text[3] = this.KeyBinding;
 
-                text[2] = "Key binding for opening the billboard for quests anywhere. Press this key to do so";
-                text[3] = this.KeyBinding;
-
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-
-                text[0] = "Config: DailyQuest_Anywhere Info. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-
-                text[2] = "Key binding for opening the billboard for quests anywhere. Press this key to do so";
-                text[3] = this.KeyBinding;
-
-                File.WriteAllLines(path, text);
-            }
+            File.WriteAllLines(path, text);
         }
     }
 }

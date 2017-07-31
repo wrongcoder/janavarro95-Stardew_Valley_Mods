@@ -513,7 +513,7 @@ namespace Omegasis.HappyBirthday
         private void LoadConfig()
         {
             string path = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
                 this.KeyBinding = "O";
             else
             {
@@ -527,35 +527,20 @@ namespace Omegasis.HappyBirthday
         {
             string path = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("HappyBirthday: The HappyBirthday Config doesn't exist. Creating it now.");
+            text[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
+            text[1] = "====================================================================================";
 
-                text[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
+            text[2] = "Key binding for opening the birthday menu. Press this key to do so.";
+            text[3] = this.KeyBinding;
 
-                text[2] = "Key binding for opening the birthday menu. Press this key to do so.";
-                text[3] = this.KeyBinding;
-
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                text[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-
-                text[2] = "Key binding for opening the birthday menu. Press this key to do so.";
-                text[3] = this.KeyBinding;
-
-                File.WriteAllLines(path, text);
-            }
+            File.WriteAllLines(path, text);
         }
 
         /// <summary>Load the player's birthday from the config file.</summary>
         private void LoadBirthday()
         {
             string path = Path.Combine(this.BirthdayFolderPath, $"HappyBirthday_{Game1.player.name}.txt");
-            if (File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (File.Exists(path))
             {
                 string[] text = File.ReadAllLines(path);
                 this.BirthdaySeason = Convert.ToString(text[3]);
@@ -568,32 +553,15 @@ namespace Omegasis.HappyBirthday
         {
             string path = Path.Combine(this.BirthdayFolderPath, $"HappyBirthday_{Game1.player.name}.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("HappyBirthday: The HappyBirthday Player Info doesn't exist. Creating it now.");
+            text[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
+            text[1] = "====================================================================================";
 
-                text[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
-                text[1] = "====================================================================================";
+            text[2] = "Player's Birthday Season";
+            text[3] = this.BirthdaySeason;
+            text[4] = "Player's Birthday Date";
+            text[5] = this.BirthdayDay.ToString();
 
-                text[2] = "Player's Birthday Season";
-                text[3] = this.BirthdaySeason;
-                text[4] = "Player's Birthday Date";
-                text[5] = this.BirthdayDay.ToString();
-
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                text[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
-                text[1] = "====================================================================================";
-
-                text[2] = "Player's Birthday Season";
-                text[3] = this.BirthdaySeason;
-                text[4] = "Player's Birthday Date";
-                text[5] = this.BirthdayDay.ToString();
-
-                File.WriteAllLines(path, text);
-            }
+            File.WriteAllLines(path, text);
         }
     }
 }

@@ -207,71 +207,37 @@ namespace Omegasis.MoreRain
         {
             string path = Path.Combine(Helper.DirectoryPath, "More_Rain_Config.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("The data file for More Rain wasn't found. Time to create it!");
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-                text[0] = "Player: More Rain Config. Feel free to edit.";
-                text[1] = "====================================================================================";
-                text[2] = "Spring Rain chance: The chance out of 100 that it will rain tomorrow.";
-                text[3] = this.SpringRainChance.ToString();
-                text[4] = "Spring Storm chance: The chance out of 100 that it will be stormy tomorrow.";
-                text[5] = this.SpringThunderChance.ToString();
+            text[0] = "Player: More Rain Config. Feel free to edit.";
+            text[1] = "====================================================================================";
+            text[2] = "Spring Rain chance: The chance out of 100 that it will rain tomorrow.";
+            text[3] = this.SpringRainChance.ToString();
+            text[4] = "Spring Storm chance: The chance out of 100 that it will be stormy tomorrow.";
+            text[5] = this.SpringThunderChance.ToString();
 
-                text[6] = "Summer Rain chance: The chance out of 100 that it will rain tomorrow.";
-                text[7] = this.SummerRainChance.ToString();
-                text[8] = "Summer Storm chance: The chance out of 100 that it will be stormy tomorrow.";
-                text[9] = this.SummerThunderChance.ToString();
+            text[6] = "Summer Rain chance: The chance out of 100 that it will rain tomorrow.";
+            text[7] = this.SummerRainChance.ToString();
+            text[8] = "Summer Storm chance: The chance out of 100 that it will be stormy tomorrow.";
+            text[9] = this.SummerThunderChance.ToString();
 
-                text[10] = "Fall Rain chance: The chance out of 100 that it will rain tomorrow.";
-                text[11] = this.FallRainChance.ToString();
-                text[12] = "Fall Storm chance: The chance out of 100 that it will be stormy tomorrow.";
-                text[13] = this.FallThunderChance.ToString();
+            text[10] = "Fall Rain chance: The chance out of 100 that it will rain tomorrow.";
+            text[11] = this.FallRainChance.ToString();
+            text[12] = "Fall Storm chance: The chance out of 100 that it will be stormy tomorrow.";
+            text[13] = this.FallThunderChance.ToString();
 
-                text[14] = "Winter Snow chance: The chance out of 100 that it will rain tomorrow.";
-                text[15] = this.WinterSnowChance.ToString();
+            text[14] = "Winter Snow chance: The chance out of 100 that it will rain tomorrow.";
+            text[15] = this.WinterSnowChance.ToString();
 
-                text[16] = "Supress Log: If true, the mod won't output any messages to the console.";
-                text[17] = this.SuppressLog.ToString();
+            text[16] = "Supress Log: If true, the mod won't output any messages to the console.";
+            text[17] = this.SuppressLog.ToString();
 
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                this.Monitor.Log("The data file for More Rain wasn't found. Time to create it!");
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-                text[0] = "Player: More Rain Config. Feel free to edit.";
-                text[1] = "====================================================================================";
-                text[2] = "Spring Rain chance: The chance out of 100 that it will rain tomorrow.";
-                text[3] = this.SpringRainChance.ToString();
-                text[4] = "Spring Storm chance: The chance out of 100 that it will be stormy tomorrow.";
-                text[5] = this.SpringThunderChance.ToString();
-
-                text[6] = "Summer Rain chance: The chance out of 100 that it will rain tomorrow.";
-                text[7] = this.SummerRainChance.ToString();
-                text[8] = "Summer Storm chance: The chance out of 100 that it will be stormy tomorrow.";
-                text[9] = this.SummerThunderChance.ToString();
-
-                text[10] = "Fall Rain chance: The chance out of 100 that it will rain tomorrow.";
-                text[11] = this.FallRainChance.ToString();
-                text[12] = "Fall Storm chance: The chance out of 100 that it will be stormy tomorrow.";
-                text[13] = this.FallThunderChance.ToString();
-
-                text[14] = "Winter Snow chance: The chance out of 100 that it will rain tomorrow.";
-                text[15] = this.WinterSnowChance.ToString();
-
-                text[16] = "Supress Log: If true, the mod won't output any messages to the console.";
-                text[17] = this.SuppressLog.ToString();
-
-                File.WriteAllLines(path, text);
-            }
+            File.WriteAllLines(path, text);
         }
 
         /// <summary>Load the configuration settings.</summary>
         private void LoadConfig()
         {
             string path = Path.Combine(Helper.DirectoryPath, $"More_Rain_Config.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
                 this.SpringRainChance = 15;
                 this.SummerRainChance = 5;

@@ -273,9 +273,8 @@ namespace Omegasis.NightOwl
         private void LoadConfig()
         {
             string path = Path.Combine(Helper.DirectoryPath, "Night_Owl_Config_.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
-                this.Monitor.Log("Loading Night_Owl_Config");
                 this.MorningLightTransition = true;
                 this.KeepPositionAfterCollapse = true;
                 this.StayUp = true;

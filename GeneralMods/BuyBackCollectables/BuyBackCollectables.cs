@@ -65,7 +65,7 @@ namespace Omegasis.BuyBackCollectables
         {
             //loads the data to the variables upon loading the game.
             string path = Path.Combine(Helper.DirectoryPath, "BuyBack_Config.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
                 this.KeyBinding = "B";
                 this.CostMultiplier = 3.0;
@@ -84,29 +84,13 @@ namespace Omegasis.BuyBackCollectables
             //write all of my info to a text file.
             string path = Path.Combine(Helper.DirectoryPath, "BuyBack_Config.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("BuyBack Collections: Config not found. Creating it now.");
-
-                text[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-                text[2] = "Key binding";
-                text[3] = this.KeyBinding;
-                text[4] = "Collectables Multiplier Cost: Sell Value * value listed below";
-                text[5] = this.CostMultiplier.ToString();
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
-                text[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-                text[2] = "Key binding";
-                text[3] = this.KeyBinding;
-                text[4] = "Collectables Multiplier Cost: Sell Value * value listed below";
-                text[5] = this.CostMultiplier.ToString();
-                File.WriteAllLines(path, text);
-            }
+            text[0] = "Config: Buy Back Collections. Feel free to mess with these settings.";
+            text[1] = "====================================================================================";
+            text[2] = "Key binding";
+            text[3] = this.KeyBinding;
+            text[4] = "Collectables Multiplier Cost: Sell Value * value listed below";
+            text[5] = this.CostMultiplier.ToString();
+            File.WriteAllLines(path, text);
         }
     }
 }

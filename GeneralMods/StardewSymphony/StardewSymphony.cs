@@ -280,11 +280,9 @@ namespace Omegasis.StardewSymphony
             }
 
             // read config file
-            if (File.Exists(Path.Combine(dirPath, "Config.txt")))
-            {
-                string temp = Path.Combine(dirPath, "Config.txt");
-                musicPacks.Add(dirPath, temp);
-            }
+            string configPath = Path.Combine(dirPath, "Config.txt");
+            if (File.Exists(configPath))
+                musicPacks.Add(dirPath, configPath);
 
             // check subdirectories
             foreach (string childDir in Directory.GetDirectories(dirPath))

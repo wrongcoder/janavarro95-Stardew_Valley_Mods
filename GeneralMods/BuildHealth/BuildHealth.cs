@@ -71,7 +71,6 @@ namespace Omegasis.BuildHealth
             var configPath = Path.Combine(helper.DirectoryPath, "BuildHealthConfig.json");
             if (!File.Exists(configPath))
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
                 this.Config = new ModConfig
                 {
                     CurrentLevel = 0,
@@ -235,17 +234,14 @@ namespace Omegasis.BuildHealth
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
-
                 this.ClearModEffects = false;
                 this.OriginalMaxHealth = 0;
                 this.BaseHealthBonus = 0;
             }
             else
             {
-                //loads the BuildHealth_data upon loading the mod
                 string[] text = File.ReadAllLines(path);
                 this.BaseHealthBonus = Convert.ToInt32(text[9]);
                 this.ClearModEffects = Convert.ToBoolean(text[14]);
@@ -260,10 +256,8 @@ namespace Omegasis.BuildHealth
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
-
                 this.ClearModEffects = false;
                 this.OriginalMaxHealth = 0;
                 this.BaseHealthBonus = 0;
@@ -282,9 +276,8 @@ namespace Omegasis.BuildHealth
                 Directory.CreateDirectory(Path.Combine(Helper.DirectoryPath, "PlayerData"));
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txr");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
-                this.Monitor.Log("The config file for BuildHealth was not found, guess I'll create it...");
                 this.ExpToNextLevel = this.Config.ExpToNextLevel;
                 this.CurrentExp = this.Config.CurrentExp;
                 this.CurrentLevel = this.Config.CurrentLevel;
@@ -295,10 +288,9 @@ namespace Omegasis.BuildHealth
             }
             else
             {
-                //loads the BuildHealth_data upon loading the mod
                 string[] text = File.ReadAllLines(path);
                 this.CurrentLevel = Convert.ToInt32(text[3]);
-                this.ExpToNextLevel = Convert.ToDouble(text[7]);  //these array locations refer to the lines in BuildHealth_data.json
+                this.ExpToNextLevel = Convert.ToDouble(text[7]);
                 this.CurrentExp = Convert.ToDouble(text[5]);
                 this.BaseHealthBonus = Convert.ToInt32(text[9]);
                 this.CurrentLevelHealthBonus = Convert.ToInt32(text[11]);
@@ -315,67 +307,31 @@ namespace Omegasis.BuildHealth
 
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.name}.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("The data file for BuildHealth was not found, guess I'll create it when you sleep.");
+            text[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
+            text[1] = "====================================================================================";
 
-                //write out the info to a text file at the end of a day. This will run if it doesnt exist.
+            text[2] = "Player Current Level:";
+            text[3] = this.CurrentLevel.ToString();
 
-                text[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
-                text[1] = "====================================================================================";
+            text[4] = "Player Current XP:";
+            text[5] = this.CurrentExp.ToString();
 
-                text[2] = "Player Current Level:";
-                text[3] = this.CurrentLevel.ToString();
+            text[6] = "Xp to next Level:";
+            text[7] = this.ExpToNextLevel.ToString();
 
-                text[4] = "Player Current XP:";
-                text[5] = this.CurrentExp.ToString();
+            text[8] = "Initial Health Bonus:";
+            text[9] = this.BaseHealthBonus.ToString();
 
-                text[6] = "Xp to next Level:";
-                text[7] = this.ExpToNextLevel.ToString();
+            text[10] = "Additional Health Bonus:";
+            text[11] = this.CurrentLevelHealthBonus.ToString();
 
-                text[8] = "Initial Health Bonus:";
-                text[9] = this.BaseHealthBonus.ToString();
+            text[12] = "=======================================================================================";
+            text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
+            text[14] = this.ClearModEffects.ToString();
+            text[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
+            text[16] = this.OriginalMaxHealth.ToString();
 
-                text[10] = "Additional Health Bonus:";
-                text[11] = this.CurrentLevelHealthBonus.ToString();
-
-                text[12] = "=======================================================================================";
-                text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
-                text[14] = this.ClearModEffects.ToString();
-                text[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
-                text[16] = this.OriginalMaxHealth.ToString();
-
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                //write out the info to a text file at the end of a day.
-                text[0] = "Player: Build Health Data. Modification can cause errors. Edit at your own risk.";
-                text[1] = "====================================================================================";
-
-                text[2] = "Player Current Level:";
-                text[3] = this.CurrentLevel.ToString();
-
-                text[4] = "Player Current XP:";
-                text[5] = this.CurrentExp.ToString();
-
-                text[6] = "Xp to next Level:";
-                text[7] = this.ExpToNextLevel.ToString();
-
-                text[8] = "Initial Health Bonus:";
-                text[9] = this.BaseHealthBonus.ToString();
-
-                text[10] = "Additional Health Bonus:";
-                text[11] = this.CurrentLevelHealthBonus.ToString();
-
-                text[12] = "=======================================================================================";
-                text[13] = "RESET ALL MOD EFFECTS? This will effective start you back at square 1. Also good if you want to remove this mod.";
-                text[14] = this.ClearModEffects.ToString();
-                text[15] = "OLD Health AMOUNT: This is the initial value of the Player's Health before this mod took over.";
-                text[16] = this.OriginalMaxHealth.ToString();
-
-                File.WriteAllLines(path, text);
-            }
+            File.WriteAllLines(path, text);
         }
     }
 }

@@ -93,10 +93,8 @@ namespace Omegasis.CustomShopsRedux
             Directory.CreateDirectory(this.DataPath);
 
             string path = Path.Combine(this.PathOnDisk, "Custom_Shop_Redux_Config.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
-            {
+            if (!File.Exists(path))
                 this.KeyBinding = "U";
-            }
             else
             {
                 string[] text = File.ReadAllLines(path);
@@ -107,32 +105,15 @@ namespace Omegasis.CustomShopsRedux
         /// <summary>Save the configuration settings.</summary>
         private void WriteConfig()
         {
-            string path = Path.Combine(PathOnDisk, "Custom_Shop_Redux_Config.txt");
+            string path = Path.Combine(this.PathOnDisk, "Custom_Shop_Redux_Config.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                Console.WriteLine("The custom character save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
+            text[0] = "Config: Custom_Shop_Redux. Feel free to mess with these settings.";
+            text[1] = "====================================================================================";
 
-                text[0] = "Config: Custom_Shop_Redux. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
+            text[2] = "Key binding for saving anywhere. Press this key to save anywhere!";
+            text[3] = this.KeyBinding;
 
-                text[2] = "Key binding for saving anywhere. Press this key to save anywhere!";
-                text[3] = this.KeyBinding;
-
-                File.WriteAllLines(path, text);
-            }
-            else
-            {
-                Console.WriteLine("The custom character save info doesn't exist. It will be created when the custom saving method is run. Which is now.");
-
-                text[0] = "Config: Custom_Shop_Redux. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-
-                text[2] = "Key binding for saving anywhere. Press this key to save anywhere!";
-                text[3] = this.KeyBinding;
-
-                File.WriteAllLines(path, text);
-            }
+            File.WriteAllLines(path, text);
         }
 
         /// <summary>Open the menu which lets the player choose a file.</summary>

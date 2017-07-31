@@ -61,7 +61,7 @@ namespace Omegasis.BillboardAnywhere
         void LoadConfig()
         {
             string path = Path.Combine(this.Helper.DirectoryPath, "Billboard_Anywhere_Config.txt");
-            if (!File.Exists(path)) //if not data.json exists, initialize the data variables to the ModConfig data. I.E. starting out.
+            if (!File.Exists(path))
             {
                 this.KeyBinding = "B";
                 this.WriteConfig();
@@ -78,24 +78,11 @@ namespace Omegasis.BillboardAnywhere
         {
             string path = Path.Combine(Helper.DirectoryPath, "Billboard_Anywhere_Config.txt");
             string[] text = new string[20];
-            if (!File.Exists(path))
-            {
-                this.Monitor.Log("Billboard_Anywhere: The Billboard Anywhere Config doesn't exist. Creating it now.");
-                text[0] = "Config: Billboard_Anywhere. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-                text[2] = "Key binding for opening the billboard anywhere. Press this key to do so";
-                text[3] = this.KeyBinding;
-                File.WriteAllLines(path, text);
-            }
-
-            else
-            {
-                text[0] = "Config: Billboard_Anywhere Info. Feel free to mess with these settings.";
-                text[1] = "====================================================================================";
-                text[2] = "Key binding for opening the billboard anywhere. Press this key to do so";
-                text[3] = this.KeyBinding;
-                File.WriteAllLines(path, text);
-            }
+            text[0] = "Config: Billboard_Anywhere. Feel free to mess with these settings.";
+            text[1] = "====================================================================================";
+            text[2] = "Key binding for opening the billboard anywhere. Press this key to do so";
+            text[3] = this.KeyBinding;
+            File.WriteAllLines(path, text);
         }
     }
 }

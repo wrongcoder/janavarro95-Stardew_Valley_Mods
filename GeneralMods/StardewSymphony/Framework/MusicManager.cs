@@ -182,28 +182,24 @@ namespace Omegasis.StardewSymphony.Framework
         public void Music_Loader_Locations(string conditionalName, IDictionary<string, MusicManager> cues)
         {
             List<Cue> locationSongs = new List<Cue>();
-            //loads the data to the variables upon loading the game.
-            var musicPath = this.Directory;
-            string mylocation = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName);
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //check to make sure the file actually exists
+
+            string path = Path.Combine(this.Directory, "Music_Files", "Locations", conditionalName + ".txt");
+            if (!File.Exists(path))
             {
-                Console.WriteLine("StardewSymohony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                Console.WriteLine("StardewSymohony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
 
-                //Console.WriteLine("Creating the Config file");
-                string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
-                mystring3[1] = "========================================================================================";
+                string[] text = new string[3];//seems legit.
+                text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
+                text[1] = "========================================================================================";
 
-                File.WriteAllLines(mylocation3, mystring3);
+                File.WriteAllLines(path, text);
             }
             else
             {
                 Console.WriteLine("Stardew Symphony:The music pack located at: " + this.Directory + " is processing the song info for the game location: " + conditionalName);
-                string[] readtext = File.ReadAllLines(mylocation3);
+                string[] readtext = File.ReadAllLines(path);
                 int i = 2;
-                var lineCount = File.ReadLines(mylocation3).Count();
+                var lineCount = File.ReadLines(path).Count();
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
                     if (Convert.ToString(readtext[i]) == "")
@@ -239,24 +235,21 @@ namespace Omegasis.StardewSymphony.Framework
         public void Music_Loader_Locations_Rain(string conditionalName, IDictionary<string, MusicManager> cues)
         {
             List<Cue> locationSongs = new List<Cue>();
-            var musicPath = this.Directory;
-            string mylocation = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName);
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //check to make sure the file actually exists
+            string path = Path.Combine(this.Directory, "Music_Files", "Locations", conditionalName + ".txt");
+            if (!File.Exists(path))
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
-                string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
-                mystring3[1] = "========================================================================================";
-                File.WriteAllLines(mylocation3, mystring3);
+                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                string[] text = new string[3];//seems legit.
+                text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
+                text[1] = "========================================================================================";
+                File.WriteAllLines(path, text);
             }
             else
             {
                 // add in data here
-                string[] readtext = File.ReadAllLines(mylocation3);
+                string[] readtext = File.ReadAllLines(path);
                 int i = 2;
-                var lineCount = File.ReadLines(mylocation3).Count();
+                var lineCount = File.ReadLines(path).Count();
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
                     if (Convert.ToString(readtext[i]) == "")
@@ -292,25 +285,21 @@ namespace Omegasis.StardewSymphony.Framework
         public void Music_Loader_Locations_Night(string conditionalName, IDictionary<string, MusicManager> cues)
         {
             List<Cue> locationSongs = new List<Cue>();
-            //loads the data to the variables upon loading the game.
-            var musicPath = this.Directory;
-            string mylocation = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName);
-            string mylocation2 = mylocation;
-            string mylocation3 = mylocation2 + ".txt";
-            if (!File.Exists(mylocation3)) //check to make sure the file actually exists
+            string path = Path.Combine(this.Directory, "Music_Files", "Locations", conditionalName + ".txt");
+            if (!File.Exists(path))
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + mylocation3 + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
-                string[] mystring3 = new string[3];//seems legit.
-                mystring3[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
-                mystring3[1] = "========================================================================================";
-                File.WriteAllLines(mylocation3, mystring3);
+                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                string[] text = new string[3];//seems legit.
+                text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
+                text[1] = "========================================================================================";
+                File.WriteAllLines(path, text);
             }
             else
             {
                 // add in data here
-                string[] readtext = File.ReadAllLines(mylocation3);
+                string[] readtext = File.ReadAllLines(path);
                 int i = 2;
-                var lineCount = File.ReadLines(mylocation3).Count();
+                var lineCount = File.ReadLines(path).Count();
 
                 while (i < lineCount) //the ordering seems bad, but it works.
                 {
@@ -350,7 +339,7 @@ namespace Omegasis.StardewSymphony.Framework
             var musicPath = this.Directory;
 
             string path = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName + ".txt");
-            if (!File.Exists(path)) //check to make sure the file actually exists
+            if (!File.Exists(path))
             {
                 Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
                 string[] text = new string[3];//seems legit.
