@@ -26,6 +26,9 @@ namespace Omegasis.SaveAnywhere
         /// <summary>Writes messages to the console and log file.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>A callback invoked when villagers are reset during a load.</summary>
+        private readonly Action OnVillagersReset;
+
         /// <summary>The full path to the folder in which to store data for this player.</summary>
         private readonly string SavePath;
 
@@ -47,12 +50,14 @@ namespace Omegasis.SaveAnywhere
         /// <param name="modPath">The full path to the mod folder.</param>
         /// <param name="monitor">Writes messages to the console and log file.</param>
         /// <param name="reflection">Simplifies access to game code.</param>
-        public SaveManager(SFarmer player, string modPath, IMonitor monitor, IReflectionHelper reflection)
+        /// <param name="onVillagersReset">A callback invoked when villagers are reset during a load.</param>
+        public SaveManager(SFarmer player, string modPath, IMonitor monitor, IReflectionHelper reflection, Action onVillagersReset)
         {
             // save info
             this.Player = player;
             this.Monitor = monitor;
             this.Reflection = reflection;
+            this.OnVillagersReset = onVillagersReset;
 
             // generate paths
             this.SavePath = Path.Combine(modPath, "Save_Data", player.name);
@@ -104,7 +109,10 @@ namespace Omegasis.SaveAnywhere
             this.LoadPlayerPosition();
             this.LoadHorsePosition();
             this.LoadPetPosition();
-            this.LoadVillagerPositions();
+            bool anyVillagersMoved = this.LoadVillagerPositions();
+
+            if (anyVillagersMoved)
+                this.OnVillagersReset?.Invoke();
         }
 
 
@@ -201,8 +209,10 @@ namespace Omegasis.SaveAnywhere
         }
 
         /// <summary>Reset the villagers to their saved state.</summary>
-        private void LoadVillagerPositions()
+        /// <returns>Returns whether any villagers changed position.</returns>
+        private bool LoadVillagerPositions()
         {
+            bool anyLoaded = false;
             foreach (NPC npc in Utility.getAllCharacters())
             {
                 // ignore non-villagers
@@ -226,9 +236,11 @@ namespace Omegasis.SaveAnywhere
                     continue;
 
                 // update NPC
+                anyLoaded = true;
                 Game1.warpCharacter(npc, map, new Point(x, y), false, true);
             }
-            SaveAnywhere.npc_warp = true;
+
+            return anyLoaded;
         }
 
         /// <summary>Save the pet state to the save file.</summary>

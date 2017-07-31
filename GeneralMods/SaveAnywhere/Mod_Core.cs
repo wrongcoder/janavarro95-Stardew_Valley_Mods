@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -10,28 +9,56 @@ using StardewValley.Characters;
 
 namespace Omegasis.SaveAnywhere
 {
+    /// <summary>The mod entry point.</summary>
     public class SaveAnywhere : Mod
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>Provides methods for saving and loading game data.</summary>
         private SaveManager SaveManager;
+
+        /// <summary>Provides methods for reading and writing the config file.</summary>
         private ConfigUtilities ConfigUtilities;
 
-        public static bool npc_warp;
-        public static int checking_time;
-        public static bool once;
-        public static bool new_day;
-        Dictionary<string, string> npc_key_value_pair;
+        /// <summary>Whether villager schedules should be reset now.</summary>
+        private bool ShouldResetSchedules;
 
+        /// <summary>The parsed schedules by NPC name.</summary>
+        private readonly IDictionary<string, string> NpcSchedules = new Dictionary<string, string>();
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
             this.ConfigUtilities = new ConfigUtilities(this.Helper.DirectoryPath);
 
-            ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
-            SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
-            TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
-            TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
-            npc_key_value_pair = new Dictionary<string, string>();
+            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            // load config
+            this.ConfigUtilities.LoadConfig();
+            this.ConfigUtilities.WriteConfig();
+
+            // load positions
+            this.SaveManager = new SaveManager(Game1.player, this.Helper.DirectoryPath, this.Monitor, this.Helper.Reflection, onVillagersReset: () => this.ShouldResetSchedules = true);
+            this.SaveManager.LoadPositions();
         }
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
@@ -39,609 +66,228 @@ namespace Omegasis.SaveAnywhere
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!Context.IsWorldReady)
-                return;
-
-            try
-            {
+            // let save manager run background logic
+            if (Context.IsWorldReady)
                 this.SaveManager.Update();
-            }
-            catch (Exception ex)
+
+            // reset NPC schedules
+            if (Context.IsWorldReady && this.ShouldResetSchedules)
             {
-                this.Monitor.Log(ex.ToString(), LogLevel.Error);
+                this.ShouldResetSchedules = false;
+                this.ApplySchedules();
             }
         }
 
-        //done
-        private void TimeEvents_OnNewDay(object sender, EventArgsIntChanged e)
-        {
-            try
-            {
-                SaveAnywhere.new_day = true;
-            }
-            catch (Exception err)
-            {
-                Monitor.Log(err.ToString());
-            }
-        }
-
-        //done
+        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
         private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
         {
-            try
-            {
-                //new_day = true;
-                // Log.Info("Day of Month Changed");
-                npc_key_value_pair.Clear();
-                foreach (var loc in Game1.locations)
-                {
-                    foreach (var character in loc.characters)
-                    {
+            // reload NPC schedules
+            this.ShouldResetSchedules = true;
 
-                        if (!npc_key_value_pair.ContainsKey(character.name)) npc_key_value_pair.Add(character.name, parseSchedule(character));
-                        //  Monitor.Log(parseSchedule(character));
-                    }
-                }
-            }
-            catch (Exception err)
+            // update NPC schedules
+            this.NpcSchedules.Clear();
+            foreach (NPC npc in Utility.getAllCharacters())
             {
-                Monitor.Log(err.ToString());
+                if (!this.NpcSchedules.ContainsKey(npc.name))
+                    this.NpcSchedules.Add(npc.name, this.ParseSchedule(npc));
             }
         }
 
-        private void NPC_scheduel_update(object sender, EventArgs e)
+        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
+            if (Game1.activeClickableMenu != null)
+                return;
 
-            if (Game1.weatherIcon == 4)
-            {
-                return;
-            }
-            if (Game1.isFestival() == true)
-            {
-                return;
-            }
-            if (Game1.eventUp == true)
-            {
-                return;
-            }
-            //if (once == true) return;
-            //FieldInfo field = typeof(NPC).GetField("scheduleTimeToTry", BindingFlags.NonPublic | BindingFlags.Instance);
-            // MethodInfo dynMethod = typeof(NPC).GetMethod("prepareToDisembarkOnNewSchedulePath",BindingFlags.NonPublic | BindingFlags.Instance);
-            MethodInfo dynMethod2 = typeof(NPC).GetMethod("pathfindToNextScheduleLocation", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (e.KeyPressed.ToString() == this.ConfigUtilities.KeyBinding)
+                this.SaveManager.SaveGameAndPositions();
+        }
 
-            if (SaveAnywhere.npc_warp == false) return;
-            if (SaveAnywhere.new_day == true) return;
-            List<Child> child_list = new List<Child>();
-            child_list = Game1.player.getChildren();
-            foreach (var loc in Game1.locations)
+        /// <summary>Apply the NPC schedules to each NPC.</summary>
+        private void ApplySchedules()
+        {
+            if (Game1.weatherIcon == Game1.weather_festival || Game1.isFestival() || Game1.eventUp)
+                return;
+
+            MethodInfo pathfind = typeof(NPC).GetMethod("pathfindToNextScheduleLocation", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // apply for each NPC
+            foreach (NPC npc in Utility.getAllCharacters())
             {
-                foreach (var npc in loc.characters)
+                if (npc.DirectionsToNewLocation != null || npc.isMoving() || npc.Schedule == null || npc.controller != null || npc is Horse)
+                    continue;
+
+                // get raw schedule from XNBs
+                IDictionary<string, string> rawSchedule = this.GetRawSchedule(npc.name);
+                if (rawSchedule == null)
+                    continue;
+
+                // get schedule data
+                string scheduleData;
+                if (!this.NpcSchedules.TryGetValue(npc.name, out scheduleData) || string.IsNullOrEmpty(scheduleData))
                 {
-                    if (npc.DirectionsToNewLocation != null) continue;
-                    if (npc.isMoving() == true) continue;
-                    if (npc.Schedule == null) continue;
-                    if (npc.controller != null) continue;
-                    foreach (var child_name in child_list)
-                    {
-                        if (npc.name == child_name.name) continue;
-                    }
-                    if (npc.name == Game1.player.getPetName()) continue;
-                    Horse horse = Utility.findHorse();
-                    if (horse != null)
-                    {
-                        if (npc.name == horse.name) continue;
-                    }
-                    // Log.Info("THIS IS MY NPC" + npc.name);
-                    //  Monitor.Log("NO SCHEDULE FOUND FOR " + npc.name);
+                    this.Monitor.Log("THIS IS AWKWARD");
+                    continue;
+                }
 
+                // get schedule script
+                string script;
+                if (!rawSchedule.TryGetValue(scheduleData, out script))
+                    continue;
 
-                    //  npc.checkSchedule(Game1.timeOfDay);
+                // parse entries
+                string[] entries = script.Split('/');
+                int index = 0;
+                foreach (string _ in entries)
+                {
+                    string[] fields = entries[index].Split(' ');
+
+                    // handle GOTO command
+                    if (fields.Contains("GOTO"))
+                    {
+                        for (int i = 0; i < fields.Length; i++)
+                        {
+                            string s = fields[i];
+                            if (s == "GOTO")
+                            {
+                                rawSchedule.TryGetValue(fields[i + 1], out script);
+                                string[] newEntries = script.Split('/');
+                                fields = newEntries[0].Split(' ');
+                            }
+                        }
+                    }
+
+                    // parse schedule script
                     SchedulePathDescription schedulePathDescription;
-
-                    //int myint = (int)field.GetValue(npc);
-                    /*
-                    npc.Schedule.TryGetValue(Game1.timeOfDay, out schedulePathDescription);
-                    int i = 0;
-                    int pseudo_time=0;
-
-                    while (schedulePathDescription == null)
-                    {
-                        i += 10;
-                        pseudo_time = Game1.timeOfDay - i;
-                        if (pseudo_time <= 600) { break; }
-                        npc.Schedule.TryGetValue(pseudo_time, out schedulePathDescription);
-                        checking_time = pseudo_time;
-                    }
-                    // npc.directionsToNewLocation = schedulePathDescription;
-                    // npc.prepareToDisembarkOnNewSchedulePath();
-
-                    //field.SetValue(npc, 9999999);
-
-                    npc.DirectionsToNewLocation = schedulePathDescription;
-                   */
-                    //////////////////////////////////////////
-                    // Log.Info("Does this break here 1");
-                    Dictionary<string, string> dictionary;
-                    string key_value = "";
                     try
                     {
-                        dictionary = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name);
+                        if (Convert.ToInt32(fields[0]) > Game1.timeOfDay) break;
+                        string endMap = Convert.ToString(fields[1]);
+                        int x = Convert.ToInt32(fields[2]);
+                        int y = Convert.ToInt32(fields[3]);
+                        int endFacingDir = Convert.ToInt32(fields[4]);
+                        schedulePathDescription = (SchedulePathDescription)pathfind.Invoke(npc, new object[] { npc.currentLocation.name, npc.getTileX(), npc.getTileY(), endMap, x, y, endFacingDir, null, null });
+                        index++;
                     }
                     catch (Exception ex)
                     {
-                        this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                        // dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
+                        this.Monitor.Log($"Error pathfinding NPC {npc.name}: {ex}", LogLevel.Error);
                         continue;
                     }
-                    // Log.Info("Does this break here 2");
-                    //////////////////////
-                    string value;
-                    string end_map;
-                    int x;
-                    int y;
-                    int end_dir;
-                    npc_key_value_pair.TryGetValue(npc.name, out key_value);
-                    if (key_value == "" || key_value == null)
-                    {
-                        Monitor.Log("THIS IS AWKWARD");
-                        continue;
-                    }
-                    dictionary.TryGetValue(key_value, out value);
-                    // Log.Info("Does this break here 3");
-                    string[] valueArray1 = value.Split('/');
-                    int count1 = 0;
-                    foreach (var josh in valueArray1)
-                    {
-                        string[] valueArray2 = valueArray1[count1].Split(' ');
-
-
-                        if (valueArray2.Contains("GOTO"))
-                        {
-
-                            for (int i = 0; i < valueArray2.Length; i++)
-                            {
-                                string s = valueArray2.ElementAt(i);
-                                if (s == "GOTO")
-                                {
-                                    dictionary.TryGetValue(valueArray2.ElementAt(i + 1), out value);
-                                    // Log.Info("Does this break here 3");
-                                    string[] valueArray3 = value.Split('/');
-                                    int count10 = 0;
-
-                                    string[] valueArray4 = valueArray3[count10].Split(' ');
-                                    valueArray2 = valueArray4;
-
-                                }
-                            }
-                        }
-
-                        try
-                        {
-                            if (Convert.ToInt32(valueArray2.ElementAt(0)) > Game1.timeOfDay) break;
-                            end_map = Convert.ToString(valueArray2.ElementAt(1));
-                            x = Convert.ToInt32(valueArray2.ElementAt(2));
-                            y = Convert.ToInt32(valueArray2.ElementAt(3));
-                            end_dir = Convert.ToInt32(valueArray2.ElementAt(4));
-                            //MOST RELIABLE    
-                            schedulePathDescription = (SchedulePathDescription)dynMethod2.Invoke(npc, new object[] { npc.currentLocation.name, npc.getTileX(), npc.getTileY(), end_map, x, y, end_dir, null, null });
-
-                            //FASTEST
-                            //schedulePathDescription =  pathfindToNextScheduleLocation(npc,npc.currentLocation.name, npc.getTileX(), npc.getTileY(), end_map, x, y, end_dir, null, null );
-                            count1++;
-                        }
-                        catch (Exception err)
-                        {
-                            this.Monitor.Log(err.ToString(), LogLevel.Error);
-                            // Monitor.Log(npc.name);
-                            foreach (var v in valueArray2)
-                            {
-                                //Monitor.Log(v);
-                            }
-                            schedulePathDescription = null;
-                            // Monitor.Log(err);
-                        }
-
-                        if (schedulePathDescription == null) continue;
-                        //  Log.Info("This works 2");
-                        // Utility.getGameLocationOfCharacter(npc);
-                        //  Log.Info("This works 3");
-
-                        npc.DirectionsToNewLocation = schedulePathDescription;
-                        npc.controller = new PathFindController(npc.DirectionsToNewLocation.route, (Character)npc, Utility.getGameLocationOfCharacter(npc))
-                        {
-                            finalFacingDirection = npc.DirectionsToNewLocation.facingDirection,
-                            endBehaviorFunction = null//npc.getRouteEndBehaviorFunction(npc.DirectionsToNewLocation.endOfRouteBehavior, npc.DirectionsToNewLocation.endOfRouteMessage)
-                        };
-
-                    }
-                }
-            }
-            SaveAnywhere.once = true;
-        }
-
-
-        //done
-        /*
-        private void NPC_scheduel_update(object sender, EventArgs e)
-        {
-            /*
-            foreach (var key in npc_key_value_pair)
-            {
-                NPC npc = Game1.getCharacterFromName(key.Key);
-                Monitor.Log(npc.name);
-                Dictionary<int, SchedulePathDescription> sch =npc.getSchedule(Game1.dayOfMonth);
-                if (sch == null) continue;
-                foreach (var ehh in sch)
-                {
-                    Monitor.Log(ehh.Key);
-                    Monitor.Log(ehh.Value);
-                }
-            }
-
-
-            return;
-            
-            //if (once == true) return;
-            //FieldInfo field = typeof(NPC).GetField("scheduleTimeToTry", BindingFlags.NonPublic | BindingFlags.Instance);
-            // MethodInfo dynMethod = typeof(NPC).GetMethod("prepareToDisembarkOnNewSchedulePath",BindingFlags.NonPublic | BindingFlags.Instance);
-            //  MethodInfo dynMethod2 = typeof(NPC).GetMethod("pathfindToNextScheduleLocation", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (npc_warp == false)
-            {
-                Monitor.Log("LOL WHUT");
-                return;
-            }
-            if (new_day == true)
-            {
-                Monitor.Log("Interesting");
-                return;
-            }
-                List<StardewValley.Characters.Child> child_list = new List<StardewValley.Characters.Child>();
-                child_list = StardewValley.Game1.player.getChildren();
-                foreach (var loc in Game1.locations)
-                {
-                foreach (var npc in loc.characters)
-                {
-                    // if (npc.DirectionsToNewLocation != null) continue;
-                    if (npc.isMoving() == true)
-                    {
-                        Monitor.Log("I AM MOVING");
-                        continue;
-                    }
-                    //if (npc.Schedule == null) continue;
-                    foreach (var child_name in child_list)
-                    {
-                        if (npc.name == child_name.name)
-                        {
-                            Monitor.Log("I AM A CHILD");
-                            continue;
-                        }
-                    }
-                    if (Game1.player.hasPet() == true) {
-                        if (npc.name == Game1.player.getPetName())
-                        {
-                            Monitor.Log("I AM A PET");
-                            continue;
-                        }
-                    }
-                    Horse horse = StardewValley.Utility.findHorse();
-
-
-                    if (horse != null)
-                    {
-                        if (npc.name == horse.name) continue;
-                    }
-                    Log.AsyncR("AM I GETTING TO STEP 1?");
-
-                   // System.Threading.Thread.Sleep(1000);
-
-
-                    // Log.Info("THIS IS MY NPC" + npc.name);
-                    //  Monitor.Log("NO SCHEDULE FOUND FOR " + npc.name);
-
-
-                    //  npc.checkSchedule(Game1.timeOfDay);
-                    SchedulePathDescription schedulePathDescription;
-
-                    //int myint = (int)field.GetValue(npc);
-                    
-                    npc.Schedule.TryGetValue(Game1.timeOfDay, out schedulePathDescription);
-                    int i = 0;
-                    int pseudo_time=0;
-
-                    while (schedulePathDescription == null)
-                    {
-                        i += 10;
-                        pseudo_time = Game1.timeOfDay - i;
-                        if (pseudo_time <= 600) { break; }
-                        npc.Schedule.TryGetValue(pseudo_time, out schedulePathDescription);
-                        checking_time = pseudo_time;
-                    }
-                    // npc.directionsToNewLocation = schedulePathDescription;
-                    // npc.prepareToDisembarkOnNewSchedulePath();
-
-                    //field.SetValue(npc, 9999999);
 
                     npc.DirectionsToNewLocation = schedulePathDescription;
-                   
-                    //////////////////////////////////////////
-                    // Log.Info("Does this break here 1");
-                    Dictionary<string, string> dictionary;
-                    string key_value = "";
-                    try
+                    npc.controller = new PathFindController(npc.DirectionsToNewLocation.route, npc, Utility.getGameLocationOfCharacter(npc))
                     {
-                        dictionary = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name);
-                    }
-                    catch (Exception ex)
-                    {
-                        // dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
-                        //Monitor.Log(ex);
-                        //Monitor.Log("YOU FIX THIS NOW");
-                        continue;
-                    }
-                    // Log.Info("Does this break here 2");
-                    //////////////////////
-                    string value;
-                    string end_map;
-                    int x;
-                    int y;
-                    int end_dir;
-                    string behavior;
-                    string message;
-                    try {
-                        npc_key_value_pair.TryGetValue(npc.name, out key_value);
-                        if (key_value == "" || key_value == null)
-                        {
-                            Monitor.Log("NO KEYBLADE");
-                            continue;
-                        }
-                        dictionary.TryGetValue(key_value, out value);
-
-                        //Log.AsyncO(value);
-                        // Log.Info("Does this break here 3");
-                        string[] valueArray1 = value.Split('/');
-                        int count1 = 0;
-                        foreach (var josh in valueArray1)
-                        {
-                            Log.AsyncR("RAWRRRRR");
-                            string[] valueArray2 = valueArray1[count1].Split(' ');
-
-                            if (Convert.ToInt32(valueArray2.ElementAt(0)) > Game1.timeOfDay) break;
-                            end_map = Convert.ToString(valueArray2.ElementAt(1));
-                            x = Convert.ToInt32(valueArray2.ElementAt(2));
-                            y = Convert.ToInt32(valueArray2.ElementAt(3));
-                            end_dir = Convert.ToInt32(valueArray2.ElementAt(4));
-                            schedulePathDescription = pathfindToNextScheduleLocation(npc, npc.currentLocation.name, npc.getTileX(), npc.getTileY(), end_map, x, y, end_dir, null, null);
-                            count1++;
-
-
-                            if (schedulePathDescription == null)
-                            {
-                                Monitor.Log("WHY???");
-                            }
-                            //  Log.Info("This works 2");
-                            // Utility.getGameLocationOfCharacter(npc);
-                            //  Log.Info("This works 3");
-
-                            npc.DirectionsToNewLocation = schedulePathDescription;
-                            npc.controller = new PathFindController(npc.DirectionsToNewLocation.route, (Character)npc, Utility.getGameLocationOfCharacter(npc))
-                            {
-                                finalFacingDirection = npc.DirectionsToNewLocation.facingDirection,
-                                endBehaviorFunction = null//npc.getRouteEndBehaviorFunction(npc.DirectionsToNewLocation.endOfRouteBehavior, npc.DirectionsToNewLocation.endOfRouteMessage)
-                            };
-                            if (npc.controller == null)
-                            {
-                                Log.AsyncR("CRY");
-                            }
-                            Monitor.Log("IS THIS RUNNING?");
-                            if (npc.name == "Shane") Monitor.Log("IS THIS RUNNING WITH BOOZE?");
-                            npc.warpToPathControllerDestination();
-                        }
-                    }
-                    catch(Exception err)
-                    {
-                       // Monitor.Log(err);
-                        continue;
-                    }
-                    }
+                        finalFacingDirection = npc.DirectionsToNewLocation.facingDirection,
+                        endBehaviorFunction = null
+                    };
                 }
-                //once = true;
-    
+            }
         }
-        */
 
-
-        //done
-        private string get_key_value(NPC npc)
+        /// <summary>Get an NPC's raw schedule data from the XNB files.</summary>
+        /// <param name="npcName">The NPC name whose schedules to read.</param>
+        /// <returns>Returns the NPC schedule if found, else <c>null</c>.</returns>
+        private IDictionary<string, string> GetRawSchedule(string npcName)
         {
             try
             {
-
-
-                Dictionary<string, string> dictionary;
-                string key_value = "";
-                try
-                {
-                    dictionary = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name);
-                }
-                catch (Exception ex)
-                {
-                    this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                    dictionary = new Dictionary<string, string>();//(Dictionary<int, SchedulePathDescription>)null;
-                }
-                if (dictionary.ContainsKey(Game1.currentSeason + "_" + Convert.ToString(Game1.dayOfMonth)))
-                    key_value = Game1.currentSeason + "_" + Convert.ToString(Game1.dayOfMonth);
-                for (int index = !Game1.player.friendships.ContainsKey(npc.name) ? -1 : Game1.player.friendships[npc.name][0] / 250; index > 0; --index)
-                {
-                    if (dictionary.ContainsKey(Convert.ToString(Game1.dayOfMonth) + "_" + Convert.ToString(index)))
-                        key_value = Convert.ToString(Game1.dayOfMonth) + "_" + Convert.ToString(index);
-                }
-                if (dictionary.ContainsKey(string.Empty + (object)Game1.dayOfMonth))
-                    key_value = string.Empty + (object)Game1.dayOfMonth;
-                if (npc.name.Equals("Pam") && Game1.player.mailReceived.Contains("ccVault"))
-                    key_value = "bus";
-                if (Game1.isRaining)
-                {
-                    if (Game1.random.NextDouble() < 0.5 && dictionary.ContainsKey("rain2"))
-                        key_value = "rain2";
-                    if (dictionary.ContainsKey("rain"))
-                        key_value = "rain";
-                }
-                List<string> list = new List<string>()
-      {
-        Game1.currentSeason,
-        Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)
-      };
-                int num1 = !Game1.player.friendships.ContainsKey(npc.name) ? -1 : Game1.player.friendships[npc.name][0] / 250;
-                while (num1 > 0)
-                {
-                    list.Add(string.Empty + (object)num1);
-                    if (dictionary.ContainsKey(string.Join("_", (IEnumerable<string>)list)))
-                        key_value = string.Join("_", (IEnumerable<string>)list);
-                    --num1;
-                    list.RemoveAt(Enumerable.Count<string>((IEnumerable<string>)list) - 1);
-                }
-                if (dictionary.ContainsKey(string.Join("_", (IEnumerable<string>)list)))
-                    key_value = string.Join("_", (IEnumerable<string>)list);
-                if (dictionary.ContainsKey(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
-                    key_value = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
-                if (dictionary.ContainsKey(Game1.currentSeason))
-                    key_value = Game1.currentSeason;
-                if (dictionary.ContainsKey("spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
-                    key_value = "spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
-                list.RemoveAt(Enumerable.Count<string>((IEnumerable<string>)list) - 1);
-                list.Add("spring");
-                int num2 = !Game1.player.friendships.ContainsKey(npc.name) ? -1 : Game1.player.friendships[npc.name][0] / 250;
-                while (num2 > 0)
-                {
-                    list.Add(string.Empty + (object)num2);
-                    if (dictionary.ContainsKey(string.Join("_", (IEnumerable<string>)list)))
-                        key_value = string.Join("_", (IEnumerable<string>)list);
-                    --num2;
-                    list.RemoveAt(Enumerable.Count<string>((IEnumerable<string>)list) - 1);
-                }
-                if (dictionary.ContainsKey("spring"))
-                    key_value = "spring";
-
-                return key_value;
+                return Game1.content.Load<Dictionary<string, string>>($"Characters\\schedules\\{npcName}");
             }
-            catch (Exception err)
+            catch (Exception)
             {
-                Monitor.Log(err.ToString());
                 return null;
             }
         }
 
-
-        private string parseSchedule(NPC npc)
+        /// <summary>Load the raw schedule data for an NPC.</summary>
+        /// <param name="npc">The NPC whose schedule to read.</param>
+        private string ParseSchedule(NPC npc)
         {
+            // set flags
             if (npc.name.Equals("Robin") || Game1.player.currentUpgrade != null)
-            {
                 npc.isInvisible = false;
-            }
             if (npc.name.Equals("Willy") && Game1.stats.DaysPlayed < 2u)
-            {
                 npc.isInvisible = true;
-            }
             else if (npc.Schedule != null)
-            {
                 npc.followSchedule = true;
-            }
 
-            Dictionary<string, string> dictionary = null;
-            string result;
-            try
-            {
-                dictionary = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name);
-            }
-            catch (Exception)
-            {
-                result = null;
+            // read schedule data
+            IDictionary<string, string> schedule = this.GetRawSchedule(npc.name);
+            if (schedule == null)
                 return "";
-            }
+
+            // do stuff
             if (npc.isMarried())
             {
-                string text = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
-                if ((npc.name.Equals("Penny") && (text.Equals("Tue") || text.Equals("Wed") || text.Equals("Fri"))) || (npc.name.Equals("Maru") && (text.Equals("Tue") || text.Equals("Thu"))) || (npc.name.Equals("Harvey") && (text.Equals("Tue") || text.Equals("Thu"))))
+                string dayName = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                if ((npc.name.Equals("Penny") && (dayName.Equals("Tue") || dayName.Equals("Wed") || dayName.Equals("Fri"))) || (npc.name.Equals("Maru") && (dayName.Equals("Tue") || dayName.Equals("Thu"))) || (npc.name.Equals("Harvey") && (dayName.Equals("Tue") || dayName.Equals("Thu"))))
                 {
                     FieldInfo field = typeof(NPC).GetField("nameofTodaysSchedule", BindingFlags.NonPublic | BindingFlags.Instance);
                     field.SetValue(npc, "marriageJob");
-                    // npc.nameOfTodaysSchedule = "marriageJob";
-                    return (result = "marriageJob");
+                    return "marriageJob";
                 }
-                if (!Game1.isRaining && dictionary.ContainsKey("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
+                if (!Game1.isRaining && schedule.ContainsKey("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
                     FieldInfo field = typeof(NPC).GetField("nameofTodaysSchedule", BindingFlags.NonPublic | BindingFlags.Instance);
                     field.SetValue(npc, "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
-                    return result = "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                    return "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
                 npc.followSchedule = false;
                 return null;
             }
             else
             {
-                if (dictionary.ContainsKey(Game1.currentSeason + "_" + Game1.dayOfMonth))
-                {
-                    return result = (Game1.currentSeason + "_" + Game1.dayOfMonth);
-                }
+                if (schedule.ContainsKey(Game1.currentSeason + "_" + Game1.dayOfMonth))
+                    return Game1.currentSeason + "_" + Game1.dayOfMonth;
                 int i;
                 for (i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1); i > 0; i--)
                 {
-                    if (dictionary.ContainsKey(Game1.dayOfMonth + "_" + i))
-                    {
-                        return result = Game1.dayOfMonth + "_" + i;
-                    }
+                    if (schedule.ContainsKey(Game1.dayOfMonth + "_" + i))
+                        return Game1.dayOfMonth + "_" + i;
                 }
-                if (dictionary.ContainsKey(string.Empty + Game1.dayOfMonth))
-                {
-                    return result = string.Empty + Game1.dayOfMonth;
-                }
+                if (schedule.ContainsKey(string.Empty + Game1.dayOfMonth))
+                    return string.Empty + Game1.dayOfMonth;
                 if (npc.name.Equals("Pam") && Game1.player.mailReceived.Contains("ccVault"))
-                {
-                    return result = "bus";
-                }
+                    return "bus";
                 if (Game1.isRaining)
                 {
-                    if (Game1.random.NextDouble() < 0.5 && dictionary.ContainsKey("rain2"))
-                    {
-                        return result = "rain2";
-                    }
-                    if (dictionary.ContainsKey("rain"))
-                    {
-                        return result = "rain";
-                    }
+                    if (Game1.random.NextDouble() < 0.5 && schedule.ContainsKey("rain2"))
+                        return "rain2";
+                    if (schedule.ContainsKey("rain"))
+                        return "rain";
                 }
-                List<string> list = new List<string>
-                {
-                    Game1.currentSeason,
-                    Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)
-                };
+                List<string> list = new List<string> { Game1.currentSeason, Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth) };
                 i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1);
                 while (i > 0)
                 {
                     list.Add(string.Empty + i);
-                    if (dictionary.ContainsKey(string.Join("_", list)))
+                    if (schedule.ContainsKey(string.Join("_", list)))
                     {
-                        return result = string.Join("_", list);
+                        return string.Join("_", list);
                     }
                     i--;
                     list.RemoveAt(list.Count - 1);
                 }
-                if (dictionary.ContainsKey(string.Join("_", list)))
+                if (schedule.ContainsKey(string.Join("_", list)))
                 {
-                    return result = string.Join("_", list);
+                    return string.Join("_", list);
                 }
-                if (dictionary.ContainsKey(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
+                if (schedule.ContainsKey(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
-                    return result = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                    return Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
-                if (dictionary.ContainsKey(Game1.currentSeason))
+                if (schedule.ContainsKey(Game1.currentSeason))
                 {
-                    return result = Game1.currentSeason;
+                    return Game1.currentSeason;
                 }
-                if (dictionary.ContainsKey("spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
+                if (schedule.ContainsKey("spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
-                    return result = "spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                    return "spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
                 list.RemoveAt(list.Count - 1);
                 list.Add("spring");
@@ -649,422 +295,15 @@ namespace Omegasis.SaveAnywhere
                 while (i > 0)
                 {
                     list.Add(string.Empty + i);
-                    if (dictionary.ContainsKey(string.Join("_", list)))
-                    {
-                        return result = string.Join("_", list);
-                    }
+                    if (schedule.ContainsKey(string.Join("_", list)))
+                        return string.Join("_", list);
                     i--;
                     list.RemoveAt(list.Count - 1);
                 }
-                if (dictionary.ContainsKey("spring"))
-                {
-                    return result = "spring";
-                }
+                if (schedule.ContainsKey("spring"))
+                    return "spring";
                 return null;
             }
-
-
-        }
-
-        //done
-        private void PlayerEvents_LoadedGame(object sender, EventArgs e)
-        {
-            this.SaveManager = new SaveManager(Game1.player, this.Helper.DirectoryPath, this.Monitor, this.Helper.Reflection);
-
-            try
-            {
-                this.ConfigUtilities.LoadConfig();
-                this.ConfigUtilities.WriteConfig();
-                this.SaveManager.LoadPositions();
-            }
-            catch (Exception err)
-            {
-                Monitor.Log(err.ToString());
-            }
-        }
-
-        public void KeyPressed_Save_Load_Menu(object sender, EventArgsKeyPressed e)
-        {
-            if (e.KeyPressed.ToString() == this.ConfigUtilities.KeyBinding) //if the key is pressed, load my cusom save function
-            {
-                try
-                {
-                    if (Game1.activeClickableMenu == null)
-                        this.SaveManager.SaveGameAndPositions();
-                }
-                catch (Exception ex)
-                {
-                    this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                }
-            }
-        }
-
-        private Dictionary<int, SchedulePathDescription> parseMasterSchedule(NPC npc, string rawData)
-        {
-            string[] array = rawData.Split(new char[]
-            {
-                '/'
-            });
-            Dictionary<int, SchedulePathDescription> dictionary = new Dictionary<int, SchedulePathDescription>();
-            int num = 0;
-            if (array[0].Contains("GOTO"))
-            {
-                string text = array[0].Split(new char[]
-                {
-                    ' '
-                })[1];
-                if (text.ToLower().Equals("season"))
-                {
-                    text = Game1.currentSeason;
-                }
-                try
-                {
-                    array = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)[text].Split(new char[]
-                    {
-                        '/'
-                    });
-                }
-                catch (Exception)
-                {
-                    return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
-                }
-            }
-            if (array[0].Contains("NOT"))
-            {
-                string[] array2 = array[0].Split(new char[]
-                {
-                    ' '
-                });
-                string a = array2[1].ToLower();
-                if (a == "friendship")
-                {
-                    string name = array2[2];
-                    int num2 = Convert.ToInt32(array2[3]);
-                    bool flag = false;
-                    using (List<StardewValley.Farmer>.Enumerator enumerator = Game1.getAllFarmers().GetEnumerator())
-                    {
-                        while (enumerator.MoveNext())
-                        {
-                            if (enumerator.Current.getFriendshipLevelForNPC(name) >= num2)
-                            {
-                                flag = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (flag)
-                    {
-                        return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
-                    }
-                    num++;
-                }
-            }
-            if (array[num].Contains("GOTO"))
-            {
-                string text2 = array[num].Split(new char[]
-                {
-                    ' '
-                })[1];
-                if (text2.ToLower().Equals("season"))
-                {
-                    text2 = Game1.currentSeason;
-                }
-                array = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)[text2].Split(new char[]
-                {
-                    '/'
-                });
-                num = 1;
-            }
-
-            //FieldInfo field = typeof(NPC).GetField("scheduleTimeToTry", BindingFlags.NonPublic | BindingFlags.Instance);
-            Point point = npc.isMarried() ? new Point(0, 23) : new Point((int)npc.DefaultPosition.X / Game1.tileSize, (int)npc.DefaultPosition.Y / Game1.tileSize);
-            string text3 = npc.isMarried() ? "BusStop" : npc.defaultMap;
-            int num3 = num;
-            while (num3 < array.Length && array.Length > 1)
-            {
-                int num4 = 0;
-                string[] array3 = array[num3].Split(new char[]
-                {
-                    ' '
-                });
-                int key = Convert.ToInt32(array3[num4]);
-                num4++;
-                string text4 = array3[num4];
-                string endBehavior = null;
-                string endMessage = null;
-                int num5;
-                if (int.TryParse(text4, out num5))
-                {
-                    text4 = text3;
-                    num4--;
-                }
-                num4++;
-                int num6 = Convert.ToInt32(array3[num4]);
-                num4++;
-                int num7 = Convert.ToInt32(array3[num4]);
-                num4++;
-                int finalFacingDirection = 2;
-                try
-                {
-                    finalFacingDirection = Convert.ToInt32(array3[num4]);
-                    num4++;
-                }
-                catch (Exception)
-                {
-                    finalFacingDirection = 2;
-                }
-                if (changeScheduleForLocationAccessibility(npc, ref text4, ref num6, ref num7, ref finalFacingDirection))
-                {
-                    if (Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name).ContainsKey("default"))
-                    {
-                        return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["default"]);
-                    }
-                    return parseMasterSchedule(npc, Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)["spring"]);
-                }
-                else
-                {
-                    if (num4 < array3.Length)
-                    {
-                        if (array3[num4].Length > 0 && array3[num4][0] == '"')
-                        {
-                            endMessage = array[num3].Substring(array[num3].IndexOf('"'));
-                        }
-                        else
-                        {
-                            endBehavior = array3[num4];
-                            num4++;
-                            if (num4 < array3.Length && array3[num4].Length > 0 && array3[num4][0] == '"')
-                            {
-                                endMessage = array[num3].Substring(array[num3].IndexOf('"')).Replace("\"", "");
-                            }
-                        }
-                    }
-                    dictionary.Add(key, pathfindToNextScheduleLocation(npc, text3, point.X, point.Y, text4, num6, num7, finalFacingDirection, endBehavior, endMessage));
-                    point.X = num6;
-                    point.Y = num7;
-                    text3 = text4;
-                    num3++;
-                }
-            }
-            return dictionary;
-        }
-
-        public Dictionary<int, SchedulePathDescription> getSchedule(NPC npc, int dayOfMonth)
-        {
-            if (!npc.name.Equals("Robin") || Game1.player.currentUpgrade != null)
-            {
-                npc.isInvisible = false;
-            }
-            if (npc.name.Equals("Willy") && Game1.stats.DaysPlayed < 2u)
-            {
-                npc.isInvisible = true;
-            }
-            else if (npc.Schedule != null)
-            {
-                npc.followSchedule = true;
-            }
-            Dictionary<string, string> dictionary = null;
-            Dictionary<int, SchedulePathDescription> result;
-            try
-            {
-                dictionary = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name);
-            }
-            catch (Exception)
-            {
-                result = null;
-                return result;
-            }
-            if (npc.isMarried())
-            {
-                string text = Game1.shortDayNameFromDayOfSeason(dayOfMonth);
-                if ((npc.name.Equals("Penny") && (text.Equals("Tue") || text.Equals("Wed") || text.Equals("Fri"))) || (npc.name.Equals("Maru") && (text.Equals("Tue") || text.Equals("Thu"))) || (npc.name.Equals("Harvey") && (text.Equals("Tue") || text.Equals("Thu"))))
-                {
-                    FieldInfo field = typeof(NPC).GetField("nameofTodaysSchedule", BindingFlags.NonPublic | BindingFlags.Instance);
-                    field.SetValue(npc, "marriageJob");
-                    return parseMasterSchedule(npc, (dictionary["marriageJob"]));
-                }
-                if (!Game1.isRaining && dictionary.ContainsKey("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
-                {
-                    FieldInfo field = typeof(NPC).GetField("nameofTodaysSchedule", BindingFlags.NonPublic | BindingFlags.Instance);
-                    field.SetValue(npc, "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
-                    return parseMasterSchedule(npc, dictionary["marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)]);
-                }
-                npc.followSchedule = false;
-                return null;
-            }
-            else
-            {
-                if (dictionary.ContainsKey(Game1.currentSeason + "_" + Game1.dayOfMonth))
-                {
-                    return parseMasterSchedule(npc, dictionary[Game1.currentSeason + "_" + Game1.dayOfMonth]);
-                }
-                int i;
-                for (i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1); i > 0; i--)
-                {
-                    if (dictionary.ContainsKey(Game1.dayOfMonth + "_" + i))
-                    {
-                        return parseMasterSchedule(npc, dictionary[Game1.dayOfMonth + "_" + i]);
-                    }
-                }
-                if (dictionary.ContainsKey(string.Empty + Game1.dayOfMonth))
-                {
-                    return parseMasterSchedule(npc, dictionary[string.Empty + Game1.dayOfMonth]);
-                }
-                if (npc.name.Equals("Pam") && Game1.player.mailReceived.Contains("ccVault"))
-                {
-                    return parseMasterSchedule(npc, dictionary["bus"]);
-                }
-                if (Game1.isRaining)
-                {
-                    if (Game1.random.NextDouble() < 0.5 && dictionary.ContainsKey("rain2"))
-                    {
-                        return parseMasterSchedule(npc, dictionary["rain2"]);
-                    }
-                    if (dictionary.ContainsKey("rain"))
-                    {
-                        return parseMasterSchedule(npc, dictionary["rain"]);
-                    }
-                }
-                List<string> list = new List<string>
-                {
-                    Game1.currentSeason,
-                    Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)
-                };
-                i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1);
-                while (i > 0)
-                {
-                    list.Add(string.Empty + i);
-                    if (dictionary.ContainsKey(string.Join("_", list)))
-                    {
-                        return parseMasterSchedule(npc, dictionary[string.Join("_", list)]);
-                    }
-                    i--;
-                    list.RemoveAt(list.Count - 1);
-                }
-                if (dictionary.ContainsKey(string.Join("_", list)))
-                {
-                    return parseMasterSchedule(npc, dictionary[string.Join("_", list)]);
-                }
-                if (dictionary.ContainsKey(Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
-                {
-                    return parseMasterSchedule(npc, dictionary[Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)]);
-                }
-                if (dictionary.ContainsKey(Game1.currentSeason))
-                {
-                    return parseMasterSchedule(npc, dictionary[Game1.currentSeason]);
-                }
-                if (dictionary.ContainsKey("spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
-                {
-                    return parseMasterSchedule(npc, dictionary["spring_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)]);
-                }
-                list.RemoveAt(list.Count - 1);
-                list.Add("spring");
-                i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1);
-                while (i > 0)
-                {
-                    list.Add(string.Empty + i);
-                    if (dictionary.ContainsKey(string.Join("_", list)))
-                    {
-                        return parseMasterSchedule(npc, dictionary[string.Join("_", list)]);
-                    }
-                    i--;
-                    list.RemoveAt(list.Count - 1);
-                }
-                if (dictionary.ContainsKey("spring"))
-                {
-                    return parseMasterSchedule(npc, dictionary["spring"]);
-                }
-                return null;
-            }
-        }
-        private bool changeScheduleForLocationAccessibility(NPC npc, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
-        {
-            string a = locationName;
-            if (!(a == "JojaMart") && !(a == "Railroad"))
-            {
-                if (a == "CommunityCenter")
-                {
-                    return !Game1.isLocationAccessible(locationName);
-                }
-            }
-            else if (!Game1.isLocationAccessible(locationName))
-            {
-                if (!Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name).ContainsKey(locationName + "_Replacement"))
-                {
-                    return true;
-                }
-                string[] array = Game1.content.Load<Dictionary<string, string>>("Characters\\schedules\\" + npc.name)[locationName + "_Replacement"].Split(new char[]
-                {
-                    ' '
-                });
-                locationName = array[0];
-                tileX = Convert.ToInt32(array[1]);
-                tileY = Convert.ToInt32(array[2]);
-                facingDirection = Convert.ToInt32(array[3]);
-            }
-            return false;
-        }
-
-        private SchedulePathDescription pathfindToNextScheduleLocation(NPC npc, string startingLocation, int startingX, int startingY, string endingLocation, int endingX, int endingY, int finalFacingDirection, string endBehavior, string endMessage)
-        {
-            Stack<Point> stack = new Stack<Point>();
-            Point warpPointTarget = new Point(startingX, startingY);
-            List<string> list = (!startingLocation.Equals(endingLocation)) ? getLocationRoute(npc, startingLocation, endingLocation) : null;
-            if (list != null)
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    GameLocation locationFromName = Game1.getLocationFromName(list[i]);
-                    if (i < list.Count - 1)
-                    {
-                        Point warpPointTo = locationFromName.getWarpPointTo(list[i + 1]);
-                        if (warpPointTo.Equals(Point.Zero) || warpPointTarget.Equals(Point.Zero))
-                        {
-                            throw new Exception("schedule pathing tried to find a warp point that doesn't exist.");
-                        }
-                        stack = addToStackForSchedule(stack, PathFindController.findPathForNPCSchedules(warpPointTarget, warpPointTo, locationFromName, 30000));
-                        warpPointTarget = locationFromName.getWarpPointTarget(warpPointTo);
-                    }
-                    else
-                    {
-                        stack = addToStackForSchedule(stack, PathFindController.findPathForNPCSchedules(warpPointTarget, new Point(endingX, endingY), locationFromName, 30000));
-                    }
-                }
-            }
-            else if (startingLocation.Equals(endingLocation))
-            {
-                stack = PathFindController.findPathForNPCSchedules(warpPointTarget, new Point(endingX, endingY), Game1.getLocationFromName(startingLocation), 30000);
-            }
-            return new SchedulePathDescription(stack, finalFacingDirection, endBehavior, endMessage);
-        }
-
-        private List<string> getLocationRoute(NPC npc, string startingLocation, string endingLocation)
-        {
-            FieldInfo field = typeof(NPC).GetField("routesFromLocationToLocation", BindingFlags.NonPublic | BindingFlags.Instance);
-            List<List<string>> s = (List<List<string>>)field.GetValue(npc);
-            foreach (List<string> current in s)
-            {
-                if (current.First<string>().Equals(startingLocation) && current.Last<string>().Equals(endingLocation) && (npc.gender == 0 || !current.Contains("BathHouse_MensLocker")) && (npc.gender != 0 || !current.Contains("BathHouse_WomensLocker")))
-                {
-                    return current;
-                }
-            }
-            return null;
-        }
-
-
-        private Stack<Point> addToStackForSchedule(Stack<Point> original, Stack<Point> toAdd)
-        {
-            if (toAdd == null)
-            {
-                return original;
-            }
-            original = new Stack<Point>(original);
-            while (original.Count > 0)
-            {
-                toAdd.Push(original.Pop());
-            }
-            return toAdd;
         }
     }
 }
