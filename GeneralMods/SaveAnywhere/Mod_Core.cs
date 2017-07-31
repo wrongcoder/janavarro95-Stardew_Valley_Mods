@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
@@ -16,41 +15,40 @@ namespace Omegasis.SaveAnywhere
         private SaveManager SaveManager;
         private ConfigUtilities ConfigUtilities;
 
-        public static string mod_path;
-        public static string player_path;
-        public static string animal_path;
-        public static string npc_path;
         public static bool npc_warp;
         public static int checking_time;
         public static bool once;
         public static bool new_day;
         Dictionary<string, string> npc_key_value_pair;
 
-        public static IMonitor thisMonitor;
-
         public override void Entry(IModHelper helper)
         {
-            this.ConfigUtilities = new ConfigUtilities();
-            this.SaveManager = new SaveManager(this.Helper.Reflection);
+            this.ConfigUtilities = new ConfigUtilities(this.Helper.DirectoryPath);
 
             ControlEvents.KeyPressed += KeyPressed_Save_Load_Menu;
             SaveEvents.AfterLoad += PlayerEvents_LoadedGame;
-            GameEvents.UpdateTick += Warp_Check;
-            GameEvents.UpdateTick += PassiveSaveChecker;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             TimeEvents.TimeOfDayChanged += NPC_scheduel_update;
             TimeEvents.DayOfMonthChanged += TimeEvents_DayOfMonthChanged;
             TimeEvents.DayOfMonthChanged += TimeEvents_OnNewDay;
-            SaveAnywhere.mod_path = Helper.DirectoryPath;
             npc_key_value_pair = new Dictionary<string, string>();
-            SaveAnywhere.thisMonitor = Monitor;
         }
 
-        private void PassiveSaveChecker(object sender, EventArgs e)
+        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (this.SaveManager.passiveSave && Game1.activeClickableMenu == null)
+            if (!Context.IsWorldReady)
+                return;
+
+            try
             {
-                Game1.activeClickableMenu = new StardewValley.Menus.SaveGameMenu();
-                this.SaveManager.passiveSave = false;
+                this.SaveManager.Update();
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log(ex.ToString(), LogLevel.Error);
             }
         }
 
@@ -59,11 +57,7 @@ namespace Omegasis.SaveAnywhere
         {
             try
             {
-                //Log.Info("Day of Month Changed");
                 SaveAnywhere.new_day = true;
-                string name = Game1.player.name;
-                SaveAnywhere.player_path = Path.Combine(SaveAnywhere.mod_path, "Save_Data", name);
-
             }
             catch (Exception err)
             {
@@ -673,60 +667,15 @@ namespace Omegasis.SaveAnywhere
         }
 
         //done
-        private void ShippingCheck(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Game1.activeClickableMenu == null)
-                    this.SaveManager.shipping_check();
-            }
-            catch (Exception err)
-            {
-                Monitor.Log(err.ToString());
-            }
-        }
-
-        //done
-        private void Warp_Check(object sender, EventArgs e)
-        {
-            try
-            {
-                string name = Game1.player.name;
-                SaveAnywhere.player_path = Path.Combine(SaveAnywhere.mod_path, "Save_Data", name);
-                if (!Directory.Exists(SaveAnywhere.player_path))
-                {
-                    //Log.AsyncM(Save_Anywhere_V2.Mod_Core.player_path);
-                    //Log.AsyncC("WOOPS");
-                    return;
-                }
-
-                // Log.AsyncY(Player_Utilities.has_player_warped_yet);
-
-                if (this.SaveManager.has_player_warped_yet == false && Game1.player.isMoving() == true)
-                {
-                    //Log.AsyncM("Ok Good"); 
-                    this.SaveManager.warp_player();
-                    this.SaveManager.load_animal_info();
-                    this.SaveManager.Load_NPC_Info();
-                    this.SaveManager.has_player_warped_yet = true;
-
-                }
-            }
-            catch (Exception err)
-            {
-                //7Log.AsyncO("THIS DOESNT MAKE SENSE");
-                Monitor.Log(err.ToString());
-            }
-        }
-
-        //done
         private void PlayerEvents_LoadedGame(object sender, EventArgs e)
         {
+            this.SaveManager = new SaveManager(Game1.player, this.Helper.DirectoryPath, this.Monitor, this.Helper.Reflection);
+
             try
             {
-                this.SaveManager.load_player_info();
-                this.ConfigUtilities.DataLoader_Settings();
-                this.ConfigUtilities.MyWritter_Settings();
+                this.ConfigUtilities.LoadConfig();
+                this.ConfigUtilities.WriteConfig();
+                this.SaveManager.LoadPositions();
             }
             catch (Exception err)
             {
@@ -736,23 +685,19 @@ namespace Omegasis.SaveAnywhere
 
         public void KeyPressed_Save_Load_Menu(object sender, EventArgsKeyPressed e)
         {
-            if (e.KeyPressed.ToString() == this.ConfigUtilities.key_binding) //if the key is pressed, load my cusom save function
+            if (e.KeyPressed.ToString() == this.ConfigUtilities.KeyBinding) //if the key is pressed, load my cusom save function
             {
-                if (Game1.activeClickableMenu != null) return;
                 try
                 {
-                    this.SaveManager.save_game();
+                    if (Game1.activeClickableMenu == null)
+                        this.SaveManager.SaveGameAndPositions();
                 }
-                catch (Exception exe)
+                catch (Exception ex)
                 {
-                    SaveAnywhere.thisMonitor.Log(exe.ToString(), LogLevel.Error);
+                    this.Monitor.Log(ex.ToString(), LogLevel.Error);
                 }
-
             }
         }
-
-
-
 
         private Dictionary<int, SchedulePathDescription> parseMasterSchedule(NPC npc, string rawData)
         {
