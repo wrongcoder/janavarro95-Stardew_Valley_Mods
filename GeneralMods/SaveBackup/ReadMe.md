@@ -1,16 +1,20 @@
-[SMAPI]Stardew_Save_Backup
+**Save Backup** is a [Stardew Valley](http://stardewvalley.net/) mod which automatically backs up
+your save files before you play and every in-game night.
 
--v1.0.2 3/31/16 12:43 AM PST
+Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
--Updated to back up upon launch and upon sleeping.
--Now supports x# of save files (28 by default) for Nightly backups and pre-launch backups (28 for each category). This can be changed in AutoBackup_data.txt.
+## Installation
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/435).
+3. Run the game using SMAPI.
 
-This is the Stardew_Save_Backup mod which automatically takes your save folder and zips it into %appdata%/StardewValley/Backed_Up_Saves for later retrieval upon launching SMAPI! This is especially usefulif you are modding/using mods and don't want your characters to be messed up, or if your game happens to crash form some odd reason, or you lose your save file!
+## Usage
+Your saves will be backed up automatically before you play and each in-game night. You can find the
+files in `%appdata%/StardewValley/Backed_Up_Saves`.
 
-The back-up happens every time you load up SMAPI so your files are zipped up nice and safe before anything can touch them. Also works when you go to bed at night.
+This keeps the last 30 backups of each type by default, but you can edit `AutoBackup_data.txt` to
+configure that.
 
-You can also keep as many back-ups as you desire, and are only limited by the hard drive space on your computer! (Editable by AutoBackup_data.txt)
-
-If you ever want to get back to your old save files, simply open up the desired .zip folder with any archival tool such as windows file manager or .7zip and you can now access your old save files!
-
-I'm open to improvements for this mod as of writing this. If so desired I will research adding functionality for when your character goes to bed that it will back up your save files, or doing a backup after x amount of days that have passed in game.
+## Versions
+1.0:
+* Initial release.

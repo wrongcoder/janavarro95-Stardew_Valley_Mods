@@ -1,24 +1,25 @@
-Stardew Valley MoreRain 1.2.0
+**More Rain** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you adjust the
+probability of rain and storms for each season.
 
+Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
-Initial Release:v1.0.0 posted on 6/7/16 at 11:34 AM
-Updated: 3/2/16 6:51 PM
+## Installation
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/441).
+3. Run the game using SMAPI.
 
-Updates:
-1.2.0
-Updated the mod to have configurable rain and storm chances for every season except winter. Winter gets a snow chance.
+## Usage
+Edit `More_Rain_Config.txt` to change the chance of rain, storms, or snow. Each value is a
+percentage (0 to 100).
 
-1.1.0
--Updated to SDV 1.1
+It won't rain on days where a wedding or a festival would take place.
 
-1.0.0
--Finally got around to an offical full release of this mod. Basically rewrote it from the ground up.
+## Versions
+1.0:
+* Initial release.
 
-Description
-This is the MoreRain mod, which can increase or decrease how much it rains in your game as well as increase the chance to get lightning storms!
-I basically wrote this mod a long time ago because some people complained about the rain in Stardew Valley being too spotty, so this adds in a new level of control to the game.
+1.1:
+* Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
 
-It will not rain on days where a wedding or a festival would take place, so this mod will ignore those days.
-
-All of the values that can be configured in More_Rain_Config.txt
-
+1.2:
+* Added configurable rain and storm chances for every season (snow chance in winter).

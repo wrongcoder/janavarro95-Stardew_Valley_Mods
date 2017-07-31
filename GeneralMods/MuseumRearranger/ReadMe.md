@@ -1,23 +1,25 @@
-Museum Rearranger 1.1.0
+**Museum Rearranger** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you rearrange
+donated items in the museum by pressing a key, even if you don't have a new item to donate.
 
-Initial Release 7/12/16 1:52 AM
-Updated: 10/11/16 11:51 PM
+Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
-Compatability:
-SDV 1.1
-Windows
+## Installation
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/428).
+3. Run the game using SMAPI.
 
-Updates:
-1.1.0
--Updated to SDV 1.1
--Added in a new key config for toggling if the inventory displays while rearranging the museum. Press T by default to toggle showing the menu.
+## Usage
+Press `R` while in the museum to open the rearranging menu. Press `T` while the menu is open to
+toggle the inventory box. Edit `Museum_Rearrange_Config.txt` to change the keys.
+
+## Versions
+1.0:
+* Initial release.
 
 1.0.2
--Massively rewrote some code because it was super necessary.
--Fixed some typoes with the config files.
+* Massively rewrote some code because it was super necessary.
+* Fixed typos in the config files.
 
-This is the museum rearranger mod! This mod allows you to rearrange the museum without having to have something to donate!
-
-Simply press the R key while inside the museum and you will be able to make the museum look however you like!
-
-That's pretty much it. I haven't found any issues thus far, so feel free to go at it!
+1.1:
+* Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
+* Added key to toggle the inventory box while rearranging the museum.

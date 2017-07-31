@@ -40,6 +40,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "~metadata", "~metadata", "{90EB59CA-51F6-49CF-8DCE-A8BB62C58E17}"
 	ProjectSection(SolutionItems) = preProject
 		deploy.targets = deploy.targets
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Global

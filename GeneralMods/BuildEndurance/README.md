@@ -1,5 +1,5 @@
-**Build Health** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you level up
-your endurance to increase your max health as you play.
+﻿**Build Endurance** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you level up
+your endurance to increase your max stamina as you play.
 
 Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
@@ -17,13 +17,12 @@ You'll automatically get XP for...
 * using tools;
 * sleeping;
 * eating or drinking;
-* taking damage;
 * running out of stamina (becoming exhausted);
 * passing out (either by working while exhausted or or staying up late).
 
-Get enough XP, and your health will level up.
+Get enough XP, and your endurance will level up.
 
-Edit `BuildHealthConfig.json` to configure the mod settings.
+Edit `BuildEnduranceConfig.json` to configure the mod settings.
 
 ## Versions
 1.0
