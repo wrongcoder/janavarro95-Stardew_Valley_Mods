@@ -47,7 +47,6 @@
     <Content Include="Custom_Shops\Test_Shop_2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Custom_Shop_Redux_Config.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />
