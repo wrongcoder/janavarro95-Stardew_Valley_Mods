@@ -333,26 +333,26 @@ namespace Omegasis.StardewSymphony
             {
                 if (isNight)
                 {
-                    music_player_rain_night(); //some really awful heirarchy type thing I made up to help ensure that music plays all the time
+                    this.PlayRainyNightMusic(); //some really awful heirarchy type thing I made up to help ensure that music plays all the time
                     if (this.HasNoMusic)
                     {
-                        music_player_rain();
+                        this.PlayRainSong();
                         if (this.HasNoMusic)
                         {
-                            music_player_night();
+                            this.PlayNightSong();
                             if (this.HasNoMusic)
-                                music_player_location();
+                                this.PlayDefaultSong();
                         }
                     }
                 }
                 else
                 {
-                    music_player_rain();
+                    this.PlayRainSong();
                     if (this.HasNoMusic)
                     {
-                        music_player_night();
+                        this.PlayNightSong();
                         if (this.HasNoMusic)
-                            music_player_location();
+                            this.PlayDefaultSong();
                     }
                 }
             }
@@ -360,12 +360,12 @@ namespace Omegasis.StardewSymphony
             {
                 if (isNight)
                 {
-                    music_player_night();
+                    this.PlayNightSong();
                     if (this.HasNoMusic) //if there is no music playing right now play some music.
-                        music_player_location();
+                        this.PlayDefaultSong();
                 }
                 else
-                    music_player_location();
+                    this.PlayDefaultSong();
             }
 
             if (this.HasNoMusic) //if there is valid music playing
@@ -380,7 +380,7 @@ namespace Omegasis.StardewSymphony
 
                 if (!this.MasterList.Any())
                 {
-                    Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                    this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                     this.Reset();
                     return;
                 }
@@ -404,10 +404,9 @@ namespace Omegasis.StardewSymphony
 
             //  no_music = false;
             //if at any time the music for an area can't be played for some unknown reason, the game should default to playing the Stardew Valley Soundtrack.
-            bool night_time = false;
             bool rainy = Game1.isRaining;
 
-            Monitor.Log("Loading farm music.");
+            this.Monitor.Log("Loading farm music.");
             if (Game1.isFestival())
             {
                 this.StopSound();
@@ -419,21 +418,11 @@ namespace Omegasis.StardewSymphony
                 return; //replace with event music if I decide to support it/people request it.
             }
 
-
-            if (Game1.timeOfDay < 600 || Game1.timeOfDay > Game1.getModeratelyDarkTime())
-            {
-                night_time = true;
-            }
-            else
-            {
-                night_time = false;
-            }
-
-            Monitor.Log("Loading Default Seasonal Music");
+            this.Monitor.Log("Loading Default Seasonal Music");
 
             if (!this.MasterList.Any())
             {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
 
@@ -447,78 +436,60 @@ namespace Omegasis.StardewSymphony
                 this.StartDefaultSong(season);
 
             //end seasonal songs
-            if (this.CurrentSong != null)
-            {
-                if (this.CurrentSong.IsPlaying)
-                {
-                    return;
-                }
-            }
+            if (this.CurrentSong != null && this.CurrentSong.IsPlaying)
+                return;
+
             //start locational songs
-            if (rainy && night_time)
+            bool nightTime = Game1.timeOfDay < 600 || Game1.timeOfDay > Game1.getModeratelyDarkTime();
+            if (rainy && nightTime)
             {
-                music_player_rain_night(); //some really awful heirarchy type thing I made up to help ensure that music plays all the time
+                this.PlayRainyNightMusic(); //some really awful heirarchy type thing I made up to help ensure that music plays all the time
                 if (this.HasNoMusic)
                 {
-                    music_player_rain();
+                    this.PlayRainSong();
                     if (this.HasNoMusic)
                     {
-                        music_player_night();
+                        this.PlayNightSong();
                         if (this.HasNoMusic)
-                        {
-                            music_player_location();
-
-                        }
+                            this.PlayDefaultSong();
                     }
                 }
 
             }
-            if (rainy && night_time == false)
+            if (rainy && !nightTime)
             {
-                music_player_rain();
+                this.PlayRainSong();
                 if (this.HasNoMusic)
                 {
-                    music_player_night();
+                    this.PlayNightSong();
                     if (this.HasNoMusic)
-                    {
-                        music_player_location();
-
-                    }
+                        this.PlayDefaultSong();
                 }
 
             }
-            if (rainy == false && night_time)
+            if (!rainy && nightTime)
             {
-                music_player_night();
+                this.PlayNightSong();
                 if (this.HasNoMusic)
-                {
-                    music_player_location();
-
-                }
+                    this.PlayDefaultSong();
 
             }
-            if (rainy == false && night_time == false)
-            {
-                music_player_location();
-            }
-
-            //end of function. Natural return;
-            return;
+            if (!rainy && !nightTime)
+                this.PlayDefaultSong();
         }
 
-        public void music_player_location()
+        public void PlayDefaultSong()
         {
             if (!this.IsGameLoaded)
             {
                 this.StartMusicDelay();
                 return;
             }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
+            int randomNumber = this.Random.Next(0, this.MasterList.Count);
 
             if (!this.MasterList.Any())
             {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
 
@@ -528,7 +499,7 @@ namespace Omegasis.StardewSymphony
             if (Game1.player.currentLocation != null)
             {
                 int helper1 = 0;
-                int master_helper = 0;
+                int masterHelper = 0;
                 bool found = false;
 
                 //this mess of a while loop iterates across all of my music packs looking for a valid music pack to play music from.
@@ -550,49 +521,34 @@ namespace Omegasis.StardewSymphony
                                 else
                                 {
                                     //this section tells me if it is valid and is less than or equal to 0
-                                    //Monitor.Log("Count is less than for this class zero. Switching music packs");
-                                    found = false;
-                                    master_helper++; //iterate across the classes
+                                    masterHelper++; //iterate across the classes
                                     break;
                                 }
 
                             }
                             else
-                            {//this section iterates through the keys
-                                Monitor.Log("Not there");
-                                found = false;
+                            {
+                                this.Monitor.Log("Not there");
                                 helper1++;
-                                continue;
                             }
-
                         } //itterate through all of the valid locations that were stored in this class
-
                     }
                     else
-                    {
-                        Monitor.Log("No data could be loaded on this area. Swaping music packs");
-                        found = false;
-                    }
-                    if (found == false) //if I didnt find the music.
-                    {
-                        master_helper++;
-
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-                            return;
-
-                        }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.
-                        continue;
-                    }
-                    else
-                    {
+                        this.Monitor.Log("No data could be loaded on this area. Swaping music packs");
+                    if (found)
                         break;
-                    }
 
+                    masterHelper++;
+
+                    if (masterHelper > this.MasterList.Count)
+                    {
+                        this.Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                        this.HasNoMusic = true;
+                        return;
+
+                    }
+                    int randomIndex = (masterHelper + randomNumber) % this.MasterList.Count;
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.
                 }
 
                 List<Cue> cues = this.CurrentSoundInfo.LocationSongs.Values.ElementAt(helper1); //set a list of songs to a "random" list of songs from a music pack
@@ -600,19 +556,19 @@ namespace Omegasis.StardewSymphony
                 while (!cues.Any()) //yet another circular array
                 {
                     pointer++;
-                    int motzy = (pointer + randomNumber) % this.MasterList.Count; //why do I name my variables pointless names?
+                    int randomID = (pointer + randomNumber) % this.MasterList.Count;
 
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(motzy);
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomID);
                     if (pointer > this.MasterList.Count)
                     {
-                        Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
+                        this.Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
                         this.HasNoMusic = true;
                         return;
                     }
 
                 }
 
-                Monitor.Log("loading music for this area");
+                this.Monitor.Log("loading music for this area");
                 this.StopSound();
                 int random3 = this.Random.Next(0, cues.Count);
                 Game1.soundBank = this.CurrentSoundInfo.Soundbank; //change the game's soundbank temporarily
@@ -622,32 +578,31 @@ namespace Omegasis.StardewSymphony
                 this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
                 if (this.CurrentSong != null)
                 {
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation);
+                    this.Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation);
                     this.HasNoMusic = false;
                     this.CurrentSong.Play(); //play some music
                     this.Reset();
-                    return;
                 }
             }
             else
             {
-                Monitor.Log("Location is null");
+                this.Monitor.Log("Location is null");
                 this.HasNoMusic = true;
             }
-        }//end music player
-        public void music_player_rain()
+        }
+
+        public void PlayRainSong()
         {
             if (!this.IsGameLoaded)
             {
                 this.StartMusicDelay();
                 return;
             }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
+            int randomNumber = this.Random.Next(0, this.MasterList.Count);
 
             if (!this.MasterList.Any())
             {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
 
@@ -658,7 +613,7 @@ namespace Omegasis.StardewSymphony
             if (Game1.player.currentLocation != null)
             {
                 int helper1 = 0;
-                int master_helper = 0;
+                int masterHelper = 0;
                 bool found = false;
 
                 while (true)
@@ -679,48 +634,33 @@ namespace Omegasis.StardewSymphony
                                 else
                                 {
                                     //this section tells me if it is valid and is less than or equal to 0
-                                    //Monitor.Log("Count is less than for this class zero. Switching music packs");
-                                    found = false;
-                                    master_helper++; //iterate across the classes
+                                    masterHelper++; //iterate across the classes
                                     break;
                                 }
 
                             }
                             else
-                            {//this section iterates through the keys
-                                Monitor.Log("Not there");
-                                found = false;
+                            {
+                                this.Monitor.Log("Not there");
                                 helper1++;
-                                continue;
                             }
-
-                        } //itterate through all of the svalid locations that were stored in this class
-
-                    }
-                    else
-                    {
-                        Monitor.Log("No data could be loaded on this area. Swaping music packs");
-                        found = false;
-                    }
-                    if (found == false) //if I didnt find the music.
-                    {
-                        master_helper++;
-
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-                            return;
-
                         }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
                     }
                     else
-                    {
+                        this.Monitor.Log("No data could be loaded on this area. Swaping music packs");
+
+                    if (found)
                         break;
+                    masterHelper++;
+
+                    if (masterHelper > this.MasterList.Count)
+                    {
+                        this.Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                        this.HasNoMusic = true;
+                        return;
                     }
+                    int randomIndex = (masterHelper + randomNumber) % this.MasterList.Count;
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
                 }
 
                 List<Cue> cues = this.CurrentSoundInfo.LocationRainSongs.Values.ElementAt(helper1);
@@ -730,21 +670,18 @@ namespace Omegasis.StardewSymphony
                 while (!cues.Any())
                 {
                     pointer++;
-                    int motzy = (pointer + randomNumber) % this.MasterList.Count;
+                    int randomID = (pointer + randomNumber) % this.MasterList.Count;
 
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(motzy);
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomID);
                     if (pointer > this.MasterList.Count)
                     {
-                        Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
+                        this.Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
                         this.HasNoMusic = true;
                         return;
                     }
-
                 }
 
-
-
-                Monitor.Log("loading music for this area");
+                this.Monitor.Log("loading music for this area");
                 this.StopSound();
                 int random3 = this.Random.Next(0, cues.Count);
                 Game1.soundBank = this.CurrentSoundInfo.Soundbank;
@@ -755,36 +692,29 @@ namespace Omegasis.StardewSymphony
                 if (this.CurrentSong != null)
                 {
                     this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation + " while it is raining");
+                    this.Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation + " while it is raining");
                     this.CurrentSong.Play();
                     this.Reset();
-                    return;
                 }
-
-
-
             }
             else
-            {
-                Monitor.Log("Location is null");
-            }
-        }//end music player
-        public void music_player_night()
+                this.Monitor.Log("Location is null");
+        }
+
+        public void PlayNightSong()
         {
             if (!this.IsGameLoaded)
             {
                 this.StartMusicDelay();
                 return;
             }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
+            int randomNumber = this.Random.Next(0, this.MasterList.Count);
 
             if (!this.MasterList.Any())
             {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
-
             }
 
             this.CurrentSoundInfo = this.MasterList.ElementAt(randomNumber); //grab a random wave bank/song bank/music pack/ from all available music packs.            
@@ -792,91 +722,70 @@ namespace Omegasis.StardewSymphony
             if (Game1.player.currentLocation != null)
             {
                 int helper1 = 0;
-                int master_helper = 0;
+                int masterHelper = 0;
                 bool found = false;
 
                 while (true)
                 {
                     if (this.CurrentSoundInfo.LocationNightSongs.Keys.Contains(Game1.player.currentLocation.name + "_night"))
                     {
-
                         foreach (var entry in this.CurrentSoundInfo.LocationNightSongs)
                         {
                             if (entry.Key == Game1.player.currentLocation.name + "_night")
                             {
                                 if (entry.Value.Count > 0)
                                 {
-                                    //Monitor.Log("FOUND THE RIGHT POSITIONING OF THE CLASS");
                                     found = true;
                                     break;
                                 }
                                 else
                                 {
                                     //this section tells me if it is valid and is less than or equal to 0
-                                    //Monitor.Log("Count is less than for this class zero. Switching music packs");
-                                    found = false;
-                                    master_helper++; //iterate across the classes
+                                    masterHelper++; //iterate across the classes
                                     break;
                                 }
-
                             }
                             else
-                            {//this section iterates through the keys
-                                Monitor.Log("Not there");
-                                found = false;
+                            {
+                                this.Monitor.Log("Not there");
                                 helper1++;
-                                continue;
                             }
-
-                        } //itterate through all of the svalid locations that were stored in this class
-
-                    }
-                    else
-                    {
-                        Monitor.Log("No data could be loaded on this area. Swaping music packs");
-                        found = false;
-                    }
-                    if (found == false) //if I didnt find the music.
-                    {
-                        master_helper++;
-
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-                            return;
-
                         }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
                     }
                     else
-                    {
+                        this.Monitor.Log("No data could be loaded on this area. Swaping music packs");
+                    if (found)
                         break;
+
+                    masterHelper++;
+
+                    if (masterHelper > this.MasterList.Count)
+                    {
+                        this.Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                        this.HasNoMusic = true;
+                        return;
                     }
+                    int randomIndex = (masterHelper + randomNumber) % this.MasterList.Count;
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
                 }
 
                 List<Cue> cues = this.CurrentSoundInfo.LocationNightSongs.Values.ElementAt(helper1);
                 int pointer = 0;
-                int motzy = 0;
                 while (!cues.Any())
                 {
                     pointer++;
-                    motzy = (pointer + randomNumber) % this.MasterList.Count;
+                    int randomID = (pointer + randomNumber) % this.MasterList.Count;
 
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(motzy);
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomID);
                     if (pointer > this.MasterList.Count)
                     {
-                        Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
+                        this.Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
                         this.HasNoMusic = true;
                         return;
                     }
-
                 }
 
-
-                Monitor.Log("loading music for this area");
+                this.Monitor.Log("loading music for this area");
                 this.StopSound();
                 int random3 = this.Random.Next(0, cues.Count);
                 Game1.soundBank = this.CurrentSoundInfo.Soundbank;
@@ -887,33 +796,27 @@ namespace Omegasis.StardewSymphony
                 if (this.CurrentSong != null)
                 {
                     this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation + " while it is night time.");
+                    this.Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation + " while it is night time.");
                     this.CurrentSong.Play();
                     this.Reset();
-                    return;
                 }
-
-
-
             }
             else
-            {
-                Monitor.Log("Location is null");
-            }
-        }//end music player
-        public void music_player_rain_night()
+                this.Monitor.Log("Location is null");
+        }
+
+        public void PlayRainyNightMusic()
         {
             if (!this.IsGameLoaded)
             {
                 this.StartMusicDelay();
                 return;
             }
-            this.Random.Next();
-            int randomNumber = this.Random.Next(0, this.MasterList.Count); //random number between 0 and n. 0 not included
+            int randomNumber = this.Random.Next(0, this.MasterList.Count);
 
             if (!this.MasterList.Any())
             {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
 
@@ -925,7 +828,7 @@ namespace Omegasis.StardewSymphony
             {
 
                 int helper1 = 0;
-                int master_helper = 0;
+                int masterHelper = 0;
                 bool found = false;
 
                 while (true)
@@ -939,55 +842,43 @@ namespace Omegasis.StardewSymphony
                             {
                                 if (entry.Value.Count > 0)
                                 {
-                                    //Monitor.Log("FOUND THE RIGHT POSITIONING OF THE CLASS");
                                     found = true;
                                     break;
                                 }
                                 else
                                 {
                                     //this section tells me if it is valid and is less than or equal to 0
-                                    //Monitor.Log("Count is less than for this class zero. Switching music packs");
-                                    found = false;
-                                    master_helper++; //iterate across the classes
+                                    masterHelper++; //iterate across the classes
                                     break;
                                 }
 
                             }
                             else
-                            {//this section iterates through the keys
-                                Monitor.Log("Not there");
-                                found = false;
+                            {
+                                this.Monitor.Log("Not there");
                                 helper1++;
-                                continue;
                             }
-
-                        } //itterate through all of the svalid locations that were stored in this class
-
-                    }
-                    else
-                    {
-                        Monitor.Log("No data could be loaded on this area. Swaping music packs");
-                        found = false;
-                    }
-                    if (found == false) //if I didnt find the music.
-                    {
-                        master_helper++;
-
-                        if (master_helper > this.MasterList.Count)
-                        {
-                            Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
-                            this.HasNoMusic = true;
-                            return;
-
                         }
-                        int randomIndex = (master_helper + randomNumber) % this.MasterList.Count;
-                        this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
-                        continue;
                     }
                     else
                     {
-                        break;
+                        this.Monitor.Log("No data could be loaded on this area. Swaping music packs");
                     }
+
+                    if (found)
+                        break;
+
+                    masterHelper++;
+
+                    if (masterHelper > this.MasterList.Count)
+                    {
+                        this.Monitor.Log("I've gone though every music pack with no success. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                        this.HasNoMusic = true;
+                        return;
+
+                    }
+                    int randomIndex = (masterHelper + randomNumber) % this.MasterList.Count;
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomIndex); //grab a random wave bank/song bank/music pack/ from all available music packs.            
                 }
 
                 List<Cue> cues = this.CurrentSoundInfo.LocationRainNightSongs.Values.ElementAt(helper1);
@@ -996,18 +887,18 @@ namespace Omegasis.StardewSymphony
                 while (!cues.Any())
                 {
                     pointer++;
-                    int motzy = (pointer + randomNumber) % this.MasterList.Count;
+                    int randomID = (pointer + randomNumber) % this.MasterList.Count;
 
-                    this.CurrentSoundInfo = this.MasterList.ElementAt(motzy);
+                    this.CurrentSoundInfo = this.MasterList.ElementAt(randomID);
                     if (pointer > this.MasterList.Count)
                     {
-                        Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
+                        this.Monitor.Log("No music packs have any valid music for this area. AKA all music packs are empty;");
                         this.HasNoMusic = true;
                         return;
                     }
 
                 }
-                Monitor.Log("loading music for this area");
+                this.Monitor.Log("loading music for this area");
                 this.StopSound();
                 int random3 = this.Random.Next(0, cues.Count);
                 Game1.soundBank = this.CurrentSoundInfo.Soundbank;
@@ -1018,19 +909,13 @@ namespace Omegasis.StardewSymphony
                 if (this.CurrentSong != null)
                 {
                     this.HasNoMusic = false;
-                    Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation + " while it is raining at night.");
+                    this.Monitor.Log("Now listening to: " + this.CurrentSong.Name + " from the music pack located at: " + this.CurrentSoundInfo.Directory + "for the location " + Game1.player.currentLocation + " while it is raining at night.");
                     this.CurrentSong.Play();
                     this.Reset();
-                    return;
                 }
-
-
-
             }
             else
-            {
-                Monitor.Log("Location is null");
-            }
+                this.Monitor.Log("Location is null");
         }
 
         /// <summary>Start a default song for the given season.</summary>
@@ -1045,7 +930,7 @@ namespace Omegasis.StardewSymphony
             }
             if (!this.MasterList.Any())
             {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
             }
@@ -1073,7 +958,6 @@ namespace Omegasis.StardewSymphony
                             this.CurrentSong = this.CurrentSoundInfo.NightSongs[season].ElementAt(randomSongIndex); //grab a random song from the seasonal song list
                             this.CurrentSong = Game1.soundBank.GetCue(this.CurrentSong.Name);
                             break;
-
                         }
 
                         if (minIndex == this.MasterList.Count - 1)
@@ -1099,7 +983,7 @@ namespace Omegasis.StardewSymphony
                 if (this.CurrentSong != null)
                 {
                     this.HasNoMusic = false;
-                    Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a {season} Night. Check the seasons folder for more info");
+                    this.Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a {season} Night. Check the seasons folder for more info");
                     this.CurrentSong.Play();
                     this.Reset();
                     return;
@@ -1168,7 +1052,7 @@ namespace Omegasis.StardewSymphony
             }
             if (!this.MasterList.Any())
             {
-                Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
+                this.Monitor.Log("The Wave Bank list is empty. Something went wrong, or you don't have any music packs installed, or you didn't have any songs in the list files.");
                 this.Reset();
                 return;
             }
@@ -1183,7 +1067,7 @@ namespace Omegasis.StardewSymphony
 
                 if (this.CurrentSoundInfo.RainyNightSongs[season].Count == 0)
                 {
-                    Monitor.Log($"The {season}_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
+                    this.Monitor.Log($"The {season}_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
 
                     int minIndex = 0;
                     for (; minIndex < this.MasterList.Count; minIndex++)
@@ -1200,7 +1084,7 @@ namespace Omegasis.StardewSymphony
 
                         if (minIndex == this.MasterList.Count - 1)
                         {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                            this.Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
                             this.HasNoMusic = true;
                             return;
                         }
@@ -1221,7 +1105,7 @@ namespace Omegasis.StardewSymphony
                 if (this.CurrentSong != null)
                 {
                     this.HasNoMusic = false;
-                    Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a rainy {season} night. Check the Seasons folder for more info");
+                    this.Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a rainy {season} night. Check the Seasons folder for more info");
                     this.CurrentSong.Play();
                     this.Reset();
                     return;
@@ -1234,7 +1118,7 @@ namespace Omegasis.StardewSymphony
 
                 if (this.CurrentSoundInfo.RainySongs[season].Count == 0)
                 {
-                    Monitor.Log($"The {season}_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
+                    this.Monitor.Log($"The {season}_rain night song list is empty. Trying to look for more songs."); //or should I default where if there aren't any nightly songs to play a song from a different play list?
                     int minIndex = 0;
                     for (; minIndex < this.MasterList.Count; minIndex++)
                     {
@@ -1250,7 +1134,7 @@ namespace Omegasis.StardewSymphony
 
                         if (minIndex > this.MasterList.Count)
                         {
-                            Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
+                            this.Monitor.Log("I've gone though every music pack with no success for default music. There is no music to load for this area so it will be silent once this song finishes playing. Sorry!");
                             this.HasNoMusic = true;
                             return;
                         }
@@ -1271,7 +1155,7 @@ namespace Omegasis.StardewSymphony
                 if (this.CurrentSong != null)
                 {
                     this.HasNoMusic = false;
-                    Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a rainy {season} Day. Check the seasons folder for more info");
+                    this.Monitor.Log($"Now listening to: {this.CurrentSong.Name} from the music pack located at: {this.CurrentSoundInfo.Directory} while it is a rainy {season} Day. Check the seasons folder for more info");
                     this.CurrentSong.Play();
                     this.Reset();
                 }
