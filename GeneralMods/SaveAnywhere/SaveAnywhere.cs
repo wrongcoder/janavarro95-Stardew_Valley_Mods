@@ -176,7 +176,7 @@ namespace Omegasis.SaveAnywhere
                     }
                     catch (Exception ex)
                     {
-                        this.Monitor.Log($"Error pathfinding NPC {npc.name}: {ex}", LogLevel.Error);
+                        //this.Monitor.Log($"Error pathfinding NPC {npc.name}: {ex}", LogLevel.Error);
                         continue;
                     }
 
