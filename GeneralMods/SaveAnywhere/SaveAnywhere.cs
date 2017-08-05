@@ -114,8 +114,6 @@ namespace Omegasis.SaveAnywhere
             if (Game1.weatherIcon == Game1.weather_festival || Game1.isFestival() || Game1.eventUp)
                 return;
 
-            MethodInfo pathfind = typeof(NPC).GetMethod("pathfindToNextScheduleLocation", BindingFlags.NonPublic | BindingFlags.Instance);
-
             // apply for each NPC
             foreach (NPC npc in Utility.getAllCharacters())
             {
@@ -171,7 +169,10 @@ namespace Omegasis.SaveAnywhere
                         int x = Convert.ToInt32(fields[2]);
                         int y = Convert.ToInt32(fields[3]);
                         int endFacingDir = Convert.ToInt32(fields[4]);
-                        schedulePathDescription = (SchedulePathDescription)pathfind.Invoke(npc, new object[] { npc.currentLocation.name, npc.getTileX(), npc.getTileY(), endMap, x, y, endFacingDir, null, null });
+
+                        schedulePathDescription = this.Helper.Reflection
+                            .GetPrivateMethod(npc, "pathfindToNextScheduleLocation")
+                            .Invoke<SchedulePathDescription>(npc.currentLocation.name, npc.getTileX(), npc.getTileY(), endMap, x, y, endFacingDir, null, null);
                         index++;
                     }
                     catch (Exception ex)
@@ -228,14 +229,16 @@ namespace Omegasis.SaveAnywhere
                 string dayName = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 if ((npc.name.Equals("Penny") && (dayName.Equals("Tue") || dayName.Equals("Wed") || dayName.Equals("Fri"))) || (npc.name.Equals("Maru") && (dayName.Equals("Tue") || dayName.Equals("Thu"))) || (npc.name.Equals("Harvey") && (dayName.Equals("Tue") || dayName.Equals("Thu"))))
                 {
-                    FieldInfo field = typeof(NPC).GetField("nameofTodaysSchedule", BindingFlags.NonPublic | BindingFlags.Instance);
-                    field.SetValue(npc, "marriageJob");
+                    this.Helper.Reflection
+                        .GetPrivateField<string>(npc, "nameofTodaysSchedule")
+                        .SetValue("marriageJob");
                     return "marriageJob";
                 }
                 if (!Game1.isRaining && schedule.ContainsKey("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
-                    FieldInfo field = typeof(NPC).GetField("nameofTodaysSchedule", BindingFlags.NonPublic | BindingFlags.Instance);
-                    field.SetValue(npc, "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
+                    this.Helper.Reflection
+                        .GetPrivateField<string>(npc, "nameofTodaysSchedule")
+                        .SetValue("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
                     return "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
                 npc.followSchedule = false;
