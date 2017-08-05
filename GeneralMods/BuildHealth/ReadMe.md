@@ -1,33 +1,33 @@
-[SMAPI]BuildEndurance
-Initial Release 4/10/16 10:40 PM
-Updated: 10/11/16 12:55 AM
+**Build Health** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you level up
+your endurance to increase your max health as you play.
 
-Compatability:
-Windows
+Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
-Updates:
-1.1.0 10/11/16 12:55 AM
--Updated to SDV 1.1
+## Installation
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/445).
+3. Run the game using SMAPI.
 
-v1.0.0 4/10/16 10:40 PM PST
+**NOTE:** to undo the mod's changes to your player, edit the `PlayerData\BuildEndurance_data_*.txt`
+file and change the "RESET ALL MOD EFFECTS?" field to `True`.
 
-Description
--Fixed the glitch where eating and using tools would not net you xp.
+## Usage
+You'll automatically get XP for...
 
-This is the BuildEndurance mod, which can increase your max health in a couple of different ways! As you partake in the tasks below, you gain xp points, and when you reach enough xp points, your max health will increase!
+* using tools;
+* sleeping;
+* eating or drinking;
+* taking damage;
+* running out of stamina (becoming exhausted);
+* passing out (either by working while exhausted or or staying up late).
 
-Ways to increase maximum health:
+Get enough XP, and your health will level up.
 
-Use tools.
+Edit `BuildHealthConfig.json` to configure the mod settings.
 
-Eating Food.
+## Versions
+1.0
+* Initial release.
 
-Sleeping!
-
-I'm up to a few more suggestions as well that can add to this list.
-
-All of the data can be set up/edited in BuildEndurance_Config.tx. If you want to increase/decrease any of the values such as the xp to level up, the maximum level, or even the amount of health you gain upon level up can be found here.
-
-All data values currently associated with the character can also be change around with BuildEndurance_data.txt
-
-NOTE! If at any time you want to remove/reverse the properties set by this mod, open up the BuildEndurance_data.txt file and set the value associated with resetting the mod data to true! This will revert the player's max health to the value initially stored when the mod was installed/ the value associate with old health.
+1.1:
+* Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.

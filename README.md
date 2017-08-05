@@ -1,40 +1,80 @@
-TODO: Rewrite this readme because I goofed up and put the wrong one here...
+﻿﻿This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
+documentation and release notes.
 
-The beginnings of Stardew Valley Revitalize.
+## Mods
+Active mods:
+* **[Auto Speed](http://www.nexusmods.com/stardewvalley/mods/443)** <small>([source](AutoSpeed))</small>  
+  _Lets you move faster without the need to enter commands in the console._
 
-+:add
-~:Edit
--:Remove
+* **[Billboard Anywhere](http://www.nexusmods.com/stardewvalley/mods/492)** <small>([source](BillboardAnywhere))</small>  
+  _Lets you look at the billboard anywhere in-game for easy access to upcoming events and birthdays._
 
-Implemented.
+* **[Build Endurance](http://www.nexusmods.com/stardewvalley/mods/445)** <small>([source](BuildEndurance))</small>  
+  _Lets you level up your endurance to increase your max stamina as you play._
 
-0.3.0 2/22/17
-+crops anywhere: Crops can now be placed anywhere where dirt can be tilled.
-+Custom Seeds: Now exist in seperate .xnb
-~Objects.xnb: Add in new crops
-+Crops
-  +Pink Turnip:Spring
-  +Blue Charm:Fall
-+Farm Swap Menu: Allows the user to have multiple custom farms loaded in without replacing original farm.xnb files, and allows them to choose one.
-+Custom Inventory Game Menu: Will allow for more edits of the game menu in the future. Possibly adding in more tabs, and equipment options.
-+Gift Packages: Now receive multiple objects from a single item. Good for gifts/rewards/etc.
-+Shop Objects: Objects that can be placed in the world, and when interacted with call a shop menu.
+* **[Build Health](http://www.nexusmods.com/stardewvalley/mods/446)** <small>([source](BuildHealth))</small>  
+  _Lets you level up your endurance to increase your max health as you play._
 
+* **[Buy Back Collectables](http://www.nexusmods.com/stardewvalley/mods/507)** <small>([source](BuyBackCollectables))</small>  
+  _Lets you buy items from the collectables menu by pressing a key, at a configurable markup._
 
-0.2.0 Alpha 12/30/16 2:52 AM
-+Quarry machines. Drills I suppose you could call them?
+* **[Daily Quest Anywhere](http://www.nexusmods.com/stardewvalley/mods/513)** <small>([source](DailyQuestAnywhere))</small>  
+  _Lets you open the daily quest menu from anywhere in-game._
 
-0.1.0 Alpha 12/15/16
-+Custom Shop Objects
-+Ground work done for new machines
-+Customizable lights
-+Preset Lighting Class with 100+ different light colors.
+* **[Fall 28 Snow Day](http://www.nexusmods.com/stardewvalley/mods/486)** <small>([source](Fall28SnowDay))</small>  
+  _Snow falls on the last day of fall._
 
-Planned:
-TBD
-More Crops
-More Weapons
-More Areas?
-More Machines: Assembly Lines, Power, Pollution, etc
-Verbose Magic System: Runes, More Junimos, Magic Spells/Books, Crystals, Alchemy, Potions
-Mail system? Sending mail to npcs for friendship+gifts?
+* **[Happy Birthday](http://www.nexusmods.com/stardewvalley/mods/520)** <small>([source](HappyBirthday))</small>  
+  _Lets you pick a day for your birthday. On your birthday, you get letters from your parents, and
+  villagers give you gifts and wish you happy birthday._
+
+* **[More Rain](http://www.nexusmods.com/stardewvalley/mods/441)** <small>([source](MoreRain))</small>  
+  _Lets you adjust the probability of rain and storms for each season._
+
+* **[Museum Rearranger](http://www.nexusmods.com/stardewvalley/mods/428)** <small>([source](MuseumRearranger))</small>  
+  _Lets you rearrange donated items in the museum by pressing a key, even if you don't have a new
+  item to donate._
+
+* **[Night Owl](http://www.nexusmods.com/stardewvalley/mods/433)** <small>([source](NightOwl))</small>  
+  _Lets you stay up a full 24 hours instead of collapsing at 2am, including a morning light
+  transition as the sun rises._
+
+* **[No More Pets](http://www.nexusmods.com/stardewvalley/mods/506)** <small>([source](NoMorePets))</small>  
+  _Removes all pets from the game._
+
+* **[Save Anywhere](http://www.nexusmods.com/stardewvalley/mods/444)** <small>([source](SaveAnywhere))</small>  
+  _Lets you save your game anywhere by pressing a key._
+
+* **[Save Backup](http://www.nexusmods.com/stardewvalley/mods/435)** <small>([source](SaveBackup))</small>  
+  _Automatically backs up your save files before you play and every in-game night._
+
+* **[Stardew Symphony](http://www.nexusmods.com/stardewvalley/mods/425)** <small>([source](StardewSymphony))</small>  
+  _Lets you add music packs to Stardew Valley and play them without editing the game's default
+  sound files. Music can be conditional on location, season, and weather._
+
+* **[Time Freeze](http://www.nexusmods.com/stardewvalley/mods/973)** <small>([source](TimeFreeze))</small>  
+  _Freezes time while indoors. Configurably lets time pass while bathing._
+
+Inactive mods:
+* **Custom Shops Redux GUI** <small>([source](CustomShopsRedux))</small>  
+  _In development. Lets you create custom shops by editing text files._
+
+## Compiling the mods
+Installing stable releases from Nexus Mods is recommended for most users. If you really want to
+compile the mod yourself, read on.
+
+These mods use the [crossplatform build config](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
+so they can be built on Linux, Mac, and Windows without changes. See [the build config documentation](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
+for troubleshooting.
+
+To compile a mod and add it to your game's `Mods` directory:
+
+1. Rebuild the project in [Visual Studio](https://www.visualstudio.com/vs/community/) or [MonoDevelop](http://www.monodevelop.com/).  
+   <small>This will compile the code and package it into the mod directory.</small>
+2. Launch the project with debugging.  
+   <small>This will start the game through SMAPI and attach the Visual Studio debugger.</small>
+
+To package a mod for release:
+
+1. Rebuild the project in release mode.
+2. The release zips will be generated in the `_releases` folder.

@@ -1,20 +1,20 @@
-# AutoSpeed_Mod
+﻿**Auto Speed** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you move faster
+without the need to enter commands in the console.
 
+Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
-Initial Post: 3/27/16
-Updated: v1.1.0 10/11/16
+## Installation
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/443).
+3. Run the game using SMAPI.
 
-Compatability:
-Windows
-SDV 1.1
+## Usage
+Launch the game with the mod installed to generate the config file, then edit the
+`AutoSpeed_data.txt` to set the speed you want (higher values are faster).
 
-Changelog:
-1.1.0
--Updated to SDv 1.1
--Updated to SMAPI 0.40.0 1.1-3
+## Versions
+1.0
+* Initial release.
 
-Description:
-This is a simple .dll mod for SMAPI which automatically changes the character's speed value referenced in AutoSpeed.txt.
-This basically just bypasses having to type in the command everytime you load SMAPI.
-
-Install in by putting it into Stardew Valley/Mods/AutoSpeed!
+1.1:
+* Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
