@@ -7,6 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
+  "MinimumApiVersion": "1.15",
   "Description": "Backs up your save files at regular intervals.",
   "UniqueID": "Omegasis.SaveBackup",
   "EntryDll": "SaveBackup.dll"

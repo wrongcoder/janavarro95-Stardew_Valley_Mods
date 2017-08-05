@@ -28,4 +28,5 @@ It won't rain on days where a wedding or a festival would take place.
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Updated for SMAPI 2.0.
 * Internal refactoring.

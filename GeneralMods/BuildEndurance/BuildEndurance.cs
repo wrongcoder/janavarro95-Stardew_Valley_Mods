@@ -68,7 +68,7 @@ namespace Omegasis.BuildEndurance
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
             string configPath = Path.Combine(helper.DirectoryPath, "BuildEnduranceConfig.json");
             if (!File.Exists(configPath))
@@ -178,10 +178,10 @@ namespace Omegasis.BuildEndurance
             this.WriteConfig();
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        public void TimeEvents_DayOfMonthChanged(object sender, EventArgs e)
+        public void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             // reset data
             this.WasExhausted = false;

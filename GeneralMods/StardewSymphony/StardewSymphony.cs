@@ -89,7 +89,7 @@ namespace Omegasis.StardewSymphony
             this.HexProcessor = new MusicHexProcessor(this.MasterList, this.Reset);
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
         }
@@ -132,10 +132,10 @@ namespace Omegasis.StardewSymphony
             Game1.nextMusicTrack = "";  //same as above line
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             if (!this.IsGameLoaded)
                 return;
@@ -269,7 +269,7 @@ namespace Omegasis.StardewSymphony
                 string extension = Path.GetExtension(filePath);
                 if (extension == ".xsb")
                 {
-                    Log.AsyncG(filePath);
+                    this.Monitor.Log(filePath);
                     this.HexProcessor.AddSoundBank(filePath);
                 }
                 //if (extension == "xwb")

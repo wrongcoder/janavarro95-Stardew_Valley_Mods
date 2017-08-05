@@ -7,6 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
+  "MinimumApiVersion": "1.15",
   "Description": "Lets you buy back any obtained collectable.",
   "UniqueID": "Omegasis.BuyBackCollectables",
   "EntryDll": "BuyBackCollectables.dll"

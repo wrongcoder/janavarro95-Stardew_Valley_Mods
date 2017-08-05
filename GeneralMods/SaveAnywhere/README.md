@@ -36,4 +36,5 @@ Press `K` to save anywhere. Edit `Save_Anywhere_Config.txt` to configure the key
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 2.5:
+* Updated for SMAPI 2.0.
 * Internal refactoring.

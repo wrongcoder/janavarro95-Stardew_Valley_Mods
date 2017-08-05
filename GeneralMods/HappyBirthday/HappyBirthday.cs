@@ -61,7 +61,7 @@ namespace Omegasis.HappyBirthday
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
@@ -78,10 +78,10 @@ namespace Omegasis.HappyBirthday
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             if (Game1.player == null)
                 return;

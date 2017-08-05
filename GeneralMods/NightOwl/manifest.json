@@ -7,6 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
+  "MinimumApiVersion": "1.15",
   "Description": "Lets you stay up all night.",
   "UniqueID": "Omegasis.NightOwl",
   "EntryDll": "NightOwl.dll"

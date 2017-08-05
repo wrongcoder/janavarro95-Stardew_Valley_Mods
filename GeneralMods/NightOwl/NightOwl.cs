@@ -93,7 +93,7 @@ namespace Omegasis.NightOwl
         public override void Entry(IModHelper helper)
         {
             TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             GameEvents.FourthUpdateTick += this.GameEvents_FourthUpdateTick;
         }
@@ -140,10 +140,10 @@ namespace Omegasis.NightOwl
             this.JustCollapsed = false;
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        public void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        public void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             if (!this.IsGameLoaded)
                 return;

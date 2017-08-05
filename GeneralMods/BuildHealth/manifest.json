@@ -7,6 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
+  "MinimumApiVersion": "1.15",
   "Description": "Increase your health as you play.",
   "UniqueID": "Omegasis.BuildHealth",
   "EntryDll": "BuildHealth.dll"

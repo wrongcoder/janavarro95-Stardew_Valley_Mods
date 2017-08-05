@@ -33,4 +33,5 @@ This won't mute the music for in-game events or festivals.
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Updated for SMAPI 2.0.
 * Internal refactoring.

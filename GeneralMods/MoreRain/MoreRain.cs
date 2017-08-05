@@ -52,7 +52,7 @@ namespace Omegasis.MoreRain
         public override void Entry(IModHelper helper)
         {
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             this.LoadConfig();
         }
 
@@ -69,10 +69,10 @@ namespace Omegasis.MoreRain
             this.HandleNewDay();
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked before the game is saved.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             if (this.IsGameLoaded)
                 this.HandleNewDay();
@@ -203,7 +203,7 @@ namespace Omegasis.MoreRain
         }
 
         /// <summary>Save the configuration settings.</summary>
-        void SaveConfig()
+        private void SaveConfig()
         {
             string path = Path.Combine(Helper.DirectoryPath, "More_Rain_Config.txt");
             string[] text = new string[20];

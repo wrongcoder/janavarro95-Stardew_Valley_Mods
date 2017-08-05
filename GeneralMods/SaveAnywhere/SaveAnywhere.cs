@@ -41,7 +41,7 @@ namespace Omegasis.SaveAnywhere
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
         }
 
 
@@ -79,10 +79,10 @@ namespace Omegasis.SaveAnywhere
             }
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             // reload NPC schedules
             this.ShouldResetSchedules = true;

@@ -7,6 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
+  "MinimumApiVersion": "1.15",
   "Description": "Adding more music to the game one beep at a time.",
   "UniqueID": "Omegasis.StardewSymphony",
   "EntryDll": "StardewSymphony.dll"

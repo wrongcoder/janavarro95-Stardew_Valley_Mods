@@ -35,4 +35,5 @@ Edit `BuildEnduranceConfig.json` to configure the mod settings.
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Updated for SMAPI 2.0.
 * Internal refactoring.
