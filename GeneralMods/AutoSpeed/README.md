@@ -9,8 +9,8 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 3. Run the game using SMAPI.
 
 ## Usage
-Launch the game with the mod installed to generate the config file, then edit the
-`AutoSpeed_data.txt` to set the speed you want (higher values are faster).
+Launch the game with the mod installed to generate the config file, then edit the `config.json` to
+set the speed you want (higher values are faster).
 
 ## Versions
 1.0
@@ -23,4 +23,5 @@ Launch the game with the mod installed to generate the config file, then edit th
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Switched to standard JSON config file.
 * Internal refactoring.

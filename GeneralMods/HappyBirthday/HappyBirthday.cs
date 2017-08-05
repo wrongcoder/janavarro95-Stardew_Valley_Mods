@@ -18,11 +18,20 @@ namespace Omegasis.HappyBirthday
         /*********
         ** Properties
         *********/
-        /// <summary>The key which shows the menu.</summary>
-        private string KeyBinding = "O";
+        /// <summary>The relative path for the current player's data file.</summary>
+        private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
+
+        /// <summary>The absolute path for the current player's legacy data file.</summary>
+        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "Player_Birthdays", $"HappyBirthday_{Game1.player.name}.txt");
+
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
+        /// <summary>The data for the current player.</summary>
+        private PlayerData PlayerData;
 
         /// <summary>Whether the player has chosen a birthday.</summary>
-        private bool HasChosenBirthday;
+        private bool HasChosenBirthday => !string.IsNullOrEmpty(this.PlayerData.BirthdaySeason) && this.PlayerData.BirthdayDay != 0;
 
         /// <summary>The queue of villagers who haven't given a gift yet.</summary>
         private List<string> VillagerQueue;
@@ -38,18 +47,6 @@ namespace Omegasis.HappyBirthday
         //private Dictionary<string, Dialogue> Dialogue;
         //private bool SeenEvent;
 
-        /// <summary>The name of the folder containing birthday data files.</summary>
-        private readonly string FolderName = "Player_Birthdays";
-
-        /// <summary>The full path to the folder containing birthday data files.</summary>
-        private string BirthdayFolderPath;
-
-        /// <summary>The player's current birthday day.</summary>
-        public int BirthdayDay;
-
-        /// <summary>The player's current birthday season.</summary>
-        public string BirthdaySeason;
-
 
         /*********
         ** Public methods
@@ -58,17 +55,16 @@ namespace Omegasis.HappyBirthday
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            this.Config = helper.ReadConfig<ModConfig>();
+
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
 
             this.VillagerQueue = new List<string>();
             this.PossibleBirthdayGifts = new List<Item>();
-            this.BirthdayFolderPath = Path.Combine(Helper.DirectoryPath, this.FolderName);
-
-            if (!Directory.Exists(this.BirthdayFolderPath))
-                Directory.CreateDirectory(this.BirthdayFolderPath);
         }
 
 
@@ -80,9 +76,6 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            if (this.HasChosenBirthday)
-                this.WriteBirthday();
-            this.WriteConfig();
             this.CheckedForBirthday = false;
         }
 
@@ -92,8 +85,8 @@ namespace Omegasis.HappyBirthday
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
             // show birthday selection menu
-            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.KeyPressed.ToString() == this.KeyBinding)
-                Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.SetBirthday);
+            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.KeyPressed.ToString() == this.Config.KeyBinding)
+                Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
         }
 
         /// <summary>The method invoked after the player loads a save.</summary>
@@ -101,10 +94,19 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            this.LoadBirthday();
-            this.LoadConfig();
+            this.MigrateLegacyData();
+            this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
             //this.SeenEvent = false;
             //this.Dialogue = new Dictionary<string, Dialogue>();
+        }
+
+        /// <summary>The method invoked just before the game updates the saves.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            if (this.HasChosenBirthday)
+                this.Helper.WriteJsonFile(this.DataFilePath, this.PlayerData);
         }
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
@@ -159,9 +161,9 @@ namespace Omegasis.HappyBirthday
                 }
 
                 // ask for birthday date
-                if (string.IsNullOrEmpty(this.BirthdaySeason) || this.BirthdayDay == 0)
+                if (!this.HasChosenBirthday)
                 {
-                    Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.SetBirthday);
+                    Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
                     this.CheckedForBirthday = false;
                 }
             }
@@ -223,14 +225,6 @@ namespace Omegasis.HappyBirthday
                 Game1.player.addItemByMenuIfNecessaryElseHoldUp(this.BirthdayGiftToReceive);
                 this.BirthdayGiftToReceive = null;
             }
-
-            // update settings
-            if (!this.HasChosenBirthday && !string.IsNullOrEmpty(this.BirthdaySeason) && this.BirthdayDay != 0)
-            {
-                this.WriteConfig();
-                this.WriteBirthday();
-                this.HasChosenBirthday = true;
-            }
         }
 
         /// <summary>Set the player's birtday/</summary>
@@ -238,8 +232,8 @@ namespace Omegasis.HappyBirthday
         /// <param name="day">The birthday day.</param>
         private void SetBirthday(string season, int day)
         {
-            this.BirthdaySeason = season;
-            this.BirthdayDay = day;
+            this.PlayerData.BirthdaySeason = season;
+            this.PlayerData.BirthdayDay = day;
         }
 
         /// <summary>Reset the queue of villager names.</summary>
@@ -495,63 +489,36 @@ namespace Omegasis.HappyBirthday
         private bool IsBirthday()
         {
             return
-                this.BirthdayDay == Game1.dayOfMonth
-                && this.BirthdaySeason == Game1.currentSeason;
+                this.PlayerData.BirthdayDay == Game1.dayOfMonth
+                && this.PlayerData.BirthdaySeason == Game1.currentSeason;
         }
 
-        /// <summary>Load the configuration settings.</summary>
-        private void LoadConfig()
+        /// <summary>Migrate the legacy settings for the current player.</summary>
+        private void MigrateLegacyData()
         {
-            string path = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config.txt");
-            if (!File.Exists(path))
-                this.KeyBinding = "O";
-            else
+            // skip if no legacy data or new data already exists
+            if (!File.Exists(this.LegacyDataFilePath) || File.Exists(this.DataFilePath))
+                return;
+
+            // migrate to new file
+            try
             {
-                string[] text = File.ReadAllLines(path);
-                this.KeyBinding = Convert.ToString(text[3]);
+                string[] text = File.ReadAllLines(this.LegacyDataFilePath);
+                this.Helper.WriteJsonFile(this.DataFilePath, new PlayerData
+                {
+                    BirthdaySeason = text[3],
+                    BirthdayDay = Convert.ToInt32(text[5])
+                });
+
+                FileInfo file = new FileInfo(this.LegacyDataFilePath);
+                file.Delete();
+                if (!file.Directory.EnumerateFiles().Any())
+                    file.Directory.Delete();
             }
-        }
-
-        /// <summary>Save the configuration settings.</summary>
-        private void WriteConfig()
-        {
-            string path = Path.Combine(Helper.DirectoryPath, "HappyBirthday_Config.txt");
-            string[] text = new string[20];
-            text[0] = "Config: HappyBirthday Info. Feel free to mess with these settings.";
-            text[1] = "====================================================================================";
-
-            text[2] = "Key binding for opening the birthday menu. Press this key to do so.";
-            text[3] = this.KeyBinding;
-
-            File.WriteAllLines(path, text);
-        }
-
-        /// <summary>Load the player's birthday from the config file.</summary>
-        private void LoadBirthday()
-        {
-            string path = Path.Combine(this.BirthdayFolderPath, $"HappyBirthday_{Game1.player.name}.txt");
-            if (File.Exists(path))
+            catch (Exception ex)
             {
-                string[] text = File.ReadAllLines(path);
-                this.BirthdaySeason = Convert.ToString(text[3]);
-                this.BirthdayDay = Convert.ToInt32(text[5]);
+                this.Monitor.Log($"Error migrating data from the legacy 'Player_Birthdays' folder for the current player. Technical details:\n {ex}", LogLevel.Error);
             }
-        }
-
-        /// <summary>Write the player's birthday to the config file.</summary>
-        private void WriteBirthday()
-        {
-            string path = Path.Combine(this.BirthdayFolderPath, $"HappyBirthday_{Game1.player.name}.txt");
-            string[] text = new string[20];
-            text[0] = "Player Info: Modifying these values could be considered cheating or an exploit. Edit at your own risk.";
-            text[1] = "====================================================================================";
-
-            text[2] = "Player's Birthday Season";
-            text[3] = this.BirthdaySeason;
-            text[4] = "Player's Birthday Date";
-            text[5] = this.BirthdayDay.ToString();
-
-            File.WriteAllLines(path, text);
         }
     }
 }

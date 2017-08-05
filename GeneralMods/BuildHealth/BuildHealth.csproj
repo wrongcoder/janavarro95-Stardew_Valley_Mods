@@ -39,6 +39,7 @@
     </Compile>
     <Compile Include="BuildHealth.cs" />
     <Compile Include="Framework\ModConfig.cs" />
+    <Compile Include="Framework\PlayerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

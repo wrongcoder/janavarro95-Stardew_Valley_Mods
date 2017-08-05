@@ -8,8 +8,8 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/445).
 3. Run the game using SMAPI.
 
-**NOTE:** to undo the mod's changes to your player, edit the `PlayerData\BuildEndurance_data_*.txt`
-file and change the "RESET ALL MOD EFFECTS?" field to `True`.
+**NOTE:** to undo the mod's changes to your player, edit the `data\*.json` file for your save and
+change the "ClearModEffects" field to `true`.
 
 ## Usage
 You'll automatically get XP for...
@@ -23,7 +23,7 @@ You'll automatically get XP for...
 
 Get enough XP, and your health will level up.
 
-Edit `BuildHealthConfig.json` to configure the mod settings.
+Edit `config.json` to configure the mod settings.
 
 ## Versions
 1.0
@@ -37,4 +37,6 @@ Edit `BuildHealthConfig.json` to configure the mod settings.
 
 1.4:
 * Updated for SMAPI 2.0.
+* Switched to standard JSON config & data files.
+* Fixed issue where saves with the same name would overwrite each other's endurance level data.
 * Internal refactoring.

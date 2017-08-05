@@ -14,7 +14,7 @@ Simply stay up past 2am, and you won't collapse. The lighting will gradually bri
 rises. At 6am you'll temporarily collapse so the game can save, but you won't lose anything and
 you'll stay where you are.
 
-Edit the `Night_Owl_Config_.txt` to change the mod settings.
+Edit the `config.json` to change the mod settings.
 
 ## Versions
 1.0:
@@ -25,4 +25,5 @@ Edit the `Night_Owl_Config_.txt` to change the mod settings.
 
 1.4:
 * Updated for SMAPI 2.0.
+* Switched to standard JSON config file.
 * Internal refactoring.

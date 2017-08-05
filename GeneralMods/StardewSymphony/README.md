@@ -34,4 +34,5 @@ This won't mute the music for in-game events or festivals.
 
 1.4:
 * Updated for SMAPI 2.0.
+* Switched to standard JSON config file.
 * Internal refactoring.

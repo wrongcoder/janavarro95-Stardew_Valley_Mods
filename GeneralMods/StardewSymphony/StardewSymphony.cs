@@ -25,6 +25,9 @@ namespace Omegasis.StardewSymphony
         /*********
         ** Properties
         *********/
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
         /// <summary>All of the music/soundbanks and their locations.</summary>
         private IList<MusicManager> MasterList = new List<MusicManager>();
 
@@ -60,21 +63,6 @@ namespace Omegasis.StardewSymphony
         /// <summary>A timer used to create random pauses between songs.</summary>
         private Timer SongDelayTimer = new Timer();
 
-        /****
-        ** Config
-        ****/
-        /// <summary>The minimum delay (in milliseconds) to pass before playing the next song, or 0 for no delay.</summary>
-        private int MinSongDelay;
-
-        /// <summary>The maximum delay (in milliseconds) to pass before playing the next song, or 0 for no delay.</summary>
-        private int MaxSongDelay;
-
-        /// <summary>Whether to disable ambient rain audio when music is playing. If false, plays ambient rain audio alongside whatever songs are set in rain music.</summary>
-        private bool SilentRain;
-
-        /// <summary>Whether to play seasonal music from the music packs, instead of defaulting to the Stardew Valley Soundtrack.</summary>
-        private bool PlaySeasonalMusic;
-
 
         /*********
         ** Public methods
@@ -83,6 +71,7 @@ namespace Omegasis.StardewSymphony
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            this.Config = helper.ReadConfig<ModConfig>();
             this.HexProcessor = new MusicHexProcessor(this.MasterList, this.Reset);
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
@@ -122,7 +111,7 @@ namespace Omegasis.StardewSymphony
                 return; // replace with festival
             if (Game1.eventUp)
                 return; // replace with event music
-            if (Game1.isRaining && !this.SilentRain)
+            if (Game1.isRaining && !this.Config.SilentRain)
                 return; // play the rain ambience soundtrack
 
             Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
@@ -135,9 +124,6 @@ namespace Omegasis.StardewSymphony
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             this.StopSound(); //if my music player is called and I forget to clean up sound before hand, kill the old sound.
-            this.LoadConfig();
-            this.WriteConfig();
-
             this.SelectMusic();
         }
 
@@ -146,10 +132,6 @@ namespace Omegasis.StardewSymphony
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            // init config
-            this.LoadConfig();
-            this.WriteConfig();
-
             // init context
             this.Random = new Random();
             this.MasterList = new List<MusicManager>();
@@ -192,7 +174,7 @@ namespace Omegasis.StardewSymphony
         {
             // reset timer
             this.SongDelayTimer.Dispose();
-            this.SongDelayTimer = new Timer(this.Random.Next(this.MinSongDelay, this.MaxSongDelay));
+            this.SongDelayTimer = new Timer(this.Random.Next(this.Config.MinSongDelay, this.Config.MaxSongDelay));
 
             // start timer
             this.SongDelayTimer.Elapsed += (sender, args) =>
@@ -364,7 +346,7 @@ namespace Omegasis.StardewSymphony
 
             if (this.HasNoMusic) //if there is valid music playing
             {
-                if (!this.PlaySeasonalMusic)
+                if (!this.Config.PlaySeasonalMusic)
                     return;
 
                 if (this.CurrentSong != null && this.CurrentSong.IsPlaying)
@@ -1184,50 +1166,6 @@ namespace Omegasis.StardewSymphony
         {
             Game1.waveBank = this.DefaultWavebank;
             Game1.soundBank = this.DefaultSoundbank;
-        }
-
-        /// <summary>Save the configuration settings.</summary>
-        private void WriteConfig()
-        {
-            string path = Path.Combine(Helper.DirectoryPath, "Music_Expansion_Config.txt");
-            string[] text = new string[20];
-            text[0] = "Player: Stardew Valley Music Expansion Config. Feel free to edit.";
-            text[1] = "====================================================================================";
-
-            text[2] = "Minimum delay time: This is the minimal amout of time(in miliseconds!!!) that will pass before another song will play. 0 means a song will play immediately, 1000 means a second will pass, etc. Used in RNG to determine a random delay between songs.";
-            text[3] = this.MinSongDelay.ToString();
-
-            text[4] = "Maximum delay time: This is the maximum amout of time(in miliseconds!!!) that will pass before another song will play. 0 means a song will play immediately, 1000 means a second will pass, etc. Used in RNG to determine a random delay between songs.";
-            text[5] = this.MaxSongDelay.ToString();
-
-            text[6] = "Silent rain? Setting this value to false plays the default ambient rain music along side whatever songs are set in rain music. Setting this to true will disable the ambient rain music. It's up to the soundpack creators wither or not they want to mix their music with rain prior to loading it in here.";
-            text[7] = this.SilentRain.ToString();
-
-            text[8] = "Seasonal_Music? Setting this value to true will play the seasonal music from the music packs instead of defaulting to the Stardew Valley Soundtrack.";
-            text[9] = this.PlaySeasonalMusic.ToString();
-
-            File.WriteAllLines(path, text);
-        }
-
-        /// <summary>Load the configuration settings.</summary>
-        void LoadConfig()
-        {
-            string path = Path.Combine(Helper.DirectoryPath, "Music_Expansion_Config.txt");
-            if (!File.Exists(path))
-            {
-                this.MinSongDelay = 10000;
-                this.MaxSongDelay = 30000;
-                this.SilentRain = false;
-                this.PlaySeasonalMusic = true;
-            }
-            else
-            {
-                string[] text = File.ReadAllLines(path);
-                this.MinSongDelay = Convert.ToInt32(text[3]);
-                this.MaxSongDelay = Convert.ToInt32(text[5]);
-                this.SilentRain = Convert.ToBoolean(text[7]);
-                this.PlaySeasonalMusic = Convert.ToBoolean(text[9]);
-            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Omegasis.MuseumRearranger.Framework;
+﻿using Omegasis.MuseumRearranger.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -14,11 +12,8 @@ namespace Omegasis.MuseumRearranger
         /*********
         ** Properties
         *********/
-        /// <summary>The key which shows the museum rearranging menu.</summary>
-        private string ShowMenuKey = "R";
-
-        /// <summary>The key which toggles the inventory box when the menu is open.</summary>
-        private string ToggleInventoryKey = "T";
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
 
         /// <summary>The open museum menu (if any).</summary>
         private NewMuseumMenu OpenMenu;
@@ -31,7 +26,8 @@ namespace Omegasis.MuseumRearranger
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            this.Config = helper.ReadConfig<ModConfig>();
+
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
@@ -48,7 +44,7 @@ namespace Omegasis.MuseumRearranger
                 return;
 
             // open menu
-            if (e.KeyPressed.ToString() == this.ShowMenuKey)
+            if (e.KeyPressed.ToString() == this.Config.ShowMenuKey)
             {
                 if (Game1.activeClickableMenu != null)
                     return;
@@ -59,48 +55,8 @@ namespace Omegasis.MuseumRearranger
             }
 
             // toggle inventory box
-            if (e.KeyPressed.ToString() == this.ToggleInventoryKey)
+            if (e.KeyPressed.ToString() == this.Config.ToggleInventoryKey)
                 this.OpenMenu?.ToggleInventory();
-        }
-
-        /// <summary>The method invoked after the player loads a save.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            this.LoadConfig();
-            this.WriteConfig();
-        }
-
-        /// <summary>Load the configuration settings.</summary>
-        private void LoadConfig()
-        {
-            string path = Path.Combine(Helper.DirectoryPath, "Museum_Rearrange_Config.txt");
-            if (!File.Exists(path))
-            {
-                this.ShowMenuKey = "R";
-                this.ToggleInventoryKey = "T";
-            }
-            else
-            {
-                string[] text = File.ReadAllLines(path);
-                this.ShowMenuKey = Convert.ToString(text[3]);
-                this.ToggleInventoryKey = Convert.ToString(text[5]);
-            }
-        }
-
-        /// <summary>Save the configuration settings.</summary>
-        private void WriteConfig()
-        {
-            string path = Path.Combine(Helper.DirectoryPath, "Museum_Rearrange_Config.txt");
-            string[] text = new string[20];
-            text[0] = "Config: Museum_Rearranger. Feel free to mess with these settings.";
-            text[1] = "====================================================================================";
-            text[2] = "Key binding for rearranging the museum.";
-            text[3] = this.ShowMenuKey;
-            text[4] = "Key binding for showing the menu when rearranging the museum.";
-            text[5] = this.ToggleInventoryKey;
-            File.WriteAllLines(path, text);
         }
     }
 }

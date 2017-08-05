@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Omegasis.CustomShopsRedux.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -31,17 +32,17 @@ namespace Omegasis.CustomShopsRedux
         /*********
         ** Properties
         *********/
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
         /// <summary>The prices for the items to list.</summary>
         private readonly Dictionary<Item, int[]> ListPrices = new Dictionary<Item, int[]>();
-
-        /// <summary>The folder path containing shop data files.</summary>
-        private string DataPath;
 
         /// <summary>The configured shop options.</summary>
         private readonly List<string> Options = new List<string>();
 
-        /// <summary>The key which shows the menu.</summary>
-        private string KeyBinding = "U";
+        /// <summary>The folder path containing shop data files.</summary>
+        private string DataPath => Path.Combine(this.Helper.DirectoryPath, "Custom_Shops");
 
 
         /*********
@@ -51,7 +52,8 @@ namespace Omegasis.CustomShopsRedux
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            SaveEvents.AfterLoad += this.SaveEvents_AfterDayStarted;
+            this.Config = helper.ReadConfig<ModConfig>();
+
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
@@ -59,58 +61,20 @@ namespace Omegasis.CustomShopsRedux
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked after a new day starts.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterDayStarted(object sender, EventArgs e)
-        {
-            this.LoadConfig();
-            this.WriteConfig();
-        }
-
         /// <summary>The method invoked when the presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Context.IsPlayerFree && e.KeyPressed.ToString() == this.KeyBinding)
+            if (Context.IsPlayerFree && e.KeyPressed.ToString() == this.Config.KeyBinding)
                 this.OpenSelectFileMenu();
-        }
-
-        /// <summary>Load the configuration settings.</summary>
-        private void LoadConfig()
-        {
-            this.DataPath = Path.Combine(this.Helper.DirectoryPath, "Custom_Shops");
-            Directory.CreateDirectory(this.DataPath);
-
-            string path = Path.Combine(this.Helper.DirectoryPath, "Custom_Shop_Redux_Config.txt");
-            if (!File.Exists(path))
-                this.KeyBinding = "U";
-            else
-            {
-                string[] text = File.ReadAllLines(path);
-                this.KeyBinding = Convert.ToString(text[3]);
-            }
-        }
-
-        /// <summary>Save the configuration settings.</summary>
-        private void WriteConfig()
-        {
-            string path = Path.Combine(this.Helper.DirectoryPath, "Custom_Shop_Redux_Config.txt");
-            string[] text = new string[20];
-            text[0] = "Config: Custom_Shop_Redux. Feel free to mess with these settings.";
-            text[1] = "====================================================================================";
-
-            text[2] = "Key binding for saving anywhere. Press this key to save anywhere!";
-            text[3] = this.KeyBinding;
-
-            File.WriteAllLines(path, text);
         }
 
         /// <summary>Open the menu which lets the player choose a file.</summary>
         private void OpenSelectFileMenu()
         {
             // get mod folder
+            Directory.CreateDirectory(this.DataPath);
             DirectoryInfo modFolder = new DirectoryInfo(this.DataPath);
             this.Monitor.Log(modFolder.FullName);
 

@@ -9,8 +9,8 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 3. Run the game using SMAPI.
 
 ## Usage
-Edit `More_Rain_Config.txt` to change the chance of rain, storms, or snow. Each value is a
-percentage (0 to 100).
+Edit `config.json` to change the chance of rain, storms, or snow. Each value is a percentage (0
+to 100).
 
 It won't rain on days where a wedding or a festival would take place.
 
@@ -29,4 +29,5 @@ It won't rain on days where a wedding or a festival would take place.
 
 1.4:
 * Updated for SMAPI 2.0.
+* Switched to standard JSON config file.
 * Internal refactoring.
