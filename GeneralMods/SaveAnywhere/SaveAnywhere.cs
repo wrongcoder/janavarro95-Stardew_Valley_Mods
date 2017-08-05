@@ -101,7 +101,7 @@ namespace Omegasis.SaveAnywhere
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.activeClickableMenu != null)
+            if (!Context.IsPlayerFree)
                 return;
 
             if (e.KeyPressed.ToString() == this.ConfigUtilities.KeyBinding)

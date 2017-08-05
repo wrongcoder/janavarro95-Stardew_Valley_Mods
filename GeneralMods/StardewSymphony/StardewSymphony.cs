@@ -48,9 +48,6 @@ namespace Omegasis.StardewSymphony
         /****
         ** Context
         ****/
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
         /// <summary>Whether no music pack was loaded for the current location.</summary>
         private bool HasNoMusic;
 
@@ -103,7 +100,7 @@ namespace Omegasis.StardewSymphony
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!this.IsGameLoaded || !this.MasterList.Any())
+            if (!Context.IsWorldReady || !this.MasterList.Any())
                 return; //basically if absolutly no music is loaded into the game for locations/festivals/seasons, don't override the game's default music player.
 
             if (this.CurrentSong == null)
@@ -137,8 +134,6 @@ namespace Omegasis.StardewSymphony
         /// <param name="e">The event data.</param>
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            if (!this.IsGameLoaded)
-                return;
             this.StopSound(); //if my music player is called and I forget to clean up sound before hand, kill the old sound.
             this.LoadConfig();
             this.WriteConfig();
@@ -178,7 +173,6 @@ namespace Omegasis.StardewSymphony
 
             // init sound
             this.HexProcessor.ProcessHex();
-            this.IsGameLoaded = true;
             this.SelectMusic();
         }
 
@@ -187,7 +181,7 @@ namespace Omegasis.StardewSymphony
         /// <param name="e">The event data.</param>
         private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             this.SelectMusic();
@@ -304,7 +298,7 @@ namespace Omegasis.StardewSymphony
         /// <summary>Select music for the current location.</summary>
         private void SelectMusic()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             //  no_music = false;
@@ -399,7 +393,7 @@ namespace Omegasis.StardewSymphony
 
         public void farm_music_selector()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             //  no_music = false;
@@ -480,7 +474,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayDefaultSong()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -593,7 +587,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayRainSong()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -703,7 +697,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayNightSong()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -807,7 +801,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayRainyNightMusic()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -923,7 +917,7 @@ namespace Omegasis.StardewSymphony
         private void StartDefaultSong(Season season)
         {
             // check exit conditions
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -1045,7 +1039,7 @@ namespace Omegasis.StardewSymphony
         private void StartRainySong(Season season)
         {
             // check exit conditions
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;

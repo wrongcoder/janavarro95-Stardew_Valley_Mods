@@ -37,9 +37,6 @@ namespace Omegasis.MoreRain
         /// <summary>The chance out of 100 that it will snow tomorrow if it's winter.</summary>
         private int WinterSnowChance;
 
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
         /// <summary>Whether to suppress verbose logging.</summary>
         private bool SuppressLog;
 
@@ -65,7 +62,6 @@ namespace Omegasis.MoreRain
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            this.IsGameLoaded = true;
             this.HandleNewDay();
         }
 
@@ -74,8 +70,7 @@ namespace Omegasis.MoreRain
         /// <param name="e">The event data.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            if (this.IsGameLoaded)
-                this.HandleNewDay();
+            this.HandleNewDay();
         }
 
         /// <summary>Update all data for a new day.</summary>

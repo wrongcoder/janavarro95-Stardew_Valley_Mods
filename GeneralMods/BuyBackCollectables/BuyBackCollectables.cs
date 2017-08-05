@@ -19,9 +19,6 @@ namespace Omegasis.BuyBackCollectables
         /// <summary>The multiplier applied to the cost of buying back a collectable.</summary>
         private double CostMultiplier = 3.0;
 
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
 
         /*********
         ** Public methods
@@ -43,7 +40,6 @@ namespace Omegasis.BuyBackCollectables
         /// <param name="e">The event data.</param>
         public void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            this.IsGameLoaded = true;
             this.LoadConfig();
             this.WriteConfig();
         }
@@ -53,10 +49,7 @@ namespace Omegasis.BuyBackCollectables
         /// <param name="e">The event data.</param>
         public void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.player == null || Game1.player.currentLocation == null || !this.IsGameLoaded || Game1.activeClickableMenu != null)
-                return;
-
-            if (e.KeyPressed.ToString() == this.KeyBinding)
+            if (Context.IsPlayerFree && e.KeyPressed.ToString() == this.KeyBinding)
                 Game1.activeClickableMenu = new BuyBackMenu(this.CostMultiplier);
         }
 

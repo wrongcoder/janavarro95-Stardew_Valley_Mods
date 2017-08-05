@@ -9,13 +9,6 @@ namespace Omegasis.NoMorePets
     public class NoMorePets : Mod
     {
         /*********
-        ** Properties
-        *********/
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
@@ -23,27 +16,18 @@ namespace Omegasis.NoMorePets
         public override void Entry(IModHelper helper)
         {
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked after the player loads a save.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        public void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            this.IsGameLoaded = true;
-        }
-
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         public void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!this.IsGameLoaded || Game1.player == null)
+            if (!Context.IsWorldReady)
                 return;
 
             string petName = Game1.player.getPetName();

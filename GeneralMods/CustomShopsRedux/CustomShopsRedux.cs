@@ -43,9 +43,6 @@ namespace Omegasis.CustomShopsRedux
         /// <summary>The key which shows the menu.</summary>
         private string KeyBinding = "U";
 
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
 
         /*********
         ** Public methods
@@ -67,7 +64,6 @@ namespace Omegasis.CustomShopsRedux
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            this.IsGameLoaded = true;
             this.LoadConfig();
             this.WriteConfig();
         }
@@ -77,13 +73,8 @@ namespace Omegasis.CustomShopsRedux
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (!this.IsGameLoaded)
-                return;
-
-            if (e.KeyPressed.ToString() == this.KeyBinding) //if the key is pressed, load my cusom save function
-            {
+            if (Context.IsPlayerFree && e.KeyPressed.ToString() == this.KeyBinding)
                 this.OpenSelectFileMenu();
-            }
         }
 
         /// <summary>Load the configuration settings.</summary>

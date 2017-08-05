@@ -27,9 +27,6 @@ namespace Omegasis.NightOwl
         /****
         ** Context
         ****/
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
         /// <summary>Whether the player stayed up all night.</summary>
         private bool IsUpLate;
 
@@ -110,7 +107,7 @@ namespace Omegasis.NightOwl
             try
             {
                 // reset position after collapse
-                if (!Game1.eventUp && this.IsGameLoaded && this.JustStartedNewDay && this.KeepPositionAfterCollapse)
+                if (Context.IsWorldReady && this.JustStartedNewDay && this.KeepPositionAfterCollapse)
                 {
                     if (this.PreCollapseMap != null)
                         Game1.warpFarmer(this.PreCollapseMap, this.PreCollapseTile.X, this.PreCollapseTile.Y, false);
@@ -134,7 +131,6 @@ namespace Omegasis.NightOwl
         {
             this.LoadConfig();
             this.WriteConfig();
-            this.IsGameLoaded = true;
             this.IsUpLate = false;
             this.JustStartedNewDay = false;
             this.JustCollapsed = false;
@@ -145,9 +141,6 @@ namespace Omegasis.NightOwl
         /// <param name="e">The event data.</param>
         public void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            if (!this.IsGameLoaded)
-                return;
-
             try
             {
                 // reset data
@@ -197,7 +190,7 @@ namespace Omegasis.NightOwl
         /// <param name="e">The event data.</param>
         private void TimeEvents_TimeOfDayChanged(object sender, EventArgsIntChanged e)
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             try

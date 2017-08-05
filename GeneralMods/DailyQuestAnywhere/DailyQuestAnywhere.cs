@@ -16,9 +16,6 @@ namespace Omegasis.DailyQuestAnywhere
         /// <summary>The key which shows the menu.</summary>
         private string KeyBinding = "H";
 
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
 
         /*********
         ** Public methods
@@ -40,7 +37,6 @@ namespace Omegasis.DailyQuestAnywhere
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            this.IsGameLoaded = true;
             this.LoadConfig();
             this.WriteConfig();
         }
@@ -50,10 +46,7 @@ namespace Omegasis.DailyQuestAnywhere
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.player == null || Game1.player.currentLocation == null || this.IsGameLoaded == false || Game1.activeClickableMenu != null)
-                return;
-
-            if (e.KeyPressed.ToString() == this.KeyBinding)
+            if (Context.IsPlayerFree && e.KeyPressed.ToString() == this.KeyBinding)
                 Game1.activeClickableMenu = new Billboard(true);
         }
 

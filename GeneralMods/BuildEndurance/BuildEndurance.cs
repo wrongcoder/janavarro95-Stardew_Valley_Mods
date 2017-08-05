@@ -51,9 +51,6 @@ namespace Omegasis.BuildEndurance
         /// <summary>Whether the player was eating last time we checked.</summary>
         private bool WasEating;
 
-        /// <summary>Whether the player has loaded a save.</summary>
-        private bool IsLoaded;
-
         /// <summary>The player's stamina last time they slept.</summary>
         private int NightlyStamina;
 
@@ -157,7 +154,6 @@ namespace Omegasis.BuildEndurance
             // initialise
             this.LoadConfig();
             this.WriteConfig();
-            this.IsLoaded = true;
 
             // grab initial stamina
             var player = Game1.player;
@@ -186,8 +182,6 @@ namespace Omegasis.BuildEndurance
             // reset data
             this.WasExhausted = false;
             this.WasCollapsed = false;
-            if (!this.IsLoaded)
-                return;
 
             // update settings
             this.Monitor.Log(this.CurrentExp.ToString());

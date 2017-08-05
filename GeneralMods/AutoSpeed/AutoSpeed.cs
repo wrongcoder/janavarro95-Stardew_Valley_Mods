@@ -42,7 +42,8 @@ namespace Omegasis.AutoSpeed
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            Game1.player.addedSpeed = Speed;
+            if (Context.IsPlayerFree)
+                Game1.player.addedSpeed = this.Speed;
         }
 
         /// <summary>Load the configuration settings.</summary>

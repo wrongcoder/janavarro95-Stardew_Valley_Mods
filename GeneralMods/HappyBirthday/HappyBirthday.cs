@@ -21,9 +21,6 @@ namespace Omegasis.HappyBirthday
         /// <summary>The key which shows the menu.</summary>
         private string KeyBinding = "O";
 
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
         /// <summary>Whether the player has chosen a birthday.</summary>
         private bool HasChosenBirthday;
 
@@ -83,9 +80,6 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            if (Game1.player == null)
-                return;
-
             if (this.HasChosenBirthday)
                 this.WriteBirthday();
             this.WriteConfig();
@@ -97,11 +91,8 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.player == null || Game1.player.currentLocation == null || !this.IsGameLoaded || this.HasChosenBirthday || Game1.activeClickableMenu != null)
-                return;
-
             // show birthday selection menu
-            if (e.KeyPressed.ToString() == this.KeyBinding)
+            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.KeyPressed.ToString() == this.KeyBinding)
                 Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.SetBirthday);
         }
 
@@ -110,7 +101,6 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            this.IsGameLoaded = true;
             this.LoadBirthday();
             this.LoadConfig();
             //this.SeenEvent = false;
@@ -122,7 +112,7 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.eventUp || Game1.isFestival() || Game1.player == null || !this.IsGameLoaded)
+            if (!Context.IsWorldReady || Game1.eventUp || Game1.isFestival())
                 return;
 
             if (!this.CheckedForBirthday)
@@ -169,7 +159,7 @@ namespace Omegasis.HappyBirthday
                 }
 
                 // ask for birthday date
-                if ((string.IsNullOrEmpty(this.BirthdaySeason) || this.BirthdayDay == 0) && Game1.activeClickableMenu == null)
+                if (string.IsNullOrEmpty(this.BirthdaySeason) || this.BirthdayDay == 0)
                 {
                     Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.SetBirthday);
                     this.CheckedForBirthday = false;
