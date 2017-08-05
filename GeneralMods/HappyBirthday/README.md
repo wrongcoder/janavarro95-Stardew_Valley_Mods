@@ -48,3 +48,9 @@ change based on your friendship with them. Check your mailbox for letters from y
 * Fixed the birthday menu not letting you exit without choosing a date.
 * Fixed NPCs sometimes giving you broken items and useless rocks.
 * Fixed game crashing when in an event. It gives priority to the event over your birthday in worst case scenario.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

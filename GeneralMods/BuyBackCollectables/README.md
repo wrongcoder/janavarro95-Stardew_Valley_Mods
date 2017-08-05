@@ -26,3 +26,9 @@ price markup.
 * Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
 * Fixed mouse not appearing in menu.
 * Fixed bug where you sometimes couldn't buy an item even if you had enough money.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

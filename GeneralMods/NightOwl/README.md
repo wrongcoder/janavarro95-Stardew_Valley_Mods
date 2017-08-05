@@ -19,3 +19,9 @@ Edit the `Night_Owl_Config_.txt` to change the mod settings.
 ## Versions
 1.0:
 * Initial release.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

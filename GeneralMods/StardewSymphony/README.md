@@ -17,3 +17,20 @@ This won't mute the music for in-game events or festivals.
 ## Versions
 1.0:
 * Initial release.
+
+1.0.1:
+* Fixed music pack playing alongside festival/event music.
+
+1.1:
+* Seasonal music now plays with a higher priority on the farm (configurable).
+* Fixed many bugs that would cause the wrong seasonal music to play.
+* Fixed a possible crash during the summer.
+
+1.1.1:
+* Fixed missing config file in release.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

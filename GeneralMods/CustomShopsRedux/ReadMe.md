@@ -32,9 +32,6 @@ Supported item types:
   In order to get the smelted copper bar however, you would have to destroy it, as would go for all
   machines that behave this way. Sorry. On the plus side your scarecrows can be on fire forever.)
 
-
-
-
 ## Goals
 * [x] Get as many different types of items available for selling.
 * [x] Create a nice GUI for creating custom shops so that modders don't have to deal with my icky
@@ -57,3 +54,9 @@ Supported item types:
 * Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
 * Fixed mouse not appearing in menu.
 * Fixed bug where you sometimes couldn't buy an item even if you had enough money.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

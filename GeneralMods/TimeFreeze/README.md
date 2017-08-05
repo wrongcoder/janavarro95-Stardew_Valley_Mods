@@ -15,3 +15,9 @@ but you can edit `ModConfig.txt` to change that.
 ## Versions
 1.0:
 * Initial release.
+
+1.1:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.2:
+* Internal refactoring.
