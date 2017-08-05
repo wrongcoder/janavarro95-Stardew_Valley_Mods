@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-using Newtonsoft.Json;
 using Omegasis.BuildEndurance.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -67,35 +65,7 @@ namespace Omegasis.BuildEndurance
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
-            string configPath = Path.Combine(helper.DirectoryPath, "BuildEnduranceConfig.json");
-            if (!File.Exists(configPath))
-            {
-                this.Monitor.Log("Initial configuration file setup.");
-                this.Config = new ModConfig
-                {
-                    CurrentLevel = 0,
-                    MaxLevel = 100,
-                    StaminaIncreasePerLevel = 1,
-                    CurrentExp = 0,
-                    ExpToNextLevel = 20,
-                    ExpCurve = 1.15,
-                    ExpForEating = 2,
-                    ExpForSleeping = 10,
-                    ExpForToolUse = 1,
-                    BaseStaminaBonus = 0,
-                    CurrentLevelStaminaBonus = 0,
-                    ExpForExhaustion = 25,
-                    ExpForCollapsing = 50
-                };
-                File.WriteAllBytes(configPath, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.Config)));
-            }
-            else
-            {
-                this.Config = JsonConvert.DeserializeObject<ModConfig>(Encoding.UTF8.GetString(File.ReadAllBytes(configPath)));
-                this.Monitor.Log("Found BuildEndurance config file.");
-            }
-
-            this.Monitor.Log("BuildEndurance Initialization Completed");
+            this.Config = helper.ReadConfig<ModConfig>();
         }
 
         /// <summary>The method invoked once per second during a game update.</summary>
@@ -234,7 +204,7 @@ namespace Omegasis.BuildEndurance
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path))
             {
-                this.Monitor.Log("Clear Data Loaded could not find the correct file."));
+                this.Monitor.Log("Clear Data Loaded could not find the correct file.");
 
                 this.ClearModEffects = false;
                 this.OriginalStamina = 0;

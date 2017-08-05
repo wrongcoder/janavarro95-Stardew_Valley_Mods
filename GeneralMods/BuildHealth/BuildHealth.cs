@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-using Newtonsoft.Json;
 using Omegasis.BuildHealth.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -61,36 +59,10 @@ namespace Omegasis.BuildHealth
         {
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
-
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoaded;
 
-            var configPath = Path.Combine(helper.DirectoryPath, "BuildHealthConfig.json");
-            if (!File.Exists(configPath))
-            {
-                this.Config = new ModConfig
-                {
-                    CurrentLevel = 0,
-                    MaxLevel = 100,
-                    HealthIncreasePerLevel = 1,
-                    CurrentExp = 0,
-                    ExpToNextLevel = 20,
-                    ExpCurve = 1.15,
-                    ExpForEating = 2,
-                    ExpForSleeping = 10,
-                    ExpForToolUse = 1,
-                    BaseHealthBonus = 0,
-                    CurrentLevelHealthBonus = 0
-                };
-                File.WriteAllBytes(configPath, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.Config)));
-            }
-            else
-            {
-                this.Config = JsonConvert.DeserializeObject<ModConfig>(Encoding.UTF8.GetString(File.ReadAllBytes(configPath)));
-                this.Monitor.Log("Found BuildHealth config file.");
-            }
-
-            this.Monitor.Log("BuildHealth Initialization Completed");
+            this.Config = helper.ReadConfig<ModConfig>();
         }
 
         /// <summary>The method invoked once per second during a game update.</summary>
