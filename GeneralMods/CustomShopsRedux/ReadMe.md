@@ -13,7 +13,7 @@ Make a custom shop by copying & editing one of the included custom shop template
 [Custom Shops Creation Tool](https://myscccd-my.sharepoint.com/personal/0703280_my_scccd_edu/_layouts/15/guestaccess.aspx?guestaccesstoken=ZYxG9Cs8S0q%2bxCVV3fEnc8MI4SfVfe07919rhFUhRiA%3d&docid=0e51dae1da2eb43988f77f5c54ec3ee58)
 (see [demo video](https://youtu.be/bSvNTZmgeZE)).
 
-You can access the custom shops by pressing `U` in-game (configurable via `Custom_Shop_Redux_Config.txt`).
+You can access the custom shops by pressing `U` in-game (configurable via `config.json`).
 
 Supported item types:
 
@@ -60,4 +60,5 @@ Supported item types:
 
 1.4:
 * Updated for SMAPI 2.0.
+* Switched to standard JSON config file.
 * Internal refactoring.

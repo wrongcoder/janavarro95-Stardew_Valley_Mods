@@ -54,4 +54,6 @@ change based on your friendship with them. Check your mailbox for letters from y
 
 1.4:
 * Updated for SMAPI 2.0.
+* Switched to standard JSON config & data files.
+* Fixed issue where saves with the same name would overwrite each other's birthdays.
 * Internal refactoring.

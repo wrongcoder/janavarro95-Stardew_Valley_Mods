@@ -9,8 +9,7 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 3. Run the game using SMAPI.
 
 ## Usage
-Press `B` while in-game to show the billboard menu. Edit the `Billboard_Anywhere_Config.txt` file
-to change the key.
+Press `B` while in-game to show the billboard menu. Edit the `config.json` file to change the key.
 
 ## Versions
 1.0
@@ -23,4 +22,5 @@ to change the key.
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Switched to standard JSON config file.
 * Internal refactoring.

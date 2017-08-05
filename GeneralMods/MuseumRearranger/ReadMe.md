@@ -10,7 +10,7 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
 ## Usage
 Press `R` while in the museum to open the rearranging menu. Press `T` while the menu is open to
-toggle the inventory box. Edit `Museum_Rearrange_Config.txt` to change the keys.
+toggle the inventory box. Edit `config.json` to change the keys.
 
 ## Versions
 1.0:
@@ -28,4 +28,5 @@ toggle the inventory box. Edit `Museum_Rearrange_Config.txt` to change the keys.
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Switched to standard JSON config file.
 * Internal refactoring.

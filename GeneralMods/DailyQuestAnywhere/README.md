@@ -9,7 +9,7 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 3. Run the game using SMAPI.
 
 ## Usage
-Press `H` to open the daily quest menu. Edit `DailyQuest_Anywhere_Config.txt` to change the key.
+Press `H` to open the daily quest menu. Edit `config.json` to change the key.
 
 ## Versions
 1.0:
@@ -22,4 +22,5 @@ Press `H` to open the daily quest menu. Edit `DailyQuest_Anywhere_Config.txt` to
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Switched to standard JSON config file.
 * Internal refactoring.

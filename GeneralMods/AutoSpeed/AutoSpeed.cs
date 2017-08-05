@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using Omegasis.AutoSpeed.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -12,8 +12,8 @@ namespace Omegasis.AutoSpeed
         /*********
         ** Properties
         *********/
-        /// <summary>The speed multiplier.</summary>
-        private int Speed = 5;
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
 
 
         /*********
@@ -24,13 +24,7 @@ namespace Omegasis.AutoSpeed
         public override void Entry(IModHelper helper)
         {
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-
-            string configLocation = Path.Combine(helper.DirectoryPath, "AutoSpeed_Data.txt");
-            if (!File.Exists(configLocation))
-                this.Speed = 1;
-
-            this.LoadConfig();
-            this.Monitor.Log("AutoSpeed Initialization Completed", LogLevel.Info);
+            this.Config = helper.ReadConfig<ModConfig>();
         }
 
 
@@ -43,32 +37,7 @@ namespace Omegasis.AutoSpeed
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             if (Context.IsPlayerFree)
-                Game1.player.addedSpeed = this.Speed;
-        }
-
-        /// <summary>Load the configuration settings.</summary>
-        private void LoadConfig()
-        {
-            string path = Path.Combine(this.Helper.DirectoryPath, "AutoSpeed_data.txt");
-            if (!File.Exists(path))
-                this.WriteConfig();
-            else
-            {
-                string[] text = File.ReadAllLines(path);
-                this.Speed = Convert.ToInt32(text[3]);
-            }
-        }
-
-        /// <summary>Save the configuration settings.</summary>
-        void WriteConfig()
-        {
-            string path = Path.Combine(this.Helper.DirectoryPath, "AutoSpeed_data.txt");
-            string[] text = new string[20];
-            text[0] = "Player: AutoSpeed Config:";
-            text[1] = "====================================================================================";
-            text[2] = "Player Added Speed:";
-            text[3] = Speed.ToString();
-            File.WriteAllLines(path, text);
+                Game1.player.addedSpeed = this.Config.Speed;
         }
     }
 }

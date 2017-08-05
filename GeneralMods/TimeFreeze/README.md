@@ -20,4 +20,5 @@ but you can edit `ModConfig.txt` to change that.
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.2:
+* Switched to standard JSON config file.
 * Internal refactoring.

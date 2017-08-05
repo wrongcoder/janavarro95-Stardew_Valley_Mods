@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Omegasis.SaveBackup.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
@@ -25,8 +26,8 @@ namespace Omegasis.SaveBackup
         /// <summary>The folder path containing nightly backups of the save.</summary>
         private static readonly string NightlyBackupsPath = Path.Combine(SaveBackup.AppDataPath, "Backed_Up_Saves", "Nightly_InGame_Saves");
 
-        /// <summary>The number of save backups to keep for each type.</summary>
-        private int SaveCount = 30;
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
 
 
         /*********
@@ -36,8 +37,7 @@ namespace Omegasis.SaveBackup
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            this.LoadConfig();
-            this.WriteConfig();
+            this.Config = helper.ReadConfig<ModConfig>();
 
             this.BackupSaves(SaveBackup.PrePlayBackupsPath);
 
@@ -68,33 +68,9 @@ namespace Omegasis.SaveBackup
             new DirectoryInfo(folderPath)
                 .EnumerateFiles()
                 .OrderByDescending(f => f.CreationTime)
-                .Skip(this.SaveCount)
+                .Skip(this.Config.SaveCount)
                 .ToList()
                 .ForEach(file => file.Delete());
-        }
-
-        /// <summary>Load the configuration settings.</summary>
-        private void LoadConfig()
-        {
-            var path = Path.Combine(Helper.DirectoryPath, "AutoBackup_data.txt");
-            if (File.Exists(path))
-            {
-                string[] text = File.ReadAllLines(path);
-                this.SaveCount = Convert.ToInt32(text[3]);
-            }
-        }
-
-        /// <summary>Save the configuration settings.</summary>
-        private void WriteConfig()
-        {
-            string path = Path.Combine(Helper.DirectoryPath, "AutoBackup_data.txt");
-            string[] text = new string[20];
-            text[0] = "Player: AutoBackup Config:";
-            text[1] = "====================================================================================";
-            text[2] = "Number of Backups to Keep:";
-            text[3] = this.SaveCount.ToString();
-
-            File.WriteAllLines(path, text);
         }
     }
 }

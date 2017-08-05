@@ -9,8 +9,8 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 3. Run the game using SMAPI.
 
 ## Usage
-Press `B` to open the buy-collectibles menu. Edit `BuildHealthConfig.json` to change the key or the
-price markup.
+Press `B` to open the buy-collectibles menu. Edit `config.json` to change the key or the price
+markup.
 
 ## Versions
 1.0:
@@ -31,4 +31,5 @@ price markup.
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
 1.4:
+* Switched to standard JSON config file.
 * Internal refactoring.
