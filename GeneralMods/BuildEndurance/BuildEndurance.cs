@@ -234,7 +234,7 @@ namespace Omegasis.BuildEndurance
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("Clear Data Loaded could not find the correct file.");
+                this.Monitor.Log("Clear Data Loaded could not find the correct file."));
 
                 this.ClearModEffects = false;
                 this.OriginalStamina = 0;
@@ -258,7 +258,7 @@ namespace Omegasis.BuildEndurance
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("Clear Data Loaded could not find the correct file.");
+                this.Monitor.Log("Clear Data Loaded could not find the correct file.");
 
                 this.ClearModEffects = false;
                 this.OriginalStamina = 0;

@@ -211,7 +211,7 @@ namespace Omegasis.StardewSymphony
             // make sure file exists
             if (!File.Exists(configPath))
             {
-                Console.WriteLine("StardewSymphony:This music pack lacks a Config.txt. Without one, I can't load in the music.");
+                this.Monitor.Log("StardewSymphony:This music pack lacks a Config.txt. Without one, I can't load in the music.");
                 return;
             }
 
@@ -221,7 +221,7 @@ namespace Omegasis.StardewSymphony
             string sound = Convert.ToString(text[5]);
 
             // load all of the info files here. This is some deep magic I worked at 4 AM. I almost forgot how the heck this worked when I woke up.
-            MusicManager manager = new MusicManager(wave, sound, rootDir);
+            MusicManager manager = new MusicManager(this.Monitor, wave, sound, rootDir);
             manager.LoadSeasonalSongs("spring", this.SongWaveReference);
             manager.LoadSeasonalSongs("summer", this.SongWaveReference);
             manager.LoadSeasonalSongs("fall", this.SongWaveReference);

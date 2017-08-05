@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Audio;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Omegasis.StardewSymphony.Framework
@@ -13,6 +14,9 @@ namespace Omegasis.StardewSymphony.Framework
         /*********
         ** Properties
         *********/
+        /// <summary>Writes messages to the console and log file.</summary>
+        private readonly IMonitor Monitor;
+
         /// <summary>The valid season values.</summary>
         private readonly Season[] Seasons = Enum.GetValues(typeof(Season)).Cast<Season>().ToArray();
 
@@ -64,12 +68,14 @@ namespace Omegasis.StardewSymphony.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="monitor">Writes messages to the console and log file.</param>
         /// <param name="wavebank">The name of the wavebank file.</param>
         /// <param name="soundbank">The name of the soundbank file.</param>
         /// <param name="directory">The directory path containing the music.</param>
-        public MusicManager(string wavebank, string soundbank, string directory)
+        public MusicManager(IMonitor monitor, string wavebank, string soundbank, string directory)
         {
             // init data
+            this.Monitor = monitor;
             this.Directory = directory;
             this.WavebankName = wavebank + ".xwb";
             this.SoundbankName = soundbank + ".xsb";
@@ -78,8 +84,8 @@ namespace Omegasis.StardewSymphony.Framework
             string wavePath = Path.Combine(this.Directory, this.WavebankName);
             string soundPath = Path.Combine(this.Directory, this.SoundbankName);
 
-            Console.WriteLine(wavePath);
-            Console.WriteLine(soundPath);
+            this.Monitor.Log(wavePath);
+            this.Monitor.Log(soundPath);
 
             if (File.Exists(wavePath))
                 this.Wavebank = new WaveBank(Game1.audioEngine, wavePath);
@@ -98,7 +104,7 @@ namespace Omegasis.StardewSymphony.Framework
             string path = Path.Combine(this.Directory, "Music_Files", "Seasons", conditionalName + ".txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine($"Stardew Symohony:The specified music file could not be found. That music file is {conditionalName} which should be located at {path} but don't worry I'll create it for you right now. It's going to be blank though");
+                this.Monitor.Log($"Stardew Symohony:The specified music file could not be found. That music file is {conditionalName} which should be located at {path} but don't worry I'll create it for you right now. It's going to be blank though");
                 string[] text = new string[3];
                 text[0] = conditionalName + " music file. This file holds all of the music that will play when there is no music for this game location, or simply put this is default music. Simply type the name of the song below the wall of equal signs.";
                 text[1] = "========================================================================================";
@@ -107,7 +113,7 @@ namespace Omegasis.StardewSymphony.Framework
             }
             else
             {
-                Console.WriteLine($"Stardew Symphony:The music pack located at: {this.Directory} is processing the song info for the game location: {conditionalName}");
+                this.Monitor.Log($"Stardew Symphony:The music pack located at: {this.Directory} is processing the song info for the game location: {conditionalName}");
 
                 string[] text = File.ReadAllLines(path);
                 int i = 2;
@@ -172,7 +178,7 @@ namespace Omegasis.StardewSymphony.Framework
                     //  Monitor.Log("Just thought that I'd let you know that there are no songs associated with the music file located at " + mylocation3 +" this may be intentional, but just incase you were wanted music, now you knew which ones were blank.");
                     return;
                 }
-                Console.WriteLine($"Stardew Symohony:The music pack located at: {this.Directory} has successfully processed the song info for the game location {conditionalName}");
+                this.Monitor.Log($"Stardew Symohony:The music pack located at: {this.Directory} has successfully processed the song info for the game location {conditionalName}");
             }
         }
 
@@ -186,7 +192,7 @@ namespace Omegasis.StardewSymphony.Framework
             string path = Path.Combine(this.Directory, "Music_Files", "Locations", conditionalName + ".txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("StardewSymohony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                this.Monitor.Log("StardewSymohony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
 
                 string[] text = new string[3];//seems legit.
                 text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
@@ -196,7 +202,7 @@ namespace Omegasis.StardewSymphony.Framework
             }
             else
             {
-                Console.WriteLine("Stardew Symphony:The music pack located at: " + this.Directory + " is processing the song info for the game location: " + conditionalName);
+                this.Monitor.Log("Stardew Symphony:The music pack located at: " + this.Directory + " is processing the song info for the game location: " + conditionalName);
                 string[] readtext = File.ReadAllLines(path);
                 int i = 2;
                 var lineCount = File.ReadLines(path).Count();
@@ -224,7 +230,7 @@ namespace Omegasis.StardewSymphony.Framework
                 if (locationSongs.Count > 0)
                 {
                     this.LocationSongs.Add(conditionalName, locationSongs);
-                    Console.WriteLine("StardewSymhony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
+                    this.Monitor.Log("StardewSymhony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
         }
@@ -238,7 +244,7 @@ namespace Omegasis.StardewSymphony.Framework
             string path = Path.Combine(this.Directory, "Music_Files", "Locations", conditionalName + ".txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                this.Monitor.Log("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
                 string[] text = new string[3];//seems legit.
                 text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
                 text[1] = "========================================================================================";
@@ -274,7 +280,7 @@ namespace Omegasis.StardewSymphony.Framework
                 if (locationSongs.Count > 0)
                 {
                     this.LocationRainSongs.Add(conditionalName, locationSongs);
-                    Console.WriteLine("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
+                    this.Monitor.Log("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
         }
@@ -288,7 +294,7 @@ namespace Omegasis.StardewSymphony.Framework
             string path = Path.Combine(this.Directory, "Music_Files", "Locations", conditionalName + ".txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                this.Monitor.Log("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
                 string[] text = new string[3];//seems legit.
                 text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
                 text[1] = "========================================================================================";
@@ -325,7 +331,7 @@ namespace Omegasis.StardewSymphony.Framework
                 if (locationSongs.Count > 0)
                 {
                     this.LocationNightSongs.Add(conditionalName, locationSongs);
-                    Console.WriteLine("StardewSymphonyLThe music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
+                    this.Monitor.Log("StardewSymphonyLThe music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
         }
@@ -341,7 +347,7 @@ namespace Omegasis.StardewSymphony.Framework
             string path = Path.Combine(musicPath, "Music_Files", "Locations", conditionalName + ".txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
+                this.Monitor.Log("StardewSymphony:A music list for the location " + conditionalName + " does not exist for the music pack located at " + path + " which isn't a problem, I just thought I'd let you know since this may have been intentional. Also I'm creating it for you just incase. Cheers.");
                 string[] text = new string[3];//seems legit.
                 text[0] = conditionalName + " music file. This file holds all of the music that will play when at this game location. Simply type the name of the song below the wall of equal signs.";
                 text[1] = "========================================================================================";
@@ -379,7 +385,7 @@ namespace Omegasis.StardewSymphony.Framework
                 if (locationSongs.Count > 0)
                 {
                     this.LocationRainNightSongs.Add(conditionalName, locationSongs);
-                    Console.WriteLine("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
+                    this.Monitor.Log("StardewSymohony:The music pack located at: " + this.Directory + " has successfully processed the song info for the game location: " + conditionalName);
                 }
             }
         }
