@@ -1,14 +1,13 @@
 {
-  "Name": "More_Rain",
-  "Authour": "Alpha_Omegasis",
+  "Name": "More Rain",
+  "Author": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": "2",
-    "MinorVersion": "2",
-    "PatchVersion": "2",
-    "Build": ""
+    "MajorVersion": 2,
+    "MinorVersion": 2,
+    "PatchVersion": 2,
+    "Build": null
   },
-  "Description": "Change how much it rains in the game. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "Stardew_More_Rain",
-  "PerSaveConfigs": false,
+  "Description": "Change how much it rains in the game.",
+  "UniqueID": "Omegasis.MoreRain",
   "EntryDll": "MoreRain.dll"
 }

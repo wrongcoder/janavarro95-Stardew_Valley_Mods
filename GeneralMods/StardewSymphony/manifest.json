@@ -1,14 +1,13 @@
 {
-  "Name": "Stardew_Symphony",
-  "Authour": "Alpha_Omegasis",
+  "Name": "Stardew Symphony",
+  "Author": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": "11",
-    "MinorVersion": "11",
-    "PatchVersion": "11",
-    "Build": ""
+    "MajorVersion": 11,
+    "MinorVersion": 11,
+    "PatchVersion": 11,
+    "Build": null
   },
-  "Description": "Adding more music to the game one beep at a time. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "StardewSymphony",
-  "PerSaveConfigs": false,
+  "Description": "Adding more music to the game one beep at a time.",
+  "UniqueID": "Omegasis.StardewSymphony",
   "EntryDll": "StardewSymphony.dll"
 }

@@ -1,14 +1,13 @@
 {
-  "Name": "CustomShopMod-Redux_GUI",
-  "Authour": "Alpha_Omegasis",
+  "Name": "Custom Shop Redux GUI",
+  "Author": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 0,
     "MinorVersion": 0,
     "PatchVersion": 1,
-    "Build": ""
+    "Build": null
   },
   "Description": "A nice way to make custom shops.",
-  "UniqueID": "4be88c18-b6f3-49b0-ba96-f94b1a5be890",
-  "PerSaveConfigs": false,
+  "UniqueID": "Omegasis.CustomShopReduxGui",
   "EntryDll": "CustomShopsRedux.dll"
 }

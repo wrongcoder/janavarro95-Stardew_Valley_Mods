@@ -1,14 +1,13 @@
 {
-  "Name": "Fall28 Snow Day",
-  "Authour": "Omegasis",
+  "Name": "Fall 28 Snow Day",
+  "Author": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": "1",
-    "MinorVersion": "1",
-    "PatchVersion": "1",
-    "Build": ""
+    "MajorVersion": 1,
+    "MinorVersion": 1,
+    "PatchVersion": 1,
+    "Build": null
   },
-  "Description": "Makes it snow on Fall 28 which makes a good explanation for all the snow. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "Fall28 Snow Day",
-  "PerSaveConfigs": false,
+  "Description": "Makes it snow on Fall 28, which makes a good explanation for all the snow on the next day.",
+  "UniqueID": "Omegasis.Fall28SnowDay",
   "EntryDll": "Fall28SnowDay.dll"
 }

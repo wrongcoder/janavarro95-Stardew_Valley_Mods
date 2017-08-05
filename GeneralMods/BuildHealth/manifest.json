@@ -1,14 +1,13 @@
 {
-  "Name": "BuildHealth",
+  "Name": "Build Health",
   "Author": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 3,
     "PatchVersion": 0,
-    "Build": ""
+    "Build": null
   },
-  "Description": "SMAPI port of BuildHealth. Increase your health as you play. Updated to SMAPI 1.12 on 5/14/17",
-  "UniqueID": "4be88c18-b6f3-49b0-ba96-f94b1a5be890",
-  "PerSaveConfigs": false,
+  "Description": "Increase your health as you play.",
+  "UniqueID": "Omegasis.BuildHealth",
   "EntryDll": "BuildHealth.dll"
 }

@@ -1,14 +1,13 @@
 {
-  "Name": "TimeFreeze",
-  "Authour": "Alpha_Omegasis",
+  "Name": "Time Freeze",
+  "Author": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 2,
     "PatchVersion": 0,
-    "Build": ""
+    "Build": null
   },
-  "Description": "Emulating old HM style games where time is frozen inside. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "4108e859-333c-4fec-a1a7-d2e18c1019fe",
-  "PerSaveConfigs": false,
+  "Description": "Emulates old Harvest Moon-style games where time is frozen inside.",
+  "UniqueID": "Omegasis.TimeFreeze",
   "EntryDll": "TimeFreeze.dll"
 }

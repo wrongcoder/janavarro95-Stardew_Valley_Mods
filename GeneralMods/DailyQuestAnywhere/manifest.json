@@ -1,14 +1,13 @@
 {
-  "Name": "DailyQuest_Anywhere",
+  "Name": "Daily Quest Anywhere",
   "Author": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 3,
     "PatchVersion": 0,
-    "Build": ""
+    "Build": null
   },
-  "Description": "Open the daily quest board from anywhere in the game. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "DailyQuest",
-  "PerSaveConfigs": false,
+  "Description": "Open the daily quest board from anywhere in the game.",
+  "UniqueID": "Omegasis.DailyQuestAnywhere",
   "EntryDll": "DailyQuestAnywhere.dll"
 }
