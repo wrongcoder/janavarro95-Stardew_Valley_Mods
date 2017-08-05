@@ -51,9 +51,6 @@ namespace Omegasis.BuildEndurance
         /// <summary>Whether the player was eating last time we checked.</summary>
         private bool WasEating;
 
-        /// <summary>Whether the player has loaded a save.</summary>
-        private bool IsLoaded;
-
         /// <summary>The player's stamina last time they slept.</summary>
         private int NightlyStamina;
 
@@ -68,7 +65,7 @@ namespace Omegasis.BuildEndurance
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
             string configPath = Path.Combine(helper.DirectoryPath, "BuildEnduranceConfig.json");
             if (!File.Exists(configPath))
@@ -157,7 +154,6 @@ namespace Omegasis.BuildEndurance
             // initialise
             this.LoadConfig();
             this.WriteConfig();
-            this.IsLoaded = true;
 
             // grab initial stamina
             var player = Game1.player;
@@ -178,16 +174,14 @@ namespace Omegasis.BuildEndurance
             this.WriteConfig();
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        public void TimeEvents_DayOfMonthChanged(object sender, EventArgs e)
+        public void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             // reset data
             this.WasExhausted = false;
             this.WasCollapsed = false;
-            if (!this.IsLoaded)
-                return;
 
             // update settings
             this.Monitor.Log(this.CurrentExp.ToString());
@@ -240,7 +234,7 @@ namespace Omegasis.BuildEndurance
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("Clear Data Loaded could not find the correct file.");
+                this.Monitor.Log("Clear Data Loaded could not find the correct file."));
 
                 this.ClearModEffects = false;
                 this.OriginalStamina = 0;
@@ -264,7 +258,7 @@ namespace Omegasis.BuildEndurance
             string path = Path.Combine(Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
             if (!File.Exists(path))
             {
-                Console.WriteLine("Clear Data Loaded could not find the correct file.");
+                this.Monitor.Log("Clear Data Loaded could not find the correct file.");
 
                 this.ClearModEffects = false;
                 this.OriginalStamina = 0;

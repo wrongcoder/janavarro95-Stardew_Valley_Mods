@@ -48,9 +48,6 @@ namespace Omegasis.BuildHealth
         /// <summary>The player's health last time we checked it.</summary>
         private int LastHealth;
 
-        /// <summary>Whether the player has loaded a save.</summary>
-        private bool IsLoaded;
-
         /// <summary>Whether the player has collapsed today.</summary>
         private bool WasCollapsed;
 
@@ -65,7 +62,7 @@ namespace Omegasis.BuildHealth
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
 
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoaded;
 
             var configPath = Path.Combine(helper.DirectoryPath, "BuildHealthConfig.json");
@@ -146,21 +143,19 @@ namespace Omegasis.BuildHealth
             }
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        public void TimeEvents_DayOfMonthChanged(object sender, EventArgs e)
+        public void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             // reset data
             this.LastHealth = Game1.player.maxHealth;
             this.WasCollapsed = false;
-            if (!this.IsLoaded)
-                return;
 
             // update settings
             this.UpdateClearSetting();
 
-            var player = StardewValley.Game1.player;
+            var player = Game1.player;
             this.CurrentExp += this.Config.ExpForSleeping;
             if (this.OriginalMaxHealth == 0)
                 this.OriginalMaxHealth = player.maxHealth; //grab the initial Health value
@@ -204,7 +199,6 @@ namespace Omegasis.BuildHealth
             // initialise
             this.LoadConfig();
             this.WriteConfig();
-            this.IsLoaded = true;
 
             // grab initial health
             var player = Game1.player;

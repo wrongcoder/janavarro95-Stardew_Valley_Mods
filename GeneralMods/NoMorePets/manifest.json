@@ -1,14 +1,14 @@
 {
-  "Name": "NoMorePets",
-  "Authour": "Alpha_Omegasis",
+  "Name": "No More Pets",
+  "Author": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 3,
+    "MinorVersion": 4,
     "PatchVersion": 0,
-    "Build": ""
+    "Build": null
   },
-  "Description": "Removes all pets from the game. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "NoMorePets",
-  "PerSaveConfigs": false,
+  "MinimumApiVersion": "1.15",
+  "Description": "Removes all pets from the game.",
+  "UniqueID": "Omegasis.NoMorePets",
   "EntryDll": "NoMorePets.dll"
 }

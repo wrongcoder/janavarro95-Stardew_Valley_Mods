@@ -2,12 +2,13 @@
   "Name": "Save Anywhere",
   "Author": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": "1",
-    "MinorVersion": "1",
-    "PatchVersion": "1",
-    "Build": ""
+    "MajorVersion": 2,
+    "MinorVersion": 5,
+    "PatchVersion": 0,
+    "Build": null
   },
-  "Description": "Allows the farmer to save almost anywhere. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "Save_Anywhere_V2",
+  "MinimumApiVersion": "1.15",
+  "Description": "Lets you save almost anywhere.",
+  "UniqueID": "Omegasis.SaveAnywhere",
   "EntryDll": "SaveAnywhere.dll"
 }

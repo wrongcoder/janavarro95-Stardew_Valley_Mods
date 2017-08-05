@@ -41,17 +41,17 @@ namespace Omegasis.SaveBackup
 
             this.BackupSaves(SaveBackup.PrePlayBackupsPath);
 
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when <see cref="StardewValley.Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked before the save is updated.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_DayOfMonthChanged(object sender, EventArgs e)
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             this.BackupSaves(SaveBackup.NightlyBackupsPath);
         }

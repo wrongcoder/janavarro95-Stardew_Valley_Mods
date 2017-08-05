@@ -17,3 +17,9 @@ All your pets will be removed automatically when you play the save.
 
 1.1:
 * Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

@@ -18,3 +18,9 @@ Launch the game with the mod installed to generate the config file, then edit th
 
 1.1:
 * Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

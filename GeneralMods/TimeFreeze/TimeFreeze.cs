@@ -39,7 +39,7 @@ namespace Omegasis.TimeFreeze
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.player == null || Game1.player.currentLocation == null)
+            if (!Context.IsWorldReady)
                 return;
 
             if (this.ShouldFreezeTime(Game1.player, Game1.player.currentLocation))

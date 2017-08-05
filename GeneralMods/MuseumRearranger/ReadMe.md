@@ -23,3 +23,9 @@ toggle the inventory box. Edit `Museum_Rearrange_Config.txt` to change the keys.
 1.1:
 * Updated to Stardew Valley 1.1 and SMAPI 0.40 1.1-3.
 * Added key to toggle the inventory box while rearranging the museum.
+
+1.3:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.4:
+* Internal refactoring.

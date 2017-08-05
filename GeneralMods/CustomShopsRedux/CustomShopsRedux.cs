@@ -43,18 +43,15 @@ namespace Omegasis.CustomShopsRedux
         /// <summary>The key which shows the menu.</summary>
         private string KeyBinding = "U";
 
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
 
         /*********
         ** Public methods
         *********/
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
-        /// <param name="args">The mod arguments.</param>
-        public override void Entry(params object[] args)
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
+        public override void Entry(IModHelper helper)
         {
-            PlayerEvents.LoadedGame += this.PlayerEvents_LoadedGame;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterDayStarted;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
@@ -62,12 +59,11 @@ namespace Omegasis.CustomShopsRedux
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <summary>The method invoked after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void PlayerEvents_LoadedGame(object sender, EventArgsLoadedGameChanged e)
+        private void SaveEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            this.IsGameLoaded = true;
             this.LoadConfig();
             this.WriteConfig();
         }
@@ -77,22 +73,17 @@ namespace Omegasis.CustomShopsRedux
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (!this.IsGameLoaded)
-                return;
-
-            if (e.KeyPressed.ToString() == this.KeyBinding) //if the key is pressed, load my cusom save function
-            {
+            if (Context.IsPlayerFree && e.KeyPressed.ToString() == this.KeyBinding)
                 this.OpenSelectFileMenu();
-            }
         }
 
         /// <summary>Load the configuration settings.</summary>
         private void LoadConfig()
         {
-            this.DataPath = Path.Combine(this.PathOnDisk, "Custom_Shops");
+            this.DataPath = Path.Combine(this.Helper.DirectoryPath, "Custom_Shops");
             Directory.CreateDirectory(this.DataPath);
 
-            string path = Path.Combine(this.PathOnDisk, "Custom_Shop_Redux_Config.txt");
+            string path = Path.Combine(this.Helper.DirectoryPath, "Custom_Shop_Redux_Config.txt");
             if (!File.Exists(path))
                 this.KeyBinding = "U";
             else
@@ -105,7 +96,7 @@ namespace Omegasis.CustomShopsRedux
         /// <summary>Save the configuration settings.</summary>
         private void WriteConfig()
         {
-            string path = Path.Combine(this.PathOnDisk, "Custom_Shop_Redux_Config.txt");
+            string path = Path.Combine(this.Helper.DirectoryPath, "Custom_Shop_Redux_Config.txt");
             string[] text = new string[20];
             text[0] = "Config: Custom_Shop_Redux. Feel free to mess with these settings.";
             text[1] = "====================================================================================";
@@ -121,13 +112,13 @@ namespace Omegasis.CustomShopsRedux
         {
             // get mod folder
             DirectoryInfo modFolder = new DirectoryInfo(this.DataPath);
-            Log.Info(modFolder);
+            this.Monitor.Log(modFolder.FullName);
 
             // get text files
             FileInfo[] files = modFolder.GetFiles("*.txt");
             if (!files.Any())
             {
-                Log.Error("No shop .txt information is found. You should create one.");
+                this.Monitor.Log("No shop .txt information is found. You should create one.", LogLevel.Error);
                 return;
             }
 
@@ -136,7 +127,7 @@ namespace Omegasis.CustomShopsRedux
                 this.Options.Add(file.Name);
             if (!this.Options.Any())
             {
-                Log.Error("No shop .txt information is found. You should create one.");
+                this.Monitor.Log("No shop .txt information is found. You should create one.", LogLevel.Error);
                 return;
             }
 
@@ -156,7 +147,7 @@ namespace Omegasis.CustomShopsRedux
             // validate
             if (filename == "Custom_Shop_Redux_Config.txt")
             {
-                Log.Info("Silly human. The config file is not a shop.");
+                this.Monitor.Log("Silly human. The config file is not a shop.", LogLevel.Info);
                 return;
             }
 
@@ -168,8 +159,8 @@ namespace Omegasis.CustomShopsRedux
                 if (i >= lineCount || objType == "" || text[i] == "") break;
 
                 //read in a line for obj type here
-                Log.Info(i);
-                Log.Info(objType);
+                this.Monitor.Log(i.ToString());
+                this.Monitor.Log(objType);
                 int objID;
                 int price;
                 if (objType == "item" || objType == "Item" || objType == "Object" || objType == "object")
@@ -177,13 +168,13 @@ namespace Omegasis.CustomShopsRedux
                     objID = Convert.ToInt16(text[i]);
                     i += 2;
 
-                    Log.Info(i);
+                    this.Monitor.Log(i.ToString());
                     bool isRecipe = Convert.ToBoolean(text[i]);
                     i += 2;
-                    Log.Info(i);
+                    this.Monitor.Log(i.ToString());
                     price = Convert.ToInt32(text[i]);
                     i += 2;
-                    Log.Info(i);
+                    this.Monitor.Log(i.ToString());
 
                     int quality = Convert.ToInt32(text[i]);
 
@@ -295,7 +286,7 @@ namespace Omegasis.CustomShopsRedux
                 //TODO:
                 //add in support for colored objects
                 //add in support for tools
-                Log.Success(i);
+                this.Monitor.Log(i.ToString());
                 if (i >= lineCount)
                     break;
 

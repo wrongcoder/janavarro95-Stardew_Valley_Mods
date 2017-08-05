@@ -1,14 +1,14 @@
 {
-  "Name": "HappyBirthday",
-  "Authour": "Alpha_Omegasis",
+  "Name": "Happy Birthday",
+  "Author": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": "1",
-    "MinorVersion": "1",
-    "PatchVersion": "1",
-    "Build": ""
+    "MajorVersion": 1,
+    "MinorVersion": 4,
+    "PatchVersion": 0,
+    "Build": null
   },
-  "Description": "Adds the farmer's birthday to the game. SMAPI 1.12. Updated 5/14/17",
-  "UniqueID": "HappyBirthday",
-  "PerSaveConfigs": false,
+  "MinimumApiVersion": "1.15",
+  "Description": "Adds the farmer's birthday to the game.",
+  "UniqueID": "Omegasis.HappyBirthday",
   "EntryDll": "HappyBirthday.dll"
 }

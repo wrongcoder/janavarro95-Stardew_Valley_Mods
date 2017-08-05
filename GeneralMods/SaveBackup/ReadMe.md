@@ -18,3 +18,10 @@ configure that.
 ## Versions
 1.0:
 * Initial release.
+
+1.2:
+* Updated to Stardew Valley 1.2 and SMAPI 1.12.
+
+1.3:
+* Updated for SMAPI 2.0.
+* Internal refactoring.

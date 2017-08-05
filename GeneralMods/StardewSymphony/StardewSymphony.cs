@@ -48,9 +48,6 @@ namespace Omegasis.StardewSymphony
         /****
         ** Context
         ****/
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
         /// <summary>Whether no music pack was loaded for the current location.</summary>
         private bool HasNoMusic;
 
@@ -89,7 +86,7 @@ namespace Omegasis.StardewSymphony
             this.HexProcessor = new MusicHexProcessor(this.MasterList, this.Reset);
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
         }
@@ -103,7 +100,7 @@ namespace Omegasis.StardewSymphony
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!this.IsGameLoaded || !this.MasterList.Any())
+            if (!Context.IsWorldReady || !this.MasterList.Any())
                 return; //basically if absolutly no music is loaded into the game for locations/festivals/seasons, don't override the game's default music player.
 
             if (this.CurrentSong == null)
@@ -132,13 +129,11 @@ namespace Omegasis.StardewSymphony
             Game1.nextMusicTrack = "";  //same as above line
         }
 
-        /// <summary>The method invoked when <see cref="Game1.dayOfMonth"/> changes.</summary>
+        /// <summary>The method invoked after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            if (!this.IsGameLoaded)
-                return;
             this.StopSound(); //if my music player is called and I forget to clean up sound before hand, kill the old sound.
             this.LoadConfig();
             this.WriteConfig();
@@ -178,7 +173,6 @@ namespace Omegasis.StardewSymphony
 
             // init sound
             this.HexProcessor.ProcessHex();
-            this.IsGameLoaded = true;
             this.SelectMusic();
         }
 
@@ -187,7 +181,7 @@ namespace Omegasis.StardewSymphony
         /// <param name="e">The event data.</param>
         private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             this.SelectMusic();
@@ -217,7 +211,7 @@ namespace Omegasis.StardewSymphony
             // make sure file exists
             if (!File.Exists(configPath))
             {
-                Console.WriteLine("StardewSymphony:This music pack lacks a Config.txt. Without one, I can't load in the music.");
+                this.Monitor.Log("StardewSymphony:This music pack lacks a Config.txt. Without one, I can't load in the music.");
                 return;
             }
 
@@ -227,7 +221,7 @@ namespace Omegasis.StardewSymphony
             string sound = Convert.ToString(text[5]);
 
             // load all of the info files here. This is some deep magic I worked at 4 AM. I almost forgot how the heck this worked when I woke up.
-            MusicManager manager = new MusicManager(wave, sound, rootDir);
+            MusicManager manager = new MusicManager(this.Monitor, wave, sound, rootDir);
             manager.LoadSeasonalSongs("spring", this.SongWaveReference);
             manager.LoadSeasonalSongs("summer", this.SongWaveReference);
             manager.LoadSeasonalSongs("fall", this.SongWaveReference);
@@ -269,7 +263,7 @@ namespace Omegasis.StardewSymphony
                 string extension = Path.GetExtension(filePath);
                 if (extension == ".xsb")
                 {
-                    Log.AsyncG(filePath);
+                    this.Monitor.Log(filePath);
                     this.HexProcessor.AddSoundBank(filePath);
                 }
                 //if (extension == "xwb")
@@ -304,7 +298,7 @@ namespace Omegasis.StardewSymphony
         /// <summary>Select music for the current location.</summary>
         private void SelectMusic()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             //  no_music = false;
@@ -399,7 +393,7 @@ namespace Omegasis.StardewSymphony
 
         public void farm_music_selector()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             //  no_music = false;
@@ -480,7 +474,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayDefaultSong()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -593,7 +587,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayRainSong()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -703,7 +697,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayNightSong()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -807,7 +801,7 @@ namespace Omegasis.StardewSymphony
 
         public void PlayRainyNightMusic()
         {
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -923,7 +917,7 @@ namespace Omegasis.StardewSymphony
         private void StartDefaultSong(Season season)
         {
             // check exit conditions
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;
@@ -1045,7 +1039,7 @@ namespace Omegasis.StardewSymphony
         private void StartRainySong(Season season)
         {
             // check exit conditions
-            if (!this.IsGameLoaded)
+            if (!Context.IsWorldReady)
             {
                 this.StartMusicDelay();
                 return;

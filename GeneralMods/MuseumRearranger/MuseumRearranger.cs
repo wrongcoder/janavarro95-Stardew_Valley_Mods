@@ -20,9 +20,6 @@ namespace Omegasis.MuseumRearranger
         /// <summary>The key which toggles the inventory box when the menu is open.</summary>
         private string ToggleInventoryKey = "T";
 
-        /// <summary>Whether the player loaded a save.</summary>
-        private bool IsGameLoaded;
-
         /// <summary>The open museum menu (if any).</summary>
         private NewMuseumMenu OpenMenu;
 
@@ -47,7 +44,7 @@ namespace Omegasis.MuseumRearranger
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (Game1.player == null || Game1.player.currentLocation == null || !this.IsGameLoaded)
+            if (!Context.IsWorldReady)
                 return;
 
             // open menu
@@ -71,7 +68,6 @@ namespace Omegasis.MuseumRearranger
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            this.IsGameLoaded = true;
             this.LoadConfig();
             this.WriteConfig();
         }
