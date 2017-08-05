@@ -2,9 +2,9 @@
   "Name": "Custom Shop Redux GUI",
   "Author": "Alpha_Omegasis",
   "Version": {
-    "MajorVersion": 0,
-    "MinorVersion": 0,
-    "PatchVersion": 1,
+    "MajorVersion": 1,
+    "MinorVersion": 3,
+    "PatchVersion": 0,
     "Build": null
   },
   "Description": "A nice way to make custom shops.",
