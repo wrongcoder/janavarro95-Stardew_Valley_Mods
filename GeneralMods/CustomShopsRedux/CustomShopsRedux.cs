@@ -38,9 +38,6 @@ namespace Omegasis.CustomShopsRedux
         /// <summary>The prices for the items to list.</summary>
         private readonly Dictionary<Item, int[]> ListPrices = new Dictionary<Item, int[]>();
 
-        /// <summary>The configured shop options.</summary>
-        private readonly List<string> Options = new List<string>();
-
         /// <summary>The folder path containing shop data files.</summary>
         private string DataPath => Path.Combine(this.Helper.DirectoryPath, "Custom_Shops");
 
@@ -87,16 +84,17 @@ namespace Omegasis.CustomShopsRedux
             }
 
             // parse options
+            List<string> options = new List<string>();
             foreach (FileInfo file in files)
-                this.Options.Add(file.Name);
-            if (!this.Options.Any())
+                options.Add(file.Name);
+            if (!options.Any())
             {
                 this.Monitor.Log("No shop .txt information is found. You should create one.", LogLevel.Error);
                 return;
             }
 
             // load menu
-            Game1.activeClickableMenu = new ChooseFromListMenu(this.Options, this.OnChoiceSelected);
+            Game1.activeClickableMenu = new ChooseFromListMenu(options, this.OnChoiceSelected);
         }
 
         /// <summary>The method called when the player chooses an option from the file list.</summary>

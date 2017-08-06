@@ -114,6 +114,12 @@ namespace Omegasis.BuildEndurance
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+            // reset state
+            this.WasExhausted = false;
+            this.WasCollapsed = false;
+            this.HasRecentToolExp = false;
+            this.WasEating = false;
+
             // load player data
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();

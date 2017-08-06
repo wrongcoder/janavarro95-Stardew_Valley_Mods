@@ -38,4 +38,5 @@ Edit `config.json` to configure the mod settings.
 * Updated for SMAPI 2.0.
 * Switched to standard JSON config & data files.
 * Fixed issue where saves with the same name would overwrite each other's endurance level data.
+* Fixed minor bugs when you load a save after exiting to title.
 * Internal refactoring.
