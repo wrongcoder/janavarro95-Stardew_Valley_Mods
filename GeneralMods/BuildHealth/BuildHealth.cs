@@ -116,6 +116,12 @@ namespace Omegasis.BuildHealth
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoaded(object sender, EventArgs e)
         {
+            // reset state
+            this.HasRecentToolExp = false;
+            this.WasEating = false;
+            this.LastHealth = Game1.player.health;
+            this.WasCollapsed = false;
+
             // load player data
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
@@ -135,12 +141,9 @@ namespace Omegasis.BuildHealth
                 this.PlayerData.ClearModEffects = false;
             }
 
-            // else apply health
+            // else apply health bonus
             else
-            {
                 Game1.player.maxHealth = this.PlayerData.BaseHealthBonus + this.PlayerData.CurrentLevelHealthBonus + this.PlayerData.OriginalMaxHealth;
-                this.LastHealth = Game1.player.health;
-            }
         }
 
         /// <summary>The method invoked just before the game saves.</summary>

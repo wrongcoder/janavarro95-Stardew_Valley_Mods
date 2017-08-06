@@ -62,9 +62,6 @@ namespace Omegasis.HappyBirthday
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-
-            this.VillagerQueue = new List<string>();
-            this.PossibleBirthdayGifts = new List<Item>();
         }
 
 
@@ -94,6 +91,13 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+            // reset state
+            this.VillagerQueue = new List<string>();
+            this.PossibleBirthdayGifts = new List<Item>();
+            this.BirthdayGiftToReceive = null;
+            this.CheckedForBirthday = false;
+
+            // load settings
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
             //this.SeenEvent = false;

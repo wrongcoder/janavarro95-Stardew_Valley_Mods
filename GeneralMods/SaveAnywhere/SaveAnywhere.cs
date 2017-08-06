@@ -21,11 +21,12 @@ namespace Omegasis.SaveAnywhere
         /// <summary>Provides methods for reading and writing the config file.</summary>
         private ConfigUtilities ConfigUtilities;
 
+        /// <summary>The parsed schedules by NPC name.</summary>
+        private readonly IDictionary<string, string> NpcSchedules = new Dictionary<string, string>();
+
         /// <summary>Whether villager schedules should be reset now.</summary>
         private bool ShouldResetSchedules;
 
-        /// <summary>The parsed schedules by NPC name.</summary>
-        private readonly IDictionary<string, string> NpcSchedules = new Dictionary<string, string>();
 
 
         /*********
@@ -52,6 +53,9 @@ namespace Omegasis.SaveAnywhere
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+            // reset state
+            this.ShouldResetSchedules = false;
+
             // load config
             this.ConfigUtilities.LoadConfig();
             this.ConfigUtilities.WriteConfig();
