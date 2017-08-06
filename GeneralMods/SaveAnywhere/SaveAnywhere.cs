@@ -126,8 +126,19 @@ namespace Omegasis.SaveAnywhere
             if (!Context.IsPlayerFree)
                 return;
 
+            // initiate save (if valid context)
             if (e.KeyPressed.ToString() == this.Config.SaveKey)
+            {
+                // validate: community center Junimos can't be saved
+                if (Utility.getAllCharacters().OfType<Junimo>().Any())
+                {
+                    Game1.addHUDMessage(new HUDMessage("The spirits don't want you to save here.", HUDMessage.error_type));
+                    return;
+                }
+
+                // save
                 this.SaveManager.BeginSaveData();
+            }
         }
 
         /// <summary>Apply the NPC schedules to each NPC.</summary>

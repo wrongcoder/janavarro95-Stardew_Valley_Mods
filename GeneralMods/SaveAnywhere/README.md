@@ -39,5 +39,6 @@ Press `K` to save anywhere. Edit `Save_Anywhere_Config.txt` to configure the key
 * Updated for SMAPI 2.0.
 * Overhauled save format.
 * Switched to standard JSON config file.
-* Fixed issue where reloading after a sleep save restored some data from your last non-sleep save.
+* Fixed crash when saving in the community center.
+* Fixed some old data being restored if you reload after a normal save.
 * Internal refactoring.
