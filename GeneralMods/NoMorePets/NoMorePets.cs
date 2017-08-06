@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Characters;
 
 namespace Omegasis.NoMorePets
 {
@@ -15,30 +17,20 @@ namespace Omegasis.NoMorePets
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <summary>The method invoked after the player loads a save.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        public void GameEvents_UpdateTick(object sender, EventArgs e)
+        public void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            if (!Context.IsWorldReady)
-                return;
-
-            string petName = Game1.player.getPetName();
-            if (Game1.player.currentLocation is Farm)
-            {
-                foreach (NPC npc in Game1.player.currentLocation.characters.ToArray())
-                {
-                    if (npc.name == petName)
-                        Game1.removeCharacterFromItsLocation(petName);
-                }
-            }
+            foreach (Pet pet in Utility.getAllCharacters().OfType<Pet>().ToArray())
+                pet.currentLocation.characters.Remove(pet);
         }
     }
 }

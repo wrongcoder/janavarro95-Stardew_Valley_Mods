@@ -23,3 +23,5 @@ All your pets will be removed automatically when you play the save.
 
 1.4:
 * Internal refactoring.
+* Fixed villagers being removed if they match your pet name.
+* Fixed pet not being removed if it's inside your house.
