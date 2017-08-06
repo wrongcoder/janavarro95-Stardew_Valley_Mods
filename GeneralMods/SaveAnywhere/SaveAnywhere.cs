@@ -66,8 +66,8 @@ namespace Omegasis.SaveAnywhere
             this.ConfigUtilities.WriteConfig();
 
             // load positions
-            this.SaveManager = new SaveManager(Game1.player, this.Helper.DirectoryPath, this.Monitor, this.Helper.Reflection, onVillagersReset: () => this.ShouldResetSchedules = true);
-            this.SaveManager.LoadPositions();
+            this.SaveManager = new SaveManager(this.Helper, this.Helper.Reflection, onLoaded: () => this.ShouldResetSchedules = true);
+            this.SaveManager.LoadData();
         }
 
         /// <summary>The method invoked after the player finishes saving.</summary>
@@ -131,7 +131,7 @@ namespace Omegasis.SaveAnywhere
                 return;
 
             if (e.KeyPressed.ToString() == this.ConfigUtilities.KeyBinding)
-                this.SaveManager.SaveGameAndPositions();
+                this.SaveManager.BeginSaveData();
         }
 
         /// <summary>Apply the NPC schedules to each NPC.</summary>
