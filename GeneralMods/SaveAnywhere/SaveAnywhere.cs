@@ -15,11 +15,11 @@ namespace Omegasis.SaveAnywhere
         /*********
         ** Properties
         *********/
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
         /// <summary>Provides methods for saving and loading game data.</summary>
         private SaveManager SaveManager;
-
-        /// <summary>Provides methods for reading and writing the config file.</summary>
-        private ConfigUtilities ConfigUtilities;
 
         /// <summary>The parsed schedules by NPC name.</summary>
         private readonly IDictionary<string, string> NpcSchedules = new Dictionary<string, string>();
@@ -27,6 +27,8 @@ namespace Omegasis.SaveAnywhere
         /// <summary>Whether villager schedules should be reset now.</summary>
         private bool ShouldResetSchedules;
 
+        /// <summary>Whether we're performing a non-vanilla save (i.e. not by sleeping in bed).</summary>
+        private bool IsCustomSaving;
 
 
         /*********
@@ -36,9 +38,11 @@ namespace Omegasis.SaveAnywhere
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            this.ConfigUtilities = new ConfigUtilities(this.Helper.DirectoryPath);
+            this.Config = helper.ReadConfig<ModConfig>();
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            SaveEvents.AfterSave += this.SaveEvents_AfterSave;
+            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -54,15 +58,30 @@ namespace Omegasis.SaveAnywhere
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             // reset state
+            this.IsCustomSaving = false;
             this.ShouldResetSchedules = false;
 
-            // load config
-            this.ConfigUtilities.LoadConfig();
-            this.ConfigUtilities.WriteConfig();
-
             // load positions
-            this.SaveManager = new SaveManager(Game1.player, this.Helper.DirectoryPath, this.Monitor, this.Helper.Reflection, onVillagersReset: () => this.ShouldResetSchedules = true);
-            this.SaveManager.LoadPositions();
+            this.SaveManager = new SaveManager(this.Helper, this.Helper.Reflection, onLoaded: () => this.ShouldResetSchedules = true);
+            this.SaveManager.LoadData();
+        }
+
+        /// <summary>The method invoked after the player finishes saving.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        {
+            // clear custom data after a normal save (to avoid restoring old state)
+            if (!this.IsCustomSaving)
+                this.SaveManager.ClearData();
+        }
+
+        /// <summary>The method invoked after a menu is opened or changed.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            this.IsCustomSaving = e.NewMenu != null && (e.NewMenu is NewSaveGameMenu || e.NewMenu is NewShippingMenu);
         }
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
@@ -107,8 +126,19 @@ namespace Omegasis.SaveAnywhere
             if (!Context.IsPlayerFree)
                 return;
 
-            if (e.KeyPressed.ToString() == this.ConfigUtilities.KeyBinding)
-                this.SaveManager.SaveGameAndPositions();
+            // initiate save (if valid context)
+            if (e.KeyPressed.ToString() == this.Config.SaveKey)
+            {
+                // validate: community center Junimos can't be saved
+                if (Utility.getAllCharacters().OfType<Junimo>().Any())
+                {
+                    Game1.addHUDMessage(new HUDMessage("The spirits don't want you to save here.", HUDMessage.error_type));
+                    return;
+                }
+
+                // save
+                this.SaveManager.BeginSaveData();
+            }
         }
 
         /// <summary>Apply the NPC schedules to each NPC.</summary>

@@ -37,4 +37,12 @@ Press `K` to save anywhere. Edit `Save_Anywhere_Config.txt` to configure the key
 
 2.5:
 * Updated for SMAPI 2.0.
+* Overhauled save format.
+* Switched to standard JSON config file.
+* Fixed crash when saving in the community center.
+* Fixed crash during cutscenes.
+* Fixed load warp only happening after you move.
+* Fixed load not working after you exit to title.
+* Fixed some old data being restored if you reload after a normal save.
+* Fixed player/NPC facing directions not being restored.
 * Internal refactoring.
