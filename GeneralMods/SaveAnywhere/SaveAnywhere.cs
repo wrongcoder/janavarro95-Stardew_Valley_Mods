@@ -27,6 +27,8 @@ namespace Omegasis.SaveAnywhere
         /// <summary>Whether villager schedules should be reset now.</summary>
         private bool ShouldResetSchedules;
 
+        /// <summary>Whether we're performing a non-vanilla save (i.e. not by sleeping in bed).</summary>
+        private bool IsCustomSaving;
 
 
         /*********
@@ -39,6 +41,8 @@ namespace Omegasis.SaveAnywhere
             this.ConfigUtilities = new ConfigUtilities(this.Helper.DirectoryPath);
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            SaveEvents.AfterSave += this.SaveEvents_AfterSave;
+            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -54,6 +58,7 @@ namespace Omegasis.SaveAnywhere
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             // reset state
+            this.IsCustomSaving = false;
             this.ShouldResetSchedules = false;
 
             // load config
@@ -63,6 +68,24 @@ namespace Omegasis.SaveAnywhere
             // load positions
             this.SaveManager = new SaveManager(Game1.player, this.Helper.DirectoryPath, this.Monitor, this.Helper.Reflection, onVillagersReset: () => this.ShouldResetSchedules = true);
             this.SaveManager.LoadPositions();
+        }
+
+        /// <summary>The method invoked after the player finishes saving.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        {
+            // clear custom data after a normal save (to avoid restoring old state)
+            if (!this.IsCustomSaving)
+                this.SaveManager.ClearData();
+        }
+
+        /// <summary>The method invoked after a menu is opened or changed.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            this.IsCustomSaving = e.NewMenu != null && (e.NewMenu is NewSaveGameMenu || e.NewMenu is NewSaveGameMenu);
         }
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>

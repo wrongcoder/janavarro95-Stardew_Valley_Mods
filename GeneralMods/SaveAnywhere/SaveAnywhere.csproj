@@ -37,6 +37,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\NewSaveMenu.cs" />
     <Compile Include="Framework\SaveManager.cs" />
     <Compile Include="Framework\ConfigUtilities.cs" />
     <Compile Include="SaveAnywhere.cs" />

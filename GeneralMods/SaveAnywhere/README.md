@@ -37,4 +37,5 @@ Press `K` to save anywhere. Edit `Save_Anywhere_Config.txt` to configure the key
 
 2.5:
 * Updated for SMAPI 2.0.
+* Fixed issue where reloading after a sleep save restored some data from your last non-sleep save.
 * Internal refactoring.

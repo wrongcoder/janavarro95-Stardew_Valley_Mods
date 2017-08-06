@@ -71,9 +71,15 @@ namespace Omegasis.SaveAnywhere.Framework
             // perform passive save
             if (this.WaitingToSave && Game1.activeClickableMenu == null)
             {
-                Game1.activeClickableMenu = new SaveGameMenu();
+                Game1.activeClickableMenu = new NewSaveGameMenu();
                 this.WaitingToSave = false;
             }
+        }
+
+        /// <summary>Clear saved data.</summary>
+        public void ClearData()
+        {
+            Directory.Delete(this.SavePath, recursive: true);
         }
 
         /// <summary>Save all game data.</summary>
@@ -89,7 +95,7 @@ namespace Omegasis.SaveAnywhere.Framework
                 this.WaitingToSave = true;
             }
             else
-                Game1.activeClickableMenu = new SaveGameMenu();
+                Game1.activeClickableMenu = new NewSaveGameMenu();
 
             // save custom data
             Directory.CreateDirectory(this.SaveAnimalsPath);
