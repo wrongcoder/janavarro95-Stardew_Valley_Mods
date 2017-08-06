@@ -81,7 +81,7 @@ namespace Omegasis.SaveAnywhere
         /// <param name="e">The event data.</param>
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
-            this.IsCustomSaving = e.NewMenu != null && (e.NewMenu is NewSaveGameMenu || e.NewMenu is NewSaveGameMenu);
+            this.IsCustomSaving = e.NewMenu != null && (e.NewMenu is NewSaveGameMenu || e.NewMenu is NewShippingMenu);
         }
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
