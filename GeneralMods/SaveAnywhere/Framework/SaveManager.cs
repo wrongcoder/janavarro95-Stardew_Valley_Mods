@@ -165,6 +165,7 @@ namespace Omegasis.SaveAnywhere.Framework
                 }
             }
 
+            // NPCs (including horse and pets)
             foreach (NPC npc in Utility.getAllCharacters())
             {
                 // get NPC type

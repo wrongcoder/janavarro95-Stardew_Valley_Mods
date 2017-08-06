@@ -44,4 +44,5 @@ Press `K` to save anywhere. Edit `Save_Anywhere_Config.txt` to configure the key
 * Fixed load warp only happening after you move.
 * Fixed load not working after you exit to title.
 * Fixed some old data being restored if you reload after a normal save.
+* Fixed player/NPC facing directions not being restored.
 * Internal refactoring.
