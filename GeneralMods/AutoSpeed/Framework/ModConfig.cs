@@ -4,6 +4,6 @@
     internal class ModConfig
     {
         /// <summary>The added speed.</summary>
-        public int Speed { get; set; } = 1;
+        public int Speed { get; set; } = 5;
     }
 }

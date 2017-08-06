@@ -24,4 +24,5 @@ set the speed you want (higher values are faster).
 
 1.4:
 * Switched to standard JSON config file.
+* Fixed config defaulting to normal speed.
 * Internal refactoring.
