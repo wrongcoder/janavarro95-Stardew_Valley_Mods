@@ -15,11 +15,11 @@ namespace Omegasis.SaveAnywhere
         /*********
         ** Properties
         *********/
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
         /// <summary>Provides methods for saving and loading game data.</summary>
         private SaveManager SaveManager;
-
-        /// <summary>Provides methods for reading and writing the config file.</summary>
-        private ConfigUtilities ConfigUtilities;
 
         /// <summary>The parsed schedules by NPC name.</summary>
         private readonly IDictionary<string, string> NpcSchedules = new Dictionary<string, string>();
@@ -38,7 +38,7 @@ namespace Omegasis.SaveAnywhere
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            this.ConfigUtilities = new ConfigUtilities(this.Helper.DirectoryPath);
+            this.Config = helper.ReadConfig<ModConfig>();
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.AfterSave += this.SaveEvents_AfterSave;
@@ -60,10 +60,6 @@ namespace Omegasis.SaveAnywhere
             // reset state
             this.IsCustomSaving = false;
             this.ShouldResetSchedules = false;
-
-            // load config
-            this.ConfigUtilities.LoadConfig();
-            this.ConfigUtilities.WriteConfig();
 
             // load positions
             this.SaveManager = new SaveManager(this.Helper, this.Helper.Reflection, onLoaded: () => this.ShouldResetSchedules = true);
@@ -130,7 +126,7 @@ namespace Omegasis.SaveAnywhere
             if (!Context.IsPlayerFree)
                 return;
 
-            if (e.KeyPressed.ToString() == this.ConfigUtilities.KeyBinding)
+            if (e.KeyPressed.ToString() == this.Config.SaveKey)
                 this.SaveManager.BeginSaveData();
         }
 
