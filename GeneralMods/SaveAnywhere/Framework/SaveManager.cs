@@ -121,7 +121,8 @@ namespace Omegasis.SaveAnywhere.Framework
             {
                 var player = Game1.player;
                 string name = player.name;
-                string map = player.currentLocation.name;
+                string map = player.currentLocation.uniqueName; //Try to get a unique name for the location and if we can't we are going to default to the actual name of the map.
+                if (map == ""|| map==null) map = player.currentLocation.name; //This is used to account for maps that share the same name but have a unique ID such as Coops, Barns and Sheds.
                 Point tile = player.getTileLocationPoint();
                 int facingDirection = player.facingDirection;
 
@@ -155,11 +156,11 @@ namespace Omegasis.SaveAnywhere.Framework
                 if (data != null)
                 {
                     Game1.player.previousLocationName = Game1.player.currentLocation.name;
-                    Game1.locationAfterWarp = Game1.getLocationFromName(data.Name);
+                    Game1.locationAfterWarp = Game1.getLocationFromName(data.Map);
                     Game1.xLocationAfterWarp = data.X;
                     Game1.yLocationAfterWarp = data.Y;
                     Game1.facingDirectionAfterWarp = data.FacingDirection;
-                    Game1.fadeScreenToBlack();
+                     Game1.fadeScreenToBlack();
                     Game1.warpFarmer(data.Map, data.X, data.Y, false);
                     Game1.player.faceDirection(data.FacingDirection);
                 }

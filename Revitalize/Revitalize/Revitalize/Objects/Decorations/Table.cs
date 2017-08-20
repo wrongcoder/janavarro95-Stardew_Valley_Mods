@@ -468,7 +468,7 @@ namespace Revitalize.Objects
                 environment.lightGlows.Remove(new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y + Game1.tileSize)));
                 this.lightGlowAdded = false;
             }
-            Lists.DecorationsToDraw.Remove(this);
+           // Lists.DecorationsToDraw.Remove(this);
             base.performRemoveAction(tileLocation, environment);
         }
 
@@ -728,7 +728,7 @@ namespace Revitalize.Objects
                 }
             }
             this.updateDrawPosition();
-            Lists.DecorationsToDraw.Add(this);
+            //Lists.DecorationsToDraw.Add(this);
             return Util.placementAction(this, location, x, y, who);
 
             //  Game1.showRedMessage("Can only be placed in House");

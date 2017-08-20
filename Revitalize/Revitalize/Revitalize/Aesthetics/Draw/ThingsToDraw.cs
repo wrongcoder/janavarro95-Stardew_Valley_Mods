@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using Revitalize.Objects;
+using Revitalize.Resources;
 using StardewModdingAPI;
 using StardewValley;
 using System;
@@ -19,6 +20,34 @@ namespace Revitalize.Draw
             Magic.MagicMonitor.drawMagicMeter();
         }
 
+        public static void drawAllObjects()
+        {
+            foreach (var v in Lists.DecorationsToDraw)
+            {
+                if (Game1.player.currentLocation == v.thisLocation)
+                {
+                    v.draw(Game1.spriteBatch,(int)v.tileLocation.X,(int)v.tileLocation.Y);
+                }
+            }
 
+        }
+
+        public static void drawAllFurniture()
+        {
+
+            //int i = 0;
+            SpriteBatch b = Game1.spriteBatch;
+            b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
+            foreach (var v in Lists.DecorationsToDraw)
+            {
+                //Log.Async(i);
+                //i++;
+                if (v is ModularDecoration && v.thisLocation==Game1.player.currentLocation)
+                {
+                    if (v.boundingBox.Height == 0 && v.boundingBox.Width == 0) (v as ModularDecoration).drawInfront(b, (int)v.tileLocation.X, (int)v.tileLocation.Y);
+                }
+            }
+            b.End();
+        }
     }
 }

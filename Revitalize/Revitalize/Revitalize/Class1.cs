@@ -29,6 +29,7 @@ using System.Reflection;
 using StardewValley.Menus;
 using Revitalize.Resources.DataNodes;
 using Revitalize.Persistence;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Revitalize
 {
@@ -93,6 +94,7 @@ namespace Revitalize
             SetUp.DuringEntry();
         }
 
+
         /// <summary>
         /// Draw my weather debris system.
         /// </summary>
@@ -112,6 +114,7 @@ namespace Revitalize
         {
             if (gameLoaded == true)
             {
+                ThingsToDraw.drawAllFurniture();
                 ThingsToDraw.drawAllHuds();
             }
         }
@@ -145,11 +148,14 @@ namespace Revitalize
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            if (Game1.activeClickableMenu != null) Monitor.Log(Game1.activeClickableMenu.ToString());
             if (Game1.player.isMoving() == true && hasLoadedTerrainList == false)
             {
                 Lists.loadAllListsAfterMovement();
                 Util.WaterAllCropsInAllLocations();
             }
+
+           // this.checkForCollision();
             WeatherDebrisSystem.update();
 
             if (Utilities.MapUtilities.isEditingMap == true)
@@ -206,6 +212,11 @@ namespace Revitalize
 
         }
 
+        /// <summary>
+        /// Don't ever use this. It was a failed attempt.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MapWipe(object sender, EventArgs e)
         {
           
@@ -325,6 +336,9 @@ namespace Revitalize
                 Dictionaries.spriteFontList.TryGetValue("0", out font);
                 objShopList.Add(new TestMachine(3, Vector2.Zero, Util.invertColor(LightColors.White), LightColors.White, false, 9, true));
                 objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
+                objShopList.Add(new Decoration(1391, Vector2.Zero));
+                objShopList.Add(new ModularDecoration(1120, Vector2.Zero,"VanillaFurniture"));
+                objShopList.Add(new ModularDecoration(0, Vector2.Zero, "VanillaFurniture"));
                 objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<List<Item>>()
                 {
                     new List<Item>()

@@ -846,6 +846,7 @@ namespace Revitalize.Objects
                  }
              }
              */
+            if (f == true) Lists.DecorationsToDraw.Add(this);
             return f;
             //  Game1.showRedMessage("Can only be placed in House");
             //  return false;

@@ -16,6 +16,7 @@ namespace Revitalize.Resources
         public static List<Revitalize.Resources.DataNodes.TrackedTerrainDummyDataNode> trackedTerrainFeaturesDummyList;
 
         public static List<Revitalize.CoreObject> trackedObjectList;
+        public static List<Revitalize.Objects.ModularDecoration> DecorationsToDraw;
 
         public static List<Type> serializerTypes;
         public static List<string> saplingNames;
@@ -27,6 +28,7 @@ namespace Revitalize.Resources
             trackedObjectList = new List<CoreObject>();
            
             WeatherDebrisSystem.thisWeatherDebris = new List<WeatherDebrisPlus>();
+            DecorationsToDraw = new List<Objects.ModularDecoration>();
         }
 
         public static void loadAllListsAfterMovement()
