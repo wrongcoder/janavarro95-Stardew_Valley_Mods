@@ -42,9 +42,9 @@ namespace Revitalize.Draw
             {
                 //Log.Async(i);
                 //i++;
-                if (v is ModularDecoration && v.thisLocation==Game1.player.currentLocation)
+                if (v is Decoration && v.thisLocation==Game1.player.currentLocation)
                 {
-                    if (v.boundingBox.Height == 0 && v.boundingBox.Width == 0) (v as ModularDecoration).drawInfront(b, (int)v.tileLocation.X, (int)v.tileLocation.Y);
+                    if (v.boundingBox.Height == 0 && v.boundingBox.Width == 0) (v as Decoration).drawInfront(b, (int)v.tileLocation.X, (int)v.tileLocation.Y);
                 }
             }
             b.End();

@@ -41,10 +41,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "~metadata", "~metadata", "{
 	ProjectSection(SolutionItems) = preProject
 		deploy.targets = deploy.targets
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+		AdditionalCropsFramework\ModularCropObject.cs = AdditionalCropsFramework\ModularCropObject.cs
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSoundManager", "SimpleSoundManager\SimpleSoundManager.csproj", "{7B1E9A54-ED9E-47AA-BBAA-98A6E7CB527A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdditionalCropsFramework", "AdditionalCropsFramework\AdditionalCropsFramework.csproj", "{C5F88D48-EA20-40CD-91E2-C8725DC11795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -124,6 +127,10 @@ Global
 		{7B1E9A54-ED9E-47AA-BBAA-98A6E7CB527A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B1E9A54-ED9E-47AA-BBAA-98A6E7CB527A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B1E9A54-ED9E-47AA-BBAA-98A6E7CB527A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5F88D48-EA20-40CD-91E2-C8725DC11795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F88D48-EA20-40CD-91E2-C8725DC11795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F88D48-EA20-40CD-91E2-C8725DC11795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F88D48-EA20-40CD-91E2-C8725DC11795}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
