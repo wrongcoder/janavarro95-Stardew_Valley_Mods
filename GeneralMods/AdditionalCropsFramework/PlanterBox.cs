@@ -1,14 +1,16 @@
 ﻿using AdditionalCropsFramework.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardustCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace AdditionalCropsFramework
@@ -58,6 +60,8 @@ namespace AdditionalCropsFramework
         public ModularCrop modularCrop;
         public bool isWatered;
 
+        public string serializationName="AdditionalCropsFramework.PlanterBox";
+
         public override string Name
         {
             get
@@ -79,6 +83,7 @@ namespace AdditionalCropsFramework
         public PlanterBox(int which, Vector2 tile, bool isRemovable = true, int price = 0, bool isSolid = false)
         {
             removable = isRemovable;
+            this.serializationName =Convert.ToString(GetType());
             // this.thisType = GetType();
             this.tileLocation = tile;
             this.InitializeBasics(0, tile);
@@ -122,6 +127,7 @@ namespace AdditionalCropsFramework
         public PlanterBox(int which, Vector2 tile, string ObjectTexture, bool isRemovable = true, int price = 0, bool isSolid = false)
         {
             removable = isRemovable;
+            this.serializationName = Convert.ToString(GetType());
             // this.thisType = GetType();
             this.tileLocation = tile;
             this.InitializeBasics(0, tile);
@@ -130,7 +136,7 @@ namespace AdditionalCropsFramework
                 TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(ObjectTexture); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
                 texturePath = ObjectTexture;
             }
-
+            this.dataPath = "";
 
             this.name = "Planter Box";
             this.description = "A planter box that can be used to grow many different crops in many different locations.";
@@ -164,44 +170,57 @@ namespace AdditionalCropsFramework
 
         public PlanterBox(int which, Vector2 tile, string ObjectTexture, string DataPath, bool isRemovable = true, bool isSolid = false)
         {
+            this.serializationName = Convert.ToString(GetType());
             removable = isRemovable;
             // this.thisType = GetType();
             this.tileLocation = tile;
             this.InitializeBasics(0, tile);
                 TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(ObjectTexture); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
                 texturePath = ObjectTexture;
-            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(DataPath);
-            dataPath = DataPath;
-            string s=""; 
-            dictionary.TryGetValue(which,out s);
-            string[] array = s.Split('/');
-            this.name = array[0];
-            this.description = array[1];
-            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
-
-            this.defaultSourceRect.Width = 1;
-            this.defaultSourceRect.Height = 1;
-            this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
-            this.defaultSourceRect = this.sourceRect;
-
-
-            this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
-
-            this.defaultBoundingBox.Width = 1;
-            this.defaultBoundingBox.Height = 1;
-            IsSolid = isSolid;
-            if (isSolid == true)
+            Dictionary<int, string> dictionary;
+            try
             {
-                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
+                
+                    dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(DataPath);
+                    dataPath = DataPath;
+                
+
+                string s = "";
+                dictionary.TryGetValue(which, out s);
+                string[] array = s.Split('/');
+                this.name = array[0];
+                this.description = array[1];
+                this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
+
+                this.defaultSourceRect.Width = 1;
+                this.defaultSourceRect.Height = 1;
+                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.defaultSourceRect = this.sourceRect;
+
+
+                this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
+
+                this.defaultBoundingBox.Width = 1;
+                this.defaultBoundingBox.Height = 1;
+                IsSolid = isSolid;
+                if (isSolid == true)
+                {
+                    this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
+                }
+                else
+                {
+                    this.boundingBox = new Rectangle(int.MinValue, (int)this.tileLocation.Y * Game1.tileSize, 0, 0); //Throw the bounding box away as far as possible.
+                }
+                this.defaultBoundingBox = this.boundingBox;
+                this.updateDrawPosition();
+                this.price = Convert.ToInt32(array[2]);
+                this.parentSheetIndex = which;
             }
-            else
+            catch(Exception e)
             {
-                this.boundingBox = new Rectangle(int.MinValue, (int)this.tileLocation.Y * Game1.tileSize, 0, 0); //Throw the bounding box away as far as possible.
+                Log.AsyncC(e);
             }
-            this.defaultBoundingBox = this.boundingBox;
-            this.updateDrawPosition();
-            this.price =Convert.ToInt32(array[2]);
-            this.parentSheetIndex = which;
+
         }
 
 
@@ -305,6 +324,7 @@ namespace AdditionalCropsFramework
                     Utilities.addItemToInventoryAndCleanTrackedList(this);
                     this.flaggedForPickUp = true;
                     this.thisLocation = null;
+                    this.locationsName = "";
                     return true;
                 }
                 else
@@ -324,6 +344,7 @@ namespace AdditionalCropsFramework
                         //   this.heldObject = null;
                         Game1.playSound("coin");
                         this.thisLocation = null;
+                        this.locationsName = "";
                         return true;
                     }
 
@@ -337,6 +358,7 @@ namespace AdditionalCropsFramework
                 Utilities.addItemToInventoryAndCleanTrackedList(this);
                 Game1.playSound("coin");
                 this.thisLocation = null;
+                this.locationsName = "";
                 return true;
             }
 
@@ -678,15 +700,15 @@ namespace AdditionalCropsFramework
                     this.modularCrop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
                     Log.AsyncM("draw a modular crop now");
                 }
-                Log.AsyncC("wait WTF");
+               // Log.AsyncC("wait WTF");
 
                 if (this.crop != null)
                 {
                     this.crop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
-                    Log.AsyncG("COWS GO MOO");
+                 //   Log.AsyncG("COWS GO MOO");
                 }
             }
-           else Log.AsyncM("I DONT UNDERSTAND");
+           //else Log.AsyncM("I DONT UNDERSTAND");
         }
 
         public void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
@@ -720,5 +742,112 @@ namespace AdditionalCropsFramework
         {
             return Color.Purple;
         }
+
+        public static new void Serialize(Item I)
+        {
+            ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.playerInventoryPath, I.Name + ".json"), (PlanterBox)I);
+        }
+
+        public static Item ParseIntoInventory(string s)
+        {
+           // PlanterBox p = new PlanterBox();
+           // return p;
+
+
+
+            dynamic obj = JObject.Parse(s);
+
+            PlanterBox d = new PlanterBox();
+
+            d.dataPath = obj.dataPath;
+            d.price = obj.price;
+            d.Decoration_type = obj.Decoration_type;
+            d.rotations = obj.rotations;
+            d.currentRotation = obj.currentRotation;
+            string s1 = Convert.ToString(obj.sourceRect);
+            d.sourceRect = Utilities.parseRectFromJson(s1);
+            string s2 = Convert.ToString(obj.defaultSourceRect);
+            d.defaultSourceRect = Utilities.parseRectFromJson(s2);
+            string s3 = Convert.ToString(obj.defaultBoundingBox);
+            d.defaultBoundingBox = Utilities.parseRectFromJson(s3);
+            d.description = obj.description;
+            d.flipped = obj.flipped;
+            d.flaggedForPickUp = obj.flaggedForPickUp;
+            d.tileLocation = obj.tileLocation;
+            d.parentSheetIndex = obj.parentSheetIndex;
+            d.owner = obj.owner;
+            d.name = obj.name;
+            d.type = obj.type;
+            d.canBeSetDown = obj.canBeSetDown;
+            d.canBeGrabbed = obj.canBeGrabbed;
+            d.isHoedirt = obj.isHoedirt;
+            d.isSpawnedObject = obj.isSpawnedObject;
+            d.questItem = obj.questItem;
+            d.isOn = obj.isOn;
+            d.fragility = obj.fragility;
+            d.edibility = obj.edibility;
+            d.stack = obj.stack;
+            d.quality = obj.quality;
+            d.bigCraftable = obj.bigCraftable;
+            d.setOutdoors = obj.setOutdoors;
+            d.setIndoors = obj.setIndoors;
+            d.readyForHarvest = obj.readyForHarvest;
+            d.showNextIndex = obj.showNextIndex;
+            d.hasBeenPickedUpByFarmer = obj.hasBeenPickedUpByFarmer;
+            d.isRecipe = obj.isRecipe;
+            d.isLamp = obj.isLamp;
+            d.heldObject = obj.heldObject;
+            d.minutesUntilReady = obj.minutesUntilReady;
+            string s4 = Convert.ToString(obj.boundingBox);
+            d.boundingBox = Utilities.parseRectFromJson(s4);
+            d.scale = obj.scale;
+            d.lightSource = obj.lightSource;
+            d.shakeTimer = obj.shakeTimer;
+            d.internalSound = obj.internalSound;
+            d.specialVariable = obj.specialVariable;
+            d.category = obj.category;
+            d.specialItem = obj.specialItem;
+            d.hasBeenInInventory = obj.hasBeenInInventory;
+            string t = obj.texturePath;
+
+            //  Log.AsyncC(t);
+
+            d.TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(t);
+            d.texturePath = t;
+            JArray array = obj.inventory;
+            d.inventory = array.ToObject<List<Item>>();
+            d.inventoryMaxSize = obj.inventoryMaxSize;
+            d.itemReadyForHarvest = obj.itemReadyForHarvest;
+            d.lightsOn = obj.lightsOn;
+            // d.thisLocation = Game1.getLocationFromName(loc);
+            // d.thisLocation = obj.thisLocation;
+          //  Log.AsyncC(d.thisLocation);
+            d.lightColor = obj.lightColor;
+            d.thisType = obj.thisType;
+            d.removable = obj.removable;
+            d.locationsName = obj.locationsName;
+
+            d.drawColor = obj.drawColor;
+
+
+            try
+            {
+                return d;
+            }
+            catch (Exception e)
+            {
+                Log.AsyncM(e);
+                return null;
+            }
+
+            //return base.ParseIntoInventory();
+        }
+
+        public static void SerializeFromWorld(Item c)
+        {
+            ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, (c as CoreObject).thisLocation.name, c.Name + ".json"), (PlanterBox)c);
+        }
+
+
     }
 }

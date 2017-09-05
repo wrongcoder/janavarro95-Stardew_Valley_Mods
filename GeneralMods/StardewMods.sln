@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleSoundManager", "Simpl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdditionalCropsFramework", "AdditionalCropsFramework\AdditionalCropsFramework.csproj", "{C5F88D48-EA20-40CD-91E2-C8725DC11795}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StardustCore", "StardustCore\StardustCore.csproj", "{0756D36A-95C8-480D-8EA6-4584C03010C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,10 @@ Global
 		{C5F88D48-EA20-40CD-91E2-C8725DC11795}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5F88D48-EA20-40CD-91E2-C8725DC11795}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5F88D48-EA20-40CD-91E2-C8725DC11795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0756D36A-95C8-480D-8EA6-4584C03010C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0756D36A-95C8-480D-8EA6-4584C03010C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0756D36A-95C8-480D-8EA6-4584C03010C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0756D36A-95C8-480D-8EA6-4584C03010C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

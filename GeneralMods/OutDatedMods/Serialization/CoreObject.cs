@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace AdditionalCropsFramework
+namespace Omegasis.CoreLibraries
 {
     /// <summary>
     ///  Extends StardewValley.Object. Might be broken and just mainly uses a ton of junk code.
@@ -1546,6 +1546,23 @@ namespace AdditionalCropsFramework
             return Color.Black;
         }
 
+
+        public static void Serialize(Item I)
+        {
+
+        }
+
+        public static Item ParseIntoInventory()
+        {
+            Item I = new CoreObject(0, Vector2.Zero, 0);
+            return I;
+        }
+
+        public static void ParseIntoWorld()
+        {
+            //Item I = new CoreObject(0, Vector2.Zero, 0);
+            //return I;
+        }
 
     }
 }

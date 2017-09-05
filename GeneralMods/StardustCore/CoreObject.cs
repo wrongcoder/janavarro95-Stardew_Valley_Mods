@@ -1,23 +1,22 @@
-﻿
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using StardustCore;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace AdditionalCropsFramework
+namespace StardustCore
 {
     /// <summary>
-    ///  Revitalize ModularCropObject Class. This is a core class and should only be extended upon.
+    ///  Extends StardewValley.Object. Might be broken and just mainly uses a ton of junk code. Just extend off of this.
     /// </summary>
     /// 
-    public class ModularCropObject : CoreObject
+ 
+    public class CoreObject : StardewValley.Object
     {
 
         public new int price;
@@ -42,7 +41,6 @@ namespace AdditionalCropsFramework
 
         [XmlIgnore]
         public Texture2D TextureSheet;
-        public string dataFileName;
 
         public new bool flipped;
 
@@ -53,7 +51,17 @@ namespace AdditionalCropsFramework
 
         public string texturePath;
 
+        public List<Item> inventory;
+
+        public int inventoryMaxSize;
+
         public bool itemReadyForHarvest;
+
+        public bool lightsOn;
+
+        public GameLocation thisLocation;
+
+        public Color lightColor;
 
         public string thisType;
 
@@ -65,8 +73,6 @@ namespace AdditionalCropsFramework
 
         public bool useXML;
 
-        public string cropType;
-
         public override string Name
         {
             get
@@ -76,31 +82,43 @@ namespace AdditionalCropsFramework
 
         }
 
-        public ModularCropObject()
+        public virtual void InitializeBasics(int InvMaxSize, Vector2 tile)
+        {
+            this.inventory = new List<Item>();
+            this.inventoryMaxSize = InvMaxSize;
+            this.tileLocation = tile;
+            lightsOn = false;
+
+            lightColor = Color.Black;
+            thisType = this.GetType().ToString();
+        }
+
+        public CoreObject()
         {
             this.updateDrawPosition();
         }
 
-        public ModularCropObject(bool f)
+        public CoreObject(bool f)
         {
             //does nothng
         }
 
-        public ModularCropObject(int which, int initalStack, string ObjectTextureSheetName, string DataFileName)
-        {       
-            this.stack = initalStack;
-            TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(ObjectTextureSheetName);  //Game1.content.Load<Texture2D>("TileSheets\\furniture");
-            texturePath = ObjectTextureSheetName;
-            this.dataFileName = DataFileName;
-            this.canBeSetDown = false;
-
-            Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>(DataFileName);
+        public CoreObject(int which, Vector2 Tile, int InventoryMaxSize)
+        {
+            InitializeBasics(InventoryMaxSize, Tile);
+            if (TextureSheet == null)
+            {
+                TextureSheet = Game1.content.Load<Texture2D>("TileSheets\\furniture");
+                texturePath = "TileSheets\\furniture";
+            }
+            Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
             string[] array = dictionary[which].Split(new char[]
             {
                 '/'
             });
             this.name = array[0];
 
+            this.Decoration_type = this.getTypeNumberFromName(array[1]);
             this.description = "Can be placed inside your house.";
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
             if (array[2].Equals("-1"))
@@ -151,13 +169,12 @@ namespace AdditionalCropsFramework
             return this.description;
         }
 
-        /*
         public override bool performDropDownAction(StardewValley.Farmer who)
         {
             this.resetOnPlayerEntry((who == null) ? Game1.currentLocation : who.currentLocation);
             return false;
         }
-        */
+
         public override void hoverAction()
         {
             base.hoverAction();
@@ -167,10 +184,8 @@ namespace AdditionalCropsFramework
             }
         }
 
-        /*
         public override bool checkForAction(StardewValley.Farmer who, bool justCheckingForActivity = false)
         {
-            /*
             var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
             if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
@@ -200,9 +215,8 @@ namespace AdditionalCropsFramework
                 return true;
             }
             return this.clicked(who);
-            
         }
-    */
+
         //DONT USE THIS BASE IT IS TERRIBLE
         /*
         public override bool clicked(StardewValley.Farmer who)
@@ -217,16 +231,16 @@ namespace AdditionalCropsFramework
                 return false;
             }
 
-            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is ModularCropObject)))
+            if (this.heldObject == null && (who.ActiveObject == null || !(who.ActiveObject is CoreObject)))
             {
                 if (Game1.player.currentLocation is FarmHouse)
                 {
                     // Game1.showRedMessage("Why2?");
                     //  this.spillInventoryEverywhere();
 
-                   // if (this.heldObject != null) Util.addItemToInventoryElseDrop(this.heldObject.getOne());
-                    this.heldObject = new ModularCropObject(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
-                   // Util.addItemToInventoryElseDrop(this.heldObject.getOne());
+                    if (this.heldObject != null) Util.addItemToInventoryElseDrop(this.heldObject.getOne());
+                    this.heldObject = new CoreObject(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
+                  //  Util.addItemToInventoryElseDrop(this.heldObject.getOne());
                     this.heldObject = null;
                     this.flaggedForPickUp = true;
                     thisLocation = null;
@@ -246,8 +260,8 @@ namespace AdditionalCropsFramework
 
                         //    Util.addItemToInventoryElseDrop(this.heldObject);
 
-                        var obj = new ModularCropObject(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
-                        Util.addItemToInventoryElseDrop(obj);
+                        var obj = new CoreObject(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
+                       // Util.addItemToInventoryElseDrop(obj);
                         //     this.spillInventoryEverywhere();
                         if (this.heldObject != null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
 
@@ -264,8 +278,8 @@ namespace AdditionalCropsFramework
                 // Game1.showRedMessage("Why3?");
                 // if(this.heldObject!=null) Game1.player.addItemByMenuIfNecessary((Item)this.heldObject);
                 // this.spillInventoryEverywhere();
-                var obj = new ModularCropObject(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
-                Util.addItemToInventoryElseDrop(obj);
+                var obj = new CoreObject(parentSheetIndex, Vector2.Zero, this.inventoryMaxSize);
+              //  Util.addItemToInventoryElseDrop(obj);
                 if (this.heldObject != null) this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.heldObject = null;
                 Game1.playSound("coin");
@@ -278,7 +292,7 @@ namespace AdditionalCropsFramework
             return false;
         }
         */
-        /*
+
         public virtual bool RightClicked(StardewValley.Farmer who)
         {
             //  StardewModdingAPI.Log.AsyncC(lightColor);
@@ -331,13 +345,11 @@ namespace AdditionalCropsFramework
                 return true;
             }
 
-            
+            */
 
             return false;
         }
-        */
 
-            /*
         public override void DayUpdate(GameLocation location)
         {
             base.DayUpdate(location);
@@ -349,9 +361,7 @@ namespace AdditionalCropsFramework
             }
             this.addLights(location);
         }
-        */
 
-            /*
         public virtual void resetOnPlayerEntry(GameLocation environment)
         {
             this.removeLights(environment);
@@ -364,13 +374,13 @@ namespace AdditionalCropsFramework
         public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, StardewValley.Farmer who)
         {
             // Log.AsyncG("HEY!");
-            if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.heldObject == null && !dropIn.bigCraftable && (!(dropIn is ModularCropObject) || ((dropIn as ModularCropObject).getTilesWide() == 1 && (dropIn as ModularCropObject).getTilesHigh() == 1)))
+            if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.heldObject == null && !dropIn.bigCraftable && (!(dropIn is CoreObject) || ((dropIn as CoreObject).getTilesWide() == 1 && (dropIn as CoreObject).getTilesHigh() == 1)))
             {
                 this.heldObject = (StardewValley.Object)dropIn.getOne();
                 this.heldObject.tileLocation = this.tileLocation;
                 this.heldObject.boundingBox.X = this.boundingBox.X;
                 this.heldObject.boundingBox.Y = this.boundingBox.Y;
-                // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as ModularCropObject).Decoration_type));
+                // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as CoreObject).Decoration_type));
                 this.heldObject.performDropDownAction(who);
                 if (!probe)
                 {
@@ -685,15 +695,14 @@ namespace AdditionalCropsFramework
         {
             return this.Decoration_type != 13 && this.Decoration_type != 6 && this.Decoration_type != 13;
         }
-        */
+
         public override bool canBeGivenAsGift()
         {
-            return true;
+            return false;
         }
-        
+        /*
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {
-            return false;
             if ((l is FarmHouse))
             {
                 for (int i = 0; i < this.boundingBox.Width / Game1.tileSize; i++)
@@ -706,9 +715,9 @@ namespace AdditionalCropsFramework
                         foreach (KeyValuePair<Vector2, StardewValley.Object> something in l.objects)
                         {
                             StardewValley.Object obj = something.Value;
-                            if ((obj.GetType()).ToString().Contains("ModularCropObject"))
+                            if ((obj.GetType()).ToString().Contains("CoreObject"))
                             {
-                                ModularCropObject current = (ModularCropObject)obj;
+                                CoreObject current = (CoreObject)obj;
                                 if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
                                 {
                                     bool result = true;
@@ -723,7 +732,7 @@ namespace AdditionalCropsFramework
                         }
                     }
                 }
-                //return Util.canBePlacedHere(this, l, tile);
+                return Util.canBePlacedHere(this, l, tile);
             }
             else
             {
@@ -736,7 +745,7 @@ namespace AdditionalCropsFramework
                         vector.X += (float)(Game1.tileSize / 2);
                         vector.Y += (float)(Game1.tileSize / 2);
                         /*
-                        foreach (ModularCropObject current in (l as FarmHouse).ModularCropObject)
+                        foreach (CoreObject current in (l as FarmHouse).CoreObject)
                         {
                             if (current.Decoration_type == 11 && current.getBoundingBox(current.tileLocation).Contains((int)vector.X, (int)vector.Y) && current.heldObject == null && this.getTilesWide() == 1)
                             {
@@ -749,14 +758,13 @@ namespace AdditionalCropsFramework
                                 return result;
                             }
                         }
-                       */ 
+                        
                     }
                 }
-              //  return Util.canBePlacedHere(this, l, tile);
+                return Util.canBePlacedHere(this, l, tile);
             }
-            
         }
-
+        */
         public virtual void updateDrawPosition()
         {
             this.drawPosition = new Vector2((float)this.boundingBox.X, (float)(this.boundingBox.Y - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)));
@@ -826,9 +834,9 @@ namespace AdditionalCropsFramework
                 foreach (KeyValuePair<Vector2, StardewValley.Object> c in location.objects)
                 {
                     StardewValley.Object ehh = c.Value;
-                    if (((ehh.GetType()).ToString()).Contains("ModularCropObject"))
+                    if (((ehh.GetType()).ToString()).Contains("CoreObject"))
                     {
-                        ModularCropObject current2 = (ModularCropObject)ehh;
+                        CoreObject current2 = (CoreObject)ehh;
                         if (current2.Decoration_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
                         {
                             current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
@@ -939,11 +947,6 @@ namespace AdditionalCropsFramework
         */
         public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
-            return false;
-            if (base.placementAction(location, x, y, who) == true)
-            {
-               // Lists.trackedObjectList.Add(this);
-            }
 
 
             if (location is FarmHouse)
@@ -997,7 +1000,7 @@ namespace AdditionalCropsFramework
                     StardewValley.Object ehh = c.Value;
                     if (((ehh.GetType()).ToString()).Contains("Spawner"))
                     {
-                        ModularCropObject current2 = (ModularCropObject)ehh;
+                        CoreObject current2 = (CoreObject)ehh;
                         if (current2.Decoration_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
                         {
                             current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
@@ -1100,6 +1103,7 @@ namespace AdditionalCropsFramework
                     }
                 }
                 this.updateDrawPosition();
+                this.thisLocation = Game1.player.currentLocation;
                 return base.placementAction(location, x * Game1.tileSize, y * Game1.tileSize, who);
             }
         }
@@ -1244,6 +1248,41 @@ namespace AdditionalCropsFramework
             return new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, num * Game1.tileSize, num2 * Game1.tileSize);
         }
 
+        private int getTypeNumberFromName(string typeName)
+        {
+            string key;
+            switch (key = typeName.ToLower())
+            {
+                case "chair":
+                    return 0;
+                case "bench":
+                    return 1;
+                case "couch":
+                    return 2;
+                case "armchair":
+                    return 3;
+                case "dresser":
+                    return 4;
+                case "long table":
+                    return 5;
+                case "painting":
+                    return 6;
+                case "lamp":
+                    return 7;
+                case "decor":
+                    return 8;
+                case "bookcase":
+                    return 10;
+                case "table":
+                    return 11;
+                case "rug":
+                    return 12;
+                case "window":
+                    return 13;
+            }
+            return 9;
+        }
+
         public override int salePrice()
         {
             return this.price;
@@ -1328,9 +1367,9 @@ namespace AdditionalCropsFramework
             }
             if (this.heldObject != null)
             {
-                if (this.heldObject is ModularCropObject)
+                if (this.heldObject is CoreObject)
                 {
-                    (this.heldObject as ModularCropObject).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as ModularCropObject).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
+                    (this.heldObject as CoreObject).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as CoreObject).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
                 spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
@@ -1345,16 +1384,123 @@ namespace AdditionalCropsFramework
 
         public override Item getOne()
         {
-            ModularCropObject ModularCropObject = new ModularCropObject(this.parentSheetIndex,this.stack,this.texturePath,this.dataFileName);
+            CoreObject CoreObject = new CoreObject(this.parentSheetIndex, this.tileLocation, this.inventoryMaxSize);
 
-            ModularCropObject.drawPosition = this.drawPosition;
-            ModularCropObject.defaultBoundingBox = this.defaultBoundingBox;
-            ModularCropObject.boundingBox = this.boundingBox;
-            ModularCropObject.currentRotation = this.currentRotation - 1;
-            ModularCropObject.rotations = this.rotations;
+            CoreObject.drawPosition = this.drawPosition;
+            CoreObject.defaultBoundingBox = this.defaultBoundingBox;
+            CoreObject.boundingBox = this.boundingBox;
+            CoreObject.currentRotation = this.currentRotation - 1;
+            CoreObject.rotations = this.rotations;
             //rotate();
 
-            return ModularCropObject;
+            return CoreObject;
+        }
+
+        public virtual bool isInventoryFull()
+        {
+            //   Log.AsyncC("Count" + inventory.Count);
+            //    Log.AsyncC("size" + inventoryMaxSize);
+            if (inventory.Count >= inventoryMaxSize)
+            {
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public virtual bool addItemToInventory(Item I)
+        {
+            if (isInventoryFull() == false)
+            {
+                inventory.Add(I.getOne());
+                return true;
+            }
+            else return false;
+        }
+
+        public virtual void spillInventoryEverywhere()
+        {
+            Game1.activeClickableMenu = new StorageContainer(this.inventory, 3, 3);
+            this.itemReadyForHarvest = false;
+            /*
+            Log.AsyncC("DROPPING INVENTORY!");
+
+            Random random = new Random(inventory.Count);
+            int i = random.Next();
+            i = i % 4;
+            Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
+            foreach (var I in inventory)
+            {
+                Log.AsyncY(I.Name);
+                Log.AsyncO(I.getStack());
+                Log.AsyncM(I.Stack);
+                Log.AsyncC("Dropping an item!");
+                Game1.createItemDebris(I, v2, i);
+            }
+            inventory.Clear();
+            */
+        }
+
+        public virtual bool addItemToInventoryElseDrop(Item I)
+        {
+
+            if (isInventoryFull() == false)
+            {
+                foreach (Item C in inventory)
+                {
+                    if (C == null) continue;
+                    if (I.canStackWith(C) == true)
+                    {
+                        C.addToStack(I.Stack);
+                        return true;
+                    }
+                    else
+                    {
+                        inventory.Add(I.getOne());
+                        return true;
+                    }
+                }
+                inventory.Add(I.getOne());
+                return true;
+            }
+            else
+            {
+                Random random = new Random(inventory.Count);
+                int i = random.Next();
+                i = i % 4;
+                Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
+                Game1.createItemDebris(I.getOne(), v2, i);
+                return false;
+            }
+        }
+
+        public virtual void toggleLights()
+        {
+
+            if (lightsOn == false)
+            {
+
+                // Log.AsyncG("ADD LIGHTS");
+                this.Decoration_type = 7;
+                this.type = "Lamp";
+
+                //     this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\Lantern");
+                // this.lightSource.position = tileLocation;
+
+                // this.addLights(thisLocation, lightColor);
+                this.addLights(thisLocation, lightColor);
+                lightsOn = true;
+            }
+            if (lightsOn == true)
+            {
+                this.removeLights(Game1.player.currentLocation);
+                lightsOn = false;
+            }
+
         }
 
         public virtual void resetTexture()
@@ -1364,17 +1510,32 @@ namespace AdditionalCropsFramework
 
         public override string getCategoryName()
         {
-            if (this.cropType != "") return this.cropType;
-            return "ModdedCrop";
+            return "Core Mod Object";
+            //  return base.getCategoryName();
         }
 
         public override Color getCategoryColor()
         {
-            return Color.DarkBlue;
-            
+            return Color.Black;
         }
 
-        
+
+        public static void Serialize(Item I)
+        {
+
+        }
+
+        public static Item ParseIntoInventory()
+        {
+            Item I = new CoreObject(0, Vector2.Zero, 0);
+            return I;
+        }
+
+        public static void ParseIntoWorld()
+        {
+            //Item I = new CoreObject(0, Vector2.Zero, 0);
+            //return I;
+        }
 
     }
 }

@@ -249,7 +249,7 @@ namespace StardewValley
                         if (junimoHarvester != null)
                             junimoHarvester.tryToAddItemToHut((Item)new ModularCropObject(this.indexOfHarvest, 1, this.cropObjectTexture, this.cropObjectData));
                         else
-                            AdditionalCropsFramework.Framework.Utilities.createObjectDebris((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
+                            AdditionalCropsFramework.Utilities.createObjectDebris((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
                             
                             //Game1.createObjectDebris(this.indexOfHarvest, xTile, yTile, -1, num2, 1f, (GameLocation)null);
                     }
@@ -309,7 +309,7 @@ namespace StardewValley
                     for (int index = 0; index < num1 - 1; ++index)
                     {
                         if (junimoHarvester == null)
-                            AdditionalCropsFramework.Framework.Utilities.createObjectDebris((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
+                            AdditionalCropsFramework.Utilities.createObjectDebris((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
                         else
                             junimoHarvester.tryToAddItemToHut((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData));
                     }
