@@ -93,7 +93,14 @@ namespace StardustCore.Serialization
 
         public void cleanUpWorld()
         {
-            ProcessDirectoryForDeletion(objectsInWorldPath);
+            try
+            {
+                ProcessDirectoryForDeletion(objectsInWorldPath);
+            }
+            catch(Exception e)
+            {
+                Log.AsyncC(e);
+            }
             List<CoreObject> removalList = new List<CoreObject>();
             int countProcessed = 0;
             List<Item> idk = new List<Item>();
@@ -116,6 +123,7 @@ namespace StardustCore.Serialization
 
                 if (acceptedTypes.ContainsKey(s))
                 {
+                    Log.AsyncM("Object is of accepted type: " + s);
                     SerializerDataNode t;
 
                     bool works = acceptedTypes.TryGetValue(s, out t);
@@ -124,6 +132,7 @@ namespace StardustCore.Serialization
                         countProcessed++;
                         if (d.useXML == false)
                         {
+                            Log.AsyncY("Saving the object");
                             t.worldObj.Invoke(d);
                         }
                         else

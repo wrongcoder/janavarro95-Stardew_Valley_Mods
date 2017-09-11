@@ -52,6 +52,8 @@ namespace StardewValley
         public string cropObjectTexture;
         public string cropObjectData;
 
+        public int seedIndex;
+
         public ModularCrop()
         {
         }
@@ -64,8 +66,9 @@ namespace StardewValley
             this.currentPhase = 5;
         }
 
-        public ModularCrop(int seedIndex, int tileX, int tileY, string DataFileName, string cropTextureSheet,string AssociatedObjectTextureSheet,string AssociatedObjectDataFile)
+        public ModularCrop(int SeedIndex, int tileX, int tileY, string DataFileName, string cropTextureSheet,string AssociatedObjectTextureSheet,string AssociatedObjectDataFile)
         {
+            this.seedIndex = SeedIndex;
             this.forageCrop = false;
             this.dataFileName = DataFileName;
             this.spriteSheet = ModCore.ModHelper.Content.Load<Texture2D>(cropTextureSheet);

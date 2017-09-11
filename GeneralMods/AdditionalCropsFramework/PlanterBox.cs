@@ -59,6 +59,10 @@ namespace AdditionalCropsFramework
         public Crop crop;
         public ModularCrop modularCrop;
         public bool isWatered;
+        public string cropInformationString;
+
+        public string normalCropSeedName;
+        public int normalCropSeedIndex;
 
         public string serializationName="AdditionalCropsFramework.PlanterBox";
 
@@ -82,6 +86,7 @@ namespace AdditionalCropsFramework
 
         public PlanterBox(int which, Vector2 tile, bool isRemovable = true, int price = 0, bool isSolid = false)
         {
+            this.cropInformationString = "";
             removable = isRemovable;
             this.serializationName =Convert.ToString(GetType());
             // this.thisType = GetType();
@@ -126,6 +131,7 @@ namespace AdditionalCropsFramework
 
         public PlanterBox(int which, Vector2 tile, string ObjectTexture, bool isRemovable = true, int price = 0, bool isSolid = false)
         {
+            this.cropInformationString = "";
             removable = isRemovable;
             this.serializationName = Convert.ToString(GetType());
             // this.thisType = GetType();
@@ -170,6 +176,7 @@ namespace AdditionalCropsFramework
 
         public PlanterBox(int which, Vector2 tile, string ObjectTexture, string DataPath, bool isRemovable = true, bool isSolid = false)
         {
+            this.cropInformationString = "";
             this.serializationName = Convert.ToString(GetType());
             removable = isRemovable;
             // this.thisType = GetType();
@@ -258,7 +265,8 @@ namespace AdditionalCropsFramework
                     this.plantModdedCrop((Game1.player.ActiveObject as ModularSeeds));
                     Log.AsyncO("Modded seeds");
                 }
-                if (Game1.player.ActiveObject.getCategoryName() == "Seeds" || Game1.player.ActiveObject.getCategoryName() == "seeds")
+                Log.AsyncO(Game1.player.CurrentItem.getCategoryName());
+                if (Game1.player.CurrentItem.getCategoryName() == "Seed" || Game1.player.CurrentItem.getCategoryName() == "seed")
                 {
                    this.plantRegularCrop();
                     Log.AsyncY("regular seeds");
@@ -298,8 +306,10 @@ namespace AdditionalCropsFramework
 
         public void plantRegularCrop()
         {
+            this.normalCropSeedName = Game1.player.ActiveObject.name;
+            this.normalCropSeedIndex = Game1.player.ActiveObject.parentSheetIndex;
             this.crop = new Crop(Game1.player.ActiveObject.parentSheetIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y);
-           // Game1.player.reduceActiveItemByOne();
+            Game1.player.reduceActiveItemByOne();
             Game1.playSound("dirtyHit");
         }
 
@@ -698,14 +708,15 @@ namespace AdditionalCropsFramework
                 if (this.modularCrop != null)
                 {
                     this.modularCrop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
-                    Log.AsyncM("draw a modular crop now");
+                   // Log.AsyncM("draw a modular crop now");
                 }
                // Log.AsyncC("wait WTF");
 
                 if (this.crop != null)
                 {
+                    
                     this.crop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
-                 //   Log.AsyncG("COWS GO MOO");
+                    //Log.AsyncG("COWS GO MOO");
                 }
             }
            //else Log.AsyncM("I DONT UNDERSTAND");
@@ -745,6 +756,7 @@ namespace AdditionalCropsFramework
 
         public static new void Serialize(Item I)
         {
+            makeCropInformationString(I);
             ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.playerInventoryPath, I.Name + ".json"), (PlanterBox)I);
         }
 
@@ -829,6 +841,50 @@ namespace AdditionalCropsFramework
 
             d.drawColor = obj.drawColor;
 
+            d.cropInformationString = obj.cropInformationString;
+
+            Log.AsyncC(d.cropInformationString);
+
+            try
+            {
+                string[] cropInfo = d.cropInformationString.Split('/');
+
+                foreach (var v in cropInfo)
+                {
+                    Log.AsyncM(v);
+                }
+
+                if (cropInfo[0] == "true") //modular crop
+                {
+                    ModularCrop c = new ModularCrop(Convert.ToInt32(cropInfo[1]), Convert.ToInt32(cropInfo[2]), Convert.ToInt32(cropInfo[3]), cropInfo[4], cropInfo[5], cropInfo[6], cropInfo[7]);
+                    c.currentPhase = Convert.ToInt32(cropInfo[8]);
+                    c.dayOfCurrentPhase = Convert.ToInt32(cropInfo[9]);
+                    d.modularCrop = c;
+                    Log.AsyncM("PARSED MODULAR CROP!");
+                }
+                if (cropInfo[0] == "false") //non-modular crop
+                {
+                    Crop c = new Crop(Convert.ToInt32(cropInfo[1]), Convert.ToInt32(cropInfo[2]), Convert.ToInt32(cropInfo[3]));
+                    c.currentPhase = Convert.ToInt32(cropInfo[4]);
+                    c.dayOfCurrentPhase = Convert.ToInt32(cropInfo[5]);
+                    d.crop = c;
+                    Log.AsyncM("PARSED REGULAR CROP!");
+                }
+            }
+            catch (Exception err)
+            {
+                Log.AsyncO(err);
+            }
+            //ModularCrop f=  j.ToObject<ModularCrop>();
+            //ModularCrop f = obj.modularCrop;
+
+           // Log.AsyncG("THIS IS CROP: " + c.indexOfHarvest);
+            //Log.AsyncG(cropString);
+
+
+           // d.crop = obj.crop;
+           // d.modularCrop = obj.modularCrop;
+
 
             try
             {
@@ -843,11 +899,29 @@ namespace AdditionalCropsFramework
             //return base.ParseIntoInventory();
         }
 
-        public static void SerializeFromWorld(Item c)
+        public static void SerializeFromWorld(Item I)
         {
-            ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, (c as CoreObject).thisLocation.name, c.Name + ".json"), (PlanterBox)c);
+            makeCropInformationString(I);
+            //  ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, (c as CoreObject).thisLocation.name, c.Name + ".json"), (PlanterBox)c);
+            ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, I.Name + ".json"), (PlanterBox)I);
         }
 
+        public static void makeCropInformationString(Item I)
+        {
+            (I as PlanterBox).cropInformationString = "";
+
+            if ((I as PlanterBox).crop != null)
+            {
+                Crop c = (I as PlanterBox).crop;
+                (I as PlanterBox).cropInformationString = "false" + "/" + (I as PlanterBox).normalCropSeedIndex + "/" + (I as PlanterBox).tileLocation.X + "/" + (I as PlanterBox).tileLocation.Y + "/" + c.currentPhase + "/" + c.dayOfCurrentPhase;
+            }
+
+            if ((I as PlanterBox).modularCrop != null)
+            {
+                ModularCrop m = (I as PlanterBox).modularCrop;
+                (I as PlanterBox).cropInformationString = "true" + "/" + m.seedIndex + "/" + (I as PlanterBox).tileLocation.X + "/" + (I as PlanterBox).tileLocation.Y + "/" + m.dataFileName + "/" + m.spriteSheetName + "/" + m.cropObjectTexture + "/" + m.cropObjectData + "/" + m.currentPhase + "/" + m.dayOfCurrentPhase;
+            }
+        }
 
     }
 }
