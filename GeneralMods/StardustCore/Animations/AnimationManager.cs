@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace StardustCore.Animations
    public class AnimationManager
     {
        public Dictionary<string, List<Animation>> animations = new Dictionary<string, List<Animation>>();
-        public string currentAnimationName;
+       public string currentAnimationName;
        public int currentAnimationListIndex;
        public List<Animation> currentAnimationList = new List<Animation>();
        public Texture2D objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
@@ -102,7 +103,8 @@ namespace StardustCore.Animations
                 {
                     currentAnimationList = dummyList;
                     currentAnimation = currentAnimationList[StartingFrame];
-                    return false;
+                    currentAnimationName = AnimationName;
+                    return true;
                 }
                 else
                 {
@@ -125,6 +127,33 @@ namespace StardustCore.Animations
         public void disableAnimation()
         {
             this.enabled = false;
+        }
+
+        public static Dictionary<string, List<Animation>> parseAnimationsFromXNB(string s)
+        {
+            string[] array = s.Split('*');
+            Dictionary<string,List<Animation>> parsedDic = new Dictionary<string, List<Animation>>();
+            foreach(var v in array)
+            {
+                Log.AsyncC(v);
+                string[] AnimationArray = v.Split(' ');
+                if (parsedDic.ContainsKey(AnimationArray[0]))
+                {
+                    parsedDic[AnimationArray[0]].Add(parseAnimationFromString(v));
+                }
+                else
+                {
+                    parsedDic.Add(AnimationArray[0], new List<Animation>());
+                    parsedDic[AnimationArray[0]].Add(parseAnimationFromString(v));
+                }
+            }
+            return parsedDic;
+        }
+
+        public static Animation parseAnimationFromString(string s)
+        {
+            string[] array = s.Split(' ');
+            return new Animation(new Rectangle(Convert.ToInt32(array[1]), Convert.ToInt32(array[2]), Convert.ToInt32(array[3]), Convert.ToInt32(array[4])), Convert.ToInt32(array[5]));
         }
 
     }

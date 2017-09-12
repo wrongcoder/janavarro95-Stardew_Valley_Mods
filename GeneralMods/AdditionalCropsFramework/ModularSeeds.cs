@@ -8,6 +8,7 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace AdditionalCropsFramework
 {
@@ -48,10 +49,10 @@ namespace AdditionalCropsFramework
         {
             if (TextureSheet == null)
             {
-                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(ObjectSpriteSheet);  //Game1.content.Load<Texture2D>("Revitalize\\CropsNSeeds\\Graphics\\seeds");
+                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectSpriteSheet));  //Game1.content.Load<Texture2D>("Revitalize\\CropsNSeeds\\Graphics\\seeds");
                 texturePath = ObjectSpriteSheet;
             }
-            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(ObjectDataFile);//Game1.content.Load<Dictionary<int, string>>("Revitalize\\CropsNSeeds\\Data\\seeds");
+            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, ObjectDataFile));//Game1.content.Load<Dictionary<int, string>>("Revitalize\\CropsNSeeds\\Data\\seeds");
             dataFilePath = ObjectDataFile;
             cropDataFilePath = AssociatedCropDataFile;
             cropTextureFilePath = AssociatedCropTextureFile;
@@ -509,7 +510,7 @@ namespace AdditionalCropsFramework
         {
             ModularCrop c = new ModularCrop();
             Log.AsyncC(this.cropDataFilePath);
-            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(this.cropDataFilePath); //Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, this.cropDataFilePath)); //Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
 
             if (dictionary.ContainsKey(seedIndex))
             {

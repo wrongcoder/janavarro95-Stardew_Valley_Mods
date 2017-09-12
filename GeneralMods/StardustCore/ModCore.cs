@@ -19,7 +19,7 @@ namespace StardustCore
         {
             ModHelper = helper;
             ModMonitor = this.Monitor;
-            //Unused MetaData information. Works in player inventory but not in chests. Besides who really care where an object is from anyways?
+            //Unused MetaData information. Works in player inventory but not in chests. Besides who really care where an object is from anyways. Also doesn't work 100% like I intended since it only gets base mod object that this runs from, not extensions?
             
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += Metadata.GameEvents_UpdateTick;
             StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;

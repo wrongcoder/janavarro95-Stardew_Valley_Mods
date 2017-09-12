@@ -8,6 +8,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardustCore;
+using StardustCore.Animations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -84,6 +85,14 @@ namespace AdditionalCropsFramework
             //does nothng
         }
 
+        /// <summary>
+        /// Don't use this unless you just want to lol with some defaults.
+        /// </summary>
+        /// <param name="which"></param>
+        /// <param name="tile"></param>
+        /// <param name="isRemovable"></param>
+        /// <param name="price"></param>
+        /// <param name="isSolid"></param>
         public PlanterBox(int which, Vector2 tile, bool isRemovable = true, int price = 0, bool isSolid = false)
         {
             this.cropInformationString = "";
@@ -94,7 +103,7 @@ namespace AdditionalCropsFramework
             this.InitializeBasics(0, tile);
             if (TextureSheet == null)
             {
-                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>("PlanterBox.png"); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
+                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, "PlanterBox.png")); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
                 texturePath = "PlanterBoxGraphic";
             }
             dataPath = "";
@@ -129,7 +138,15 @@ namespace AdditionalCropsFramework
             this.parentSheetIndex = which;
         }
 
-
+        /// <summary>
+        /// Planterbox Constructor. Does not use an animation manager.
+        /// </summary>
+        /// <param name="which"></param>
+        /// <param name="tile"></param>
+        /// <param name="ObjectTexture"></param>
+        /// <param name="isRemovable"></param>
+        /// <param name="price"></param>
+        /// <param name="isSolid"></param>
         public PlanterBox(int which, Vector2 tile, string ObjectTexture, bool isRemovable = true, int price = 0, bool isSolid = false)
         {
       
@@ -141,7 +158,7 @@ namespace AdditionalCropsFramework
             this.InitializeBasics(0, tile);
             if (TextureSheet == null)
             {
-                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(ObjectTexture); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
+                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectTexture)); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
                 texturePath = ObjectTexture;
             }
             this.dataPath = "";
@@ -157,9 +174,6 @@ namespace AdditionalCropsFramework
             this.defaultSourceRect.Height = 1;
             this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
             this.defaultSourceRect = this.sourceRect;
-
-
-            this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1));
 
             this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
 
@@ -189,13 +203,13 @@ namespace AdditionalCropsFramework
             // this.thisType = GetType();
             this.tileLocation = tile;
             this.InitializeBasics(0, tile);
-                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(ObjectTexture); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
+                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectTexture)); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
                 texturePath = ObjectTexture;
             Dictionary<int, string> dictionary;
             try
             {
                 
-                    dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(DataPath);
+                    dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, DataPath));
                     dataPath = DataPath;
                 
 
@@ -210,9 +224,16 @@ namespace AdditionalCropsFramework
                 this.defaultSourceRect.Height = 1;
                 this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
-
-                this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1));
-
+                try
+                {                
+                    this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1), AnimationManager.parseAnimationsFromXNB(array[3]), "default");
+                    this.animationManager.setAnimation("default", 0);
+                    //Log.AsyncC("Using animation manager");
+                }
+                catch (Exception errr)
+                {
+                    this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1));
+                }
                 this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
 
                 this.defaultBoundingBox.Width = 1;
@@ -230,10 +251,11 @@ namespace AdditionalCropsFramework
                 this.updateDrawPosition();
                 this.price = Convert.ToInt32(array[2]);
                 this.parentSheetIndex = which;
+                
             }
             catch(Exception e)
             {
-                Log.AsyncC(e);
+              //  Log.AsyncC(e);
             }
 
         }
@@ -272,13 +294,13 @@ namespace AdditionalCropsFramework
                 if (Game1.player.ActiveObject is ModularSeeds || Game1.player.ActiveObject.getCategoryName() == "Modular Seeds")
                 {
                     this.plantModdedCrop((Game1.player.ActiveObject as ModularSeeds));
-                    Log.AsyncO("Modded seeds");
+                   // Log.AsyncO("Modded seeds");
                 }
-                Log.AsyncO(Game1.player.CurrentItem.getCategoryName());
+               // Log.AsyncO(Game1.player.CurrentItem.getCategoryName());
                 if (Game1.player.CurrentItem.getCategoryName() == "Seed" || Game1.player.CurrentItem.getCategoryName() == "seed")
                 {
                    this.plantRegularCrop();
-                    Log.AsyncY("regular seeds");
+                   // Log.AsyncY("regular seeds");
                 }
 
                 if(Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
@@ -660,12 +682,15 @@ namespace AdditionalCropsFramework
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
-            if (f.ActiveObject.bigCraftable)
+            if (animationManager == null)
             {
-                spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(StardewValley.Object.getSourceRectForBigCraftable(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
-                return;
+                spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             }
-            spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            else
+            {
+                spriteBatch.Draw(this.TextureSheet, objectPosition,this.animationManager.currentAnimation.sourceRectangle, Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            }
+
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
                 spriteBatch.Draw(this.TextureSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
@@ -684,7 +709,12 @@ namespace AdditionalCropsFramework
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
-            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
+            if(animationManager==null) spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
+            else
+            {
+            spriteBatch.Draw(animationManager.objectTexture, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(animationManager.currentAnimation.sourceRectangle), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
+            if (Game1.player.CurrentItem != this) animationManager.tickAnimation();
+            }
         }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
@@ -851,20 +881,16 @@ namespace AdditionalCropsFramework
             d.category = obj.category;
             d.specialItem = obj.specialItem;
             d.hasBeenInInventory = obj.hasBeenInInventory;
+
+
             string t = obj.texturePath;
-
-            //  Log.AsyncC(t);
-
-            d.TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(t);
+            d.TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, t));
             d.texturePath = t;
             JArray array = obj.inventory;
             d.inventory = array.ToObject<List<Item>>();
             d.inventoryMaxSize = obj.inventoryMaxSize;
             d.itemReadyForHarvest = obj.itemReadyForHarvest;
             d.lightsOn = obj.lightsOn;
-            // d.thisLocation = Game1.getLocationFromName(loc);
-            // d.thisLocation = obj.thisLocation;
-          //  Log.AsyncC(d.thisLocation);
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
@@ -874,7 +900,18 @@ namespace AdditionalCropsFramework
 
             d.cropInformationString = obj.cropInformationString;
 
-            Log.AsyncC(d.cropInformationString);
+            d.IsSolid = obj.IsSolid;
+
+
+            //ANIMATIONS
+            var q = obj.animationManager;
+            dynamic obj1 = q;
+            string name =Convert.ToString( obj1.currentAnimationName);
+            int frame = Convert.ToInt32(obj1.currentAnimationListIndex);
+            PlanterBox dummy = new PlanterBox(d.parentSheetIndex, d.tileLocation, d.texturePath, d.dataPath, d.removable, d.IsSolid);
+            d.animationManager = dummy.animationManager;
+            d.animationManager.setAnimation(name,frame);
+            // Log.AsyncC(d.cropInformationString);
 
             try
             {
@@ -882,7 +919,7 @@ namespace AdditionalCropsFramework
 
                 foreach (var v in cropInfo)
                 {
-                    Log.AsyncM(v);
+                  //  Log.AsyncM(v);
                 }
 
                 if (cropInfo[0] == "true") //modular crop
@@ -891,7 +928,7 @@ namespace AdditionalCropsFramework
                     c.currentPhase = Convert.ToInt32(cropInfo[8]);
                     c.dayOfCurrentPhase = Convert.ToInt32(cropInfo[9]);
                     d.modularCrop = c;
-                    Log.AsyncM("PARSED MODULAR CROP!");
+                    //Log.AsyncM("PARSED MODULAR CROP!");
                 }
                 if (cropInfo[0] == "false") //non-modular crop
                 {
@@ -899,12 +936,12 @@ namespace AdditionalCropsFramework
                     c.currentPhase = Convert.ToInt32(cropInfo[4]);
                     c.dayOfCurrentPhase = Convert.ToInt32(cropInfo[5]);
                     d.crop = c;
-                    Log.AsyncM("PARSED REGULAR CROP!");
+                  //  Log.AsyncM("PARSED REGULAR CROP!");
                 }
             }
             catch (Exception err)
             {
-                Log.AsyncO(err);
+               // Log.AsyncO(err);
             }
             //ModularCrop f=  j.ToObject<ModularCrop>();
             //ModularCrop f = obj.modularCrop;
@@ -923,7 +960,7 @@ namespace AdditionalCropsFramework
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+               // Log.AsyncM(e);
                 return null;
             }
 

@@ -9,6 +9,7 @@ using StardewValley.Objects;
 using StardustCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace AdditionalCropsFramework
@@ -89,12 +90,12 @@ namespace AdditionalCropsFramework
         public ModularCropObject(int which, int initalStack, string ObjectTextureSheetName, string DataFileName)
         {       
             this.stack = initalStack;
-            TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(ObjectTextureSheetName);  //Game1.content.Load<Texture2D>("TileSheets\\furniture");
+            TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectTextureSheetName));  //Game1.content.Load<Texture2D>("TileSheets\\furniture");
             texturePath = ObjectTextureSheetName;
             this.dataFileName = DataFileName;
             this.canBeSetDown = false;
 
-            Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>(DataFileName);
+            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, DataFileName));
             string[] array = dictionary[which].Split(new char[]
             {
                 '/'

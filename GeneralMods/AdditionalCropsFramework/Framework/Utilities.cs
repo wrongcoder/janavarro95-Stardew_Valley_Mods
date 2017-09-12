@@ -17,6 +17,8 @@ namespace AdditionalCropsFramework
 {
     class Utilities
     {
+        public static readonly string EntensionsFolderName = "Extensions"; 
+
         public static List<TerrainDataNode> trackedTerrainFeatures= new List<TerrainDataNode>();
 
         public static List<CoreObject> NonSolidThingsToDraw = new List<CoreObject>();

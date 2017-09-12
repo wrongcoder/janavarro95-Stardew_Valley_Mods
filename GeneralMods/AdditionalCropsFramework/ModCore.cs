@@ -47,13 +47,13 @@ namespace AdditionalCropsFramework
         {
             ModHelper = helper;
             ModMonitor = this.Monitor;
-
-            
-            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
-
+            if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, Utilities.EntensionsFolderName)))
+            {
+                Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, Utilities.EntensionsFolderName));
+            }
             //StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
 
         }
@@ -84,17 +84,7 @@ namespace AdditionalCropsFramework
         }
 
 
-        private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
-        {
-            if (e.KeyPressed == Keys.U)
-            {
-                List<Item> shopInventory = new List<Item>();
-                shopInventory.Add((Item)new ModularSeeds(1, "SeedsGraphics", "SeedsData", "CropsGraphics", "CropsData","CropsObjectTexture","CropsObjectData"));
-                shopInventory.Add((Item)new PlanterBox(0, Vector2.Zero));
-                shopInventory.Add((Item)new PlanterBox(1, Vector2.Zero, "PlanterBox.png", "PlanterBox.xnb"));
-                Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(shopInventory);
-            }
-        }
+
 
         }
     }

@@ -7,6 +7,7 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace StardewValley
 {
@@ -71,14 +72,14 @@ namespace StardewValley
             this.seedIndex = SeedIndex;
             this.forageCrop = false;
             this.dataFileName = DataFileName;
-            this.spriteSheet = ModCore.ModHelper.Content.Load<Texture2D>(cropTextureSheet);
+            this.spriteSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, cropTextureSheet));
             this.spriteSheetName = cropTextureSheet;
             this.experienceGainWhenHarvesting = 0;
             this.fullyGrown = false;
             cropObjectTexture = AssociatedObjectTextureSheet;
             cropObjectData = AssociatedObjectDataFile;
 
-            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int,string>>(dataFileName);  //Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int,string>>(Path.Combine(Utilities.EntensionsFolderName, dataFileName));  //Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
 
             if (seedIndex == 770)
             {
@@ -458,13 +459,13 @@ namespace StardewValley
             if (this.forageCrop)
             {
                 b.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
-                Log.AsyncC((float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
+               // Log.AsyncC((float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
             }
             else
             {
                 b.Draw(this.spriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(this.getSourceRect((int)tileLocation.X * 7 + (int)tileLocation.Y * 11)), toTint, rotation, new Vector2(8f, 24f), (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
 
-                Log.AsyncG((float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
+                //Log.AsyncG((float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
 
                 if (this.tintColor.Equals(Color.White) || this.currentPhase != this.phaseDays.Count - 1 || this.dead)
                     return;
