@@ -1,0 +1,131 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StardustCore.Animations
+{
+    /// <summary>
+    /// Used to play animations for Stardust.CoreObject type objects and all objects that extend from it. In draw code of object make sure to use this info instead.
+    /// </summary>
+   public class AnimationManager
+    {
+       public Dictionary<string, List<Animation>> animations = new Dictionary<string, List<Animation>>();
+        public string currentAnimationName;
+       public int currentAnimationListIndex;
+       public List<Animation> currentAnimationList = new List<Animation>();
+       public Texture2D objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
+       public Animation defaultDrawFrame;
+       public Animation currentAnimation;
+       bool enabled;
+
+        /// <summary>
+        /// Constructor for Animation Manager class.
+        /// </summary>
+        /// <param name="ObjectTexture">The texture that will be used for the animation. This is typically the same as the object this class is attached to.</param>
+        /// <param name="DefaultFrame">This is used if no animations will be available to the animation manager.</param>
+        /// <param name="EnabledByDefault">Whether or not animations play by default. Default value is true.</param>
+        public AnimationManager (Texture2D ObjectTexture,Animation DefaultFrame, bool EnabledByDefault=true)
+        {
+            currentAnimationListIndex = 0;
+            this.objectTexture = ObjectTexture;
+            this.defaultDrawFrame = DefaultFrame;
+            this.enabled = EnabledByDefault;
+            currentAnimation = this.defaultDrawFrame;
+        }
+    
+        public AnimationManager(Texture2D ObjectTexture,Animation DefaultFrame ,Dictionary<string, List<Animation>> animationsToPlay, string startingAnimationKey, int startingAnimationFrame=0,bool EnabledByDefault=true)
+        {
+            currentAnimationListIndex = 0;
+            this.objectTexture = ObjectTexture;
+            this.defaultDrawFrame = DefaultFrame;
+            this.enabled = EnabledByDefault;
+
+            this.animations = animationsToPlay;
+            bool f = animations.TryGetValue(startingAnimationKey, out currentAnimationList);
+            if (f == true) {
+                setAnimation(startingAnimationKey, startingAnimationFrame);
+            }
+            else currentAnimation = this.defaultDrawFrame;
+        }
+
+        /// <summary>
+        /// Update the animation frame once after drawing the object.
+        /// </summary>
+        public void tickAnimation()
+        {
+            try
+            {
+                if (this.currentAnimation.frameDuration == -1 || this.enabled == false || this.currentAnimation == this.defaultDrawFrame) return; //This is if this is a default animation or the animation stops here.
+                if (this.currentAnimation.frameCountUntilNextAnimation == 0) getNextAnimation();
+                this.currentAnimation.tickAnimationFrame();
+            }
+            catch(Exception err)
+            {
+                ModCore.ModMonitor.Log("An internal error occured when trying to tick the animation.");
+                ModCore.ModMonitor.Log(err.ToString(), StardewModdingAPI.LogLevel.Error);
+            }
+        }
+
+        /// <summary>
+        /// Get the next animation in the list of animations.
+        /// </summary>
+        public void getNextAnimation()
+        {
+            currentAnimationListIndex++;
+           if(currentAnimationListIndex==currentAnimationList.Count) //If the animation frame I'm tryting to get is 1 outside my list length, reset the list.
+            {
+                currentAnimationListIndex = 0;
+            }
+           
+           //Get the next animation from the list and reset it's counter to the starting frame value.
+           this.currentAnimation = currentAnimationList[currentAnimationListIndex];
+           this.currentAnimation.startAnimation();
+        }
+
+        /// <summary>
+        /// Gets the animation from the dictionary of all animations available.
+        /// </summary>
+        /// <param name="AnimationName"></param>
+        /// <param name="StartingFrame"></param>
+        /// <returns></returns>
+        public bool setAnimation(string AnimationName, int StartingFrame=0)
+        {
+            List<Animation> dummyList = new List<Animation>();
+            bool f = animations.TryGetValue(AnimationName, out dummyList);
+            if (f == true)
+            {
+                if (dummyList.Count != 0 || StartingFrame>=dummyList.Count)
+                {
+                    currentAnimationList = dummyList;
+                    currentAnimation = currentAnimationList[StartingFrame];
+                    return false;
+                }
+                else
+                {
+                  if(dummyList.Count==0) ModCore.ModMonitor.Log("Error: Current animation " + AnimationName+ " has no animation frames associated with it.");
+                  if (dummyList.Count > dummyList.Count) ModCore.ModMonitor.Log("Error: Animation frame "+ StartingFrame+ " is outside the range of provided animations. Which has a maximum count of "+ dummyList.Count);
+                    return false;
+                }
+            }
+            else
+            {
+                ModCore.ModMonitor.Log("Error setting animation: " + AnimationName + " animation does not exist in list of available animations. Did you make sure to add it in?");
+                return false;
+            }
+        }
+
+        public void enableAnimation()
+        {
+            this.enabled = true;
+        }
+        public void disableAnimation()
+        {
+            this.enabled = false;
+        }
+
+    }
+}

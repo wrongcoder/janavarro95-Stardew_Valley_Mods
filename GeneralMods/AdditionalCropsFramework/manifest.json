@@ -10,5 +10,11 @@
   "MinimumApiVersion": "1.15",
   "Description": "Allows additional crops to be added to their own .xnb files without having to override crop.xnb!",
   "UniqueID": "Omegasis.AdditionalCropsFramework",
-  "EntryDll": "AdditionalCropsFramework.dll"
+  "EntryDll": "AdditionalCropsFramework.dll",
+  "Dependencies": [
+   {
+      "UniqueID": "Omegasis.StardustCore",
+      "IsRequired": true
+   }
+]
 }

@@ -9,6 +9,12 @@ namespace StardustCore
 {
     public class ModCore : Mod
     {
-        
+        public static IModHelper ModHelper;
+        public static IMonitor ModMonitor;
+        public override void Entry(IModHelper helper)
+        {
+            ModHelper = helper;
+            ModMonitor = this.Monitor;
+        }
     }
 }

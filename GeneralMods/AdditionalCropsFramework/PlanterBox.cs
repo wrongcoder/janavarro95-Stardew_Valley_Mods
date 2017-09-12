@@ -108,6 +108,7 @@ namespace AdditionalCropsFramework
             this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
             this.defaultSourceRect = this.sourceRect;
 
+            this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1));
 
             this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
 
@@ -131,6 +132,7 @@ namespace AdditionalCropsFramework
 
         public PlanterBox(int which, Vector2 tile, string ObjectTexture, bool isRemovable = true, int price = 0, bool isSolid = false)
         {
+      
             this.cropInformationString = "";
             removable = isRemovable;
             this.serializationName = Convert.ToString(GetType());
@@ -146,6 +148,9 @@ namespace AdditionalCropsFramework
 
             this.name = "Planter Box";
             this.description = "A planter box that can be used to grow many different crops in many different locations.";
+
+          
+
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
 
             this.defaultSourceRect.Width = 1;
@@ -153,6 +158,8 @@ namespace AdditionalCropsFramework
             this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
             this.defaultSourceRect = this.sourceRect;
 
+
+            this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1));
 
             this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
 
@@ -204,6 +211,7 @@ namespace AdditionalCropsFramework
                 this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
 
+                this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1));
 
                 this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
 
@@ -249,6 +257,7 @@ namespace AdditionalCropsFramework
             {
                 Game1.mouseCursor = 2;
             }
+            
         }
 
         public override bool checkForAction(StardewValley.Farmer who, bool justCheckingForActivity = false)
@@ -686,21 +695,43 @@ namespace AdditionalCropsFramework
             }
             else
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y*Game1.tileSize)), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
-            }
-            if (this.heldObject != null)
-            {
-                if (this.heldObject is PlanterBox)
+                //The actual planter box being drawn.
+                if (animationManager == null)
                 {
-                    (this.heldObject as PlanterBox).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as PlanterBox).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
-                    return;
+                    spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                   // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
                 }
-                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
-            }
-            this.drawCrops(Game1.spriteBatch, (int)this.tileLocation.X, (int)this.tileLocation.Y);
 
+                else
+                {
+                    //Log.AsyncC("Animation Manager is working!");
+                    spriteBatch.Draw(animationManager.objectTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(animationManager.currentAnimation.sourceRectangle), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                    try
+                    {
+                        this.animationManager.tickAnimation();
+                       // Log.AsyncC("Tick animation");
+                    }
+                    catch (Exception err)
+                    {
+                        ModCore.ModMonitor.Log(err.ToString());
+                    }
+                }
+                if (this.heldObject != null)
+                {
+                    if (this.heldObject is PlanterBox)
+                    {
+                        (this.heldObject as PlanterBox).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as PlanterBox).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
+                        return;
+                    }
+                    spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
+                    spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                }
+                this.drawCrops(Game1.spriteBatch, (int)this.tileLocation.X, (int)this.tileLocation.Y);
+
+            }
         }
+
+
         public void drawCrops(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             if (this.thisLocation != null)
@@ -922,6 +953,8 @@ namespace AdditionalCropsFramework
                 (I as PlanterBox).cropInformationString = "true" + "/" + m.seedIndex + "/" + (I as PlanterBox).tileLocation.X + "/" + (I as PlanterBox).tileLocation.Y + "/" + m.dataFileName + "/" + m.spriteSheetName + "/" + m.cropObjectTexture + "/" + m.cropObjectData + "/" + m.currentPhase + "/" + m.dayOfCurrentPhase;
             }
         }
+
+        
 
     }
 }

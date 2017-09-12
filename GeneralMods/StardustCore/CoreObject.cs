@@ -5,6 +5,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardustCore.Animations;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -72,6 +73,8 @@ namespace StardustCore
         public Color drawColor;
 
         public bool useXML;
+
+        public AnimationManager animationManager;
 
         public override string Name
         {
