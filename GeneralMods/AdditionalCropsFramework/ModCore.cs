@@ -54,62 +54,11 @@ namespace AdditionalCropsFramework
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
 
-            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            //StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
 
         }
 
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
-        {
-            if (Game1.activeClickableMenu != null)
-            {
-              //  if (Game1.activeClickableMenu.allClickableComponents == null) return;
-              
-                List<IClickableMenu> pages = this.Helper.Reflection.GetPrivateValue<List<IClickableMenu>>(Game1.activeClickableMenu, "pages");
-                if(Game1.activeClickableMenu is GameMenu)
-                {
-                    StardewValley.Menus.IClickableMenu s = pages[(Game1.activeClickableMenu as GameMenu).currentTab];
 
-                   // Log.AsyncG(s);
-                   
-                    
-                    foreach (var v in (s as StardewValley.Menus.InventoryPage).allClickableComponents)
-                    {
-                        if (v.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                        {
-
-                            if (v == null) return;
-                            string fire = v.name;
-                            //Log.AsyncC(v.name);
-
-                            bool num = true;
-                            foreach (var v2 in fire)
-                            {
-                                if (v2 != '0' && v2 != '1' && v2 != '2' && v2 != '3' && v2 != '4' && v2 != '5' && v2 != '6' && v2 != '7' && v2 != '8' && v2 != '9')
-                                {
-                                    num = false;
-                                    break;
-                                }
-                                else continue;
-                            }
-                            if (num == true)
-                            {
-                                int inv = Convert.ToInt32(v.name);
-                                Item I = (s as StardewValley.Menus.InventoryPage).inventory.actualInventory[inv];
-                                Log.AsyncM(I.Name);
-                                Log.AsyncC(I.GetType());
-                            }
-                        }
-                      //  if (v == null) continue;
-                       // Log.AsyncC(v.name);
-                      //  Log.AsyncM(v.item.Name);
-                       // (s as StardewValley.Menus.InventoryPage).
-                    }
-                    
-
-               
-                }
-            }
-        }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {

@@ -1,4 +1,5 @@
 ﻿using StardewModdingAPI;
+using StardustCore.ModInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace StardustCore
         {
             ModHelper = helper;
             ModMonitor = this.Monitor;
+
+            StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += Metadata.GameEvents_UpdateTick;
         }
     }
 }
