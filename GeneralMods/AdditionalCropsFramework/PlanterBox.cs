@@ -303,10 +303,6 @@ namespace AdditionalCropsFramework
                    // Log.AsyncY("regular seeds");
                 }
 
-                if(Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
-                {
-                    //Do a thing.
-                }
 
 
                 Game1.playSound("coin");
@@ -347,6 +343,15 @@ namespace AdditionalCropsFramework
 
         public override bool clicked(StardewValley.Farmer who)
         {
+            if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
+            {
+                this.isWatered = true;
+                this.animationManager.setAnimation("watered", 0);
+                return false;
+            }
+
+            
+
 
             if (removable == false) return false;
             //   Game1.showRedMessage("THIS IS CLICKED!!!");
@@ -909,8 +914,14 @@ namespace AdditionalCropsFramework
             string name =Convert.ToString( obj1.currentAnimationName);
             int frame = Convert.ToInt32(obj1.currentAnimationListIndex);
             PlanterBox dummy = new PlanterBox(d.parentSheetIndex, d.tileLocation, d.texturePath, d.dataPath, d.removable, d.IsSolid);
-            d.animationManager = dummy.animationManager;
-            d.animationManager.setAnimation(name,frame);
+            d.animationManager = dummy.animationManager;          
+            bool f = d.animationManager.setAnimation(name, frame);
+            bool f2;
+            if (f == false)
+            {
+                f2 = d.animationManager.setAnimation(name, 0);
+                if (f2 == false) d.animationManager.currentAnimation = d.animationManager.defaultDrawFrame;
+            }
             // Log.AsyncC(d.cropInformationString);
 
             try
