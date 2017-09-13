@@ -20,8 +20,6 @@ namespace StardustCore
     public class CoreObject : StardewValley.Object
     {
 
-        public new int price;
-
         public int Decoration_type;
 
         public int rotations;
@@ -1293,7 +1291,7 @@ namespace StardustCore
 
         public override int maximumStackSize()
         {
-            return 1;
+            return 999;
         }
 
         public override int getStack()
@@ -1301,10 +1299,6 @@ namespace StardustCore
             return this.stack;
         }
 
-        public override int addToStack(int amount)
-        {
-            return 1;
-        }
 
         private float getScaleSize()
         {
@@ -1355,6 +1349,13 @@ namespace StardustCore
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
+            if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
+                Utility.drawTinyDigits(this.stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
+            if (drawStackNumber && this.quality > 0)
+            {
+                float num = this.quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
+                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
+            }
             spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height)), 1f * this.getScaleSize() * scaleSize * .5f, SpriteEffects.None, layerDepth);
         }
 

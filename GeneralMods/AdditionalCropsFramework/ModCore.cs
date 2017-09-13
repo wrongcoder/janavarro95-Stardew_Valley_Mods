@@ -56,10 +56,11 @@ namespace AdditionalCropsFramework
             {
                 Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, Utilities.EntensionsFolderName));
             }
-            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+           // StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             this.shippingList = new List<Item>();
         }
 
+        //Unused
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             

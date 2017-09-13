@@ -119,6 +119,23 @@ namespace AdditionalCropsFramework
             this.displayName = this.name;
             
             this.description = array[5];
+
+            string[] dArray = this.description.Split(' ');
+            string newDes = "";
+            int MaxWords = 7;
+            int currentCount = 0;
+            foreach (var v in dArray)
+            {
+                if (currentCount == MaxWords)
+                {
+                    currentCount = 0;
+                    newDes += "\n";
+                }
+                newDes += v+" ";
+                currentCount++;
+            }
+            this.description = newDes;
+
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 16, 16);
             this.sourceRect = this.defaultSourceRect;
             
@@ -128,7 +145,6 @@ namespace AdditionalCropsFramework
 
             this.updateDrawPosition();
             this.parentSheetIndex = which;
-            this.quality = 1;
        
         }
 
@@ -1115,10 +1131,6 @@ namespace AdditionalCropsFramework
             return this.stack;
         }
 
-        public override int addToStack(int amount)
-        {
-            return 1;
-        }
 
         private float getScaleSize()
         {
@@ -1169,9 +1181,18 @@ namespace AdditionalCropsFramework
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
-                //spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.sourceRect), Color.White * transparency, 0f, new Vector2((float)(this.sourceRect.Width / 2), (float)(this.sourceRect.Height)), 1f * 3, SpriteEffects.None, layerDepth);
-                spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize * 1.5f, SpriteEffects.None, layerDepth);
+
+            //spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.sourceRect), Color.White * transparency, 0f, new Vector2((float)(this.sourceRect.Width / 2), (float)(this.sourceRect.Height)), 1f * 3, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize * 1.5f, SpriteEffects.None, layerDepth);
+
+            if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
+                Utility.drawTinyDigits(this.stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
+            if (drawStackNumber && this.quality > 0)
+            {
+                float num = this.quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
+                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
             }
+        }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {

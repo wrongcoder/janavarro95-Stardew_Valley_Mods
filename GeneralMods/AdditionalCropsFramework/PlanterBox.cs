@@ -290,17 +290,48 @@ namespace AdditionalCropsFramework
                 // Game1.showRedMessage("YOOO");
                 //do some stuff when the right button is down
                 // rotate();
-                if (Game1.player.ActiveObject == null) return false;
-                if (Game1.player.ActiveObject is ModularSeeds || Game1.player.ActiveObject.getCategoryName() == "Modular Seeds")
+                if (Game1.player.ActiveObject != null)
                 {
-                    this.plantModdedCrop((Game1.player.ActiveObject as ModularSeeds));
-                   // Log.AsyncO("Modded seeds");
+                    if (Game1.player.ActiveObject is ModularSeeds || Game1.player.ActiveObject.getCategoryName() == "Modular Seeds")
+                    {
+                        this.plantModdedCrop((Game1.player.ActiveObject as ModularSeeds));
+                        // Log.AsyncO("Modded seeds");
+                    }
+                    // Log.AsyncO(Game1.player.CurrentItem.getCategoryName());
+                    if (Game1.player.CurrentItem.getCategoryName() == "Seed" || Game1.player.CurrentItem.getCategoryName() == "seed")
+                    {
+                        this.plantRegularCrop();
+                        // Log.AsyncY("regular seeds");
+                    }
                 }
-               // Log.AsyncO(Game1.player.CurrentItem.getCategoryName());
-                if (Game1.player.CurrentItem.getCategoryName() == "Seed" || Game1.player.CurrentItem.getCategoryName() == "seed")
+                if (this.crop != null)
                 {
-                   this.plantRegularCrop();
-                   // Log.AsyncY("regular seeds");
+                    if (Utilities.isCropFullGrown(this.crop) == true)
+                    {
+                        //this.crop.harvest();
+                       bool f= Utilities.harvestCrop(this.crop, (int)this.tileLocation.X, (int)this.tileLocation.Y, 0);
+                        if (f == true && this.crop.regrowAfterHarvest == -1) this.crop = null;
+                    }
+                }
+                if (this.modularCrop != null)
+                {
+                    Log.AsyncM("HELLO MOD CROP");
+                    if (this.modularCrop.isFullyGrown() == true)
+                    {
+                        Log.AsyncM("FULL BLOW");
+                        bool f = Utilities.harvestModularCrop(this.modularCrop, (int)this.tileLocation.X, (int)this.tileLocation.Y, 0);
+                        if (f == true)
+                        {
+                            //this.modularCrop = null;
+                            if (f == true && this.modularCrop.regrowAfterHarvest == -1) this.modularCrop = null;
+                            Log.AsyncO("HARVEST");
+                            return false;
+                        }
+                        else
+                        {
+                            Log.AsyncC("failed to harvest crop. =/");
+                        }
+                    }
                 }
 
 
@@ -335,9 +366,22 @@ namespace AdditionalCropsFramework
         public void plantRegularCrop()
         {
             if (this.crop != null) return;
-            this.normalCropSeedName = Game1.player.ActiveObject.name;
-            this.normalCropSeedIndex = Game1.player.ActiveObject.parentSheetIndex;
-            this.crop = new Crop(Game1.player.ActiveObject.parentSheetIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y);
+            this.normalCropSeedName = Game1.player.CurrentItem.Name;
+            this.normalCropSeedIndex = Game1.player.CurrentItem.parentSheetIndex;
+
+            try
+            {
+                this.crop = new Crop(Game1.player.CurrentItem.parentSheetIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y);
+            }
+            catch(Exception e)
+            {
+                Log.AsyncM(e);
+            }
+
+            foreach (var v in this.crop.phaseDays)
+            {
+                Log.AsyncC("I grow! " + v);
+            }
             Game1.player.reduceActiveItemByOne();
             Game1.playSound("dirtyHit");
         }
@@ -355,36 +399,7 @@ namespace AdditionalCropsFramework
                     return false;
                 }
             }
-            if (this.crop != null)
-            {
-                if (this.crop.fullyGrown == true)
-                {
-                    //this.crop.harvest();
-                }
-            }
-            if (this.modularCrop != null)
-            {
-                Log.AsyncM("HELLO MOD CROP");
-                if (this.modularCrop.isFullyGrown() == true)
-                {
-                    Log.AsyncM("FULL BLOW");
-                    bool f = Utilities.harvestModularCrop(this.modularCrop, (int)this.tileLocation.X, (int)this.tileLocation.Y, 0);
-                    if (f == true)
-                    {
-                        //this.modularCrop = null;
-                        Log.AsyncO("HARVEST");
-                        return false;
-                    }
-                    else
-                    {
-                        Log.AsyncC("failed to harvest crop. =/");
-                    }
-                }
-            }
-            else
-            {
-                Log.AsyncR("WTF???");
-            }
+
             
 
 
@@ -964,7 +979,7 @@ namespace AdditionalCropsFramework
             d.locationsName = obj.locationsName;
 
             d.drawColor = obj.drawColor;
-
+            d.normalCropSeedIndex = obj.normalCropSeedIndex;
             d.cropInformationString = obj.cropInformationString;
 
             d.IsSolid = obj.IsSolid;
@@ -1019,11 +1034,50 @@ namespace AdditionalCropsFramework
                 }
                 if (cropInfo[0] == "false") //non-modular crop
                 {
-                    Crop c = new Crop(Convert.ToInt32(cropInfo[1]), Convert.ToInt32(cropInfo[2]), Convert.ToInt32(cropInfo[3]));
+                    Crop c = new Crop(Convert.ToInt32(d.normalCropSeedIndex), Convert.ToInt32(cropInfo[2]), Convert.ToInt32(cropInfo[3]));
+
+                    Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+                    if (dictionary.ContainsKey(Convert.ToInt32(cropInfo[1])))
+                    {
+                        string[] strArray1 = dictionary[Convert.ToInt32(cropInfo[1])].Split('/');
+                        string str1 = strArray1[0];
+                        char[] chArray1 = new char[1] { ' ' };
+                        c.phaseDays = new List<int>();
+                        foreach (string str2 in str1.Split(chArray1))
+                        {
+                            c.phaseDays.Add(Convert.ToInt32(str2));
+                        }
+                        c.phaseDays.Add(99999);
+                    }
+                    else
+                    {
+                        Log.AsyncR("AOSIDHA(IUDGUDIUBGDLIUGDOIHDO:IHDOIHDIOHDIOP");
+                    }
+
                     c.currentPhase = Convert.ToInt32(cropInfo[4]);
                     c.dayOfCurrentPhase = Convert.ToInt32(cropInfo[5]);
+                  
+                    try
+                    {
+                        c.fullyGrown = Convert.ToBoolean(cropInfo[10]);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    Log.AsyncM("PARSED Regular CROP!");
+                    Log.AsyncG(cropInfo[1]);
+                    Log.AsyncG(cropInfo[2]);
+                    Log.AsyncG(cropInfo[3]);
+                    Log.AsyncR(c.phaseDays.Count);
+                    Log.AsyncM("PARSED REGULAR CROP! FINISH");
+
+                    foreach(var v in c.phaseDays)
+                    {
+                        Log.AsyncG("THIS IS THE FINAL COUNT DOWN " + v);
+                    }
+
                     d.crop = c;
-                  //  Log.AsyncM("PARSED REGULAR CROP!");
                 }
             }
             catch (Exception err)

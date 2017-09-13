@@ -83,19 +83,9 @@ namespace AdditionalCropsFramework
                 Log.AsyncG("BUBBLES");
             }
         }
-    */
+    
         public static void plantRegularCropHere()
         {
-            /*
-            Log.AsyncY(Game1.player.ActiveObject.name);
-            if (Lists.saplingNames.Contains(Game1.player.ActiveObject.name))
-            {
-                Log.AsyncY("PLANT THE SAPLING");
-                bool f = plantSappling();
-
-                if (f == true) return;
-            }
-            */
             HoeDirt t;
             TerrainFeature r;
             bool plant = Game1.player.currentLocation.terrainFeatures.TryGetValue(Game1.currentCursorTile, out r);
@@ -111,7 +101,7 @@ namespace AdditionalCropsFramework
                 }
             }
         }
-
+        */
 
 
         public static bool placementAction(CoreObject cObj, GameLocation location, int x, int y, StardewValley.Farmer who = null, bool playSound = true)
@@ -734,6 +724,18 @@ namespace AdditionalCropsFramework
             return new Microsoft.Xna.Framework.Rectangle(Convert.ToInt32(parsed[2]), Convert.ToInt32(parsed[4]), Convert.ToInt32(parsed[6]), Convert.ToInt32(parsed[8]));
         }
 
+       public static bool isCropFullGrown(Crop c)
+        {
+
+            if (c.currentPhase >= c.phaseDays.Count - 1)
+            {
+               c.currentPhase = c.phaseDays.Count - 1;
+               c.dayOfCurrentPhase = 0;
+                return true;
+            }
+            return false;
+    }
+
         public static void cropNewDay(Crop c,int state, int fertilizer, int xTile, int yTile, GameLocation environment)
         {
             /*
@@ -751,7 +753,15 @@ namespace AdditionalCropsFramework
                 if (state == 1)
                 {
                     c.dayOfCurrentPhase++;
-                    Log.AsyncG(c.dayOfCurrentPhase);
+                    Log.AsyncG("DaY OF CURRRENT PHASE BISCUITS!"+c.dayOfCurrentPhase);
+
+                    Log.AsyncC(c.currentPhase);
+                    if (c.dayOfCurrentPhase >= c.phaseDays[c.currentPhase])
+                    {
+                        c.currentPhase++;
+                        c.dayOfCurrentPhase = 0;
+                    }
+
                     //c.dayOfCurrentPhase = c.fullyGrown ? c.dayOfCurrentPhase - 1 : Math.Min(c.dayOfCurrentPhase + 1, c.phaseDays.Count > 0 ? c.phaseDays[Math.Min(c.phaseDays.Count - 1, c.currentPhase)] : 0);
                     if (c.dayOfCurrentPhase >= (c.phaseDays.Count > 0 ? c.phaseDays[Math.Min(c.phaseDays.Count - 1, c.currentPhase)] : 0) && c.currentPhase < c.phaseDays.Count - 1)
                     {
@@ -761,7 +771,7 @@ namespace AdditionalCropsFramework
 
                     foreach(var v in c.phaseDays)
                     {
-                        Log.AsyncR(v);
+                        Log.AsyncR("PHASE DAY"+v);
                     }
                     while (c.currentPhase < c.phaseDays.Count - 1 && c.phaseDays.Count > 0 && c.phaseDays[c.currentPhase] <= 0)
                         c.currentPhase = c.currentPhase + 1;
@@ -913,12 +923,34 @@ namespace AdditionalCropsFramework
 
         public static bool harvestCrop(Crop c,int xTile, int yTile, int fertilizer, JunimoHarvester junimoHarvester = null)
         {
+            Item I = (Item)new StardewValley.Object(c.indexOfHarvest, 1);
+
+            int howMuch = 3;
+            if (Game1.player.addItemToInventoryBool(I, false))
+            {
+                Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
+                Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                Game1.player.canMove = false;
+                Game1.playSound("harvest");
+                DelayedAction.playSoundAfterDelay("coin", 260);
+                if (c.regrowAfterHarvest == -1)
+                {
+                    Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(17, new Vector2(vector2.X * (float)Game1.tileSize, vector2.Y * (float)Game1.tileSize), Color.White, 7, Game1.random.NextDouble() < 0.5, 125f, 0, -1, -1f, -1, 0));
+                    Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(14, new Vector2(vector2.X * (float)Game1.tileSize, vector2.Y * (float)Game1.tileSize), Color.White, 7, Game1.random.NextDouble() < 0.5, 50f, 0, -1, -1f, -1, 0));
+                }
+                Game1.player.gainExperience(2, howMuch);
+                return true;
+            }
+
+            return false;
+
+
             if (c.dead)
                 return junimoHarvester != null;
             if (c.forageCrop)
             {
                 StardewValley.Object @object = (StardewValley.Object)null;
-                int howMuch = 3;
+               // int howMuch = 3;
                 if (c.whichForageCrop == 1)
                     @object = new StardewValley.Object(399, 1, false, -1, 0);
                 if (Game1.player.professions.Contains(16))
@@ -1091,11 +1123,26 @@ namespace AdditionalCropsFramework
         public static bool harvestModularCrop(ModularCrop c, int xTile, int yTile, int fertilizer, JunimoHarvester junimoHarvester = null)
         {
             Item I = (Item)new ModularCropObject(c.indexOfHarvest, 1, c.cropObjectTexture, c.cropObjectData);
-            if (I == null)
+
+            int howMuch = 3;
+            if (Game1.player.addItemToInventoryBool(I, false))
             {
-                Log.AsyncC("BAD JUJU");
-                return false;
+                Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
+                Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                Game1.player.canMove = false;
+                Game1.playSound("harvest");
+                DelayedAction.playSoundAfterDelay("coin", 260);
+                if (c.regrowAfterHarvest == -1)
+                {
+                    Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(17, new Vector2(vector2.X * (float)Game1.tileSize, vector2.Y * (float)Game1.tileSize), Color.White, 7, Game1.random.NextDouble() < 0.5, 125f, 0, -1, -1f, -1, 0));
+                    Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(14, new Vector2(vector2.X * (float)Game1.tileSize, vector2.Y * (float)Game1.tileSize), Color.White, 7, Game1.random.NextDouble() < 0.5, 50f, 0, -1, -1f, -1, 0));
+
+                }
+                Game1.player.gainExperience(2, howMuch);
+                return true;
             }
+            return false;
+
             Game1.player.addItemToInventoryBool(I);
 
             return true;
@@ -1105,7 +1152,7 @@ namespace AdditionalCropsFramework
             if (c.forageCrop)
             {
                 ModularCropObject @object = (ModularCropObject)null;
-                int howMuch = 3;
+                //int howMuch = 3;
                 if (c.whichForageCrop == 1)
                    // @object = new StardewValley.Object(399, 1, false, -1, 0);
                 if (Game1.player.professions.Contains(16))
