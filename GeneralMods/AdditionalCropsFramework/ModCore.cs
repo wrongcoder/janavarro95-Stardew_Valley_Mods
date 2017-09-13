@@ -41,6 +41,7 @@ namespace AdditionalCropsFramework
         public static readonly List<ModularCropObject> WinterWildCrops = new List<ModularCropObject>();
         public static SerializationManager serilaizationManager;
 
+        private List<Item> shippingList;
 
 
        public override void Entry(IModHelper helper)
@@ -50,19 +51,59 @@ namespace AdditionalCropsFramework
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
+         
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, Utilities.EntensionsFolderName)))
             {
                 Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, Utilities.EntensionsFolderName));
             }
-            //StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-
+            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            this.shippingList = new List<Item>();
         }
 
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        {
+            
+            if (Game1.activeClickableMenu != null) return;
+            else
+            {
+                if (shippingList.Count > 0) Game1.activeClickableMenu = new Menus.ShippingMenuExpanded(shippingList);
+                shippingList.Clear();
+            }
+            if (Game1.newDay == true)
+            {
+                foreach(var v in Game1.getFarm().shippingBin)
+                {
+                    if (shippingList.Contains(v)) continue;
+                    if (v is StardustCore.CoreObject)
+                    {
+                        Log.AsyncC(v.Name);
+                        shippingList.Add(v);
+                    }
+                }
+                foreach(var v in shippingList)
+                {
+                    Game1.getFarm().shippingBin.Remove(v);
+                }
+            }
+            
+        }
 
+        public void dailyUpdates()
+        {
+            foreach (var v in serilaizationManager.trackedObjectList)
+            {
+                if (v is PlanterBox)
+                {
+                    (v as PlanterBox).dayUpdate();
+                }
+            }
+        }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
             serilaizationManager.restoreAllModObjects(serilaizationManager.trackedObjectList);
+
+            dailyUpdates();
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
@@ -81,6 +122,7 @@ namespace AdditionalCropsFramework
           serilaizationManager.acceptedTypes.Add("AdditionalCropsFramework.PlanterBox", new SerializerDataNode(new SerializerDataNode.SerializingFunction(PlanterBox.Serialize), new SerializerDataNode.ParsingFunction(PlanterBox.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(PlanterBox.SerializeFromWorld))); //need serialize, deserialize, and world deserialize functions.
 
             serilaizationManager.restoreAllModObjects(serilaizationManager.trackedObjectList);
+            dailyUpdates();
         }
 
 

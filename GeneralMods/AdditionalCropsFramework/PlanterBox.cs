@@ -326,6 +326,7 @@ namespace AdditionalCropsFramework
 
         public void plantModdedCrop(ModularSeeds seeds)
         {
+            if (this.modularCrop != null) return;
           this.modularCrop = new ModularCrop(seeds.parentSheetIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y, seeds.cropDataFilePath, seeds.cropTextureFilePath, seeds.cropObjectTextureFilePath, seeds.cropObjectDataFilePath);
          // Game1.player.reduceActiveItemByOne();
           Game1.playSound("dirtyHit");
@@ -333,6 +334,7 @@ namespace AdditionalCropsFramework
 
         public void plantRegularCrop()
         {
+            if (this.crop != null) return;
             this.normalCropSeedName = Game1.player.ActiveObject.name;
             this.normalCropSeedIndex = Game1.player.ActiveObject.parentSheetIndex;
             this.crop = new Crop(Game1.player.ActiveObject.parentSheetIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y);
@@ -341,15 +343,48 @@ namespace AdditionalCropsFramework
         }
 
 
+
         public override bool clicked(StardewValley.Farmer who)
         {
-            if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
+            if (Game1.player.CurrentItem != null)
             {
-                this.isWatered = true;
-                this.animationManager.setAnimation("watered", 0);
-                return false;
+                if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
+                {
+                    this.isWatered = true;
+                    this.animationManager.setAnimation("watered", 0);
+                    return false;
+                }
             }
-
+            if (this.crop != null)
+            {
+                if (this.crop.fullyGrown == true)
+                {
+                    //this.crop.harvest();
+                }
+            }
+            if (this.modularCrop != null)
+            {
+                Log.AsyncM("HELLO MOD CROP");
+                if (this.modularCrop.isFullyGrown() == true)
+                {
+                    Log.AsyncM("FULL BLOW");
+                    bool f = Utilities.harvestModularCrop(this.modularCrop, (int)this.tileLocation.X, (int)this.tileLocation.Y, 0);
+                    if (f == true)
+                    {
+                        //this.modularCrop = null;
+                        Log.AsyncO("HARVEST");
+                        return false;
+                    }
+                    else
+                    {
+                        Log.AsyncC("failed to harvest crop. =/");
+                    }
+                }
+            }
+            else
+            {
+                Log.AsyncR("WTF???");
+            }
             
 
 
@@ -423,6 +458,33 @@ namespace AdditionalCropsFramework
                 return;
             }
             this.addLights(location);
+
+        }
+
+        public void dayUpdate()
+        {
+            Log.AsyncC("HELLO?!?!?");
+            if (this.isWatered==true)
+            {
+                if (this.crop != null)
+                {
+                    Utilities.cropNewDay(this.crop,1, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
+                   
+                }
+
+                if (this.modularCrop != null)
+                {
+                   Utilities.cropNewDayModded(this.modularCrop,1, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
+                }
+                Log.AsyncC("DRINK YOUR WATER");
+                this.isWatered = false;
+                this.animationManager.setAnimation("default", 0);
+            }
+            else
+            {
+                Log.AsyncC("No Water Here");
+                this.animationManager.setAnimation("default", 0);
+            }
         }
 
         public void resetOnPlayerEntry(GameLocation environment)
@@ -907,7 +969,9 @@ namespace AdditionalCropsFramework
 
             d.IsSolid = obj.IsSolid;
 
-
+            string IsWatered = obj.isWatered;
+            Log.AsyncC("AM I WATERED OR NOT?!?!?: "+IsWatered);
+            d.isWatered = Convert.ToBoolean(IsWatered);
             //ANIMATIONS
             var q = obj.animationManager;
             dynamic obj1 = q;
@@ -931,6 +995,7 @@ namespace AdditionalCropsFramework
                 foreach (var v in cropInfo)
                 {
                   //  Log.AsyncM(v);
+                  
                 }
 
                 if (cropInfo[0] == "true") //modular crop
@@ -938,8 +1003,19 @@ namespace AdditionalCropsFramework
                     ModularCrop c = new ModularCrop(Convert.ToInt32(cropInfo[1]), Convert.ToInt32(cropInfo[2]), Convert.ToInt32(cropInfo[3]), cropInfo[4], cropInfo[5], cropInfo[6], cropInfo[7]);
                     c.currentPhase = Convert.ToInt32(cropInfo[8]);
                     c.dayOfCurrentPhase = Convert.ToInt32(cropInfo[9]);
+                    try
+                    {
+                        c.fullyGrown = Convert.ToBoolean(cropInfo[10]);
+                    }
+                    catch(Exception e)
+                    {
+                        
+                    }
                     d.modularCrop = c;
-                    //Log.AsyncM("PARSED MODULAR CROP!");
+                    Log.AsyncM("PARSED MODULAR CROP!");
+                    Log.AsyncG(cropInfo[8]);
+                    Log.AsyncG(cropInfo[9]);
+                    Log.AsyncG(cropInfo[10]);
                 }
                 if (cropInfo[0] == "false") //non-modular crop
                 {
@@ -992,13 +1068,13 @@ namespace AdditionalCropsFramework
             if ((I as PlanterBox).crop != null)
             {
                 Crop c = (I as PlanterBox).crop;
-                (I as PlanterBox).cropInformationString = "false" + "/" + (I as PlanterBox).normalCropSeedIndex + "/" + (I as PlanterBox).tileLocation.X + "/" + (I as PlanterBox).tileLocation.Y + "/" + c.currentPhase + "/" + c.dayOfCurrentPhase;
+                (I as PlanterBox).cropInformationString = "false" + "/" + (I as PlanterBox).normalCropSeedIndex + "/" + (I as PlanterBox).tileLocation.X + "/" + (I as PlanterBox).tileLocation.Y + "/" + c.currentPhase + "/" + c.dayOfCurrentPhase + "/" + c.fullyGrown; ;
             }
 
             if ((I as PlanterBox).modularCrop != null)
             {
                 ModularCrop m = (I as PlanterBox).modularCrop;
-                (I as PlanterBox).cropInformationString = "true" + "/" + m.seedIndex + "/" + (I as PlanterBox).tileLocation.X + "/" + (I as PlanterBox).tileLocation.Y + "/" + m.dataFileName + "/" + m.spriteSheetName + "/" + m.cropObjectTexture + "/" + m.cropObjectData + "/" + m.currentPhase + "/" + m.dayOfCurrentPhase;
+                (I as PlanterBox).cropInformationString = "true" + "/" + m.seedIndex + "/" + (I as PlanterBox).tileLocation.X + "/" + (I as PlanterBox).tileLocation.Y + "/" + m.dataFileName + "/" + m.spriteSheetName + "/" + m.cropObjectTexture + "/" + m.cropObjectData + "/" + m.currentPhase + "/" + m.dayOfCurrentPhase+"/"+m.fullyGrown;
             }
         }
 

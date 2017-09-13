@@ -28,6 +28,7 @@ namespace RuneFactoryCropsMod
                 string ModdedCropsFolderName = "RuneFactoryCropsMod";
                 shopInventory.Add((Item)new ModularSeeds(1, Path.Combine(ModdedCropsFolderName,"SeedsGraphics.xnb"), Path.Combine(ModdedCropsFolderName,"SeedsData.xnb"), Path.Combine(ModdedCropsFolderName,"CropsGraphics.xnb"), Path.Combine(ModdedCropsFolderName,"CropsData.xnb"),Path.Combine(ModdedCropsFolderName,"CropsObjectTexture.xnb"), Path.Combine(ModdedCropsFolderName,"CropsObjectData.xnb")));
                 shopInventory.Add((Item)new PlanterBox(1, Vector2.Zero, Path.Combine(ModdedCropsFolderName, "PlanterBox.png"), Path.Combine(ModdedCropsFolderName, "PlanterBox.xnb")));
+                shopInventory.Add((Item)new ModularCropObject(816, 1, Path.Combine(ModdedCropsFolderName, "CropsObjectTexture.xnb"), Path.Combine(ModdedCropsFolderName, "CropsObjectData.xnb")));
                 Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(shopInventory);
             }
         }

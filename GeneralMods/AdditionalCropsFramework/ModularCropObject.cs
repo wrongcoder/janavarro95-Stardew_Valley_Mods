@@ -21,8 +21,6 @@ namespace AdditionalCropsFramework
     public class ModularCropObject : CoreObject
     {
 
-        public new int price;
-
         public int Decoration_type;
 
         public int rotations;
@@ -88,10 +86,21 @@ namespace AdditionalCropsFramework
         }
 
         public ModularCropObject(int which, int initalStack, string ObjectTextureSheetName, string DataFileName)
-        {       
+        {
+
+            if (File.Exists(ObjectTextureSheetName)) Log.AsyncC("YAY");
+            this.tileLocation = Vector2.Zero;
+          
             this.stack = initalStack;
-            TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectTextureSheetName));  //Game1.content.Load<Texture2D>("TileSheets\\furniture");
-            texturePath = ObjectTextureSheetName;
+            try
+            {
+                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectTextureSheetName));  //Game1.content.Load<Texture2D>("TileSheets\\furniture");
+            }
+            catch(Exception err)
+            {
+                Log.AsyncM(err);
+            }
+                texturePath = ObjectTextureSheetName;
             this.dataFileName = DataFileName;
             this.canBeSetDown = false;
 
@@ -101,50 +110,26 @@ namespace AdditionalCropsFramework
                 '/'
             });
             this.name = array[0];
+            this.price = Convert.ToInt32(array[1]);
+            this.edibility =Convert.ToInt32(array[2]);
+            string[] array2 = array[3].Split(' ');
+            this.cropType = array2[0];
+            this.category =Convert.ToInt32(array2[1]);
+            this.type = this.cropType;
+            this.displayName = this.name;
+            
+            this.description = array[5];
+            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 16, 16);
+            this.sourceRect = this.defaultSourceRect;
+            
+            Log.AsyncC(this.sourceRect);
+            this.defaultBoundingBox = new Rectangle(0, 0, 16, 16);
+            this.boundingBox = this.defaultBoundingBox;
 
-            this.description = "Can be placed inside your house.";
-            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
-            if (array[2].Equals("-1"))
-            {
-                this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
-                this.defaultSourceRect = this.sourceRect;
-            }
-            else
-            {
-                this.defaultSourceRect.Width = Convert.ToInt32(array[2].Split(new char[]
-                {
-                    ' '
-                })[0]);
-                this.defaultSourceRect.Height = Convert.ToInt32(array[2].Split(new char[]
-                {
-                    ' '
-                })[1]);
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
-                this.defaultSourceRect = this.sourceRect;
-            }
-            this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
-            if (array[3].Equals("-1"))
-            {
-                this.boundingBox = this.getDefaultBoundingBoxForType(this.Decoration_type);
-                this.defaultBoundingBox = this.boundingBox;
-            }
-            else
-            {
-                this.defaultBoundingBox.Width = Convert.ToInt32(array[3].Split(new char[]
-                {
-                    ' '
-                })[0]);
-                this.defaultBoundingBox.Height = Convert.ToInt32(array[3].Split(new char[]
-                {
-                    ' '
-                })[1]);
-                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
-                this.defaultBoundingBox = this.boundingBox;
-            }
             this.updateDrawPosition();
-            this.rotations = Convert.ToInt32(array[4]);
-            this.price = Convert.ToInt32(array[5]);
             this.parentSheetIndex = which;
+            this.quality = 1;
+       
         }
 
         public override string getDescription()
@@ -1115,136 +1100,6 @@ namespace AdditionalCropsFramework
             return this.boundingBox;
         }
 
-        private Rectangle getDefaultSourceRectForType(int tileIndex, int type)
-        {
-            int num;
-            int num2;
-            switch (type)
-            {
-                case 0:
-                    num = 1;
-                    num2 = 2;
-                    goto IL_94;
-                case 1:
-                    num = 2;
-                    num2 = 2;
-                    goto IL_94;
-                case 2:
-                    num = 3;
-                    num2 = 2;
-                    goto IL_94;
-                case 3:
-                    num = 2;
-                    num2 = 2;
-                    goto IL_94;
-                case 4:
-                    num = 2;
-                    num2 = 2;
-                    goto IL_94;
-                case 5:
-                    num = 5;
-                    num2 = 3;
-                    goto IL_94;
-                case 6:
-                    num = 2;
-                    num2 = 2;
-                    goto IL_94;
-                case 7:
-                    num = 1;
-                    num2 = 3;
-                    goto IL_94;
-                case 8:
-                    num = 1;
-                    num2 = 2;
-                    goto IL_94;
-                case 10:
-                    num = 2;
-                    num2 = 3;
-                    goto IL_94;
-                case 11:
-                    num = 2;
-                    num2 = 3;
-                    goto IL_94;
-                case 12:
-                    num = 3;
-                    num2 = 2;
-                    goto IL_94;
-                case 13:
-                    num = 1;
-                    num2 = 2;
-                    goto IL_94;
-            }
-            num = 1;
-            num2 = 2;
-            IL_94:
-            return new Rectangle(tileIndex * 16 % TextureSheet.Width, tileIndex * 16 / TextureSheet.Width * 16, num * 16, num2 * 16);
-        }
-
-        private Rectangle getDefaultBoundingBoxForType(int type)
-        {
-            int num;
-            int num2;
-            switch (type)
-            {
-                case 0:
-                    num = 1;
-                    num2 = 1;
-                    goto IL_94;
-                case 1:
-                    num = 2;
-                    num2 = 1;
-                    goto IL_94;
-                case 2:
-                    num = 3;
-                    num2 = 1;
-                    goto IL_94;
-                case 3:
-                    num = 2;
-                    num2 = 1;
-                    goto IL_94;
-                case 4:
-                    num = 2;
-                    num2 = 1;
-                    goto IL_94;
-                case 5:
-                    num = 5;
-                    num2 = 2;
-                    goto IL_94;
-                case 6:
-                    num = 2;
-                    num2 = 2;
-                    goto IL_94;
-                case 7:
-                    num = 1;
-                    num2 = 1;
-                    goto IL_94;
-                case 8:
-                    num = 1;
-                    num2 = 1;
-                    goto IL_94;
-                case 10:
-                    num = 2;
-                    num2 = 1;
-                    goto IL_94;
-                case 11:
-                    num = 2;
-                    num2 = 2;
-                    goto IL_94;
-                case 12:
-                    num = 3;
-                    num2 = 2;
-                    goto IL_94;
-                case 13:
-                    num = 1;
-                    num2 = 2;
-                    goto IL_94;
-            }
-            num = 1;
-            num2 = 1;
-            IL_94:
-            return new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, num * Game1.tileSize, num2 * Game1.tileSize);
-        }
-
         public override int salePrice()
         {
             return this.price;
@@ -1252,7 +1107,7 @@ namespace AdditionalCropsFramework
 
         public override int maximumStackSize()
         {
-            return 1;
+            return 999;
         }
 
         public override int getStack()
@@ -1314,8 +1169,9 @@ namespace AdditionalCropsFramework
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
         {
-            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height)), 1f * this.getScaleSize() * scaleSize * .5f, SpriteEffects.None, layerDepth);
-        }
+                //spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.sourceRect), Color.White * transparency, 0f, new Vector2((float)(this.sourceRect.Width / 2), (float)(this.sourceRect.Height)), 1f * 3, SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize * 1.5f, SpriteEffects.None, layerDepth);
+            }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
@@ -1365,8 +1221,9 @@ namespace AdditionalCropsFramework
 
         public override string getCategoryName()
         {
-            if (this.cropType != "") return this.cropType;
-            return "ModdedCrop";
+            if (this.cropType != "") return ("Modded Crop:"+this.cropType);
+            return "Modded Crop";
+            //return "Modded Crop";
         }
 
         public override Color getCategoryColor()
@@ -1375,6 +1232,8 @@ namespace AdditionalCropsFramework
             
         }
 
+
+      
         
 
     }

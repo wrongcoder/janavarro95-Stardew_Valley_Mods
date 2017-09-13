@@ -75,7 +75,6 @@ namespace StardewValley
             this.spriteSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, cropTextureSheet));
             this.spriteSheetName = cropTextureSheet;
             this.experienceGainWhenHarvesting = 0;
-            this.fullyGrown = false;
             cropObjectTexture = AssociatedObjectTextureSheet;
             cropObjectData = AssociatedObjectDataFile;
 
@@ -133,7 +132,18 @@ namespace StardewValley
             this.whichForageCrop = seedIndex;
         }
 
-        public static int getRandomLowGradeCropForThisSeason(string season)
+        public bool isFullyGrown()
+        {
+            if (this.currentPhase >= this.phaseDays.Count - 1)
+            {
+                this.currentPhase = this.phaseDays.Count - 1;
+                this.dayOfCurrentPhase = 0;
+                return true;
+            }
+            return false;
+        }
+
+    public static int getRandomLowGradeCropForThisSeason(string season)
         {
             if (season.Equals("winter"))
                 season = Game1.random.NextDouble() < 0.33 ? "spring" : (Game1.random.NextDouble() < 0.5 ? "summer" : "fall");
