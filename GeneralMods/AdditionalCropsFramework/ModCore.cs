@@ -39,7 +39,6 @@ namespace AdditionalCropsFramework
         public static readonly List<ModularCropObject> SummerWildCrops = new List<ModularCropObject>();
         public static readonly List<ModularCropObject> FallWildCrops = new List<ModularCropObject>();
         public static readonly List<ModularCropObject> WinterWildCrops = new List<ModularCropObject>();
-        public static SerializationManager serilaizationManager;
 
         private List<Item> shippingList;
 
@@ -49,14 +48,18 @@ namespace AdditionalCropsFramework
             ModHelper = helper;
             ModMonitor = this.Monitor;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
-            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
          
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, Utilities.EntensionsFolderName)))
             {
                 Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, Utilities.EntensionsFolderName));
             }
-           // StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+
+
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.PlanterBox", new SerializerDataNode(new SerializerDataNode.SerializingFunction(PlanterBox.Serialize), new SerializerDataNode.ParsingFunction(PlanterBox.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(PlanterBox.SerializeFromWorld))); //need serialize, deserialize, and world deserialize functions.
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.ModularCropObject", new SerializerDataNode(new SerializerDataNode.SerializingFunction(ModularCropObject.Serialize), new SerializerDataNode.ParsingFunction(ModularCropObject.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(ModularCropObject.SerializeFromWorld)));
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.ModularSeeds", new SerializerDataNode(new SerializerDataNode.SerializingFunction(ModularSeeds.Serialize), new SerializerDataNode.ParsingFunction(ModularSeeds.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(ModularSeeds.SerializeFromWorld)));
+            // StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             this.shippingList = new List<Item>();
         }
 
@@ -91,7 +94,7 @@ namespace AdditionalCropsFramework
 
         public void dailyUpdates()
         {
-            foreach (var v in serilaizationManager.trackedObjectList)
+            foreach (var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
             {
                 if (v is PlanterBox)
                 {
@@ -102,32 +105,15 @@ namespace AdditionalCropsFramework
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
-            serilaizationManager.restoreAllModObjects(serilaizationManager.trackedObjectList);
-
             dailyUpdates();
         }
 
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
-        {
-            serilaizationManager.cleanUpInventory();
-            serilaizationManager.cleanUpWorld();
-        }
+
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-           string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath,Game1.player.name,"PlayerInventory");
-           string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.name, "ObjectsInWorld"); ;
-           string trashPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "ModTrashFolder");
-           serilaizationManager = new SerializationManager(invPath,trashPath,worldPath);
-
-          serilaizationManager.acceptedTypes.Add("AdditionalCropsFramework.PlanterBox", new SerializerDataNode(new SerializerDataNode.SerializingFunction(PlanterBox.Serialize), new SerializerDataNode.ParsingFunction(PlanterBox.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(PlanterBox.SerializeFromWorld))); //need serialize, deserialize, and world deserialize functions.
-
-            serilaizationManager.restoreAllModObjects(serilaizationManager.trackedObjectList);
+           
             dailyUpdates();
         }
-
-
-
-
         }
     }

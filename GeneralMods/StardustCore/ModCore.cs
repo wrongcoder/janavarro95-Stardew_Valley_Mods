@@ -3,8 +3,10 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardustCore.ModInfo;
+using StardustCore.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,15 +17,41 @@ namespace StardustCore
     {
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
+        public static Serialization.SerializationManager SerializationManager;
         public override void Entry(IModHelper helper)
         {
             ModHelper = helper;
             ModMonitor = this.Monitor;
             //Unused MetaData information. Works in player inventory but not in chests. Besides who really care where an object is from anyways. Also doesn't work 100% like I intended since it only gets base mod object that this runs from, not extensions?
-            
-          //  StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += Metadata.GameEvents_UpdateTick;
-           // StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
-            
+
+            //  StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += Metadata.GameEvents_UpdateTick;
+            // StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
+            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.name, "PlayerInventory");
+            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.name, "ObjectsInWorld"); ;
+            string trashPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "ModTrashFolder");
+            string chestPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "StorageContainers");
+            SerializationManager = new SerializationManager(invPath, trashPath, worldPath,chestPath);
+
+            StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+        }
+
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+        }
+
+        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        {
+            SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+
+        }
+
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            SerializationManager.cleanUpInventory();
+            SerializationManager.cleanUpWorld();
         }
 
         private void ControlEvents_MouseChanged(object sender, StardewModdingAPI.Events.EventArgsMouseStateChanged e)

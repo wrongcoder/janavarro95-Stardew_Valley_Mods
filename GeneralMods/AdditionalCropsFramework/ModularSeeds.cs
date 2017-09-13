@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace AdditionalCropsFramework
 {
@@ -52,6 +53,7 @@ namespace AdditionalCropsFramework
                 TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectSpriteSheet));  //Game1.content.Load<Texture2D>("Revitalize\\CropsNSeeds\\Graphics\\seeds");
                 texturePath = ObjectSpriteSheet;
             }
+            this.serializationName = this.GetType().ToString();
             Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, ObjectDataFile));//Game1.content.Load<Dictionary<int, string>>("Revitalize\\CropsNSeeds\\Data\\seeds");
             dataFilePath = ObjectDataFile;
             cropDataFilePath = AssociatedCropDataFile;
@@ -59,9 +61,6 @@ namespace AdditionalCropsFramework
 
            cropObjectDataFilePath = AssociatedCropObjectDataFile;
            cropObjectTextureFilePath = AssociatedCropObjectTexture;
-
-            Log.AsyncC(cropDataFilePath);
-            Log.AsyncG(cropTextureFilePath);
 
 
             //Log.AsyncC(which);
@@ -395,10 +394,6 @@ namespace AdditionalCropsFramework
             return this.stack;
         }
 
-        public override int addToStack(int amount)
-        {
-            return 1;
-        }
 
         private float getScaleSize()
         {
@@ -446,6 +441,15 @@ namespace AdditionalCropsFramework
         {
             //spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
             spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize * 1.5f, SpriteEffects.None, layerDepth);
+
+
+            if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
+                Utility.drawTinyDigits(this.stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
+            if (drawStackNumber && this.quality > 0)
+            {
+                float num = this.quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
+                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
+            }
         }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
@@ -503,13 +507,13 @@ namespace AdditionalCropsFramework
 
         public override int maximumStackSize()
         {
-            return base.maximumStackSize();
+            return 999;
         }
 
         public ModularCrop parseCropInfo(int seedIndex)
         {
             ModularCrop c = new ModularCrop();
-            Log.AsyncC(this.cropDataFilePath);
+           // Log.AsyncC(this.cropDataFilePath);
             Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, this.cropDataFilePath)); //Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
 
             if (dictionary.ContainsKey(seedIndex))
@@ -576,5 +580,143 @@ namespace AdditionalCropsFramework
             return c;
         }
 
+
+
+        public static new void Serialize(Item I)
+        {
+            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(StardustCore.ModCore.SerializationManager.playerInventoryPath, I.Name + ".json"), (ModularSeeds)I);
+        }
+
+        public static Item ParseIntoInventory(string s)
+        {
+            // PlanterBox p = new PlanterBox();
+            // return p;
+
+
+
+            dynamic obj = JObject.Parse(s);
+
+           ModularSeeds d = new ModularSeeds();
+
+            d.dataFilePath = obj.dataFilePath;
+            d.cropDataFilePath = obj.cropDataFilePath;
+            d.cropObjectDataFilePath = obj.cropObjectDataFilePath;
+
+            
+
+            d.texturePath = obj.texturePath;
+            d.cropTextureFilePath = obj.cropTextureFilePath;
+            d.cropObjectTextureFilePath = obj.cropObjectTextureFilePath;
+
+            d.price = obj.price;
+            d.Decoration_type = obj.Decoration_type;
+            d.rotations = obj.rotations;
+            d.currentRotation = obj.currentRotation;
+            string s1 = Convert.ToString(obj.sourceRect);
+            d.sourceRect = Utilities.parseRectFromJson(s1);
+            string s2 = Convert.ToString(obj.defaultSourceRect);
+            d.defaultSourceRect = Utilities.parseRectFromJson(s2);
+            string s3 = Convert.ToString(obj.defaultBoundingBox);
+            d.defaultBoundingBox = Utilities.parseRectFromJson(s3);
+            d.description = obj.description;
+            d.flipped = obj.flipped;
+            d.flaggedForPickUp = obj.flaggedForPickUp;
+            d.tileLocation = obj.tileLocation;
+            d.parentSheetIndex = obj.parentSheetIndex;
+            d.owner = obj.owner;
+            d.name = obj.name;
+            d.type = obj.type;
+            d.canBeSetDown = obj.canBeSetDown;
+            d.canBeGrabbed = obj.canBeGrabbed;
+            d.isHoedirt = obj.isHoedirt;
+            d.isSpawnedObject = obj.isSpawnedObject;
+            d.questItem = obj.questItem;
+            d.isOn = obj.isOn;
+            d.fragility = obj.fragility;
+            d.edibility = obj.edibility;
+            d.stack = obj.stack;
+            d.quality = obj.quality;
+            d.bigCraftable = obj.bigCraftable;
+            d.setOutdoors = obj.setOutdoors;
+            d.setIndoors = obj.setIndoors;
+            d.readyForHarvest = obj.readyForHarvest;
+            d.showNextIndex = obj.showNextIndex;
+            d.hasBeenPickedUpByFarmer = obj.hasBeenPickedUpByFarmer;
+            d.isRecipe = obj.isRecipe;
+            d.isLamp = obj.isLamp;
+            d.heldObject = obj.heldObject;
+            d.minutesUntilReady = obj.minutesUntilReady;
+            string s4 = Convert.ToString(obj.boundingBox);
+            d.boundingBox = Utilities.parseRectFromJson(s4);
+            d.scale = obj.scale;
+            d.lightSource = obj.lightSource;
+            d.shakeTimer = obj.shakeTimer;
+            d.internalSound = obj.internalSound;
+            d.specialVariable = obj.specialVariable;
+            d.category = obj.category;
+            d.specialItem = obj.specialItem;
+            d.hasBeenInInventory = obj.hasBeenInInventory;
+
+
+            string t = obj.texturePath;
+            d.TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, t));
+            d.texturePath = t;
+            d.itemReadyForHarvest = obj.itemReadyForHarvest;
+            d.lightsOn = obj.lightsOn;
+            d.lightColor = obj.lightColor;
+            d.thisType = obj.thisType;
+            d.removable = obj.removable;
+            d.locationsName = obj.locationsName;
+
+            d.drawColor = obj.drawColor;
+            d.serializationName = obj.serializationName;
+
+            /*
+            //ANIMATIONS
+            var q = obj.animationManager;
+            dynamic obj1 = q;
+            string name = Convert.ToString(obj1.currentAnimationName);
+            int frame = Convert.ToInt32(obj1.currentAnimationListIndex);
+            PlanterBox dummy = new PlanterBox(d.parentSheetIndex, d.tileLocation, d.texturePath, d.dataPath, d.removable, d.IsSolid);
+            d.animationManager = dummy.animationManager;
+            bool f = d.animationManager.setAnimation(name, frame);
+            bool f2;
+            if (f == false)
+            {
+                f2 = d.animationManager.setAnimation(name, 0);
+                if (f2 == false) d.animationManager.currentAnimation = d.animationManager.defaultDrawFrame;
+            }
+            // Log.AsyncC(d.cropInformationString);
+            */
+            
+            //ModularCrop f=  j.ToObject<ModularCrop>();
+            //ModularCrop f = obj.modularCrop;
+
+            // Log.AsyncG("THIS IS CROP: " + c.indexOfHarvest);
+            //Log.AsyncG(cropString);
+
+
+            // d.crop = obj.crop;
+            // d.modularCrop = obj.modularCrop;
+
+
+            try
+            {
+                return d;
+            }
+            catch (Exception e)
+            {
+                // Log.AsyncM(e);
+                return null;
+            }
+
+            //return base.ParseIntoInventory();
+        }
+
+        public static void SerializeFromWorld(Item I)
+        {
+            //  ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, (c as CoreObject).thisLocation.name, c.Name + ".json"), (PlanterBox)c);
+            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(StardustCore.ModCore.SerializationManager.objectsInWorldPath, I.Name + ".json"), (ModularSeeds)I);
+        }
     }
 }

@@ -664,7 +664,7 @@ namespace AdditionalCropsFramework
                     else
                     {
                         //   Game1.showRedMessage("STEP 2");
-                        Log.Info(vector);
+                       // Log.Info(vector);
 
                         Vector2 newVec = new Vector2(vector.X, vector.Y);
                         // cObj.boundingBox.Inflate(32, 32);
@@ -675,11 +675,11 @@ namespace AdditionalCropsFramework
                 if (playSound == true) Game1.playSound("woodyStep");
                 else
                 {
-                    Log.AsyncG("restoring item from file");
+                  //  Log.AsyncG("restoring item from file");
                 }
                 //Log.AsyncM("Placed and object");
                 cObj.locationsName = location.name;
-                ModCore.serilaizationManager.trackedObjectList.Add(cObj);
+                StardustCore.ModCore.SerializationManager.trackedObjectList.Add(cObj);
                 return true;
 
             }
@@ -692,7 +692,7 @@ namespace AdditionalCropsFramework
             if (Game1.player.isInventoryFull() == false)
             {
                 Game1.player.addItemToInventoryBool(I, false);
-                ModCore.serilaizationManager.trackedObjectList.Remove(I);
+                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(I);
                 return true;
             }
             else
@@ -753,9 +753,9 @@ namespace AdditionalCropsFramework
                 if (state == 1)
                 {
                     c.dayOfCurrentPhase++;
-                    Log.AsyncG("DaY OF CURRRENT PHASE BISCUITS!"+c.dayOfCurrentPhase);
+                  //  Log.AsyncG("DaY OF CURRRENT PHASE BISCUITS!"+c.dayOfCurrentPhase);
 
-                    Log.AsyncC(c.currentPhase);
+                   // Log.AsyncC(c.currentPhase);
                     if (c.dayOfCurrentPhase >= c.phaseDays[c.currentPhase])
                     {
                         c.currentPhase++;
@@ -769,10 +769,6 @@ namespace AdditionalCropsFramework
                         c.dayOfCurrentPhase = 0;
                     }
 
-                    foreach(var v in c.phaseDays)
-                    {
-                        Log.AsyncR("PHASE DAY"+v);
-                    }
                     while (c.currentPhase < c.phaseDays.Count - 1 && c.phaseDays.Count > 0 && c.phaseDays[c.currentPhase] <= 0)
                         c.currentPhase = c.currentPhase + 1;
                     if (c.rowInSpriteSheet == 23 && c.phaseToShow == -1 && c.currentPhase > 0)
@@ -850,7 +846,9 @@ namespace AdditionalCropsFramework
                 if (state == 1)
                 {
                     c.dayOfCurrentPhase++;
-                    Log.AsyncG(c.dayOfCurrentPhase);
+
+
+
                     //c.dayOfCurrentPhase = c.fullyGrown ? c.dayOfCurrentPhase - 1 : Math.Min(c.dayOfCurrentPhase + 1, c.phaseDays.Count > 0 ? c.phaseDays[Math.Min(c.phaseDays.Count - 1, c.currentPhase)] : 0);
                     if (c.dayOfCurrentPhase >= (c.phaseDays.Count > 0 ? c.phaseDays[Math.Min(c.phaseDays.Count - 1, c.currentPhase)] : 0) && c.currentPhase < c.phaseDays.Count - 1)
                     {
@@ -858,10 +856,6 @@ namespace AdditionalCropsFramework
                         c.dayOfCurrentPhase = 0;
                     }
 
-                    foreach (var v in c.phaseDays)
-                    {
-                        Log.AsyncR(v);
-                    }
 
 
 
@@ -1123,7 +1117,6 @@ namespace AdditionalCropsFramework
         public static bool harvestModularCrop(ModularCrop c, int xTile, int yTile, int fertilizer, JunimoHarvester junimoHarvester = null)
         {
             Item I = (Item)new ModularCropObject(c.indexOfHarvest, 1, c.cropObjectTexture, c.cropObjectData);
-
             int howMuch = 3;
             if (Game1.player.addItemToInventoryBool(I, false))
             {
@@ -1242,7 +1235,7 @@ namespace AdditionalCropsFramework
                         ModularCropObject @object;
                         if (!c.programColored)
                         {
-                            Log.AsyncG(c.indexOfHarvest);
+                           // Log.AsyncG(c.indexOfHarvest);
                             try
                             {
                                 @object = new ModularCropObject(c.indexOfHarvest, 1, c.cropObjectTexture, c.cropObjectData);
@@ -1250,7 +1243,7 @@ namespace AdditionalCropsFramework
                             catch(Exception lol)
                             {
                                 @object = new ModularCropObject();
-                                Log.AsyncO(lol);
+                              //  Log.AsyncO(lol);
                             }
                         }
                         else

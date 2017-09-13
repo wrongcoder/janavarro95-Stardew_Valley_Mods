@@ -1,12 +1,14 @@
 ﻿
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardustCore;
+using StardustCore.Animations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +43,7 @@ namespace AdditionalCropsFramework
 
         [XmlIgnore]
         public Texture2D TextureSheet;
-        public string dataFileName;
+
 
         public new bool flipped;
 
@@ -50,7 +52,7 @@ namespace AdditionalCropsFramework
 
         public bool lightGlowAdded;
 
-        public string texturePath;
+      
 
         public bool itemReadyForHarvest;
 
@@ -65,6 +67,9 @@ namespace AdditionalCropsFramework
         public bool useXML;
 
         public string cropType;
+
+        public string dataFileName;
+        public string texturePath;
 
         public override string Name
         {
@@ -87,8 +92,8 @@ namespace AdditionalCropsFramework
 
         public ModularCropObject(int which, int initalStack, string ObjectTextureSheetName, string DataFileName)
         {
-
-            if (File.Exists(ObjectTextureSheetName)) Log.AsyncC("YAY");
+            this.serializationName = this.GetType().ToString();
+           // if (File.Exists(ObjectTextureSheetName)) Log.AsyncC("YAY");
             this.tileLocation = Vector2.Zero;
           
             this.stack = initalStack;
@@ -98,13 +103,26 @@ namespace AdditionalCropsFramework
             }
             catch(Exception err)
             {
-                Log.AsyncM(err);
+              //  Log.AsyncM(err);
             }
                 texturePath = ObjectTextureSheetName;
             this.dataFileName = DataFileName;
             this.canBeSetDown = false;
+          //  Log.AsyncG(Path.Combine(Utilities.EntensionsFolderName,DataFileName));
+          //  Log.AsyncC(which);
+            Dictionary<int, string> dictionary = new Dictionary<int, string>();
 
-            Dictionary<int, string> dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, DataFileName));
+        
+            try
+            {
+                dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, DataFileName));
+            }
+            catch(Exception err)
+            {
+               // Log.AsyncC(err);
+            }
+
+
             string[] array = dictionary[which].Split(new char[]
             {
                 '/'
@@ -139,13 +157,24 @@ namespace AdditionalCropsFramework
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 16, 16);
             this.sourceRect = this.defaultSourceRect;
             
-            Log.AsyncC(this.sourceRect);
+     
+        
             this.defaultBoundingBox = new Rectangle(0, 0, 16, 16);
             this.boundingBox = this.defaultBoundingBox;
 
             this.updateDrawPosition();
             this.parentSheetIndex = which;
-       
+
+            try
+            {
+                this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1), AnimationManager.parseAnimationsFromXNB(array[3]), "default");
+                this.animationManager.setAnimation("Default", 0);
+                //Log.AsyncC("Using animation manager");
+            }
+            catch (Exception errr)
+            {
+                this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1));
+            }
         }
 
         public override string getDescription()
@@ -1254,8 +1283,132 @@ namespace AdditionalCropsFramework
         }
 
 
-      
+        public static new void Serialize(Item I)
+        {
         
+            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(StardustCore.ModCore.SerializationManager.playerInventoryPath, I.Name + ".json"), (ModularCropObject)I);
+        }
+
+        public static Item ParseIntoInventory(string s)
+        {
+            // PlanterBox p = new PlanterBox();
+            // return p;
+
+
+
+            dynamic obj = JObject.Parse(s);
+
+           ModularCropObject d = new ModularCropObject();
+
+            d.dataFileName= obj.dataFileName;
+            d.price = obj.price;
+            d.Decoration_type = obj.Decoration_type;
+            d.rotations = obj.rotations;
+            d.currentRotation = obj.currentRotation;
+            string s1 = Convert.ToString(obj.sourceRect);
+            d.sourceRect = Utilities.parseRectFromJson(s1);
+            string s2 = Convert.ToString(obj.defaultSourceRect);
+            d.defaultSourceRect = Utilities.parseRectFromJson(s2);
+            string s3 = Convert.ToString(obj.defaultBoundingBox);
+            d.defaultBoundingBox = Utilities.parseRectFromJson(s3);
+            d.description = obj.description;
+            d.flipped = obj.flipped;
+            d.flaggedForPickUp = obj.flaggedForPickUp;
+            d.tileLocation = obj.tileLocation;
+            d.parentSheetIndex = obj.parentSheetIndex;
+            d.owner = obj.owner;
+            d.name = obj.name;
+            d.type = obj.type;
+            d.canBeSetDown = obj.canBeSetDown;
+            d.canBeGrabbed = obj.canBeGrabbed;
+            d.isHoedirt = obj.isHoedirt;
+            d.isSpawnedObject = obj.isSpawnedObject;
+            d.questItem = obj.questItem;
+            d.isOn = obj.isOn;
+            d.fragility = obj.fragility;
+            d.edibility = obj.edibility;
+            d.stack = obj.stack;
+            d.quality = obj.quality;
+            d.bigCraftable = obj.bigCraftable;
+            d.setOutdoors = obj.setOutdoors;
+            d.setIndoors = obj.setIndoors;
+            d.readyForHarvest = obj.readyForHarvest;
+            d.showNextIndex = obj.showNextIndex;
+            d.hasBeenPickedUpByFarmer = obj.hasBeenPickedUpByFarmer;
+            d.isRecipe = obj.isRecipe;
+            d.isLamp = obj.isLamp;
+            d.heldObject = obj.heldObject;
+            d.minutesUntilReady = obj.minutesUntilReady;
+            string s4 = Convert.ToString(obj.boundingBox);
+            d.boundingBox = Utilities.parseRectFromJson(s4);
+            d.scale = obj.scale;
+            d.lightSource = obj.lightSource;
+            d.shakeTimer = obj.shakeTimer;
+            d.internalSound = obj.internalSound;
+            d.specialVariable = obj.specialVariable;
+            d.category = obj.category;
+            d.specialItem = obj.specialItem;
+            d.hasBeenInInventory = obj.hasBeenInInventory;
+
+
+            string t = obj.texturePath;
+            d.TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, t));
+            d.texturePath = t;
+            d.itemReadyForHarvest = obj.itemReadyForHarvest;
+            d.lightsOn = obj.lightsOn;
+            d.lightColor = obj.lightColor;
+            d.thisType = obj.thisType;
+            d.removable = obj.removable;
+            d.locationsName = obj.locationsName;
+            d.cropType = obj.cropType;
+            d.drawColor = obj.drawColor;
+            d.serializationName = obj.serializationName;
+            //ANIMATIONS
+            var q = obj.animationManager;
+            dynamic obj1 = q;
+
+           ModularCropObject dummy = new ModularCropObject(d.parentSheetIndex, d.stack, d.texturePath, d.dataFileName);
+            d.animationManager = dummy.animationManager;
+            try
+            {
+                string name = Convert.ToString(obj1.currentAnimationName);
+                int frame = Convert.ToInt32(obj1.currentAnimationListIndex);
+                bool f = d.animationManager.setAnimation(name, frame);
+                bool f2;
+                if (f == false)
+                {
+                    f2 = d.animationManager.setAnimation(name, 0);
+                    if (f2 == false) d.animationManager.currentAnimation = d.animationManager.defaultDrawFrame;
+                }
+            }
+            catch(Exception err)
+            {
+
+            }
+
+            try
+            {
+                return d;
+            }
+            catch (Exception e)
+            {
+                // Log.AsyncM(e);
+                return null;
+            }
+
+            //return base.ParseIntoInventory();
+        }
+
+        public static void SerializeFromWorld(Item I)
+        {
+            //  ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, (c as CoreObject).thisLocation.name, c.Name + ".json"), (PlanterBox)c);
+            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(StardustCore.ModCore.SerializationManager.objectsInWorldPath, I.Name + ".json"), (ModularCropObject)I);
+        }
+
+
+
+
+
 
     }
 }

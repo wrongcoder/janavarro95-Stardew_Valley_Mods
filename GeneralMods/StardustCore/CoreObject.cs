@@ -74,6 +74,8 @@ namespace StardustCore
 
         public AnimationManager animationManager;
 
+        public string serializationName;
+
         public override string Name
         {
             get

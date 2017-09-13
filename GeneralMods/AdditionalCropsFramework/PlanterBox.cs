@@ -22,9 +22,6 @@ namespace AdditionalCropsFramework
     public class PlanterBox : CoreObject
     {
 
-
-        public new int price;
-
         public int Decoration_type;
 
         public int rotations;
@@ -65,7 +62,6 @@ namespace AdditionalCropsFramework
         public string normalCropSeedName;
         public int normalCropSeedIndex;
 
-        public string serializationName="AdditionalCropsFramework.PlanterBox";
 
         public override string Name
         {
@@ -226,8 +222,8 @@ namespace AdditionalCropsFramework
                 this.defaultSourceRect = this.sourceRect;
                 try
                 {                
-                    this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1), AnimationManager.parseAnimationsFromXNB(array[3]), "default");
-                    this.animationManager.setAnimation("default", 0);
+                    this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1), AnimationManager.parseAnimationsFromXNB(array[3]), "Default");
+                    this.animationManager.setAnimation("Default", 0);
                     //Log.AsyncC("Using animation manager");
                 }
                 catch (Exception errr)
@@ -315,21 +311,21 @@ namespace AdditionalCropsFramework
                 }
                 if (this.modularCrop != null)
                 {
-                    Log.AsyncM("HELLO MOD CROP");
+                  //  Log.AsyncM("HELLO MOD CROP");
                     if (this.modularCrop.isFullyGrown() == true)
                     {
-                        Log.AsyncM("FULL BLOW");
+                    //    Log.AsyncM("FULL BLOW");
                         bool f = Utilities.harvestModularCrop(this.modularCrop, (int)this.tileLocation.X, (int)this.tileLocation.Y, 0);
                         if (f == true)
                         {
                             //this.modularCrop = null;
                             if (f == true && this.modularCrop.regrowAfterHarvest == -1) this.modularCrop = null;
-                            Log.AsyncO("HARVEST");
+                           // Log.AsyncO("HARVEST");
                             return false;
                         }
                         else
                         {
-                            Log.AsyncC("failed to harvest crop. =/");
+                           // Log.AsyncC("failed to harvest crop. =/");
                         }
                     }
                 }
@@ -357,9 +353,9 @@ namespace AdditionalCropsFramework
 
         public void plantModdedCrop(ModularSeeds seeds)
         {
-            if (this.modularCrop != null) return;
+          if (this.modularCrop != null) return;
           this.modularCrop = new ModularCrop(seeds.parentSheetIndex, (int)Game1.currentCursorTile.X, (int)Game1.currentCursorTile.Y, seeds.cropDataFilePath, seeds.cropTextureFilePath, seeds.cropObjectTextureFilePath, seeds.cropObjectDataFilePath);
-         // Game1.player.reduceActiveItemByOne();
+          Game1.player.reduceActiveItemByOne();
           Game1.playSound("dirtyHit");
         }
 
@@ -375,12 +371,12 @@ namespace AdditionalCropsFramework
             }
             catch(Exception e)
             {
-                Log.AsyncM(e);
+             //   Log.AsyncM(e);
             }
 
             foreach (var v in this.crop.phaseDays)
             {
-                Log.AsyncC("I grow! " + v);
+              //  Log.AsyncC("I grow! " + v);
             }
             Game1.player.reduceActiveItemByOne();
             Game1.playSound("dirtyHit");
@@ -395,7 +391,7 @@ namespace AdditionalCropsFramework
                 if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
                 {
                     this.isWatered = true;
-                    this.animationManager.setAnimation("watered", 0);
+                    this.animationManager.setAnimation("Watered", 0);
                     return false;
                 }
             }
@@ -478,7 +474,7 @@ namespace AdditionalCropsFramework
 
         public void dayUpdate()
         {
-            Log.AsyncC("HELLO?!?!?");
+           
             if (this.isWatered==true)
             {
                 if (this.crop != null)
@@ -491,14 +487,14 @@ namespace AdditionalCropsFramework
                 {
                    Utilities.cropNewDayModded(this.modularCrop,1, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
                 }
-                Log.AsyncC("DRINK YOUR WATER");
+               
                 this.isWatered = false;
-                this.animationManager.setAnimation("default", 0);
+                this.animationManager.setAnimation("Default", 0);
             }
             else
             {
-                Log.AsyncC("No Water Here");
-                this.animationManager.setAnimation("default", 0);
+              
+                this.animationManager.setAnimation("Default", 0);
             }
         }
 
@@ -900,7 +896,7 @@ namespace AdditionalCropsFramework
         public static new void Serialize(Item I)
         {
             makeCropInformationString(I);
-            ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.playerInventoryPath, I.Name + ".json"), (PlanterBox)I);
+            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(StardustCore.ModCore.SerializationManager.playerInventoryPath, I.Name + ".json"), (PlanterBox)I);
         }
 
         public static Item ParseIntoInventory(string s)
@@ -981,11 +977,11 @@ namespace AdditionalCropsFramework
             d.drawColor = obj.drawColor;
             d.normalCropSeedIndex = obj.normalCropSeedIndex;
             d.cropInformationString = obj.cropInformationString;
-
+            d.serializationName = obj.serializationName;
             d.IsSolid = obj.IsSolid;
 
             string IsWatered = obj.isWatered;
-            Log.AsyncC("AM I WATERED OR NOT?!?!?: "+IsWatered);
+           // Log.AsyncC("AM I WATERED OR NOT?!?!?: "+IsWatered);
             d.isWatered = Convert.ToBoolean(IsWatered);
             //ANIMATIONS
             var q = obj.animationManager;
@@ -1027,10 +1023,10 @@ namespace AdditionalCropsFramework
                         
                     }
                     d.modularCrop = c;
-                    Log.AsyncM("PARSED MODULAR CROP!");
-                    Log.AsyncG(cropInfo[8]);
-                    Log.AsyncG(cropInfo[9]);
-                    Log.AsyncG(cropInfo[10]);
+                   // Log.AsyncM("PARSED MODULAR CROP!");
+                   // Log.AsyncG(cropInfo[8]);
+                   // Log.AsyncG(cropInfo[9]);
+                   // Log.AsyncG(cropInfo[10]);
                 }
                 if (cropInfo[0] == "false") //non-modular crop
                 {
@@ -1051,7 +1047,7 @@ namespace AdditionalCropsFramework
                     }
                     else
                     {
-                        Log.AsyncR("AOSIDHA(IUDGUDIUBGDLIUGDOIHDO:IHDOIHDIOHDIOP");
+                       
                     }
 
                     c.currentPhase = Convert.ToInt32(cropInfo[4]);
@@ -1065,17 +1061,12 @@ namespace AdditionalCropsFramework
                     {
 
                     }
-                    Log.AsyncM("PARSED Regular CROP!");
-                    Log.AsyncG(cropInfo[1]);
-                    Log.AsyncG(cropInfo[2]);
-                    Log.AsyncG(cropInfo[3]);
-                    Log.AsyncR(c.phaseDays.Count);
-                    Log.AsyncM("PARSED REGULAR CROP! FINISH");
-
-                    foreach(var v in c.phaseDays)
-                    {
-                        Log.AsyncG("THIS IS THE FINAL COUNT DOWN " + v);
-                    }
+                   // Log.AsyncM("PARSED Regular CROP!");
+                   // Log.AsyncG(cropInfo[1]);
+                   // Log.AsyncG(cropInfo[2]);
+                   // Log.AsyncG(cropInfo[3]);
+                   // Log.AsyncR(c.phaseDays.Count);
+                   // Log.AsyncM("PARSED REGULAR CROP! FINISH");
 
                     d.crop = c;
                 }
@@ -1112,7 +1103,7 @@ namespace AdditionalCropsFramework
         {
             makeCropInformationString(I);
             //  ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, (c as CoreObject).thisLocation.name, c.Name + ".json"), (PlanterBox)c);
-            ModCore.serilaizationManager.WriteToJsonFile(Path.Combine(ModCore.serilaizationManager.objectsInWorldPath, I.Name + ".json"), (PlanterBox)I);
+            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(StardustCore.ModCore.SerializationManager.objectsInWorldPath, I.Name + ".json"), (PlanterBox)I);
         }
 
         public static void makeCropInformationString(Item I)

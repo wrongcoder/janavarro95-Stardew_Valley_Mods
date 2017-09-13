@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,27 +23,30 @@ namespace StardustCore.Serialization
     {
         public string objectsInWorldPath;
         public string playerInventoryPath;
-        public string SerializerTrashPath;
-
-        public Dictionary<string, SerializerDataNode> acceptedTypes = new Dictionary<string, SerializerDataNode>();
-        public List<CoreObject> trackedObjectList = new List<CoreObject>();
+        public string serializerTrashPath;
+        public string storageContainerPath;
 
 
+        public  Dictionary<string, SerializerDataNode> acceptedTypes = new Dictionary<string, SerializerDataNode>();
+        public  List<CoreObject> trackedObjectList = new List<CoreObject>();
 
-        public SerializationManager(string PlayerInventoryPath,string SerializerTrashPath,string ObjectsInWorldPath)
+
+
+        public SerializationManager(string PlayerInventoryPath,string SerializerTrashPath,string ObjectsInWorldPath,string StorageContainerPath)
         {
-            this.objectsInWorldPath = ObjectsInWorldPath;
-            this.playerInventoryPath = PlayerInventoryPath;
-            this.SerializerTrashPath = SerializerTrashPath;
-
+            objectsInWorldPath = ObjectsInWorldPath;
+            playerInventoryPath = PlayerInventoryPath;
+            serializerTrashPath = SerializerTrashPath;
+            storageContainerPath = StorageContainerPath;
             verifyAllDirectoriesExist();
         }
 
         private void verifyAllDirectoriesExist()
         {
-            if (!Directory.Exists(this.playerInventoryPath)) Directory.CreateDirectory(this.playerInventoryPath);
-            if (!Directory.Exists(this.SerializerTrashPath)) Directory.CreateDirectory(this.SerializerTrashPath);
-            if (!Directory.Exists(this.objectsInWorldPath)) Directory.CreateDirectory(this.objectsInWorldPath);
+            if (!Directory.Exists(playerInventoryPath)) Directory.CreateDirectory(playerInventoryPath);
+            if (!Directory.Exists(serializerTrashPath)) Directory.CreateDirectory(serializerTrashPath);
+            if (!Directory.Exists(objectsInWorldPath)) Directory.CreateDirectory(objectsInWorldPath);
+            if (!Directory.Exists(storageContainerPath)) Directory.CreateDirectory(storageContainerPath);
         }
 
         public void cleanUpInventory()
@@ -99,7 +103,7 @@ namespace StardustCore.Serialization
             }
             catch(Exception e)
             {
-                Log.AsyncC(e);
+               // Log.AsyncC(e);
             }
             List<CoreObject> removalList = new List<CoreObject>();
             int countProcessed = 0;
@@ -123,7 +127,7 @@ namespace StardustCore.Serialization
 
                 if (acceptedTypes.ContainsKey(s))
                 {
-                    Log.AsyncM("Object is of accepted type: " + s);
+                   // Log.AsyncM("Object is of accepted type: " + s);
                     SerializerDataNode t;
 
                     bool works = acceptedTypes.TryGetValue(s, out t);
@@ -132,7 +136,7 @@ namespace StardustCore.Serialization
                         countProcessed++;
                         if (d.useXML == false)
                         {
-                            Log.AsyncY("Saving the object");
+                           // Log.AsyncY("Saving the object");
                             t.worldObj.Invoke(d);
                         }
                         else
@@ -175,11 +179,43 @@ namespace StardustCore.Serialization
 
         }
 
+        public static void cleanUpStorageContainers()
+        {
+            foreach (GameLocation loc in Game1.locations)
+            {
+                foreach (var obj in loc.objects)
+                {
+                    if (obj.Value is StardewValley.Objects.Chest) {
+                    foreach(var item in (obj.Value as StardewValley.Objects.Chest).items)
+                        {
+                            if (item is CoreObject) (obj.Value as StardewValley.Objects.Chest).items.Remove(item);
+                        }
+                      }
+                }
+            }
+
+            foreach (Building building in Game1.getFarm().buildings)
+            {
+                GameLocation loc =Game1.getLocationFromName(building.nameOfIndoors,true);
+                Log.AsyncG("THIS IS MY BUILDING!!!!!");
+                foreach (var obj in loc.objects)
+                {
+                    if (obj.Value is StardewValley.Objects.Chest)
+                    {
+                        foreach (var item in (obj.Value as StardewValley.Objects.Chest).items)
+                        {
+                            if (item is CoreObject) (obj.Value as StardewValley.Objects.Chest).items.Remove(item);
+                        }
+                    }
+                }
+            }
+        }
 
         public void restoreAllModObjects(List<CoreObject> thingsToAddBackIn)
         {
-            processDirectoryForDeserialization(this.playerInventoryPath,thingsToAddBackIn);
-            Log.AsyncG("DESERIALIZE???");
+            processDirectoryForDeserialization(playerInventoryPath,thingsToAddBackIn);
+            processDirectoryForDeserialization(storageContainerPath, thingsToAddBackIn);
+           // Log.AsyncG("Done deserializing player inventory.");
             try
             {
                 trackedObjectList.Clear(); //clear whatever mod objects I'm tracking
@@ -261,9 +297,12 @@ namespace StardustCore.Serialization
         public void processDirectoryForDeserialization(string pathToFile,List<CoreObject> thingsToAddBackIn)
         {
             string[] fileEntries = Directory.GetFiles(pathToFile);
+        //    Log.AsyncC(pathToFile);
+
             foreach(var fileName in fileEntries)
             {
                 ProcessFileForCleanUp(fileName,thingsToAddBackIn);
+              //  Log.AsyncG(fileName);
             }
 
             string[] subDirectories = Directory.GetDirectories(pathToFile);
@@ -278,7 +317,7 @@ namespace StardustCore.Serialization
         public void ProcessFileForCleanUp(string path, List<CoreObject> thingsToAddBackIn)
         {
 
-            Log.AsyncC(path);
+            //Log.AsyncC(path);
 
             string[] ehh = File.ReadAllLines(path);
             string data = ehh[0];
@@ -298,7 +337,7 @@ namespace StardustCore.Serialization
                 a = obj.serializationName;
                 b = a.Split(',');
                 s = b.ElementAt(0);
-                Log.AsyncC(s);
+             //   Log.AsyncC(s);
             }
             catch (Exception e)
             {
@@ -315,7 +354,7 @@ namespace StardustCore.Serialization
                         if ((cObj as CoreObject).thisLocation == null)
                         {
                             Game1.player.addItemToInventory(cObj);
-                            Log.AsyncY("ADDED ITEM TO INVENTORY");
+                           // Log.AsyncY("ADDED ITEM TO INVENTORY");
                             return;
                         }
                         else
@@ -350,23 +389,23 @@ namespace StardustCore.Serialization
             //USE JSON STYLE DESERIALIZNG
             if (acceptedTypes.ContainsKey(s))
             {
-                  Log.AsyncC("FUUUUU");
+                  //Log.AsyncC("FUUUUU");
                 foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
                 {
-                    Log.AsyncY(pair.Key);
+                  //  Log.AsyncY(pair.Key);
                     if (pair.Key == s)
                     {
                         try
                         {
                             //parse from Json Style
-                            Log.AsyncR("1");
+                         //   Log.AsyncR("1");
                             cObj = (CoreObject)pair.Value.parse.Invoke(data);
                             (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
 
                             if ((cObj as CoreObject).thisLocation == null)
                             {
                                 Game1.player.addItemToInventory(cObj);
-                                Log.AsyncY("ADDED ITEM TO INVENTORY");
+                               // Log.AsyncY("ADDED ITEM TO INVENTORY");
                                 return;
                             }
                             else
@@ -378,7 +417,7 @@ namespace StardustCore.Serialization
                         }
                         catch (Exception e)
                         {
-                            Log.AsyncO(e);
+                           // Log.AsyncO(e);
                         }
                     }
                 }
