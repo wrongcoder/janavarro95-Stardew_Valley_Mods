@@ -736,20 +736,17 @@ namespace AdditionalCropsFramework
             return false;
     }
 
-        public static void cropNewDay(Crop c,int state, int fertilizer, int xTile, int yTile, GameLocation environment)
+        public static void cropNewDay(PlanterBox p,Crop c,int state, int fertilizer, int xTile, int yTile, GameLocation environment)
         {
-            /*
-            if ((c.dead || !c.seasonsToGrowIn.Contains(Game1.currentSeason)))
+            if (p.greenHouseEffect == false)
             {
-                c.dead = true;
+                if ((c.dead || !c.seasonsToGrowIn.Contains(Game1.currentSeason)))
+                {
+                    c.dead = true;
+                }
             }
-            */
-            if (1 == 0)
-            {
 
-            }
-            else
-            {
+
                 if (state == 1)
                 {
                     c.dayOfCurrentPhase++;
@@ -823,26 +820,22 @@ namespace AdditionalCropsFramework
                 if (environment.terrainFeatures[index] == null || !(environment.terrainFeatures[index] is HoeDirt))
                     return;
                 (environment.terrainFeatures[index] as HoeDirt).crop = (Crop)null;
-            }
+            
         }
 
 
        
 
-        public static void cropNewDayModded(ModularCrop c, int state, int fertilizer, int xTile, int yTile, GameLocation environment)
+        public static void cropNewDayModded(PlanterBox p,ModularCrop c, int state, int fertilizer, int xTile, int yTile, GameLocation environment)
         {
-            /*
-            if ((c.dead || !c.seasonsToGrowIn.Contains(Game1.currentSeason)))
+            if (p.greenHouseEffect == false)
             {
-                c.dead = true;
+                if ((c.dead || !c.seasonsToGrowIn.Contains(Game1.currentSeason)))
+                {
+                    c.dead = true;
+                }
             }
-            */
-            if (1 == 0)
-            {
 
-            }
-            else
-            {
                 if (state == 1)
                 {
                     c.dayOfCurrentPhase++;
@@ -911,7 +904,7 @@ namespace AdditionalCropsFramework
                 if (environment.terrainFeatures[index] == null || !(environment.terrainFeatures[index] is HoeDirt))
                     return;
                 (environment.terrainFeatures[index] as HoeDirt).crop = (Crop)null;
-            }
+            
         }
 
 
@@ -923,7 +916,12 @@ namespace AdditionalCropsFramework
             if (Game1.player.addItemToInventoryBool(I, false))
             {
                 Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
-                Game1.player.animateOnce(279 + Game1.player.facingDirection);
+
+                if (Game1.player.CurrentItem == null)
+                {
+                    // Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                   // StardustCore.Utilities.animateOnce(Game1.player, 279 + Game1.player.facingDirection, 10f, 6, null, false, false, false);
+                }
                 Game1.player.canMove = false;
                 Game1.playSound("harvest");
                 DelayedAction.playSoundAfterDelay("coin", 260);
@@ -1121,7 +1119,11 @@ namespace AdditionalCropsFramework
             if (Game1.player.addItemToInventoryBool(I, false))
             {
                 Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
-                Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                if (Game1.player.CurrentItem == null)
+                {
+                    // Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                  //  StardustCore.Utilities.animateOnce(Game1.player, 279 + Game1.player.facingDirection, 10f, 6, null, false, false, false);
+                }
                 Game1.player.canMove = false;
                 Game1.playSound("harvest");
                 DelayedAction.playSoundAfterDelay("coin", 260);

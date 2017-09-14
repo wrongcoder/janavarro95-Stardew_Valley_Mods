@@ -31,14 +31,11 @@ namespace AdditionalCropsFramework
     {
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
-
-     
-
-
         public static readonly List<ModularCropObject> SpringWildCrops = new List<ModularCropObject>();
         public static readonly List<ModularCropObject> SummerWildCrops = new List<ModularCropObject>();
         public static readonly List<ModularCropObject> FallWildCrops = new List<ModularCropObject>();
         public static readonly List<ModularCropObject> WinterWildCrops = new List<ModularCropObject>();
+        public static Framework.Config ModConfig;
 
         private List<Item> shippingList;
 
@@ -61,35 +58,8 @@ namespace AdditionalCropsFramework
             StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.ModularSeeds", new SerializerDataNode(new SerializerDataNode.SerializingFunction(ModularSeeds.Serialize), new SerializerDataNode.ParsingFunction(ModularSeeds.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(ModularSeeds.SerializeFromWorld),new SerializerDataNode.SerializingToContainerFunction(ModularSeeds.Serialize)));
             // StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             this.shippingList = new List<Item>();
-        }
 
-        //Unused
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
-        {
-            
-            if (Game1.activeClickableMenu != null) return;
-            else
-            {
-                if (shippingList.Count > 0) Game1.activeClickableMenu = new Menus.ShippingMenuExpanded(shippingList);
-                shippingList.Clear();
-            }
-            if (Game1.newDay == true)
-            {
-                foreach(var v in Game1.getFarm().shippingBin)
-                {
-                    if (shippingList.Contains(v)) continue;
-                    if (v is StardustCore.CoreObject)
-                    {
-                        //Log.AsyncC(v.Name);
-                        shippingList.Add(v);
-                    }
-                }
-                foreach(var v in shippingList)
-                {
-                    Game1.getFarm().shippingBin.Remove(v);
-                }
-            }
-            
+          ModConfig=  helper.ReadConfig<Framework.Config>();
         }
 
         public void dailyUpdates()

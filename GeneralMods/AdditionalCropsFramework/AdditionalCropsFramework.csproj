@@ -49,8 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Config.cs" />
     <Compile Include="Framework\TerrainDataNode.cs" />
-    <Compile Include="Menus\ShippingMenu.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Framework\Utilities.cs" />
     <Compile Include="ModularCrop.cs" />

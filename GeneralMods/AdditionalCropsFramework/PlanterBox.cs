@@ -62,6 +62,8 @@ namespace AdditionalCropsFramework
         public string normalCropSeedName;
         public int normalCropSeedIndex;
 
+        public bool greenHouseEffect;
+        public bool selfWatering;
 
         public override string Name
         {
@@ -199,14 +201,14 @@ namespace AdditionalCropsFramework
             // this.thisType = GetType();
             this.tileLocation = tile;
             this.InitializeBasics(0, tile);
-                TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectTexture)); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
-                texturePath = ObjectTexture;
+            TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, ObjectTexture)); //Game1.content.Load<Texture2D>("TileSheets\\furniture");
+            texturePath = ObjectTexture;
             Dictionary<int, string> dictionary;
             try
             {
                 
-                    dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, DataPath));
-                    dataPath = DataPath;
+               dictionary = ModCore.ModHelper.Content.Load<Dictionary<int, string>>(Path.Combine(Utilities.EntensionsFolderName, DataPath));
+               dataPath = DataPath;
                 
 
                 string s = "";
@@ -247,6 +249,25 @@ namespace AdditionalCropsFramework
                 this.updateDrawPosition();
                 this.price = Convert.ToInt32(array[2]);
                 this.parentSheetIndex = which;
+
+                try
+                {
+                    this.selfWatering = Convert.ToBoolean(array[4]);
+                }
+                catch(Exception e)
+                {
+                    Log.AsyncG(e);
+                    this.selfWatering = false;
+                }
+                try
+                {
+                    this.greenHouseEffect = Convert.ToBoolean(array[5]);
+                }
+                catch (Exception e)
+                {
+                    Log.AsyncG(e);
+                    this.greenHouseEffect = false;
+                }
                 
             }
             catch(Exception e)
@@ -396,7 +417,29 @@ namespace AdditionalCropsFramework
                 }
             }
 
-            
+            if (Game1.player.CurrentItem != null)
+            {
+                if (Game1.player.CurrentItem is StardewValley.Tools.MeleeWeapon || Game1.player.CurrentItem is StardewValley.Tools.Sword)
+                {
+                    if (this.modularCrop != null)
+                    {
+                        if (this.modularCrop.dead == true)
+                        {
+                            this.modularCrop = null;
+                            return false;
+                        }
+                    }
+                    if (this.crop != null)
+                    {
+                        if (this.crop.dead == true)
+                        {
+                            this.crop = null;
+                            return false;
+                        }
+                    }
+                }
+            }
+
 
 
             if (removable == false) return false;
@@ -474,28 +517,76 @@ namespace AdditionalCropsFramework
 
         public void dayUpdate()
         {
-           
+
+            if (ModCore.ModConfig.removeCropsDayofDying == false)
+            {
+                if (this.crop != null)
+                {
+                    if (this.crop.dead) this.crop = null;
+
+                }
+            }
+
+            if (this.modularCrop != null)
+            {
+                if (this.modularCrop.dead) this.modularCrop = null;
+            }
+
+
+            if (this.selfWatering == true)
+            {
+                this.isWatered = true;
+                this.animationManager.setAnimation("Watered", 0);
+            }
+
+
             if (this.isWatered==true)
             {
                 if (this.crop != null)
                 {
-                    Utilities.cropNewDay(this.crop,1, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
+                    Utilities.cropNewDay(this,this.crop,1, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
                    
                 }
 
                 if (this.modularCrop != null)
                 {
-                   Utilities.cropNewDayModded(this.modularCrop,1, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
+                   Utilities.cropNewDayModded(this,this.modularCrop,1, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
                 }
-               
-                this.isWatered = false;
-                this.animationManager.setAnimation("Default", 0);
+                if (this.selfWatering == false)
+                {
+                    this.isWatered = false;
+                    this.animationManager.setAnimation("Default", 0);
+                }
             }
-            else
+            else //if planterbox isn't watered
             {
-              
-                this.animationManager.setAnimation("Default", 0);
+                if (this.crop != null)
+                {
+                    Utilities.cropNewDay(this, this.crop, 0, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
+
+                }
+
+                if (this.modularCrop != null)
+                {
+                    Utilities.cropNewDayModded(this, this.modularCrop, 0, 0, (int)this.tileLocation.X, (int)this.tileLocation.Y, this.thisLocation);
+                }
+                if (this.selfWatering == false)
+                {
+                    this.isWatered = false;
+                    this.animationManager.setAnimation("Default", 0);
+                }
             }
+            //Update ticks occ
+            if (ModCore.ModConfig.removeCropsDayofDying == true)
+            {
+                if (this.crop != null)
+                {
+                    if (this.crop.dead) this.crop = null;
+
+                }
+            }
+
+
         }
 
         public void resetOnPlayerEntry(GameLocation environment)
@@ -985,7 +1076,8 @@ namespace AdditionalCropsFramework
             d.cropInformationString = obj.cropInformationString;
             d.serializationName = obj.serializationName;
             d.IsSolid = obj.IsSolid;
-
+            d.selfWatering = obj.selfWatering;
+            d.greenHouseEffect = obj.greenHouseEffect;
             string IsWatered = obj.isWatered;
            // Log.AsyncC("AM I WATERED OR NOT?!?!?: "+IsWatered);
             d.isWatered = Convert.ToBoolean(IsWatered);
