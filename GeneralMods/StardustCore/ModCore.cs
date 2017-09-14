@@ -52,6 +52,7 @@ namespace StardustCore
         {
             SerializationManager.cleanUpInventory();
             SerializationManager.cleanUpWorld();
+            SerializationManager.cleanUpStorageContainers();
         }
 
         private void ControlEvents_MouseChanged(object sender, StardewModdingAPI.Events.EventArgsMouseStateChanged e)

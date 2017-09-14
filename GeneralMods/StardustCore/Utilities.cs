@@ -670,5 +670,63 @@ namespace StardustCore
             }
             return new Microsoft.Xna.Framework.Rectangle(Convert.ToInt32(parsed[2]), Convert.ToInt32(parsed[4]), Convert.ToInt32(parsed[6]), Convert.ToInt32(parsed[8]));
         }
+
+
+        public static bool addItemToOtherInventory(List<Item> inventory, Item I)
+        {
+            if (I == null) return false;
+            if (isInventoryFull(inventory) == false)
+            {
+                if (inventory == null)
+                {
+                    return false;
+                }
+                if (inventory.Count == 0)
+                {
+                    inventory.Add(I);
+                    return true;
+                }
+                for (int i = 0; i < inventory.Capacity; i++)
+                {
+                    //   Log.AsyncC("OK????");
+
+                    foreach (var v in inventory)
+                    {
+
+                        if (inventory.Count == 0)
+                        {
+                            addItemToOtherInventory(inventory, I);
+                            return true;
+                        }
+                        if (v == null) continue;
+                        if (v.canStackWith(I))
+                        {
+                            v.addToStack(I.getStack());
+                            return true;
+                        }
+                    }
+                }
+
+                inventory.Add(I);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool isInventoryFull(List<Item> inventory, bool logInfo = false)
+        {
+            if (logInfo)
+            {
+                Log.AsyncG("size " + inventory.Count);
+                Log.AsyncG("max " + inventory.Capacity);
+            }
+
+            if (inventory.Count == inventory.Capacity) return true;
+            else return false;
+        }
+
+
     }
 }

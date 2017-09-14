@@ -56,9 +56,9 @@ namespace AdditionalCropsFramework
             }
 
 
-            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.PlanterBox", new SerializerDataNode(new SerializerDataNode.SerializingFunction(PlanterBox.Serialize), new SerializerDataNode.ParsingFunction(PlanterBox.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(PlanterBox.SerializeFromWorld))); //need serialize, deserialize, and world deserialize functions.
-            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.ModularCropObject", new SerializerDataNode(new SerializerDataNode.SerializingFunction(ModularCropObject.Serialize), new SerializerDataNode.ParsingFunction(ModularCropObject.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(ModularCropObject.SerializeFromWorld)));
-            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.ModularSeeds", new SerializerDataNode(new SerializerDataNode.SerializingFunction(ModularSeeds.Serialize), new SerializerDataNode.ParsingFunction(ModularSeeds.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(ModularSeeds.SerializeFromWorld)));
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.PlanterBox", new SerializerDataNode(new SerializerDataNode.SerializingFunction(PlanterBox.Serialize), new SerializerDataNode.ParsingFunction(PlanterBox.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(PlanterBox.SerializeFromWorld),new SerializerDataNode.SerializingToContainerFunction(PlanterBox.Serialize))); //need serialize, deserialize, and world deserialize functions.
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.ModularCropObject", new SerializerDataNode(new SerializerDataNode.SerializingFunction(ModularCropObject.Serialize), new SerializerDataNode.ParsingFunction(ModularCropObject.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(ModularCropObject.SerializeFromWorld),new SerializerDataNode.SerializingToContainerFunction(ModularCropObject.Serialize)));
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("AdditionalCropsFramework.ModularSeeds", new SerializerDataNode(new SerializerDataNode.SerializingFunction(ModularSeeds.Serialize), new SerializerDataNode.ParsingFunction(ModularSeeds.ParseIntoInventory), new SerializerDataNode.WorldParsingFunction(ModularSeeds.SerializeFromWorld),new SerializerDataNode.SerializingToContainerFunction(ModularSeeds.Serialize)));
             // StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             this.shippingList = new List<Item>();
         }
@@ -80,7 +80,7 @@ namespace AdditionalCropsFramework
                     if (shippingList.Contains(v)) continue;
                     if (v is StardustCore.CoreObject)
                     {
-                        Log.AsyncC(v.Name);
+                        //Log.AsyncC(v.Name);
                         shippingList.Add(v);
                     }
                 }

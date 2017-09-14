@@ -135,7 +135,7 @@ namespace StardustCore.Animations
             Dictionary<string,List<Animation>> parsedDic = new Dictionary<string, List<Animation>>();
             foreach(var v in array)
             {
-                Log.AsyncC(v);
+               // Log.AsyncC(v);
                 string[] AnimationArray = v.Split(' ');
                 if (parsedDic.ContainsKey(AnimationArray[0]))
                 {

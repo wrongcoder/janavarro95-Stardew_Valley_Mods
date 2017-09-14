@@ -179,33 +179,83 @@ namespace StardustCore.Serialization
 
         }
 
-        public static void cleanUpStorageContainers()
+        public void cleanUpStorageContainers()
         {
+            ProcessDirectoryForDeletion(storageContainerPath);
+
+            List<Item> removalList = new List<Item>();
             foreach (GameLocation loc in Game1.locations)
             {
+                int i = loc.objects.Count;
+                int j = 0;
                 foreach (var obj in loc.objects)
                 {
+                    j++;
+                    ModCore.ModMonitor.Log("Parsing location " + loc.name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
                     if (obj.Value is StardewValley.Objects.Chest) {
-                    foreach(var item in (obj.Value as StardewValley.Objects.Chest).items)
+                        int k = (obj.Value as StardewValley.Objects.Chest).items.Count;
+                        int l = 0;
+                    foreach (var item in (obj.Value as StardewValley.Objects.Chest).items)
                         {
-                            if (item is CoreObject) (obj.Value as StardewValley.Objects.Chest).items.Remove(item);
+                            l++;
+                            ModCore.ModMonitor.Log("Parsing Chest at : " + loc.name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
+                            if (item is CoreObject) removalList.Add(item);
                         }
+
+                    foreach(var v in removalList)
+                        {
+                            (obj.Value as StardewValley.Objects.Chest).items.Remove(v);
+
+                            SerializerDataNode t;
+                            if (acceptedTypes.ContainsKey((v as CoreObject).serializationName))
+                            {
+                                acceptedTypes.TryGetValue((v as CoreObject).serializationName, out t);
+                                string s = Path.Combine(loc.name, "Chest," + Convert.ToString((int)obj.Key.X) + "," + Convert.ToString((int)obj.Key.Y));
+                                string s2 = Path.Combine(ModCore.SerializationManager.storageContainerPath, s);
+                                if (!Directory.Exists(s)) Directory.CreateDirectory(s2);
+                                t.serializeToContainer.Invoke(v, s2);
+                            }
+                        }
+                        removalList.Clear();
                       }
                 }
             }
 
             foreach (Building building in Game1.getFarm().buildings)
             {
+               
                 GameLocation loc =Game1.getLocationFromName(building.nameOfIndoors,true);
-                Log.AsyncG("THIS IS MY BUILDING!!!!!");
-                foreach (var obj in loc.objects)
+              ModCore.ModMonitor.Log("Cleaning up farm building: "+loc.uniqueName);
+                int i = loc.objects.Count;
+                int j = 0;
+                foreach (var obj in loc.objects) 
                 {
+                    j++;
+                    ModCore.ModMonitor.Log("Parsing location " + loc.name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
                     if (obj.Value is StardewValley.Objects.Chest)
                     {
+                        int k = (obj.Value as StardewValley.Objects.Chest).items.Count;
+                        int l = 0;
                         foreach (var item in (obj.Value as StardewValley.Objects.Chest).items)
                         {
-                            if (item is CoreObject) (obj.Value as StardewValley.Objects.Chest).items.Remove(item);
+                            l++;
+                            ModCore.ModMonitor.Log("Parsing Chest at : " + loc.name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
+                            if (item is CoreObject) removalList.Add(item);
                         }
+                        foreach(var v in removalList)
+                        {
+                            (obj.Value as StardewValley.Objects.Chest).items.Remove(v);
+
+                            SerializerDataNode t;
+                            if(acceptedTypes.ContainsKey((v as CoreObject).serializationName)){
+                                acceptedTypes.TryGetValue((v as CoreObject).serializationName, out t);
+                                string s = Path.Combine(building.nameOfIndoors, "Chest,"+Convert.ToString( (int)obj.Key.X)+","+Convert.ToString((int)obj.Key.Y));
+                                string s2 = Path.Combine(ModCore.SerializationManager.storageContainerPath, s);
+                                if (!Directory.Exists(s)) Directory.CreateDirectory(s2);
+                                t.serializeToContainer.Invoke(v, s2);
+                            }
+                        }
+                        removalList.Clear();
                     }
                 }
             }
@@ -214,12 +264,14 @@ namespace StardustCore.Serialization
         public void restoreAllModObjects(List<CoreObject> thingsToAddBackIn)
         {
             processDirectoryForDeserialization(playerInventoryPath,thingsToAddBackIn);
-            processDirectoryForDeserialization(storageContainerPath, thingsToAddBackIn);
+            
+
            // Log.AsyncG("Done deserializing player inventory.");
             try
             {
                 trackedObjectList.Clear(); //clear whatever mod objects I'm tracking
                 processDirectoryForDeserialization(objectsInWorldPath,thingsToAddBackIn); //restore whatever I'm tracking here when I replace the object back into the world. This also works when loading up the game, not just when saving/loading
+                processDirectoryForDeserializationIntoContainer(storageContainerPath, thingsToAddBackIn);
             }
             catch (Exception e)
             {
@@ -309,6 +361,25 @@ namespace StardustCore.Serialization
             foreach(var folder in subDirectories)
             {
                 processDirectoryForDeserialization(folder,thingsToAddBackIn);
+            }
+
+        }
+
+        public void processDirectoryForDeserializationIntoContainer(string pathToFile, List<CoreObject> thingsToAddBackIn)
+        {
+            string[] fileEntries = Directory.GetFiles(pathToFile);
+            //    Log.AsyncC(pathToFile);
+
+            foreach (var fileName in fileEntries)
+            {
+                ProcessFileForCleanUpIntoContainer(fileName, thingsToAddBackIn);
+                //  Log.AsyncG(fileName);
+            }
+
+            string[] subDirectories = Directory.GetDirectories(pathToFile);
+            foreach (var folder in subDirectories)
+            {
+                processDirectoryForDeserializationIntoContainer(folder, thingsToAddBackIn);
             }
 
         }
@@ -418,6 +489,174 @@ namespace StardustCore.Serialization
                         catch (Exception e)
                         {
                            // Log.AsyncO(e);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Log.AsyncM("Error parsing unknown object type: " + s);
+            }
+
+        }
+
+
+
+        public void ProcessFileForCleanUpIntoContainer(string path, List<CoreObject> thingsToAddBackIn)
+        {
+
+            //Log.AsyncC(path);
+            string newLine = Environment.NewLine;
+
+            string[] chestArray= path.Split(new string[] { "/"}, StringSplitOptions.None);
+            string[] chestArray2= path.Split(new string[] { "\\" }, StringSplitOptions.None);
+            /*
+            foreach (var v in chestArray)
+            {
+                Log.AsyncC("PART OF PATH "+v);
+            }
+            foreach (var v in chestArray2)
+            {
+                Log.AsyncC("PART OF PATH2 " + v);
+            }
+            */
+            if (chestArray2.Length > chestArray.Length) chestArray = chestArray2;
+
+            GameLocation loc = Game1.getLocationFromName(chestArray[chestArray.Length - 3]);
+            string[] chest = chestArray[chestArray.Length - 2].Split(',');
+            StardewValley.Object chestObject;
+            bool f = loc.objects.TryGetValue(new Microsoft.Xna.Framework.Vector2( Convert.ToInt32(chest[1]),Convert.ToInt32(chest[2])),out chestObject);
+            if (f == true)
+            {
+                Log.AsyncC("YAY");
+            }
+            else
+            {
+                Log.AsyncR("BOO");
+            }
+
+            string[] ehh = File.ReadAllLines(path);
+            string data = ehh[0];
+            CoreObject cObj;
+            string a;
+            string[] b;
+            string s = "";
+            // Log.AsyncC(path);
+            //  Log.AsyncC(data);
+            try
+            {
+                dynamic obj = JObject.Parse(data);
+
+
+                //   Log.AsyncC(obj.thisType);
+
+                a = obj.serializationName;
+                b = a.Split(',');
+                s = b.ElementAt(0);
+                //   Log.AsyncC(s);
+            }
+            catch (Exception e)
+            {
+                Log.AsyncR("WHYASIIF");
+                //USE XML STYLE DESERIALIZING
+                foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
+                {
+                    var word = ParseXMLType(path);
+                    if (pair.Key == word.ToString())
+                    {
+                        cObj = (CoreObject)pair.Value.parse.Invoke(path);
+                        (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
+                        (cObj as CoreObject).resetTexture();
+                        if ((cObj as CoreObject).thisLocation == null)
+                        {
+                           // Game1.player.addItemToInventory(cObj);
+                            try
+                            {
+                                Utilities.addItemToOtherInventory((chestObject as StardewValley.Objects.Chest).items, cObj);
+                            }
+                            catch(Exception err)
+                            {
+                                Log.AsyncR(err);
+                            }
+                            // Log.AsyncY("ADDED ITEM TO INVENTORY");
+                            return;
+                        }
+                        else
+                        {
+                            (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).tileLocation, (StardewValley.Object)cObj);
+                            thingsToAddBackIn.Add(cObj);
+                            //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+                        }
+                    }
+                }
+
+                // Log.AsyncG("attempting to parse from path and value of s is " + s);
+            }
+
+            // var cObj = parseBagOfHolding(path); //pair.Value.parse.Invoke(path);
+            //  cObj.TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds"));
+            /*
+            cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
+            if (cObj.thisLocation == null)
+            {
+                Game1.player.addItemToInventory(cObj);
+                return;
+            }
+            else
+            {
+                cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
+                Lists.trackedObjectList.Add(cObj);
+                //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+            }
+            */
+
+            //USE JSON STYLE DESERIALIZNG
+            if (acceptedTypes.ContainsKey(s))
+            {
+                Log.AsyncC("parse???");
+                foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
+                {
+                    //  Log.AsyncY(pair.Key);
+                    if (pair.Key == s)
+                    {
+                        try
+                        {
+                            //parse from Json Style
+                            //   Log.AsyncR("1");
+                            cObj = (CoreObject)pair.Value.parse.Invoke(data);
+                            (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
+                            Log.AsyncY("closer");
+                            if ((cObj as CoreObject).thisLocation == null)
+                            {
+                                try
+                                {
+                                    Log.AsyncG("HERE PRETTY MUCH!!!");
+                                    Utilities.addItemToOtherInventory((chestObject as StardewValley.Objects.Chest).items, cObj);
+
+                                    foreach(var v in (chestObject as StardewValley.Objects.Chest).items)
+                                    {
+                                        Log.AsyncC(v.Name);
+                                    }
+
+                                }
+                                catch (Exception err)
+                                {
+                                    Log.AsyncR(err);
+                                }
+                                // Log.AsyncY("ADDED ITEM TO INVENTORY");
+                                return;
+                            }
+                            else
+                            {
+                                Log.AsyncG("WHY HERE????");
+                                (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).tileLocation, (StardewValley.Object)cObj);
+                                thingsToAddBackIn.Add(cObj);
+                                //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            // Log.AsyncO(e);
                         }
                     }
                 }

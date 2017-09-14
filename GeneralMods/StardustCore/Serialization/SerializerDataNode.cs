@@ -11,17 +11,20 @@ namespace StardustCore.Serialization
     {
         public delegate Item ParsingFunction(string data);
         public delegate void SerializingFunction(Item item);
+        public delegate void SerializingToContainerFunction(Item item, string s);
         public delegate void WorldParsingFunction(Item obj);
 
         public SerializingFunction serialize;
+        public SerializingToContainerFunction serializeToContainer;
         public ParsingFunction parse;
         public WorldParsingFunction worldObj;
 
-        public SerializerDataNode(SerializingFunction serializeFunction, ParsingFunction parsingFunction, WorldParsingFunction worldObjectParsingFunction)
+        public SerializerDataNode(SerializingFunction serializeFunction, ParsingFunction parsingFunction, WorldParsingFunction worldObjectParsingFunction, SerializingToContainerFunction containerSerializationFunction)
         {
             serialize = serializeFunction;
             parse = parsingFunction;
-            worldObj = worldObjectParsingFunction;          
+            worldObj = worldObjectParsingFunction;
+            serializeToContainer = containerSerializationFunction;
         }
     }
 }

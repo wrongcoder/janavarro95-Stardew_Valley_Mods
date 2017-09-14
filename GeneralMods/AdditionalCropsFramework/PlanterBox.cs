@@ -899,6 +899,12 @@ namespace AdditionalCropsFramework
             StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(StardustCore.ModCore.SerializationManager.playerInventoryPath, I.Name + ".json"), (PlanterBox)I);
         }
 
+        public static void Serialize(Item I,string s)
+        {
+            makeCropInformationString(I);
+            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(s, I.Name + ".json"), (PlanterBox)I);
+        }
+
         public static Item ParseIntoInventory(string s)
         {
            // PlanterBox p = new PlanterBox();

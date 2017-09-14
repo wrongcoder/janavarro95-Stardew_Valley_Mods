@@ -160,11 +160,11 @@ namespace AdditionalCropsFramework.Menus
             }
             foreach (Item obj in items)
             {
-                Log.AsyncY("I AM A BUTTERFLY. KILL ME"+obj.Name);
+               // Log.AsyncY("I AM A BUTTERFLY. KILL ME"+obj.Name);
                 
                 if (obj is StardewValley.Object)
                 {
-                    Log.AsyncG("I DON't UNDERSTAND");
+                 //   Log.AsyncG("I DON't UNDERSTAND");
                     int categoryIndexForObject = this.getCategoryIndexForObject((obj as StardewValley.Object));
                     this.categoryItems[categoryIndexForObject].Add((Item)(obj as StardewValley.Object));
                     List<int> categoryTotals = this.categoryTotals;
@@ -172,11 +172,11 @@ namespace AdditionalCropsFramework.Menus
                     if (obj is StardustCore.CoreObject)
                     {
                         categoryTotals[index] = categoryTotals[index] + StardustCore.Utilities.sellToStorePrice((obj as StardustCore.CoreObject)) * (obj as StardustCore.CoreObject).Stack;
-                        Log.AsyncY("CORE");
+                       // Log.AsyncY("CORE");
                     }
                     else
                     {
-                        Log.AsyncY("VANILLA");
+                       // Log.AsyncY("VANILLA");
                         categoryTotals[index] = categoryTotals[index] + (obj as StardewValley.Object).sellToStorePrice() * (obj as StardewValley.Object).Stack;
                     }
                     Game1.stats.itemsShipped += (uint)(obj as StardewValley.Object).Stack;
