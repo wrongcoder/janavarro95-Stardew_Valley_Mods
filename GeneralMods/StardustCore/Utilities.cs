@@ -728,107 +728,17 @@ namespace StardustCore
             else return false;
         }
 
-        public static void animateOnce(StardewValley.Farmer player,int whichAnimation, float animationInterval, int numberOfFrames, AnimatedSprite.endOfAnimationBehavior endOfBehaviorFunction, bool flip, bool secondaryArm, bool backwards)
+        public static void drawGreenPlus()
         {
-            
-            if (player.FarmerSprite.PauseForSingleAnimation || player.FarmerSprite.freezeUntilDialogueIsOver)
-                return;
-            if (!player.IsMainPlayer)
+            try
             {
-                if (whichAnimation <= 240)
-                {
-                    if (whichAnimation != 232)
-                    {
-                        if (whichAnimation == 240)
-                        {
-                            player.faceDirection(1);
-                            goto label_16;
-                        }
-                    }
-                    else
-                    {
-                        player.faceDirection(2);
-                        goto label_16;
-                    }
-                }
-                else if (whichAnimation != 248)
-                {
-                    if (whichAnimation == 256)
-                    {
-                        player.faceDirection(3);
-                        goto label_16;
-                    }
-                }
-                else
-                {
-                    player.faceDirection(0);
-                    goto label_16;
-                }
-                int direction = whichAnimation / 8 % 4;
-                switch (direction)
-                {
-                    case 0:
-                        direction = 2;
-                        break;
-                    case 2:
-                        direction = 0;
-                        break;
-                }
-                player.faceDirection(direction);
+                Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2(Game1.getMouseX() + 34, Game1.getMouseY() + 34), new Microsoft.Xna.Framework.Rectangle(0, 410, 17, 17), Color.White, 0, new Vector2(0, 0), 2f, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0);
             }
-            label_16:
-            player.FarmerSprite.setCurrentSingleAnimation(whichAnimation);
-            player.FarmerSprite.CurrentFrame = player.FarmerSprite.CurrentSingleAnimation;
-            player.FarmerSprite.PauseForSingleAnimation = true;
-            player.FarmerSprite.oldFrame = player.FarmerSprite.CurrentFrame;
-          //   player.FarmerSprite.oldInterval =  player.FarmerSprite.interval;
-             player.FarmerSprite.currentSingleAnimationInterval = animationInterval;
-          //   player.FarmerSprite.endOfAnimationFunction = endOfBehaviorFunction;
-             player.FarmerSprite.timer = 0.0f;
-             player.FarmerSprite.animatingBackwards = false;
-            if (backwards)
+            catch(Exception e)
             {
-                 player.FarmerSprite.animatingBackwards = true;
-                 player.FarmerSprite.setCurrentFrameBackwards( player.FarmerSprite.CurrentSingleAnimation, 0, (int)animationInterval, numberOfFrames, secondaryArm, flip);
-            }
-            else
-                 player.FarmerSprite.setCurrentFrame( player.FarmerSprite.CurrentSingleAnimation, 0, (int)animationInterval, numberOfFrames, secondaryArm, flip);
-            if ( player.FarmerSprite.CurrentAnimation[0].frameBehavior != null && ! player.FarmerSprite.CurrentAnimation[0].behaviorAtEndOfFrame)
-                 player.FarmerSprite.CurrentAnimation[0].frameBehavior( player);
-            if ((double) player.Stamina <= 0.0 &&  player.usingTool)
-            {
-                for (int index = 0; index <  player.FarmerSprite.CurrentAnimation.Count; ++index)
-                     player.FarmerSprite.CurrentAnimation[index] = new FarmerSprite.AnimationFrame( player.FarmerSprite.CurrentAnimation[index].frame,  player.FarmerSprite.CurrentAnimation[index].milliseconds * 2,  player.FarmerSprite.CurrentAnimation[index].secondaryArm,  player.FarmerSprite.CurrentAnimation[index].flip,  player.FarmerSprite.CurrentAnimation[index].frameBehavior,  player.FarmerSprite.CurrentAnimation[index].behaviorAtEndOfFrame);
-            }
-            // player.FarmerSprite.CurrentAnimationFrame =  player.FarmerSprite.CurrentAnimation.Count;
-             player.FarmerSprite.indexInCurrentAnimation = 0;
-             player.FarmerSprite.interval = (float) player.FarmerSprite.CurrentAnimationFrame.milliseconds;
-            if (Game1.IsClient &&  player.uniqueMultiplayerID == Game1.player.uniqueMultiplayerID)
-            {
-                 player.CurrentToolIndex = -1;
-                if ( player.UsingTool)
-                {
-                     player.CurrentToolIndex =  player.CurrentTool.CurrentParentTileIndex;
-                    if ( player.CurrentTool is FishingRod)
-                         player.CurrentToolIndex =  player.facingDirection == 3 ||  player.facingDirection == 1 ? 55 : 48;
-                }
-                MultiplayerUtility.sendAnimationMessageToServer(whichAnimation, numberOfFrames, animationInterval, false,  player.CurrentToolIndex);
-            }
-            else if (Game1.IsServer)
-            {
-                if ( player.IsMainPlayer &&  player.UsingTool)
-                {
-                     player.CurrentToolIndex =  player.CurrentTool.CurrentParentTileIndex;
-                    if ( player.CurrentTool is FishingRod)
-                         player.CurrentToolIndex =  player.facingDirection == 3 ||  player.facingDirection == 1 ? 55 : 48;
-                }
-                MultiplayerUtility.broadcastFarmerAnimation( player.uniqueMultiplayerID, whichAnimation, numberOfFrames, animationInterval, false,  player.currentLocation.name,  player.CurrentToolIndex);
-            }
-            if (!Game1.IsMultiplayer ||  player.FarmerSprite.getWeaponTypeFromAnimation() != 3)
-                return;
-            MeleeWeapon.doSwipe( player.FarmerSprite.getWeaponTypeFromAnimation(),  player.position,  player.facingDirection, animationInterval,  player);
-        }
 
+            }
+        }
 
 
     }

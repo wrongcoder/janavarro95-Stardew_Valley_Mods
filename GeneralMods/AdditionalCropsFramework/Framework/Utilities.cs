@@ -917,12 +917,10 @@ namespace AdditionalCropsFramework
             {
                 Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
 
-                if (Game1.player.CurrentItem == null)
-                {
-                    // Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                Game1.player.animateOnce(279 + Game1.player.facingDirection);
                    // StardustCore.Utilities.animateOnce(Game1.player, 279 + Game1.player.facingDirection, 10f, 6, null, false, false, false);
-                }
-                Game1.player.canMove = false;
+                
+                Game1.player.canMove = true;
                 Game1.playSound("harvest");
                 DelayedAction.playSoundAfterDelay("coin", 260);
                 if (c.regrowAfterHarvest == -1)
@@ -960,7 +958,7 @@ namespace AdditionalCropsFramework
                 if (Game1.player.addItemToInventoryBool((Item)@object, false))
                 {
                     Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
-                    Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                  //  Game1.player.animateOnce(279 + Game1.player.facingDirection);
                    // Game1.player.canMove = false;
                     Game1.playSound("harvest");
                     DelayedAction.playSoundAfterDelay("coin", 260);
@@ -1050,7 +1048,7 @@ namespace AdditionalCropsFramework
                     Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
                     if (junimoHarvester == null)
                     {
-                        Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                      //  Game1.player.animateOnce(279 + Game1.player.facingDirection);
                        // Game1.player.canMove = false;
                     }
                     else
@@ -1119,12 +1117,10 @@ namespace AdditionalCropsFramework
             if (Game1.player.addItemToInventoryBool(I, false))
             {
                 Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
-                if (Game1.player.CurrentItem == null)
-                {
-                    // Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                Game1.player.animateOnce(279 + Game1.player.facingDirection);
                   //  StardustCore.Utilities.animateOnce(Game1.player, 279 + Game1.player.facingDirection, 10f, 6, null, false, false, false);
-                }
-                Game1.player.canMove = false;
+                
+                Game1.player.canMove = true;
                 Game1.playSound("harvest");
                 DelayedAction.playSoundAfterDelay("coin", 260);
                 if (c.regrowAfterHarvest == -1)
@@ -1165,7 +1161,7 @@ namespace AdditionalCropsFramework
                 if (Game1.player.addItemToInventoryBool((Item)@object, false))
                 {
                     Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
-                    Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                  //  Game1.player.animateOnce(279 + Game1.player.facingDirection);
                     //Game1.player.canMove = false;
                     Game1.playSound("harvest");
                     DelayedAction.playSoundAfterDelay("coin", 260);
@@ -1264,7 +1260,7 @@ namespace AdditionalCropsFramework
                     Vector2 vector2 = new Vector2((float)xTile, (float)yTile);
                     if (junimoHarvester == null)
                     {
-                        Game1.player.animateOnce(279 + Game1.player.facingDirection);
+                     //   Game1.player.animateOnce(279 + Game1.player.facingDirection);
                         //Game1.player.canMove = false;
                     }
                     else

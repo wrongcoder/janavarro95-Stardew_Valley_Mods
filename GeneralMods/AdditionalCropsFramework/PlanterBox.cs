@@ -296,6 +296,22 @@ namespace AdditionalCropsFramework
             {
                 Game1.mouseCursor = 2;
             }
+            if (this.crop != null)
+            {
+                if (Utilities.isCropFullGrown(this.crop))
+                {
+                    StardustCore.Utilities.drawGreenPlus();
+                }
+            }
+            if (this.modularCrop != null)
+            {
+        
+                if (this.modularCrop.isFullyGrown())
+                {
+                    Log.AsyncC("hi!");
+                    StardustCore.Utilities.drawGreenPlus();
+                }
+            }
             
         }
 
@@ -342,7 +358,7 @@ namespace AdditionalCropsFramework
                             //this.modularCrop = null;
                             if (f == true && this.modularCrop.regrowAfterHarvest == -1) this.modularCrop = null;
                            // Log.AsyncO("HARVEST");
-                            return false;
+                            return true;
                         }
                         else
                         {
@@ -350,10 +366,6 @@ namespace AdditionalCropsFramework
                         }
                     }
                 }
-
-
-
-                Game1.playSound("coin");
                 return true;
             }
             else
@@ -915,6 +927,9 @@ namespace AdditionalCropsFramework
                         ModCore.ModMonitor.Log(err.ToString());
                     }
                 }
+
+               // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
+
                 if (this.heldObject != null)
                 {
                     if (this.heldObject is PlanterBox)
