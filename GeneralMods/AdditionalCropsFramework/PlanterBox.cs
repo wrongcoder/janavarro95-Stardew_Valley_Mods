@@ -38,6 +38,7 @@ namespace AdditionalCropsFramework
 
         public Rectangle defaultBoundingBox;
 
+
         public string description;
 
         public Texture2D TextureSheet;
@@ -130,6 +131,7 @@ namespace AdditionalCropsFramework
             {
                 this.boundingBox = new Rectangle(int.MinValue, (int)this.tileLocation.Y * Game1.tileSize, 0, 0); //Throw the bounding box away as far as possible.
             }
+         //   this.cropBoundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
             this.defaultBoundingBox = this.boundingBox;
             this.updateDrawPosition();
             this.price = price;
@@ -256,7 +258,7 @@ namespace AdditionalCropsFramework
                 }
                 catch(Exception e)
                 {
-                    Log.AsyncG(e);
+                  
                     this.selfWatering = false;
                 }
                 try
@@ -265,7 +267,7 @@ namespace AdditionalCropsFramework
                 }
                 catch (Exception e)
                 {
-                    Log.AsyncG(e);
+                  
                     this.greenHouseEffect = false;
                 }
                 
@@ -274,7 +276,8 @@ namespace AdditionalCropsFramework
             {
               //  Log.AsyncC(e);
             }
-
+           
+        
         }
 
 
@@ -308,7 +311,6 @@ namespace AdditionalCropsFramework
         
                 if (this.modularCrop.isFullyGrown())
                 {
-                    Log.AsyncC("hi!");
                     StardustCore.Utilities.drawGreenPlus();
                 }
             }
@@ -419,38 +421,42 @@ namespace AdditionalCropsFramework
 
         public override bool clicked(StardewValley.Farmer who)
         {
-            if (Game1.player.CurrentItem != null)
-            {
-                if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
-                {
-                    this.isWatered = true;
-                    this.animationManager.setAnimation("Watered", 0);
-                    return false;
-                }
-            }
+            if (StardustCore.Utilities.isWithinRange(2, this.tileLocation) == false) return false;
+            
 
-            if (Game1.player.CurrentItem != null)
-            {
-                if (Game1.player.CurrentItem is StardewValley.Tools.MeleeWeapon || Game1.player.CurrentItem is StardewValley.Tools.Sword)
+                if (Game1.player.CurrentItem != null)
                 {
-                    if (this.modularCrop != null)
+                    if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
                     {
-                        if (this.modularCrop.dead == true)
-                        {
-                            this.modularCrop = null;
-                            return false;
-                        }
+                        this.isWatered = true;
+                        this.animationManager.setAnimation("Watered", 0);
+                        return false;
                     }
-                    if (this.crop != null)
+                }
+
+                if (Game1.player.CurrentItem != null)
+                {
+                    if (Game1.player.CurrentItem is StardewValley.Tools.MeleeWeapon || Game1.player.CurrentItem is StardewValley.Tools.Sword)
                     {
-                        if (this.crop.dead == true)
+                        if (this.modularCrop != null)
                         {
-                            this.crop = null;
-                            return false;
+                            if (this.modularCrop.dead == true)
+                            {
+                                this.modularCrop = null;
+                                return false;
+                            }
+                        }
+                        if (this.crop != null)
+                        {
+                            if (this.crop.dead == true)
+                            {
+                                this.crop = null;
+                                return false;
+                            }
                         }
                     }
                 }
-            }
+            
 
 
 
@@ -545,7 +551,7 @@ namespace AdditionalCropsFramework
             }
 
 
-            if (this.selfWatering == true)
+            if (this.selfWatering == true ||(this.thisLocation.isOutdoors && Game1.isRaining))
             {
                 this.isWatered = true;
                 this.animationManager.setAnimation("Watered", 0);
@@ -799,17 +805,18 @@ namespace AdditionalCropsFramework
             {
                 this.boundingBox = new Rectangle(int.MinValue, y / Game1.tileSize * Game1.tileSize, 0, 0);
             }
-                /*
-            foreach (Furniture current2 in (location as DecoratableLocation).furniture)
+            
+            /*
+        foreach (Furniture current2 in (location as DecoratableLocation).furniture)
+            {
+                if (current2.furniture_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
                 {
-                    if (current2.furniture_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
-                    {
-                        current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
-                        bool result = true;
-                        return result;
-                    }
+                    current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
+                    bool result = true;
+                    return result;
                 }
-                */
+            }
+            */
             using (List<StardewValley.Farmer>.Enumerator enumerator3 = location.getFarmers().GetEnumerator())
             {
                 while (enumerator3.MoveNext())
@@ -885,6 +892,7 @@ namespace AdditionalCropsFramework
                     Game1.starCropShimmerPause = -0.8f;
                 }
             }
+            this.drawCrops(spriteBatch, (int)objectPosition.X,(int)objectPosition.Y);
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
@@ -894,8 +902,26 @@ namespace AdditionalCropsFramework
             else
             {
             spriteBatch.Draw(animationManager.objectTexture, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(animationManager.currentAnimation.sourceRectangle), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
+
+
+                //this.modularCrop.drawInMenu(spriteBatch, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), Color.White, 0f,true);
+
             if (Game1.player.CurrentItem != this) animationManager.tickAnimation();
             }
+            Vector2 v = location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2));
+            this.drawCrops(spriteBatch, (int)v.X, (int)v.Y, 1, true);
+        }
+
+        public void drawCropWhenPlanterBoxHeld(PlanterBox p, SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
+        {
+            spriteBatch.Draw(Game1.cropSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2(Game1.player.GetBoundingBox().Center.X - Game1.tileSize / 2, (Game1.player.GetBoundingBox().Center.Y - Game1.tileSize * 4 / 3) - (Game1.tileSize * 2))), getCropSourceRect(this.crop.rowInSpriteSheet,this.crop), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(p.boundingBox.Bottom + 1) / 10000f);
+        }
+
+        private Rectangle getCropSourceRect(int number, Crop c)
+        {
+            if (c.dead)
+                return new Rectangle(192 + number % 4 * 16, 384, 16, 32);
+            return new Rectangle(Math.Min(240, (c.fullyGrown ? (c.dayOfCurrentPhase <= 0 ? 6 : 7) : (c.phaseToShow != -1 ? c.phaseToShow : c.currentPhase) + ((c.phaseToShow != -1 ? c.phaseToShow : c.currentPhase) != 0 || number % 2 != 0 ? 0 : -1) + 1) * 16 + (c.rowInSpriteSheet % 2 != 0 ? 128 : 0)), c.rowInSpriteSheet / 2 * 16 * 2, 16, 32);
         }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
@@ -903,6 +929,7 @@ namespace AdditionalCropsFramework
             if (x == -1)
             {
                 spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                this.drawCrops(Game1.spriteBatch,(int) Game1.GlobalToLocal(Game1.viewport, this.drawPosition).X,(int) Game1.GlobalToLocal(Game1.viewport, this.drawPosition).Y);
             }
             else
             {
@@ -940,36 +967,79 @@ namespace AdditionalCropsFramework
                     spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
                     spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
                 }
-                this.drawCrops(Game1.spriteBatch, (int)this.tileLocation.X, (int)this.tileLocation.Y);
+                this.drawCrops(Game1.spriteBatch, (int)x, (int)y);
 
             }
         }
 
 
-        public void drawCrops(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
+        public void drawCrops(SpriteBatch spriteBatch, int x, int y, float alpha = 1f, bool inMenu = false)
         {
-            if (this.thisLocation != null)
+
+            if (inMenu == false)
+            {
+                if (this.thisLocation != null)
+                {
+                    if (this.modularCrop != null)
+                    {
+                        this.modularCrop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
+                        // Log.AsyncM("draw a modular crop now");
+                    }
+                    // Log.AsyncC("wait WTF");
+
+                    if (this.crop != null)
+                    {
+
+                        this.crop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
+                        //Log.AsyncG("COWS GO MOO");
+                    }
+                }
+                else //if is in inventory
+                {
+                    if (this.modularCrop != null)
+                    {
+                        this.modularCrop.drawWhenPlanterBoxHeld(this ,Game1.spriteBatch, new Vector2(x,y),0);                      
+                        // Log.AsyncM("draw a modular crop now");
+                    }
+                    // Log.AsyncC("wait WTF");
+
+                    if (this.crop != null)
+                    {
+
+                        this.drawCropWhenPlanterBoxHeld(this,Game1.spriteBatch, new Vector2(x,y), 0);
+                        //Log.AsyncG("COWS GO MOO");
+                    }
+                }
+            }
+            else
             {
                 if (this.modularCrop != null)
                 {
-                    this.modularCrop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
-                   // Log.AsyncM("draw a modular crop now");
+                    this.modularCrop.drawInMenu(this,Game1.spriteBatch, new Vector2(x,y), Color.White, 0,1,0);
+                    // Log.AsyncM("draw a modular crop now");
                 }
-               // Log.AsyncC("wait WTF");
+                // Log.AsyncC("wait WTF");
 
                 if (this.crop != null)
                 {
-                    
-                    this.crop.draw(Game1.spriteBatch, this.tileLocation, Color.White, 0);
+
+                    this.drawCropInMenu(this, Game1.spriteBatch, new Vector2(x, y), Color.White, 0, 1, 0);
                     //Log.AsyncG("COWS GO MOO");
                 }
             }
            //else Log.AsyncM("I DONT UNDERSTAND");
         }
 
-        public void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
+        public void drawCropInMenu(PlanterBox p, SpriteBatch b, Vector2 screenPosition, Color c, float roation, float scale, float layerDepth)
+        {            
+            b.Draw(Game1.cropSpriteSheet, new Vector2(screenPosition.X, screenPosition.Y - (Game1.tileSize / 2)), new Rectangle?(this.getCropSourceRect(this.crop.rowInSpriteSheet,this.crop)), Color.White, 0f, new Vector2((float)(p.defaultSourceRect.Width / 2), (float)(p.defaultSourceRect.Height / 2)), 1f * (2) * scale, SpriteEffects.None, layerDepth);
+        }
+
+        public new void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
             spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+
+          //  this.drawCrops(spriteBatch, (int)location.X*Game1.tileSize, (int)location.Y*Game1.tileSize, 1, true);
         }
 
         public override Item getOne()

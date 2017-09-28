@@ -728,6 +728,15 @@ namespace StardustCore
             else return false;
         }
 
+        public static bool isWithinRange(int tileLength,Vector2 positionToCheck)
+        {
+            Vector2 v = Game1.player.getTileLocation();
+            if (v.X < positionToCheck.X - tileLength || v.X > positionToCheck.X + tileLength) return false;
+            if (v.Y < positionToCheck.Y - tileLength || v.Y > positionToCheck.Y + tileLength) return false;
+
+            return true;
+        }
+
         public static void drawGreenPlus()
         {
             try

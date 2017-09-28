@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley.Characters;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using System;
@@ -483,10 +484,13 @@ namespace StardewValley
             }
            
         }
-
-        public new void drawInMenu(SpriteBatch b, Vector2 screenPosition, Color toTint, float rotation, float scale, float layerDepth)
+        public void drawWhenPlanterBoxHeld(PlanterBox p, SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
-            b.Draw(this.spriteSheet, screenPosition, new Rectangle?(this.getSourceRect(0)), toTint, rotation, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize + Game1.tileSize / 2)), scale, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(this.spriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2(Game1.player.GetBoundingBox().Center.X-Game1.tileSize/2, (Game1.player.GetBoundingBox().Center.Y- Game1.tileSize * 4 / 3)-(Game1.tileSize*2))), this.getSourceRect(this.rowInSpriteSheet), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(p.boundingBox.Bottom + 1) / 10000f);
+        }
+        public void drawInMenu(PlanterBox p,SpriteBatch b, Vector2 screenPosition, Color toTint, float rotation, float scale, float layerDepth)
+        {
+            b.Draw(this.spriteSheet,new Vector2(screenPosition.X, screenPosition.Y-(Game1.tileSize/2)), new Rectangle?(getSourceRect(this.rowInSpriteSheet)), Color.White, 0f, new Vector2((float)(p.defaultSourceRect.Width / 2), (float)(p.defaultSourceRect.Height / 2)), 1f * (2) * scale, SpriteEffects.None, layerDepth);
         }
 
         public int getQualityOfCrop()
