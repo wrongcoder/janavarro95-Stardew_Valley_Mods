@@ -421,9 +421,11 @@ namespace AdditionalCropsFramework
 
         public override bool clicked(StardewValley.Farmer who)
         {
-            if (StardustCore.Utilities.isWithinRange(2, this.tileLocation) == false) return false;
-            
+            int range = 2;
+            if (StardustCore.Utilities.isWithinRange(range, this.tileLocation) == false) return false;
 
+            if (StardustCore.Utilities.isWithinDirectionRange(Game1.player.FacingDirection, range, this.tileLocation))
+            {
                 if (Game1.player.CurrentItem != null)
                 {
                     if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
@@ -456,6 +458,7 @@ namespace AdditionalCropsFramework
                         }
                     }
                 }
+            }
             
 
 

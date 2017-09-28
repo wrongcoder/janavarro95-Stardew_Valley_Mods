@@ -737,6 +737,20 @@ namespace StardustCore
             return true;
         }
 
+        public static bool isWithinDirectionRange(int direction,int range, Vector2 positionToCheck)
+        {
+            Vector2 v = Game1.player.getTileLocation();
+            if (direction==3 && (v.X >= positionToCheck.X - range)) return true; //face left
+            if (direction==1 && (v.X <= positionToCheck.X + range)) return true; //face right
+            if (direction==0 && (v.Y <= positionToCheck.Y + range)) return true; //face up
+            if (direction==2 && (v.Y >= positionToCheck.Y - range)) return true; //face down
+
+            return true;
+        }
+
+
+
+
         public static void drawGreenPlus()
         {
             try
