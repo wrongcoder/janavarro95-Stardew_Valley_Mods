@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AdditionalCropsFramework">
-      <HintPath>..\AdditionalCropsFramework\bin\Release\AdditionalCropsFramework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -41,6 +38,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AdditionalCropsFramework\AdditionalCropsFramework.csproj">
+      <Project>{c5f88d48-ea20-40cd-91e2-c8725dc11795}</Project>
+      <Name>AdditionalCropsFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StardustCore\StardustCore.csproj">
       <Project>{0756D36A-95C8-480D-8EA6-4584C03010C6}</Project>
       <Name>StardustCore</Name>
