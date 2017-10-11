@@ -10,5 +10,6 @@
   "MinimumApiVersion": "1.15",
   "Description": "A nice way to make custom shops.",
   "UniqueID": "Omegasis.CustomShopReduxGui",
-  "EntryDll": "CustomShopsRedux.dll"
+  "EntryDll": "CustomShopsRedux.dll",
+  "UpdateKeys": [ "Nexus:1378" ]
 }

@@ -10,5 +10,6 @@
   "MinimumApiVersion": "1.15",
   "Description": "Increase your health as you play.",
   "UniqueID": "Omegasis.BuildEndurance",
-  "EntryDll": "BuildEndurance.dll"
+  "EntryDll": "BuildEndurance.dll",
+  "UpdateKeys": [ "Nexus:445" ]
 }

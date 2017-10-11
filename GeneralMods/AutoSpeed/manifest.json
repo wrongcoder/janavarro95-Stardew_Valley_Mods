@@ -10,5 +10,6 @@
   "MinimumApiVersion": "1.15",
   "Description": "Got to go fast!",
   "UniqueID": "Omegasis.AutoSpeed",
-  "EntryDll": "AutoSpeed.dll"
+  "EntryDll": "AutoSpeed.dll",
+  "UpdateKeys": [ "Nexus:443" ]
 }

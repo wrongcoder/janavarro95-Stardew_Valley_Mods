@@ -10,5 +10,6 @@
   "MinimumApiVersion": "1.15",
   "Description": "A simple framework to play sounds from wave banks.",
   "UniqueID": "Omegasis.SimpleSoundManager",
-  "EntryDll": "SimpleSoundManager.dll"
+  "EntryDll": "SimpleSoundManager.dll",
+  "UpdateKeys": [ "Nexus:1410" ]
 }

@@ -10,5 +10,6 @@
   "MinimumApiVersion": "1.15",
   "Description": "Change how much it rains in the game.",
   "UniqueID": "Omegasis.MoreRain",
-  "EntryDll": "MoreRain.dll"
+  "EntryDll": "MoreRain.dll",
+  "UpdateKeys": [ "Nexus:441" ]
 }
