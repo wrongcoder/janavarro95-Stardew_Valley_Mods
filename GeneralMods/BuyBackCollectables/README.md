@@ -33,3 +33,6 @@ markup.
 1.4:
 * Switched to standard JSON config file.
 * Internal refactoring.
+
+1.4.1:
+* Enabled update checks in SMAPI 2.0+.

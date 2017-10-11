@@ -18,3 +18,7 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 ## Versions
 1.0:
 * Initial release.
+
+1.0.1:
+* Enabled update checks in SMAPI 2.0+.
+* Fixed compatibility with SMAPI 2.0.

@@ -27,7 +27,10 @@ It won't rain on days where a wedding or a festival would take place.
 1.3:
 * Updated to Stardew Valley 1.2 and SMAPI 1.12.
 
-1.4:
+1.4 (released as 1.5):
 * Updated for SMAPI 2.0.
 * Switched to standard JSON config file.
 * Internal refactoring.
+
+1.5.1:
+* Enabled update checks in SMAPI 2.0+.
