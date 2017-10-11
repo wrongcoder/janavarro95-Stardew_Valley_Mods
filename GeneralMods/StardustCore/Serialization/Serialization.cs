@@ -495,7 +495,7 @@ namespace StardustCore.Serialization
             }
             else
             {
-                Log.AsyncM("Error parsing unknown object type: " + s);
+                ModCore.ModMonitor.Log("Error parsing unknown object type: " + s, LogLevel.Error);
             }
 
         }
@@ -528,11 +528,11 @@ namespace StardustCore.Serialization
             bool f = loc.objects.TryGetValue(new Microsoft.Xna.Framework.Vector2( Convert.ToInt32(chest[1]),Convert.ToInt32(chest[2])),out chestObject);
             if (f == true)
             {
-                Log.AsyncC("YAY");
+                ModCore.ModMonitor.Log("YAY");
             }
             else
             {
-                Log.AsyncR("BOO");
+                ModCore.ModMonitor.Log("BOO");
             }
 
             string[] ehh = File.ReadAllLines(path);
@@ -557,7 +557,7 @@ namespace StardustCore.Serialization
             }
             catch (Exception e)
             {
-                Log.AsyncR("WHYASIIF");
+                ModCore.ModMonitor.Log("WHYASIIF");
                 //USE XML STYLE DESERIALIZING
                 foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
                 {
@@ -576,7 +576,7 @@ namespace StardustCore.Serialization
                             }
                             catch(Exception err)
                             {
-                                Log.AsyncR(err);
+                                ModCore.ModMonitor.Log(err.ToString(), LogLevel.Error);
                             }
                             // Log.AsyncY("ADDED ITEM TO INVENTORY");
                             return;
@@ -613,7 +613,7 @@ namespace StardustCore.Serialization
             //USE JSON STYLE DESERIALIZNG
             if (acceptedTypes.ContainsKey(s))
             {
-                Log.AsyncC("parse???");
+                ModCore.ModMonitor.Log("parse???");
                 foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
                 {
                     //  Log.AsyncY(pair.Key);
@@ -625,30 +625,30 @@ namespace StardustCore.Serialization
                             //   Log.AsyncR("1");
                             cObj = (CoreObject)pair.Value.parse.Invoke(data);
                             (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
-                            Log.AsyncY("closer");
+                            ModCore.ModMonitor.Log("closer");
                             if ((cObj as CoreObject).thisLocation == null)
                             {
                                 try
                                 {
-                                    Log.AsyncG("HERE PRETTY MUCH!!!");
+                                    ModCore.ModMonitor.Log("HERE PRETTY MUCH!!!");
                                     Utilities.addItemToOtherInventory((chestObject as StardewValley.Objects.Chest).items, cObj);
 
                                     foreach(var v in (chestObject as StardewValley.Objects.Chest).items)
                                     {
-                                        Log.AsyncC(v.Name);
+                                        ModCore.ModMonitor.Log(v.Name);
                                     }
 
                                 }
                                 catch (Exception err)
                                 {
-                                    Log.AsyncR(err);
+                                    ModCore.ModMonitor.Log(err.ToString(), LogLevel.Error);
                                 }
                                 // Log.AsyncY("ADDED ITEM TO INVENTORY");
                                 return;
                             }
                             else
                             {
-                                Log.AsyncG("WHY HERE????");
+                                ModCore.ModMonitor.Log("WHY HERE????");
                                 (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).tileLocation, (StardewValley.Object)cObj);
                                 thingsToAddBackIn.Add(cObj);
                                 //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
@@ -663,7 +663,7 @@ namespace StardustCore.Serialization
             }
             else
             {
-                Log.AsyncM("Error parsing unknown object type: " + s);
+                ModCore.ModMonitor.Log("Error parsing unknown object type: " + s, LogLevel.Error);
             }
 
         }

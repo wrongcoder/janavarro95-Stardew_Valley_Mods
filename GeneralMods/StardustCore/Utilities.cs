@@ -612,7 +612,7 @@ namespace StardustCore
                     else
                     {
                         //   Game1.showRedMessage("STEP 2");
-                        Log.Info(vector);
+                        ModCore.ModMonitor.Log(vector.ToString());
 
                         Vector2 newVec = new Vector2(vector.X, vector.Y);
                         // cObj.boundingBox.Inflate(32, 32);
@@ -623,7 +623,7 @@ namespace StardustCore
                 if (playSound == true) Game1.playSound("woodyStep");
                 else
                 {
-                    Log.AsyncG("restoring item from file");
+                    ModCore.ModMonitor.Log("restoring item from file");
                 }
                 //Log.AsyncM("Placed and object");
                 cObj.locationsName = location.name;
@@ -720,8 +720,8 @@ namespace StardustCore
         {
             if (logInfo)
             {
-                Log.AsyncG("size " + inventory.Count);
-                Log.AsyncG("max " + inventory.Capacity);
+                ModCore.ModMonitor.Log("size " + inventory.Count);
+                ModCore.ModMonitor.Log("max " + inventory.Capacity);
             }
 
             if (inventory.Count == inventory.Capacity) return true;
