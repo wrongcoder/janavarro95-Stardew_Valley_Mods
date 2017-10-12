@@ -4,11 +4,12 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 4,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
-  "MinimumApiVersion": "1.15", 
+  "MinimumApiVersion": "1.15",
   "Description": "Lets you view the billboard from anywhere.",
   "UniqueID": "Omegasis.BillboardAnywhere",
-  "EntryDll": "BillboardAnywhere.dll"
+  "EntryDll": "BillboardAnywhere.dll",
+  "UpdateKeys": [ "Nexus:492" ]
 }

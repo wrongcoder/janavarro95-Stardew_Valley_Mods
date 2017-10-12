@@ -4,11 +4,12 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 4,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
   "Description": "Got to go fast!",
   "UniqueID": "Omegasis.AutoSpeed",
-  "EntryDll": "AutoSpeed.dll"
+  "EntryDll": "AutoSpeed.dll",
+  "UpdateKeys": [ "Nexus:443" ]
 }

@@ -22,3 +22,6 @@ but you can edit `ModConfig.txt` to change that.
 1.2:
 * Switched to standard JSON config file.
 * Internal refactoring.
+
+1.2.1:
+* Enabled update checks in SMAPI 2.0+.

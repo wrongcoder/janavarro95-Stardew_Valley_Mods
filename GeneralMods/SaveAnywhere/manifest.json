@@ -3,12 +3,13 @@
   "Author": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 2,
-    "MinorVersion": 5,
-    "PatchVersion": 0,
+    "MinorVersion": 6,
+    "PatchVersion": 1,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
   "Description": "Lets you save almost anywhere.",
   "UniqueID": "Omegasis.SaveAnywhere",
-  "EntryDll": "SaveAnywhere.dll"
+  "EntryDll": "SaveAnywhere.dll",
+  "UpdateKeys": [ "Nexus:444" ]
 }

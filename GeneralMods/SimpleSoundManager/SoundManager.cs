@@ -24,7 +24,6 @@ namespace SimpleSoundManager
         /// <param name="newSoundBank">The path to the sound bank in the mod's asset folder.</param>
         public SoundManager(string newWaveBank, string newSoundBank)
         {
-            Log.AsyncC(newSoundBank);
             this.waveBank = new WaveBank(Game1.audioEngine, newWaveBank);
             this.soundBank = new SoundBank(Game1.audioEngine, newSoundBank);
             this.currentlyPlayingSounds = new List<Cue>();

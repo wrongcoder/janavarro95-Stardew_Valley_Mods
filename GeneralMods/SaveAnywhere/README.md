@@ -46,3 +46,9 @@ Press `K` to save anywhere. Edit `Save_Anywhere_Config.txt` to configure the key
 * Fixed some old data being restored if you reload after a normal save.
 * Fixed player/NPC facing directions not being restored.
 * Internal refactoring.
+
+2.6:
+* ?
+
+2.6.1:
+* Enabled update checks in SMAPI 2.0+.

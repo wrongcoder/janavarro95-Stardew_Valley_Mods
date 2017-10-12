@@ -3,12 +3,13 @@
   "Author": "Alpha_Omegasis",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 4,
-    "PatchVersion": 0,
+    "MinorVersion": 5,
+    "PatchVersion": 1,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
   "Description": "Change how much it rains in the game.",
   "UniqueID": "Omegasis.MoreRain",
-  "EntryDll": "MoreRain.dll"
+  "EntryDll": "MoreRain.dll",
+  "UpdateKeys": [ "Nexus:441" ]
 }

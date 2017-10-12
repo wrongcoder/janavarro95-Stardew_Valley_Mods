@@ -26,3 +26,6 @@ configure that.
 * Updated for SMAPI 2.0.
 * Switched to standard JSON config file.
 * Internal refactoring.
+
+1.3.1:
+* Enabled update checks in SMAPI 2.0+.

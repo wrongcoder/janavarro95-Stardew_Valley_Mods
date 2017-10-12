@@ -4,11 +4,12 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 4,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
   "Description": "Increase your health as you play.",
   "UniqueID": "Omegasis.BuildEndurance",
-  "EntryDll": "BuildEndurance.dll"
+  "EntryDll": "BuildEndurance.dll",
+  "UpdateKeys": [ "Nexus:445" ]
 }

@@ -4,11 +4,12 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 4,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
   "Description": "Lets you rearrange the museum without needing to donate something.",
   "UniqueID": "Omegasis.MuseumRearranger",
-  "EntryDll": "MuseumRearranger.dll"
+  "EntryDll": "MuseumRearranger.dll",
+  "UpdateKeys": [ "Nexus:428" ]
 }

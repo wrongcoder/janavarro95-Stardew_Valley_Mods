@@ -4,11 +4,12 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 4,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
   "Description": "Makes it snow on Fall 28, which makes a good explanation for all the snow on the next day.",
   "UniqueID": "Omegasis.Fall28SnowDay",
-  "EntryDll": "Fall28SnowDay.dll"
+  "EntryDll": "Fall28SnowDay.dll",
+  "UpdateKeys": [ "Nexus:486" ]
 }

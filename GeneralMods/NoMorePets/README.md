@@ -25,3 +25,6 @@ All your pets will be removed automatically when you play the save.
 * Internal refactoring.
 * Fixed villagers being removed if they match your pet name.
 * Fixed pet not being removed if it's inside your house.
+
+1.4.1:
+* Enabled update checks in SMAPI 2.0+.

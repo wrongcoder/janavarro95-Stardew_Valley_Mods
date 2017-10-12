@@ -4,11 +4,12 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 4,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
   "Description": "Lets you buy back any obtained collectable.",
   "UniqueID": "Omegasis.BuyBackCollectables",
-  "EntryDll": "BuyBackCollectables.dll"
+  "EntryDll": "BuyBackCollectables.dll",
+  "UpdateKeys": [ "Nexus:507" ]
 }

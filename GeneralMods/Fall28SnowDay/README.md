@@ -24,3 +24,6 @@ It automatically snows on fall 28.
 1.4:
 * Updated for SMAPI 2.0.
 * Internal refactoring.
+
+1.4.1:
+* Enabled update checks in SMAPI 2.0+.
