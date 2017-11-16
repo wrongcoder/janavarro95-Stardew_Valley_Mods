@@ -350,16 +350,16 @@ namespace AdditionalCropsFramework
                 }
                 if (this.modularCrop != null)
                 {
-                  //  Log.AsyncM("HELLO MOD CROP");
+                
                     if (this.modularCrop.isFullyGrown() == true)
                     {
-                    //    Log.AsyncM("FULL BLOW");
+                 
                         bool f = Utilities.harvestModularCrop(this.modularCrop, (int)this.tileLocation.X, (int)this.tileLocation.Y, 0);
                         if (f == true)
                         {
                             //this.modularCrop = null;
                             if (f == true && this.modularCrop.regrowAfterHarvest == -1) this.modularCrop = null;
-                           // Log.AsyncO("HARVEST");
+                         
                             return true;
                         }
                         else

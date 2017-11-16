@@ -910,7 +910,25 @@ namespace AdditionalCropsFramework
 
         public static bool harvestCrop(Crop c,int xTile, int yTile, int fertilizer, JunimoHarvester junimoHarvester = null)
         {
-            Item I = (Item)new StardewValley.Object(c.indexOfHarvest, 1);
+            
+
+            int amountToHarvest = 1;
+            Random r = new Random(xTile + yTile + c.rowInSpriteSheet);
+
+            if (c.minHarvest > 1)
+            {
+                for (int i = c.minHarvest; i <= c.maxHarvest; i++)
+                {
+
+                    int chanceAgainst = r.Next(0, 100);
+                    float chanceFor = (float)c.chanceForExtraCrops + (Game1.player.farmingLevel * .03f);
+                    if (chanceFor > chanceAgainst)
+                    {
+                        amountToHarvest++;
+                    }
+                }
+            }
+            Item I = (Item)new StardewValley.Object(c.indexOfHarvest, amountToHarvest);
 
             int howMuch = 3;
             if (Game1.player.addItemToInventoryBool(I, false))
@@ -928,7 +946,11 @@ namespace AdditionalCropsFramework
                     Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(17, new Vector2(vector2.X * (float)Game1.tileSize, vector2.Y * (float)Game1.tileSize), Color.White, 7, Game1.random.NextDouble() < 0.5, 125f, 0, -1, -1f, -1, 0));
                     Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(14, new Vector2(vector2.X * (float)Game1.tileSize, vector2.Y * (float)Game1.tileSize), Color.White, 7, Game1.random.NextDouble() < 0.5, 50f, 0, -1, -1f, -1, 0));
                 }
-                Game1.player.gainExperience(2, howMuch);
+                else
+                {
+                    c.currentPhase = c.regrowAfterHarvest;
+                }
+                Game1.player.gainExperience(2, howMuch*amountToHarvest);
                 return true;
             }
 
@@ -1112,7 +1134,25 @@ namespace AdditionalCropsFramework
 
         public static bool harvestModularCrop(ModularCrop c, int xTile, int yTile, int fertilizer, JunimoHarvester junimoHarvester = null)
         {
-            Item I = (Item)new ModularCropObject(c.indexOfHarvest, 1, c.cropObjectTexture, c.cropObjectData);
+
+            int amountToHarvest = 1;
+            Random r = new Random(xTile + yTile + c.rowInSpriteSheet);
+
+            if (c.minHarvest > 1)
+            {
+                for(int i = c.minHarvest; i <= c.maxHarvest; i++)
+                {
+        
+                    int chanceAgainst = r.Next(0, 100);
+                    float chanceFor =(float)c.chanceForExtraCrops + (Game1.player.farmingLevel * .03f);
+                    if (chanceFor > chanceAgainst)
+                    {
+                        amountToHarvest++;
+                    }
+                }
+            }
+
+            Item I = (Item)new ModularCropObject(c.indexOfHarvest, amountToHarvest, c.cropObjectTexture, c.cropObjectData);
             int howMuch = 3;
             if (Game1.player.addItemToInventoryBool(I, false))
             {
@@ -1129,7 +1169,11 @@ namespace AdditionalCropsFramework
                     Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(14, new Vector2(vector2.X * (float)Game1.tileSize, vector2.Y * (float)Game1.tileSize), Color.White, 7, Game1.random.NextDouble() < 0.5, 50f, 0, -1, -1f, -1, 0));
 
                 }
-                Game1.player.gainExperience(2, howMuch);
+                else
+                {
+                    c.currentPhase = c.regrowAfterHarvest;
+                }
+                Game1.player.gainExperience(2, howMuch*amountToHarvest);
                 return true;
             }
             return false;
