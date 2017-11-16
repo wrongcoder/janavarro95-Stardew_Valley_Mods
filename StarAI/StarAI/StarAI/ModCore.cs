@@ -7,6 +7,8 @@ using StardewValley;
 using StardewModdingAPI;
 using WindowsInput;
 using Microsoft.Xna.Framework;
+using StarAI.PathFindingCore;
+using System.IO;
 
 namespace StarAI
 {
@@ -33,6 +35,45 @@ namespace StarAI
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
             StardewModdingAPI.Events.GameEvents.SecondUpdateTick += GameEvents_SecondUpdateTick;
+
+            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+        }
+
+        private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        {
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.J)
+            {
+                CoreMonitor.Log("OK THE J KEY WAS PRESSED!");
+                List<Item> shoppingList = new List<Item>();
+                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"));
+                CoreMonitor.Log("AAAAAAAA???????:" + t.name);
+                CoreMonitor.Log("BBBBBB???????:" + t.DisplayName);
+                if (t == null)
+                {
+                    CoreMonitor.Log("WTF?????");
+                }
+                try
+                {
+                    if (t == null)
+                    {
+                        CoreMonitor.Log("FUCK");
+                        System.Threading.Thread.Sleep(5);
+
+                    }
+                    shoppingList.Add((Item)t);
+                    foreach(var v in shoppingList)
+                    {
+                        if (v == null) continue;
+                        
+                        CoreMonitor.Log("FUUUUU???????:"+ (v as TileNode).name);
+                        CoreMonitor.Log("FUUUUU???????:" + (v as TileNode).DisplayName);
+                    }
+                    Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(shoppingList);
+                }catch(Exception err)
+                {
+                    CoreMonitor.Log(Convert.ToString(err));
+                }
+            }
         }
 
         public static Vector2 parseCenterFromTile(int tileX, int tileY)
@@ -224,7 +265,7 @@ namespace StarAI
             {
                 string s ="X: " +Convert.ToString(v.X) + " Y: " + Convert.ToString(v.Y) + " TargetX: " + Convert.ToString(v.TargetX) + " TargetY: " + Convert.ToString(v.TargetY) + " TargetLocationName: " + Convert.ToString(v.TargetName);
                 CoreMonitor.Log(s);
-                warpGoals.Add(v);
+                //warpGoals.Add(v); Disabled for now
             }
             //GameLocation loc=Game1.getLocationFromName("location name")
             //
