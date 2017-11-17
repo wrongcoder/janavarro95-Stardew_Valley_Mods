@@ -139,21 +139,46 @@ namespace StardustCore.Animations
                 string[] AnimationArray = v.Split(' ');
                 if (parsedDic.ContainsKey(AnimationArray[0]))
                 {
-                    parsedDic[AnimationArray[0]].Add(parseAnimationFromString(v));
+                    List<Animation> aniList = new List<Animation>();
+                    aniList = parseAnimationFromString(v);
+                    foreach(var ani in aniList) {
+                        parsedDic[AnimationArray[0]].Add(ani);
+                    }
+                    
                 }
                 else
                 {
                     parsedDic.Add(AnimationArray[0], new List<Animation>());
-                    parsedDic[AnimationArray[0]].Add(parseAnimationFromString(v));
+                    List<Animation> aniList = new List<Animation>();
+                    aniList = parseAnimationFromString(v);
+                    foreach (var ani in aniList)
+                    {
+                        parsedDic[AnimationArray[0]].Add(ani);
+                    }
                 }
             }
             return parsedDic;
         }
 
-        public static Animation parseAnimationFromString(string s)
+        public static List<Animation> parseAnimationFromString(string s)
         {
-            string[] array = s.Split(' ');
-            return new Animation(new Rectangle(Convert.ToInt32(array[1]), Convert.ToInt32(array[2]), Convert.ToInt32(array[3]), Convert.ToInt32(array[4])), Convert.ToInt32(array[5]));
+            List<Animation> ok = new List<Animation>(); 
+            string[] array2 = s.Split('>');
+            foreach(var q in array2) {
+                string[] array = q.Split(' ');
+                try
+                {
+                    Animation ani = new Animation(new Rectangle(Convert.ToInt32(array[1]), Convert.ToInt32(array[2]), Convert.ToInt32(array[3]), Convert.ToInt32(array[4])), Convert.ToInt32(array[5]));
+                    ModCore.ModMonitor.Log(ani.sourceRectangle.ToString());
+                    ok.Add(ani);
+                }
+                catch(Exception err)
+                {
+                    continue;
+                }
+            
+            }
+            return ok;
         }
 
     }

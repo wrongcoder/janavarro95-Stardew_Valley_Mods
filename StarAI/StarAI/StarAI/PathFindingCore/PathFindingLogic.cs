@@ -87,9 +87,9 @@ namespace StarAI.PathFindingCore
                     if (node.parent == null)
                     {
                         ModCore.CoreMonitor.Log("I DONT UNDERSTAND!");
-                        System.Threading.Thread.Sleep(500);
+                        System.Threading.Thread.Sleep(50);
                     }
-                    ModCore.CoreMonitor.Log("ok checking adj:" + node.tileLocation.ToString());
+                    //ModCore.CoreMonitor.Log("ok checking adj:" + node.tileLocation.ToString());
 
 
                     if (node.seenState == 0)
@@ -116,11 +116,25 @@ namespace StarAI.PathFindingCore
                     else queue.Add(v);
                 }
                 currentNode.seenState = 2;
+                
                 currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.DarkOrange); //Finished
-                currentNode = queue.ElementAt(index);
+                try
+                {
+                    currentNode = queue.ElementAt(index);
+                }
+                catch(Exception err)
+                {
+                    break;
+                }
                 currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Blue); //Working
                 index++;
           
+            }
+
+            if (currentNode.tileLocation != currentGoal.tileLocation)
+            {
+                ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
+                return;
             }
 
             if (currentNode.tileLocation == currentGoal.tileLocation)
@@ -137,8 +151,25 @@ namespace StarAI.PathFindingCore
             {
                 currentNode.drawColor= StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Red); //Working
                 path.Add(currentNode);
+                if (currentNode.parent.tileLocation.X<currentNode.tileLocation.X)
+                {
+                    currentNode.parent.animationManager.setAnimation("Right", 0);
+                }
+                if (currentNode.parent.tileLocation.X > currentNode.tileLocation.X)
+                {
+                    currentNode.parent.animationManager.setAnimation("Left", 0);
+                }
+                if (currentNode.parent.tileLocation.Y < currentNode.tileLocation.Y)
+                {
+                    currentNode.parent.animationManager.setAnimation("Down", 0);
+                }
+                if (currentNode.parent.tileLocation.Y > currentNode.tileLocation.Y)
+                {
+                    currentNode.parent.animationManager.setAnimation("Up", 0);
+                }
+                currentNode.parent.animationManager.enableAnimation();
                 currentNode = currentNode.parent;
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(200);
                 if (currentNode.parent == null)
                 {
                     currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Red); //Working

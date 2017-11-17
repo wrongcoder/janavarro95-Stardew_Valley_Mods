@@ -167,7 +167,7 @@ namespace AdditionalCropsFramework
 
             try
             {
-                this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1), AnimationManager.parseAnimationsFromXNB(array[3]), "default");
+                this.animationManager = new StardustCore.Animations.AnimationManager(this.TextureSheet, new StardustCore.Animations.Animation(this.defaultSourceRect, -1), AnimationManager.parseAnimationsFromXNB(array[3]), "Default");
                 this.animationManager.setAnimation("Default", 0);
                 //Log.AsyncC("Using animation manager");
             }

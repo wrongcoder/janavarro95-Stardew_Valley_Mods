@@ -121,8 +121,8 @@ namespace StarAI.PathFindingCore
             else
             {
                 ModCore.CoreMonitor.Log("Adding a child!");
-                System.Threading.Thread.Sleep(500);
-                TileNode child = new TileNode(1, Vector2.Zero, t.texturePath,StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Cyan));
+                System.Threading.Thread.Sleep(50);
+                TileNode child = new TileNode(1, Vector2.Zero, t.texturePath,t.dataPath,StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Cyan));
                 child.seenState = (int)stateEnum.NotVisited;
                 child.parent = t;
                 child.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
@@ -749,10 +749,18 @@ namespace StarAI.PathFindingCore
                 }
             }
             this.updateDrawPosition();
-
-            bool f = Utilities.placementAction(this, location, x, y,StardustCore.ModCore.SerializationManager, who);
-            this.thisLocation = Game1.player.currentLocation;
-            return f;
+            try
+            {
+                bool f = Utilities.placementAction(this, location, x, y, StardustCore.ModCore.SerializationManager, who);
+                this.thisLocation = Game1.player.currentLocation;
+                return f;
+            }
+            catch(Exception err)
+            {
+                ModCore.CoreMonitor.Log(err.ToString());
+                return false;
+            }
+            
             //  Game1.showRedMessage("Can only be placed in House");
             //  return false;
         }
@@ -842,13 +850,6 @@ namespace StarAI.PathFindingCore
         {
             try
             {
-                if (x == -1)
-                {
-                    spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), this.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
-
-                }
-                else
-                {
                     //The actual planter box being drawn.
                     if (animationManager == null)
                     {
@@ -885,7 +886,7 @@ namespace StarAI.PathFindingCore
                     }
 
 
-                }
+                
             }
             catch(Exception err)
             {
