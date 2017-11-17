@@ -35,11 +35,14 @@ namespace StardustCore
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+
+            IlluminateFramework.Colors.initializeColors();
         }
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+            
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)

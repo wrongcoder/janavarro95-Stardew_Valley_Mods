@@ -21,6 +21,11 @@ namespace StarAI.PathFindingCore
     /// </summary>
     public class TileNode : CoreObject
     {
+        public Vector2 position;
+        public List<TileNode> children = new List<TileNode>();
+        public enum stateEnum { NotVisited, Seen, Visited };
+        public int seenState;
+
 
         public int Decoration_type;
 
@@ -55,6 +60,161 @@ namespace StarAI.PathFindingCore
 
         public bool IsSolid;
 
+        public int cost;
+        public int costToThisPoint;
+
+        public TileNode parent;
+
+        public bool checkIfICanPlaceHere(TileNode t, Vector2 pos, GameLocation loc = null, bool recursive = false)
+        {
+            bool cry = false;
+            if (t.thisLocation == null)
+            {
+                t.thisLocation = loc;
+                cry = true;
+            }
+
+            
+            if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
+            {
+                ModCore.CoreMonitor.Log("F!: " + t.thisLocation.name, LogLevel.Warn);
+                if (cry == true) this.thisLocation = null;
+                return false;
+            }
+            if (t.thisLocation.isTileOccupied(pos / Game1.tileSize))
+            {
+                ModCore.CoreMonitor.Log("K!!!!: " + t.thisLocation.name, LogLevel.Error);
+                if (cry == true) this.thisLocation = null;
+                return false;
+            }
+
+            if (t.thisLocation.isTilePlaceable(pos) == false)
+            {
+                ModCore.CoreMonitor.Log("C!!!!: " + t.thisLocation.name, LogLevel.Error);
+                if (cry == true) this.thisLocation = null;
+                return false;
+            }
+            if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
+            {
+                ModCore.CoreMonitor.Log("J!!!!: " + t.thisLocation.name, LogLevel.Error);
+                if (cry == true) this.thisLocation = null;
+                return false;
+            }
+
+            if (t.thisLocation.isTilePassable(new xTile.Dimensions.Location((int)(pos.X/Game1.tileSize), (int)(pos.Y/Game1.tileSize)), Game1.viewport)==false)
+            {
+                ModCore.CoreMonitor.Log("Y!!!!: " + t.thisLocation.name, LogLevel.Error);
+                if (cry == true) this.thisLocation = null;
+                return false;
+            }
+
+
+            if (cry == true) this.thisLocation = null;
+            return true;
+        }
+
+        public static void setSingleTileAsChild(TileNode t,int x, int y)
+        {
+            Vector2 pos = new Vector2(x * Game1.tileSize, y * Game1.tileSize);
+           bool f= t.checkIfICanPlaceHere(t, new Vector2(pos.X,pos.Y), null);
+            if (f == false) return;
+            else
+            {
+                ModCore.CoreMonitor.Log("Adding a child!");
+                System.Threading.Thread.Sleep(500);
+                TileNode child = new TileNode(1, Vector2.Zero, t.texturePath,StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Cyan));
+                child.seenState = (int)stateEnum.NotVisited;
+                child.parent = t;
+                child.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                t.children.Add(child);
+            }
+        }
+
+        public void setAdjacentTiles(bool recursive)
+        {
+            Vector2 startPosition = this.tileLocation;
+
+            int xMin=-1;
+            int yMin=-1;
+            int xMax=1;
+            int yMax = 1;
+            
+            for (int x = xMin; x <= xMax; x++)
+            {
+                for (int y = yMin; y <= yMax; y++)
+                {
+                    if (x == 0 && y == 0) continue;
+                    int xPos = (int)(this.tileLocation.X + x) * Game1.tileSize;
+                    int yPos = (int)(this.tileLocation.Y + y) * Game1.tileSize;
+                    ModCore.CoreMonitor.Log("ATTEMPTING TO PLACE ITEM AT: " + new Vector2(this.tileLocation.X + x, this.tileLocation.Y + y));
+                    Rectangle r = new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize);
+                    Vector2 pos = new Vector2(r.X, r.Y);
+
+                    ModCore.CoreMonitor.Log("THIS IS MY LOCATION!!!: " + this.thisLocation.name);
+
+                    bool ok = checkIfICanPlaceHere(this,pos,null,recursive);
+                    if (ok == false) continue;
+                    if (this.thisLocation.isTileLocationOpen(new xTile.Dimensions.Location((int) (pos.X) ,(int) (pos.Y)) )==true && this.thisLocation.isObjectAt((int) (pos.X),(int) (pos.Y))==false) ; //&& Game1.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)startPosition.X+x,(int)startPosition.Y+y)))
+                    {
+                        TileNode child = new TileNode(1,Vector2.Zero,this.texturePath,this.drawColor);
+                        child.placementAction(Game1.currentLocation, xPos, yPos);
+                        this.children.Add(child);
+                    }
+                }
+            }
+        }
+
+        public static void setAdjacentTiles(Vector2 position, GameLocation loc)
+        {
+            Vector2 startPosition = position;
+
+            int xMin = -1;
+            int yMin = -1;
+            int xMax = 1;
+            int yMax = 1;
+            for (int x = xMin; x <= xMax; x++)
+            {
+                for (int y = yMin; y <= yMax; y++)
+                {
+                    int xPos = (int)(startPosition.X + x) * Game1.tileSize;
+                    int yPos = (int)(startPosition.Y + y) * Game1.tileSize;
+                   // ModCore.CoreMonitor.Log("ATTEMPTING TO PLACE ITEM AT: " + new Vector2(this.tileLocation.X + x, this.tileLocation.Y + y));
+                    Rectangle r = new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize);
+                    Vector2 pos = new Vector2(r.X, r.Y);
+
+                    ModCore.CoreMonitor.Log("THIS IS MY LOCATION!!!: " +loc.name);
+                    if (loc.isObjectAt((int)pos.X, (int)pos.Y))
+                    {
+                        ModCore.CoreMonitor.Log("F!: " + loc.name, LogLevel.Warn);
+                        continue;
+                    }
+                    if (loc.isTileOccupied(pos / Game1.tileSize))
+                    {
+                        ModCore.CoreMonitor.Log("K!!!!: " + loc.name, LogLevel.Error);
+                        continue;
+                    }
+
+                    if (loc.isTilePlaceable(pos) == false)
+                    {
+                        ModCore.CoreMonitor.Log("C!!!!: " + loc.name, LogLevel.Error);
+                        continue;
+                    }
+                    if (loc.isTilePlaceable(pos / Game1.tileSize) == false)
+                    {
+                        ModCore.CoreMonitor.Log("J!!!!: " + loc.name, LogLevel.Error);
+                        continue;
+                    }
+
+
+                    if (loc.isTilePassable(new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize), Game1.viewport) == true && loc.isTileLocationOpen(new xTile.Dimensions.Location((int)(pos.X), (int)(pos.Y))) == true && loc.isObjectAt((int)(pos.X), (int)(pos.Y)) == false) ; //&& Game1.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)startPosition.X+x,(int)startPosition.Y+y)))
+                    {
+                        //TileNode child = new TileNode(1, Vector2.Zero, this.texturePath, this.drawColor);
+                        //child.placementAction(Game1.currentLocation, xPos, yPos);
+                        //this.children.Add(child);
+                    }
+                }
+            }
+        }
 
 
         public override string Name
@@ -84,8 +244,15 @@ namespace StarAI.PathFindingCore
         /// <param name="isRemovable"></param>
         /// <param name="price"></param>
         /// <param name="isSolid"></param>
-        public TileNode(int which, Vector2 tile, string ObjectTexture, bool isRemovable = true, int price = 0, bool isSolid = false)
+        public TileNode(int which, Vector2 tile, string ObjectTexture, Color DrawColor, bool isRemovable = true, int price = 0, bool isSolid = false,int Cost=1)
         {
+            this.cost = Cost;
+            Color c=DrawColor;
+            if (c == null)
+            {
+                c = StardustCore.IlluminateFramework.ColorsList.White;
+            }
+            this.drawColor = c;
 
             removable = isRemovable;
             this.serializationName = Convert.ToString(GetType());
@@ -133,10 +300,17 @@ namespace StarAI.PathFindingCore
         }
 
 
-        public TileNode(int which, Vector2 tile, string ObjectTexture, string DataPath, bool isRemovable = true, bool isSolid = false)
+        public TileNode(int which, Vector2 tile, string ObjectTexture, string DataPath, Color DrawColor, bool isRemovable = true, bool isSolid = false,int Cost=1)
         {
             try
             {
+                this.cost = Cost;
+                Color c = DrawColor;
+                if (c == null)
+                {
+                    c = StardustCore.IlluminateFramework.ColorsList.White;
+                }
+                this.drawColor = c;
                 this.serializationName = Convert.ToString(GetType());
                 removable = isRemovable;
                 // this.thisType = GetType();
@@ -617,16 +791,16 @@ namespace StarAI.PathFindingCore
         {
             if (animationManager == null)
             {
-                spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), this.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             }
             else
             {
-                spriteBatch.Draw(this.TextureSheet, objectPosition, this.animationManager.currentAnimation.sourceRectangle, Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(this.TextureSheet, objectPosition, this.animationManager.currentAnimation.sourceRectangle, this.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             }
 
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
-                spriteBatch.Draw(this.TextureSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(this.TextureSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), this.drawColor, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
                 {
                     return;
@@ -644,13 +818,13 @@ namespace StarAI.PathFindingCore
         {
             try
             {
-                if (animationManager == null) spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
+                if (animationManager == null) spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), this.drawColor * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
                 else
                 {
-                    spriteBatch.Draw(animationManager.objectTexture, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(animationManager.currentAnimation.sourceRectangle), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
+                    spriteBatch.Draw(animationManager.objectTexture, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(animationManager.currentAnimation.sourceRectangle), this.drawColor * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * (3) * scaleSize, SpriteEffects.None, layerDepth);
 
 
-                    //this.modularCrop.drawInMenu(spriteBatch, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), Color.White, 0f,true);
+                    //this.modularCrop.drawInMenu(spriteBatch, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), this.drawColor, 0f,true);
 
                     if (Game1.player.CurrentItem != this) animationManager.tickAnimation();
                 }
@@ -670,7 +844,7 @@ namespace StarAI.PathFindingCore
             {
                 if (x == -1)
                 {
-                    spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                    spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), this.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
 
                 }
                 else
@@ -678,14 +852,14 @@ namespace StarAI.PathFindingCore
                     //The actual planter box being drawn.
                     if (animationManager == null)
                     {
-                        spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                        spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.sourceRect), this.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
                         // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
                     }
 
                     else
                     {
                         //Log.AsyncC("Animation Manager is working!");
-                        spriteBatch.Draw(animationManager.objectTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(animationManager.currentAnimation.sourceRectangle), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                        spriteBatch.Draw(animationManager.objectTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(animationManager.currentAnimation.sourceRectangle), this.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
                         try
                         {
                             this.animationManager.tickAnimation();
@@ -697,7 +871,7 @@ namespace StarAI.PathFindingCore
                         }
                     }
 
-                    // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
+                    // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), this.drawColor, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
 
                     if (this.heldObject != null)
                     {
@@ -706,8 +880,8 @@ namespace StarAI.PathFindingCore
                             (this.heldObject as TileNode).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as TileNode).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                             return;
                         }
-                        spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                        spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                        spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), this.drawColor * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
+                        spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), this.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
                     }
 
 
@@ -725,7 +899,7 @@ namespace StarAI.PathFindingCore
         {
             try
             {
-                spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), this.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
             }
             catch(Exception err)
             {
@@ -739,8 +913,8 @@ namespace StarAI.PathFindingCore
         {
             try
             {
-                if (this.dataPath == "") return new TileNode(this.parentSheetIndex, this.tileLocation, this.texturePath, this.removable, this.price, this.IsSolid);
-                else return new TileNode(this.parentSheetIndex, this.tileLocation, this.texturePath, this.dataPath, this.removable, this.IsSolid);
+                if (this.dataPath == "") return new TileNode(this.parentSheetIndex, this.tileLocation, this.texturePath,this.drawColor, this.removable, this.price, this.IsSolid);
+                else return new TileNode(this.parentSheetIndex, this.tileLocation, this.texturePath, this.dataPath,this.drawColor, this.removable, this.IsSolid);
             }
             catch (Exception err)
             {
@@ -865,7 +1039,7 @@ namespace StarAI.PathFindingCore
             dynamic obj1 = q;
             string name = Convert.ToString(obj1.currentAnimationName);
             int frame = Convert.ToInt32(obj1.currentAnimationListIndex);
-            TileNode dummy = new TileNode(d.parentSheetIndex, d.tileLocation, d.texturePath, d.dataPath, d.removable, d.IsSolid);
+            TileNode dummy = new TileNode(d.parentSheetIndex, d.tileLocation, d.texturePath, d.dataPath,d.drawColor, d.removable, d.IsSolid);
             d.animationManager = dummy.animationManager;
             bool f = d.animationManager.setAnimation(name, frame);
             bool f2;

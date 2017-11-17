@@ -11,5 +11,11 @@
   "Description": "An AI assignment but for stardew.",
   "UniqueID": "Omegasis.StarAI",
   "EntryDll": "StarAI.dll",
-  "UpdateKeys": [ "" ]
+  "UpdateKeys": [""],
+  "Dependencies": [
+   {
+      "UniqueID": "Omegasis.StardustCore",
+      "IsRequired": true
+   }
+]
 }

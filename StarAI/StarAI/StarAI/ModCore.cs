@@ -9,6 +9,7 @@ using WindowsInput;
 using Microsoft.Xna.Framework;
 using StarAI.PathFindingCore;
 using System.IO;
+using StardustCore;
 
 namespace StarAI
 {
@@ -21,12 +22,17 @@ namespace StarAI
         public static StardewModdingAPI.IMonitor CoreMonitor;
         public static StardewModdingAPI.IModHelper CoreHelper;
         public static List<Warp> warpGoals= new List<Warp>();
-
-        public static Task fun = new Task(new Action(calculateMovement));
+        public static object[] obj = new object[3];
+        
+        public static Task fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj);
         public override void Entry(IModHelper helper)
         {
+            obj[0] = PathFindingLogic.source;
+            obj[1] = PathFindingLogic.currentGoal;
+            obj[2] = PathFindingLogic.queue;
             CoreHelper = helper;
             helper.ConsoleCommands.Add("hello", "Ok?", new Action<string, string[]>(hello));
+            helper.ConsoleCommands.Add("pathfind", "pathy?", new Action<string, string[]>(pathfind));
             string[] s = new string[10];
             
             CoreMonitor = this.Monitor;
@@ -37,6 +43,145 @@ namespace StarAI
             StardewModdingAPI.Events.GameEvents.SecondUpdateTick += GameEvents_SecondUpdateTick;
 
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(TileNode.Serialize)));
+        }
+
+        public void pathfind(string s, string[] args)
+        {
+            if (args.Length < 1)
+            {
+                CoreMonitor.Log("No args passed into path finding function",LogLevel.Error);
+            }
+            if (args[0] == "addGoal")
+            {
+
+                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"),StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Green));
+                Vector2 pos=new Vector2((int)(Convert.ToInt32(args[1]) * Game1.tileSize), Convert.ToInt32(args[2]) * Game1.tileSize);
+                bool ok = t.checkIfICanPlaceHere(t, new Vector2(pos.X,pos.Y), Game1.player.currentLocation);
+                if (ok == false)
+                {
+                    CoreMonitor.Log("Can't place a goal point here!!!", LogLevel.Error);
+                    return;
+                }
+                t.placementAction(Game1.currentLocation,(int) pos.X,(int) pos.Y);
+                PathFindingLogic.currentGoal = t;
+                PathFindingLogic.goals.Add(t);
+            }
+
+            if (args[0] == "addStart")
+            {
+
+                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Magenta));
+                Vector2 pos;
+                if (args[1] == "currentPosition")
+                {
+                    pos = new Vector2((int)(Game1.player.getTileX() * Game1.tileSize), Game1.player.getTileY() * Game1.tileSize);
+                }
+                else
+                {
+                    pos = new Vector2((int)(Convert.ToInt32(args[1]) * Game1.tileSize), Convert.ToInt32(args[2]) * Game1.tileSize);
+                }
+
+                bool ok = t.checkIfICanPlaceHere(t, new Vector2(pos.X, pos.Y), Game1.player.currentLocation);
+                if (ok == false)
+                {
+                    CoreMonitor.Log("Can't place a start point here!!!", LogLevel.Error);
+                    return;
+                }
+                t.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                PathFindingLogic.source = t;
+            }
+
+            if (args[0] == "restart")
+            {
+                List<CoreObject> removalList = new List<CoreObject>();
+                foreach(var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
+                {
+                    removalList.Add(v);
+                }
+                foreach (var v in removalList)
+                {
+                    StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+                    Game1.player.currentLocation.objects.Remove(v.TileLocation);
+                    pathfind("pathfind restart", new string[]
+                    {
+                        "addGoal",
+                        PathFindingLogic.currentGoal.tileLocation.X.ToString(),
+                        PathFindingLogic.currentGoal.tileLocation.Y.ToString(),
+                    }
+                    );
+                }
+                removalList.Clear();
+                    pathfind("pathfind restart", new string[]
+                    {
+                        "addStart",
+                        PathFindingLogic.source.tileLocation.X.ToString(),
+                        PathFindingLogic.source.tileLocation.Y.ToString(),
+                    }
+                    );
+                    pathfind("pathfind restart", new string[]
+                   {
+                        "start"
+                   }
+                   );
+                
+            }
+
+            if (args[0] == "start")
+            {
+                if (Game1.player == null) return;
+                if (Game1.hasLoadedGame == false) return;
+                // ModCore.CoreMonitor.Log(Game1.player.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)(Game1.player.getTileX() + 1)*Game1.tileSize, (int)(Game1.player.getTileY())*Game1.tileSize)).ToString());
+                //CoreMonitor.Log(Convert.ToString(warpGoals.Count));
+                if (PathFindingCore.PathFindingLogic.currentGoal == null)
+                {
+                    CoreMonitor.Log("NO VALID GOAL SET FOR PATH FINDING!",LogLevel.Error);
+                }
+                if (PathFindingCore.PathFindingLogic.source == null)
+                {
+                    CoreMonitor.Log("NO VALID START SET FOR PATH FINDING!", LogLevel.Error);
+                }
+
+                if (fun.Status == TaskStatus.Running)
+                {
+                    CoreMonitor.Log("TASK IS RUNNING CAN'T PATHFIND AT THE MOMENT", LogLevel.Alert);
+                    return;
+                }
+                if (fun.Status == TaskStatus.RanToCompletion)
+                {
+
+                    CoreMonitor.Log("TASK IS Finished PATHFINDING", LogLevel.Warn);
+                    obj[0] = PathFindingLogic.source;
+                    obj[1] = PathFindingLogic.currentGoal;
+                    obj[2] = PathFindingLogic.queue;
+                    fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal), obj);
+                    return;
+                }
+
+                if (fun.Status == TaskStatus.Created)
+                {
+                    CoreMonitor.Log("CREATE AND RUN A TASK!!! PATHFINDING!");
+                    obj[0] = PathFindingLogic.source;
+                    obj[1] = PathFindingLogic.currentGoal;
+                    obj[2] = PathFindingLogic.queue;
+                    fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal), obj);
+                    
+                    fun.Start();
+                    return;
+                }
+                CoreMonitor.Log(fun.Status.ToString());
+                if (fun.Status == TaskStatus.Faulted)
+                {
+                    CoreMonitor.Log(fun.Exception.ToString());
+                    CoreMonitor.Log("CREATE AND RUN A TASK!!! PATHFINDING!");
+                    obj[0] = PathFindingLogic.source;
+                    obj[1] = PathFindingLogic.currentGoal;
+                    obj[2] = PathFindingLogic.queue;
+                    fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal), obj);
+                }
+
+            }
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -45,9 +190,7 @@ namespace StarAI
             {
                 CoreMonitor.Log("OK THE J KEY WAS PRESSED!");
                 List<Item> shoppingList = new List<Item>();
-                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"));
-                CoreMonitor.Log("AAAAAAAA???????:" + t.name);
-                CoreMonitor.Log("BBBBBB???????:" + t.DisplayName);
+                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"),StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Aqua));
                 if (t == null)
                 {
                     CoreMonitor.Log("WTF?????");
@@ -56,20 +199,43 @@ namespace StarAI
                 {
                     if (t == null)
                     {
-                        CoreMonitor.Log("FUCK");
-                        System.Threading.Thread.Sleep(5);
-
+                        return;
                     }
                     shoppingList.Add((Item)t);
-                    foreach(var v in shoppingList)
-                    {
-                        if (v == null) continue;
-                        
-                        CoreMonitor.Log("FUUUUU???????:"+ (v as TileNode).name);
-                        CoreMonitor.Log("FUUUUU???????:" + (v as TileNode).DisplayName);
-                    }
                     Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(shoppingList);
                 }catch(Exception err)
+                {
+                    CoreMonitor.Log(Convert.ToString(err));
+                }
+             }
+
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
+            {
+                CoreMonitor.Log("OK THE K KEY WAS PRESSED!");
+                
+                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"),StardustCore.IlluminateFramework.Colors.randomColor());
+                if (t == null)
+                {
+                    CoreMonitor.Log("WTF?????");
+                }
+                try
+                {
+                    if (t == null)
+                    {
+                        return;
+                    }
+                    CoreMonitor.Log(new Vector2(Game1.player.getTileX()*Game1.tileSize,Game1.player.getTileY()*Game1.tileSize).ToString());
+
+                    int xPos = (int)(Game1.player.getTileX()) * Game1.tileSize;
+                    int yPos = (int)(Game1.player.getTileY()) * Game1.tileSize;
+                    Rectangle r = new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize);
+                    Vector2 pos = new Vector2(r.X, r.Y);
+                    bool ok = t.checkIfICanPlaceHere(t,pos,Game1.player.currentLocation);
+                    if (ok == false) return;
+                    t.placementAction(Game1.currentLocation, Game1.player.getTileX()*Game1.tileSize, Game1.player.getTileY()*Game1.tileSize);
+                    t.setAdjacentTiles(true);
+                }
+                catch (Exception err)
                 {
                     CoreMonitor.Log(Convert.ToString(err));
                 }
@@ -233,6 +399,9 @@ namespace StarAI
 
         private void GameEvents_SecondUpdateTick(object sender, EventArgs e)
         {
+            if (Game1.player == null) return;
+            if (Game1.hasLoadedGame == false) return;
+           // ModCore.CoreMonitor.Log(Game1.player.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)(Game1.player.getTileX() + 1)*Game1.tileSize, (int)(Game1.player.getTileY())*Game1.tileSize)).ToString());
             //CoreMonitor.Log(Convert.ToString(warpGoals.Count));
             if (warpGoals.Count == 0) return;
             if (fun.Status == TaskStatus.Running)

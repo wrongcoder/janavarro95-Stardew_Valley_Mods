@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModCore.cs" />
-    <Compile Include="PathFindingCore\TileNode.cs" />
+    <Compile Include="PathFindingCore\PathFindingLogic.cs" />
     <Compile Include="PathFindingCore\TileNodeObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
