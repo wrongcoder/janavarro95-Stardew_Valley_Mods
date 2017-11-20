@@ -21,6 +21,9 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("hello", "Ok?", new Action<string, string[]>(hello));
             ModCore.CoreHelper.ConsoleCommands.Add("pathfind", "pathy?", new Action<string, string[]>(Commands.pathfind));
             ModCore.CoreHelper.ConsoleCommands.Add("pathfinding", "pathy?", new Action<string, string[]>(Commands.pathfind));
+            ModCore.CoreHelper.ConsoleCommands.Add("Execute", "Run tasks", new Action<string,string[]>(Commands.runTasks));
+            //ModCore.CoreHelper.ConsoleCommands.Add("execute", "Run tasks", new Action<string, string[]>(Commands.runTasks));
+            ModCore.CoreHelper.ConsoleCommands.Add("runTasks", "Run tasks", new Action<string, string[]>(Commands.runTasks));
 
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -28,8 +31,18 @@ namespace StarAI
                 });
         }
 
+        public static void runTasks(string s, string[] args)
+        {
+            ExecutionCore.TaskList.runTaskList();
+        }
 
-
+        /// <summary>
+        /// 1.Set start position
+        /// 2.set goal
+        /// 3.queue up the task
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="args"></param>
         public static void pathfind(string s, string[] args)
         {
             
@@ -70,9 +83,9 @@ namespace StarAI
 
                 });
 
-                pathfind("pathfind restart", new string[]
+                pathfind("pathfind pathto", new string[]
                 {
-                        "start"
+                        "queue"
                 });
             }
             #endregion
@@ -91,6 +104,7 @@ namespace StarAI
                     return;
                 }
                 t.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                ModCore.CoreMonitor.Log("Placing start at: " + pos.ToString(), LogLevel.Warn);
                 PathFindingLogic.currentGoal = t;
                 PathFindingLogic.goals.Add(t);
             }
@@ -111,14 +125,35 @@ namespace StarAI
                 {
                     pos = new Vector2((int)(Convert.ToInt32(args[1]) * Game1.tileSize), Convert.ToInt32(args[2]) * Game1.tileSize);
                 }
-
+              
                 bool ok = t.checkIfICanPlaceHere(t, new Vector2(pos.X, pos.Y), Game1.player.currentLocation);
+                bool cry = false;
+                if (t.thisLocation == null)
+                {
+                    cry = true;
+                    t.thisLocation=Game1.player.currentLocation;
+                }
+
+                if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
+                {
+                    StardewValley.Object maybe = t.thisLocation.getObjectAt((int)pos.X, (int)pos.Y);
+                    if (maybe is TileNode)
+                    {
+                        if (PathFindingLogic.goals.Contains(maybe))
+                        {
+                            PathFindingLogic.source = (TileNode)maybe;
+                            ModCore.CoreMonitor.Log("Changed the source point!!!!", LogLevel.Warn);
+                            ok = true;
+                        }
+                    }
+                }
                 if (ok == false)
                 {
                     ModCore.CoreMonitor.Log("Can't place a start point here!!!", LogLevel.Error);
                     return;
                 }
                 t.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                ModCore.CoreMonitor.Log("Placing start at: "+pos.ToString(), LogLevel.Warn);
                 PathFindingLogic.source = t;
             }
             #endregion
@@ -207,6 +242,56 @@ namespace StarAI
                     ModCore.fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
                 }
 
+            }
+            #endregion
+
+            //Queue Code
+            #region
+            if (args[0]=="queue" || args[0] == "Queue")
+            {
+                if (Game1.player == null) return;
+                if (Game1.hasLoadedGame == false) return;
+                // ModCore.CoreMonitor.Log(Game1.player.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)(Game1.player.getTileX() + 1)*Game1.tileSize, (int)(Game1.player.getTileY())*Game1.tileSize)).ToString());
+                //CoreMonitor.Log(Convert.ToString(warpGoals.Count));
+                if (PathFindingCore.PathFindingLogic.currentGoal == null)
+                {
+                    ModCore.CoreMonitor.Log("NO VALID GOAL SET FOR PATH FINDING!", LogLevel.Error);
+                    return;
+                }
+                if (PathFindingCore.PathFindingLogic.source == null)
+                {
+                    ModCore.CoreMonitor.Log("NO VALID START SET FOR PATH FINDING!", LogLevel.Error);
+                    return;
+                }
+                object[] obj = new object[3];
+                obj[0] = PathFindingLogic.source;
+                obj[1] = PathFindingLogic.currentGoal;
+                PathFindingLogic.queue = new List<TileNode>();
+                obj[2] = PathFindingLogic.queue;
+               ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
+            }
+            #endregion
+
+
+            //AddTask one liner
+            #region
+            if (args[0] == "addTask" || args[0] == "addtask" || args[0] == "AddTask" || args[0] == "Addtask")
+            {
+                pathfind("add a task",new string[]{
+                    "addStart",
+                    args[1],
+                    args[2],
+                });
+                pathfind("add a task", new string[] {
+                    "addGoal",
+                    args[3],
+                    args[4]
+
+                });
+                pathfind("add a task", new string[]
+                {
+                    "queue"
+                });
             }
             #endregion
         }

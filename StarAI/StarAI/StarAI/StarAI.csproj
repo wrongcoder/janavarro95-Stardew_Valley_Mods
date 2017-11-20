@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
+    <Compile Include="ExecutionCore\TaskList.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="PathFindingCore\PathFindingLogic.cs" />
     <Compile Include="PathFindingCore\TileExceptionNode.cs" />
