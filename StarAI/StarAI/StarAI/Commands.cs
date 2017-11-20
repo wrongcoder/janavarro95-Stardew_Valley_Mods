@@ -104,13 +104,38 @@ namespace StarAI
             #region
             if (args[0]=="pathTo"|| args[0]=="pathto"|| args[0]=="PathTo"|| args[0] == "Pathto")
             {
-                pathfind(s,new string[]{
+                if (PathFindingLogic.currentGoal == null)
+                {
+                    pathfind(s, new string[]{
 
                     "setStart",
                     "currentPosition"
                 });
-                int currentX = Game1.player.getTileX();
-                int currentY = Game1.player.getTileY();
+                }
+                else
+                {
+                    pathfind(s, new string[]{
+
+                    "setStart",
+                    PathFindingLogic.currentGoal.tileLocation.X.ToString(),
+                    PathFindingLogic.currentGoal.tileLocation.Y.ToString(),
+                });
+                }
+              
+
+                int currentX;
+                int currentY;
+                if (PathFindingLogic.currentGoal == null)
+                {
+                     currentX = Game1.player.getTileX();
+                     currentY = Game1.player.getTileY();
+                }
+                else
+                {
+                     currentX = (int)PathFindingLogic.currentGoal.tileLocation.X;
+                     currentY = (int)PathFindingLogic.currentGoal.tileLocation.Y;
+                }
+
                 int xOffset = Convert.ToInt32(args[1]);
                 int yOffset = Convert.ToInt32(args[2]);
                 int destX = currentX + xOffset;

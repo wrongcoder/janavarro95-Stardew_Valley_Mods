@@ -21,6 +21,7 @@ namespace StarAI.ExecutionCore
             {
                 ModCore.CoreMonitor.Log("I value: " + i);
                 ModCore.CoreMonitor.Log("Count: " + taskList.Count);
+                ModCore.CoreMonitor.Log("GAOL AMOUNT: " + PathFindingCore.PathFindingLogic.goals.Count);
                 Task v = taskList[i];
                 //  v.Start();
 

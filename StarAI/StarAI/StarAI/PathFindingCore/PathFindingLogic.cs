@@ -223,7 +223,7 @@ namespace StarAI.PathFindingCore
             {
                 if(v is TileNode)
                 {
-                    if (path.Contains(v) || goals.Contains(v))
+                    if (path.Contains(v) || goals.Contains(v)|| v.drawColor==StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Red))
                     {
                         continue;
                     }
@@ -258,8 +258,11 @@ namespace StarAI.PathFindingCore
                 //ModCore.CoreMonitor.Log("My Point position now: " + Game1.player.getTileLocationPoint());
                 if (Game1.player.getTileX() == w.tileLocation.X && Game1.player.getTileY() == w.tileLocation.Y)
                 {
-                    path.Remove(w);
+                   
+                        
                     removalList.Add(w);
+                    
+                    path.Remove(w);
                     xTargetReached = false;
                     yTargetReached = false;
                    
@@ -335,8 +338,12 @@ namespace StarAI.PathFindingCore
 
                     if (xTargetReached == true && yTargetReached == true)
                     {
-                        path.Remove(w);
+                        
+                           
+
                         removalList.Add(w);
+                        
+                        path.Remove(w);
                         xTargetReached = false;
                         yTargetReached = false;
           
