@@ -169,7 +169,7 @@ namespace StardustCore.Animations
                 try
                 {
                     Animation ani = new Animation(new Rectangle(Convert.ToInt32(array[1]), Convert.ToInt32(array[2]), Convert.ToInt32(array[3]), Convert.ToInt32(array[4])), Convert.ToInt32(array[5]));
-                    ModCore.ModMonitor.Log(ani.sourceRectangle.ToString());
+                   // ModCore.ModMonitor.Log(ani.sourceRectangle.ToString());
                     ok.Add(ani);
                 }
                 catch(Exception err)

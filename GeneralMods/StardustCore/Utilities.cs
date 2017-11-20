@@ -612,7 +612,7 @@ namespace StardustCore
                     else
                     {
                         //   Game1.showRedMessage("STEP 2");
-                        ModCore.ModMonitor.Log(vector.ToString());
+                        //ModCore.ModMonitor.Log(vector.ToString());
 
                         Vector2 newVec = new Vector2(vector.X, vector.Y);
                         // cObj.boundingBox.Inflate(32, 32);

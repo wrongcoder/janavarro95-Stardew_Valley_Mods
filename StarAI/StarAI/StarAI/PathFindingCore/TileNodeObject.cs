@@ -74,39 +74,38 @@ namespace StarAI.PathFindingCore
                 cry = true;
             }
 
+
+
             
             if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
             {
-                ModCore.CoreMonitor.Log("F!: " + t.thisLocation.name, LogLevel.Warn);
+                ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.name, LogLevel.Warn);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }
             if (t.thisLocation.isTileOccupied(pos / Game1.tileSize))
             {
-                ModCore.CoreMonitor.Log("K!!!!: " + t.thisLocation.name, LogLevel.Error);
+                ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }
 
-            if (t.thisLocation.isTilePlaceable(pos) == false)
-            {
-                ModCore.CoreMonitor.Log("C!!!!: " + t.thisLocation.name, LogLevel.Error);
-                if (cry == true) this.thisLocation = null;
-                return false;
-            }
             if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
             {
-                ModCore.CoreMonitor.Log("J!!!!: " + t.thisLocation.name, LogLevel.Error);
+                ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }
+
+
 
             if (t.thisLocation.isTilePassable(new xTile.Dimensions.Location((int)(pos.X/Game1.tileSize), (int)(pos.Y/Game1.tileSize)), Game1.viewport)==false)
             {
-                ModCore.CoreMonitor.Log("Y!!!!: " + t.thisLocation.name, LogLevel.Error);
+                ModCore.CoreMonitor.Log("Tile not passable check 2?????!!!!: " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }
+            
 
 
             if (cry == true) this.thisLocation = null;
@@ -120,8 +119,8 @@ namespace StarAI.PathFindingCore
             if (f == false) return;
             else
             {
-                ModCore.CoreMonitor.Log("Adding a child!");
-                System.Threading.Thread.Sleep(50);
+               // ModCore.CoreMonitor.Log("Adding a child!");
+                System.Threading.Thread.Sleep(PathFindingCore.PathFindingLogic.delay);
                 TileNode child = new TileNode(1, Vector2.Zero, t.texturePath,t.dataPath,StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Cyan));
                 child.seenState = (int)stateEnum.NotVisited;
                 child.parent = t;
@@ -164,6 +163,8 @@ namespace StarAI.PathFindingCore
             }
         }
 
+
+        //Unused????
         public static void setAdjacentTiles(Vector2 position, GameLocation loc)
         {
             Vector2 startPosition = position;
@@ -185,28 +186,28 @@ namespace StarAI.PathFindingCore
                     ModCore.CoreMonitor.Log("THIS IS MY LOCATION!!!: " +loc.name);
                     if (loc.isObjectAt((int)pos.X, (int)pos.Y))
                     {
-                        ModCore.CoreMonitor.Log("F!: " + loc.name, LogLevel.Warn);
+                       // ModCore.CoreMonitor.Log("F!: " + loc.name, LogLevel.Warn);
                         continue;
                     }
                     if (loc.isTileOccupied(pos / Game1.tileSize))
                     {
-                        ModCore.CoreMonitor.Log("K!!!!: " + loc.name, LogLevel.Error);
+                        //ModCore.CoreMonitor.Log("K!!!!: " + loc.name, LogLevel.Error);
                         continue;
                     }
 
                     if (loc.isTilePlaceable(pos) == false)
                     {
-                        ModCore.CoreMonitor.Log("C!!!!: " + loc.name, LogLevel.Error);
-                        continue;
+                        //ModCore.CoreMonitor.Log("C!!!!: " + loc.name, LogLevel.Error);
+                        //continue;
                     }
                     if (loc.isTilePlaceable(pos / Game1.tileSize) == false)
                     {
-                        ModCore.CoreMonitor.Log("J!!!!: " + loc.name, LogLevel.Error);
-                        continue;
+                       // ModCore.CoreMonitor.Log("J!!!!: " + loc.name, LogLevel.Error);
+                       // continue;
                     }
 
 
-                    if (loc.isTilePassable(new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize), Game1.viewport) == true && loc.isTileLocationOpen(new xTile.Dimensions.Location((int)(pos.X), (int)(pos.Y))) == true && loc.isObjectAt((int)(pos.X), (int)(pos.Y)) == false) ; //&& Game1.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)startPosition.X+x,(int)startPosition.Y+y)))
+                    if (loc.isTilePassable(new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize), Game1.viewport) == true && loc.isTileLocationOpen(new xTile.Dimensions.Location((int)(pos.X), (int)(pos.Y)))) ; //&& Game1.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)startPosition.X+x,(int)startPosition.Y+y)))
                     {
                         //TileNode child = new TileNode(1, Vector2.Zero, this.texturePath, this.drawColor);
                         //child.placementAction(Game1.currentLocation, xPos, yPos);
@@ -462,7 +463,7 @@ namespace StarAI.PathFindingCore
                 {
                     //   Game1.showRedMessage("Why2?");
                     // this.heldObject = new TileNode(parentSheetIndex, Vector2.Zero);
-                    Utilities.addItemToInventoryAndCleanTrackedList(this,StardustCore.ModCore.SerializationManager);
+                    StardustCore.Utilities.addItemToInventoryAndCleanTrackedList(this,StardustCore.ModCore.SerializationManager);
                     this.flaggedForPickUp = true;
                     this.thisLocation = null;
                     this.locationsName = "";
@@ -480,7 +481,7 @@ namespace StarAI.PathFindingCore
                     else
                     {
                         //  this.heldObject = new TileNode(parentSheetIndex, Vector2.Zero);
-                        Utilities.addItemToInventoryAndCleanTrackedList(this,StardustCore.ModCore.SerializationManager);
+                        StardustCore.Utilities.addItemToInventoryAndCleanTrackedList(this,StardustCore.ModCore.SerializationManager);
                         //  this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                         //   this.heldObject = null;
                         Game1.playSound("coin");
@@ -496,7 +497,7 @@ namespace StarAI.PathFindingCore
                 // Game1.showRedMessage("Why3?");
                 this.heldObject.performRemoveAction(this.tileLocation, who.currentLocation);
                 this.heldObject = null;
-                Utilities.addItemToInventoryAndCleanTrackedList(this,StardustCore.ModCore.SerializationManager);
+                StardustCore.Utilities.addItemToInventoryAndCleanTrackedList(this,StardustCore.ModCore.SerializationManager);
                 Game1.playSound("coin");
                 this.thisLocation = null;
                 this.locationsName = "";
@@ -751,7 +752,7 @@ namespace StarAI.PathFindingCore
             this.updateDrawPosition();
             try
             {
-                bool f = Utilities.placementAction(this, location, x, y, StardustCore.ModCore.SerializationManager, who);
+                bool f = StardustCore.Utilities.placementAction(this, location, x, y, StardustCore.ModCore.SerializationManager, who);
                 this.thisLocation = Game1.player.currentLocation;
                 return f;
             }
@@ -970,11 +971,11 @@ namespace StarAI.PathFindingCore
             d.rotations = obj.rotations;
             d.currentRotation = obj.currentRotation;
             string s1 = Convert.ToString(obj.sourceRect);
-            d.sourceRect = Utilities.parseRectFromJson(s1);
+            d.sourceRect = StardustCore.Utilities.parseRectFromJson(s1);
             string s2 = Convert.ToString(obj.defaultSourceRect);
-            d.defaultSourceRect = Utilities.parseRectFromJson(s2);
+            d.defaultSourceRect = StardustCore.Utilities.parseRectFromJson(s2);
             string s3 = Convert.ToString(obj.defaultBoundingBox);
-            d.defaultBoundingBox = Utilities.parseRectFromJson(s3);
+            d.defaultBoundingBox = StardustCore.Utilities.parseRectFromJson(s3);
             d.description = obj.description;
             d.flipped = obj.flipped;
             d.flaggedForPickUp = obj.flaggedForPickUp;
@@ -1004,7 +1005,7 @@ namespace StarAI.PathFindingCore
             d.heldObject = obj.heldObject;
             d.minutesUntilReady = obj.minutesUntilReady;
             string s4 = Convert.ToString(obj.boundingBox);
-            d.boundingBox = Utilities.parseRectFromJson(s4);
+            d.boundingBox = StardustCore.Utilities.parseRectFromJson(s4);
             d.scale = obj.scale;
             d.lightSource = obj.lightSource;
             d.shakeTimer = obj.shakeTimer;

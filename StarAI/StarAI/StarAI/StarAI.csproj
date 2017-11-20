@@ -56,9 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="PathFindingCore\PathFindingLogic.cs" />
+    <Compile Include="PathFindingCore\TileExceptionNode.cs" />
     <Compile Include="PathFindingCore\TileNodeObject.cs" />
+    <Compile Include="PathFindingCore\Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

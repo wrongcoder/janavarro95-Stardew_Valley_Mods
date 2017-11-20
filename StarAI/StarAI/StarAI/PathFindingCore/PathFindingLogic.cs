@@ -17,6 +17,7 @@ namespace StarAI.PathFindingCore
         public static List<TileNode> queue=new List<TileNode>();
         public static int totalPathCost;
         public static TileNode currentGoal;
+        public static int delay;
 
         public static List<TileNode> path=new List<TileNode>();
         public static int index = 0;
@@ -87,7 +88,7 @@ namespace StarAI.PathFindingCore
                     if (node.parent == null)
                     {
                         ModCore.CoreMonitor.Log("I DONT UNDERSTAND!");
-                        System.Threading.Thread.Sleep(50);
+                        System.Threading.Thread.Sleep(delay);
                     }
                     //ModCore.CoreMonitor.Log("ok checking adj:" + node.tileLocation.ToString());
 
@@ -169,7 +170,7 @@ namespace StarAI.PathFindingCore
                 }
                 currentNode.parent.animationManager.enableAnimation();
                 currentNode = currentNode.parent;
-                System.Threading.Thread.Sleep(200);
+                System.Threading.Thread.Sleep(delay);
                 if (currentNode.parent == null)
                 {
                     currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Red); //Working
