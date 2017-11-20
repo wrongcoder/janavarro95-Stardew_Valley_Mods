@@ -79,20 +79,20 @@ namespace StarAI.PathFindingCore
             
             if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
             {
-                ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.name, LogLevel.Warn);
+                //ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.name, LogLevel.Warn);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }
             if (t.thisLocation.isTileOccupied(pos / Game1.tileSize))
             {
-                ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
+               // ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }
 
             if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
             {
-                ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
+                //ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }
@@ -101,7 +101,7 @@ namespace StarAI.PathFindingCore
 
             if (t.thisLocation.isTilePassable(new xTile.Dimensions.Location((int)(pos.X/Game1.tileSize), (int)(pos.Y/Game1.tileSize)), Game1.viewport)==false)
             {
-                ModCore.CoreMonitor.Log("Tile not passable check 2?????!!!!: " + t.thisLocation.name, LogLevel.Error);
+               // ModCore.CoreMonitor.Log("Tile not passable check 2?????!!!!: " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) this.thisLocation = null;
                 return false;
             }

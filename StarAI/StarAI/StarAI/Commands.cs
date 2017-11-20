@@ -33,7 +33,47 @@ namespace StarAI
 
         public static void runTasks(string s, string[] args)
         {
-            ExecutionCore.TaskList.runTaskList();
+            ModCore.CoreMonitor.Log("EXECUTE TASKS");
+            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.Running)
+            {
+                ModCore.CoreMonitor.Log("Tasklist is already executing. Just going to return.");
+                return;
+            }
+            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.RanToCompletion)
+            {
+                ModCore.CoreMonitor.Log("Tasklist is finished. Going to restart");
+
+                List<Task> removalList = new List<Task>();
+                foreach(var v in ExecutionCore.TaskList.taskList)
+                {
+                    if (v.IsCompleted) removalList.Add(v);
+                }
+                foreach(var v in removalList)
+                {
+                    ExecutionCore.TaskList.taskList.Remove(v);
+                }
+
+                ExecutionCore.TaskList.executioner = new Task(new Action(ExecutionCore.TaskList.runTaskList));
+                ExecutionCore.TaskList.executioner.Start();
+               // ExecutionCore.TaskList.taskList.Clear();
+                return;
+                //ExecutionCore.TaskList.runTaskList();
+
+            }
+
+            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.Faulted)
+            {
+                ModCore.CoreMonitor.Log(ExecutionCore.TaskList.executioner.Exception.ToString());
+            }
+
+            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.Created)
+            {
+                //ExecutionCore.TaskList.runTaskList();
+                List<Task> removalList = new List<Task>();
+                ExecutionCore.TaskList.executioner.Start();
+  
+                return;
+            }
         }
 
         /// <summary>
