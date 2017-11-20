@@ -31,7 +31,7 @@ namespace StarAI.ExecutionCore
                     ModCore.fun = v;
                     ModCore.fun.Start();
                     assignNewTask = false;
-                    i--;
+                    //i--;
                     continue;
                 }
 
@@ -46,7 +46,10 @@ namespace StarAI.ExecutionCore
                 if (ModCore.fun.Status == TaskStatus.RanToCompletion)
                 {
 
-                    assignNewTask = true;
+                    ModCore.fun = v;
+                    ModCore.fun.Start();
+                    assignNewTask = false;
+                    //i--;
                     removalList.Add(v);
                     continue;
                     // return;
@@ -54,7 +57,10 @@ namespace StarAI.ExecutionCore
 
                 if (ModCore.fun.Status == TaskStatus.Faulted)
                 {
-                    assignNewTask = true;
+                    ModCore.fun = v;
+                    ModCore.fun.Start();
+                    assignNewTask = false;
+                    //i--;
                     removalList.Add(v);
                     continue;
                     //ModCore.CoreMonitor.Log(ModCore.fun.Exception.ToString());
@@ -64,6 +70,10 @@ namespace StarAI.ExecutionCore
                 }
 
                
+            }
+            foreach(var v in removalList)
+            {
+                taskList.Remove(v);
             }
 
             

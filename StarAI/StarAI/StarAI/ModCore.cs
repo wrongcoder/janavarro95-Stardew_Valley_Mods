@@ -24,7 +24,7 @@ namespace StarAI
         public static List<Warp> warpGoals = new List<Warp>();
         public static object[] obj = new object[3];
 
-        public static Task fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
+        public static Task fun;
         public override void Entry(IModHelper helper)
         {
             obj[0] = PathFindingLogic.source;

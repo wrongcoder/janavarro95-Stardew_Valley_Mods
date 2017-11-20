@@ -20,12 +20,13 @@ namespace StarAI.PathFindingCore
         public static TileNode currentGoal;
         public static int delay;
 
-        public static List<TileNode> path = new List<TileNode>();
+       
         public static int index = 0;
 
 
         public static void pathFindToAllGoals()
         {
+            List<TileNode> path = new List<TileNode>();
             List<TileNode> cleanseGoals = new List<TileNode>();
             foreach (var v in goals)
             {
@@ -68,12 +69,22 @@ namespace StarAI.PathFindingCore
 
         public static void pathFindToSingleGoal(object data)
         {
+            List<TileNode> path = new List<TileNode>();
+            //path.Clear();
             ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
             object[] obj = (object[])data;
 
-
             TileNode Source =(TileNode) obj[0];
+
+            if (Source.parent != null)
+            {
+                Source.parent = null;
+            }
+
+            ModCore.CoreMonitor.Log("PATH FROM SOURCE: "+Source.tileLocation, LogLevel.Error);
+           
             TileNode Goal = (TileNode)obj[1];
+            ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
             List<TileNode> Queue = (List<TileNode>)obj[2];
             totalPathCost = 0;
             TileNode currentNode = Source;
@@ -247,6 +258,8 @@ namespace StarAI.PathFindingCore
         public static void calculateMovement(List<TileNode> path)
         {
             path.Reverse();
+
+            ModCore.CoreMonitor.Log("PATH COUNT TIME!!!!: " + path.Count);
             bool xTargetReached = false;
             bool yTargetReached = false;
             List<TileNode> removalList = new List<TileNode>();
@@ -368,7 +381,7 @@ namespace StarAI.PathFindingCore
                 v.thisLocation.removeObject(v.tileLocation, false);
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
             }
-            
+            goals.Clear();
         }
 
 

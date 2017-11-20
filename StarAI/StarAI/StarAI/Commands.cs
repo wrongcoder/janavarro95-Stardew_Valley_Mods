@@ -34,6 +34,8 @@ namespace StarAI
         public static void runTasks(string s, string[] args)
         {
             ModCore.CoreMonitor.Log("EXECUTE TASKS");
+            PathFindingLogic.source = null;
+            PathFindingLogic.currentGoal = null;
             if (ExecutionCore.TaskList.executioner.Status == TaskStatus.Running)
             {
                 ModCore.CoreMonitor.Log("Tasklist is already executing. Just going to return.");
@@ -85,7 +87,10 @@ namespace StarAI
         /// <param name="args"></param>
         public static void pathfind(string s, string[] args)
         {
-            
+            if (PathFindingCore.PathFindingLogic.source != null)
+            {
+                ModCore.CoreMonitor.Log("THIS IS OUR SOURCE POINT: as " + s + " : " + PathFindingCore.PathFindingLogic.source.tileLocation.ToString());
+            }
             if (args.Length < 1)
             {
                 ModCore.CoreMonitor.Log("No args passed into path finding function", LogLevel.Error);
@@ -152,6 +157,8 @@ namespace StarAI
                 {
                         "queue"
                 });
+                //PathFindingLogic.currentGoal = null;
+                //PathFindingLogic.source = null;
             }
             #endregion
 
@@ -170,6 +177,11 @@ namespace StarAI
                 }
                 t.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
                 ModCore.CoreMonitor.Log("Placing start at: " + pos.ToString(), LogLevel.Warn);
+
+                if (PathFindingLogic.currentGoal != null)
+                {
+                    PathFindingLogic.source = PathFindingLogic.currentGoal;
+                }
                 PathFindingLogic.currentGoal = t;
                 PathFindingLogic.goals.Add(t);
             }
@@ -204,12 +216,11 @@ namespace StarAI
                     StardewValley.Object maybe = t.thisLocation.getObjectAt((int)pos.X, (int)pos.Y);
                     if (maybe is TileNode)
                     {
-                        if (PathFindingLogic.goals.Contains(maybe))
-                        {
+                        
                             PathFindingLogic.source = (TileNode)maybe;
-                            ModCore.CoreMonitor.Log("Changed the source point!!!!", LogLevel.Warn);
-                            ok = true;
-                        }
+                            ModCore.CoreMonitor.Log("Changed the source point!!!!:"+PathFindingLogic.source.tileLocation, LogLevel.Warn);
+                           // ok = true;
+                        
                     }
                 }
                 if (ok == false)
@@ -333,7 +344,7 @@ namespace StarAI
                 obj[1] = PathFindingLogic.currentGoal;
                 PathFindingLogic.queue = new List<TileNode>();
                 obj[2] = PathFindingLogic.queue;
-               ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
+                ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
             }
             #endregion
 
