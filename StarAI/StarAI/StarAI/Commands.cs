@@ -187,20 +187,14 @@ namespace StarAI
                 {
 
                     ModCore.CoreMonitor.Log("TASK IS Finished PATHFINDING", LogLevel.Warn);
-                    ModCore.obj[0] = PathFindingLogic.source;
-                    ModCore.obj[1] = PathFindingLogic.currentGoal;
-                    ModCore.obj[2] = PathFindingLogic.queue;
-                    ModCore.fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal), ModCore.obj);
-                    return;
+                    ModCore.fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
+                   // return;
                 }
 
                 if (ModCore.fun.Status == TaskStatus.Created)
                 {
                     ModCore.CoreMonitor.Log("CREATE AND RUN A TASK!!! PATHFINDING!");
-                    ModCore.obj[0] = PathFindingLogic.source;
-                    ModCore.obj[1] = PathFindingLogic.currentGoal;
-                    ModCore.obj[2] = PathFindingLogic.queue;
-                    ModCore.fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal), ModCore.obj);
+                    ModCore.fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
 
                     ModCore.fun.Start();
                     return;
@@ -210,10 +204,7 @@ namespace StarAI
                 {
                     ModCore.CoreMonitor.Log(ModCore.fun.Exception.ToString());
                     ModCore.CoreMonitor.Log("CREATE AND RUN A TASK!!! PATHFINDING!");
-                    ModCore.obj[0] = PathFindingLogic.source;
-                    ModCore.obj[1] = PathFindingLogic.currentGoal;
-                    ModCore.obj[2] = PathFindingLogic.queue;
-                    ModCore.fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal), ModCore.obj);
+                    ModCore.fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
                 }
 
             }

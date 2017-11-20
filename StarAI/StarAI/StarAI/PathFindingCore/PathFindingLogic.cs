@@ -7,20 +7,65 @@ using System.Threading.Tasks;
 using StarAI;
 using StardewModdingAPI;
 using StardewValley;
+using WindowsInput;
 
 namespace StarAI.PathFindingCore
 {
     class PathFindingLogic
     {
         public static TileNode source;
-        public static List<TileNode> goals=new List<TileNode>();
-        public static List<TileNode> queue=new List<TileNode>();
+        public static List<TileNode> goals = new List<TileNode>();
+        public static List<TileNode> queue = new List<TileNode>();
         public static int totalPathCost;
         public static TileNode currentGoal;
         public static int delay;
 
-        public static List<TileNode> path=new List<TileNode>();
+        public static List<TileNode> path = new List<TileNode>();
         public static int index = 0;
+
+
+        public static void pathFindToAllGoals()
+        {
+            List<TileNode> cleanseGoals = new List<TileNode>();
+            foreach (var v in goals)
+            {
+                Commands.pathfind("path to all goals", new string[]{
+               "addStart",
+               "currentPosition"
+            });
+                queue = new List<TileNode>();
+                currentGoal = v;
+                pathFindToSingleGoal(source, v, queue); //v is a goal in my goal list, queue is my queue to work with,and I always set my start to where I am at.
+                List<TileNode> removalList = new List<TileNode>();
+                foreach(var tile in path)
+                {
+                    removalList.Add(tile);
+                }
+                foreach (var tile in removalList)
+                {
+                    StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(tile);
+                    (tile as TileNode).thisLocation.objects.Remove(tile.tileLocation);
+                }
+                cleanseGoals.Add(v);
+            }
+            foreach(var v in cleanseGoals)
+            {
+                goals.Remove(v);
+            }
+
+            
+        }
+
+
+        public static void pathFindToSingleGoal(TileNode Source, TileNode Goal, List<TileNode> Queue)
+        {
+         object[] obj = new object[3];
+            obj[0] = Source;
+            obj[1] = Goal;
+            obj[2] = Queue;
+            pathFindToSingleGoal(obj);
+         }
+
         public static void pathFindToSingleGoal(object data)
         {
             ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
@@ -132,13 +177,13 @@ namespace StarAI.PathFindingCore
           
             }
 
-            if (currentNode.tileLocation != currentGoal.tileLocation)
+            if (currentNode.tileLocation != Goal.tileLocation)
             {
                 ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
                 return;
             }
 
-            if (currentNode.tileLocation == currentGoal.tileLocation)
+            if (currentNode.tileLocation == Goal.tileLocation)
             {
                 ModCore.CoreMonitor.Log("SWEET BEANS!!!!!!", LogLevel.Error);
                 queue.Clear();
@@ -177,8 +222,136 @@ namespace StarAI.PathFindingCore
                     path.Add(currentNode);
                 }
             }
+            List<TileNode> removalList = new List<TileNode>();
+            foreach(var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
+            {
+                if(v is TileNode)
+                {
+                    if (path.Contains(v) || goals.Contains(v))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        removalList.Add((TileNode)v);
+                    }
+                }
+            }
+            foreach(var v in removalList)
+            {
+                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+                (v as TileNode).thisLocation.objects.Remove(v.tileLocation);
+            }
 
+            calculateMovement(path);
+           // goals.Remove(Goal);
+            
         }
+
+        public static void calculateMovement(List<TileNode> path)
+        {
+            path.Reverse();
+            bool xTargetReached = false;
+            bool yTargetReached = false;
+            while (path.Count > 0)
+            {
+                TileNode w = path[0];
+                ModCore.CoreMonitor.Log("Goto: " + w.tileLocation.ToString());
+                ModCore.CoreMonitor.Log("My position now: " + Game1.player.getTileLocation());
+                //ModCore.CoreMonitor.Log("My Point position now: " + Game1.player.getTileLocationPoint());
+                if (Game1.player.getTileX() == w.tileLocation.X && Game1.player.getTileY() == w.tileLocation.Y)
+                {
+                    path.Remove(w);
+                    w.thisLocation.objects.Remove(w.tileLocation);
+                    xTargetReached = false;
+                    yTargetReached = false;
+                    StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(w);
+                    ModCore.CoreMonitor.Log("LOOOP", LogLevel.Debug);
+                    // return;
+                    continue;
+                }
+                else
+                {
+                    Vector2 center = Utilities.parseCenterFromTile((int)w.tileLocation.X, (int)w.tileLocation.Y);
+                    while (Game1.player.position.X > center.X && xTargetReached == false)
+                    {
+                        if (Utilities.isWithinRange(Game1.player.position.X, center.X, 6) == true)
+                        {
+                            ModCore.CoreMonitor.Log("XXXXXXXtargetReached");
+                            xTargetReached = true;
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_A);
+                            //break;
+                            continue;
+                        }
+                        InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_A);
+                    }
+                    while (Game1.player.position.X < center.X && xTargetReached == false)
+                    {
+                        ModCore.CoreMonitor.Log("Player x: " + Game1.player.position.X);
+                        ModCore.CoreMonitor.Log("center x: " + center.X);
+                        if (Utilities.isWithinRange(Game1.player.position.X, center.X, 6) == true)
+                        {
+                            xTargetReached = true;
+                            ModCore.CoreMonitor.Log("XXXXXXXtargetReached");
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_D);
+                            continue;
+                        }
+                        InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_D);
+                    }
+                    while (Game1.player.position.Y < center.Y && yTargetReached == false)
+                    {
+                        ModCore.CoreMonitor.Log("banana");
+                        if (Utilities.isWithinRange(Game1.player.position.Y, center.Y, 6) == true)
+                        {
+                            yTargetReached = true;
+                            ModCore.CoreMonitor.Log("YYYYYYYYYtargetReached");
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_S);
+                            continue;
+                        }
+                        InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_S);
+                    }
+                    while (Game1.player.position.Y > center.Y && yTargetReached == false)
+                    {
+                        ModCore.CoreMonitor.Log("potato");
+                        if (Utilities.isWithinRange(Game1.player.position.Y, center.Y, 6) == true)
+                        {
+                            yTargetReached = true;
+                            ModCore.CoreMonitor.Log("YYYYYYYYYtargetReached");
+                            InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_W);
+                            continue;
+                        }
+                        InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_W);
+                    }
+
+
+                    if (xTargetReached == true && yTargetReached == true)
+                    {
+                        path.Remove(w);
+
+
+
+                        xTargetReached = false;
+                        yTargetReached = false;
+                        StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(w);
+                        w.thisLocation.objects.Remove(w.tileLocation);
+
+                        InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_A);
+                        InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_D);
+                        InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_W);
+                        InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_S);
+                        //return;
+                        ModCore.CoreMonitor.Log("Reached goal!", LogLevel.Error);
+                        //Game1.player.position = new Vector2(center.X, center.Y);
+                        continue;
+                    }
+
+
+                    ModCore.CoreMonitor.Log("UNCAUGHT EXCEPTION", LogLevel.Error);
+                }
+            }
+            
+        }
+
 
     }
 }

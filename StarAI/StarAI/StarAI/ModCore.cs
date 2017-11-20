@@ -24,7 +24,7 @@ namespace StarAI
         public static List<Warp> warpGoals = new List<Warp>();
         public static object[] obj = new object[3];
 
-        public static Task fun = new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal), obj);
+        public static Task fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
         public override void Entry(IModHelper helper)
         {
             obj[0] = PathFindingLogic.source;
@@ -40,10 +40,10 @@ namespace StarAI
             PathFindingCore.Utilities.initializeTileExceptionList();
             //throw new NotImplementedException();
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
-            StardewModdingAPI.Events.GameEvents.SecondUpdateTick += GameEvents_SecondUpdateTick;
 
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+
 
             StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(TileNode.Serialize)));
         }
@@ -55,7 +55,10 @@ namespace StarAI
 
         public void loadExceptionTiles()
         {
-
+            if (!Directory.Exists(Path.Combine(CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles)))
+            {
+                Directory.CreateDirectory(Path.Combine(CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles));
+            }
             // Process the list of files found in the directory.
             string[] fileEntries = Directory.GetFiles(Path.Combine(CoreHelper.DirectoryPath,PathFindingCore.Utilities.folderForExceptionTiles));
             foreach (string fileName in fileEntries)
@@ -180,35 +183,7 @@ namespace StarAI
 
 
 
-        private void GameEvents_SecondUpdateTick(object sender, EventArgs e)
-        {
-            if (Game1.player == null) return;
-            if (Game1.hasLoadedGame == false) return;
-            // ModCore.CoreMonitor.Log(Game1.player.currentLocation.isTileLocationOpen(new xTile.Dimensions.Location((int)(Game1.player.getTileX() + 1)*Game1.tileSize, (int)(Game1.player.getTileY())*Game1.tileSize)).ToString());
-            //CoreMonitor.Log(Convert.ToString(warpGoals.Count));
-            if (warpGoals.Count == 0) return;
-            if (fun.Status == TaskStatus.Running)
-            {
-                //CoreMonitor.Log("TASK IS RUNNING", LogLevel.Alert);
-                return;
-            }
-            if (fun.Status == TaskStatus.RanToCompletion)
-            {
-
-                //CoreMonitor.Log("TASK IS Finished", LogLevel.Warn);
-                fun = new Task(new Action(PathFindingCore.Utilities.calculateMovement));
-                return;
-            }
-
-            if (fun.Status == TaskStatus.Created)
-            {
-                //CoreMonitor.Log("CREATE AND RUN A TASK!!!");
-                fun.Start();
-                return;
-            }
-
-        }
-
+     
         private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
         {
             CoreMonitor.Log("LOCATION CHANGED!");
