@@ -3,7 +3,7 @@ documentation and release notes.
 
 ## Mods
 Active mods:
-* **[Auto Speed](http://www.nexusmods.com/stardewvalley/mods/443)** <small>([source](AutoSpeed))</small>  
+* **[Auto Speed](http://www.nexusmods.com/stardewvalley/mods/443)** <small>([source](https://github.com/janavarro95/Stardew_Valley_Mods/tree/master/GeneralMods/AutoSpeed))</small>  
   _Lets you move faster without the need to enter commands in the console._
 
 * **[Billboard Anywhere](http://www.nexusmods.com/stardewvalley/mods/492)** <small>([source](BillboardAnywhere))</small>  
