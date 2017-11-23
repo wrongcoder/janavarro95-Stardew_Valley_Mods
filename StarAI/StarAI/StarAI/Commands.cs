@@ -24,6 +24,7 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("Execute", "Run tasks", new Action<string,string[]>(Commands.runTasks));
             //ModCore.CoreHelper.ConsoleCommands.Add("execute", "Run tasks", new Action<string, string[]>(Commands.runTasks));
             ModCore.CoreHelper.ConsoleCommands.Add("runTasks", "Run tasks", new Action<string, string[]>(Commands.runTasks));
+            ModCore.CoreHelper.ConsoleCommands.Add("Water", "Water the crops", new Action<string, string[]>(Commands.waterCrops));
 
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -76,6 +77,13 @@ namespace StarAI
   
                 return;
             }
+        }
+
+
+
+        public static void waterCrops(string s, string[] args)
+        {
+            PathFindingCore.CropLogic.CropLogic.getAllCropsNeededToBeWatered();
         }
 
         /// <summary>
@@ -169,7 +177,7 @@ namespace StarAI
 
                 TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Green));
                 Vector2 pos = new Vector2((int)(Convert.ToInt32(args[1]) * Game1.tileSize), Convert.ToInt32(args[2]) * Game1.tileSize);
-                bool ok = t.checkIfICanPlaceHere(t, new Vector2(pos.X, pos.Y), Game1.player.currentLocation);
+                bool ok =TileNode.checkIfICanPlaceHere(t, new Vector2(pos.X, pos.Y), Game1.player.currentLocation);
                 if (ok == false)
                 {
                     ModCore.CoreMonitor.Log("Can't place a goal point here!!!", LogLevel.Error);
@@ -203,7 +211,7 @@ namespace StarAI
                     pos = new Vector2((int)(Convert.ToInt32(args[1]) * Game1.tileSize), Convert.ToInt32(args[2]) * Game1.tileSize);
                 }
               
-                bool ok = t.checkIfICanPlaceHere(t, new Vector2(pos.X, pos.Y), Game1.player.currentLocation);
+                bool ok = TileNode.checkIfICanPlaceHere(t, new Vector2(pos.X, pos.Y), Game1.player.currentLocation);
                 bool cry = false;
                 if (t.thisLocation == null)
                 {

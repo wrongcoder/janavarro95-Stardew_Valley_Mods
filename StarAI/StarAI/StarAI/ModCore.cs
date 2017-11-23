@@ -66,7 +66,7 @@ namespace StarAI
                 try
                 {
                     TileExceptionNode t = TileExceptionNode.parseJson(fileName);
-                    PathFindingCore.Utilities.tileExceptionList.Add(t);
+                    PathFindingCore.Utilities.ignoreCheckTiles.Add(t);
                 }
                 catch(Exception err)
                 {
@@ -128,7 +128,7 @@ namespace StarAI
                     int yPos = (int)(Game1.player.getTileY()) * Game1.tileSize;
                     Rectangle r = new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize);
                     Vector2 pos = new Vector2(r.X, r.Y);
-                    bool ok = t.checkIfICanPlaceHere(t, pos, Game1.player.currentLocation);
+                    bool ok = TileNode.checkIfICanPlaceHere(t, pos, Game1.player.currentLocation);
                     if (ok == false) return;
                     t.placementAction(Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
                     //t.setAdjacentTiles(true);
@@ -164,7 +164,7 @@ namespace StarAI
                         if (layer == "Buildings")
                         {
                             TileExceptionNode tileException = new TileExceptionNode(v.ImageSource, tileIndex);
-                            foreach(var tile in PathFindingCore.Utilities.tileExceptionList)
+                            foreach(var tile in PathFindingCore.Utilities.ignoreCheckTiles)
                             {
                                 if (tile.imageSource == tileException.imageSource && tile.index == tileException.index)
                                 {
@@ -172,7 +172,7 @@ namespace StarAI
                                     return; //tile is already initialized.
                                 }
                             }
-                            PathFindingCore.Utilities.tileExceptionList.Add(tileException);
+                            PathFindingCore.Utilities.ignoreCheckTiles.Add(tileException);
                             tileException.serializeJson(Path.Combine(ModCore.CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles));
                             //StardustCore.ModCore.SerializationManager.
                         }

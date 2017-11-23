@@ -13,7 +13,9 @@ namespace StarAI.PathFindingCore
     public class Utilities
     {
 
-       public static  List<TileExceptionNode> tileExceptionList = new List<TileExceptionNode>();
+       public static  List<TileExceptionMetaData> tileExceptionList = new List<TileExceptionMetaData>();
+
+        public static List<TileExceptionNode> ignoreCheckTiles = new List<TileExceptionNode>();
        public static string folderForExceptionTiles="ExceptionTilesData";
 
         public static Vector2 parseCenterFromTile(int tileX, int tileY)
@@ -27,7 +29,20 @@ namespace StarAI.PathFindingCore
         {
             
         }
+        
 
+        public static void cleanExceptionList(TileNode t)
+        {
+            TileExceptionMetaData err= new TileExceptionMetaData(null,"");
+            foreach (var v in tileExceptionList)
+            {
+                if (v.tile == t) err = v;
+            }
+            if(err.tile != null)
+            {
+                tileExceptionList.Remove(err);
+            }
+        }
         /// <summary>
         /// Used to calculate center of a tile with varience.
         /// </summary>

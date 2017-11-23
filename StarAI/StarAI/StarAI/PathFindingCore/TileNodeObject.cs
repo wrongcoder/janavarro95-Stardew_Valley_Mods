@@ -65,7 +65,7 @@ namespace StarAI.PathFindingCore
 
         public TileNode parent;
 
-        public bool checkIfICanPlaceHere(TileNode t, Vector2 pos, GameLocation loc = null, bool recursive = false)
+        public static bool checkIfICanPlaceHere(TileNode t, Vector2 pos, GameLocation loc = null, bool checkForCrops=false)
         {
             bool cry = false;
             if (t.thisLocation == null)
@@ -74,26 +74,41 @@ namespace StarAI.PathFindingCore
                 cry = true;
             }
 
-
-
+            if (checkForCrops == true)
+            {
+                if (t.thisLocation.isTerrainFeatureAt((int)pos.X, (int)pos.Y))
+                {
+                    StardewValley.TerrainFeatures.TerrainFeature terrain = t.thisLocation.terrainFeatures[t.tileLocation];
+                    if (terrain != null)
+                    {
+                        if (terrain is StardewValley.TerrainFeatures.HoeDirt)
+                        {
+                            if ((terrain as StardewValley.TerrainFeatures.HoeDirt).crop != null)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
             
             if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
             {
                 //ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.name, LogLevel.Warn);
-                if (cry == true) this.thisLocation = null;
+                if (cry == true) t.thisLocation = null;
                 return false;
             }
             if (t.thisLocation.isTileOccupied(pos / Game1.tileSize))
             {
                // ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
-                if (cry == true) this.thisLocation = null;
+                if (cry == true) t.thisLocation = null;
                 return false;
             }
 
             if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
             {
                 //ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
-                if (cry == true) this.thisLocation = null;
+                if (cry == true) t.thisLocation = null;
                 return false;
             }
 
@@ -102,20 +117,20 @@ namespace StarAI.PathFindingCore
             if (t.thisLocation.isTilePassable(new xTile.Dimensions.Location((int)(pos.X/Game1.tileSize), (int)(pos.Y/Game1.tileSize)), Game1.viewport)==false)
             {
                // ModCore.CoreMonitor.Log("Tile not passable check 2?????!!!!: " + t.thisLocation.name, LogLevel.Error);
-                if (cry == true) this.thisLocation = null;
+                if (cry == true) t.thisLocation = null;
                 return false;
             }
             
 
 
-            if (cry == true) this.thisLocation = null;
+            if (cry == true) t.thisLocation = null;
             return true;
         }
 
         public static void setSingleTileAsChild(TileNode t,int x, int y)
         {
             Vector2 pos = new Vector2(x * Game1.tileSize, y * Game1.tileSize);
-           bool f= t.checkIfICanPlaceHere(t, new Vector2(pos.X,pos.Y), null);
+           bool f= checkIfICanPlaceHere(t, new Vector2(pos.X,pos.Y), null);
             if (f == false) return;
             else
             {
@@ -345,7 +360,19 @@ namespace StarAI.PathFindingCore
                 {
                     if (Game1.player.getToolFromName(Game1.player.CurrentItem.Name) is StardewValley.Tools.WateringCan)
                     {
-                        this.animationManager.setAnimation("Watered", 0);
+                        //this.animationManager.setAnimation("Watered", 0);
+                        //TileExceptionMetaData t = new TileExceptionMetaData(this, "Water");
+                        bool foundRemoval = false;
+                        foreach(var exc in Utilities.tileExceptionList)
+                        {
+                            if (exc.tile == this && exc.actionType=="Water")
+                            {
+                                this.thisLocation.objects.Remove(this.tileLocation);
+                                foundRemoval = true;
+                                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(this);
+                            }
+                        }
+                        if(foundRemoval==true) PathFindingCore.Utilities.cleanExceptionList(this);
                         return false;
                     }
                 }
