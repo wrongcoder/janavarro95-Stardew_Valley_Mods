@@ -52,8 +52,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 List<List<TileNode>> paths = new List<List<TileNode>>();
                 //try to set children to tiles where children haven't been before
                 for (int x = xMin; x <= xMax; x++)
-                {
-                    for (int y = yMin; y <= yMax; y++)
+                {                    for (int y = yMin; y <= yMax; y++)
                     {
                         if (x == 0 && y == 0) continue;
 
@@ -113,26 +112,68 @@ namespace StarAI.PathFindingCore.CropLogic
                 {
                     Game1.player.faceDirection(3);
                 }
-                if (v.tileLocation.X > Game1.player.getTileX())
+                else if (v.tileLocation.X > Game1.player.getTileX())
                 {
                     Game1.player.faceDirection(1);
                 }
-                if (v.tileLocation.Y < Game1.player.getTileY())
+                else if (v.tileLocation.Y < Game1.player.getTileY())
                 {
                     Game1.player.faceDirection(0);
                 }
-                if (v.tileLocation.Y > Game1.player.getTileY())
+                else if (v.tileLocation.Y > Game1.player.getTileY())
                 {
                     Game1.player.faceDirection(2);
                 }
-                foreach(var item in Game1.player.items)
+                foreach (var item in Game1.player.items)
                 {
                     if(item is StardewValley.Tools.WateringCan)
                     {
                         Game1.player.CurrentToolIndex = Game1.player.getIndexOfInventoryItem(item);
                     }
                 }
-                WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
+                bool move = false;
+                while ((v.thisLocation.terrainFeatures[v.tileLocation*Game1.tileSize] as StardewValley.TerrainFeatures.HoeDirt).needsWatering() == true)
+                {
+                  if(WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C)==false)  WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
+
+                    if (move == true)
+                    {
+                        if (v.position.X < Game1.player.position.X)
+                        {
+                            Game1.player.position = new Vector2(Game1.player.position.X + .1f, Game1.player.position.Y);
+                            move = false;
+                            continue;
+                        }
+                        if (v.position.X > Game1.player.position.X)
+                        {
+                            Game1.player.position = new Vector2(Game1.player.position.X - .1f, Game1.player.position.Y);
+                            move = false;
+                            continue;
+                        }
+                        if (v.position.Y < Game1.player.position.Y)
+                        {
+                            Game1.player.position = new Vector2(Game1.player.position.X, Game1.player.position.Y + .1f);
+                            move = false;
+                            continue;
+                        }
+                        if (v.position.Y > Game1.player.position.Y)
+                        {
+                            Game1.player.position = new Vector2(Game1.player.position.X, Game1.player.position.Y - .1f);
+                            move = false;
+                            continue;
+                        }
+                    }
+                    move = true;
+                    //Game1.setMousePosition((int)v.tileLocation.X*Game1.tileSize/2,(int)v.tileLocation.Y*Game1.tileSize/2);
+                    ModCore.CoreMonitor.Log("DOESNT WATER LIKE YOU THINK IT SHOULD");
+                    ModCore.CoreMonitor.Log("player pos: "+Game1.player.position.ToString(),LogLevel.Warn);
+                    ModCore.CoreMonitor.Log("TilePos: "+v.position.ToString(), LogLevel.Error);
+                }
+                Utilities.cleanExceptionList(v);
+                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+                v.thisLocation.objects.Remove(v.tileLocation);
+
+                WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
             }
 
         }

@@ -26,7 +26,7 @@ namespace StarAI.PathFindingCore
         public enum stateEnum { NotVisited, Seen, Visited };
         public int seenState;
 
-
+        
         public int Decoration_type;
 
         public int rotations;
@@ -73,7 +73,7 @@ namespace StarAI.PathFindingCore
                 t.thisLocation = loc;
                 cry = true;
             }
-
+            
             if (checkForCrops == true)
             {
                 if (t.thisLocation.isTerrainFeatureAt((int)pos.X, (int)pos.Y))
@@ -652,7 +652,7 @@ namespace StarAI.PathFindingCore
         {
 
             Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
-
+            this.position = new Vector2(x, y);
 
             this.tileLocation = new Vector2((float)point.X, (float)point.Y);
             bool flag = false;
