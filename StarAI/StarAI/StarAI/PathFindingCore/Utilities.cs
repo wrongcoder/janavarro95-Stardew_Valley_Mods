@@ -20,8 +20,10 @@ namespace StarAI.PathFindingCore
 
         public static Vector2 parseCenterFromTile(int tileX, int tileY)
         {
-            int x = (tileX * Game1.tileSize) + Game1.tileSize / 2;
-            int y = (tileY * Game1.tileSize) + Game1.tileSize / 2;
+            //int x = (tileX * Game1.tileSize) + Game1.tileSize / 2;
+            //int y = (tileY * Game1.tileSize) + Game1.tileSize / 2;
+            int x = (tileX * Game1.tileSize);
+            int y = (tileY * Game1.tileSize);
             return new Vector2(x, y);
         }
 

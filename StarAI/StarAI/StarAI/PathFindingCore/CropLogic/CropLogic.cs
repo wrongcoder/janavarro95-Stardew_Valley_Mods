@@ -19,12 +19,12 @@ namespace StarAI.PathFindingCore.CropLogic
 
         public static void getAllCropsNeededToBeWatered()
         {
-            foreach(var v in Game1.player.currentLocation.terrainFeatures)
+            foreach (var v in Game1.player.currentLocation.terrainFeatures)
             {
-                
-                if(v.Value is StardewValley.TerrainFeatures.HoeDirt)
+
+                if (v.Value is StardewValley.TerrainFeatures.HoeDirt)
                 {
-                    if((v.Value as StardewValley.TerrainFeatures.HoeDirt).crop != null)
+                    if ((v.Value as StardewValley.TerrainFeatures.HoeDirt).crop != null)
                     {
                         //cropsToWater.Add(v.Key);
                         //If my dirt needs to be watered and the crop isn't fully grown.
@@ -32,17 +32,44 @@ namespace StarAI.PathFindingCore.CropLogic
                         {
                             TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.LightSkyBlue));
                             t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
-                            Utilities.tileExceptionList.Add(new TileExceptionMetaData(t,"Water"));
+                            Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Water"));
                             cropsToWater.Add(t);
                         }
                     }
                 }
             }
 
-
-
+            //Instead of just running this function I should add it to my execution queue.
             foreach(var v in cropsToWater)
             {
+                object[] obj = new object[1];
+                obj[0] = v;
+                ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
+             //   waterSingleCrop(v);
+            }
+        }
+
+        public static void waterSingleCrop(TileNode v)
+        {
+            object[] obj = new object[1];
+            obj[0] = v;
+            waterSingleCrop(obj);
+        }
+
+
+        public static void waterSingleCrop(object obj) {
+            object[] objArr =(object[]) obj;
+            TileNode v =(TileNode) objArr[0];
+            bool moveOn = false;
+            foreach (var q in Utilities.tileExceptionList)
+            {
+                if(q.tile==v && q.actionType=="Water")
+                {
+                    moveOn = true;
+                }
+            }
+            if (moveOn == false) return;
+
                 WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
                 int xMin = -1;
                 int yMin = -1;
@@ -132,38 +159,62 @@ namespace StarAI.PathFindingCore.CropLogic
                     }
                 }
                 bool move = false;
-                while ((v.thisLocation.terrainFeatures[v.tileLocation*Game1.tileSize] as StardewValley.TerrainFeatures.HoeDirt).needsWatering() == true)
+                while ((v.thisLocation.terrainFeatures[v.tileLocation] as StardewValley.TerrainFeatures.HoeDirt).state==0)
                 {
                   if(WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C)==false)  WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
 
-                    if (move == true)
+                    Vector2 center=new Vector2();
+                    if (Game1.player.facingDirection == 2)
                     {
-                        if (v.position.X < Game1.player.position.X)
-                        {
-                            Game1.player.position = new Vector2(Game1.player.position.X + .1f, Game1.player.position.Y);
-                            move = false;
-                            continue;
-                        }
-                        if (v.position.X > Game1.player.position.X)
-                        {
-                            Game1.player.position = new Vector2(Game1.player.position.X - .1f, Game1.player.position.Y);
-                            move = false;
-                            continue;
-                        }
-                        if (v.position.Y < Game1.player.position.Y)
-                        {
-                            Game1.player.position = new Vector2(Game1.player.position.X, Game1.player.position.Y + .1f);
-                            move = false;
-                            continue;
-                        }
-                        if (v.position.Y > Game1.player.position.Y)
-                        {
-                            Game1.player.position = new Vector2(Game1.player.position.X, Game1.player.position.Y - .1f);
-                            move = false;
-                            continue;
-                        }
+                         center = Utilities.parseCenterFromTile((int)v.tileLocation.X+1, (int)v.tileLocation.Y);
+                        continue;
                     }
-                    move = true;
+                    if (Game1.player.facingDirection == 1)
+                    {
+                        center = Utilities.parseCenterFromTile((int)v.tileLocation.X-1, (int)v.tileLocation.Y);
+                        continue;
+                    }
+                    if (Game1.player.facingDirection == 0)
+                    {
+                        center = Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y+1);
+                        continue;
+
+                    }
+                    if (Game1.player.facingDirection == 3)
+                    {
+                        center = Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y-1);
+                        continue;
+                    }
+                    //Get center of destination tile and move player there.
+                    /*
+                    if (v.position.X < Game1.player.position.X)
+                    {
+                        Game1.player.position = new Vector2(Game1.player.position.X + .1f, Game1.player.position.Y);
+                        move = false;
+                        continue;
+                    }
+                    if (v.position.X > Game1.player.position.X)
+                    {
+                        Game1.player.position = new Vector2(Game1.player.position.X - .1f, Game1.player.position.Y);
+                        move = false;
+                        continue;
+                    }
+                    if (v.position.Y < Game1.player.position.Y)
+                    {
+                        Game1.player.position = new Vector2(Game1.player.position.X, Game1.player.position.Y + .1f);
+                        move = false;
+                        continue;
+                    }
+                    if (v.position.Y > Game1.player.position.Y)
+                    {
+                        Game1.player.position = new Vector2(Game1.player.position.X, Game1.player.position.Y - .1f);
+                        move = false;
+                        continue;
+                    }
+                    */
+                    Game1.player.position = center;
+                  
+                 
                     //Game1.setMousePosition((int)v.tileLocation.X*Game1.tileSize/2,(int)v.tileLocation.Y*Game1.tileSize/2);
                     ModCore.CoreMonitor.Log("DOESNT WATER LIKE YOU THINK IT SHOULD");
                     ModCore.CoreMonitor.Log("player pos: "+Game1.player.position.ToString(),LogLevel.Warn);
@@ -176,7 +227,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
             }
 
-        }
+        
         
          
 

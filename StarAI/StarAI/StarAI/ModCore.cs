@@ -140,7 +140,12 @@ namespace StarAI
             }
             #endregion
 
-            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
+            {
+                ModCore.CoreMonitor.Log(Game1.player.facingDirection.ToString());
+            }
+
+                if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)
             {
 
                 foreach (var v in Game1.player.currentLocation.map.TileSheets)
