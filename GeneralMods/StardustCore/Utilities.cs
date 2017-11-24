@@ -8,7 +8,6 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using StardustCore;
-using StardustCore.DataNodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +22,16 @@ namespace StardustCore
     public class Utilities
     {
 
-       
+        public static List<CoreObject> masterRemovalList = new List<CoreObject>();
+
 
         public static int sellToStorePrice(CoreObject c)
         {
             return  (int)((double)c.price * (1.0 + (double)c.quality * 0.25));
         }
+
+
+
 
 
         public static void createObjectDebris(Item I, int xTileOrigin, int yTileOrigin, int xTileTarget, int yTileTarget, int groundLevel = -1, int itemQuality = 0, float velocityMultiplyer = 1f, GameLocation location = null)

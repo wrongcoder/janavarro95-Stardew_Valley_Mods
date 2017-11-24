@@ -12,11 +12,15 @@ namespace StarAI.PathFindingCore
 {
     public class Utilities
     {
+        
 
-       public static  List<TileExceptionMetaData> tileExceptionList = new List<TileExceptionMetaData>();
+        public static  List<TileExceptionMetaData> tileExceptionList = new List<TileExceptionMetaData>();
 
         public static List<TileExceptionNode> ignoreCheckTiles = new List<TileExceptionNode>();
        public static string folderForExceptionTiles="ExceptionTilesData";
+
+
+
 
         public static Vector2 parseCenterFromTile(int tileX, int tileY)
         {

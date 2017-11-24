@@ -38,7 +38,11 @@ namespace StardustCore
 
 
             IlluminateFramework.Colors.initializeColors();
+      
+          
         }
+
+        
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {

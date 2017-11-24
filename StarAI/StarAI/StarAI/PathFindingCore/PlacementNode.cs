@@ -1,24 +1,27 @@
 ﻿using StardewValley;
+using StardustCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardustCore.DataNodes
+namespace StarAI.PathFindingCore
 {
     public class PlacementNode
     {
-        public CoreObject cObj;
+        public TileNode cObj;
         public GameLocation location;
         public int x;
         public int y;
 
-        public PlacementNode(CoreObject C, GameLocation Location, int X, int Y) {
+        public PlacementNode(TileNode C, GameLocation Location, int X, int Y)
+        {
             cObj = C;
             location = Location;
             x = X;
             y = Y;
+            ModCore.CoreMonitor.Log(location.name);
         }
 
     }

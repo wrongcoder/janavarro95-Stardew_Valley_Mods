@@ -94,6 +94,7 @@ namespace StardustCore
 
             lightColor = Color.Black;
             thisType = this.GetType().ToString();
+            
         }
 
         public CoreObject()

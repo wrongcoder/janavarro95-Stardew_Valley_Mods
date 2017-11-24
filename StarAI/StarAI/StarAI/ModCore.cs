@@ -42,9 +42,10 @@ namespace StarAI
 
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+           // StardewModdingAPI.Events.GraphicsEvents.OnPreRenderEvent += PathFindingCore.Utilities.addFromPlacementListBeforeDraw;
+           
 
-
-            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(TileNode.Serialize)));
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(StarAI.PathFindingCore.TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(StarAI.PathFindingCore.TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(StarAI.PathFindingCore.TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(StarAI.PathFindingCore.TileNode.Serialize)));
         }
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
@@ -83,7 +84,7 @@ namespace StarAI
             {
                 CoreMonitor.Log("OK THE J KEY WAS PRESSED!");
                 List<Item> shoppingList = new List<Item>();
-                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Aqua));
+                StarAI.PathFindingCore.TileNode t = new StarAI.PathFindingCore.TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Aqua));
                 if (t == null)
                 {
                     CoreMonitor.Log("WTF?????");
@@ -110,7 +111,7 @@ namespace StarAI
             {
                 CoreMonitor.Log("OK THE K KEY WAS PRESSED!");
 
-                TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.randomColor());
+                StarAI.PathFindingCore.TileNode t = new StarAI.PathFindingCore.TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.randomColor());
                 if (t == null)
                 {
                     CoreMonitor.Log("WTF?????");
@@ -127,7 +128,7 @@ namespace StarAI
                     int yPos = (int)(Game1.player.getTileY()) * Game1.tileSize;
                     Rectangle r = new Rectangle(xPos, yPos, Game1.tileSize, Game1.tileSize);
                     Vector2 pos = new Vector2(r.X, r.Y);
-                    bool ok = TileNode.checkIfICanPlaceHere(t, pos, Game1.player.currentLocation);
+                    bool ok = StarAI.PathFindingCore.TileNode.checkIfICanPlaceHere(t, pos, Game1.player.currentLocation);
                     if (ok == false) return;
                     t.placementAction(Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
                     //t.setAdjacentTiles(true);

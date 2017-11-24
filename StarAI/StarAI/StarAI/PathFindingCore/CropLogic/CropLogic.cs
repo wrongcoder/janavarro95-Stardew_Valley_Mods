@@ -29,7 +29,7 @@ namespace StarAI.PathFindingCore.CropLogic
                     {
                         //cropsToWater.Add(v.Key);
                         //If my dirt needs to be watered and the crop isn't fully grown.
-                        if ((v.Value as StardewValley.TerrainFeatures.HoeDirt).state==0 && (v.Value as StardewValley.TerrainFeatures.HoeDirt).crop.fullyGrown == false)
+                        if ((v.Value as StardewValley.TerrainFeatures.HoeDirt).state==0 && isCropFullGrown((v.Value as StardewValley.TerrainFeatures.HoeDirt).crop) == false)
                         {
                             TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.LightSkyBlue));
                             t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
@@ -114,7 +114,8 @@ namespace StarAI.PathFindingCore.CropLogic
                 tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX()*Game1.tileSize, Game1.player.getTileY()*Game1.tileSize);
                 //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
                 List<TileNode> path=  PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource,nav,new List<TileNode>());
-                    if (path != null)
+
+                if (path.Count!=0)
                     {
                         //ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
                         paths.Add(path);
@@ -130,6 +131,7 @@ namespace StarAI.PathFindingCore.CropLogic
                     }
                     
                 }
+            Console.WriteLine("GOALS COUNT:" + miniGoals.Count);
                 foreach(var q in removalList) {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(q);
                 q.thisLocation.objects.Remove(q.tileLocation);
@@ -141,6 +143,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 {
                     if (potentialPath.Count < pathCost)
                     {
+               
                         pathCost = potentialPath.Count;
                         correctPath = potentialPath;
                     }
@@ -333,7 +336,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
                 tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
                 List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>());
-                if (path != null)
+                if (path.Count!=0)
                 {
                     ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
                     paths.Add(path);

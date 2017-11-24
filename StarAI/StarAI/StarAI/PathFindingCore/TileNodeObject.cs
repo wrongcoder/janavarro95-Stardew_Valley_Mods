@@ -91,7 +91,14 @@ namespace StarAI.PathFindingCore
                     }
                 }
             }
-            
+            if (t == null)
+            {
+                Console.WriteLine("OK T IS NULL");
+            }
+            if (t.thisLocation == null)
+            {
+                Console.WriteLine("OK T LOCATION IS NULL");
+            }
             if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
             {
                 //ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.name, LogLevel.Warn);
@@ -129,18 +136,21 @@ namespace StarAI.PathFindingCore
 
         public static void setSingleTileAsChild(TileNode t,int x, int y)
         {
+            
             Vector2 pos = new Vector2(x * Game1.tileSize, y * Game1.tileSize);
-           bool f= checkIfICanPlaceHere(t, new Vector2(pos.X,pos.Y), null);
+          
+           bool f= checkIfICanPlaceHere(t, new Vector2(pos.X,pos.Y));
             if (f == false) return;
             else
             {
+                
                // ModCore.CoreMonitor.Log("Adding a child!");
                 System.Threading.Thread.Sleep(PathFindingCore.PathFindingLogic.delay);
                 TileNode child = new TileNode(1, Vector2.Zero, t.texturePath,t.dataPath,StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Cyan));
                 child.seenState = (int)stateEnum.NotVisited;
                 child.parent = t;
                 child.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
-                //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(child, Game1.currentLocation, (int)pos.X, (int)pos.Y));
+                //StarAI.PathFindingCore.Utilities.masterAdditionList.Add(new StarAI.PathFindingCore.PlacementNode(child, Game1.currentLocation, (int)pos.X, (int)pos.Y));
                 t.children.Add(child);
             }
         }

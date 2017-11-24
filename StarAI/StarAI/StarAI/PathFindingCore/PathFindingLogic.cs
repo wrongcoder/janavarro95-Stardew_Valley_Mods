@@ -114,7 +114,8 @@ namespace StarAI.PathFindingCore
                         if (x == -1 && y ==  1) continue; //bottom left
                         if (x == 1 && y == -1) continue; //upper right
                         if (x == 1 && y == 1) continue; //bottom right
-                        //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
+                                                        //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
+                
                         TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         Vector2 check = new Vector2((int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         if(check.X==Goal.tileLocation.X && check.Y == Goal.tileLocation.Y)
@@ -261,7 +262,8 @@ namespace StarAI.PathFindingCore
             }
 
             calculateMovement(path);
-           // goals.Remove(Goal);
+            // goals.Remove(Goal);
+            //goals.Remove(Goal);
             
         }
 
@@ -301,7 +303,7 @@ namespace StarAI.PathFindingCore
             bool goalFound = false;
             while (currentNode.tileLocation != Goal.tileLocation && queue.Count != 0)
             {
-
+                Console.WriteLine("OK WTF IS GOING ON????");
                 //Add children to current node
                 int xMin = -1;
                 int yMin = -1;
@@ -321,7 +323,8 @@ namespace StarAI.PathFindingCore
                         if (x == 1 && y == -1) continue; //upper right
                         if (x == 1 && y == 1) continue; //bottom right
                                                         //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
-                        //ModCore.CoreMonitor.Log("HERE1", LogLevel.Error);
+                                                        //ModCore.CoreMonitor.Log("HERE1", LogLevel.Error);
+                      
                         TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         //ModCore.CoreMonitor.Log("OR NO?", LogLevel.Error);
                         Vector2 check = new Vector2((int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
@@ -399,7 +402,7 @@ namespace StarAI.PathFindingCore
             if (currentNode.tileLocation != Goal.tileLocation)
             {
                 ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
-                return null;
+                return new List<TileNode>();
             }
 
             if (currentNode.tileLocation == Goal.tileLocation)
@@ -487,6 +490,7 @@ namespace StarAI.PathFindingCore
             bool xTargetReached = false;
             bool yTargetReached = false;
             List<TileNode> removalList = new List<TileNode>();
+            if (path.Count == 0) return;
             while (path.Count > 0)
             {
                 TileNode w = path[0];
@@ -607,7 +611,7 @@ namespace StarAI.PathFindingCore
                 //StardustCore.Utilities.masterRemovalList.Add(v);
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
             }
-            goals.Clear();
+            //goals.Clear();
         }
 
 
