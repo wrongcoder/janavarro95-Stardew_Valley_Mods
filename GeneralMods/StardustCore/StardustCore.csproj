@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationManager.cs" />
+    <Compile Include="DataNodes\PlacementNode.cs" />
     <Compile Include="IlluminateFramework\Colors.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="CoreObject.cs" />

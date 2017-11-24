@@ -140,6 +140,7 @@ namespace StarAI.PathFindingCore
                 child.seenState = (int)stateEnum.NotVisited;
                 child.parent = t;
                 child.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(child, Game1.currentLocation, (int)pos.X, (int)pos.Y));
                 t.children.Add(child);
             }
         }
@@ -693,6 +694,7 @@ namespace StarAI.PathFindingCore
             try
             {
                 bool f = StardustCore.Utilities.placementAction(this, location, x, y, StardustCore.ModCore.SerializationManager, who);
+               
                 this.thisLocation = Game1.player.currentLocation;
                 return f;
             }

@@ -57,7 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
+    <Compile Include="ExecutionCore\CustomTask.cs" />
     <Compile Include="ExecutionCore\TaskList.cs" />
+    <Compile Include="ExecutionCore\TaskMetaData.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="PathFindingCore\CropLogic\CropLogic.cs" />
     <Compile Include="PathFindingCore\PathFindingLogic.cs" />

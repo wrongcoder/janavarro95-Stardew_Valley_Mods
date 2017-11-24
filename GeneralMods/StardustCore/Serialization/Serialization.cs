@@ -700,5 +700,16 @@ namespace StardustCore.Serialization
             return new Microsoft.Xna.Framework.Rectangle(Convert.ToInt32(parsed[2]), Convert.ToInt32(parsed[4]), Convert.ToInt32(parsed[6]), Convert.ToInt32(parsed[8]));
         }
 
+        public void removeObjectWithCopy(CoreObject c)
+        {
+            foreach(var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
+            {
+                if(c.tileLocation==v.tileLocation && c.thisLocation == v.thisLocation)
+                {
+                    StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+                }
+            }
+        }
+
     }
 }

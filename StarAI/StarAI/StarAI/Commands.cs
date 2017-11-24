@@ -25,6 +25,7 @@ namespace StarAI
             //ModCore.CoreHelper.ConsoleCommands.Add("execute", "Run tasks", new Action<string, string[]>(Commands.runTasks));
             ModCore.CoreHelper.ConsoleCommands.Add("runTasks", "Run tasks", new Action<string, string[]>(Commands.runTasks));
             ModCore.CoreHelper.ConsoleCommands.Add("Water", "Water the crops", new Action<string, string[]>(Commands.waterCrops));
+            ModCore.CoreHelper.ConsoleCommands.Add("Harvest", "Harvest the crops", new Action<string, string[]>(Commands.harvestCrops));
 
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -34,6 +35,8 @@ namespace StarAI
 
         public static void runTasks(string s, string[] args)
         {
+            ExecutionCore.TaskList.runTaskList();
+            /*
             ModCore.CoreMonitor.Log("EXECUTE TASKS");
             PathFindingLogic.source = null;
             PathFindingLogic.currentGoal = null;
@@ -77,6 +80,7 @@ namespace StarAI
   
                 return;
             }
+            */
         }
 
 
@@ -84,6 +88,11 @@ namespace StarAI
         public static void waterCrops(string s, string[] args)
         {
             PathFindingCore.CropLogic.CropLogic.getAllCropsNeededToBeWatered();
+        }
+
+        public static void harvestCrops(string s,string[] args)
+        {
+            PathFindingCore.CropLogic.CropLogic.getAllCropsNeededToBeHarvested();
         }
 
         /// <summary>
@@ -297,34 +306,7 @@ namespace StarAI
                     ModCore.CoreMonitor.Log("NO VALID START SET FOR PATH FINDING!", LogLevel.Error);
                 }
 
-                if (ModCore.fun.Status == TaskStatus.Running)
-                {
-                    ModCore.CoreMonitor.Log("TASK IS RUNNING CAN'T PATHFIND AT THE MOMENT", LogLevel.Alert);
-                    return;
-                }
-                if (ModCore.fun.Status == TaskStatus.RanToCompletion)
-                {
-
-                    ModCore.CoreMonitor.Log("TASK IS Finished PATHFINDING", LogLevel.Warn);
-                    ModCore.fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
-                   // return;
-                }
-
-                if (ModCore.fun.Status == TaskStatus.Created)
-                {
-                    ModCore.CoreMonitor.Log("CREATE AND RUN A TASK!!! PATHFINDING!");
-                    ModCore.fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
-
-                    ModCore.fun.Start();
-                    return;
-                }
-                ModCore.CoreMonitor.Log(ModCore.fun.Status.ToString());
-                if (ModCore.fun.Status == TaskStatus.Faulted)
-                {
-                    ModCore.CoreMonitor.Log(ModCore.fun.Exception.ToString());
-                    ModCore.CoreMonitor.Log("CREATE AND RUN A TASK!!! PATHFINDING!");
-                    ModCore.fun = new Task(new Action(PathFindingLogic.pathFindToAllGoals));
-                }
+                PathFindingLogic.pathFindToAllGoals();
 
             }
             #endregion
@@ -352,7 +334,8 @@ namespace StarAI
                 obj[1] = PathFindingLogic.currentGoal;
                 PathFindingLogic.queue = new List<TileNode>();
                 obj[2] = PathFindingLogic.queue;
-                ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(PathFindingLogic.pathFindToSingleGoal, obj));
+                //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
             }
             #endregion
 

@@ -36,6 +36,7 @@ namespace StardustCore
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
 
+
             IlluminateFramework.Colors.initializeColors();
         }
 

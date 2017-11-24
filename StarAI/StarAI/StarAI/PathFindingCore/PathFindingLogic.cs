@@ -45,7 +45,9 @@ namespace StarAI.PathFindingCore
                 foreach (var tile in removalList)
                 {
                     StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(tile);
-                    v.thisLocation.removeObject(v.tileLocation, false);
+                    //StardustCore.Utilities.masterRemovalList.Add(v);
+                     v.thisLocation.removeObject(v.tileLocation, false);
+                    //v.performRemoveAction(v.tileLocation, v.thisLocation);
                 }
                 cleanseGoals.Add(v);
             }
@@ -253,7 +255,9 @@ namespace StarAI.PathFindingCore
             foreach(var v in removalList)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
-                v.thisLocation.removeObject(v.tileLocation, false);
+                 v.thisLocation.removeObject(v.tileLocation, false);
+                //v.performRemoveAction(v.tileLocation, v.thisLocation);    
+            //StardustCore.Utilities.masterRemovalList.Add(v);
             }
 
             calculateMovement(path);
@@ -316,8 +320,10 @@ namespace StarAI.PathFindingCore
                         if (x == -1 && y == 1) continue; //bottom left
                         if (x == 1 && y == -1) continue; //upper right
                         if (x == 1 && y == 1) continue; //bottom right
-                        //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
+                                                        //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
+                        //ModCore.CoreMonitor.Log("HERE1", LogLevel.Error);
                         TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
+                        //ModCore.CoreMonitor.Log("OR NO?", LogLevel.Error);
                         Vector2 check = new Vector2((int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         if (check.X == Goal.tileLocation.X && check.Y == Goal.tileLocation.Y)
                         {
@@ -340,6 +346,7 @@ namespace StarAI.PathFindingCore
                 List<TileNode> adjList = new List<TileNode>();
                 foreach (var node in currentNode.children)
                 {
+                   // ModCore.CoreMonitor.Log("MAYBE HERE",LogLevel.Warn);
                     //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
                     //TileNode.setSingleTileAsChild(source, (int)source.tileLocation.X + x, (int)source.tileLocation.Y + y);
                     if (node.parent == null)
@@ -458,7 +465,11 @@ namespace StarAI.PathFindingCore
             foreach (var v in removalList)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+                //v.performRemoveAction(v.tileLocation, v.thisLocation);
+              
+
                 v.thisLocation.removeObject(v.tileLocation, false);
+                //StardustCore.Utilities.masterRemovalList.Add(v);
             }
             return path;
             //calculateMovement(path);
@@ -592,6 +603,8 @@ namespace StarAI.PathFindingCore
             {
                 //v.thisLocation.objects.Remove(v.tileLocation);
                 v.thisLocation.removeObject(v.tileLocation, false);
+                //v.performRemoveAction(v.tileLocation, v.thisLocation);
+                //StardustCore.Utilities.masterRemovalList.Add(v);
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
             }
             goals.Clear();
