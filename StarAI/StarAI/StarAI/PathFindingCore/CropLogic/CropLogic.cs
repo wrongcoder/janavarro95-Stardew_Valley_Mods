@@ -141,13 +141,15 @@ namespace StarAI.PathFindingCore.CropLogic
                 List<TileNode> correctPath = new List<TileNode>();
                 foreach(var potentialPath in paths)
                 {
+                if (potentialPath.Count == 0) continue;
                     if (potentialPath.Count < pathCost)
                     {
-               
+                        
                         pathCost = potentialPath.Count;
                         correctPath = potentialPath;
                     }
                 }
+
                 foreach (var goodTile in correctPath) {
                     StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
                 //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(goodTile, Game1.currentLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize));
@@ -361,12 +363,14 @@ namespace StarAI.PathFindingCore.CropLogic
             List<TileNode> correctPath = new List<TileNode>();
             foreach (var potentialPath in paths)
             {
+                if (potentialPath.Count == 0) continue;
                 if (potentialPath.Count < pathCost)
                 {
                     pathCost = potentialPath.Count;
                     correctPath = potentialPath;
                 }
             }
+
             foreach (var goodTile in correctPath)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
