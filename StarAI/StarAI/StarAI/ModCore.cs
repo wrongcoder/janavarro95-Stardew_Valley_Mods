@@ -142,7 +142,7 @@ namespace StarAI
 
             if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
             {
-                ModCore.CoreMonitor.Log(Game1.player.facingDirection.ToString());
+             
             }
 
                 if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)

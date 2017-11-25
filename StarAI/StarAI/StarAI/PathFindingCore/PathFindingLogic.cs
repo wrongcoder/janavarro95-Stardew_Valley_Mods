@@ -435,6 +435,10 @@ namespace StarAI.PathFindingCore
                 {
                     currentNode.parent.animationManager.setAnimation("Up", 0);
                 }
+                if (currentNode.parent.tileLocation == currentNode.tileLocation)
+                {
+                    currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Black); //Working
+                }
                 currentNode.parent.animationManager.enableAnimation();
                 currentNode = currentNode.parent;
                 System.Threading.Thread.Sleep(delay);

@@ -26,11 +26,16 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("runTasks", "Run tasks", new Action<string, string[]>(Commands.runTasks));
             ModCore.CoreHelper.ConsoleCommands.Add("Water", "Water the crops", new Action<string, string[]>(Commands.waterCrops));
             ModCore.CoreHelper.ConsoleCommands.Add("Harvest", "Harvest the crops", new Action<string, string[]>(Commands.harvestCrops));
-
+            ModCore.CoreHelper.ConsoleCommands.Add("getseeds", "Get Seeds From chests.", new Action<string, string[]>(Commands.getSeedsFromChests));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
                 "0"
                 });
+        }
+
+        public static void getSeedsFromChests(string s, string[] args)
+        {
+            ChestLogic.getAllChestsFromLocation(Game1.player.currentLocation);
         }
 
         public static void runTasks(string s, string[] args)

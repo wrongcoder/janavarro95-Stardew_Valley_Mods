@@ -61,6 +61,7 @@
     <Compile Include="ExecutionCore\TaskList.cs" />
     <Compile Include="ExecutionCore\TaskMetaData.cs" />
     <Compile Include="ModCore.cs" />
+    <Compile Include="PathFindingCore\ChestLogic.cs" />
     <Compile Include="PathFindingCore\CropLogic\CropLogic.cs" />
     <Compile Include="PathFindingCore\PathFindingLogic.cs" />
     <Compile Include="PathFindingCore\PlacementNode.cs" />
