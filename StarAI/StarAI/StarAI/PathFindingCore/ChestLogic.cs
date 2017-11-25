@@ -206,8 +206,17 @@ namespace StarAI.PathFindingCore
                 {
                     if (item.getCategoryName() == "Seed")
                     {
+                        int seedIndex = item.parentSheetIndex;
+                        
+                        if (seedIndex == 770)
+                        {
+                            seedIndex = Crop.getRandomLowGradeCropForThisSeason(Game1.currentSeason);
+                            if (seedIndex == 473)
+                                --seedIndex;
+                        }
 
-                        StardewValley.Crop c = new Crop(item.parentSheetIndex, 0, 0);
+                        StardewValley.Crop c = new Crop(seedIndex, 0, 0);
+
                         if (c.seasonsToGrowIn.Contains(Game1.currentSeason))
                         {
                             Game1.player.addItemToInventory(item);
