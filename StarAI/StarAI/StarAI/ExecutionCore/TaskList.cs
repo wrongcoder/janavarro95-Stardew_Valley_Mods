@@ -11,16 +11,16 @@ namespace StarAI.ExecutionCore
     {
         public static List<CustomTask> taskList = new List<CustomTask>();
         public static Task executioner = new Task(new Action(runTaskList));
-       
+
+        public static List<CustomTask> removalList = new List<CustomTask>();
         public static void runTaskList()
         {
             
             //myTask t = new myTask(StarAI.PathFindingCore.CropLogic.CropLogic.harvestSingleCrop);
              
-            List<CustomTask> removalList = new List<CustomTask>();
             bool assignNewTask = true;
 
-            foreach(var task in taskList)
+            while(ranAllTasks()==false)
             {
 
            
@@ -59,8 +59,18 @@ namespace StarAI.ExecutionCore
 
 
             taskList.Clear();
-
+            removalList.Clear();
             
+        }
+
+        public static bool ranAllTasks()
+        {
+            foreach(CustomTask task in taskList)
+            {
+                if (removalList.Contains(task)) continue;
+                else return false;
+            }
+            return true;
         }
 
         public static void printAllTaskMetaData()
