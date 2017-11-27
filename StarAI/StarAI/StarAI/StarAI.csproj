@@ -60,7 +60,9 @@
     <Compile Include="ExecutionCore\CustomTask.cs" />
     <Compile Include="ExecutionCore\TaskList.cs" />
     <Compile Include="ExecutionCore\TaskMetaData.cs" />
+    <Compile Include="ExecutionCore\TaskMetaDataHeuristics.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\GenericPrerequisite.cs" />
+    <Compile Include="ExecutionCore\TaskPrerequisites\InventoryFullPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\StaminaPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\ToolPrerequisite.cs" />
     <Compile Include="ModCore.cs" />

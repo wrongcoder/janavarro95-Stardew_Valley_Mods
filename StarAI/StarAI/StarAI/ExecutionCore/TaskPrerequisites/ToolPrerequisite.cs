@@ -11,17 +11,23 @@ namespace StarAI.ExecutionCore.TaskPrerequisites
     {
         public bool requiresTool;
         public Type requiredTool;
+        public int estimatedNumberOfUses;
 
-        public ToolPrerequisite(bool TaskNeedsTool, Type RequiredTool)
+        public ToolPrerequisite(bool TaskNeedsTool, Type RequiredTool, int EstimatedNumberOfUses)
         {
             requiresTool = TaskNeedsTool;
             requiredTool = RequiredTool;
+            this.estimatedNumberOfUses = EstimatedNumberOfUses;
             verifyToolSetUp();
         }
 
         public void verifyToolSetUp()
         {
-            if (requiresTool == false) requiredTool = null;
+            if (requiresTool == false)
+            {
+                requiredTool = null;
+                estimatedNumberOfUses = 0;
+            }
         }
 
         public bool isToolInInventory()
