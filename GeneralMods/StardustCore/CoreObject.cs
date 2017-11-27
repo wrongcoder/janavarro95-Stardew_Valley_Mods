@@ -19,6 +19,7 @@ namespace StardustCore
  
     public class CoreObject : StardewValley.Object
     {
+        public Vector2 position;
 
         public int Decoration_type;
 
@@ -171,6 +172,25 @@ namespace StardustCore
         public override string getDescription()
         {
             return this.description;
+        }
+
+        /// <summary>
+        /// A "placement" action that doesn't put the object in the world, but set it's position accordingly.
+        /// </summary>
+        /// <param name="location">The GameLocation that this object will be placed at.</param>
+        /// <param name="tileX">The x tile location to "place".</param>
+        /// <param name="tileY">The y tile location to "place".</param>
+        /// <param name="trackSerialization">If true then the Serialization manager will keep track of this object.</param>
+        public void fakePlacementAction(GameLocation location, int tileX, int tileY,bool trackSerialization=true)
+        {
+            this.thisLocation = location;
+            this.tileLocation = new Vector2(tileX, tileY);
+            this.position = this.tileLocation*(Game1.tileSize);
+            if (trackSerialization)
+            {
+                if (ModCore.SerializationManager.trackedObjectList.Contains(this)) return;
+                ModCore.SerializationManager.trackedObjectList.Add(this);
+            }
         }
 
         public override bool performDropDownAction(StardewValley.Farmer who)

@@ -8,6 +8,7 @@ using StardustCore;
 using StardewValley;
 using Microsoft.Xna.Framework;
 using System.IO;
+using StarAI.ExecutionCore.TaskPrerequisites;
 
 namespace StarAI.PathFindingCore.CropLogic
 {
@@ -40,14 +41,15 @@ namespace StarAI.PathFindingCore.CropLogic
                     }
                 }
             }
-
+            
             //Instead of just running this function I should add it to my execution queue.
             foreach(var v in cropsToWater)
             {
                 object[] obj = new object[1];
                 obj[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(waterSingleCrop, obj)); 
+                StardewValley.Tools.WateringCan w = new StardewValley.Tools.WateringCan();
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(waterSingleCrop, obj,new ExecutionCore.TaskMetaData("Water Crop",PathFindingCore.Utilities.calculatePathCost(v),new StaminaPrerequisite(true,3),new ToolPrerequisite(true,w.GetType())))); 
             //   waterSingleCrop(v);
             }
         }
@@ -113,7 +115,7 @@ namespace StarAI.PathFindingCore.CropLogic
                     TileNode tempSource= new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
                 tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX()*Game1.tileSize, Game1.player.getTileY()*Game1.tileSize);
                 //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
-                List<TileNode> path=  PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource,nav,new List<TileNode>());
+                List<TileNode> path=  PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource,nav,new List<TileNode>(),true);
 
                 if (path.Count!=0)
                     {
@@ -157,6 +159,9 @@ namespace StarAI.PathFindingCore.CropLogic
 
             }
                 PathFindingLogic.calculateMovement(correctPath);
+
+
+
                 if (v.tileLocation.X < Game1.player.getTileX())
                 {
                     Game1.player.faceDirection(3);
@@ -266,8 +271,9 @@ namespace StarAI.PathFindingCore.CropLogic
                 object[] obj = new object[1];
                 obj[0] = v;
                 //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(harvestSingleCrop), obj));
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(harvestSingleCrop, obj));    
-            //   waterSingleCrop(v);
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(harvestSingleCrop, obj,new ExecutionCore.TaskMetaData("HarvestSingleCrop",StarAI.PathFindingCore.Utilities.calculatePathCost(v))));    
+                
+                //   waterSingleCrop(v);
             }
         }
 
@@ -277,6 +283,7 @@ namespace StarAI.PathFindingCore.CropLogic
             obj[0] = v;
             harvestSingleCrop(obj);
         }
+
 
 
         public static void harvestSingleCrop(object obj)
@@ -337,7 +344,7 @@ namespace StarAI.PathFindingCore.CropLogic
             {
                 TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
                 tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>());
+                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(),true);
                 if (path.Count!=0)
                 {
                     ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
@@ -377,6 +384,8 @@ namespace StarAI.PathFindingCore.CropLogic
                 goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
                 //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(goodTile, Game1.currentLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize));
             }
+            //END HERE FOR JUST CALCULATING PATH COST
+            
             PathFindingLogic.calculateMovement(correctPath);
             if (v.tileLocation.X < Game1.player.getTileX())
             {

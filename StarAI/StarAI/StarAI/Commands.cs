@@ -35,7 +35,7 @@ namespace StarAI
 
         public static void getSeedsFromChests(string s, string[] args)
         {
-            ChestLogic.getAllChestsFromLocation(Game1.player.currentLocation);
+            ChestLogic.getAllSeasonalSeedsFromAllChestsAtLocation(Game1.player.currentLocation);
         }
 
         public static void runTasks(string s, string[] args)
@@ -339,7 +339,7 @@ namespace StarAI
                 obj[1] = PathFindingLogic.currentGoal;
                 PathFindingLogic.queue = new List<TileNode>();
                 obj[2] = PathFindingLogic.queue;
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(PathFindingLogic.pathFindToSingleGoal, obj));
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(PathFindingLogic.pathFindToSingleGoal, obj,new ExecutionCore.TaskMetaData("Pathfind Command",PathFindingCore.Utilities.calculatePathCost(PathFindingLogic.source))));
                 //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
             }
             #endregion

@@ -15,14 +15,14 @@ namespace StarAI.PathFindingCore
     {
         public static List<TileNode> chestsAtThisLocation = new List<TileNode>();
 
-        public static void getAllChestsFromLocation(GameLocation location)
+        public static void getAllSeasonalSeedsFromAllChestsAtLocation(GameLocation location)
         {
             object[] arr = new object[1];
             arr[0] = location;
-            getAllChestsFromLocation(arr);
+            getAllSeasonalSeedsFromAllChestsAtLocation(arr);
         }
 
-        public static void getAllChestsFromLocation(object obj)
+        public static void getAllSeasonalSeedsFromAllChestsAtLocation(object obj)
         {
             object[] objArr = (object[])obj;
             GameLocation location = (GameLocation)objArr[0];
@@ -44,19 +44,13 @@ namespace StarAI.PathFindingCore
                                  //t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
                                 t.tileLocation=new Vector2((int)v.Key.X, (int)v.Key.Y);
                                 t.position = new Vector2(v.Key.X*Game1.tileSize, v.Key.Y*Game1.tileSize);
-                                t.thisLocation = Game1.currentLocation;
+                                t.thisLocation = location;
                                 //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(t, Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize));
                                 Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Chest"));
                                 chestsAtThisLocation.Add(t);
                             }
                         }
                     }
-
-                    //TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
-                   // t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
-                    //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(t, Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize));
-                    //Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Chest"));
-                    //chestsAtThisLocation.Add(t);
 
                 }
 
@@ -67,7 +61,7 @@ namespace StarAI.PathFindingCore
                 object[] objList = new object[1];
                 objList[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(pathToSingleChest, objList));
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(pathToSingleChest, objList,new ExecutionCore.TaskMetaData("Path to chest for seeds",PathFindingCore.Utilities.calculatePathCost(v))));
                 //   waterSingleCrop(v);
             }
         }
@@ -127,7 +121,7 @@ namespace StarAI.PathFindingCore
                 TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
                 tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
                 //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
-                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>());
+                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(),true);
 
                 if (path.Count != 0)
                 {
@@ -219,7 +213,7 @@ namespace StarAI.PathFindingCore
 
                         if (c.seasonsToGrowIn.Contains(Game1.currentSeason))
                         {
-                            Game1.player.addItemToInventory(item);
+                            Game1.player.addItemByMenuIfNecessary(item);
                             removalListSeeds.Add(item);
                             break;
                         }

@@ -134,7 +134,7 @@ namespace StarAI.PathFindingCore
             return true;
         }
 
-        public static void setSingleTileAsChild(TileNode t,int x, int y)
+        public static void setSingleTileAsChild(TileNode t,int x, int y,bool placementAction=true)
         {
             
             Vector2 pos = new Vector2(x * Game1.tileSize, y * Game1.tileSize);
@@ -149,7 +149,8 @@ namespace StarAI.PathFindingCore
                 TileNode child = new TileNode(1, Vector2.Zero, t.texturePath,t.dataPath,StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Cyan));
                 child.seenState = (int)stateEnum.NotVisited;
                 child.parent = t;
-                child.placementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                if (placementAction) child.placementAction(t.thisLocation, (int)pos.X, (int)pos.Y);
+                else child.fakePlacementAction(t.thisLocation, x, y);
                 //StarAI.PathFindingCore.Utilities.masterAdditionList.Add(new StarAI.PathFindingCore.PlacementNode(child, Game1.currentLocation, (int)pos.X, (int)pos.Y));
                 t.children.Add(child);
             }

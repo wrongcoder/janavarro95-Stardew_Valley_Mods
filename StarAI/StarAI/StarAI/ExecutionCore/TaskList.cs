@@ -19,24 +19,57 @@ namespace StarAI.ExecutionCore
              
             List<CustomTask> removalList = new List<CustomTask>();
             bool assignNewTask = true;
-            for (int i= 0; i < taskList.Count;i++)
+
+            foreach(var task in taskList)
             {
-                ModCore.CoreMonitor.Log("I value: " + i);
-                ModCore.CoreMonitor.Log("Count: " + taskList.Count);
-                ModCore.CoreMonitor.Log("GAOL AMOUNT: " + PathFindingCore.PathFindingLogic.goals.Count);
-                CustomTask v = taskList[i];
+
+           
+            //recalculate cost expenses every time a task runs because we don't know where we will be at any given moment. Kind of costly unfortunately but works.
+            foreach(var task2 in taskList)
+            {
+                    if (removalList.Contains(task2)) continue;
+                task2.taskMetaData.cost = PathFindingCore.Utilities.calculatePathCost(task2.objectParameterDataArray);
+                //task.taskMetaData = new TaskMetaData(task.taskMetaData.name, PathFindingCore.Utilities.calculatePathCost(task.objectParameterDataArray), task.taskMetaData.staminaPrerequisite, task.taskMetaData.toolPrerequisite);
+            }
+            
+            //Some really cool delegate magic that sorts in place by the cost of the action!!!!
+            taskList.Sort(delegate (CustomTask t1, CustomTask t2)
+            {
+                return t1.taskMetaData.cost.CompareTo(t2.taskMetaData.cost);
+            });
+                CustomTask v = taskList.ElementAt(0);
+                int i = 0;
+                while (removalList.Contains(v))
+                {
+                    v = taskList.ElementAt(i);
+                    i++;
+                }
                 //  v.Start();
 
-                v.runTask();
+                if (v.taskMetaData.verifyAllPrerequisitesHit() == true)
+                {
+                    v.runTask();
+                    removalList.Add(v);
+                }
+                else
+                {
+                    removalList.Add(v);
+                }
+            }
 
-               
-            }
-            foreach(var v in removalList)
-            {
-                taskList.Remove(v);
-            }
+
+            taskList.Clear();
 
             
+        }
+
+        public static void printAllTaskMetaData()
+        {
+            ModCore.CoreMonitor.Log(taskList.Count.ToString());
+            foreach (var task in taskList)
+            {
+                task.taskMetaData.printMetaData();
+            }
         }
     }
 }

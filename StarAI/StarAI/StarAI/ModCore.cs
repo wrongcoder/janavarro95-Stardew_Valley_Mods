@@ -142,7 +142,7 @@ namespace StarAI
 
             if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
             {
-             
+                ExecutionCore.TaskList.printAllTaskMetaData();
             }
 
                 if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)

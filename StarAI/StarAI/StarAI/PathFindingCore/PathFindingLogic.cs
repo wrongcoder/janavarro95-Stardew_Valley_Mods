@@ -83,10 +83,10 @@ namespace StarAI.PathFindingCore
                 Source.parent = null;
             }
 
-            ModCore.CoreMonitor.Log("PATH FROM SOURCE: "+Source.tileLocation, LogLevel.Error);
+           // ModCore.CoreMonitor.Log("PATH FROM SOURCE: "+Source.tileLocation, LogLevel.Error);
            
             TileNode Goal = (TileNode)obj[1];
-            ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
+           // ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
             List<TileNode> Queue = (List<TileNode>)obj[2];
             totalPathCost = 0;
             TileNode currentNode = Source;
@@ -95,7 +95,7 @@ namespace StarAI.PathFindingCore
             bool goalFound = false;
             while (currentNode.tileLocation != Goal.tileLocation && queue.Count != 0)
             {
-
+               // ModCore.CoreMonitor.Log("LET'S GO SINGLE GOAL!!!!", LogLevel.Error);
                 //Add children to current node
                 int xMin = -1;
                 int yMin = -1;
@@ -267,13 +267,21 @@ namespace StarAI.PathFindingCore
             
         }
 
-
-        public static List<TileNode> pathFindToSingleGoalReturnPath(TileNode Source, TileNode Goal, List<TileNode> Queue)
+        /// <summary>
+        /// Used to return the path to the destination without moving towards the goal.
+        /// </summary>
+        /// <param name="Source">The starting point to path from.</param>
+        /// <param name="Goal">The goal to path to.</param>
+        /// <param name="Queue">Depreciated for further builds.</param>
+        /// <param name="Placement">Whether or not tiles are actually going to be placed</param>
+        /// <returns></returns>
+        public static List<TileNode> pathFindToSingleGoalReturnPath(TileNode Source, TileNode Goal, List<TileNode> Queue,bool Placement)
         {
-            object[] obj = new object[3];
+            object[] obj = new object[4];
             obj[0] = Source;
             obj[1] = Goal;
             obj[2] = Queue;
+            obj[3] = Placement;
            return pathFindToSingleGoalReturnPath(obj);
         }
 
@@ -291,19 +299,24 @@ namespace StarAI.PathFindingCore
                 Source.parent = null;
             }
 
-            ModCore.CoreMonitor.Log("PATH FROM SOURCE: " + Source.tileLocation, LogLevel.Error);
+            //
 
             TileNode Goal = (TileNode)obj[1];
-            ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
+            //
             List<TileNode> Queue = (List<TileNode>)obj[2];
             totalPathCost = 0;
             TileNode currentNode = Source;
+
+            bool placement = (bool)obj[3];
             queue.Add(currentNode);
             index++;
             bool goalFound = false;
             while (currentNode.tileLocation != Goal.tileLocation && queue.Count != 0)
             {
-                Console.WriteLine("OK WTF IS GOING ON????");
+                // ModCore.CoreMonitor.Log("LET'S GO PATH!!!!", LogLevel.Error);
+              //  ModCore.CoreMonitor.Log("PATH FROM SOURCE: " + currentNode.tileLocation, LogLevel.Error);
+               // ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
+                //Console.WriteLine("OK WTF IS GOING ON????");
                 //Add children to current node
                 int xMin = -1;
                 int yMin = -1;
@@ -325,7 +338,7 @@ namespace StarAI.PathFindingCore
                                                         //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
                                                         //ModCore.CoreMonitor.Log("HERE1", LogLevel.Error);
                       
-                        TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
+                        TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y,placement);
                         //ModCore.CoreMonitor.Log("OR NO?", LogLevel.Error);
                         Vector2 check = new Vector2((int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         if (check.X == Goal.tileLocation.X && check.Y == Goal.tileLocation.Y)
@@ -354,7 +367,7 @@ namespace StarAI.PathFindingCore
                     //TileNode.setSingleTileAsChild(source, (int)source.tileLocation.X + x, (int)source.tileLocation.Y + y);
                     if (node.parent == null)
                     {
-                        ModCore.CoreMonitor.Log("I DONT UNDERSTAND!");
+                        //ModCore.CoreMonitor.Log("I DONT UNDERSTAND!");
                         System.Threading.Thread.Sleep(delay);
                     }
                     //ModCore.CoreMonitor.Log("ok checking adj:" + node.tileLocation.ToString());
@@ -407,7 +420,7 @@ namespace StarAI.PathFindingCore
 
             if (currentNode.tileLocation == Goal.tileLocation)
             {
-                ModCore.CoreMonitor.Log("SWEET BEANS!!!!!!", LogLevel.Error);
+               // ModCore.CoreMonitor.Log("SWEET BEANS!!!!!!", LogLevel.Error);
                 queue.Clear();
                 index = 0;
                 //ModCore.CoreMonitor.Log(currentNode.parent.ToString(), LogLevel.Error);
@@ -474,8 +487,7 @@ namespace StarAI.PathFindingCore
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
                 //v.performRemoveAction(v.tileLocation, v.thisLocation);
               
-
-                v.thisLocation.removeObject(v.tileLocation, false);
+                if(placement)v.thisLocation.removeObject(v.tileLocation, false);
                 //StardustCore.Utilities.masterRemovalList.Add(v);
             }
             return path;
