@@ -26,6 +26,7 @@ namespace StarAI.ExecutionCore.TaskPrerequisites
 
         public override bool checkAllPrerequisites()
         {
+            if (this.doesTaskRequireInventorySpace == false) return true;
             if (isPlayerInventoryFull() == false) return true;
             else//player inventory is full
             {

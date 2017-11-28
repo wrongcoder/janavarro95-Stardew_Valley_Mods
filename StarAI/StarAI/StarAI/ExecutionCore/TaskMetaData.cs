@@ -18,9 +18,11 @@ namespace StarAI.ExecutionCore
         public StarAI.ExecutionCore.TaskPrerequisites.ToolPrerequisite toolPrerequisite;
         public TaskPrerequisites.InventoryFullPrerequisite inventoryPrerequisite;
 
+        public TaskPrerequisites.BedTimePrerequisite bedTimePrerequisite;
+
         public List<TaskPrerequisites.GenericPrerequisite> prerequisitesList;
 
-        public TaskMetaData(string Name, float Priority, float Cost, float Utility, float Frequency, TaskPrerequisites.StaminaPrerequisite StaminaPrerequisite=null, TaskPrerequisites.ToolPrerequisite ToolPrerequisite=null, TaskPrerequisites.InventoryFullPrerequisite InventoryFull = null)
+        public TaskMetaData(string Name, float Priority, float Cost, float Utility, float Frequency, TaskPrerequisites.StaminaPrerequisite StaminaPrerequisite=null, TaskPrerequisites.ToolPrerequisite ToolPrerequisite=null, TaskPrerequisites.InventoryFullPrerequisite InventoryFull = null, TaskPrerequisites.BedTimePrerequisite BedTimePrereq=null)
         {
             this.name = Name;
             this.priority = Priority;
@@ -30,47 +32,59 @@ namespace StarAI.ExecutionCore
             this.staminaPrerequisite = StaminaPrerequisite;
             this.toolPrerequisite = ToolPrerequisite;
             this.inventoryPrerequisite = InventoryFull;
+            this.bedTimePrerequisite = BedTimePrereq;
             //Make sure to set values correctly incase of null
             setUpStaminaPrerequisiteIfNull();
             setUpToolPrerequisiteIfNull();
             setUpInventoryPrerequisiteIfNull();
+            setUpBedTimeIfNull();
             this.prerequisitesList = new List<TaskPrerequisites.GenericPrerequisite>();
             this.prerequisitesList.Add(this.staminaPrerequisite);
             this.prerequisitesList.Add(this.toolPrerequisite);
             this.prerequisitesList.Add(this.inventoryPrerequisite);
+
+            this.prerequisitesList.Add(this.bedTimePrerequisite);
         }
 
-        public TaskMetaData(string Name,float Cost,TaskPrerequisites.StaminaPrerequisite StaminaPrerequisite = null, TaskPrerequisites.ToolPrerequisite ToolPrerequisite = null, TaskPrerequisites.InventoryFullPrerequisite InventoryFull = null)
+        public TaskMetaData(string Name,float Cost,TaskPrerequisites.StaminaPrerequisite StaminaPrerequisite = null, TaskPrerequisites.ToolPrerequisite ToolPrerequisite = null, TaskPrerequisites.InventoryFullPrerequisite InventoryFull = null,TaskPrerequisites.BedTimePrerequisite BedTimePrereq=null)
         {
             this.name = Name;
             this.cost = Cost;
             this.staminaPrerequisite = StaminaPrerequisite;
             this.toolPrerequisite = ToolPrerequisite;
             this.inventoryPrerequisite = InventoryFull;
+
+            this.bedTimePrerequisite = BedTimePrereq;
             //Make sure to set values correctly incase of null
             setUpStaminaPrerequisiteIfNull();
             setUpToolPrerequisiteIfNull();
             setUpInventoryPrerequisiteIfNull();
+            setUpBedTimeIfNull();
             this.prerequisitesList = new List<TaskPrerequisites.GenericPrerequisite>();
             this.prerequisitesList.Add(this.staminaPrerequisite);
             this.prerequisitesList.Add(this.toolPrerequisite);
             this.prerequisitesList.Add(this.inventoryPrerequisite);
+            this.prerequisitesList.Add(this.bedTimePrerequisite);
         }
 
-        public TaskMetaData(string Name, TaskPrerequisites.StaminaPrerequisite StaminaPrerequisite = null, TaskPrerequisites.ToolPrerequisite ToolPrerequisite = null, TaskPrerequisites.InventoryFullPrerequisite InventoryFull=null)
+        public TaskMetaData(string Name, TaskPrerequisites.StaminaPrerequisite StaminaPrerequisite = null, TaskPrerequisites.ToolPrerequisite ToolPrerequisite = null, TaskPrerequisites.InventoryFullPrerequisite InventoryFull=null,TaskPrerequisites.BedTimePrerequisite bedTimePrereq=null)
         {
             this.name = Name;
             this.staminaPrerequisite = StaminaPrerequisite;
             this.toolPrerequisite = ToolPrerequisite;
             this.inventoryPrerequisite = InventoryFull;
+
+            this.bedTimePrerequisite = bedTimePrereq;
             //Make sure to set values correctly incase of null
             setUpStaminaPrerequisiteIfNull();
             setUpToolPrerequisiteIfNull();
             setUpInventoryPrerequisiteIfNull();
+            setUpBedTimeIfNull();
             this.prerequisitesList = new List<TaskPrerequisites.GenericPrerequisite>();
             this.prerequisitesList.Add(this.staminaPrerequisite);
             this.prerequisitesList.Add(this.toolPrerequisite);
             this.prerequisitesList.Add(this.inventoryPrerequisite);
+            this.prerequisitesList.Add(this.bedTimePrerequisite);
         }
 
         public void calculateTaskCost(TileNode source)
@@ -96,6 +110,11 @@ namespace StarAI.ExecutionCore
         private void setUpInventoryPrerequisiteIfNull()
         {
             if (this.inventoryPrerequisite == null) this.inventoryPrerequisite = new TaskPrerequisites.InventoryFullPrerequisite(false);
+        }
+
+        private void setUpBedTimeIfNull()
+        {
+            if (this.bedTimePrerequisite == null) this.bedTimePrerequisite = new TaskPrerequisites.BedTimePrerequisite(true);
         }
 
         
