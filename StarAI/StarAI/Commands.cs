@@ -30,6 +30,9 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("getseeds", "Get Seeds From chests.", new Action<string, string[]>(Commands.getSeedsFromChests));
 
             ModCore.CoreHelper.ConsoleCommands.Add("choptwigs", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
+            ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
+            ModCore.CoreHelper.ConsoleCommands.Add("breakstones", "Break small stones with pickaxe.", new Action<string, string[]>(Commands.breakAllStones));
+           // ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
                 "0"
@@ -43,7 +46,30 @@ namespace StarAI
 
         public static void chopAllTwigs(string s, string[] args)
         {
+            if (args.Length == 1)
+            {
+                if (args[0] == "All" || args[0] == "all")
+                {
+                    DebrisLogic.getAllSticksToChop(Game1.player.currentLocation);
+                    return;
+                }
+            }
             DebrisLogic.getAllSticksToChopRadius(Game1.player.currentLocation);
+        }
+
+
+
+        public static void breakAllStones(string s, string[] args)
+        {
+            if (args.Length == 1)
+            {
+                if (args[0] == "All" || args[0] == "all")
+                {
+                    DebrisLogic.getAllStonesToBreak(Game1.player.currentLocation);
+                    return;
+                }
+            }
+            DebrisLogic.getAllStonestoBreakRadius(Game1.player.currentLocation);
         }
 
         public static void runTasks(string s, string[] args)

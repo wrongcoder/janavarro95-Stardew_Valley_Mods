@@ -774,5 +774,34 @@ namespace StardustCore
         }
 
 
+        public static StardewValley.Object checkRadiusForObject(int radius, string name)
+        {
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int y = -radius; y <= radius; y++)
+                {
+                    bool f = Game1.player.currentLocation.isObjectAt((Game1.player.getTileX() + x) * Game1.tileSize, (Game1.player.getTileY() + y) * Game1.tileSize);
+                    if (f == false) continue;
+                    StardewValley.Object obj = Game1.player.currentLocation.getObjectAt((Game1.player.getTileX() + x) * Game1.tileSize, (Game1.player.getTileY() + y) * Game1.tileSize);
+                    if (obj == null) continue;
+                    if (obj.name == name)
+                    {
+                        return obj;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static bool doesLocationContainObject(GameLocation location, string name)
+        {
+            foreach (var v in location.objects)
+            {
+                if (name == v.Value.name) return true;
+            }
+            return false;
+        }
+
+
     }
 }
