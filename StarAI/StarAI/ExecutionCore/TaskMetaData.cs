@@ -90,9 +90,10 @@ namespace StarAI.ExecutionCore
             this.prerequisitesList.Add(this.bedTimePrerequisite);
         }
 
-        public void calculateTaskCost(TileNode source)
+        public void calculateTaskCost(TileNode source,bool unknownPath)
         {
-          this.cost=TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite);
+          this.cost=TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite,unknownPath);
+            this.path = Utilities.pathStuff(source); 
             //this.path = Utilities.calculatePath(source, false);
         }
 

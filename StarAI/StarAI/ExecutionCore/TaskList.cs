@@ -16,7 +16,7 @@ namespace StarAI.ExecutionCore
         public static List<CustomTask> removalList = new List<CustomTask>();
         public static void runTaskList()
         {
-            
+           
             //myTask t = new myTask(StarAI.PathFindingCore.CropLogic.CropLogic.harvestSingleCrop);
              
             bool assignNewTask = true;
@@ -24,17 +24,21 @@ namespace StarAI.ExecutionCore
             while(ranAllTasks()==false)
             {
 
-           
-            //recalculate cost expenses every time a task runs because we don't know where we will be at any given moment. Kind of costly unfortunately but works.
-            foreach(var task2 in taskList)
+
+                //recalculate cost expenses every time a task runs because we don't know where we will be at any given moment. Kind of costly unfortunately but works.
+            
+                
+                
+            /*
+            foreach (var task2 in taskList)
             {
                     if (removalList.Contains(task2)) continue;
                     object[] oArray = (object[])task2.objectParameterDataArray;
                     TileNode t =(TileNode) oArray[0];
-                    task2.taskMetaData.calculateTaskCost((t));
+                    task2.taskMetaData.calculateTaskCost(t,false);
                 //task.taskMetaData = new TaskMetaData(task.taskMetaData.name, PathFindingCore.Utilities.calculatePathCost(task.objectParameterDataArray), task.taskMetaData.staminaPrerequisite, task.taskMetaData.toolPrerequisite);
             }
-            
+            */
             //Some really cool delegate magic that sorts in place by the cost of the action!!!!
             taskList.Sort(delegate (CustomTask t1, CustomTask t2)
             {
@@ -52,6 +56,8 @@ namespace StarAI.ExecutionCore
                 if (v.taskMetaData.verifyAllPrerequisitesHit() == true)
                 {
                     v.runTask();
+                    Utilities.clearExceptionListWithName("Child");
+                    Utilities.clearExceptionListWithName("Navigation");
                     removalList.Add(v);
                 }
                 else

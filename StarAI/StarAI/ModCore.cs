@@ -144,6 +144,10 @@ namespace StarAI
             if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
             {
                 ExecutionCore.TaskList.printAllTaskMetaData();
+                foreach(var v in PathFindingCore.Utilities.tileExceptionList)
+                {
+                    ModCore.CoreMonitor.Log(v.actionType);
+                }
             }
 
                 if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)

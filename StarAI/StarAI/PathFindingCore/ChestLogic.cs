@@ -68,7 +68,9 @@ namespace StarAI.PathFindingCore
                     continue;
                 }
                 ExecutionCore.TaskList.taskList.Add(task);
-                Utilities.clearExceptionListWithName(true, "Child");
+                //Utilities.clearExceptionListWithName(true, "Child");
+                Utilities.clearExceptionListWithName("Child");
+                
                 //   waterSingleCrop(v);
             }
         }

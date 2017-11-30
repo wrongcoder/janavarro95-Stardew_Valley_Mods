@@ -508,7 +508,7 @@ namespace StarAI.PathFindingCore
                 {
                     StardewValley.Object ob = v.thisLocation.objects[v.tileLocation];
 
-                    ModCore.CoreMonitor.Log(ob.name);
+                    //ModCore.CoreMonitor.Log(ob.name);
                     if (v.name != "Generic Colored Tile") continue;// ModCore.CoreMonitor.Log("Culperate 3");
                     if (placement) v.thisLocation.removeObject(v.tileLocation, false);
                 }

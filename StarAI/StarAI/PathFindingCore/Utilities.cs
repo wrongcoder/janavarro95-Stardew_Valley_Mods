@@ -55,7 +55,7 @@ namespace StarAI.PathFindingCore
         {
             foreach(var v in tileExceptionList)
             {
-                if (t == v.tile) return v;
+                if (t.tileLocation == v.tile.tileLocation) return v;
             }
             return null;
         }
@@ -90,6 +90,20 @@ namespace StarAI.PathFindingCore
             }
         }
 
+        public static void clearExceptionListWithName(string name)
+        {
+            List<TileExceptionMetaData> removalList = new List<TileExceptionMetaData>();
+            foreach(var v in tileExceptionList)
+            {
+                ModCore.CoreMonitor.Log("DING");
+                if (v.actionType == name) removalList.Add(v);
+            }
+            foreach(var v in removalList)
+            {
+                Utilities.tileExceptionList.Remove(v);
+            }
+
+        }
 
         public static void clearExceptionListWithName(bool removeFromWorld,string name)
         {
@@ -282,35 +296,18 @@ namespace StarAI.PathFindingCore
             return correctPath.Count;
         }
 
-        public static List<TileNode> calculatePath(TileNode v, bool Placement = true)
+        public static List<TileNode> pathStuff(TileNode t)
         {
-            object[] obj = new object[2];
-            obj[0] = v;
-            obj[1] = Placement;
-            return calculatePath(obj);
+            object[] arr = new object[1];
+            arr[0] = t;
+            return pathStuff(arr);
         }
 
-        public static List<TileNode> calculatePath(object obj)
+        public static List<TileNode> pathStuff(object obj)
         {
             object[] objArr = (object[])obj;
             TileNode v = (TileNode)objArr[0];
-            bool placement;
-            try
-            {
-                placement = (bool)objArr[1];
-            }
-            catch (Exception err)
-            {
-                placement = true;
-            }
-            foreach (var q in objArr)
-            {
-                ModCore.CoreMonitor.Log("OK THIS IS THE RESULT !: " + q, LogLevel.Alert);
-            }
-            if (v == null) ModCore.CoreMonitor.Log("WTF MARK!!!!!!: ", LogLevel.Alert);
-            bool moveOn = false;
-
-            WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_X);
+           
             int xMin = -1;
             int yMin = -1;
             int xMax = 1;
@@ -332,17 +329,16 @@ namespace StarAI.PathFindingCore
 
                     Vector2 pos = new Vector2(v.tileLocation.X + x, v.tileLocation.Y + y);
                     //ModCore.CoreMonitor.Log("AHHHHHHH POSITION: " + pos.ToString(), LogLevel.Alert);
-                    bool f = PathFindingCore.TileNode.checkIfICanPlaceHere(v, pos * Game1.tileSize, v.thisLocation, true, true);
-                    ModCore.CoreMonitor.Log("OK THIS IS THE RESULT F: " + f, LogLevel.Alert);
+                    bool f = PathFindingCore.TileNode.checkIfICanPlaceHere(v, pos * Game1.tileSize, v.thisLocation, true);
+                    // ModCore.CoreMonitor.Log("OK THIS IS THE RESULT F: " + f, LogLevel.Alert);
                     if (f == true)
                     {
 
                         TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                        if (placement) t.placementAction(Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
-                        else t.fakePlacementAction(v.thisLocation, (int)pos.X, (int)pos.Y);
-                        //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
+                        t.placementAction(Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
+                        //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode( t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
                         miniGoals.Add(t);
-                        //Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "CostCalculation"));
+                        Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Navigation"));
                     }
                 }
             }
@@ -350,35 +346,32 @@ namespace StarAI.PathFindingCore
             foreach (var nav in miniGoals)
             {
                 TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                if (placement) tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-                else tempSource.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
-
-                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(), false, true);
-
-                Utilities.clearExceptionListWithName(placement, "Child");
-
-                ModCore.CoreMonitor.Log(tempSource.tileLocation.ToString() + tempSource.tileLocation.ToString());
-                ModCore.CoreMonitor.Log(nav.tileLocation.ToString() + nav.tileLocation.ToString());
+                tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
+                Utilities.tileExceptionList.Add(new TileExceptionMetaData(tempSource, "Navigation"));
+                //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
+                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(), true, false);
 
                 if (path.Count != 0)
                 {
-                    ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
+                    //ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
                     paths.Add(path);
                     foreach (var someTile in path)
                     {
                         if (someTile == nav) removalList.Add(someTile);
                         StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(someTile);
-                        if (placement) someTile.thisLocation.objects.Remove(someTile.tileLocation);
-                        //someTile.performRemoveAction(someTile.tileLocation, someTile.thisLocation);    
-                        //StardustCore.Utilities.masterRemovalList.Add(v);
+                        someTile.thisLocation.objects.Remove(someTile.tileLocation);
+                        //someTile.performRemoveAction(someTile.tileLocation, someTile.thisLocation);
+                        //StardustCore.Utilities.masterRemovalList.Add(someTile);
+                        //ModCore.CoreMonitor.Log("CAUGHT MY CULPERATE", LogLevel.Warn);
                     }
                 }
 
             }
+            Console.WriteLine("GOALS COUNT:" + miniGoals.Count);
             foreach (var q in removalList)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(q);
-                if (placement) q.thisLocation.objects.Remove(q.tileLocation);
+                q.thisLocation.objects.Remove(q.tileLocation);
             }
             removalList.Clear();
             int pathCost = 999999999;
@@ -388,21 +381,17 @@ namespace StarAI.PathFindingCore
                 if (potentialPath.Count == 0) continue;
                 if (potentialPath.Count < pathCost)
                 {
+
                     pathCost = potentialPath.Count;
                     correctPath = potentialPath;
                 }
             }
 
-            foreach (var goodTile in correctPath)
-            {
-                StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
-                //goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
-                //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(goodTile, Game1.currentLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize));
-            }
-            //END HERE FOR JUST CALCULATING PATH COST
-            if (correctPath.Count==0)return new List<TileNode>();
+
             return correctPath;
         }
 
+
+    
     }
 }

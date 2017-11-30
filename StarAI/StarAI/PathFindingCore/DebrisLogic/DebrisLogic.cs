@@ -23,6 +23,10 @@ namespace StarAI.PathFindingCore.DebrisLogic
             getAllSticksToChop(arr);
         }
 
+        /// <summary>
+        /// DO NOT USE THIS UNLESS YOU WANT LAG UP THE WAZOO
+        /// </summary>
+        /// <param name="obj"></param>
         public static void getAllSticksToChop(object obj)
         {
             int twingCount = 0;
@@ -52,25 +56,31 @@ namespace StarAI.PathFindingCore.DebrisLogic
             int ok = 0;
             foreach (var v in sticksToChop)
             {
-          
+
                 object[] objList = new object[1];
                 objList[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.Axe w = new StardewValley.Tools.Axe();
                 ModCore.CoreMonitor.Log("Processing twig:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task= new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
+                    System.Threading.Thread.Sleep(1000);
                     Utilities.clearExceptionListWithNames(true);
                     continue;
                 }
 
-                ModCore.CoreMonitor.Log("TASK COST:"+task.taskMetaData.cost.ToString());
-
-                ExecutionCore.TaskList.taskList.Add(task);
+                ModCore.CoreMonitor.Log("TASK COST:" + task.taskMetaData.cost.ToString());
+                if (task.taskMetaData.cost.ToString()=="2.147484E+09")
+                {
+                    ModCore.CoreMonitor.Log("OHH THAT's BAD");
+                    System.Threading.Thread.Sleep(2000);
+                }
+                    ExecutionCore.TaskList.taskList.Add(task);
                 ModCore.CoreMonitor.Log("TASK LIST COUNT:"+ExecutionCore.TaskList.taskList.Count.ToString());
                 Utilities.clearExceptionListWithName(true, "Child");
+                Utilities.clearExceptionListWithName("Child");
                 //   waterSingleCrop(v);
             }
         }
@@ -90,7 +100,8 @@ namespace StarAI.PathFindingCore.DebrisLogic
             {
                 for (int y = -radius; y <= radius; y++)
                 {
-                    
+                    bool f= Game1.player.currentLocation.isObjectAt((Game1.player.getTileX() + x) * Game1.tileSize, (Game1.player.getTileY() + y) * Game1.tileSize);
+                    if (f == false) continue;
                     StardewValley.Object obj = Game1.player.currentLocation.getObjectAt((Game1.player.getTileX() + x)*Game1.tileSize, (Game1.player.getTileY() + y)*Game1.tileSize);
                     if (obj == null) continue;
                     if (obj.name==name)
@@ -154,29 +165,46 @@ namespace StarAI.PathFindingCore.DebrisLogic
             foreach (var v in sticksToChop)
             {
 
-                object[] objList = new object[1];
+                object[] objList = new object[2];
                 objList[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.Axe w = new StardewValley.Tools.Axe();
                 ModCore.CoreMonitor.Log("Processing twig:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
                 ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                objList[1] = task.taskMetaData.path;
+                task.objectParameterDataArray = objList;
 
+
+                if (task.taskMetaData.cost == Int32.MaxValue)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                    Utilities.clearExceptionListWithNames(true);
+                    continue;
+                }
+                if (task.taskMetaData.cost.ToString() == "2.147484E+09")
+                {
+                    ModCore.CoreMonitor.Log("OHH THAT's BAD");
+                    System.Threading.Thread.Sleep(2000);
+                }
 
                 ModCore.CoreMonitor.Log("TASK COST:" + task.taskMetaData.cost.ToString());
 
                 ExecutionCore.TaskList.taskList.Add(task);
+                Utilities.clearExceptionListWithName("Child");
                 ModCore.CoreMonitor.Log("TASK LIST COUNT:" + ExecutionCore.TaskList.taskList.Count.ToString());
                 //Utilities.clearExceptionListWithName(true, "Child");
                 //   waterSingleCrop(v);
             }
+            sticksToChop.Clear();
         }
 
 
-        public static void chopSingleStick(TileNode v)
+        public static void chopSingleStick(TileNode v,List<TileNode> path)
         {
             object[] obj = new object[1];
             obj[0] = v;
+            obj[1] = path;
             chopSingleStick(obj);
         }
 
@@ -184,97 +212,11 @@ namespace StarAI.PathFindingCore.DebrisLogic
 
         public static void chopSingleStick(object obj)
         {
-            object[] objArr = (object[])obj;
-            TileNode v = (TileNode)objArr[0];
-            bool moveOn = false;
-            foreach (var q in Utilities.tileExceptionList)
-            {
-                if (q.tile == v && q.actionType == "ChopStick")
-                {
-                    moveOn = true;
-                }
-            }
-            if (moveOn == false) return;
-
-            WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
-            int xMin = -1;
-            int yMin = -1;
-            int xMax = 1;
-            int yMax = 1;
-            List<TileNode> miniGoals = new List<TileNode>();
-            List<List<TileNode>> paths = new List<List<TileNode>>();
-            //try to set children to tiles where children haven't been before
-            for (int x = xMin; x <= xMax; x++)
-            {
-                for (int y = yMin; y <= yMax; y++)
-                {
-                    if (x == 0 && y == 0) continue;
-
-                    //Include these 4 checks for just left right up down movement. Remove them to enable 8 direction path finding
-                    if (x == -1 && y == -1) continue; //upper left
-                    if (x == -1 && y == 1) continue; //bottom left
-                    if (x == 1 && y == -1) continue; //upper right
-                    if (x == 1 && y == 1) continue; //bottom right
-
-                    Vector2 pos = new Vector2(v.tileLocation.X + x, v.tileLocation.Y + y);
-                    //ModCore.CoreMonitor.Log("AHHHHHHH POSITION: " + pos.ToString(), LogLevel.Alert);
-                    bool f = PathFindingCore.TileNode.checkIfICanPlaceHere(v, pos * Game1.tileSize, v.thisLocation, true);
-                    // ModCore.CoreMonitor.Log("OK THIS IS THE RESULT F: " + f, LogLevel.Alert);
-                    if (f == true)
-                    {
-
-                        TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                        t.placementAction(Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
-                        //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode( t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
-                        miniGoals.Add(t);
-                        Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Navigation"));
-                    }
-                }
-            }
-            List<TileNode> removalList = new List<TileNode>();
-            foreach (var nav in miniGoals)
-            {
-                TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-                //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
-                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(), true, false);
-
-                if (path.Count != 0)
-                {
-                    //ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
-                    paths.Add(path);
-                    foreach (var someTile in path)
-                    {
-                        if (someTile == nav) removalList.Add(someTile);
-                        StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(someTile);
-                        someTile.thisLocation.objects.Remove(someTile.tileLocation);
-                        //someTile.performRemoveAction(someTile.tileLocation, someTile.thisLocation);
-                        //StardustCore.Utilities.masterRemovalList.Add(someTile);
-                        //ModCore.CoreMonitor.Log("CAUGHT MY CULPERATE", LogLevel.Warn);
-                    }
-                }
-
-            }
-            Console.WriteLine("GOALS COUNT:" + miniGoals.Count);
-            foreach (var q in removalList)
-            {
-                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(q);
-                q.thisLocation.objects.Remove(q.tileLocation);
-            }
-            removalList.Clear();
-            int pathCost = 999999999;
-            List<TileNode> correctPath = new List<TileNode>();
-            foreach (var potentialPath in paths)
-            {
-                if (potentialPath.Count == 0) continue;
-                if (potentialPath.Count < pathCost)
-                {
-
-                    pathCost = potentialPath.Count;
-                    correctPath = potentialPath;
-                }
-            }
-
+            
+            object[] objArray=(object[])obj;
+           
+            TileNode v = (TileNode)objArray[0];
+            List<TileNode> correctPath = (List<TileNode>)objArray[1];
             foreach (var goodTile in correctPath)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
