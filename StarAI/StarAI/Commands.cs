@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StarAI;
+using StarAI.PathFindingCore.DebrisLogic;
 
 namespace StarAI
 {
@@ -27,6 +28,8 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("Water", "Water the crops", new Action<string, string[]>(Commands.waterCrops));
             ModCore.CoreHelper.ConsoleCommands.Add("Harvest", "Harvest the crops", new Action<string, string[]>(Commands.harvestCrops));
             ModCore.CoreHelper.ConsoleCommands.Add("getseeds", "Get Seeds From chests.", new Action<string, string[]>(Commands.getSeedsFromChests));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("choptwigs", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
                 "0"
@@ -36,6 +39,11 @@ namespace StarAI
         public static void getSeedsFromChests(string s, string[] args)
         {
             ChestLogic.getAllSeasonalSeedsFromAllChestsAtLocation(Game1.player.currentLocation);
+        }
+
+        public static void chopAllTwigs(string s, string[] args)
+        {
+            DebrisLogic.getAllSticksToChopRadius(Game1.player.currentLocation);
         }
 
         public static void runTasks(string s, string[] args)
@@ -339,7 +347,7 @@ namespace StarAI
                 obj[1] = PathFindingLogic.currentGoal;
                 PathFindingLogic.queue = new List<TileNode>();
                 obj[2] = PathFindingLogic.queue;
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(PathFindingLogic.pathFindToSingleGoal, obj,new ExecutionCore.TaskMetaData("Pathfind Command",PathFindingCore.Utilities.calculatePathCost(PathFindingLogic.source))));
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(PathFindingLogic.pathFindToSingleGoal, obj,new ExecutionCore.TaskMetaData("Pathfind Command",PathFindingCore.Utilities.calculatePathCost(PathFindingLogic.source,false))));
                 //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
             }
             #endregion

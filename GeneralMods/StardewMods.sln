@@ -61,10 +61,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuneFactoryCropsMod", "Rune
 		{C5F88D48-EA20-40CD-91E2-C8725DC11795} = {C5F88D48-EA20-40CD-91E2-C8725DC11795}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarAI", "..\StarAI\StarAI\StarAI\StarAI.csproj", "{93632675-991D-425B-96F9-9C2B6BFC4EFE}"
-	ProjectSection(ProjectDependencies) = postProject
-		{0756D36A-95C8-480D-8EA6-4584C03010C6} = {0756D36A-95C8-480D-8EA6-4584C03010C6}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarAI", "..\StarAI\StarAI\StarAI.csproj", "{93632675-991D-425B-96F9-9C2B6BFC4EFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

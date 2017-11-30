@@ -116,7 +116,7 @@ namespace StarAI.PathFindingCore
                         if (x == 1 && y == 1) continue; //bottom right
                                                         //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
                 
-                        TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
+                        TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y,false);
                         Vector2 check = new Vector2((int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         if(check.X==Goal.tileLocation.X && check.Y == Goal.tileLocation.Y)
                         {
@@ -275,13 +275,14 @@ namespace StarAI.PathFindingCore
         /// <param name="Queue">Depreciated for further builds.</param>
         /// <param name="Placement">Whether or not tiles are actually going to be placed</param>
         /// <returns></returns>
-        public static List<TileNode> pathFindToSingleGoalReturnPath(TileNode Source, TileNode Goal, List<TileNode> Queue,bool Placement)
+        public static List<TileNode> pathFindToSingleGoalReturnPath(TileNode Source, TileNode Goal, List<TileNode> Queue,bool Placement,bool CheckForUtility)
         {
-            object[] obj = new object[4];
+            object[] obj = new object[5];
             obj[0] = Source;
             obj[1] = Goal;
             obj[2] = Queue;
             obj[3] = Placement;
+            obj[4] = CheckForUtility;
            return pathFindToSingleGoalReturnPath(obj);
         }
 
@@ -308,14 +309,15 @@ namespace StarAI.PathFindingCore
             TileNode currentNode = Source;
 
             bool placement = (bool)obj[3];
+            bool checkForUtility = (bool)obj[4];
             queue.Add(currentNode);
             index++;
             bool goalFound = false;
             while (currentNode.tileLocation != Goal.tileLocation && queue.Count != 0)
             {
                 // ModCore.CoreMonitor.Log("LET'S GO PATH!!!!", LogLevel.Error);
-              //  ModCore.CoreMonitor.Log("PATH FROM SOURCE: " + currentNode.tileLocation, LogLevel.Error);
-               // ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
+                //ModCore.CoreMonitor.Log("PATH FROM SOURCE: " + currentNode.tileLocation, LogLevel.Error);
+                //ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
                 //Console.WriteLine("OK WTF IS GOING ON????");
                 //Add children to current node
                 int xMin = -1;
@@ -337,8 +339,8 @@ namespace StarAI.PathFindingCore
                         if (x == 1 && y == 1) continue; //bottom right
                                                         //TileNode t = new TileNode(1, Vector2.Zero, Souce.texturePath,source.dataPath, source.drawColor);
                                                         //ModCore.CoreMonitor.Log("HERE1", LogLevel.Error);
-                      
-                        TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y,placement);
+
+                        TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y, checkForUtility,true);
                         //ModCore.CoreMonitor.Log("OR NO?", LogLevel.Error);
                         Vector2 check = new Vector2((int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         if (check.X == Goal.tileLocation.X && check.Y == Goal.tileLocation.Y)
@@ -462,6 +464,7 @@ namespace StarAI.PathFindingCore
                 }
             }
             List<TileNode> removalList = new List<TileNode>();
+            List<TileNode> ignoreList = new List<TileNode>();
             foreach (var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
             {
                 if (v is TileNode)
@@ -469,25 +472,52 @@ namespace StarAI.PathFindingCore
 
                     foreach (var exc in Utilities.tileExceptionList)
                     {
-                        if (exc.tile == (v as TileNode)) continue;
+                        if (ignoreList.Contains(exc.tile)) continue;
+                        // if ( (exc.tile == (v as TileNode)&&(exc.actionType!="Child"||exc.actionType!="Navigation"||exc.actionType!="CostCalculation"))|| path.Contains(v)) continue;
+                        if (exc.actionType == "ChopStick")
+                        {
+                            List<TileNode> idk = new List<TileNode>();
+                            foreach (var q in removalList)
+                            {
+                                if (exc.tile.tileLocation == q.tileLocation)
+                                {
+                                    idk.Add(q);
+                                    //removalList.Remove(exc.tile);
+                                    ignoreList.Add(exc.tile);
+                                    continue;
+                                }
+                            } 
+                            foreach(var h in idk)
+                            {
+                                removalList.Remove(exc.tile);
+                            }
+                            
+                        }
+                        else removalList.Add((TileNode)v);
                     }
 
-                    if (path.Contains(v) || goals.Contains(v) || v.drawColor == StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Red))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        removalList.Add((TileNode)v);
-                    }
+                    
                 }
             }
             foreach (var v in removalList)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
                 //v.performRemoveAction(v.tileLocation, v.thisLocation);
-              
-                if(placement)v.thisLocation.removeObject(v.tileLocation, false);
+
+                try
+                {
+                    StardewValley.Object ob = v.thisLocation.objects[v.tileLocation];
+
+                    ModCore.CoreMonitor.Log(ob.name);
+                    if (v.name != "Generic Colored Tile") continue;// ModCore.CoreMonitor.Log("Culperate 3");
+                    if (placement) v.thisLocation.removeObject(v.tileLocation, false);
+                }
+                catch(Exception err)
+                {
+
+                }
+                 
+                
                 //StardustCore.Utilities.masterRemovalList.Add(v);
             }
             return path;
