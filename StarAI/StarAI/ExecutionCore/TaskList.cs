@@ -36,16 +36,13 @@ namespace StarAI.ExecutionCore
                     object[] oArray = (object[])task2.objectParameterDataArray;
                     TileNode t =(TileNode) oArray[0];
                     task2.taskMetaData.calculateTaskCost(t,true);
-                    try
-                    {
-                        object[] objArr = (object[])task2.objectParameterDataArray;
-                        objArr[1]= (object)task2.taskMetaData.path;
-                        task2.objectParameterDataArray = objArr;
-                    }
-                    catch(Exception err)
-                    {
 
-                    }
+                    object[] objArr = new object[2];
+                    objArr[0] = (object)t;
+                    objArr[1]= (object)task2.taskMetaData.path;
+                    task2.objectParameterDataArray = objArr;
+                    
+                   
                 //task.taskMetaData = new TaskMetaData(task.taskMetaData.name, PathFindingCore.Utilities.calculatePathCost(task.objectParameterDataArray), task.taskMetaData.staminaPrerequisite, task.taskMetaData.toolPrerequisite);
             }
             

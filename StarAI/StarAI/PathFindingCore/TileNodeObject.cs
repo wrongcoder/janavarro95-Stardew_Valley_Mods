@@ -92,7 +92,7 @@ namespace StarAI.PathFindingCore
                 if (cry == true) t.thisLocation = null;
                 return false;
             }
-            /*
+           
             if (utilityCheck) { 
                 foreach (var v in Utilities.tileExceptionList)
                 {
@@ -100,7 +100,7 @@ namespace StarAI.PathFindingCore
                     if (v.tile.position == pos) return false;
                     if (v.tile.tileLocation == pos / Game1.tileSize) return false;
                 }
-        }*/
+            }
            
                 bool terrainFeature = t.thisLocation.terrainFeatures.ContainsKey(pos / Game1.tileSize);
                 if (terrainFeature)
@@ -153,8 +153,8 @@ namespace StarAI.PathFindingCore
                 TileNode child = new TileNode(1, Vector2.Zero, t.texturePath,t.dataPath,StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Cyan));
                 child.seenState = (int)stateEnum.NotVisited;
                 child.parent = t;
-                 child.placementAction(t.thisLocation, (int)pos.X, (int)pos.Y);
-                //else child.fakePlacementAction(t.thisLocation, x, y);
+               if(placementAction)  child.placementAction(t.thisLocation, (int)pos.X, (int)pos.Y);
+               else child.fakePlacementAction(t.thisLocation, x, y);
                 Utilities.tileExceptionList.Add(new TileExceptionMetaData(child, "Child"));
                 //StarAI.PathFindingCore.Utilities.masterAdditionList.Add(new StarAI.PathFindingCore.PlacementNode(child, Game1.currentLocation, (int)pos.X, (int)pos.Y));
                 t.children.Add(child);

@@ -57,7 +57,7 @@ namespace StarAI.PathFindingCore.DebrisLogic
             foreach (var v in sticksToChop)
             {
 
-                object[] objList = new object[1];
+                object[] objList = new object[2];
                 objList[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.Axe w = new StardewValley.Tools.Axe();
@@ -202,7 +202,7 @@ namespace StarAI.PathFindingCore.DebrisLogic
 
         public static void chopSingleStick(TileNode v,List<TileNode> path)
         {
-            object[] obj = new object[1];
+            object[] obj = new object[2];
             obj[0] = v;
             obj[1] = path;
             chopSingleStick(obj);

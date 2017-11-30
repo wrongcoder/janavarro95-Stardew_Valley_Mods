@@ -45,125 +45,52 @@ namespace StarAI.PathFindingCore.CropLogic
             //Instead of just running this function I should add it to my execution queue.
             foreach(var v in cropsToWater)
             {
-                object[] obj = new object[1];
+                object[] obj = new object[2];
                 obj[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.WateringCan w = new StardewValley.Tools.WateringCan();
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(waterSingleCrop, obj,new ExecutionCore.TaskMetaData("Water Crop", new StaminaPrerequisite(true,3),new ToolPrerequisite(true,w.GetType(),1))));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(waterSingleCrop, obj, new ExecutionCore.TaskMetaData("Water Crop", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                if (task.taskMetaData.cost == Int32.MaxValue)
+                {
+                    Utilities.clearExceptionListWithNames(true);
+                    continue;
+                }
+                ExecutionCore.TaskList.taskList.Add(task);
+                obj[1] = task.taskMetaData.path;
+                task.objectParameterDataArray = obj;
                 //   waterSingleCrop(v);
                 Utilities.clearExceptionListWithName("Child");
             }
+            cropsToWater.Clear();
         }
 
-        public static void waterSingleCrop(TileNode v)
+        public static void waterSingleCrop(TileNode v,List<TileNode> path)
         {
-            object[] obj = new object[1];
+            object[] obj = new object[2];
             obj[0] = v;
+            obj[1] = path;
             waterSingleCrop(obj);
         }
 
 
         public static void waterSingleCrop(object obj) {
-            object[] objArr =(object[]) obj;
-            TileNode v =(TileNode) objArr[0];
-            bool moveOn = false;
-            foreach (var q in Utilities.tileExceptionList)
+
+
+            object[] objArray = (object[])obj;
+
+            TileNode v = (TileNode)objArray[0];
+            //List<TileNode> correctPath = Utilities.pathStuff(v);//(List<TileNode>)objArray[1];
+            List<TileNode> correctPath = (List<TileNode>)objArray[1];
+            foreach (var goodTile in correctPath)
             {
-                if(q.tile==v && q.actionType=="Water")
-                {
-                    moveOn = true;
-                }
-            }
-            if (moveOn == false) return;
-
-                WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
-                int xMin = -1;
-                int yMin = -1;
-                int xMax = 1;
-                int yMax = 1;
-                List<TileNode> miniGoals = new List<TileNode>();
-                List<List<TileNode>> paths = new List<List<TileNode>>();
-                //try to set children to tiles where children haven't been before
-                for (int x = xMin; x <= xMax; x++)
-                {                    for (int y = yMin; y <= yMax; y++)
-                    {
-                        if (x == 0 && y == 0) continue;
-
-                        //Include these 4 checks for just left right up down movement. Remove them to enable 8 direction path finding
-                        if (x == -1 && y == -1) continue; //upper left
-                        if (x == -1 && y == 1) continue; //bottom left
-                        if (x == 1 && y == -1) continue; //upper right
-                        if (x == 1 && y == 1) continue; //bottom right
-
-                        Vector2 pos = new Vector2(v.tileLocation.X + x, v.tileLocation.Y + y);
-                        //ModCore.CoreMonitor.Log("AHHHHHHH POSITION: " + pos.ToString(), LogLevel.Alert);
-                        bool f=  PathFindingCore.TileNode.checkIfICanPlaceHere(v, pos*Game1.tileSize, v.thisLocation,true);
-                       // ModCore.CoreMonitor.Log("OK THIS IS THE RESULT F: " + f, LogLevel.Alert);
-                        if (f == true)
-                        {
-                         
-                            TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                        t.placementAction(Game1.currentLocation,(int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
-                        //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode( t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
-                        miniGoals.Add(t);
-                            Utilities.tileExceptionList.Add(new TileExceptionMetaData(t,"Navigation"));
-                        }
-                    }
-                }
-            List<TileNode> removalList = new List<TileNode>();
-                foreach(var nav in miniGoals)
-                {
-                    TileNode tempSource= new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX()*Game1.tileSize, Game1.player.getTileY()*Game1.tileSize);
-                //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
-                List<TileNode> path=  PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource,nav,new List<TileNode>(),true,false);
-
-                if (path.Count!=0)
-                    {
-                        //ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
-                        paths.Add(path);
-                        foreach(var someTile in path)
-                        {
-                        if (someTile == nav) removalList.Add(someTile);
-                            StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(someTile);
-                        someTile.thisLocation.objects.Remove(someTile.tileLocation);
-                        //someTile.performRemoveAction(someTile.tileLocation, someTile.thisLocation);
-                        //StardustCore.Utilities.masterRemovalList.Add(someTile);
-                        //ModCore.CoreMonitor.Log("CAUGHT MY CULPERATE", LogLevel.Warn);
-                    }
-                    }
-                    
-                }
-            Console.WriteLine("GOALS COUNT:" + miniGoals.Count);
-                foreach(var q in removalList) {
-                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(q);
-                q.thisLocation.objects.Remove(q.tileLocation);
-            }
-            removalList.Clear();
-                int pathCost = 999999999;
-                List<TileNode> correctPath = new List<TileNode>();
-                foreach(var potentialPath in paths)
-                {
-                if (potentialPath.Count == 0) continue;
-                    if (potentialPath.Count < pathCost)
-                    {
-                        
-                        pathCost = potentialPath.Count;
-                        correctPath = potentialPath;
-                    }
-                }
-
-                foreach (var goodTile in correctPath) {
-                    StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
+                StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
                 //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(goodTile, Game1.currentLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize));
-                goodTile.placementAction(goodTile.thisLocation,(int) goodTile.tileLocation.X*Game1.tileSize, (int)goodTile.tileLocation.Y*Game1.tileSize);
+                goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
 
             }
-                PathFindingLogic.calculateMovement(correctPath);
+            PathFindingLogic.calculateMovement(correctPath);
 
-
-
-                if (v.tileLocation.X < Game1.player.getTileX())
+            if (v.tileLocation.X < Game1.player.getTileX())
                 {
                     Game1.player.faceDirection(3);
                 }
@@ -269,19 +196,31 @@ namespace StarAI.PathFindingCore.CropLogic
             //Instead of just running this function I should add it to my execution queue.
             foreach (var v in cropsToHarvest)
             {
-                object[] obj = new object[1];
+                object[] obj = new object[2];
                 obj[0] = v;
                 //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(harvestSingleCrop), obj));
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(harvestSingleCrop, obj,new ExecutionCore.TaskMetaData("HarvestSingleCrop",null,null,new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true))));
+
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(harvestSingleCrop, obj, new ExecutionCore.TaskMetaData("HarvestSingleCrop", null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
+                if (task.taskMetaData.cost == Int32.MaxValue)
+                {
+                    Utilities.clearExceptionListWithNames(true);
+                    continue;
+                }
+
+                ExecutionCore.TaskList.taskList.Add(task);
+                obj[1] = task.taskMetaData.path;
+                task.objectParameterDataArray = obj;
                 Utilities.clearExceptionListWithName("Child");
                 //   waterSingleCrop(v);
             }
+            cropsToHarvest.Clear();
         }
 
-        public static void harvestSingleCrop(TileNode v)
+        public static void harvestSingleCrop(TileNode v,List<TileNode> path)
         {
-            object[] obj = new object[1];
+            object[] obj = new object[2];
             obj[0] = v;
+            obj[1] = path;
             harvestSingleCrop(obj);
         }
 
@@ -289,104 +228,18 @@ namespace StarAI.PathFindingCore.CropLogic
 
         public static void harvestSingleCrop(object obj)
         {
-            object[] objArr = (object[])obj;
-            TileNode v = (TileNode)objArr[0];
-            foreach (var q in objArr){
-                ModCore.CoreMonitor.Log("OK THIS IS THE RESULT !: " + q, LogLevel.Alert);
-            }
-            if(v==null) ModCore.CoreMonitor.Log("WTF MARK!!!!!!: ", LogLevel.Alert);
-            bool moveOn = false;
-            foreach (var q in Utilities.tileExceptionList)
-            {
-                if (q.tile == v && q.actionType == "Harvest")
-                {
-                    moveOn = true;
-                }
-            }
-            if (moveOn == false) return;
+            object[] objArray = (object[])obj;
 
-            WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_X);
-            int xMin = -1;
-            int yMin = -1;
-            int xMax = 1;
-            int yMax = 1;
-            List<TileNode> miniGoals = new List<TileNode>();
-            List<List<TileNode>> paths = new List<List<TileNode>>();
-            //try to set children to tiles where children haven't been before
-            for (int x = xMin; x <= xMax; x++)
-            {
-                for (int y = yMin; y <= yMax; y++)
-                {
-                    if (x == 0 && y == 0) continue;
-
-                    //Include these 4 checks for just left right up down movement. Remove them to enable 8 direction path finding
-                    if (x == -1 && y == -1) continue; //upper left
-                    if (x == -1 && y == 1) continue; //bottom left
-                    if (x == 1 && y == -1) continue; //upper right
-                    if (x == 1 && y == 1) continue; //bottom right
-
-                    Vector2 pos = new Vector2(v.tileLocation.X + x, v.tileLocation.Y + y);
-                    //ModCore.CoreMonitor.Log("AHHHHHHH POSITION: " + pos.ToString(), LogLevel.Alert);
-                    bool f = PathFindingCore.TileNode.checkIfICanPlaceHere(v, pos * Game1.tileSize, v.thisLocation, true);
-                    ModCore.CoreMonitor.Log("OK THIS IS THE RESULT F: " + f, LogLevel.Alert);
-                    if (f == true)
-                    {
-
-                        TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                        t.placementAction(Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
-                        //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
-                        miniGoals.Add(t);
-                        Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Navigation"));
-                    }
-                }
-            }
-            List<TileNode> removalList = new List<TileNode>();
-            foreach (var nav in miniGoals)
-            {
-                TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(),true,false);
-                if (path.Count!=0)
-                {
-                    ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
-                    paths.Add(path);
-                    foreach (var someTile in path)
-                    {
-                        if (someTile == nav) removalList.Add(someTile);
-                        StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(someTile);
-                        someTile.thisLocation.objects.Remove(someTile.tileLocation);
-                        //someTile.performRemoveAction(someTile.tileLocation, someTile.thisLocation);    
-                    //StardustCore.Utilities.masterRemovalList.Add(v);
-                    }
-                }
-
-            }
-            foreach (var q in removalList)
-            {
-                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(q);
-                q.thisLocation.objects.Remove(q.tileLocation);
-            }
-            removalList.Clear();
-            int pathCost = 999999999;
-            List<TileNode> correctPath = new List<TileNode>();
-            foreach (var potentialPath in paths)
-            {
-                if (potentialPath.Count == 0) continue;
-                if (potentialPath.Count < pathCost)
-                {
-                    pathCost = potentialPath.Count;
-                    correctPath = potentialPath;
-                }
-            }
-
+            TileNode v = (TileNode)objArray[0];
+            //List<TileNode> correctPath = Utilities.pathStuff(v);//(List<TileNode>)objArray[1];
+            List<TileNode> correctPath = (List<TileNode>)objArray[1];
             foreach (var goodTile in correctPath)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
-                goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
                 //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(goodTile, Game1.currentLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize));
+                goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
+
             }
-            //END HERE FOR JUST CALCULATING PATH COST
-            
             PathFindingLogic.calculateMovement(correctPath);
             if (v.tileLocation.X < Game1.player.getTileX())
             {
