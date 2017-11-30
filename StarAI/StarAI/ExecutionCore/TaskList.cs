@@ -29,16 +29,26 @@ namespace StarAI.ExecutionCore
             
                 
                 
-            /*
+            
             foreach (var task2 in taskList)
             {
                     if (removalList.Contains(task2)) continue;
                     object[] oArray = (object[])task2.objectParameterDataArray;
                     TileNode t =(TileNode) oArray[0];
-                    task2.taskMetaData.calculateTaskCost(t,false);
+                    task2.taskMetaData.calculateTaskCost(t,true);
+                    try
+                    {
+                        object[] objArr = (object[])task2.objectParameterDataArray;
+                        objArr[1]= (object)task2.taskMetaData.path;
+                        task2.objectParameterDataArray = objArr;
+                    }
+                    catch(Exception err)
+                    {
+
+                    }
                 //task.taskMetaData = new TaskMetaData(task.taskMetaData.name, PathFindingCore.Utilities.calculatePathCost(task.objectParameterDataArray), task.taskMetaData.staminaPrerequisite, task.taskMetaData.toolPrerequisite);
             }
-            */
+            
             //Some really cool delegate magic that sorts in place by the cost of the action!!!!
             taskList.Sort(delegate (CustomTask t1, CustomTask t2)
             {

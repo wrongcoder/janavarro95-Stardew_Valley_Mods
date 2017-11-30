@@ -216,7 +216,8 @@ namespace StarAI.PathFindingCore.DebrisLogic
             object[] objArray=(object[])obj;
            
             TileNode v = (TileNode)objArray[0];
-            List<TileNode> correctPath = (List<TileNode>)objArray[1];
+            //List<TileNode> correctPath = Utilities.pathStuff(v);//(List<TileNode>)objArray[1];
+            List<TileNode> correctPath =(List<TileNode>)objArray[1];
             foreach (var goodTile in correctPath)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
