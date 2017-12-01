@@ -34,18 +34,43 @@ namespace StarAI.ExecutionCore
             {
                     if (removalList.Contains(task2)) continue;
                     object[] oArray = (object[])task2.objectParameterDataArray;
-                    TileNode t =(TileNode) oArray[0];
-                    task2.taskMetaData.calculateTaskCost(t,true);
+                   
+                    try
+                    {
+                        TileNode t = (TileNode)oArray[0];
+                        ModCore.CoreMonitor.Log("Premtive calculate 1");
+                        task2.taskMetaData.calculateTaskCost(t, false);
+                        object[] objArr = new object[3];
+                        objArr[0] = (object)t;
+                        objArr[1] = (object)task2.taskMetaData.path;
+                        task2.objectParameterDataArray = objArr;
+                    }
+                    catch(Exception err)
+                    {
+                        List<TileNode> t = (List<TileNode>)oArray[0];
+                        ModCore.CoreMonitor.Log("Premtive calculate 2");
+                        foreach(var s in Utilities.tileExceptionList)
+                        {
+                            ModCore.CoreMonitor.Log(s.actionType);
+                        }
+                        task2.taskMetaData.calculateTaskCost(t, false);
+                        object[] objArr = new object[3];
+                        objArr[0] = (object)t; //List of trees to use for path calculations
+                        objArr[1] = (object)task2.taskMetaData.path; //The path itself.
+                        int malcolm = 0;
+                        ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
+                        objArr[2] = (object)task2.taskMetaData.path.ElementAt(malcolm); //source of whatever is hit.
+                        task2.objectParameterDataArray = objArr;
+                        Utilities.tileExceptionList.Clear();
+                    }
+                  
 
-                    object[] objArr = new object[2];
-                    objArr[0] = (object)t;
-                    objArr[1]= (object)task2.taskMetaData.path;
-                    task2.objectParameterDataArray = objArr;
+                  
                     
                    
                 //task.taskMetaData = new TaskMetaData(task.taskMetaData.name, PathFindingCore.Utilities.calculatePathCost(task.objectParameterDataArray), task.taskMetaData.staminaPrerequisite, task.taskMetaData.toolPrerequisite);
             }
-            
+                ModCore.CoreMonitor.Log("DONE CALCULATING JUNK NOW RUNNING TASK");
             //Some really cool delegate magic that sorts in place by the cost of the action!!!!
             taskList.Sort(delegate (CustomTask t1, CustomTask t2)
             {

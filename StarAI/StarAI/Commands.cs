@@ -31,6 +31,10 @@ namespace StarAI
 
             ModCore.CoreHelper.ConsoleCommands.Add("choptwigs", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("choptrees", "Chop trees down.", new Action<string, string[]>(Commands.chopAllTrees));
+            ModCore.CoreHelper.ConsoleCommands.Add("cuttrees",  "Chop trees down.", new Action<string, string[]>(Commands.chopAllTrees));
+
             ModCore.CoreHelper.ConsoleCommands.Add("breakstones", "Break small stones with pickaxe.", new Action<string, string[]>(Commands.breakAllStones));
 
             ModCore.CoreHelper.ConsoleCommands.Add("cutweed", "Cut weeds with a tool.", new Action<string, string[]>(Commands.cutAllWeeds));
@@ -45,6 +49,20 @@ namespace StarAI
         public static void getSeedsFromChests(string s, string[] args)
         {
             ChestLogic.getAllSeasonalSeedsFromAllChestsAtLocation(Game1.player.currentLocation);
+        }
+
+        public static void chopAllTrees(string s, string[] args)
+        {
+            if (args.Length == 1)
+            {
+                if (args[0] == "All" || args[0] == "all")
+                {
+                    ModCore.CoreMonitor.Log("CHOP ALL TREES");
+                    DebrisLogic.getAllTreesToChop(Game1.player.currentLocation);
+                    return;
+                }
+            }
+            DebrisLogic.getAllTreesToChopRadius(Game1.player.currentLocation);
         }
 
         public static void chopAllTwigs(string s, string[] args)

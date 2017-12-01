@@ -803,5 +803,35 @@ namespace StardustCore
         }
 
 
+        public static KeyValuePair<Vector2,TerrainFeature> checkRadiusForTerrainFeature(int radius, Type terrainType)
+        {
+            for (int x = -radius; x <= radius; x++)
+            {
+                for (int y = -radius; y <= radius; y++)
+                {
+                    Vector2 pos = new Vector2((Game1.player.getTileX() + x), (Game1.player.getTileY() + y));
+                    bool f = Game1.player.currentLocation.isTerrainFeatureAt((int)pos.X,(int)pos.Y);
+                    if (f == false) continue;
+                    TerrainFeature t = Game1.player.currentLocation.terrainFeatures[pos];  //((Game1.player.getTileX() + x) * Game1.tileSize, (Game1.player.getTileY() + y) * Game1.tileSize);
+                    if (t == null) continue;
+                    if (t.GetType() == terrainType)
+                    {
+                        return new KeyValuePair<Vector2, TerrainFeature> (pos,t);
+                    }
+                }
+            }
+            return new KeyValuePair<Vector2, TerrainFeature>(new Vector2(),null);
+        }
+
+        public static bool doesLocationContainTerrainFeature(GameLocation location, Type terrain)
+        {
+            foreach (var v in location.terrainFeatures)
+            {
+                if (terrain == v.Value.GetType()) return true;
+            }
+            return false;
+        }
+
+
     }
 }

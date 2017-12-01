@@ -30,7 +30,14 @@ namespace StarAI.ExecutionCore
             objectTask = objTask;
             objectParameterDataArray = arrayData;
             this.taskMetaData = TaskMetaData;
-            this.taskMetaData.calculateTaskCost((TileNode)arrayData[0],true);
+            try
+            {
+                this.taskMetaData.calculateTaskCost((TileNode)arrayData[0], true);
+            }
+            catch(Exception err)
+            {
+                this.taskMetaData.calculateTaskCost((List<TileNode>)arrayData[0], true);
+            }
         }
 
         public CustomTask(VoidTask vTask, TaskMetaData TaskMetaData)

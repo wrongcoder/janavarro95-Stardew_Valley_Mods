@@ -67,7 +67,7 @@ namespace StarAI.ExecutionCore
         {
            if(unknownPath) PathFindingLogic.delay = 18;
             else PathFindingLogic.delay = 0;
-            List<TileNode> idealPath = StarAI.PathFindingCore.Utilities.pathStuff(v);
+            List<TileNode> idealPath = StarAI.PathFindingCore.Utilities.getIdealPath(v);
             int costCalculation;
 
             if (idealPath.Count == 0) costCalculation = Int32.MaxValue;
@@ -78,6 +78,23 @@ namespace StarAI.ExecutionCore
             float pathCost=  costCalculation* pathCostMultiplier;
             float toolCost = calculateToolCostMultiplier(t);
             return new KeyValuePair<int,List<TileNode>>(((int)pathCost + (int)toolCost),idealPath);  
+        }
+
+        public static KeyValuePair<int, List<TileNode>> calculateTaskCost(List<TileNode> v, ToolPrerequisite t, bool unknownPath)
+        {
+            if (unknownPath) PathFindingLogic.delay = 18;
+            else PathFindingLogic.delay = 0;
+            List<TileNode> idealPath = StarAI.PathFindingCore.Utilities.getIdealPath(v);
+            int costCalculation;
+
+            if (idealPath.Count == 0) costCalculation = Int32.MaxValue;
+            else costCalculation = idealPath.Count;
+
+            if (costCalculation == Int32.MaxValue) return new KeyValuePair<int, List<TileNode>>(Int32.MaxValue, new List<TileNode>());
+
+            float pathCost = costCalculation * pathCostMultiplier;
+            float toolCost = calculateToolCostMultiplier(t);
+            return new KeyValuePair<int, List<TileNode>>(((int)pathCost + (int)toolCost), idealPath);
         }
 
     }

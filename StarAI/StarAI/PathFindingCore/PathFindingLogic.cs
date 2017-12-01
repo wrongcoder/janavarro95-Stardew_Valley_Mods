@@ -21,7 +21,7 @@ namespace StarAI.PathFindingCore
         public static int delay;
 
        
-        public static int index = 0;
+      //  public static int index = 0;
 
 
         public static void pathFindToAllGoals()
@@ -71,6 +71,7 @@ namespace StarAI.PathFindingCore
 
         public static void pathFindToSingleGoal(object data)
         {
+            int index = 0;
             List<TileNode> path = new List<TileNode>();
             //path.Clear();
             ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
@@ -299,6 +300,7 @@ namespace StarAI.PathFindingCore
 
         public static List<TileNode> pathFindToSingleGoalReturnPath(object data)
         {
+            int index = 0;
             List<TileNode> path = new List<TileNode>();
             //path.Clear();
             ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
@@ -324,6 +326,8 @@ namespace StarAI.PathFindingCore
             queue.Add(currentNode);
             index++;
             bool goalFound = false;
+            Utilities.clearExceptionListWithName("Child");
+            Utilities.clearExceptionListWithName("Navigation");
             while (currentNode.tileLocation != Goal.tileLocation && queue.Count != 0)
             {
                 // ModCore.CoreMonitor.Log("LET'S GO PATH!!!!", LogLevel.Error);
@@ -557,9 +561,10 @@ namespace StarAI.PathFindingCore
         }
         public static List<TileNode> pathFindToSingleGoalReturnPathList(object data)
         {
+            int index = 0;
             List<TileNode> path = new List<TileNode>();
             //path.Clear();
-            ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
+            ModCore.CoreMonitor.Log("LET'S GO 2222!!!!", LogLevel.Error);
             object[] obj = (object[])data;
 
             TileNode Source = (TileNode)obj[0];
@@ -579,13 +584,14 @@ namespace StarAI.PathFindingCore
             bool placement = (bool)obj[3];
             bool checkForUtility = (bool)obj[4];
             queue.Add(currentNode);
-            index++;
+           // index++;
             bool goalFound = false;
             while (doesNodeEqualGoal(currentNode,Goals).Key==false && queue.Count != 0)
             {
-                // ModCore.CoreMonitor.Log("LET'S GO PATH!!!!", LogLevel.Error);
-                //ModCore.CoreMonitor.Log("PATH FROM SOURCE: " + currentNode.tileLocation, LogLevel.Error);
-                //ModCore.CoreMonitor.Log("PATH To GOAL: " + Goal.tileLocation, LogLevel.Error);
+               //  ModCore.CoreMonitor.Log("LET'S GO PATH!!!!", LogLevel.Error);
+               // ModCore.CoreMonitor.Log("PATH FROM SOURCE: " + currentNode.tileLocation, LogLevel.Error);
+               // ModCore.CoreMonitor.Log("THIS IS MY MISTAKE!!!!!!! " + Goals.Count, LogLevel.Error);
+      
                 //Console.WriteLine("OK WTF IS GOING ON????");
                 //Add children to current node
                 int xMin = -1;
@@ -609,7 +615,7 @@ namespace StarAI.PathFindingCore
                                                         //ModCore.CoreMonitor.Log("HERE1", LogLevel.Error);
 
                         TileNode.setSingleTileAsChild(currentNode, (int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y, checkForUtility, placement);
-                        //ModCore.CoreMonitor.Log("OR NO?", LogLevel.Error);
+                       // ModCore.CoreMonitor.Log("OR NO?", LogLevel.Error);
                         Vector2 check = new Vector2((int)currentNode.tileLocation.X + x, (int)currentNode.tileLocation.Y + y);
                         if (doesNodeEqualGoal(check,Goals).Key==true)
                         {
@@ -676,6 +682,7 @@ namespace StarAI.PathFindingCore
                 }
                 catch (Exception err)
                 {
+                    ModCore.CoreMonitor.Log("FUCK", LogLevel.Error);
                     break;
                 }
                 currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Blue); //Working
