@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using StarAI.PathFindingCore;
 using System.IO;
 using StardustCore;
+using StardewValley.Menus;
 
 namespace StarAI
 {
@@ -24,13 +25,15 @@ namespace StarAI
         public static List<Warp> warpGoals = new List<Warp>();
         public static object[] obj = new object[3];
 
+        public static bool throwUpShippingMenu;
+
         public override void Entry(IModHelper helper)
         {
             obj[0] = PathFindingLogic.source;
             obj[1] = PathFindingLogic.currentGoal;
             obj[2] = PathFindingLogic.queue;
             CoreHelper = helper;
-
+            throwUpShippingMenu = false;
             // string[] s = new string[10];
 
             CoreMonitor = this.Monitor;
@@ -43,10 +46,36 @@ namespace StarAI
 
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
-           // StardewModdingAPI.Events.GraphicsEvents.OnPreRenderEvent += PathFindingCore.Utilities.addFromPlacementListBeforeDraw;
-           
+            // StardewModdingAPI.Events.GraphicsEvents.OnPreRenderEvent += PathFindingCore.Utilities.addFromPlacementListBeforeDraw;
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
 
             StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(StarAI.PathFindingCore.TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(StarAI.PathFindingCore.TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(StarAI.PathFindingCore.TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(StarAI.PathFindingCore.TileNode.Serialize)));
+        }
+
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+
+            Stack<IClickableMenu> menus = new Stack<IClickableMenu>();
+
+            if (throwUpShippingMenu == true)
+            {
+                List<Item> itemList = new List<Item>();
+                foreach (var item in Game1.shippingBin)
+                {
+                    itemList.Add(item);
+                }
+                menus.Push(new StardewValley.Menus.ShippingMenu(itemList));
+                foreach (var q in Game1.shippingBin)
+                {
+                    ModCore.CoreMonitor.Log(q.name);
+                }
+                throwUpShippingMenu = false;
+            }
+            foreach(var v in Game1.endOfNightMenus)
+            {
+                menus.Push(v);
+            }
+            Game1.endOfNightMenus = menus;
         }
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)

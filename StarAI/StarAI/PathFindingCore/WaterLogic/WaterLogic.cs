@@ -69,15 +69,16 @@ namespace StarAI.PathFindingCore.WaterLogic
             ok++;
             int numberOfUses = 1;
             ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToSingleWaterTile, objList, new ExecutionCore.TaskMetaData("GoToWaterTile", new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
-            task.objectParameterDataArray = objList;
+
 
             if (task.taskMetaData.cost == Int32.MaxValue)
             {
                 Utilities.clearExceptionListWithNames(true);
                 return;
             }
+            objList[1] = task.taskMetaData.path;
+            objList[2] = task.taskMetaData.path.ElementAt(0);
+            task.objectParameterDataArray = objList;
             ExecutionCore.TaskList.taskList.Add(task);
             Utilities.clearExceptionListWithName("Child");
 
@@ -109,7 +110,7 @@ namespace StarAI.PathFindingCore.WaterLogic
                     {
                         TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
                         t.fakePlacementAction(Game1.currentLocation, i, j);
-                        Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "ChopTree"));
+                        Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "WaterTile"));
                         waterTilesAvailable.Add(t);
                         twingCount++;
                     }
@@ -134,16 +135,17 @@ namespace StarAI.PathFindingCore.WaterLogic
             ok++;
             int numberOfUses = 1;
             ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToSingleWaterTile, objList, new ExecutionCore.TaskMetaData("GoToWaterTile", new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
-            task.objectParameterDataArray = objList;
+
 
             if (task.taskMetaData.cost == Int32.MaxValue)
             {
                 Utilities.clearExceptionListWithNames(true);
                 return null;
             }
-           // ExecutionCore.TaskList.taskList.Add(task);
+            objList[1] = task.taskMetaData.path;
+            objList[2] = task.taskMetaData.path.ElementAt(0);
+            task.objectParameterDataArray = objList;
+            // ExecutionCore.TaskList.taskList.Add(task);
             Utilities.clearExceptionListWithName("Child");
 
             waterTilesAvailable.Clear();

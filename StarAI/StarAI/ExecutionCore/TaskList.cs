@@ -93,12 +93,20 @@ namespace StarAI.ExecutionCore
                     ModCore.CoreMonitor.Log(s.actionType);
                 }
                 v.taskMetaData.calculateTaskCost(t, false);
-                object[] objArr = new object[3];
+                object[] objArr = new object[4];
                 objArr[0] = (object)t; //List of trees to use for path calculations
                 objArr[1] = (object)v.taskMetaData.path; //The path itself.
                 int malcolm = 0;
                 ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
                 objArr[2] = (object)v.taskMetaData.path.ElementAt(malcolm); //source of whatever is hit.
+                try
+                {
+                    objArr[3] = oArray[3];
+                }
+                catch(Exception err2)
+                {
+
+                }
                 v.objectParameterDataArray = objArr;
                 Utilities.tileExceptionList.Clear();
             }

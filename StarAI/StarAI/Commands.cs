@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using StarAI;
 using StarAI.PathFindingCore.DebrisLogic;
 using StarAI.PathFindingCore.WaterLogic;
+using StarAI.PathFindingCore.CropLogic;
 
 namespace StarAI
 {
@@ -43,6 +44,9 @@ namespace StarAI
 
             ModCore.CoreHelper.ConsoleCommands.Add("watercan", "Fill my watering can.", new Action<string, string[]>(Commands.fillWateringCan));
             ModCore.CoreHelper.ConsoleCommands.Add("fillcan", "Fill my watering can.", new Action<string, string[]>(Commands.fillWateringCan));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("shippingbin", "Goto shipping bin", new Action<string, string[]>(Commands.goToShippingBin));
+            ModCore.CoreHelper.ConsoleCommands.Add("shipItem", "Fill my watering can.", new Action<string, string[]>(Commands.shipItem));
             // ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -53,6 +57,35 @@ namespace StarAI
         public static void getSeedsFromChests(string s, string[] args)
         {
             ChestLogic.getAllSeasonalSeedsFromAllChestsAtLocation(Game1.player.currentLocation);
+        }
+
+        public static void shipItem(string s, string[] args)
+        {
+            if (args.Length < 2)
+            {
+                ModCore.CoreMonitor.Log("NOT ENOUGH PARAMETERS. NEED 2 ARGS. ItemIndex,Amount");
+                return;
+            }
+            StardewValley.Object ok =new StardewValley.Object(Convert.ToInt32(args[0]),Convert.ToInt32(args[1]));
+
+            if (ok == null) {
+                ModCore.CoreMonitor.Log("ITEM IS NULL????");
+                return;
+            }
+            ExecutionCore.TaskPrerequisites.ItemPrerequisite pre = new ExecutionCore.TaskPrerequisites.ItemPrerequisite(ok, ok.stack);
+            if (pre.doesPlayerHaveEnoughOfMe())
+            {
+                ShippingLogic.goToShippingBinShipItem(ok);
+            }
+            else
+            {
+                ModCore.CoreMonitor.Log("Player does not have: " + ok.name + ": amount: " + ok.stack.ToString());
+            }
+        }
+
+        public static void goToShippingBin(string s, string[] args)
+        {
+            ShippingLogic.goToShippingBinSetUp();
         }
 
         public static void fillWateringCan(string s, string[] args)
@@ -372,7 +405,7 @@ namespace StarAI
                 obj[1] = PathFindingLogic.currentGoal;
                 PathFindingLogic.queue = new List<TileNode>();
                 obj[2] = PathFindingLogic.queue;
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(PathFindingLogic.pathFindToSingleGoal, obj,new ExecutionCore.TaskMetaData("Pathfind Command",PathFindingCore.Utilities.calculatePathCost(PathFindingLogic.source,false))));
+               // ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(PathFindingLogic.pathFindToSingleGoal, obj,new ExecutionCore.TaskMetaData("Pathfind Command",PathFindingCore.Utilities.calculatePathCost(PathFindingLogic.source,false))));
                 //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(PathFindingLogic.pathFindToSingleGoal),obj));
             }
             #endregion

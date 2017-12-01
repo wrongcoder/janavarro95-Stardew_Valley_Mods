@@ -832,6 +832,21 @@ namespace StardustCore
             return false;
         }
 
-
+        public static Item getItemFromInventory(int index)
+        {
+            foreach(var v in Game1.player.items)
+            {
+                if (v.parentSheetIndex == index) return v;
+            }
+            return null;
+        }
+        public static Item getItemFromInventory(string name)
+        {
+            foreach (var v in Game1.player.items)
+            {
+                if (v.Name == name) return v;
+            }
+            return null;
+        }
     }
 }
