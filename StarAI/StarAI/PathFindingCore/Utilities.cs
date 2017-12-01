@@ -544,6 +544,9 @@ namespace StarAI.PathFindingCore
 
             //have this take in a list of goals and see which goal it reaches first
             List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, miniGoals, new List<TileNode>(), placement, utility);
+
+            ModCore.CoreMonitor.Log("OK MY PATH IS:" + path.Count);
+
             Utilities.clearExceptionListWithName("Child");
             Utilities.clearExceptionListWithName("Navigation");
             if (path.Count == 0)

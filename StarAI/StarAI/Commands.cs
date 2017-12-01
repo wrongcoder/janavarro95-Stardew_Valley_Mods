@@ -13,6 +13,7 @@ using StarAI;
 using StarAI.PathFindingCore.DebrisLogic;
 using StarAI.PathFindingCore.WaterLogic;
 using StarAI.PathFindingCore.CropLogic;
+using StarAI.PathFindingCore.MapTransitionLogic;
 
 namespace StarAI
 {
@@ -46,12 +47,27 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("fillcan", "Fill my watering can.", new Action<string, string[]>(Commands.fillWateringCan));
 
             ModCore.CoreHelper.ConsoleCommands.Add("shippingbin", "Goto shipping bin", new Action<string, string[]>(Commands.goToShippingBin));
-            ModCore.CoreHelper.ConsoleCommands.Add("shipItem", "Fill my watering can.", new Action<string, string[]>(Commands.shipItem));
+            ModCore.CoreHelper.ConsoleCommands.Add("shipItem", "Ship an Item", new Action<string, string[]>(Commands.shipItem));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("pathto", "Path to the adjacent map", new Action<string, string[]>(Commands.pathToMap));
             // ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
                 "0"
                 });
+        }
+
+        public static void pathToMap(string s, string[] args)
+        {
+            if (args.Length == 0)
+            {
+                ModCore.CoreMonitor.Log("Need 1 parameter. MapName");
+                return;
+            }
+            else
+            {
+                TransitionLogic.transitionToAdjacentMap(Game1.player.currentLocation, args[0]);
+            }
         }
 
         public static void getSeedsFromChests(string s, string[] args)
@@ -102,10 +118,25 @@ namespace StarAI
                     ModCore.CoreMonitor.Log("CHOP ALL TREES");
                     DebrisLogic.getAllTreesToChop(Game1.player.currentLocation);
                     return;
+                   
                 }
             }
-            DebrisLogic.getAllTreesToChopRadius(Game1.player.currentLocation);
+            DebrisLogic.getAllTreesToChop(Game1.player.currentLocation);
         }
+
+        /*
+        public void goPickUpDebris()
+        {
+                public static void removeSquareDebrisFromTile(int tileX, int tileY)
+        {
+            for (int index = Game1.currentLocation.debris.Count - 1; index >= 0; --index)
+            {
+                if (Game1.currentLocation.debris[index].debrisType == Debris.DebrisType.SQUARES && (int)((double)Game1.currentLocation.debris[index].Chunks[0].position.X / (double)Game1.tileSize) == tileX && Game1.currentLocation.debris[index].chunkFinalYLevel / Game1.tileSize == tileY)
+                    Game1.currentLocation.debris.RemoveAt(index);
+            }
+        }
+        */
+    
 
         public static void chopAllTwigs(string s, string[] args)
         {

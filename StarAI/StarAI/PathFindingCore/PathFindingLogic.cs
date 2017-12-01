@@ -632,7 +632,9 @@ namespace StarAI.PathFindingCore
                 if (goalFound == true)
                 {
                     currentNode = doesNodeEqualGoal(currentNode, Goals).Value;
-                    //ModCore.CoreMonitor.Log("FOUND YOU!!!");
+                    ModCore.CoreMonitor.Log("FOUND YOU!!!");
+
+                  //  path.Add(currentNode);
                     //System.Threading.Thread.Sleep(2000);
                     break;
                 }
@@ -738,6 +740,7 @@ namespace StarAI.PathFindingCore
                     currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Red); //Working
                     path.Add(currentNode);
                 }
+                ModCore.CoreMonitor.Log("??????");
             }
             List<TileNode> removalList = new List<TileNode>();
             List<TileNode> ignoreList = new List<TileNode>();
@@ -745,36 +748,11 @@ namespace StarAI.PathFindingCore
             {
                 if (v is TileNode)
                 {
-
-                    foreach (var exc in Utilities.tileExceptionList)
-                    {
-                        if (ignoreList.Contains(exc.tile)) continue;
-                        // if ( (exc.tile == (v as TileNode)&&(exc.actionType!="Child"||exc.actionType!="Navigation"||exc.actionType!="CostCalculation"))|| path.Contains(v)) continue;
-                        if (exc.actionType == "ChopStick")
-                        {
-                            List<TileNode> idk = new List<TileNode>();
-                            foreach (var q in removalList)
-                            {
-                                if (exc.tile.tileLocation == q.tileLocation)
-                                {
-                                    idk.Add(q);
-                                    //removalList.Remove(exc.tile);
-                                    ignoreList.Add(exc.tile);
-                                    continue;
-                                }
-                            }
-                            foreach (var h in idk)
-                            {
-                                removalList.Remove(exc.tile);
-                            }
-
-                        }
-                        else removalList.Add((TileNode)v);
-                    }
-
-
-                }
-            }
+                   // ModCore.CoreMonitor.Log("Removing item: " + why + " / " + StardustCore.ModCore.SerializationManager.trackedObjectList.Count);
+                    removalList.Add((TileNode)v);                  
+                 }
+             }
+            
             foreach (var v in removalList)
             {
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
@@ -795,6 +773,11 @@ namespace StarAI.PathFindingCore
 
 
                 //StardustCore.Utilities.masterRemovalList.Add(v);
+            }
+
+            if (path.Count==0&& goalFound==true)
+            {
+                path.Add(Source);
             }
             return path;
             //calculateMovement(path);

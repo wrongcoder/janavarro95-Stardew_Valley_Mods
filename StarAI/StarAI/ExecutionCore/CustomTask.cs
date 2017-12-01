@@ -32,11 +32,11 @@ namespace StarAI.ExecutionCore
             this.taskMetaData = TaskMetaData;
             try
             {
-                this.taskMetaData.calculateTaskCost((TileNode)arrayData[0], true);
+                this.taskMetaData.calculateTaskCost((TileNode)arrayData[0], false);
             }
             catch(Exception err)
             {
-                this.taskMetaData.calculateTaskCost((List<TileNode>)arrayData[0], true);
+                this.taskMetaData.calculateTaskCost((List<TileNode>)arrayData[0], false);
             }
         }
 
