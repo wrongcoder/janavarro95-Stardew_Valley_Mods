@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StarAI;
 using StarAI.PathFindingCore.DebrisLogic;
+using StarAI.PathFindingCore.WaterLogic;
 
 namespace StarAI
 {
@@ -39,6 +40,9 @@ namespace StarAI
 
             ModCore.CoreHelper.ConsoleCommands.Add("cutweed", "Cut weeds with a tool.", new Action<string, string[]>(Commands.cutAllWeeds));
             ModCore.CoreHelper.ConsoleCommands.Add("cutweeds", "Cut weeds with a tool", new Action<string, string[]>(Commands.cutAllWeeds));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("watercan", "Fill my watering can.", new Action<string, string[]>(Commands.fillWateringCan));
+            ModCore.CoreHelper.ConsoleCommands.Add("fillcan", "Fill my watering can.", new Action<string, string[]>(Commands.fillWateringCan));
             // ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -49,6 +53,11 @@ namespace StarAI
         public static void getSeedsFromChests(string s, string[] args)
         {
             ChestLogic.getAllSeasonalSeedsFromAllChestsAtLocation(Game1.player.currentLocation);
+        }
+
+        public static void fillWateringCan(string s, string[] args)
+        {
+            WaterLogic.getAllWaterTiles(Game1.player.currentLocation);
         }
 
         public static void chopAllTrees(string s, string[] args)
@@ -109,51 +118,7 @@ namespace StarAI
         public static void runTasks(string s, string[] args)
         {
             ExecutionCore.TaskList.runTaskList();
-            /*
-            ModCore.CoreMonitor.Log("EXECUTE TASKS");
-            PathFindingLogic.source = null;
-            PathFindingLogic.currentGoal = null;
-            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.Running)
-            {
-                ModCore.CoreMonitor.Log("Tasklist is already executing. Just going to return.");
-                return;
-            }
-            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.RanToCompletion)
-            {
-                ModCore.CoreMonitor.Log("Tasklist is finished. Going to restart");
-
-                List<Task> removalList = new List<Task>();
-                foreach(var v in ExecutionCore.TaskList.taskList)
-                {
-                    if (v.IsCompleted) removalList.Add(v);
-                }
-                foreach(var v in removalList)
-                {
-                    ExecutionCore.TaskList.taskList.Remove(v);
-                }
-
-                ExecutionCore.TaskList.executioner = new Task(new Action(ExecutionCore.TaskList.runTaskList));
-                ExecutionCore.TaskList.executioner.Start();
-               // ExecutionCore.TaskList.taskList.Clear();
-                return;
-                //ExecutionCore.TaskList.runTaskList();
-
-            }
-
-            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.Faulted)
-            {
-                ModCore.CoreMonitor.Log(ExecutionCore.TaskList.executioner.Exception.ToString());
-            }
-
-            if (ExecutionCore.TaskList.executioner.Status == TaskStatus.Created)
-            {
-                //ExecutionCore.TaskList.runTaskList();
-                List<Task> removalList = new List<Task>();
-                ExecutionCore.TaskList.executioner.Start();
-  
-                return;
-            }
-            */
+          
         }
 
 
