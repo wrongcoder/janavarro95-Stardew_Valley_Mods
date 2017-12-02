@@ -50,6 +50,8 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("shipItem", "Ship an Item", new Action<string, string[]>(Commands.shipItem));
 
             ModCore.CoreHelper.ConsoleCommands.Add("pathto", "Path to the adjacent map", new Action<string, string[]>(Commands.pathToMap));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("goto", "Path to the adjacent map", new Action<string, string[]>(Commands.goToMap));
             // ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -66,7 +68,7 @@ namespace StarAI
             }
             else
             {
-                TransitionLogic.transitionToAdjacentMap(Game1.player.currentLocation, args[0]);
+                WarpGoal.getWarpChain(Game1.player.currentLocation, args[0]);
             }
         }
 
@@ -152,6 +154,15 @@ namespace StarAI
         }
 
 
+        public static void goToMap(string s, string[] args)
+        {
+            if (args.Length < 1)
+            {
+                ModCore.CoreMonitor.Log("Need args length of 1. Param: Name of location to go to.");
+                return;
+            }
+            PathFindingCore.MapTransitionLogic.TransitionLogic.transitionToAdjacentMap(Game1.player.currentLocation, args[0]);
+        }
 
         public static void breakAllStones(string s, string[] args)
         {

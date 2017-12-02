@@ -22,7 +22,6 @@ namespace StarAI.PathFindingCore
     /// </summary>
     public class TileNode : CoreObject
     {
-        public Vector2 position;
         public List<TileNode> children = new List<TileNode>();
         public enum stateEnum { NotVisited, Seen, Visited };
         public int seenState;
@@ -84,7 +83,7 @@ namespace StarAI.PathFindingCore
             {
                 Console.WriteLine("OK T LOCATION IS NULL");
             }
-
+            //ModCore.CoreMonitor.Log("TRY TO PLACE A TILE AT:" + loc + pos);
 
             if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
             {
@@ -111,14 +110,14 @@ namespace StarAI.PathFindingCore
             
             if (t.thisLocation.isTileOccupied(pos / Game1.tileSize))
             {
-               // ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
+             //   ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) t.thisLocation = null;
                 return false;
             }
 
             if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
             {
-                //ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
+               // ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) t.thisLocation = null;
                 return false;
             }

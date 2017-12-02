@@ -73,6 +73,7 @@
     <Compile Include="PathFindingCore\CropLogic\ShippingLogic.cs" />
     <Compile Include="PathFindingCore\DebrisLogic\DebrisLogic.cs" />
     <Compile Include="PathFindingCore\MapTransitionLogic\TransitionLogic.cs" />
+    <Compile Include="PathFindingCore\MapTransitionLogic\WarpGoal.cs" />
     <Compile Include="PathFindingCore\PathFindingLogic.cs" />
     <Compile Include="PathFindingCore\PlacementNode.cs" />
     <Compile Include="PathFindingCore\TileExceptionMetaData.cs" />

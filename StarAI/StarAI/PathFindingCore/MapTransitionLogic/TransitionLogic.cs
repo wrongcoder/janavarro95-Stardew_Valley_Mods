@@ -117,16 +117,15 @@ namespace StarAI.PathFindingCore.MapTransitionLogic
                 {
                     if (InputSimulator.IsKeyDown(VirtualKeyCode.VK_A) == false) InputSimulator.SimulateKeyDown(VirtualKeyCode.VK_A);
                 }
-                */
+                
             
             InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_W);
             InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_A);
             InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_S);
             InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_D);
+            */
             //ModCore.CoreMonitor.Log(tileLocation.ToString());
             //if(v.thisLocation.isTerrainFeatureAt)
-
-            //DO SOME LOGIC HERE IF I WANT TO SHIP???
 
             Utilities.cleanExceptionList(v);
             StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);

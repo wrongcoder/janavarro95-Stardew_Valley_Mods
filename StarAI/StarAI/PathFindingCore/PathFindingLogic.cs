@@ -484,34 +484,7 @@ namespace StarAI.PathFindingCore
             {
                 if (v is TileNode)
                 {
-
-                    foreach (var exc in Utilities.tileExceptionList)
-                    {
-                        if (ignoreList.Contains(exc.tile)) continue;
-                        // if ( (exc.tile == (v as TileNode)&&(exc.actionType!="Child"||exc.actionType!="Navigation"||exc.actionType!="CostCalculation"))|| path.Contains(v)) continue;
-                        if (exc.actionType == "ChopStick")
-                        {
-                            List<TileNode> idk = new List<TileNode>();
-                            foreach (var q in removalList)
-                            {
-                                if (exc.tile.tileLocation == q.tileLocation)
-                                {
-                                    idk.Add(q);
-                                    //removalList.Remove(exc.tile);
-                                    ignoreList.Add(exc.tile);
-                                    continue;
-                                }
-                            } 
-                            foreach(var h in idk)
-                            {
-                                removalList.Remove(exc.tile);
-                            }
-                            
-                        }
-                        else removalList.Add((TileNode)v);
-                    }
-
-                    
+                     removalList.Add((TileNode)v);
                 }
             }
             foreach (var v in removalList)
@@ -589,9 +562,12 @@ namespace StarAI.PathFindingCore
             while (doesNodeEqualGoal(currentNode,Goals).Key==false && queue.Count != 0)
             {
                //  ModCore.CoreMonitor.Log("LET'S GO PATH!!!!", LogLevel.Error);
-               // ModCore.CoreMonitor.Log("PATH FROM SOURCE: " + currentNode.tileLocation, LogLevel.Error);
-               // ModCore.CoreMonitor.Log("THIS IS MY MISTAKE!!!!!!! " + Goals.Count, LogLevel.Error);
-      
+               // ModCore.CoreMonitor.Log("PATH FROM Node: " + currentNode.tileLocation, LogLevel.Error);
+               // ModCore.CoreMonitor.Log("PATH FROM Source: " + Source.tileLocation, LogLevel.Error);
+               // ModCore.CoreMonitor.Log("GOALS COUNT " + Goals.Count, LogLevel.Error);
+             
+                // ModCore.CoreMonitor.Log("THIS IS MY MISTAKE!!!!!!! " + Goals.Count, LogLevel.Error);
+
                 //Console.WriteLine("OK WTF IS GOING ON????");
                 //Add children to current node
                 int xMin = -1;
@@ -655,7 +631,7 @@ namespace StarAI.PathFindingCore
                     if (node.seenState == 0)
                     {
                         node.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.LightPink); //Seen
-                        adjList.Add(node);
+                       
                     }
                     if (node.seenState == 1)
                     {
@@ -665,8 +641,9 @@ namespace StarAI.PathFindingCore
                     {
                         node.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.DarkOrange);
                     }
+                    adjList.Add(node);
                 }
-
+               
 
 
 
@@ -685,6 +662,7 @@ namespace StarAI.PathFindingCore
                 catch (Exception err)
                 {
                     ModCore.CoreMonitor.Log("FUCK", LogLevel.Error);
+                    ModCore.CoreMonitor.Log("INDEX ERROR:"+index, LogLevel.Error);
                     break;
                 }
                 currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Blue); //Working
@@ -800,9 +778,14 @@ namespace StarAI.PathFindingCore
             while (path.Count > 0)
             {
                 TileNode w = path[0];
-                //ModCore.CoreMonitor.Log("Goto: " + w.tileLocation.ToString());
+              
+                ModCore.CoreMonitor.Log("Here: " +Game1.player.position.ToString());
+                ModCore.CoreMonitor.Log("LOC: " + Game1.player.currentLocation);
+                Vector2 center2 = Utilities.parseCenterFromTile((int)w.tileLocation.X, (int)w.tileLocation.Y);
+                ModCore.CoreMonitor.Log("Goto: " + center2);
                 //ModCore.CoreMonitor.Log("My position now: " + Game1.player.getTileLocation());
                 //ModCore.CoreMonitor.Log("My Point position now: " + Game1.player.getTileLocationPoint());
+
                 if (Game1.player.getTileX() == w.tileLocation.X && Game1.player.getTileY() == w.tileLocation.Y)
                 {
                    
@@ -907,6 +890,10 @@ namespace StarAI.PathFindingCore
 
 
                     ModCore.CoreMonitor.Log("UNCAUGHT EXCEPTION", LogLevel.Error);
+                    InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_A);
+                    InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_D);
+                    InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_W);
+                    InputSimulator.SimulateKeyUp(VirtualKeyCode.VK_S);
                 }
             }
             foreach(var v in removalList)

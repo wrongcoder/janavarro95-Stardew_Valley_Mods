@@ -137,7 +137,12 @@ namespace StarAI
 
             //K key for placing a tile.
             #region
-            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
+
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.H)
+            {
+                CoreMonitor.Log(Game1.player.position.ToString());
+            }
+                if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
             {
                 CoreMonitor.Log("OK THE K KEY WAS PRESSED!");
 

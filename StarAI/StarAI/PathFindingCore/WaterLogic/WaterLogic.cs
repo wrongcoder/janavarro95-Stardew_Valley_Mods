@@ -43,7 +43,7 @@ namespace StarAI.PathFindingCore.WaterLogic
                     if (location.isOpenWater(i, j))
                     {
                         TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
-                        t.fakePlacementAction(Game1.currentLocation, i,j);
+                        t.fakePlacementAction(location, i,j);
                         Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "ChopTree"));
                         waterTilesAvailable.Add(t);
                         twingCount++;
@@ -109,7 +109,7 @@ namespace StarAI.PathFindingCore.WaterLogic
                     if (location.isOpenWater(i, j))
                     {
                         TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
-                        t.fakePlacementAction(Game1.currentLocation, i, j);
+                        t.fakePlacementAction(location, i, j);
                         Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "WaterTile"));
                         waterTilesAvailable.Add(t);
                         twingCount++;

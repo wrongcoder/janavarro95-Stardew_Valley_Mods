@@ -204,7 +204,7 @@ namespace StarAI.PathFindingCore
                     {
 
                         TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                        if(placement)t.placementAction(Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
+                        if(placement)t.placementAction(v.thisLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
                         else t.fakePlacementAction(v.thisLocation, (int)pos.X, (int)pos.Y);
                         //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
                         miniGoals.Add(t);
@@ -217,7 +217,7 @@ namespace StarAI.PathFindingCore
             {
                 TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
                 if(placement)tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-                else tempSource.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
+                else tempSource.fakePlacementAction(v.thisLocation, (int)v.tileLocation.X, (int)v.tileLocation.Y);
                
                 List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(),true,true);
 
@@ -301,10 +301,11 @@ namespace StarAI.PathFindingCore
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static List<TileNode> getIdealPath(TileNode t)
+        public static List<TileNode> getIdealPath(TileNode target, TileNode Source)
         {
-            object[] arr = new object[1];
-            arr[0] = t;
+            object[] arr = new object[2];
+            arr[0] = target;
+            arr[1] = Source;
             return getIdealPath(arr);
         }
 
@@ -317,6 +318,23 @@ namespace StarAI.PathFindingCore
         {
             object[] objArr = (object[])obj;
             TileNode v = (TileNode)objArr[0];
+            TileNode s;
+            try
+            {
+                s = (TileNode)objArr[1];
+                if (s == null)
+                {
+                    s = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
+                    s.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
+                    ModCore.CoreMonitor.Log("WHUT???????");
+                }
+            }
+            catch(Exception err)
+            {
+                s = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
+                s.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
+                ModCore.CoreMonitor.Log("ICECREAM!!!!!!???????");
+            }
 
 
             bool placement = false;
@@ -344,13 +362,18 @@ namespace StarAI.PathFindingCore
                     Vector2 pos = new Vector2(v.tileLocation.X + x, v.tileLocation.Y + y);
                     //ModCore.CoreMonitor.Log("AHHHHHHH POSITION: " + pos.ToString(), LogLevel.Alert);
                     bool f = PathFindingCore.TileNode.checkIfICanPlaceHere(v, pos * Game1.tileSize, v.thisLocation, true, utility);
+                    if (f == false)
+                    {
+                        ModCore.CoreMonitor.Log("FAILED TO PUT DOWN A GOAL????");
+                        ModCore.CoreMonitor.Log(v.thisLocation.ToString()+v.tileLocation.ToString());
+                    }
                     // ModCore.CoreMonitor.Log("OK THIS IS THE RESULT F: " + f, LogLevel.Alert);
                     if (f == true)
                     {
 
                         TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                        if (placement) t.placementAction(Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
-                        else t.fakePlacementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                        if (placement) t.placementAction(v.thisLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
+                        else t.fakePlacementAction(v.thisLocation, (int)pos.X, (int)pos.Y);
                         //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode( t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
                         miniGoals.Add(t);
                         Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Navigation"));
@@ -362,8 +385,8 @@ namespace StarAI.PathFindingCore
             Utilities.clearExceptionListWithName("Child");
             Utilities.clearExceptionListWithName("Navigation");
             TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-            if (placement) tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-            else tempSource.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
+            if (placement) tempSource.placementAction(v.thisLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
+            else tempSource.fakePlacementAction(s.thisLocation, (int)s.tileLocation.X, (int)s.tileLocation.Y);
 
             Utilities.tileExceptionList.Add(new TileExceptionMetaData(tempSource, "Navigation"));
             //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
@@ -521,8 +544,8 @@ namespace StarAI.PathFindingCore
                         {
 
                             TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-                            if (placement) t.placementAction(Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
-                            else t.fakePlacementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
+                            if (placement) t.placementAction(v.thisLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize);
+                            else t.fakePlacementAction(v.thisLocation, (int)pos.X, (int)pos.Y);
                             //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode( t, Game1.currentLocation, (int)pos.X * Game1.tileSize, (int)pos.Y * Game1.tileSize));
                             miniGoals.Add(t);
                             Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Navigation"));
@@ -536,7 +559,7 @@ namespace StarAI.PathFindingCore
             Utilities.clearExceptionListWithName("Navigation");
             TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
             if (placement) tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-            else tempSource.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
+            else tempSource.fakePlacementAction(vList[0].thisLocation, (int)vList[0].tileLocation.X,(int) vList[0].tileLocation.Y);
 
             Utilities.tileExceptionList.Add(new TileExceptionMetaData(tempSource, "Navigation"));
             //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
