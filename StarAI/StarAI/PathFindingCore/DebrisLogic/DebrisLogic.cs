@@ -61,7 +61,7 @@ namespace StarAI.PathFindingCore.DebrisLogic
                 StardewValley.Tools.Axe w = new StardewValley.Tools.Axe();
                 ModCore.CoreMonitor.Log("Processing twig:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick",new LocationPrerequisite(v.thisLocation), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                     System.Threading.Thread.Sleep(1000);
@@ -139,8 +139,8 @@ namespace StarAI.PathFindingCore.DebrisLogic
                 StardewValley.Tools.Axe w = new StardewValley.Tools.Axe();
                 ModCore.CoreMonitor.Log("Processing twig:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
-                objList[1] = task.taskMetaData.path;
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick",new LocationPrerequisite(v.thisLocation) ,new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                objList[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = objList;
 
 
@@ -309,7 +309,7 @@ namespace StarAI.PathFindingCore.DebrisLogic
                 StardewValley.Tools.Pickaxe w = new StardewValley.Tools.Pickaxe();
                 ModCore.CoreMonitor.Log("Processing :"+ targetName+" : "+  ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Break Single Rock", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Break Single Rock",  new LocationPrerequisite(v.thisLocation), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                     System.Threading.Thread.Sleep(1000);
@@ -383,8 +383,8 @@ namespace StarAI.PathFindingCore.DebrisLogic
                 StardewValley.Tools.Pickaxe w = new StardewValley.Tools.Pickaxe();
                 ModCore.CoreMonitor.Log("Processing stone:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(breakSingleStone, objList, new ExecutionCore.TaskMetaData("Break Single Stone", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
-                objList[1] = task.taskMetaData.path;
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(breakSingleStone, objList, new ExecutionCore.TaskMetaData("Break Single Stone", new LocationPrerequisite(v.thisLocation), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                objList[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = objList;
 
 
@@ -549,7 +549,7 @@ namespace StarAI.PathFindingCore.DebrisLogic
                 StardewValley.Tools.MeleeWeapon w = new StardewValley.Tools.MeleeWeapon();
                 ModCore.CoreMonitor.Log("Processing weed:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", null, new ToolPrerequisite(true, w.GetType(), 1)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", new LocationPrerequisite(v.thisLocation), null, new ToolPrerequisite(true, w.GetType(), 1)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                    
@@ -613,8 +613,8 @@ namespace StarAI.PathFindingCore.DebrisLogic
                 StardewValley.Tools.MeleeWeapon w = new StardewValley.Tools.MeleeWeapon();
                 ModCore.CoreMonitor.Log("Processing weeds:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
-                objList[1] = task.taskMetaData.path;
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", new LocationPrerequisite(v.thisLocation), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                objList[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = objList;
 
                 if (task.taskMetaData.cost == Int32.MaxValue)
@@ -778,8 +778,8 @@ namespace StarAI.PathFindingCore.DebrisLogic
                 ModCore.CoreMonitor.Log("Processing Trees:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
                 int numberOfUses = 15;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleTree, objList, new ExecutionCore.TaskMetaData("ChopSingleTree", new StaminaPrerequisite(true, 2*numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
-                objList[1] = task.taskMetaData.path;
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleTree, objList, new ExecutionCore.TaskMetaData("ChopSingleTree", new LocationPrerequisite(location), new StaminaPrerequisite(true, 2*numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
+                objList[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = objList;
 
                 if (task.taskMetaData.cost == Int32.MaxValue)
@@ -851,9 +851,9 @@ namespace StarAI.PathFindingCore.DebrisLogic
             ModCore.CoreMonitor.Log("Processing Trees:" + treesToChop.Count.ToString() + " / " + twingCount.ToString());
             ok++;
             int numberOfUses = 15;
-            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleTree, objList, new ExecutionCore.TaskMetaData("ChopSingleTree", new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
+            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleTree, objList, new ExecutionCore.TaskMetaData("ChopSingleTree", new LocationPrerequisite(location), new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
             task.objectParameterDataArray = objList;
 
             if (task.taskMetaData.cost == Int32.MaxValue)

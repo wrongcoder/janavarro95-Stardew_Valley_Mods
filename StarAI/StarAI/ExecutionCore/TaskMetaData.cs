@@ -22,25 +22,28 @@ namespace StarAI.ExecutionCore
         public TaskPrerequisites.BedTimePrerequisite bedTimePrerequisite;
 
         public TaskPrerequisites.ItemPrerequisite itemPrerequisite;
+        public LocationPrerequisite locationPrerequisite;
 
         public List<TaskPrerequisites.GenericPrerequisite> prerequisitesList;
 
 
-        public List<TileNode> path = new List<TileNode>();
+        public List<List<TileNode>> pathsToTake = new List<List<TileNode>>();
 
 
 
-        public TaskMetaData(string Name, StaminaPrerequisite StaminaPrerequisite = null, ToolPrerequisite ToolPrerequisite = null, InventoryFullPrerequisite InventoryFull=null,BedTimePrerequisite bedTimePrereq=null, ItemPrerequisite ItemPrereque = null)
+        public TaskMetaData(string Name, LocationPrerequisite LocationPrereque, StaminaPrerequisite StaminaPrerequisite = null, ToolPrerequisite ToolPrerequisite = null, InventoryFullPrerequisite InventoryFull=null,BedTimePrerequisite bedTimePrereq=null, ItemPrerequisite ItemPrereque = null)
         {
             this.name = Name;
             this.staminaPrerequisite = StaminaPrerequisite;
             this.toolPrerequisite = ToolPrerequisite;
             this.inventoryPrerequisite = InventoryFull;
-
+            this.pathsToTake = new List<List<TileNode>>();
             this.bedTimePrerequisite = bedTimePrereq;
 
             this.itemPrerequisite = ItemPrereque;
+            this.locationPrerequisite = LocationPrereque;
             //Make sure to set values correctly incase of null
+            setUpLocationPrerequsiteIfNull();
             setUpStaminaPrerequisiteIfNull();
             setUpToolPrerequisiteIfNull();
             setUpInventoryPrerequisiteIfNull();
@@ -58,7 +61,7 @@ namespace StarAI.ExecutionCore
         {
             var pair = TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite, unknownPath);
             this.cost=  pair.Key;
-            this.path =pair.Value; 
+            this.pathsToTake.Add(pair.Value); 
             //this.path = Utilities.calculatePath(source, false);
         }
 
@@ -66,8 +69,21 @@ namespace StarAI.ExecutionCore
         {
             var pair = TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite, unknownPath);
             this.cost = pair.Key;
-            this.path = pair.Value;
+            this.pathsToTake.Add(pair.Value);
             //this.path = Utilities.calculatePath(source, false);
+        }
+
+        public void calculateTaskCost(List<List<TileNode>> source, bool unknownPath)
+        {
+            var pair = TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite, unknownPath);
+            this.cost = pair.Key;
+            this.pathsToTake = pair.Value;
+            //this.path = Utilities.calculatePath(source, false);
+        }
+
+        private void setUpLocationPrerequsiteIfNull()
+        {
+            if (this.locationPrerequisite == null) this.locationPrerequisite = new LocationPrerequisite(null);
         }
 
         private void setUpToolPrerequisiteIfNull()

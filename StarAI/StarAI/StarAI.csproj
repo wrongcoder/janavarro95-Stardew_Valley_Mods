@@ -65,6 +65,7 @@
     <Compile Include="ExecutionCore\TaskPrerequisites\GenericPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\InventoryFullPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\ItemPrerequisite.cs" />
+    <Compile Include="ExecutionCore\TaskPrerequisites\LocationPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\StaminaPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\ToolPrerequisite.cs" />
     <Compile Include="ModCore.cs" />

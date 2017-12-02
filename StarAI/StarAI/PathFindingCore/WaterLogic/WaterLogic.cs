@@ -68,7 +68,7 @@ namespace StarAI.PathFindingCore.WaterLogic
             ModCore.CoreMonitor.Log("Processing water tiles:" + waterTilesAvailable.Count.ToString() + " / " + twingCount.ToString());
             ok++;
             int numberOfUses = 1;
-            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToSingleWaterTile, objList, new ExecutionCore.TaskMetaData("GoToWaterTile", new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
+            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToSingleWaterTile, objList, new ExecutionCore.TaskMetaData("GoToWaterTile", new LocationPrerequisite(location), new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
 
 
             if (task.taskMetaData.cost == Int32.MaxValue)
@@ -76,8 +76,8 @@ namespace StarAI.PathFindingCore.WaterLogic
                 Utilities.clearExceptionListWithNames(true);
                 return;
             }
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
             task.objectParameterDataArray = objList;
             ExecutionCore.TaskList.taskList.Add(task);
             Utilities.clearExceptionListWithName("Child");
@@ -134,7 +134,7 @@ namespace StarAI.PathFindingCore.WaterLogic
             ModCore.CoreMonitor.Log("Processing water tiles:" + waterTilesAvailable.Count.ToString() + " / " + twingCount.ToString());
             ok++;
             int numberOfUses = 1;
-            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToSingleWaterTile, objList, new ExecutionCore.TaskMetaData("GoToWaterTile", new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
+            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToSingleWaterTile, objList, new ExecutionCore.TaskMetaData("GoToWaterTile", new LocationPrerequisite(location), new StaminaPrerequisite(true, 2 * numberOfUses), new ToolPrerequisite(true, w.GetType(), numberOfUses)));
 
 
             if (task.taskMetaData.cost == Int32.MaxValue)
@@ -142,8 +142,8 @@ namespace StarAI.PathFindingCore.WaterLogic
                 Utilities.clearExceptionListWithNames(true);
                 return null;
             }
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
             task.objectParameterDataArray = objList;
             // ExecutionCore.TaskList.taskList.Add(task);
             Utilities.clearExceptionListWithName("Child");

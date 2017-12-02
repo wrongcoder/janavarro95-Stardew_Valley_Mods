@@ -61,7 +61,7 @@ namespace StarAI.PathFindingCore
                 object[] objList = new object[2];
                 objList[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(pathToSingleChest, objList, new ExecutionCore.TaskMetaData("Path to chest for seeds", null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(pathToSingleChest, objList, new ExecutionCore.TaskMetaData("Path to chest for seeds",new ExecutionCore.TaskPrerequisites.LocationPrerequisite(v.thisLocation), null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                     Utilities.clearExceptionListWithNames(true);
@@ -69,7 +69,12 @@ namespace StarAI.PathFindingCore
                 }
                 ExecutionCore.TaskList.taskList.Add(task);
                 //Utilities.clearExceptionListWithName(true, "Child");
-                objList[1] = task.taskMetaData.path;
+                if (task.taskMetaData.pathsToTake == null)
+                {
+                    ModCore.CoreMonitor.Log("WTF???");
+                }
+                ModCore.CoreMonitor.Log("COST:"+task.taskMetaData.cost);
+                objList[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = objList;
                 Utilities.clearExceptionListWithName("Child");
                 Utilities.clearExceptionListWithName("Navigation");

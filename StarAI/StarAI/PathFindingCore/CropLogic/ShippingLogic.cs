@@ -51,8 +51,8 @@ namespace StarAI.PathFindingCore.CropLogic
                 Utilities.clearExceptionListWithNames(true);
                 return;
             }
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
             ExecutionCore.TaskList.taskList.Add(task);
             Utilities.clearExceptionListWithName("Child");
             Utilities.tileExceptionList.Clear();
@@ -132,7 +132,7 @@ namespace StarAI.PathFindingCore.CropLogic
             //ModCore.CoreMonitor.Log("Processing water tiles:" + shippingTiles.Count.ToString() + " / " + twingCount.ToString());
             ok++;
             int numberOfUses = 1;
-            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToShippingBinShipItem, objList, new ExecutionCore.TaskMetaData("GoToShippingBin", null, null, null, null,new ItemPrerequisite(I,I.Stack)));
+            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToShippingBinShipItem, objList, new ExecutionCore.TaskMetaData("GoToShippingBin",new LocationPrerequisite(Game1.getLocationFromName("Farm")), null, null, null, null,new ItemPrerequisite(I,I.Stack)));
 
             task.objectParameterDataArray = objList;
 
@@ -141,8 +141,8 @@ namespace StarAI.PathFindingCore.CropLogic
                 Utilities.clearExceptionListWithNames(true);
                 return;
             }
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
             ExecutionCore.TaskList.taskList.Add(task);
             Utilities.clearExceptionListWithName("Child");
             Utilities.tileExceptionList.Clear();

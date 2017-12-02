@@ -718,7 +718,7 @@ namespace StarAI.PathFindingCore
                     currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Red); //Working
                     path.Add(currentNode);
                 }
-                ModCore.CoreMonitor.Log("??????");
+               // ModCore.CoreMonitor.Log("??????");
             }
             List<TileNode> removalList = new List<TileNode>();
             List<TileNode> ignoreList = new List<TileNode>();
@@ -779,10 +779,10 @@ namespace StarAI.PathFindingCore
             {
                 TileNode w = path[0];
               
-                ModCore.CoreMonitor.Log("Here: " +Game1.player.position.ToString());
-                ModCore.CoreMonitor.Log("LOC: " + Game1.player.currentLocation);
+               // ModCore.CoreMonitor.Log("Here: " +Game1.player.position.ToString());
+              //  ModCore.CoreMonitor.Log("LOC: " + Game1.player.currentLocation);
                 Vector2 center2 = Utilities.parseCenterFromTile((int)w.tileLocation.X, (int)w.tileLocation.Y);
-                ModCore.CoreMonitor.Log("Goto: " + center2);
+               // ModCore.CoreMonitor.Log("Goto: " + center2);
                 //ModCore.CoreMonitor.Log("My position now: " + Game1.player.getTileLocation());
                 //ModCore.CoreMonitor.Log("My Point position now: " + Game1.player.getTileLocationPoint());
 

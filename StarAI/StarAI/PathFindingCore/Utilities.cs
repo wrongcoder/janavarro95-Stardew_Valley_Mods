@@ -301,7 +301,7 @@ namespace StarAI.PathFindingCore
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public static List<TileNode> getIdealPath(TileNode target, TileNode Source)
+        public static List<TileNode> getIdealPath(TileNode target, TileNode Source=null)
         {
             object[] arr = new object[2];
             arr[0] = target;
@@ -559,7 +559,7 @@ namespace StarAI.PathFindingCore
             Utilities.clearExceptionListWithName("Navigation");
             TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
             if (placement) tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-            else tempSource.fakePlacementAction(vList[0].thisLocation, (int)vList[0].tileLocation.X,(int) vList[0].tileLocation.Y);
+            else tempSource.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
 
             Utilities.tileExceptionList.Add(new TileExceptionMetaData(tempSource, "Navigation"));
             //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
@@ -597,50 +597,6 @@ namespace StarAI.PathFindingCore
                 }
             }
 
-
-
-            /*
-            foreach (var nav in miniGoals) //change this??????
-            {
-                Utilities.clearExceptionListWithName("Child");
-                Utilities.clearExceptionListWithName("Navigation");
-                TileNode tempSource = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
-               if(placement) tempSource.placementAction(Game1.player.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize);
-                else tempSource.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
-
-                Utilities.tileExceptionList.Add(new TileExceptionMetaData(tempSource, "Navigation"));
-                //StaardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(tempSource, Game1.currentLocation, Game1.player.getTileX() * Game1.tileSize, Game1.player.getTileY() * Game1.tileSize));
-
-
-                //have this take in a list of goals and see which goal it reaches first
-                List<TileNode> path = PathFindingCore.PathFindingLogic.pathFindToSingleGoalReturnPath(tempSource, nav, new List<TileNode>(), placement, utility);
-                if (path.Count == 0)
-                {
-                    ModCore.CoreMonitor.Log("NOPE, no path I guess.",LogLevel.Warn);
-                }
-                else
-                {
-                    ModCore.CoreMonitor.Log("There is a path", LogLevel.Alert);
-                    ModCore.CoreMonitor.Log("COST OF THE PATH IS: "+path.Count.ToString(), LogLevel.Alert);
-                }
-                if (path.Count != 0)
-                {
-                    //ModCore.CoreMonitor.Log("PATH WAS NOT NULL", LogLevel.Warn);
-                    paths.Add(path);
-                    foreach (var someTile in path)
-                    {
-                        if (someTile == nav) removalList.Add(someTile);
-                        StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(someTile);
-                       if(placement) someTile.thisLocation.objects.Remove(someTile.tileLocation);
-                       
-                       //someTile.performRemoveAction(someTile.tileLocation, someTile.thisLocation);
-                        //StardustCore.Utilities.masterRemovalList.Add(someTile);
-                        //ModCore.CoreMonitor.Log("CAUGHT MY CULPERATE", LogLevel.Warn);
-                    }
-                }
-
-            }
-            */
             Console.WriteLine("GOALS COUNT:" + miniGoals.Count);
             foreach (var q in removalList)
             {

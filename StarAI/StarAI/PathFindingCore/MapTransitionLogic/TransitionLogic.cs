@@ -51,8 +51,8 @@ namespace StarAI.PathFindingCore.MapTransitionLogic
                 Utilities.clearExceptionListWithNames(true);
                 return;
             }
-            objList[1] = task.taskMetaData.path;
-            objList[2] = task.taskMetaData.path.ElementAt(0);
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
             objList[3] = targetName;
             ExecutionCore.TaskList.taskList.Add(task);
             Utilities.clearExceptionListWithName("Child");
@@ -60,6 +60,51 @@ namespace StarAI.PathFindingCore.MapTransitionLogic
 
             warpGoals.Clear();
         }
+
+        public static List<TileNode> transitionToAdjacentMapReturn(GameLocation location, string targetName)
+        {
+            List<TileNode> warpGoals = new List<TileNode>();
+            foreach (var v in location.warps)
+            {
+                if (v.TargetName == targetName)
+                {
+                    TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
+                    t.fakePlacementAction(Game1.currentLocation, v.X, v.Y);
+                    Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "WarpGoal"));
+                    warpGoals.Add(t);
+                }
+            }
+            int ok = 0;
+
+            object[] objList = new object[4];
+            List<TileNode> tempList = new List<TileNode>();
+            foreach (var v in warpGoals)
+            {
+                tempList.Add(v);
+            }
+            return tempList;
+            objList[0] = tempList;
+            ok++;
+            int numberOfUses = 1;
+            ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(goToAdjacentWarpGoal, objList, new ExecutionCore.TaskMetaData("GoToShippingBin", null, null, null, null, null));
+
+            task.objectParameterDataArray = objList;
+
+            if (task.taskMetaData.cost == Int32.MaxValue)
+            {
+                Utilities.clearExceptionListWithNames(true);
+                return null;
+            }
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
+            objList[3] = targetName;
+            ExecutionCore.TaskList.taskList.Add(task);
+            Utilities.clearExceptionListWithName("Child");
+            Utilities.tileExceptionList.Clear();
+
+            warpGoals.Clear();
+        }
+
 
         public static void goToAdjacentWarpGoal(TileNode v, List<TileNode> path)
         {

@@ -68,7 +68,11 @@ namespace StarAI
             }
             else
             {
-                WarpGoal.getWarpChain(Game1.player.currentLocation, args[0]);
+                if (args.Length >= 1)
+                {
+                    //path to the map location.
+                    WarpGoal.getWarpChain(Game1.player.currentLocation, args[0]);
+                }
             }
         }
 

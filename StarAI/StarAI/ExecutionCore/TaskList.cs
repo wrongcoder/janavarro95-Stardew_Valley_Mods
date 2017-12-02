@@ -73,6 +73,29 @@ namespace StarAI.ExecutionCore
         public static void recalculateTask(CustomTask v)
         {
             object[] oArray = (object[])v.objectParameterDataArray;
+            ModCore.CoreMonitor.Log("RECALCULATING: "+ v.taskMetaData.name);
+           
+
+            if (v.taskMetaData.name.Contains("Path to "))
+            {
+                ModCore.CoreMonitor.Log("POKE DEW VALLEY: " + v.taskMetaData.name);
+                string[] s = v.taskMetaData.name.Split(' ');
+                ModCore.CoreMonitor.Log(s.ElementAt(s.Length-1));
+                List<List<TileNode>> newPaths = new List<List<TileNode>>(); 
+                newPaths = PathFindingCore.MapTransitionLogic.WarpGoal.getWarpChainReturn(Game1.player.currentLocation, s.ElementAt(s.Length-1));
+                v.taskMetaData.cost = 0;
+                int value = 0;
+                foreach (var path in newPaths)
+                {
+                    value+= (path.Count * TaskMetaDataHeuristics.pathCostMultiplier);
+                }
+                object[] arr = (object[])v.objectParameterDataArray;
+                arr[3] = newPaths;
+                v.taskMetaData.cost = value;
+                v.taskMetaData.pathsToTake = newPaths;
+                ModCore.CoreMonitor.Log("IDK ANY MORE: " + v.taskMetaData.cost);
+                return;
+            }
 
             try
             {
@@ -81,10 +104,14 @@ namespace StarAI.ExecutionCore
                 v.taskMetaData.calculateTaskCost(t, false);
                 object[] objArr = new object[3];
                 objArr[0] = (object)t;
-                objArr[1] = (object)v.taskMetaData.path;
+                objArr[1] = (object)v.taskMetaData.pathsToTake[0];
                 v.objectParameterDataArray = objArr;
             }
             catch (Exception err)
+            {
+               
+            }
+            try
             {
                 List<TileNode> t = (List<TileNode>)oArray[0];
                 ModCore.CoreMonitor.Log("Premtive calculate 2");
@@ -95,25 +122,65 @@ namespace StarAI.ExecutionCore
                 v.taskMetaData.calculateTaskCost(t, false);
                 object[] objArr = new object[4];
                 objArr[0] = (object)t; //List of trees to use for path calculations
-                objArr[1] = (object)v.taskMetaData.path; //The path itself.
+                objArr[1] = (object)v.taskMetaData.pathsToTake[0]; //The path itself.
                 int malcolm = 0;
                 ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
-                objArr[2] = (object)v.taskMetaData.path.ElementAt(malcolm); //source of whatever is hit.
+                objArr[2] = (object)v.taskMetaData.pathsToTake[0].ElementAt(malcolm); //source of whatever is hit.
                 try
                 {
                     objArr[3] = oArray[3];
                 }
-                catch(Exception err2)
+                catch (Exception err2)
                 {
 
                 }
                 v.objectParameterDataArray = objArr;
                 Utilities.tileExceptionList.Clear();
             }
+            catch(Exception err)
+            {
+
+            }
+
+            try
+            {
+                List<List<TileNode>> t = (List<List<TileNode>>)oArray[3];
+                ModCore.CoreMonitor.Log("Premtive calculate 2");
+                foreach (var s in Utilities.tileExceptionList)
+                {
+                    ModCore.CoreMonitor.Log(s.actionType);
+                }
+                v.taskMetaData.calculateTaskCost(t, false);
+                object[] objArr = new object[4];
+                objArr[0] = (object)t; //List of trees to use for path calculations
+                objArr[1] = (object)v.taskMetaData.pathsToTake; //The path itself.
+                int malcolm = 0;
+                ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
+                objArr[2] = (object)v.taskMetaData.pathsToTake[0].ElementAt(malcolm); //source of whatever is hit.
+                try
+                {
+                    objArr[3] = oArray[3];
+                }
+                catch (Exception err2)
+                {
+
+                }
+                v.objectParameterDataArray = objArr;
+                Utilities.tileExceptionList.Clear();
+            }
+            catch(Exception err)
+            {
+
+            }
         }
 
         public static bool interruptionTasks(CustomTask v)
         {
+            if (v.taskMetaData.locationPrerequisite.isPlayerAtLocation() == false)
+            {
+                //Force player to move to that location, but also need the cost again....
+            }
+
             if (v.taskMetaData.name == "Water Crop")
             {
                 StardewValley.Tools.WateringCan w = new WateringCan();

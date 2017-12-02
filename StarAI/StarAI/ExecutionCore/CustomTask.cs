@@ -32,11 +32,30 @@ namespace StarAI.ExecutionCore
             this.taskMetaData = TaskMetaData;
             try
             {
-                this.taskMetaData.calculateTaskCost((TileNode)arrayData[0], false);
+              //  ModCore.CoreMonitor.Log("ONE COST");
+                this.taskMetaData.calculateTaskCost((TileNode)arrayData[0], false); //Used for pathing to a single tile in a location
             }
             catch(Exception err)
             {
-                this.taskMetaData.calculateTaskCost((List<TileNode>)arrayData[0], false);
+              //  ModCore.CoreMonitor.Log(err.ToString());
+            }
+            try
+            {
+               // ModCore.CoreMonitor.Log("TWO COST");
+                this.taskMetaData.calculateTaskCost((List<TileNode>)arrayData[0], false); //used to calculate best path stuff
+            }
+            catch (Exception err)
+            {
+              //  ModCore.CoreMonitor.Log(err.ToString());
+            }
+            try
+            {
+               // ModCore.CoreMonitor.Log("THREE COST");
+                this.taskMetaData.calculateTaskCost((List<List<TileNode>>)arrayData[0], false); //and this one is for multiple paths.
+            }
+            catch(Exception err)
+            {
+                ModCore.CoreMonitor.Log(err.ToString());
             }
         }
 

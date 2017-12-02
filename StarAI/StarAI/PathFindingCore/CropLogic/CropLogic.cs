@@ -49,14 +49,14 @@ namespace StarAI.PathFindingCore.CropLogic
                 obj[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.WateringCan w = new StardewValley.Tools.WateringCan();
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(waterSingleCrop, obj, new ExecutionCore.TaskMetaData("Water Crop", new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(waterSingleCrop, obj, new ExecutionCore.TaskMetaData("Water Crop", new LocationPrerequisite(v.thisLocation),new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                     Utilities.clearExceptionListWithNames(true);
                     continue;
                 }
                 ExecutionCore.TaskList.taskList.Add(task);
-                obj[1] = task.taskMetaData.path;
+                obj[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = obj;
                 //   waterSingleCrop(v);
                 Utilities.clearExceptionListWithName("Child");
@@ -200,7 +200,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 obj[0] = v;
                 //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(harvestSingleCrop), obj));
 
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(harvestSingleCrop, obj, new ExecutionCore.TaskMetaData("HarvestSingleCrop", null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(harvestSingleCrop, obj, new ExecutionCore.TaskMetaData("HarvestSingleCrop",new LocationPrerequisite(v.thisLocation) ,null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                     Utilities.clearExceptionListWithNames(true);
@@ -208,7 +208,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 }
 
                 ExecutionCore.TaskList.taskList.Add(task);
-                obj[1] = task.taskMetaData.path;
+                obj[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = obj;
                 Utilities.clearExceptionListWithName("Child");
                 //   waterSingleCrop(v);
