@@ -87,6 +87,7 @@ namespace StarAI.PathFindingCore
 
             if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
             {
+               // ModCore.CoreMonitor.Log("OBJECt??? " + t.thisLocation.name, LogLevel.Error);
                 //ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.objects[new Vector2(pos.X/Game1.tileSize,pos.Y/Game1.tileSize)].name, LogLevel.Warn);
                 if (cry == true) t.thisLocation = null;
                 return false;
@@ -95,9 +96,18 @@ namespace StarAI.PathFindingCore
             if (utilityCheck) { 
                 foreach (var v in Utilities.tileExceptionList)
                 {
-                   // ModCore.CoreMonitor.Log(v.actionType);
-                    if (v.tile.position == pos) return false;
-                    if (v.tile.tileLocation == pos / Game1.tileSize) return false;
+                    // ModCore.CoreMonitor.Log(v.actionType);
+                  //  ModCore.CoreMonitor.Log("UTILITY????: " + t.thisLocation.name, LogLevel.Error);
+                    if (v.tile.position == pos)
+                    {
+                    //    ModCore.CoreMonitor.Log("DERP????: " + t.thisLocation.name, LogLevel.Error);
+                        return false;
+                    }
+                    if (v.tile.tileLocation == pos / Game1.tileSize)
+                    {
+                    //    ModCore.CoreMonitor.Log("BLURP " + t.thisLocation.name, LogLevel.Error);
+                        return false;
+                    }
                 }
             }
            
@@ -105,30 +115,34 @@ namespace StarAI.PathFindingCore
                 if (terrainFeature)
                 {
                     TerrainFeature terrain = t.thisLocation.terrainFeatures[pos / Game1.tileSize];
-                    if (terrain.isPassable()) return true;
+              //  ModCore.CoreMonitor.Log("TERRAIN NOPE!: " + t.thisLocation.name, LogLevel.Error);
+                if (terrain.isPassable()) return true;
                 }
             
             if (t.thisLocation.isTileOccupied(pos / Game1.tileSize))
             {
-             //   ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
+              //  ModCore.CoreMonitor.Log("Tile occupied!: " + t.thisLocation.name, LogLevel.Error);
+                if (isTileExempt(t,pos)) return true;
                 if (cry == true) t.thisLocation = null;
                 return false;
             }
 
+            /*
             if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
             {
                // ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
                 if (cry == true) t.thisLocation = null;
                 return false;
             }
+            */
 
-
-
+           
             if (t.thisLocation.isTilePassable(new xTile.Dimensions.Location((int)(pos.X/Game1.tileSize), (int)(pos.Y/Game1.tileSize)), Game1.viewport)==false)
             {
-               // ModCore.CoreMonitor.Log("Tile not passable check 2?????!!!!: " + t.thisLocation.name, LogLevel.Error);
+                //ModCore.CoreMonitor.Log("Tile not passable check 2?????!!!!: " + t.thisLocation.name, LogLevel.Error);
+                if (isTileExempt(t,pos)) return true;
                 if (cry == true) t.thisLocation = null;
-                return false;
+                else return false;
             }
             
 
@@ -136,6 +150,44 @@ namespace StarAI.PathFindingCore
             if (cry == true) t.thisLocation = null;
             return true;
         }
+        
+
+        public static bool isTileExempt(TileNode t,Vector2 pos)
+        {
+            foreach (var v in Game1.player.currentLocation.map.TileSheets)
+            {
+                foreach (var q in Game1.player.currentLocation.map.Layers)
+                {
+                    string[] s = q.ToString().Split(':');
+                    string layer = s[1].Trim();
+                    int tileIndex = t.thisLocation.getTileIndexAt((int)pos.X/Game1.tileSize, (int)pos.Y / Game1.tileSize, layer);
+                    if (tileIndex == -1) continue;
+                    //ModCore.CoreMonitor.Log("Position: " + (Game1.player.getTileLocation() / Game1.tileSize).ToString(), LogLevel.Warn);
+                    //ModCore.CoreMonitor.Log("Layer: " + layer, LogLevel.Warn);
+                    //ModCore.CoreMonitor.Log("Index: " + tileIndex.ToString(), LogLevel.Warn);
+                    //ModCore.CoreMonitor.Log("Image Source: " + v.ImageSource, LogLevel.Warn);
+
+                    if (layer == "Buildings")
+                    {
+                        TileExceptionNode tileException = new TileExceptionNode(v.ImageSource, tileIndex);
+                        foreach (var tile in PathFindingCore.Utilities.ignoreCheckTiles)
+                        {
+                            if (tile.imageSource == tileException.imageSource && tile.index == tileException.index)
+                            {
+                                ModCore.CoreMonitor.Log("Tile exception already initialized!");
+                                return true; //tile is already initialized.
+                            }
+                        }
+                       // PathFindingCore.Utilities.ignoreCheckTiles.Add(tileException);
+                        //tileException.serializeJson(Path.Combine(ModCore.CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles));
+                        //StardustCore.ModCore.SerializationManager.
+                    }
+                }
+            }
+            return false;
+        }
+    
+    
 
         public static void setSingleTileAsChild(TileNode t,int x, int y,bool checkForUtility,bool placementAction=true)
         {

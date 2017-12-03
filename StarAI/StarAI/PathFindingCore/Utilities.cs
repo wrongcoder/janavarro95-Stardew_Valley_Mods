@@ -34,7 +34,25 @@ namespace StarAI.PathFindingCore
 
         public static void initializeTileExceptionList()
         {
-            
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\spring_outdoorsTileSheet", 779));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\spring_outdoorsTileSheet", 780));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\spring_outdoorsTileSheet", 781));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\spring_outdoorsTileSheet", 782));
+
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\summer_outdoorsTileSheet", 779));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\summer_outdoorsTileSheet", 780));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\summer_outdoorsTileSheet", 781));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\summer_outdoorsTileSheet", 782));
+
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\fall_outdoorsTileSheet", 779));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\fall_outdoorsTileSheet", 780));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\fall_outdoorsTileSheet", 781));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\fall_outdoorsTileSheet", 782));
+
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\winter_outdoorsTileSheet", 779));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\winter_outdoorsTileSheet", 780));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\winter_outdoorsTileSheet", 781));
+            ignoreCheckTiles.Add(new TileExceptionNode("Maps\\winter_outdoorsTileSheet", 782));
         }
         
 

@@ -42,7 +42,7 @@ namespace StarAI
             PathFindingCore.Utilities.initializeTileExceptionList();
             ExecutionCore.TaskMetaDataHeuristics.initializeToolCostDictionary();
             //throw new NotImplementedException();
-            StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
+            //StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
 
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
@@ -50,6 +50,7 @@ namespace StarAI
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
 
             StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(StarAI.PathFindingCore.TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(StarAI.PathFindingCore.TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(StarAI.PathFindingCore.TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(StarAI.PathFindingCore.TileNode.Serialize)));
+           
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
@@ -81,6 +82,7 @@ namespace StarAI
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             loadExceptionTiles();
+            CheatCore.DoorsToWarps.makeAllDoorsWarps();
         }
 
         public void loadExceptionTiles()
@@ -138,11 +140,8 @@ namespace StarAI
             //K key for placing a tile.
             #region
 
-            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.H)
-            {
-                CoreMonitor.Log(Game1.player.position.ToString());
-            }
-                if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
+         
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
             {
                 CoreMonitor.Log("OK THE K KEY WAS PRESSED!");
 
@@ -198,12 +197,12 @@ namespace StarAI
 
                             ModCore.CoreMonitor.Log("SHITTTTTT: " + layer, LogLevel.Error);
                         }
-                        int tileIndex = Game1.player.currentLocation.getTileIndexAt((int)Game1.player.getTileX() / Game1.tileSize, (int)Game1.player.getTileY() / Game1.tileSize, layer);
+                        int tileIndex = Game1.player.currentLocation.getTileIndexAt((int)Game1.player.getTileX(), (int)Game1.player.getTileY(), layer);
                         if (tileIndex == -1) continue;
-                        //ModCore.CoreMonitor.Log("Position: " + (Game1.player.getTileLocation() / Game1.tileSize).ToString(), LogLevel.Warn);
-                        //ModCore.CoreMonitor.Log("Layer: " + layer, LogLevel.Warn);
-                        //ModCore.CoreMonitor.Log("Index: " + tileIndex.ToString(), LogLevel.Warn);
-                        //ModCore.CoreMonitor.Log("Image Source: " + v.ImageSource, LogLevel.Warn);
+                        ModCore.CoreMonitor.Log("Position: " + (Game1.player.getTileLocation()).ToString(), LogLevel.Warn);
+                        ModCore.CoreMonitor.Log("Layer: " + layer, LogLevel.Warn);
+                        ModCore.CoreMonitor.Log("Index: " + tileIndex.ToString(), LogLevel.Warn);
+                        ModCore.CoreMonitor.Log("Image Source: " + v.ImageSource, LogLevel.Warn);
 
                         if (layer == "Buildings")
                         {
@@ -216,8 +215,8 @@ namespace StarAI
                                     return; //tile is already initialized.
                                 }
                             }
-                            PathFindingCore.Utilities.ignoreCheckTiles.Add(tileException);
-                            tileException.serializeJson(Path.Combine(ModCore.CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles));
+                            //PathFindingCore.Utilities.ignoreCheckTiles.Add(tileException);
+                           // tileException.serializeJson(Path.Combine(ModCore.CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles));
                             //StardustCore.ModCore.SerializationManager.
                         }
                     }
