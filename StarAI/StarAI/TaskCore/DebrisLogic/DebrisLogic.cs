@@ -19,6 +19,8 @@ namespace StarAI.TaskCore.DebrisLogic
         public static List<TileNode> weedsToCut = new List<TileNode>();
         public static List<TileNode> treesToChop = new List<TileNode>();
 
+        //Stick Logic
+        #region
         public static void getAllSticksToChop(GameLocation location)
         {
             object[] arr = new object[1];
@@ -37,11 +39,11 @@ namespace StarAI.TaskCore.DebrisLogic
             GameLocation location = (GameLocation)objArr[0];
             foreach (var v in location.objects)
             {
-                ModCore.CoreMonitor.Log(v.Value.name);
+               // ModCore.CoreMonitor.Log(v.Value.name);
 
                 if (v.Value.name == "Twig")
                 {
-                    ModCore.CoreMonitor.Log(v.Value.name,LogLevel.Warn);
+                   // ModCore.CoreMonitor.Log(v.Value.name,LogLevel.Warn);
                     TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
                     //t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
                     t.fakePlacementAction(Game1.currentLocation, (int)v.Key.X, (int)v.Key.Y);
@@ -53,35 +55,41 @@ namespace StarAI.TaskCore.DebrisLogic
 
 
             int ok = 0;
+
+            List<TileNode> tempList = new List<TileNode>();
             foreach (var v in sticksToChop)
             {
+                tempList.Add(v);
+            }
 
-                object[] objList = new object[2];
-                objList[0] = v;
+            object[] objList = new object[10];
+            objList[0] = tempList;
+
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.Axe w = new StardewValley.Tools.Axe();
                 ModCore.CoreMonitor.Log("Processing twig:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick",new LocationPrerequisite(v.thisLocation), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
-                if (task.taskMetaData.cost == Int32.MaxValue)
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Chop Single Stick",new LocationPrerequisite(location), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
+            task.objectParameterDataArray = objList;
+
+            if (task.taskMetaData.cost == Int32.MaxValue)
                 {
-                    System.Threading.Thread.Sleep(1000);
+                Utilities.tileExceptionList.Clear();
                     Utilities.clearExceptionListWithNames(true);
-                    continue;
+                    return;
                 }
 
                 ModCore.CoreMonitor.Log("TASK COST:" + task.taskMetaData.cost.ToString());
-                if (task.taskMetaData.cost.ToString()=="2.147484E+09")
-                {
-                    ModCore.CoreMonitor.Log("OHH THAT's BAD");
-                    System.Threading.Thread.Sleep(2000);
-                }
+
                     ExecutionCore.TaskList.taskList.Add(task);
                 ModCore.CoreMonitor.Log("TASK LIST COUNT:"+ExecutionCore.TaskList.taskList.Count.ToString());
                 Utilities.clearExceptionListWithName(true, "Child");
                 Utilities.clearExceptionListWithName("Child");
                 //   waterSingleCrop(v);
-            }
+            
             sticksToChop.Clear();
         }
 
@@ -175,7 +183,7 @@ namespace StarAI.TaskCore.DebrisLogic
             
             object[] objArray=(object[])obj;
            
-            TileNode v = (TileNode)objArray[0];
+            TileNode v = (TileNode)objArray[2];
             //List<TileNode> correctPath = Utilities.pathStuff(v);//(List<TileNode>)objArray[1];
             List<TileNode> correctPath =(List<TileNode>)objArray[1];
             foreach (var goodTile in correctPath)
@@ -189,21 +197,68 @@ namespace StarAI.TaskCore.DebrisLogic
 
 
 
-            if (v.tileLocation.X < Game1.player.getTileX())
+            Vector2 tileLocation = v.tileLocation;
+            ModCore.CoreMonitor.Log(tileLocation.ToString());
+            StardewValley.Object sObject = new StardewValley.Object();
+            try
             {
-                Game1.player.faceDirection(3);
+                ModCore.CoreMonitor.Log("once");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)].name == "Twig")
+                {
+                    ModCore.CoreMonitor.Log("onceGod");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)];
+                    Game1.player.faceDirection(3);
+                }
             }
-            else if (v.tileLocation.X > Game1.player.getTileX())
+            catch (Exception err)
             {
-                Game1.player.faceDirection(1);
+
             }
-            else if (v.tileLocation.Y < Game1.player.getTileY())
+            try
             {
-                Game1.player.faceDirection(0);
+                ModCore.CoreMonitor.Log("twice");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)].name == "Twig")
+                {
+                    ModCore.CoreMonitor.Log("twiceGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)];
+                    Game1.player.faceDirection(1);
+                }
             }
-            else if (v.tileLocation.Y > Game1.player.getTileY())
+            catch (Exception err)
             {
-                Game1.player.faceDirection(2);
+
+            }
+            try
+            {
+                ModCore.CoreMonitor.Log("thrice");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y - 1)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y - 1)].name == "Twig")
+                {
+                    ModCore.CoreMonitor.Log("thriceGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y - 1)];
+                    Game1.player.faceDirection(0);
+                }
+            }
+            catch (Exception err)
+            {
+
+            }
+            try
+            {
+                ModCore.CoreMonitor.Log("fourth");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)].name == "Twig")
+                {
+                    ModCore.CoreMonitor.Log("fourthGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)];
+                    Game1.player.faceDirection(2);
+                }
+            }
+            catch (Exception err)
+            {
+
             }
             foreach (var item in Game1.player.items)
             {
@@ -213,10 +268,10 @@ namespace StarAI.TaskCore.DebrisLogic
                 }
             }
             bool move = false;
-            StardewValley.Object twig = v.thisLocation.objects[v.tileLocation];
-            while ((twig.name=="Twig"))
+           // StardewValley.Object twig = v.thisLocation.objects[v.tileLocation];
+            while ((sObject.name=="Twig"))
             {
-                if (!v.thisLocation.isObjectAt((int)v.tileLocation.X*Game1.tileSize, (int)v.tileLocation.Y*Game1.tileSize)) break;
+                if (!v.thisLocation.isObjectAt((int)sObject.tileLocation.X * Game1.tileSize, (int)sObject.tileLocation.Y * Game1.tileSize)) break; //CHANNGE THIS LINE
                 if (WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C) == false) WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
 
                 Vector2 center = new Vector2();
@@ -263,7 +318,10 @@ namespace StarAI.TaskCore.DebrisLogic
             }
             WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
         }
+        #endregion
 
+        //Stone logic
+        #region
 
 
         public static void getAllStonesToBreak(GameLocation location)
@@ -285,11 +343,11 @@ namespace StarAI.TaskCore.DebrisLogic
             string targetName = "Stone";
             foreach (var v in location.objects)
             {
-                ModCore.CoreMonitor.Log(v.Value.name);
+               // ModCore.CoreMonitor.Log(v.Value.name);
 
                 if (v.Value.name == targetName)
                 {
-                    ModCore.CoreMonitor.Log(v.Value.name, LogLevel.Warn);
+                    //ModCore.CoreMonitor.Log(v.Value.name, LogLevel.Warn);
                     TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
                     //t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
                     t.fakePlacementAction(Game1.currentLocation, (int)v.Key.X, (int)v.Key.Y);
@@ -301,27 +359,33 @@ namespace StarAI.TaskCore.DebrisLogic
 
 
             int ok = 0;
+            List<TileNode> tempList = new List<TileNode>();
             foreach (var v in stonesToBreak)
             {
+                tempList.Add(v);
+            }
 
-                object[] objList = new object[2];
-                objList[0] = v;
+            object[] objList = new object[10];
+                objList[0] = tempList;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.Pickaxe w = new StardewValley.Tools.Pickaxe();
                 ModCore.CoreMonitor.Log("Processing :"+ targetName+" : "+  ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(chopSingleStick, objList, new ExecutionCore.TaskMetaData("Break Single Rock",  new LocationPrerequisite(v.thisLocation), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
-                if (task.taskMetaData.cost == Int32.MaxValue)
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(breakSingleStone, objList, new ExecutionCore.TaskMetaData("Break Single Rock",  new LocationPrerequisite(location), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
+            task.objectParameterDataArray = objList;
+            if (task.taskMetaData.cost == Int32.MaxValue)
                 {
-                    System.Threading.Thread.Sleep(1000);
+                Utilities.tileExceptionList.Clear();
                     Utilities.clearExceptionListWithNames(true);
-                    continue;
+                    return;
                 }
                 ExecutionCore.TaskList.taskList.Add(task);
              //   Utilities.clearExceptionListWithName(true, "Child");
                 Utilities.clearExceptionListWithName("Child");
                 //   waterSingleCrop(v);
-            }
+            
             stonesToBreak.Clear();
         }
 
@@ -407,7 +471,7 @@ namespace StarAI.TaskCore.DebrisLogic
         public static void breakSingleStone(TileNode v, List<TileNode> path)
         {
             object[] obj = new object[2];
-            obj[0] = v;
+            obj[2] = v;
             obj[1] = path;
             breakSingleStone(obj);
         }
@@ -419,7 +483,7 @@ namespace StarAI.TaskCore.DebrisLogic
 
             object[] objArray = (object[])obj;
 
-            TileNode v = (TileNode)objArray[0];
+            TileNode v = (TileNode)objArray[2];
             //List<TileNode> correctPath = Utilities.pathStuff(v);//(List<TileNode>)objArray[1];
             List<TileNode> correctPath = (List<TileNode>)objArray[1];
             foreach (var goodTile in correctPath)
@@ -432,22 +496,68 @@ namespace StarAI.TaskCore.DebrisLogic
             PathFindingLogic.calculateMovement(correctPath);
 
 
+            Vector2 tileLocation = v.tileLocation;
+            ModCore.CoreMonitor.Log(tileLocation.ToString());
+            StardewValley.Object sObject = new StardewValley.Object();
+            try
+            {
+                ModCore.CoreMonitor.Log("once");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)].Name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)].Name == "Stone")
+                {
+                    ModCore.CoreMonitor.Log("onceGod");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)];
+                    Game1.player.faceDirection(3);
+                }
+            }
+            catch (Exception err)
+            {
 
-            if (v.tileLocation.X < Game1.player.getTileX())
-            {
-                Game1.player.faceDirection(3);
             }
-            else if (v.tileLocation.X > Game1.player.getTileX())
+            try
             {
-                Game1.player.faceDirection(1);
+                ModCore.CoreMonitor.Log("twice");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)].Name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)].Name == "Stone")
+                {
+                    ModCore.CoreMonitor.Log("twiceGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)];
+                    Game1.player.faceDirection(1);
+                }
             }
-            else if (v.tileLocation.Y < Game1.player.getTileY())
+            catch (Exception err)
             {
-                Game1.player.faceDirection(0);
+
             }
-            else if (v.tileLocation.Y > Game1.player.getTileY())
+            try
             {
-                Game1.player.faceDirection(2);
+                ModCore.CoreMonitor.Log("thrice");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y - 1)].Name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y - 1)].Name == "Stone")
+                {
+                    ModCore.CoreMonitor.Log("thriceGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y - 1)];
+                    Game1.player.faceDirection(0);
+                }
+            }
+            catch (Exception err)
+            {
+
+            }
+            try
+            {
+                ModCore.CoreMonitor.Log("fourth");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)].Name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)].Name == "Stone")
+                {
+                    ModCore.CoreMonitor.Log("fourthGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)];
+                    Game1.player.faceDirection(2);
+                }
+            }
+            catch (Exception err)
+            {
+
             }
             foreach (var item in Game1.player.items)
             {
@@ -457,10 +567,11 @@ namespace StarAI.TaskCore.DebrisLogic
                 }
             }
             bool move = false;
-            StardewValley.Object twig = v.thisLocation.objects[v.tileLocation];
-            while ((twig.name == "Stone"))
+            //StardewValley.Object twig = v.thisLocation.objects[v.tileLocation];
+            ModCore.CoreMonitor.Log("NAME"+sObject.name);
+            while ((sObject.name == "Stone"))
             {
-                if (!v.thisLocation.isObjectAt((int)v.tileLocation.X * Game1.tileSize, (int)v.tileLocation.Y * Game1.tileSize)) break;
+                if (!v.thisLocation.isObjectAt((int)sObject.tileLocation.X * Game1.tileSize, (int)sObject.tileLocation.Y * Game1.tileSize)) break; //CHANNGE THIS LINE
                 if (WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C) == false) WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
 
                 Vector2 center = new Vector2();
@@ -504,8 +615,10 @@ namespace StarAI.TaskCore.DebrisLogic
             WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
         }
 
+        #endregion
 
-
+        //Weed Logic
+        #region
 
         public static void getAllWeedsToCut(GameLocation location)
         {
@@ -525,11 +638,11 @@ namespace StarAI.TaskCore.DebrisLogic
             GameLocation location = (GameLocation)objArr[0];
             foreach (var v in location.objects)
             {
-                ModCore.CoreMonitor.Log(v.Value.name);
+               // ModCore.CoreMonitor.Log(v.Value.name);
 
                 if (v.Value.name == "Weeds")
                 {
-                    ModCore.CoreMonitor.Log(v.Value.name, LogLevel.Warn);
+               //     ModCore.CoreMonitor.Log(v.Value.name, LogLevel.Warn);
                     TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
                     //t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
                     t.fakePlacementAction(Game1.currentLocation, (int)v.Key.X, (int)v.Key.Y);
@@ -541,26 +654,34 @@ namespace StarAI.TaskCore.DebrisLogic
 
 
             int ok = 0;
+
+
+            List<TileNode> tempList = new List<TileNode>();
             foreach (var v in weedsToCut)
             {
+                tempList.Add(v);
+            }
 
-                object[] objList = new object[2];
-                objList[0] = v;
+            object[] objList = new object[10];
+            objList[0] = tempList;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.MeleeWeapon w = new StardewValley.Tools.MeleeWeapon();
                 ModCore.CoreMonitor.Log("Processing weed:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", new LocationPrerequisite(v.thisLocation), null, new ToolPrerequisite(true, w.GetType(), 1)));
-                if (task.taskMetaData.cost == Int32.MaxValue)
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", new LocationPrerequisite(location), null, new ToolPrerequisite(true, w.GetType(), 1)));
+            objList[1] = task.taskMetaData.pathsToTake[0];
+            objList[2] = task.taskMetaData.pathsToTake[0].ElementAt(0);
+            task.objectParameterDataArray = objList;
+            if (task.taskMetaData.cost == Int32.MaxValue)
                 {
-                   
+                Utilities.tileExceptionList.Clear();
                     Utilities.clearExceptionListWithNames(true);
-                    continue;
+                    return;
                 }
                 ExecutionCore.TaskList.taskList.Add(task);
                 Utilities.clearExceptionListWithName("Child");
                 //   waterSingleCrop(v);
-            }
+            
             weedsToCut.Clear();
         }
 
@@ -606,26 +727,30 @@ namespace StarAI.TaskCore.DebrisLogic
             }
 
             int ok = 0;
-            foreach (var v in weedsToCut)
+            List<TileNode> tempList = new List<TileNode>();
+            foreach (var v in treesToChop)
             {
-                object[] objList = new object[2];
-                objList[0] = v;
+                tempList.Add(v);
+            }
+
+                object[] objList = new object[10];
+                objList[0] = tempList;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.MeleeWeapon w = new StardewValley.Tools.MeleeWeapon();
                 ModCore.CoreMonitor.Log("Processing weeds:" + ok.ToString() + " / " + twingCount.ToString());
                 ok++;
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", new LocationPrerequisite(v.thisLocation), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(cutSingleWeed, objList, new ExecutionCore.TaskMetaData("Cut Single Weed", new LocationPrerequisite(location), new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
                 objList[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = objList;
 
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                     Utilities.clearExceptionListWithNames(true);
-                    continue;
+                    return;
                 }
                 ExecutionCore.TaskList.taskList.Add(task);
                 Utilities.clearExceptionListWithName("Child");
-            }
+            
             weedsToCut.Clear();
         }
 
@@ -644,7 +769,7 @@ namespace StarAI.TaskCore.DebrisLogic
         {
             object[] objArray = (object[])obj;
 
-            TileNode v = (TileNode)objArray[0];
+            TileNode v = (TileNode)objArray[2];
             List<TileNode> correctPath = (List<TileNode>)objArray[1];
             foreach (var goodTile in correctPath)
             {
@@ -653,21 +778,68 @@ namespace StarAI.TaskCore.DebrisLogic
             }
             PathFindingLogic.calculateMovement(correctPath);
 
-            if (v.tileLocation.X < Game1.player.getTileX())
+            Vector2 tileLocation = v.tileLocation;
+            ModCore.CoreMonitor.Log(tileLocation.ToString());
+            StardewValley.Object sObject = new StardewValley.Object();
+            try
             {
-                Game1.player.faceDirection(3);
+                ModCore.CoreMonitor.Log("once");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)].name=="Weeds")
+                {
+                    ModCore.CoreMonitor.Log("onceGod");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X - 1, tileLocation.Y)];
+                    Game1.player.faceDirection(3);
+                }
             }
-            else if (v.tileLocation.X > Game1.player.getTileX())
+            catch (Exception err)
             {
-                Game1.player.faceDirection(1);
+
             }
-            else if (v.tileLocation.Y < Game1.player.getTileY())
+            try
             {
-                Game1.player.faceDirection(0);
+                ModCore.CoreMonitor.Log("twice");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)].name=="Weeds")
+                {
+                    ModCore.CoreMonitor.Log("twiceGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X + 1, tileLocation.Y)];
+                    Game1.player.faceDirection(1);
+                }
             }
-            else if (v.tileLocation.Y > Game1.player.getTileY())
+            catch (Exception err)
             {
-                Game1.player.faceDirection(2);
+
+            }
+            try
+            {
+                ModCore.CoreMonitor.Log("thrice");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y-1)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y-1)].name == "Weeds")
+                {
+                    ModCore.CoreMonitor.Log("thriceGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y-1)];
+                    Game1.player.faceDirection(0);
+                }
+            }
+            catch (Exception err)
+            {
+
+            }
+            try
+            {
+                ModCore.CoreMonitor.Log("fourth");
+                ModCore.CoreMonitor.Log(v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)].name);
+                if (v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y + 1)].name == "Weeds")
+                {
+                    ModCore.CoreMonitor.Log("fourthGood");
+                    sObject = v.thisLocation.objects[new Vector2(tileLocation.X, tileLocation.Y +1)];
+                    Game1.player.faceDirection(2);
+                }
+            }
+            catch (Exception err)
+            {
+
             }
             foreach (var item in Game1.player.items)
             {
@@ -676,10 +848,10 @@ namespace StarAI.TaskCore.DebrisLogic
                     Game1.player.CurrentToolIndex = Game1.player.getIndexOfInventoryItem(item);
                 }
             }
-            StardewValley.Object twig = v.thisLocation.objects[v.tileLocation];
-            while ((twig.name == "Weeds"))
+            
+            while ((sObject.name == "Weeds"))
             {
-                if (!v.thisLocation.isObjectAt((int)v.tileLocation.X * Game1.tileSize, (int)v.tileLocation.Y * Game1.tileSize)) break;
+                if (!v.thisLocation.isObjectAt((int)sObject.tileLocation.X * Game1.tileSize, (int)sObject.tileLocation.Y * Game1.tileSize)) break; //CHANNGE THIS LINE
                 if (WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C) == false) WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
 
                 Vector2 center = new Vector2();
@@ -720,8 +892,11 @@ namespace StarAI.TaskCore.DebrisLogic
             WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
         }
 
+        #endregion
 
 
+        //Tree Logic
+        #region
         public static void getAllTreesToChopRadius(GameLocation location)
         {
             object[] arr = new object[1];
@@ -826,8 +1001,8 @@ namespace StarAI.TaskCore.DebrisLogic
 
                 if (terrain.GetType() == terrainType)
                 {
-                    ModCore.CoreMonitor.Log(terrain.GetType().ToString(), LogLevel.Warn);
-                    ModCore.CoreMonitor.Log(pos.ToString(), LogLevel.Warn);
+                    //ModCore.CoreMonitor.Log(terrain.GetType().ToString(), LogLevel.Warn);
+                    //ModCore.CoreMonitor.Log(pos.ToString(), LogLevel.Warn);
                     TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
                     t.fakePlacementAction(Game1.currentLocation, (int)pos.X, (int)pos.Y);
                     Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "ChopTree"));
@@ -839,7 +1014,7 @@ namespace StarAI.TaskCore.DebrisLogic
            
             int ok = 0;
 
-            object[] objList = new object[3];
+            object[] objList = new object[10];
             List<TileNode> tempTreesToChop = new List<TileNode>();
             foreach(var v in treesToChop)
             {
@@ -1005,7 +1180,7 @@ namespace StarAI.TaskCore.DebrisLogic
             }
             WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
         }
-
+        #endregion
 
     }
 }

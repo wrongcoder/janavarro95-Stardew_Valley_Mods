@@ -62,7 +62,7 @@ namespace StarAI.TaskCore
                 object[] objList = new object[2];
                 objList[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
-                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(pathToSingleChest, objList, new ExecutionCore.TaskMetaData("Path to chest for seeds",new ExecutionCore.TaskPrerequisites.LocationPrerequisite(v.thisLocation), null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
+                ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(pathToSingleChest, objList, new ExecutionCore.TaskMetaData("GetSeasonalSeedsFromChest",new ExecutionCore.TaskPrerequisites.LocationPrerequisite(v.thisLocation), null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
                     Utilities.clearExceptionListWithNames(true);

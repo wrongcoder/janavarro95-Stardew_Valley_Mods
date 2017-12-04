@@ -233,7 +233,7 @@ namespace StarAI
                     return;
                 }
             }
-            DebrisLogic.getAllSticksToChopRadius(Game1.player.currentLocation);
+            DebrisLogic.getAllSticksToChop(Game1.player.currentLocation);
         }
 
 
@@ -257,7 +257,7 @@ namespace StarAI
                     return;
                 }
             }
-            DebrisLogic.getAllStonestoBreakRadius(Game1.player.currentLocation);
+            DebrisLogic.getAllStonesToBreak(Game1.player.currentLocation);
         }
 
         public static void cutAllWeeds(string s, string[] args)
@@ -270,7 +270,7 @@ namespace StarAI
                     return;
                 }
             }
-            DebrisLogic.getAllWeedsToCutRadius(Game1.player.currentLocation);
+            DebrisLogic.getAllWeedsToCut(Game1.player.currentLocation);
         }
 
         public static void runTasks(string s, string[] args)

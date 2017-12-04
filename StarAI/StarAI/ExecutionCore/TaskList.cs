@@ -1,4 +1,5 @@
-﻿using StarAI.PathFindingCore;
+﻿using Microsoft.Xna.Framework;
+using StarAI.PathFindingCore;
 using StarAI.PathFindingCore.WaterLogic;
 using StarAI.TaskCore.MapTransitionLogic;
 using StardewModdingAPI;
@@ -6,6 +7,7 @@ using StardewValley;
 using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -280,8 +282,75 @@ namespace StarAI.ExecutionCore
                     ModCore.CoreMonitor.Log("SOMETHING WENT WRONG WHEN TRYING TO GO TO" + v.taskMetaData.locationPrerequisite.location.name, LogLevel.Error);
                     return false;
                 }
+
                 task.runTask();
-                return true;
+                object[] arr = (object[])v.objectParameterDataArray;
+                List<TileNode> path;
+                try
+                {
+                    foreach (var thing in arr)
+                    {
+                        if (thing == null) continue;
+                        ModCore.CoreMonitor.Log("Thing:" + thing.ToString());
+                    }
+                    List<List<TileNode>> okList = (arr[0] as List<List<TileNode>>);
+                    List<TileNode> smallList = okList.ElementAt(okList.Count - 1);
+                    TileNode tile = smallList.ElementAt(smallList.Count - 1);
+                    //arr[0] = WarpGoal.pathToWorldTileReturnTask(Game1.player.currentLocation, v.taskMetaData.locationPrerequisite.location.name,(int) tile.tileLocation.X,(int) tile.tileLocation.Y);
+                    TileNode s = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
+                    s.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
+
+                   path = Utilities.getIdealPath(tile, s);
+                }
+                catch(Exception err)
+                {
+                    foreach(var thing in arr)
+                    {
+                        if (thing == null) continue;
+                        ModCore.CoreMonitor.Log("Thing2:"+thing.ToString());
+                    }
+                    Utilities.tileExceptionList.Clear();
+                    List<TileNode> smallList = (arr[1] as List<TileNode>);
+                    TileNode tile = smallList.ElementAt(smallList.Count-1);
+                    ModCore.CoreMonitor.Log("LOC:" + tile.thisLocation + tile.thisLocation);
+
+
+                    Warp lastWarp = new Warp(-1, -1, "Grahm", -1, -1, false);
+                    GameLocation fakeLocation = Game1.getLocationFromName(Game1.player.currentLocation.name);
+                    foreach(var ok in fakeLocation.warps)
+                    {
+                        if (ok.X == Game1.player.getTileX() && ok.Y == Game1.player.getTileY() + 1) lastWarp = ok;
+                    }
+
+                    ModCore.CoreMonitor.Log("MYLOC:" + lastWarp.TargetName + lastWarp.TargetX +" "+lastWarp.TargetY);
+
+
+
+
+
+                    //arr[0] = WarpGoal.pathToWorldTileReturnTask(Game1.player.currentLocation, v.taskMetaData.locationPrerequisite.location.name,(int) tile.tileLocation.X,(int) tile.tileLocation.Y);
+                    TileNode s = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
+                    s.fakePlacementAction(Game1.getLocationFromName(lastWarp.TargetName), lastWarp.TargetX, lastWarp.TargetY);
+
+                     path = Utilities.getIdealPath(tile, s);
+
+
+                    
+                     //arr[0] = s;
+                }
+
+                ModCore.CoreMonitor.Log("PATHCOUNT:"+path.Count);
+
+                foreach (var piece in path)
+                {
+                 
+                    ModCore.CoreMonitor.Log("Location: "+piece.thisLocation +" TilePoisition: "+ piece.tileLocation);
+                }
+                
+                //arr[1] = path;
+                //v.objectParameterDataArray = arr;
+                PathFindingLogic.calculateMovement(path);
+                return false;
 
             }
 
