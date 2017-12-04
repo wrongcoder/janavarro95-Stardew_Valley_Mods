@@ -10,10 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StarAI;
-using StarAI.PathFindingCore.DebrisLogic;
 using StarAI.PathFindingCore.WaterLogic;
-using StarAI.PathFindingCore.CropLogic;
-using StarAI.PathFindingCore.MapTransitionLogic;
+using StarAI.TaskCore.MapTransitionLogic;
+using StarAI.TaskCore;
+using StarAI.TaskCore.CropLogic;
+using StarAI.TaskCore.DebrisLogic;
 
 namespace StarAI
 {
@@ -51,7 +52,10 @@ namespace StarAI
 
             ModCore.CoreHelper.ConsoleCommands.Add("pathto", "Path to the adjacent map", new Action<string, string[]>(Commands.pathToMap));
 
-            ModCore.CoreHelper.ConsoleCommands.Add("goto", "Path to the adjacent map", new Action<string, string[]>(Commands.goToMap));
+            ModCore.CoreHelper.ConsoleCommands.Add("goto", "Path to a given waypoint", new Action<string, string[]>(Commands.wayPoints));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("waypoints", "Utilities to deal with waypoints", new Action<string, string[]>(Commands.wayPoints));
+
             // ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -59,19 +63,94 @@ namespace StarAI
                 });
         }
 
+
+        public static void taskListCommands(string s, string[] args)
+        {
+            if (args.Length == 0)
+            {
+                ModCore.CoreMonitor.Log("Error: Need more parameters. Possible command paramaters are...");
+                ModCore.CoreMonitor.Log("(Pop/pop): pop off the first task and remove it");
+                ModCore.CoreMonitor.Log("(Clear/clear/Flush/flush):Remove all tasks from the task list");
+                return;
+            }
+            if(args[0]=="Pop"|| args[0] == "pop")
+            {
+                ExecutionCore.TaskList.taskList.Remove(ExecutionCore.TaskList.taskList.ElementAt(0));
+                ModCore.CoreMonitor.Log("Removed top task from tasklist.");
+                return;
+            }
+            if (args[0] == "Clear" || args[0] == "clear")
+            {
+                ExecutionCore.TaskList.taskList.Clear();
+                ModCore.CoreMonitor.Log("Cleared out the task list");
+                return;
+            }
+            if (args[0] == "Flush" || args[0] == "flush")
+            {
+                ExecutionCore.TaskList.taskList.Clear();
+                ModCore.CoreMonitor.Log("Cleared out the task list");
+                return;
+            }
+        }
+
+        public static void wayPoints(string s, string[] args)
+        {
+            if (args.Length == 0)
+            {
+                ModCore.CoreMonitor.Log("Invalid arguments. Possible arguments are:");
+                ModCore.CoreMonitor.Log("Print: Print all waypoints");
+                ModCore.CoreMonitor.Log("print: Print all waypoints");
+                ModCore.CoreMonitor.Log("goto <waypointName>: Go to a specified waypoint in the world.");
+                return;
+            }
+
+            if (s == "goto")
+            {
+                if (args.Length == 0)
+                {
+                    ModCore.CoreMonitor.Log("Please specify a waypoint name. They can be fetched with the command line \"waypoints print\"");
+                    return;
+                }
+                WayPoints.pathToWayPoint(args[0]);
+                return;
+            }
+
+            if(args[0]=="Print"|| args[0] == "print")
+            {
+                WayPoints.printWayPoints();
+            }
+            if (args[0] == "goto" || args[0] == "GoTo" || args[0] == "goTo")
+            {
+                if (args.Length == 1)
+                {
+                    ModCore.CoreMonitor.Log("Please specify a waypoint name. They can be fetched with the command line \"waypoints print\"");
+                    return;
+                }
+                WayPoints.pathToWayPoint(args[1]);
+                return;
+            }
+        }
+
         public static void pathToMap(string s, string[] args)
         {
             if (args.Length == 0)
             {
                 ModCore.CoreMonitor.Log("Need 1 parameter. MapName");
+                ModCore.CoreMonitor.Log("OR need 3 parameters. MapName, xTile, yTile");
                 return;
             }
             else
             {
-                if (args.Length >= 1)
+                if (args.Length == 1)
                 {
                     //path to the map location.
                     WarpGoal.getWarpChain(Game1.player.currentLocation, args[0]);
+                }
+
+                if (args.Length >= 3)
+                {
+                    //path to the map location.
+                    WarpGoal.pathToWorldTile(Game1.player.currentLocation, args[0],Convert.ToInt32(args[1]), Convert.ToInt32(args[2]));
                 }
             }
         }
@@ -165,7 +244,7 @@ namespace StarAI
                 ModCore.CoreMonitor.Log("Need args length of 1. Param: Name of location to go to.");
                 return;
             }
-            PathFindingCore.MapTransitionLogic.TransitionLogic.transitionToAdjacentMap(Game1.player.currentLocation, args[0]);
+            TaskCore.MapTransitionLogic.TransitionLogic.transitionToAdjacentMap(Game1.player.currentLocation, args[0]);
         }
 
         public static void breakAllStones(string s, string[] args)
@@ -200,16 +279,14 @@ namespace StarAI
           
         }
 
-
-
         public static void waterCrops(string s, string[] args)
         {
-            PathFindingCore.CropLogic.CropLogic.getAllCropsNeededToBeWatered();
+           CropLogic.getAllCropsNeededToBeWatered();
         }
 
         public static void harvestCrops(string s,string[] args)
         {
-            PathFindingCore.CropLogic.CropLogic.getAllCropsNeededToBeHarvested();
+            CropLogic.getAllCropsNeededToBeHarvested();
         }
 
         /// <summary>

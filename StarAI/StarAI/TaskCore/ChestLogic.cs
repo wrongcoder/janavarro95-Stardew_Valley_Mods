@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using StarAI.PathFindingCore;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarAI.PathFindingCore
+namespace StarAI.TaskCore
 {
     class ChestLogic
     {

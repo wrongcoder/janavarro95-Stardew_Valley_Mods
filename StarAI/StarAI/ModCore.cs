@@ -11,6 +11,7 @@ using StarAI.PathFindingCore;
 using System.IO;
 using StardustCore;
 using StardewValley.Menus;
+using StarAI.TaskCore.MapTransitionLogic;
 
 namespace StarAI
 {
@@ -34,23 +35,31 @@ namespace StarAI
             obj[2] = PathFindingLogic.queue;
             CoreHelper = helper;
             throwUpShippingMenu = false;
-            // string[] s = new string[10];
 
             CoreMonitor = this.Monitor;
             CoreMonitor.Log("Hello AI WORLD!", LogLevel.Info);
+
+            initializeEverything();
+    
+            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
+            StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
+
+            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(StarAI.PathFindingCore.TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(StarAI.PathFindingCore.TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(StarAI.PathFindingCore.TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(StarAI.PathFindingCore.TileNode.Serialize)));    
+        }
+
+        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        {
+            WayPoints.setUpBedWaypoint();
+        }
+
+        public void initializeEverything()
+        {
             Commands.initializeCommands();
             PathFindingCore.Utilities.initializeTileExceptionList();
             ExecutionCore.TaskMetaDataHeuristics.initializeToolCostDictionary();
-            //throw new NotImplementedException();
-            //StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
-
-            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
-            // StardewModdingAPI.Events.GraphicsEvents.OnPreRenderEvent += PathFindingCore.Utilities.addFromPlacementListBeforeDraw;
-            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
-
-            StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(StarAI.PathFindingCore.TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(StarAI.PathFindingCore.TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(StarAI.PathFindingCore.TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(StarAI.PathFindingCore.TileNode.Serialize)));
-           
+            WayPoints.initializeWaypoints();
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
@@ -81,31 +90,10 @@ namespace StarAI
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            loadExceptionTiles();
+           // loadExceptionTiles();
             CheatCore.DoorsToWarps.makeAllDoorsWarps();
-        }
-
-        public void loadExceptionTiles()
-        {
-            if (!Directory.Exists(Path.Combine(CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles)))
-            {
-                Directory.CreateDirectory(Path.Combine(CoreHelper.DirectoryPath, PathFindingCore.Utilities.folderForExceptionTiles));
-            }
-            // Process the list of files found in the directory.
-            string[] fileEntries = Directory.GetFiles(Path.Combine(CoreHelper.DirectoryPath,PathFindingCore.Utilities.folderForExceptionTiles));
-            foreach (string fileName in fileEntries)
-            {
-                try
-                {
-                    TileExceptionNode t = TileExceptionNode.parseJson(fileName);
-                    PathFindingCore.Utilities.ignoreCheckTiles.Add(t);
-                }
-                catch(Exception err)
-                {
-                    ModCore.CoreMonitor.Log(err.ToString(), LogLevel.Error);
-                }
-            }
-        
+            WayPoints.setUpBedWaypoint();
+            WayPoints.verifyWayPoints();
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)

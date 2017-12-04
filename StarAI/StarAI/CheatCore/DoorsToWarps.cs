@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using Microsoft.Xna.Framework;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace StarAI.CheatCore
             {
                 foreach(var door in v.doors)
                 {
-                    ModCore.CoreMonitor.Log(v.name.ToString());
-                    ModCore.CoreMonitor.Log(door.Key.ToString());
-                    ModCore.CoreMonitor.Log(door.Value);
+                   // ModCore.CoreMonitor.Log(v.name.ToString());
+                   // ModCore.CoreMonitor.Log(door.Key.ToString());
+                   // ModCore.CoreMonitor.Log(door.Value);
 
                     foreach(var warp in Game1.getLocationFromName(door.Value).warps)
                     {
@@ -26,6 +27,7 @@ namespace StarAI.CheatCore
                         {
                             Warp w = new Warp(door.Key.X, door.Key.Y, door.Value, warp.X, warp.Y - 1,false);
                             v.warps.Add(w);
+                            ModCore.CoreMonitor.Log("Star AI: Cheat Core: Adding warp on door at:" + door.Value + " " + new Vector2(door.Key.X, door.Key.Y));
                         }
                     }
                   

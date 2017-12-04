@@ -25,19 +25,6 @@ namespace StarAI.PathFindingCore
             index = TileIndex;
         }
 
-        public static TileExceptionNode parseJson(string s)
-        {
-            dynamic obj = JObject.Parse(s);
-            TileExceptionNode t = new TileExceptionNode();
-            t.imageSource = obj.imageSource;
-            t.index = obj.index;
-            return t;
-        }
-
-        public void serializeJson(string s)
-        {
-            StardustCore.ModCore.SerializationManager.WriteToJsonFile(Path.Combine(s, "tileExceptionData"+ this.index.ToString() + ".json"), (TileExceptionNode)this);
-        }
 
     }
 }

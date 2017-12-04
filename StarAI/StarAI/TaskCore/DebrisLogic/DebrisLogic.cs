@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using StarAI.ExecutionCore.TaskPrerequisites;
+using StarAI.PathFindingCore;
 using StardewModdingAPI;
 using StardewValley;
 using System;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarAI.PathFindingCore.DebrisLogic
+namespace StarAI.TaskCore.DebrisLogic
 {
     class DebrisLogic
     {

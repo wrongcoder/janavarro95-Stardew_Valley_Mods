@@ -18,8 +18,17 @@ namespace StarAI.ExecutionCore.TaskPrerequisites
 
         public bool isPlayerAtLocation()
         {
-            if (this.location == null) return true;
-            if (Game1.player.currentLocation == this.location || Game1.player.currentLocation.name == this.location.name || Game1.player.currentLocation.uniqueName == this.location.uniqueName) return true;
+            if (this.location == null)
+            {
+                ModCore.CoreMonitor.Log("Location calculation is null");
+                return true;
+            }
+            else
+            {
+                ModCore.CoreMonitor.Log("THIS IS THE LOCATION"+this.location);
+
+            }
+            if (Game1.player.currentLocation == this.location || Game1.player.currentLocation.name == this.location.name) return true;
             else return false;
         }
 

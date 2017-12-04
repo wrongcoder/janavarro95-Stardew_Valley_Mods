@@ -65,7 +65,7 @@ namespace StarAI.PathFindingCore
 
         public TileNode parent;
 
-        public static bool checkIfICanPlaceHere(TileNode t, Vector2 pos, GameLocation loc = null,bool idk=true, bool utilityCheck=false)
+        public static bool checkIfICanPlaceHere(TileNode t, Vector2 pos, GameLocation loc = null,bool ignorePlacement=true, bool utilityCheck=false)
         {
             bool cry = false;
             if (t.thisLocation == null)
@@ -127,14 +127,15 @@ namespace StarAI.PathFindingCore
                 return false;
             }
 
-            /*
-            if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
+            if (ignorePlacement == false)
             {
-               // ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
-                if (cry == true) t.thisLocation = null;
-                return false;
+                if (t.thisLocation.isTilePlaceable(pos / Game1.tileSize) == false)
+                {
+                    // ModCore.CoreMonitor.Log("Tile Not placeable at location. " + t.thisLocation.name, LogLevel.Error);
+                    if (cry == true) t.thisLocation = null;
+                    return false;
+                }
             }
-            */
 
            
             if (t.thisLocation.isTilePassable(new xTile.Dimensions.Location((int)(pos.X/Game1.tileSize), (int)(pos.Y/Game1.tileSize)), Game1.viewport)==false)

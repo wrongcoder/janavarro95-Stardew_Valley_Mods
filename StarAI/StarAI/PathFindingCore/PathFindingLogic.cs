@@ -303,7 +303,7 @@ namespace StarAI.PathFindingCore
             int index = 0;
             List<TileNode> path = new List<TileNode>();
             //path.Clear();
-            ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
+            //ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
             object[] obj = (object[])data;
 
             TileNode Source = (TileNode)obj[0];

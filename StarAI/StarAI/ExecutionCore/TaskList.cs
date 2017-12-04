@@ -1,5 +1,6 @@
 ﻿using StarAI.PathFindingCore;
 using StarAI.PathFindingCore.WaterLogic;
+using StarAI.TaskCore.MapTransitionLogic;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Tools;
@@ -17,6 +18,8 @@ namespace StarAI.ExecutionCore
         public static Task executioner = new Task(new Action(runTaskList));
 
         public static List<CustomTask> removalList = new List<CustomTask>();
+
+        public static bool pathafterLocationChange;
         public static void runTaskList()
         {
            
@@ -24,9 +27,22 @@ namespace StarAI.ExecutionCore
              
             bool assignNewTask = true;
 
-            while(ranAllTasks()==false)
+            if(TaskPrerequisites.BedTimePrerequisite.enoughTimeToDoTaskStatic() == false)
             {
-            foreach (var task2 in taskList)
+                CustomTask task = WayPoints.pathToWayPointReturnTask("bed");
+                if (task == null) ModCore.CoreMonitor.Log("SOMETHING WENT WRONG WHEN TRYING TO GO TO BED", LogLevel.Error);
+                ModCore.CoreMonitor.Log("Not enough time remaining in day. Going home.", LogLevel.Alert);
+                task.runTask();
+                Utilities.tileExceptionList.Clear();
+                taskList.Clear();
+                removalList.Clear();
+                return;
+            }
+
+            while(ranAllTasks()==false||TaskPrerequisites.BedTimePrerequisite.enoughTimeToDoTaskStatic()==false)
+            {
+                Utilities.tileExceptionList.Clear();
+                foreach (var task2 in taskList)
             {
                     if (removalList.Contains(task2)) continue;
                     recalculateTask(task2);               
@@ -64,7 +80,7 @@ namespace StarAI.ExecutionCore
                 }
             }
 
-
+            Utilities.tileExceptionList.Clear();
             taskList.Clear();
             removalList.Clear();
             
@@ -74,15 +90,15 @@ namespace StarAI.ExecutionCore
         {
             object[] oArray = (object[])v.objectParameterDataArray;
             ModCore.CoreMonitor.Log("RECALCULATING: "+ v.taskMetaData.name);
-           
 
             if (v.taskMetaData.name.Contains("Path to "))
             {
+                Utilities.tileExceptionList.Clear();
                 ModCore.CoreMonitor.Log("POKE DEW VALLEY: " + v.taskMetaData.name);
                 string[] s = v.taskMetaData.name.Split(' ');
                 ModCore.CoreMonitor.Log(s.ElementAt(s.Length-1));
                 List<List<TileNode>> newPaths = new List<List<TileNode>>(); 
-                newPaths = PathFindingCore.MapTransitionLogic.WarpGoal.getWarpChainReturn(Game1.player.currentLocation, s.ElementAt(s.Length-1));
+                newPaths = TaskCore.MapTransitionLogic.WarpGoal.getWarpChainReturn(Game1.player.currentLocation, s.ElementAt(s.Length-1));
                 v.taskMetaData.cost = 0;
                 int value = 0;
                 foreach (var path in newPaths)
@@ -96,23 +112,53 @@ namespace StarAI.ExecutionCore
                 ModCore.CoreMonitor.Log("IDK ANY MORE: " + v.taskMetaData.cost);
                 return;
             }
-
+            Utilities.tileExceptionList.Clear();
             try
             {
+                Utilities.tileExceptionList.Clear();
                 TileNode t = (TileNode)oArray[0];
+                Utilities.tileExceptionList.Clear();
                 ModCore.CoreMonitor.Log("Premtive calculate 1");
                 v.taskMetaData.calculateTaskCost(t, false);
-                object[] objArr = new object[3];
+                object[] objArr = new object[10];
                 objArr[0] = (object)t;
                 objArr[1] = (object)v.taskMetaData.pathsToTake[0];
+                int malcolm = 0;
+                objArr[2] = (object)v.taskMetaData.pathsToTake[0].ElementAt(malcolm); //source of whatever is hit.
+                try
+                {
+                    objArr[3] = oArray[3];
+                }
+                catch (Exception err2)
+                {
+
+                }
+                try
+                {
+                    objArr[4] = oArray[4];
+                }
+                catch (Exception err2)
+                {
+
+                }
+                try
+                {
+                    objArr[5] = oArray[5];
+                }
+                catch (Exception err2)
+                {
+
+                }
                 v.objectParameterDataArray = objArr;
             }
             catch (Exception err)
             {
                
             }
+            
             try
             {
+                Utilities.tileExceptionList.Clear();
                 List<TileNode> t = (List<TileNode>)oArray[0];
                 ModCore.CoreMonitor.Log("Premtive calculate 2");
                 foreach (var s in Utilities.tileExceptionList)
@@ -120,7 +166,7 @@ namespace StarAI.ExecutionCore
                     ModCore.CoreMonitor.Log(s.actionType);
                 }
                 v.taskMetaData.calculateTaskCost(t, false);
-                object[] objArr = new object[4];
+                object[] objArr = new object[10];
                 objArr[0] = (object)t; //List of trees to use for path calculations
                 objArr[1] = (object)v.taskMetaData.pathsToTake[0]; //The path itself.
                 int malcolm = 0;
@@ -129,6 +175,22 @@ namespace StarAI.ExecutionCore
                 try
                 {
                     objArr[3] = oArray[3];
+                }
+                catch (Exception err2)
+                {
+
+                }
+                try
+                {
+                    objArr[4] = oArray[4];
+                }
+                catch (Exception err2)
+                {
+
+                }
+                try
+                {
+                    objArr[5] = oArray[5];
                 }
                 catch (Exception err2)
                 {
@@ -144,14 +206,15 @@ namespace StarAI.ExecutionCore
 
             try
             {
+                Utilities.tileExceptionList.Clear();
                 List<List<TileNode>> t = (List<List<TileNode>>)oArray[3];
-                ModCore.CoreMonitor.Log("Premtive calculate 2");
+                ModCore.CoreMonitor.Log("Premtive calculate 3");
                 foreach (var s in Utilities.tileExceptionList)
                 {
                     ModCore.CoreMonitor.Log(s.actionType);
                 }
                 v.taskMetaData.calculateTaskCost(t, false);
-                object[] objArr = new object[4];
+                object[] objArr = new object[10];
                 objArr[0] = (object)t; //List of trees to use for path calculations
                 objArr[1] = (object)v.taskMetaData.pathsToTake; //The path itself.
                 int malcolm = 0;
@@ -160,6 +223,22 @@ namespace StarAI.ExecutionCore
                 try
                 {
                     objArr[3] = oArray[3];
+                }
+                catch (Exception err2)
+                {
+
+                }
+                try
+                {
+                    objArr[4] = oArray[4];
+                }
+                catch (Exception err2)
+                {
+
+                }
+                try
+                {
+                    objArr[5] = oArray[5];
                 }
                 catch (Exception err2)
                 {
@@ -176,9 +255,34 @@ namespace StarAI.ExecutionCore
 
         public static bool interruptionTasks(CustomTask v)
         {
+
+            if (v.taskMetaData.bedTimePrerequisite.enoughTimeToDoTask() == false)
+            {
+                CustomTask task = WayPoints.pathToWayPointReturnTask("bed");
+                if (task == null)
+                {
+                    ModCore.CoreMonitor.Log("SOMETHING WENT WRONG WHEN TRYING TO GO TO BED", LogLevel.Error);
+                    return false;
+                }
+                ModCore.CoreMonitor.Log("Not enough time remaining in day. Going home and removing tasks.", LogLevel.Alert);
+                task.runTask();
+                return true;
+            }
+
             if (v.taskMetaData.locationPrerequisite.isPlayerAtLocation() == false)
             {
                 //Force player to move to that location, but also need the cost again....
+                ModCore.CoreMonitor.Log("PLAYERS LOCATION:"+Game1.player.currentLocation.name);
+                Utilities.tileExceptionList.Clear();
+               CustomTask task= WarpGoal.getWarpChainReturnTask(Game1.player.currentLocation, v.taskMetaData.locationPrerequisite.location.name);
+                if (task == null)
+                {
+                    ModCore.CoreMonitor.Log("SOMETHING WENT WRONG WHEN TRYING TO GO TO" + v.taskMetaData.locationPrerequisite.location.name, LogLevel.Error);
+                    return false;
+                }
+                task.runTask();
+                return true;
+
             }
 
             if (v.taskMetaData.name == "Water Crop")

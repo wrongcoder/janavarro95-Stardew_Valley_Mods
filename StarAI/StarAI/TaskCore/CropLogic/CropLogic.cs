@@ -9,8 +9,9 @@ using StardewValley;
 using Microsoft.Xna.Framework;
 using System.IO;
 using StarAI.ExecutionCore.TaskPrerequisites;
+using StarAI.PathFindingCore;
 
-namespace StarAI.PathFindingCore.CropLogic
+namespace StarAI.TaskCore.CropLogic
 {
     
 
@@ -35,7 +36,7 @@ namespace StarAI.PathFindingCore.CropLogic
                             TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.LightSkyBlue));
                             t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
                             //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(t, Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize));
-                            Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Water"));
+                            PathFindingCore.Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Water"));
                             cropsToWater.Add(t);
                         }
                     }
@@ -52,14 +53,14 @@ namespace StarAI.PathFindingCore.CropLogic
                 ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(waterSingleCrop, obj, new ExecutionCore.TaskMetaData("Water Crop", new LocationPrerequisite(v.thisLocation),new StaminaPrerequisite(true, 3), new ToolPrerequisite(true, w.GetType(), 1)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
-                    Utilities.clearExceptionListWithNames(true);
+                   StarAI.PathFindingCore.Utilities.clearExceptionListWithNames(true);
                     continue;
                 }
                 ExecutionCore.TaskList.taskList.Add(task);
                 obj[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = obj;
                 //   waterSingleCrop(v);
-                Utilities.clearExceptionListWithName("Child");
+                StarAI.PathFindingCore.Utilities.clearExceptionListWithName("Child");
             }
             cropsToWater.Clear();
         }
@@ -121,23 +122,23 @@ namespace StarAI.PathFindingCore.CropLogic
                     Vector2 center=new Vector2();
                     if (Game1.player.facingDirection == 2)
                     {
-                         center = Utilities.parseCenterFromTile((int)v.tileLocation.X+1, (int)v.tileLocation.Y);
+                         center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X+1, (int)v.tileLocation.Y);
                         continue;
                     }
                     if (Game1.player.facingDirection == 1)
                     {
-                        center = Utilities.parseCenterFromTile((int)v.tileLocation.X-1, (int)v.tileLocation.Y);
+                        center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X-1, (int)v.tileLocation.Y);
                         continue;
                     }
                     if (Game1.player.facingDirection == 0)
                     {
-                        center = Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y+1);
+                        center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y+1);
                         continue;
 
                     }
                     if (Game1.player.facingDirection == 3)
                     {
-                        center = Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y-1);
+                        center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y-1);
                         continue;
                     }
                     Game1.player.position = center;
@@ -148,7 +149,7 @@ namespace StarAI.PathFindingCore.CropLogic
                     ModCore.CoreMonitor.Log("player pos: "+Game1.player.position.ToString(),LogLevel.Warn);
                     ModCore.CoreMonitor.Log("TilePos: "+v.position.ToString(), LogLevel.Error);
                 }
-                Utilities.cleanExceptionList(v);
+            StarAI.PathFindingCore.Utilities.cleanExceptionList(v);
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
             // StardustCore.Utilities.masterRemovalList.Add(v);
             //v.performRemoveAction(v.tileLocation, v.thisLocation);
@@ -186,7 +187,7 @@ namespace StarAI.PathFindingCore.CropLogic
                             TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.LimeGreen));
                             t.placementAction(Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize);
                             //StardustCore.Utilities.masterAdditionList.Add(new StardustCore.DataNodes.PlacementNode(t, Game1.currentLocation, (int)v.Key.X * Game1.tileSize, (int)v.Key.Y * Game1.tileSize));
-                            Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Harvest"));
+                            StarAI.PathFindingCore.Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "Harvest"));
                             cropsToHarvest.Add(t);
                         }
                     }
@@ -203,14 +204,14 @@ namespace StarAI.PathFindingCore.CropLogic
                 ExecutionCore.CustomTask task = new ExecutionCore.CustomTask(harvestSingleCrop, obj, new ExecutionCore.TaskMetaData("HarvestSingleCrop",new LocationPrerequisite(v.thisLocation) ,null, null, new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true)));
                 if (task.taskMetaData.cost == Int32.MaxValue)
                 {
-                    Utilities.clearExceptionListWithNames(true);
+                    StarAI.PathFindingCore.Utilities.clearExceptionListWithNames(true);
                     continue;
                 }
 
                 ExecutionCore.TaskList.taskList.Add(task);
                 obj[1] = task.taskMetaData.pathsToTake[0];
                 task.objectParameterDataArray = obj;
-                Utilities.clearExceptionListWithName("Child");
+                StarAI.PathFindingCore.Utilities.clearExceptionListWithName("Child");
                 //   waterSingleCrop(v);
             }
             cropsToHarvest.Clear();
@@ -274,28 +275,28 @@ namespace StarAI.PathFindingCore.CropLogic
                 Vector2 center = new Vector2();
                 if (Game1.player.facingDirection == 2)
                 {
-                    center = Utilities.parseCenterFromTile((int)v.tileLocation.X + 1, (int)v.tileLocation.Y);
+                    center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X + 1, (int)v.tileLocation.Y);
                     continue;
                 }
                 if (Game1.player.facingDirection == 1)
                 {
-                    center = Utilities.parseCenterFromTile((int)v.tileLocation.X - 1, (int)v.tileLocation.Y);
+                    center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X - 1, (int)v.tileLocation.Y);
                     continue;
                 }
                 if (Game1.player.facingDirection == 0)
                 {
-                    center = Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y + 1);
+                    center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y + 1);
                     continue;
 
                 }
                 if (Game1.player.facingDirection == 3)
                 {
-                    center = Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y - 1);
+                    center = StarAI.PathFindingCore.Utilities.parseCenterFromTile((int)v.tileLocation.X, (int)v.tileLocation.Y - 1);
                     continue;
                 }
                 Game1.player.position = center;
             }
-            Utilities.cleanExceptionList(v);
+            StarAI.PathFindingCore.Utilities.cleanExceptionList(v);
             StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
             v.thisLocation.objects.Remove(v.tileLocation);
             //v.performRemoveAction(v.tileLocation, v.thisLocation);

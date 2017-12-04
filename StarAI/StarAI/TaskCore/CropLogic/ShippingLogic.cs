@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using StarAI.ExecutionCore.TaskPrerequisites;
+using StarAI.PathFindingCore;
 using StardewValley;
 using StardewValley.Menus;
 using System;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarAI.PathFindingCore.CropLogic
+namespace StarAI.TaskCore.CropLogic
 {
     class ShippingLogic
     {

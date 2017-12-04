@@ -33,6 +33,23 @@ namespace StarAI.ExecutionCore.TaskPrerequisites
             else return false;
         }
 
+        public static int timeRemainingInDayStatic()
+        {
+            int passOutTime = 2600;
+            return passOutTime - Game1.timeOfDay;
+        }
+
+        /// <summary>
+        /// The default here will give you 2 hrs which should be enough for bedTime.
+        /// </summary>
+        /// <returns></returns>
+        public static bool enoughTimeToDoTaskStatic()
+        {
+            int timeRemaining = timeRemainingInDayStatic();
+            if (timeRemaining > 200) return true;
+            else return false;
+        }
+
         public bool enoughTimeToDoTask(int timeToDoTask)
         {
             int timeRemaining = timeRemainingInDay();
