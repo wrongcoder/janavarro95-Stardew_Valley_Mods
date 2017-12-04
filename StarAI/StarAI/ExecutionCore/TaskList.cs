@@ -47,7 +47,8 @@ namespace StarAI.ExecutionCore
                 foreach (var task2 in taskList)
             {
                     if (removalList.Contains(task2)) continue;
-                    recalculateTask(task2);               
+                    var temp = task2;
+                    recalculateTask(ref temp);               
                 //task.taskMetaData = new TaskMetaData(task.taskMetaData.name, PathFindingCore.Utilities.calculatePathCost(task.objectParameterDataArray), task.taskMetaData.staminaPrerequisite, task.taskMetaData.toolPrerequisite);
             }
                // ModCore.CoreMonitor.Log("DONE CALCULATING JUNK NOW RUNNING TASK");
@@ -67,7 +68,7 @@ namespace StarAI.ExecutionCore
                 bool recalculate= interruptionTasks(v);
 
                 if (recalculate) {
-                    recalculateTask(v);
+                    recalculateTask(ref v);
                 }
                 if (v.taskMetaData.verifyAllPrerequisitesHit() == true)
                 {
@@ -88,7 +89,7 @@ namespace StarAI.ExecutionCore
             
         }
 
-        public static void recalculateTask(CustomTask v)
+        public static void recalculateTask(ref CustomTask v)
         {
             object[] oArray = (object[])v.objectParameterDataArray;
             ModCore.CoreMonitor.Log("RECALCULATING: "+ v.taskMetaData.name);
@@ -121,10 +122,16 @@ namespace StarAI.ExecutionCore
                 TileNode t = (TileNode)oArray[0];
                 Utilities.tileExceptionList.Clear();
                 ModCore.CoreMonitor.Log("Premtive calculate 1");
+                ModCore.CoreMonitor.Log("Valaue before???:" + v.taskMetaData.pathsToTake[0].Count);
                 v.taskMetaData.calculateTaskCost(t, false);
+                //v.taskMetaData.pathsToTake = new List<List<TileNode>>();
+                //v.taskMetaData.pathsToTake.Add(StarAI.PathFindingCore.Utilities.getIdealPath(v));
+
+
                 object[] objArr = new object[10];
                 objArr[0] = (object)t;
                 objArr[1] = (object)v.taskMetaData.pathsToTake[0];
+                ModCore.CoreMonitor.Log("HMM SO WHAT'S HAPPENING???:" + v.taskMetaData.pathsToTake[0].Count);
                 int malcolm = 0;
                 objArr[2] = (object)v.taskMetaData.pathsToTake[0].ElementAt(malcolm); //source of whatever is hit.
                 try
@@ -152,6 +159,7 @@ namespace StarAI.ExecutionCore
 
                 }
                 v.objectParameterDataArray = objArr;
+                return;
             }
             catch (Exception err)
             {
@@ -200,6 +208,7 @@ namespace StarAI.ExecutionCore
                 }
                 v.objectParameterDataArray = objArr;
                 Utilities.tileExceptionList.Clear();
+                return;
             }
             catch(Exception err)
             {
@@ -248,6 +257,7 @@ namespace StarAI.ExecutionCore
                 }
                 v.objectParameterDataArray = objArr;
                 Utilities.tileExceptionList.Clear();
+                return;
             }
             catch(Exception err)
             {

@@ -61,6 +61,7 @@ namespace StarAI.ExecutionCore
         {
             var pair = TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite, unknownPath);
             this.cost=  pair.Key;
+            this.pathsToTake = new List<List<TileNode>>();
             this.pathsToTake.Add(pair.Value); 
             //this.path = Utilities.calculatePath(source, false);
         }
@@ -69,6 +70,7 @@ namespace StarAI.ExecutionCore
         {
             var pair = TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite, unknownPath);
             this.cost = pair.Key;
+            this.pathsToTake = new List<List<TileNode>>();
             this.pathsToTake.Add(pair.Value);
             //this.path = Utilities.calculatePath(source, false);
         }

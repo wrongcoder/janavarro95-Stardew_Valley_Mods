@@ -70,6 +70,7 @@
     <Compile Include="ExecutionCore\TaskPrerequisites\StaminaPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\ToolPrerequisite.cs" />
     <Compile Include="ModCore.cs" />
+    <Compile Include="ShopCore\ShopLogic.cs" />
     <Compile Include="TaskCore\ChestLogic.cs" />
     <Compile Include="TaskCore\CropLogic\CropLogic.cs" />
     <Compile Include="TaskCore\CropLogic\ShippingLogic.cs" />
