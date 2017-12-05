@@ -661,7 +661,7 @@ namespace StarAI.PathFindingCore
                 }
                 catch (Exception err)
                 {
-                    ModCore.CoreMonitor.Log("FUCK", LogLevel.Error);
+                   
                     ModCore.CoreMonitor.Log("INDEX ERROR:"+index, LogLevel.Error);
                     break;
                 }

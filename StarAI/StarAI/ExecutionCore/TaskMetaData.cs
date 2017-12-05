@@ -68,7 +68,7 @@ namespace StarAI.ExecutionCore
 
         public void calculateTaskCost(List<TileNode> source, bool unknownPath)
         {
-            var pair = TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite, unknownPath);
+            var pair = TaskMetaDataHeuristics.calculateTaskCost(source, this.toolPrerequisite, unknownPath); 
             this.cost = pair.Key;
             this.pathsToTake = new List<List<TileNode>>();
             this.pathsToTake.Add(pair.Value);

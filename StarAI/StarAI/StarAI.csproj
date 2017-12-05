@@ -73,6 +73,7 @@
     <Compile Include="ShopCore\ShopLogic.cs" />
     <Compile Include="TaskCore\ChestLogic.cs" />
     <Compile Include="TaskCore\CropLogic\CropLogic.cs" />
+    <Compile Include="TaskCore\CropLogic\SeedLogic.cs" />
     <Compile Include="TaskCore\CropLogic\ShippingLogic.cs" />
     <Compile Include="TaskCore\DebrisLogic\DebrisLogic.cs" />
     <Compile Include="TaskCore\MapTransitionLogic\TransitionLogic.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="PathFindingCore\Utilities.cs" />
     <Compile Include="TaskCore\WaterLogic\WaterLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilityCore\SeedCropUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

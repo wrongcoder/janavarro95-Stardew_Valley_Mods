@@ -52,6 +52,7 @@ namespace StarAI
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
             WayPoints.setUpBedWaypoint();
+            UtilityCore.SeedCropUtility.setUpCropUtilityDictionaryDaily();
         }
 
         public void initializeEverything()
@@ -60,6 +61,7 @@ namespace StarAI
             PathFindingCore.Utilities.initializeTileExceptionList();
             ExecutionCore.TaskMetaDataHeuristics.initializeToolCostDictionary();
             WayPoints.initializeWaypoints();
+            
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
@@ -94,6 +96,7 @@ namespace StarAI
             CheatCore.DoorsToWarps.makeAllDoorsWarps();
             WayPoints.setUpBedWaypoint();
             WayPoints.verifyWayPoints();
+            UtilityCore.SeedCropUtility.setUpCropUtilityDictionaryDaily();
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -162,7 +165,11 @@ namespace StarAI
             }
             #endregion
 
-            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.Y)
+            {
+                ShopCore.ShopLogic.openSeedShopMenu();
+            }
+                if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
             {
                 ExecutionCore.TaskList.printAllTaskMetaData();
                 foreach(var v in PathFindingCore.Utilities.tileExceptionList)
