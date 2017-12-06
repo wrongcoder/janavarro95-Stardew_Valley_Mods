@@ -189,7 +189,8 @@ namespace StarAI.MenuCore
                 List<ClickableTextureComponent> textureComponentList = this.collections[index].Last<List<ClickableTextureComponent>>();
                 float scale= Game1.pixelZoom * (1 + UtilityCore.SeedCropUtility.getUtilityScaleValue(o.parentSheetIndex));
                 if (UtilityCore.SeedCropUtility.getUtilityScaleValue(o.parentSheetIndex)==0) scale = 1.00f;
-                ClickableTextureComponent textureComponent9 = new ClickableTextureComponent(keyValuePair.Key.ToString() + " " + drawShadow.ToString(), new Rectangle(x1, y1, Game1.tileSize, Game1.tileSize), (string)null, "", Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, keyValuePair.Key, 16, 16),scale, drawShadow);
+                ClickableTextureComponent textureComponent9 = new ClickableTextureComponent(keyValuePair.Key.ToString() + " " + drawShadow.ToString(), new Rectangle(x1, y1, Game1.tileSize, Game1.tileSize), (string)null, "", Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, keyValuePair.Key, 16, 16),Game1.pixelZoom, drawShadow);
+                textureComponent9.scale = scale;
                 int count = this.collections[index].Last<List<ClickableTextureComponent>>().Count;
                 textureComponent9.myID = count;
                 int num30 = (this.collections[index].Last<List<ClickableTextureComponent>>().Count + 1) % num29 == 0 ? -1 : this.collections[index].Last<List<ClickableTextureComponent>>().Count + 1;
@@ -334,9 +335,9 @@ namespace StarAI.MenuCore
                     if (UtilityCore.SeedCropUtility.getUtilityScaleValue(Convert.ToInt32(s[0])) == 0) textureComponent.scale = 1.00f;
                     if (Convert.ToBoolean(textureComponent.name.Split(' ')[1]) || this.currentTab == 5) {
                         this.hoverText = this.createDescription(Convert.ToInt32(textureComponent.name.Split(' ')[0]));
-                        this.hoverText += "\n\nAI Utility Value: " + UtilityCore.SeedCropUtility.CropSeedUtilityDictionary[(Convert.ToInt32(s[0]))];
-                        this.hoverText += "\n\nUser Utility Value: " + UtilityCore.SeedCropUtility.UserCropSeedUtilityDictionary[(Convert.ToInt32(s[0]))];
-                        this.hoverText += "\n\nTotal Utility Value: " + UtilityCore.SeedCropUtility.getUtilityScaleValue(Convert.ToInt32(s[0]));
+                        this.hoverText += "\n\nAI Utility Value: " +Math.Round(UtilityCore.SeedCropUtility.CropSeedUtilityDictionary[(Convert.ToInt32(s[0]))],3);
+                        this.hoverText += "\n\nUser Utility Value: " +Math.Round(UtilityCore.SeedCropUtility.UserCropSeedUtilityDictionary[(Convert.ToInt32(s[0]))],3);
+                        this.hoverText += "\n\nTotal Utility Value: " +Math.Round(UtilityCore.SeedCropUtility.getUtilityScaleValue(Convert.ToInt32(s[0])),3);
                     }
                     else
                         this.hoverText = "???";
@@ -419,8 +420,8 @@ namespace StarAI.MenuCore
             b.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
             foreach (ClickableTextureComponent textureComponent in this.collections[0][this.currentPage])
             {
-                bool boolean = Convert.ToBoolean(textureComponent.name.Split(' ')[1]);
-                textureComponent.draw(b, boolean ? Color.White : Color.Black * 0.2f, 0.86f);
+                bool boolean = textureComponent.scale.Equals(1.00f);
+                textureComponent.draw(b, boolean ? Color.White * 0.6f : Color.White, 0.86f);
                 if (this.currentTab == 5 & boolean)
                 {
                     int num = new Random(Convert.ToInt32(textureComponent.name.Split(' ')[0])).Next(12);
