@@ -90,13 +90,17 @@ namespace StarAI
             Game1.endOfNightMenus = menus;
         }
 
+
+
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
            // loadExceptionTiles();
             CheatCore.DoorsToWarps.makeAllDoorsWarps();
             WayPoints.setUpBedWaypoint();
             WayPoints.verifyWayPoints();
-            UtilityCore.SeedCropUtility.setUpCropUtilityDictionaryDaily();
+            UtilityCore.SeedCropUtility.setUpUserCropUtilityDictionary(); //Runs once
+            UtilityCore.SeedCropUtility.setUpCropUtilityDictionaryDaily(); //Runs daily
+         
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -169,7 +173,13 @@ namespace StarAI
             {
                 ShopCore.ShopLogic.openSeedShopMenu();
             }
-                if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
+
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.T)
+            {
+                Game1.activeClickableMenu = new MenuCore.CropUtilityMenu((int)(Game1.viewport.Width * .1f), (int)(Game1.viewport.Height * .05f), (int)(Game1.viewport.Width*.7f),(int)(Game1.viewport.Height*.75f));
+            }
+
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.U)
             {
                 ExecutionCore.TaskList.printAllTaskMetaData();
                 foreach(var v in PathFindingCore.Utilities.tileExceptionList)

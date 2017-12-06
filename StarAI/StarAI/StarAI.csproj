@@ -69,6 +69,7 @@
     <Compile Include="ExecutionCore\TaskPrerequisites\LocationPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\StaminaPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\ToolPrerequisite.cs" />
+    <Compile Include="MenuCore\CropUtilityMenu.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="ShopCore\ShopLogic.cs" />
     <Compile Include="TaskCore\ChestLogic.cs" />
