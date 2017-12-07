@@ -1170,7 +1170,19 @@ namespace StarAI.TaskCore.MapTransitionLogic
             PathFindingLogic.calculateMovement(Utilities.getIdealPath(t, s));
 
             //Do final location walk to stuff here.
+            finalLocationLogic();
         }
 
+
+        public static void finalLocationLogic()
+        {
+
+            if (Game1.player.currentLocation.name == "SeedShop" && Game1.player.getTileX() == 5 && Game1.player.getTileY() == 19)
+            {
+                TaskCore.CropLogic.SeedLogic.buySeeds();
+            }
+        }
     }
+
+
 }
