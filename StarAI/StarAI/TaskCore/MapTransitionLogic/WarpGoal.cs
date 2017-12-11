@@ -1126,6 +1126,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
             {
                 TaskCore.CropLogic.SeedLogic.buySeeds();
             }
+            
         }
     }
 

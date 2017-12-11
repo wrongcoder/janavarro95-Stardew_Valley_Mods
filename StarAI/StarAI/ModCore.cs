@@ -27,6 +27,7 @@ namespace StarAI
         public static object[] obj = new object[3];
 
         public static bool throwUpShippingMenu;
+        private bool playerHasLoadedGame;
 
         public override void Entry(IModHelper helper)
         {
@@ -46,13 +47,25 @@ namespace StarAI
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
 
+            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            playerHasLoadedGame = false;
+
             StardustCore.ModCore.SerializationManager.acceptedTypes.Add("StarAI.PathFindingCore.TileNode", new StardustCore.Serialization.SerializerDataNode(new StardustCore.Serialization.SerializerDataNode.SerializingFunction(StarAI.PathFindingCore.TileNode.Serialize), new StardustCore.Serialization.SerializerDataNode.ParsingFunction(StarAI.PathFindingCore.TileNode.ParseIntoInventory), new StardustCore.Serialization.SerializerDataNode.WorldParsingFunction(StarAI.PathFindingCore.TileNode.SerializeFromWorld), new StardustCore.Serialization.SerializerDataNode.SerializingToContainerFunction(StarAI.PathFindingCore.TileNode.Serialize)));    
+        }
+
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        {
+            if (playerHasLoadedGame == false) return;
+            DialogueCore.ReponseLogic.answerDialogueResponses();
+            InterfaceCore.InterfaceLogic.interactWithCurrentMenu();
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
             WayPoints.setUpBedWaypoint();
             UtilityCore.SeedCropUtility.setUpCropUtilityDictionaryDaily();
+            WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.ESCAPE);
+            
         }
 
         public void initializeEverything()
@@ -100,7 +113,7 @@ namespace StarAI
             WayPoints.verifyWayPoints();
             UtilityCore.SeedCropUtility.setUpUserCropUtilityDictionary(); //Runs once
             UtilityCore.SeedCropUtility.setUpCropUtilityDictionaryDaily(); //Runs daily
-         
+            playerHasLoadedGame = true;
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -228,9 +241,6 @@ namespace StarAI
                 }
             }
         }
-
-
-
      
         private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
         {

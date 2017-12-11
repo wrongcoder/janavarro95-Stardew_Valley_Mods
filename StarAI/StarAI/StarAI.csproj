@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="CheatCore\DoorsToWarps.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="DialogueCore\ReponseLogic.cs" />
     <Compile Include="ExecutionCore\CustomTask.cs" />
     <Compile Include="ExecutionCore\TaskList.cs" />
     <Compile Include="ExecutionCore\TaskMetaData.cs" />
@@ -69,6 +70,8 @@
     <Compile Include="ExecutionCore\TaskPrerequisites\LocationPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\StaminaPrerequisite.cs" />
     <Compile Include="ExecutionCore\TaskPrerequisites\ToolPrerequisite.cs" />
+    <Compile Include="InterfaceCore\InterfaceLogic.cs" />
+    <Compile Include="InterfaceCore\ShippingMenuCore.cs" />
     <Compile Include="MenuCore\CropUtilityMenu.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="ShopCore\ShopLogic.cs" />
