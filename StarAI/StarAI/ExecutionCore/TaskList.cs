@@ -92,12 +92,12 @@ namespace StarAI.ExecutionCore
         public static void recalculateTask(ref CustomTask v)
         {
             object[] oArray = (object[])v.objectParameterDataArray;
-            ModCore.CoreMonitor.Log("RECALCULATING: "+ v.taskMetaData.name);
+          //  ModCore.CoreMonitor.Log("RECALCULATING: "+ v.taskMetaData.name);
 
             if (v.taskMetaData.name.Contains("Path to "))
             {
                 Utilities.tileExceptionList.Clear();
-                ModCore.CoreMonitor.Log("POKE DEW VALLEY: " + v.taskMetaData.name);
+               // ModCore.CoreMonitor.Log("POKE DEW VALLEY: " + v.taskMetaData.name);
                 string[] s = v.taskMetaData.name.Split(' ');
                 ModCore.CoreMonitor.Log(s.ElementAt(s.Length-1));
                 List<List<TileNode>> newPaths = new List<List<TileNode>>(); 
@@ -112,7 +112,7 @@ namespace StarAI.ExecutionCore
                 arr[3] = newPaths;
                 v.taskMetaData.cost = value;
                 v.taskMetaData.pathsToTake = newPaths;
-                ModCore.CoreMonitor.Log("IDK ANY MORE: " + v.taskMetaData.cost);
+                //ModCore.CoreMonitor.Log("IDK ANY MORE: " + v.taskMetaData.cost);
                 return;
             }
             Utilities.tileExceptionList.Clear();
@@ -121,8 +121,8 @@ namespace StarAI.ExecutionCore
                 Utilities.tileExceptionList.Clear();
                 TileNode t = (TileNode)oArray[0];
                 Utilities.tileExceptionList.Clear();
-                ModCore.CoreMonitor.Log("Premtive calculate 1");
-                ModCore.CoreMonitor.Log("Valaue before???:" + v.taskMetaData.pathsToTake[0].Count);
+                //ModCore.CoreMonitor.Log("Premtive calculate 1");
+                //ModCore.CoreMonitor.Log("Valaue before???:" + v.taskMetaData.pathsToTake[0].Count);
                 v.taskMetaData.calculateTaskCost(t, false);
                 //v.taskMetaData.pathsToTake = new List<List<TileNode>>();
                 //v.taskMetaData.pathsToTake.Add(StarAI.PathFindingCore.Utilities.getIdealPath(v));
@@ -131,7 +131,7 @@ namespace StarAI.ExecutionCore
                 object[] objArr = new object[10];
                 objArr[0] = (object)t;
                 objArr[1] = (object)v.taskMetaData.pathsToTake[0];
-                ModCore.CoreMonitor.Log("HMM SO WHAT'S HAPPENING???:" + v.taskMetaData.pathsToTake[0].Count);
+                //ModCore.CoreMonitor.Log("HMM SO WHAT'S HAPPENING???:" + v.taskMetaData.pathsToTake[0].Count);
                 int malcolm = 0;
                 objArr[2] = (object)v.taskMetaData.pathsToTake[0].ElementAt(malcolm); //source of whatever is hit.
                 try
@@ -170,7 +170,7 @@ namespace StarAI.ExecutionCore
             {
                 Utilities.tileExceptionList.Clear();
                 List<TileNode> t = (List<TileNode>)oArray[0];
-                ModCore.CoreMonitor.Log("Premtive calculate 2");
+               // ModCore.CoreMonitor.Log("Premtive calculate 2");
                 foreach (var s in Utilities.tileExceptionList)
                 {
                     ModCore.CoreMonitor.Log(s.actionType);
@@ -180,7 +180,7 @@ namespace StarAI.ExecutionCore
                 objArr[0] = (object)t; //List of trees to use for path calculations
                 objArr[1] = (object)v.taskMetaData.pathsToTake[0]; //The path itself.
                 int malcolm = 0;
-                ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
+               // ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
                 objArr[2] = (object)v.taskMetaData.pathsToTake[0].ElementAt(malcolm); //source of whatever is hit.
                 try
                 {
@@ -219,7 +219,7 @@ namespace StarAI.ExecutionCore
             {
                 Utilities.tileExceptionList.Clear();
                 List<List<TileNode>> t = (List<List<TileNode>>)oArray[3];
-                ModCore.CoreMonitor.Log("Premtive calculate 3");
+               // ModCore.CoreMonitor.Log("Premtive calculate 3");
                 foreach (var s in Utilities.tileExceptionList)
                 {
                     ModCore.CoreMonitor.Log(s.actionType);
@@ -229,7 +229,7 @@ namespace StarAI.ExecutionCore
                 objArr[0] = (object)t; //List of trees to use for path calculations
                 objArr[1] = (object)v.taskMetaData.pathsToTake; //The path itself.
                 int malcolm = 0;
-                ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
+               // ModCore.CoreMonitor.Log("THIS IS MALCOLM:" + malcolm);
                 objArr[2] = (object)v.taskMetaData.pathsToTake[0].ElementAt(malcolm); //source of whatever is hit.
                 try
                 {
@@ -284,7 +284,7 @@ namespace StarAI.ExecutionCore
             if (v.taskMetaData.locationPrerequisite.isPlayerAtLocation() == false)
             {
                 //Force player to move to that location, but also need the cost again....
-                ModCore.CoreMonitor.Log("PLAYERS LOCATION:"+Game1.player.currentLocation.name);
+               // ModCore.CoreMonitor.Log("PLAYERS LOCATION:"+Game1.player.currentLocation.name);
                 Utilities.tileExceptionList.Clear();
                CustomTask task= WarpGoal.getWarpChainReturnTask(Game1.player.currentLocation, v.taskMetaData.locationPrerequisite.location.name);
                 if (task == null)
@@ -298,11 +298,7 @@ namespace StarAI.ExecutionCore
                 List<TileNode> path;
                 try
                 {
-                    foreach (var thing in arr)
-                    {
-                        if (thing == null) continue;
-                        ModCore.CoreMonitor.Log("Thing:" + thing.ToString());
-                    }
+
                     List<List<TileNode>> okList = (arr[0] as List<List<TileNode>>);
                     List<TileNode> smallList = okList.ElementAt(okList.Count - 1);
                     TileNode tile = smallList.ElementAt(smallList.Count - 1);
@@ -314,15 +310,11 @@ namespace StarAI.ExecutionCore
                 }
                 catch(Exception err)
                 {
-                    foreach(var thing in arr)
-                    {
-                        if (thing == null) continue;
-                        ModCore.CoreMonitor.Log("Thing2:"+thing.ToString());
-                    }
+
                     Utilities.tileExceptionList.Clear();
                     List<TileNode> smallList = (arr[1] as List<TileNode>);
                     TileNode tile = smallList.ElementAt(smallList.Count-1);
-                    ModCore.CoreMonitor.Log("LOC:" + tile.thisLocation + tile.thisLocation);
+                    //ModCore.CoreMonitor.Log("LOC:" + tile.thisLocation + tile.thisLocation);
 
 
                     Warp lastWarp = new Warp(-1, -1, "Grahm", -1, -1, false);
@@ -332,30 +324,16 @@ namespace StarAI.ExecutionCore
                         if (ok.X == Game1.player.getTileX() && ok.Y == Game1.player.getTileY() + 1) lastWarp = ok;
                     }
 
-                    ModCore.CoreMonitor.Log("MYLOC:" + lastWarp.TargetName + lastWarp.TargetX +" "+lastWarp.TargetY);
-
-
-
-
-
+                    //ModCore.CoreMonitor.Log("MYLOC:" + lastWarp.TargetName + lastWarp.TargetX +" "+lastWarp.TargetY);
                     //arr[0] = WarpGoal.pathToWorldTileReturnTask(Game1.player.currentLocation, v.taskMetaData.locationPrerequisite.location.name,(int) tile.tileLocation.X,(int) tile.tileLocation.Y);
                     TileNode s = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
                     s.fakePlacementAction(Game1.getLocationFromName(lastWarp.TargetName), lastWarp.TargetX, lastWarp.TargetY);
 
                      path = Utilities.getIdealPath(tile, s);
-
-
-                    
                      //arr[0] = s;
                 }
 
-                ModCore.CoreMonitor.Log("PATHCOUNT:"+path.Count);
-
-                foreach (var piece in path)
-                {
-                 
-                    ModCore.CoreMonitor.Log("Location: "+piece.thisLocation +" TilePoisition: "+ piece.tileLocation);
-                }
+               // ModCore.CoreMonitor.Log("PATHCOUNT:"+path.Count);
                 
                 //arr[1] = path;
                 //v.objectParameterDataArray = arr;

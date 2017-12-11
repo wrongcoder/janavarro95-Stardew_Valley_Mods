@@ -47,6 +47,13 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("watercan", "Fill my watering can.", new Action<string, string[]>(Commands.fillWateringCan));
             ModCore.CoreHelper.ConsoleCommands.Add("fillcan", "Fill my watering can.", new Action<string, string[]>(Commands.fillWateringCan));
 
+            ModCore.CoreHelper.ConsoleCommands.Add("digdirt", "Dig out dirt on the farm.", new Action<string, string[]>(Commands.hoeDirtAmount));
+            ModCore.CoreHelper.ConsoleCommands.Add("tillsoil", "Dig out dirt on the farm.", new Action<string, string[]>(Commands.hoeDirtAmount));
+            ModCore.CoreHelper.ConsoleCommands.Add("hoedirt", "Dig out dirt on the farm.", new Action<string, string[]>(Commands.hoeDirtAmount));
+
+            ModCore.CoreHelper.ConsoleCommands.Add("plant", "Plant Seeds", new Action<string, string[]>(Commands.plantSeeds));
+            ModCore.CoreHelper.ConsoleCommands.Add("plantseeds", "Plant Seeds", new Action<string, string[]>(Commands.plantSeeds));
+
             ModCore.CoreHelper.ConsoleCommands.Add("shippingbin", "Goto shipping bin", new Action<string, string[]>(Commands.goToShippingBin));
             ModCore.CoreHelper.ConsoleCommands.Add("shipItem", "Ship an Item", new Action<string, string[]>(Commands.shipItem));
 
@@ -63,6 +70,20 @@ namespace StarAI
                 });
         }
 
+        public static void hoeDirtAmount(string s, string[] args)
+        {
+            if (args.Length !=2)
+            {
+                ModCore.CoreMonitor.Log("Error, need to specify 2 paramaters: <Number of tiles to dig.>, <Radius to search around farmer>");
+                return;
+            }
+            SeedLogic.makeAsMuchDirtAsSpecifiedAroundFarmer(Game1.player.currentLocation, Convert.ToInt32(args[0]), Convert.ToInt32(args[1]));
+        }
+
+        public static void plantSeeds(string s, string[] args)
+        {
+            SeedLogic.plantSeeds(Game1.player.currentLocation);
+        }
 
         public static void taskListCommands(string s, string[] args)
         {

@@ -74,7 +74,7 @@ namespace StarAI.PathFindingCore
             int index = 0;
             List<TileNode> path = new List<TileNode>();
             //path.Clear();
-            ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
+            //ModCore.CoreMonitor.Log("LET'S GO!!!!", LogLevel.Error);
             object[] obj = (object[])data;
 
             TileNode Source =(TileNode) obj[0];
@@ -190,13 +190,13 @@ namespace StarAI.PathFindingCore
 
             if (currentNode.tileLocation != Goal.tileLocation)
             {
-                ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
+               // ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
                 return;
             }
 
             if (currentNode.tileLocation == Goal.tileLocation)
             {
-                ModCore.CoreMonitor.Log("SWEET BEANS!!!!!!", LogLevel.Error);
+               // ModCore.CoreMonitor.Log("SWEET BEANS!!!!!!", LogLevel.Error);
                 queue.Clear();
                 index = 0;
                 //ModCore.CoreMonitor.Log(currentNode.parent.ToString(), LogLevel.Error);
@@ -431,7 +431,7 @@ namespace StarAI.PathFindingCore
 
             if (currentNode.tileLocation != Goal.tileLocation)
             {
-                ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
+               // ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
                 return new List<TileNode>();
             }
 
@@ -537,7 +537,7 @@ namespace StarAI.PathFindingCore
             int index = 0;
             List<TileNode> path = new List<TileNode>();
             //path.Clear();
-            ModCore.CoreMonitor.Log("LET'S GO 2222!!!!", LogLevel.Error);
+            //ModCore.CoreMonitor.Log("LET'S GO 2222!!!!", LogLevel.Error);
             object[] obj = (object[])data;
 
             TileNode Source = (TileNode)obj[0];
@@ -608,7 +608,7 @@ namespace StarAI.PathFindingCore
                 if (goalFound == true)
                 {
                     currentNode = doesNodeEqualGoal(currentNode, Goals).Value;
-                    ModCore.CoreMonitor.Log("FOUND YOU!!!");
+                   // ModCore.CoreMonitor.Log("FOUND YOU!!!");
 
                   //  path.Add(currentNode);
                     //System.Threading.Thread.Sleep(2000);
@@ -662,7 +662,7 @@ namespace StarAI.PathFindingCore
                 catch (Exception err)
                 {
                    
-                    ModCore.CoreMonitor.Log("INDEX ERROR:"+index, LogLevel.Error);
+                    //ModCore.CoreMonitor.Log("INDEX ERROR:"+index, LogLevel.Error);
                     break;
                 }
                 currentNode.drawColor = StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Blue); //Working
@@ -672,7 +672,7 @@ namespace StarAI.PathFindingCore
 
             if (doesNodeEqualGoal(currentNode,Goals).Key==false)
             {
-                ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
+               // ModCore.CoreMonitor.Log("NO PATH FOUND", LogLevel.Error);
                 return new List<TileNode>();
             }
 
@@ -770,7 +770,7 @@ namespace StarAI.PathFindingCore
         {
             path.Reverse();
 
-            ModCore.CoreMonitor.Log("PATH COUNT TIME!!!!: " + path.Count);
+           // ModCore.CoreMonitor.Log("PATH COUNT TIME!!!!: " + path.Count);
             bool xTargetReached = false;
             bool yTargetReached = false;
             List<TileNode> removalList = new List<TileNode>();

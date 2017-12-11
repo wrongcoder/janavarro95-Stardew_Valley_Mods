@@ -154,7 +154,7 @@ namespace StarAI.UtilityCore
             recalculateAllUtilityValues();
         }
 
-
+        //AI cares about money, user might care about other things.
         //Doesn't recalculate crops that regrow. Favors crops with mutiple yields. Quantity over quality I suppose.
         public static float averageGoldPerDay(Crop c,Item seeds)
         {

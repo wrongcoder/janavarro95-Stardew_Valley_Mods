@@ -55,7 +55,7 @@ namespace StarAI.ExecutionCore
             }
             catch(Exception err)
             {
-                ModCore.CoreMonitor.Log(err.ToString());
+                //ModCore.CoreMonitor.Log(err.ToString());
             }
         }
 

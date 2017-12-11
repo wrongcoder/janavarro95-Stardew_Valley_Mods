@@ -55,7 +55,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
             //keep chaining children
             //exploredLocations.Add(location);
             checkedLocations.Add(location);
-            List<WarpGoal> warpChain = okBye(startinggoals, mapName, location,checkedLocations);
+            List<WarpGoal> warpChain = getRecursiveWarpChain(startinggoals, mapName, location,checkedLocations);
 
             checkedLocations.Clear();
             exploredLocations.Clear();
@@ -209,7 +209,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
             //keep chaining children
             //exploredLocations.Add(location);
             checkedLocations.Add(location);
-            List<WarpGoal> warpChain = okBye(startinggoals, mapName, location, checkedLocations);
+            List<WarpGoal> warpChain = getRecursiveWarpChain(startinggoals, mapName, location, checkedLocations);
 
             checkedLocations.Clear();
             exploredLocations.Clear();
@@ -372,7 +372,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
             //keep chaining children
             // exploredLocations.Add(location);
             checkedLocations.Add(location);
-            List<WarpGoal> warpChain= okBye(startinggoals, mapName,location,checkedLocations);
+            List<WarpGoal> warpChain= getRecursiveWarpChain(startinggoals, mapName,location,checkedLocations);
             checkedLocations.Clear();
             exploredLocations.Clear();
             if (warpChain == null)
@@ -510,10 +510,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
                 if (once == false)
                 {
 
-                    foreach (var v in pathMaster.ElementAt(0))
-                    {
-                        ModCore.CoreMonitor.Log("This is my path:" + v.thisLocation.ToString() + v.tileLocation.ToString());
-                    }
+                    
                     //pathMaster.ElementAt(0).Remove(pathMaster.ElementAt(0).ElementAt(0));
                     PathFindingLogic.calculateMovement(pathMaster.ElementAt(0));
                     ModCore.CoreMonitor.Log("WTF???");
@@ -529,15 +526,22 @@ namespace StarAI.TaskCore.MapTransitionLogic
                         temp.Add(pathMaster.ElementAt(0).ElementAt(i));
 
                     }
-                    ModCore.CoreMonitor.Log("Pathing from FIX:" + temp.ElementAt(temp.Count - 1).thisLocation.ToString() + temp.ElementAt(temp.Count - 1).tileLocation.ToString());
+                    //ModCore.CoreMonitor.Log("Pathing from FIX:" + temp.ElementAt(temp.Count - 1).thisLocation.ToString() + temp.ElementAt(temp.Count - 1).tileLocation.ToString());
 
-                    foreach (var v in temp)
+                    foreach (var goodTile in temp)
                     {
-                        ModCore.CoreMonitor.Log("This is my path modified:" + v.thisLocation.ToString() + v.tileLocation.ToString() + v.position.ToString());
+                        StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
+                        goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
                     }
                     // temp.Remove(temp.ElementAt(0));
                     Game1.player.position = temp.ElementAt(temp.Count - 1).position;
                     PathFindingLogic.calculateMovement(temp);
+
+                    foreach (var goodTile in temp)
+                    {
+                        StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(goodTile);
+                        goodTile.performRemoveAction(goodTile.tileLocation, goodTile.thisLocation);
+                    }
                 }
 
                 bool warped = false;
@@ -569,70 +573,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
             //Do final location walk to stuff here.
         }
 
-        /*
-                public static List<WarpGoal> okByeGOODLOCATION(List<WarpGoal> param, string targetMapName, GameLocation lastCheckedLocation)
-                {
-
-                    List<GameLocation> placesToExplore = new List<GameLocation>();
-                    List<GameLocation> placesIHaveBeen = new List<GameLocation>();
-
-                   foreach(var warpGoal in param)
-                    {
-                        ModCore.CoreMonitor.Log(warpGoal.warp.TargetName);
-                        placesToExplore.Add(Game1.getLocationFromName(warpGoal.warp.TargetName));
-                    }
-                    placesIHaveBeen.Add(lastCheckedLocation);
-
-
-                    while (placesToExplore.Count != 0)
-                    {
-                        GameLocation currentCheckingLocation = placesToExplore.ElementAt(0);
-                        while(checkedLocations.Contains(currentCheckingLocation))
-                        {
-                            placesToExplore.Remove(currentCheckingLocation);
-                            currentCheckingLocation = placesToExplore.ElementAt(0);
-                            ModCore.CoreMonitor.Log("REMOVING " + currentCheckingLocation.name, StardewModdingAPI.LogLevel.Warn);
-
-                        }
-                        foreach(var warp in currentCheckingLocation.warps)
-                        {
-                            bool addNewLocation = true;
-                            foreach (var checkedPlace in placesIHaveBeen)
-                            {
-
-                                if (checkedPlace.name == warp.TargetName)
-                                {
-                                    addNewLocation = false;
-                                    continue;
-                                }
-                            }
-                            foreach(var location in placesToExplore)
-                            {
-                                if(location.name== warp.TargetName)
-                                {
-                                    addNewLocation = false;
-                                    continue;
-                                }
-                            }
-
-                            if (addNewLocation == true)
-                            {
-                                placesToExplore.Add(Game1.getLocationFromName(warp.TargetName));
-                                ModCore.CoreMonitor.Log("ADDING NEW LOCATION" + warp.TargetName, StardewModdingAPI.LogLevel.Error);
-                            }
-                            else
-                            {
-                                ModCore.CoreMonitor.Log("ALREADY BEEN AT THIS LOCATION: " + currentCheckingLocation.name, StardewModdingAPI.LogLevel.Warn);
-                            }
-                        }
-                        placesIHaveBeen.Add(currentCheckingLocation);
-                        placesToExplore.Remove(currentCheckingLocation);
-                        ModCore.CoreMonitor.Log("CHECKING LOCATION: " + currentCheckingLocation.name,StardewModdingAPI.LogLevel.Alert);
-                    }
-                    return new List<WarpGoal>();
-                }
-        */
-        public static List<WarpGoal> okBye(List<WarpGoal> param, string targetMapName, GameLocation lastCheckedLocation,List<GameLocation> place)
+        public static List<WarpGoal> getRecursiveWarpChain(List<WarpGoal> param, string targetMapName, GameLocation lastCheckedLocation,List<GameLocation> place)
         {
 
             //  List<GameLocation> placesToExplore = new List<GameLocation>();
@@ -687,7 +628,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
                     warpGoal.childrenWarps.Add(fun);
                 }
                 placesIHaveBeen.Add(targetLocation);
-                List<WarpGoal> idk = okBye(lastWarp.childrenWarps, targetMapName, targetLocation,placesIHaveBeen);
+                List<WarpGoal> idk = getRecursiveWarpChain(lastWarp.childrenWarps, targetMapName, targetLocation,placesIHaveBeen);
                 if (idk.Count == 0) continue;
                 if (idk.ElementAt(0).warp.TargetName == targetMapName) return idk;
                // placesIHaveBeen.Clear();
@@ -753,7 +694,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
             //keep chaining children
             //exploredLocations.Add(location);
             checkedLocations.Add(location);
-            List<WarpGoal> warpChain = okBye(startinggoals, mapName, location, checkedLocations);
+            List<WarpGoal> warpChain = getRecursiveWarpChain(startinggoals, mapName, location, checkedLocations);
 
             checkedLocations.Clear();
             exploredLocations.Clear();
@@ -940,7 +881,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
             //keep chaining children
             //exploredLocations.Add(location);
             checkedLocations.Add(location);
-            List<WarpGoal> warpChain = okBye(startinggoals, mapName, location, checkedLocations);
+            List<WarpGoal> warpChain = getRecursiveWarpChain(startinggoals, mapName, location, checkedLocations);
 
             checkedLocations.Clear();
             exploredLocations.Clear();
@@ -1100,15 +1041,19 @@ namespace StarAI.TaskCore.MapTransitionLogic
 
                 if (once == false)
                 {
-
-                    foreach (var v in pathMaster.ElementAt(0))
-                    {
-                        ModCore.CoreMonitor.Log("This is my path:" + v.thisLocation.ToString() + v.tileLocation.ToString());
-                    }
                     //pathMaster.ElementAt(0).Remove(pathMaster.ElementAt(0).ElementAt(0));
+                    foreach (var goodTile in pathMaster.ElementAt(0))
+                    {
+                        StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
+                        goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
+                    }
                     PathFindingLogic.calculateMovement(pathMaster.ElementAt(0));
-                    ModCore.CoreMonitor.Log("WTF???");
                     once = true;
+                    foreach (var goodTile in pathMaster.ElementAt(0))
+                    {
+                        StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(goodTile);
+                        goodTile.performRemoveAction(goodTile.tileLocation, goodTile.thisLocation);
+                    }
                     //warped = false;
                 }
                 else if (once == true)

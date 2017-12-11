@@ -344,7 +344,7 @@ namespace StarAI.PathFindingCore
                 {
                     s = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.RosyBrown));
                     s.fakePlacementAction(Game1.player.currentLocation, Game1.player.getTileX(), Game1.player.getTileY());
-                    ModCore.CoreMonitor.Log("WHUT???????");
+                   // ModCore.CoreMonitor.Log("WHUT???????");
                 }
             }
             catch(Exception err)
@@ -382,7 +382,7 @@ namespace StarAI.PathFindingCore
                     bool f = PathFindingCore.TileNode.checkIfICanPlaceHere(v, pos * Game1.tileSize, v.thisLocation, true, utility);
                     if (f == false)
                     {
-                        ModCore.CoreMonitor.Log("FAILED TO PUT DOWN A GOAL????");
+                       // ModCore.CoreMonitor.Log("FAILED TO PUT DOWN A GOAL????");
                         ModCore.CoreMonitor.Log(v.thisLocation.ToString()+pos.ToString());
                     }
                     // ModCore.CoreMonitor.Log("OK THIS IS THE RESULT F: " + f, LogLevel.Alert);
