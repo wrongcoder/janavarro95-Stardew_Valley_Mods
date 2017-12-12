@@ -79,6 +79,19 @@ namespace StarAI
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
+            List<TileNode> removalList = new List<TileNode>();
+            foreach(var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
+            {
+                if(v.getCategoryName()=="Tile Node")
+                {
+                    //StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+                    removalList.Add((v as TileNode));
+                }
+            }
+            foreach(var v in removalList)
+            {
+                StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+            }
 
             Stack<IClickableMenu> menus = new Stack<IClickableMenu>();
 

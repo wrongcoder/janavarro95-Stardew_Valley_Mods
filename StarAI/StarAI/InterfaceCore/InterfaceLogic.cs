@@ -19,13 +19,13 @@ namespace StarAI.InterfaceCore
 
             //WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.ESCAPE);
             ModCore.CoreMonitor.Log(Game1.activeClickableMenu.ToString());
-            while(Game1.activeClickableMenu is StardewValley.Menus.DialogueBox)
+            if(Game1.activeClickableMenu is StardewValley.Menus.DialogueBox)
             {
                 Game1.activeClickableMenu.exitThisMenu(true);
                 ModCore.CoreMonitor.Log("BYE");
             }
 
-            while (Game1.activeClickableMenu is StardewValley.Menus.ShippingMenu)
+            if (Game1.activeClickableMenu is StardewValley.Menus.ShippingMenu)
             {
                 //(Game1.activeClickableMenu as StardewValley.Menus.ShippingMenu).readyToClose
                 //Game1.activeClickableMenu.exitThisMenu(true);

@@ -113,6 +113,14 @@ namespace StarAI.UtilityCore
 
             foreach (var v in CropSeedUtilityDictionary)
             {
+                if (StardustCore.StaticExtentions.HasValue(CropSeedUtilityDictionary[v.Key]) == false)
+                {
+                    CropSeedUtilityDictionary[v.Key] = 0;
+                }
+                if (StardustCore.StaticExtentions.HasValue(UserCropSeedUtilityDictionary[v.Key]) == false)
+                {
+                    UserCropSeedUtilityDictionary[v.Key] = 0;
+                }
                 float scale = CropSeedUtilityDictionary[v.Key] + UserCropSeedUtilityDictionary[v.Key];
                 if (scale <= 0)
                 {
