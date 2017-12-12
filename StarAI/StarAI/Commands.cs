@@ -72,12 +72,18 @@ namespace StarAI
 
         public static void hoeDirtAmount(string s, string[] args)
         {
-            if (args.Length !=2)
+            if (args.Length !=3)
             {
-                ModCore.CoreMonitor.Log("Error, need to specify 2 paramaters: <Number of tiles to dig.>, <Radius to search around farmer>");
+                ModCore.CoreMonitor.Log("Error, need to specify 3 paramaters:<Game location name>, <Number of tiles to dig.>, <Radius to search around farmer>");
                 return;
             }
-            SeedLogic.makeAsMuchDirtAsSpecifiedAroundFarmer(Game1.player.currentLocation, Convert.ToInt32(args[0]), Convert.ToInt32(args[1]));
+           GameLocation loc= Game1.getLocationFromName(args[0]);
+            if (loc == null)
+            {
+                ModCore.CoreMonitor.Log("Error location " + args[0] + "is not valid");
+                return;
+            }
+            SeedLogic.makeAsMuchDirtAsSpecifiedAroundFarmer(loc, Convert.ToInt32(args[1]), Convert.ToInt32(args[2]));
         }
 
         public static void plantSeeds(string s, string[] args)

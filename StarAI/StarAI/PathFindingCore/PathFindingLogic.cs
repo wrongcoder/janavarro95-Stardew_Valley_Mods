@@ -899,10 +899,14 @@ namespace StarAI.PathFindingCore
             foreach(var v in removalList)
             {
                 //v.thisLocation.objects.Remove(v.tileLocation);
-                v.thisLocation.removeObject(v.tileLocation, false);
+                //v.thisLocation.removeObject(v.tileLocation, false);
                 //v.performRemoveAction(v.tileLocation, v.thisLocation);
                 //StardustCore.Utilities.masterRemovalList.Add(v);
+                v.thisLocation.objects.Remove(v.tileLocation);
+                //ModCore.CoreMonitor.Log("WHUT???"+v.tileLocation);
                 StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
+                //var ok = v;
+                //ok = null;
             }
             //goals.Clear();
         }

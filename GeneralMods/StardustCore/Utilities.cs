@@ -793,6 +793,50 @@ namespace StardustCore
             return null;
         }
 
+        public static StardewValley.Object checkCardinalForObject(string name)
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    if (x == -1 && y == -1) continue; //upper left
+                    if (x == -1 && y == 1) continue; //bottom left
+                    if (x == 1 && y == -1) continue; //upper right
+                    if (x == 1 && y == 1) continue; //bottom right
+                    bool f = Game1.player.currentLocation.isObjectAt((Game1.player.getTileX() + x) * Game1.tileSize, (Game1.player.getTileY() + y) * Game1.tileSize);
+                    if (f == false) continue;
+                    StardewValley.Object obj = Game1.player.currentLocation.getObjectAt((Game1.player.getTileX() + x) * Game1.tileSize, (Game1.player.getTileY() + y) * Game1.tileSize);
+                    if (obj == null) continue;
+                    if (obj.name == name)
+                    {
+                        return obj;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static void faceDirectionTowardsSomething(Vector2 tileLocation)
+        {
+
+            if (tileLocation.X < Game1.player.getTileX())
+            {
+                Game1.player.faceDirection(3);
+            }
+            else if (tileLocation.X > Game1.player.getTileX())
+            {
+                Game1.player.faceDirection(1);
+            }
+            else if (tileLocation.Y < Game1.player.getTileY())
+            {
+                Game1.player.faceDirection(0);
+            }
+            else if (tileLocation.Y > Game1.player.getTileY())
+            {
+                Game1.player.faceDirection(2);
+            }
+        }
+
         public static bool doesLocationContainObject(GameLocation location, string name)
         {
             foreach (var v in location.objects)
@@ -822,6 +866,32 @@ namespace StardustCore
             }
             return new KeyValuePair<Vector2, TerrainFeature>(new Vector2(),null);
         }
+
+        public static KeyValuePair<Vector2, TerrainFeature> checkCardinalForTerrainFeature(Type terrainType)
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    if (x == -1 && y == -1) continue; //upper left
+                    if (x == -1 && y == 1) continue; //bottom left
+                    if (x == 1 && y == -1) continue; //upper right
+                    if (x == 1 && y == 1) continue; //bottom right
+                    Vector2 pos = new Vector2((Game1.player.getTileX() + x), (Game1.player.getTileY() + y));
+                    bool f = Game1.player.currentLocation.isTerrainFeatureAt((int)pos.X, (int)pos.Y);
+                    if (f == false) continue;
+                    TerrainFeature t = Game1.player.currentLocation.terrainFeatures[pos];  //((Game1.player.getTileX() + x) * Game1.tileSize, (Game1.player.getTileY() + y) * Game1.tileSize);
+                    if (t == null) continue;
+                    if (t.GetType() == terrainType)
+                    {
+                        return new KeyValuePair<Vector2, TerrainFeature>(pos, t);
+                    }
+                }
+            }
+            return new KeyValuePair<Vector2, TerrainFeature>(new Vector2(), null);
+        }
+
+
 
         public static bool doesLocationContainTerrainFeature(GameLocation location, Type terrain)
         {

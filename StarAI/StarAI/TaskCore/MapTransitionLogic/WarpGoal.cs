@@ -157,13 +157,6 @@ namespace StarAI.TaskCore.MapTransitionLogic
             bool once = false;
 
 
-            foreach (var path in pathMaster)
-            {
-                foreach (var v in path)
-                {
-                    ModCore.CoreMonitor.Log("This is my path LOL:" + v.thisLocation.ToString() + v.tileLocation.ToString(), StardewModdingAPI.LogLevel.Warn);
-                }
-            }
 
             object[] arr = new object[4];
             arr[3] = pathMaster;
@@ -311,13 +304,6 @@ namespace StarAI.TaskCore.MapTransitionLogic
             bool once = false;
 
 
-            foreach (var path in pathMaster)
-            {
-                foreach (var v in path)
-                {
-                    ModCore.CoreMonitor.Log("This is my path LOL:" + v.thisLocation.ToString() + v.tileLocation.ToString(), StardewModdingAPI.LogLevel.Warn);
-                }
-            }
 
             object[] arr = new object[4];
             arr[3] = pathMaster;
@@ -474,13 +460,6 @@ namespace StarAI.TaskCore.MapTransitionLogic
             bool once = false;
 
 
-            foreach(var path in pathMaster)
-            {
-                foreach(var v in path)
-                {
-                    ModCore.CoreMonitor.Log("This is my path LOL:" + v.thisLocation.ToString() + v.tileLocation.ToString(),StardewModdingAPI.LogLevel.Warn);
-                }
-            }
 
 
             return pathMaster;
@@ -536,11 +515,21 @@ namespace StarAI.TaskCore.MapTransitionLogic
                     // temp.Remove(temp.ElementAt(0));
                     Game1.player.position = temp.ElementAt(temp.Count - 1).position;
                     PathFindingLogic.calculateMovement(temp);
-
-                    foreach (var goodTile in temp)
+                    List<StardewValley.Object> removalList2 = new List<StardewValley.Object>();
+                    foreach (var obj in Game1.player.currentLocation.objects)
                     {
-                        StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(goodTile);
-                        goodTile.performRemoveAction(goodTile.tileLocation, goodTile.thisLocation);
+                        //ModCore.CoreMonitor.Log(Game1.player.currentLocation.name);
+                        if (obj.Value.name == "Generic Colored Tile" || obj.Value.getCategoryName() == "Tile Node")
+                        {
+                            removalList2.Add(obj.Value);
+                            //loc.objects.Remove(obj.Value.tileLocation);
+                            //ModCore.CoreMonitor.Log("ANIAHILATION!!!!");
+                        }
+                    }
+                    foreach (var v in removalList2)
+                    {
+                        //ModCore.CoreMonitor.Log(v.tileLocation.ToString());
+                        Game1.player.currentLocation.objects.Remove(v.tileLocation);
                     }
                 }
 
@@ -796,13 +785,6 @@ namespace StarAI.TaskCore.MapTransitionLogic
             bool once = false;
 
 
-            foreach (var path in pathMaster)
-            {
-                foreach (var v in path)
-                {
-                    ModCore.CoreMonitor.Log("This is my path LOL:" + v.thisLocation.ToString() + v.tileLocation.ToString(), StardewModdingAPI.LogLevel.Warn);
-                }
-            }
 
             object[] arr = new object[10];
             
@@ -983,14 +965,6 @@ namespace StarAI.TaskCore.MapTransitionLogic
             bool once = false;
 
 
-            foreach (var path in pathMaster)
-            {
-                foreach (var v in path)
-                {
-                    ModCore.CoreMonitor.Log("This is my path LOL:" + v.thisLocation.ToString() + v.tileLocation.ToString(), StardewModdingAPI.LogLevel.Warn);
-                }
-            }
-
             object[] arr = new object[10];
 
             arr[3] = pathMaster;
@@ -1052,7 +1026,8 @@ namespace StarAI.TaskCore.MapTransitionLogic
                     foreach (var goodTile in pathMaster.ElementAt(0))
                     {
                         StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(goodTile);
-                        goodTile.performRemoveAction(goodTile.tileLocation, goodTile.thisLocation);
+                        // goodTile.performRemoveAction(goodTile.tileLocation, goodTile.thisLocation);
+                        goodTile.thisLocation.removeObject(goodTile.tileLocation, false);
                     }
                     //warped = false;
                 }
@@ -1067,13 +1042,33 @@ namespace StarAI.TaskCore.MapTransitionLogic
                     }
                     ModCore.CoreMonitor.Log("Pathing from FIX:" + temp.ElementAt(temp.Count - 1).thisLocation.ToString() + temp.ElementAt(temp.Count - 1).tileLocation.ToString());
 
-                    foreach (var v in temp)
-                    {
-                        ModCore.CoreMonitor.Log("This is my path modified:" + v.thisLocation.ToString() + v.tileLocation.ToString() + v.position.ToString());
-                    }
                     // temp.Remove(temp.ElementAt(0));
                     Game1.player.position = temp.ElementAt(temp.Count - 1).position;
-                    PathFindingLogic.calculateMovement(temp);
+                    
+                    foreach (var goodTile in pathMaster.ElementAt(0))
+                    {
+                        ModCore.CoreMonitor.Log("BLERP "+goodTile.position.ToString());
+                        StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
+                        goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
+                        ModCore.CoreMonitor.Log("LOC"+goodTile.thisLocation.name);
+                    }
+                    PathFindingLogic.calculateMovement(pathMaster.ElementAt(0));
+                    List<StardewValley.Object> removalList = new List<StardewValley.Object>();
+                    foreach(var obj in Game1.player.currentLocation.objects)
+                    {
+                        //ModCore.CoreMonitor.Log(Game1.player.currentLocation.name);
+                        if(obj.Value.name=="Generic Colored Tile"|| obj.Value.getCategoryName()== "Tile Node")
+                        {
+                            removalList.Add(obj.Value);
+                            //loc.objects.Remove(obj.Value.tileLocation);
+                            //ModCore.CoreMonitor.Log("ANIAHILATION!!!!");
+                        }
+                    }
+                    foreach(var v in removalList)
+                    {
+                        //ModCore.CoreMonitor.Log(v.tileLocation.ToString());
+                        Game1.player.currentLocation.objects.Remove(v.tileLocation);
+                    }
                 }
 
                 bool warped = false;
@@ -1111,9 +1106,32 @@ namespace StarAI.TaskCore.MapTransitionLogic
             TileNode t = new TileNode(1, Vector2.Zero, Path.Combine("Tiles", "GenericUncoloredTile.xnb"), Path.Combine("Tiles", "TileData.xnb"), StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.ColorsList.Brown));
             t.fakePlacementAction(Game1.getLocationFromName(mapName), (int)position.X, (int)position.Y);
             Utilities.tileExceptionList.Add(new TileExceptionMetaData(t, "WarpGoal"));
+            var pathy = Utilities.getIdealPath(t, s);
 
-            PathFindingLogic.calculateMovement(Utilities.getIdealPath(t, s));
-
+            foreach (var goodTile in pathy)
+            {
+                ModCore.CoreMonitor.Log("BLERP " + goodTile.position.ToString());
+                StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
+                goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
+                ModCore.CoreMonitor.Log("LOC" + goodTile.thisLocation.name);
+            }
+            PathFindingLogic.calculateMovement(pathy);
+            List<StardewValley.Object> removalList2 = new List<StardewValley.Object>();
+            foreach (var obj in Game1.player.currentLocation.objects)
+            {
+                //ModCore.CoreMonitor.Log(Game1.player.currentLocation.name);
+                if (obj.Value.name == "Generic Colored Tile" || obj.Value.getCategoryName() == "Tile Node")
+                {
+                    removalList2.Add(obj.Value);
+                    //loc.objects.Remove(obj.Value.tileLocation);
+                    //ModCore.CoreMonitor.Log("ANIAHILATION!!!!");
+                }
+            }
+            foreach (var v in removalList2)
+            {
+                //ModCore.CoreMonitor.Log(v.tileLocation.ToString());
+                Game1.player.currentLocation.objects.Remove(v.tileLocation);
+            }
             //Do final location walk to stuff here.
             finalLocationLogic();
         }

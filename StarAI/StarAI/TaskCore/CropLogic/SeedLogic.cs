@@ -191,10 +191,10 @@ namespace StarAI.TaskCore.CropLogic
 
 
 
-        public static void plantSeeds(GameLocation location)
+        public static void plantSeeds(GameLocation location2)
         {
             List<TileNode> seedsToPlant = new List<TileNode>();
-
+            GameLocation location = Game1.getLocationFromName("Farm");
             string name = "";
             foreach (var seed in Game1.player.items)
             {

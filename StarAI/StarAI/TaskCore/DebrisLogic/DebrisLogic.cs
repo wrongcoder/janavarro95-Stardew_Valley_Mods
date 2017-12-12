@@ -37,6 +37,29 @@ namespace StarAI.TaskCore.DebrisLogic
             int twingCount = 0;
             object[] objArr = (object[])obj;
             GameLocation location = (GameLocation)objArr[0];
+
+            //If Twig is next to me just chop it.
+            StardewValley.Object twig = StardustCore.Utilities.checkCardinalForObject("Twig");
+            if (twig != null)
+            {
+                StardustCore.Utilities.faceDirectionTowardsSomething(twig.tileLocation);
+                foreach (var item in Game1.player.items)
+                {
+                    if (item is StardewValley.Tools.Axe)
+                    {
+                        Game1.player.CurrentToolIndex = Game1.player.getIndexOfInventoryItem(item);
+                    }
+                }
+                while ((twig.name == "Twig"))
+                {
+                    if (!location.isObjectAt((int)twig.tileLocation.X * Game1.tileSize, (int)twig.tileLocation.Y * Game1.tileSize)) break; //CHANNGE THIS LINE
+                    if (WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C) == false) WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
+                }
+                WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
+                return;
+            }
+
+
             foreach (var v in location.objects)
             {
                // ModCore.CoreMonitor.Log(v.Value.name);
@@ -341,6 +364,29 @@ namespace StarAI.TaskCore.DebrisLogic
             object[] objArr = (object[])obj;
             GameLocation location = (GameLocation)objArr[0];
             string targetName = "Stone";
+
+            StardewValley.Object twig = StardustCore.Utilities.checkCardinalForObject(targetName);
+            if (twig != null)
+            {
+                StardustCore.Utilities.faceDirectionTowardsSomething(twig.tileLocation);
+                foreach (var item in Game1.player.items)
+                {
+                    if (item is StardewValley.Tools.Pickaxe)
+                    {
+                        Game1.player.CurrentToolIndex = Game1.player.getIndexOfInventoryItem(item);
+                    }
+                }
+                while ((twig.name == targetName))
+                {
+                    if (!location.isObjectAt((int)twig.tileLocation.X * Game1.tileSize, (int)twig.tileLocation.Y * Game1.tileSize)) break; //CHANNGE THIS LINE
+                    if (WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C) == false) WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
+                }
+                WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
+                return;
+            }
+
+
+
             foreach (var v in location.objects)
             {
                // ModCore.CoreMonitor.Log(v.Value.name);
@@ -636,6 +682,26 @@ namespace StarAI.TaskCore.DebrisLogic
             int twingCount = 0;
             object[] objArr = (object[])obj;
             GameLocation location = (GameLocation)objArr[0];
+            string targetName = "Weeds";
+            StardewValley.Object twig = StardustCore.Utilities.checkCardinalForObject(targetName);
+            if (twig != null)
+            {
+                StardustCore.Utilities.faceDirectionTowardsSomething(twig.tileLocation);
+                foreach (var item in Game1.player.items)
+                {
+                    if (item is StardewValley.Tools.Pickaxe)
+                    {
+                        Game1.player.CurrentToolIndex = Game1.player.getIndexOfInventoryItem(item);
+                    }
+                }
+                while ((twig.name == targetName))
+                {
+                    if (!location.isObjectAt((int)twig.tileLocation.X * Game1.tileSize, (int)twig.tileLocation.Y * Game1.tileSize)) break; //CHANNGE THIS LINE
+                    if (WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C) == false) WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
+                }
+                WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
+                return;
+            }
             foreach (var v in location.objects)
             {
                // ModCore.CoreMonitor.Log(v.Value.name);
@@ -914,6 +980,8 @@ namespace StarAI.TaskCore.DebrisLogic
             GameLocation location = (GameLocation)objArr[0];
             // string targetName = "Weeds";
             Type terrainType = typeof(StardewValley.TerrainFeatures.Tree);
+
+
             if (StardustCore.Utilities.doesLocationContainTerrainFeature(location,terrainType))
             {
                
@@ -991,6 +1059,20 @@ namespace StarAI.TaskCore.DebrisLogic
                 ModCore.CoreMonitor.Log("Trees not found at location.");
                 return;
             }
+
+
+            KeyValuePair<Vector2, StardewValley.TerrainFeatures.TerrainFeature> pair2 = StardustCore.Utilities.checkCardinalForTerrainFeature(terrainType);
+            if (pair2.Value != null)
+            {
+                while (location.terrainFeatures.ContainsValue(pair2.Value))
+                {
+                    //  if (!v.thisLocation.isTerrainFeatureAt((int)v.tileLocation.X, (int)v.tileLocation.Y)) break;
+                    if (WindowsInput.InputSimulator.IsKeyDown(WindowsInput.VirtualKeyCode.VK_C) == false) WindowsInput.InputSimulator.SimulateKeyDown(WindowsInput.VirtualKeyCode.VK_C);
+                }
+                WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.VK_C);
+                return;
+            }
+
             foreach (var v in location.terrainFeatures)
             {
                 if (v.Value.GetType() != terrainType) continue; 
