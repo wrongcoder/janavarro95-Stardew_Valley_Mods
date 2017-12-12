@@ -138,13 +138,19 @@ namespace StarAI.ExecutionCore
             s += "Queued Task:"+"\n";
             s += "  TaskName: " + this.name + "\n";
             s += "  TaskCost: " + this.cost + "\n";
-            
+            if (this.locationPrerequisite.location != null)
+            {
+                s += "  Task Location: " + this.locationPrerequisite.location.name + "\n";
+            }
+            TileNode t = pathsToTake.ElementAt(pathsToTake.Count - 1).ElementAt(pathsToTake.ElementAt(pathsToTake.Count - 1).Count-1);
+            s += "  Goal Location: " + t.thisLocation.name + " " + t.tileLocation;
+
             s += "  Task Requires Stamina: " + this.staminaPrerequisite.requiresStamina + "\n";
             if(this.staminaPrerequisite.requiresStamina==true) s += "  Requires : " + this.staminaPrerequisite.staminaCost + "Stamina.\n";
             s += "  Task Requires Tool: " + this.toolPrerequisite.requiresTool + "\n";
-            if (this.toolPrerequisite.requiresTool == true) s += "   Requires a : " + this.toolPrerequisite.requiredTool + "\n";
+            if (this.toolPrerequisite.requiresTool == true) s += "  Requires a : " + this.toolPrerequisite.requiredTool + "\n";
             s += "  Task Requires Tool: " + this.toolPrerequisite.requiresTool + "\n";
-            s += "    Checks if inventory full: "+this.inventoryPrerequisite.doesTaskRequireInventorySpace.ToString() + "\n";
+            s += "  Checks if inventory full: "+this.inventoryPrerequisite.doesTaskRequireInventorySpace.ToString() + "\n";
             ModCore.CoreMonitor.Log(s);
         }
 
