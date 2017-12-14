@@ -1047,10 +1047,10 @@ namespace StarAI.TaskCore.MapTransitionLogic
                     
                     foreach (var goodTile in pathMaster.ElementAt(0))
                     {
-                        ModCore.CoreMonitor.Log("BLERP "+goodTile.position.ToString());
+                       // ModCore.CoreMonitor.Log("BLERP "+goodTile.position.ToString());
                         StardustCore.ModCore.SerializationManager.trackedObjectList.Add(goodTile);
                         goodTile.placementAction(goodTile.thisLocation, (int)goodTile.tileLocation.X * Game1.tileSize, (int)goodTile.tileLocation.Y * Game1.tileSize);
-                        ModCore.CoreMonitor.Log("LOC"+goodTile.thisLocation.name);
+                       // ModCore.CoreMonitor.Log("LOC"+goodTile.thisLocation.name);
                     }
                     PathFindingLogic.calculateMovement(pathMaster.ElementAt(0));
                     List<StardewValley.Object> removalList = new List<StardewValley.Object>();

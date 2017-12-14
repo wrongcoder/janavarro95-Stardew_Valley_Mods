@@ -15,7 +15,6 @@ namespace StarAI.ShopCore
             Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(UtilityCore.SeedCropUtility.sortSeedListByUtility(getGeneralStoreSeedStock(true)));
         }
 
-
         public static List<Item> getGeneralStoreSeedStock(bool removeExpensiveItems){
             List<Item> buyableSeeds = new List<Item>();
             foreach (var location in Game1.locations)
@@ -39,9 +38,5 @@ namespace StarAI.ShopCore
             }
             return buyableSeeds;
         }
-
-        
-
-
     }
 }

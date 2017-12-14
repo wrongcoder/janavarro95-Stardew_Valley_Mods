@@ -20,7 +20,7 @@ namespace StarAI.PathFindingCore
         public static List<TileExceptionNode> ignoreCheckTiles = new List<TileExceptionNode>();
        public static string folderForExceptionTiles="ExceptionTilesData";
 
-
+        public static bool placement;
 
 
         public static Vector2 parseCenterFromTile(int tileX, int tileY)
@@ -355,7 +355,7 @@ namespace StarAI.PathFindingCore
             }
 
 
-            bool placement = false;
+            
             bool utility = true;
 
             int xMin = -1;
@@ -485,8 +485,6 @@ namespace StarAI.PathFindingCore
             object[] objArr = (object[])obj;
           List<TileNode> vList = (List<TileNode>)objArr[0];
 
-
-            bool placement = false;
             bool utility = true;
 
             int xMin = -1;

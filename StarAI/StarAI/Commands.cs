@@ -26,7 +26,7 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("hello", "Ok?", new Action<string, string[]>(hello));
             ModCore.CoreHelper.ConsoleCommands.Add("pathfind", "pathy?", new Action<string, string[]>(Commands.pathfind));
             ModCore.CoreHelper.ConsoleCommands.Add("pathfinding", "pathy?", new Action<string, string[]>(Commands.pathfind));
-            ModCore.CoreHelper.ConsoleCommands.Add("Execute", "Run tasks", new Action<string,string[]>(Commands.runTasks));
+            ModCore.CoreHelper.ConsoleCommands.Add("Execute", "Run tasks", new Action<string, string[]>(Commands.runTasks));
             //ModCore.CoreHelper.ConsoleCommands.Add("execute", "Run tasks", new Action<string, string[]>(Commands.runTasks));
             ModCore.CoreHelper.ConsoleCommands.Add("runTasks", "Run tasks", new Action<string, string[]>(Commands.runTasks));
             ModCore.CoreHelper.ConsoleCommands.Add("Water", "Water the crops", new Action<string, string[]>(Commands.waterCrops));
@@ -37,7 +37,7 @@ namespace StarAI
             ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
 
             ModCore.CoreHelper.ConsoleCommands.Add("choptrees", "Chop trees down.", new Action<string, string[]>(Commands.chopAllTrees));
-            ModCore.CoreHelper.ConsoleCommands.Add("cuttrees",  "Chop trees down.", new Action<string, string[]>(Commands.chopAllTrees));
+            ModCore.CoreHelper.ConsoleCommands.Add("cuttrees", "Chop trees down.", new Action<string, string[]>(Commands.chopAllTrees));
 
             ModCore.CoreHelper.ConsoleCommands.Add("breakstones", "Break small stones with pickaxe.", new Action<string, string[]>(Commands.breakAllStones));
 
@@ -63,6 +63,8 @@ namespace StarAI
 
             ModCore.CoreHelper.ConsoleCommands.Add("waypoints", "Utilities to deal with waypoints", new Action<string, string[]>(Commands.wayPoints));
 
+            ModCore.CoreHelper.ConsoleCommands.Add("placement", "Toggleplacement", new Action<string, string[]>(Commands.togglePlacement));
+
             // ModCore.CoreHelper.ConsoleCommands.Add("chopsticks", "Chop twigs.", new Action<string, string[]>(Commands.chopAllTwigs));
             pathfind("Initialize Delay 0", new string[] {
                 "setDelay",
@@ -72,12 +74,12 @@ namespace StarAI
 
         public static void hoeDirtAmount(string s, string[] args)
         {
-            if (args.Length !=3)
+            if (args.Length != 3)
             {
                 ModCore.CoreMonitor.Log("Error, need to specify 3 paramaters:<Game location name>, <Number of tiles to dig.>, <Radius to search around farmer>");
                 return;
             }
-           GameLocation loc= Game1.getLocationFromName(args[0]);
+            GameLocation loc = Game1.getLocationFromName(args[0]);
             if (loc == null)
             {
                 ModCore.CoreMonitor.Log("Error location " + args[0] + "is not valid");
@@ -100,7 +102,7 @@ namespace StarAI
                 ModCore.CoreMonitor.Log("(Clear/clear/Flush/flush):Remove all tasks from the task list");
                 return;
             }
-            if(args[0]=="Pop"|| args[0] == "pop")
+            if (args[0] == "Pop" || args[0] == "pop")
             {
                 ExecutionCore.TaskList.taskList.Remove(ExecutionCore.TaskList.taskList.ElementAt(0));
                 ModCore.CoreMonitor.Log("Removed top task from tasklist.");
@@ -142,7 +144,7 @@ namespace StarAI
                 return;
             }
 
-            if(args[0]=="Print"|| args[0] == "print")
+            if (args[0] == "Print" || args[0] == "print")
             {
                 WayPoints.printWayPoints();
             }
@@ -177,7 +179,7 @@ namespace StarAI
                 if (args.Length >= 3)
                 {
                     //path to the map location.
-                    WarpGoal.pathToWorldTile(Game1.player.currentLocation, args[0],Convert.ToInt32(args[1]), Convert.ToInt32(args[2]));
+                    WarpGoal.pathToWorldTile(Game1.player.currentLocation, args[0], Convert.ToInt32(args[1]), Convert.ToInt32(args[2]));
                 }
             }
         }
@@ -194,7 +196,7 @@ namespace StarAI
                 ModCore.CoreMonitor.Log("NOT ENOUGH PARAMETERS. NEED 2 ARGS. ItemIndex,Amount");
                 return;
             }
-            StardewValley.Object ok =new StardewValley.Object(Convert.ToInt32(args[0]),Convert.ToInt32(args[1]));
+            StardewValley.Object ok = new StardewValley.Object(Convert.ToInt32(args[0]), Convert.ToInt32(args[1]));
 
             if (ok == null) {
                 ModCore.CoreMonitor.Log("ITEM IS NULL????");
@@ -230,7 +232,7 @@ namespace StarAI
                     ModCore.CoreMonitor.Log("CHOP ALL TREES");
                     DebrisLogic.getAllTreesToChop(Game1.player.currentLocation);
                     return;
-                   
+
                 }
             }
             DebrisLogic.getAllTreesToChop(Game1.player.currentLocation);
@@ -248,7 +250,7 @@ namespace StarAI
             }
         }
         */
-    
+
 
         public static void chopAllTwigs(string s, string[] args)
         {
@@ -303,17 +305,36 @@ namespace StarAI
         public static void runTasks(string s, string[] args)
         {
             ExecutionCore.TaskList.runTaskList();
-          
+
         }
 
         public static void waterCrops(string s, string[] args)
         {
-           CropLogic.getAllCropsNeededToBeWatered();
+            CropLogic.getAllCropsNeededToBeWatered();
         }
 
-        public static void harvestCrops(string s,string[] args)
+        public static void harvestCrops(string s, string[] args)
         {
             CropLogic.getAllCropsNeededToBeHarvested();
+        }
+
+        public static void togglePlacement(string s, string[] args)
+        {
+            if (PathFindingCore.Utilities.placement == true)
+            {
+                PathFindingLogic.delay = 0;
+                PathFindingCore.Utilities.placement = false;
+                ModCore.CoreMonitor.Log("Placement disabled");
+                return;
+            }
+            if (PathFindingCore.Utilities.placement == false)
+            {
+                PathFindingLogic.delay = 200;
+                PathFindingCore.Utilities.placement = true;
+                ModCore.CoreMonitor.Log("Placement enabled");
+                return;
+            }
+
         }
 
         /// <summary>

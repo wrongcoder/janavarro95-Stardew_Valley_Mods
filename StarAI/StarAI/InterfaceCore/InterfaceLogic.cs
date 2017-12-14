@@ -18,7 +18,7 @@ namespace StarAI.InterfaceCore
             }
 
             //WindowsInput.InputSimulator.SimulateKeyUp(WindowsInput.VirtualKeyCode.ESCAPE);
-            ModCore.CoreMonitor.Log(Game1.activeClickableMenu.ToString());
+            //ModCore.CoreMonitor.Log(Game1.activeClickableMenu.ToString());
             if(Game1.activeClickableMenu is StardewValley.Menus.DialogueBox)
             {
                 Game1.activeClickableMenu.exitThisMenu(true);

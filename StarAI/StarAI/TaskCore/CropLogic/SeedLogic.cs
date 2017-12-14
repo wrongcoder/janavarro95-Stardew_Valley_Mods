@@ -177,9 +177,9 @@ namespace StarAI.TaskCore.CropLogic
 
         public static void buySeeds()
         {
-           var retList= ShopCore.ShopLogic.getGeneralStoreSeedStock(true);
-            var item = retList.ElementAt(0);
-
+            var retList = UtilityCore.SeedCropUtility.sortSeedListByUtility(ShopCore.ShopLogic.getGeneralStoreSeedStock(true));
+           var item = retList.ElementAt(0);
+            item.Stack++;
             while (Game1.player.money >= item.salePrice())
             {
                 item.Stack++;

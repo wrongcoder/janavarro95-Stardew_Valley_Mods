@@ -65,8 +65,8 @@ namespace StarAI.ExecutionCore
 
         public static KeyValuePair<int,List<TileNode>> calculateTaskCost(TileNode v,ToolPrerequisite t,bool unknownPath)
         {
-           if(unknownPath) PathFindingLogic.delay = 18;
-            else PathFindingLogic.delay = 0;
+           //if(unknownPath) PathFindingLogic.delay = 18;
+           // else PathFindingLogic.delay = 0;
             List<TileNode> idealPath = StarAI.PathFindingCore.Utilities.getIdealPath(v);
             int costCalculation;
 
@@ -82,8 +82,8 @@ namespace StarAI.ExecutionCore
 
         public static KeyValuePair<int, List<TileNode>> calculateTaskCost(List<TileNode> v, ToolPrerequisite t, bool unknownPath)
         {
-            if (unknownPath) PathFindingLogic.delay = 18;
-            else PathFindingLogic.delay = 0;
+            //if (unknownPath) PathFindingLogic.delay = 18;
+            //else PathFindingLogic.delay = 0;
             List<TileNode> idealPath = StarAI.PathFindingCore.Utilities.getIdealPath(v);
             int costCalculation;
 
@@ -99,8 +99,8 @@ namespace StarAI.ExecutionCore
 
         public static KeyValuePair<int, List<List<TileNode>>> calculateTaskCost(List<List<TileNode>> v, ToolPrerequisite t, bool unknownPath)
         {
-            if (unknownPath) PathFindingLogic.delay = 18;
-            else PathFindingLogic.delay = 0;
+            //if (unknownPath) PathFindingLogic.delay = 18;
+            //else PathFindingLogic.delay = 0;
             float totalCalculation = 0;
             List < List < TileNode >> idealPaths=new List<List<TileNode>>();
             foreach (var path in v)
