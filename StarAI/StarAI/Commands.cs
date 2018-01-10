@@ -329,7 +329,7 @@ namespace StarAI
             }
             if (PathFindingCore.Utilities.placement == false)
             {
-                PathFindingLogic.delay = 200;
+                PathFindingLogic.delay = 100;
                 PathFindingCore.Utilities.placement = true;
                 ModCore.CoreMonitor.Log("Placement enabled");
                 return;

@@ -20,6 +20,7 @@ namespace StarAI.TaskCore.MapTransitionLogic
         {
             wayPoints.Add("seeds", new KeyValuePair<string, Vector2>("SeedShop", new Vector2(5, 18))); //This waypoint will position the player at the General store 1 tile below the counter.
             wayPoints.Add("bed", new KeyValuePair<string, Vector2>("FarmHouse", new Vector2(-1, -1))); //to be initialized after load.
+            wayPoints.Add("porch", new KeyValuePair<string, Vector2>("Farm", new Vector2(64, 15))); //to be initialized after load.
 
             ModCore.CoreMonitor.Log("Star AI WayPoints: Done initializing: " + wayPoints.Count + " waypoints.");
         }
