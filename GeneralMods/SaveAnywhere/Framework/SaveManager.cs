@@ -84,7 +84,8 @@ namespace Omegasis.SaveAnywhere.Framework
             PlayerData data = new PlayerData
             {
                 Time = Game1.timeOfDay,
-                Characters = this.GetPositions().ToArray()
+                Characters = this.GetPositions().ToArray(),
+                IsCharacterSwimming = Game1.player.swimming
             };
 
             // save to disk
@@ -92,7 +93,7 @@ namespace Omegasis.SaveAnywhere.Framework
             Directory.CreateDirectory(new FileInfo(this.SavePath).Directory.FullName);
             this.Helper.WriteJsonFile(this.SavePath, data);
 
-            // clear any legacy data (no longer needed as backup)
+            // clear any legacy data (no longer needed as backup)1
             this.RemoveLegacyDataForThisPlayer();
         }
 
@@ -106,10 +107,31 @@ namespace Omegasis.SaveAnywhere.Framework
 
             // apply
             Game1.timeOfDay = data.Time;
+            this.ResumeSwimming(data);
             this.SetPositions(data.Characters);
             this.OnLoaded?.Invoke();
+
         }
 
+        /// <summary>
+        /// Checks to see if the player was swimming when the game was saved and if so, resumes the swimming animation.
+        /// </summary>
+        /// <param name="data"></param>
+        public void ResumeSwimming(PlayerData data)
+        {
+            try
+            {
+                if (data.IsCharacterSwimming == true)
+                {
+                    Game1.player.changeIntoSwimsuit();
+                    Game1.player.swimming = true;
+                }
+            }
+            catch (Exception err)
+            {
+                //Here to allow compatability with old save files.
+            }
+        }
 
         /*********
         ** Private methods
@@ -135,7 +157,7 @@ namespace Omegasis.SaveAnywhere.Framework
                 CharacterType? type = this.GetCharacterType(npc);
                 if (type == null)
                     continue;
-
+                if (npc == null || npc.currentLocation == null) continue;
                 string name = npc.name;
                 string map = npc.currentLocation.name;
                 Point tile = npc.getTileLocationPoint();

@@ -31,6 +31,15 @@ namespace Omegasis.SaveAnywhere
         private bool IsCustomSaving;
 
 
+        /// <summary>
+        /// Used to access the Mod's helper from other files associated with the mod.
+        /// </summary>
+        public static IModHelper ModHelper;
+        /// <summary>
+        /// Used to access the Mod's monitor to allow for debug logging in other files associated with the mod.
+        /// </summary>
+        public static IMonitor ModMonitor;
+
         /*********
         ** Public methods
         *********/
@@ -46,6 +55,8 @@ namespace Omegasis.SaveAnywhere
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            ModHelper = helper;
+            ModMonitor = Monitor;
         }
 
 

@@ -13,7 +13,7 @@ namespace Omegasis.SaveAnywhere.Framework
         ** Properties
         *********/
         /// <summary>The private field on the shipping menu which indicates the game has already been saved, which prevents it from saving.</summary>
-        private readonly IPrivateField<bool> SavedYet;
+        private readonly IReflectedField<bool> SavedYet;
 
 
         /*********
@@ -25,7 +25,19 @@ namespace Omegasis.SaveAnywhere.Framework
         public NewShippingMenu(List<Item> items, IReflectionHelper reflection)
             : base(items)
         {
-            this.SavedYet = reflection.GetPrivateField<bool>(this, "savedYet");
+            this.SavedYet = reflection.GetField<bool>(this, "savedYet");
+        }
+
+        /// <summary>
+        /// Overrides some base functionality of the shipping menu to enable proper closing.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
+        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        {
+            if (this.okButton.containsPoint(x, y)) this.exitThisMenu(true);
+            base.receiveLeftClick(x, y, playSound);
         }
 
         /// <summary>Updates the menu during the game's update loop.</summary>
