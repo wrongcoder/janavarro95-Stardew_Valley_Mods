@@ -1,15 +1,10 @@
 {
   "Name": "Billboard Anywhere",
   "Author": "Alpha_Omegasis",
-  "Version": {
-    "MajorVersion": 1,
-    "MinorVersion": 4,
-    "PatchVersion": 1,
-    "Build": null
-  },
-  "MinimumApiVersion": "1.15",
+  "Version": "1.4.1",
   "Description": "Lets you view the billboard from anywhere.",
   "UniqueID": "Omegasis.BillboardAnywhere",
   "EntryDll": "BillboardAnywhere.dll",
+  "MinimumApiVersion": "2.0",
   "UpdateKeys": [ "Nexus:492" ]
 }

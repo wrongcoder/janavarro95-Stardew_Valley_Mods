@@ -215,7 +215,7 @@ namespace Omegasis.SaveAnywhere
                         int endFacingDir = Convert.ToInt32(fields[4]);
 
                         schedulePathDescription = this.Helper.Reflection
-                            .GetPrivateMethod(npc, "pathfindToNextScheduleLocation")
+                            .GetMethod(npc, "pathfindToNextScheduleLocation")
                             .Invoke<SchedulePathDescription>(npc.currentLocation.name, npc.getTileX(), npc.getTileY(), endMap, x, y, endFacingDir, null, null);
                         index++;
                     }
@@ -274,14 +274,14 @@ namespace Omegasis.SaveAnywhere
                 if ((npc.name.Equals("Penny") && (dayName.Equals("Tue") || dayName.Equals("Wed") || dayName.Equals("Fri"))) || (npc.name.Equals("Maru") && (dayName.Equals("Tue") || dayName.Equals("Thu"))) || (npc.name.Equals("Harvey") && (dayName.Equals("Tue") || dayName.Equals("Thu"))))
                 {
                     this.Helper.Reflection
-                        .GetPrivateField<string>(npc, "nameofTodaysSchedule")
+                        .GetField<string>(npc, "nameofTodaysSchedule")
                         .SetValue("marriageJob");
                     return "marriageJob";
                 }
                 if (!Game1.isRaining && schedule.ContainsKey("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
                     this.Helper.Reflection
-                        .GetPrivateField<string>(npc, "nameofTodaysSchedule")
+                        .GetField<string>(npc, "nameofTodaysSchedule")
                         .SetValue("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
                     return "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
