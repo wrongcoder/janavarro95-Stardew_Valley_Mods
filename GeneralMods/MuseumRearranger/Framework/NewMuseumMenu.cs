@@ -17,7 +17,7 @@ namespace Omegasis.MuseumRearranger.Framework
         private bool ShowInventory = true;
 
         /// <summary>A reference to a private <see cref="MuseumMenu"/> field for use in the overridden draw code.</summary>
-        private readonly IPrivateField<bool> HoldingMuseumPiece;
+        private readonly IReflectedField<bool> HoldingMuseumPiece;
 
 
         /*********
@@ -27,7 +27,7 @@ namespace Omegasis.MuseumRearranger.Framework
         /// <param name="reflection">Simplifies access to private game code.</param>
         public NewMuseumMenu(IReflectionHelper reflection)
         {
-            this.HoldingMuseumPiece = reflection.GetPrivateField<bool>(this, "holdingMuseumPiece");
+            this.HoldingMuseumPiece = reflection.GetField<bool>(this, "holdingMuseumPiece");
         }
 
         /// <summary>Toggle the inventory box.</summary>

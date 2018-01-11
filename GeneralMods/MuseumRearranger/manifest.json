@@ -5,6 +5,6 @@
   "Description": "Lets you rearrange the museum without needing to donate something.",
   "UniqueID": "Omegasis.MuseumRearranger",
   "EntryDll": "MuseumRearranger.dll",
-  "MinimumApiVersion": "2.0",
+  "MinimumApiVersion": "2.3",
   "UpdateKeys": [ "Nexus:428" ]
 }

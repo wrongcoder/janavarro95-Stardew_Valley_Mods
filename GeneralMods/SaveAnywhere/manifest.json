@@ -5,6 +5,6 @@
   "Description": "Lets you save almost anywhere.",
   "UniqueID": "Omegasis.SaveAnywhere",
   "EntryDll": "SaveAnywhere.dll",
-  "MinimumApiVersion": "2.0",
+  "MinimumApiVersion": "2.3",
   "UpdateKeys": [ "Nexus:444" ]
 }
