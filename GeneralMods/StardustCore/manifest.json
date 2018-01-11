@@ -1,15 +1,10 @@
 {
   "Name": "StardustCore",
   "Author": "Alpha_Omegasis",
-  "Version": {
-    "MajorVersion": 2,
-    "MinorVersion": 0,
-    "PatchVersion": 0,
-    "Build": null
-  },
-  "MinimumApiVersion": "1.15",
+  "Version": "2.0.0",
   "Description": "A core mod that allows for other mods to be run.",
   "UniqueID": "Omegasis.StardustCore",
   "EntryDll": "StardustCore.dll",
-  "UpdateKeys": [""]
+  "MinimumApiVersion": "2.0",
+  "UpdateKeys": []
 }
