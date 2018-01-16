@@ -145,9 +145,9 @@ namespace Revitalize.Menus
             }
             else
             {
-                if (this.pixels == null) Log.AsyncC("this pixels null");
-                if (CanvasObject == null) Log.AsyncC("cnvas object is null");
-                if (CanvasObject.pixels == null) Log.AsyncC("this canvas object ==null");
+                if (this.pixels == null) //Log.AsyncC("this pixels null");
+                if (CanvasObject == null) //Log.AsyncC("cnvas object is null");
+                if (CanvasObject.pixels == null) //Log.AsyncC("this canvas object ==null");
                 this.pixels = CanvasObject.pixels;
             }
 

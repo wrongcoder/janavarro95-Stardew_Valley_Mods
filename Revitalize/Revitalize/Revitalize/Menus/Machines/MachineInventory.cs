@@ -83,10 +83,10 @@ namespace Revitalize.Menus.Machines
         {
             machine = Machine;
             Rows = rows;
-            Log.AsyncC(InputInventory.Capacity);
+            //Log.AsyncC(InputInventory.Capacity);
             this.inputInventory = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen, false, InputInventory, null, 9, 3, 0, 0, true);
             this.outputInventory = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen + Game1.tileSize *8, this.yPositionOnScreen, false, OutputInventory, null, 9, 3, 0, 0, true);
-            Log.AsyncM(this.inputInventory.actualInventory.Capacity);
+            //Log.AsyncM(this.inputInventory.actualInventory.Capacity);
             this.inputInventory.capacity = 9;
             this.outputInventory.capacity = 9;
             this.inputInventory.actualInventory.Capacity = 9;
@@ -136,7 +136,7 @@ namespace Revitalize.Menus.Machines
             }
             this.inputInventory = new InventoryMenu(this.xPositionOnScreen + Game1.tileSize / 2, this.yPositionOnScreen, false, InputInventory, highlightFunction, 9, 3, 0, 0, true);
             this.outputInventory = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen + Game1.tileSize * 8, this.yPositionOnScreen, false, OutputInventory, null, 9, 3, 0, 0, true);
-            Log.AsyncM(this.inputInventory.actualInventory.Capacity);
+            //Log.AsyncM(this.inputInventory.actualInventory.Capacity);
             this.inputInventory.capacity = 9;
             this.inputInventory.capacity = 9;
             this.inputInventory.actualInventory.Capacity = 9;
@@ -322,7 +322,7 @@ namespace Revitalize.Menus.Machines
 
                 if (this.inputInventory.actualInventory == null)
                 {
-                    Log.AsyncG("WTF HOW IS THIS NULL!?!?!?!?!");
+                    //Log.AsyncG("WTF HOW IS THIS NULL!?!?!?!?!");
                 }
                 bool f = Util.isInventoryFull(this.inputInventory.actualInventory,true);
                 if (f == false)
@@ -337,9 +337,9 @@ namespace Revitalize.Menus.Machines
 
                         Util.addItemToOtherInventory(this.inputInventory.actualInventory, this.heldItem);
                         // Log.AsyncG("item swap");
-                        if (this.machine == null) Log.AsyncC("OK MY MACHINE IS NULL");
-                        if (this.inputInventory == null) Log.AsyncG("Input is null");
-                        if (this.outputInventory == null) Log.AsyncO("output is null");
+                        if (this.machine == null) //Log.AsyncC("OK MY MACHINE IS NULL");
+                        if (this.inputInventory == null) //Log.AsyncG("Input is null");
+                        if (this.outputInventory == null) //Log.AsyncO("output is null");
                         //Game1.activeClickableMenu = new MachineInventory(this.machine, this.inputInventory.actualInventory,this.outputInventory.actualInventory, this.Rows, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
                         Game1.activeClickableMenu = new Revitalize.Menus.Machines.MachineInventory(this.machine, this.inputInventory.actualInventory, this.outputInventory.actualInventory, 3);
                         // Game1.playSound("Ship");
@@ -351,7 +351,7 @@ namespace Revitalize.Menus.Machines
                 }
                 else
                 {
-                    Log.AsyncO("Inventory is full?????");
+                    //Log.AsyncO("Inventory is full?????");
                     return;
                 }
                 // this.inputInventory.inventory.Add(new ClickableComponent(new Rectangle(inputInventory.xPositionOnScreen + inputInventory.actualInventory.Count-1 % (this.capacity / this.inputInventory.rows) * Game1.tileSize + this.inputInventory.horizontalGap * (inputInventory.actualInventory.Count-1 % (this.capacity / this.inputInventory.rows)), inputInventory.yPositionOnScreen + inputInventory.actualInventory.Count-1 / (this.capacity / this.inputInventory.rows) * (Game1.tileSize + this.inputInventory.verticalGap) + (inputInventory.actualInventory.Count-1 / (this.capacity / this.inputInventory.rows) - 1) * Game1.pixelZoom -  (Game1.tileSize / 5), Game1.tileSize, Game1.tileSize), string.Concat(inputInventory.actualInventory.Count-1)));
@@ -370,7 +370,7 @@ namespace Revitalize.Menus.Machines
                 //outputInventory.actualInventory.Add(new Decoration(3, Vector2.Zero));
                 if (this.outputInventory.actualInventory == null)
                 {
-                    Log.AsyncG("WTF HOW IS THIS NULL!?!?!?!?!");
+                    //Log.AsyncG("WTF HOW IS THIS NULL!?!?!?!?!");
                 }
 
                     this.heldItem = this.outputInventory.leftClick(x, y, this.heldItem, false);
@@ -448,9 +448,9 @@ namespace Revitalize.Menus.Machines
                     //   j=  this.inputInventory.leftClick(x, y, this.heldItem, false);
                    // Util.addItemToOtherInventory(this.inputInventory.actualInventory, i);
                     // Log.AsyncG("item swap");
-                    if (this.machine == null) Log.AsyncC("OK MY MACHINE IS NULL");
-                    if (this.inputInventory == null) Log.AsyncG("Input is null");
-                    if (this.outputInventory == null) Log.AsyncO("output is null");
+                    if (this.machine == null) //Log.AsyncC("OK MY MACHINE IS NULL");
+                    if (this.inputInventory == null) //Log.AsyncG("Input is null");
+                    if (this.outputInventory == null) //Log.AsyncO("output is null");
                     //Game1.activeClickableMenu = new MachineInventory(this.machine, this.inputInventory.actualInventory,this.outputInventory.actualInventory, this.Rows, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
                     Game1.activeClickableMenu = new Revitalize.Menus.Machines.MachineInventory(this.machine, this.inputInventory.actualInventory, this.outputInventory.actualInventory, 3);
                     // Game1.playSound("Ship");

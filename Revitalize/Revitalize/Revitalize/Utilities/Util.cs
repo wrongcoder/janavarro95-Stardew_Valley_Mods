@@ -25,7 +25,7 @@ namespace Revitalize
     {
         public static bool hasWateredAllCropsToday;
 
-        public static void ResetAllDailyBooleans(object sender, EventArgsIntChanged e)
+        public static void ResetAllDailyBooleans(object sender, EventArgs e)
         {
             SetUp.createDirectories();
             hasWateredAllCropsToday = false;
@@ -100,8 +100,8 @@ namespace Revitalize
         {
             if (logInfo)
             {
-                Log.AsyncG("size " + inventory.Count);
-                Log.AsyncG("max " + inventory.Capacity);
+                //Log.AsyncG("size " + inventory.Count);
+                //Log.AsyncG("max " + inventory.Capacity);
             }
 
             if (inventory.Count == inventory.Capacity) return true;
@@ -757,7 +757,7 @@ namespace Revitalize
                     else
                     {
                      //   Game1.showRedMessage("STEP 2");
-                        Log.Info(vector);
+                        //Log.Info(vector);
 
                         Vector2 newVec = new Vector2(vector.X, vector.Y);
                         // cObj.boundingBox.Inflate(32, 32);
@@ -768,7 +768,7 @@ namespace Revitalize
               if(playSound==true)  Game1.playSound("woodyStep");
               else
                 {
-                    Log.AsyncG("restoring item from file");
+                    //Log.AsyncG("restoring item from file");
                 }
                 //Log.AsyncM("Placed and object");
                 cObj.locationsName = location.name;
@@ -788,10 +788,10 @@ namespace Revitalize
 
         public static void plantCropHere()
         {
-          Log.AsyncY(Game1.player.ActiveObject.name);
+          //Log.AsyncY(Game1.player.ActiveObject.name);
             if (Lists.saplingNames.Contains(Game1.player.ActiveObject.name))
             {
-                Log.AsyncY("PLANT THE SAPLING");
+                //Log.AsyncY("PLANT THE SAPLING");
                 bool f = plantSappling();
 
                 if (f == true) return;
@@ -907,7 +907,7 @@ namespace Revitalize
                 Game1.showRedMessage("Can't be planted here.");
                 return false;
             }
-            Log.AsyncR("MAKES NO SENSE");
+            //Log.AsyncR("MAKES NO SENSE");
             return false;
         }
 
@@ -962,21 +962,21 @@ namespace Revitalize
             Class1.persistentMapSwap = Serialize.parseMapSwapData();
             if (Class1.persistentMapSwap == null)
             {
-                Log.AsyncG("IS NULL");
+                //Log.AsyncG("IS NULL");
                 Class1.persistentMapSwap = new MapSwapData();
             }
             else
             {
                 try
                 {
-                    Log.AsyncM(parseOutContent(Class1.persistentMapSwap.mapPath));
+                    //Log.AsyncM(parseOutContent(Class1.persistentMapSwap.mapPath));
                     m = Game1.content.Load<Map>(parseOutContent(Class1.persistentMapSwap.mapPath));
-                    Log.AsyncG("Successfully loaded custom farm map.");
+                    //Log.AsyncG("Successfully loaded custom farm map.");
                 }
                 catch (Exception err)
                 {
                     m = null;
-                    Log.AsyncM(err);
+                    //Log.AsyncM(err);
 
 
                 }
@@ -990,14 +990,14 @@ namespace Revitalize
                             bool[,] oldWaterTiles = v.waterTiles;
 
                             v.map = m;//change this to  v.map =(Game1.content.Load<Map>("Path.Combine("Maps,"Farms",folderName,"Farm")));
-                            Log.AsyncG("Sucesfully injected custom farm map");
+                            //Log.AsyncG("Sucesfully injected custom farm map");
                             Utilities.MapUtilities.loadCustomFarmMap(v, oldLocDimensions, oldWaterTiles);
                         }
                     }
                 }
                 else
                 {
-                    Log.AsyncM("WTF");
+                    //Log.AsyncM("WTF");
                 }
             }
         }

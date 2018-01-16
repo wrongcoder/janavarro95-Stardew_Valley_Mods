@@ -76,7 +76,7 @@ namespace Revitalize.Magic.Alchemy.Objects
                     this.inventory = InventoriesToAdd[0];
                     this.inventory.Capacity = InventoriesToAdd[0].Capacity;
                     // this.allInventoriesCapacities.Add(this.inventory.Capacity);
-                    Log.AsyncC("WHT THE SNAG");
+                    //Log.AsyncC("WHT THE SNAG");
                     foreach (var v in InventoriesToAdd)
                     {
                      //   this.allInventories.Add(v);

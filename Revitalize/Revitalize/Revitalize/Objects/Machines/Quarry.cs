@@ -53,7 +53,7 @@ namespace Revitalize.Objects.Machines
                 bool works= Dictionaries.quarryList.TryGetValue(resourceName, out t);
                 if (works == false)
                 {
-                    Log.AsyncR("ERROR, invalid resource type for quarry.");
+                    //Log.AsyncR("ERROR, invalid resource type for quarry.");
                     return;
                 }
                 else
@@ -133,7 +133,7 @@ namespace Revitalize.Objects.Machines
                 bool works = Dictionaries.quarryList.TryGetValue(resourceName, out t);
                 if (works == false)
                 {
-                    Log.AsyncR("ERROR, invalid resource type for quarry.");
+                    ////Log.AsyncR("ERROR, invalid resource type for quarry.");
                     return;
                 }
                 else
@@ -267,7 +267,7 @@ namespace Revitalize.Objects.Machines
                     bool works = Dictionaries.quarryList.TryGetValue(ResourceName, out t);
                     if (works == false)
                     {
-                        Log.AsyncR("ERROR, invalid resource type for quarry.");
+                        ////Log.AsyncR("ERROR, invalid resource type for quarry.");
                         return false;
                     }
                     else
@@ -586,7 +586,7 @@ namespace Revitalize.Objects.Machines
             //   Log.Info(this.Decoration_type);
             if (this.lightSource != null) this.lightSource.color = new Color(0, 255, 255, 255);  //THE COLORS ARE REVERSED!!!!!!!!!!!!
             this.minutesUntilReady = (this.minutesUntilReady - minutes);
-             Log.Info("minues remaining" + this.minutesUntilReady);
+             ////Log.Info("minues remaining" + this.minutesUntilReady);
 
             // if(this.output!= null) Log.Info("stack size"+this.output.stack);
             if (Game1.isDarkOut())

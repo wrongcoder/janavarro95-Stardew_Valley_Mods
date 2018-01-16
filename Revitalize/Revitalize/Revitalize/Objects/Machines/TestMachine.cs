@@ -260,13 +260,13 @@ namespace Revitalize.Objects.Machines
             //Game1.activeClickableMenu = new Revitalize.Menus.LightCustomizer(this);
             if (this.inputInventory == null)
             {
-                Log.AsyncG(">>>>>>>>??????????????????>>>>>>>>>>>>>");
+                //Log.AsyncG(">>>>>>>>??????????????????>>>>>>>>>>>>>");
             }
             if (this.outputInventory == null)
             {
-                Log.AsyncC(">??????????????");
+                //Log.AsyncC(">??????????????");
             }
-            Log.AsyncM(this.GetType());
+            //Log.AsyncM(this.GetType());
            // this.outputInventory.Add(new Revitalize.Objects.Light(0, Vector2.Zero, LightColors.Azure, LightColors.Azure));
             Game1.activeClickableMenu = new Revitalize.Menus.Machines.MachineInventory(this, this.inputInventory, this.outputInventory, 3);
             return false;

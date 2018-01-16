@@ -535,10 +535,10 @@ namespace Revitalize.Objects.Machines
 
             if (minutesUntilReady == 0)
             {
-                Log.AsyncC(this.name + "Is ready!");
-                 Log.AsyncC(Game1.player.getStandingPosition());
+               // Log.AsyncC(this.name + "Is ready!");
+                // Log.AsyncC(Game1.player.getStandingPosition());
                   Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
-                Log.AsyncC(v2);
+                //Log.AsyncC(v2);
                 //Game1.createItemDebris((Item)this.heldObject, v2, Game1.player.getDirection());
                 if (this.heldObject != null)
                 {
@@ -832,9 +832,9 @@ namespace Revitalize.Objects.Machines
                     }
                 }
                 this.updateDrawPosition();
-                Log.AsyncO(this.boundingBox);
-                Log.AsyncO(x);
-                Log.AsyncY(y);
+                //Log.AsyncO(this.boundingBox);
+                //Log.AsyncO(x);
+                //Log.AsyncY(y);
                 for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
                 {
                     return Util.placementAction(this, location, x+1, y, who);

@@ -81,8 +81,8 @@ namespace Revitalize.Utilities
 
         public static void removeAllWaterTilesFromMap(GameLocation c)
         {
-            Log.AsyncM(c.map.Layers[0].LayerWidth);
-            Log.AsyncM(c.map.Layers[0].LayerHeight);
+            //Log.AsyncM(c.map.Layers[0].LayerWidth);
+            //Log.AsyncM(c.map.Layers[0].LayerHeight);
             for (int i = 0; i < c.map.Layers[0].LayerWidth; i++)
             {
                 for (int j = 0; j < c.map.Layers[0].LayerHeight; j++)
@@ -97,9 +97,9 @@ namespace Revitalize.Utilities
 
                     }
                 }
-                Log.AsyncY("Position: " + i +" of "+ c.map.Layers[0].LayerWidth);
+                //Log.AsyncY("Position: " + i +" of "+ c.map.Layers[0].LayerWidth);
             }
-            Log.AsyncC("Removed All Water Tiles from " + c.name);
+            //Log.AsyncC("Removed All Water Tiles from " + c.name);
         }
 
         public static Vector2 getMapDimensions(GameLocation loc)
@@ -131,7 +131,7 @@ namespace Revitalize.Utilities
                     }
                    
                 }
-                Log.AsyncY("Position: " + i + " of " + newLoc.map.Layers[0].LayerWidth);
+                //Log.AsyncY("Position: " + i + " of " + newLoc.map.Layers[0].LayerWidth);
             }
             newLoc.waterTiles = newWaterTiles;
             return;
@@ -151,7 +151,7 @@ namespace Revitalize.Utilities
             }
             foreach (string file in s)
             {
-                Log.AsyncO(file);
+                //Log.AsyncO(file);
                 string[] reader = File.ReadAllLines(file);
                 try
                 {
@@ -160,7 +160,7 @@ namespace Revitalize.Utilities
                 }
                 catch (Exception err)
                 {
-                    Log.AsyncR(err);
+                    //Log.AsyncR(err);
                 }
            }
         }
