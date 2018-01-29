@@ -42,7 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Framework\MusicPackMetaData.cs" />
+    <Compile Include="StaticExtentions.cs" />
+    <Compile Include="StardewSymphony.cs" />
     <Compile Include="Framework\MusicHexProcessor.cs" />
     <Compile Include="Framework\MusicManager.cs" />
     <Compile Include="Framework\MusicPack.cs" />

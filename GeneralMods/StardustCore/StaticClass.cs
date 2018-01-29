@@ -20,6 +20,7 @@ namespace StardustCore
         public static bool In<T>(this T obj, params T[] args)
         {
             return args.Contains(obj);
+            
         }
 
         public static bool HasValue(this double value)

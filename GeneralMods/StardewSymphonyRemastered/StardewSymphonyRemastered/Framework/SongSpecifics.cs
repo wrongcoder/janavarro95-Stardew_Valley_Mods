@@ -9,6 +9,8 @@ namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>
     /// Stores information about what songs play when.
+    /// 
+    /// TODO: Festivals and events
     /// </summary>
     public class SongSpecifics
     {
@@ -17,6 +19,8 @@ namespace StardewSymphonyRemastered.Framework
         Dictionary<string, List<string>> eventSongs;
 
         Dictionary<string, List<string>> festivalSongs;
+
+        public List<string> listOfSongsWithoutTriggers; 
 
         public static List<string> locations = new List<string>();
         public static List<string> festivals = new List<string>();
@@ -71,16 +75,24 @@ namespace StardewSymphonyRemastered.Framework
             eventSongs = new Dictionary<string, List<string>>();
             festivalSongs = new Dictionary<string, List<string>>();
 
+            this.listOfSongsWithoutTriggers = new List<string>();
+
             this.addSongLists();
 
         }
 
+
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //                         Static Methods                       //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        #region
         /// <summary>
         /// Initialize the location lists with the names of all of the major locations in the game.
         /// </summary>
         public static void addLocations()
         {
-            foreach(var v in Game1.locations)
+            foreach (var v in Game1.locations)
             {
                 locations.Add(v.name);
             }
@@ -128,79 +140,6 @@ namespace StardewSymphonyRemastered.Framework
         public static void addLocation(string name)
         {
             locations.Add(name);
-        }
-
-        /// <summary>
-        /// A pretty big function to add in all of the specific songs that play at certain locations_seasons_weather_dayOfWeek_times. 
-        /// </summary>
-        public void addSongLists()
-        {
-            foreach (var loc in Game1.locations)
-            {
-                foreach (var season in seasons)
-                {
-                    listOfSongsWithTriggers.Add(loc.name + seperator + season, new List<string>());
-                    foreach(var Weather in weather)
-                    {
-                        listOfSongsWithTriggers.Add(loc.name + seperator + season + seperator + Weather, new List<string>());
-                        foreach(var day in daysOfWeek)
-                        {
-                            listOfSongsWithTriggers.Add(loc.name + seperator + season + seperator + Weather + seperator + day, new List<string>());
-                            foreach(var time in timesOfDay)
-                            {
-                                listOfSongsWithTriggers.Add(loc.name + seperator + season + seperator + Weather + seperator + day + seperator + time, new List<string>());
-                            }
-                        }
-                    }
-                }
-            }
-
-            //Add in some default seasonal music because maybe a location doesn't have some music?
-            foreach (var season in seasons)
-            {
-                listOfSongsWithTriggers.Add(season, new List<string>());
-                foreach (var Weather in weather)
-                {
-                    listOfSongsWithTriggers.Add( season + seperator + Weather, new List<string>());
-                    foreach (var day in daysOfWeek)
-                    {
-                        listOfSongsWithTriggers.Add(season + seperator + Weather + seperator + day, new List<string>());
-                        foreach (var time in timesOfDay)
-                        {
-                            listOfSongsWithTriggers.Add(season + seperator + Weather + seperator + day + seperator + time, new List<string>());
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// TODO: Add functionality for events and festivals
-        /// Sum up some conditionals to parse the correct string key to access the songs list.
-        /// </summary>
-        /// <returns></returns>
-        public string getCurrentConditionalString()
-        {
-            string key = "";
-            if (Game1.eventUp == true)
-            {
-                //Get the event id an hijack it with some different music
-            }
-            else if (Game1.isFestival())
-            {
-                //hijack the name of the festival and load some different songs
-            }
-            /*
-            else if (Game1.eventUp == false && Game1.isFestival() == false && Game1.currentSpeaker != null)
-            {
-                //get the speaker's name and play their theme song?
-            }
-            */
-            else
-            {
-              key = getLocationString()+seperator+ getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
-            }
-            return key;
         }
 
         /// <summary>
@@ -273,7 +212,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public static string getTimeOfDayString()
         {
-            if (Game1.timeOfDay< Game1.getModeratelyDarkTime()) return "day";
+            if (Game1.timeOfDay < Game1.getModeratelyDarkTime()) return "day";
             else return "night";
         }
 
@@ -285,5 +224,156 @@ namespace StardewSymphonyRemastered.Framework
         {
             return Game1.currentLocation.name;
         }
+        #endregion
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //                         Non-Static Methods                   //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+        #region
+        /// <summary>
+        /// Adds the song's reference to a music pack.
+        /// </summary>
+        /// <param name="songName"></param>
+        public void addSongToMusicPack(string songName)
+        {
+            this.listOfSongsWithoutTriggers.Add(songName);
+        }
+
+        /// <summary>
+        /// Checks if the song exists at all in this music pack.
+        /// </summary>
+        /// <param name="songName"></param>
+        /// <returns></returns>
+        public bool isSongInList(string songName)
+        {
+            return listOfSongsWithoutTriggers.Contains(songName);
+        }
+
+        /// <summary>
+        /// A pretty big function to add in all of the specific songs that play at certain locations_seasons_weather_dayOfWeek_times. 
+        /// </summary>
+        public void addSongLists()
+        {
+            foreach (var loc in locations)
+            {
+                foreach (var season in seasons)
+                {
+                    listOfSongsWithTriggers.Add(loc + seperator + season, new List<string>());
+                    foreach(var Weather in weather)
+                    {
+                        listOfSongsWithTriggers.Add(loc + seperator + season + seperator + Weather, new List<string>());
+                        foreach(var day in daysOfWeek)
+                        {
+                            listOfSongsWithTriggers.Add(loc + seperator + season + seperator + Weather + seperator + day, new List<string>());
+                            foreach(var time in timesOfDay)
+                            {
+                                listOfSongsWithTriggers.Add(loc + seperator + season + seperator + Weather + seperator + day + seperator + time, new List<string>());
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Add in some default seasonal music because maybe a location doesn't have some music?
+            foreach (var season in seasons)
+            {
+                listOfSongsWithTriggers.Add(season, new List<string>());
+                foreach (var Weather in weather)
+                {
+                    listOfSongsWithTriggers.Add( season + seperator + Weather, new List<string>());
+                    foreach (var day in daysOfWeek)
+                    {
+                        listOfSongsWithTriggers.Add(season + seperator + Weather + seperator + day, new List<string>());
+                        foreach (var time in timesOfDay)
+                        {
+                            listOfSongsWithTriggers.Add(season + seperator + Weather + seperator + day + seperator + time, new List<string>());
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// TODO: Add functionality for events and festivals
+        /// Sum up some conditionals to parse the correct string key to access the songs list.
+        /// </summary>
+        /// <returns></returns>
+        public string getCurrentConditionalString()
+        {
+            string key = "";
+            if (Game1.eventUp == true)
+            {
+                //Get the event id an hijack it with some different music
+                //String key="Event_EventName";
+            }
+            else if (Game1.isFestival())
+            {
+                //hijack the name of the festival and load some different songs
+                // string s="Festival_FestivalName";
+            }
+            else
+            {
+              key = getLocationString()+seperator+ getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
+            }
+            return key;
+        }
+
+        /// <summary>
+        /// Used to access the master list of songs this music pack contains.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public KeyValuePair<string,List<string>>getSongList(string key)
+        {
+            string keyPhrase = key.Split(seperator).ElementAt(0);
+
+            if (keyPhrase == "event")
+            {
+                foreach (KeyValuePair<string, List<string>> pair in eventSongs)
+                {
+                    if (pair.Key == key) return pair;
+                }
+            }
+            else if (keyPhrase == "festival")
+            {
+                foreach (KeyValuePair<string, List<string>> pair in festivalSongs)
+                {
+                    if (pair.Key == key) return pair;
+                }
+            }
+            else
+            {
+                foreach(KeyValuePair<string,List<string>> pair in listOfSongsWithTriggers)
+                {
+                    if (pair.Key == key) return pair;
+                }
+            }
+            return new KeyValuePair<string, List<string>>();
+        }
+
+        /// <summary>
+        /// Add a song name to a specific list of songs to play that will play under certain conditions.
+        /// </summary>
+        /// <param name="songListKey"></param>
+        /// <param name="songName"></param>
+        public void addSongToList(string songListKey,string songName)
+        {
+            var songList = getSongList(songListKey);
+
+            songList.Value.Add(songName);
+        }
+
+        /// <summary>
+        /// Remove a song name from a specific list of songs to play that will play under certain conditions.
+        /// </summary>
+        /// <param name="songListKey"></param>
+        /// <param name="songName"></param>
+        public void removeSongFromList(string songListKey,string songName)
+        {
+            var songList = getSongList(songListKey);
+            songList.Value.Remove(songName);
+        }
+        #endregion
     }
 }

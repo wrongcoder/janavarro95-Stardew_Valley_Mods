@@ -23,22 +23,28 @@ namespace StardewSymphonyRemastered
     /// 6.Make videos documenting how to make this mod work.
     /// 7.Make way to generate new music packs.
     /// </summary>
-    public class Class1 : Mod
+    public class StardewSymphony : Mod
     {
         public static WaveBank DefaultWaveBank;
         public static SoundBank DefaultSoundBank;
+
+
+        public static IModHelper ModHelper;
+        public static IMonitor ModMonitor;
 
 
         public override void Entry(IModHelper helper)
         {
             DefaultSoundBank = Game1.soundBank;
             DefaultWaveBank = Game1.waveBank;
+            ModHelper = helper;
+            ModMonitor = Monitor;
 
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
         }
 
         /// <summary>
-        /// 
+        /// Events to occur after the game has loaded in.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -58,6 +64,7 @@ namespace StardewSymphonyRemastered
             Game1.waveBank = DefaultWaveBank;
             Game1.soundBank = DefaultSoundBank;
         }
+
 
     }
 }

@@ -8,12 +8,13 @@ namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>
     /// A base class that xnb and wav packs will derive commonalities from.
+    /// //Make Music Pack Meta data
     /// </summary>
     public class MusicPack 
     {
-        public string name;
         public string directory;
-        public List<string> listOfSongs;
+        public StardewSymphonyRemastered.Framework.SongSpecifics songInformation;
+        public MusicPackMetaData musicPackInformation;
 
 
         public virtual void playSong(string name)
@@ -21,17 +22,17 @@ namespace StardewSymphonyRemastered.Framework
 
         }
 
-        public virtual void pauseSong(string name)
+        public virtual void pauseSong()
         {
 
         }
 
-        public virtual void stopSong(string name)
+        public virtual void stopSong()
         {
 
         }
 
-        public virtual void returnSong(string name)
+        public virtual void resumeSong()
         {
 
         }
@@ -39,6 +40,16 @@ namespace StardewSymphonyRemastered.Framework
         public virtual void loadMusicFiles()
         {
 
+        }
+
+        public virtual void swapSong(string songName)
+        {
+
+        }
+
+        public virtual string getNameOfCurrentSong()
+        {
+            return "";
         }
 
     }
