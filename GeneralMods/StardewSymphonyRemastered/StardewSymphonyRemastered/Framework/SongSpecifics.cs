@@ -30,7 +30,7 @@ namespace StardewSymphonyRemastered.Framework
         string[] weather;
         string[] daysOfWeek;
         string[] timesOfDay;
-        char seperator = '_';
+        public static char seperator = '_';
 
         /// <summary>
         /// Constructor.
@@ -87,6 +87,34 @@ namespace StardewSymphonyRemastered.Framework
         //                         Static Methods                       //
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
         #region
+
+        /// <summary>
+        /// TODO: Add functionality for events and festivals
+        /// Sum up some conditionals to parse the correct string key to access the songs list.
+        /// </summary>
+        /// <returns></returns>
+        public static string getCurrentConditionalString()
+        {
+            string key = "";
+            if (Game1.eventUp == true)
+            {
+                //Get the event id an hijack it with some different music
+                //String key="Event_EventName";
+            }
+            else if (Game1.isFestival())
+            {
+                //hijack the name of the festival and load some different songs
+                // string s="Festival_FestivalName";
+            }
+            else
+            {
+                key = getLocationString() + seperator + getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
+            }
+            return key;
+        }
+
+
+
         /// <summary>
         /// Initialize the location lists with the names of all of the major locations in the game.
         /// </summary>
@@ -294,30 +322,6 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
-        /// <summary>
-        /// TODO: Add functionality for events and festivals
-        /// Sum up some conditionals to parse the correct string key to access the songs list.
-        /// </summary>
-        /// <returns></returns>
-        public string getCurrentConditionalString()
-        {
-            string key = "";
-            if (Game1.eventUp == true)
-            {
-                //Get the event id an hijack it with some different music
-                //String key="Event_EventName";
-            }
-            else if (Game1.isFestival())
-            {
-                //hijack the name of the festival and load some different songs
-                // string s="Festival_FestivalName";
-            }
-            else
-            {
-              key = getLocationString()+seperator+ getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
-            }
-            return key;
-        }
 
         /// <summary>
         /// Used to access the master list of songs this music pack contains.
@@ -330,26 +334,34 @@ namespace StardewSymphonyRemastered.Framework
 
             if (keyPhrase == "event")
             {
+                /*
                 foreach (KeyValuePair<string, List<string>> pair in eventSongs)
                 {
                     if (pair.Key == key) return pair;
                 }
+                */
+                return new KeyValuePair<string, List<string>>(key, eventSongs[key]);
             }
             else if (keyPhrase == "festival")
             {
+                /*
                 foreach (KeyValuePair<string, List<string>> pair in festivalSongs)
                 {
                     if (pair.Key == key) return pair;
                 }
+                */
+                return new KeyValuePair<string, List<string>>(key, festivalSongs[key]);
             }
             else
             {
+                /*
                 foreach(KeyValuePair<string,List<string>> pair in listOfSongsWithTriggers)
                 {
                     if (pair.Key == key) return pair;
                 }
+                */
+                return new KeyValuePair<string, List<string>>(key, listOfSongsWithTriggers[key]);
             }
-            return new KeyValuePair<string, List<string>>();
         }
 
         /// <summary>

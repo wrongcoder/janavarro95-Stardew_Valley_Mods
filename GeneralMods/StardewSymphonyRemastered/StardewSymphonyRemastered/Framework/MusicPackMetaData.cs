@@ -32,18 +32,27 @@ namespace StardewSymphonyRemastered.Framework
             this.versionInfo = VersionInfo;
         }
         /// <summary>
-        /// Blank Const
+        /// Blank Constructor
         /// </summary>
         public MusicPackMetaData()
         {
 
         }
 
+        /// <summary>
+        /// Loads the music pack information from a json file.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static MusicPackMetaData readFromJson(string path)
         {
             return StardewSymphony.ModHelper.ReadJsonFile<MusicPackMetaData>(path);
         }
 
+        /// <summary>
+        /// Writes the music pack information to a json file.
+        /// </summary>
+        /// <param name="path"></param>
         public void writeToJson(string path)
         {
           StardewSymphony.ModHelper.WriteJsonFile<MusicPackMetaData>(path,this);

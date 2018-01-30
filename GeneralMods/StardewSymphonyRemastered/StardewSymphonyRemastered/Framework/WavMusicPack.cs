@@ -9,7 +9,7 @@ namespace StardewSymphonyRemastered.Framework
     /// <summary>
     /// TODO: Make this class
     /// </summary>
-    class WavMusicPack : MusicPack
+    public class WavMusicPack : MusicPack
     {
     }
 }

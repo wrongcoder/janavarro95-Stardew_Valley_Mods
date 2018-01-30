@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Audio;
 using StardewModdingAPI;
 using StardewValley;
+using StardewSymphonyRemastered.Framework;
 
 namespace StardewSymphonyRemastered
 {
@@ -15,6 +16,7 @@ namespace StardewSymphonyRemastered
     /// BIG WIP. Don't use this at all because it does nothing right now.
     /// TODO:
     /// 1.Make Xwb packs work
+    /// 1.5. Make way to load in music packs.
     /// 2.Make stream files work
     /// 2.5. Make Music Manager
     /// 3.Make interface.
@@ -32,6 +34,8 @@ namespace StardewSymphonyRemastered
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
 
+        public static MusicManager musicManager;
+
 
         public override void Entry(IModHelper helper)
         {
@@ -41,6 +45,20 @@ namespace StardewSymphonyRemastered
             ModMonitor = Monitor;
 
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+            StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
+
+            musicManager = new MusicManager();
+            //load in all packs here.
+        }
+
+        /// <summary>
+        /// Raised when the player changes locations. This should determine the next song to play.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
+        {
+            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
         }
 
         /// <summary>
@@ -53,6 +71,10 @@ namespace StardewSymphonyRemastered
             StardewSymphonyRemastered.Framework.SongSpecifics.addLocations();
             StardewSymphonyRemastered.Framework.SongSpecifics.addFestivals();
             StardewSymphonyRemastered.Framework.SongSpecifics.addEvents();
+
+           
+
+           
         }
 
 

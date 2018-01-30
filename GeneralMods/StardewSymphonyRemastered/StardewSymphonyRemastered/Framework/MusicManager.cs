@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewSymphonyRemastered;
+using StardewValley;
+
 namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>
@@ -22,7 +24,8 @@ namespace StardewSymphonyRemastered.Framework
 
         public MusicPack currentMusicPack;
 
-
+        Random packSelector;
+        Random songSelector;
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -30,6 +33,8 @@ namespace StardewSymphonyRemastered.Framework
         {
             this.musicPacks = new Dictionary<string, MusicPack>();
             this.currentMusicPack = null;
+            packSelector = new Random(Game1.random.Next(1,1000000));
+            songSelector = new Random(Game1.player.deepestMineLevel + Game1.player.facingDirection + packSelector.Next(0,10000));
         }
 
         /// <summary>
@@ -108,6 +113,10 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
+        /// <summary>
+        /// Get the information associated with the current music pack.
+        /// </summary>
+        /// <returns></returns>
         public MusicPackMetaData getMusicPackInformation()
         {
             if (this.currentMusicPack.isNull() == false)
@@ -152,6 +161,71 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 return null; //Needed I suppose to ensure this function compiles.
             }
+        }
+
+        /// <summary>
+        /// Iterates across all music packs and determines which music packs contain songs that can be played right now.
+        /// </summary>
+        /// <param name="songListKey"></param>
+        /// <returns></returns>
+        public Dictionary<MusicPack,List<string>> getListOfApplicableMusicPacks(string songListKey)
+        {
+            Dictionary<MusicPack, List<string>> listOfValidDictionaries = new Dictionary<MusicPack, List<string>>();
+            foreach(var v in this.musicPacks)
+            {
+              var songList= v.Value.songInformation.getSongList(songListKey).Value;
+                if (songList.Count > 0)
+                {
+                    listOfValidDictionaries.Add(v.Value, songList);
+                }
+            }
+            return listOfValidDictionaries;
+        }
+
+        /// <summary>
+        /// Selects the actual song to be played right now based off of the selector key. The selector key should be called when the player's location changes.
+        /// </summary>
+        /// <param name="songListKey"></param>
+        public void selectMusic(string songListKey)
+        {
+            var listOfValidMusicPacks = getListOfApplicableMusicPacks(songListKey);
+            if (listOfValidMusicPacks.Count == 0)
+            {
+                //No valid songs to play at this time.
+                StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack. Are you sure you did this properly?");
+                return;
+            }
+            
+            int randInt = packSelector.Next(0, listOfValidMusicPacks.Count-1);
+
+            var musicPackPair = listOfValidMusicPacks.ElementAt(randInt);
+
+            //used to swap the music packs and stop the last playing song.
+            this.swapMusicPacks(musicPackPair.Key.musicPackInformation.name);
+
+            int randInt2 = songSelector.Next(0, musicPackPair.Value.Count);
+
+            var songName = musicPackPair.Value.ElementAt(randInt2);
+
+            this.currentMusicPack.playSong(songName);
+        }
+
+        /// <summary>
+        /// TODO: Make WAV MUSIC PACKS
+        /// </summary>
+        /// <param name="wavMusicPack"></param>
+        public void addMusicPack(WavMusicPack wavMusicPack)
+        {
+
+        }
+
+        /// <summary>
+        /// Adds a valid xwb music pack to the list of music packs available.
+        /// </summary>
+        /// <param name="xwbMusicPack"></param>
+        public void addMusicPack(XwbMusicPack xwbMusicPack)
+        {
+            this.musicPacks.Add(xwbMusicPack.musicPackInformation.name,xwbMusicPack);
         }
     }
 }
