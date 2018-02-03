@@ -223,8 +223,27 @@ namespace StardewSymphonyRemastered.Framework
         /// Adds a valid xwb music pack to the list of music packs available.
         /// </summary>
         /// <param name="xwbMusicPack"></param>
-        public void addMusicPack(XACTMusicPack xwbMusicPack)
+        /// <param name="displayLogInformation">Whether or not to display the process to the console. Will include information from the pack's metadata. Default:False</param>
+        /// <param name="xwbMusicPack">If displayLogInformation is also true this will display the name of all of the songs in the music pack when it is added in.</param>
+        public void addMusicPack(XACTMusicPack xwbMusicPack,bool displayLogInformation=false,bool displaySongs=false)
         {
+            if (displayLogInformation == true)
+            {
+                StardewSymphony.ModMonitor.Log("Adding a new music pack!");
+                StardewSymphony.ModMonitor.Log("    Name:" + xwbMusicPack.musicPackInformation.name);
+                StardewSymphony.ModMonitor.Log("    Author:" + xwbMusicPack.musicPackInformation.author);
+                StardewSymphony.ModMonitor.Log("    Description:" + xwbMusicPack.musicPackInformation.description);
+                StardewSymphony.ModMonitor.Log("    Version Info:" + xwbMusicPack.musicPackInformation.versionInfo);
+                StardewSymphony.ModMonitor.Log("    Song List:");
+
+                if (displaySongs == true)
+                {
+                    foreach(var songname in xwbMusicPack.songInformation.listOfSongsWithoutTriggers)
+                    {
+                        StardewSymphony.ModMonitor.Log("        " + songname);
+                    }
+                }
+            }
             this.musicPacks.Add(xwbMusicPack.musicPackInformation.name,xwbMusicPack);
         }
     }

@@ -17,25 +17,23 @@ namespace StardewSymphonyRemastered.Framework
         public Microsoft.Xna.Framework.Audio.WaveBank WaveBank;
         public Microsoft.Xna.Framework.Audio.SoundBank SoundBank;
 
-
-
         public Cue currentCue;
 
-
-        //Make Music pack meta data. Includes author, version, description.
-
-        public string XWBPath;
+        public string WaveBankPath;
+        public string SoundBankPath;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="directoryToXwb"></param>
-        /// <param name="pathToXWB"></param>
-        public XACTMusicPack(string directoryToXwb,string pathToXWB)
+        /// <param name="pathToWaveBank"></param>
+        /// <param name="pathToSoundBank"></param>
+        public XACTMusicPack(string directoryToXwb,string pathToWaveBank,string pathToSoundBank)
         {
             this.directory = directoryToXwb;
-            this.XWBPath = pathToXWB;
+            this.WaveBankPath = pathToWaveBank;
+            this.SoundBankPath = pathToSoundBank;
             this.songInformation = new SongSpecifics();
             this.currentCue = null;
             this.musicPackInformation = MusicPackMetaData.readFromJson(Path.Combine(directoryToXwb, "MusicPackInformation.json"));
@@ -44,6 +42,10 @@ namespace StardewSymphonyRemastered.Framework
                 StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.",StardewModdingAPI.LogLevel.Warn);
                 this.musicPackInformation = new MusicPackMetaData("???","???","","0.0.0");
             }
+
+            this.WaveBank = new WaveBank(Game1.audioEngine, this.WaveBankPath);
+            this.SoundBank = new SoundBank(Game1.audioEngine,this.SoundBankPath);
+            this.loadMusicFiles();
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void loadMusicFiles()
         {
-          this.songInformation.listOfSongsWithoutTriggers=StardewSymphonyRemastered.Framework.MusicHexProcessor.ProcessSongNamesFromHex(this,StardewSymphony.Reset,this.XWBPath);
+          this.songInformation.listOfSongsWithoutTriggers=StardewSymphonyRemastered.Framework.MusicHexProcessor.ProcessSongNamesFromHex(this,StardewSymphony.Reset,this.SoundBankPath);
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace StardewSymphonyRemastered.Framework
         private Cue getCue(string name) {
             if (this.songInformation.isSongInList(name) == false)
             {
-                StardewSymphony.ModMonitor.Log("Error! The song " + name + " could not be found in music pack " + this.musicPackInformation.name+". Please ensure that this song is part of this music pack located at: "+ this.XWBPath+ " or contact the music pack author: "+this.musicPackInformation.author,StardewModdingAPI.LogLevel.Error);
+                StardewSymphony.ModMonitor.Log("Error! The song " + name + " could not be found in music pack " + this.musicPackInformation.name+". Please ensure that this song is part of this music pack located at: "+ this.WaveBankPath+ " or contact the music pack author: "+this.musicPackInformation.author,StardewModdingAPI.LogLevel.Error);
                 return null;
             }
             else
