@@ -358,7 +358,7 @@ namespace Revitalize.Menus
                 if (current.containsPoint(x, y))
                 {
                     this.hoverText = current.label;
-                    Log.AsyncM(current.value);
+                    //Log.AsyncM(current.value);
                     return;
                 }
             }

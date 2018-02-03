@@ -22,6 +22,7 @@ namespace Revitalize.Draw
 
         public static void drawAllObjects()
         {
+            /*
             foreach (var v in Lists.DecorationsToDraw)
             {
                 if (Game1.player.currentLocation == v.thisLocation)
@@ -29,7 +30,7 @@ namespace Revitalize.Draw
                     v.draw(Game1.spriteBatch,(int)v.tileLocation.X,(int)v.tileLocation.Y);
                 }
             }
-
+            */
         }
 
         public static void drawAllFurniture()
@@ -38,6 +39,7 @@ namespace Revitalize.Draw
             //int i = 0;
             SpriteBatch b = Game1.spriteBatch;
             b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
+            /*
             foreach (var v in Lists.DecorationsToDraw)
             {
                 //Log.Async(i);
@@ -48,6 +50,7 @@ namespace Revitalize.Draw
                 }
             }
             b.End();
+            */
         }
     }
 }

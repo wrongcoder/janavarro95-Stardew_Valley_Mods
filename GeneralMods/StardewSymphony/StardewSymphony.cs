@@ -154,7 +154,7 @@ namespace Omegasis.StardewSymphony
             }
 
             // init sound
-            this.HexProcessor.ProcessHex();
+            this.HexProcessor.ProcessHex();  //Get all of the songs from the music packs.
             this.SelectMusic();
         }
 

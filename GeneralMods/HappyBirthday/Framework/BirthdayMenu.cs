@@ -170,13 +170,17 @@ namespace Omegasis.HappyBirthday.Framework
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            foreach (ClickableTextureComponent button in this.DayButtons)
+            //If the season is not selected then the day buttons can't be clicked. Thanks to @Potato#5266 on the SDV discord for this tip.
+            if (this.BirthdaySeason == "spring" || this.BirthdaySeason == "summer" || this.BirthdaySeason == "fall" || this.BirthdaySeason == "winter")
             {
-                if (button.containsPoint(x, y))
+                foreach (ClickableTextureComponent button in this.DayButtons)
                 {
-                    this.HandleButtonClick(button.name);
-                    button.scale -= 0.5f;
-                    button.scale = Math.Max(3.5f, button.scale);
+                    if (button.containsPoint(x, y))
+                    {
+                        this.HandleButtonClick(button.name);
+                        button.scale -= 0.5f;
+                        button.scale = Math.Max(3.5f, button.scale);
+                    }
                 }
             }
 

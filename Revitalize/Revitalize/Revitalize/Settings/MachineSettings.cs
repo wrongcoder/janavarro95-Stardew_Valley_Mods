@@ -38,7 +38,7 @@ namespace Revitalize.Settings
             }
             catch (Exception e)
             {
-                Log.AsyncR("Failed to load Machine Settings"); 
+                ////Log.AsyncR("Failed to load Machine Settings"); 
             }
         }
 

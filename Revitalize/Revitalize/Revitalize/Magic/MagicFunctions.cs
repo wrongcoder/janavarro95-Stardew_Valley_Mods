@@ -353,13 +353,13 @@ namespace Revitalize.Magic.MagicFunctions
                 }
                 catch (Exception e)
                 {
-                    Log.AsyncR("BAD Water SPELL");
+                    //Log.AsyncR("BAD Water SPELL");
                 }
             }
             else
             {
-                Log.AsyncC(Game1.currentCursorTile);
-                Log.AsyncC("Cant water here ");
+                //Log.AsyncC(Game1.currentCursorTile);
+                //Log.AsyncC("Cant water here ");
             }
 
         }

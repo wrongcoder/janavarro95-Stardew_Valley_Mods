@@ -40,6 +40,11 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Framework\ModConfig.cs" />
+    <Compile Include="Framework\SongsProcessor\MusicPack.cs" />
+    <Compile Include="Framework\SongsProcessor\MusicPackMetaData.cs" />
+    <Compile Include="Framework\SongsProcessor\Song.cs" />
+    <Compile Include="Framework\SongsProcessor\SongState.cs" />
+    <Compile Include="Framework\SongsProcessor\WaveFile.cs" />
     <Compile Include="StardewSymphony.cs" />
     <Compile Include="Framework\MusicHexProcessor.cs" />
     <Compile Include="Framework\MusicManager.cs" />

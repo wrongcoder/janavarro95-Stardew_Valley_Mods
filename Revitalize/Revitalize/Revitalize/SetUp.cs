@@ -27,7 +27,7 @@ namespace Revitalize
 
 
             PlayerVariables.initializePlayerVariables();
-            Log.AsyncG("Revitalize: Running on API Version: " + StardewModdingAPI.Constants.ApiVersion);
+            //Log.AsyncG("Revitalize: Running on API Version: " + StardewModdingAPI.Constants.ApiVersion);
 
             Lists.loadAllListsAtEntry();
 

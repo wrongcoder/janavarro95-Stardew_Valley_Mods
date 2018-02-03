@@ -22,12 +22,12 @@ namespace Revitalize.Settings
             if (File.Exists(Path.Combine(Class1.path, "xnb_node.cmd")))
             {
                 PaintEnabled = true;
-                Log.AsyncG("Revitalize: Paint Module Enabled");
+                //Log.AsyncG("Revitalize: Paint Module Enabled");
             }
             else
             {
                 PaintEnabled = false;
-                Log.AsyncG("Revitalize: Paint Module Disabled");
+                //Log.AsyncG("Revitalize: Paint Module Disabled");
             }
         }
 

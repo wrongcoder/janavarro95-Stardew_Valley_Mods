@@ -100,6 +100,7 @@ namespace Omegasis.HappyBirthday
             // load settings
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
+            
             //this.SeenEvent = false;
             //this.Dialogue = new Dictionary<string, Dialogue>();
         }
@@ -501,28 +502,35 @@ namespace Omegasis.HappyBirthday
         private void MigrateLegacyData()
         {
             // skip if no legacy data or new data already exists
-            if (!File.Exists(this.LegacyDataFilePath) || File.Exists(this.DataFilePath))
-                return;
-
-            // migrate to new file
             try
             {
-                string[] text = File.ReadAllLines(this.LegacyDataFilePath);
-                this.Helper.WriteJsonFile(this.DataFilePath, new PlayerData
-                {
-                    BirthdaySeason = text[3],
-                    BirthdayDay = Convert.ToInt32(text[5])
-                });
-
-                FileInfo file = new FileInfo(this.LegacyDataFilePath);
-                file.Delete();
-                if (!file.Directory.EnumerateFiles().Any())
-                    file.Directory.Delete();
+                if (!File.Exists(this.LegacyDataFilePath) || File.Exists(this.DataFilePath))
+                    if (this.PlayerData == null) this.PlayerData = new PlayerData();
+                         return;
             }
-            catch (Exception ex)
+            catch(Exception err)
             {
-                this.Monitor.Log($"Error migrating data from the legacy 'Player_Birthdays' folder for the current player. Technical details:\n {ex}", LogLevel.Error);
+                // migrate to new file
+                try
+                {
+                    string[] text = File.ReadAllLines(this.LegacyDataFilePath);
+                    this.Helper.WriteJsonFile(this.DataFilePath, new PlayerData
+                    {
+                        BirthdaySeason = text[3],
+                        BirthdayDay = Convert.ToInt32(text[5])
+                    });
+
+                    FileInfo file = new FileInfo(this.LegacyDataFilePath);
+                    file.Delete();
+                    if (!file.Directory.EnumerateFiles().Any())
+                        file.Directory.Delete();
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Error migrating data from the legacy 'Player_Birthdays' folder for the current player. Technical details:\n {ex}", LogLevel.Error);
+                }
             }
+            
         }
     }
 }

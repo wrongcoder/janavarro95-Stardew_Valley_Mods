@@ -82,9 +82,9 @@ namespace Revitalize
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ShopCall;
             StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick +=gameMenuCall;
-            StardewModdingAPI.Events.GameEvents.GameLoaded += GameEvents_GameLoaded;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += GameEvents_GameLoaded;
             StardewModdingAPI.Events.GameEvents.OneSecondTick += MapWipe;
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += Util.ResetAllDailyBooleans;
+            StardewModdingAPI.Events.TimeEvents.AfterDayStarted+= Util.ResetAllDailyBooleans;
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterSave;
@@ -234,19 +234,19 @@ namespace Revitalize
 
                     if (R.name == "Town" || R.name == "town")
                     {
-                        Log.AsyncO("Adding Town");
+                        //Log.AsyncO("Adding Town");
                        // R = new ModTown(v.Map, v.name);
                     }
                     newLoc.Add(R);
-                    Log.AsyncC("DONE1");
+                    //Log.AsyncC("DONE1");
                 }
                 Game1.locations.Clear();
                 foreach (var v in newLoc)
                 {
                     Game1.locations.Add(v);
-                    Log.AsyncC("DONE2");
+                    //Log.AsyncC("DONE2");
                 }
-                Log.AsyncC("DONE");
+                //Log.AsyncC("DONE");
                 mapWipe = false;
             }
 
@@ -312,7 +312,7 @@ namespace Revitalize
         {
             if (e.KeyPressed.ToString() == "J")
             {
-                Log.AsyncC("Mouse Position " + Game1.getMousePosition());
+                //Log.AsyncC("Mouse Position " + Game1.getMousePosition());
             }
 
             if (e.KeyPressed.ToString() == "O")
@@ -337,8 +337,8 @@ namespace Revitalize
                 objShopList.Add(new TestMachine(3, Vector2.Zero, Util.invertColor(LightColors.White), LightColors.White, false, 9, true));
                 objShopList.Add(new SpriteFontObject(0, Vector2.Zero, font.path, Color.White));
                 objShopList.Add(new Decoration(1391, Vector2.Zero));
-                objShopList.Add(new ModularDecoration(1120, Vector2.Zero,"VanillaFurniture"));
-                objShopList.Add(new ModularDecoration(0, Vector2.Zero, "VanillaFurniture"));
+                //objShopList.Add(new ModularDecoration(1120, Vector2.Zero,"VanillaFurniture"));
+                //objShopList.Add(new ModularDecoration(0, Vector2.Zero, "VanillaFurniture"));
                 objShopList.Add(new Magic.Alchemy.Objects.BagofHolding(0, Vector2.Zero, new List<List<Item>>()
                 {
                     new List<Item>()
@@ -394,7 +394,7 @@ namespace Revitalize
                 }
                 foreach(var v in trash)
                 {
-                    Log.AsyncC("TRASH");
+                    //Log.AsyncC("TRASH");
                     objShopList.Remove(v);
                 }
 
@@ -440,8 +440,8 @@ namespace Revitalize
 
             if (e.KeyPressed.ToString() == "J")
             {
-                Log.AsyncC("Player Position " + Game1.player.getTileLocation());
-                Log.AsyncC("Mouse Position " + Game1.currentCursorTile);
+                //Log.AsyncC("Player Position " + Game1.player.getTileLocation());
+                //Log.AsyncC("Mouse Position " + Game1.currentCursorTile);
             }
         }
             

@@ -257,7 +257,7 @@ namespace Revitalize.Menus
                     {
                         this.heldItem = this.ItemsToGrabMenu.leftClick(x, y, this.heldItem, false);
                         Util.addItemToOtherInventory(this.ItemsToGrabMenu.actualInventory, this.heldItem);
-                        Log.AsyncG("not full");
+                        //Log.AsyncG("not full");
                     }
                     else
                     {
@@ -305,7 +305,7 @@ namespace Revitalize.Menus
                     }
                //   j=  this.ItemsToGrabMenu.leftClick(x, y, this.heldItem, false);
                     Util.addItemToOtherInventory(this.ItemsToGrabMenu.actualInventory, i);
-                    Log.AsyncG("item swap");
+                    //Log.AsyncG("item swap");
                     Game1.activeClickableMenu = new ItemGrabMenu(this.ItemsToGrabMenu.actualInventory,this.Rows, false, true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems), this.behaviorFunction, null, this.behaviorOnItemGrab, false, true, true, true, true, this.source, this.sourceItem);
                     Game1.playSound("Ship");
                     this.heldItem = null;

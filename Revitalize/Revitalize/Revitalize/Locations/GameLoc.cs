@@ -622,11 +622,11 @@ namespace Revitalize
 
         public new bool performAction(string action, StardewValley.Farmer who, Location tileLocation)
         {
-            Log.AsyncG("WHY???");
+            //Log.AsyncG("WHY???");
 
-            Log.AsyncC(action);
-            Log.AsyncM(who);
-            Log.AsyncO(tileLocation);
+            //Log.AsyncC(action);
+            //Log.AsyncM(who);
+            //Log.AsyncO(tileLocation);
 
 
             if (action != null && who.IsMainPlayer)
@@ -638,7 +638,7 @@ namespace Revitalize
                 string text = array[0];
 
 
-                Log.AsyncG(text);
+                //Log.AsyncG(text);
 
 
 
@@ -2280,7 +2280,7 @@ namespace Revitalize
         */
         public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, StardewValley.Farmer who)
         {
-            Log.AsyncG("BASLLS");
+            //Log.AsyncG("BASLLS");
 
             if (this.currentEvent != null && this.currentEvent.isFestival)
             {

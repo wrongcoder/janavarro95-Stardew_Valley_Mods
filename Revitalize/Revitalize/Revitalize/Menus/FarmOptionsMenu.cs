@@ -146,7 +146,7 @@ namespace Revitalize.Menus
         private void optionButtonClick(string name)
         {
 
-              Log.AsyncC(name);
+              //Log.AsyncC(name);
             if (name == "Wilderness")
             {
                 if (!this.wizardSource)
@@ -155,9 +155,9 @@ namespace Revitalize.Menus
                     Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
                     Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
                     whichFarm = 4;
-                    Log.AsyncG("MAP SWAP!");
+                    //Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
-                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    //Log.AsyncG(Class1.persistentMapSwap.mapPath);
                     Serialize.serializeMapSwapData(Class1.persistentMapSwap);
 
 
@@ -174,9 +174,9 @@ namespace Revitalize.Menus
                     string g = Path.Combine("Maps", "Farm");
                     Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
                     Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
-                    Log.AsyncG("MAP SWAP!");
+                    //Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
-                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    //Log.AsyncG(Class1.persistentMapSwap.mapPath);
                     Serialize.serializeMapSwapData(Class1.persistentMapSwap);
 
 
@@ -192,9 +192,9 @@ namespace Revitalize.Menus
                     string g = Path.Combine("Maps", "Farm_Fishing");
                     Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
                     Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
-                    Log.AsyncG("MAP SWAP!");
+                    //Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
-                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    //Log.AsyncG(Class1.persistentMapSwap.mapPath);
                     Serialize.serializeMapSwapData(Class1.persistentMapSwap);
 
                     Game1.whichFarm = 1;
@@ -228,9 +228,9 @@ namespace Revitalize.Menus
                     string g = Path.Combine("Maps", "Farm_Mining");
                     Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
                     Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
-                    Log.AsyncG("MAP SWAP!");
+                    //Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
-                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    //Log.AsyncG(Class1.persistentMapSwap.mapPath);
                     Serialize.serializeMapSwapData(Class1.persistentMapSwap);
 
                     Game1.whichFarm = 3;
@@ -246,9 +246,9 @@ namespace Revitalize.Menus
                     string g = Path.Combine("Maps", "Farm_Foraging");
                     Utilities.MapUtilities.removeAllWaterTilesFromMap(Game1.getLocationFromName("Farm"));
                     Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(g);
-                    Log.AsyncG("MAP SWAP!");
+                    //Log.AsyncG("MAP SWAP!");
                     Class1.persistentMapSwap.mapPath = Path.Combine(Game1.content.RootDirectory, g);
-                    Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                    //Log.AsyncG(Class1.persistentMapSwap.mapPath);
                     Serialize.serializeMapSwapData(Class1.persistentMapSwap);
 
 
@@ -277,10 +277,10 @@ namespace Revitalize.Menus
                                 c.map = v.map;
                                 //
                                     whichFarm = count;
-                                    Log.AsyncG("MAP SWAP!");
+                                    //Log.AsyncG("MAP SWAP!");
                          Class1.persistentMapSwap.mapPath= Path.Combine(Game1.content.RootDirectory,"Maps","Farms", v.clicky.name,v.clicky.name);
                             Class1.persistentMapSwap.folderPath = Path.Combine(Game1.content.RootDirectory, "Maps", "Farms", v.clicky.name);
-                            Log.AsyncG(Class1.persistentMapSwap.mapPath);
+                            //Log.AsyncG(Class1.persistentMapSwap.mapPath);
                             //Game1.getLocationFromName("Farm").map = Game1.game1.xTileContent.Load<Map>(Class1.persistentMapSwap.mapPath);
                             Serialize.serializeMapSwapData(Class1.persistentMapSwap);
                             // Util.removeAllWaterTilesFromMap(c);
@@ -658,7 +658,7 @@ namespace Revitalize.Menus
                 string[] spliiter=v.Split('\\');
                 string fileName = spliiter.ElementAt(spliiter.Length-1);
                 string s = fileName;
-                Log.AsyncC(v);
+                //Log.AsyncC(v);
                fileName= Path.Combine(v.Remove(0, 8),s);
                 try
                 {
@@ -672,14 +672,14 @@ namespace Revitalize.Menus
                 catch(Exception e)
                 {
                     if (e.ToString().Contains("FarmIcons")) continue;
-                    Log.AsyncR(e);
+                    //Log.AsyncR(e);
                 }
                 }
 
             foreach (var v in fi)
             {
                 dir2.Add(Path.GetFileNameWithoutExtension(v));
-                Log.AsyncC(v);
+                //Log.AsyncC(v);
                 string f=Path.GetDirectoryName(v);
                 string[] spliiter = f.Split('\\');
                 string fileName = spliiter.ElementAt(spliiter.Length-1);
@@ -694,7 +694,7 @@ namespace Revitalize.Menus
                 }
                 catch(Exception e)
                 {
-                    Log.AsyncR(e);
+                    //Log.AsyncR(e);
                 }
             }
 
@@ -703,7 +703,7 @@ namespace Revitalize.Menus
             {
                // Log.AsyncC("BOO");
                 farmTypeButtons.Add(k.clicky);
-                Log.AsyncC(k.clicky.name);
+                //Log.AsyncC(k.clicky.name);
             }
             //TODO: CHECK THE DIRECTORY AND ADD ALL DATA NODES TO THIS LIST
 
@@ -733,7 +733,7 @@ namespace Revitalize.Menus
 
             catch(Exception e)
             {
-                Log.AsyncO(e);
+                //Log.AsyncO(e);
                 return Game1.mouseCursors;
             }
 

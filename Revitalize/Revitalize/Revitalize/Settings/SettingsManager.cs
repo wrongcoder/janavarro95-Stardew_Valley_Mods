@@ -48,7 +48,7 @@ namespace Revitalize.Settings
                 }
                 catch(Exception e)
                 {
-                    Log.AsyncR(e);
+                    //Log.AsyncR(e);
                 }
             }
         }

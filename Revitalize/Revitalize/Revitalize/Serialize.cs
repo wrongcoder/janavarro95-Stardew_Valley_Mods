@@ -78,7 +78,7 @@ namespace Revitalize
                         {
                             idk.Add(d);
                         }
-                        Log.AsyncC("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
+                        //Log.AsyncC("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
                         removalList.Add(d);
                     }
                 }
@@ -103,14 +103,14 @@ namespace Revitalize
                         {
                             t.worldObj.Invoke(v as CoreObject);
                         }
-                        Log.AsyncG("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
+                        //Log.AsyncG("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
                         removalList.Add(v as CoreObject);
                     }
                 }
             }
 
             removalList.Clear();
-            Log.AsyncM("Revitalize: Done cleaning world for saving.");
+            //Log.AsyncM("Revitalize: Done cleaning world for saving.");
 
         }
 
@@ -160,7 +160,7 @@ namespace Revitalize
             }
             removalList.Clear();
 
-            Log.AsyncM("Revitalize: Done cleaning inventory!");
+            //Log.AsyncM("Revitalize: Done cleaning inventory!");
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace Revitalize
             string a;
             string[] b;
             string s="";
-            Log.AsyncC(path);
+            //Log.AsyncC(path);
             //  Log.AsyncC(data);
             try
             {
@@ -287,7 +287,7 @@ namespace Revitalize
                     }
                 }
                         
-                Log.AsyncG("attempting to parse from path and value of s is " + s);
+                //Log.AsyncG("attempting to parse from path and value of s is " + s);
             }
 
             // var cObj = parseBagOfHolding(path); //pair.Value.parse.Invoke(path);
@@ -443,7 +443,7 @@ namespace Revitalize
                     continue;
                 }
             }
-            Log.AsyncC("CHECK RESULTS " + false);
+            ////Log.AsyncC("CHECK RESULTS " + false);
             return false;
             // XElement school = doc.Element("School");
             // school.Add(new XAttribute("ID", "ID_Value"));
@@ -475,12 +475,12 @@ namespace Revitalize
 
         private static void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)
         {
-            Log.AsyncR(e);
+            //Log.AsyncR(e);
         }
 
         private static void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
         {
-            Log.AsyncR(e);
+            //Log.AsyncR(e);
         }
 
         public static void serializeMapSwapData(MapSwapData d)
@@ -989,7 +989,7 @@ namespace Revitalize
             d.lightsOn = obj.lightsOn;
             // d.thisLocation = Game1.getLocationFromName(loc);
             // d.thisLocation = obj.thisLocation;
-            Log.AsyncC(d.thisLocation);
+            //Log.AsyncC(d.thisLocation);
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
@@ -1003,7 +1003,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+                //Log.AsyncM(e);
                 return null;
             }
 
@@ -1085,7 +1085,7 @@ namespace Revitalize
             d.lightsOn = obj.lightsOn;
             // d.thisLocation = Game1.getLocationFromName(loc);
             // d.thisLocation = obj.thisLocation;
-            Log.AsyncC(d.thisLocation);
+            //Log.AsyncC(d.thisLocation);
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
@@ -1099,7 +1099,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+                //Log.AsyncM(e);
                 return null;
             }
 
@@ -1221,7 +1221,7 @@ namespace Revitalize
             d.lightsOn = obj.lightsOn;
             // d.thisLocation = Game1.getLocationFromName(loc);
             // d.thisLocation = obj.thisLocation;
-            Log.AsyncC(d.thisLocation);
+            ////Log.AsyncC(d.thisLocation);
             d.lightColor = obj.lightColor;
             d.thisType = obj.thisType;
             d.removable = obj.removable;
@@ -1235,7 +1235,7 @@ namespace Revitalize
             }
             catch (Exception e)
             {
-                Log.AsyncM(e);
+                //Log.AsyncM(e);
                 return null;
             }
         }
@@ -1577,7 +1577,7 @@ namespace Revitalize
             {
                 serializer.TypeNameHandling = TypeNameHandling.Auto;
                 serializer.NullValueHandling = NullValueHandling.Ignore;
-                Log.AsyncG("DESERIALIZE THE WORLD");
+                ////Log.AsyncG("DESERIALIZE THE WORLD");
                 return base.ReadJson(reader, objectType, existingValue, serializer);
             }
 
@@ -1614,7 +1614,7 @@ namespace Revitalize
             TextReader reader = null;
             try
             {
-                Log.AsyncC(filePath);
+                ////Log.AsyncC(filePath);
                 reader = new StreamReader(filePath);
                 var fileContents = reader.ReadToEnd();
 
