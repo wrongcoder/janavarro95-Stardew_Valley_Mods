@@ -7,6 +7,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 using StardustCore;
 using StardustCore.Animations;
 using System;
@@ -65,7 +66,7 @@ namespace StarAI.PathFindingCore
 
         public TileNode parent;
 
-        public static bool checkIfICanPlaceHere(TileNode t, Vector2 pos, GameLocation loc = null, bool checkForCrops=false)
+        public static bool checkIfICanPlaceHere(TileNode t, Vector2 pos, GameLocation loc = null, bool checkForPassableTerrainFeatures = true)
         {
             bool cry = false;
             if (t.thisLocation == null)
@@ -74,23 +75,7 @@ namespace StarAI.PathFindingCore
                 cry = true;
             }
             
-            if (checkForCrops == true)
-            {
-                if (t.thisLocation.isTerrainFeatureAt((int)pos.X, (int)pos.Y))
-                {
-                    StardewValley.TerrainFeatures.TerrainFeature terrain = t.thisLocation.terrainFeatures[t.tileLocation];
-                    if (terrain != null)
-                    {
-                        if (terrain is StardewValley.TerrainFeatures.HoeDirt)
-                        {
-                            if ((terrain as StardewValley.TerrainFeatures.HoeDirt).crop != null)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
+
             if (t == null)
             {
                 Console.WriteLine("OK T IS NULL");
@@ -99,11 +84,25 @@ namespace StarAI.PathFindingCore
             {
                 Console.WriteLine("OK T LOCATION IS NULL");
             }
+
+
             if (t.thisLocation.isObjectAt((int)pos.X, (int)pos.Y))
             {
-                //ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.name, LogLevel.Warn);
+                //ModCore.CoreMonitor.Log("Object at this tile position!: " + t.thisLocation.objects[new Vector2(pos.X/Game1.tileSize,pos.Y/Game1.tileSize)].name, LogLevel.Warn);
                 if (cry == true) t.thisLocation = null;
                 return false;
+            }
+
+
+
+            if (checkForPassableTerrainFeatures)
+            {
+                bool terrainFeature = t.thisLocation.terrainFeatures.ContainsKey(pos / Game1.tileSize);
+                if (terrainFeature)
+                {
+                    TerrainFeature terrain = t.thisLocation.terrainFeatures[pos / Game1.tileSize];
+                    if (terrain.isPassable()) return true;
+                }
             }
             if (t.thisLocation.isTileOccupied(pos / Game1.tileSize))
             {

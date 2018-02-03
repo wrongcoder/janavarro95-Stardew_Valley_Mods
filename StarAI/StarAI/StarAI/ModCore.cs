@@ -37,6 +37,7 @@ namespace StarAI
             CoreMonitor.Log("Hello AI WORLD!", LogLevel.Info);
             Commands.initializeCommands();
             PathFindingCore.Utilities.initializeTileExceptionList();
+            ExecutionCore.TaskMetaDataHeuristics.initializeToolCostDictionary();
             //throw new NotImplementedException();
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
 
