@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Audio;
 using StardewModdingAPI;
 using StardewValley;
 using StardewSymphonyRemastered.Framework;
+using System.IO;
 
 namespace StardewSymphonyRemastered
 {
@@ -36,6 +37,11 @@ namespace StardewSymphonyRemastered
 
         public static MusicManager musicManager;
 
+        private string MusicPath;
+        public static string WavMusicDirectory;
+        public static string XACTMusicDirectory;
+        public static string TemplateMusicDirectory;
+
 
         public override void Entry(IModHelper helper)
         {
@@ -48,8 +54,72 @@ namespace StardewSymphonyRemastered
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
 
             musicManager = new MusicManager();
+
+            MusicPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Music");
+            WavMusicDirectory = Path.Combine(MusicPath, "Wav");
+            XACTMusicDirectory = Path.Combine(MusicPath, "XACT");
+            TemplateMusicDirectory = Path.Combine(MusicPath, "Templates");
+
+            this.createDirectories();
+            this.createBlankXACTTemplate();
             //load in all packs here.
         }
+
+        public void createDirectories()
+        {
+            if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);
+            if (!Directory.Exists(WavMusicDirectory)) Directory.CreateDirectory(WavMusicDirectory);
+            if (!Directory.Exists(XACTMusicDirectory)) Directory.CreateDirectory(XACTMusicDirectory);
+            if (!Directory.Exists(TemplateMusicDirectory)) Directory.CreateDirectory(TemplateMusicDirectory);
+        }
+        public void createBlankXACTTemplate()
+        {
+            string path= Path.Combine(TemplateMusicDirectory, "XACT");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            if(!File.Exists(Path.Combine(path, "MusicPackInformation.json"))){
+                MusicPackMetaData blankMetaData = new MusicPackMetaData();
+                blankMetaData.writeToJson(Path.Combine(path, "MusicPackInformation.json"));
+            }
+            if (!File.Exists(Path.Combine(path, "readme.txt")))
+            {
+                string info = "Place the Wave Bank.xwb file and Sound Bank.xsb file you created in XACT in a similar directory in Content/Music/XACT/SoundPackName with a new meta data to load it!";
+                File.WriteAllText(Path.Combine(path, "readme.txt"),info);
+            }
+        }
+
+
+        public static void loadXACTMusicPacks()
+        {
+            string[] listOfDirectories= Directory.GetDirectories(XACTMusicDirectory);
+            foreach(string folder in listOfDirectories)
+            {
+                string waveBank = Path.Combine(folder, "Wave Bank.xwb");
+                string soundBank = Path.Combine(folder, "Sound Bank.xwb");
+                string metaData = Path.Combine(folder, "MusicPackInformation.json");
+                if (!File.Exists(waveBank))
+                {
+                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no file Wave Bank.xwb located in this directory. AKA there is no valid music here.", LogLevel.Error);
+                    return;
+                }
+
+                if (!File.Exists(soundBank))
+                {
+                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no file Sound Bank.xwb located in this directory. This is needed to play the music from Wave Bank.xwb", LogLevel.Error);
+                    return;
+                }
+
+                if (!File.Exists(metaData))
+                {
+                    ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
+                }
+                StardewSymphonyRemastered.Framework.XACTMusicPack musicPack = new XACTMusicPack(folder, waveBank);
+                musicManager.addMusicPack(musicPack);
+            }
+        }
+
 
         /// <summary>
         /// Raised when the player changes locations. This should determine the next song to play.

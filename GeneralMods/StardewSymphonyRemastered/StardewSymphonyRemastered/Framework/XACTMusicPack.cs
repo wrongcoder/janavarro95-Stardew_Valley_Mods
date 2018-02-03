@@ -12,7 +12,7 @@ namespace StardewSymphonyRemastered.Framework
     /// <summary>
     /// TODO: Make this work and add in overrided functions.
     /// </summary>
-   public class XwbMusicPack: MusicPack
+   public class XACTMusicPack: MusicPack
     {
         public Microsoft.Xna.Framework.Audio.WaveBank WaveBank;
         public Microsoft.Xna.Framework.Audio.SoundBank SoundBank;
@@ -32,7 +32,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <param name="name"></param>
         /// <param name="directoryToXwb"></param>
         /// <param name="pathToXWB"></param>
-        public XwbMusicPack(string name, string directoryToXwb,string pathToXWB)
+        public XACTMusicPack(string directoryToXwb,string pathToXWB)
         {
             this.directory = directoryToXwb;
             this.XWBPath = pathToXWB;
@@ -41,8 +41,8 @@ namespace StardewSymphonyRemastered.Framework
             this.musicPackInformation = MusicPackMetaData.readFromJson(Path.Combine(directoryToXwb, "MusicPackInformation.json"));
             if (this.musicPackInformation == null)
             {
-                StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.");
-                this.musicPackInformation = new MusicPackMetaData(name,"???","","0.0.0");
+                StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.",StardewModdingAPI.LogLevel.Warn);
+                this.musicPackInformation = new MusicPackMetaData("???","???","","0.0.0");
             }
         }
 

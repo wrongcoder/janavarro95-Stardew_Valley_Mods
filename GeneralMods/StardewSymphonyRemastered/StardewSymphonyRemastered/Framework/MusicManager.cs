@@ -223,7 +223,7 @@ namespace StardewSymphonyRemastered.Framework
         /// Adds a valid xwb music pack to the list of music packs available.
         /// </summary>
         /// <param name="xwbMusicPack"></param>
-        public void addMusicPack(XwbMusicPack xwbMusicPack)
+        public void addMusicPack(XACTMusicPack xwbMusicPack)
         {
             this.musicPacks.Add(xwbMusicPack.musicPackInformation.name,xwbMusicPack);
         }

@@ -13,7 +13,7 @@ namespace StardewSymphonyRemastered.Framework
         ** Properties
         *********/
         /// <summary>All of the music/soundbanks and their locations.</summary>
-        private readonly XwbMusicPack MasterList;
+        private readonly XACTMusicPack MasterList;
 
         /// <summary>The registered soundbanks.</summary>
         private readonly List<string> SoundBanks = new List<string>();
@@ -28,7 +28,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="masterList">All of the music/soundbanks and their locations.</param>
         /// <param name="reset">The callback to reset the game audio.</param>
-        public MusicHexProcessor(XwbMusicPack masterList, Action reset)
+        public MusicHexProcessor(XACTMusicPack masterList, Action reset)
         {
             this.MasterList = masterList;
             this.Reset = reset;
@@ -41,7 +41,7 @@ namespace StardewSymphonyRemastered.Framework
             this.SoundBanks.Add(path);
         }
 
-        public static List<string> ProcessSongNamesFromHex(XwbMusicPack musicPack, Action reset, string FileName)
+        public static List<string> ProcessSongNamesFromHex(XACTMusicPack musicPack, Action reset, string FileName)
         {
             int counter = 0;
                 List<string> cleanCueNames = new List<string>();
