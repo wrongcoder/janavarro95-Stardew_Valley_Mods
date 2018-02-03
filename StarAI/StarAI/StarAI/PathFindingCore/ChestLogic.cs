@@ -61,7 +61,7 @@ namespace StarAI.PathFindingCore
                 object[] objList = new object[1];
                 objList[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(pathToSingleChest, objList,new ExecutionCore.TaskMetaData("Path to chest for seeds",PathFindingCore.Utilities.calculatePathCost(v))));
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(pathToSingleChest, objList,new ExecutionCore.TaskMetaData("Path to chest for seeds",null,null,new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true))));
                 //   waterSingleCrop(v);
             }
         }

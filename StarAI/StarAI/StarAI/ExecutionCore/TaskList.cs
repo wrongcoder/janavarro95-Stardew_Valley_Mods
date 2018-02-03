@@ -1,4 +1,5 @@
-﻿using StardewModdingAPI;
+﻿using StarAI.PathFindingCore;
+using StardewModdingAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,9 @@ namespace StarAI.ExecutionCore
             foreach(var task2 in taskList)
             {
                     if (removalList.Contains(task2)) continue;
-                task2.taskMetaData.cost = PathFindingCore.Utilities.calculatePathCost(task2.objectParameterDataArray);
+                    object[] oArray = (object[])task2.objectParameterDataArray;
+                    TileNode t =(TileNode) oArray[0];
+                    task2.taskMetaData.calculateTaskCost((t));
                 //task.taskMetaData = new TaskMetaData(task.taskMetaData.name, PathFindingCore.Utilities.calculatePathCost(task.objectParameterDataArray), task.taskMetaData.staminaPrerequisite, task.taskMetaData.toolPrerequisite);
             }
             

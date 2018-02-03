@@ -49,7 +49,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 obj[0] = v;
                 // ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(waterSingleCrop), obj));
                 StardewValley.Tools.WateringCan w = new StardewValley.Tools.WateringCan();
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(waterSingleCrop, obj,new ExecutionCore.TaskMetaData("Water Crop",PathFindingCore.Utilities.calculatePathCost(v),new StaminaPrerequisite(true,3),new ToolPrerequisite(true,w.GetType())))); 
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(waterSingleCrop, obj,new ExecutionCore.TaskMetaData("Water Crop", new StaminaPrerequisite(true,3),new ToolPrerequisite(true,w.GetType(),1)))); 
             //   waterSingleCrop(v);
             }
         }
@@ -271,7 +271,7 @@ namespace StarAI.PathFindingCore.CropLogic
                 object[] obj = new object[1];
                 obj[0] = v;
                 //ExecutionCore.TaskList.taskList.Add(new Task(new Action<object>(harvestSingleCrop), obj));
-                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(harvestSingleCrop, obj,new ExecutionCore.TaskMetaData("HarvestSingleCrop",StarAI.PathFindingCore.Utilities.calculatePathCost(v))));    
+                ExecutionCore.TaskList.taskList.Add(new ExecutionCore.CustomTask(harvestSingleCrop, obj,new ExecutionCore.TaskMetaData("HarvestSingleCrop",null,null,new ExecutionCore.TaskPrerequisites.InventoryFullPrerequisite(true))));    
                 
                 //   waterSingleCrop(v);
             }

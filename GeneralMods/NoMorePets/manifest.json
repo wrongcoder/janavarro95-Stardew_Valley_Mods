@@ -1,15 +1,10 @@
 {
   "Name": "No More Pets",
   "Author": "Alpha_Omegasis",
-  "Version": {
-    "MajorVersion": 1,
-    "MinorVersion": 4,
-    "PatchVersion": 1,
-    "Build": null
-  },
-  "MinimumApiVersion": "1.15",
+  "Version": "1.4.1",
   "Description": "Removes all pets from the game.",
   "UniqueID": "Omegasis.NoMorePets",
   "EntryDll": "NoMorePets.dll",
+  "MinimumApiVersion": "2.0",
   "UpdateKeys": [ "Nexus:506" ]
 }

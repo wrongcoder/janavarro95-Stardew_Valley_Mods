@@ -55,7 +55,7 @@ namespace StardustCore.ModInfo
             {
                 //  if (Game1.activeClickableMenu.allClickableComponents == null) return;
                 try {
-                    List<IClickableMenu> pages = ModCore.ModHelper.Reflection.GetPrivateValue<List<IClickableMenu>>(Game1.activeClickableMenu, "pages");
+                    List<IClickableMenu> pages = ModCore.ModHelper.Reflection.GetField<List<IClickableMenu>>(Game1.activeClickableMenu, "pages").GetValue();
                     if (Game1.activeClickableMenu is GameMenu)
                     {
                         StardewValley.Menus.IClickableMenu s = pages[(Game1.activeClickableMenu as GameMenu).currentTab];
