@@ -17,9 +17,7 @@ namespace StardewSymphonyRemastered
     /// BIG WIP. Don't use this at all because it does nothing right now.
     /// TODO:
     /// 1.Make Xwb packs work
-    /// 1.5. Make way to load in music packs.
     /// 2.Make stream files work
-    /// 2.5. Make Music Manager
     /// 3.Make interface.
     /// 4.Make sure stuff doesn't blow up.
     /// 5.Release
@@ -44,6 +42,10 @@ namespace StardewSymphonyRemastered
 
         public bool musicPacksInitialized;
 
+        /// <summary>
+        /// Entry point for the mod.
+        /// </summary>
+        /// <param name="helper"></param>
         public override void Entry(IModHelper helper)
         {
             DefaultSoundBank = Game1.soundBank;
@@ -67,6 +69,11 @@ namespace StardewSymphonyRemastered
             musicPacksInitialized = false;
         }
 
+        /// <summary>
+        /// Raised every frame. Mainly used just to initiate the music packs. Probably not needed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             if (musicPacksInitialized == false)
@@ -76,6 +83,9 @@ namespace StardewSymphonyRemastered
             }
         }
 
+        /// <summary>
+        /// Load in the music packs to the music manager.
+        /// </summary>
         public void initializeMusicPacks()
         {
             //load in all packs here.
@@ -83,6 +93,9 @@ namespace StardewSymphonyRemastered
             loadWAVMusicPacks();
         }
 
+        /// <summary>
+        /// Create the core directories needed by the mod.
+        /// </summary>
         public void createDirectories()
         {
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);
@@ -91,6 +104,10 @@ namespace StardewSymphonyRemastered
             if (!Directory.Exists(TemplateMusicDirectory)) Directory.CreateDirectory(TemplateMusicDirectory);
         }
 
+
+        /// <summary>
+        /// Used to create a blank XACT music pack example.
+        /// </summary>
         public void createBlankXACTTemplate()
         {
             string path= Path.Combine(TemplateMusicDirectory, "XACT");
@@ -109,6 +126,9 @@ namespace StardewSymphonyRemastered
             }
         }
 
+        /// <summary>
+        /// USed to create a blank WAV music pack example.
+        /// </summary>
         public void createBlankWAVTemplate()
         {
             string path = Path.Combine(TemplateMusicDirectory, "WAV");
@@ -133,7 +153,9 @@ namespace StardewSymphonyRemastered
             }
         }
 
-
+        /// <summary>
+        /// Load in the XACT music packs.
+        /// </summary>
         public static void loadXACTMusicPacks()
         {
             string[] listOfDirectories= Directory.GetDirectories(XACTMusicDirectory);
@@ -179,7 +201,9 @@ namespace StardewSymphonyRemastered
             }
         }
 
-
+        /// <summary>
+        /// Load in WAV music packs.
+        /// </summary>
         public static void loadWAVMusicPacks()
         {
             string[] listOfDirectories = Directory.GetDirectories(WavMusicDirectory);
