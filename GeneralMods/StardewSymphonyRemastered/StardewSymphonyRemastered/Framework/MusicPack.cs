@@ -13,6 +13,7 @@ namespace StardewSymphonyRemastered.Framework
     public class MusicPack 
     {
         public string directory;
+        public string shortenedDirectory;
         public StardewSymphonyRemastered.Framework.SongSpecifics songInformation;
         public MusicPackMetaData musicPackInformation;
 
@@ -52,5 +53,9 @@ namespace StardewSymphonyRemastered.Framework
             return "";
         }
 
+        public virtual void setModDirectoryFromFullDirectory()
+        {
+            
+        }
     }
 }

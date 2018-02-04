@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\MusicPackMetaData.cs" />
+    <Compile Include="Framework\Song.cs" />
     <Compile Include="StaticExtentions.cs" />
     <Compile Include="StardewSymphony.cs" />
     <Compile Include="Framework\MusicHexProcessor.cs" />

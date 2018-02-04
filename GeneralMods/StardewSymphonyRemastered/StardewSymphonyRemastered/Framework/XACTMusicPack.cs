@@ -34,6 +34,7 @@ namespace StardewSymphonyRemastered.Framework
             this.directory = directoryToXwb;
             this.WaveBankPath = pathToWaveBank;
             this.SoundBankPath = pathToSoundBank;
+            this.setModDirectoryFromFullDirectory();
             this.songInformation = new SongSpecifics();
             this.currentCue = null;
             this.musicPackInformation = MusicPackMetaData.readFromJson(Path.Combine(directoryToXwb, "MusicPackInformation.json"));
@@ -53,7 +54,21 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void loadMusicFiles()
         {
-          this.songInformation.listOfSongsWithoutTriggers=StardewSymphonyRemastered.Framework.MusicHexProcessor.ProcessSongNamesFromHex(this,StardewSymphony.Reset,this.SoundBankPath);
+
+            var listOfSongStrings = StardewSymphonyRemastered.Framework.MusicHexProcessor.ProcessSongNamesFromHex(this, StardewSymphony.Reset, this.SoundBankPath);
+
+            List<Song> listofSongs = new List<Song>();
+            foreach(var songname in listOfSongStrings)
+            {
+                Song song = new Song(this.WaveBankPath, songname);
+                listofSongs.Add(song);
+            }
+
+            this.songInformation.listOfSongsWithoutTriggers = listofSongs;
+                
+            
+                
+               
         }
 
         /// <summary>
@@ -156,6 +171,26 @@ namespace StardewSymphonyRemastered.Framework
         public override string getNameOfCurrentSong()
         {
             return this.currentCue.Name;
+        }
+
+        /// <summary>
+        /// Returns a shortened directory name for display purposes.
+        /// </summary>
+        /// <returns></returns>
+        public override void setModDirectoryFromFullDirectory()
+        {
+            string[] spliter = this.WaveBankPath.Split(Path.DirectorySeparatorChar);
+            string directoryLocation="";
+            for (int i = spliter.Length - 5; i < spliter.Length; i++)
+            {
+                directoryLocation += spliter[i];
+
+                if (i != spliter.Length - 1)
+                {
+                    directoryLocation += Path.DirectorySeparatorChar;
+                }
+            }
+            this.shortenedDirectory = directoryLocation;
         }
 
     }

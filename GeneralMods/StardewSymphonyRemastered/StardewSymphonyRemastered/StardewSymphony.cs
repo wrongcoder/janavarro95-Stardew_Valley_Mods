@@ -63,13 +63,12 @@ namespace StardewSymphonyRemastered
 
             this.createDirectories();
             this.createBlankXACTTemplate();
-
+            this.createBlankWAVTemplate();
             musicPacksInitialized = false;
         }
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.activeClickableMenu.GetType()!=typeof(StardewValley.Menus.TitleMenu)&& Game1.audioEngine.isNull()) return;
             if (musicPacksInitialized == false)
             {
                 initializeMusicPacks();
@@ -81,6 +80,7 @@ namespace StardewSymphonyRemastered
         {
             //load in all packs here.
             loadXACTMusicPacks();
+            loadWAVMusicPacks();
         }
 
         public void createDirectories()
@@ -90,6 +90,7 @@ namespace StardewSymphonyRemastered
             if (!Directory.Exists(XACTMusicDirectory)) Directory.CreateDirectory(XACTMusicDirectory);
             if (!Directory.Exists(TemplateMusicDirectory)) Directory.CreateDirectory(TemplateMusicDirectory);
         }
+
         public void createBlankXACTTemplate()
         {
             string path= Path.Combine(TemplateMusicDirectory, "XACT");
@@ -103,8 +104,32 @@ namespace StardewSymphonyRemastered
             }
             if (!File.Exists(Path.Combine(path, "readme.txt")))
             {
-                string info = "Place the Wave Bank.xwb file and Sound Bank.xsb file you created in XACT in a similar directory in Content/Music/XACT/SoundPackName with a new meta data to load it!";
+                string info = "Place the Wave Bank.xwb file and Sound Bank.xsb file you created in XACT in a similar directory in Content/Music/XACT/SoundPackName.\nModify MusicPackInformation.json as desire!\nRun the mod!";
                 File.WriteAllText(Path.Combine(path, "readme.txt"),info);
+            }
+        }
+
+        public void createBlankWAVTemplate()
+        {
+            string path = Path.Combine(TemplateMusicDirectory, "WAV");
+            string pathSongs = Path.Combine(path, "Songs");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            if (!Directory.Exists(pathSongs))
+            {
+                Directory.CreateDirectory(pathSongs);
+            }
+            if (!File.Exists(Path.Combine(path, "MusicPackInformation.json")))
+            {
+                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example", "Omegasis", "Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!", "1.0.0 CoolExample");
+                blankMetaData.writeToJson(Path.Combine(path, "MusicPackInformation.json"));
+            }
+            if (!File.Exists(Path.Combine(path, "readme.txt")))
+            {
+                string info = "Place the .wav song files in the Songs folder, modify the MusicPackInformation.json as desired, and then run!";
+                File.WriteAllText(Path.Combine(path, "readme.txt"), info);
             }
         }
 
@@ -155,6 +180,23 @@ namespace StardewSymphonyRemastered
         }
 
 
+        public static void loadWAVMusicPacks()
+        {
+            string[] listOfDirectories = Directory.GetDirectories(WavMusicDirectory);
+            foreach (string folder in listOfDirectories)
+            {
+                string metaData = Path.Combine(folder, "MusicPackInformation.json");
+
+                if (!File.Exists(metaData))
+                {
+                    ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
+                }
+
+                StardewSymphonyRemastered.Framework.WavMusicPack musicPack = new WavMusicPack(folder);
+                musicManager.addMusicPack(musicPack,true,true);
+            }
+        }
+
         /// <summary>
         /// Raised when the player changes locations. This should determine the next song to play.
         /// </summary>
@@ -175,9 +217,6 @@ namespace StardewSymphonyRemastered
             StardewSymphonyRemastered.Framework.SongSpecifics.addLocations();
             StardewSymphonyRemastered.Framework.SongSpecifics.addFestivals();
             StardewSymphonyRemastered.Framework.SongSpecifics.addEvents();
-
-           
-
            
         }
 

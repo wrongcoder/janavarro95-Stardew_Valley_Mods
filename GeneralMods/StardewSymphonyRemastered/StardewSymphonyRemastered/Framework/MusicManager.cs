@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewSymphonyRemastered;
 using StardewValley;
+using System.IO;
 
 namespace StardewSymphonyRemastered.Framework
 {
@@ -168,9 +169,9 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         /// <param name="songListKey"></param>
         /// <returns></returns>
-        public Dictionary<MusicPack,List<string>> getListOfApplicableMusicPacks(string songListKey)
+        public Dictionary<MusicPack,List<Song>> getListOfApplicableMusicPacks(string songListKey)
         {
-            Dictionary<MusicPack, List<string>> listOfValidDictionaries = new Dictionary<MusicPack, List<string>>();
+            Dictionary<MusicPack, List<Song>> listOfValidDictionaries = new Dictionary<MusicPack, List<Song>>();
             foreach(var v in this.musicPacks)
             {
               var songList= v.Value.songInformation.getSongList(songListKey).Value;
@@ -207,44 +208,39 @@ namespace StardewSymphonyRemastered.Framework
 
             var songName = musicPackPair.Value.ElementAt(randInt2);
 
-            this.currentMusicPack.playSong(songName);
+            this.currentMusicPack.playSong(songName.name);
         }
 
-        /// <summary>
-        /// TODO: Make WAV MUSIC PACKS
-        /// </summary>
-        /// <param name="wavMusicPack"></param>
-        public void addMusicPack(WavMusicPack wavMusicPack)
-        {
-
-        }
 
         /// <summary>
         /// Adds a valid xwb music pack to the list of music packs available.
         /// </summary>
-        /// <param name="xwbMusicPack"></param>
+        /// <param name="musicPack"></param>
         /// <param name="displayLogInformation">Whether or not to display the process to the console. Will include information from the pack's metadata. Default:False</param>
         /// <param name="xwbMusicPack">If displayLogInformation is also true this will display the name of all of the songs in the music pack when it is added in.</param>
-        public void addMusicPack(XACTMusicPack xwbMusicPack,bool displayLogInformation=false,bool displaySongs=false)
+        public void addMusicPack(MusicPack musicPack,bool displayLogInformation=false,bool displaySongs=false)
         {
             if (displayLogInformation == true)
             {
                 StardewSymphony.ModMonitor.Log("Adding a new music pack!");
-                StardewSymphony.ModMonitor.Log("    Name:" + xwbMusicPack.musicPackInformation.name);
-                StardewSymphony.ModMonitor.Log("    Author:" + xwbMusicPack.musicPackInformation.author);
-                StardewSymphony.ModMonitor.Log("    Description:" + xwbMusicPack.musicPackInformation.description);
-                StardewSymphony.ModMonitor.Log("    Version Info:" + xwbMusicPack.musicPackInformation.versionInfo);
+
+    
+                StardewSymphony.ModMonitor.Log("    Location:" + musicPack.shortenedDirectory);
+                StardewSymphony.ModMonitor.Log("    Name:" + musicPack.musicPackInformation.name);
+                StardewSymphony.ModMonitor.Log("    Author:" + musicPack.musicPackInformation.author);
+                StardewSymphony.ModMonitor.Log("    Description:" + musicPack.musicPackInformation.description);
+                StardewSymphony.ModMonitor.Log("    Version Info:" + musicPack.musicPackInformation.versionInfo);
                 StardewSymphony.ModMonitor.Log("    Song List:");
 
                 if (displaySongs == true)
                 {
-                    foreach(var songname in xwbMusicPack.songInformation.listOfSongsWithoutTriggers)
+                    foreach(var song in musicPack.songInformation.listOfSongsWithoutTriggers)
                     {
-                        StardewSymphony.ModMonitor.Log("        " + songname);
+                        StardewSymphony.ModMonitor.Log("        " + song.name);
                     }
                 }
             }
-            this.musicPacks.Add(xwbMusicPack.musicPackInformation.name,xwbMusicPack);
+            this.musicPacks.Add(musicPack.musicPackInformation.name,musicPack);
         }
     }
 }
