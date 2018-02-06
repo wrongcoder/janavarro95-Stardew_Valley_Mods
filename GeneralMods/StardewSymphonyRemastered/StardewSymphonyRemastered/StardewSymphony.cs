@@ -86,7 +86,7 @@ namespace StardewSymphonyRemastered
         {
             if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)
             {
-                Game1.activeClickableMenu = new StardewSymphonyRemastered.Framework.Menus.MusicManagerMenu();
+                Game1.activeClickableMenu = new StardewSymphonyRemastered.Framework.Menus.MusicManagerMenu(Game1.viewport.Width,Game1.viewport.Height);
             }
         }
 
@@ -139,7 +139,7 @@ namespace StardewSymphonyRemastered
                 Directory.CreateDirectory(path);
             }
             if(!File.Exists(Path.Combine(path, "MusicPackInformation.json"))){
-                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example","Omegasis","Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!","1.0.0 CoolExample");
+                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example","Omegasis","Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!","1.0.0 CoolExample","Icon.png");
                 blankMetaData.writeToJson(Path.Combine(path, "MusicPackInformation.json"));
             }
             if (!File.Exists(Path.Combine(path, "readme.txt")))
@@ -166,7 +166,7 @@ namespace StardewSymphonyRemastered
             }
             if (!File.Exists(Path.Combine(path, "MusicPackInformation.json")))
             {
-                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example", "Omegasis", "Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!", "1.0.0 CoolExample");
+                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example", "Omegasis", "Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!", "1.0.0 CoolExample","Icon");
                 blankMetaData.writeToJson(Path.Combine(path, "MusicPackInformation.json"));
             }
             if (!File.Exists(Path.Combine(path, "readme.txt")))

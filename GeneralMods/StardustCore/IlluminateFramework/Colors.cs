@@ -12,7 +12,7 @@ namespace StardustCore.IlluminateFramework
     /// <summary>
     /// Make sure all colors are inverted.
     /// </summary>
-    public class ColorsList
+    public class LightColorsList
     {
         public static Color AliceBlue = new Color(15, 7, 0, 255);
 
@@ -639,7 +639,7 @@ namespace StardustCore.IlluminateFramework
 
         }
 
-        public Color getColorFromList(string s)
+        public static Color getColorFromList(string s)
         {
             Color color;
             bool f = ColorDictionary.TryGetValue(s, out color);

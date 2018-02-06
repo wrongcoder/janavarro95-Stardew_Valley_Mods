@@ -41,7 +41,7 @@ namespace StardewSymphonyRemastered.Framework
             if (this.musicPackInformation == null)
             {
                 StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.",StardewModdingAPI.LogLevel.Warn);
-                this.musicPackInformation = new MusicPackMetaData("???","???","","0.0.0");
+                this.musicPackInformation = new MusicPackMetaData("???","???","","0.0.0","");
             }
 
             this.WaveBank = new WaveBank(Game1.audioEngine, this.WaveBankPath);

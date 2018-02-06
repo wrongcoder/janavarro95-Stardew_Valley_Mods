@@ -30,8 +30,16 @@ namespace StardustCore
             return  (int)((double)c.price * (1.0 + (double)c.quality * 0.25));
         }
 
-
-
+        /// <summary>
+        /// Returns an absolute path past the mod's directory.
+        /// </summary>
+        /// <param name="absolutePath"></param>
+        /// <returns></returns>
+        public static string getRelativePath(string absolutePath)
+        {
+            var ok= absolutePath.Split(new string[] { "StardustCore" }, StringSplitOptions.None);
+            return ok.ElementAt(1);
+        }
 
 
         public static void createObjectDebris(Item I, int xTileOrigin, int yTileOrigin, int xTileTarget, int yTileTarget, int groundLevel = -1, int itemQuality = 0, float velocityMultiplyer = 1f, GameLocation location = null)

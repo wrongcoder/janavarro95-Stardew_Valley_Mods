@@ -120,10 +120,17 @@ namespace StardustCore.Animations
             }
         }
 
+        /// <summary>
+        /// Sets the animation manager to an on state, meaning that this animation will update on the draw frame.
+        /// </summary>
         public void enableAnimation()
         {
             this.enabled = true;
         }
+
+        /// <summary>
+        /// Sets the animation manager to an off state, meaning that this animation will no longer update on the draw frame.
+        /// </summary>
         public void disableAnimation()
         {
             this.enabled = false;
