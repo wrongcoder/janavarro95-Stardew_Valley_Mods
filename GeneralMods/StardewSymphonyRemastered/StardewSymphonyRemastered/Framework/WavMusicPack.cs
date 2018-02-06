@@ -233,8 +233,5 @@ namespace StardewSymphonyRemastered.Framework
             }
             return "";
         }
-
-        
-
     }
 }

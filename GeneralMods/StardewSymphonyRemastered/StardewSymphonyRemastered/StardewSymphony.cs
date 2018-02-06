@@ -57,6 +57,7 @@ namespace StardewSymphonyRemastered
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             musicManager = new MusicManager();
 
             MusicPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Music");
@@ -69,6 +70,16 @@ namespace StardewSymphonyRemastered
             this.createBlankWAVTemplate();
 
             musicPacksInitialized = false;
+        }
+
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            /* THIS IS WAY TO LONG to run. Better make it save individual lists when I am editing songs.
+            foreach(var musicPack in musicManager.musicPacks)
+            {
+                musicPack.Value.writeToJson();
+            }
+            */
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -210,6 +221,9 @@ namespace StardewSymphonyRemastered
                 }
                 StardewSymphonyRemastered.Framework.XACTMusicPack musicPack = new XACTMusicPack(folder, waveBank,soundBank);
                 musicManager.addMusicPack(musicPack,true,true);
+                
+                musicPack.readFromJson();
+                
             }
         }
 
@@ -230,6 +244,9 @@ namespace StardewSymphonyRemastered
 
                 StardewSymphonyRemastered.Framework.WavMusicPack musicPack = new WavMusicPack(folder);
                 musicManager.addMusicPack(musicPack,true,true);
+                
+                musicPack.readFromJson();
+                
             }
         }
 

@@ -14,11 +14,11 @@ namespace StardewSymphonyRemastered.Framework
     /// </summary>
     public class SongSpecifics
     {
-        Dictionary<string, List<Song>> listOfSongsWithTriggers; //triggerName, <songs>
+        public Dictionary<string, List<Song>> listOfSongsWithTriggers; //triggerName, <songs>
 
-        Dictionary<string, List<Song>> eventSongs;
+        public Dictionary<string, List<Song>> eventSongs;
 
-        Dictionary<string, List<Song>> festivalSongs;
+        public Dictionary<string, List<Song>> festivalSongs;
 
         public List<Song> listOfSongsWithoutTriggers; 
 
@@ -72,7 +72,8 @@ namespace StardewSymphonyRemastered.Framework
                 "night"
             };
             menus = new List<string>();
-            menus.Add(typeof(StardewValley.Menus.TitleMenu).ToString());
+            
+            menus.Add(typeof(StardewValley.Menus.TitleMenu).ToString().Replace('.', seperator));
 
 
             listOfSongsWithTriggers = new Dictionary<string, List<Song>>();
@@ -113,7 +114,7 @@ namespace StardewSymphonyRemastered.Framework
             {
                 if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.TitleMenu))
                 {
-                    key = Game1.activeClickableMenu.GetType().ToString();
+                    key = Game1.activeClickableMenu.GetType().ToString().Replace('.',seperator);
                     foundMenuString = true;
                 }
 
