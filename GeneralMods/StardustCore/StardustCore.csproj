@@ -45,6 +45,7 @@
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationManager.cs" />
     <Compile Include="IlluminateFramework\Colors.cs" />
+    <Compile Include="UIUtilities\LayeredTexture.cs" />
     <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\GenericCharacterSheets.cs" />
     <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\VanillaCharacterSheet.cs" />
     <Compile Include="UIUtilities\SpriteFonts\Fonts\Components\CharacterSpacing.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="UIUtilities\MenuComponents\Button.cs" />
     <Compile Include="UIUtilities\SpriteFonts\Fonts\VanillaFont.cs" />
     <Compile Include="UIUtilities\SpriteFonts\SpriteFont.cs" />
+    <Compile Include="UIUtilities\Texture2DExtended.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
