@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +16,23 @@ namespace StardewSymphonyRemastered.Framework
     {
         public Song currentSong;
         public string songsDirectory;
+
+        /// <summary>
+        /// Used to actually play the song.
+        /// </summary>
+        DynamicSoundEffectInstance dynamicSound;
+        /// <summary>
+        /// Used to keep track of where in the song we are.
+        /// </summary>
+        int position;
+        /// <summary>
+        /// ???
+        /// </summary>
+        int count;
+        /// <summary>
+        /// Used to store the info for the song.
+        /// </summary>
+        byte[] byteArray;
 
         /// <summary>
         /// Constructor.
@@ -56,11 +75,68 @@ namespace StardewSymphonyRemastered.Framework
         }
 
         /// <summary>
+        /// Load a wav file into the stream to be played.
+        /// </summary>
+        public void LoadWavFromFileToStream(string p)
+        {
+            // Create a new SpriteBatch, which can be used to draw textures.
+
+            string file =p;
+            System.IO.Stream waveFileStream = File.OpenRead(file); //TitleContainer.OpenStream(file);
+          
+            BinaryReader reader = new BinaryReader(waveFileStream);
+
+            int chunkID = reader.ReadInt32();
+            int fileSize = reader.ReadInt32();
+            int riffType = reader.ReadInt32();
+            int fmtID = reader.ReadInt32();
+            int fmtSize = reader.ReadInt32();
+            int fmtCode = reader.ReadInt16();
+            int channels = reader.ReadInt16();
+            int sampleRate = reader.ReadInt32();
+            int fmtAvgBPS = reader.ReadInt32();
+            int fmtBlockAlign = reader.ReadInt16();
+            int bitDepth = reader.ReadInt16();
+
+            if (fmtSize == 18)
+            {
+                // Read any extra values
+                int fmtExtraSize = reader.ReadInt16();
+                reader.ReadBytes(fmtExtraSize);
+            }
+
+            int dataID = reader.ReadInt32();
+            int dataSize = reader.ReadInt32();
+
+            byteArray = reader.ReadBytes(dataSize);
+
+            dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
+            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(100));
+
+            dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
+            this.currentSong = new Song(p);
+        }
+
+        void DynamicSound_BufferNeeded(object sender, EventArgs e)
+        {
+            dynamicSound.SubmitBuffer(byteArray, position, count / 2);
+            dynamicSound.SubmitBuffer(byteArray, position + count / 2, count / 2);
+
+            position += count;
+            if (position + count > byteArray.Length)
+            {
+                position = 0;
+            }
+        }
+
+
+        /// <summary>
         /// Returns the name of the currently playing song.
         /// </summary>
         /// <returns></returns>
         public override string getNameOfCurrentSong()
         {
+            if (this.currentSong == null) return "";
             return this.currentSong.name;
         }
 
@@ -79,30 +155,86 @@ namespace StardewSymphonyRemastered.Framework
             this.songInformation.listOfSongsWithoutTriggers = listOfSongs;
         }
 
+        /// <summary>
+        /// Used to pause the current song.
+        /// </summary>
         public override void pauseSong()
         {
-            throw new NotImplementedException();
+            if (dynamicSound != null) dynamicSound.Pause();
         }
 
+        /// <summary>
+        /// Used to play a song.
+        /// </summary>
+        /// <param name="name"></param>
         public override void playSong(string name)
         {
-            throw new NotImplementedException();
+            string pathToSong = getSongPathFromName(name);
+            LoadWavFromFileToStream(pathToSong);
+            dynamicSound.Play();
         }
 
+        /// <summary>
+        /// Used to resume the currently playing song.
+        /// </summary>
         public override void resumeSong()
         {
-            throw new NotImplementedException();
+            if (dynamicSound == null) return;
+            dynamicSound.Resume();
         }
 
+        /// <summary>
+        /// Used to stop the currently playing song.
+        /// </summary>
         public override void stopSong()
         {
-            throw new NotImplementedException();
+            if (dynamicSound != null)
+            {
+                dynamicSound.Stop();
+                dynamicSound = null;
+                this.currentSong = null;
+            }
         }
 
+        /// <summary>
+        /// Used to change from one playing song to another;
+        /// </summary>
+        /// <param name="songName"></param>
         public override void swapSong(string songName)
         {
-            throw new NotImplementedException();
+            this.stopSong();
+            this.playSong(songName);
         }
+
+        /// <summary>
+        /// Get the son's name from the path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public string getSongNameFromPath(string path)
+        {
+            foreach(var song in this.songInformation.listOfSongsWithoutTriggers)
+            {
+                if (song.pathToSong == path) return song.name;
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Gets the song's path that shares the same name.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string getSongPathFromName(string name)
+        {
+            foreach (var song in this.songInformation.listOfSongsWithoutTriggers)
+            {
+                if (song.name == name) return song.pathToSong;
+            }
+            return "";
+        }
+
+        
 
     }
 }

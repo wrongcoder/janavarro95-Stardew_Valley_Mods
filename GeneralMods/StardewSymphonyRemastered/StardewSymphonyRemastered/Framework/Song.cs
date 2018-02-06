@@ -9,6 +9,10 @@ namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>
     /// The class to be used to manage individual songs.
+    /// 
+    /// 
+    /// 
+    /// TODO: MAKE SMALL RELATIVE PATH TO SONG. /CONTENT/MUSIC/SONG
     /// </summary>
     public class Song
     {
@@ -21,6 +25,11 @@ namespace StardewSymphonyRemastered.Framework
         /// The name of the song itself.
         /// </summary>
         public string name;
+
+        /// <summary>
+        /// The relative path to the song.
+        /// </summary>
+        public string relativePath;
 
         /// <summary>
         /// Blank Constructor;
@@ -38,6 +47,7 @@ namespace StardewSymphonyRemastered.Framework
         {
             this.pathToSong=PathToSong;
             this.name = getNameFromPath(this.pathToSong);
+            this.relativePath = this.getRelativePathFromFullPath();
         }
 
         /// <summary>
@@ -49,6 +59,7 @@ namespace StardewSymphonyRemastered.Framework
         {
             this.pathToSong = PathToSong;
             this.name = Name;
+            this.relativePath = this.getRelativePathFromFullPath();
         }
 
         /// <summary>
@@ -59,6 +70,31 @@ namespace StardewSymphonyRemastered.Framework
         public string getNameFromPath(string path)
         {
             return Path.GetFileNameWithoutExtension(path);
+        }
+
+        public string getRelativePathFromFullPath()
+        {
+            string[] spliter = this.pathToSong.Split(Path.DirectorySeparatorChar);
+            string relative = "";
+            int index = 0;
+            foreach(var str in spliter) //iterate across all of the strings until Content is found.
+            {
+                
+                if (str == "Content")
+                {
+                    //Once content is found add it to the relative string and append a newline character.
+                    for(int i = index; i < spliter.Length; i++)
+                    {
+                        relative += spliter[i];
+                        if (i != spliter.Length - 1)
+                        {
+                            relative += Path.DirectorySeparatorChar;
+                        }
+                    }
+                }
+                index++;
+            }
+            return relative; //Return the relative path string
         }
 
         /// <summary>

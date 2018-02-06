@@ -56,6 +56,7 @@ namespace StardewSymphonyRemastered
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             musicManager = new MusicManager();
 
             MusicPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Music");
@@ -66,8 +67,18 @@ namespace StardewSymphonyRemastered
             this.createDirectories();
             this.createBlankXACTTemplate();
             this.createBlankWAVTemplate();
+
             musicPacksInitialized = false;
         }
+
+        private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        {
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)
+            {
+                Game1.activeClickableMenu = new StardewSymphonyRemastered.Framework.Menus.MusicManagerMenu();
+            }
+        }
+
 
         /// <summary>
         /// Raised every frame. Mainly used just to initiate the music packs. Probably not needed.
@@ -80,6 +91,7 @@ namespace StardewSymphonyRemastered
             {
                 initializeMusicPacks();
                 musicPacksInitialized = true;
+                musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
             }
         }
 
@@ -241,6 +253,7 @@ namespace StardewSymphonyRemastered
             StardewSymphonyRemastered.Framework.SongSpecifics.addLocations();
             StardewSymphonyRemastered.Framework.SongSpecifics.addFestivals();
             StardewSymphonyRemastered.Framework.SongSpecifics.addEvents();
+            musicManager.initializeSeasonalMusic();
            
         }
 

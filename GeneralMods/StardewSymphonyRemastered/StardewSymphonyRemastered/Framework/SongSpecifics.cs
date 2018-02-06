@@ -30,6 +30,7 @@ namespace StardewSymphonyRemastered.Framework
         string[] weather;
         string[] daysOfWeek;
         string[] timesOfDay;
+        List<string> menus;
         public static char seperator = '_';
 
         /// <summary>
@@ -70,15 +71,16 @@ namespace StardewSymphonyRemastered.Framework
                 "day",
                 "night"
             };
+            menus = new List<string>();
+            menus.Add(typeof(StardewValley.Menus.TitleMenu).ToString());
+
 
             listOfSongsWithTriggers = new Dictionary<string, List<Song>>();
             eventSongs = new Dictionary<string, List<Song>>();
             festivalSongs = new Dictionary<string, List<Song>>();
 
             this.listOfSongsWithoutTriggers = new List<Song>();
-
-            this.addSongLists();
-
+            this.addMenuMusic();
         }
 
 
@@ -96,6 +98,7 @@ namespace StardewSymphonyRemastered.Framework
         public static string getCurrentConditionalString()
         {
             string key = "";
+            bool foundMenuString = false;
             if (Game1.eventUp == true)
             {
                 //Get the event id an hijack it with some different music
@@ -106,10 +109,25 @@ namespace StardewSymphonyRemastered.Framework
                 //hijack the name of the festival and load some different songs
                 // string s="Festival_FestivalName";
             }
+            else if (Game1.activeClickableMenu!=null)
+            {
+                if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.TitleMenu))
+                {
+                    key = Game1.activeClickableMenu.GetType().ToString();
+                    foundMenuString = true;
+                }
+
+            }
             else
             {
                 key = getLocationString() + seperator + getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
             }
+
+            if(foundMenuString==false && key == "")
+            {
+                key = getLocationString() + seperator + getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
+            }
+
             return key;
         }
 
@@ -123,6 +141,7 @@ namespace StardewSymphonyRemastered.Framework
             foreach (var v in Game1.locations)
             {
                 locations.Add(v.name);
+                StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.name);
             }
         }
 
@@ -252,6 +271,12 @@ namespace StardewSymphonyRemastered.Framework
         {
             return Game1.currentLocation.name;
         }
+
+        public static string getCurrentMenuString()
+        {
+            if (Game1.activeClickableMenu == null) return "";
+            else return Game1.activeClickableMenu.GetType().ToString();
+        }
         #endregion
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -268,6 +293,14 @@ namespace StardewSymphonyRemastered.Framework
             this.listOfSongsWithoutTriggers.Add(song);
         }
 
+        public void addMenuMusic()
+        {
+            foreach(var v in menus)
+            {
+                this.listOfSongsWithTriggers.Add(v, new List<Song>());
+            }
+        }
+
         /// <summary>
         /// Checks if the song exists at all in this music pack.
         /// </summary>
@@ -282,7 +315,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>
         /// A pretty big function to add in all of the specific songs that play at certain locations_seasons_weather_dayOfWeek_times. 
         /// </summary>
-        public void addSongLists()
+        public void initializeSeasonalMusic()
         {
             foreach (var loc in locations)
             {
@@ -331,8 +364,15 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public KeyValuePair<string,List<Song>>getSongList(string key)
         {
-            string keyPhrase = key.Split(seperator).ElementAt(0);
-
+            string keyPhrase = "";
+            try
+            {
+                 keyPhrase= key.Split(seperator).ElementAt(0);
+            }
+            catch(Exception err)
+            {
+                 keyPhrase = key;
+            }
             if (keyPhrase == "event")
             {
                 
@@ -358,6 +398,7 @@ namespace StardewSymphonyRemastered.Framework
                 
                 foreach(KeyValuePair<string,List<Song>> pair in listOfSongsWithTriggers)
                 {
+                    //StardewSymphony.ModMonitor.Log(pair.Key);
                     if (pair.Key == key) return pair;
                 }
                 
