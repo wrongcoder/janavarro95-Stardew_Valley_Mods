@@ -13,9 +13,8 @@ namespace MapEvents.Framework
     class MapEvent
     {
         /// <summary>
-        /// Make constructor that takes all parameters for a function.
         /// Make an update function that runs associated functions to check which events need to be ran.
-        /// 
+        /// make way to detect which button is clicked when on this tile.
         /// //MAKE A MAP EVENT MANAGER TO HOLD GAME LOCATIONS AND A LIST OF MAP EVENTS!!!!!! Dic<Loc.List<Events>>
         /// </summary>
 
@@ -98,9 +97,26 @@ namespace MapEvents.Framework
         }
 
         /// <summary>
+        /// A constructor encapsulating player, mouse button, and mouse entry events.
+        /// </summary>
+        /// <param name="Location">The game location for which the event is located. I.E Town, Farm, etc.</param>
+        /// <param name="Position">The x,y cordinates for this event to be located at.</param>
+        /// <param name="playerEvents">The events that occur associated with the player. I.E player entry, etc.</param>
+        /// <param name="mouseButtonEvents">The events associated with clicking a mouse button while on this tile.</param>
+        /// <param name="mouseEntryLeaveEvents">The events that occur when the mouse enters or leaves the same tile position as this event.</param>
+        public MapEvent(GameLocation Location, Vector2 Position, PlayerEvents playerEvents, MouseButtonEvents mouseButtonEvents, MouseEntryLeaveEvent mouseEntryLeaveEvents)
+        {
+            this.location = Location;
+            this.tilePosition = Position;
+            this.playerEvents = playerEvents;
+            this.mouseButtonEvents = mouseButtonEvents;
+            this.mouseEntryLeaveEvents = mouseEntryLeaveEvents;
+        }
+
+        /// <summary>
         /// Occurs when the player enters the same tile as this event. The function associated with this event is then ran.
         /// </summary>
-        public void OnPlayerEnter()
+        private void OnPlayerEnter()
         {
             this.playerOnTile = true;
             if (this.playerEvents.onPlayerEnter != null) this.playerEvents.onPlayerEnter.run();
@@ -109,7 +125,7 @@ namespace MapEvents.Framework
         /// <summary>
         /// Occurs when the player leaves the same tile that this event is on. The function associated with thie event is then ran.
         /// </summary>
-        public void OnPlayerLeave()
+        private void OnPlayerLeave()
         {
             this.playerOnTile = false;
             if (this.playerEvents.onPlayerLeave != null) this.playerEvents.onPlayerEnter.run();
@@ -120,6 +136,7 @@ namespace MapEvents.Framework
         /// </summary>
         public void OnLeftClick()
         {
+            if (this.mouseOnTile==false) return;
             if (this.mouseButtonEvents.onLeftClick != null) this.mouseButtonEvents.onLeftClick.run();
         }
 
@@ -128,6 +145,7 @@ namespace MapEvents.Framework
         /// </summary>
         public void OnRightClick()
         {
+            if (this.mouseOnTile == false) return;
             if (this.mouseButtonEvents.onRightClick != null) this.mouseButtonEvents.onRightClick.run();
         }
 
@@ -136,8 +154,11 @@ namespace MapEvents.Framework
         /// </summary>
         public void OnMouseEnter()
         {
-            this.mouseOnTile = true;
-            if (this.mouseEntryLeaveEvents.onMouseEnter != null) this.mouseEntryLeaveEvents.onMouseEnter.run();
+            if (isMouseOnTile())
+            {
+                this.mouseOnTile = true;
+                if (this.mouseEntryLeaveEvents.onMouseEnter != null) this.mouseEntryLeaveEvents.onMouseEnter.run();
+            }
         }
 
         /// <summary>
@@ -145,8 +166,11 @@ namespace MapEvents.Framework
         /// </summary>
         public void OnMouseLeave()
         {
-            this.mouseOnTile = false;
-            if (this.mouseEntryLeaveEvents.onMouseLeave != null) this.mouseEntryLeaveEvents.onMouseLeave.run();
+            if (isMouseOnTile() == false && this.mouseOnTile == true)
+            {
+                this.mouseOnTile = false;
+                if (this.mouseEntryLeaveEvents.onMouseLeave != null) this.mouseEntryLeaveEvents.onMouseLeave.run();
+            }
         }
 
         /// <summary>
@@ -154,6 +178,7 @@ namespace MapEvents.Framework
         /// </summary>
         public void OnMouseScroll()
         {
+            if (isMouseOnTile() == false) return;
             if (this.mouseButtonEvents.onMouseScroll != null) this.mouseButtonEvents.onMouseScroll.run();
         }
 
@@ -182,6 +207,19 @@ namespace MapEvents.Framework
         {
             if (this.playerOnTile == true && isPlayerOnTile() == false) this.OnPlayerLeave();
         }
+
+        /// <summary>
+        /// Checks if the mouse is on the tile.
+        /// </summary>
+        /// <returns></returns>
+        public bool isMouseOnTile()
+        {
+            Vector2 mousePosition = new Vector2(Game1.getMouseX(), Game1.getMouseY());
+            if (mousePosition.X == this.tilePosition.X && mousePosition.Y == this.tilePosition.Y) return true;
+            return false;
+        }
+
+       
 
     }
 }
