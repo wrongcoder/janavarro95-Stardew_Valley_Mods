@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapEvents.Framework.FunctionEvents
+namespace EventSystem.Framework.FunctionEvents
 {
     /// <summary>
     /// Used to handle events that happens when a mouse enters/leaves a specified position.
     /// </summary>
-    class MouseEntryLeaveEvent
+    public class MouseEntryLeaveEvent
     {
         /// <summary>
         /// A function that is called when a mouse enters a certain position.

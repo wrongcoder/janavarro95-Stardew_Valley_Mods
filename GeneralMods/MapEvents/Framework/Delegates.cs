@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapEvents.Framework
+namespace EventSystem.Framework
 {
-    class Delegates
+    public class Delegates
     {
         public delegate void voidDel();
         public delegate void strDel(string s);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardustCore.Math
+namespace StardustCore.StardustMath
 {
     /// <summary>
     /// Base class for hex representation.

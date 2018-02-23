@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapEvents.Framework.FunctionEvents
+namespace EventSystem.Framework.FunctionEvents
 {
     /// <summary>
     /// Used to handle various functions that occur on player interaction.
     /// </summary>
-    class PlayerEvents
+    public class PlayerEvents
     {
         /// <summary>
         /// Occurs when the player enters the same tile as this event.

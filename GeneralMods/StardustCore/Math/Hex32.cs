@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardustCore.Math
+namespace StardustCore.StardustMath
 {
     /// <summary>
     /// A Class that helps represents 32 bit hex.

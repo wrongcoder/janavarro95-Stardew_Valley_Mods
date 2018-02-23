@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapEvents.Framework.FunctionEvents
+namespace EventSystem.Framework.FunctionEvents
 {
     /// <summary>
     /// Used to handle mouse interactions with button clicks and scrolling the mouse wheel.
     /// </summary>
-    class MouseButtonEvents
+    public class MouseButtonEvents
     {
         /// <summary>
         /// Function that runs when the user left clicks.

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static MapEvents.Framework.Delegates;
+using static EventSystem.Framework.Delegates;
 
-namespace MapEvents.Framework
+namespace EventSystem.Framework
 {
     /// <summary>
     /// Used to pair a function and a parameter list using the super object class to run virtually any function for map events.
     /// </summary>
-    class functionEvent
+    public class functionEvent
     {
         public paramFunction function;
         public List<object> parameters;
