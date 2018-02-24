@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomNPCFramework.Framework.ModularNPCS
+namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
 {
-    public class CharacterAnimation
+    public class StandardCharacterAnimation :CharacterAnimationBase
     {
         public AnimatedSpriteCollection hair;
         public AnimatedSpriteCollection body;
@@ -19,7 +19,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         public AnimatedSpriteCollection shoes;
         public List<AnimatedSpriteCollection> accessories;
 
-        public CharacterAnimation(AnimatedSpriteCollection bodyAnimation, AnimatedSpriteCollection eyeAnimation, AnimatedSpriteCollection hairAnimation, AnimatedSpriteCollection shirtAnimation, AnimatedSpriteCollection pantsAnimation, AnimatedSpriteCollection shoesAnimation,List<AnimatedSpriteCollection> accessoriesWithAnimations)
+        public StandardCharacterAnimation(AnimatedSpriteCollection bodyAnimation, AnimatedSpriteCollection eyeAnimation, AnimatedSpriteCollection hairAnimation, AnimatedSpriteCollection shirtAnimation, AnimatedSpriteCollection pantsAnimation, AnimatedSpriteCollection shoesAnimation,List<AnimatedSpriteCollection> accessoriesWithAnimations) :base()
         {
             this.body = bodyAnimation;
             this.hair = hairAnimation;
@@ -30,7 +30,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
             this.accessories = accessoriesWithAnimations;
         }
 
-        public void setLeft()
+        public override void setLeft()
         {
             this.body.setLeft();
             this.hair.setLeft();
@@ -44,7 +44,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
                 accessory.setLeft();
             }
         }
-        public void setRight()
+        public override void setRight()
         {
             this.body.setRight();
             this.hair.setRight();
@@ -58,7 +58,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
                 accessory.setRight();
             }
         }
-        public void setUp()
+        public override void setUp()
         {
             this.body.setUp();
             this.hair.setUp();
@@ -72,7 +72,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
                 accessory.setUp();
             }
         }
-        public void setDown()
+        public override void setDown()
         {
             this.body.setDown();
             this.hair.setDown();
@@ -87,7 +87,17 @@ namespace CustomNPCFramework.Framework.ModularNPCS
             }
         }
 
-        public void Animate(float animationInterval)
+        public override void reload()
+        {
+            this.body.reload();
+            this.hair.reload();
+            this.eyes.reload();
+            this.shirt.reload();
+            this.pants.reload();
+            this.shoes.reload();
+        }
+
+        public override void Animate(float animationInterval)
         {
             this.body.Animate(animationInterval);
             this.hair.Animate(animationInterval);
@@ -108,7 +118,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="b"></param>
         /// <param name="screenPosition"></param>
         /// <param name="layerDepth"></param>
-        public void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth)
+        public override void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth)
         {
             this.body.draw(b,screenPosition,layerDepth);
             this.hair.draw(b, screenPosition, layerDepth);
@@ -138,7 +148,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="scale"></param>
         /// <param name="rotation"></param>
         /// <param name="characterSourceRectOffset"></param>
-        public void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth, int xOffset, int yOffset, Color c, bool flip = false, float scale = 1f, float rotation = 0.0f, bool characterSourceRectOffset = false)
+        public override void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth, int xOffset, int yOffset, Color c, bool flip = false, float scale = 1f, float rotation = 0.0f, bool characterSourceRectOffset = false)
         {
             // b.Draw(this.currentSprite.Texture, screenPosition, new Rectangle?(new Rectangle(this.currentSprite.sourceRect.X + xOffset, this.currentSprite.sourceRect.Y + yOffset, this.currentSprite.sourceRect.Width, this.currentSprite.sourceRect.Height)), c, rotation, characterSourceRectOffset ? new Vector2((float)(this.currentSprite.spriteWidth / 2), (float)((double)this.currentSprite.spriteHeight * 3.0 / 4.0)) : Vector2.Zero, scale, flip || this.currentSprite.currentAnimation != null && this.currentSprite.currentAnimation[this.currentSprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
             this.body.draw(b, screenPosition, layerDepth, xOffset, yOffset, c, flip, scale, rotation, characterSourceRectOffset);
@@ -166,7 +176,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="scale"></param>
         /// <param name="effects"></param>
         /// <param name="layerDepth"></param>
-        public void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle, Color color, float alpha, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
+        public override void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle, Color color, float alpha, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
             this.body.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
             this.hair.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);

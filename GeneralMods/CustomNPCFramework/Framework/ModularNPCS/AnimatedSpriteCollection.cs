@@ -12,12 +12,12 @@ namespace CustomNPCFramework.Framework.ModularNPCS
 {
     public class AnimatedSpriteCollection
     {
-        AnimatedSprite leftSprite;
-        AnimatedSprite rightSprite;
-        AnimatedSprite upSprite;
-        AnimatedSprite downSprite;
+        AnimatedSpriteExtended leftSprite;
+        AnimatedSpriteExtended rightSprite;
+        AnimatedSpriteExtended upSprite;
+        AnimatedSpriteExtended downSprite;
 
-        public AnimatedSprite currentSprite;
+        public AnimatedSpriteExtended currentSprite;
 
         /// <summary>
         /// Constructor.
@@ -27,7 +27,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="UpSprite">Up animated sprite for this piece.</param>
         /// <param name="DownSprite">Down animated sprite for this piece.</param>
         /// <param name="startingSpriteDirection"></param>
-        public AnimatedSpriteCollection(AnimatedSprite LeftSprite,AnimatedSprite RightSprite,AnimatedSprite UpSprite,AnimatedSprite DownSprite,Direction startingSpriteDirection)
+        public AnimatedSpriteCollection(AnimatedSpriteExtended LeftSprite,AnimatedSpriteExtended RightSprite,AnimatedSpriteExtended UpSprite,AnimatedSpriteExtended DownSprite,Direction startingSpriteDirection)
         {
             this.leftSprite = LeftSprite;
             this.rightSprite = RightSprite;
@@ -49,6 +49,14 @@ namespace CustomNPCFramework.Framework.ModularNPCS
             {
                 setUp();
             }
+        }
+
+        public virtual void reload()
+        {
+            this.leftSprite.reload();
+            this.rightSprite.reload();
+            this.upSprite.reload();
+            this.downSprite.reload();
         }
 
         /// <summary>
@@ -82,7 +90,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="layerDepth"></param>
         public void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth)
         {
-            b.Draw(this.currentSprite.Texture, screenPosition, new Rectangle?(this.currentSprite.sourceRect), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, this.currentSprite.currentAnimation == null || !this.currentSprite.currentAnimation[this.currentSprite.currentAnimationIndex].flip ? SpriteEffects.None : SpriteEffects.FlipHorizontally, layerDepth);
+            b.Draw(this.currentSprite.sprite.Texture, screenPosition, new Rectangle?(this.currentSprite.sprite.sourceRect), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, this.currentSprite.sprite.currentAnimation == null || !this.currentSprite.sprite.currentAnimation[this.currentSprite.sprite.currentAnimationIndex].flip ? SpriteEffects.None : SpriteEffects.FlipHorizontally, layerDepth);
         }
 
         /// <summary>
@@ -100,7 +108,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="characterSourceRectOffset"></param>
         public void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth, int xOffset, int yOffset, Color c, bool flip = false, float scale = 1f, float rotation = 0.0f, bool characterSourceRectOffset = false)
         {
-            b.Draw(this.currentSprite.Texture, screenPosition, new Rectangle?(new Rectangle(this.currentSprite.sourceRect.X + xOffset, this.currentSprite.sourceRect.Y + yOffset, this.currentSprite.sourceRect.Width, this.currentSprite.sourceRect.Height)), c, rotation, characterSourceRectOffset ? new Vector2((float)(this.currentSprite.spriteWidth / 2), (float)((double)this.currentSprite.spriteHeight * 3.0 / 4.0)) : Vector2.Zero, scale, flip || this.currentSprite.currentAnimation != null && this.currentSprite.currentAnimation[this.currentSprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(this.currentSprite.sprite.Texture, screenPosition, new Rectangle?(new Rectangle(this.currentSprite.sprite.sourceRect.X + xOffset, this.currentSprite.sprite.sourceRect.Y + yOffset, this.currentSprite.sprite.sourceRect.Width, this.currentSprite.sprite.sourceRect.Height)), c, rotation, characterSourceRectOffset ? new Vector2((float)(this.currentSprite.sprite.spriteWidth / 2), (float)((double)this.currentSprite.sprite.spriteHeight * 3.0 / 4.0)) : Vector2.Zero, scale, flip || this.currentSprite.sprite.currentAnimation != null && this.currentSprite.sprite.currentAnimation[this.currentSprite.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         /// <summary>
@@ -118,9 +126,10 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="layerDepth"></param>
         public void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle,Color color, float alpha,Vector2 origin,float scale,SpriteEffects effects,float layerDepth)
         {
-            b.Draw(this.currentSprite.Texture,position,sourceRectangle, color* alpha, npc.rotation, origin,scale,effects,layerDepth);
+            b.Draw(this.currentSprite.sprite.Texture,position,sourceRectangle, color* alpha, npc.rotation, origin,scale,effects,layerDepth);
             //b.Draw(this.Sprite.Texture, npc.getLocalPosition(Game1.viewport) + new Vector2((float)(this.sprite.spriteWidth * Game1.pixelZoom / 2), (float)(this.GetBoundingBox().Height / 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero), new Microsoft.Xna.Framework.Rectangle?(this.Sprite.SourceRect), Color.White * alpha, this.rotation, new Vector2((float)(this.sprite.spriteWidth / 2), (float)((double)this.sprite.spriteHeight * 3.0 / 4.0)), Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip || this.sprite.currentAnimation != null && this.sprite.currentAnimation[this.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.991f : (float)this.getStandingY() / 10000f));
         }
+
 
         /// <summary>
         /// Animate the current sprite. Theoreticlly works from index offset to how many frames
@@ -128,7 +137,16 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="intervalFromCharacter"></param>
         public void Animate(float intervalFromCharacter)
         {
-            this.currentSprite.Animate(Game1.currentGameTime, 0, 3, intervalFromCharacter);
+            this.currentSprite.sprite.Animate(Game1.currentGameTime, 0,3, intervalFromCharacter);
+        }
+
+        /// <summary>
+        /// Animate the current sprite. Theoreticlly works from index offset to how many frames
+        /// </summary>
+        /// <param name="intervalFromCharacter"></param>
+        public void Animate(float intervalFromCharacter,int startFrame,int endFrame)
+        {
+            this.currentSprite.sprite.Animate(Game1.currentGameTime, startFrame, endFrame, intervalFromCharacter);
         }
     }
 }

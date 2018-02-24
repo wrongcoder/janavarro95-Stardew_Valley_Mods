@@ -1,4 +1,5 @@
-﻿using CustomNPCFramework.Framework.NPCS;
+﻿using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
+using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,12 +12,12 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
 {
     public class BasicRenderer
     {
-        public Dictionary<string, CharacterAnimation> animationList;
-        public CharacterAnimation currentAnimation;
+        public Dictionary<string, StandardCharacterAnimation> animationList;
+        public StandardCharacterAnimation currentAnimation;
 
-        public BasicRenderer(CharacterAnimation standingAnimation,CharacterAnimation walkingAnimation, CharacterAnimation swimmingAnimation)
+        public BasicRenderer(StandardCharacterAnimation standingAnimation,StandardCharacterAnimation walkingAnimation, StandardCharacterAnimation swimmingAnimation)
         {
-            animationList = new Dictionary<string, CharacterAnimation>();
+            animationList = new Dictionary<string, StandardCharacterAnimation>();
             animationList.Add(AnimationKeys.standingKey, standingAnimation);
             animationList.Add(AnimationKeys.walkingKey, walkingAnimation);
             animationList.Add(AnimationKeys.swimmingKey, swimmingAnimation);
@@ -59,6 +60,14 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         public virtual void setDown()
         {
             this.currentAnimation.setDown();
+        }
+
+        public virtual void reloadSprites()
+        {
+            foreach(var v in this.animationList)
+            {
+                v.Value.reload();
+            }
         }
 
         /// <summary>
