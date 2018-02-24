@@ -22,6 +22,8 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         {
             this.relativePath = Class1.getRelativeDirectory(path);
             this.sprite = new AnimatedSprite(Class1.ModHelper.Content.Load<Texture2D>(this.relativePath));
+            this.sprite.spriteWidth = this.sprite.Texture.Width;
+            this.sprite.spriteHeight = this.sprite.Texture.Height;
         }
 
         /// <summary>

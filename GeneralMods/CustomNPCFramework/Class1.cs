@@ -1,4 +1,6 @@
 ﻿using CustomNPCFramework.Framework.Graphics;
+using CustomNPCFramework.Framework.ModularNPCS;
+using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
 using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -36,8 +38,8 @@ namespace CustomNPCFramework
             foreach (var v in Game1.player.currentLocation.characters)
             {
                 v.speed = 5;
-                v.MovePosition(Game1.currentGameTime, Game1.viewport, Game1.player.currentLocation);
-                ModMonitor.Log(v.name);
+                //v.MovePosition(Game1.currentGameTime, Game1.viewport, Game1.player.currentLocation);
+                ModMonitor.Log(v.sprite.spriteHeight.ToString());
             }
         }
 
@@ -50,8 +52,9 @@ namespace CustomNPCFramework
         {
             string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS", "Characters", "RainMan");
             assetManager.addPathCreateDirectory(new KeyValuePair<string, string>("characters", path));
-            Texture2D tex=ModHelper.Content.Load<Texture2D>(Path.Combine(getShortenedDirectory(path).Remove(0,1), "character.png"));
-            ExtendedNPC myNpc3 = new ExtendedNPC(new StardewValley.AnimatedSprite(tex, 0, 16, 32), new Vector2(14, 14)*Game1.tileSize, 2, "b2");
+            Texture2D tex = ModHelper.Content.Load<Texture2D>(Path.Combine(getShortenedDirectory(path).Remove(0, 1), "character.png"));
+            ModMonitor.Log("PATH???: " + path);
+            ExtendedNPC myNpc3 = new ExtendedNPC(new Framework.ModularNPCS.Sprite(Path.Combine(path,"character.png")),null, new Vector2(14, 14)*Game1.tileSize, 2, "b2");
             Game1.getLocationFromName("BusStop").addCharacter(myNpc3);
             myNpc3.SetMovingDown(true);
         }
@@ -70,8 +73,8 @@ namespace CustomNPCFramework
 
         public static string getShortenedDirectory(string path)
         {
-            
-            string[] spliter = path.Split(new string[] { ModHelper.DirectoryPath },StringSplitOptions.None);
+            string lol = (string)path.Clone();
+            string[] spliter = lol.Split(new string[] { ModHelper.DirectoryPath },StringSplitOptions.None);
             return spliter[1];
         }
 

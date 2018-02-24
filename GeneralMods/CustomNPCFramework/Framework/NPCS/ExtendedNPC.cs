@@ -40,6 +40,7 @@ namespace CustomNPCFramework.Framework.NPCS
             this.portraitInformation = null;
             this.spriteInformation = sprite;
             this.spriteInformation.setCharacterSpriteFromThis(this);
+            this.swimming = false;
         }
 
         public ExtendedNPC(Sprite sprite,BasicRenderer renderer,Portrait portrait, Vector2 position, int facingDirection, string name) : base(sprite.sprite, position, facingDirection, name, null)
@@ -49,6 +50,7 @@ namespace CustomNPCFramework.Framework.NPCS
             this.portraitInformation.setCharacterPortraitFromThis(this);
             this.spriteInformation = sprite;
             this.spriteInformation.setCharacterSpriteFromThis(this);
+            this.swimming = false;
         }
 
         //ERROR NEED FIXING
@@ -107,145 +109,11 @@ namespace CustomNPCFramework.Framework.NPCS
             return false;
         }
 
-
-        public override void behaviorOnFarmerLocationEntry(GameLocation location, StardewValley.Farmer who)
-        {
-            if (this.sprite == null || this.sprite.currentAnimation != null || this.sprite.sourceRect.Height <= 32)
-                return;
-            this.sprite.spriteWidth = 16;
-            this.sprite.spriteHeight = 16;
-            this.sprite.CurrentFrame = 0;
-        }
-
-        public override void updateMovement(GameLocation location, GameTime time)
-        {
-            this.lastPosition = this.position;
-            if (this.DirectionsToNewLocation != null && !Game1.newDay)
-            {
-                if (this.getStandingX() < -Game1.tileSize || this.getStandingX() > location.map.DisplayWidth + Game1.tileSize || (this.getStandingY() < -Game1.tileSize || this.getStandingY() > location.map.DisplayHeight + Game1.tileSize))
-                {
-                    this.IsWalkingInSquare = false;
-                    Game1.warpCharacter(this, this.DefaultMap, this.DefaultPosition, true, true);
-                    location.characters.Remove(this);
-                }
-                else if (this.IsWalkingInSquare)
-                {
-                    this.returnToEndPoint();
-                    this.MovePosition(time, Game1.viewport, location);
-                }
-                else
-                {
-                    if (!this.followSchedule)
-                        return;
-                    this.MovePosition(time, Game1.viewport, location);
-                    Warp warp = location.isCollidingWithWarp(this.GetBoundingBox());
-                    PropertyValue propertyValue = (PropertyValue)null;
-                    Tile tile1 = location.map.GetLayer("Buildings").PickTile(this.nextPositionPoint(), Game1.viewport.Size);
-                    if (tile1 != null)
-                        tile1.Properties.TryGetValue("Action", out propertyValue);
-                    string[] strArray1;
-                    if (propertyValue != null)
-                        strArray1 = propertyValue.ToString().Split(' ');
-                    else
-                        strArray1 = (string[])null;
-                    string[] strArray2 = strArray1;
-                    if (warp != null)
-                    {
-                        if (location is BusStop && warp.TargetName.Equals("Farm"))
-                        {
-                            Point entryLocation = ((this.isMarried() ? (GameLocation)(this.getHome() as FarmHouse) : Game1.getLocationFromName("FarmHouse")) as FarmHouse).getEntryLocation();
-                            warp = new Warp(warp.X, warp.Y, "FarmHouse", entryLocation.X, entryLocation.Y, false);
-                        }
-                        else if (location is FarmHouse && warp.TargetName.Equals("Farm"))
-                            warp = new Warp(warp.X, warp.Y, "BusStop", 0, 23, false);
-                        Game1.warpCharacter(this, warp.TargetName, new Vector2((float)(warp.TargetX * Game1.tileSize), (float)(warp.TargetY * Game1.tileSize - this.Sprite.getHeight() / 2 - Game1.tileSize / 4)), false, location.IsOutdoors);
-                        location.characters.Remove(this);
-                    }
-                    else if (strArray2 != null && strArray2.Length >= 1 && strArray2[0].Contains("Warp"))
-                    {
-                        Game1.warpCharacter(this, strArray2[3], new Vector2((float)Convert.ToInt32(strArray2[1]), (float)Convert.ToInt32(strArray2[2])), false, location.IsOutdoors);
-                        if (Game1.currentLocation.name.Equals(location.name) && Utility.isOnScreen(this.getStandingPosition(), Game1.tileSize * 3))
-                            Game1.playSound("doorClose");
-                        location.characters.Remove(this);
-                    }
-                    else if (strArray2 != null && strArray2.Length >= 1 && strArray2[0].Contains("Door"))
-                    {
-                        location.openDoor(new Location(this.nextPositionPoint().X / Game1.tileSize, this.nextPositionPoint().Y / Game1.tileSize), Game1.player.currentLocation.Equals((object)location));
-                    }
-                    else
-                    {
-                        if (location.map.GetLayer("Paths") == null)
-                            return;
-                        Tile tile2 = location.map.GetLayer("Paths").PickTile(new Location(this.getStandingX(), this.getStandingY()), Game1.viewport.Size);
-                        Microsoft.Xna.Framework.Rectangle boundingBox = this.GetBoundingBox();
-                        boundingBox.Inflate(2, 2);
-                        if (tile2 == null || !new Microsoft.Xna.Framework.Rectangle(this.getStandingX() - this.getStandingX() % Game1.tileSize, this.getStandingY() - this.getStandingY() % Game1.tileSize, Game1.tileSize, Game1.tileSize).Contains(boundingBox))
-                            return;
-                        switch (tile2.TileIndex)
-                        {
-                            case 0:
-                                if (this.getDirection() == 3)
-                                {
-                                    this.SetMovingOnlyUp();
-                                    break;
-                                }
-                                if (this.getDirection() != 2)
-                                    break;
-                                this.SetMovingOnlyRight();
-                                break;
-                            case 1:
-                                if (this.getDirection() == 3)
-                                {
-                                    this.SetMovingOnlyDown();
-                                    break;
-                                }
-                                if (this.getDirection() != 0)
-                                    break;
-                                this.SetMovingOnlyRight();
-                                break;
-                            case 2:
-                                if (this.getDirection() == 1)
-                                {
-                                    this.SetMovingOnlyDown();
-                                    break;
-                                }
-                                if (this.getDirection() != 0)
-                                    break;
-                                this.SetMovingOnlyLeft();
-                                break;
-                            case 3:
-                                if (this.getDirection() == 1)
-                                {
-                                    this.SetMovingOnlyUp();
-                                    break;
-                                }
-                                if (this.getDirection() != 2)
-                                    break;
-                                this.SetMovingOnlyLeft();
-                                break;
-                            case 4:
-                                this.changeSchedulePathDirection();
-                                this.moveCharacterOnSchedulePath();
-                                break;
-                            case 7:
-                                this.ReachedEndPoint();
-                                break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (!this.IsWalkingInSquare)
-                    return;
-                this.randomSquareMovement(time);
-                this.MovePosition(time, Game1.viewport, location);
-            }
-        }
-
         //ERROR NEED FIXING
         public override void MovePosition(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation)
         {
+            base.MovePosition(time,viewport,currentLocation);
+            return;
             if (this.GetType() == typeof(FarmAnimal))
                 this.willDestroyObjectsUnderfoot = false;
             if ((double)this.xVelocity != 0.0 || (double)this.yVelocity != 0.0)
@@ -382,11 +250,6 @@ namespace CustomNPCFramework.Framework.NPCS
             base.update(time, location);        
         }
 
-        public virtual void prepareToDisembarkOnNewSchedulePath()
-        {
-           
-        }
-
         public virtual void routeEndAnimationFinished(StardewValley.Farmer who)
         {
             this.doingEndOfRouteAnimation = false;
@@ -408,10 +271,6 @@ namespace CustomNPCFramework.Framework.NPCS
         {
         }
 
-        public virtual void doMiddleAnimation(StardewValley.Farmer who)
-        {
-
-        }
 
         public virtual void startRouteBehavior(string behaviorName)
         {
@@ -575,7 +434,7 @@ namespace CustomNPCFramework.Framework.NPCS
             {
                 b.Draw(this.Sprite.Texture, this.getLocalPosition(Game1.viewport) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize + Game1.tileSize / 4 + this.yJumpOffset * 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero) - new Vector2(0.0f, this.yOffset), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(this.sprite.SourceRect.X, this.sprite.SourceRect.Y, this.sprite.SourceRect.Width, this.sprite.SourceRect.Height / 2 - (int)((double)this.yOffset / (double)Game1.pixelZoom))), Color.White, this.rotation, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 3 / 2)) / 4f, Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.991f : (float)this.getStandingY() / 10000f));
                 Vector2 localPosition = this.getLocalPosition(Game1.viewport);
-                b.Draw(Game1.staminaRect, new Microsoft.Xna.Framework.Rectangle((int)localPosition.X + (int)this.yOffset + Game1.pixelZoom * 2, (int)localPosition.Y - 32 * Game1.pixelZoom + this.sprite.SourceRect.Height * Game1.pixelZoom + Game1.tileSize * 3 / 4 + this.yJumpOffset * 2 - (int)this.yOffset, this.sprite.SourceRect.Width * Game1.pixelZoom - (int)this.yOffset * 2 - Game1.pixelZoom * 4, Game1.pixelZoom), new Microsoft.Xna.Framework.Rectangle?(Game1.staminaRect.Bounds), Color.White * 0.75f, 0.0f, Vector2.Zero, SpriteEffects.None, (float)((double)this.getStandingY() / 10000.0 + 1.0 / 1000.0));
+                //b.Draw(Game1.staminaRect, new Microsoft.Xna.Framework.Rectangle((int)localPosition.X + (int)this.yOffset + Game1.pixelZoom * 2, (int)localPosition.Y - 32 * Game1.pixelZoom + this.sprite.SourceRect.Height * Game1.pixelZoom + Game1.tileSize * 3 / 4 + this.yJumpOffset * 2 - (int)this.yOffset, this.sprite.SourceRect.Width * Game1.pixelZoom - (int)this.yOffset * 2 - Game1.pixelZoom * 4, Game1.pixelZoom), new Microsoft.Xna.Framework.Rectangle?(Game1.staminaRect.Bounds), Color.White * 0.75f, 0.0f, Vector2.Zero, SpriteEffects.None, (float)((double)this.getStandingY() / 10000.0 + 1.0 / 1000.0));
             }
             else
                 b.Draw(this.Sprite.Texture, this.getLocalPosition(Game1.viewport) + new Vector2((float)(this.sprite.spriteWidth * Game1.pixelZoom / 2), (float)(this.GetBoundingBox().Height / 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero), new Microsoft.Xna.Framework.Rectangle?(this.Sprite.SourceRect), Color.White * alpha, this.rotation, new Vector2((float)(this.sprite.spriteWidth / 2), (float)((double)this.sprite.spriteHeight * 3.0 / 4.0)), Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip || this.sprite.currentAnimation != null && this.sprite.currentAnimation[this.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.991f : (float)this.getStandingY() / 10000f));
@@ -600,13 +459,14 @@ namespace CustomNPCFramework.Framework.NPCS
                     sourceRect.Height /= 2;
                 }
                 float num = Math.Max(0.0f, (float)(Math.Ceiling(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 600.0 + (double)this.DefaultPosition.X * 20.0)) / 4.0));
+
                 b.Draw(this.Sprite.Texture, this.getLocalPosition(Game1.viewport) + vector2 + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero), new Microsoft.Xna.Framework.Rectangle?(sourceRect), Color.White * alpha, this.rotation, new Vector2((float)(sourceRect.Width / 2), (float)(sourceRect.Height / 2 + 1)), Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom + num, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.992f : (float)((double)this.getStandingY() / 10000.0 + 1.0 / 1000.0)));
             }
             if (this.isGlowing)
                 b.Draw(this.Sprite.Texture, this.getLocalPosition(Game1.viewport) + new Vector2((float)(this.sprite.spriteWidth * Game1.pixelZoom / 2), (float)(this.GetBoundingBox().Height / 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero), new Microsoft.Xna.Framework.Rectangle?(this.Sprite.SourceRect), this.glowingColor * this.glowingTransparency, this.rotation, new Vector2((float)(this.sprite.spriteWidth / 2), (float)((double)this.sprite.spriteHeight * 3.0 / 4.0)), Math.Max(0.2f, this.scale) * 4f, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.99f : (float)((double)this.getStandingY() / 10000.0 + 1.0 / 1000.0)));
             Vector2 localPosition1 = this.getLocalPosition(Game1.viewport);
             localPosition1.Y -= (float)(Game1.tileSize / 2 + this.sprite.spriteHeight * Game1.pixelZoom);
-            b.Draw(Game1.emoteSpriteSheet, localPosition1, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(this.CurrentEmoteIndex * 16 % Game1.emoteSpriteSheet.Width, this.CurrentEmoteIndex * 16 / Game1.emoteSpriteSheet.Width * 16, 16, 16)), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)this.getStandingY() / 10000f);
+            //b.Draw(Game1.emoteSpriteSheet, localPosition1, new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(this.CurrentEmoteIndex * 16 % Game1.emoteSpriteSheet.Width, this.CurrentEmoteIndex * 16 / Game1.emoteSpriteSheet.Width * 16, 16, 16)), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)this.getStandingY() / 10000f);
         }
 
 
