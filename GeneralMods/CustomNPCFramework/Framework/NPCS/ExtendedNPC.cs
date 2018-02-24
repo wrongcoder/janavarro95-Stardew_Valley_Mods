@@ -42,11 +42,13 @@ namespace CustomNPCFramework.Framework.NPCS
             this.spriteInformation.setCharacterSpriteFromThis(this);
         }
 
-        public ExtendedNPC(AnimatedSprite characterSprite,BasicRenderer renderer,Portrait portrait, Vector2 position, int facingDirection, string name) : base(characterSprite, position, facingDirection, name, null)
+        public ExtendedNPC(Sprite sprite,BasicRenderer renderer,Portrait portrait, Vector2 position, int facingDirection, string name) : base(sprite.sprite, position, facingDirection, name, null)
         {
             this.characterRenderer = renderer;
             this.portraitInformation = portrait;
             this.portraitInformation.setCharacterPortraitFromThis(this);
+            this.spriteInformation = sprite;
+            this.spriteInformation.setCharacterSpriteFromThis(this);
         }
 
         //ERROR NEED FIXING
