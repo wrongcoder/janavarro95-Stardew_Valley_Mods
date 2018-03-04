@@ -29,6 +29,19 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         }
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="texture">The texture for the sprite.</param>
+        /// <param name="currentFrame">Starting animation frame.</param>
+        /// <param name="spriteWidth">Sprite width.</param>
+        /// <param name="spriteHeight">Sprite height</param>
+        public AnimatedSpriteExtended(Texture2D texture, int currentFrame, int spriteWidth, int spriteHeight)
+        {
+            this.path = Class1.getRelativeDirectory(path);
+            this.sprite = new AnimatedSprite(texture, currentFrame, spriteWidth, spriteHeight);
+        }
+
+        /// <summary>
         /// Reloads the asset from disk.
         /// </summary>
         public void reload()

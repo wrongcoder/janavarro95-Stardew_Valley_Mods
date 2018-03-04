@@ -1,4 +1,5 @@
-﻿using CustomNPCFramework.Framework.NPCS;
+﻿using CustomNPCFramework.Framework.Enums;
+using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -10,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.ModularNPCS
 {
+    /// <summary>
+    /// Used to hold all of the sprites for a single asset such as hair or bodies.
+    /// </summary>
     public class AnimatedSpriteCollection
     {
         AnimatedSpriteExtended leftSprite;

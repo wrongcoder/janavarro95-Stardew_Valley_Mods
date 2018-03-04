@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CustomNPCFramework.Framework.ModularNPCS
+namespace CustomNPCFramework.Framework.Enums
 {
-    public enum Direction
+    public enum Seasons
     {
-        up,
-        right,
-        down,
-        left
+        spring,
+        summer,
+        fall,
+        winter
     }
 }

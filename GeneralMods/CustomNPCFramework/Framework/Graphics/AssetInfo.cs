@@ -9,18 +9,37 @@ namespace CustomNPCFramework.Framework.Graphics
 {
     public class AssetInfo
     {
-        public string name;
+        public string assetName;
+        public string leftAssetName;
+        public string rightAssetName;
+        public string upAssetName;
+        public string downAssetName;
         public Vector2 assetSize;
         public bool randomizeUponLoad;
-        /// <summary>
-        /// A constructor use to create asset info which can then be used to create asset sheets.
-        /// </summary>
-        /// <param name="name">The name of the texture sheet. Can be different than the actual file name.</param>
-        /// <param name="assetSize">The size of the individual sprites on the texture sheet. Ex 16x16 pixels.</param>
-        /// <param name="randomizeUponLoad">If true, the index for the asset will be randomized. Good for getting variation from a texture.</param>
-        public AssetInfo(string name, Vector2 assetSize, bool randomizeUponLoad)
+       
+        public AssetInfo()
         {
-            this.name = name;
+
+        }
+
+        public AssetInfo(string assetName,string Lname, string Rname, string Uname, string Dname, Vector2 assetSize, bool randomizeUponLoad)
+        {
+            this.assetName = assetName;
+            this.leftAssetName = Lname;
+            this.rightAssetName = Rname;
+            this.upAssetName = Uname;
+            this.downAssetName = Dname;
+            this.assetSize = assetSize;
+            this.randomizeUponLoad = randomizeUponLoad;
+        }
+
+        public AssetInfo(string assetName,NamePairings pair, Vector2 assetSize, bool randomizeUponLoad)
+        {
+            this.assetName = assetName;
+            this.leftAssetName = pair.leftString;
+            this.rightAssetName = pair.rightString;
+            this.upAssetName = pair.upString;
+            this.downAssetName = pair.downString;
             this.assetSize = assetSize;
             this.randomizeUponLoad = randomizeUponLoad;
         }

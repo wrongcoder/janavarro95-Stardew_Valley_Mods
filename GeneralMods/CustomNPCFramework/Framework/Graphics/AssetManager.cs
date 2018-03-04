@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CustomNPCFramework.Framework.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -59,9 +60,18 @@ namespace CustomNPCFramework.Framework.Graphics
 
         private void ProcessFile(string file,string path)
         {
-            AssetInfo info = AssetInfo.readFromJson(file);
-            AssetSheet sheet = new AssetSheet(info, path);
-            addAsset(sheet);
+            try
+            {
+                ExtendedAssetInfo info = ExtendedAssetInfo.readFromJson(file);
+                AssetSheet sheet = new AssetSheet(info, path);
+                addAsset(sheet);
+            }
+            catch (Exception err)
+            {
+                AssetInfo info = AssetInfo.readFromJson(file);
+                AssetSheet sheet = new AssetSheet(info, path);
+                addAsset(sheet);
+            }
         }
 
         /// <summary>
@@ -82,7 +92,7 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             foreach(var v in assets)
             {
-                if (v.assetInfo.name == s) return v;
+                if (v.assetInfo.assetName == s) return v;
             }
             return null;
         }
@@ -120,5 +130,112 @@ namespace CustomNPCFramework.Framework.Graphics
                 Directory.CreateDirectory(Path.Combine(Class1.ModHelper.DirectoryPath,v.Value));
             }
         }
+
+        /// <summary>
+        /// Returns a list of assets from this manager that match the given critera.
+        /// </summary>
+        /// <param name="gender">The criteria we are searching for this time is gender.</param>
+        /// <returns></returns>
+        public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(Genders gender)
+        {
+            List<AssetSheet> aSheet = new List<AssetSheet>();
+            foreach(var v in this.assets)
+            {
+                if(v.assetInfo is ExtendedAssetInfo)
+                {
+                    if ((v.assetInfo as ExtendedAssetInfo).gender == gender) aSheet.Add(v);
+                }
+            }
+            return aSheet;
+        }
+
+        public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(PartType type)
+        {
+            List<AssetSheet> aSheet = new List<AssetSheet>();
+            foreach (var v in this.assets)
+            {
+                if (v.assetInfo is ExtendedAssetInfo)
+                {
+                    if ((v.assetInfo as ExtendedAssetInfo).type == type) aSheet.Add(v);
+                }
+            }
+            return aSheet;
+        }
+
+        public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(Genders gender,PartType type)
+        {
+            List<AssetSheet> aSheet = new List<AssetSheet>();
+            foreach (var v in this.assets)
+            {
+                if (v.assetInfo is ExtendedAssetInfo)
+                {
+                    if ((v.assetInfo as ExtendedAssetInfo).type == type && (v.assetInfo as ExtendedAssetInfo).gender == gender) aSheet.Add(v);
+                }
+            }
+            return aSheet;
+        }
+
+        /// <summary>
+        /// Returns a list of assets from this manager that match the given critera.
+        /// </summary>
+        /// <param name="gender">The criteria we are searching for this time is gender.</param>
+        /// <returns></returns>
+        public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(Seasons season)
+        {
+            List<AssetSheet> aSheet = new List<AssetSheet>();
+            foreach (var v in this.assets)
+            {
+                if (v.assetInfo is ExtendedAssetInfo)
+                {
+                    foreach (var sea in (v.assetInfo as ExtendedAssetInfo).seasons) {
+                        if (sea == season) aSheet.Add(v);
+                        break; //Only need to find first validation that this is a valid asset.
+                    }
+                }
+            }
+            return aSheet;
+        }
+
+        /// <summary>
+        /// Get a list of assets that match this criteria of gender and seasons.
+        /// </summary>
+        /// <param name="gender"></param>
+        /// <param name="season"></param>
+        /// <returns></returns>
+        public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(Genders gender,Seasons season)
+        {
+            List<AssetSheet> aSheet = new List<AssetSheet>();
+            foreach (var v in this.assets)
+            {
+                if (v.assetInfo is ExtendedAssetInfo)
+                {
+                    foreach (var sea in (v.assetInfo as ExtendedAssetInfo).seasons)
+                    {
+                        if (sea == season && (v.assetInfo as ExtendedAssetInfo).gender==gender) aSheet.Add(v);
+                        break; //Only need to find first validation that this is a valid asset.
+                    }
+                }
+            }
+            return aSheet;
+        }
+
+        public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(Genders gender, Seasons season, PartType type)
+        {
+            List<AssetSheet> aSheet = new List<AssetSheet>();
+            foreach (var v in this.assets)
+            {
+                if (v.assetInfo is ExtendedAssetInfo)
+                {
+                    foreach (var sea in (v.assetInfo as ExtendedAssetInfo).seasons)
+                    {
+                        if (sea == season && (v.assetInfo as ExtendedAssetInfo).gender == gender && (v.assetInfo as ExtendedAssetInfo).type == type) aSheet.Add(v);
+                        break; //Only need to find first validation that this is a valid asset.
+                    }
+                }
+            }
+            return aSheet;
+        }
+
+
     }
 }

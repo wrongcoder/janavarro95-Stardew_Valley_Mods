@@ -1,5 +1,5 @@
-﻿using CustomNPCFramework.Framework.Graphics;
-using CustomNPCFramework.Framework.Graphics.NewFolder1;
+﻿using CustomNPCFramework.Framework.Enums;
+using CustomNPCFramework.Framework.Graphics;
 using CustomNPCFramework.Framework.ModularNPCS;
 using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
 using CustomNPCFramework.Framework.NPCS;
@@ -21,6 +21,7 @@ namespace CustomNPCFramework
     /// TODO:
     /// List all asset managers in use.
     /// Have all asset managers list what assets they are using.
+    /// FIX NPC GENERATION IN ASSETPOOL.CS
     /// </summary>
 
 
@@ -111,15 +112,31 @@ namespace CustomNPCFramework
 
         public void initializeExamples()
         {
+            
             string dirPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Templates");
             var aManager=assetPool.getAssetManager("testNPC");
             aManager.addPathCreateDirectory(new KeyValuePair<string, string>("templates", dirPath));
             string filePath =Path.Combine(dirPath, "Example.json");
-            if (File.Exists(filePath)) return;
-            string getRelativePath = getShortenedDirectory(filePath);
-            ModMonitor.Log("THIS IS THE PATH::: " + getRelativePath);
-            AssetInfo info = new AssetInfo("Example", new Vector2(16, 16), false);
-            info.writeToJson(filePath);
+            if (!File.Exists(filePath))
+            {
+                string getRelativePath = getShortenedDirectory(filePath);
+                ModMonitor.Log("THIS IS THE PATH::: " + getRelativePath);
+                AssetInfo info = new AssetInfo("MyExample",new NamePairings("ExampleL","ExampleR","ExampleU","ExampleD"), new Vector2(16, 16), false);
+                info.writeToJson(filePath);
+
+            }
+            string filePath2 = Path.Combine(dirPath, "AdvancedExample.json");
+            if (!File.Exists(filePath2))
+            {
+
+                ExtendedAssetInfo info2 = new ExtendedAssetInfo("AdvancedExample", new NamePairings("AdvancedExampleL", "AdvancedExampleR", "AdvancedExampleU", "AdvancedExampleD"), new Vector2(16, 16), false, Genders.female, new List<Seasons>()
+            {
+                Seasons.spring,
+                Seasons.summer
+            }, PartType.hair
+                );
+                info2.writeToJson(filePath2);
+            }
         }
 
         public static string getShortenedDirectory(string path)

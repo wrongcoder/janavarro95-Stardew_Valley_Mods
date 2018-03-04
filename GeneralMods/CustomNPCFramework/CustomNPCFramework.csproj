@@ -43,19 +43,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Framework\Enums\AnimationType.cs" />
     <Compile Include="Framework\Graphics\AssetInfo.cs" />
     <Compile Include="Framework\Graphics\AssetManager.cs" />
     <Compile Include="Framework\Graphics\AssetSheet.cs" />
-    <Compile Include="Framework\Graphics\NewFolder1\AssetPool.cs" />
+    <Compile Include="Framework\Enums\PartType.cs" />
+    <Compile Include="Framework\Enums\Seasons.cs" />
+    <Compile Include="Framework\Graphics\DirectionalTexture.cs" />
+    <Compile Include="Framework\Graphics\ExtendedAssetInfo.cs" />
+    <Compile Include="Framework\Enums\Genders.cs" />
+    <Compile Include="Framework\Graphics\AssetPool.cs" />
     <Compile Include="Framework\ModularNPCS\AnimatedSpriteCollection.cs" />
     <Compile Include="Framework\ModularNPCS\AnimatedSpriteExtended.cs" />
     <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\StandardCharacterAnimation.cs" />
     <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\CharacterAnimationBase.cs" />
-    <Compile Include="Framework\ModularNPCS\Direction.cs" />
+    <Compile Include="Framework\Enums\Direction.cs" />
     <Compile Include="Framework\ModularNPCS\ModularRenderers\AnimationKeys.cs" />
     <Compile Include="Framework\ModularNPCS\ModularRenderers\BasicRenderer.cs" />
     <Compile Include="Framework\ModularNPCS\Portrait.cs" />
     <Compile Include="Framework\ModularNPCS\Sprite.cs" />
+    <Compile Include="Framework\NPCNames.cs" />
     <Compile Include="Framework\NPCS\ExtendedNPC.cs" />
     <Compile Include="Framework\Utilities\NPCTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
