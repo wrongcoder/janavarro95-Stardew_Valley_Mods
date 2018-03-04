@@ -33,12 +33,12 @@ namespace CustomNPCFramework.Framework.Graphics
 
         }
 
-        public DirectionalTexture(AssetInfo info, string path, Direction direction = Direction.down)
+        public DirectionalTexture(NamePairings info, string path, Direction direction = Direction.down)
         {
-            this.leftTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.leftAssetName + ".png")).Remove(0, 1));
-            this.rightTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.rightAssetName + ".png")).Remove(0, 1));
-            this.upTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.upAssetName + ".png")).Remove(0, 1));
-            this.downTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.downAssetName + ".png")).Remove(0, 1));
+            this.leftTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.leftString + ".png")).Remove(0, 1));
+            this.rightTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.rightString + ".png")).Remove(0, 1));
+            this.upTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.upString + ".png")).Remove(0, 1));
+            this.downTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.downString + ".png")).Remove(0, 1));
 
             if (direction == Direction.left) this.currentTexture = leftTexture;
             if (direction == Direction.right) this.currentTexture = rightTexture;
@@ -64,6 +64,15 @@ namespace CustomNPCFramework.Framework.Graphics
         public void setRight()
         {
             this.currentTexture = rightTexture;
+        }
+
+        public virtual Texture2D getTextureFromDirection(Direction direction)
+        {
+            if (direction == Direction.left) return this.leftTexture;
+            if (direction == Direction.right) return this.rightTexture;
+            if (direction == Direction.up) return this.upTexture;
+            if (direction == Direction.down) return this.downTexture;
+            return null;
         }
     }
 }

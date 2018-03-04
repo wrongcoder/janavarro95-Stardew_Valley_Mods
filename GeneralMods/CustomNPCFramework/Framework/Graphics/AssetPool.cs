@@ -81,18 +81,24 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             assetPool.TryGetValue(name, out AssetManager asset);
             var assetSheet = asset.getAssetByName(name);
-            return new AnimatedSpriteExtended(assetSheet.clone().texture.currentTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+            return new AnimatedSpriteExtended(assetSheet.clone().getCurrentSpriteTexture(), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
         }
 
 
-        public AnimatedSpriteCollection getSpriteCollectionFromSheet(AssetSheet assetSheet)
+        
+        public AnimatedSpriteCollection getSpriteCollectionFromSheet(AssetSheet assetSheet, AnimationType type)
         {
-           var left=new AnimatedSpriteExtended(assetSheet.clone().texture.leftTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-           var right = new AnimatedSpriteExtended(assetSheet.clone().texture.rightTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-           var up = new AnimatedSpriteExtended(assetSheet.clone().texture.upTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-           var down = new AnimatedSpriteExtended(assetSheet.clone().texture.downTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-           return new AnimatedSpriteCollection(left, right, up, down, Direction.down);
+            if (type == AnimationType.standing)
+            {
+                var ok = assetSheet.getTexture(Direction, AnimationType);
+                var left = new AnimatedSpriteExtended(assetSheet.clone().textures.standingTexture.leftTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var right = new AnimatedSpriteExtended(assetSheet.clone().texture.rightTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var up = new AnimatedSpriteExtended(assetSheet.clone().texture.upTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var down = new AnimatedSpriteExtended(assetSheet.clone().texture.downTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                return new AnimatedSpriteCollection(left, right, up, down, Direction.down);
+            }
         }
+        
 
         /// <summary>
         /// Gets an animated sprite collection (ie a hair style facing all four directions) from a list of asset names.

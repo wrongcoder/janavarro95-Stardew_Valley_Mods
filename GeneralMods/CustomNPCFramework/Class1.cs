@@ -22,6 +22,8 @@ namespace CustomNPCFramework
     /// List all asset managers in use.
     /// Have all asset managers list what assets they are using.
     /// FIX NPC GENERATION IN ASSETPOOL.CS
+    /// 
+    /// Load in the assets and go go go.
     /// </summary>
 
 
@@ -121,7 +123,7 @@ namespace CustomNPCFramework
             {
                 string getRelativePath = getShortenedDirectory(filePath);
                 ModMonitor.Log("THIS IS THE PATH::: " + getRelativePath);
-                AssetInfo info = new AssetInfo("MyExample",new NamePairings("ExampleL","ExampleR","ExampleU","ExampleD"), new Vector2(16, 16), false);
+                AssetInfo info = new AssetInfo("MyExample",new NamePairings("StandingExampleL", "StandingExampleR", "StandingExampleU", "StandingExampleD"), new NamePairings("MovingExampleL", "MovingExampleR", "MovingExampleU", "MovingExampleD"), new NamePairings("SwimmingExampleL", "SwimmingExampleR", "SwimmingExampleU", "SwimmingExampleD"), new NamePairings("SittingExampleL", "SittingExampleR", "SittingExampleU", "SittingExampleD"), new Vector2(16, 16), false);
                 info.writeToJson(filePath);
 
             }

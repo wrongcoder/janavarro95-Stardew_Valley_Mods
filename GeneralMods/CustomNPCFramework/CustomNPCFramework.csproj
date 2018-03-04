@@ -53,6 +53,7 @@
     <Compile Include="Framework\Graphics\ExtendedAssetInfo.cs" />
     <Compile Include="Framework\Enums\Genders.cs" />
     <Compile Include="Framework\Graphics\AssetPool.cs" />
+    <Compile Include="Framework\Graphics\TextureGroups\TextureGroup.cs" />
     <Compile Include="Framework\ModularNPCS\AnimatedSpriteCollection.cs" />
     <Compile Include="Framework\ModularNPCS\AnimatedSpriteExtended.cs" />
     <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\StandardCharacterAnimation.cs" />

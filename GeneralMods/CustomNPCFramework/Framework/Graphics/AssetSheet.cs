@@ -15,7 +15,7 @@ namespace CustomNPCFramework.Framework.Graphics
     /// </summary>
     public class AssetSheet
     {
-        public DirectionalTexture texture;
+        public TextureGroups.TextureGroup textures;
 
         public AssetInfo assetInfo;
         public string path;
@@ -28,47 +28,57 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             this.assetInfo = info;
 
-            this.texture = new DirectionalTexture(info, path, direction);
-           
+            
+
             this.path = Class1.getShortenedDirectory(path);
             this.index = 0;
             
         }
 
-        public KeyValuePair<string, Texture2D> getPathTexturePair()
+        public virtual KeyValuePair<string, Texture2D> getPathTexturePair()
         {
-            return new KeyValuePair<string, Texture2D>(this.path, this.texture.currentTexture);
+            return new KeyValuePair<string, Texture2D>(this.path, this.textures.currentTexture.currentTexture);
         }
 
 
         /// <summary>
         /// Used just to get a copy of this asset sheet.
         /// </summary>
-        public AssetSheet clone()
+        public virtual AssetSheet clone()
         {
             var asset = new AssetSheet(this.assetInfo,(string)this.path.Clone());
             return asset;
         }
 
 
-        public void setLeft()
+        public virtual void setLeft()
         {
-            this.texture.setLeft();
+            this.textures.setLeft();
         }
 
-        public void setUp()
+        public virtual void setUp()
         {
-            this.texture.setUp();
+            this.textures.setUp();
         }
 
-        public void setDown()
+        public virtual void setDown()
         {
-            this.texture.setDown();
+            this.textures.setDown();
         }
 
-        public void setRight()
+        public virtual void setRight()
         {
-            this.texture.setRight();
+            this.textures.setRight();
+        }
+
+        public virtual Texture2D getCurrentSpriteTexture()
+        {
+            return this.textures.currentTexture.currentTexture;
+        }
+
+        public virtual Texture2D getTexture(Direction direction,AnimationType type)
+        {
+            return this.textures.getTextureFromAnimation(type).getTextureFromDirection(direction);
         }
     }
 }

@@ -10,9 +10,10 @@ namespace CustomNPCFramework.Framework.Graphics
     public class AssetInfo
     {
         public string assetName;
-        public string leftAssetName;
-        public string rightAssetName;
-        public string upAssetName;
+        public NamePairings standingAssetPaths;
+        public NamePairings swimmingAssetPaths;
+        public NamePairings movingAssetPaths;
+        public NamePairings sittingAssetPaths;
         public string downAssetName;
         public Vector2 assetSize;
         public bool randomizeUponLoad;
@@ -22,24 +23,12 @@ namespace CustomNPCFramework.Framework.Graphics
 
         }
 
-        public AssetInfo(string assetName,string Lname, string Rname, string Uname, string Dname, Vector2 assetSize, bool randomizeUponLoad)
+        public AssetInfo(string assetName,NamePairings StandingAssetPaths, NamePairings MovingAssetPaths, NamePairings SwimmingAssetPaths, NamePairings SittingAssetPaths, Vector2 assetSize, bool randomizeUponLoad)
         {
-            this.assetName = assetName;
-            this.leftAssetName = Lname;
-            this.rightAssetName = Rname;
-            this.upAssetName = Uname;
-            this.downAssetName = Dname;
-            this.assetSize = assetSize;
-            this.randomizeUponLoad = randomizeUponLoad;
-        }
-
-        public AssetInfo(string assetName,NamePairings pair, Vector2 assetSize, bool randomizeUponLoad)
-        {
-            this.assetName = assetName;
-            this.leftAssetName = pair.leftString;
-            this.rightAssetName = pair.rightString;
-            this.upAssetName = pair.upString;
-            this.downAssetName = pair.downString;
+            this.sittingAssetPaths = SittingAssetPaths;
+            this.standingAssetPaths = StandingAssetPaths;
+            this.movingAssetPaths = MovingAssetPaths;
+            this.swimmingAssetPaths = SwimmingAssetPaths;
             this.assetSize = assetSize;
             this.randomizeUponLoad = randomizeUponLoad;
         }
