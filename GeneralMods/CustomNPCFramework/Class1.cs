@@ -22,6 +22,18 @@ namespace CustomNPCFramework
     /// List all asset managers in use.
     /// Have all asset managers list what assets they are using.
     /// 
+    /// Have asset info have a var called age.
+    ///     ...where 
+    ///         0=adult
+    ///         1=child
+    /// 
+    ///    /// Have asset info have a var called bodyType.
+    ///     ...where 
+    ///         0=thin
+    ///         1=normal
+    ///         2=muscular
+    ///         3=big
+    /// 
     /// Load in the assets and go go go.
     ///     -Collect a bunch of assets together to test this thing.
     /// </summary>

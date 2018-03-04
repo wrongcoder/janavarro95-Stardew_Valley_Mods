@@ -42,6 +42,27 @@ namespace CustomNPCFramework.Framework.NPCS
         public ExtendedNPC() :base()
         {
         }
+
+        public ExtendedNPC(Sprite sprite, Vector2 position, int facingDirection, string name) : base(sprite.sprite, position, facingDirection, name, null)
+        {
+            this.characterRenderer = null;
+            this.Portrait = (Texture2D)null;
+            this.portraitInformation = null;
+            this.spriteInformation = sprite;
+            this.spriteInformation.setCharacterSpriteFromThis(this);
+            this.swimming = false;
+        }
+
+        public ExtendedNPC(Sprite sprite, Portrait portrait, Vector2 position, int facingDirection, string name) : base(sprite.sprite, position, facingDirection, name, null)
+        {
+            this.characterRenderer = null;
+            this.portraitInformation = portrait;
+            this.portraitInformation.setCharacterPortraitFromThis(this);
+            this.spriteInformation = sprite;
+            this.spriteInformation.setCharacterSpriteFromThis(this);
+            this.swimming = false;
+        }
+
         public ExtendedNPC(Sprite sprite,BasicRenderer renderer,Vector2 position,int facingDirection,string name): base(sprite.sprite, position, facingDirection, name, null)
         {
             this.characterRenderer = renderer;
