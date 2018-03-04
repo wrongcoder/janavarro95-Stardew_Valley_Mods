@@ -228,6 +228,10 @@ namespace Omegasis.HappyBirthday
                     }
                 }
 
+                if (Game1.activeClickableMenu != null)
+                {
+                    if (Game1.activeClickableMenu.GetType() == typeof(BirthdayMenu)) return;
+                }
                 // ask for birthday date
                 if (!this.HasChosenBirthday)
                 {
