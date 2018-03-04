@@ -21,21 +21,47 @@ namespace CustomNPCFramework.Framework.Graphics
             this.paths = new Dictionary<string, string>();
         }
 
+        public AssetManager(Dictionary<string,string> assetsPathsToLoadFrom)
+        {
+            this.assets = new List<AssetSheet>();
+            this.paths = assetsPathsToLoadFrom;
+        }
+
         /// <summary>
-        /// Default loading function from paths.
+        /// Default loading function from hard coded paths.
         /// </summary>
         public void loadAssets()
         {
             foreach(var path in this.paths)
             {
-               string[] files= Directory.GetFiles(path.Value, "*.json");
-                foreach(var file in files)
-                {
-                    AssetInfo info = AssetInfo.readFromJson(file);
-                    AssetSheet sheet = new AssetSheet(info,path.Value);
-                    this.assets.Add(sheet);
-                }
+                ProcessDirectory(path.Value);
             }
+        }
+
+        /// <summary>
+        /// Taken from Microsoft c# documented webpages.
+        /// Process all .json files in the given directory. If there are more nested directories, keep digging to find more .json files. Also allows us to specify a broader directory like Content/Grahphics/ModularNPC/Hair to have multiple hair styles.
+        /// </summary>
+        /// <param name="targetDirectory"></param>
+        private void ProcessDirectory(string targetDirectory)
+        {
+            // Process the list of files found in the directory.
+            string[] files = Directory.GetFiles(targetDirectory, "*.json");
+            foreach (var file in files)
+            {
+                ProcessFile(file,targetDirectory);
+            }
+            // Recurse into subdirectories of this directory.
+            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            foreach (string subdirectory in subdirectoryEntries)
+                ProcessDirectory(subdirectory);
+        }
+
+        private void ProcessFile(string file,string path)
+        {
+            AssetInfo info = AssetInfo.readFromJson(file);
+            AssetSheet sheet = new AssetSheet(info, path);
+            addAsset(sheet);
         }
 
         /// <summary>

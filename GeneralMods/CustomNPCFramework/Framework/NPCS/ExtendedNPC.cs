@@ -115,6 +115,7 @@ namespace CustomNPCFramework.Framework.NPCS
 
         public override bool checkAction(StardewValley.Farmer who, GameLocation l)
         {
+            base.checkAction(who, l);
             return false;
         }
 
@@ -253,7 +254,6 @@ namespace CustomNPCFramework.Framework.NPCS
             }
         }
 
-        //ERROR NEED FIXING
         public override void update(GameTime time, GameLocation location)
         {
             base.update(time, location);        

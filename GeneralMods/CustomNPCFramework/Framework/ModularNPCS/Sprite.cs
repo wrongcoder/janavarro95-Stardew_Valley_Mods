@@ -15,13 +15,26 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         public string relativePath;
 
         /// <summary>
-        /// A class for handling portraits.
+        /// A class for handling character sprites.
         /// </summary>
         /// <param name="path">The full path to the file.</param>
         public Sprite(string path)
         {
             this.relativePath = Class1.getRelativeDirectory(path);
             this.sprite = new AnimatedSprite(Class1.ModHelper.Content.Load<Texture2D>(this.relativePath));
+            this.sprite.spriteWidth = this.sprite.Texture.Width;
+            this.sprite.spriteHeight = this.sprite.Texture.Height;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="path">Used to hold the path to the asset.</param>
+        /// <param name="texture">Used to assign the texture to the sprite from a pre-loaded asset.</param>
+        public Sprite(string path, Texture2D texture)
+        {
+            this.relativePath = path;
+            this.sprite = new AnimatedSprite(texture);
             this.sprite.spriteWidth = this.sprite.Texture.Width;
             this.sprite.spriteHeight = this.sprite.Texture.Height;
         }

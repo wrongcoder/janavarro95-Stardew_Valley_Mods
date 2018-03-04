@@ -1,4 +1,5 @@
 ﻿using CustomNPCFramework.Framework.Graphics;
+using CustomNPCFramework.Framework.Graphics.NewFolder1;
 using CustomNPCFramework.Framework.ModularNPCS;
 using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
 using CustomNPCFramework.Framework.NPCS;
@@ -16,19 +17,25 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework
 {
+    /// <summary>
+    /// TODO:
+    /// List all asset managers in use.
+    /// Have all asset managers list what assets they are using.
+    /// </summary>
+
+
     public class Class1 : Mod
     {
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
-        public static AssetManager assetManager;
+
         public static NPCTracker npcTracker;
+        public static AssetPool assetPool;
         public override void Entry(IModHelper helper)
         {
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
-            assetManager = new AssetManager();
-            initializeExamples();
-            assetManager.loadAssets();
+
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_LoadChar;
 
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
@@ -37,6 +44,18 @@ namespace CustomNPCFramework
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             npcTracker = new NPCTracker();
+            assetPool = new AssetPool();
+            var assetManager = new AssetManager();
+            assetPool.addAssetManager(new KeyValuePair<string, AssetManager>("testNPC", assetManager));
+            initializeExamples();
+            initializeAssetPool();
+            assetPool.loadAllAssets();
+        }
+
+        public void initializeAssetPool()
+        {
+            string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS", "Characters", "RainMan");
+            assetPool.getAssetManager("testNPC").addPathCreateDirectory(new KeyValuePair<string, string>("characters", path));
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
@@ -56,7 +75,7 @@ namespace CustomNPCFramework
             {
                 v.speed = 5;
                 //v.MovePosition(Game1.currentGameTime, Game1.viewport, Game1.player.currentLocation);
-                ModMonitor.Log(v.sprite.spriteHeight.ToString());
+                //ModMonitor.Log(v.sprite.spriteHeight.ToString());
             }
         }
 
@@ -72,11 +91,20 @@ namespace CustomNPCFramework
         /// <param name="e"></param>
         private void SaveEvents_LoadChar(object sender, EventArgs e)
         {
-            string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS", "Characters", "RainMan");
-            assetManager.addPathCreateDirectory(new KeyValuePair<string, string>("characters", path));
-            Texture2D tex = ModHelper.Content.Load<Texture2D>(Path.Combine(getShortenedDirectory(path).Remove(0, 1), "character.png"));
-            ModMonitor.Log("PATH???: " + path);
-            ExtendedNPC myNpc3 = new ExtendedNPC(new Framework.ModularNPCS.Sprite(Path.Combine(path,"character.png")),null, new Vector2(14, 14)*Game1.tileSize, 2, "b2");
+
+            //Texture2D tex = ModHelper.Content.Load<Texture2D>(Path.Combine(getShortenedDirectory(path).Remove(0, 1), "character.png"));
+            if (assetPool.getAssetManager("testNPC").getAssetByName("character") == null)
+            {
+                
+                    ModMonitor.Log("HMMMMM", LogLevel.Error);
+                
+            }
+            var pair= assetPool.getAssetManager("testNPC").getAssetByName("character").getPathTexturePair();
+            if (pair.Value == null)
+            {
+                ModMonitor.Log("UGGGGGGG", LogLevel.Error);
+            }
+            ExtendedNPC myNpc3 = new ExtendedNPC(new Framework.ModularNPCS.Sprite(pair.Key,pair.Value),null, new Vector2(14, 14)*Game1.tileSize, 2, "b2");
             npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop"),myNpc3);
             myNpc3.SetMovingDown(true);
         }
@@ -84,7 +112,8 @@ namespace CustomNPCFramework
         public void initializeExamples()
         {
             string dirPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Templates");
-            assetManager.addPathCreateDirectory(new KeyValuePair<string, string>("templates", dirPath));
+            var aManager=assetPool.getAssetManager("testNPC");
+            aManager.addPathCreateDirectory(new KeyValuePair<string, string>("templates", dirPath));
             string filePath =Path.Combine(dirPath, "Example.json");
             if (File.Exists(filePath)) return;
             string getRelativePath = getShortenedDirectory(filePath);

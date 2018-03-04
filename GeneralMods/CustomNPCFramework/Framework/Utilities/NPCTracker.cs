@@ -10,9 +10,14 @@ namespace CustomNPCFramework.Framework.Utilities
 {
     public class NPCTracker
     {
+        /// <summary>
+        /// A list used to keep track of the npcs.
+        /// </summary>
         public List<ExtendedNPC> moddedNPCS;
 
-
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public NPCTracker()
         {
             this.moddedNPCS = new List<ExtendedNPC>();

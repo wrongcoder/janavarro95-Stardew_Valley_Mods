@@ -46,6 +46,7 @@
     <Compile Include="Framework\Graphics\AssetInfo.cs" />
     <Compile Include="Framework\Graphics\AssetManager.cs" />
     <Compile Include="Framework\Graphics\AssetSheet.cs" />
+    <Compile Include="Framework\Graphics\NewFolder1\AssetPool.cs" />
     <Compile Include="Framework\ModularNPCS\AnimatedSpriteCollection.cs" />
     <Compile Include="Framework\ModularNPCS\AnimatedSpriteExtended.cs" />
     <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\StandardCharacterAnimation.cs" />

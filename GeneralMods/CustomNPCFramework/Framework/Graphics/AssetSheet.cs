@@ -31,7 +31,7 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             this.assetInfo = info;
             this.texture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path,info.name+".png")).Remove(0,1));
-
+            this.path = Class1.getShortenedDirectory(Path.Combine(path, info.name + ".png"));
             this.widthIndexMax = this.texture.Width / (int)this.assetInfo.assetSize.X;
             this.heightIndexMax = this.texture.Width / (int)this.assetInfo.assetSize.Y;
             this.index = 0;
@@ -46,6 +46,11 @@ namespace CustomNPCFramework.Framework.Graphics
                 setIndex();
             }
             this.currentAsset = new Rectangle(widthIndex * (int)this.assetInfo.assetSize.X, heightIndex * (int)this.assetInfo.assetSize.Y, (int)this.assetInfo.assetSize.X, (int)this.assetInfo.assetSize.Y);
+        }
+
+        public KeyValuePair<string, Texture2D> getPathTexturePair()
+        {
+            return new KeyValuePair<string, Texture2D>(this.path, this.texture);
         }
 
         /// <summary>
