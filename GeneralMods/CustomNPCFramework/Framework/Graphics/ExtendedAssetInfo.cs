@@ -28,7 +28,7 @@ namespace CustomNPCFramework.Framework.Graphics
         /// <param name="randomizeOnLoad"></param>
         /// <param name="Gender">The type of gender this asset will be associated with.</param>
         /// <param name="Season">The type of season this asset will be associated with.</param>
-        public ExtendedAssetInfo(string name,NamePairings pair,Vector2 assetSize, bool randomizeOnLoad, Genders Gender, List<Seasons> Season, PartType Type): base(name,pair, assetSize, randomizeOnLoad)
+        public ExtendedAssetInfo(string name, NamePairings StandingAssetPaths, NamePairings MovingAssetPaths, NamePairings SwimmingAssetPaths, NamePairings SittingAssetPaths, Vector2 assetSize, bool randomizeOnLoad, Genders Gender, List<Seasons> Season, PartType Type): base(name,StandingAssetPaths,MovingAssetPaths,SwimmingAssetPaths,SittingAssetPaths, assetSize, randomizeOnLoad)
         {
             this.gender = Gender;
             this.seasons = Season;

@@ -1,4 +1,5 @@
 ﻿using CustomNPCFramework.Framework.Enums;
+using CustomNPCFramework.Framework.Graphics.TextureGroups;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -27,12 +28,9 @@ namespace CustomNPCFramework.Framework.Graphics
         public AssetSheet(AssetInfo info,string path,Direction direction=Direction.down)
         {
             this.assetInfo = info;
-
-            
-
+            this.textures = new TextureGroup(info,path,direction);
             this.path = Class1.getShortenedDirectory(path);
             this.index = 0;
-            
         }
 
         public virtual KeyValuePair<string, Texture2D> getPathTexturePair()

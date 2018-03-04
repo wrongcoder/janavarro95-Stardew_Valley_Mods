@@ -14,7 +14,6 @@ namespace CustomNPCFramework.Framework.Graphics
         public NamePairings swimmingAssetPaths;
         public NamePairings movingAssetPaths;
         public NamePairings sittingAssetPaths;
-        public string downAssetName;
         public Vector2 assetSize;
         public bool randomizeUponLoad;
        
@@ -25,6 +24,7 @@ namespace CustomNPCFramework.Framework.Graphics
 
         public AssetInfo(string assetName,NamePairings StandingAssetPaths, NamePairings MovingAssetPaths, NamePairings SwimmingAssetPaths, NamePairings SittingAssetPaths, Vector2 assetSize, bool randomizeUponLoad)
         {
+            this.assetName = assetName;
             this.sittingAssetPaths = SittingAssetPaths;
             this.standingAssetPaths = StandingAssetPaths;
             this.movingAssetPaths = MovingAssetPaths;

@@ -87,16 +87,12 @@ namespace CustomNPCFramework.Framework.Graphics
 
         
         public AnimatedSpriteCollection getSpriteCollectionFromSheet(AssetSheet assetSheet, AnimationType type)
-        {
-            if (type == AnimationType.standing)
-            {
-                var ok = assetSheet.getTexture(Direction, AnimationType);
-                var left = new AnimatedSpriteExtended(assetSheet.clone().textures.standingTexture.leftTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var right = new AnimatedSpriteExtended(assetSheet.clone().texture.rightTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var up = new AnimatedSpriteExtended(assetSheet.clone().texture.upTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var down = new AnimatedSpriteExtended(assetSheet.clone().texture.downTexture, assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                return new AnimatedSpriteCollection(left, right, up, down, Direction.down);
-            }
+        {    
+                var left = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.left, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var right = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.right, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var up = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.up, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var down = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.down, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                return new AnimatedSpriteCollection(left, right, up, down, Direction.down); 
         }
         
 
@@ -219,27 +215,39 @@ namespace CustomNPCFramework.Framework.Graphics
                 accessorySheet.Add(accessoryList.ElementAt(v));
             }
 
-            var bodySprite = getSpriteCollectionFromSheet(bodySheet);
-            var eyesSprite = getSpriteCollectionFromSheet(eyesSheet);
-            var hairSprite = getSpriteCollectionFromSheet(hairSheet);
-            var shirtSprite = getSpriteCollectionFromSheet(shirtSheet);
-            var pantsSprite = getSpriteCollectionFromSheet(pantsSheet);
-            var shoesSprite = getSpriteCollectionFromSheet(shoesSheet);
-            List<AnimatedSpriteCollection> accessoryCollection = new List<AnimatedSpriteCollection>();
-            foreach(var v in accessorySheet)
-            {
-                AnimatedSpriteCollection acc = getSpriteCollectionFromSheet(v);
-                accessoryCollection.Add(acc);
-            }
 
-            StandardCharacterAnimation standingAnimation = new StandardCharacterAnimation(bodySprite, eyesSprite, hairSprite, shirtSprite, pantsSprite, shoesSprite, accessoryCollection);
+            AnimationType type = AnimationType.standing;
+            var standingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
+            type = AnimationType.walking;
+            var movingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
+            type = AnimationType.swimming;
+            var swimmingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
+            //type = AnimationType.standing;
+            //var sAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
 
 
-
-            BasicRenderer render = new BasicRenderer(standingAnimation,standingAnimation,standingAnimation);
+            BasicRenderer render = new BasicRenderer(standingAnimation,movingAnimation,swimmingAnimation);
 
             ExtendedNPC npc = new ExtendedNPC(null, render, new Microsoft.Xna.Framework.Vector2(13, 15) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
 
+        }
+
+        public virtual StandardCharacterAnimation generateCharacterAnimation(AssetSheet body, AssetSheet eyes, AssetSheet hair, AssetSheet shirt, AssetSheet pants, AssetSheet shoes,List<AssetSheet> accessories, AnimationType animationType)
+        {
+            var bodySprite = getSpriteCollectionFromSheet(body, animationType);
+            var eyesSprite = getSpriteCollectionFromSheet(eyes, animationType);
+            var hairSprite = getSpriteCollectionFromSheet(hair, animationType);
+            var shirtSprite = getSpriteCollectionFromSheet(shirt, animationType);
+            var pantsSprite = getSpriteCollectionFromSheet(pants, animationType);
+            var shoesSprite = getSpriteCollectionFromSheet(shoes, animationType);
+            List<AnimatedSpriteCollection> accessoryCollection = new List<AnimatedSpriteCollection>();
+            foreach (var v in accessories)
+            {
+                AnimatedSpriteCollection acc = getSpriteCollectionFromSheet(v, AnimationType.standing);
+                accessoryCollection.Add(acc);
+            }
+            StandardCharacterAnimation standingAnimation = new StandardCharacterAnimation(bodySprite, eyesSprite, hairSprite, shirtSprite, pantsSprite, shoesSprite, accessoryCollection);
+            return standingAnimation;
         }
 
 

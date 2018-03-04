@@ -131,7 +131,7 @@ namespace CustomNPCFramework
             if (!File.Exists(filePath2))
             {
 
-                ExtendedAssetInfo info2 = new ExtendedAssetInfo("AdvancedExample", new NamePairings("AdvancedExampleL", "AdvancedExampleR", "AdvancedExampleU", "AdvancedExampleD"), new Vector2(16, 16), false, Genders.female, new List<Seasons>()
+                ExtendedAssetInfo info2 = new ExtendedAssetInfo("AdvancedExample", new NamePairings("AdvancedStandingExampleL", "AdvancedStandingExampleR", "AdvancedStandingExampleU", "AdvancedStandingExampleD"), new NamePairings("AdvancedMovingExampleL", "AdvancedMovingExampleR", "AdvancedMovingExampleU", "AdvancedMovingExampleD"), new NamePairings("AdvancedSwimmingExampleL", "AdvancedSwimmingExampleR", "AdvancedSwimmingExampleU", "AdvancedSwimmingExampleD"), new NamePairings("AdvancedSittingExampleL", "AdvancedSittingExampleR", "AdvancedSittingExampleU", "AdvancedSittingExampleD"), new Vector2(16, 16), false, Genders.female, new List<Seasons>()
             {
                 Seasons.spring,
                 Seasons.summer
