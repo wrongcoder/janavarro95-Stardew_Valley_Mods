@@ -45,6 +45,15 @@
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationManager.cs" />
     <Compile Include="IlluminateFramework\Colors.cs" />
+    <Compile Include="Math\Hex.cs" />
+    <Compile Include="Math\Hex32.cs" />
+    <Compile Include="UIUtilities\LayeredTexture.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\GenericCharacterSheets.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\VanillaCharacterSheet.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\Fonts\Components\CharacterSpacing.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\Fonts\GenericFont.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\Fonts\Components\TexturedCharacter.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\Fonts\Components\TexturedString.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="CoreObject.cs" />
     <Compile Include="ModInfo\Metadata.cs" />
@@ -52,12 +61,17 @@
     <Compile Include="Serialization\Serialization.cs" />
     <Compile Include="Serialization\SerializerDataNode.cs" />
     <Compile Include="StaticClass.cs" />
+    <Compile Include="UIUtilities\MenuComponents\Button.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\Fonts\VanillaFont.cs" />
+    <Compile Include="UIUtilities\SpriteFonts\SpriteFont.cs" />
+    <Compile Include="UIUtilities\Texture2DExtended.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\deploy.targets" />
   <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets')" />

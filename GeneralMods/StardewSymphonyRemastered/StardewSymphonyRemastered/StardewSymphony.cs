@@ -17,9 +17,7 @@ namespace StardewSymphonyRemastered
     /// BIG WIP. Don't use this at all because it does nothing right now.
     /// TODO:
     /// 1.Make Xwb packs work
-    /// 1.5. Make way to load in music packs.
     /// 2.Make stream files work
-    /// 2.5. Make Music Manager
     /// 3.Make interface.
     /// 4.Make sure stuff doesn't blow up.
     /// 5.Release
@@ -42,7 +40,12 @@ namespace StardewSymphonyRemastered
         public static string XACTMusicDirectory;
         public static string TemplateMusicDirectory;
 
+        public bool musicPacksInitialized;
 
+        /// <summary>
+        /// Entry point for the mod.
+        /// </summary>
+        /// <param name="helper"></param>
         public override void Entry(IModHelper helper)
         {
             DefaultSoundBank = Game1.soundBank;
@@ -52,7 +55,9 @@ namespace StardewSymphonyRemastered
 
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
-
+            StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             musicManager = new MusicManager();
 
             MusicPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Music");
@@ -62,9 +67,58 @@ namespace StardewSymphonyRemastered
 
             this.createDirectories();
             this.createBlankXACTTemplate();
-            //load in all packs here.
+            this.createBlankWAVTemplate();
+
+            musicPacksInitialized = false;
         }
 
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            /* THIS IS WAY TO LONG to run. Better make it save individual lists when I am editing songs.
+            foreach(var musicPack in musicManager.musicPacks)
+            {
+                musicPack.Value.writeToJson();
+            }
+            */
+        }
+
+        private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
+        {
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)
+            {
+                Game1.activeClickableMenu = new StardewSymphonyRemastered.Framework.Menus.MusicManagerMenu(Game1.viewport.Width,Game1.viewport.Height);
+            }
+        }
+
+
+        /// <summary>
+        /// Raised every frame. Mainly used just to initiate the music packs. Probably not needed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        {
+            if (musicPacksInitialized == false)
+            {
+                initializeMusicPacks();
+                musicPacksInitialized = true;
+                musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+            }
+        }
+
+        /// <summary>
+        /// Load in the music packs to the music manager.
+        /// </summary>
+        public void initializeMusicPacks()
+        {
+            //load in all packs here.
+            loadXACTMusicPacks();
+            loadWAVMusicPacks();
+        }
+
+        /// <summary>
+        /// Create the core directories needed by the mod.
+        /// </summary>
         public void createDirectories()
         {
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);
@@ -72,6 +126,11 @@ namespace StardewSymphonyRemastered
             if (!Directory.Exists(XACTMusicDirectory)) Directory.CreateDirectory(XACTMusicDirectory);
             if (!Directory.Exists(TemplateMusicDirectory)) Directory.CreateDirectory(TemplateMusicDirectory);
         }
+
+
+        /// <summary>
+        /// Used to create a blank XACT music pack example.
+        /// </summary>
         public void createBlankXACTTemplate()
         {
             string path= Path.Combine(TemplateMusicDirectory, "XACT");
@@ -80,46 +139,116 @@ namespace StardewSymphonyRemastered
                 Directory.CreateDirectory(path);
             }
             if(!File.Exists(Path.Combine(path, "MusicPackInformation.json"))){
-                MusicPackMetaData blankMetaData = new MusicPackMetaData();
+                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example","Omegasis","Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!","1.0.0 CoolExample","Icon.png");
                 blankMetaData.writeToJson(Path.Combine(path, "MusicPackInformation.json"));
             }
             if (!File.Exists(Path.Combine(path, "readme.txt")))
             {
-                string info = "Place the Wave Bank.xwb file and Sound Bank.xsb file you created in XACT in a similar directory in Content/Music/XACT/SoundPackName with a new meta data to load it!";
+                string info = "Place the Wave Bank.xwb file and Sound Bank.xsb file you created in XACT in a similar directory in Content/Music/XACT/SoundPackName.\nModify MusicPackInformation.json as desire!\nRun the mod!";
                 File.WriteAllText(Path.Combine(path, "readme.txt"),info);
             }
         }
 
+        /// <summary>
+        /// USed to create a blank WAV music pack example.
+        /// </summary>
+        public void createBlankWAVTemplate()
+        {
+            string path = Path.Combine(TemplateMusicDirectory, "WAV");
+            string pathSongs = Path.Combine(path, "Songs");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            if (!Directory.Exists(pathSongs))
+            {
+                Directory.CreateDirectory(pathSongs);
+            }
+            if (!File.Exists(Path.Combine(path, "MusicPackInformation.json")))
+            {
+                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example", "Omegasis", "Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!", "1.0.0 CoolExample","Icon");
+                blankMetaData.writeToJson(Path.Combine(path, "MusicPackInformation.json"));
+            }
+            if (!File.Exists(Path.Combine(path, "readme.txt")))
+            {
+                string info = "Place the .wav song files in the Songs folder, modify the MusicPackInformation.json as desired, and then run!";
+                File.WriteAllText(Path.Combine(path, "readme.txt"), info);
+            }
+        }
 
+        /// <summary>
+        /// Load in the XACT music packs.
+        /// </summary>
         public static void loadXACTMusicPacks()
         {
             string[] listOfDirectories= Directory.GetDirectories(XACTMusicDirectory);
             foreach(string folder in listOfDirectories)
             {
-                string waveBank = Path.Combine(folder, "Wave Bank.xwb");
-                string soundBank = Path.Combine(folder, "Sound Bank.xwb");
-                string metaData = Path.Combine(folder, "MusicPackInformation.json");
-                if (!File.Exists(waveBank))
+                //This chunk essentially allows people to name .xwb and .xsb files whatever they want.
+                string[] xwb=Directory.GetFiles(folder, "*.xwb");
+                string[] xsb = Directory.GetFiles(folder, "*.xsb");
+
+                string[] debug = Directory.GetFiles(folder);
+                if (xwb.Length == 0)
                 {
-                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no file Wave Bank.xwb located in this directory. AKA there is no valid music here.", LogLevel.Error);
+                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no wave bank music file: .xwb located in this directory. AKA there is no valid music here.", LogLevel.Error);
+                    return;
+                }
+                if (xwb.Length >= 2)
+                {
+                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There are too many wave bank music files or .xwbs located in this directory. Please ensure that there is only one music pack in this folder. You can make another music pack but putting a wave bank file in a different folder.", LogLevel.Error);
                     return;
                 }
 
-                if (!File.Exists(soundBank))
+                if (xsb.Length == 0)
                 {
-                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no file Sound Bank.xwb located in this directory. This is needed to play the music from Wave Bank.xwb", LogLevel.Error);
+                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no sound bank music file: .xsb located in this directory. AKA there is no valid music here.", LogLevel.Error);
                     return;
                 }
+                if (xsb.Length >= 2)
+                {
+                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There are too many sound bank music files or .xsbs located in this directory. Please ensure that there is only one sound reference file in this folder. You can make another music pack but putting a sound file in a different folder.", LogLevel.Error);
+                    return;
+                }
+
+                string waveBank = xwb[0];
+                string soundBank = xsb[0];
+                string metaData = Path.Combine(folder, "MusicPackInformation.json");
 
                 if (!File.Exists(metaData))
                 {
                     ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
                 }
-                StardewSymphonyRemastered.Framework.XACTMusicPack musicPack = new XACTMusicPack(folder, waveBank);
-                musicManager.addMusicPack(musicPack);
+                StardewSymphonyRemastered.Framework.XACTMusicPack musicPack = new XACTMusicPack(folder, waveBank,soundBank);
+                musicManager.addMusicPack(musicPack,true,true);
+                
+                musicPack.readFromJson();
+                
             }
         }
 
+        /// <summary>
+        /// Load in WAV music packs.
+        /// </summary>
+        public static void loadWAVMusicPacks()
+        {
+            string[] listOfDirectories = Directory.GetDirectories(WavMusicDirectory);
+            foreach (string folder in listOfDirectories)
+            {
+                string metaData = Path.Combine(folder, "MusicPackInformation.json");
+
+                if (!File.Exists(metaData))
+                {
+                    ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
+                }
+
+                StardewSymphonyRemastered.Framework.WavMusicPack musicPack = new WavMusicPack(folder);
+                musicManager.addMusicPack(musicPack,true,true);
+                
+                musicPack.readFromJson();
+                
+            }
+        }
 
         /// <summary>
         /// Raised when the player changes locations. This should determine the next song to play.
@@ -141,9 +270,7 @@ namespace StardewSymphonyRemastered
             StardewSymphonyRemastered.Framework.SongSpecifics.addLocations();
             StardewSymphonyRemastered.Framework.SongSpecifics.addFestivals();
             StardewSymphonyRemastered.Framework.SongSpecifics.addEvents();
-
-           
-
+            musicManager.initializeSeasonalMusic();
            
         }
 

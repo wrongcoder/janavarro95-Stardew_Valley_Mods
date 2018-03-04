@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,8 @@ namespace StardewSymphonyRemastered.Framework
         public string author;
         public string description;
         public string versionInfo;
-
+        public string pathToMusicPackIcon;
+        public Texture2D Icon;
         /// <summary>
         /// Constrctor
         /// </summary>
@@ -24,12 +26,22 @@ namespace StardewSymphonyRemastered.Framework
         /// <param name="Author">The author who compiled ths music pack.</param>
         /// <param name="Description">The description of</param>
         /// <param name="VersionInfo"></param>
-        public MusicPackMetaData(string Name,string Author,string Description,string VersionInfo)
+        public MusicPackMetaData(string Name,string Author,string Description,string VersionInfo,string PathToMusicPackIcon)
         {
             this.name = Name;
             this.author = Author;
             this.description = Description;
             this.versionInfo = VersionInfo;
+            this.pathToMusicPackIcon = PathToMusicPackIcon;
+            try
+            {
+                this.Icon = StardewSymphony.ModHelper.Content.Load<Texture2D>(this.pathToMusicPackIcon);
+            }
+            catch(Exception err)
+            {
+                this.Icon = null;
+                StardewSymphony.ModMonitor.Log(err.ToString());
+            }
         }
         /// <summary>
         /// Blank Constructor

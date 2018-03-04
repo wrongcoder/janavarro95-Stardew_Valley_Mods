@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewSymphonyRemastered;
 using StardewValley;
+using System.IO;
 
 namespace StardewSymphonyRemastered.Framework
 {
@@ -168,15 +169,22 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         /// <param name="songListKey"></param>
         /// <returns></returns>
-        public Dictionary<MusicPack,List<string>> getListOfApplicableMusicPacks(string songListKey)
+        public Dictionary<MusicPack,List<Song>> getListOfApplicableMusicPacks(string songListKey)
         {
-            Dictionary<MusicPack, List<string>> listOfValidDictionaries = new Dictionary<MusicPack, List<string>>();
+            Dictionary<MusicPack, List<Song>> listOfValidDictionaries = new Dictionary<MusicPack, List<Song>>();
             foreach(var v in this.musicPacks)
             {
-              var songList= v.Value.songInformation.getSongList(songListKey).Value;
-                if (songList.Count > 0)
+                try
                 {
-                    listOfValidDictionaries.Add(v.Value, songList);
+                    var songList = v.Value.songInformation.getSongList(songListKey).Value;
+                    if (songList.Count > 0)
+                    {
+                        listOfValidDictionaries.Add(v.Value, songList);
+                    }
+                }
+                catch(Exception err)
+                {
+
                 }
             }
             return listOfValidDictionaries;
@@ -188,14 +196,101 @@ namespace StardewSymphonyRemastered.Framework
         /// <param name="songListKey"></param>
         public void selectMusic(string songListKey)
         {
+           
             var listOfValidMusicPacks = getListOfApplicableMusicPacks(songListKey);
+          
+            string subKey = songListKey;
+            //Try to get more specific.
+            
+            //This chunk is to determine song specifics for location.
+            while (listOfValidMusicPacks.Count == 0)
+            {
+                if (subKey.Length == 0) break;
+                string[] subList=  subKey.Split(SongSpecifics.seperator);
+                if (subList.Length == 0) break; //Because things would go bad otherwise.
+                subKey = "";
+                for(int i = 0; i < subList.Length-1; i++)
+                {
+                    subKey += subList[i];
+                    if (i != subList.Length - 2)
+                    {
+                        subKey += SongSpecifics.seperator;
+                    }
+                }
+                if (subKey == "") break;
+                StardewSymphony.ModMonitor.Log(subKey,StardewModdingAPI.LogLevel.Alert);
+                listOfValidMusicPacks = getListOfApplicableMusicPacks(subKey);
+                if (listOfValidMusicPacks.Count == 0)
+                {
+                    //No valid songs to play at this time.
+                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". Are you sure you did this properly?");
+                    //return;
+                }
+            }
+
+            if (listOfValidMusicPacks.Count == 0)
+            {
+                //This chunk is used to determine more general seasonal specifics if song specifics couldn't be found.
+                subKey = songListKey;
+                string[] season = subKey.Split(SongSpecifics.seperator);
+                subKey = "";
+                for (int i = 1; i < season.Length; i++)
+                {
+                    subKey += season[i];
+                    if (i != season.Length - 1)
+                    {
+                        subKey += SongSpecifics.seperator;
+                    }
+                }
+                if (string.IsNullOrEmpty(subKey))
+                {
+                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ". Are you sure you did this properly?");
+                    return;
+                }
+                StardewSymphony.ModMonitor.Log(subKey, StardewModdingAPI.LogLevel.Alert);
+                listOfValidMusicPacks = getListOfApplicableMusicPacks(subKey);
+                if (listOfValidMusicPacks.Count == 0)
+                {
+                    //No valid songs to play at this time.
+                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". Are you sure you did this properly?");
+                    //return;
+                }
+                //Try to get more specific.
+
+                while (listOfValidMusicPacks.Count == 0)
+                {
+                    if (subKey.Length == 0) break;
+                    string[] subList = subKey.Split(SongSpecifics.seperator);
+                    if (subList.Length == 0) break; //Because things would go bad otherwise.
+                    subKey = "";
+                    for (int i = 0; i < subList.Length - 1; i++)
+                    {
+                        subKey += subList[i];
+                        if (i != subList.Length - 2)
+                        {
+                            subKey += SongSpecifics.seperator;
+                        }
+                    }
+                    if (subKey == "") break;
+                    StardewSymphony.ModMonitor.Log(subKey, StardewModdingAPI.LogLevel.Alert);
+                    listOfValidMusicPacks = getListOfApplicableMusicPacks(subKey);
+                    if (listOfValidMusicPacks.Count == 0)
+                    {
+                        //No valid songs to play at this time.
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". Are you sure you did this properly?");
+                        //return;
+                    }
+                }
+            }
+
             if (listOfValidMusicPacks.Count == 0)
             {
                 //No valid songs to play at this time.
-                StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack. Are you sure you did this properly?");
+                StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ". Are you sure you did this properly?");
                 return;
             }
-            
+
+
             int randInt = packSelector.Next(0, listOfValidMusicPacks.Count-1);
 
             var musicPackPair = listOfValidMusicPacks.ElementAt(randInt);
@@ -207,25 +302,57 @@ namespace StardewSymphonyRemastered.Framework
 
             var songName = musicPackPair.Value.ElementAt(randInt2);
 
-            this.currentMusicPack.playSong(songName);
+            this.currentMusicPack.playSong(songName.name);
         }
 
-        /// <summary>
-        /// TODO: Make WAV MUSIC PACKS
-        /// </summary>
-        /// <param name="wavMusicPack"></param>
-        public void addMusicPack(WavMusicPack wavMusicPack)
-        {
-
-        }
 
         /// <summary>
         /// Adds a valid xwb music pack to the list of music packs available.
         /// </summary>
-        /// <param name="xwbMusicPack"></param>
-        public void addMusicPack(XACTMusicPack xwbMusicPack)
+        /// <param name="musicPack"></param>
+        /// <param name="displayLogInformation">Whether or not to display the process to the console. Will include information from the pack's metadata. Default:False</param>
+        /// <param name="xwbMusicPack">If displayLogInformation is also true this will display the name of all of the songs in the music pack when it is added in.</param>
+        public void addMusicPack(MusicPack musicPack,bool displayLogInformation=false,bool displaySongs=false)
         {
-            this.musicPacks.Add(xwbMusicPack.musicPackInformation.name,xwbMusicPack);
+            if (displayLogInformation == true)
+            {
+                StardewSymphony.ModMonitor.Log("Adding a new music pack!");
+
+    
+                StardewSymphony.ModMonitor.Log("    Location:" + musicPack.shortenedDirectory);
+                StardewSymphony.ModMonitor.Log("    Name:" + musicPack.musicPackInformation.name);
+                StardewSymphony.ModMonitor.Log("    Author:" + musicPack.musicPackInformation.author);
+                StardewSymphony.ModMonitor.Log("    Description:" + musicPack.musicPackInformation.description);
+                StardewSymphony.ModMonitor.Log("    Version Info:" + musicPack.musicPackInformation.versionInfo);
+                StardewSymphony.ModMonitor.Log("    Song List:");
+
+                if (displaySongs == true)
+                {
+                    foreach(var song in musicPack.songInformation.listOfSongsWithoutTriggers)
+                    {
+                        StardewSymphony.ModMonitor.Log("        " + song.name);
+                    }
+                }
+            }
+            /*
+            if(musicPack.GetType()==typeof(WavMusicPack)){
+                foreach (var song in musicPack.songInformation.listOfSongsWithoutTriggers)
+                {
+                    (musicPack as WavMusicPack).LoadWavFromFileToStream(song.pathToSong);
+                }
+            }
+            */
+
+            this.musicPacks.Add(musicPack.musicPackInformation.name,musicPack);
+        }
+
+
+        public void initializeSeasonalMusic()
+        {
+            foreach(var pack in this.musicPacks)
+            {
+                pack.Value.songInformation.initializeSeasonalMusic();
+            }
         }
     }
 }

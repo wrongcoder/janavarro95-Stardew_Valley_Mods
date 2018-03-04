@@ -17,33 +17,36 @@ namespace StardewSymphonyRemastered.Framework
         public Microsoft.Xna.Framework.Audio.WaveBank WaveBank;
         public Microsoft.Xna.Framework.Audio.SoundBank SoundBank;
 
-
-
         public Cue currentCue;
 
-
-        //Make Music pack meta data. Includes author, version, description.
-
-        public string XWBPath;
+        public string WaveBankPath;
+        public string SoundBankPath;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="directoryToXwb"></param>
-        /// <param name="pathToXWB"></param>
-        public XACTMusicPack(string directoryToXwb,string pathToXWB)
+        /// <param name="pathToWaveBank"></param>
+        /// <param name="pathToSoundBank"></param>
+        public XACTMusicPack(string directoryToXwb,string pathToWaveBank,string pathToSoundBank)
         {
             this.directory = directoryToXwb;
-            this.XWBPath = pathToXWB;
+            this.WaveBankPath = pathToWaveBank;
+            this.SoundBankPath = pathToSoundBank;
+            this.setModDirectoryFromFullDirectory();
             this.songInformation = new SongSpecifics();
             this.currentCue = null;
             this.musicPackInformation = MusicPackMetaData.readFromJson(Path.Combine(directoryToXwb, "MusicPackInformation.json"));
             if (this.musicPackInformation == null)
             {
                 StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.",StardewModdingAPI.LogLevel.Warn);
-                this.musicPackInformation = new MusicPackMetaData("???","???","","0.0.0");
+                this.musicPackInformation = new MusicPackMetaData("???","???","","0.0.0","");
             }
+
+            this.WaveBank = new WaveBank(Game1.audioEngine, this.WaveBankPath);
+            this.SoundBank = new SoundBank(Game1.audioEngine,this.SoundBankPath);
+            this.loadMusicFiles();
         }
 
         /// <summary>
@@ -51,7 +54,21 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void loadMusicFiles()
         {
-          this.songInformation.listOfSongsWithoutTriggers=StardewSymphonyRemastered.Framework.MusicHexProcessor.ProcessSongNamesFromHex(this,StardewSymphony.Reset,this.XWBPath);
+
+            var listOfSongStrings = StardewSymphonyRemastered.Framework.MusicHexProcessor.ProcessSongNamesFromHex(this, StardewSymphony.Reset, this.SoundBankPath);
+
+            List<Song> listofSongs = new List<Song>();
+            foreach(var songname in listOfSongStrings)
+            {
+                Song song = new Song(this.WaveBankPath, songname);
+                listofSongs.Add(song);
+            }
+
+            this.songInformation.listOfSongsWithoutTriggers = listofSongs;
+                
+            
+                
+               
         }
 
         /// <summary>
@@ -62,7 +79,7 @@ namespace StardewSymphonyRemastered.Framework
         private Cue getCue(string name) {
             if (this.songInformation.isSongInList(name) == false)
             {
-                StardewSymphony.ModMonitor.Log("Error! The song " + name + " could not be found in music pack " + this.musicPackInformation.name+". Please ensure that this song is part of this music pack located at: "+ this.XWBPath+ " or contact the music pack author: "+this.musicPackInformation.author,StardewModdingAPI.LogLevel.Error);
+                StardewSymphony.ModMonitor.Log("Error! The song " + name + " could not be found in music pack " + this.musicPackInformation.name+". Please ensure that this song is part of this music pack located at: "+ this.WaveBankPath+ " or contact the music pack author: "+this.musicPackInformation.author,StardewModdingAPI.LogLevel.Error);
                 return null;
             }
             else
@@ -154,6 +171,26 @@ namespace StardewSymphonyRemastered.Framework
         public override string getNameOfCurrentSong()
         {
             return this.currentCue.Name;
+        }
+
+        /// <summary>
+        /// Returns a shortened directory name for display purposes.
+        /// </summary>
+        /// <returns></returns>
+        public override void setModDirectoryFromFullDirectory()
+        {
+            string[] spliter = this.WaveBankPath.Split(Path.DirectorySeparatorChar);
+            string directoryLocation="";
+            for (int i = spliter.Length - 5; i < spliter.Length; i++)
+            {
+                directoryLocation += spliter[i];
+
+                if (i != spliter.Length - 1)
+                {
+                    directoryLocation += Path.DirectorySeparatorChar;
+                }
+            }
+            this.shortenedDirectory = directoryLocation;
         }
 
     }

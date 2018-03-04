@@ -49,6 +49,8 @@ namespace StardewSymphonyRemastered.Framework
                 string rawName = FileName.Substring(0, FileName.Length - 4);
                 string cueName = rawName + "CueList.txt";
 
+                //Not used as the music pack can change between loads
+                /*
                 if (File.Exists(cueName))
                 {
                     string[] arr = File.ReadAllLines(cueName);
@@ -59,6 +61,7 @@ namespace StardewSymphonyRemastered.Framework
                     }
                     return names;
                 }
+                */
                 string hexDumpContents = HexDump(array);
 
                 string rawHexName = rawName + "HexDump.txt";
@@ -89,19 +92,24 @@ namespace StardewSymphonyRemastered.Framework
                 foreach (var split in splits)
                 {
                     if (split == "") continue;
-
                     try
                     {
                         Game1.waveBank = musicPack.WaveBank;
                         Game1.soundBank = musicPack.SoundBank;
 
-                        if (Game1.soundBank.GetCue(split) != null)
-                            cleanCueNames.Add(split);
+                    if (Game1.soundBank.GetCue(split) != null)
+                    {
+                        cleanCueNames.Add(split);
+                    }
 
                         reset.Invoke();
                     }
-                    catch { }
+                    catch(Exception err)
+                    {
+                    reset.Invoke();
+                    }
                 }
+
 
                 return cleanCueNames;
         }
