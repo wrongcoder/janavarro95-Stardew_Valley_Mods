@@ -146,8 +146,6 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             Seasons myseason=Seasons.spring;
 
-            AnimationType currentType = AnimationType.standing;
-
             if (Game1.currentSeason == "spring") myseason = Seasons.spring;
             if (Game1.currentSeason == "summer") myseason = Seasons.summer;
             if (Game1.currentSeason == "fall") myseason = Seasons.fall;
@@ -202,6 +200,7 @@ namespace CustomNPCFramework.Framework.Graphics
                 accIntList.Add(acc);
             }
 
+            //Get a single sheet to pull from.
             AssetSheet bodySheet = bodyList.ElementAt(bodyIndex);
             AssetSheet eyesSheet = eyesList.ElementAt(bodyIndex);
             AssetSheet hairSheet = hairList.ElementAt(bodyIndex);
@@ -215,21 +214,23 @@ namespace CustomNPCFramework.Framework.Graphics
                 accessorySheet.Add(accessoryList.ElementAt(v));
             }
 
+            var render = generateBasicRenderer(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet);
+            ExtendedNPC npc = new ExtendedNPC(null, render, new Microsoft.Xna.Framework.Vector2(13, 15) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
 
+        }
+
+        public virtual BasicRenderer generateBasicRenderer(AssetSheet bodySheet, AssetSheet eyesSheet, AssetSheet hairSheet, AssetSheet shirtSheet, AssetSheet pantsSheet, AssetSheet shoesSheet, List<AssetSheet> accessorySheet)
+        {
+            //Get all of the appropriate animations.
             AnimationType type = AnimationType.standing;
             var standingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
             type = AnimationType.walking;
             var movingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
             type = AnimationType.swimming;
             var swimmingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
-            //type = AnimationType.standing;
-            //var sAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
 
-
-            BasicRenderer render = new BasicRenderer(standingAnimation,movingAnimation,swimmingAnimation);
-
-            ExtendedNPC npc = new ExtendedNPC(null, render, new Microsoft.Xna.Framework.Vector2(13, 15) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
-
+            BasicRenderer render = new BasicRenderer(standingAnimation, movingAnimation, swimmingAnimation);
+            return render;
         }
 
         public virtual StandardCharacterAnimation generateCharacterAnimation(AssetSheet body, AssetSheet eyes, AssetSheet hair, AssetSheet shirt, AssetSheet pants, AssetSheet shoes,List<AssetSheet> accessories, AnimationType animationType)
@@ -249,50 +250,5 @@ namespace CustomNPCFramework.Framework.Graphics
             StandardCharacterAnimation standingAnimation = new StandardCharacterAnimation(bodySprite, eyesSprite, hairSprite, shirtSprite, pantsSprite, shoesSprite, accessoryCollection);
             return standingAnimation;
         }
-
-
-        /*
-        public void generateNPC(string assetManagerName,Genders gender, Seasons season, int minNumOfAccessories,int maxNumOfAccessories)
-        {
-           var body= this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, PartType.body);
-           var eyes = this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, PartType.eyes);
-           var hair = this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, PartType.hair);
-           var shirt = this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, PartType.shirt);
-           var pants = this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, PartType.pants);
-           var shoes = this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, PartType.shoes);
-           List<AssetSheet> accessories = new List<AssetSheet>();
-           Random r = new Random(Game1.random.Next());
-           int amount=r.Next(minNumOfAccessories, maxNumOfAccessories);
-           var accessoriesList= this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, PartType.shoes);
-
-            int bodyIndex = r.Next(0, body.Count - 1);
-            int eyesIndex = r.Next(0, eyes.Count - 1);
-            int hairIndex = r.Next(0, hair.Count - 1);
-            int shirtIndex = r.Next(0, shirt.Count - 1);
-            int pantsIndex = r.Next(0, pants.Count - 1);
-            int shoesIndex = r.Next(0, shoes.Count - 1);
-            List<int> accIntList = new List<int>();
-            for(int i=0; i < amount; i++)
-            {
-                int acc= r.Next(0, accessoriesList.Count - 1);
-                accIntList.Add(acc);
-            }
-
-            AssetSheet bodySheet = body.ElementAt(bodyIndex);
-            AssetSheet eyesSheet = body.ElementAt(bodyIndex);
-            AssetSheet hairSheet = body.ElementAt(bodyIndex);
-            AssetSheet shirtSheet = body.ElementAt(bodyIndex);
-            AssetSheet pantsSheet = body.ElementAt(bodyIndex);
-            AssetSheet shoesSheet = body.ElementAt(bodyIndex);
-
-            foreach(var v in accIntList)
-            {
-                accessories.Add(accessoriesList.ElementAt(v));
-            }
-
-
-        }
-        */
-
     }
 }

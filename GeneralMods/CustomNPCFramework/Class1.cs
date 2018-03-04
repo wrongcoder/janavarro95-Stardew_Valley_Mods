@@ -21,9 +21,9 @@ namespace CustomNPCFramework
     /// TODO:
     /// List all asset managers in use.
     /// Have all asset managers list what assets they are using.
-    /// FIX NPC GENERATION IN ASSETPOOL.CS
     /// 
     /// Load in the assets and go go go.
+    ///     -Collect a bunch of assets together to test this thing.
     /// </summary>
 
 

@@ -13,7 +13,6 @@ namespace CustomNPCFramework.Framework.Graphics
         public Genders gender;
         public List<Seasons> seasons;
         public PartType type;
-        public AnimationType animationType;
         
         public ExtendedAssetInfo()
         {
