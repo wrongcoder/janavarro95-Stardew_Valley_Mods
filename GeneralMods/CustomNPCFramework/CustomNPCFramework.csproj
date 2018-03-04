@@ -56,6 +56,7 @@
     <Compile Include="Framework\ModularNPCS\Portrait.cs" />
     <Compile Include="Framework\ModularNPCS\Sprite.cs" />
     <Compile Include="Framework\NPCS\ExtendedNPC.cs" />
+    <Compile Include="Framework\Utilities\NPCTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

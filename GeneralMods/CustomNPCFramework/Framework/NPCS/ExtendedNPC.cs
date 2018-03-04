@@ -36,6 +36,9 @@ namespace CustomNPCFramework.Framework.NPCS
         public Sprite spriteInformation;
 
         public Portrait portraitInformation;
+
+        public GameLocation defaultLocation;
+
         public ExtendedNPC() :base()
         {
         }

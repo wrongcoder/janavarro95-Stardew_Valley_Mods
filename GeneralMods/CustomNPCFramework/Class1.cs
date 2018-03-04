@@ -2,6 +2,7 @@
 using CustomNPCFramework.Framework.ModularNPCS;
 using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
 using CustomNPCFramework.Framework.NPCS;
+using CustomNPCFramework.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -20,6 +21,7 @@ namespace CustomNPCFramework
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
         public static AssetManager assetManager;
+        public static NPCTracker npcTracker;
         public override void Entry(IModHelper helper)
         {
             ModHelper = this.Helper;
@@ -28,8 +30,23 @@ namespace CustomNPCFramework
             initializeExamples();
             assetManager.loadAssets();
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_LoadChar;
+
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
+            StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
+
             StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            npcTracker = new NPCTracker();
+        }
+
+        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        {
+            npcTracker.afterSave();
+        }
+
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            npcTracker.cleanUpBeforeSave();
         }
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
@@ -48,6 +65,11 @@ namespace CustomNPCFramework
          
         }
 
+        /// <summary>
+        /// Used to spawn a custom npc just as an example. Don't keep this code.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveEvents_LoadChar(object sender, EventArgs e)
         {
             string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS", "Characters", "RainMan");
@@ -55,7 +77,7 @@ namespace CustomNPCFramework
             Texture2D tex = ModHelper.Content.Load<Texture2D>(Path.Combine(getShortenedDirectory(path).Remove(0, 1), "character.png"));
             ModMonitor.Log("PATH???: " + path);
             ExtendedNPC myNpc3 = new ExtendedNPC(new Framework.ModularNPCS.Sprite(Path.Combine(path,"character.png")),null, new Vector2(14, 14)*Game1.tileSize, 2, "b2");
-            Game1.getLocationFromName("BusStop").addCharacter(myNpc3);
+            npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop"),myNpc3);
             myNpc3.SetMovingDown(true);
         }
 
