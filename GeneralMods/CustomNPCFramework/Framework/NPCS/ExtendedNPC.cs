@@ -18,6 +18,12 @@ using xTile.Tiles;
 
 namespace CustomNPCFramework.Framework.NPCS
 {
+    /// <summary>
+    /// TODO: Add in an resource loader for all of the character graphics and use it to populate some character graphics.
+    /// Make .json way to load in assets to the mod.
+    /// Organize it all.
+    /// Profit???
+    /// </summary>
     public class ExtendedNPC :StardewValley.NPC
     {
         public BasicRenderer characterRenderer;

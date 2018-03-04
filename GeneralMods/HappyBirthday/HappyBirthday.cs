@@ -13,7 +13,7 @@ using SObject = StardewValley.Object;
 namespace Omegasis.HappyBirthday
 {
     /// <summary>The mod entry point.</summary>
-    public class HappyBirthday : Mod
+    public class HappyBirthday : Mod, IAssetEditor, IAssetLoader
     {
         /*********
         ** Properties
@@ -46,6 +46,68 @@ namespace Omegasis.HappyBirthday
         private bool CheckedForBirthday;
         //private Dictionary<string, Dialogue> Dialogue;
         //private bool SeenEvent;
+        public bool CanLoad<T>(IAssetInfo asset)
+        {
+            return asset.AssetNameEquals(@"Data\FarmerBirthdayDialogue");
+        }
+
+        /// <summary>Load a matched asset.</summary>
+        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        public T Load<T>(IAssetInfo asset)
+        {
+            return (T)(object)new Dictionary<string, string> // (T)(object) is a trick to cast anything to T if we know it's compatible
+            {
+                ["Robin"] = "Hey @, happy birthday! I'm glad you choose this town to move here to. ",
+                ["Demetrius"] = "Happy birthday @! Make sure you take some time off today to enjoy yourself. $h",
+                ["Maru"] = "Happy birthday @. I tried to make you an everlasting candle but sadly that didn't work out. Maybe next year right? $h",
+                ["Sebastian"] = "Happy birthday @. Here's to another year of chilling. ",
+                ["Linus"] = "Happy birthday @. Thanks for visiting me even on your birthday. It makes me really happy. ",
+                ["Pierre"] = "Hey @, happy birthday! Hopefully this next year for you will be a great one! ",
+                ["Caroline"] = "Happy birthday @. Thank you for all that you've done for our community. I'm sure your parents must be proud of you.$h",
+                ["Abigail"] = "Happy Birthday @! Hopefully this year we can go on even more adventures together $h!",
+                ["Alex"] = "Yo @, happy birthday! Maybe this will be your best year yet.$h",
+                ["George"] = "When you get to my age birthdays come and go. Still happy birthday @.",
+                ["Evelyn"] = "Happy birthday @. You have grown up to be such a fine individual and I'm sure you'll continue to grow. ",
+                ["Lewis"] = "Happy birthday @! I'm thankful for what you have done for the town and I'm sure your grandfather would be proud of you.",
+                ["Clint"] = "Hey happy birthday @. I'm sure this year is going to be great for you.",
+                ["Penny"] = "Happy birthday @. May you enjoy all of life's blessings this year. ",
+                ["Pam"] = "Happy birthday kid. We should have a drink to celebrate another year of life for you! $h",
+                ["Emily"] = "I'm sensing a strong positive life energy about you, so it must be your birthday. Happy birthday @!$h",
+                ["Haley"] = "Happy birthday @. Hopefully this year you'll get some good presents!$h",
+                ["Jas"] = "Happy birthday @. I hope you have a good birthday.",
+                ["Vincent"] = "Hey @ have you come to pl...oh it's your birthday? Happy birthday! ",
+                ["Jodi"] = "Hello there @. Rumor has it that today is your birthday. In that case, happy birthday!$h",
+                ["Kent"] = "Jodi told me that it was your birthday today @. Happy birthday and make sure to cherish every single day.",
+                ["Sam"] = "Yo @ happy birthday! We'll have to have a birthday jam session for you some time!$h ",
+                ["Leah"] = "Hey @ happy birthday! We should go to the saloon tonight and celebrate!$h ",
+                ["Shane"] = "Happy birthday @. Keep working hard and I'm sure this next year for you will be a great one.",
+                ["Marnie"] = "Hello there @. Everyone is talking about your birthday today and I wanted to make sure that I wished you a happy birthday as well, so happy birthday! $h ",
+                ["Elliott"] = "What a wonderful day isn't it @? Especially since today is your birthday. I tried to make you a poem but I feel like the best way of putting it is simply, happy birthday. $h ",
+                ["Gus"] = "Hey @ happy birthday! Hopefully you enjoy the rest of the day and make sure you aren't a stranger at the saloon!",
+                ["Dwarf"] = "Happy birthday @. I hope that what I got you is acceptable for humans as well. ",
+                ["Wizard"] = "The spirits told me that today is your birthday. In that case happy birthday @. ",
+                ["Harvey"] = "Hey @, happy birthday! Make sure to come in for a checkup some time to make sure you live many more years! ",
+                ["Sandy"] = "Hello there @. I heard that today was your birthday and I didn't want you feeling left out, so happy birthday!",
+                ["Willy"] = "Aye @ happy birthday. Looking at you reminds me of ye days when I was just a guppy swimming out to sea. Continue to enjoy them youngin.$h",
+                ["Krobus"] = "I have heard that it is tradition to give a gift to others on their birthday. In that case, happy birthday @."
+            };
+        }
+
+        public bool CanEdit<T>(IAssetInfo asset)
+        {
+            return asset.AssetNameEquals(@"Data\mail");
+        }
+
+        public void Edit<T>(IAssetData asset)
+        {
+            asset
+            .AsDictionary<string, string>()
+            .Set("birthdayMom", "Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %%");
+
+            asset
+            .AsDictionary<string, string>()
+            .Set("birthdayDad", "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%");
+        }
 
 
         /*********
@@ -55,6 +117,7 @@ namespace Omegasis.HappyBirthday
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            helper.Content.AssetLoaders.Add(new PossibleGifts());
             this.Config = helper.ReadConfig<ModConfig>();
 
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -299,8 +362,7 @@ namespace Omegasis.HappyBirthday
             {
                 // read from birthday gifts file
                 IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-                string text;
-                data.TryGetValue(name, out text);
+                data.TryGetValue(name, out string text);
                 if (text != null)
                 {
                     string[] fields = text.Split('/');
@@ -400,8 +462,7 @@ namespace Omegasis.HappyBirthday
             if (!isBirthdayGiftList)
             {
                 // get raw data
-                string text;
-                Game1.NPCGiftTastes.TryGetValue($"Universal_{group}", out text);
+                Game1.NPCGiftTastes.TryGetValue($"Universal_{group}", out string text);
                 if (text == null)
                     yield break;
 
@@ -417,8 +478,7 @@ namespace Omegasis.HappyBirthday
             {
                 // get raw data
                 Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-                string text;
-                data.TryGetValue($"Universal_{group}_Gift", out text);
+                data.TryGetValue($"Universal_{group}_Gift", out string text);
                 if (text == null)
                     yield break;
 
@@ -437,8 +497,7 @@ namespace Omegasis.HappyBirthday
         private IEnumerable<SObject> GetLikedItems(string name)
         {
             // get raw data
-            string text;
-            Game1.NPCGiftTastes.TryGetValue(name, out text);
+            Game1.NPCGiftTastes.TryGetValue(name, out string text);
             if (text == null)
                 yield break;
 
@@ -457,8 +516,7 @@ namespace Omegasis.HappyBirthday
         private IEnumerable<SObject> GetLovedItems(string name)
         {
             // get raw data
-            string text;
-            Game1.NPCGiftTastes.TryGetValue(name, out text);
+            Game1.NPCGiftTastes.TryGetValue(name, out string text);
             if (text == null)
                 yield break;
 
