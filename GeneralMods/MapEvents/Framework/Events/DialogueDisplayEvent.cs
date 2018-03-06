@@ -13,12 +13,11 @@ namespace EventSystem.Framework.Events
     public class DialogueDisplayEvent :MapEvent
     {
         string dialogue;
-        public DialogueDisplayEvent(string Name, GameLocation Location, Vector2 Position, PlayerEvents playerEvents, MouseButtonEvents MouseEvents,MouseEntryLeaveEvent EntryLeave, string Dialogue) : base(Name, Location, Position, playerEvents)
+        public DialogueDisplayEvent(string Name, GameLocation Location, Vector2 Position, MouseButtonEvents MouseEvents,MouseEntryLeaveEvent EntryLeave, string Dialogue) : base(Name, Location, Position)
         {
             this.name = Name;
             this.location = Location;
             this.tilePosition = Position;
-            this.playerEvents = playerEvents;
             this.mouseButtonEvents = MouseEvents;
 
             this.doesInteractionNeedToRun = true;
@@ -28,48 +27,12 @@ namespace EventSystem.Framework.Events
         }
 
 
-        /// <summary>
-        /// Occurs when the player enters the warp tile event position.
-        /// </summary>s
-        public override void OnPlayerEnter()
+        public override bool OnLeftClick()
         {
-            if (isPlayerOnTile() == true && this.doesInteractionNeedToRun == true)
-            {
-                this.doesInteractionNeedToRun = false;
-                this.playerOnTile = true;
-                if (this.playerEvents != null)
-                {
-                    if (this.playerEvents.onPlayerEnter != null) this.playerEvents.onPlayerEnter.run(); //used to run a function before the warp.
-                }
-                Game1.activeClickableMenu =new StardewValley.Menus.DialogueBox(this.dialogue);
-                //Game1.drawDialogueBox(this.dialogue);     
-            }
-        }
-
-        /// <summary>
-        /// Runs when the player is not on the tile and resets player interaction.
-        /// </summary>
-        public override void OnPlayerLeave()
-        {
-            if (isPlayerOnTile() == false && this.playerOnTile == true)
-            {
-                this.playerOnTile = false;
-                this.doesInteractionNeedToRun = true;
-                if (this.playerEvents != null)
-                {
-                    if (this.playerEvents.onPlayerLeave != null) this.playerEvents.onPlayerLeave.run();
-                }
-            }
-        }
-
-        public override void OnLeftClick()
-        {
-            if (Game1.activeClickableMenu != null) return;
-            if (this.mouseButtonEvents == null) return;
-            if (this.mouseOnTile == false) return;
-            if (this.location.isObjectAt((int)this.tilePosition.X*Game1.tileSize, (int)this.tilePosition.Y*Game1.tileSize)) return;
-            if (this.mouseButtonEvents.onLeftClick != null) this.mouseButtonEvents.onLeftClick.run();
+            if (base.OnLeftClick() == false) return false;
+            if (this.location.isObjectAt((int)this.tilePosition.X*Game1.tileSize, (int)this.tilePosition.Y*Game1.tileSize)) return false;
             Game1.activeClickableMenu = new StardewValley.Menus.DialogueBox(this.dialogue);
+            return true;
         }
 
         /// <summary>
@@ -78,10 +41,9 @@ namespace EventSystem.Framework.Events
         public override void update()
         {
             this.clickEvent();
+            //Needed for updating.
             this.OnMouseEnter();
             this.OnMouseLeave();
-            this.OnPlayerEnter();
-            this.OnPlayerLeave();
         }
 
     }
