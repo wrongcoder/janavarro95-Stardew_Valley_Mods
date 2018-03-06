@@ -27,7 +27,7 @@ namespace SundropMapEvents
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             EventSystem.EventSystem.eventManager.addEvent(Game1.getLocationFromName("BusStop"), new WarpEvent("toRR", Game1.getLocationFromName("BusStop"), new Vector2(6, 11), new PlayerEvents(null, null), new WarpInformation("BusStop", 10, 12, 2, false)));
-            EventSystem.EventSystem.eventManager.addEvent(Game1.getLocationFromName("BusStop"), new DialogueDisplayEvent("Hello.", Game1.getLocationFromName("BusStop"), new Vector2(10, 13), new PlayerEvents(null, null), "Hello there!"));
+            EventSystem.EventSystem.eventManager.addEvent(Game1.getLocationFromName("BusStop"), new DialogueDisplayEvent("Hello.", Game1.getLocationFromName("BusStop"), new Vector2(10, 13), new PlayerEvents(null, null),new MouseButtonEvents(null,null) , new MouseEntryLeaveEvent(null,null),"Hello there!"));
         }
     }
 }

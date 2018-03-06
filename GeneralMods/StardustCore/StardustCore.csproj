@@ -49,6 +49,9 @@
     <Compile Include="Math\Hex32.cs" />
     <Compile Include="UIUtilities\IClickableMenuExtended.cs" />
     <Compile Include="UIUtilities\LayeredTexture.cs" />
+    <Compile Include="UIUtilities\MenuComponents\Delegates\Delegates.cs" />
+    <Compile Include="UIUtilities\MenuComponents\Delegates\DelegatePairing.cs" />
+    <Compile Include="UIUtilities\MenuComponents\Delegates\Functionality\ButtonFunctionality.cs" />
     <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\GenericCharacterSheets.cs" />
     <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\VanillaCharacterSheet.cs" />
     <Compile Include="UIUtilities\SpriteFonts\Fonts\Components\CharacterSpacing.cs" />

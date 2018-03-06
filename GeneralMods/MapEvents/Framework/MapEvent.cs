@@ -177,6 +177,7 @@ namespace EventSystem.Framework
         /// </summary>
         public virtual void OnLeftClick()
         {
+            if (Game1.activeClickableMenu != null) return;
             if (this.mouseOnTile==false) return;
             if (this.mouseButtonEvents.onLeftClick != null) this.mouseButtonEvents.onLeftClick.run();
         }
@@ -230,7 +231,7 @@ namespace EventSystem.Framework
         /// <returns></returns>
         public virtual bool isMouseOnTile()
         {
-            Vector2 mousePosition = new Vector2(Game1.getMouseX(), Game1.getMouseY());
+            Vector2 mousePosition = Game1.currentCursorTile;
             if (mousePosition.X == this.tilePosition.X && mousePosition.Y == this.tilePosition.Y) return true;
             return false;
         }
@@ -238,7 +239,7 @@ namespace EventSystem.Framework
         /// <summary>
         /// Occurs when the tile is clicked. Runs the appropriate event.
         /// </summary>
-        public virtual void eventClickEvent()
+        public virtual void clickEvent()
         {
             if (this.mouseOnTile == false) return;
             var mouseState=Mouse.GetState();
@@ -253,7 +254,7 @@ namespace EventSystem.Framework
         /// </summary>
         public virtual void update()
         {
-            eventClickEvent(); //click events
+            clickEvent(); //click events
             OnPlayerEnter(); //player enter events
             OnPlayerLeave(); //player leave events
             OnMouseEnter(); //on mouse enter events

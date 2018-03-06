@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardustCore.UIUtilities.MenuComponents.Delegates;
+using StardustCore.UIUtilities.MenuComponents.Delegates.Functionality;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StardustCore.UIUtilities.MenuComponents.Delegates.Delegates;
 
 namespace StardustCore.UIUtilities.MenuComponents
 {
@@ -14,6 +17,9 @@ namespace StardustCore.UIUtilities.MenuComponents
         public Animations.AnimationManager animationManager;
         public Color textureColor;
         public Color textColor;
+
+        public ButtonFunctionality buttonFunctionality;
+
         /// <summary>
         /// Basic Button constructor.
         /// </summary>
@@ -23,7 +29,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="Scale"></param>
         /// <param name="defaultAnimation"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, bool AnimationEnabled=true) : base(Bounds,Texture.texture,sourceRect,Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, ButtonFunctionality Functionality, bool AnimationEnabled=true) : base(Bounds,Texture.texture,sourceRect,Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation,AnimationEnabled);
             this.label = displayText;
@@ -38,6 +44,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             {
                 this.textColor = StardustCore.IlluminateFramework.Colors.getColorFromList("White");
             }
+            this.buttonFunctionality = Functionality;
         }
 
         /// <summary>
@@ -54,7 +61,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="startingAnimationKey"></param>
         /// <param name="startingAnimationFrame"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor,int startingAnimationFrame=0,bool AnimationEnabled=true) : base(Bounds, Texture.texture, sourceRect, Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor, ButtonFunctionality Functionality,int startingAnimationFrame=0,bool AnimationEnabled=true) : base(Bounds, Texture.texture, sourceRect, Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation, animationsToPlay, startingAnimationKey, startingAnimationFrame, AnimationEnabled);
             this.label = displayText;
@@ -69,6 +76,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             {
                 this.textColor = StardustCore.IlluminateFramework.Colors.getColorFromList("White");
             }
+            this.buttonFunctionality = Functionality;
         }
 
         /// <summary>
@@ -104,5 +112,35 @@ namespace StardustCore.UIUtilities.MenuComponents
             }
         }
     
+
+        public void onRightClick()
+        {
+            if (this.buttonFunctionality == null) return;
+            else
+            {
+                if (this.buttonFunctionality.rightClick == null) return;
+                else this.buttonFunctionality.rightClick.run();
+            }
+        }
+
+        public void onLeftClick()
+        {
+            if (this.buttonFunctionality == null) return;
+            else
+            {
+                if (this.buttonFunctionality.leftClick == null) return;
+                else this.buttonFunctionality.leftClick.run();
+            }
+        }
+
+        public void onHover()
+        {
+            if (this.buttonFunctionality == null) return;
+            else
+            {
+                if (this.buttonFunctionality.hover == null) return;
+                else this.buttonFunctionality.hover.run();
+            }
+        }
     }
 }
