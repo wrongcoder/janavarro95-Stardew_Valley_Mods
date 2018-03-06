@@ -45,6 +45,7 @@
     <Compile Include="EventSystem.cs" />
     <Compile Include="Framework\Delegates.cs" />
     <Compile Include="Framework\EventManager.cs" />
+    <Compile Include="Framework\Events\DialogueDisplayEvent.cs" />
     <Compile Include="Framework\Events\WarpEvent.cs" />
     <Compile Include="Framework\FunctionEvents\functionEvent.cs" />
     <Compile Include="Framework\FunctionEvents\MouseButtonEvents.cs" />

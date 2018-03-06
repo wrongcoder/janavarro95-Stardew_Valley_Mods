@@ -119,7 +119,7 @@ namespace CustomNPCFramework
             {
                 ModMonitor.Log("UGGGGGGG", LogLevel.Error);
             }
-            ExtendedNPC myNpc3 = new ExtendedNPC(new Framework.ModularNPCS.Sprite(pair.Key,pair.Value),null, new Vector2(14, 14)*Game1.tileSize, 2, "b2");
+            ExtendedNPC myNpc3 = new ExtendedNPC(new Framework.ModularNPCS.Sprite(pair.Key,pair.Value),null,null, new Vector2(14, 14)*Game1.tileSize, 2, "b2");
             npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop"),myNpc3);
             myNpc3.SetMovingDown(true);
         }

@@ -18,12 +18,12 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// Basic Button constructor.
         /// </summary>
         /// <param name="Bounds"></param>
-        /// <param name="Texture"></param>
+        /// <param name="Texture">The texture sheet to be drawn to the screen. Used with the animation manager this allows you to reference different parts of the sheet at any given time.</param>
         /// <param name="sourceRect"></param>
         /// <param name="Scale"></param>
         /// <param name="defaultAnimation"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2D Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, bool AnimationEnabled=true) : base(Bounds,Texture,sourceRect,Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, bool AnimationEnabled=true) : base(Bounds,Texture.texture,sourceRect,Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation,AnimationEnabled);
             this.label = displayText;
@@ -54,7 +54,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="startingAnimationKey"></param>
         /// <param name="startingAnimationFrame"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2D Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor,int startingAnimationFrame=0,bool AnimationEnabled=true) : base(Bounds, Texture, sourceRect, Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor,int startingAnimationFrame=0,bool AnimationEnabled=true) : base(Bounds, Texture.texture, sourceRect, Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation, animationsToPlay, startingAnimationKey, startingAnimationFrame, AnimationEnabled);
             this.label = displayText;

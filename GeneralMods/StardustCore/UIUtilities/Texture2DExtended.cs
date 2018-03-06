@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,16 +15,20 @@ namespace StardustCore.UIUtilities
         public Texture2D texture;
         public string path;
         
-        public Texture2DExtended(string path)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
+        public Texture2DExtended(IModHelper helper,string path)
         {
             this.Name = Path.GetFileName(path);
             this.path = path;
-            this.texture = StardustCore.ModCore.ModHelper.Content.Load<Texture2D>(path);
+            this.texture = helper.Content.Load<Texture2D>(path);
         }
         
-        public Texture2DExtended Copy()
+        public Texture2DExtended Copy(IModHelper helper)
         {
-            return new Texture2DExtended(this.path);
+            return new Texture2DExtended(helper,this.path);
         } 
     }
 }

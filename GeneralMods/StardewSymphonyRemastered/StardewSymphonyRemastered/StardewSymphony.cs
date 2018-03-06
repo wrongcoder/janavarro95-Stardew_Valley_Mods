@@ -9,6 +9,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewSymphonyRemastered.Framework;
 using System.IO;
+using StardustCore.UIUtilities;
 
 namespace StardewSymphonyRemastered
 {
@@ -42,6 +43,8 @@ namespace StardewSymphonyRemastered
 
         public bool musicPacksInitialized;
 
+
+        public static TextureManager textureManager;
         /// <summary>
         /// Entry point for the mod.
         /// </summary>
@@ -64,12 +67,14 @@ namespace StardewSymphonyRemastered
             WavMusicDirectory = Path.Combine(MusicPath, "Wav");
             XACTMusicDirectory = Path.Combine(MusicPath, "XACT");
             TemplateMusicDirectory = Path.Combine(MusicPath, "Templates");
-
+            textureManager = new TextureManager();
             this.createDirectories();
             this.createBlankXACTTemplate();
             this.createBlankWAVTemplate();
 
             musicPacksInitialized = false;
+
+           
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
@@ -84,9 +89,9 @@ namespace StardewSymphonyRemastered
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.O)
+            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
             {
-                Game1.activeClickableMenu = new StardewSymphonyRemastered.Framework.Menus.MusicManagerMenu(Game1.viewport.Width,Game1.viewport.Height);
+                Game1.activeClickableMenu = new Framework.Menus.MusicManagerMenu(Game1.viewport.Width,Game1.viewport.Height);
             }
         }
 
@@ -121,6 +126,11 @@ namespace StardewSymphonyRemastered
         /// </summary>
         public void createDirectories()
         {
+            string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "MusicMenu");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            string musicNote = Path.Combine(path, "MusicNote.png");
+            textureManager.addTexture("MusicNote",new Texture2DExtended(ModHelper,StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicNote)));
+
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);
             if (!Directory.Exists(WavMusicDirectory)) Directory.CreateDirectory(WavMusicDirectory);
             if (!Directory.Exists(XACTMusicDirectory)) Directory.CreateDirectory(XACTMusicDirectory);

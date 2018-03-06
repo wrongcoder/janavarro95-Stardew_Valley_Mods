@@ -47,6 +47,7 @@
     <Compile Include="IlluminateFramework\Colors.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
+    <Compile Include="UIUtilities\IClickableMenuExtended.cs" />
     <Compile Include="UIUtilities\LayeredTexture.cs" />
     <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\GenericCharacterSheets.cs" />
     <Compile Include="UIUtilities\SpriteFonts\CharacterSheets\VanillaCharacterSheet.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="UIUtilities\SpriteFonts\Fonts\VanillaFont.cs" />
     <Compile Include="UIUtilities\SpriteFonts\SpriteFont.cs" />
     <Compile Include="UIUtilities\Texture2DExtended.cs" />
+    <Compile Include="UIUtilities\TextureManager.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

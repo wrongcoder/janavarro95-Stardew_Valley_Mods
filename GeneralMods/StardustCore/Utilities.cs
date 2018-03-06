@@ -25,6 +25,19 @@ namespace StardustCore
         public static List<CoreObject> masterRemovalList = new List<CoreObject>();
 
 
+        public static string getShortenedDirectory(string modName,string path)
+        {
+            string lol = (string)path.Clone();
+            string[] spliter = lol.Split(new string[] { modName }, StringSplitOptions.None);
+            return spliter[1];
+        }
+
+        public static string getRelativeDirectory(string modName,string path)
+        {
+            string s = getShortenedDirectory(modName,path);
+            return s.Remove(0, 1);
+        }
+
         public static int sellToStorePrice(CoreObject c)
         {
             return  (int)((double)c.price * (1.0 + (double)c.quality * 0.25));

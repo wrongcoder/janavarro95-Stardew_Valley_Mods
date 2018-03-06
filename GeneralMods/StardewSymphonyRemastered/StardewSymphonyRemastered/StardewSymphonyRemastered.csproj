@@ -46,17 +46,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\Menus\MusicManagerMenu.cs" />
-    <Compile Include="Framework\MusicPackMetaData.cs" />
-    <Compile Include="Framework\Song.cs" />
-    <Compile Include="Framework\SongListNode.cs" />
+    <Compile Include="Framework\Music\MusicPackMetaData.cs" />
+    <Compile Include="Framework\Music\Song.cs" />
+    <Compile Include="Framework\Music\SongListNode.cs" />
     <Compile Include="StaticExtentions.cs" />
     <Compile Include="StardewSymphony.cs" />
-    <Compile Include="Framework\MusicHexProcessor.cs" />
-    <Compile Include="Framework\MusicManager.cs" />
-    <Compile Include="Framework\MusicPack.cs" />
-    <Compile Include="Framework\SongSpecifics.cs" />
-    <Compile Include="Framework\WavMusicPack.cs" />
-    <Compile Include="Framework\XACTMusicPack.cs" />
+    <Compile Include="Framework\Music\MusicHexProcessor.cs" />
+    <Compile Include="Framework\Music\MusicManager.cs" />
+    <Compile Include="Framework\Music\MusicPack.cs" />
+    <Compile Include="Framework\Music\SongSpecifics.cs" />
+    <Compile Include="Framework\Music\WavMusicPack.cs" />
+    <Compile Include="Framework\Music\XACTMusicPack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
