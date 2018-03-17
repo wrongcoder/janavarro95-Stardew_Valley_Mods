@@ -7,6 +7,7 @@ using CustomNPCFramework.Framework.NPCS;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,17 +82,17 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             assetPool.TryGetValue(name, out AssetManager asset);
             var assetSheet = asset.getAssetByName(name);
-            return new AnimatedSpriteExtended(assetSheet.clone().getCurrentSpriteTexture(), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+            return new AnimatedSpriteExtended(assetSheet.clone().getCurrentSpriteTexture(),assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
         }
 
 
         
         public AnimatedSpriteCollection getSpriteCollectionFromSheet(AssetSheet assetSheet, AnimationType type)
         {    
-                var left = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.left, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var right = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.right, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var up = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.up, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var down = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.down, type), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var left = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.left, type),assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var right = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.right, type),assetSheet.path.Clone().ToString(), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var up = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.up, type),assetSheet.path.Clone().ToString(), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var down = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.down, type), assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
                 return new AnimatedSpriteCollection(left, right, up, down, Direction.down); 
         }
         
@@ -142,7 +143,14 @@ namespace CustomNPCFramework.Framework.Graphics
             return parts;
         }
 
-        public void generateNPC(Genders gender, int minNumOfAccessories, int maxNumOfAccessories)
+
+        /// <summary>
+        /// Generate a basic npc based off of all all of the NPC data here.
+        /// </summary>
+        /// <param name="gender"></param>
+        /// <param name="minNumOfAccessories"></param>
+        /// <param name="maxNumOfAccessories"></param>
+        public ExtendedNPC generateNPC(Genders gender, int minNumOfAccessories, int maxNumOfAccessories)
         {
             Seasons myseason=Seasons.spring;
 
@@ -178,35 +186,105 @@ namespace CustomNPCFramework.Framework.Graphics
                 foreach (var piece in pants) pantsList.Add(piece);
 
                 var shoes = getListOfApplicableBodyParts(assetManager.Key, gender, myseason, PartType.shoes);
-                foreach (var piece in shoes) bodyList.Add(piece);
+                foreach (var piece in shoes) shoesList.Add(piece);
 
                 var accessory = getListOfApplicableBodyParts(assetManager.Key, gender, myseason, PartType.accessory);
                 foreach (var piece in accessory) accessoryList.Add(piece);
             }
 
-            Random r = new Random(Game1.random.Next());
-            int amount = r.Next(minNumOfAccessories, maxNumOfAccessories);
-           
-            int bodyIndex = r.Next(0, bodyList.Count - 1);
-            int eyesIndex = r.Next(0, eyesList.Count - 1);
-            int hairIndex = r.Next(0, hairList.Count - 1);
-            int shirtIndex = r.Next(0, shirtList.Count - 1);
-            int pantsIndex = r.Next(0, pantsList.Count - 1);
-            int shoesIndex = r.Next(0, shoesList.Count - 1);
-            List<int> accIntList = new List<int>();
-            for (int i = 0; i < amount; i++)
+            
+            Random r = new Random(System.DateTime.Now.Millisecond);
+            int amount = 0;
+            
+            amount = r.Next(minNumOfAccessories,maxNumOfAccessories + 1); //Necessary since r.next returns a num between min and (max-1)
+
+            int bodyIndex = 0;
+            int eyesIndex = 0;
+            int hairIndex = 0;
+            int shirtIndex = 0;
+            int pantsIndex = 0;
+            int shoesIndex = 0;
+
+            if (bodyList.Count != 0) {
+                bodyIndex = r.Next(0, bodyList.Count - 1);
+            }
+            else
             {
-                int acc = r.Next(0, accessoryList.Count - 1);
-                accIntList.Add(acc);
+                Class1.ModMonitor.Log("Error: Not enough body templates to generate an npc. Aborting", StardewModdingAPI.LogLevel.Error);
+                return null;
+            }
+
+            if (eyesList.Count != 0) {
+                eyesIndex = r.Next(0, eyesList.Count - 1);
+            }
+            else
+            {
+                Class1.ModMonitor.Log("Error: Not enough eyes templates to generate an npc. Aborting", StardewModdingAPI.LogLevel.Error);
+                return null;
+            }
+
+            if (hairList.Count != 0) {
+                hairIndex = r.Next(0, hairList.Count - 1);
+            }
+            else
+            {
+                Class1.ModMonitor.Log("Error: Not enough hair templates to generate an npc. Aborting", StardewModdingAPI.LogLevel.Error);
+                return null;
+            }
+
+            if (shirtList.Count != 0) {
+                shirtIndex = r.Next(0, shirtList.Count - 1);
+            }
+            else
+            {
+                Class1.ModMonitor.Log("Error: Not enough shirt templates to generate an npc. Aborting", StardewModdingAPI.LogLevel.Error);
+                return null;
+            }
+
+            if (pantsList.Count != 0) {
+                pantsIndex = r.Next(0, pantsList.Count - 1);
+            }
+            else
+            {
+                Class1.ModMonitor.Log("Error: Not enough pants templates to generate an npc. Aborting", StardewModdingAPI.LogLevel.Error);
+                return null;
+            }
+
+            if (shoesList.Count != 0) {
+                shoesIndex = r.Next(0, shoesList.Count - 1);
+
+            }
+            else
+            {
+                Class1.ModMonitor.Log("Error: Not enough shoes templates to generate an npc. Aborting", StardewModdingAPI.LogLevel.Error);
+                return null;
+            }
+            List<int> accIntList = new List<int>();
+            if (accessoryList.Count != 0)
+            {
+                for (int i = 0; i < amount; i++)
+                {
+                    int acc = r.Next(0, accessoryList.Count - 1);
+                    accIntList.Add(acc);
+                }
             }
 
             //Get a single sheet to pull from.
-            AssetSheet bodySheet = bodyList.ElementAt(bodyIndex);
-            AssetSheet eyesSheet = eyesList.ElementAt(bodyIndex);
-            AssetSheet hairSheet = hairList.ElementAt(bodyIndex);
-            AssetSheet shirtSheet = shirtList.ElementAt(bodyIndex);
-            AssetSheet pantsSheet = pantsList.ElementAt(bodyIndex);
-            AssetSheet shoesSheet = shoesList.ElementAt(bodyIndex);
+            AssetSheet bodySheet;
+            AssetSheet eyesSheet;
+            AssetSheet hairSheet;
+            AssetSheet shirtSheet;
+            AssetSheet shoesSheet;
+            AssetSheet pantsSheet;
+
+            bodySheet = bodyList.ElementAt(bodyIndex);
+            eyesSheet = eyesList.ElementAt(eyesIndex);
+            hairSheet = hairList.ElementAt(hairIndex);
+            shirtSheet = eyesList.ElementAt(shirtIndex);
+            pantsSheet = pantsList.ElementAt(pantsIndex);
+            shoesSheet = shoesList.ElementAt(shoesIndex);
+
+
             List<AssetSheet> accessorySheet = new List<AssetSheet>();
 
             foreach (var v in accIntList)
@@ -215,9 +293,9 @@ namespace CustomNPCFramework.Framework.Graphics
             }
 
             var render = generateBasicRenderer(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet);
-            ExtendedNPC npc = new ExtendedNPC(null, render, new Microsoft.Xna.Framework.Vector2(13, 15) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
-
-        }
+            ExtendedNPC npc = new ExtendedNPC(new Sprite(getDefaultSpriteImage(bodySheet)), render, new Microsoft.Xna.Framework.Vector2(13, 15) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
+            return npc;
+    }
 
         public virtual BasicRenderer generateBasicRenderer(AssetSheet bodySheet, AssetSheet eyesSheet, AssetSheet hairSheet, AssetSheet shirtSheet, AssetSheet pantsSheet, AssetSheet shoesSheet, List<AssetSheet> accessorySheet)
         {
@@ -249,6 +327,11 @@ namespace CustomNPCFramework.Framework.Graphics
             }
             StandardCharacterAnimation standingAnimation = new StandardCharacterAnimation(bodySprite, eyesSprite, hairSprite, shirtSprite, pantsSprite, shoesSprite, accessoryCollection);
             return standingAnimation;
+        }
+
+        public virtual string getDefaultSpriteImage(AssetSheet imageGraphics)
+        {
+            return Class1.getRelativeDirectory(Path.Combine(imageGraphics.path, imageGraphics.assetInfo.standingAssetPaths.downString));
         }
     }
 }

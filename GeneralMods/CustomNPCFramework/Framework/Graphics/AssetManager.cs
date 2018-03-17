@@ -58,6 +58,11 @@ namespace CustomNPCFramework.Framework.Graphics
                 ProcessDirectory(subdirectory);
         }
 
+        /// <summary>
+        /// Actually load in the asset information.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="path"></param>
         private void ProcessFile(string file,string path)
         {
             try
@@ -65,6 +70,7 @@ namespace CustomNPCFramework.Framework.Graphics
                 ExtendedAssetInfo info = ExtendedAssetInfo.readFromJson(file);
                 AssetSheet sheet = new AssetSheet(info, path);
                 addAsset(sheet);
+                Class1.ModMonitor.Log("Loaded in new modular asset: " + info.assetName + " asset type: " + info.type);
             }
             catch (Exception err)
             {
@@ -228,11 +234,19 @@ namespace CustomNPCFramework.Framework.Graphics
                 {
                     foreach (var sea in (v.assetInfo as ExtendedAssetInfo).seasons)
                     {
-                        if (sea == season && (v.assetInfo as ExtendedAssetInfo).gender == gender && (v.assetInfo as ExtendedAssetInfo).type == type) aSheet.Add(v);
-                        break; //Only need to find first validation that this is a valid asset.
+                        //Class1.ModMonitor.Log("Searching: seasons");
+                        if (sea == season && (v.assetInfo as ExtendedAssetInfo).gender == gender && (v.assetInfo as ExtendedAssetInfo).type == type)
+                        {
+                            aSheet.Add(v);
+                        }
+                        else
+                        {
+                            //Class1.ModMonitor.Log("Not what I was looking for.");
+                        }
                     }
                 }
             }
+            //Class1.ModMonitor.Log("ok it's over: "+aSheet.Count.ToString());
             return aSheet;
         }
 

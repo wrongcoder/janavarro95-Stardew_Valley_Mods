@@ -11,12 +11,12 @@ namespace CustomNPCFramework.Framework.Graphics
     public class ExtendedAssetInfo :AssetInfo
     {
         public Genders gender;
-        public List<Seasons> seasons;
+        public List<Seasons> seasons=new List<Seasons>();
         public PartType type;
         
         public ExtendedAssetInfo()
         {
-
+            this.seasons = new List<Seasons>();
         }
         
         /// <summary>
@@ -31,6 +31,7 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             this.gender = Gender;
             this.seasons = Season;
+            if (this.seasons == null) this.seasons = new List<Seasons>();
             this.type = Type;
         }
 

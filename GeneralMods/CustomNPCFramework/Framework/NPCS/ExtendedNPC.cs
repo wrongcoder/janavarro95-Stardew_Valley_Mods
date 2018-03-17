@@ -69,7 +69,10 @@ namespace CustomNPCFramework.Framework.NPCS
             this.Portrait = (Texture2D)null;
             this.portraitInformation = null;
             this.spriteInformation = sprite;
-            this.spriteInformation.setCharacterSpriteFromThis(this);
+            if (this.spriteInformation != null)
+            {
+                this.spriteInformation.setCharacterSpriteFromThis(this);
+            }
             this.swimming = false;
         }
 
@@ -416,6 +419,7 @@ namespace CustomNPCFramework.Framework.NPCS
             }
             else
             {
+                //FIX THIS LINE WITH LAYER DEPTH!!!
                 this.characterRenderer.draw(b,this, this.getLocalPosition(Game1.viewport) + new Vector2((float)(this.sprite.spriteWidth * Game1.pixelZoom / 2), (float)(this.GetBoundingBox().Height / 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero), new Microsoft.Xna.Framework.Rectangle?(this.Sprite.SourceRect), Color.White * alpha, this.rotation, new Vector2((float)(this.sprite.spriteWidth / 2), (float)((double)this.sprite.spriteHeight * 3.0 / 4.0)), Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip || this.sprite.currentAnimation != null && this.sprite.currentAnimation[this.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.991f : (float)this.getStandingY() / 10000f));
             }
             //If the npc breathes then this code is ran.

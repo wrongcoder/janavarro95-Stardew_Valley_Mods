@@ -32,10 +32,11 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// Constructor.
         /// </summary>
         /// <param name="texture">The texture for the sprite.</param>
+        /// <param name="texture">Path used for retaining texture location on disk.</param>
         /// <param name="currentFrame">Starting animation frame.</param>
         /// <param name="spriteWidth">Sprite width.</param>
         /// <param name="spriteHeight">Sprite height</param>
-        public AnimatedSpriteExtended(Texture2D texture, int currentFrame, int spriteWidth, int spriteHeight)
+        public AnimatedSpriteExtended(Texture2D texture,string path ,int currentFrame, int spriteWidth, int spriteHeight)
         {
             this.path = Class1.getRelativeDirectory(path);
             this.sprite = new AnimatedSprite(texture, currentFrame, spriteWidth, spriteHeight);

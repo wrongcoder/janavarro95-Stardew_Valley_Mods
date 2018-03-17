@@ -20,8 +20,22 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="path">The full path to the file.</param>
         public Sprite(string path)
         {
-            this.relativePath = Class1.getRelativeDirectory(path);
-            this.sprite = new AnimatedSprite(Class1.ModHelper.Content.Load<Texture2D>(this.relativePath));
+            try
+            {
+                this.relativePath = Class1.getShortenedDirectory(path);
+            }
+            catch(Exception err)
+            {
+                this.relativePath = path;
+            }
+            try
+            {
+                this.sprite = new AnimatedSprite(Class1.ModHelper.Content.Load<Texture2D>(this.relativePath));
+            }
+            catch(Exception err)
+            {
+                this.sprite = new AnimatedSprite(Class1.ModHelper.Content.Load<Texture2D>(this.relativePath+".png"));
+            }
             this.sprite.spriteWidth = this.sprite.Texture.Width;
             this.sprite.spriteHeight = this.sprite.Texture.Height;
         }

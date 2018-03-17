@@ -10,6 +10,9 @@ namespace CustomNPCFramework.Framework
 {
     public class NPCNames
     {
+        /// <summary>
+        /// Holds all of the npc male names.
+        /// </summary>
         public static List<string> maleNames = new List<string>()
         {
             "Freddy",
@@ -17,6 +20,9 @@ namespace CustomNPCFramework.Framework
             "Ash"
         };
 
+        /// <summary>
+        /// Holds all of the npc female names.
+        /// </summary>
         public static List<string> femaleNames = new List<string>()
         {
             "Rebecca",
@@ -24,6 +30,9 @@ namespace CustomNPCFramework.Framework
             "Lisa"
         };
 
+        /// <summary>
+        /// Holds all of the npc gender non-binary names.
+        /// </summary>
         public static List<string> otherGenderNames = new List<string>()
         {
             "Jayden",
@@ -31,6 +40,11 @@ namespace CustomNPCFramework.Framework
             "Skylar"
         };
 
+        /// <summary>
+        /// Get a gender appropriate name from the pool of npc names.
+        /// </summary>
+        /// <param name="gender"></param>
+        /// <returns></returns>
         public static string getRandomNPCName(Genders gender)
         {
             if (gender == Genders.female) {

@@ -29,7 +29,14 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             this.assetInfo = info;
             this.textures = new TextureGroup(info,path,direction);
-            this.path = Class1.getShortenedDirectory(path);
+            try
+            {
+                this.path = Class1.getShortenedDirectory(path);
+            }
+            catch(Exception err)
+            {
+                this.path = path;
+            }
             this.index = 0;
         }
 

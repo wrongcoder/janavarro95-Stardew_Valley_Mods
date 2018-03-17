@@ -101,27 +101,14 @@ namespace CustomNPCFramework
 
         /// <summary>
         /// Used to spawn a custom npc just as an example. Don't keep this code.
+        /// GENERATE NPC AND CALL THE CODE
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void SaveEvents_LoadChar(object sender, EventArgs e)
         {
-
-            //Texture2D tex = ModHelper.Content.Load<Texture2D>(Path.Combine(getShortenedDirectory(path).Remove(0, 1), "character.png"));
-            if (assetPool.getAssetManager("testNPC").getAssetByName("character") == null)
-            {
-                
-                    ModMonitor.Log("HMMMMM", LogLevel.Error);
-                
-            }
-            var pair= assetPool.getAssetManager("testNPC").getAssetByName("character").getPathTexturePair();
-            if (pair.Value == null)
-            {
-                ModMonitor.Log("UGGGGGGG", LogLevel.Error);
-            }
-            ExtendedNPC myNpc3 = new ExtendedNPC(new Framework.ModularNPCS.Sprite(pair.Key,pair.Value),null,null, new Vector2(14, 14)*Game1.tileSize, 2, "b2");
-            npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop"),myNpc3);
-            myNpc3.SetMovingDown(true);
+            ExtendedNPC myNpc3 = assetPool.generateNPC(Genders.female, 0, 1);
+            npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop", false), myNpc3);
         }
 
         public void initializeExamples()
@@ -157,7 +144,14 @@ namespace CustomNPCFramework
         {
             string lol = (string)path.Clone();
             string[] spliter = lol.Split(new string[] { ModHelper.DirectoryPath },StringSplitOptions.None);
-            return spliter[1];
+            try
+            {
+                return spliter[1];
+            }
+            catch(Exception err)
+            {
+                return spliter[0];
+            }
         }
 
         public static string getRelativeDirectory(string path)
