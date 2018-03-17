@@ -49,7 +49,10 @@ namespace CustomNPCFramework.Framework.NPCS
             this.Portrait = (Texture2D)null;
             this.portraitInformation = null;
             this.spriteInformation = sprite;
-            this.spriteInformation.setCharacterSpriteFromThis(this);
+            if (this.spriteInformation != null)
+            {
+                this.spriteInformation.setCharacterSpriteFromThis(this);
+            }
             this.swimming = false;
         }
 
@@ -57,7 +60,10 @@ namespace CustomNPCFramework.Framework.NPCS
         {
             this.characterRenderer = null;
             this.portraitInformation = portrait;
-            this.portraitInformation.setCharacterPortraitFromThis(this);
+            if (this.portraitInformation != null)
+            {
+                this.portraitInformation.setCharacterPortraitFromThis(this);
+            }
             this.spriteInformation = sprite;
             this.spriteInformation.setCharacterSpriteFromThis(this);
             this.swimming = false;

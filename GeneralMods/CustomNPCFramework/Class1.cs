@@ -108,7 +108,11 @@ namespace CustomNPCFramework
         private void SaveEvents_LoadChar(object sender, EventArgs e)
         {
             ExtendedNPC myNpc3 = assetPool.generateNPC(Genders.female, 0, 1);
-            npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop", false), myNpc3);
+            MerchantNPC merch = new MerchantNPC(new List<Item>()
+            {
+                new StardewValley.Object(475,999)
+            }, myNpc3);
+            npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop", false), merch);
         }
 
         public void initializeExamples()

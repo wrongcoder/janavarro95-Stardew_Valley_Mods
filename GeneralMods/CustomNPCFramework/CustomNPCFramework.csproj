@@ -65,6 +65,7 @@
     <Compile Include="Framework\ModularNPCS\Sprite.cs" />
     <Compile Include="Framework\NPCNames.cs" />
     <Compile Include="Framework\NPCS\ExtendedNPC.cs" />
+    <Compile Include="Framework\NPCS\MerchantNPC.cs" />
     <Compile Include="Framework\Utilities\NPCTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
