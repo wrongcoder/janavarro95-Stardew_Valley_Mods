@@ -1,4 +1,5 @@
 ﻿using CustomNPCFramework.Framework.NPCS;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,16 @@ namespace CustomNPCFramework.Framework.Utilities
         {
             this.moddedNPCS.Add(npc);
             npc.defaultLocation = loc;
+            npc.currentLocation = loc;
+            loc.addCharacter(npc);
+        }
+
+        public void addNewNPCToLocation(GameLocation loc, ExtendedNPC npc, Vector2 tilePosition)
+        {
+            this.moddedNPCS.Add(npc);
+            npc.defaultLocation = loc;
+            npc.currentLocation = loc;
+            npc.position = tilePosition*Game1.tileSize;
             loc.addCharacter(npc);
         }
 

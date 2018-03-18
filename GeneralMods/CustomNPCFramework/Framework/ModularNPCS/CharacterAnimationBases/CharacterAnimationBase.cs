@@ -41,6 +41,12 @@ namespace CustomNPCFramework.Framework.ModularNPCS
 
         }
 
+
+        public virtual void Animate(float animationInterval, bool loop=true)
+        {
+
+        }
+
         /// <summary>
         /// Used to draw the sprite to the screen.
         /// </summary>

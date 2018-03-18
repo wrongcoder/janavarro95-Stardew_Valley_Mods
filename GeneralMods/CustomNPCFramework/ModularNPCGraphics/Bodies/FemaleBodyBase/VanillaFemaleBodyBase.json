@@ -21,10 +21,10 @@
     "downString": "FBodyBaseDown"
   },
   "movingAssetPaths": {
-    "leftString": "FBodyBaseLeft",
-    "rightString": "FBodyBaseRight",
-    "upString": "FBodyBaseUp",
-    "downString": "FBodyBaseDown"
+    "leftString": "FBodyBaseMovingLeft",
+    "rightString": "FBodyBaseMovingRight",
+    "upString": "FBodyBaseMovingUp",
+    "downString": "FBodyBaseMovingDown"
   },
   "sittingAssetPaths": {
     "leftString": "FBodyBaseLeft",

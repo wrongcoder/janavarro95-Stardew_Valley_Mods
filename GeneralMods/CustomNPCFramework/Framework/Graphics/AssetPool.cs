@@ -5,6 +5,7 @@ using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
 using CustomNPCFramework.Framework.ModularNPCS.ColorCollections;
 using CustomNPCFramework.Framework.ModularNPCS.ModularRenderers;
 using CustomNPCFramework.Framework.NPCS;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using System;
 using System.Collections.Generic;
@@ -152,7 +153,7 @@ namespace CustomNPCFramework.Framework.Graphics
         /// <param name="gender"></param>
         /// <param name="minNumOfAccessories"></param>
         /// <param name="maxNumOfAccessories"></param>
-        public ExtendedNPC generateNPC(Genders gender, int minNumOfAccessories, int maxNumOfAccessories, StandardColorCollection DrawColors=null)
+        public ExtendedNPC generateNPC(Genders gender, int minNumOfAccessories, int maxNumOfAccessories ,StandardColorCollection DrawColors=null)
         {
             Seasons myseason=Seasons.spring;
 
@@ -295,7 +296,7 @@ namespace CustomNPCFramework.Framework.Graphics
             }
             if (DrawColors == null) DrawColors = new StandardColorCollection();
             var render = generateBasicRenderer(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet,DrawColors);
-            ExtendedNPC npc = new ExtendedNPC(new Sprite(getDefaultSpriteImage(bodySheet)), render, new Microsoft.Xna.Framework.Vector2(13, 15) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
+            ExtendedNPC npc = new ExtendedNPC(new Sprite(getDefaultSpriteImage(bodySheet)), render, new Microsoft.Xna.Framework.Vector2(0,0) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
             return npc;
     }
 

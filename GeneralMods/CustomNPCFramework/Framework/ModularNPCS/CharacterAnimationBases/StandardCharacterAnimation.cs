@@ -101,17 +101,17 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
             this.shoes.reload();
         }
 
-        public override void Animate(float animationInterval)
+        public override void Animate(float animationInterval,bool loop=true)
         {
-            this.body.Animate(animationInterval);
-            this.hair.Animate(animationInterval);
-            this.eyes.Animate(animationInterval);
-            this.shirt.Animate(animationInterval);
-            this.pants.Animate(animationInterval);
-            this.shoes.Animate(animationInterval);
+            this.body.Animate(animationInterval,loop);
+            this.hair.Animate(animationInterval,loop);
+            this.eyes.Animate(animationInterval,loop);
+            this.shirt.Animate(animationInterval,loop);
+            this.pants.Animate(animationInterval,loop);
+            this.shoes.Animate(animationInterval,loop);
             foreach(var accessory in this.accessories)
             {
-                accessory.Animate(animationInterval);
+                accessory.Animate(animationInterval,loop);
             }
             
         }
@@ -184,6 +184,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
         {
             //Class1.ModMonitor.Log(sourceRectangle.ToString());
             Vector2 generalOffset = new Vector2(0, 1*Game1.tileSize); //Puts the sprite at the correct positioning.
+            position -= new Vector2(0, 0.25f * Game1.tileSize);
             float smallOffset = 0.001f;
             float tinyOffset = 0.0001f;
             //Class1.ModMonitor.Log((position - generalOffset).ToString());

@@ -132,7 +132,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         {
             //DEFINITELY FIX THIS PART. Something is wrong with how these two functions handle the drawing of my npc to the scene.
             //this.draw(b, position, layerDepth);
-            b.Draw(this.currentSprite.sprite.Texture,position,sourceRectangle, color, 0.0f, origin,scale,effects,layerDepth);
+            b.Draw(this.currentSprite.sprite.Texture,position,this.currentSprite.sprite.sourceRect, color, 0.0f, origin,scale,effects,layerDepth);
             //b.Draw(this.Sprite.Texture, npc.getLocalPosition(Game1.viewport) + new Vector2((float)(this.sprite.spriteWidth * Game1.pixelZoom / 2), (float)(this.GetBoundingBox().Height / 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero), new Microsoft.Xna.Framework.Rectangle?(this.Sprite.SourceRect), Color.White * alpha, this.rotation, new Vector2((float)(this.sprite.spriteWidth / 2), (float)((double)this.sprite.spriteHeight * 3.0 / 4.0)), Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip || this.sprite.currentAnimation != null && this.sprite.currentAnimation[this.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.991f : (float)this.getStandingY() / 10000f));
         }
 
@@ -141,17 +141,54 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// Animate the current sprite. Theoreticlly works from index offset to how many frames
         /// </summary>
         /// <param name="intervalFromCharacter"></param>
-        public void Animate(float intervalFromCharacter)
+        public void Animate(float intervalFromCharacter,bool loop=true)
         {
-            this.currentSprite.sprite.Animate(Game1.currentGameTime, 0,3, intervalFromCharacter);
+            //ANIMATE AND UPDATE SOURCE RECTANGLE NOT WORKING!!!! FIGURE THIS OUT!!!!
+            //Class1.ModMonitor.Log("Current sprite frame:"+this.currentSprite.sprite.currentFrame.ToString());
+            //Class1.ModMonitor.Log("Am I ignoring something??: " + this.currentSprite.sprite.ignoreSourceRectUpdates);
+            //Class1.ModMonitor.Log("Current Sprite Source Rect:" + this.currentSprite.sprite.sourceRect);
+            //Class1.ModMonitor.Log("Sprite width: " + this.currentSprite.sprite.spriteWidth);
+            //Class1.ModMonitor.Log("Sprite width: " + this.currentSprite.sprite.spriteHeight);
+            this.Animate(Game1.currentGameTime, 0,2, intervalFromCharacter,this.currentSprite.sprite,loop);
+        }
+
+        public virtual bool Animate(GameTime gameTime, int startFrame, int numberOfFrames, float interval, AnimatedSprite sprite, bool loop=true)
+        {
+            if (sprite.CurrentFrame >= startFrame + numberOfFrames + 1 || sprite.CurrentFrame < startFrame)
+                sprite.CurrentFrame = startFrame + sprite.CurrentFrame % numberOfFrames;
+            sprite.timer = sprite.timer + (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if ((double)sprite.timer > (double)interval)
+            {
+                sprite.CurrentFrame = sprite.CurrentFrame + 1;
+                sprite.timer = 0.0f;
+                if (sprite.CurrentFrame == startFrame + numberOfFrames + 1 || sprite.currentFrame * sprite.spriteWidth >= sprite.Texture.Width)
+                {
+                    if (loop)
+                        sprite.CurrentFrame = startFrame;
+                    sprite.UpdateSourceRect();
+                    return true;
+                }
+            }
+            this.UpdateSourceRect(sprite);
+            return false;
+        }
+
+        public virtual void UpdateSourceRect(AnimatedSprite sprite)
+        {
+            if (sprite.ignoreSourceRectUpdates)
+                return;
+            sprite.sourceRect.X = sprite.CurrentFrame * sprite.spriteWidth;
+            sprite.sourceRect.Y = 0;
+            //sprite.SourceRect = new Rectangle(, 0, sprite.spriteWidth, sprite.spriteHeight);
         }
 
         /// <summary>
         /// Animate the current sprite. Theoreticlly works from index offset to how many frames
         /// </summary>
         /// <param name="intervalFromCharacter"></param>
-        public void Animate(float intervalFromCharacter,int startFrame,int endFrame)
+        public void Animate(float intervalFromCharacter,int startFrame,int endFrame, bool loop)
         {
+            this.currentSprite.sprite.loop = loop;
             this.currentSprite.sprite.Animate(Game1.currentGameTime, startFrame, endFrame, intervalFromCharacter);
         }
     }

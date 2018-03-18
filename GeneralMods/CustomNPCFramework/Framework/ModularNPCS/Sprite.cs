@@ -1,4 +1,5 @@
-﻿using CustomNPCFramework.Framework.NPCS;
+﻿using CustomNPCFramework.Framework.ModularNPCS.ModularRenderers;
+using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using System;
@@ -68,6 +69,58 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         public void reload()
         {
             this.sprite.Texture = Class1.ModHelper.Content.Load<Texture2D>(this.relativePath);
+        }
+
+        /// <summary>
+        /// Set's the npc's sprites to face left IF and only if there is a non-null modular Renderer attached to the npc.
+        /// </summary>
+        /// <param name="npc"></param>
+        public void setLeft(ExtendedNPC npc)
+        {
+            if (npc.characterRenderer == null)
+            {
+                return;
+            }
+            else npc.characterRenderer.setLeft();
+        }
+
+        /// <summary>
+        /// Set's the npc's sprites to face left IF and only if there is a non-null modular Renderer attached to the npc.
+        /// </summary>
+        /// <param name="npc"></param>
+        public void setRight(ExtendedNPC npc)
+        {
+            if (npc.characterRenderer == null)
+            {
+                return;
+            }
+            else npc.characterRenderer.setRight();
+        }
+
+        /// <summary>
+        /// Set's the npc's sprites to face left IF and only if there is a non-null modular Renderer attached to the npc.
+        /// </summary>
+        /// <param name="npc"></param>
+        public void setDown(ExtendedNPC npc)
+        {
+            if (npc.characterRenderer == null)
+            {
+                return;
+            }
+            else npc.characterRenderer.setDown();
+        }
+
+        /// <summary>
+        /// Set's the npc's sprites to face left IF and only if there is a non-null modular Renderer attached to the npc.
+        /// </summary>
+        /// <param name="npc"></param>
+        public void setUp(ExtendedNPC npc)
+        {
+            if (npc.characterRenderer == null)
+            {
+                return;
+            }
+            else npc.characterRenderer.setUp();
         }
     }
 }

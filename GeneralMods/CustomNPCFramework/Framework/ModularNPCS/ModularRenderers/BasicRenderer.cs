@@ -32,7 +32,11 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         public virtual void setAnimation(string key)
         {
             this.currentAnimation = animationList[key];
-            if (this.currentAnimation == null) this.setAnimation(AnimationKeys.standingKey);
+            if (this.currentAnimation == null)
+            {
+                Class1.ModMonitor.Log("ERROR SETTING AN ANIMATION: "+key);
+                this.setAnimation(AnimationKeys.standingKey);
+            }
         }
 
         public virtual void setDirection(int facingDirection)
@@ -120,9 +124,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         }
 
 
-        public virtual void Animate(float interval)
+        public virtual void Animate(float interval, bool loop=true)
         {
-            this.currentAnimation.Animate(interval);
+            this.currentAnimation.Animate(interval,loop);
         }
 
 

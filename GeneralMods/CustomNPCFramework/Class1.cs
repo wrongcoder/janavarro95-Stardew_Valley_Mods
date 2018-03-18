@@ -92,7 +92,11 @@ namespace CustomNPCFramework
             if (Game1.player.currentLocation == null) return;
             foreach (var v in Game1.player.currentLocation.characters)
             {
-                v.speed = 5;
+                v.speed = 1;
+                if(v is ExtendedNPC)
+                {
+                    (v as ExtendedNPC).SetMovingAndMove(Game1.currentGameTime, Game1.viewport, Game1.player.currentLocation, Direction.right, true);
+                }
                 //v.MovePosition(Game1.currentGameTime, Game1.viewport, Game1.player.currentLocation);
                 //ModMonitor.Log(v.sprite.spriteHeight.ToString());
             }
@@ -116,7 +120,7 @@ namespace CustomNPCFramework
             {
                 new StardewValley.Object(475,999)
             }, myNpc3);
-            npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop", false), merch);
+            npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop", false), merch,new Vector2(2,23));
         }
 
         public void initializeExamples()

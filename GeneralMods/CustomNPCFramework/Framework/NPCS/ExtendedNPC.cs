@@ -1,4 +1,5 @@
-﻿using CustomNPCFramework.Framework.ModularNPCS;
+﻿using CustomNPCFramework.Framework.Enums;
+using CustomNPCFramework.Framework.ModularNPCS;
 using CustomNPCFramework.Framework.ModularNPCS.ModularRenderers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -158,8 +159,75 @@ namespace CustomNPCFramework.Framework.NPCS
         //ERROR NEED FIXING
         public override void MovePosition(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation)
         {
-            base.MovePosition(time,viewport,currentLocation);
+            if (this.characterRenderer != null)
+            {
+                ModularMovement(time,viewport,currentLocation);
+            }
+            else
+            {
+                NonModularMovement(time,viewport,currentLocation);
+            }
             return;
+
+        }
+
+        /// <summary>
+        /// Set's the npc to move a certain direction and then executes the movement.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="viewport"></param>
+        /// <param name="currentLocation"></param>
+        /// <param name="MoveDirection">The direction to move the npc.</param>
+        /// <param name="Move">Set's the npc's sprite to halt if Move=false. Else set it to true.</param>
+        public virtual void SetMovingAndMove(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation, Direction MoveDirection, bool Move=true)
+        {
+            if (MoveDirection == Direction.down) this.SetMovingDown(Move);
+            if (MoveDirection == Direction.left) this.SetMovingLeft(Move);
+            if (MoveDirection == Direction.up) this.SetMovingUp(Move);
+            if (MoveDirection == Direction.right) this.SetMovingRight(Move);
+            this.MovePosition(time, viewport, currentLocation);
+        }
+
+        public virtual void NonModularMovement(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation location)
+        {
+            base.MovePosition(time, viewport, currentLocation);
+            return;
+        }
+
+        public virtual bool canMovePastNextLocation(xTile.Dimensions.Rectangle viewport)
+        {
+            //Up
+            if (!currentLocation.isTilePassable(this.nextPosition(0), viewport) || !this.willDestroyObjectsUnderfoot)
+            {
+                return false;
+            }
+            //Right
+            if (!currentLocation.isTilePassable(this.nextPosition(1), viewport) || !this.willDestroyObjectsUnderfoot)
+            {
+                return false;
+            }
+            //Down
+            if (!currentLocation.isTilePassable(this.nextPosition(2), viewport) || !this.willDestroyObjectsUnderfoot)
+            {
+                return false;
+            }
+            //Left
+            if (!currentLocation.isTilePassable(this.nextPosition(3), viewport) || !this.willDestroyObjectsUnderfoot)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public virtual void ModularMovement(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation location, float interval = 1000f)
+        {
+            interval /= 2;
+            this.characterRenderer.setAnimation(AnimationKeys.walkingKey);
+            if (this.canMovePastNextLocation(viewport) == false)
+            {
+                this.Halt();
+                return;
+            }
             if (this.GetType() == typeof(FarmAnimal))
                 this.willDestroyObjectsUnderfoot = false;
             if ((double)this.xVelocity != 0.0 || (double)this.yVelocity != 0.0)
@@ -182,7 +250,9 @@ namespace CustomNPCFramework.Framework.NPCS
                     this.position.Y -= (float)(this.speed + this.addedSpeed);
                     if (!this.ignoreMovementAnimation)
                     {
-                        this.sprite.AnimateUp(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
+                        this.spriteInformation.setUp(this);
+                        this.characterRenderer.Animate(interval,true);
+                        //this.sprite.AnimateUp(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
                         this.faceDirection(0);
                     }
                 }
@@ -207,7 +277,10 @@ namespace CustomNPCFramework.Framework.NPCS
                     this.position.X += (float)(this.speed + this.addedSpeed);
                     if (!this.ignoreMovementAnimation)
                     {
-                        this.sprite.AnimateRight(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
+                        this.spriteInformation.setRight(this);
+                        this.characterRenderer.Animate(interval,true);
+                        //this.spriteInformation.sprite.Animate(time, 0, 3, 1f);
+                        //this.sprite.AnimateRight(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
                         this.faceDirection(1);
                     }
                 }
@@ -232,7 +305,10 @@ namespace CustomNPCFramework.Framework.NPCS
                     this.position.Y += (float)(this.speed + this.addedSpeed);
                     if (!this.ignoreMovementAnimation)
                     {
-                        this.sprite.AnimateDown(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
+                        this.spriteInformation.setDown(this);
+                        this.characterRenderer.Animate(interval,true);
+                        //this.spriteInformation.sprite.Animate(time, 0, 3, 1f);
+                        //this.sprite.AnimateDown(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
                         this.faceDirection(2);
                     }
                 }
@@ -257,7 +333,10 @@ namespace CustomNPCFramework.Framework.NPCS
                     this.position.X -= (float)(this.speed + this.addedSpeed);
                     if (!this.ignoreMovementAnimation)
                     {
-                        this.sprite.AnimateLeft(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
+                        this.spriteInformation.setLeft(this);
+                        this.characterRenderer.Animate(interval,true);
+                        //this.spriteInformation.sprite.Animate(time, 0, 3, 1f);
+                        //this.sprite.AnimateLeft(time, (this.speed - 2 + this.addedSpeed) * -25, Utility.isOnScreen(this.getTileLocationPoint(), 1, currentLocation) ? "Cowboy_Footstep" : "");
                         this.faceDirection(3);
                     }
                 }
@@ -288,6 +367,12 @@ namespace CustomNPCFramework.Framework.NPCS
                 this.isCharging = true;
                 this.blockedInterval = 0;
             }
+        }
+
+        public override void Halt()
+        {
+            this.characterRenderer.setAnimation(AnimationKeys.standingKey);
+            base.Halt();
         }
 
         public override void update(GameTime time, GameLocation location)
@@ -425,7 +510,7 @@ namespace CustomNPCFramework.Framework.NPCS
             {
                 this.characterRenderer.setAnimation(AnimationKeys.swimmingKey);
                 this.characterRenderer.setDirection(this.facingDirection);
-                this.characterRenderer.draw(b,this,this.getLocalPosition(Game1.viewport) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize + Game1.tileSize / 4 + this.yJumpOffset * 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero) - new Vector2(0.0f, this.yOffset), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(this.sprite.SourceRect.X, this.sprite.SourceRect.Y, this.sprite.SourceRect.Width, this.sprite.SourceRect.Height / 2 - (int)((double)this.yOffset / (double)Game1.pixelZoom))), Color.White, this.rotation, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 3 / 2)) / 4f, Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.991f : (float)this.getStandingY() / 10000f));
+                this.characterRenderer.draw(b,this,this.getLocalPosition(Game1.viewport) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize + Game1.tileSize / 4 + this.yJumpOffset * 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero) - new Vector2(0.0f, this.yOffset), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(this.sprite.SourceRect.X, this.sprite.SourceRect.Y, this.sprite.SourceRect.Width, this.sprite.SourceRect.Height / 2 - (int)((double)this.yOffset / (double)Game1.pixelZoom))), Color.White, this.rotation, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 3 / 2)) / 4f, Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, (float)this.getStandingY() / 10000f));
                 //Vector2 localPosition = this.getLocalPosition(Game1.viewport);
                 //b.Draw(Game1.staminaRect, new Microsoft.Xna.Framework.Rectangle((int)localPosition.X + (int)this.yOffset + Game1.pixelZoom * 2, (int)localPosition.Y - 32 * Game1.pixelZoom + this.sprite.SourceRect.Height * Game1.pixelZoom + Game1.tileSize * 3 / 4 + this.yJumpOffset * 2 - (int)this.yOffset, this.sprite.SourceRect.Width * Game1.pixelZoom - (int)this.yOffset * 2 - Game1.pixelZoom * 4, Game1.pixelZoom), new Microsoft.Xna.Framework.Rectangle?(Game1.staminaRect.Bounds), Color.White * 0.75f, 0.0f, Vector2.Zero, SpriteEffects.None, (float)((double)this.getStandingY() / 10000.0 + 1.0 / 1000.0));
             }
@@ -530,6 +615,11 @@ namespace CustomNPCFramework.Framework.NPCS
         }
 
 
+        /// <summary>
+        /// Basic draw functionality to checkn whether or not to draw the npc using it's default sprite or using a custom character renderer.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="alpha"></param>
         public override void draw(SpriteBatch b, float alpha = 1f)
         {
             if (this.characterRenderer == null)
