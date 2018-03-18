@@ -179,17 +179,19 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
         /// <param name="layerDepth"></param>
         public override void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle, Color color, float alpha, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
-            Class1.ModMonitor.Log(sourceRectangle.ToString());
-            Vector2 generalOffset = new Vector2(0, 1*Game1.tileSize);
-            this.body.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.hair.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.eyes.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.shirt.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.pants.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.shoes.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+            //Class1.ModMonitor.Log(sourceRectangle.ToString());
+            Vector2 generalOffset = new Vector2(0, 1*Game1.tileSize); //Puts the sprite at the correct positioning.
+            float smallOffset = 0.001f;
+            float tinyOffset = 0.0001f;
+            this.body.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth + smallOffset);
+            this.eyes.draw(b, npc, position - generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth + smallOffset+(tinyOffset *1));
+            this.hair.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth + smallOffset+(tinyOffset *2));
+            this.shirt.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth + smallOffset+(tinyOffset*3));
+            this.pants.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth + smallOffset+(tinyOffset*4));
+            this.shoes.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth + smallOffset+(tinyOffset*5));
             foreach(var accessory in this.accessories)
             {
-                accessory.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+                accessory.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth +0.0006f);
             }
         }
 

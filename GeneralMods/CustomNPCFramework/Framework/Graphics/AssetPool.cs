@@ -280,7 +280,7 @@ namespace CustomNPCFramework.Framework.Graphics
             bodySheet = bodyList.ElementAt(bodyIndex);
             eyesSheet = eyesList.ElementAt(eyesIndex);
             hairSheet = hairList.ElementAt(hairIndex);
-            shirtSheet = eyesList.ElementAt(shirtIndex);
+            shirtSheet = shirtList.ElementAt(shirtIndex);
             pantsSheet = pantsList.ElementAt(pantsIndex);
             shoesSheet = shoesList.ElementAt(shoesIndex);
 

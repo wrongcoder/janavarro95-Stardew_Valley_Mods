@@ -36,6 +36,9 @@ namespace CustomNPCFramework
     /// 
     /// Load in the assets and go go go.
     ///     -Collect a bunch of assets together to test this thing.
+    ///     
+    /// Fix modular npc breathing.
+    /// Find way to make sideways shirts render correctly.
     /// </summary>
 
 
@@ -69,7 +72,7 @@ namespace CustomNPCFramework
 
         public void initializeAssetPool()
         {
-            string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS", "Characters", "RainMan");
+            string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS");
             assetPool.getAssetManager("testNPC").addPathCreateDirectory(new KeyValuePair<string, string>("characters", path));
         }
 
@@ -117,7 +120,7 @@ namespace CustomNPCFramework
 
         public void initializeExamples()
         {
-            
+            return;
             string dirPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Templates");
             var aManager=assetPool.getAssetManager("testNPC");
             aManager.addPathCreateDirectory(new KeyValuePair<string, string>("templates", dirPath));
