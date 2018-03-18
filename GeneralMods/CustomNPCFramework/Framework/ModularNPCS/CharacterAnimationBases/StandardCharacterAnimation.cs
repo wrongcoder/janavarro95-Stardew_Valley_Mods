@@ -1,6 +1,7 @@
 ﻿using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -178,15 +179,17 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
         /// <param name="layerDepth"></param>
         public override void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle, Color color, float alpha, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
-            this.body.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.hair.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.eyes.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.shirt.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.pants.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
-            this.shoes.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+            Class1.ModMonitor.Log(sourceRectangle.ToString());
+            Vector2 generalOffset = new Vector2(0, 1*Game1.tileSize);
+            this.body.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+            this.hair.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+            this.eyes.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+            this.shirt.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+            this.pants.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+            this.shoes.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
             foreach(var accessory in this.accessories)
             {
-                accessory.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
+                accessory.draw(b, npc, position-generalOffset, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
             }
         }
 

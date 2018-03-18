@@ -130,13 +130,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="layerDepth"></param>
         public void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle,Color color, float alpha,Vector2 origin,float scale,SpriteEffects effects,float layerDepth)
         {
-            Class1.ModMonitor.Log("Position: "+position.ToString());
-            Class1.ModMonitor.Log("Source Rec: "+sourceRectangle.ToString());
-            Class1.ModMonitor.Log("Depth: "+layerDepth.ToString());
-
             //DEFINITELY FIX THIS PART. Something is wrong with how these two functions handle the drawing of my npc to the scene.
-            this.draw(b, position, layerDepth);
-            // b.Draw(this.currentSprite.sprite.Texture,position,sourceRectangle, color* alpha, npc.rotation, origin,scale,effects,layerDepth);
+            //this.draw(b, position, layerDepth);
+            b.Draw(this.currentSprite.sprite.Texture,position,sourceRectangle, color, 0.0f, origin,scale,effects,layerDepth);
             //b.Draw(this.Sprite.Texture, npc.getLocalPosition(Game1.viewport) + new Vector2((float)(this.sprite.spriteWidth * Game1.pixelZoom / 2), (float)(this.GetBoundingBox().Height / 2)) + (this.shakeTimer > 0 ? new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2)) : Vector2.Zero), new Microsoft.Xna.Framework.Rectangle?(this.Sprite.SourceRect), Color.White * alpha, this.rotation, new Vector2((float)(this.sprite.spriteWidth / 2), (float)((double)this.sprite.spriteHeight * 3.0 / 4.0)), Math.Max(0.2f, this.scale) * (float)Game1.pixelZoom, this.flip || this.sprite.currentAnimation != null && this.sprite.currentAnimation[this.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0.0f, this.drawOnTop ? 0.991f : (float)this.getStandingY() / 10000f));
         }
 

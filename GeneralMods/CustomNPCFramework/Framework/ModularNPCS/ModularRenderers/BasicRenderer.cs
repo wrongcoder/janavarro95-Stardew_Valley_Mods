@@ -137,9 +137,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         /// <param name="v2"></param>
         /// <param name="spriteEffects"></param>
         /// <param name="v3"></param>
-        public virtual void draw(SpriteBatch b, ExtendedNPC extendedNPC, Vector2 vector21, Rectangle? v1, Color white, float rotation, Vector2 vector22, float v2, SpriteEffects spriteEffects, float v3)
+        public virtual void draw(SpriteBatch b, ExtendedNPC extendedNPC, Vector2 position, Rectangle? v1, Color white, float rotation, Vector2 origin, float v2, SpriteEffects spriteEffects, float v3)
         {
-            this.draw(b, extendedNPC, vector21, new Rectangle(v1.Value.X,v1.Value.Y,v1.Value.Width,v1.Value.Height), white, rotation, vector22, v2, spriteEffects, v3);
+            this.draw(b, extendedNPC, position, new Rectangle(0,0,16,32), white, rotation, origin, v2, spriteEffects, v3);
         }
     }
 }

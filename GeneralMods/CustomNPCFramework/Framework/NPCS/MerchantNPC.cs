@@ -18,7 +18,8 @@ namespace CustomNPCFramework.Framework.NPCS
             this.stock = Stock;
         }
 
-        public MerchantNPC(List<Item> Stock, ExtendedNPC npcBase): base(npcBase.spriteInformation, npcBase.portraitInformation, npcBase.position, npcBase.facingDirection, npcBase.name)
+
+        public MerchantNPC(List<Item> Stock, ExtendedNPC npcBase) : base(npcBase.spriteInformation, npcBase.characterRenderer, npcBase.portraitInformation, npcBase.position, npcBase.facingDirection, npcBase.name)
         {
             this.stock = Stock;
         }
