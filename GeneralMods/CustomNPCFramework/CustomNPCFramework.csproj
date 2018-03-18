@@ -59,6 +59,7 @@
     <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\StandardCharacterAnimation.cs" />
     <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\CharacterAnimationBase.cs" />
     <Compile Include="Framework\Enums\Direction.cs" />
+    <Compile Include="Framework\ModularNPCS\ColorCollections\StandardColorCollection.cs" />
     <Compile Include="Framework\ModularNPCS\ModularRenderers\AnimationKeys.cs" />
     <Compile Include="Framework\ModularNPCS\ModularRenderers\BasicRenderer.cs" />
     <Compile Include="Framework\ModularNPCS\Portrait.cs" />

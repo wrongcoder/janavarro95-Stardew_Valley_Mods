@@ -2,6 +2,7 @@
 using CustomNPCFramework.Framework.Graphics;
 using CustomNPCFramework.Framework.ModularNPCS;
 using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
+using CustomNPCFramework.Framework.ModularNPCS.ColorCollections;
 using CustomNPCFramework.Framework.NPCS;
 using CustomNPCFramework.Framework.Utilities;
 using Microsoft.Xna.Framework;
@@ -37,8 +38,8 @@ namespace CustomNPCFramework
     /// Load in the assets and go go go.
     ///     -Collect a bunch of assets together to test this thing.
     ///     
-    /// Fix modular npc breathing.
     /// Find way to make sideways shirts render correctly.
+
     /// </summary>
 
 
@@ -110,7 +111,7 @@ namespace CustomNPCFramework
         /// <param name="e"></param>
         private void SaveEvents_LoadChar(object sender, EventArgs e)
         {
-            ExtendedNPC myNpc3 = assetPool.generateNPC(Genders.female, 0, 1);
+            ExtendedNPC myNpc3 = assetPool.generateNPC(Genders.female, 0, 1,new StandardColorCollection(null, null, Color.Blue, null, Color.Yellow, null));
             MerchantNPC merch = new MerchantNPC(new List<Item>()
             {
                 new StardewValley.Object(475,999)

@@ -2,6 +2,7 @@
 using CustomNPCFramework.Framework.Enums;
 using CustomNPCFramework.Framework.ModularNPCS;
 using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
+using CustomNPCFramework.Framework.ModularNPCS.ColorCollections;
 using CustomNPCFramework.Framework.ModularNPCS.ModularRenderers;
 using CustomNPCFramework.Framework.NPCS;
 using StardewValley;
@@ -121,7 +122,7 @@ namespace CustomNPCFramework.Framework.Graphics
             return getAnimatedSpriteCollectionFromAssets(pair.leftString, pair.rightString, pair.upString, pair.downString);
         }
 
-        public StandardCharacterAnimation GetStandardCharacterAnimation(NamePairings BodySprites, NamePairings EyeSprites, NamePairings HairSprites, NamePairings ShirtsSprites, NamePairings PantsSprites, NamePairings ShoesSprites,List<NamePairings> AccessoriesSprites)
+        public StandardCharacterAnimation GetStandardCharacterAnimation(NamePairings BodySprites, NamePairings EyeSprites, NamePairings HairSprites, NamePairings ShirtsSprites, NamePairings PantsSprites, NamePairings ShoesSprites,List<NamePairings> AccessoriesSprites,StandardColorCollection DrawColors=null)
         {
             var body = getAnimatedSpriteCollectionFromAssets(BodySprites);
             var eyes = getAnimatedSpriteCollectionFromAssets(EyeSprites);
@@ -134,7 +135,8 @@ namespace CustomNPCFramework.Framework.Graphics
             {
                 accessories.Add(getAnimatedSpriteCollectionFromAssets(v));
             }
-            return new StandardCharacterAnimation(body,eyes,hair,shirts,pants,shoes,accessories);
+            if (DrawColors == null) DrawColors = new StandardColorCollection();
+            return new StandardCharacterAnimation(body,eyes,hair,shirts,pants,shoes,accessories,DrawColors);
         }
 
         public List<AssetSheet> getListOfApplicableBodyParts(string assetManagerName,Genders gender, Seasons season, PartType type)
@@ -150,7 +152,7 @@ namespace CustomNPCFramework.Framework.Graphics
         /// <param name="gender"></param>
         /// <param name="minNumOfAccessories"></param>
         /// <param name="maxNumOfAccessories"></param>
-        public ExtendedNPC generateNPC(Genders gender, int minNumOfAccessories, int maxNumOfAccessories)
+        public ExtendedNPC generateNPC(Genders gender, int minNumOfAccessories, int maxNumOfAccessories, StandardColorCollection DrawColors=null)
         {
             Seasons myseason=Seasons.spring;
 
@@ -291,27 +293,28 @@ namespace CustomNPCFramework.Framework.Graphics
             {
                 accessorySheet.Add(accessoryList.ElementAt(v));
             }
-
-            var render = generateBasicRenderer(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet);
+            if (DrawColors == null) DrawColors = new StandardColorCollection();
+            var render = generateBasicRenderer(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet,DrawColors);
             ExtendedNPC npc = new ExtendedNPC(new Sprite(getDefaultSpriteImage(bodySheet)), render, new Microsoft.Xna.Framework.Vector2(13, 15) * Game1.tileSize, 2, NPCNames.getRandomNPCName(gender));
             return npc;
     }
 
-        public virtual BasicRenderer generateBasicRenderer(AssetSheet bodySheet, AssetSheet eyesSheet, AssetSheet hairSheet, AssetSheet shirtSheet, AssetSheet pantsSheet, AssetSheet shoesSheet, List<AssetSheet> accessorySheet)
+        public virtual BasicRenderer generateBasicRenderer(AssetSheet bodySheet, AssetSheet eyesSheet, AssetSheet hairSheet, AssetSheet shirtSheet, AssetSheet pantsSheet, AssetSheet shoesSheet, List<AssetSheet> accessorySheet, StandardColorCollection DrawColors=null)
         {
+            if (DrawColors == null) DrawColors = new StandardColorCollection();
             //Get all of the appropriate animations.
             AnimationType type = AnimationType.standing;
-            var standingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
+            var standingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type,DrawColors);
             type = AnimationType.walking;
-            var movingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
+            var movingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type,DrawColors);
             type = AnimationType.swimming;
-            var swimmingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type);
+            var swimmingAnimation = generateCharacterAnimation(bodySheet, eyesSheet, hairSheet, shirtSheet, pantsSheet, shoesSheet, accessorySheet, type,DrawColors);
 
             BasicRenderer render = new BasicRenderer(standingAnimation, movingAnimation, swimmingAnimation);
             return render;
         }
 
-        public virtual StandardCharacterAnimation generateCharacterAnimation(AssetSheet body, AssetSheet eyes, AssetSheet hair, AssetSheet shirt, AssetSheet pants, AssetSheet shoes,List<AssetSheet> accessories, AnimationType animationType)
+        public virtual StandardCharacterAnimation generateCharacterAnimation(AssetSheet body, AssetSheet eyes, AssetSheet hair, AssetSheet shirt, AssetSheet pants, AssetSheet shoes,List<AssetSheet> accessories, AnimationType animationType, StandardColorCollection DrawColors=null)
         {
             var bodySprite = getSpriteCollectionFromSheet(body, animationType);
             var eyesSprite = getSpriteCollectionFromSheet(eyes, animationType);
@@ -325,7 +328,8 @@ namespace CustomNPCFramework.Framework.Graphics
                 AnimatedSpriteCollection acc = getSpriteCollectionFromSheet(v, AnimationType.standing);
                 accessoryCollection.Add(acc);
             }
-            StandardCharacterAnimation standingAnimation = new StandardCharacterAnimation(bodySprite, eyesSprite, hairSprite, shirtSprite, pantsSprite, shoesSprite, accessoryCollection);
+            if (DrawColors == null) DrawColors = new StandardColorCollection();
+            StandardCharacterAnimation standingAnimation = new StandardCharacterAnimation(bodySprite, eyesSprite, hairSprite, shirtSprite, pantsSprite, shoesSprite, accessoryCollection,DrawColors);
             return standingAnimation;
         }
 

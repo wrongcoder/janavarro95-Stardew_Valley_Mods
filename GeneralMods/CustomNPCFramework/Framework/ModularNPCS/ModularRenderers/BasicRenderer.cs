@@ -2,6 +2,7 @@
 using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -114,6 +115,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         /// <param name="layerDepth"></param>
         public virtual void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle, Color color, float alpha, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
+
             this.currentAnimation.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
         }
 
@@ -137,9 +139,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         /// <param name="v2"></param>
         /// <param name="spriteEffects"></param>
         /// <param name="v3"></param>
-        public virtual void draw(SpriteBatch b, ExtendedNPC extendedNPC, Vector2 position, Rectangle? v1, Color white, float rotation, Vector2 origin, float v2, SpriteEffects spriteEffects, float v3)
+        public virtual void draw(SpriteBatch b, ExtendedNPC extendedNPC, Vector2 position, Rectangle? v1, Color white, float rotation, Vector2 origin, float scale, SpriteEffects spriteEffects, float v3)
         {
-            this.draw(b, extendedNPC, position, new Rectangle(0,0,16,32), white, rotation, origin, v2, spriteEffects, v3);
+            this.draw(b, extendedNPC, position, new Rectangle(0,0,16,32), white, rotation, origin, scale, spriteEffects, v3);
         }
     }
 }
