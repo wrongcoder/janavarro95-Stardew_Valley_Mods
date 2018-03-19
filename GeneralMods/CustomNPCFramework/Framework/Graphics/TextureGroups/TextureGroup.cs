@@ -52,6 +52,13 @@ namespace CustomNPCFramework.Framework.Graphics.TextureGroups
         /// </summary>
         private AnimationType type;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="info">The asset info file to be stored with this texture group.</param>
+        /// <param name="path">Use to locate the files on disk.</param>
+        /// <param name="direction">Used to determine the current direction/animation to load</param>
+        /// <param name="animationType">The type of asset this is. Eyes, Hair, Shirts, etc</param>
         public TextureGroup(AssetInfo info, string path,Direction direction ,AnimationType animationType=AnimationType.standing)
         {
             this.standingTexture = new DirectionalTexture(info.standingAssetPaths, path, direction);
@@ -71,12 +78,19 @@ namespace CustomNPCFramework.Framework.Graphics.TextureGroups
 
         }
 
+        /// <summary>
+        /// Gets a clone of this texture group. 
+        /// </summary>
+        /// <returns></returns>
         public TextureGroup clone()
         {
             return new TextureGroup(this.info, this.path, this.dir, this.type);
         }
 
 
+        /// <summary>
+        /// Sets all of the different animations to use their left facing sprites.
+        /// </summary>
         public virtual void setLeft()
         {
             this.movingTexture.setLeft();
@@ -85,6 +99,9 @@ namespace CustomNPCFramework.Framework.Graphics.TextureGroups
             this.swimmingTexture.setLeft();
         }
 
+        /// <summary>
+        /// Sets all of the different animations to use their up facing sprites.
+        /// </summary>
         public virtual void setUp()
         {
             this.movingTexture.setUp();
@@ -93,6 +110,9 @@ namespace CustomNPCFramework.Framework.Graphics.TextureGroups
             this.swimmingTexture.setUp();
         }
 
+        /// <summary>
+        /// Sets all of the different animations to use their down facing sprites.
+        /// </summary>
         public virtual void setDown()
         {
             this.movingTexture.setDown();
@@ -101,6 +121,9 @@ namespace CustomNPCFramework.Framework.Graphics.TextureGroups
             this.swimmingTexture.setDown();
         }
 
+        /// <summary>
+        /// Sets all of the different animations to use their right facing sprites.
+        /// </summary>
         public virtual void setRight()
         {
             this.movingTexture.setRight();
@@ -109,6 +132,11 @@ namespace CustomNPCFramework.Framework.Graphics.TextureGroups
             this.swimmingTexture.setRight();
         }
 
+        /// <summary>
+        /// Get's the appropriate animation texture based on the type of animation key passed in.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public virtual DirectionalTexture getTextureFromAnimation(AnimationType type)
         {
             if (type == AnimationType.standing) return this.standingTexture;

@@ -8,12 +8,27 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.Graphics
 {
+    /// <summary>
+    /// An expanded Asset info class that deals with seasons and genders.
+    /// </summary>
     public class ExtendedAssetInfo :AssetInfo
     {
+        /// <summary>
+        /// The genders this part is associated with. 0=Male, 1=female, 2=other.
+        /// </summary>
         public Genders gender;
+        /// <summary>
+        /// A list of seasons where this part can be displayed
+        /// </summary>
         public List<Seasons> seasons=new List<Seasons>();
+        /// <summary>
+        /// The part type to be used for this asset such as hair, eyes, etc.
+        /// </summary>
         public PartType type;
         
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ExtendedAssetInfo()
         {
             this.seasons = new List<Seasons>();

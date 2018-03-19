@@ -16,11 +16,10 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.Graphics
 {
-    /// <summary>
-    /// Used to contain all of the asset managers.
-    /// </summary>
-    /// 
 
+    /// <summary>
+    /// Used to hold a collection of strings.
+    /// </summary>
     public class NamePairings
     {
         public string leftString;
@@ -36,37 +35,67 @@ namespace CustomNPCFramework.Framework.Graphics
         }
     }
 
+    /// <summary>
+    /// Used to contain all of the asset managers.
+    /// </summary>
     public class AssetPool
     {
 
+        /// <summary>
+        /// A dictionary holding all of the asset managers. (Name, AssetManager)
+        /// </summary>
         public Dictionary<string, AssetManager> assetPool;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public AssetPool()
         {
             this.assetPool = new Dictionary<string, AssetManager>();
         }
 
+        /// <summary>
+        /// Adds an asset manager to the asset pool.
+        /// </summary>
+        /// <param name="pair">A key value pair with the convention being (Manager Name, Asset Manager)</param>
         public void addAssetManager(KeyValuePair<string, AssetManager> pair)
         {
             this.assetPool.Add(pair.Key, pair.Value);
         }
 
+        /// <summary>
+        /// Adds an asset manager to the asset pool.
+        /// </summary>
+        /// <param name="assetManagerName">The name of the asset manager to be added.</param>
+        /// <param name="assetManager">The asset manager object to be added to the asset pool.</param>
         public void addAssetManager(string assetManagerName, AssetManager assetManager)
         {
             this.assetPool.Add(assetManagerName, assetManager);
         }
 
+        /// <summary>
+        /// Get an asset manager from the asset pool from a name.
+        /// </summary>
+        /// <param name="name">The name of the asset manager to return.</param>
+        /// <returns></returns>
         public AssetManager getAssetManager(string name)
         {
             assetPool.TryGetValue(name, out AssetManager asset);
             return asset;
         }
 
+        /// <summary>
+        /// Remove an asset manager from the asset pool.
+        /// </summary>
+        /// <param name="key">The name of the asset manager to remove.</param>
         public void removeAssetManager(string key)
         {
             assetPool.Remove(key);
         }
 
+        /// <summary>
+        /// Go through all of the asset managers and load assets according to their respective paths.
+        /// </summary>
         public void loadAllAssets()
         {
             foreach (KeyValuePair<string, AssetManager> assetManager in this.assetPool)
@@ -88,7 +117,12 @@ namespace CustomNPCFramework.Framework.Graphics
         }
 
 
-        
+        /// <summary>
+        /// Generates a new AnimatedSpriteCollection object from the data held in an asset sheet.
+        /// </summary>
+        /// <param name="assetSheet">An asset sheet that holds the data for textures.</param>
+        /// <param name="type">The type of asset to get from the sheet. Hair, eyes, shoes, etc.</param>
+        /// <returns></returns>
         public AnimatedSpriteCollection getSpriteCollectionFromSheet(AssetSheet assetSheet, AnimationType type)
         {    
                 var left = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.left, type),assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
@@ -118,11 +152,29 @@ namespace CustomNPCFramework.Framework.Graphics
 
         }
 
+        /// <summary>
+        /// Get an AnimatedSpriteCollection from a name pairing.
+        /// </summary>
+        /// <param name="pair">A collection of strings that hold information on directional textures.</param>
+        /// <param name="startingDirection">The direction in which the sprite should face.</param>
+        /// <returns></returns>
         public AnimatedSpriteCollection getAnimatedSpriteCollectionFromAssets(NamePairings pair, Direction startingDirection = Direction.down)
         {
             return getAnimatedSpriteCollectionFromAssets(pair.leftString, pair.rightString, pair.upString, pair.downString);
         }
 
+        /// <summary>
+        /// Get a collection of sprites to generate a collective animated sprite.
+        /// </summary>
+        /// <param name="BodySprites">The collection of sprites to be used for the boyd of the npc.</param>
+        /// <param name="EyeSprites">The collection of sprites to be used for the eye of the npc.</param>
+        /// <param name="HairSprites">The collection of sprites to be used for the hair of the npc.</param>
+        /// <param name="ShirtsSprites">The collection of sprites to be used for the shirts of the npc.</param>
+        /// <param name="PantsSprites">The collection of sprites to be used for the pants of the npc.</param>
+        /// <param name="ShoesSprites">The collection of sprites to be used for the shoes of the npc.</param>
+        /// <param name="AccessoriesSprites">The collection of sprites to be used for the accessories of the npc.</param>
+        /// <param name="DrawColors">The collection of collors to be used for chaing the color of an individual asset.</param>
+        /// <returns></returns>
         public StandardCharacterAnimation GetStandardCharacterAnimation(NamePairings BodySprites, NamePairings EyeSprites, NamePairings HairSprites, NamePairings ShirtsSprites, NamePairings PantsSprites, NamePairings ShoesSprites,List<NamePairings> AccessoriesSprites,StandardColorCollection DrawColors=null)
         {
             var body = getAnimatedSpriteCollectionFromAssets(BodySprites);
@@ -140,6 +192,14 @@ namespace CustomNPCFramework.Framework.Graphics
             return new StandardCharacterAnimation(body,eyes,hair,shirts,pants,shoes,accessories,DrawColors);
         }
 
+        /// <summary>
+        /// Get a list of parts that can apply for this criteria.
+        /// </summary>
+        /// <param name="assetManagerName">The name of the asset manager.</param>
+        /// <param name="gender">The gender critera.</param>
+        /// <param name="season">The season critera.</param>
+        /// <param name="type">The part type critera.</param>
+        /// <returns></returns>
         public List<AssetSheet> getListOfApplicableBodyParts(string assetManagerName,Genders gender, Seasons season, PartType type)
         {
             var parts = this.getAssetManager(assetManagerName).getListOfAssetsThatMatchThisCriteria(gender, season, type);
@@ -300,6 +360,18 @@ namespace CustomNPCFramework.Framework.Graphics
             return npc;
     }
 
+        /// <summary>
+        /// Creates a character renderer (a collection of textures) from a bunch of different asset sheets.
+        /// </summary>
+        /// <param name="bodySheet">The textures for the npc's body.</param>
+        /// <param name="eyesSheet">The textures for the npc's eyes.</param>
+        /// <param name="hairSheet">The textures for the npc's hair.</param>
+        /// <param name="shirtSheet">The textures for the npc's shirt.</param>
+        /// <param name="pantsSheet">The textures for the npc's pants.</param>
+        /// <param name="shoesSheet">The textures for the npc's shoes.</param>
+        /// <param name="accessorySheet">The textures for the npc's accessories.</param>
+        /// <param name="DrawColors">The colors for the npc's different assets.</param>
+        /// <returns></returns>
         public virtual BasicRenderer generateBasicRenderer(AssetSheet bodySheet, AssetSheet eyesSheet, AssetSheet hairSheet, AssetSheet shirtSheet, AssetSheet pantsSheet, AssetSheet shoesSheet, List<AssetSheet> accessorySheet, StandardColorCollection DrawColors=null)
         {
             if (DrawColors == null) DrawColors = new StandardColorCollection();
@@ -315,6 +387,19 @@ namespace CustomNPCFramework.Framework.Graphics
             return render;
         }
 
+        /// <summary>
+        /// Generate a Standard Character Animation from some asset sheets.
+        /// (collection of textures to animations) 
+        /// </summary>
+        /// <param name="body">The textures for the npc's body.</param>
+        /// <param name="eyes">The textures for the npc's eyes.</param>
+        /// <param name="hair">The textures for the npc's hair.</param>
+        /// <param name="shirt">The textures for the npc's shirt.</param>
+        /// <param name="pants">The textures for the npc's pants.</param>
+        /// <param name="shoes">The textures for the npc's shoes.</param>
+        /// <param name="accessoryType">The textures for the npc's accessories.</param>
+        /// <param name="DrawColors">The colors for the npc's different assets.</param>
+        /// <returns></returns>
         public virtual StandardCharacterAnimation generateCharacterAnimation(AssetSheet body, AssetSheet eyes, AssetSheet hair, AssetSheet shirt, AssetSheet pants, AssetSheet shoes,List<AssetSheet> accessories, AnimationType animationType, StandardColorCollection DrawColors=null)
         {
             var bodySprite = getSpriteCollectionFromSheet(body, animationType);
@@ -334,6 +419,11 @@ namespace CustomNPCFramework.Framework.Graphics
             return standingAnimation;
         }
 
+        /// <summary>
+        /// Get the string for the standard character sprite to be used from this asset sheet.
+        /// </summary>
+        /// <param name="imageGraphics">The standard asset sheet to be used.</param>
+        /// <returns></returns>
         public virtual string getDefaultSpriteImage(AssetSheet imageGraphics)
         {
             return Class1.getRelativeDirectory(Path.Combine(imageGraphics.path, imageGraphics.assetInfo.standingAssetPaths.downString));

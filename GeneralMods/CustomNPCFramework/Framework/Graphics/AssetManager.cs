@@ -8,9 +8,18 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.Graphics
 {
+    /// <summary>
+    /// Used to hold assets from specified directories.
+    /// </summary>
     public class AssetManager
     {
+        /// <summary>
+        /// A list of all of the assets held by this asset manager.
+        /// </summary>
         public List<AssetSheet> assets;
+        /// <summary>
+        /// A list of all of the directories managed by this asset manager.
+        /// </summary>
         public Dictionary<string,string> paths;
 
         /// <summary>
@@ -22,6 +31,10 @@ namespace CustomNPCFramework.Framework.Graphics
             this.paths = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="assetsPathsToLoadFrom">A list of all directories to be managed by the asset manager. Name, path is the key pair value.</param>
         public AssetManager(Dictionary<string,string> assetsPathsToLoadFrom)
         {
             this.assets = new List<AssetSheet>();
@@ -155,6 +168,11 @@ namespace CustomNPCFramework.Framework.Graphics
             return aSheet;
         }
 
+        /// <summary>
+        /// Get a list of all the assets of this kind of part.
+        /// </summary>
+        /// <param name="type">The type of part to return a list of from this asset manager.</param>
+        /// <returns></returns>
         public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(PartType type)
         {
             List<AssetSheet> aSheet = new List<AssetSheet>();
@@ -168,6 +186,12 @@ namespace CustomNPCFramework.Framework.Graphics
             return aSheet;
         }
 
+        /// <summary>
+        /// Get a list of assets that match the critera.
+        /// </summary>
+        /// <param name="gender">The gender criteria for this asset, such as if this part belongs to either a female or male character.</param>
+        /// <param name="type">The type of asset to return. Hair eyes, shoes, etc.</param>
+        /// <returns></returns>
         public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(Genders gender,PartType type)
         {
             List<AssetSheet> aSheet = new List<AssetSheet>();
@@ -225,6 +249,13 @@ namespace CustomNPCFramework.Framework.Graphics
             return aSheet;
         }
 
+        /// <summary>
+        /// Get a list of asssets that match certain critera.
+        /// </summary>
+        /// <param name="gender">The gengder certain assets belong to, such as male or female.</param>
+        /// <param name="season">The season that an asset can be displayed in. Good for seasonal assets.</param>
+        /// <param name="type">The type of part to return a list of such as hair, eyes, or pants.</param>
+        /// <returns></returns>
         public List<AssetSheet> getListOfAssetsThatMatchThisCriteria(Genders gender, Seasons season, PartType type)
         {
             List<AssetSheet> aSheet = new List<AssetSheet>();
