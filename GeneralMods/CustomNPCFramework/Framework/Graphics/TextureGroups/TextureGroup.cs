@@ -8,18 +8,48 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.Graphics.TextureGroups
 {
+    /// <summary>
+    /// A group of a textures used to hold all of the textures associated with a single asset such as a hair style or a shirt.
+    /// </summary>
     public class TextureGroup
     {
+        /// <summary>
+        /// The directional (Left, Right, Up, Down) textures to be used when the NPC is standing.
+        /// </summary>
         public DirectionalTexture standingTexture;
+        /// <summary>
+        /// The directional (Left, Right, Up, Down) textures to be used when the NPC is sitting.
+        /// </summary>
         public DirectionalTexture sittingTexture;
+        /// <summary>
+        /// The directional (Left, Right, Up, Down) textures to be used when the NPC is swimming.
+        /// </summary>
         public DirectionalTexture swimmingTexture;
+        /// <summary>
+        /// The directional (Left, Right, Up, Down) textures to be used when the NPC is moving.
+        /// </summary>
         public DirectionalTexture movingTexture;
 
+        /// <summary>
+        /// The current directional texture to be used by the npc. Can be things such as the standing, swimming, moving, or sitting texture.
+        /// </summary>
         public DirectionalTexture currentTexture;
 
+        /// <summary>
+        /// Asset info loaded in from the corresponding .json file. 
+        /// </summary>
         private AssetInfo info;
+        /// <summary>
+        /// The path to the .json file.
+        /// </summary>
         private string path;
+        /// <summary>
+        /// The current direction of the texture group. See Direction.cs
+        /// </summary>
         private Direction dir;
+        /// <summary>
+        /// The type of asset this is. Body, hair, eyes, shirt,etc...
+        /// </summary>
         private AnimationType type;
 
         public TextureGroup(AssetInfo info, string path,Direction direction ,AnimationType animationType=AnimationType.standing)

@@ -90,6 +90,7 @@ namespace CustomNPCFramework
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             if (Game1.player.currentLocation == null) return;
+            if (Game1.activeClickableMenu != null) return;
             foreach (var v in Game1.player.currentLocation.characters)
             {
                 v.speed = 1;
