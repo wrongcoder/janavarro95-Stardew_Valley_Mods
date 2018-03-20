@@ -67,6 +67,8 @@ namespace StardewSymphonyRemastered
             WavMusicDirectory = Path.Combine(MusicPath, "Wav");
             XACTMusicDirectory = Path.Combine(MusicPath, "XACT");
             TemplateMusicDirectory = Path.Combine(MusicPath, "Templates");
+
+
             textureManager = new TextureManager();
             this.createDirectories();
             this.createBlankXACTTemplate();

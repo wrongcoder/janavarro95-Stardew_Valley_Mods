@@ -23,7 +23,27 @@ namespace StardewSymphonyRemastered.Framework.Menus
             this.texturedStrings = new List<StardustCore.UIUtilities.SpriteFonts.Components.TexturedString>();
             this.texturedStrings.Add(StardustCore.UIUtilities.SpriteFonts.SpriteFont.vanillaFont.ParseString("Hello", new Microsoft.Xna.Framework.Vector2(100, 100),StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.LightColorsList.Blue)));
             this.buttons = new List<StardustCore.UIUtilities.MenuComponents.Button>();
-            this.buttons.Add(new Button("myButton", new Rectangle(100, 100, 64, 64), StardewSymphony.textureManager.getTexture("MusicNote").Copy(StardewSymphony.ModHelper), "mynote", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), Color.White, Color.White,new ButtonFunctionality(new DelegatePairing(hello,null),null,null),false)); //A button that does nothing on the left click.  
+            //this.buttons.Add(new Button("myButton", new Rectangle(100, 100, 64, 64), StardewSymphony.textureManager.getTexture("MusicNote").Copy(StardewSymphony.ModHelper), "mynote", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), Color.White, Color.White,new ButtonFunctionality(new DelegatePairing(hello,null),null,null),false)); //A button that does nothing on the left click.  
+
+            int numOfButtons = 0;
+            int rows = 0;
+            foreach(var v in StardewSymphony.musicManager.musicPacks)
+            {
+                this.buttons.Add(new Button(v.Key, new Rectangle(100+(numOfButtons*100), 100+(rows*100), 64, 64), StardewSymphony.textureManager.getTexture("MusicNote").Copy(StardewSymphony.ModHelper), "", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), Color.White, Color.White, new ButtonFunctionality(new DelegatePairing(displayMusicPack, new List<object>
+                {
+                    (object)v
+                }
+                ),null, new DelegatePairing(null,new List<object>(){
+                    (object)v
+                }
+                )), false));
+                numOfButtons++;
+                if (numOfButtons > 8)
+                {
+                    numOfButtons = 0;
+                    rows++;
+                }
+            }
         }
 
         public override void receiveRightClick(int x, int y, bool playSound = true)
@@ -38,7 +58,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
         {
             foreach(var v in this.buttons)
             {
-                if (v.containsPoint(x, y)) v.onHover();
+                if (v.containsPoint(x, y))
+                {
+                    var pair = (KeyValuePair<string, MusicPack>)v.buttonFunctionality.hover.paramaters[0];
+                    v.hoverText = pair.Key;
+                    v.onHover();
+                    StardewSymphony.ModMonitor.Log(pair.Key);
+                }
             }
         }
 
@@ -77,6 +103,15 @@ namespace StardewSymphonyRemastered.Framework.Menus
         {
             StardewSymphony.ModMonitor.Log("Hello");
         }
+
+        public void displayMusicPack(List<object> param)
+        {
+            var info=(KeyValuePair<string, MusicPack>)param[0];
+            StardewSymphony.ModMonitor.Log(info.ToString());
+            StardewSymphony.musicManager.playRandomSongFromPack(info.Key);
+            //info.Value.playRandomSong();
+        }
+
         #endregion
     }
 }

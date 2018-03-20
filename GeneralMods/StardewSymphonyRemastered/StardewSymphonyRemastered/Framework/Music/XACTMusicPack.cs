@@ -64,11 +64,16 @@ namespace StardewSymphonyRemastered.Framework
                 listofSongs.Add(song);
             }
 
-            this.songInformation.listOfSongsWithoutTriggers = listofSongs;
-                
-            
-                
+            this.songInformation.listOfSongsWithoutTriggers = listofSongs;            
                
+        }
+
+        public override void playRandomSong()
+        {
+            Random r = new Random();
+            int value = r.Next(0,this.songInformation.listOfSongsWithoutTriggers.Count);
+            Song s = this.songInformation.listOfSongsWithoutTriggers.ElementAt(value);
+            this.swapSong(s.name);
         }
 
         /// <summary>
@@ -143,6 +148,7 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void stopSong()
         {
+            if(Game1.currentSong!=null) Game1.currentSong.Stop(AudioStopOptions.Immediate);
             if (this.currentCue == null) return;
             else
             {

@@ -354,5 +354,13 @@ namespace StardewSymphonyRemastered.Framework
                 pack.Value.songInformation.initializeSeasonalMusic();
             }
         }
+
+        public void playRandomSongFromPack(string musicPackName)
+        {
+            this.musicPacks.TryGetValue(musicPackName, out MusicPack musicPack);
+            if (this.currentMusicPack != null) this.currentMusicPack.stopSong();
+            musicPack.playRandomSong();
+            this.currentMusicPack = musicPack;
+        }
     }
 }

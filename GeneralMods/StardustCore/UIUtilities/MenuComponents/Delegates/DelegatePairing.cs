@@ -14,7 +14,7 @@ namespace StardustCore.UIUtilities.MenuComponents.Delegates
         public DelegatePairing(Delegates.paramaterDelegate buttonDelegate,List<object> Paramaters)
         {
             this.click = buttonDelegate;
-            if (this.paramaters == null)
+            if (Paramaters == null)
             {
                 this.paramaters = new List<object>();
             }
@@ -26,7 +26,11 @@ namespace StardustCore.UIUtilities.MenuComponents.Delegates
 
         public void run()
         {
-            this.click.Invoke(this.paramaters);
+            if (this.click != null)
+            {
+                this.click.Invoke(this.paramaters);
+            }
+            else return;
         }
     }
 }

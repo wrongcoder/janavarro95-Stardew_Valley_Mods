@@ -59,6 +59,11 @@ namespace StardewSymphonyRemastered.Framework
             
         }
 
+        public virtual void playRandomSong()
+        {
+
+        }
+
 
         public virtual void writeToJson()
         {

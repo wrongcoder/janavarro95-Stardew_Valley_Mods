@@ -17,7 +17,7 @@ namespace FarmersMarketStall.Framework.Menus
 
         public static IClickableMenu openMenu(MarketStall marketStall)
         {
-            return null;
+            throw new NotImplementedException("This menu isn't implemented because the author is busy/lazy. Please encorage Omegasis to finish it!",null);
             //return new StardewValley.Menus.InventoryMenu((int)(Game1.viewport.Width*.25f),(int)(Game1.viewport.Height*.25f),true,marketStall.stock);
         }
 
