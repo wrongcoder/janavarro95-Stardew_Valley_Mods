@@ -19,7 +19,10 @@ using System.Threading.Tasks;
 namespace CustomNPCFramework
 {
     /// <summary>
+    /// BETA VERSION 0.1.0: Lots of ways this can be improved upon.
     /// TODO:
+    /// 
+    ///
     /// List all asset managers in use.
     /// Have all asset managers list what assets they are using.
     /// 
@@ -39,6 +42,8 @@ namespace CustomNPCFramework
     ///     -Collect a bunch of assets together to test this thing.
     ///     
     /// Find way to make sideways shirts render correctly.
+    /// 
+    ///Get suggestions from modding community on requests and ways to improve the mod. 
 
     /// </summary>
 

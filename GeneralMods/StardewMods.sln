@@ -79,6 +79,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SundropMapEvents", "Sundrop
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomNPCFramework", "CustomNPCFramework\CustomNPCFramework.csproj", "{89C7DF45-8AE5-49AC-ADA9-6312E9590829}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FarmersMarketStall", "FarmersMarketStall\FarmersMarketStall.csproj", "{0E37BE57-6B3C-4C79-A134-D16283D5306D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB737337-2D82-4245-AA46-F3B82FC6F228} = {BB737337-2D82-4245-AA46-F3B82FC6F228}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -185,6 +190,10 @@ Global
 		{89C7DF45-8AE5-49AC-ADA9-6312E9590829}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89C7DF45-8AE5-49AC-ADA9-6312E9590829}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89C7DF45-8AE5-49AC-ADA9-6312E9590829}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E37BE57-6B3C-4C79-A134-D16283D5306D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E37BE57-6B3C-4C79-A134-D16283D5306D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E37BE57-6B3C-4C79-A134-D16283D5306D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E37BE57-6B3C-4C79-A134-D16283D5306D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -195,6 +204,7 @@ Global
 		{BAAC8F21-C12F-42B0-A51C-0C5F33B52575} = {3EE26DA0-0337-4991-8B02-BCB8D408008C}
 		{29A68F94-B23C-442B-8867-8B8F3502E64F} = {BAAC8F21-C12F-42B0-A51C-0C5F33B52575}
 		{89C7DF45-8AE5-49AC-ADA9-6312E9590829} = {3EE26DA0-0337-4991-8B02-BCB8D408008C}
+		{0E37BE57-6B3C-4C79-A134-D16283D5306D} = {3EE26DA0-0337-4991-8B02-BCB8D408008C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4135247C-1326-43F4-A762-3916E50635EF}
