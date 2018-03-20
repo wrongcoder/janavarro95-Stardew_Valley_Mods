@@ -37,7 +37,6 @@ namespace CustomNPCFramework.Framework.Graphics
         public Rectangle currentAsset;
 
         public int index;
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -59,7 +58,6 @@ namespace CustomNPCFramework.Framework.Graphics
 
             this.index = 0;
         }
-
         /// <summary>
         /// Get the path to the current texture.
         /// </summary>

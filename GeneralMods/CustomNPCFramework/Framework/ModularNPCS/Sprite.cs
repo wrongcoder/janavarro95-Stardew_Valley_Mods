@@ -10,9 +10,18 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.ModularNPCS
 {
+    /// <summary>
+    /// Used as a wrapper for the npcs to hold sprite information.
+    /// </summary>
     public class Sprite
     {
+        /// <summary>
+        /// The actual sprite to draw for the npc.
+        /// </summary>
         public AnimatedSprite sprite;
+        /// <summary>
+        /// The path to the texture to use for the animated sprite.
+        /// </summary>
         public string relativePath;
 
         /// <summary>

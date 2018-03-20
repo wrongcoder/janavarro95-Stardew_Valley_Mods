@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework
 {
+    /// <summary>
+    /// Used as a class to hold all of the possible npc names.
+    /// </summary>
     public class NPCNames
     {
         /// <summary>

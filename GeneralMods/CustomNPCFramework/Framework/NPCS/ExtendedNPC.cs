@@ -27,6 +27,9 @@ namespace CustomNPCFramework.Framework.NPCS
     /// </summary>
     public class ExtendedNPC :StardewValley.NPC
     {
+        /// <summary>
+        /// The custom character renderer for this npc.
+        /// </summary>
         public BasicRenderer characterRenderer;
         public bool hasBeenKissedToday;
         public Point previousEndPoint;
@@ -34,16 +37,35 @@ namespace CustomNPCFramework.Framework.NPCS
         public bool hasSaidAfternoonDialogue;
         public int timeAfterSquare;
 
+        /// <summary>
+        /// Used to hold sprite information to be used in the case the npc renderer is null.
+        /// </summary>
         public Sprite spriteInformation;
 
+        /// <summary>
+        /// Used to hold the portrait information for the npc and display it.
+        /// </summary>
         public Portrait portraitInformation;
 
+        /// <summary>
+        /// The default location for this npc to reside in.
+        /// </summary>
         public GameLocation defaultLocation;
 
+        /// <summary>
+        /// Empty Constructor.
+        /// </summary>
         public ExtendedNPC() :base()
         {
         }
 
+        /// <summary>
+        /// Non modular npc Constructor.
+        /// </summary>
+        /// <param name="sprite">The sprite for the character.</param>
+        /// <param name="position">The position of the npc on the map.</param>
+        /// <param name="facingDirection">The direction of the npc</param>
+        /// <param name="name">The name of the npc.</param>
         public ExtendedNPC(Sprite sprite, Vector2 position, int facingDirection, string name) : base(sprite.sprite, position, facingDirection, name, null)
         {
             this.characterRenderer = null;
@@ -57,6 +79,14 @@ namespace CustomNPCFramework.Framework.NPCS
             this.swimming = false;
         }
 
+        /// <summary>
+        /// Non modular npc Constructor.
+        /// </summary>
+        /// <param name="sprite">The sprite for the character.</param>
+        /// <param name="portrait">The portrait texture for this npc.</param>
+        /// <param name="position">The position of the npc on the map.</param>
+        /// <param name="facingDirection">The direction of the npc</param>
+        /// <param name="name">The name of the npc.</param>
         public ExtendedNPC(Sprite sprite, Portrait portrait, Vector2 position, int facingDirection, string name) : base(sprite.sprite, position, facingDirection, name, null)
         {
             this.characterRenderer = null;
@@ -70,6 +100,15 @@ namespace CustomNPCFramework.Framework.NPCS
             this.swimming = false;
         }
 
+        /// <summary>
+        /// Modular npc constructor.
+        /// </summary>
+        /// <param name="sprite">The sprite for the character to use incase the renderer is null.</param>
+        /// <param name="renderer">The custom npc render. Used to draw the npcfrom a collection of assets.</param>
+        /// <param name="portrait">The portrait texture for this npc.</param>
+        /// <param name="position">The position of the npc on the map.</param>
+        /// <param name="facingDirection">The direction of the npc</param>
+        /// <param name="name">The name of the npc.</param>
         public ExtendedNPC(Sprite sprite,BasicRenderer renderer,Vector2 position,int facingDirection,string name): base(sprite.sprite, position, facingDirection, name, null)
         {
             this.characterRenderer = renderer;
@@ -83,6 +122,15 @@ namespace CustomNPCFramework.Framework.NPCS
             this.swimming = false;
         }
 
+        /// <summary>
+        /// Modular constructor for the npc.
+        /// </summary>
+        /// <param name="sprite">The sprite for the npc to use incase the renderer is null.</param>
+        /// <param name="renderer">The custom npc renderer used to draw the npc from the collection of textures.</param>
+        /// <param name="portrait">The portrait texture for the npc.</param>
+        /// <param name="position">The positon for the npc to be.</param>
+        /// <param name="facingDirection">The direction for the npc to face.</param>
+        /// <param name="name">The name for the npc.</param>
         public ExtendedNPC(Sprite sprite,BasicRenderer renderer,Portrait portrait, Vector2 position, int facingDirection, string name) : base(sprite.sprite, position, facingDirection, name, null)
         {
             this.characterRenderer = renderer;
@@ -99,7 +147,9 @@ namespace CustomNPCFramework.Framework.NPCS
             this.swimming = false;
         }
 
-        //ERROR NEED FIXING
+        /// <summary>
+        /// Used to reload the sprite for the npc.
+        /// </summary>
         public override void reloadSprite()
         {
             if (this.characterRenderer == null)
@@ -150,13 +200,24 @@ namespace CustomNPCFramework.Framework.NPCS
 
         }
 
+        /// <summary>
+        /// Functionality used when interacting with the npc.
+        /// </summary>
+        /// <param name="who"></param>
+        /// <param name="l"></param>
+        /// <returns></returns>
         public override bool checkAction(StardewValley.Farmer who, GameLocation l)
         {
             base.checkAction(who, l);
             return false;
         }
 
-        //ERROR NEED FIXING
+        /// <summary>
+        /// Used to move the npc. Different code is used depending if the character renderer is null or not.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="viewport"></param>
+        /// <param name="currentLocation"></param>
         public override void MovePosition(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation)
         {
             if (this.characterRenderer != null)
@@ -188,12 +249,23 @@ namespace CustomNPCFramework.Framework.NPCS
             this.MovePosition(time, viewport, currentLocation);
         }
 
+        /// <summary>
+        /// USed to move the npc if the character renderer is null.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="viewport"></param>
+        /// <param name="location"></param>
         public virtual void NonModularMovement(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation location)
         {
             base.MovePosition(time, viewport, currentLocation);
             return;
         }
 
+        /// <summary>
+        /// Used to determine if the npc can move past the next location.
+        /// </summary>
+        /// <param name="viewport"></param>
+        /// <returns></returns>
         public virtual bool canMovePastNextLocation(xTile.Dimensions.Rectangle viewport)
         {
             //Up
@@ -219,9 +291,15 @@ namespace CustomNPCFramework.Framework.NPCS
             return true;
         }
 
+        /// <summary>
+        /// Used to move the npc if the character renderer is valid. Handles animating all of the sprites associated with the renderer.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="viewport"></param>
+        /// <param name="location"></param>
+        /// <param name="interval"></param>
         public virtual void ModularMovement(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation location, float interval = 1000f)
         {
-            interval /= 2;
             this.characterRenderer.setAnimation(AnimationKeys.walkingKey);
             if (this.canMovePastNextLocation(viewport) == false)
             {
@@ -369,17 +447,32 @@ namespace CustomNPCFramework.Framework.NPCS
             }
         }
 
+        /// <summary>
+        /// Used to halt the npc sprite. Sets the npc's animation to the standing animation if the character renderer is not null.
+        /// </summary>
         public override void Halt()
         {
-            this.characterRenderer.setAnimation(AnimationKeys.standingKey);
+            if (this.characterRenderer != null)
+            {
+                this.characterRenderer.setAnimation(AnimationKeys.standingKey);
+            }
             base.Halt();
         }
 
+        /// <summary>
+        /// Used to update npc information.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <param name="location"></param>
         public override void update(GameTime time, GameLocation location)
         {
             base.update(time, location);        
         }
 
+        /// <summary>
+        /// Pathfinding code.
+        /// </summary>
+        /// <param name="who"></param>
         public virtual void routeEndAnimationFinished(StardewValley.Farmer who)
         {
             this.doingEndOfRouteAnimation = false;
@@ -397,11 +490,20 @@ namespace CustomNPCFramework.Framework.NPCS
             this.timeAfterSquare = Game1.timeOfDay;
         }
 
+        /// <summary>
+        /// Pathfinding code.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="l"></param>
         public virtual void doAnimationAtEndOfScheduleRoute(Character c, GameLocation l)
         {
         }
 
 
+        /// <summary>
+        /// Pathfinding code.
+        /// </summary>
+        /// <param name="behaviorName"></param>
         public virtual void startRouteBehavior(string behaviorName)
         {
             if (behaviorName.Length > 0 && (int)behaviorName[0] == 34)
@@ -429,6 +531,11 @@ namespace CustomNPCFramework.Framework.NPCS
         }
 
 
+        /// <summary>
+        /// Occurs when the npc gets hit by the player. 
+        /// </summary>
+        /// <param name="who"></param>
+        /// <param name="location"></param>
         public new void getHitByPlayer(StardewValley.Farmer who, GameLocation location)
         {
             this.doEmote(12, true);

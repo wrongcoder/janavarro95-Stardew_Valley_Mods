@@ -8,9 +8,18 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.ModularNPCS
 {
+    /// <summary>
+    /// Used as a wrapper for the AnimatedSprite class.
+    /// </summary>
     public class AnimatedSpriteExtended
     {
+        /// <summary>
+        /// The actual sprite of the object.
+        /// </summary>
         public AnimatedSprite sprite;
+        /// <summary>
+        /// The path to the texture to load the sprite from.
+        /// </summary>
         public string path;
 
 

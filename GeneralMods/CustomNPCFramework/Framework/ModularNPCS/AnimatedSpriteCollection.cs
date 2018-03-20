@@ -16,11 +16,26 @@ namespace CustomNPCFramework.Framework.ModularNPCS
     /// </summary>
     public class AnimatedSpriteCollection
     {
+        /// <summary>
+        /// The left sprite for this sprite asset part.
+        /// </summary>
         AnimatedSpriteExtended leftSprite;
+        /// <summary>
+        /// The right sprite for this sprite asset part.
+        /// </summary>
         AnimatedSpriteExtended rightSprite;
+        /// <summary>
+        /// The up sprite for this sprite asset part.
+        /// </summary>
         AnimatedSpriteExtended upSprite;
+        /// <summary>
+        /// The down sprite for this sprite asset part.
+        /// </summary>
         AnimatedSpriteExtended downSprite;
 
+        /// <summary>
+        /// The current sprite for this sprite collection. This is one of the four directions for this collection.
+        /// </summary>
         public AnimatedSpriteExtended currentSprite;
 
         /// <summary>
@@ -55,6 +70,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS
             }
         }
 
+        /// <summary>
+        /// Reloads all of the directional textures for this texture collection.
+        /// </summary>
         public virtual void reload()
         {
             this.leftSprite.reload();
@@ -64,23 +82,32 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         }
 
         /// <summary>
-        /// Sets the current 
+        /// Sets the current sprite direction to face left.
         /// </summary>
         public void setLeft()
         {
             this.currentSprite = leftSprite;
         }
 
+        /// <summary>
+        /// Sets the current sprite direction to face right.
+        /// </summary>
         public void setRight()
         {
             this.currentSprite = rightSprite;
         }
 
+        /// <summary>
+        /// Sets the current sprite direction to face down.
+        /// </summary>
         public void setDown()
         {
             this.currentSprite = downSprite;
         }
 
+        /// <summary>
+        /// Sets the current sprite direction to face up.
+        /// </summary>
         public void setUp()
         {
             this.currentSprite = upSprite;
@@ -140,18 +167,22 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <summary>
         /// Animate the current sprite. Theoreticlly works from index offset to how many frames
         /// </summary>
-        /// <param name="intervalFromCharacter"></param>
-        public void Animate(float intervalFromCharacter,bool loop=true)
+        /// <param name="intervalDelay">The delay in milliseconds between frames.</param>
+        public void Animate(float intervalDelay,bool loop=true)
         {
-            //ANIMATE AND UPDATE SOURCE RECTANGLE NOT WORKING!!!! FIGURE THIS OUT!!!!
-            //Class1.ModMonitor.Log("Current sprite frame:"+this.currentSprite.sprite.currentFrame.ToString());
-            //Class1.ModMonitor.Log("Am I ignoring something??: " + this.currentSprite.sprite.ignoreSourceRectUpdates);
-            //Class1.ModMonitor.Log("Current Sprite Source Rect:" + this.currentSprite.sprite.sourceRect);
-            //Class1.ModMonitor.Log("Sprite width: " + this.currentSprite.sprite.spriteWidth);
-            //Class1.ModMonitor.Log("Sprite width: " + this.currentSprite.sprite.spriteHeight);
-            this.Animate(Game1.currentGameTime, 0,2, intervalFromCharacter,this.currentSprite.sprite,loop);
+            this.Animate(Game1.currentGameTime, 0,2, intervalDelay,this.currentSprite.sprite,loop);
         }
 
+        /// <summary>
+        /// Animate the current sprite.
+        /// </summary>
+        /// <param name="gameTime">The game time from Monogames/XNA</param>
+        /// <param name="startFrame">The starting frame of the animation on the sprite sheet.</param>
+        /// <param name="numberOfFrames">The number of frames to animate the sprite.</param>
+        /// <param name="interval">The delay between frames in milliseconds.</param>
+        /// <param name="sprite">The animated sprite from the npc.</param>
+        /// <param name="loop">If true, the animation plays over and over again.</param>
+        /// <returns></returns>
         public virtual bool Animate(GameTime gameTime, int startFrame, int numberOfFrames, float interval, AnimatedSprite sprite, bool loop=true)
         {
             if (sprite.CurrentFrame >= startFrame + numberOfFrames + 1 || sprite.CurrentFrame < startFrame)
@@ -173,6 +204,10 @@ namespace CustomNPCFramework.Framework.ModularNPCS
             return false;
         }
 
+        /// <summary>
+        /// Update the source rectangle on the sprite sheet. Needed for animation.
+        /// </summary>
+        /// <param name="sprite"></param>
         public virtual void UpdateSourceRect(AnimatedSprite sprite)
         {
             if (sprite.ignoreSourceRectUpdates)

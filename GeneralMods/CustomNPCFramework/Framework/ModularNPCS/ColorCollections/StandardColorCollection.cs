@@ -12,11 +12,29 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ColorCollections
     /// </summary>
     public class StandardColorCollection
     {
+        /// <summary>
+        /// The draw color to be used for the body sprite for the npc.
+        /// </summary>
         public Color bodyColor;
+        /// <summary>
+        /// The draw color to be used for the eye sprite for the npc.
+        /// </summary>
         public Color eyeColor;
+        /// <summary>
+        /// The draw color to be used for the hair sprite for the npc.
+        /// </summary>
         public Color hairColor;
+        /// <summary>
+        /// The draw color to be used for the shirt sprite for the npc.
+        /// </summary>
         public Color shirtColor;
+        /// <summary>
+        /// The draw color to be used for the bottoms/pants sprite for the npc.
+        /// </summary>
         public Color bottomsColor;
+        /// <summary>
+        /// The draw color to be used for the shoes sprite for the npc.
+        /// </summary>
         public Color shoesColor;
 
         /// <summary>
@@ -67,6 +85,12 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ColorCollections
             if (color == null) color = Color.White;
         }
 
+        /// <summary>
+        /// Used to mix colors together. 
+        /// </summary>
+        /// <param name="cBase">The base color to mix.</param>
+        /// <param name="cMult">The modifier color to mix.</param>
+        /// <returns>A color that is a mix between the two colors passed in.</returns>
         public static Color colorMult(Color cBase, Color cMult)
         {
             Vector3 color1 = cBase.ToVector3();

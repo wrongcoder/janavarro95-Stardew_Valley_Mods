@@ -1,4 +1,6 @@
-﻿using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
+﻿using CustomNPCFramework.Framework.Enums;
+using CustomNPCFramework.Framework.Graphics;
+using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
 using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,11 +13,26 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
 {
+    /// <summary>
+    /// A class used to hold all of the textures/animations/information to make modular npc rendering possible.
+    /// </summary>
     public class BasicRenderer
     {
+        /// <summary>
+        /// Dictionary that holds key pair values of (animationName,Animation). USed to manage multiple animations. 
+        /// </summary>
         public Dictionary<string, StandardCharacterAnimation> animationList;
+        /// <summary>
+        /// Used to keep track of what animation is currently being used.
+        /// </summary>
         public StandardCharacterAnimation currentAnimation;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="standingAnimation">The animation information to be used when the character is standing.</param>
+        /// <param name="walkingAnimation">The animation information to be used when the character is walking/moving.</param>
+        /// <param name="swimmingAnimation">The animation information to be used when the character is walking/moving.</param>
         public BasicRenderer(StandardCharacterAnimation standingAnimation,StandardCharacterAnimation walkingAnimation, StandardCharacterAnimation swimmingAnimation)
         {
             animationList = new Dictionary<string, StandardCharacterAnimation>();
@@ -28,7 +45,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         /// <summary>
         /// Sets the animation associated with the key name; If it fails the npc will just default to standing.
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">The name of the animation to swap the current animation to.</param>
         public virtual void setAnimation(string key)
         {
             this.currentAnimation = animationList[key];
@@ -39,6 +56,10 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
             }
         }
 
+        /// <summary>
+        /// Sets the direction of the current animated sprite respectively.
+        /// </summary>
+        /// <param name="facingDirection">The direction to face. 0=up, 1=right, 2= down, 3=left.</param>
         public virtual void setDirection(int facingDirection)
         {
             if (facingDirection == 0) setUp();
@@ -47,26 +68,54 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
             if (facingDirection == 2) setLeft();
         }
 
+        /// <summary>
+        /// Sets the direction of the current animated sprite respectively to the direction passed in.
+        /// </summary>
+        /// <param name="direction">The direction to face.</param>
+        public virtual void setDirection(Direction direction)
+        {
+            if (direction == Direction.up) setUp();
+            if (direction == Direction.right) setRight();
+            if (direction == Direction.down) setDown();
+            if (direction == Direction.left) setLeft();
+        }
+
+
+        /// <summary>
+        /// Sets the current animated sprite to face left.
+        /// </summary>
         public virtual void setLeft()
         {
             this.currentAnimation.setLeft();
         }
 
+        /// <summary>
+        /// Sets the current animated sprite to face right.
+        /// </summary>
         public virtual void setRight()
         {
             this.currentAnimation.setRight();
         }
 
+        /// <summary>
+        /// Sets the current animated sprite to face up.
+        /// </summary>
         public virtual void setUp()
         {
             this.currentAnimation.setUp();
         }
-
+        
+        /// <summary>
+        /// Sets the current animated sprite to face down.
+        /// </summary>
         public virtual void setDown()
         {
             this.currentAnimation.setDown();
         }
 
+        /// <summary>
+        /// Used to reload all of the sprites pertaining to all of the animations stored in this renderer.
+        /// </summary>
         public virtual void reloadSprites()
         {
             foreach(var v in this.animationList)
@@ -124,6 +173,11 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         }
 
 
+        /// <summary>
+        /// Animates the current animation for the current sprite.
+        /// </summary>
+        /// <param name="interval"></param>
+        /// <param name="loop"></param>
         public virtual void Animate(float interval, bool loop=true)
         {
             this.currentAnimation.Animate(interval,loop);

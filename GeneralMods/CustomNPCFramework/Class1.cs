@@ -42,14 +42,30 @@ namespace CustomNPCFramework
 
     /// </summary>
 
-
     public class Class1 : Mod
     {
+        /// <summary>
+        /// The mod helper for the mod.
+        /// </summary>
         public static IModHelper ModHelper;
+        /// <summary>
+        /// The mod monitor for the mod.
+        /// </summary>
         public static IMonitor ModMonitor;
 
+        /// <summary>
+        /// The npc tracker for the mod. Keeps track of all npcs added by the custom framework and cleans them up during saving.
+        /// </summary>
         public static NPCTracker npcTracker;
+        /// <summary>
+        /// Keeps track of all of the asets/textures added in by the framework. Also manages all of the asset managers that are the ones actually managing the textures.
+        /// </summary>
         public static AssetPool assetPool;
+        
+        /// <summary>
+        /// Ran when loading the SMAPI. Used to initialize data.
+        /// </summary>
+        /// <param name="helper"></param>
         public override void Entry(IModHelper helper)
         {
             ModHelper = this.Helper;
@@ -71,24 +87,43 @@ namespace CustomNPCFramework
             assetPool.loadAllAssets();
         }
 
+        /// <summary>
+        /// Initialize the asset pool with some test variables.
+        /// </summary>
         public void initializeAssetPool()
         {
             string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS");
             assetPool.getAssetManager("testNPC").addPathCreateDirectory(new KeyValuePair<string, string>("characters", path));
         }
 
+        /// <summary>
+        /// A function that is called when the game finishes saving.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
             npcTracker.afterSave();
         }
 
+        /// <summary>
+        /// A function that is called when the game is about to load. Used to clean up all the npcs from the game world to prevent it from crashing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             npcTracker.cleanUpBeforeSave();
         }
 
+        /// <summary>
+        /// Called upon 60 times a second. For testing purposes only. Will remove in future release.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            /*
             if (Game1.player.currentLocation == null) return;
             if (Game1.activeClickableMenu != null) return;
             foreach (var v in Game1.player.currentLocation.characters)
@@ -101,8 +136,14 @@ namespace CustomNPCFramework
                 //v.MovePosition(Game1.currentGameTime, Game1.viewport, Game1.player.currentLocation);
                 //ModMonitor.Log(v.sprite.spriteHeight.ToString());
             }
+            */
         }
 
+        /// <summary>
+        /// Called when the player's location changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
         {
          
@@ -124,6 +165,9 @@ namespace CustomNPCFramework
             npcTracker.addNewNPCToLocation(Game1.getLocationFromName("BusStop", false), merch,new Vector2(2,23));
         }
 
+        /// <summary>
+        /// Used to initialize examples for other modders to look at as reference.
+        /// </summary>
         public void initializeExamples()
         {
             return;
@@ -153,6 +197,11 @@ namespace CustomNPCFramework
             }
         }
 
+        /// <summary>
+        /// Used to splice the mod directory to get relative paths.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string getShortenedDirectory(string path)
         {
             string lol = (string)path.Clone();
@@ -167,6 +216,11 @@ namespace CustomNPCFramework
             }
         }
 
+        /// <summary>
+        /// Used to finish cleaning up absolute asset paths into a shortened relative path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string getRelativeDirectory(string path)
         {
             string s = getShortenedDirectory(path);

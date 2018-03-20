@@ -11,17 +11,52 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
 {
+    /// <summary>
+    /// A class used to reference the different textures used to comprise the different parts for character rendering.
+    /// </summary>
     public class StandardCharacterAnimation :CharacterAnimationBase
     {
+        /// <summary>
+        /// Used to hold all of the information for the npc hair part.
+        /// </summary>
         public AnimatedSpriteCollection hair;
+        /// <summary>
+        /// Used to hold all of the information for the npc body part.
+        /// </summary>
         public AnimatedSpriteCollection body;
+        /// <summary>
+        /// Used to hold all of the information for the npc eyes part.
+        /// </summary>
         public AnimatedSpriteCollection eyes;
+        /// <summary>
+        /// Used to hold all of the information for the npc shirt part.
+        /// </summary>
         public AnimatedSpriteCollection shirt;
+        /// <summary>
+        /// Used to hold all of the information for the npc pants part.
+        /// </summary>
         public AnimatedSpriteCollection pants;
+        /// <summary>
+        /// Used to hold all of the information for the npc shoes part.
+        /// </summary>
         public AnimatedSpriteCollection shoes;
+        /// <summary>
+        /// Used to hold all of the information for draw colors for the different parts.
+        /// </summary>
         public StandardColorCollection drawColors;
         public List<AnimatedSpriteCollection> accessories;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="bodyAnimation">The collection of textures to be used for the body part for the npc.</param>
+        /// <param name="eyeAnimation">The collection of textures to be used for the eyes part for the npc.</param>
+        /// <param name="hairAnimation">The collection of textures to be used for the hair part for the npc.</param>
+        /// <param name="shirtAnimation">The collection of textures to be used for the shirt part for the npc.</param>
+        /// <param name="pantsAnimation">The collection of textures to be used for the pants part for the npc.</param>
+        /// <param name="shoesAnimation">The collection of textures to be used for the shoes part for the npc.</param>
+        /// <param name="accessoriesWithAnimations">The collection of textures to be used for the accessories part for the npc.</param>
+        /// <param name="DrawColors">The collection of draw colors for the different parts for the npc.</param>
         public StandardCharacterAnimation(AnimatedSpriteCollection bodyAnimation, AnimatedSpriteCollection eyeAnimation, AnimatedSpriteCollection hairAnimation, AnimatedSpriteCollection shirtAnimation, AnimatedSpriteCollection pantsAnimation, AnimatedSpriteCollection shoesAnimation,List<AnimatedSpriteCollection> accessoriesWithAnimations, StandardColorCollection DrawColors) :base()
         {
             this.body = bodyAnimation;
@@ -34,6 +69,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
             this.drawColors = DrawColors;
         }
 
+        /// <summary>
+        /// Sets all of the different textures to face left.
+        /// </summary>
         public override void setLeft()
         {
             this.body.setLeft();
@@ -48,6 +86,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
                 accessory.setLeft();
             }
         }
+        /// <summary>
+        /// Sets all of the different textures to face right.
+        /// </summary>
         public override void setRight()
         {
             this.body.setRight();
@@ -62,6 +103,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
                 accessory.setRight();
             }
         }
+        /// <summary>
+        /// Sets all of the different textures to face up.
+        /// </summary>
         public override void setUp()
         {
             this.body.setUp();
@@ -76,6 +120,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
                 accessory.setUp();
             }
         }
+        /// <summary>
+        /// Sets all of the different textures to face down.
+        /// </summary>
         public override void setDown()
         {
             this.body.setDown();
@@ -91,6 +138,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
             }
         }
 
+        /// <summary>
+        /// Reloads all of the sprite textures.
+        /// </summary>
         public override void reload()
         {
             this.body.reload();
@@ -101,6 +151,11 @@ namespace CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases
             this.shoes.reload();
         }
 
+        /// <summary>
+        /// Animates all of the textures for this sprite.
+        /// </summary>
+        /// <param name="animationInterval">The delay in milliseconds between animation frames.</param>
+        /// <param name="loop">Determines if the animation continuously plays over and over.</param>
         public override void Animate(float animationInterval,bool loop=true)
         {
             this.body.Animate(animationInterval,loop);

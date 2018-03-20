@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.Utilities
 {
+    /// <summary>
+    /// Used to keep track of all of the custom npcs.
+    /// </summary>
     public class NPCTracker
     {
         /// <summary>
@@ -27,8 +30,8 @@ namespace CustomNPCFramework.Framework.Utilities
         /// <summary>
         /// Use this to add a new npc into the game.
         /// </summary>
-        /// <param name="loc"></param>
-        /// <param name="npc"></param>
+        /// <param name="loc">The game location to add the npc to.</param>
+        /// <param name="npc">The extended npc to add to the location.</param>
         public void addNewNPCToLocation(GameLocation loc,ExtendedNPC npc)
         {
             this.moddedNPCS.Add(npc);
@@ -37,6 +40,12 @@ namespace CustomNPCFramework.Framework.Utilities
             loc.addCharacter(npc);
         }
 
+        /// <summary>
+        /// Add a npc to a location.
+        /// </summary>
+        /// <param name="loc">The game location to add an npc to.</param>
+        /// <param name="npc">The extended npc to add to the location.</param>
+        /// <param name="tilePosition">The tile position at the game location to add the mpc to.</param>
         public void addNewNPCToLocation(GameLocation loc, ExtendedNPC npc, Vector2 tilePosition)
         {
             this.moddedNPCS.Add(npc);
@@ -59,7 +68,7 @@ namespace CustomNPCFramework.Framework.Utilities
         /// <summary>
         /// Use this to completly remove and npc from the game as it is removed from the location and is no longer tracked.
         /// </summary>
-        /// <param name="npc"></param>
+        /// <param name="npc">The npc to remove from the location.</param>
         public void removeFromLocationAndTrackingList(ExtendedNPC npc)
         {
             if (npc.currentLocation != null)
