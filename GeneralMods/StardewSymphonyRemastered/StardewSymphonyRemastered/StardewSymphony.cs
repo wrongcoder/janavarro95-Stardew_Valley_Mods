@@ -131,7 +131,10 @@ namespace StardewSymphonyRemastered
             string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "MusicMenu");
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             string musicNote = Path.Combine(path, "MusicNote.png");
+            string musicCD = Path.Combine(path, "MusicDisk.png");
             textureManager.addTexture("MusicNote",new Texture2DExtended(ModHelper,StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicNote)));
+            textureManager.addTexture("MusicDisk", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicCD)));
+            textureManager.addTexture("MusicCD", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicCD)));
 
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);
             if (!Directory.Exists(WavMusicDirectory)) Directory.CreateDirectory(WavMusicDirectory);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -172,6 +173,14 @@ namespace StardewSymphonyRemastered.Framework
             string pathToSong = getSongPathFromName(name);
             LoadWavFromFileToStream(pathToSong);
             dynamicSound.Play();
+        }
+
+        public override void playRandomSong()
+        {
+            Random r = Game1.random;
+            int value=r.Next(0, this.songInformation.listOfSongsWithoutTriggers.Count);
+            Song s = this.songInformation.listOfSongsWithoutTriggers.ElementAt(value);
+            this.swapSong(s.name);
         }
 
         /// <summary>

@@ -313,6 +313,8 @@ namespace StardustCore.IlluminateFramework
     {
         public static Dictionary<string, Color> ColorDictionary;
 
+        public static Random colorRandomizer;
+
         public static void initializeColors()
         {
             ColorDictionary = new Dictionary<string, Color>();
@@ -609,12 +611,19 @@ namespace StardustCore.IlluminateFramework
 
     }
 
+        /// <summary>
+        /// Generate a random color! Does not need to be inverted to be properly used.
+        /// </summary>
+        /// <returns></returns>
         public static Color randomColor()
         {
-            Random r = new Random(Game1.player.money + Game1.tileSize + Game1.dayOfMonth+(int)Game1.stats.stepsTaken);
-            int R = r.Next(0, 255);
-            int G = r.Next(0, 255);
-            int B = r.Next(0, 255);
+            if (colorRandomizer == null)
+            {
+                colorRandomizer = new Random(Game1.player.money + Game1.tileSize + Game1.dayOfMonth + (int)Game1.stats.stepsTaken);
+            }
+            int R = colorRandomizer.Next(0, 255);
+            int G = colorRandomizer.Next(0, 255);
+            int B = colorRandomizer.Next(0, 255);
             int A = 255;
             return new Color(R, G, B, A);
         }

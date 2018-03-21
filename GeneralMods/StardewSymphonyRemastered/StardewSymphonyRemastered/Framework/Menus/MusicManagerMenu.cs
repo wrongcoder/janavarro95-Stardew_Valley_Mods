@@ -29,14 +29,29 @@ namespace StardewSymphonyRemastered.Framework.Menus
             int rows = 0;
             foreach(var v in StardewSymphony.musicManager.musicPacks)
             {
-                this.buttons.Add(new Button(v.Key, new Rectangle(100+(numOfButtons*100), 100+(rows*100), 64, 64), StardewSymphony.textureManager.getTexture("MusicNote").Copy(StardewSymphony.ModHelper), "", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), Color.White, Color.White, new ButtonFunctionality(new DelegatePairing(displayMusicPack, new List<object>
+                if (v.Value.musicPackInformation.Icon == null)
                 {
+                    this.buttons.Add(new Button(v.Key, new Rectangle(100 + (numOfButtons * 100), 125 + (rows * 100), 64, 64), StardewSymphony.textureManager.getTexture("MusicDisk"), "", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), StardustCore.IlluminateFramework.Colors.randomColor(), Color.White, new ButtonFunctionality(new DelegatePairing(displayMusicPack, new List<object>
+                    {
+                        (object)v
+                    }
+                    ), null, new DelegatePairing(null, new List<object>(){
                     (object)v
+                    }
+                    )), false));
                 }
-                ),null, new DelegatePairing(null,new List<object>(){
+                else
+                {
+                    this.buttons.Add(new Button(v.Key, new Rectangle(100 + (numOfButtons * 100), 100 + (rows * 100), 64, 64), v.Value.musicPackInformation.Icon, "", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), StardustCore.IlluminateFramework.LightColorsList.Black, Color.White, new ButtonFunctionality(new DelegatePairing(displayMusicPack, new List<object>
+                    {
+                        (object)v
+                    }
+                    ), null, new DelegatePairing(null, new List<object>(){
                     (object)v
+                    }
+                    )), false));
                 }
-                )), false));
+
                 numOfButtons++;
                 if (numOfButtons > 8)
                 {
@@ -61,9 +76,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (v.containsPoint(x, y))
                 {
                     var pair = (KeyValuePair<string, MusicPack>)v.buttonFunctionality.hover.paramaters[0];
-                    v.hoverText = pair.Key;
+                    v.hoverText = (string)pair.Key;
                     v.onHover();
-                    StardewSymphony.ModMonitor.Log(pair.Key);
+                    //StardewSymphony.ModMonitor.Log(pair.Key);
+                }
+                else
+                {
+                    v.hoverText = "";
                 }
             }
         }

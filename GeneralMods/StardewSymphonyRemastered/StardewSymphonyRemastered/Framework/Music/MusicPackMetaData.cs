@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace StardewSymphonyRemastered.Framework
         public string description;
         public string versionInfo;
         public string pathToMusicPackIcon;
-        public Texture2D Icon;
+        public Texture2DExtended Icon;
         /// <summary>
         /// Constrctor
         /// </summary>
@@ -35,7 +36,7 @@ namespace StardewSymphonyRemastered.Framework
             this.pathToMusicPackIcon = PathToMusicPackIcon;
             try
             {
-                this.Icon = StardewSymphony.ModHelper.Content.Load<Texture2D>(this.pathToMusicPackIcon);
+                this.Icon = new Texture2DExtended(StardewSymphony.ModHelper, this.pathToMusicPackIcon);
             }
             catch(Exception err)
             {
