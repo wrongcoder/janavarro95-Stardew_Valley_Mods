@@ -2,6 +2,7 @@
 using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,16 +60,24 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public static MusicPackMetaData readFromJson(string path)
         {
-            var meta=StardewSymphony.ModHelper.ReadJsonFile<MusicPackMetaData>(path);
+            string json = Path.Combine(path, "MusicPackInformation.json");
+            var meta=StardewSymphony.ModHelper.ReadJsonFile<MusicPackMetaData>(json);
             try
             {
-                meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper, meta.pathToMusicPackIcon + ".png");
+                try
+                {
+                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper, StardewSymphony.getRelativeDirectory(Path.Combine(path, meta.pathToMusicPackIcon + ".png")));
+                }
+                catch(Exception errr)
+                {
+                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper, StardewSymphony.getRelativeDirectory(Path.Combine(path, meta.pathToMusicPackIcon)));
+                }
             }
             catch(Exception err)
             {
-
+                //StardewSymphony.ModMonitor.Log(err.ToString());
             }
-            return StardewSymphony.ModHelper.ReadJsonFile<MusicPackMetaData>(path);
+            return meta;
         }
 
         /// <summary>

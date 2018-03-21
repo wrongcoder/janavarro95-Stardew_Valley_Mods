@@ -42,7 +42,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 else
                 {
-                    this.buttons.Add(new Button(v.Key, new Rectangle(100 + (numOfButtons * 100), 100 + (rows * 100), 64, 64), v.Value.musicPackInformation.Icon, "", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), StardustCore.IlluminateFramework.LightColorsList.Black, Color.White, new ButtonFunctionality(new DelegatePairing(displayMusicPack, new List<object>
+                    this.buttons.Add(new Button(v.Key, new Rectangle(100 + (numOfButtons * 100), 125 + (rows * 100), 64, 64), v.Value.musicPackInformation.Icon, "", new Rectangle(0, 0, 16, 16), 4f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), StardustCore.IlluminateFramework.LightColorsList.Black, Color.White, new ButtonFunctionality(new DelegatePairing(displayMusicPack, new List<object>
                     {
                         (object)v
                     }

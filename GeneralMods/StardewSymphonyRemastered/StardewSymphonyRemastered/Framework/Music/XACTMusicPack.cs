@@ -37,7 +37,7 @@ namespace StardewSymphonyRemastered.Framework
             this.setModDirectoryFromFullDirectory();
             this.songInformation = new SongSpecifics();
             this.currentCue = null;
-            this.musicPackInformation = MusicPackMetaData.readFromJson(Path.Combine(directoryToXwb, "MusicPackInformation.json"));
+            this.musicPackInformation = MusicPackMetaData.readFromJson(directoryToXwb);
             if (this.musicPackInformation == null)
             {
                 StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.",StardewModdingAPI.LogLevel.Warn);
