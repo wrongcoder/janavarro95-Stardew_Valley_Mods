@@ -127,6 +127,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
         {
             var info=(KeyValuePair<string, MusicPack>)param[0];
             StardewSymphony.ModMonitor.Log(info.ToString());
+            StardewSymphony.musicManager.swapMusicPacks(info.Key);
             StardewSymphony.musicManager.playRandomSongFromPack(info.Key);
             //info.Value.playRandomSong();
         }

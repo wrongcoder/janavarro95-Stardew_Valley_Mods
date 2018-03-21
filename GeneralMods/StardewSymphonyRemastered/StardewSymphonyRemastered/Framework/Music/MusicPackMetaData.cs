@@ -36,7 +36,7 @@ namespace StardewSymphonyRemastered.Framework
             this.pathToMusicPackIcon = PathToMusicPackIcon;
             try
             {
-                this.Icon = new Texture2DExtended(StardewSymphony.ModHelper, this.pathToMusicPackIcon);
+                this.Icon = new Texture2DExtended(StardewSymphony.ModHelper, this.pathToMusicPackIcon+".png");
             }
             catch(Exception err)
             {
@@ -59,6 +59,15 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public static MusicPackMetaData readFromJson(string path)
         {
+            var meta=StardewSymphony.ModHelper.ReadJsonFile<MusicPackMetaData>(path);
+            try
+            {
+                meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper, meta.pathToMusicPackIcon + ".png");
+            }
+            catch(Exception err)
+            {
+
+            }
             return StardewSymphony.ModHelper.ReadJsonFile<MusicPackMetaData>(path);
         }
 

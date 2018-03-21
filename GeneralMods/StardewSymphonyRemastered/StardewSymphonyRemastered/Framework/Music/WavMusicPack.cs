@@ -112,7 +112,7 @@ namespace StardewSymphonyRemastered.Framework
             byteArray = reader.ReadBytes(dataSize);
 
             dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
-            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(100));
+            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
 
             dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
             this.currentSong = new Song(p);
@@ -120,8 +120,9 @@ namespace StardewSymphonyRemastered.Framework
 
         void DynamicSound_BufferNeeded(object sender, EventArgs e)
         {
-            dynamicSound.SubmitBuffer(byteArray, position, count / 2);
-            dynamicSound.SubmitBuffer(byteArray, position + count / 2, count / 2);
+            dynamicSound.SubmitBuffer(byteArray, position, count);
+            //dynamicSound.SubmitBuffer(byteArray);
+            //dynamicSound.SubmitBuffer(byteArray, position + count / 2, count / 2);
 
             position += count;
             if (position + count > byteArray.Length)
@@ -197,11 +198,17 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void stopSong()
         {
+            if (Game1.currentSong != null) Game1.currentSong.Stop(AudioStopOptions.Immediate);
+            if (this.currentSong == null) return;
             if (dynamicSound != null)
             {
-                dynamicSound.Stop();
+                dynamicSound.Stop(true);
+                dynamicSound.BufferNeeded -= new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
                 dynamicSound = null;
                 this.currentSong = null;
+                position = 0;
+                count = 0;
+                byteArray = new byte[0];
             }
         }
 
