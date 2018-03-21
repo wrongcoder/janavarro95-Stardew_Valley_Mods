@@ -111,6 +111,7 @@ namespace StardewSymphonyRemastered.Framework
 
             byteArray = reader.ReadBytes(dataSize);
 
+
             dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
             count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
 
@@ -120,7 +121,18 @@ namespace StardewSymphonyRemastered.Framework
 
         void DynamicSound_BufferNeeded(object sender, EventArgs e)
         {
-            dynamicSound.SubmitBuffer(byteArray, position, count);
+            //StardewSymphony.ModMonitor.Log(byteArray.Length.ToString());
+            //StardewSymphony.ModMonitor.Log(position.ToString());
+            //StardewSymphony.ModMonitor.Log(count.ToString());
+            try
+            {
+                dynamicSound.SubmitBuffer(byteArray, position, count);
+            }
+            catch(Exception err)
+            {
+                StardewSymphony.ModMonitor.Log(err.ToString(), StardewModdingAPI.LogLevel.Error);
+            }
+            
             //dynamicSound.SubmitBuffer(byteArray);
             //dynamicSound.SubmitBuffer(byteArray, position + count / 2, count / 2);
 
