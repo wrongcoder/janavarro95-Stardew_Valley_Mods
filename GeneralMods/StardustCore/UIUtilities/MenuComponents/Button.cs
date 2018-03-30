@@ -39,7 +39,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             {
                 this.textureColor = StardustCore.IlluminateFramework.Colors.getColorFromList("White");
             }
-            this.textColor = DrawColor;
+            this.textColor = TextColor;
             if (this.textColor == null)
             {
                 this.textColor = StardustCore.IlluminateFramework.Colors.getColorFromList("White");
@@ -115,11 +115,27 @@ namespace StardustCore.UIUtilities.MenuComponents
 
         }
 
+        /// <summary>
+        /// Draw the button.
+        /// </summary>
+        /// <param name="b"></param>
         public new void draw(SpriteBatch b)
         {
             if (!this.visible)
                 return;
             this.draw(b, Color.White, (float)(0.860000014305115 + (double)this.bounds.Y / 20000.0));
+        }
+
+        /// <summary>
+        /// Draw the button.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="color"></param>
+        public virtual void draw(SpriteBatch b, Color color)
+        {
+            if (!this.visible)
+                return;
+            this.draw(b, color, (float)(0.860000014305115 + (double)this.bounds.Y / 20000.0));
         }
 
         /// <summary>
@@ -134,7 +150,9 @@ namespace StardustCore.UIUtilities.MenuComponents
             }
         }
     
-
+        /// <summary>
+        /// The functionality that occurs when the button is clicked with the right mouse button.
+        /// </summary>
         public void onRightClick()
         {
             if (this.buttonFunctionality == null) return;
@@ -145,7 +163,10 @@ namespace StardustCore.UIUtilities.MenuComponents
             }
         }
 
-        public void onLeftClick()
+        /// <summary>
+        /// The functionality that occurs when the button is clicked with the left mouse button.
+        /// </summary>
+        public virtual void onLeftClick()
         {
             if (this.buttonFunctionality == null) return;
             else
@@ -155,7 +176,10 @@ namespace StardustCore.UIUtilities.MenuComponents
             }
         }
 
-        public void onHover()
+        /// <summary>
+        /// The functionality that occcurs when the button is hover overed.
+        /// </summary>
+        public virtual void onHover()
         {
             if (this.buttonFunctionality == null) return;
             else
@@ -163,6 +187,20 @@ namespace StardustCore.UIUtilities.MenuComponents
                 if (this.buttonFunctionality.hover == null) return;
                 else this.buttonFunctionality.hover.run();
             }
+        }
+
+        /// <summary>
+        /// Returns a new object based off of the data of this object.
+        /// </summary>
+        /// <returns></returns>
+        public Button clone()
+        {
+            var b= new Button(this.name, this.bounds, this.animationManager.objectTexture, this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
+            if (b.buttonFunctionality.hover == null)
+            {
+                StardustCore.ModCore.ModMonitor.Log("I'm null!");
+            }
+            return b;
         }
     }
 }

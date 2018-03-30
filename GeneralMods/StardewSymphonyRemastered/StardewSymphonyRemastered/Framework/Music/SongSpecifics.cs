@@ -246,8 +246,8 @@ namespace StardewSymphonyRemastered.Framework
         {
             if (Game1.weatherIcon == Game1.weather_sunny) return "sunny";
             if (Game1.weatherIcon == Game1.weather_rain) return "rainy";
-            if (Game1.weatherIcon == Game1.weather_debris) return "debris";
-            if (Game1.weatherIcon == Game1.weather_lightning) return "lightning";
+            if (Game1.weatherIcon == Game1.weather_debris) return "lightning";
+            if (Game1.weatherIcon == Game1.weather_lightning) return "debris"; //????
             if (Game1.weatherIcon == Game1.weather_festival) return "festival";
             if (Game1.weatherIcon == Game1.weather_snow) return "snow";
             if (Game1.weatherIcon == Game1.weather_wedding) return "wedding";

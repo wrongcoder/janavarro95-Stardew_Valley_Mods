@@ -17,10 +17,9 @@ namespace StardewSymphonyRemastered
     /// <summary>
     /// BIG WIP. Don't use this at all because it does nothing right now.
     /// TODO:
-    /// 1.Make Xwb packs work
-    /// 2.Make stream files work
+    /// -Make way to swap between album menu draw modes
+    /// -make a currently playing menu off to the side to tell you what song is playing from what album.
     /// 3.Make interface.
-    /// 4.Make sure stuff doesn't blow up.
     /// 5.Release
     /// 6.Make videos documenting how to make this mod work.
     /// 7.Make way to generate new music packs.
@@ -133,9 +132,11 @@ namespace StardewSymphonyRemastered
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             string musicNote = Path.Combine(path, "MusicNote.png");
             string musicCD = Path.Combine(path, "MusicDisk.png");
+            string outlineBox = Path.Combine(path, "OutlineBox.png");
             textureManager.addTexture("MusicNote",new Texture2DExtended(ModHelper,StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicNote)));
             textureManager.addTexture("MusicDisk", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicCD)));
             textureManager.addTexture("MusicCD", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicCD)));
+            textureManager.addTexture("OutlineBox", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", outlineBox)));
 
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);
             if (!Directory.Exists(WavMusicDirectory)) Directory.CreateDirectory(WavMusicDirectory);

@@ -17,7 +17,7 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
         /// </summary>
         public VanillaFont()
         {
-            this.path = Path.Combine(StardustCore.UIUtilities.SpriteFonts.SpriteFont.FontDirectory, "Vanilla");
+            this.path = Path.Combine(SpriteFonts.FontDirectory, "Vanilla");
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             this.characterSheet = new VanillaCharacterSheet(path);
         }
@@ -27,7 +27,7 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public TexturedString voidParseString(string str)
+        public TexturedString ParseString(string str)
         {
             List<TexturedCharacter> characters=new List<TexturedCharacter>();
             foreach(var chr in str)

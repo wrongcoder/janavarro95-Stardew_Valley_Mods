@@ -38,6 +38,19 @@ namespace StardustCore
             return s.Remove(0, 1);
         }
 
+        public static string getRelativeDiretory(IModHelper modHelper, string path)
+        {
+            string s = getShortenedDirectory(modHelper, path);
+            return s.Remove(0, 1);
+        }
+
+        public static string getShortenedDirectory(IModHelper modHelper, string path)
+        {
+            string lol = (string)path.Clone();
+            string[] spliter = lol.Split(new string[] { modHelper.DirectoryPath }, StringSplitOptions.None);
+            return spliter[1];
+        }
+
         public static int sellToStorePrice(CoreObject c)
         {
             return  (int)((double)c.price * (1.0 + (double)c.quality * 0.25));

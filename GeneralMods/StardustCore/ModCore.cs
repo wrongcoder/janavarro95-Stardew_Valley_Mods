@@ -4,6 +4,7 @@ using StardewValley;
 using StardewValley.Menus;
 using StardustCore.ModInfo;
 using StardustCore.Serialization;
+using StardustCore.UIUtilities.SpriteFonts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +42,7 @@ namespace StardustCore
             IlluminateFramework.Colors.initializeColors();
             ContentDirectory = Path.Combine(ModHelper.DirectoryPath, "Content");
             if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(ContentDirectory);
-            UIUtilities.SpriteFonts.SpriteFont.initialize();
+            SpriteFonts.initialize();
             
           
         }

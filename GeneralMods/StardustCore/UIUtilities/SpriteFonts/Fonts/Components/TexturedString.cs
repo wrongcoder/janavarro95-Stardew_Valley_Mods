@@ -37,8 +37,8 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
                 {
                     c.position = new Vector2(this.position.X + c.spacing.LeftPadding + lastSeenChar.spacing.RightPadding+lastSeenChar.texture.Width*index, this.position.Y);    
                 }
-                StardustCore.ModCore.ModMonitor.Log(c.character.ToString());
-                StardustCore.ModCore.ModMonitor.Log(c.position.ToString());
+                //StardustCore.ModCore.ModMonitor.Log(c.character.ToString());
+                //StardustCore.ModCore.ModMonitor.Log(c.position.ToString());
                 lastSeenChar = c;
                 index++;
             }

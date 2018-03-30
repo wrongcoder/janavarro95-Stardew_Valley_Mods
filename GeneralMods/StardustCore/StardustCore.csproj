@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Animations\Animation.cs" />
     <Compile Include="Animations\AnimationManager.cs" />
+    <Compile Include="Enums\Directions.cs" />
+    <Compile Include="Enums\Weather.cs" />
     <Compile Include="IlluminateFramework\Colors.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
