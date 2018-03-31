@@ -52,6 +52,10 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 this.currentMusicPack = getMusicPack(nameOfNewMusicPack);
             }
+            else
+            {
+                StardewSymphony.ModMonitor.Log("ERROR: Music Pack " + nameOfNewMusicPack + " isn't valid for some reason.", StardewModdingAPI.LogLevel.Alert);
+            }
         }
 
         /// <summary>
@@ -134,11 +138,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public bool isMusicPackValid(string nameOfMusicPack)
         {
-            if (this.currentMusicPack.isNull() == false)
-            {
                 return musicPacks.ContainsKey(nameOfMusicPack);
-            }
-            else return false;
         }
 
         /// <summary>

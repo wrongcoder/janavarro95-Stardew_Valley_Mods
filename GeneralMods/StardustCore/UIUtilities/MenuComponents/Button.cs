@@ -20,6 +20,15 @@ namespace StardustCore.UIUtilities.MenuComponents
 
         public ButtonFunctionality buttonFunctionality;
 
+
+        /// <summary>
+        /// Empty Constructor.
+        /// </summary>
+        public Button(Rectangle Bounds,Texture2DExtended Texture,Rectangle sourceRect,float Scale): base(Bounds, Texture.texture, sourceRect, Scale)
+        {
+
+        }
+
         /// <summary>
         /// Basic Button constructor.
         /// </summary>
@@ -192,7 +201,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <summary>
         /// Returns a new object based off of the data of this object.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A Button object that is identical to the one passed in.</returns>
         public Button clone()
         {
             var b= new Button(this.name, this.bounds, this.animationManager.objectTexture, this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
@@ -202,5 +211,51 @@ namespace StardustCore.UIUtilities.MenuComponents
             }
             return b;
         }
+
+        /// <summary>
+        /// Makes a clone of the passed in button but at a new position.
+        /// </summary>
+        /// <param name="newPosition"></param>
+        /// <returns></returns>
+        public Button clone(Vector2 newPosition)
+        {
+            var b = new Button(this.name, new Rectangle((int)newPosition.X,(int)newPosition.Y,this.bounds.Width,this.bounds.Height), this.animationManager.objectTexture, this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
+            if (b.buttonFunctionality.hover == null)
+            {
+                StardustCore.ModCore.ModMonitor.Log("I'm null!");
+            }
+            return b;
+        }
+
+        /// <summary>
+        /// Returns a new object based off of the data of this object.
+        /// </summary>
+        /// <returns>A Button object that is identical to the one passed in.</returns>
+        public Button copy()
+        {
+            return this.clone();
+        }
+
+        /// <summary>
+        /// Generates a new "null" Button.
+        /// </summary>
+        /// <returns></returns>
+        public static Button EmptyButton()
+        {
+            var b= new Button(new Rectangle(0, 0, 16, 16), new Texture2DExtended(), new Rectangle(0, 0, 16, 16), 1f);
+            b.label = "Null";
+            return b;
+        }
+
+        /// <summary>
+        /// Generates a new "null" Button.
+        /// </summary>
+        /// <returns></returns>
+        public static Button Empty()
+        {
+            return EmptyButton();
+        }
+
+
     }
 }

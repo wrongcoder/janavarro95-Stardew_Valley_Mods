@@ -10,11 +10,13 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
 {
     public class TexturedString
     {
-        List<TexturedCharacter> characters;
-        Vector2 position;
+        public List<TexturedCharacter> characters;
+        public Vector2 position;
+        public string label;
 
-        public TexturedString(Vector2 Position,List<TexturedCharacter> Characters)
+        public TexturedString(string Label,Vector2 Position,List<TexturedCharacter> Characters)
         {
+            this.label = Label;
             this.characters = Characters;
             this.position = Position;
             setCharacterPositions();
@@ -99,9 +101,11 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
             {
                 characterList.Add(v);
             }
-            TexturedString newString = new TexturedString(new Vector2(0, 0), characterList);
+            TexturedString newString = new TexturedString("",new Vector2(0, 0), characterList);
             return newString;
         }
+
+
 
 
         /// <summary>
@@ -124,6 +128,36 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
             {
                 v.draw(b);
             }
+        }
+
+        /// <summary>
+        /// Returns a copy of this object.
+        /// </summary>
+        /// <returns></returns>
+        public TexturedString copy()
+        {
+            return new TexturedString(this.label,this.position, this.characters);
+        }
+
+        /// <summary>
+        /// Returns a copy of this object at the specified position.
+        /// </summary>
+        /// <param name="newPosition"></param>
+        /// <returns></returns>
+        public TexturedString copy(Vector2 newPosition)
+        {
+            return new TexturedString(this.label,newPosition, this.characters);
+        }
+
+        /// <summary>
+        /// Returns a new textured strings with a different label and position.
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="newPosition"></param>
+        /// <returns></returns>
+        public TexturedString copy(string label, Vector2 newPosition)
+        {
+            return new TexturedString(label, newPosition, this.characters);
         }
     }
 }

@@ -16,6 +16,16 @@ namespace StardustCore.UIUtilities
         public string path;
         
         /// <summary>
+        /// Empty/null constructor.
+        /// </summary>
+        public Texture2DExtended()
+        {
+            this.Name = "";
+            this.texture = null;
+            this.path = "";
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
