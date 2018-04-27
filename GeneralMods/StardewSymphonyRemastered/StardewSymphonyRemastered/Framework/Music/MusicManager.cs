@@ -190,6 +190,49 @@ namespace StardewSymphonyRemastered.Framework
             return listOfValidDictionaries;
         }
 
+        public Dictionary<MusicPack, List<Song>> getListOfApplicableMusicPacksForFestivals()
+        {
+            Dictionary<MusicPack, List<Song>> listOfValidDictionaries = new Dictionary<MusicPack, List<Song>>();
+            foreach (var v in this.musicPacks)
+            {
+                try
+                {
+                    var songList = v.Value.songInformation.getFestivalMusic();
+                    if (songList.Count > 0)
+                    {
+                        listOfValidDictionaries.Add(v.Value, songList);
+                    }
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+            return listOfValidDictionaries;
+        }
+
+
+        public Dictionary<MusicPack, List<Song>> getListOfApplicableMusicPacksForEvents()
+        {
+            Dictionary<MusicPack, List<Song>> listOfValidDictionaries = new Dictionary<MusicPack, List<Song>>();
+            foreach (var v in this.musicPacks)
+            {
+                try
+                {
+                    var songList = v.Value.songInformation.getEventMusic();
+                    if (songList.Count > 0)
+                    {
+                        listOfValidDictionaries.Add(v.Value, songList);
+                    }
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+            return listOfValidDictionaries;
+        }
+
         /// <summary>
         /// Selects the actual song to be played right now based off of the selector key. The selector key should be called when the player's location changes.
         /// </summary>
@@ -223,7 +266,7 @@ namespace StardewSymphonyRemastered.Framework
                 if (listOfValidMusicPacks.Count == 0)
                 {
                     //No valid songs to play at this time.
-                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". Are you sure you did this properly?");
+                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". 1 Are you sure you did this properly?");
                     //return;
                 }
             }
@@ -244,15 +287,22 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 if (string.IsNullOrEmpty(subKey))
                 {
-                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ". Are you sure you did this properly?");
-                    return;
+
+                    bool f = checkGenericMusic(songListKey);
+
+                    if (f == false)
+                    {
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".2 Are you sure you did this properly?");
+                        StardewSymphony.menuChangedMusic = false;
+                        return;
+                    }
                 }
                 StardewSymphony.ModMonitor.Log(subKey, StardewModdingAPI.LogLevel.Alert);
                 listOfValidMusicPacks = getListOfApplicableMusicPacks(subKey);
                 if (listOfValidMusicPacks.Count == 0)
                 {
                     //No valid songs to play at this time.
-                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". Are you sure you did this properly?");
+                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ".3 Are you sure you did this properly?");
                     //return;
                 }
                 //Try to get more specific.
@@ -277,19 +327,28 @@ namespace StardewSymphonyRemastered.Framework
                     if (listOfValidMusicPacks.Count == 0)
                     {
                         //No valid songs to play at this time.
-                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". Are you sure you did this properly?");
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ".4 Are you sure you did this properly?");
                         //return;
                     }
                 }
             }
 
+            //If the list of valid packs are 0, check if I'm currently at an event or festival and try to play a generalized song from there.
             if (listOfValidMusicPacks.Count == 0)
             {
-                //No valid songs to play at this time.
-                StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ". Are you sure you did this properly?");
-                return;
+
+                bool f= checkGenericMusic(songListKey);
+
+                if (f == false)
+                {
+                    //No valid songs to play at this time.
+                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".7 Are you sure you did this properly?");
+                    StardewSymphony.menuChangedMusic = false;
+                    return;
+                }
             }
 
+            //If there is a valid key for the place/time/event/festival I am at, play it!
 
             int randInt = packSelector.Next(0, listOfValidMusicPacks.Count-1);
 
@@ -305,6 +364,72 @@ namespace StardewSymphonyRemastered.Framework
             this.currentMusicPack.playSong(songName.name);
         }
 
+
+        public bool checkGenericMusic(string songListKey)
+        {
+            if (Game1.CurrentEvent != null)
+            {
+                if (Game1.CurrentEvent.isFestival)
+                {
+                    //Try to play a generalized festival song.
+                    var listOfFestivalPacks = this.getListOfApplicableMusicPacksForFestivals();
+                    if (listOfFestivalPacks.Count > 0)
+                    {
+                        int randFestivalPack = packSelector.Next(0, listOfFestivalPacks.Count - 1);
+
+                        var festivalMusicPackPair = listOfFestivalPacks.ElementAt(randFestivalPack);
+
+                        //used to swap the music packs and stop the last playing song.
+                        this.swapMusicPacks(festivalMusicPackPair.Key.musicPackInformation.name);
+
+                        int randFestivalPack2 = songSelector.Next(0, festivalMusicPackPair.Value.Count);
+
+                        var festivalSongName = festivalMusicPackPair.Value.ElementAt(randFestivalPack2);
+
+                        this.currentMusicPack.playSong(festivalSongName.name);
+                        StardewSymphony.menuChangedMusic = false;
+                        return true;
+                    }
+                    else
+                    {
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".5 Are you sure you did this properly?");
+                        StardewSymphony.ModMonitor.Log("Also failed playing a festival event song.");
+                        StardewSymphony.menuChangedMusic = false;
+                        return false;
+                    }
+                }
+                else
+                {
+                    //Try to play a generalized event song.
+                    var listOfEventPacks = this.getListOfApplicableMusicPacksForEvents();
+                    if (listOfEventPacks.Count > 0)
+                    {
+                        int randEventPack = packSelector.Next(0, listOfEventPacks.Count - 1);
+
+                        var eventMusicPackPair = listOfEventPacks.ElementAt(randEventPack);
+
+                        //used to swap the music packs and stop the last playing song.
+                        this.swapMusicPacks(eventMusicPackPair.Key.musicPackInformation.name);
+
+                        int randEventPack2 = songSelector.Next(0, eventMusicPackPair.Value.Count);
+
+                        var eventSongName = eventMusicPackPair.Value.ElementAt(randEventPack2);
+
+                        this.currentMusicPack.playSong(eventSongName.name);
+                        StardewSymphony.menuChangedMusic = false;
+                        return true;
+                    }
+                    else
+                    {
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".6 Are you sure you did this properly?");
+                        StardewSymphony.ModMonitor.Log("Also failed playing a generalized event song.");
+                        StardewSymphony.menuChangedMusic = false;
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Adds a valid xwb music pack to the list of music packs available.
@@ -346,7 +471,9 @@ namespace StardewSymphonyRemastered.Framework
             this.musicPacks.Add(musicPack.musicPackInformation.name,musicPack);
         }
 
-
+        /// <summary>
+        /// Initializes all of the potential key triggers for playing songs.
+        /// </summary>
         public void initializeSeasonalMusic()
         {
             foreach(var pack in this.musicPacks)
@@ -355,6 +482,43 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
+        /// <summary>
+        /// Initializes all of the potential key triggers for playing songs.
+        /// </summary>
+        public void initializeMenuMusic()
+        {
+            foreach (var pack in this.musicPacks)
+            {
+                pack.Value.songInformation.initializeMenuMusic();
+            }
+        }
+
+        /// <summary>
+        /// Initializes all of the potential key triggers for playing songs.
+        /// </summary>
+        public void initializeFestivalMusic()
+        {
+            foreach (var pack in this.musicPacks)
+            {
+                pack.Value.songInformation.initializeFestivalMusic();
+            }
+        }
+
+        /// <summary>
+        /// Initializes all of the potential key triggers for playing songs.
+        /// </summary>
+        public void initializeEventMusic()
+        {
+            foreach (var pack in this.musicPacks)
+            {
+                pack.Value.songInformation.initializeEventMusic();
+            }
+        }
+
+        /// <summary>
+        /// Play a random song from a given music pack.
+        /// </summary>
+        /// <param name="musicPackName"></param>
         public void playRandomSongFromPack(string musicPackName)
         {
             this.musicPacks.TryGetValue(musicPackName, out MusicPack musicPack);

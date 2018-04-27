@@ -166,6 +166,7 @@ namespace Omegasis.StardewSymphony
             if (!Context.IsWorldReady)
                 return;
 
+           
             this.SelectMusic();
         }
 

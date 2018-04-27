@@ -19,10 +19,21 @@ namespace StardewSymphonyRemastered
     /// TODO:
     /// -Make way to swap between album menu draw modes
     /// -make a currently playing menu off to the side to tell you what song is playing from what album.
+    /// Make songs work for festivals and events.
+    /// Finish making triggers menus
     /// 3.Make interface.
     /// 5.Release
     /// 6.Make videos documenting how to make this mod work.
     /// 7.Make way to generate new music packs.
+    /// 
+    /// 
+    /// Add mod config to have silent rain option.
+    /// Add in song delay function.
+    /// Add in shuffle song button that just selects music but probably plays a different song. same as musicManager.selectmusic(getConditionalString);
+    /// 
+    /// 
+    /// Notes:
+    /// All mods must add events/locations/festivals/menu information to this mod during the Entry function of their mod because once the game does it's first update tick, that's when all of the packs are initialized with all of their music.
     /// </summary>
     public class StardewSymphony : Mod
     {
@@ -43,6 +54,14 @@ namespace StardewSymphonyRemastered
         public bool musicPacksInitialized;
 
 
+
+        public static bool festivalStart;
+        public static bool eventStart;
+
+        public static bool menuChangedMusic;
+
+
+
         public static TextureManager textureManager;
         /// <summary>
         /// Entry point for the mod.
@@ -60,6 +79,13 @@ namespace StardewSymphonyRemastered
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
+
+            StardewModdingAPI.Events.MenuEvents.MenuChanged += MenuEvents_MenuChanged;
+            StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
+
+            StardewModdingAPI.Events.GameEvents.FirstUpdateTick += GameEvents_FirstUpdateTick;
+
+
             musicManager = new MusicManager();
 
             MusicPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Music");
@@ -74,8 +100,71 @@ namespace StardewSymphonyRemastered
             this.createBlankWAVTemplate();
 
             musicPacksInitialized = false;
+            menuChangedMusic = false;
 
-           
+
+            //Initialize all of the lists upon creation during entry.
+            SongSpecifics.initializeMenuList();
+            SongSpecifics.initializeEventsList();
+            SongSpecifics.initializeFestivalsList();
+
+            initializeMusicPacks();
+        }
+
+        /// <summary>
+        /// Ran once all of teh entry methods are ran. This will ensure that all custom music from other mods has been properly loaded in.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        {
+            if (musicPacksInitialized == false)
+            {
+                musicManager.initializeMenuMusic(); //Initialize menu music that has been added to SongSpecifics.menus from all other mods during their Entry function.
+                musicManager.initializeFestivalMusic();//Initialize festival music that has been added to SongSpecifics.menus from all other mods during their Entry function.
+                musicManager.initializeEventMusic();//Initialize event music that has been added to SongSpecifics.menus from all other mods during their Entry function.
+                //Note that locations should also be added to SongSpecifics.locations during the mod's respective Entry function.
+                musicPacksInitialized = true;
+                //musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+            }
+        }
+
+        /// <summary>
+        /// Events to occur after the game has loaded in.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+
+            //Locaion initialization MUST occur after load. Anything else can occur before.
+            SongSpecifics.initializeLocationsList(); //Gets all Game locations once the player has loaded the game, and all buildings on the player's farm and adds them to a location list.
+            musicManager.initializeSeasonalMusic(); //Initialize the seasonal music using all locations gathered in the location list.
+
+        }
+
+
+        /// <summary>
+        /// Choose new music when a menu is closed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
+        {
+            if (menuChangedMusic == true)
+            {
+                musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+            }
+        }
+
+        /// <summary>
+        /// Choose new music when a menu is opened.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuEvents_MenuChanged(object sender, StardewModdingAPI.Events.EventArgsClickableMenuChanged e)
+        {
+            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
@@ -88,6 +177,11 @@ namespace StardewSymphonyRemastered
             */
         }
 
+        /// <summary>
+        /// Fires when a key is pressed to open the music selection menu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
             if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
@@ -104,14 +198,28 @@ namespace StardewSymphonyRemastered
         /// <param name="e"></param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.currentSong != null) Game1.currentSong.Stop(AudioStopOptions.Immediate);
-            if (musicPacksInitialized == false)
+            // ModMonitor.Log("HELLO WORLD");
+            if (Game1.currentSong != null)
             {
-                initializeMusicPacks();
-                musicPacksInitialized = true;
-                musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+                //ModMonitor.Log("STOP THE MUSIC!!!");
+                Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
+                Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
+                Game1.nextMusicTrack = "";  //same as above line
             }
+      
         }
+
+        /// <summary>
+        /// Raised when the player changes locations. This should determine the next song to play.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
+        {
+            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+        }
+
+
 
         /// <summary>
         /// Load in the music packs to the music manager.
@@ -265,30 +373,6 @@ namespace StardewSymphonyRemastered
                 musicPack.readFromJson();
                 
             }
-        }
-
-        /// <summary>
-        /// Raised when the player changes locations. This should determine the next song to play.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
-        {
-            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
-        }
-
-        /// <summary>
-        /// Events to occur after the game has loaded in.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            StardewSymphonyRemastered.Framework.SongSpecifics.addLocations();
-            StardewSymphonyRemastered.Framework.SongSpecifics.addFestivals();
-            StardewSymphonyRemastered.Framework.SongSpecifics.addEvents();
-            musicManager.initializeSeasonalMusic();
-           
         }
 
 

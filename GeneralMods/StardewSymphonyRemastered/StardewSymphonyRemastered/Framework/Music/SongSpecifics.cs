@@ -9,28 +9,31 @@ namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>
     /// Stores information about what songs play when.
-    /// 
-    /// TODO: Festivals and events
     /// </summary>
     public class SongSpecifics
     {
-        public Dictionary<string, List<Song>> listOfSongsWithTriggers; //triggerName, <songs>
+        public Dictionary<string, List<Song>> listOfSongsWithTriggers; //triggerName, <songs>. Seasonal music
 
-        public Dictionary<string, List<Song>> eventSongs;
 
-        public Dictionary<string, List<Song>> festivalSongs;
+        public List<Song> listOfSongsWithoutTriggers;
 
-        public List<Song> listOfSongsWithoutTriggers; 
+
+        public List<Song> festivalSongs;
+        public List<Song> eventSongs;
 
         public static List<string> locations = new List<string>();
         public static List<string> festivals = new List<string>();
         public static List<string> events = new List<string>();
 
+        /// <summary>
+        /// Keeps track of the menus that support custom music with this mod.
+        /// </summary>
+        public static List<string> menus = new List<string>();
+
         string[] seasons;
         string[] weather;
         string[] daysOfWeek;
         string[] timesOfDay;
-        List<string> menus;
         public static char seperator = '_';
 
         /// <summary>
@@ -52,7 +55,6 @@ namespace StardewSymphonyRemastered.Framework
                 "rainy",
                 "debris",
                 "lightning",
-                "festival",
                 "snow",
                 "wedding"
             };
@@ -71,17 +73,13 @@ namespace StardewSymphonyRemastered.Framework
                 "day",
                 "night"
             };
-            menus = new List<string>();
-            
-            menus.Add(typeof(StardewValley.Menus.TitleMenu).ToString().Replace('.', seperator));
 
 
             listOfSongsWithTriggers = new Dictionary<string, List<Song>>();
-            eventSongs = new Dictionary<string, List<Song>>();
-            festivalSongs = new Dictionary<string, List<Song>>();
-
             this.listOfSongsWithoutTriggers = new List<Song>();
-            this.addMenuMusic();
+            this.eventSongs = new List<Song>();
+            this.festivalSongs = new List<Song>();
+
         }
 
 
@@ -100,23 +98,41 @@ namespace StardewSymphonyRemastered.Framework
         {
             string key = "";
             bool foundMenuString = false;
-            if (Game1.eventUp == true)
+            //Event id's are the number found before the : for the event in Content/events/<location>.yaml file where location is the name of the stardew valley location.
+            if (Game1.eventUp == true && Game1.CurrentEvent.isFestival==false)
             {
                 //Get the event id an hijack it with some different music
                 //String key="Event_EventName";
+
+                var reflected = StardewSymphony.ModHelper.Reflection.GetField<int>(Game1.CurrentEvent, "id", true);
+
+                int id = reflected.GetValue();
+                key= id.ToString(); //get the event id. Really really messy.
+                return key;
+               
             }
             else if (Game1.isFestival())
             {
-                //hijack the name of the festival and load some different songs
-                // string s="Festival_FestivalName";
+                //hijack the date of the festival and load some different songs
+                // string s="Festival name"
+                key = Game1.CurrentEvent.FestivalName;
+                return key;
             }
             else if (Game1.activeClickableMenu!=null)
             {
-                if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.TitleMenu))
+                String name = Game1.activeClickableMenu.GetType().ToString().Replace('.', seperator);
+                //Iterate through all of the potential menu options and check if it is valid.
+                foreach (var menuNamespaceName in menus)
                 {
-                    key = Game1.activeClickableMenu.GetType().ToString().Replace('.',seperator);
-                    foundMenuString = true;
+                    if (name == menuNamespaceName)
+                    {
+                        key =name;
+                        foundMenuString = true;
+                        StardewSymphony.menuChangedMusic = true;
+                        return key;
+                    }
                 }
+                return ""; //No menu found so don't event try to change the music.
 
             }
             else
@@ -137,26 +153,52 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>
         /// Initialize the location lists with the names of all of the major locations in the game.
         /// </summary>
-        public static void addLocations()
+        public static void initializeLocationsList()
         {
+            //Give stardew symphony access to have unique music at any game location.
             foreach (var v in Game1.locations)
             {
                 locations.Add(v.name);
                 StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.name);
             }
+
+            //Try to get stardew symphony to recognize builds on the farm and try to give those buildings unique soundtracks as well.
+            try
+            {
+                var farm = (Farm)Game1.getLocationFromName("Farm");
+                foreach(var building in farm.buildings)
+                {
+                    locations.Add(building.nameOfIndoors);
+                    StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors);
+                }
+            }
+            catch(Exception err)
+            {
+                StardewSymphony.ModMonitor.Log(err.ToString());
+            }
+
         }
 
         /// <summary>
-        /// TODO: Find a way to get all of the festivals in the game for this list. Perhapse have a way to check the season and day of the month and equivilate it to something.
-        /// Initialize list of festivals for the game.
+        /// Initializes a list of the festivals included in vanilla stardew valley to be allowed to have custom music options.
+        /// Initialized by festival name
         /// </summary>
-        public static void addFestivals()
+        public static void initializeFestivalsList()
         {
-            //Do some logic for festivals here.
+            addFestival("Egg Festival"); //Egg festival
+            addFestival("Flower Dance"); //Flower dance
+            addFestival("Luau"); //luau
+            addFestival("Dance Of The Moonlight Jellies"); //moonlight jellies
+            addFestival("Stardew Valley Fair"); //fall fair
+            addFestival("Spirit's Eve"); //spirits eve
+            addFestival("Festival of Ice"); //festival of ice
+            addFestival("Feast of the Winter Star"); //festival of winter star
         }
 
         /// <summary>
-        /// Add a specific new festival to the list
+        /// Add a specific new festival to the list. Must be in the format seasonDay.
+        /// Ex) spring13
+        /// Ex) fall27
         /// </summary>
         public static void addFestival(string name)
         {
@@ -167,17 +209,19 @@ namespace StardewSymphonyRemastered.Framework
         /// TODO: Get a list of all of the vanilla events in the game. But how to determine what event is playing is the question.
         /// </summary>
         /// <param name="name"></param>
-        public static void addEvents()
+        public static void initializeEventsList()
         {
             //Do some logic here
+            //addEvent(12345.ToString());
         }
 
         /// <summary>
         /// TODO: Custom way to add in event to hijack music.
         /// </summary>
         /// <param name="name"></param>
-        public static void addEvent(string name)
+        public static void addEvent(string id)
         {
+            events.Add(id);
             //Do some logic here
         }
 
@@ -244,14 +288,15 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public static string getWeatherString()
         {
-            if (Game1.weatherIcon == Game1.weather_sunny) return "sunny";
-            if (Game1.weatherIcon == Game1.weather_rain) return "rainy";
-            if (Game1.weatherIcon == Game1.weather_debris) return "lightning";
-            if (Game1.weatherIcon == Game1.weather_lightning) return "debris"; //????
-            if (Game1.weatherIcon == Game1.weather_festival) return "festival";
-            if (Game1.weatherIcon == Game1.weather_snow) return "snow";
-            if (Game1.weatherIcon == Game1.weather_wedding) return "wedding";
-            return "";
+
+            if (Game1.isRaining && Game1.isLightning==false) return "rainy";
+            if (Game1.isLightning) return "lightning";
+            if (Game1.isDebrisWeather) return "debris"; //????
+            if (Game1.isSnowing) return "snow";
+            if (Game1.weddingToday) return "wedding";
+
+            
+            return "sunny"; //If none of the other weathers, make it sunny.
         }
 
         /// <summary>
@@ -270,7 +315,14 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public static string getLocationString()
         {
-            return Game1.currentLocation.name;
+            try
+            {
+                return Game1.currentLocation.name;
+            }
+            catch(Exception err)
+            {
+                return "";
+            }
         }
 
         public static string getCurrentMenuString()
@@ -284,23 +336,135 @@ namespace StardewSymphonyRemastered.Framework
         //                         Non-Static Methods                   //
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
+
+      
+        
         #region
         /// <summary>
         /// Adds the song's reference to a music pack.
         /// </summary>
-        /// <param name="songName"></param>
+        /// <param name="songName">The FULL namespace of the menu. Example is StardewValley.Menus.TitleMenu</param>
         public void addSongToMusicPack(Song song)
         {
             this.listOfSongsWithoutTriggers.Add(song);
         }
 
-        public void addMenuMusic()
+        /// <summary>
+        /// Initialize a basic list of menus supported.
+        /// </summary>
+        public static void initializeMenuList()
+        {
+            addMenu(typeof(StardewValley.Menus.TitleMenu)); //Of course!
+            addMenu(typeof(StardewValley.Menus.AboutMenu)); //Sure, though I doubt many people look at this menu.
+            addMenu(typeof(StardewValley.Menus.Billboard));  //The billboard in town.
+            addMenu(typeof(StardewValley.Menus.BlueprintsMenu)); // the crafting menu.
+            //addMenu(typeof(StardewValley.Menus.BobberBar)); //Fishing.
+            addMenu(typeof(StardewValley.Menus.Bundle)); //Definitely could be fun. Custom bundle menu music.
+            addMenu(typeof(StardewValley.Menus.CarpenterMenu)); //Building a thing with robbin
+            addMenu(typeof(StardewValley.Menus.CataloguePage)); //???
+            addMenu(typeof(StardewValley.Menus.CharacterCustomization)); //Yea!
+            addMenu(typeof(StardewValley.Menus.CollectionsPage));
+            addMenu(typeof(StardewValley.Menus.CooperativeMenu));
+            addMenu(typeof(StardewValley.Menus.CraftingPage));
+            addMenu(typeof(StardewValley.Menus.Fish)); //Music when fishing
+            addMenu(typeof(StardewValley.Menus.GameMenu)); //Err default inventory page?
+            addMenu(typeof(StardewValley.Menus.GeodeMenu));  //Flint
+            addMenu(typeof(StardewValley.Menus.LoadGameMenu)); //Loading the game.
+            addMenu(typeof(StardewValley.Menus.LevelUpMenu)); //Leveling up
+            addMenu(typeof(StardewValley.Menus.LetterViewerMenu)); //Viewing your mail
+            addMenu(typeof(StardewValley.Menus.MapPage)); //Looking at the map
+            addMenu(typeof(StardewValley.Menus.MuseumMenu)); //Arranging things in the museum
+            addMenu(typeof(StardewValley.Menus.NamingMenu)); //Naming an animal
+            addMenu(typeof(StardewValley.Menus.PurchaseAnimalsMenu)); //Buying an animal.
+            addMenu(typeof(StardewValley.Menus.SaveGameMenu)); //Saving the game / end of night
+            addMenu(typeof(StardewValley.Menus.ShippingMenu)); //Shipping screen.
+            addMenu(typeof(StardewValley.Menus.ShopMenu)); //Buying things
+
+        }
+
+        /// <summary>
+        /// Add a menu to stardew symphony so that it may have unique music.
+        /// </summary>
+        /// <param name="name"></param>
+        public static void addMenu(string name)
+        {
+            try
+            {
+                name = name.Replace('.', seperator); //Sanitize the name passed in to use my parsing conventions.
+                menus.Add(name);
+            }
+            catch(Exception err)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Add amenu to stardew symphony so that it may have unique music.
+        /// </summary>
+        /// <param name="menuType">The type of menu to add in. Typically this is typeof(MyMenuClass)</param>
+        public static void addMenu(Type menuType)
+        {
+            try
+            {
+                string name = menuType.ToString().Replace('.', seperator); //Sanitize the name passed in to use my parsing conventions.
+                menus.Add(name); //Add the sanitized menu name to the list of menus that have custom music.
+            }
+            catch(Exception err)
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// Initialize the music packs with music from all passed in menus.
+        /// </summary>
+        public void initializeMenuMusic()
         {
             foreach(var v in menus)
             {
-                this.listOfSongsWithTriggers.Add(v, new List<Song>());
+                try
+                {
+                    this.listOfSongsWithTriggers.Add(v, new List<Song>());
+                }
+                catch(Exception err)
+                {
+
+                }
             }
         }
+
+        public void initializeFestivalMusic()
+        {
+            foreach (var v in festivals)
+            {
+                try
+                {
+                    this.listOfSongsWithTriggers.Add(v, new List<Song>());
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+        }
+
+        public void initializeEventMusic()
+        {
+            foreach (var v in events)
+            {
+                try
+                {
+                    this.listOfSongsWithTriggers.Add(v, new List<Song>());
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+        }
+
+   
 
         /// <summary>
         /// Checks if the song exists at all in this music pack.
@@ -366,46 +530,53 @@ namespace StardewSymphonyRemastered.Framework
         public KeyValuePair<string,List<Song>>getSongList(string key)
         {
             string keyPhrase = "";
+            string keyPhraseInfo = "";
             try
             {
                  keyPhrase= key.Split(seperator).ElementAt(0);
+                 keyPhraseInfo= key.Split(seperator).ElementAt(1);
             }
             catch(Exception err)
             {
                  keyPhrase = key;
             }
-            if (keyPhrase == "event")
-            {
-                
-                foreach (KeyValuePair<string, List<Song>> pair in eventSongs)
-                {
-                    if (pair.Key == key) return pair;
-                }
-                
-                //return new KeyValuePair<string, List<Song>>(key, eventSongs[key]);
-            }
-            else if (keyPhrase == "festival")
-            {
-                
-                foreach (KeyValuePair<string, List<Song>> pair in festivalSongs)
-                {
-                    if (pair.Key == key) return pair;
-                }
-                
-                //return new KeyValuePair<string, List<string>>(key, festivalSongs[key]);
-            }
-            else
-            {
-                
+            
+                //This is just the plain song name with no extra info.
                 foreach(KeyValuePair<string,List<Song>> pair in listOfSongsWithTriggers)
                 {
                     //StardewSymphony.ModMonitor.Log(pair.Key);
                     if (pair.Key == key) return pair;
                 }
-                
-                //return new KeyValuePair<string, List<string>>(key, listOfSongsWithTriggers[key]);
+
+            
+            //This is just the plain song name with no extra info.
+            foreach (KeyValuePair<string, List<Song>> pair in listOfSongsWithTriggers)
+            {
+                //StardewSymphony.ModMonitor.Log(pair.Key);
+                if (pair.Key == key) return pair;
             }
+            
+            //This is just the plain song name with no extra info.
+            foreach (KeyValuePair<string, List<Song>> pair in listOfSongsWithTriggers)
+            {
+                //StardewSymphony.ModMonitor.Log(pair.Key);
+                if (pair.Key == key) return pair;
+            }
+
+
+            //return new KeyValuePair<string, List<string>>(key, listOfSongsWithTriggers[key]);
+
             return new KeyValuePair<string, List<Song>>("",null);
+        }
+
+        public List<Song> getFestivalMusic()
+        {
+            return this.festivalSongs;
+        }
+
+        public List<Song> getEventMusic()
+        {
+            return this.eventSongs;
         }
 
         /// <summary>

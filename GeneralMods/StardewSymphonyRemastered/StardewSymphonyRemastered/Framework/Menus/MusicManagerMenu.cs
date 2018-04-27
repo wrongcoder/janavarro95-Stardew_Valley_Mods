@@ -16,9 +16,20 @@ using StardustCore.UIUtilities.SpriteFonts.Components;
 
 namespace StardewSymphonyRemastered.Framework.Menus
 {
-
+    /* TODO: Make the different menus for the conditional keys
+     * Normal (locations, season, weather,date, time)
+     * Festival
+     * Event
+     *
+     */
+    /// <summary>
+    /// Interface for the menu for selection music.
+    /// </summary>
     public class MusicManagerMenu : IClickableMenuExtended
     {
+        /// <summary>
+        /// The different displays for this menu.
+        /// </summary>
         public enum DrawMode
         {
             AlbumSelection,
@@ -26,15 +37,15 @@ namespace StardewSymphonyRemastered.Framework.Menus
             SongSelectionMode,
         }
 
-        public List<Button> musicAlbumButtons;
+        public List<Button> musicAlbumButtons; 
         public Button currentMusicPackAlbum;
         public Button currentSelectedSong;
         public DrawMode drawMode;
         public int currentAlbumIndex;
         public int currentSongPageIndex;
 
-        public List<Button> fancyButtons;
-        public int framesSinceLastUpdate;
+        public List<Button> fancyButtons; //List that holds all of the buttons for the fancy album menu.
+        public int framesSinceLastUpdate; //Used to control how fast we can cycle through the menu.
 
         public bool searchBoxSelected;
 
@@ -278,7 +289,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
         }
 
-
+        /// <summary>
+        /// Functionality that occurs when right clicking a menu component.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
             if (this.drawMode == DrawMode.AlbumSelection)
@@ -303,6 +319,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
         }
 
+        /// <summary>
+        /// Actions that occur when hovering over an icon.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public override void performHoverAction(int x, int y)
         {
             if (this.drawMode == DrawMode.AlbumSelection)
@@ -374,6 +395,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
         }
 
+        /// <summary>
+        /// Functionality that occurs when left clicking a menu component.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             if (this.drawMode == DrawMode.AlbumSelection)
