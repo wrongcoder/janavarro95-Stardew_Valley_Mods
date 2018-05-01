@@ -151,7 +151,7 @@ namespace Omegasis.NightOwl
 
                     Game1.mailbox.Clear();
                     foreach (string mail in validMail)
-                        Game1.mailbox.Enqueue(mail);
+                        Game1.mailbox.Add(mail);
                 }
 
                 this.JustStartedNewDay = true;
@@ -197,7 +197,7 @@ namespace Omegasis.NightOwl
 
                     this.ShouldResetPlayerAfterCollapseNow = true;
                     this.PreCollapseTile = new Point(Game1.player.getTileX(), Game1.player.getTileY());
-                    this.PreCollapseMap = Game1.player.currentLocation.name;
+                    this.PreCollapseMap = Game1.player.currentLocation.Name;
                     this.PreCollapseStamina = Game1.player.stamina;
                     this.PreCollapseHealth = Game1.player.health;
                     this.PreCollapseMoney = Game1.player.money;

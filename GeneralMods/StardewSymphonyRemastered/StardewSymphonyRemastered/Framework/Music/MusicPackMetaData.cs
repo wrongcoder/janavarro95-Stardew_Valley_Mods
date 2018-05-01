@@ -70,11 +70,13 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch(Exception errr)
                 {
+                    errr.ToString();
                     meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper, StardewSymphony.getRelativeDirectory(Path.Combine(path, meta.pathToMusicPackIcon)));
                 }
             }
             catch(Exception err)
             {
+                err.ToString();
                 //StardewSymphony.ModMonitor.Log(err.ToString());
             }
             return meta;

@@ -9,10 +9,6 @@ namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>
     /// The class to be used to manage individual songs.
-    /// 
-    /// 
-    /// 
-    /// TODO: MAKE SMALL RELATIVE PATH TO SONG. /CONTENT/MUSIC/SONG
     /// </summary>
     public class Song
     {
@@ -72,6 +68,10 @@ namespace StardewSymphonyRemastered.Framework
             return Path.GetFileNameWithoutExtension(path);
         }
 
+        /// <summary>
+        /// Get the relative path to this song from the full path on disk provided.
+        /// </summary>
+        /// <returns></returns>
         public string getRelativePathFromFullPath()
         {
             string[] spliter = this.pathToSong.Split(Path.DirectorySeparatorChar);

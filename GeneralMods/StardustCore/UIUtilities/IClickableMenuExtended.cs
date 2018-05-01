@@ -141,7 +141,7 @@ namespace StardustCore.UIUtilities
             {
                 Microsoft.Xna.Framework.Rectangle rectangle2 = new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64);
                 NPC npc = objectDialogueWithPortrait ? Game1.objectDialoguePortraitPerson : Game1.currentSpeaker;
-                string s = objectDialogueWithPortrait ? (Game1.objectDialoguePortraitPerson.name.Equals(Game1.player.spouse) ? "$l" : "$neutral") : npc.CurrentDialogue.Peek().CurrentEmotion;
+                string s = objectDialogueWithPortrait ? (Game1.objectDialoguePortraitPerson.Name.Equals(Game1.player.spouse) ? "$l" : "$neutral") : npc.CurrentDialogue.Peek().CurrentEmotion;
                 switch (s)
                 {
                     case "$a":
@@ -180,7 +180,7 @@ namespace StardustCore.UIUtilities
                 Game1.spriteBatch.Begin();
                 if (Game1.isQuestion)
                     Game1.spriteBatch.DrawString(Game1.dialogueFont, npc.displayName, new Vector2((float)(Game1.tileSize * 14 + Game1.tileSize / 2) - Game1.dialogueFont.MeasureString(npc.displayName).X / 2f + (float)dialogueX + (float)x, (float)(height1 - 5 * Game1.tileSize - Game1.tileSize * addedTileHeightForQuestions) - Game1.dialogueFont.MeasureString(npc.displayName).Y + (float)num1 + (float)(Game1.tileSize / 3) + (float)num2) + new Vector2(2f, 2f), new Color(150, 150, 150));
-                Game1.spriteBatch.DrawString(Game1.dialogueFont, npc.name.Equals("DwarfKing") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3754") : (npc.name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName), new Vector2((float)(dialogueX + x + Game1.tileSize * 14 + Game1.tileSize / 2) - Game1.dialogueFont.MeasureString(npc.name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).X / 2f, (float)(height1 - 5 * Game1.tileSize - Game1.tileSize * addedTileHeightForQuestions) - Game1.dialogueFont.MeasureString(npc.name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).Y + (float)num1 + (float)(Game1.tileSize / 3) + (float)(Game1.tileSize / 8) + (float)num2), Game1.textColor);
+                Game1.spriteBatch.DrawString(Game1.dialogueFont, npc.Name.Equals("DwarfKing") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3754") : (npc.Name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName), new Vector2((float)(dialogueX + x + Game1.tileSize * 14 + Game1.tileSize / 2) - Game1.dialogueFont.MeasureString(npc.Name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).X / 2f, (float)(height1 - 5 * Game1.tileSize - Game1.tileSize * addedTileHeightForQuestions) - Game1.dialogueFont.MeasureString(npc.Name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).Y + (float)num1 + (float)(Game1.tileSize / 3) + (float)(Game1.tileSize / 8) + (float)num2), Game1.textColor);
             }
             if (drawOnlyBox || Game1.nameSelectUp && (!Game1.messagePause || Game1.currentObjectDialogue == null))
                 return;
@@ -221,7 +221,7 @@ namespace StardustCore.UIUtilities
                         position.Y = (float)(height1 - (5 + addedTileHeightForQuestions + 1) * Game1.tileSize) + (text.Trim().Length > 0 ? Game1.dialogueFont.MeasureString(text).Y : 0.0f) + (float)(Game1.tileSize * 2) + (float)((Game1.tileSize / 2 + Game1.tileSize / 4) * index) - (float)(Game1.tileSize / 4 + (Game1.questionChoices.Count - 2) * Game1.tileSize) + (float)num1 + (float)num2;
                         Game1.spriteBatch.End();
                         Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
-                        Game1.spriteBatch.Draw(Game1.objectSpriteSheet, position + new Vector2((float)Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) * 3f, 0.0f), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(26)), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, 1f);
+                        Game1.spriteBatch.Draw(Game1.objectSpriteSheet, position + new Vector2((float)Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) * 3f, 0.0f), new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(26)), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, 1f);
                         Game1.spriteBatch.End();
                         Game1.spriteBatch.Begin();
                         position.X = (float)(Game1.tileSize * 5 / 2 + dialogueX + x);
@@ -322,7 +322,7 @@ namespace StardustCore.UIUtilities
             {
                 Microsoft.Xna.Framework.Rectangle rectangle2 = new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64);
                 NPC npc = objectDialogueWithPortrait ? Game1.objectDialoguePortraitPerson : Game1.currentSpeaker;
-                string s = objectDialogueWithPortrait ? (Game1.objectDialoguePortraitPerson.name.Equals(Game1.player.spouse) ? "$l" : "$neutral") : npc.CurrentDialogue.Peek().CurrentEmotion;
+                string s = objectDialogueWithPortrait ? (Game1.objectDialoguePortraitPerson.Name.Equals(Game1.player.spouse) ? "$l" : "$neutral") : npc.CurrentDialogue.Peek().CurrentEmotion;
                 switch (s)
                 {
                     case "$a":
@@ -361,7 +361,7 @@ namespace StardustCore.UIUtilities
                 Game1.spriteBatch.Begin();
                 if (Game1.isQuestion)
                     Game1.spriteBatch.DrawString(Game1.dialogueFont, npc.displayName, new Vector2((float)(Game1.tileSize * 14 + Game1.tileSize / 2) - Game1.dialogueFont.MeasureString(npc.displayName).X / 2f + (float)dialogueX + (float)x, (float)(height1 - 5 * Game1.tileSize - Game1.tileSize * addedTileHeightForQuestions) - Game1.dialogueFont.MeasureString(npc.displayName).Y + (float)num1 + (float)(Game1.tileSize / 3) + (float)num2) + new Vector2(2f, 2f), new Color(150, 150, 150));
-                Game1.spriteBatch.DrawString(Game1.dialogueFont, npc.name.Equals("DwarfKing") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3754") : (npc.name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName), new Vector2((float)(dialogueX + x + Game1.tileSize * 14 + Game1.tileSize / 2) - Game1.dialogueFont.MeasureString(npc.name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).X / 2f, (float)(height1 - 5 * Game1.tileSize - Game1.tileSize * addedTileHeightForQuestions) - Game1.dialogueFont.MeasureString(npc.name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).Y + (float)num1 + (float)(Game1.tileSize / 3) + (float)(Game1.tileSize / 8) + (float)num2), Game1.textColor);
+                Game1.spriteBatch.DrawString(Game1.dialogueFont, npc.Name.Equals("DwarfKing") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3754") : (npc.Name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName), new Vector2((float)(dialogueX + x + Game1.tileSize * 14 + Game1.tileSize / 2) - Game1.dialogueFont.MeasureString(npc.Name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).X / 2f, (float)(height1 - 5 * Game1.tileSize - Game1.tileSize * addedTileHeightForQuestions) - Game1.dialogueFont.MeasureString(npc.Name.Equals("Lewis") ? Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3756") : npc.displayName).Y + (float)num1 + (float)(Game1.tileSize / 3) + (float)(Game1.tileSize / 8) + (float)num2), Game1.textColor);
             }
             if (drawOnlyBox || Game1.nameSelectUp && (!Game1.messagePause || Game1.currentObjectDialogue == null))
                 return;
@@ -402,7 +402,7 @@ namespace StardustCore.UIUtilities
                         position.Y = (float)(height1 - (5 + addedTileHeightForQuestions + 1) * Game1.tileSize) + (text.Trim().Length > 0 ? Game1.dialogueFont.MeasureString(text).Y : 0.0f) + (float)(Game1.tileSize * 2) + (float)((Game1.tileSize / 2 + Game1.tileSize / 4) * index) - (float)(Game1.tileSize / 4 + (Game1.questionChoices.Count - 2) * Game1.tileSize) + (float)num1 + (float)num2;
                         Game1.spriteBatch.End();
                         Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
-                        Game1.spriteBatch.Draw(Game1.objectSpriteSheet, position + new Vector2((float)Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) * 3f, 0.0f), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(26)), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, 1f);
+                        Game1.spriteBatch.Draw(Game1.objectSpriteSheet, position + new Vector2((float)Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) * 3f, 0.0f), new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(26)), Color.White, 0.0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, 1f);
                         Game1.spriteBatch.End();
                         Game1.spriteBatch.Begin();
                         position.X = (float)(Game1.tileSize * 5 / 2 + dialogueX + x);

@@ -41,9 +41,16 @@ namespace StardewSymphonyRemastered.Framework
             this.SoundBanks.Add(path);
         }
 
+        /// <summary>
+        /// Process the soundbank.swb file's hex info and extract the song names from it.
+        /// </summary>
+        /// <param name="musicPack"></param>
+        /// <param name="reset"></param>
+        /// <param name="FileName"></param>
+        /// <returns></returns>
         public static List<string> ProcessSongNamesFromHex(XACTMusicPack musicPack, Action reset, string FileName)
         {
-            int counter = 0;
+                
                 List<string> cleanCueNames = new List<string>();
                 byte[] array = File.ReadAllBytes(FileName);
                 string rawName = FileName.Substring(0, FileName.Length - 4);
@@ -106,6 +113,7 @@ namespace StardewSymphonyRemastered.Framework
                     }
                     catch(Exception err)
                     {
+                    err.ToString();
                     reset.Invoke();
                     }
                 }

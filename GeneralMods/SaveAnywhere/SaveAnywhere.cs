@@ -124,8 +124,8 @@ namespace Omegasis.SaveAnywhere
             this.NpcSchedules.Clear();
             foreach (NPC npc in Utility.getAllCharacters())
             {
-                if (!this.NpcSchedules.ContainsKey(npc.name))
-                    this.NpcSchedules.Add(npc.name, this.ParseSchedule(npc));
+                if (!this.NpcSchedules.ContainsKey(npc.Name))
+                    this.NpcSchedules.Add(npc.Name, this.ParseSchedule(npc));
             }
         }
 
@@ -141,7 +141,8 @@ namespace Omegasis.SaveAnywhere
             if (e.KeyPressed.ToString() == this.Config.SaveKey)
             {
                 // validate: community center Junimos can't be saved
-                if (Utility.getAllCharacters().OfType<Junimo>().Any())
+                
+                if (Game1.player.currentLocation.getCharacters().OfType<Junimo>().Any())
                 {
                     Game1.addHUDMessage(new HUDMessage("The spirits don't want you to save here.", HUDMessage.error_type));
                     return;
@@ -165,13 +166,13 @@ namespace Omegasis.SaveAnywhere
                     continue;
 
                 // get raw schedule from XNBs
-                IDictionary<string, string> rawSchedule = this.GetRawSchedule(npc.name);
+                IDictionary<string, string> rawSchedule = this.GetRawSchedule(npc.Name);
                 if (rawSchedule == null)
                     continue;
 
                 // get schedule data
                 string scheduleData;
-                if (!this.NpcSchedules.TryGetValue(npc.name, out scheduleData) || string.IsNullOrEmpty(scheduleData))
+                if (!this.NpcSchedules.TryGetValue(npc.Name, out scheduleData) || string.IsNullOrEmpty(scheduleData))
                 {
                     this.Monitor.Log("THIS IS AWKWARD");
                     continue;
@@ -216,11 +217,12 @@ namespace Omegasis.SaveAnywhere
 
                         schedulePathDescription = this.Helper.Reflection
                             .GetMethod(npc, "pathfindToNextScheduleLocation")
-                            .Invoke<SchedulePathDescription>(npc.currentLocation.name, npc.getTileX(), npc.getTileY(), endMap, x, y, endFacingDir, null, null);
+                            .Invoke<SchedulePathDescription>(npc.currentLocation.Name, npc.getTileX(), npc.getTileY(), endMap, x, y, endFacingDir, null, null);
                         index++;
                     }
                     catch (Exception ex)
                     {
+                        ex.ToString();
                         //this.Monitor.Log($"Error pathfinding NPC {npc.name}: {ex}", LogLevel.Error);
                         continue;
                     }
@@ -255,15 +257,15 @@ namespace Omegasis.SaveAnywhere
         private string ParseSchedule(NPC npc)
         {
             // set flags
-            if (npc.name.Equals("Robin") || Game1.player.currentUpgrade != null)
-                npc.isInvisible = false;
-            if (npc.name.Equals("Willy") && Game1.stats.DaysPlayed < 2u)
-                npc.isInvisible = true;
+            if (npc.Name.Equals("Robin") || Game1.player.currentUpgrade != null)
+                npc.IsInvisible = false;
+            if (npc.Name.Equals("Willy") && Game1.stats.DaysPlayed < 2u)
+                npc.IsInvisible = true;
             else if (npc.Schedule != null)
                 npc.followSchedule = true;
 
             // read schedule data
-            IDictionary<string, string> schedule = this.GetRawSchedule(npc.name);
+            IDictionary<string, string> schedule = this.GetRawSchedule(npc.Name);
             if (schedule == null)
                 return "";
 
@@ -271,7 +273,7 @@ namespace Omegasis.SaveAnywhere
             if (npc.isMarried())
             {
                 string dayName = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
-                if ((npc.name.Equals("Penny") && (dayName.Equals("Tue") || dayName.Equals("Wed") || dayName.Equals("Fri"))) || (npc.name.Equals("Maru") && (dayName.Equals("Tue") || dayName.Equals("Thu"))) || (npc.name.Equals("Harvey") && (dayName.Equals("Tue") || dayName.Equals("Thu"))))
+                if ((npc.Name.Equals("Penny") && (dayName.Equals("Tue") || dayName.Equals("Wed") || dayName.Equals("Fri"))) || (npc.Name.Equals("Maru") && (dayName.Equals("Tue") || dayName.Equals("Thu"))) || (npc.Name.Equals("Harvey") && (dayName.Equals("Tue") || dayName.Equals("Thu"))))
                 {
                     this.Helper.Reflection
                         .GetField<string>(npc, "nameofTodaysSchedule")
@@ -293,14 +295,16 @@ namespace Omegasis.SaveAnywhere
                 if (schedule.ContainsKey(Game1.currentSeason + "_" + Game1.dayOfMonth))
                     return Game1.currentSeason + "_" + Game1.dayOfMonth;
                 int i;
-                for (i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1); i > 0; i--)
+                Friendship f;
+                Game1.player.friendshipData.TryGetValue(npc.Name, out f);
+                for (i = (Game1.player.friendshipData.ContainsKey(npc.Name) ? (f.Points/ 250) : -1); i > 0; i--)
                 {
                     if (schedule.ContainsKey(Game1.dayOfMonth + "_" + i))
                         return Game1.dayOfMonth + "_" + i;
                 }
                 if (schedule.ContainsKey(string.Empty + Game1.dayOfMonth))
                     return string.Empty + Game1.dayOfMonth;
-                if (npc.name.Equals("Pam") && Game1.player.mailReceived.Contains("ccVault"))
+                if (npc.Name.Equals("Pam") && Game1.player.mailReceived.Contains("ccVault"))
                     return "bus";
                 if (Game1.isRaining)
                 {
@@ -310,7 +314,9 @@ namespace Omegasis.SaveAnywhere
                         return "rain";
                 }
                 List<string> list = new List<string> { Game1.currentSeason, Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth) };
-                i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1);
+                Friendship friendship;
+                Game1.player.friendshipData.TryGetValue(npc.Name, out friendship);
+                i = (Game1.player.friendshipData.ContainsKey(npc.Name) ? (friendship.Points / 250) : -1);
                 while (i > 0)
                 {
                     list.Add(string.Empty + i);
@@ -339,7 +345,9 @@ namespace Omegasis.SaveAnywhere
                 }
                 list.RemoveAt(list.Count - 1);
                 list.Add("spring");
-                i = (Game1.player.friendships.ContainsKey(npc.name) ? (Game1.player.friendships[npc.name][0] / 250) : -1);
+                Friendship friendship2;
+                Game1.player.friendshipData.TryGetValue(npc.Name, out friendship2);
+                i = (Game1.player.friendshipData.ContainsKey(npc.Name) ? (friendship2.Points / 250) : -1);
                 while (i > 0)
                 {
                     list.Add(string.Empty + i);

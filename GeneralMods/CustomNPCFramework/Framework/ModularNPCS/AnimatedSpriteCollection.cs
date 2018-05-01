@@ -139,7 +139,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// <param name="characterSourceRectOffset"></param>
         public void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth, int xOffset, int yOffset, Color c, bool flip = false, float scale = 1f, float rotation = 0.0f, bool characterSourceRectOffset = false)
         {
-            b.Draw(this.currentSprite.sprite.Texture, screenPosition, new Rectangle?(new Rectangle(this.currentSprite.sprite.sourceRect.X + xOffset, this.currentSprite.sprite.sourceRect.Y + yOffset, this.currentSprite.sprite.sourceRect.Width, this.currentSprite.sprite.sourceRect.Height)), c, rotation, characterSourceRectOffset ? new Vector2((float)(this.currentSprite.sprite.spriteWidth / 2), (float)((double)this.currentSprite.sprite.spriteHeight * 3.0 / 4.0)) : Vector2.Zero, scale, flip || this.currentSprite.sprite.currentAnimation != null && this.currentSprite.sprite.currentAnimation[this.currentSprite.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            b.Draw(this.currentSprite.sprite.Texture, screenPosition, new Rectangle?(new Rectangle(this.currentSprite.sprite.sourceRect.X + xOffset, this.currentSprite.sprite.sourceRect.Y + yOffset, this.currentSprite.sprite.sourceRect.Width, this.currentSprite.sprite.sourceRect.Height)), c, rotation, characterSourceRectOffset ? new Vector2((float)(this.currentSprite.sprite.SpriteWidth / 2), (float)((double)this.currentSprite.sprite.SpriteHeight * 3.0 / 4.0)) : Vector2.Zero, scale, flip || this.currentSprite.sprite.currentAnimation != null && this.currentSprite.sprite.currentAnimation[this.currentSprite.sprite.currentAnimationIndex].flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
             {
                 sprite.CurrentFrame = sprite.CurrentFrame + 1;
                 sprite.timer = 0.0f;
-                if (sprite.CurrentFrame == startFrame + numberOfFrames + 1 || sprite.currentFrame * sprite.spriteWidth >= sprite.Texture.Width)
+                if (sprite.CurrentFrame == startFrame + numberOfFrames + 1 || sprite.currentFrame * sprite.SpriteWidth >= sprite.Texture.Width)
                 {
                     if (loop)
                         sprite.CurrentFrame = startFrame;
@@ -212,7 +212,7 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         {
             if (sprite.ignoreSourceRectUpdates)
                 return;
-            sprite.sourceRect.X = sprite.CurrentFrame * sprite.spriteWidth;
+            sprite.sourceRect.X = sprite.CurrentFrame * sprite.SpriteWidth;
             sprite.sourceRect.Y = 0;
             //sprite.SourceRect = new Rectangle(, 0, sprite.spriteWidth, sprite.spriteHeight);
         }

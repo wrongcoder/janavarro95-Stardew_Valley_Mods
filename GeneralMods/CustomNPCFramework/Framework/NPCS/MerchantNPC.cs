@@ -39,7 +39,7 @@ namespace CustomNPCFramework.Framework.NPCS
         /// </summary>
         /// <param name="Stock">The list of items for the npc to sell.</param>
         /// <param name="npcBase">The npc base for the character to be expanded upon.</param>
-        public MerchantNPC(List<Item> Stock, ExtendedNPC npcBase) : base(npcBase.spriteInformation, npcBase.characterRenderer, npcBase.portraitInformation, npcBase.position, npcBase.facingDirection, npcBase.name)
+        public MerchantNPC(List<Item> Stock, ExtendedNPC npcBase) : base(npcBase.spriteInformation, npcBase.characterRenderer, npcBase.portraitInformation, npcBase.position, npcBase.facingDirection, npcBase.Name)
         {
             this.stock = Stock;
         }

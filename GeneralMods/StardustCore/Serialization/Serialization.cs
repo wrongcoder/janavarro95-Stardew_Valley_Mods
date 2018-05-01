@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 using StardewValley;
@@ -56,7 +57,7 @@ namespace StardustCore.Serialization
             //ProcessDirectoryForDeletion(SerializerTrashPath);
 
             List<Item> removalList = new List<Item>();
-            foreach (Item d in Game1.player.items)
+            foreach (Item d in Game1.player.Items)
             {
                 try
                 {
@@ -67,14 +68,12 @@ namespace StardustCore.Serialization
                     }
                     // Log.AsyncC(d.GetType());
                 }
-                catch (Exception e)
+                catch (Exception err)
                 {
-
+                    ModCore.ModMonitor.Log(err.ToString());
                 }
+
                 string s = Convert.ToString((d.GetType()));
-
-
-
 
                 if (acceptedTypes.ContainsKey(s))
                 {
@@ -103,7 +102,7 @@ namespace StardustCore.Serialization
             }
             catch(Exception e)
             {
-               // Log.AsyncC(e);
+                ModCore.ModMonitor.Log(e.ToString());
             }
             List<CoreObject> removalList = new List<CoreObject>();
             int countProcessed = 0;
@@ -121,7 +120,7 @@ namespace StardustCore.Serialization
                 }
                 catch (Exception e)
                 {
-
+                    ModCore.ModMonitor.Log(e.ToString());
                 }
                 string s = Convert.ToString((d.GetType()));
 
@@ -150,7 +149,7 @@ namespace StardustCore.Serialization
             }
             foreach (var i in removalList)
             {
-                i.thisLocation.removeObject(i.tileLocation, false);
+                i.thisLocation.removeObject(i.TileLocation, false);
             }
             foreach (var v in idk)
             {
@@ -186,19 +185,19 @@ namespace StardustCore.Serialization
             List<Item> removalList = new List<Item>();
             foreach (GameLocation loc in Game1.locations)
             {
-                int i = loc.objects.Count;
+                int i = loc.objects.Pairs.Count();
                 int j = 0;
-                foreach (var obj in loc.objects)
+                foreach (KeyValuePair<Vector2, StardewValley.Object> obj in loc.objects.Pairs)
                 {
                     j++;
-                    ModCore.ModMonitor.Log("Parsing location " + loc.name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
+                    ModCore.ModMonitor.Log("Parsing location " + loc.Name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
                     if (obj.Value is StardewValley.Objects.Chest) {
                         int k = (obj.Value as StardewValley.Objects.Chest).items.Count;
                         int l = 0;
                     foreach (var item in (obj.Value as StardewValley.Objects.Chest).items)
                         {
                             l++;
-                            ModCore.ModMonitor.Log("Parsing Chest at : " + loc.name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
+                            ModCore.ModMonitor.Log("Parsing Chest at : " + loc.Name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
                             if (item is CoreObject) removalList.Add(item);
                         }
 
@@ -210,7 +209,7 @@ namespace StardustCore.Serialization
                             if (acceptedTypes.ContainsKey((v as CoreObject).serializationName))
                             {
                                 acceptedTypes.TryGetValue((v as CoreObject).serializationName, out t);
-                                string s = Path.Combine(loc.name, "Chest," + Convert.ToString((int)obj.Key.X) + "," + Convert.ToString((int)obj.Key.Y));
+                                string s = Path.Combine(loc.Name, "Chest," + Convert.ToString((int)obj.Key.X) + "," + Convert.ToString((int)obj.Key.Y));
                                 string s2 = Path.Combine(ModCore.SerializationManager.storageContainerPath, s);
                                 if (!Directory.Exists(s)) Directory.CreateDirectory(s2);
                                 t.serializeToContainer.Invoke(v, s2);
@@ -224,14 +223,14 @@ namespace StardustCore.Serialization
             foreach (Building building in Game1.getFarm().buildings)
             {
                
-                GameLocation loc =Game1.getLocationFromName(building.nameOfIndoors,true);
-              ModCore.ModMonitor.Log("Cleaning up farm building: "+loc.uniqueName);
-                int i = loc.objects.Count;
+                GameLocation loc =Game1.getLocationFromName(building.nameOfIndoors.Value,true);
+              ModCore.ModMonitor.Log("Cleaning up farm building: "+loc.uniqueName.Value);
+                int i = loc.objects.Pairs.Count();
                 int j = 0;
-                foreach (var obj in loc.objects) 
+                foreach (KeyValuePair<Vector2, StardewValley.Object> obj in loc.objects.Pairs) 
                 {
                     j++;
-                    ModCore.ModMonitor.Log("Parsing location " + loc.name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
+                    ModCore.ModMonitor.Log("Parsing location " + loc.Name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
                     if (obj.Value is StardewValley.Objects.Chest)
                     {
                         int k = (obj.Value as StardewValley.Objects.Chest).items.Count;
@@ -239,7 +238,7 @@ namespace StardustCore.Serialization
                         foreach (var item in (obj.Value as StardewValley.Objects.Chest).items)
                         {
                             l++;
-                            ModCore.ModMonitor.Log("Parsing Chest at : " + loc.name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
+                            ModCore.ModMonitor.Log("Parsing Chest at : " + loc.Name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
                             if (item is CoreObject) removalList.Add(item);
                         }
                         foreach(var v in removalList)
@@ -249,7 +248,7 @@ namespace StardustCore.Serialization
                             SerializerDataNode t;
                             if(acceptedTypes.ContainsKey((v as CoreObject).serializationName)){
                                 acceptedTypes.TryGetValue((v as CoreObject).serializationName, out t);
-                                string s = Path.Combine(building.nameOfIndoors, "Chest,"+Convert.ToString( (int)obj.Key.X)+","+Convert.ToString((int)obj.Key.Y));
+                                string s = Path.Combine(building.nameOfIndoors.Value, "Chest,"+Convert.ToString( (int)obj.Key.X)+","+Convert.ToString((int)obj.Key.Y));
                                 string s2 = Path.Combine(ModCore.SerializationManager.storageContainerPath, s);
                                 if (!Directory.Exists(s)) Directory.CreateDirectory(s2);
                                 t.serializeToContainer.Invoke(v, s2);
@@ -261,6 +260,10 @@ namespace StardustCore.Serialization
             }
         }
 
+        /// <summary>
+        /// Reloads all modded objects added by this mod back to the game in proper locations.
+        /// </summary>
+        /// <param name="thingsToAddBackIn"></param>
         public void restoreAllModObjects(List<CoreObject> thingsToAddBackIn)
         {
             processDirectoryForDeserialization(playerInventoryPath,thingsToAddBackIn);
@@ -275,7 +278,7 @@ namespace StardustCore.Serialization
             }
             catch (Exception e)
             {
-                
+                ModCore.ModMonitor.Log(e.ToString());
             }
         }
 
@@ -412,7 +415,7 @@ namespace StardustCore.Serialization
             }
             catch (Exception e)
             {
-
+                e.ToString(); //Get rid of that warning because I'll do other things.
                 //USE XML STYLE DESERIALIZING
                 foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
                 {
@@ -430,7 +433,7 @@ namespace StardustCore.Serialization
                         }
                         else
                         {
-                            (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).tileLocation, (StardewValley.Object)cObj);
+                            (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
                           thingsToAddBackIn.Add(cObj);
                             //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
                         }
@@ -481,13 +484,14 @@ namespace StardustCore.Serialization
                             }
                             else
                             {
-                                (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).tileLocation,(StardewValley.Object)cObj);
+                                (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation,(StardewValley.Object)cObj);
                                 thingsToAddBackIn.Add(cObj);
                                 //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
                             }
                         }
                         catch (Exception e)
                         {
+                            ModCore.ModMonitor.Log(e.ToString());
                            // Log.AsyncO(e);
                         }
                     }
@@ -557,7 +561,7 @@ namespace StardustCore.Serialization
             }
             catch (Exception e)
             {
-                ModCore.ModMonitor.Log("WHYASIIF");
+                e.ToString();
                 //USE XML STYLE DESERIALIZING
                 foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
                 {
@@ -572,6 +576,7 @@ namespace StardustCore.Serialization
                            // Game1.player.addItemToInventory(cObj);
                             try
                             {
+                                
                                 Utilities.addItemToOtherInventory((chestObject as StardewValley.Objects.Chest).items, cObj);
                             }
                             catch(Exception err)
@@ -583,7 +588,7 @@ namespace StardustCore.Serialization
                         }
                         else
                         {
-                            (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).tileLocation, (StardewValley.Object)cObj);
+                            (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
                             thingsToAddBackIn.Add(cObj);
                             //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
                         }
@@ -649,13 +654,14 @@ namespace StardustCore.Serialization
                             else
                             {
                                 ModCore.ModMonitor.Log("WHY HERE????");
-                                (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).tileLocation, (StardewValley.Object)cObj);
+                                (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
                                 thingsToAddBackIn.Add(cObj);
                                 //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
                             }
                         }
                         catch (Exception e)
                         {
+                            ModCore.ModMonitor.Log(e.ToString());
                             // Log.AsyncO(e);
                         }
                     }
@@ -700,11 +706,15 @@ namespace StardustCore.Serialization
             return new Microsoft.Xna.Framework.Rectangle(Convert.ToInt32(parsed[2]), Convert.ToInt32(parsed[4]), Convert.ToInt32(parsed[6]), Convert.ToInt32(parsed[8]));
         }
 
+        /// <summary>
+        /// Remove all objects that there are a copy of this thing?
+        /// </summary>
+        /// <param name="c"></param>
         public void removeObjectWithCopy(CoreObject c)
         {
             foreach(var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
             {
-                if(c.tileLocation==v.tileLocation && c.thisLocation == v.thisLocation)
+                if(c.TileLocation==v.TileLocation && c.thisLocation == v.thisLocation)
                 {
                     StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(v);
                 }

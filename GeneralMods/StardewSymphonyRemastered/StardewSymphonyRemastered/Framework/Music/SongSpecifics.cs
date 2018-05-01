@@ -158,8 +158,8 @@ namespace StardewSymphonyRemastered.Framework
             //Give stardew symphony access to have unique music at any game location.
             foreach (var v in Game1.locations)
             {
-                locations.Add(v.name);
-                StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.name);
+                locations.Add(v.Name);
+                StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.Name);
             }
 
             //Try to get stardew symphony to recognize builds on the farm and try to give those buildings unique soundtracks as well.
@@ -168,8 +168,8 @@ namespace StardewSymphonyRemastered.Framework
                 var farm = (Farm)Game1.getLocationFromName("Farm");
                 foreach(var building in farm.buildings)
                 {
-                    locations.Add(building.nameOfIndoors);
-                    StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors);
+                    locations.Add(building.nameOfIndoors.Value);
+                    StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors.Value);
                 }
             }
             catch(Exception err)
@@ -317,10 +317,11 @@ namespace StardewSymphonyRemastered.Framework
         {
             try
             {
-                return Game1.currentLocation.name;
+                return Game1.currentLocation.Name;
             }
             catch(Exception err)
             {
+                err.ToString();
                 return "";
             }
         }
@@ -364,7 +365,7 @@ namespace StardewSymphonyRemastered.Framework
             addMenu(typeof(StardewValley.Menus.CataloguePage)); //???
             addMenu(typeof(StardewValley.Menus.CharacterCustomization)); //Yea!
             addMenu(typeof(StardewValley.Menus.CollectionsPage));
-            addMenu(typeof(StardewValley.Menus.CooperativeMenu));
+            addMenu(typeof(StardewValley.Menus.CoopMenu));
             addMenu(typeof(StardewValley.Menus.CraftingPage));
             addMenu(typeof(StardewValley.Menus.Fish)); //Music when fishing
             addMenu(typeof(StardewValley.Menus.GameMenu)); //Err default inventory page?
@@ -395,7 +396,7 @@ namespace StardewSymphonyRemastered.Framework
             }
             catch(Exception err)
             {
-
+                err.ToString();
             }
         }
 
@@ -412,7 +413,7 @@ namespace StardewSymphonyRemastered.Framework
             }
             catch(Exception err)
             {
-
+                err.ToString();
             }
         }
 
@@ -429,7 +430,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch(Exception err)
                 {
-
+                    err.ToString();
                 }
             }
         }
@@ -444,7 +445,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch (Exception err)
                 {
-
+                    err.ToString();
                 }
             }
         }
@@ -459,7 +460,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch (Exception err)
                 {
-
+                    err.ToString();
                 }
             }
         }
@@ -538,6 +539,7 @@ namespace StardewSymphonyRemastered.Framework
             }
             catch(Exception err)
             {
+                err.ToString();
                  keyPhrase = key;
             }
             

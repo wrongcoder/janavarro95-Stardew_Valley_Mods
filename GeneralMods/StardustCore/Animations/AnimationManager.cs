@@ -183,6 +183,7 @@ namespace StardustCore.Animations
                 }
                 catch(Exception err)
                 {
+                    err.ToString();
                     continue;
                 }
             

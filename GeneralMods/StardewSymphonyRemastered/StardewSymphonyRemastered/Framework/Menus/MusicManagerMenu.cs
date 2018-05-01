@@ -21,7 +21,10 @@ namespace StardewSymphonyRemastered.Framework.Menus
      * Festival
      * Event
      *
+     * once song is selected also have play and stop button to see how song plays.
+     * 
      */
+
     /// <summary>
     /// Interface for the menu for selection music.
     /// </summary>
@@ -35,6 +38,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
             AlbumSelection,
             AlbumFancySelection,
             SongSelectionMode,
+
+            DifferntSelectionTypesMode //Used for locations, events, festivals,  menus (house, exclamation mark, star, and list/book icons respectively)
         }
 
         public List<Button> musicAlbumButtons; 
@@ -222,6 +227,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         }
                         catch (Exception err)
                         {
+                            err.ToString();
                             if (this.currentAlbumIndex + i == 0)
                             {
                                 Button button = this.musicAlbumButtons.ElementAt(0).clone();
@@ -239,7 +245,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                                 }
                                 catch (Exception err2)
                                 {
-
+                                    err2.ToString();
                                     Button button = this.musicAlbumButtons.ElementAt(((this.currentAlbumIndex + i) + this.musicAlbumButtons.Count) % this.musicAlbumButtons.Count).clone();
                                     button.bounds = new Rectangle((int)placement.X + (i * 100) + offsetX, (int)placement.Y, 64, 64);
                                     fancyButtons.Add(button);

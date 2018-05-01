@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Xna.Framework;
+using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -53,7 +54,7 @@ namespace StardustCore
 
         public static int sellToStorePrice(CoreObject c)
         {
-            return  (int)((double)c.price * (1.0 + (double)c.quality * 0.25));
+            return  (int)((double)c.Price * (1.0 + (double)c.Quality * 0.25));
         }
 
         /// <summary>
@@ -68,433 +69,60 @@ namespace StardustCore
         }
 
 
-        public static void createObjectDebris(Item I, int xTileOrigin, int yTileOrigin, int xTileTarget, int yTileTarget, int groundLevel = -1, int itemQuality = 0, float velocityMultiplyer = 1f, GameLocation location = null)
+        /// <summary>
+        /// Create some object debris at my game location.
+        /// </summary>
+        /// <param name="objectIndex"></param>
+        /// <param name="xTile"></param>
+        /// <param name="yTile"></param>
+        /// <param name="groundLevel"></param>
+        /// <param name="itemQuality"></param>
+        /// <param name="velocityMultiplyer"></param>
+        /// <param name="location"></param>
+        public static void createObjectDebris(int objectIndex, int xTile, int yTile, int groundLevel = -1, int itemQuality = 0, float velocityMultiplyer = 1f, GameLocation location = null)
         {
-            Debris debris = new Debris(I, new Vector2(xTileOrigin, yTileOrigin), new Vector2(xTileTarget, yTileTarget))
-            {
-                itemQuality = itemQuality,
-            };
-       
-            /*
-            Debris debris = new Debris(objectIndex, new Vector2((float)(xTile * Game1.tileSize + Game1.tileSize / 2), (float)(yTile * Game1.tileSize + Game1.tileSize / 2)), new Vector2((float)Game1.player.getStandingX(), (float)Game1.player.getStandingY()))
+            if (location == null)
+                location = Game1.currentLocation;
+            Debris debris = new Debris(objectIndex, new Vector2((float)(xTile * 64 + 32), (float)(yTile * 64 + 32)), new Vector2((float)Game1.player.getStandingX(), (float)Game1.player.getStandingY()))
             {
                 itemQuality = itemQuality
             };
-            */
-            foreach (Chunk chunk in debris.Chunks)
+            foreach (Chunk chunk in (IEnumerable<Chunk>)debris.Chunks)
             {
-                double num1 = (double)chunk.xVelocity * (double)velocityMultiplyer;
-                chunk.xVelocity = (float)num1;
-                double num2 = (double)chunk.yVelocity * (double)velocityMultiplyer;
-                chunk.yVelocity = (float)num2;
+                chunk.xVelocity.Value *= (float)(double)velocityMultiplyer;
+                chunk.yVelocity.Value *= (float)(double)velocityMultiplyer;
             }
             if (groundLevel != -1)
                 debris.chunkFinalYLevel = groundLevel;
-            (location == null ? Game1.currentLocation : location).debris.Add(debris);
+            location.debris.Add(debris);
         }
 
 
 
-        
+        /// <summary>
+        /// Place a core object into a game location.
+        /// </summary>
+        /// <param name="cObj"></param>
+        /// <param name="location"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="s"></param>
+        /// <param name="who"></param>
+        /// <param name="playSound"></param>
+        /// <returns></returns>
         public static bool placementAction(CoreObject cObj, GameLocation location, int x, int y,Serialization.SerializationManager s, StardewValley.Farmer who = null, bool playSound = true)
         {
             Vector2 vector = new Vector2((float)(x / Game1.tileSize), (float)(y / Game1.tileSize));
             //  cObj.health = 10;
             if (who != null)
             {
-                cObj.owner = who.uniqueMultiplayerID;
+                cObj.owner.Value = who.UniqueMultiplayerID;
             }
             else
             {
-                cObj.owner = Game1.player.uniqueMultiplayerID;
+                cObj.owner.Value = Game1.player.UniqueMultiplayerID;
             }
 
-            if (!cObj.bigCraftable && !(cObj is Furniture))
-            {
-                int num = cObj.ParentSheetIndex;
-                if (num <= 298)
-                {
-                    if (num > 94)
-                    {
-                        bool result;
-                        switch (num)
-                        {
-                            case 286:
-                                {
-                                    using (List<TemporaryAnimatedSprite>.Enumerator enumerator = Game1.currentLocation.temporarySprites.GetEnumerator())
-                                    {
-                                        while (enumerator.MoveNext())
-                                        {
-                                            if (enumerator.Current.position.Equals(vector * (float)Game1.tileSize))
-                                            {
-                                                result = false;
-                                                return result;
-                                            }
-                                        }
-                                    }
-                                    int num2 = Game1.random.Next();
-                                    Game1.playSound("thudStep");
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(cObj.parentSheetIndex, 100f, 1, 24, vector * (float)Game1.tileSize, true, false, Game1.currentLocation, who)
-                                    {
-                                        shakeIntensity = 0.5f,
-                                        shakeIntensityChange = 0.002f,
-                                        extraInfoForEndBehavior = num2,
-                                        endFunction = new TemporaryAnimatedSprite.endBehavior(Game1.currentLocation.removeTemporarySpritesWithID)
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize + new Vector2(5f, 3f) * (float)Game1.pixelZoom, true, false, (float)(y + 7) / 10000f, 0f, Color.Yellow, (float)Game1.pixelZoom, 0f, 0f, 0f, false)
-                                    {
-                                        id = (float)num2
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize + new Vector2(5f, 3f) * (float)Game1.pixelZoom, true, true, (float)(y + 7) / 10000f, 0f, Color.Orange, (float)Game1.pixelZoom, 0f, 0f, 0f, false)
-                                    {
-                                        delayBeforeAnimationStart = 100,
-                                        id = (float)num2
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize + new Vector2(5f, 3f) * (float)Game1.pixelZoom, true, false, (float)(y + 7) / 10000f, 0f, Color.White, (float)Game1.pixelZoom * 0.75f, 0f, 0f, 0f, false)
-                                    {
-                                        delayBeforeAnimationStart = 200,
-                                        id = (float)num2
-                                    });
-                                    if (Game1.fuseSound != null && !Game1.fuseSound.IsPlaying)
-                                    {
-                                        Game1.fuseSound = Game1.soundBank.GetCue("fuse");
-                                        Game1.fuseSound.Play();
-                                    }
-                                    return true;
-                                }
-                            case 287:
-                                {
-                                    using (List<TemporaryAnimatedSprite>.Enumerator enumerator = Game1.currentLocation.temporarySprites.GetEnumerator())
-                                    {
-                                        while (enumerator.MoveNext())
-                                        {
-                                            if (enumerator.Current.position.Equals(vector * (float)Game1.tileSize))
-                                            {
-                                                result = false;
-                                                return result;
-                                            }
-                                        }
-                                    }
-                                    int num2 = Game1.random.Next();
-                                    Game1.playSound("thudStep");
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(cObj.parentSheetIndex, 100f, 1, 24, vector * (float)Game1.tileSize, true, false, Game1.currentLocation, who)
-                                    {
-                                        shakeIntensity = 0.5f,
-                                        shakeIntensityChange = 0.002f,
-                                        extraInfoForEndBehavior = num2,
-                                        endFunction = new TemporaryAnimatedSprite.endBehavior(Game1.currentLocation.removeTemporarySpritesWithID)
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize, true, false, (float)(y + 7) / 10000f, 0f, Color.Yellow, (float)Game1.pixelZoom, 0f, 0f, 0f, false)
-                                    {
-                                        id = (float)num2
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize, true, false, (float)(y + 7) / 10000f, 0f, Color.Orange, (float)Game1.pixelZoom, 0f, 0f, 0f, false)
-                                    {
-                                        delayBeforeAnimationStart = 100,
-                                        id = (float)num2
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize, true, false, (float)(y + 7) / 10000f, 0f, Color.White, (float)Game1.pixelZoom * 0.75f, 0f, 0f, 0f, false)
-                                    {
-                                        delayBeforeAnimationStart = 200,
-                                        id = (float)num2
-                                    });
-                                    if (Game1.fuseSound != null && !Game1.fuseSound.IsPlaying)
-                                    {
-                                        Game1.fuseSound = Game1.soundBank.GetCue("fuse");
-                                        Game1.fuseSound.Play();
-                                    }
-                                    return true;
-                                }
-                            case 288:
-                                {
-                                    using (List<TemporaryAnimatedSprite>.Enumerator enumerator = Game1.currentLocation.temporarySprites.GetEnumerator())
-                                    {
-                                        while (enumerator.MoveNext())
-                                        {
-                                            if (enumerator.Current.position.Equals(vector * (float)Game1.tileSize))
-                                            {
-                                                result = false;
-                                                return result;
-                                            }
-                                        }
-                                    }
-                                    int num2 = Game1.random.Next();
-                                    Game1.playSound("thudStep");
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(cObj.parentSheetIndex, 100f, 1, 24, vector * (float)Game1.tileSize, true, false, Game1.currentLocation, who)
-                                    {
-                                        shakeIntensity = 0.5f,
-                                        shakeIntensityChange = 0.002f,
-                                        extraInfoForEndBehavior = num2,
-                                        endFunction = new TemporaryAnimatedSprite.endBehavior(Game1.currentLocation.removeTemporarySpritesWithID)
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize + new Vector2(5f, 0f) * (float)Game1.pixelZoom, true, false, (float)(y + 7) / 10000f, 0f, Color.Yellow, (float)Game1.pixelZoom, 0f, 0f, 0f, false)
-                                    {
-                                        id = (float)num2
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize + new Vector2(5f, 0f) * (float)Game1.pixelZoom, true, true, (float)(y + 7) / 10000f, 0f, Color.Orange, (float)Game1.pixelZoom, 0f, 0f, 0f, false)
-                                    {
-                                        delayBeforeAnimationStart = 100,
-                                        id = (float)num2
-                                    });
-                                    Game1.currentLocation.TemporarySprites.Add(new TemporaryAnimatedSprite(Game1.mouseCursors, new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector * (float)Game1.tileSize + new Vector2(5f, 0f) * (float)Game1.pixelZoom, true, false, (float)(y + 7) / 10000f, 0f, Color.White, (float)Game1.pixelZoom * 0.75f, 0f, 0f, 0f, false)
-                                    {
-                                        delayBeforeAnimationStart = 200,
-                                        id = (float)num2
-                                    });
-                                    if (Game1.fuseSound != null && !Game1.fuseSound.IsPlaying)
-                                    {
-                                        Game1.fuseSound = Game1.soundBank.GetCue("fuse");
-                                        Game1.fuseSound.Play();
-                                    }
-                                    return true;
-                                }
-                            default:
-                                if (num != 297)
-                                {
-                                    if (num != 298)
-                                    {
-                                        goto IL_FD7;
-                                    }
-                                    if (location.objects.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.objects.Add(vector, new Fence(vector, 5, false));
-                                    Game1.playSound("axe");
-                                    return true;
-                                }
-                                else
-                                {
-                                    if (location.objects.ContainsKey(vector) || location.terrainFeatures.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.terrainFeatures.Add(vector, new Grass(1, 4));
-                                    Game1.playSound("dirtyHit");
-                                    return true;
-                                }
-                                break;
-                        }
-                        return result;
-                    }
-                    if (num != 93)
-                    {
-                        if (num == 94)
-                        {
-                            if (location.objects.ContainsKey(vector))
-                            {
-                                return false;
-                            }
-                            new Torch(vector, 1, 94).placementAction(location, x, y, who);
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        if (location.objects.ContainsKey(vector))
-                        {
-                            return false;
-                        }
-                        Utility.removeLightSource((int)(cObj.tileLocation.X * 2000f + cObj.tileLocation.Y));
-                        Utility.removeLightSource((int)Game1.player.uniqueMultiplayerID);
-                        new Torch(vector, 1).placementAction(location, x, y, (who == null) ? Game1.player : who);
-                        return true;
-                    }
-                }
-                else if (num <= 401)
-                {
-                    switch (num)
-                    {
-                        case 309:
-                        case 310:
-                        case 311:
-                            {
-                                bool flag = location.terrainFeatures.ContainsKey(vector) && location.terrainFeatures[vector] is HoeDirt && (location.terrainFeatures[vector] as HoeDirt).crop == null;
-                                if (!flag && (location.objects.ContainsKey(vector) || location.terrainFeatures.ContainsKey(vector) || (!(location is Farm) && !location.name.Contains("Greenhouse"))))
-                                {
-                                    Game1.showRedMessage("Invalid Position");
-                                    return false;
-                                }
-                                string text = location.doesTileHaveProperty(x, y, "NoSpawn", "Back");
-                                if ((text == null || (!text.Equals("Tree") && !text.Equals("All"))) && (flag || (location.isTileLocationOpen(new Location(x * Game1.tileSize, y * Game1.tileSize)) && !location.isTileOccupied(new Vector2((float)x, (float)y), "") && location.doesTileHaveProperty(x, y, "Water", "Back") == null)))
-                                {
-                                    int which = 1;
-                                    num = cObj.parentSheetIndex;
-                                    if (num != 310)
-                                    {
-                                        if (num == 311)
-                                        {
-                                            which = 3;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        which = 2;
-                                    }
-                                    location.terrainFeatures.Remove(vector);
-                                    location.terrainFeatures.Add(vector, new Tree(which, 0));
-                                    Game1.playSound("dirtyHit");
-                                    return true;
-                                }
-                                break;
-                            }
-                        default:
-                            switch (num)
-                            {
-                                case 322:
-                                    if (location.objects.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.objects.Add(vector, new Fence(vector, 1, false));
-                                    Game1.playSound("axe");
-                                    return true;
-                                case 323:
-                                    if (location.objects.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.objects.Add(vector, new Fence(vector, 2, false));
-                                    Game1.playSound("stoneStep");
-                                    return true;
-                                case 324:
-                                    if (location.objects.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.objects.Add(vector, new Fence(vector, 3, false));
-                                    Game1.playSound("hammer");
-                                    return true;
-                                case 325:
-                                    if (location.objects.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.objects.Add(vector, new Fence(vector, 4, true));
-                                    Game1.playSound("axe");
-                                    return true;
-                                case 326:
-                                case 327:
-                                case 330:
-                                case 332:
-                                    break;
-                                case 328:
-                                    if (location.terrainFeatures.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.terrainFeatures.Add(vector, new Flooring(0));
-                                    Game1.playSound("axchop");
-                                    return true;
-                                case 329:
-                                    if (location.terrainFeatures.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.terrainFeatures.Add(vector, new Flooring(1));
-                                    Game1.playSound("thudStep");
-                                    return true;
-                                case 331:
-                                    if (location.terrainFeatures.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.terrainFeatures.Add(vector, new Flooring(2));
-                                    Game1.playSound("axchop");
-                                    return true;
-                                case 333:
-                                    if (location.terrainFeatures.ContainsKey(vector))
-                                    {
-                                        return false;
-                                    }
-                                    location.terrainFeatures.Add(vector, new Flooring(3));
-                                    Game1.playSound("thudStep");
-                                    return true;
-                                default:
-                                    if (num == 401)
-                                    {
-                                        if (location.terrainFeatures.ContainsKey(vector))
-                                        {
-                                            return false;
-                                        }
-                                        location.terrainFeatures.Add(vector, new Flooring(4));
-                                        Game1.playSound("thudStep");
-                                        return true;
-                                    }
-                                    break;
-                            }
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (num)
-                    {
-                        case 405:
-                            if (location.terrainFeatures.ContainsKey(vector))
-                            {
-                                return false;
-                            }
-                            location.terrainFeatures.Add(vector, new Flooring(6));
-                            Game1.playSound("woodyStep");
-                            return true;
-                        case 406:
-                        case 408:
-                        case 410:
-                            break;
-                        case 407:
-                            if (location.terrainFeatures.ContainsKey(vector))
-                            {
-                                return false;
-                            }
-                            location.terrainFeatures.Add(vector, new Flooring(5));
-                            Game1.playSound("dirtyHit");
-                            return true;
-                        case 409:
-                            if (location.terrainFeatures.ContainsKey(vector))
-                            {
-                                return false;
-                            }
-                            location.terrainFeatures.Add(vector, new Flooring(7));
-                            Game1.playSound("stoneStep");
-                            return true;
-                        case 411:
-                            if (location.terrainFeatures.ContainsKey(vector))
-                            {
-                                return false;
-                            }
-                            location.terrainFeatures.Add(vector, new Flooring(8));
-                            Game1.playSound("stoneStep");
-                            return true;
-                        default:
-                            if (num != 415)
-                            {
-                                if (num == 710)
-                                {
-                                    if (location.objects.ContainsKey(vector) || location.doesTileHaveProperty((int)vector.X, (int)vector.Y, "Water", "Back") == null)
-                                    {
-                                        return false;
-                                    }
-                                    new CrabPot(vector, 1).placementAction(location, x, y, who);
-                                    return true;
-                                }
-                            }
-                            else
-                            {
-                                if (location.terrainFeatures.ContainsKey(vector))
-                                {
-                                    return false;
-                                }
-                                location.terrainFeatures.Add(vector, new Flooring(9));
-                                Game1.playSound("stoneStep");
-                                return true;
-                            }
-                            break;
-                    }
-                }
-            }
-            else
-            {
                 int num = cObj.ParentSheetIndex;
                 if (num <= 130)
                 {
@@ -542,7 +170,7 @@ namespace StardustCore
                             {
                                 return false;
                             }
-                            new Torch(vector, cObj.parentSheetIndex, true)
+                            new Torch(vector, cObj.ParentSheetIndex, true)
                             {
                                 shakeTimer = 25
                             }.placementAction(location, x, y, who);
@@ -556,37 +184,36 @@ namespace StardustCore
                             break;
                     }
                 }
-            }
-            IL_FD7:
+            
             if (cObj.name.Equals("Tapper"))
             {
-                if (location.terrainFeatures.ContainsKey(vector) && location.terrainFeatures[vector] is Tree && (location.terrainFeatures[vector] as Tree).growthStage >= 5 && !(location.terrainFeatures[vector] as Tree).stump && !location.objects.ContainsKey(vector))
+                if (location.terrainFeatures.ContainsKey(vector) && location.terrainFeatures[vector] is Tree && (location.terrainFeatures[vector] as Tree).growthStage.Value >= 5 && !(location.terrainFeatures[vector] as Tree).stump.Value && !location.objects.ContainsKey(vector))
                 {
-                    cObj.tileLocation = vector;
+                    cObj.TileLocation = vector;
                     location.objects.Add(vector, cObj);
-                    int treeType = (location.terrainFeatures[vector] as Tree).treeType;
-                    (location.terrainFeatures[vector] as Tree).tapped = true;
+                    int treeType = (location.terrainFeatures[vector] as Tree).treeType.Value;
+                    (location.terrainFeatures[vector] as Tree).tapped.Value = true;
                     switch (treeType)
                     {
                         case 1:
-                            cObj.heldObject = new StardewValley.Object(725, 1, false, -1, 0);
-                            cObj.minutesUntilReady = 13000 - Game1.timeOfDay;
+                            cObj.heldObject.Value = new StardewValley.Object(725, 1, false, -1, 0);
+                            cObj.MinutesUntilReady = 13000 - Game1.timeOfDay;
                             break;
                         case 2:
-                            cObj.heldObject = new StardewValley.Object(724, 1, false, -1, 0);
-                            cObj.minutesUntilReady = 16000 - Game1.timeOfDay;
+                            cObj.heldObject.Value = new StardewValley.Object(724, 1, false, -1, 0);
+                            cObj.MinutesUntilReady = 16000 - Game1.timeOfDay;
                             break;
                         case 3:
-                            cObj.heldObject = new StardewValley.Object(726, 1, false, -1, 0);
-                            cObj.minutesUntilReady = 10000 - Game1.timeOfDay;
+                            cObj.heldObject.Value = new StardewValley.Object(726, 1, false, -1, 0);
+                            cObj.MinutesUntilReady = 10000 - Game1.timeOfDay;
                             break;
                         case 7:
-                            cObj.heldObject = new StardewValley.Object(420, 1, false, -1, 0);
-                            cObj.minutesUntilReady = 3000 - Game1.timeOfDay;
+                            cObj.heldObject.Value = new StardewValley.Object(420, 1, false, -1, 0);
+                            cObj.MinutesUntilReady = 3000 - Game1.timeOfDay;
                             if (!Game1.currentSeason.Equals("fall"))
                             {
-                                cObj.heldObject = new StardewValley.Object(404, 1, false, -1, 0);
-                                cObj.minutesUntilReady = 6000 - Game1.timeOfDay;
+                                cObj.heldObject.Value = new StardewValley.Object(404, 1, false, -1, 0);
+                                cObj.MinutesUntilReady = 6000 - Game1.timeOfDay;
                             }
                             break;
                     }
@@ -623,7 +250,7 @@ namespace StardustCore
                 {
                     Game1.playSound("dirtyHit");
                     DelayedAction.playSoundAfterDelay("coin", 100);
-                    location.terrainFeatures.Add(vector, new FruitTree(cObj.parentSheetIndex));
+                    location.terrainFeatures.Add(vector, new FruitTree(cObj.ParentSheetIndex));
                     return true;
                 }
                 Game1.showRedMessage("Can't be planted here.");
@@ -634,7 +261,7 @@ namespace StardustCore
 
                 //Game1.showRedMessage("STEP 1");
 
-                if (cObj.category == -74)
+                if (cObj.Category == -74)
                 {
                     return true;
                 }
@@ -642,11 +269,11 @@ namespace StardustCore
                 {
                     CoreObject @object = (CoreObject)cObj.getOne();
                     @object.shakeTimer = 50;
-                    @object.tileLocation = vector;
+                    @object.TileLocation = vector;
                     @object.performDropDownAction(who);
                     if (location.objects.ContainsKey(vector))
                     {
-                        if (location.objects[vector].ParentSheetIndex != cObj.parentSheetIndex)
+                        if (location.objects[vector].ParentSheetIndex != cObj.ParentSheetIndex)
                         {
                             Game1.createItemDebris(location.objects[vector], vector * (float)Game1.tileSize, Game1.random.Next(4));
                             location.objects[vector] = @object;
@@ -670,7 +297,7 @@ namespace StardustCore
                     ModCore.ModMonitor.Log("restoring item from file");
                 }
                 //Log.AsyncM("Placed and object");
-                cObj.locationsName = location.name;
+                cObj.locationsName = location.Name;
                 s.trackedObjectList.Add(cObj);
                 return true;
 
@@ -716,7 +343,12 @@ namespace StardustCore
             return new Microsoft.Xna.Framework.Rectangle(Convert.ToInt32(parsed[2]), Convert.ToInt32(parsed[4]), Convert.ToInt32(parsed[6]), Convert.ToInt32(parsed[8]));
         }
 
-
+        /// <summary>
+        /// Add an object to a list fo items.
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="I"></param>
+        /// <returns></returns>
         public static bool addItemToOtherInventory(List<Item> inventory, Item I)
         {
             if (I == null) return false;
@@ -760,6 +392,64 @@ namespace StardustCore
                 return false;
             }
         }
+
+
+        /// <summary>
+        /// Add an object to a netList of items.
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="I"></param>
+        /// <returns></returns>
+        public static bool addItemToOtherInventory(NetObjectList<Item> inventory, Item I)
+        {
+            if (I == null) return false;
+            if (isInventoryFull(inventory) == false)
+            {
+                if (inventory == null)
+                {
+                    return false;
+                }
+                if (inventory.Count == 0)
+                {
+                    inventory.Add(I);
+                    return true;
+                }
+                for (int i = 0; i < inventory.Capacity; i++)
+                {
+                    //   Log.AsyncC("OK????");
+
+                    foreach (var v in inventory)
+                    {
+
+                        if (inventory.Count == 0)
+                        {
+                            addItemToOtherInventory(inventory, I);
+                            return true;
+                        }
+                        if (v == null) continue;
+                        if (v.canStackWith(I))
+                        {
+                            v.addToStack(I.getStack());
+                            return true;
+                        }
+                    }
+                }
+
+                inventory.Add(I);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether or not the inventory list is full of items.
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="logInfo"></param>
+        /// <returns></returns>
         public static bool isInventoryFull(List<Item> inventory, bool logInfo = false)
         {
             if (logInfo)
@@ -771,6 +461,26 @@ namespace StardustCore
             if (inventory.Count == inventory.Capacity) return true;
             else return false;
         }
+
+
+        /// <summary>
+        /// Checks whether or not the net inventory list is full of items.
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="logInfo"></param>
+        /// <returns></returns>
+        public static bool isInventoryFull(NetObjectList<Item> inventory, bool logInfo = false)
+        {
+            if (logInfo)
+            {
+                ModCore.ModMonitor.Log("size " + inventory.Count);
+                ModCore.ModMonitor.Log("max " + inventory.Capacity);
+            }
+
+            if (inventory.Count == inventory.Capacity) return true;
+            else return false;
+        }
+
 
         public static bool isWithinRange(int tileLength,Vector2 positionToCheck)
         {
@@ -794,7 +504,9 @@ namespace StardustCore
 
 
 
-
+        /// <summary>
+        /// Draws the green mouse cursor plus sign.
+        /// </summary>
         public static void drawGreenPlus()
         {
             try
@@ -803,7 +515,7 @@ namespace StardustCore
             }
             catch(Exception e)
             {
-
+                e.ToString();
             }
         }
 
@@ -871,9 +583,15 @@ namespace StardustCore
             }
         }
 
+        /// <summary>
+        /// Checks if a game location contains an object with the exact name passed in.
+        /// </summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="name">The name of the object to check.</param>
+        /// <returns></returns>
         public static bool doesLocationContainObject(GameLocation location, string name)
         {
-            foreach (var v in location.objects)
+            foreach (KeyValuePair<Vector2, StardewValley.Object> v in location.objects.Pairs)
             {
                 if (name == v.Value.name) return true;
             }
@@ -926,27 +644,43 @@ namespace StardustCore
         }
 
 
-
+        /// <summary>
+        /// Checks if the game location has this terrain feature.
+        /// </summary>
+        /// <param name="location">The game location to check.</param>
+        /// <param name="terrain">The terrain feature type to check if it exists at said location.</param>
+        /// <returns></returns>
         public static bool doesLocationContainTerrainFeature(GameLocation location, Type terrain)
         {
-            foreach (var v in location.terrainFeatures)
+            foreach (KeyValuePair<Vector2, StardewValley.TerrainFeatures.TerrainFeature> v in location.terrainFeatures.Pairs)
             {
                 if (terrain == v.Value.GetType()) return true;
             }
             return false;
         }
 
+        /// <summary>
+        /// Get an item from the player's inventory.
+        /// </summary>
+        /// <param name="index">The index in the player's inventory of the item.</param>
+        /// <returns></returns>
         public static Item getItemFromInventory(int index)
         {
-            foreach(var v in Game1.player.items)
+            foreach(var v in Game1.player.Items)
             {
-                if (v.parentSheetIndex == index) return v;
+                if (v.ParentSheetIndex == index) return v;
             }
             return null;
         }
+
+        /// <summary>
+        /// Get an item from the player's inventory.
+        /// </summary>
+        /// <param name="name">The name of the item in the player's inventory</param>
+        /// <returns></returns>
         public static Item getItemFromInventory(string name)
         {
-            foreach (var v in Game1.player.items)
+            foreach (var v in Game1.player.Items)
             {
                 if (v.Name == name) return v;
             }

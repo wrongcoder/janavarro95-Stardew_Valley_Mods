@@ -14,8 +14,8 @@ namespace StardewSymphonyRemastered.Framework
     /// </summary>
    public class XACTMusicPack: MusicPack
     {
-        public Microsoft.Xna.Framework.Audio.WaveBank WaveBank;
-        public Microsoft.Xna.Framework.Audio.SoundBank SoundBank;
+        public WaveBank WaveBank;
+        public ISoundBank SoundBank;
 
         public Cue currentCue;
 
@@ -45,7 +45,7 @@ namespace StardewSymphonyRemastered.Framework
             }
 
             this.WaveBank = new WaveBank(Game1.audioEngine, this.WaveBankPath);
-            this.SoundBank = new SoundBank(Game1.audioEngine,this.SoundBankPath);
+            this.SoundBank = (ISoundBank)new SoundBankWrapper(new SoundBank(Game1.audioEngine, this.SoundBankPath));
             this.loadMusicFiles();
         }
 

@@ -51,7 +51,7 @@ namespace CustomNPCFramework.Framework.Utilities
             this.moddedNPCS.Add(npc);
             npc.defaultLocation = loc;
             npc.currentLocation = loc;
-            npc.position = tilePosition*Game1.tileSize;
+            npc.position.Value = tilePosition*Game1.tileSize;
             loc.addCharacter(npc);
         }
 
@@ -87,7 +87,7 @@ namespace CustomNPCFramework.Framework.Utilities
             {
                 //npc.currentLocation.characters.Remove(npc);
                 //Game1.removeThisCharacterFromAllLocations(npc);
-                Game1.removeCharacterFromItsLocation(npc.name);
+                Game1.removeCharacterFromItsLocation(npc.Name);
                 Class1.ModMonitor.Log("Removed an npc!");
                 //Do some saving code here.
             }

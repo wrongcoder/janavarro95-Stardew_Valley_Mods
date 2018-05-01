@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace StardustCore.UIUtilities
 {
+    /// <summary>
+    /// A class that keeps track of a collection of textures that are layered one on top of the others.
+    /// </summary>
     public class LayeredTexture
     {
         public List<Texture2DExtended> textureLayers;

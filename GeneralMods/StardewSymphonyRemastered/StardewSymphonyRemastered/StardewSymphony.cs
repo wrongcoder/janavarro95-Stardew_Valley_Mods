@@ -38,7 +38,7 @@ namespace StardewSymphonyRemastered
     public class StardewSymphony : Mod
     {
         public static WaveBank DefaultWaveBank;
-        public static SoundBank DefaultSoundBank;
+        public static ISoundBank DefaultSoundBank;
 
 
         public static IModHelper ModHelper;
@@ -400,6 +400,7 @@ namespace StardewSymphonyRemastered
             }
             catch (Exception err)
             {
+                err.ToString();
                 return spliter[0];
             }
         }

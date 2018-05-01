@@ -44,7 +44,8 @@ namespace EventSystem.Framework.Events
             if (base.OnPlayerEnter() == false) return false;
             else
             {
-                Game1.warpFarmer(Game1.getLocationFromName(this.warpInfo.targetMapName), this.warpInfo.targetX, this.warpInfo.targetY, this.warpInfo.facingDirection, this.warpInfo.isStructure);
+                
+                Game1.warpFarmer(this.warpInfo.targetMapName, this.warpInfo.targetX, this.warpInfo.targetY, this.warpInfo.facingDirection, this.warpInfo.isStructure);
                 return true;
             }
         }

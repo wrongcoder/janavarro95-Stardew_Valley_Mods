@@ -37,7 +37,7 @@ namespace Omegasis.StardewSymphony.Framework
         public WaveBank Wavebank { get; }
 
         /// <summary>The loaded soundbank (if any).</summary>
-        public SoundBank Soundbank { get; }
+        public ISoundBank Soundbank { get; }
 
         /// <summary>The default music to play if there isn't a more specific option.</summary>
         public IDictionary<Season, List<Cue>> DefaultSongs = MusicManager.CreateSeasonalSongList();
@@ -90,7 +90,7 @@ namespace Omegasis.StardewSymphony.Framework
             if (File.Exists(wavePath))
                 this.Wavebank = new WaveBank(Game1.audioEngine, wavePath);
             if (File.Exists(Path.Combine(this.Directory, this.SoundbankName)))
-                this.Soundbank = new SoundBank(Game1.audioEngine, soundPath);
+                this.Soundbank = (ISoundBank)new SoundBankWrapper(new SoundBank(Game1.audioEngine, soundPath));
 
             // update audio
             Game1.audioEngine.Update();

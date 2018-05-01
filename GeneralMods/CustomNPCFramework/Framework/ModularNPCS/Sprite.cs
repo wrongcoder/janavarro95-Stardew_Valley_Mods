@@ -40,14 +40,21 @@ namespace CustomNPCFramework.Framework.ModularNPCS
             }
             try
             {
-                this.sprite = new AnimatedSprite(Class1.ModHelper.Content.Load<Texture2D>(this.relativePath));
+                this.sprite = new AnimatedSprite();
+                Texture2D text = Class1.ModHelper.Content.Load<Texture2D>(this.relativePath);
+                var reflect=Class1.ModHelper.Reflection.GetField<Texture2D>(this.sprite, "Texture", true);
+                reflect.SetValue(text);
+                
             }
             catch(Exception err)
             {
-                this.sprite = new AnimatedSprite(Class1.ModHelper.Content.Load<Texture2D>(this.relativePath+".png"));
+                this.sprite = new AnimatedSprite();
+                Texture2D text = Class1.ModHelper.Content.Load<Texture2D>(this.relativePath);
+                var reflect = Class1.ModHelper.Reflection.GetField<Texture2D>(this.sprite, "Texture", true);
+                reflect.SetValue(text);
             }
-            this.sprite.spriteWidth = this.sprite.Texture.Width;
-            this.sprite.spriteHeight = this.sprite.Texture.Height;
+            this.sprite.SpriteWidth = this.sprite.Texture.Width;
+            this.sprite.SpriteHeight = this.sprite.Texture.Height;
         }
 
         /// <summary>
@@ -55,12 +62,12 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// </summary>
         /// <param name="path">Used to hold the path to the asset.</param>
         /// <param name="texture">Used to assign the texture to the sprite from a pre-loaded asset.</param>
-        public Sprite(string path, Texture2D texture)
+        public Sprite(string path, string texture)
         {
             this.relativePath = path;
             this.sprite = new AnimatedSprite(texture);
-            this.sprite.spriteWidth = this.sprite.Texture.Width;
-            this.sprite.spriteHeight = this.sprite.Texture.Height;
+            this.sprite.SpriteWidth = this.sprite.Texture.Width;
+            this.sprite.SpriteHeight = this.sprite.Texture.Height;
         }
 
         /// <summary>
@@ -77,7 +84,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS
         /// </summary>
         public void reload()
         {
-            this.sprite.Texture = Class1.ModHelper.Content.Load<Texture2D>(this.relativePath);
+            var text=CustomNPCFramework.Class1.ModHelper.Reflection.GetField<Texture2D>(this.sprite.Texture, "Texture", true);
+            Texture2D loaded= Class1.ModHelper.Content.Load<Texture2D>(this.relativePath);
+            text.SetValue(loaded);
         }
 
         /// <summary>

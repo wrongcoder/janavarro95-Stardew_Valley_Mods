@@ -29,8 +29,8 @@ namespace StardustCore
 
             //  StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += Metadata.GameEvents_UpdateTick;
             //StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
-            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.name, "PlayerInventory");
-            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.name, "ObjectsInWorld"); ;
+            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name, "PlayerInventory");
+            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.Name, "ObjectsInWorld"); ;
             string trashPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "ModTrashFolder");
             string chestPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "StorageContainers");
             SerializationManager = new SerializationManager(invPath, trashPath, worldPath,chestPath);

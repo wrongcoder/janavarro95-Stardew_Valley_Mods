@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace StardustCore.ModInfo
 {
+    /// <summary>
+    /// Handles things like displaying object class types.
+    /// </summary>
     public class Metadata
     {
         Color ModInfoColor;
@@ -31,12 +34,23 @@ namespace StardustCore.ModInfo
             ModName = modName;
         }
 
+        /// <summary>
+        /// Parse the name of the mod that this object is from from the Namespace type.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static string parseModNameFromType(Type t)
         {
             string s = t.ToString();
             string[] array = s.Split('.');
             return array[0];
         }
+
+        /// <summary>
+        /// Parse the class inside of the mod's namespace that this object is from.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static string parseClassNameFromType(Type t)
         {
             string s = t.ToString();
@@ -45,7 +59,7 @@ namespace StardustCore.ModInfo
         }
 
         /// <summary>
-        /// TODO: Add to check to chest inventory. See if I can grab activeclickable menu and instead hook the inventory component from it.
+        /// TODO: Add the ModClass item check to chest inventory. See if I can grab activeclickable menu and instead hook the inventory component from it.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -131,7 +145,7 @@ namespace StardustCore.ModInfo
                                     }
                                     catch(Exception errr)
                                     {
-                                       
+                                        errr.ToString();
                                     }
 
                                 }
@@ -145,12 +159,14 @@ namespace StardustCore.ModInfo
                 }
                 catch(Exception err) //Try to parse a menu that isn't the default GameMenu
                 {
+                    err.ToString();
                     try
                     {
                         List<Item> inventory = (List<Item>)Game1.activeClickableMenu.GetType().GetProperty("inventory").GetValue(Game1.activeClickableMenu, null);                        
                     }
                     catch(Exception errr)
                     {
+                        errr.ToString();
                         try
                         {
                         
@@ -227,7 +243,7 @@ namespace StardustCore.ModInfo
                                             }
                                             catch (Exception errrr)
                                             {
-                                               
+                                            errrr.ToString();
                                             }
 
                                         }
@@ -242,7 +258,7 @@ namespace StardustCore.ModInfo
                         }
                         catch(Exception errrr)
                         {
-
+                            errrr.ToString();
                         }
                     }
                 }

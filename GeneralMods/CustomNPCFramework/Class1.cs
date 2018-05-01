@@ -217,6 +217,7 @@ namespace CustomNPCFramework
             }
             catch(Exception err)
             {
+                err.ToString();
                 return spliter[0];
             }
         }

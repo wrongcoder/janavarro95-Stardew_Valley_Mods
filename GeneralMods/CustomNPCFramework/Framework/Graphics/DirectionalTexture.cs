@@ -1,5 +1,7 @@
 ﻿using CustomNPCFramework.Framework.Enums;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
+using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,25 +19,25 @@ namespace CustomNPCFramework.Framework.Graphics
         /// <summary>
         /// The left texture for this group.
         /// </summary>
-        public Texture2D leftTexture;
+        public Texture2DExtended leftTexture;
         /// <summary>
         /// The right texture for this group.
         /// </summary>
-        public Texture2D rightTexture;
+        public Texture2DExtended rightTexture;
         
         /// <summary>
         /// The down textiure for this group.
         /// </summary>
-        public Texture2D downTexture;
+        public Texture2DExtended downTexture;
         /// <summary>
         /// The up texture for this group.
         /// </summary>
-        public Texture2D upTexture;
+        public Texture2DExtended upTexture;
 
         /// <summary>
         /// The current texture for this group.
         /// </summary>
-        public Texture2D currentTexture;
+        public Texture2DExtended currentTexture;
 
         /// <summary>
         /// Constructor.
@@ -45,7 +47,7 @@ namespace CustomNPCFramework.Framework.Graphics
         /// <param name="up">The up texture to use.</param>
         /// <param name="down">The down texture to use.</param>
         /// <param name="direction">The direction texture for the sprite to face.</param>
-        public DirectionalTexture(Texture2D left, Texture2D right, Texture2D up, Texture2D down, Direction direction=Direction.down)
+        public DirectionalTexture(Texture2DExtended left, Texture2DExtended right, Texture2DExtended up, Texture2DExtended down, Direction direction=Direction.down)
         {
             this.leftTexture = left;
             this.rightTexture = right;
@@ -60,18 +62,22 @@ namespace CustomNPCFramework.Framework.Graphics
 
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="info">A list of name pairings to hold the info for the directional texture.</param>
-        /// <param name="path">The path location of the textures to load.</param>
-        /// <param name="direction">The direction the textures should be facing.</param>
-        public DirectionalTexture(NamePairings info, string path, Direction direction = Direction.down)
+        
+        public DirectionalTexture(IModHelper helper ,NamePairings info, string path, Direction direction = Direction.down)
         {
-            this.leftTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.leftString + ".png")).Remove(0, 1));
-            this.rightTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.rightString + ".png")).Remove(0, 1));
-            this.upTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.upString + ".png")).Remove(0, 1));
-            this.downTexture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path, info.downString + ".png")).Remove(0, 1));
+
+            new Texture2DExtended(helper, path);
+
+            string leftString= Class1.getShortenedDirectory(Path.Combine(path, info.leftString + ".png")).Remove(0, 1);
+            string rightString = Class1.getShortenedDirectory(Path.Combine(path, info.rightString + ".png")).Remove(0, 1);
+            string upString = Class1.getShortenedDirectory(Path.Combine(path, info.upString + ".png")).Remove(0, 1);
+            string downString = Class1.getShortenedDirectory(Path.Combine(path, info.downString + ".png")).Remove(0, 1);
+
+
+            this.leftTexture = new Texture2DExtended(helper, leftString);
+            this.rightTexture = new Texture2DExtended(helper, rightString);
+            this.upTexture = new Texture2DExtended(helper, upString);
+            this.downTexture = new Texture2DExtended(helper, downString);
 
             if (direction == Direction.left) this.currentTexture = leftTexture;
             if (direction == Direction.right) this.currentTexture = rightTexture;
@@ -116,7 +122,7 @@ namespace CustomNPCFramework.Framework.Graphics
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
-        public virtual Texture2D getTextureFromDirection(Direction direction)
+        public virtual Texture2DExtended getTextureFromDirection(Direction direction)
         {
             if (direction == Direction.left) return this.leftTexture;
             if (direction == Direction.right) return this.rightTexture;

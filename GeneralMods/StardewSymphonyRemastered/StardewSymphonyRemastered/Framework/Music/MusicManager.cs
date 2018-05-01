@@ -184,7 +184,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch(Exception err)
                 {
-
+                    err.ToString();
                 }
             }
             return listOfValidDictionaries;
@@ -205,7 +205,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch (Exception err)
                 {
-
+                    err.ToString();
                 }
             }
             return listOfValidDictionaries;
@@ -227,7 +227,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch (Exception err)
                 {
-
+                    err.ToString();
                 }
             }
             return listOfValidDictionaries;

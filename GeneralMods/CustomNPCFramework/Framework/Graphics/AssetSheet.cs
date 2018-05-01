@@ -2,6 +2,7 @@
 using CustomNPCFramework.Framework.Graphics.TextureGroups;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,9 +63,9 @@ namespace CustomNPCFramework.Framework.Graphics
         /// Get the path to the current texture.
         /// </summary>
         /// <returns></returns>
-        public virtual KeyValuePair<string, Texture2D> getPathTexturePair()
+        public virtual KeyValuePair<string, Texture2DExtended> getPathTexturePair()
         {
-            return new KeyValuePair<string, Texture2D>(this.path, this.textures.currentTexture.currentTexture);
+            return new KeyValuePair<string, Texture2DExtended>(this.path, this.textures.currentTexture.currentTexture);
         }
 
 
@@ -113,7 +114,7 @@ namespace CustomNPCFramework.Framework.Graphics
         /// Get the current animation texture.
         /// </summary>
         /// <returns></returns>
-        public virtual Texture2D getCurrentSpriteTexture()
+        public virtual Texture2DExtended getCurrentSpriteTexture()
         {
             return this.textures.currentTexture.currentTexture;
         }
@@ -124,7 +125,7 @@ namespace CustomNPCFramework.Framework.Graphics
         /// <param name="direction"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public virtual Texture2D getTexture(Direction direction,AnimationType type)
+        public virtual Texture2DExtended getTexture(Direction direction,AnimationType type)
         {
             return this.textures.getTextureFromAnimation(type).getTextureFromDirection(direction);
         }

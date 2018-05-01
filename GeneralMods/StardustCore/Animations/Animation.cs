@@ -7,11 +7,23 @@ using System.Threading.Tasks;
 
 namespace StardustCore.Animations
 {
+    /// <summary>
+    /// A custom class used to deal with custom animations/
+    /// </summary>
    public class Animation
     {
+        /// <summary>
+        /// The source rectangle on the texture to display.
+        /// </summary>
        public Rectangle sourceRectangle;
-       public readonly int frameDuration; 
-       public int frameCountUntilNextAnimation;
+        /// <summary>
+        /// The duration of the frame in length.
+        /// </summary>
+       public readonly int frameDuration;
+        /// <summary>
+        /// The duration until the next frame.
+        /// </summary>
+        public int frameCountUntilNextAnimation;
 
 
 

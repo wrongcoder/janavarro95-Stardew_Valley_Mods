@@ -61,10 +61,10 @@ namespace CustomNPCFramework.Framework.Graphics.TextureGroups
         /// <param name="animationType">The type of asset this is. Eyes, Hair, Shirts, etc</param>
         public TextureGroup(AssetInfo info, string path,Direction direction ,AnimationType animationType=AnimationType.standing)
         {
-            this.standingTexture = new DirectionalTexture(info.standingAssetPaths, path, direction);
-            this.sittingTexture = new DirectionalTexture(info.sittingAssetPaths, path, direction);
-            this.swimmingTexture = new DirectionalTexture(info.swimmingAssetPaths, path, direction);
-            this.movingTexture = new DirectionalTexture(info.movingAssetPaths, path, direction);
+            this.standingTexture = new DirectionalTexture(Class1.ModHelper,info.standingAssetPaths, path, direction);
+            this.sittingTexture = new DirectionalTexture(Class1.ModHelper, info.sittingAssetPaths, path, direction);
+            this.swimmingTexture = new DirectionalTexture(Class1.ModHelper, info.swimmingAssetPaths, path, direction);
+            this.movingTexture = new DirectionalTexture(Class1.ModHelper,info.movingAssetPaths, path, direction);
 
             this.info = info;
             this.path = path;

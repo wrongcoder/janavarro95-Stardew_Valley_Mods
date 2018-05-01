@@ -311,10 +311,19 @@ namespace StardustCore.IlluminateFramework
     /// </summary>
     public class Colors
     {
+        /// <summary>
+        /// Used to hold all of the colors.
+        /// </summary>
         public static Dictionary<string, Color> ColorDictionary;
 
+        /// <summary>
+        /// A random variable used to generate random colors.
+        /// </summary>
         public static Random colorRandomizer;
 
+        /// <summary>
+        /// Initialize a big list of colors.
+        /// </summary>
         public static void initializeColors()
         {
             ColorDictionary = new Dictionary<string, Color>();
@@ -628,6 +637,12 @@ namespace StardustCore.IlluminateFramework
             return new Color(R, G, B, A);
         }
 
+        /// <summary>
+        /// Invert the color passed in.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="Alpha"></param>
+        /// <returns></returns>
         public static Color invertColor(Color c, int Alpha = 255)
         {
 
@@ -647,7 +662,12 @@ namespace StardustCore.IlluminateFramework
             return new Color(r, g, b, a);
 
         }
-
+        
+        /// <summary>
+        /// Get the color from the color list by the name passed in.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static Color getColorFromList(string s)
         {
             Color color;

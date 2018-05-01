@@ -12,9 +12,9 @@ namespace SimpleSoundManager
     public class SoundManager
     {
         public WaveBank waveBank;
-        public SoundBank soundBank;
+        public ISoundBank soundBank;
         WaveBank vanillaWaveBank;
-        SoundBank vanillaSoundBank;
+        ISoundBank vanillaSoundBank;
         List<Cue> currentlyPlayingSounds;
 
         /// <summary>
@@ -25,7 +25,8 @@ namespace SimpleSoundManager
         public SoundManager(string newWaveBank, string newSoundBank)
         {
             this.waveBank = new WaveBank(Game1.audioEngine, newWaveBank);
-            this.soundBank = new SoundBank(Game1.audioEngine, newSoundBank);
+            
+            this.soundBank = (ISoundBank)new SoundBankWrapper(new SoundBank(Game1.audioEngine, newSoundBank));
             this.currentlyPlayingSounds = new List<Cue>();
             vanillaWaveBank = Game1.waveBank;
             vanillaSoundBank = Game1.soundBank;
@@ -36,7 +37,7 @@ namespace SimpleSoundManager
         /// </summary>
         /// <param name="newWaveBank">The reference to the wave bank in the mod's asset folder.</param>
         /// <param name="newSoundBank">The reference to the sound bank in the mod's asset folder.</param>
-        public SoundManager(WaveBank newWaveBank, SoundBank newSoundBank)
+        public SoundManager(WaveBank newWaveBank, ISoundBank newSoundBank)
         {
             this.waveBank = newWaveBank;
             this.soundBank = newSoundBank;

@@ -64,7 +64,9 @@ namespace StardewSymphonyRemastered.Framework
 
         }
 
-
+        /// <summary>
+        /// Save functionality.
+        /// </summary>
         public virtual void writeToJson()
         {
             StardewSymphony.ModMonitor.Log("Loading in music for this pack:"+this.musicPackInformation.name+". Please wait.");
@@ -81,6 +83,9 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
+        /// <summary>
+        /// Load functionality.
+        /// </summary>
         public virtual void readFromJson()
         {
             StardewSymphony.ModMonitor.Log("Saving music for this pack:" + this.musicPackInformation.name + ". Please wait as this will take quite soem time.");

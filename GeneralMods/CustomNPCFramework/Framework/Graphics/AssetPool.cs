@@ -113,7 +113,7 @@ namespace CustomNPCFramework.Framework.Graphics
         {
             assetPool.TryGetValue(name, out AssetManager asset);
             var assetSheet = asset.getAssetByName(name);
-            return new AnimatedSpriteExtended(assetSheet.clone().getCurrentSpriteTexture(),assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+            return new AnimatedSpriteExtended(assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
         }
 
 
@@ -125,10 +125,10 @@ namespace CustomNPCFramework.Framework.Graphics
         /// <returns></returns>
         public AnimatedSpriteCollection getSpriteCollectionFromSheet(AssetSheet assetSheet, AnimationType type)
         {    
-                var left = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.left, type),assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var right = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.right, type),assetSheet.path.Clone().ToString(), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var up = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.up, type),assetSheet.path.Clone().ToString(), assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
-                var down = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.down, type), assetSheet.path.Clone().ToString(),assetSheet.index, (int)assetSheet.assetInfo.assetSize.X, (int)assetSheet.assetInfo.assetSize.Y);
+                var left = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.left, type),assetSheet);
+                var right = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.right, type), assetSheet);
+                var up = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.up, type), assetSheet);
+                var down = new AnimatedSpriteExtended(assetSheet.clone().getTexture(Direction.down, type), assetSheet);
                 return new AnimatedSpriteCollection(left, right, up, down, Direction.down); 
         }
         
