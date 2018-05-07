@@ -224,6 +224,7 @@ namespace Omegasis.BuyBackCollectables.Framework
                 if (current2.containsPoint(x, y) && this.NewItem != null && Game1.player.money >= this.Value)
                 {
                     Game1.player.money -= this.Value;
+                    Game1.playSound("coin");
                     Game1.player.addItemByMenuIfNecessary(this.NewItem);
                 }
             }
@@ -239,6 +240,7 @@ namespace Omegasis.BuyBackCollectables.Framework
             {
                 Game1.player.money -= this.Value;
                 Game1.player.addItemByMenuIfNecessary(this.NewItem);
+                Game1.playSound("coin");
             }
         }
 

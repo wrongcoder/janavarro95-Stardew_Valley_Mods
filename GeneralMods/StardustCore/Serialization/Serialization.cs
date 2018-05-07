@@ -223,7 +223,7 @@ namespace StardustCore.Serialization
             foreach (Building building in Game1.getFarm().buildings)
             {
                
-                GameLocation loc =Game1.getLocationFromName(building.nameOfIndoors.Value,true);
+                GameLocation loc =Game1.getLocationFromName(building.nameOfIndoors,true);
               ModCore.ModMonitor.Log("Cleaning up farm building: "+loc.uniqueName.Value);
                 int i = loc.objects.Pairs.Count();
                 int j = 0;
@@ -248,7 +248,7 @@ namespace StardustCore.Serialization
                             SerializerDataNode t;
                             if(acceptedTypes.ContainsKey((v as CoreObject).serializationName)){
                                 acceptedTypes.TryGetValue((v as CoreObject).serializationName, out t);
-                                string s = Path.Combine(building.nameOfIndoors.Value, "Chest,"+Convert.ToString( (int)obj.Key.X)+","+Convert.ToString((int)obj.Key.Y));
+                                string s = Path.Combine(building.nameOfIndoors, "Chest,"+Convert.ToString( (int)obj.Key.X)+","+Convert.ToString((int)obj.Key.Y));
                                 string s2 = Path.Combine(ModCore.SerializationManager.storageContainerPath, s);
                                 if (!Directory.Exists(s)) Directory.CreateDirectory(s2);
                                 t.serializeToContainer.Invoke(v, s2);

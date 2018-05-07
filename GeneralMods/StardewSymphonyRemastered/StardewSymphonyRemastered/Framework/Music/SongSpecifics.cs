@@ -168,8 +168,8 @@ namespace StardewSymphonyRemastered.Framework
                 var farm = (Farm)Game1.getLocationFromName("Farm");
                 foreach(var building in farm.buildings)
                 {
-                    locations.Add(building.nameOfIndoors.Value);
-                    StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors.Value);
+                    locations.Add(building.nameOfIndoors);
+                    StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors);
                 }
             }
             catch(Exception err)
