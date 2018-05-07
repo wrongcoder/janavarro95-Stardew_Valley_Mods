@@ -21,7 +21,7 @@ namespace ModdedUtilitiesNetworking.Framework.Extentions
 
         public static void WriteString(this BinaryWriter writer, object str)
         {
-            writer.WriteString((string)str);
+            writer.Write((string)str);
             
         }
 
@@ -85,6 +85,36 @@ namespace ModdedUtilitiesNetworking.Framework.Extentions
                 
                 return memoryStream.ToArray();
             }
+        }
+
+        /// <summary>
+        /// Read a data info file from a binary stream.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static DataInfo ReadDataInfo(this BinaryReader reader)
+        {
+            String key=reader.ReadString();
+            object data = ModCore.processTypesToRead(reader, key);
+
+            DataInfo info = new DataInfo(key,data);
+            return info;
+        }
+        
+        /// <summary>
+        /// Write a dataInfo file to binary.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="obj"></param>
+        public static void WriteDataInfo(this BinaryWriter writer, object obj)
+        {
+            
+
+            DataInfo dataInfo = (DataInfo)obj;
+
+            writer.WriteString(dataInfo.type);
+            ModCore.monitor.Log("WRITE DATA INFO FUNCTION3: " + dataInfo.type);
+            ModCore.processTypesToWrite(writer, dataInfo.type, dataInfo.data);
         }
 
         //Can do custom classes here for reading and writing.

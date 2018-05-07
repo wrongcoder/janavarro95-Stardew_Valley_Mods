@@ -143,7 +143,8 @@ namespace ModdedUtilitiesNetworking
         /// <param name="param"></param>
         public static void displayMessage(object param)
         {
-            string s =(string) param;
+            DataInfo dataInfo = (DataInfo)param;
+            string s = (string)dataInfo.data;
             monitor.Log(s);
         }
 
@@ -151,9 +152,11 @@ namespace ModdedUtilitiesNetworking
         /// Initialize basic supported types.
         /// </summary>
         public static void initializeBasicTypes()
-        {        
+        {
+            addObjectType(monitor, typeof(string), new ReadWriter(new reader(GenericExtentions.ReadString), new writer(GenericExtentions.WriteString)));
             addObjectType(monitor,typeof(String), new ReadWriter(new reader(GenericExtentions.ReadString), new writer(GenericExtentions.WriteString)));
             addObjectType(monitor,typeof(List<String>), new ReadWriter(new reader(GenericExtentions.ReadStringList), new writer(GenericExtentions.WriteStringList)));
+            addObjectType(monitor, typeof(DataInfo), new ReadWriter(new reader(GenericExtentions.ReadDataInfo), new writer(GenericExtentions.WriteDataInfo)));
 
         }
 
@@ -195,7 +198,7 @@ namespace ModdedUtilitiesNetworking
         /// <param name="msg"></param>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static object processTypes(BinaryReader msg,string key)
+        public static object processTypesToRead(BinaryReader msg,string key)
         {
             foreach(var v in objectTypes)
             {
@@ -209,6 +212,19 @@ namespace ModdedUtilitiesNetworking
             return null;
         }
 
+        public static void processTypesToWrite(BinaryWriter msg, string key,object data)
+        {
+            foreach (var v in objectTypes)
+            {
+                if (v.Key == key)
+                {
+                    ModCore.monitor.Log("PROCESS TYPES TO WRITE FUNCTION: "+v.Key + " " + data.ToString());
+                    v.Value.write(msg,data);
+                    return;
+                }
+            }
+            monitor.Log("Error: type not found: " + key, LogLevel.Error);
+        }
     }
 
  

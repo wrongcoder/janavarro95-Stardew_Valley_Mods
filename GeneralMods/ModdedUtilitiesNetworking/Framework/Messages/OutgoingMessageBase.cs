@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using ModdedUtilitiesNetworking.Framework.Extentions;
 using Netcode;
 using StardewValley;
 using StardewValley.Network;
@@ -136,6 +137,54 @@ namespace ModdedUtilitiesNetworking.Framework.Messages
         public virtual OutgoingMessage convertToOutgoingMessage()
         {
             return new OutgoingMessage(this.messageType, this.farmerID, this.data);
+        }
+
+        public static void WriteFromMessage(OutgoingMessage message,BinaryWriter writer)
+        {
+            writer.Write(message.MessageType);
+            writer.Write(message.FarmerID);
+            object[] data = message.Data.ToArray();
+            BinaryReaderWriterExtensions.WriteSkippable(writer, (Action)(() =>
+            {
+                foreach (object enumValue in data)
+                {
+                    if (enumValue is Vector2)
+                    {
+                        writer.Write(((Vector2)enumValue).X);
+                        writer.Write(((Vector2)enumValue).Y);
+                    }
+                    else if (enumValue is Guid)
+                        writer.Write(((Guid)enumValue).ToByteArray());
+                    else if (enumValue is byte[])
+                        writer.Write((byte[])enumValue);
+                    else if (enumValue is bool)
+                        writer.Write((bool)enumValue ? (byte)1 : (byte)0);
+                    else if (enumValue is byte)
+                        writer.Write((byte)enumValue);
+                    else if (enumValue is int)
+                        writer.Write((int)enumValue);
+                    else if (enumValue is short)
+                        writer.Write((short)enumValue);
+                    else if (enumValue is float)
+                        writer.Write((float)enumValue);
+                    else if (enumValue is long)
+                        writer.Write((long)enumValue);
+                    else if (enumValue is string)
+                        writer.Write((string)enumValue);
+                    else if (enumValue is string[])
+                    {
+                        string[] strArray = (string[])enumValue;
+                        writer.Write((byte)strArray.Length);
+                        for (int index = 0; index < strArray.Length; ++index)
+                            writer.Write(strArray[index]);
+                    }
+                    else
+                    {
+                        ModCore.processTypesToWrite(writer, (string)data[1], data[2]); //writer, stringType, data
+                    }
+                }
+            }));
+
         }
     }
 }

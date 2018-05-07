@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using ModdedUtilitiesNetworking.Framework.Clients;
 using ModdedUtilitiesNetworking.Framework.Extentions;
 using Netcode;
 using StardewValley;
@@ -24,7 +25,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             public CustomGameServer()
             {
                 this.servers = new List<Server>();
-                this.servers.Add(ModCore.multiplayer.InitServer((Server)new LidgrenServer((IGameServer)this)));
+                this.servers.Add(ModCore.multiplayer.InitServer((Server)new CustomLidgrenServer((IGameServer)this)));
                 ModCore.monitor.Log("Custom Lidgren Server Created");
                 ModCore.monitor.Log("Custom Game Server Created");
             if (Program.sdk.Networking == null)
@@ -382,7 +383,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                     object[] obj = message.Reader.ReadModdedInfoPacket();
                     string functionName = (string)obj[0];
                     string classType = (string)obj[1];
-                    object actualObject = ModCore.processTypes(message.Reader, classType);
+                    object actualObject = ModCore.processTypesToRead(message.Reader, classType);
                     ModCore.processVoidFunction(functionName, actualObject);
                     break;
                 default:

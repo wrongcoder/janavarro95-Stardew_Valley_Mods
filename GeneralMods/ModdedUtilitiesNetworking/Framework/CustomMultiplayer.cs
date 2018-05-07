@@ -1,4 +1,5 @@
-﻿using ModdedUtilitiesNetworking.Framework.Messages;
+﻿using ModdedUtilitiesNetworking.Framework.Clients;
+using ModdedUtilitiesNetworking.Framework.Messages;
 using ModdedUtilitiesNetworking.Framework.Servers;
 using StardewValley;
 using StardewValley.Network;
@@ -20,6 +21,15 @@ namespace ModdedUtilitiesNetworking.Framework
             return true;
         }
 
+        public override void processIncomingMessage(IncomingMessage msg)
+        {
+            base.processIncomingMessage(msg);
+            if (msg.MessageType == 20)
+            {
+                ModCore.monitor.Log("CUSTOM FUNCTION???");
+            }
+        }
+
         /// <summary>
         /// Sends an outgoing message to appropriate players.
         /// </summary>
@@ -35,7 +45,17 @@ namespace ModdedUtilitiesNetworking.Framework
             }
             if (Game1.client != null)
             {
-                Game1.client.sendMessage(message);
+                if (Game1.client is CustomLidgrenClient) {
+                    (Game1.client as CustomLidgrenClient).sendMessage(message);
+                    return;
+                }
+                if (Game1.client is CustomGalaxyClient)
+                {
+                    (Game1.client as CustomGalaxyClient).sendMessage(message);
+                    return;
+                }
+                ModCore.monitor.Log("Error sending server message!!!");
+
             }
         }
 
@@ -79,11 +99,12 @@ namespace ModdedUtilitiesNetworking.Framework
 
         public object[] makeDataArray(string functionName, string objectParametersType, object data)
         {
+            DataInfo datainfo = new DataInfo(objectParametersType, data);
             object[] obj = new object[3]
             {
                 functionName,
-                objectParametersType,
-                data
+                typeof(DataInfo).ToString(),
+                datainfo,
             };
             return obj;
         }

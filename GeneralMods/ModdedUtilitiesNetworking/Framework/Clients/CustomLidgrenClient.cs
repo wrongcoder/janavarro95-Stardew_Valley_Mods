@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Netcode;
 using ModdedUtilitiesNetworking.Framework.Extentions;
+using ModdedUtilitiesNetworking.Framework.Messages;
 
 namespace ModdedUtilitiesNetworking.Framework.Clients
 {
@@ -142,9 +143,24 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             using (NetBufferWriteStream bufferWriteStream = new NetBufferWriteStream((NetBuffer)message1))
             {
                 using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream))
-                    message.Write(writer);
+                {
+                    if (message.MessageType != 20)
+                    {
+                        message.Write(writer);
+                    }
+                    else
+                    {
+                        OutgoingMessageBase.WriteFromMessage(message, writer);
+                    }
+                }
+                    
             }
-                int num = (int)this.client.SendMessage(message1, NetDeliveryMethod.ReliableOrdered);       
+            
+                int num = (int)this.client.SendMessage(message1, NetDeliveryMethod.ReliableOrdered);
+            if (num == (int)NetSendResult.Sent)
+            {
+                ModCore.monitor.Log("DONE Writing message from client!");
+            }
         }
 
         private void parseDataMessageFromServer(NetIncomingMessage dataMsg)
@@ -167,6 +183,7 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
 
         protected override void processIncomingMessage(IncomingMessage message)
         {
+            ModCore.monitor.Log("PROCESS PACKET" + ((int)message.MessageType).ToString());
             base.processIncomingMessage(message);
 
             //Packet signiture for functions that return nothing.
@@ -176,7 +193,7 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
                 object[] obj = message.Reader.ReadModdedInfoPacket();
                 string functionName = (string)obj[0];
                 string classType = (string)obj[1];
-                object actualObject = ModCore.processTypes(message.Reader, classType);
+                object actualObject = ModCore.processTypesToRead(message.Reader, classType);
                 ModCore.processVoidFunction(functionName, actualObject);
                 return;
             }

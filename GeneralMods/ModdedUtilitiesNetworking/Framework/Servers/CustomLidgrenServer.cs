@@ -1,4 +1,5 @@
 ﻿using Lidgren.Network;
+using ModdedUtilitiesNetworking.Framework.Messages;
 using ModdedUtilitiesNetworking.Framework.Network;
 using StardewValley;
 using StardewValley.Network;
@@ -154,12 +155,6 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             }
         }
 
-        protected override void playerDisconnected(long disconnectee)
-        {
-            base.playerDisconnected(disconnectee);
-            this.introductionsSent.Remove(this.peers[disconnectee]);
-            this.peers.RemoveLeft(disconnectee);
-        }
 
         private void parseDataMessageFromClient(NetIncomingMessage dataMsg)
         {
@@ -201,8 +196,10 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             NetOutgoingMessage message1 = this.server.CreateMessage();
             using (NetBufferWriteStream bufferWriteStream = new NetBufferWriteStream((NetBuffer)message1))
             {
-                using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream))
+                using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream)) {
                     message.Write(writer);
+                    //OutgoingMessageBase.WriteFromMessage(message, writer);
+                }
             }
             int num = (int)this.server.SendMessage(message1, connection, NetDeliveryMethod.ReliableOrdered);
         }
