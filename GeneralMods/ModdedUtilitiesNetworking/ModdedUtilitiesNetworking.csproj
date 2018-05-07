@@ -53,7 +53,8 @@
     <Compile Include="Framework\Clients\CustomGalaxyClient.cs" />
     <Compile Include="Framework\Clients\CustomLidgrenClient.cs" />
     <Compile Include="Framework\Delegates\DelegateInfo.cs" />
-    <Compile Include="Framework\Extentions\BinaryReadWriteExtentions.cs" />
+    <Compile Include="Framework\Extentions\GenericExtentions.cs" />
+    <Compile Include="Framework\Extentions\XNAExtentions.cs" />
     <Compile Include="Framework\Messages\OutgoingMessageBase.cs" />
     <Compile Include="Framework\CustomMultiplayer.cs" />
     <Compile Include="Framework\Network\NetBufferReadStream.cs" />

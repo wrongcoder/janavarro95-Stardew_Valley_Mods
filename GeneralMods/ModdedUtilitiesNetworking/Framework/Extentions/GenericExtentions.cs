@@ -10,15 +10,8 @@ using Netcode;
 
 namespace ModdedUtilitiesNetworking.Framework.Extentions
 {
-    public static class BinaryReadWriteExtentions
+    public static class GenericExtentions
     {       
-      public static Vector3 ReadVector3(this BinaryReader reader)
-      {
-            float x=reader.ReadSingle();
-            float y=reader.ReadSingle();
-            float z=reader.ReadSingle();
-            return new Vector3(x, y, z);
-      }
         
        public static string ReadString(this BinaryReader reader)
         {

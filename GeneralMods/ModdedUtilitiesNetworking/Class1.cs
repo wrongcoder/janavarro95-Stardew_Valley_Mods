@@ -46,6 +46,7 @@ namespace ModdedUtilitiesNetworking
 
             possibleVoidFunctions.Add(displayMessageString, new voidFunc(displayMessage));
             initializeBasicTypes();
+
             
         }
 
@@ -150,10 +151,29 @@ namespace ModdedUtilitiesNetworking
         /// Initialize basic supported types.
         /// </summary>
         public static void initializeBasicTypes()
+        {        
+            addObjectType(monitor,typeof(String), new ReadWriter(new reader(GenericExtentions.ReadString), new writer(GenericExtentions.WriteString)));
+            addObjectType(monitor,typeof(List<String>), new ReadWriter(new reader(GenericExtentions.ReadStringList), new writer(GenericExtentions.WriteStringList)));
+
+        }
+
+        /// <summary>
+        /// Safely adds types
+        /// </summary>
+        /// <param name="monitor"></param>
+        /// <param name="t"></param>
+        /// <param name="readWriter"></param>
+        public static void addObjectType(IMonitor monitor,Type t, ReadWriter readWriter)
         {
-
-            objectTypes.Add(typeof(String).ToString(), new ReadWriter(new reader(BinaryReadWriteExtentions.ReadString), new writer(BinaryReadWriteExtentions.WriteString)));
-
+            if (objectTypes.ContainsKey(t.ToString()) == false)
+            {
+                objectTypes.Add(t.ToString(), readWriter);
+                monitor.Log("Added supported type: " + t.ToString() + " to ModdedUtilitiesNetworking.",LogLevel.Info);
+            }
+            else
+            {
+                monitor.Log("Error adding supported type: " + t.ToString() + " to ModdedUtilitiesNetworking. Type already supported!", LogLevel.Alert);
+            }
         }
 
         /// <summary>
