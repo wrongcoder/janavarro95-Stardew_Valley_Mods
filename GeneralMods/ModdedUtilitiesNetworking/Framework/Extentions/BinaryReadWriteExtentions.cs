@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Netcode;
+
+
 namespace ModdedUtilitiesNetworking.Framework.Extentions
 {
     public static class BinaryReadWriteExtentions
@@ -27,6 +29,39 @@ namespace ModdedUtilitiesNetworking.Framework.Extentions
         public static void WriteString(this BinaryWriter writer, object str)
         {
             writer.WriteString((string)str);
+            
+        }
+
+        /// <summary>
+        /// Writes a string list to a binary stream.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="strList">The list to write.</param>
+        public static void WriteStringList(this BinaryWriter writer, object strList)
+        {
+            List<string> list =(List<string>)strList;
+            writer.Write(list.Count);
+            for(int i=0; i<list.Count; i++)
+            {
+                writer.WriteString(list.ElementAt(i));
+            }
+        }
+
+        /// <summary>
+        /// Reads a string list from the binary data.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static List<String> ReadStringList(this BinaryReader reader)
+        {
+            int count = reader.ReadInt32();
+            List<string> strList = new List<string>();
+            for(int i = 0; i < count; i++)
+            {
+                string s=reader.ReadString();
+                strList.Add(s);
+            }
+            return strList;
         }
 
         /// <summary>
