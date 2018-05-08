@@ -3,6 +3,7 @@ using ModdedUtilitiesNetworking.Framework;
 using ModdedUtilitiesNetworking.Framework.Clients;
 using ModdedUtilitiesNetworking.Framework.Delegates;
 using ModdedUtilitiesNetworking.Framework.Extentions;
+using ModdedUtilitiesNetworking.Framework.Extentions.StrardewValleyExtentions;
 using ModdedUtilitiesNetworking.Framework.Servers;
 using StardewModdingAPI;
 using StardewValley;
@@ -15,10 +16,25 @@ using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using ModdedUtilitiesNetworking.Framework.Features;
 using static ModdedUtilitiesNetworking.Framework.Delegates.DelegateInfo;
 
 namespace ModdedUtilitiesNetworking
 {
+    /*
+     *When adding a new supported type... 
+     * 1.Make reader and writer overload functions
+     * 2.Add supported type to objectTypes list using addObjectType or addCustomObjectType
+     * 
+     * When adding a new supported function...
+     * 1.Make sure the supported type is handled first!
+     * 2.Add in a function that will accept the object data and parse the data to do what you want.
+     * 3. Add funtion to possibleVoidFunctions
+     * 
+     * 
+     * TODO:
+     *  Make CustomGalaxyClient work.
+     */
     public class ModCore : Mod
     {
         public static CustomMultiplayer multiplayer;
@@ -45,6 +61,7 @@ namespace ModdedUtilitiesNetworking
             multiplayer = new CustomMultiplayer();
 
             possibleVoidFunctions.Add(displayMessageString, new voidFunc(displayMessage));
+            possibleVoidFunctions.Add(Framework.Features.Stardew.MessageFeatures.FSTRING_SendHUDMessageWithIcon, Framework.Features.Stardew.MessageFeatures.SendHUDMessageWithIcon);
             initializeBasicTypes();
 
             
@@ -56,7 +73,7 @@ namespace ModdedUtilitiesNetworking
             
                 if (e.KeyPressed==Microsoft.Xna.Framework.Input.Keys.K)
                 {
-                    multiplayer.sendModInfoReturnVoid(displayMessageString, typeof(String), (object)"My love is like fire.");
+                    multiplayer.sendModInfoReturnVoid(Framework.Features.Stardew.MessageFeatures.FSTRING_SendHUDMessageWithIcon, MessagesExtentions.HUDMessageIconIdentifier, new HUDMessage("My love is like fire",1));
                 }
         }
 
@@ -158,6 +175,7 @@ namespace ModdedUtilitiesNetworking
             addObjectType(monitor,typeof(List<String>), new ReadWriter(new reader(GenericExtentions.ReadStringList), new writer(GenericExtentions.WriteStringList)));
             addObjectType(monitor, typeof(DataInfo), new ReadWriter(new reader(GenericExtentions.ReadDataInfo), new writer(GenericExtentions.WriteDataInfo)));
 
+            addObjectCustomType(monitor, MessagesExtentions.HUDMessageIconIdentifier, new ReadWriter(new reader(MessagesExtentions.ReadHUDMessageWithIcon), new writer(MessagesExtentions.WriteHUDMessageWithIcon)));
         }
 
         /// <summary>
@@ -176,6 +194,25 @@ namespace ModdedUtilitiesNetworking
             else
             {
                 monitor.Log("Error adding supported type: " + t.ToString() + " to ModdedUtilitiesNetworking. Type already supported!", LogLevel.Alert);
+            }
+        }
+
+        /// <summary>
+        /// Adds "types" using a string convention to be able to allow processing of the same class type in different ways.
+        /// </summary>
+        /// <param name="monitor"></param>
+        /// <param name="t"></param>
+        /// <param name="readWriter"></param>
+        public static void addObjectCustomType(IMonitor monitor, string t, ReadWriter readWriter)
+        {
+            if (objectTypes.ContainsKey(t.ToString()) == false)
+            {
+                objectTypes.Add(t, readWriter);
+                monitor.Log("Added custom supported type: " + t.ToString() + " to ModdedUtilitiesNetworking.", LogLevel.Info);
+            }
+            else
+            {
+                monitor.Log("Error custom adding supported type: " + t.ToString() + " to ModdedUtilitiesNetworking. Type already supported!", LogLevel.Alert);
             }
         }
 

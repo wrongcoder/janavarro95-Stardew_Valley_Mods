@@ -77,7 +77,7 @@ namespace ModdedUtilitiesNetworking.Framework
         }
 
         /// <summary>
-        /// Creates a net outgoing message that is written specifically to call a void function when sent.
+        /// Creates a net outgoing message that is written specifically to call a void function when sent. USed to specifiy types and specific ways to handle them.
         /// </summary>
         /// <param name="functionName"></param>
         /// <param name="objectParametersType"></param>
@@ -121,6 +121,22 @@ namespace ModdedUtilitiesNetworking.Framework
             Farmer f = Game1.player;
 
             OutgoingMessage message =ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f);
+
+            ModCore.multiplayer.sendMessage(message);
+        }
+
+        /// <summary>
+        /// Creates all of the necessary parameters for the outgoing message to be sent to the server/client on what to do and how to handle the data sent.
+        /// This message written will attempt to access a function that doesn't return anything. Essentially null.
+        /// </summary>
+        /// <param name="uniqueID"></param>
+        /// <param name="classType"></param>
+        /// <param name="data"></param>
+        public void sendModInfoReturnVoid(string uniqueID, string classType, object data)
+        {
+            Farmer f = Game1.player;
+
+            OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f);
 
             ModCore.multiplayer.sendMessage(message);
         }

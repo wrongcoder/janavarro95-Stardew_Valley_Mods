@@ -197,8 +197,14 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             using (NetBufferWriteStream bufferWriteStream = new NetBufferWriteStream((NetBuffer)message1))
             {
                 using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream)) {
-                    message.Write(writer);
-                    //OutgoingMessageBase.WriteFromMessage(message, writer);
+                    if (message.MessageType != 20)
+                    {
+                        message.Write(writer);
+                    }
+                    else
+                    {
+                        OutgoingMessageBase.WriteFromMessage(message, writer);
+                    }
                 }
             }
             int num = (int)this.server.SendMessage(message1, connection, NetDeliveryMethod.ReliableOrdered);

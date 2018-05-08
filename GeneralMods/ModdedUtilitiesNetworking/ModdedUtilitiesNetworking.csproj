@@ -55,7 +55,9 @@
     <Compile Include="Framework\DataInfo.cs" />
     <Compile Include="Framework\Delegates\DelegateInfo.cs" />
     <Compile Include="Framework\Extentions\GenericExtentions.cs" />
+    <Compile Include="Framework\Extentions\StrardewValleyExtentions\MessagesExtentions.cs" />
     <Compile Include="Framework\Extentions\XNAExtentions.cs" />
+    <Compile Include="Framework\Features\Stardew\MessageFeatures.cs" />
     <Compile Include="Framework\Messages\OutgoingMessageBase.cs" />
     <Compile Include="Framework\CustomMultiplayer.cs" />
     <Compile Include="Framework\Network\NetBufferReadStream.cs" />
