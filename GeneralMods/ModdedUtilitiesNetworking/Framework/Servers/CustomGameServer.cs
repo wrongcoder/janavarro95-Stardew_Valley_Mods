@@ -379,20 +379,44 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                 case 5:
                     this.warpFarmer(message.SourceFarmer, message.Reader.ReadInt16(), message.Reader.ReadInt16(), message.Reader.ReadString(), (int)message.Reader.ReadByte() == 1);
                     break;
-                case 20:
+                case Enums.MessageTypes.SendOneWay:
                     object[] obj = message.Reader.ReadModdedInfoPacket();
                     string functionName = (string)obj[0];
                     string classType = (string)obj[1];
                     object actualObject = ModCore.processTypesToRead(message.Reader, classType);
                     ModCore.processVoidFunction(functionName, actualObject);
                     break;
+                case Enums.MessageTypes.SendToAll:
+                    object[] obj2 = message.Reader.ReadModdedInfoPacket();
+                    string functionName2 = (string)obj2[0];
+                    string classType2 = (string)obj2[1];
+                    object actualObject2 = ModCore.processTypesToRead(message.Reader, classType2);
+                    ModCore.processVoidFunction(functionName2, actualObject2);
+                    this.rebroadcastClientMessageToAllClients(message);
+                    break;
                 default:
                     ModCore.multiplayer.processIncomingMessage(message);
                     break;
             }
+            //this.rebroadcastClientMessage(message);
+        }
 
+        /// <summary>
+        /// Takes an incoming client message and sends it back to all clients to process.
+        /// </summary>
+        /// <param name="message"></param>
+        private void rebroadcastClientMessageToAllClients(IncomingMessage message)
+        {
+            byte messageType = Enums.MessageTypes.SendOneWay;
+            Farmer f = Game1.player;         
+            object data = message.Data.Clone();
+            OutgoingMessage message1 = new OutgoingMessage(messageType, f, data);
+            foreach (long peerId in (IEnumerable<long>)Game1.otherFarmers.Keys)
+            {
+                ModCore.monitor.Log("RESEND MESSAGE TO CLIENT!!!", StardewModdingAPI.LogLevel.Alert);
+                    this.sendMessage(peerId, message1);
+            }
 
-            this.rebroadcastClientMessage(message);
         }
 
         private void rebroadcastClientMessage(IncomingMessage message)

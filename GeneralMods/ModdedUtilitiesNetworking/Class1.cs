@@ -73,7 +73,7 @@ namespace ModdedUtilitiesNetworking
             
                 if (e.KeyPressed==Microsoft.Xna.Framework.Input.Keys.K)
                 {
-                    multiplayer.sendModInfoReturnVoid(Framework.Features.Stardew.MessageFeatures.FSTRING_SendHUDMessageWithIcon, MessagesExtentions.HUDMessageIconIdentifier, new HUDMessage("My love is like fire",1));
+                    multiplayer.sendModInfoReturnVoid(Framework.Features.Stardew.MessageFeatures.FSTRING_SendHUDMessageWithIcon, MessagesExtentions.HUDMessageIconIdentifier, new HUDMessage("My love is like fire",1),Framework.Enums.MessageTypes.messageTypes.SendToAll);
                 }
         }
 

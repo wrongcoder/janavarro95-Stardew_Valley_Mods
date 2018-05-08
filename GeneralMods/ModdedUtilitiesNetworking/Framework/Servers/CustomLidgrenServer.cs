@@ -197,7 +197,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             using (NetBufferWriteStream bufferWriteStream = new NetBufferWriteStream((NetBuffer)message1))
             {
                 using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream)) {
-                    if (message.MessageType != 20)
+                    if (message.MessageType < 20)
                     {
                         message.Write(writer);
                     }

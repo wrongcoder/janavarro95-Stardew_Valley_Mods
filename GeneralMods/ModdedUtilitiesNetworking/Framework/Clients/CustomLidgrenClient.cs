@@ -30,6 +30,11 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             return "";
         }
 
+        public virtual NetClient getClient()
+        {
+            return this.client;
+        }
+
         protected override string getHostUserName()
         {
             return this.client.ServerConnection.RemoteEndPoint.Address.ToString();
@@ -144,19 +149,19 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             {
                 using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream))
                 {
-                    if (message.MessageType != 20)
+                    if (message.MessageType <20)
                     {
                         message.Write(writer);
                     }
                     else
                     {
-                        OutgoingMessageBase.WriteFromMessage(message, writer);
+                        OutgoingMessageBase.WriteFromMessage(message, writer);   
                     }
                 }
                     
             }
             
-                int num = (int)this.client.SendMessage(message1, NetDeliveryMethod.ReliableOrdered);
+            int num = (int)this.client.SendMessage(message1, NetDeliveryMethod.ReliableOrdered);
             if (num == (int)NetSendResult.Sent)
             {
                 ModCore.monitor.Log("DONE Writing message from client!");
@@ -187,9 +192,8 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             base.processIncomingMessage(message);
 
             //Packet signiture for functions that return nothing.
-            if (message.MessageType == 20)
+            if (message.MessageType == Enums.MessageTypes.SendOneWay || message.MessageType == Enums.MessageTypes.SendToAll)
             {
-
                 object[] obj = message.Reader.ReadModdedInfoPacket();
                 string functionName = (string)obj[0];
                 string classType = (string)obj[1];
@@ -197,8 +201,6 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
                 ModCore.processVoidFunction(functionName, actualObject);
                 return;
             }
-
-
 
             //message.Reader.ReadChar();
             //Write Binary ententions reader

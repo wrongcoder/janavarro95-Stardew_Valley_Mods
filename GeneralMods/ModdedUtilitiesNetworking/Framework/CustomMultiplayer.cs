@@ -36,26 +36,28 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <param name="message"></param>
         public void sendMessage(OutgoingMessage message)
         {
-            if (Game1.server != null)
-            {
-                foreach (long peerId in (IEnumerable<long>)Game1.otherFarmers.Keys)
+                if (Game1.server != null)
                 {
-                    Game1.server.sendMessage(peerId, message);
+                    foreach (long peerId in (IEnumerable<long>)Game1.otherFarmers.Keys)
+                    {
+                        Game1.server.sendMessage(peerId, message);
+                    }
                 }
-            }
-            if (Game1.client != null)
-            {
-                if (Game1.client is CustomLidgrenClient) {
-                    (Game1.client as CustomLidgrenClient).sendMessage(message);
-                    return;
-                }
-                if (Game1.client is CustomGalaxyClient)
+                if (Game1.client != null)
                 {
-                    (Game1.client as CustomGalaxyClient).sendMessage(message);
-                    return;
-                }
-                ModCore.monitor.Log("Error sending server message!!!");
+                    if (Game1.client is CustomLidgrenClient)
+                    {
+                        (Game1.client as CustomLidgrenClient).sendMessage(message);
+                        return;
+                    }
+                    if (Game1.client is CustomGalaxyClient)
+                    {
+                        (Game1.client as CustomGalaxyClient).sendMessage(message);
+                        return;
+                    }
+                    ModCore.monitor.Log("Error sending server message!!!");
 
+                
             }
         }
 
@@ -84,15 +86,21 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <param name="data"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        public OutgoingMessage sendOutGoingMessageReturnVoid(string functionName, string objectParametersType, object data, Farmer source)
+        public OutgoingMessage sendOutGoingMessageReturnVoid(string functionName, string objectParametersType, object data, Farmer source,Enums.MessageTypes.messageTypes sendingInfo)
         {
-            OutgoingMessage message = new OutgoingMessage((byte)20, source, makeDataArray(functionName, objectParametersType, data));
+            byte bite = new byte();
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendOneWay) bite = Enums.MessageTypes.SendOneWay;
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToAll) bite = Enums.MessageTypes.SendToAll;
+            OutgoingMessage message = new OutgoingMessage(bite, source, makeDataArray(functionName, objectParametersType, data));
             return message;
         }
 
-        public OutgoingMessage sendOutGoingMessageReturnVoid(string functionName, Type objectParametersType, object data, Farmer source)
+        public OutgoingMessage sendOutGoingMessageReturnVoid(string functionName, Type objectParametersType, object data, Farmer source, Enums.MessageTypes.messageTypes sendingInfo)
         {
-            OutgoingMessage message = new OutgoingMessage((byte)20, source, makeDataArray(functionName, objectParametersType.ToString(), data));
+            byte bite=new byte();
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendOneWay) bite = Enums.MessageTypes.SendOneWay;
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToAll) bite = Enums.MessageTypes.SendToAll;
+            OutgoingMessage message = new OutgoingMessage(bite, source, makeDataArray(functionName, objectParametersType.ToString(), data));
             return message;
         }
 
@@ -116,11 +124,11 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <param name="uniqueID"></param>
         /// <param name="classType"></param>
         /// <param name="data"></param>
-        public void sendModInfoReturnVoid(string uniqueID,Type classType,object data)
+        public void sendModInfoReturnVoid(string uniqueID,Type classType,object data, Enums.MessageTypes.messageTypes sendingInfo)
         {
             Farmer f = Game1.player;
 
-            OutgoingMessage message =ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f);
+            OutgoingMessage message =ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f, sendingInfo);
 
             ModCore.multiplayer.sendMessage(message);
         }
@@ -132,11 +140,11 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <param name="uniqueID"></param>
         /// <param name="classType"></param>
         /// <param name="data"></param>
-        public void sendModInfoReturnVoid(string uniqueID, string classType, object data)
+        public void sendModInfoReturnVoid(string uniqueID, string classType, object data, Enums.MessageTypes.messageTypes sendingInfo)
         {
             Farmer f = Game1.player;
 
-            OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f);
+            OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f,sendingInfo);
 
             ModCore.multiplayer.sendMessage(message);
         }
