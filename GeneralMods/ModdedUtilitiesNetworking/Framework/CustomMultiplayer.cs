@@ -229,5 +229,31 @@ namespace ModdedUtilitiesNetworking.Framework
         }
 
 
+        public static Farmer getServerHost()
+        {
+            return Game1.serverHost.Value;
+        }
+
+        public static Farmer getPlayerOne()
+        {
+            return getServerHost();
+        }
+
+        public static Farmer getPlayerTwo()
+        {
+            return Game1.otherFarmers.ElementAt(0).Value;
+        }
+
+        public static Farmer getPlayerThree()
+        {
+            return Game1.otherFarmers.ElementAt(1).Value;
+        }
+
+        public static Farmer getPlayerFour()
+        {
+            return Game1.otherFarmers.ElementAt(2).Value;
+        }
+
+
     }
 }
