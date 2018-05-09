@@ -34,7 +34,7 @@ namespace ModdedUtilitiesNetworking.Framework
         /// Sends an outgoing message to appropriate players.
         /// </summary>
         /// <param name="message"></param>
-        public void sendMessage(OutgoingMessage message)
+        private void sendMessage(OutgoingMessage message)
         {
                 if (Game1.server != null)
                 {
@@ -104,10 +104,55 @@ namespace ModdedUtilitiesNetworking.Framework
             return message;
         }
 
+        public OutgoingMessage sendOutGoingMessageReturnVoid(string functionName, string objectParametersType, object data, Farmer source, Enums.MessageTypes.messageTypes sendingInfo, Farmer recipient)
+        {
+            byte bite = new byte();
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendOneWay) bite = Enums.MessageTypes.SendOneWay;
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToAll) bite = Enums.MessageTypes.SendToAll;
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToSpecific) bite = Enums.MessageTypes.SendToSpecific;
+            OutgoingMessage message = new OutgoingMessage(bite, source, makeDataArray(functionName, objectParametersType, data,recipient));
+            return message;
+        }
+
+        public OutgoingMessage sendOutGoingMessageReturnVoid(string functionName, Type objectParametersType, object data, Farmer source, Enums.MessageTypes.messageTypes sendingInfo, Farmer recipient)
+        {
+            byte bite = new byte();
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendOneWay) bite = Enums.MessageTypes.SendOneWay;
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToAll) bite = Enums.MessageTypes.SendToAll;
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToSpecific) bite = Enums.MessageTypes.SendToSpecific;
+            OutgoingMessage message = new OutgoingMessage(bite, source, makeDataArray(functionName, objectParametersType.ToString(), data, recipient));
+            return message;
+        }
+
+
 
         public object[] makeDataArray(string functionName, string objectParametersType, object data)
         {
             DataInfo datainfo = new DataInfo(objectParametersType, data);
+            object[] obj = new object[3]
+            {
+                functionName,
+                typeof(DataInfo).ToString(),
+                datainfo,
+            };
+            return obj;
+        }
+
+        public object[] makeDataArray(string functionName, string objectParametersType, object data, Farmer recipient)
+        {
+            DataInfo datainfo = new DataInfo(objectParametersType, data,recipient);
+            object[] obj = new object[3]
+            {
+                functionName,
+                typeof(DataInfo).ToString(),
+                datainfo,
+            };
+            return obj;
+        }
+
+        public object[] makeDataArray(string functionName, string objectParametersType, object data, long recipient)
+        {
+            DataInfo datainfo = new DataInfo(objectParametersType, data, recipient.ToString());
             object[] obj = new object[3]
             {
                 functionName,
@@ -124,30 +169,65 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <param name="uniqueID"></param>
         /// <param name="classType"></param>
         /// <param name="data"></param>
-        public void sendModInfoReturnVoid(string uniqueID,Type classType,object data, Enums.MessageTypes.messageTypes sendingInfo)
+        public void sendMessage(string uniqueID, Type classType, object data, Enums.MessageTypes.messageTypes sendingInfo, Farmer recipient = null)
         {
             Farmer f = Game1.player;
 
-            OutgoingMessage message =ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f, sendingInfo);
+            if ((sendingInfo == Enums.MessageTypes.messageTypes.SendOneWay || sendingInfo == Enums.MessageTypes.messageTypes.SendToAll))
+            {
+                OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f, sendingInfo);
+                ModCore.multiplayer.sendMessage(message);
+                return;
+            }
 
-            ModCore.multiplayer.sendMessage(message);
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToSpecific && recipient != null)
+            {
+                OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f, sendingInfo, recipient);
+                ModCore.multiplayer.sendMessage(message);
+                return;
+            }
+
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToSpecific && recipient == null)
+            {
+                ModCore.monitor.Log("ERROR: Attempted to send a target specific message to a NULL recipient");
+                return;
+            }
         }
 
+
         /// <summary>
-        /// Creates all of the necessary parameters for the outgoing message to be sent to the server/client on what to do and how to handle the data sent.
-        /// This message written will attempt to access a function that doesn't return anything. Essentially null.
+        /// A way to send mod info across the net.
         /// </summary>
         /// <param name="uniqueID"></param>
         /// <param name="classType"></param>
         /// <param name="data"></param>
-        public void sendModInfoReturnVoid(string uniqueID, string classType, object data, Enums.MessageTypes.messageTypes sendingInfo)
+        /// <param name="sendingInfo"></param>
+        /// <param name="recipient"></param>
+        public void sendMessage(string uniqueID, string classType, object data, Enums.MessageTypes.messageTypes sendingInfo, Farmer recipient=null)
         {
             Farmer f = Game1.player;
 
-            OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f,sendingInfo);
+            if ((sendingInfo == Enums.MessageTypes.messageTypes.SendOneWay || sendingInfo == Enums.MessageTypes.messageTypes.SendToAll))
+            {
+                OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f, sendingInfo);
+                ModCore.multiplayer.sendMessage(message);
+                return;
+            }
 
-            ModCore.multiplayer.sendMessage(message);
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToSpecific && recipient!=null)
+            {
+                OutgoingMessage message = ModCore.multiplayer.sendOutGoingMessageReturnVoid(uniqueID, classType, data, f, sendingInfo,recipient);
+                ModCore.multiplayer.sendMessage(message);
+                return;
+            }
+
+            if (sendingInfo == Enums.MessageTypes.messageTypes.SendToSpecific && recipient == null)
+            {
+                ModCore.monitor.Log("ERROR: Attempted to send a target specific message to a NULL recipient");
+                return;
+            }
         }
+
 
     }
 }

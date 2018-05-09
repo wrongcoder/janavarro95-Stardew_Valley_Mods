@@ -394,6 +394,25 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                     ModCore.processVoidFunction(functionName2, actualObject2);
                     this.rebroadcastClientMessageToAllClients(message);
                     break;
+                case Enums.MessageTypes.SendToSpecific:
+                    //Read in specific info.
+                    object[] obj3 = message.Reader.ReadModdedInfoPacket();
+                    string functionName3 = (string)obj3[0];
+                    string classType3 = (string)obj3[1];
+                    //Parse 
+                    object actualObject3 = ModCore.processTypesToRead(message.Reader, classType3);
+                    DataInfo info = (DataInfo)actualObject3;
+
+                    if (info.recipientID == Game1.player.UniqueMultiplayerID.ToString())
+                    {
+                        ModCore.processVoidFunction(functionName3, actualObject3);
+                    }
+                    else
+                    {
+                        this.sendMessageToSpecificClient(message, info);
+                    }
+
+                    break;
                 default:
                     ModCore.multiplayer.processIncomingMessage(message);
                     break;
@@ -416,7 +435,24 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                 ModCore.monitor.Log("RESEND MESSAGE TO CLIENT!!!", StardewModdingAPI.LogLevel.Alert);
                     this.sendMessage(peerId, message1);
             }
+        }
 
+        private void sendMessageToSpecificClient(IncomingMessage message, long farmerID)
+        {
+            byte messageType = Enums.MessageTypes.SendOneWay;
+            Farmer f = Game1.player;
+            object data = message.Data.Clone();
+            OutgoingMessage message1 = new OutgoingMessage(messageType, f, data);
+            this.sendMessage(farmerID, message1);
+        }
+
+        private void sendMessageToSpecificClient(IncomingMessage message, DataInfo info)
+        {
+            byte messageType = Enums.MessageTypes.SendOneWay;
+            Farmer f = Game1.player;
+            object data = message.Data.Clone();
+            OutgoingMessage message1 = new OutgoingMessage(messageType, f, data);
+            this.sendMessage(long.Parse(info.recipientID), message1);
         }
 
         private void rebroadcastClientMessage(IncomingMessage message)

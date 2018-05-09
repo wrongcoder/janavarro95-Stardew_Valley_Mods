@@ -96,8 +96,8 @@ namespace ModdedUtilitiesNetworking.Framework.Extentions
         {
             String key=reader.ReadString();
             object data = ModCore.processTypesToRead(reader, key);
-
-            DataInfo info = new DataInfo(key,data);
+            string ID = reader.ReadString();
+            DataInfo info = new DataInfo(key,data,ID);
             return info;
         }
         
@@ -115,6 +115,7 @@ namespace ModdedUtilitiesNetworking.Framework.Extentions
             writer.WriteString(dataInfo.type);
             ModCore.monitor.Log("WRITE DATA INFO FUNCTION3: " + dataInfo.type);
             ModCore.processTypesToWrite(writer, dataInfo.type, dataInfo.data);
+            writer.WriteString(dataInfo.recipientID);
         }
 
         //Can do custom classes here for reading and writing.

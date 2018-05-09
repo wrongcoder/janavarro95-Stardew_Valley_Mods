@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StardewValley;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace ModdedUtilitiesNetworking.Framework
     {
         public string type;
         public object data;
+        public string recipientID;
 
         public DataInfo()
         {
@@ -19,8 +21,21 @@ namespace ModdedUtilitiesNetworking.Framework
         {
             this.type = Type;
             this.data = Data;
+            this.recipientID = "";
         }
 
+        public DataInfo(string Type, object Data, Farmer farmer)
+        {
+            this.type = Type;
+            this.data = Data;
+            this.recipientID = farmer.UniqueMultiplayerID.ToString();
+        }
 
+        public DataInfo(string Type, object Data, string uniqueID)
+        {
+            this.type = Type;
+            this.data = Data;
+            this.recipientID = uniqueID;
+        }
     }
 }

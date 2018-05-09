@@ -71,10 +71,12 @@ namespace ModdedUtilitiesNetworking
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
             
+            /*
                 if (e.KeyPressed==Microsoft.Xna.Framework.Input.Keys.K)
                 {
-                    multiplayer.sendModInfoReturnVoid(Framework.Features.Stardew.MessageFeatures.FSTRING_SendHUDMessageWithIcon, MessagesExtentions.HUDMessageIconIdentifier, new HUDMessage("My love is like fire",1),Framework.Enums.MessageTypes.messageTypes.SendToAll);
+                    //multiplayer.sendMessage(Framework.Features.Stardew.MessageFeatures.FSTRING_SendHUDMessageWithIcon, MessagesExtentions.HUDMessageIconIdentifier, new HUDMessage("My love is like fire",1),Framework.Enums.MessageTypes.messageTypes.SendToSpecific,Game1.otherFarmers.ElementAt(0).Value);
                 }
+            */
         }
 
         /// <summary>
