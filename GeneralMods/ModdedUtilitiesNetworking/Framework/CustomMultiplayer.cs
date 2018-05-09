@@ -229,29 +229,84 @@ namespace ModdedUtilitiesNetworking.Framework
         }
 
 
+        /// <summary>
+        /// Get's the server host farmer.
+        /// </summary>
+        /// <returns></returns>
         public static Farmer getServerHost()
         {
             return Game1.serverHost.Value;
         }
 
+        /// <summary>
+        /// Get's the farmer in the player one slot also known as player 1.
+        /// </summary>
+        /// <returns></returns>
         public static Farmer getPlayerOne()
         {
             return getServerHost();
         }
 
+        /// <summary>
+        /// Get's the farmer in the player two slot for the server.
+        /// </summary>
+        /// <returns></returns>
         public static Farmer getPlayerTwo()
         {
             return Game1.otherFarmers.ElementAt(0).Value;
         }
 
+        /// <summary>
+        /// Get's the farmer in the player three slot for the server.
+        /// </summary>
+        /// <returns></returns>
         public static Farmer getPlayerThree()
         {
             return Game1.otherFarmers.ElementAt(1).Value;
         }
 
+        /// <summary>
+        /// Get's the farmer in the player four slot for the server.
+        /// </summary>
+        /// <returns></returns>
         public static Farmer getPlayerFour()
         {
             return Game1.otherFarmers.ElementAt(2).Value;
+        }
+
+
+        /// <summary>
+        /// Gets all farmers that are not the current player.
+        /// </summary>
+        /// <returns></returns>
+        public static List<Farmer> getAllFarmersExceptThisOne()
+        {
+            Farmer player = Game1.player;
+
+            Farmer player1 = getPlayerOne();
+            Farmer player2 = getPlayerTwo();
+            Farmer player3 = getPlayerThree();
+            Farmer player4 = getPlayerFour();
+
+            List<Farmer> otherFarmers=new List<Farmer>();
+
+            if (player1 != null)
+            {
+                if (player != player1) otherFarmers.Add(player1);
+            }
+            if (player2 != null)
+            {
+                if (player != player2) otherFarmers.Add(player2);
+            }
+            if (player3 != null)
+            {
+                if (player != player3) otherFarmers.Add(player3);
+            }
+            if (player4 != null)
+            {
+                if (player != player4) otherFarmers.Add(player4);
+            }
+                return otherFarmers;
         }
 
 
