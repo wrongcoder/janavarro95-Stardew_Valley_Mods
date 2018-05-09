@@ -25,6 +25,8 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             this.address = address;
         }
 
+      
+
         public override string getUserID()
         {
             
@@ -198,8 +200,44 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
 
         protected override void processIncomingMessage(IncomingMessage message)
         {
-          
-            base.processIncomingMessage(message);
+
+            byte messageType = message.MessageType;
+            if ((uint)messageType <= 9U)
+            {
+                switch (messageType)
+                {
+                    case 1:
+                        this.receiveServerIntroduction(message.Reader);
+                        return;
+                    case 2:
+                        this.userNames[message.FarmerID] = message.Reader.ReadString();
+                        ModCore.multiplayer.processIncomingMessage(message);
+                        return;
+                    case 3:
+                        ModCore.multiplayer.processIncomingMessage(message);
+                        return;
+                    case 9:
+                        this.receiveAvailableFarmhands(message.Reader);
+                        return;
+                }
+            }
+            else if ((int)messageType != 11)
+            {
+                if ((int)messageType == 16)
+                {
+                    if (message.FarmerID != Game1.serverHost.Value.UniqueMultiplayerID)
+                        return;
+                    this.receiveUserNameUpdate(message.Reader);
+                    return;
+                }
+            }
+            else
+            {
+                this.connectionMessage = message.Reader.ReadString();
+                return;
+            }
+            ModCore.multiplayer.baseProcessMessage(message);
+
 
             //Packet signiture for functions that return nothing.
             if (message.MessageType == Enums.MessageTypes.SendOneWay || message.MessageType == Enums.MessageTypes.SendToAll)
@@ -250,7 +288,7 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             this.setUpGame();
             if (Game1.chatBox == null)
                 return;
-            Game1.chatBox.listPlayers();
+            //Game1.chatBox.listPlayers();
         }
     }
 }

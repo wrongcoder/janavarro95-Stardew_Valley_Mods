@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ModdedUtilitiesNetworking.Framework.Servers
 {
-    class CustomLidgrenServer : LidgrenServer
+    class CustomLidgrenServer : Server
     {
         private HashSet<NetConnection> introductionsSent = new HashSet<NetConnection>();
         private Bimap<long, NetConnection> peers = new Bimap<long, NetConnection>();
@@ -150,16 +150,22 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                 case NetConnectionStatus.Disconnecting:
                     if (!this.peers.ContainsRight(message.SenderConnection))
                         break;
-                    try
-                    {
-                        this.playerDisconnected(this.peers[message.SenderConnection]);
-                    }
-                    catch(Exception err)
-                    {
+                    //Forces a de-sync with money.
 
-                    }
+
+                        this.playerDisconnected(this.peers[message.SenderConnection]);
+
                     break;
             }
+        }
+
+        protected override void playerDisconnected(long disconnectee)
+        {
+            this.gameServer.playerDisconnected(disconnectee);
+            
+              this.introductionsSent.Remove(this.peers[disconnectee]);
+
+            this.peers.RemoveLeft(disconnectee);
         }
 
 

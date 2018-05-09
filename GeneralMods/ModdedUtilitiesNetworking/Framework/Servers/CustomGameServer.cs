@@ -21,6 +21,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
     {     
             public List<Server> servers = new List<Server>();
             public List<Action> pendingGameAvailableActions = new List<Action>();
+        public List<long> hasPlayerDisconnectedOnce = new List<long>();
 
         public CustomGameServer()
         {
@@ -28,7 +29,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             this.servers.Add(ModCore.multiplayer.InitServer((Server)new CustomLidgrenServer((IGameServer)this)));
             ModCore.monitor.Log("Custom Lidgren Server Created");
             ModCore.monitor.Log("Custom Game Server Created");
-            
+            hasPlayerDisconnectedOnce = new List<long>();
             try {
                 if (Program.sdk.Networking == null)
                     return;
@@ -43,16 +44,6 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             {
                 ModCore.monitor.Log("Issue creating custom galaxy game server. If you are not playing via GOG you may ignore this message.");
                 return;
-            }
-        }
-
-        public CustomGameServer(List<Server> servers)
-        {
-            this.servers = new List<Server>();
-
-            foreach(var server in servers)
-            {
-                this.servers.Add(server);
             }
         }
 
@@ -225,13 +216,23 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             ModCore.multiplayer.playerDisconnected(disconnectee);
             if (sourceFarmer == null)
                 return;
-            OutgoingMessage message = new OutgoingMessage((byte)19, sourceFarmer, new object[0]);
-            foreach (long peerId in (IEnumerable<long>)Game1.otherFarmers.Keys)
+
+            if (this.hasPlayerDisconnectedOnce.Contains(disconnectee))
             {
-                if (peerId != disconnectee)
-                    this.sendMessage(peerId, message);
+                OutgoingMessage message = new OutgoingMessage((byte)19, sourceFarmer, new object[0]);
+                foreach (long peerId in (IEnumerable<long>)Game1.otherFarmers.Keys)
+                {
+                    if (peerId != disconnectee)
+                        this.sendMessage(peerId, message);
+                }
+            }
+            else
+            {
+                this.hasPlayerDisconnectedOnce.Add(disconnectee);
             }
         }
+
+
 
         public bool isGameAvailable()
         {

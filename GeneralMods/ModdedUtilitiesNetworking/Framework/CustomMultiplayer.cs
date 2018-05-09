@@ -1,7 +1,9 @@
 ﻿using ModdedUtilitiesNetworking.Framework.Clients;
 using ModdedUtilitiesNetworking.Framework.Messages;
 using ModdedUtilitiesNetworking.Framework.Servers;
+using Netcode;
 using StardewValley;
+using StardewValley.Menus;
 using StardewValley.Network;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,12 @@ namespace ModdedUtilitiesNetworking.Framework
 {
     public class CustomMultiplayer : StardewValley.Multiplayer
     {
+        public List<long> hasConnectedOnce = new List<long>();
+
+        public CustomMultiplayer()
+        {
+            this.hasConnectedOnce = new List<long>();
+        }
 
         public override bool isClientBroadcastType(byte messageType)
         {
@@ -76,6 +84,11 @@ namespace ModdedUtilitiesNetworking.Framework
                 Game1.client.receiveMessages();
             this.tickFarmerRoots();
             this.tickLocationRoots();
+        }
+
+        public void baseProcessMessage(IncomingMessage message)
+        {
+            base.processIncomingMessage(message);
         }
 
         /// <summary>
@@ -252,6 +265,20 @@ namespace ModdedUtilitiesNetworking.Framework
             catch(Exception err)
             {
                 return null;
+            }
+        }
+
+        public override void addPlayer(NetFarmerRoot f)
+        {
+            long uniqueMultiplayerId = f.Value.UniqueMultiplayerID;
+            //Surpresses the first connected chat info message on non modded clients.
+            if (this.hasConnectedOnce.Contains(uniqueMultiplayerId))
+            {
+                base.addPlayer(f);
+            }
+            else
+            {
+                this.hasConnectedOnce.Add(uniqueMultiplayerId);
             }
         }
 
