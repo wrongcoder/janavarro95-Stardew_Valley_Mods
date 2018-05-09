@@ -51,6 +51,8 @@ namespace Omegasis.HappyBirthday.Framework
             this.SetUpPositions();
         }
 
+ 
+
         /// <summary>The method called when the game window changes size.</summary>
         /// <param name="oldBounds">The former viewport.</param>
         /// <param name="newBounds">The new viewport.</param>
@@ -196,6 +198,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (this.OkButton.containsPoint(x, y))
             {
+                if (this.BirthdaySeason == "" || this.BirthdayDay == 0) return;
                 this.HandleButtonClick(this.OkButton.name);
                 this.OkButton.scale -= 0.25f;
                 this.OkButton.scale = Math.Max(0.75f, this.OkButton.scale);

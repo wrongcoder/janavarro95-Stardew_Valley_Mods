@@ -19,7 +19,7 @@ namespace Omegasis.HappyBirthday
         ** Properties
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
-        private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
+        private string DataFilePath;
 
         /// <summary>The absolute path for the current player's legacy data file.</summary>
         private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "Player_Birthdays", $"HappyBirthday_{Game1.player.Name}.txt");
@@ -125,6 +125,8 @@ namespace Omegasis.HappyBirthday
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+
+            MultiplayerSupport.initializeMultiplayerSupport();
         }
 
 
@@ -154,6 +156,8 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+            this.DataFilePath = Path.Combine("data", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID+".json");
+
             // reset state
             this.VillagerQueue = new List<string>();
             this.PossibleBirthdayGifts = new List<Item>();
@@ -193,6 +197,8 @@ namespace Omegasis.HappyBirthday
                 if (this.IsBirthday())
                 {
                     Messages.ShowStarMessage("It's your birthday today! Happy birthday!");
+                    MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
+
 
                     Game1.player.mailbox.Add("birthdayMom");
                     Game1.player.mailbox.Add("birthdayDad");
@@ -596,5 +602,6 @@ namespace Omegasis.HappyBirthday
             }
             
         }
+
     }
 }

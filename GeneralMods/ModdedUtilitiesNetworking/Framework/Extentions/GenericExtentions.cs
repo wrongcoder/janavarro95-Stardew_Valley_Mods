@@ -108,12 +108,9 @@ namespace ModdedUtilitiesNetworking.Framework.Extentions
         /// <param name="obj"></param>
         public static void WriteDataInfo(this BinaryWriter writer, object obj)
         {
-            
-
             DataInfo dataInfo = (DataInfo)obj;
-
             writer.WriteString(dataInfo.type);
-            ModCore.monitor.Log("WRITE DATA INFO FUNCTION3: " + dataInfo.type);
+            //ModCore.monitor.Log("WRITE DATA INFO FUNCTION3: " + dataInfo.type);
             ModCore.processTypesToWrite(writer, dataInfo.type, dataInfo.data);
             writer.WriteString(dataInfo.recipientID);
         }

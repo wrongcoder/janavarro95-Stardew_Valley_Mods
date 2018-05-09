@@ -27,6 +27,7 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
 
         public override string getUserID()
         {
+            
             return "";
         }
 
@@ -62,6 +63,19 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
         }
 
         public override void disconnect(bool neatly = true)
+        {
+            if (this.client.ConnectionStatus != NetConnectionStatus.Disconnected && this.client.ConnectionStatus != NetConnectionStatus.Disconnecting)
+            {
+                if (neatly)
+                    this.sendMessage(new OutgoingMessage((byte)19, Game1.player, new object[0]));
+                this.client.FlushSendQueue();
+                this.client.Disconnect("");
+                this.client.FlushSendQueue();
+            }
+            this.connectionMessage = (string)null;
+        }
+
+        public void disconnect(string leaveMeNULL,bool neatly = true)
         {
             if (this.client.ConnectionStatus != NetConnectionStatus.Disconnected && this.client.ConnectionStatus != NetConnectionStatus.Disconnecting)
             {
@@ -162,10 +176,6 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             }
             
             int num = (int)this.client.SendMessage(message1, NetDeliveryMethod.ReliableOrdered);
-            if (num == (int)NetSendResult.Sent)
-            {
-                ModCore.monitor.Log("DONE Writing message from client!");
-            }
         }
 
         private void parseDataMessageFromServer(NetIncomingMessage dataMsg)
@@ -188,7 +198,7 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
 
         protected override void processIncomingMessage(IncomingMessage message)
         {
-            ModCore.monitor.Log("PROCESS PACKET" + ((int)message.MessageType).ToString());
+          
             base.processIncomingMessage(message);
 
             //Packet signiture for functions that return nothing.
@@ -200,6 +210,22 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
                 object actualObject = ModCore.processTypesToRead(message.Reader, classType);
                 ModCore.processVoidFunction(functionName, actualObject);
                 return;
+            }
+            else
+            {
+                if(message.MessageType == Enums.MessageTypes.SendToSpecific)
+                {
+                    object[] obj = message.Reader.ReadModdedInfoPacket();
+                    string functionName = (string)obj[0];
+                    string classType = (string)obj[1];
+                    object actualObject = ModCore.processTypesToRead(message.Reader, classType);
+                    DataInfo info = (DataInfo)actualObject;
+
+                    if (info.recipientID == Game1.player.UniqueMultiplayerID.ToString())
+                    {
+                        ModCore.processVoidFunction(functionName, actualObject);
+                    }
+                }
             }
 
             //message.Reader.ReadChar();

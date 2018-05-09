@@ -22,16 +22,29 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             public List<Server> servers = new List<Server>();
             public List<Action> pendingGameAvailableActions = new List<Action>();
 
-            public CustomGameServer()
-            {
-                this.servers = new List<Server>();
-                this.servers.Add(ModCore.multiplayer.InitServer((Server)new CustomLidgrenServer((IGameServer)this)));
-                ModCore.monitor.Log("Custom Lidgren Server Created");
-                ModCore.monitor.Log("Custom Game Server Created");
-            if (Program.sdk.Networking == null)
+        public CustomGameServer()
+        {
+            this.servers = new List<Server>();
+            this.servers.Add(ModCore.multiplayer.InitServer((Server)new CustomLidgrenServer((IGameServer)this)));
+            ModCore.monitor.Log("Custom Lidgren Server Created");
+            ModCore.monitor.Log("Custom Game Server Created");
+            
+            try {
+                if (Program.sdk.Networking == null)
                     return;
-                this.servers.Add(Program.sdk.Networking.CreateServer((IGameServer)this));
+                Server server = Program.sdk.Networking.CreateServer((IGameServer)this);
+                if (server != null)
+                {
+                    this.servers.Add(server);
+                    ModCore.monitor.Log("Custom Galaxy Server Created");
+                }
             }
+            catch(Exception err)
+            {
+                ModCore.monitor.Log("Issue creating custom galaxy game server. If you are not playing via GOG you may ignore this message.");
+                return;
+            }
+        }
 
         public CustomGameServer(List<Server> servers)
         {
@@ -78,8 +91,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
         {
             foreach (Server server in this.servers)
             {
-                if (server.connected() == true) continue;
-                server.initialize();
+                if(server!=null) server.initialize();
             }
             this.updateLobbyData();
         }
@@ -113,7 +125,17 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
         public void sendMessage(long peerId, OutgoingMessage message)
         {
             foreach (Server server in this.servers)
-                server.sendMessage(peerId, message);
+                if (server is CustomLidgrenServer)
+                {
+                    server.sendMessage(peerId, message);
+                }
+                else //If I am not a custom lidgren server ignore sending modding info to clients. The lidgren server should handle all of that.
+                {
+                    if (message.MessageType <= 19)
+                    {
+                        server.sendMessage(peerId, message);
+                    }
+                }
         }
 
         public bool canAcceptIPConnections()
@@ -468,7 +490,14 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
         private void setLobbyData(string key, string value)
         {
             foreach (Server server in this.servers)
-                server.setLobbyData(key, value);
+                try
+                {
+                    server.setLobbyData(key, value);
+                }
+                catch(Exception err)
+                {
+
+                }
         }
 
         private bool unclaimedFarmhandsExist()

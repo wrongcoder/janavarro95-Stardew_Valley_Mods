@@ -1,4 +1,5 @@
 ﻿using Galaxy.Api;
+using ModdedUtilitiesNetworking.Framework.Extentions;
 using StardewValley;
 using StardewValley.Network;
 using StardewValley.SDKs;
@@ -100,52 +101,25 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
             if (this.client == null || !this.client.Connected || this.serverId == (GalaxyID)null)
                 return;
             this.client.Send(this.serverId, message);
+            //??? I'm asuuming for galaxy net clients I don't need to include any hacks on sending data....
         }
 
         protected override void processIncomingMessage(IncomingMessage message)
         {
-            byte messageType = message.MessageType;
-            if ((uint)messageType <= 9U)
+            base.processIncomingMessage(message);
+
+            //Packet signiture for functions that return nothing.
+            if (message.MessageType == Enums.MessageTypes.SendOneWay || message.MessageType == Enums.MessageTypes.SendToAll)
             {
-                switch (messageType)
-                {
-                    case 1:
-                        this.receiveServerIntroduction(message.Reader);
-                        return;
-                    case 2:
-                        this.userNames[message.FarmerID] = message.Reader.ReadString();
-                        ModCore.multiplayer.processIncomingMessage(message);
-                        return;
-                    case 3:
-                        ModCore.multiplayer.processIncomingMessage(message);
-                        return;
-                    case 9:
-                        this.receiveAvailableFarmhands(message.Reader);
-                        return;
-                }
-            }
-            else if ((int)messageType != 11)
-            {
-                if ((int)messageType == 16)
-                {
-                    if (message.FarmerID != Game1.serverHost.Value.UniqueMultiplayerID)
-                        return;
-                    this.receiveUserNameUpdate(message.Reader);
-                    return;
-                }
-            }
-            else
-            {
-                this.connectionMessage = message.Reader.ReadString();
+                object[] obj = message.Reader.ReadModdedInfoPacket();
+                string functionName = (string)obj[0];
+                string classType = (string)obj[1];
+                object actualObject = ModCore.processTypesToRead(message.Reader, classType);
+                ModCore.processVoidFunction(functionName, actualObject);
                 return;
             }
-
-            if (message.MessageType == 20)
-            {
-                ModCore.monitor.Log("JUMPING JELLYBEANS!!!");
-            }
-
-            ModCore.multiplayer.processIncomingMessage(message); //If we don't know how to initially process the message, send it to the multiplayer function.
         }
+
+
     }
 }

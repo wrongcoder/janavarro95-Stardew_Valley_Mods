@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using ModdedUtilitiesNetworking.Framework;
+using StardewValley;
 using System.Collections.Generic;
 
 namespace Omegasis.HappyBirthday.Framework
@@ -17,8 +18,6 @@ namespace Omegasis.HappyBirthday.Framework
 
             Game1.addHUDMessage(new HUDMessage(message, 1));
 
-            
-
             if (!message.Contains("Inventory"))
             {
                 Game1.playSound("cancel");
@@ -29,6 +28,9 @@ namespace Omegasis.HappyBirthday.Framework
                 Game1.player.mailReceived.Add("BackpackTip");
                 Game1.addMailForTomorrow("pierreBackpack", false, false);
             }
+
+
         }
+
     }
 }

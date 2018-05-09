@@ -71,6 +71,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ModdedUtilitiesNetworking">
+      <HintPath>..\ModdedUtilitiesNetworking\bin\Release\ModdedUtilitiesNetworking.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -80,6 +83,7 @@
     </Compile>
     <Compile Include="Framework\BirthdayMenu.cs" />
     <Compile Include="Framework\ModConfig.cs" />
+    <Compile Include="Framework\MultiplayerSupport.cs" />
     <Compile Include="Framework\PlayerData.cs" />
     <Compile Include="HappyBirthday.cs" />
     <Compile Include="Framework\Messages.cs" />

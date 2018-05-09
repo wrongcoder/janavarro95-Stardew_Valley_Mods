@@ -35,7 +35,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
         }
 
         public override string getUserName(long farmerId)
-        {
+        {       
             if (!this.peers.ContainsLeft(farmerId))
                 return (string)null;
             return this.peers[farmerId].RemoteEndPoint.Address.ToString();
@@ -150,7 +150,14 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                 case NetConnectionStatus.Disconnecting:
                     if (!this.peers.ContainsRight(message.SenderConnection))
                         break;
-                    this.playerDisconnected(this.peers[message.SenderConnection]);
+                    try
+                    {
+                        this.playerDisconnected(this.peers[message.SenderConnection]);
+                    }
+                    catch(Exception err)
+                    {
+
+                    }
                     break;
             }
         }
@@ -170,7 +177,6 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                         {
                             message.Read(reader);
                             int type = message.MessageType;
-                            ModCore.monitor.Log("INCOMING MESSAGE TYPE: "+type.ToString());
                             if (this.peers.ContainsLeft(message.FarmerID) && this.peers[message.FarmerID] == peer)
                                 this.gameServer.processIncomingMessage(message);
                             else if ((int)message.MessageType == 2)

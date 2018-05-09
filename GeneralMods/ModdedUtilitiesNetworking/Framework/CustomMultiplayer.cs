@@ -236,6 +236,7 @@ namespace ModdedUtilitiesNetworking.Framework
         public static Farmer getServerHost()
         {
             return Game1.serverHost.Value;
+            
         }
 
         /// <summary>
@@ -244,7 +245,14 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <returns></returns>
         public static Farmer getPlayerOne()
         {
-            return getServerHost();
+            try
+            {
+                return Game1.getAllFarmers().ElementAt(0);
+            }
+            catch(Exception err)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -253,7 +261,16 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <returns></returns>
         public static Farmer getPlayerTwo()
         {
-            return Game1.otherFarmers.ElementAt(0).Value;
+            try
+            {
+                
+                return Game1.getAllFarmers().ElementAt(1);
+            }
+            catch(Exception err)
+            {
+                return null;
+            }
+           
         }
 
         /// <summary>
@@ -262,7 +279,15 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <returns></returns>
         public static Farmer getPlayerThree()
         {
-            return Game1.otherFarmers.ElementAt(1).Value;
+            try
+            {
+                return Game1.getAllFarmers().ElementAt(2);
+            }
+            catch (Exception err)
+            {
+                return null;
+            }
+            
         }
 
         /// <summary>
@@ -271,7 +296,15 @@ namespace ModdedUtilitiesNetworking.Framework
         /// <returns></returns>
         public static Farmer getPlayerFour()
         {
-            return Game1.otherFarmers.ElementAt(2).Value;
+            try
+            {
+                return Game1.getAllFarmers().ElementAt(3);
+            }
+            catch (Exception err)
+            {
+                return null;
+            }
+            
         }
 
 
@@ -309,6 +342,26 @@ namespace ModdedUtilitiesNetworking.Framework
                 return otherFarmers;
         }
 
+        /// <summary>
+        /// Gets a farmer from a player index number. Player 1 is 0, player two is one, etc. 
+        /// </summary>
+        /// <param name="number"></param>
+        public Farmer getFarmerFromIndex(int number)
+        {
+            if (number == 0) return getPlayerOne();
+            if (number == 1) return getPlayerTwo();
+            if (number == 2) return getPlayerThree();
+            if (number == 3) return getPlayerFour();
 
+            try
+            {
+                Game1.getAllFarmers().ElementAt(number);
+            }
+            catch(Exception err)
+            {
+                return null;
+            }
+            return null;
+        }
     }
 }

@@ -143,7 +143,7 @@ namespace ModdedUtilitiesNetworking
 
                     // get the field info
                     FieldInfo finfo = typeof(StardewValley.SDKs.GalaxyNetClient).GetField("lobbyId", bindingFlags);
-
+                    
 
                     var galaxyID = (GalaxyID)finfo.GetValue(Game1.client);
 
@@ -257,7 +257,7 @@ namespace ModdedUtilitiesNetworking
             {
                 if (v.Key == key)
                 {
-                    ModCore.monitor.Log("PROCESS TYPES TO WRITE FUNCTION: "+v.Key + " " + data.ToString());
+                    //ModCore.monitor.Log("PROCESS TYPES TO WRITE FUNCTION: "+v.Key + " " + data.ToString());
                     v.Value.write(msg,data);
                     return;
                 }
