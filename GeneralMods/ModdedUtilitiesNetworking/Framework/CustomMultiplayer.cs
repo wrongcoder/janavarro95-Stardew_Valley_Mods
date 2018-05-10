@@ -7,6 +7,7 @@ using StardewValley.Menus;
 using StardewValley.Network;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -22,7 +23,48 @@ namespace ModdedUtilitiesNetworking.Framework
         public CustomMultiplayer()
         {
             this.hasConnectedOnce = new List<long>();
+
+            
         }
+
+        public override void writeObjectFull<T>(BinaryWriter writer, NetRoot<T> root, long? peer)
+        {
+            try
+            {
+                root.CreateConnectionPacket(writer, peer);
+            }
+            catch(Exception err)
+            {
+
+            }
+        }
+
+        public override void readObjectDelta<T>(BinaryReader reader, NetRoot<T> root)
+        {
+            try
+            {
+                root.Read(reader);
+            }
+            catch(Exception err)
+            {
+
+            }
+        }
+
+        public override void receiveWorldState(BinaryReader msg)
+        {
+            this.readObjectDelta<IWorldState>(msg, Game1.netWorldState);
+            if (Game1.IsServer)
+                return;
+            int num1 = Game1.timeOfDay;
+            Game1.netWorldState.Value.WriteToGame1();
+            int num2 = Game1.timeOfDay;
+            if (num1 == num2 || Game1.currentLocation == null || Game1.newDaySync != null)
+                return;
+            Game1.performTenMinuteClockUpdate();
+        }
+
+
 
         public override bool isClientBroadcastType(byte messageType)
         {
@@ -31,7 +73,94 @@ namespace ModdedUtilitiesNetworking.Framework
 
         public override void processIncomingMessage(IncomingMessage msg)
         {
-            base.processIncomingMessage(msg);
+            if (msg.MessageType <= 19)
+            {
+                switch (msg.MessageType)
+                {
+                    case 0:
+                        NetFarmerRoot netFarmerRoot = this.farmerRoot(msg.Reader.ReadInt64());
+                        this.readObjectDelta<Farmer>(msg.Reader, (NetRoot<Farmer>)netFarmerRoot);
+                        break;
+                    case 2:
+                        this.receivePlayerIntroduction(msg.Reader);
+                        break;
+                    case 3:
+                        this.readActiveLocation(msg, false);
+                        break;
+                    case 4:
+                        int eventId = msg.Reader.ReadInt32();
+                        int tileX = msg.Reader.ReadInt32();
+                        int tileY = msg.Reader.ReadInt32();
+                        if (Game1.CurrentEvent != null)
+                            break;
+                        this.readWarp(msg.Reader, tileX, tileY, (Action)(() =>
+                        {
+                            Farmer farmerActor = (msg.SourceFarmer.NetFields.Root as NetRoot<Farmer>).Clone().Value;
+                            farmerActor.currentLocation = Game1.currentLocation;
+                            farmerActor.completelyStopAnimatingOrDoingAction();
+                            farmerActor.hidden.Value = false;
+                            Event eventById = Game1.currentLocation.findEventById(eventId, farmerActor);
+                            Game1.currentLocation.startEvent(eventById);
+                            farmerActor.Position = Game1.player.Position;
+                        }));
+                        break;
+                    case 6:
+                        GameLocation gameLocation = this.readLocation(msg.Reader);
+                        if (gameLocation == null)
+                            break;
+                        this.readObjectDelta<GameLocation>(msg.Reader, gameLocation.Root);
+                        break;
+                    case 7:
+                        GameLocation location = this.readLocation(msg.Reader);
+                        if (location == null)
+                            break;
+                        location.temporarySprites.AddRange((IEnumerable<TemporaryAnimatedSprite>)this.readSprites(msg.Reader, location));
+                        break;
+                    case 8:
+                        NPC character = this.readNPC(msg.Reader);
+                        GameLocation targetLocation = this.readLocation(msg.Reader);
+                        if (character == null || targetLocation == null)
+                            break;
+                        Game1.warpCharacter(character, targetLocation, BinaryReaderWriterExtensions.ReadVector2(msg.Reader));
+                        break;
+                    case 10:
+                        this.receiveChatMessage(msg.SourceFarmer, BinaryReaderWriterExtensions.ReadEnum<LocalizedContentManager.LanguageCode>(msg.Reader), msg.Reader.ReadString());
+                        break;
+                    case 12:
+                        try
+                        {
+                            this.receiveWorldState(msg.Reader);
+                        }
+                        catch(Exception err)
+                        {
+
+                        }
+                        break;
+                    case 13:
+                        this.receiveTeamDelta(msg.Reader);
+                        break;
+                    case 14:
+                        this.receiveNewDaySync(msg);
+                        break;
+                    case 15:
+                        string messageKey = msg.Reader.ReadString();
+                        string[] args = new string[(int)msg.Reader.ReadByte()];
+                        for (int index = 0; index < args.Length; ++index)
+                            args[index] = msg.Reader.ReadString();
+                        this.receiveChatInfoMessage(msg.SourceFarmer, messageKey, args);
+                        break;
+                    case 17:
+                        this.receiveFarmerGainExperience(msg);
+                        break;
+                    case 18:
+                        this.parseServerToClientsMessage(msg.Reader.ReadString());
+                        break;
+                    case 19:
+                        this.playerDisconnected(msg.SourceFarmer.UniqueMultiplayerID);
+                        break;
+                }
+            }
+
             if (msg.MessageType == 20)
             {
                 ModCore.monitor.Log("CUSTOM FUNCTION???");

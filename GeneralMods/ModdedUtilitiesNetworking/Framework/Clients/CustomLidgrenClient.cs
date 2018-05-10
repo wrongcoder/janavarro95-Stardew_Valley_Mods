@@ -236,7 +236,7 @@ namespace ModdedUtilitiesNetworking.Framework.Clients
                 this.connectionMessage = message.Reader.ReadString();
                 return;
             }
-            ModCore.multiplayer.baseProcessMessage(message);
+            ModCore.multiplayer.processIncomingMessage(message);
 
 
             //Packet signiture for functions that return nothing.

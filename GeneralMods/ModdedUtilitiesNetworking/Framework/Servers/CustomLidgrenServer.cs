@@ -14,6 +14,38 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
 {
     class CustomLidgrenServer : Server
     {
+        ///Save this for later
+
+        protected override void playerDisconnected(long disconnectee)
+        {
+            this.gameServer.playerDisconnected(disconnectee);
+            
+              this.introductionsSent.Remove(this.peers[disconnectee]);
+
+            this.peers.RemoveLeft(disconnectee);
+        }
+
+        protected void sendMessage(NetConnection connection, OutgoingMessage message)
+        {
+            NetOutgoingMessage message1 = this.server.CreateMessage();
+            using (NetBufferWriteStream bufferWriteStream = new NetBufferWriteStream((NetBuffer)message1))
+            {
+                using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream)) {
+                    if (message.MessageType < 20)
+                    {
+                        message.Write(writer);
+                    }
+                    else
+                    {
+                        OutgoingMessageBase.WriteFromMessage(message, writer);
+                    }
+                }
+            }
+            int num = (int)this.server.SendMessage(message1, connection, NetDeliveryMethod.ReliableOrdered);
+        }
+        
+
+
         private HashSet<NetConnection> introductionsSent = new HashSet<NetConnection>();
         private Bimap<long, NetConnection> peers = new Bimap<long, NetConnection>();
         public const int defaultPort = 24642;
@@ -35,7 +67,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
         }
 
         public override string getUserName(long farmerId)
-        {       
+        {
             if (!this.peers.ContainsLeft(farmerId))
                 return (string)null;
             return this.peers[farmerId].RemoteEndPoint.Address.ToString();
@@ -84,8 +116,6 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             NetIncomingMessage netIncomingMessage;
             while ((netIncomingMessage = this.server.ReadMessage()) != null)
             {
-                int i = (int)netIncomingMessage.MessageType;
-                //ModCore.monitor.Log("Message Type: " + i.ToString());
                 switch (netIncomingMessage.MessageType)
                 {
                     case NetIncomingMessageType.WarningMessage:
@@ -114,11 +144,10 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                         netIncomingMessage.SenderConnection.Deny();
                         break;
                     case NetIncomingMessageType.Data:
-                        //ModCore.monitor.Log("GOT DATA~~");
                         this.parseDataMessageFromClient(netIncomingMessage);
                         break;
                     default:
-                        //ModCore.monitor.Log(netIncomingMessage.ToString());
+                        Game1.debugOutput = netIncomingMessage.ToString();
                         break;
                 }
                 this.server.Recycle(netIncomingMessage);
@@ -150,28 +179,15 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                 case NetConnectionStatus.Disconnecting:
                     if (!this.peers.ContainsRight(message.SenderConnection))
                         break;
-                    //Forces a de-sync with money.
-
-
-                        this.playerDisconnected(this.peers[message.SenderConnection]);
-
+                    this.playerDisconnected(this.peers[message.SenderConnection]);
                     break;
             }
         }
 
-        protected override void playerDisconnected(long disconnectee)
-        {
-            this.gameServer.playerDisconnected(disconnectee);
-            
-              this.introductionsSent.Remove(this.peers[disconnectee]);
-
-            this.peers.RemoveLeft(disconnectee);
-        }
 
 
         private void parseDataMessageFromClient(NetIncomingMessage dataMsg)
         {
-            //ModCore.monitor.Log("DATA MSG: "+dataMsg.ToString());
             NetConnection peer = dataMsg.SenderConnection;
             using (IncomingMessage message = new IncomingMessage())
             {
@@ -182,7 +198,6 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
                         while ((long)dataMsg.LengthBits - dataMsg.Position >= 8L)
                         {
                             message.Read(reader);
-                            int type = message.MessageType;
                             if (this.peers.ContainsLeft(message.FarmerID) && this.peers[message.FarmerID] == peer)
                                 this.gameServer.processIncomingMessage(message);
                             else if ((int)message.MessageType == 2)
@@ -203,24 +218,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             this.sendMessage(this.peers[peerId], message);
         }
 
-        protected void sendMessage(NetConnection connection, OutgoingMessage message)
-        {
-            NetOutgoingMessage message1 = this.server.CreateMessage();
-            using (NetBufferWriteStream bufferWriteStream = new NetBufferWriteStream((NetBuffer)message1))
-            {
-                using (BinaryWriter writer = new BinaryWriter((Stream)bufferWriteStream)) {
-                    if (message.MessageType < 20)
-                    {
-                        message.Write(writer);
-                    }
-                    else
-                    {
-                        OutgoingMessageBase.WriteFromMessage(message, writer);
-                    }
-                }
-            }
-            int num = (int)this.server.SendMessage(message1, connection, NetDeliveryMethod.ReliableOrdered);
-        }
+
 
         public override void setLobbyData(string key, string value)
         {

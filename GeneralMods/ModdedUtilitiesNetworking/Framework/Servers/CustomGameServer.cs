@@ -47,13 +47,13 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             }
         }
 
-        public int connectionsCount
-        {
-            get
-            {
-                return Enumerable.Sum<Server>((IEnumerable<Server>)this.servers, (Func<Server, int>)(s => s.connectionsCount));
-            }
-        }
+    public int connectionsCount
+    {
+      get
+      {
+        return Enumerable.Sum<Server>((IEnumerable<Server>) this.servers, (Func<Server, int>) (s => s.connectionsCount));
+      }
+    }
 
 
 
@@ -68,15 +68,15 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             return (string)null;
         }
 
-        public string getUserName(long farmerId)
-        {
-            foreach (Server server in this.servers)
-            {
-                if (server.getUserName(farmerId) != null)
-                    return server.getUserName(farmerId);
-            }
-            return (string)null;
-        }
+    public string getUserName(long farmerId)
+    {
+      foreach (Server server in this.servers)
+      {
+        if (server.getUserName(farmerId) != null)
+          return server.getUserName(farmerId);
+      }
+      return (string) null;
+    }
 
         protected void initialize()
         {
@@ -104,6 +104,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
            
             foreach (Server server in this.servers)
             {
+                if (server == null) continue;
                server.receiveMessages();              
             }
             if (!this.isGameAvailable())
@@ -116,7 +117,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
         public void sendMessage(long peerId, OutgoingMessage message)
         {
             foreach (Server server in this.servers)
-                if (server is CustomLidgrenServer)
+                if (server is CustomLidgrenServer || server is LidgrenServer)
                 {
                     server.sendMessage(peerId, message);
                 }
@@ -136,7 +137,18 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
 
         public bool canOfferInvite()
         {
-            return Enumerable.Aggregate<bool, bool>(Enumerable.Select<Server, bool>((IEnumerable<Server>)this.servers, (Func<Server, bool>)(s => s.canOfferInvite())), false, (Func<bool, bool, bool>)((a, b) => a | b));
+            if (this.servers == null)
+            {
+                ModCore.monitor.Log("WAIT WHY IS THIS HAPPENING????");
+            }
+            foreach(var v in this.servers)
+            {
+                if (v.canOfferInvite() == true) continue;
+                else return false;
+            }
+            return true;
+
+            //return Enumerable.Aggregate<bool, bool>(Enumerable.Select<Server, bool>((IEnumerable<Server>)this.servers, (Func<Server, bool>)(s => s.canOfferInvite())), false, (Func<bool, bool, bool>)((a, b) => a | b));
         }
 
         public void offerInvite()
@@ -177,12 +189,12 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
         {
             Console.WriteLine("Starting server. Protocol version: " + ModCore.multiplayer.protocolVersion);
             this.initialize();
-            if ((NetFieldBase<Farmer, NetRef<Farmer>>)Game1.serverHost == (NetRef<Farmer>)null)
+            if (Game1.serverHost.Value == null)
                 Game1.serverHost = new NetFarmerRoot();
             Game1.serverHost.Value = Game1.player;
             Game1.serverHost.MarkClean();
             Game1.serverHost.Clock.InterpolationTicks = ModCore.multiplayer.defaultInterpolationTicks;
-            if ((NetFieldBase<IWorldState, NetRef<IWorldState>>)Game1.netWorldState == (NetRef<IWorldState>)null)
+            if (Game1.netWorldState.Value == (NetRef<IWorldState>)null)
                 Game1.netWorldState = new NetRoot<IWorldState>((IWorldState)new NetWorldState());
             Game1.netWorldState.Clock.InterpolationTicks = 0;
             Game1.netWorldState.Value.UpdateFromGame1();
@@ -209,6 +221,8 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             }
         }
 
+
+
         public void playerDisconnected(long disconnectee)
         {
             Farmer sourceFarmer = (Farmer)null;
@@ -217,6 +231,7 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             if (sourceFarmer == null)
                 return;
 
+            
             if (this.hasPlayerDisconnectedOnce.Contains(disconnectee))
             {
                 OutgoingMessage message = new OutgoingMessage((byte)19, sourceFarmer, new object[0]);
@@ -230,6 +245,15 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             {
                 this.hasPlayerDisconnectedOnce.Add(disconnectee);
             }
+            /*
+            OutgoingMessage message = new OutgoingMessage((byte)19, sourceFarmer, new object[0]);
+            foreach (long peerId in (IEnumerable<long>)Game1.otherFarmers.Keys)
+            {
+                if (peerId != disconnectee)
+                    this.sendMessage(peerId, message);
+            }
+            */
+
         }
 
 
@@ -455,7 +479,6 @@ namespace ModdedUtilitiesNetworking.Framework.Servers
             OutgoingMessage message1 = new OutgoingMessage(messageType, f, data);
             foreach (long peerId in (IEnumerable<long>)Game1.otherFarmers.Keys)
             {
-                ModCore.monitor.Log("RESEND MESSAGE TO CLIENT!!!", StardewModdingAPI.LogLevel.Alert);
                     this.sendMessage(peerId, message1);
             }
         }

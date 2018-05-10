@@ -117,11 +117,11 @@ namespace ModdedUtilitiesNetworking
                 ModCore.monitor.Log("Custom multiplayer binding success!");
             }
 
-            if(Game1.client !=null && multiplayerSet == false)
+            if (Game1.client != null && multiplayerSet ==false )
             {
                 if(Game1.client is LidgrenClient)
                 {
-                    
+
                     BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
 
                     // get the field info
@@ -131,7 +131,7 @@ namespace ModdedUtilitiesNetworking
                     var address = (string)finfo.GetValue(Game1.client);
 
                     Game1.client.disconnect(true); //Disconnect old client
-                    CustomLidgrenClient client = new CustomLidgrenClient(address);
+                    LidgrenClient client = new CustomLidgrenClient(address);
                     Game1.client = client;
                     client.connect(); //Connect new client.
                     multiplayerSet = true;
