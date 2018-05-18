@@ -47,6 +47,7 @@ namespace Omegasis.SaveAnywhere
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+
             this.Config = helper.ReadConfig<ModConfig>();
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
@@ -100,9 +101,14 @@ namespace Omegasis.SaveAnywhere
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            
             // let save manager run background logic
             if (Context.IsWorldReady)
+            {
+                if (Game1.player.IsMainPlayer == false) return;
                 this.SaveManager.Update();
+            }
+               
 
             // reset NPC schedules
             if (Context.IsWorldReady && this.ShouldResetSchedules)
@@ -137,19 +143,28 @@ namespace Omegasis.SaveAnywhere
             if (!Context.IsPlayerFree)
                 return;
 
+
+
             // initiate save (if valid context)
             if (e.KeyPressed.ToString() == this.Config.SaveKey)
             {
-                // validate: community center Junimos can't be saved
-                
-                if (Game1.player.currentLocation.getCharacters().OfType<Junimo>().Any())
+                if (Game1.client==null)
                 {
-                    Game1.addHUDMessage(new HUDMessage("The spirits don't want you to save here.", HUDMessage.error_type));
-                    return;
-                }
+                    // validate: community center Junimos can't be saved
 
-                // save
-                this.SaveManager.BeginSaveData();
+                    if (Game1.player.currentLocation.getCharacters().OfType<Junimo>().Any())
+                    {
+                        Game1.addHUDMessage(new HUDMessage("The spirits don't want you to save here.", HUDMessage.error_type));
+                        return;
+                    }
+
+                    // save
+                    this.SaveManager.BeginSaveData();
+                }
+                else
+                {
+                    Game1.addHUDMessage(new HUDMessage("Only server hosts can save anywhere.",HUDMessage.error_type));
+                }
             }
         }
 

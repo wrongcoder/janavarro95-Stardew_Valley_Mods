@@ -90,7 +90,6 @@ namespace StardewSymphonyRemastered.Framework
         #region
 
         /// <summary>
-        /// TODO: Add functionality for events and festivals
         /// Sum up some conditionals to parse the correct string key to access the songs list.
         /// </summary>
         /// <returns></returns>
@@ -137,12 +136,12 @@ namespace StardewSymphonyRemastered.Framework
             }
             else
             {
-                key = getLocationString() + seperator + getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
+                key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString() + seperator + getLocationString() + seperator + getDayOfWeekString();
             }
 
             if(foundMenuString==false && key == "")
             {
-                key = getLocationString() + seperator + getSeasonNameString() + seperator + getWeatherString() + seperator + getDayOfWeekString() + seperator + getTimeOfDayString();
+                key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString() + seperator + getLocationString() + seperator + getDayOfWeekString();
             }
 
             return key;

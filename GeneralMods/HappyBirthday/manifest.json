@@ -12,11 +12,5 @@
   "UniqueID": "Omegasis.HappyBirthday",
   "EntryDll": "HappyBirthday.dll",
   "MinimumApiVersion": "2.0",
-  "UpdateKeys": [ "Nexus:520" ],
-  "Dependencies": [
-   {
-      "UniqueID": "Omegasis.ModdedUtilitiesNetworking",
-      "IsRequired": true
-   }
-]
+  "UpdateKeys": [ "Nexus:520" ]
 }

@@ -126,7 +126,7 @@ namespace Omegasis.HappyBirthday
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
 
-            MultiplayerSupport.initializeMultiplayerSupport();
+            //MultiplayerSupport.initializeMultiplayerSupport();
         }
 
 
@@ -197,7 +197,7 @@ namespace Omegasis.HappyBirthday
                 if (this.IsBirthday())
                 {
                     Messages.ShowStarMessage("It's your birthday today! Happy birthday!");
-                    MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
+                    //MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
 
 
                     Game1.player.mailbox.Add("birthdayMom");

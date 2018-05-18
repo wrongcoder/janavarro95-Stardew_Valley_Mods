@@ -27,6 +27,7 @@ namespace ModdedUtilitiesNetworking.Framework
             
         }
 
+        /*
         public override void writeObjectFull<T>(BinaryWriter writer, NetRoot<T> root, long? peer)
         {
             try
@@ -38,7 +39,8 @@ namespace ModdedUtilitiesNetworking.Framework
 
             }
         }
-
+        */
+        /*
         public override void readObjectDelta<T>(BinaryReader reader, NetRoot<T> root)
         {
             try
@@ -50,6 +52,7 @@ namespace ModdedUtilitiesNetworking.Framework
 
             }
         }
+        */
 
         public override void receiveWorldState(BinaryReader msg)
         {

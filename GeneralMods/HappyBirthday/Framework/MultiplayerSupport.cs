@@ -1,17 +1,16 @@
-﻿using ModdedUtilitiesNetworking.Framework;
+﻿
 using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ModdedUtilitiesNetworking.Framework.Delegates.DelegateInfo;
 
 namespace Omegasis.HappyBirthday.Framework
 {
     public class MultiplayerSupport
     {
-
+        /*
         public static string FSTRING_SendBirthdayMessageToOthers = "Omegasis.HappyBirthday.Framework.Messages.SendBirthdayMessageToOtherPlayers";
 
         public static void initializeMultiplayerSupport()
@@ -52,5 +51,6 @@ namespace Omegasis.HappyBirthday.Framework
                 ModdedUtilitiesNetworking.ModCore.multiplayer.sendMessage(FSTRING_SendBirthdayMessageToOthers, ModdedUtilitiesNetworking.Framework.Extentions.StrardewValleyExtentions.MessagesExtentions.HUDMessageIconIdentifier, message, ModdedUtilitiesNetworking.Framework.Enums.MessageTypes.messageTypes.SendToSpecific, f);
             }
         }
+        */
     }
 }

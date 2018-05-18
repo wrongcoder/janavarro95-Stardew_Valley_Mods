@@ -71,9 +71,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ModdedUtilitiesNetworking">
-      <HintPath>..\ModdedUtilitiesNetworking\bin\Release\ModdedUtilitiesNetworking.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
   </ItemGroup>

@@ -61,7 +61,7 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>Clear saved data.</summary>
         public void ClearData()
         {
-            Directory.Delete(this.SavePath, recursive: true);
+            File.Delete(this.SavePath);
             this.RemoveLegacyDataForThisPlayer();
         }
 
