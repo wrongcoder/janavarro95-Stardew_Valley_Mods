@@ -89,7 +89,7 @@ namespace StardewSymphonyRemastered.Framework
             }
             else
             {
-              return this.SoundBank.GetCue(name);
+                return this.SoundBank.GetCue(name);
             }
         }
 
@@ -107,7 +107,6 @@ namespace StardewSymphonyRemastered.Framework
             Game1.waveBank = this.WaveBank;
             Game1.soundBank = this.SoundBank;
             this.currentCue.Play();
-
             StardewSymphony.Reset();
         }
 

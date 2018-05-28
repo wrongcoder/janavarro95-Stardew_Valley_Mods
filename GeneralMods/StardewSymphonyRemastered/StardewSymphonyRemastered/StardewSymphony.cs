@@ -298,6 +298,9 @@ namespace StardewSymphonyRemastered
 
             string houseIcon = Path.Combine(path, "HouseIcon.png");
 
+            string playButton = Path.Combine(path, "PlayButton.png");
+            string stopButton = Path.Combine(path, "StopButton.png");
+
 
 
 
@@ -337,6 +340,9 @@ namespace StardewSymphonyRemastered
             textureManager.addTexture("SundayIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", sundayIcon)));
 
             textureManager.addTexture("HouseIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", houseIcon)));
+
+            textureManager.addTexture("PlayButton", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", playButton)));
+            textureManager.addTexture("StopButton", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", stopButton)));
 
 
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);

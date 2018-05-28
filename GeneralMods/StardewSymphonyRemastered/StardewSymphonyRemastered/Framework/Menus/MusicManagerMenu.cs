@@ -24,6 +24,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
      * 
      * Figure out positioning for icons on fancy icons
      * 
+     * Need to do menu layout for menu/festival/event music.
+     * Ned to make play/stop/add/delete/back buttons.
+     * 
+     * //Make all the functionality work.
+     * 
      */
 
     /// <summary>
@@ -40,7 +45,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             AlbumFancySelection,
             SongSelectionMode,
 
-            DifferntSelectionTypesMode, //Used for locations, events, festivals,  menus (house, exclamation mark, star, and list/book icons respectively)
+            DifferentSelectionTypesMode, //Used for locations, events, festivals,  menus (house, exclamation mark, star, and list/book icons respectively)
             WeatherSelection,
             FestivalSelection,
             EventSelection,
@@ -60,6 +65,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
         public Button currentlySelectedTime;
         public Button currentlySelectedLocation;
         public Button currentlySelectedDay;
+
+
+        public Button addButton;
+        public Button deleteButton;
+        public Button playButton;
+        public Button stopButton;
+
 
         public DrawMode drawMode;
         public int currentAlbumIndex;
@@ -153,8 +165,20 @@ namespace StardewSymphonyRemastered.Framework.Menus
             this.searchBoxSelected = false;
             this.menuTextures = new List<Texture2DExtended>();
 
+            Vector2 playPos= new Vector2(this.width * .1f + 128 + 32, this.height * .05f + 128); //Put it to the right of the music disk
+            this.playButton = new Button("PlayButton", new Rectangle((int)playPos.X, (int)playPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("PlayButton"), "", new Rectangle(0, 0, 16, 16), 4f, new Animation(new Rectangle(0, 0, 16, 16)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
 
-    }
+            Vector2 stopPos = new Vector2(this.width * .1f + 192 + 32, this.height * .05f + 128); //Put it to the right of the music disk
+            this.stopButton = new Button("StopButton", new Rectangle((int)stopPos.X, (int)stopPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("StopButton"), "", new Rectangle(0, 0, 16, 16), 4f, new Animation(new Rectangle(0, 0, 16, 16)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
+
+            Vector2 addPos = new Vector2(this.width * .1f + 256 + 32, this.height * .05f + 128); //Put it to the right of the music disk
+            this.addButton = new Button("AddIcon", new Rectangle((int)addPos.X, (int)addPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("AddIcon"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
+
+            Vector2 delPos = new Vector2(this.width * .1f + 320 + 32, this.height * .05f + 128); //Put it to the right of the music disk
+            this.deleteButton = new Button("DeleteIcon", new Rectangle((int)delPos.X, (int)delPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("DeleteIcon"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
+
+
+        }
 
         /// <summary>
         /// Runs every game tick to check for stuff.
@@ -347,7 +371,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
 
             //Options selection mode.
-            if (this.drawMode == DrawMode.DifferntSelectionTypesMode)
+            if (this.drawMode == DrawMode.DifferentSelectionTypesMode)
             {
 
                 this.fancyButtons.Clear();
@@ -775,6 +799,32 @@ namespace StardewSymphonyRemastered.Framework.Menus
         {
             bool buttonSelected = false;
 
+
+            if(this.currentSelectedSong!=null && this.currentMusicPackAlbum!=null && this.playButton.containsPoint(x, y))
+            {
+                playSong();
+                return;
+            }
+
+            if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.stopButton.containsPoint(x, y))
+            {
+                stopSong();
+                return;
+            }
+
+            if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.addButton.containsPoint(x, y))
+            {
+                addSong();
+                return;
+            }
+
+            if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.deleteButton.containsPoint(x, y))
+            {
+                deleteSong();
+                return;
+            }
+
+
             if (this.drawMode == DrawMode.AlbumSelection)
             {
                 foreach (var v in this.musicAlbumButtons)
@@ -863,7 +913,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
 
             //Left click an option.
-            if(this.drawMode == DrawMode.DifferntSelectionTypesMode)
+            if(this.drawMode == DrawMode.DifferentSelectionTypesMode)
             {
                 foreach(var button in this.fancyButtons)
                 {
@@ -1055,7 +1105,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
 
 
-            if (this.drawMode == DrawMode.DifferntSelectionTypesMode)
+            if (this.drawMode == DrawMode.DifferentSelectionTypesMode)
             {
                 Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
@@ -1079,35 +1129,6 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
 
             }
-
-            if (this.drawMode == DrawMode.DifferntSelectionTypesMode)
-            {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
-                this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
-                this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-                //make 3rd dialogue box option;
-                this.currentMusicPackAlbum.draw(b);
-                this.currentSelectedSong.draw(b);
-                //this.currentlySelectedOption.draw(b);
-
-                foreach (Button button in fancyButtons)
-                {
-                    button.draw(b);
-                }
-
-                foreach (var v in this.texturedStrings)
-                {
-                    v.draw(b);
-                }
-
-            }
-
-            this.drawMouse(b);
-
 
             if (this.drawMode == DrawMode.WeatherSelection)
             {
@@ -1275,6 +1296,17 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             }
 
+            //Draw the add, delete, play, and stop buttons.
+            if(this.currentSelectedSong!=null && this.currentMusicPackAlbum != null)
+            {
+                if (this.drawMode == DrawMode.WeatherSelection || this.drawMode == DrawMode.TimeSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.DaySelection || this.drawMode == DrawMode.NothingElseToDisplay || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.EventSelection || this.drawMode == DrawMode.MenuSelection)
+                {
+                    this.addButton.draw(b);
+                    this.deleteButton.draw(b);
+                }
+                this.playButton.draw(b);
+                this.stopButton.draw(b);
+            }
 
             this.drawMouse(b);
         }
@@ -1323,11 +1355,87 @@ namespace StardewSymphonyRemastered.Framework.Menus
             StardewSymphony.musicManager.swapMusicPacks(info.Key);
             StardewSymphony.musicManager.playSongFromCurrentPack(b.name);
             */
-            this.drawMode = DrawMode.DifferntSelectionTypesMode;
+            this.drawMode = DrawMode.DifferentSelectionTypesMode;
             //this.updateFancyButtons();
         }
 
-        
+        public void playSong()
+        {
+            StardewSymphony.ModMonitor.Log("Song Selected!" + this.currentSelectedSong.name);
+            var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
+            StardewSymphony.ModMonitor.Log("Select Pack:" + info.Key);
+            StardewSymphony.musicManager.swapMusicPacks(info.Key);
+            StardewSymphony.musicManager.playSongFromCurrentPack(this.currentSelectedSong.name);
+        }
+
+        public void stopSong()
+        {
+            StardewSymphony.ModMonitor.Log("Song Selected!" + this.currentSelectedSong.name);
+            var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
+            StardewSymphony.ModMonitor.Log("Select Pack:" + info.Key);
+            StardewSymphony.musicManager.swapMusicPacks(info.Key);
+            StardewSymphony.musicManager.stopSongFromCurrentMusicPack();
+        }
+
+        public void addSong()
+        {
+            var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
+            info.Value.songInformation.addSongToTriggerList(generateSongTriggerKeyFromSelection(), this.currentSelectedSong.label);
+        }
+
+        public void deleteSong()
+        {
+            var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
+            info.Value.songInformation.removeSongFromTriggerList(generateSongTriggerKeyFromSelection(), this.currentSelectedSong.label);
+        }
+
+        public string generateSongTriggerKeyFromSelection()
+        {
+            string key = "";
+            string seperator = "_";
+            //Seasonal selection region
+            #region
+            if (this.currentlySelectedOption.name == "SeasonIcon")
+            {
+                if (Game1.currentSeason == "spring") key += "spring";
+                if (Game1.currentSeason == "summer") key += "summer";
+                if (Game1.currentSeason == "fall") key += "fall";
+                if (Game1.currentSeason == "winter") key += "winter";
+            }
+            if (this.currentlySelectedWeather != null)
+            {
+                if (this.currentlySelectedWeather.name == "SunnyIcon") key += seperator + "sunny";
+                if (this.currentlySelectedWeather.name == "RainyIcon") key += seperator + "rain";
+                if (this.currentlySelectedWeather.name == "WeatherDebrisIcon") key += seperator + "debris";
+                if (this.currentlySelectedWeather.name == "WeatherFestivalIcon") key += seperator + "festival";
+                if (this.currentlySelectedWeather.name == "SnowIcon") key += seperator + "snow";
+                if (this.currentlySelectedWeather.name == "StormIcon") key += seperator + "lightning";
+                if (this.currentlySelectedWeather.name == "WeddingIcon") key += seperator + "wedding";
+            }
+            if (this.currentlySelectedTime != null)
+            {
+                if (this.currentlySelectedTime.name == "DayIcon") key += seperator + "day";
+                if (this.currentlySelectedTime.name == "NightIcon") key += seperator + "night";
+            }
+            if (this.currentlySelectedLocation != null)
+            {
+                key += seperator + this.currentlySelectedLocation.label;
+            }
+            if (this.currentlySelectedDay != null)
+            {
+                if (this.currentlySelectedDay.name == "SundayIcon") key += seperator + "sunday";
+                if (this.currentlySelectedDay.name == "MondayIcon") key += seperator + "monday";
+                if (this.currentlySelectedDay.name == "TuesdayIcon") key += seperator + "tuesday";
+                if (this.currentlySelectedDay.name == "WednesdayIcon") key += seperator + "wednesday";
+                if (this.currentlySelectedDay.name == "ThursdayIcon") key += seperator + "thursday";
+                if (this.currentlySelectedDay.name == "FridayIcon") key += seperator + "friday";
+                if (this.currentlySelectedDay.name == "SaturdayIcon") key += seperator + "saturday";
+            }
+            #endregion
+
+
+            return key;
+        }
 
         #endregion
     }

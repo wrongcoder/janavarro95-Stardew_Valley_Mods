@@ -256,6 +256,11 @@ namespace StardustCore.UIUtilities.MenuComponents
             return EmptyButton();
         }
 
+        public string getDisplayText()
+        {
+            return this.label;
+        }
+
 
     }
 }

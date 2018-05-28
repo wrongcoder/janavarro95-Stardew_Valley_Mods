@@ -293,7 +293,6 @@ namespace StardewSymphonyRemastered.Framework
             if (Game1.isDebrisWeather) return "debris"; //????
             if (Game1.isSnowing) return "snow";
             if (Game1.weddingToday) return "wedding";
-
             
             return "sunny"; //If none of the other weathers, make it sunny.
         }
@@ -474,6 +473,10 @@ namespace StardewSymphonyRemastered.Framework
         public bool isSongInList(string songName)
         {
             Song s = getSongFromList(listOfSongsWithoutTriggers, songName);
+            if (s == null)
+            {
+                return false;
+            }
             return listOfSongsWithoutTriggers.Contains(s);
         }
 
@@ -482,39 +485,22 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public void initializeSeasonalMusic()
         {
-            foreach (var loc in locations)
-            {
-                foreach (var season in seasons)
-                {
-                    listOfSongsWithTriggers.Add(loc + seperator + season, new List<Song>());
-                    foreach(var Weather in weather)
-                    {
-                        listOfSongsWithTriggers.Add(loc + seperator + season + seperator + Weather, new List<Song>());
-                        foreach(var day in daysOfWeek)
-                        {
-                            listOfSongsWithTriggers.Add(loc + seperator + season + seperator + Weather + seperator + day, new List<Song>());
-                            foreach(var time in timesOfDay)
-                            {
-                                listOfSongsWithTriggers.Add(loc + seperator + season + seperator + Weather + seperator + day + seperator + time, new List<Song>());
-                            }
-                        }
-                    }
-                }
-            }
-
-            //Add in some default seasonal music because maybe a location doesn't have some music?
-            foreach (var season in seasons)
+            foreach(var season in seasons)
             {
                 listOfSongsWithTriggers.Add(season, new List<Song>());
-                foreach (var Weather in weather)
+                foreach(var weather in this.weather)
                 {
-                    listOfSongsWithTriggers.Add( season + seperator + Weather, new List<Song>());
-                    foreach (var day in daysOfWeek)
+                    listOfSongsWithTriggers.Add(season + seperator + weather,new List<Song>());
+                    foreach(var time in this.timesOfDay)
                     {
-                        listOfSongsWithTriggers.Add(season + seperator + Weather + seperator + day, new List<Song>());
-                        foreach (var time in timesOfDay)
+                        listOfSongsWithTriggers.Add(season + seperator + weather+seperator+time, new List<Song>());
+                        foreach(var loc in locations)
                         {
-                            listOfSongsWithTriggers.Add(season + seperator + Weather + seperator + day + seperator + time, new List<Song>());
+                            listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time+seperator+loc, new List<Song>());
+                            foreach(var day in this.daysOfWeek)
+                            {
+                                listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time + seperator + loc+seperator+day, new List<Song>());
+                            }
                         }
                     }
                 }
@@ -549,22 +535,6 @@ namespace StardewSymphonyRemastered.Framework
                     if (pair.Key == key) return pair;
                 }
 
-            
-            //This is just the plain song name with no extra info.
-            foreach (KeyValuePair<string, List<Song>> pair in listOfSongsWithTriggers)
-            {
-                //StardewSymphony.ModMonitor.Log(pair.Key);
-                if (pair.Key == key) return pair;
-            }
-            
-            //This is just the plain song name with no extra info.
-            foreach (KeyValuePair<string, List<Song>> pair in listOfSongsWithTriggers)
-            {
-                //StardewSymphony.ModMonitor.Log(pair.Key);
-                if (pair.Key == key) return pair;
-            }
-
-
             //return new KeyValuePair<string, List<string>>(key, listOfSongsWithTriggers[key]);
 
             return new KeyValuePair<string, List<Song>>("",null);
@@ -580,16 +550,29 @@ namespace StardewSymphonyRemastered.Framework
             return this.eventSongs;
         }
 
+        public List<Song> getMenuMusic()
+        {
+            return null;
+            //return this.menuSongs();
+        }
+
         /// <summary>
         /// Add a song name to a specific list of songs to play that will play under certain conditions.
         /// </summary>
         /// <param name="songListKey"></param>
         /// <param name="songName"></param>
-        public void addSongToList(string songListKey,string songName)
+        public void addSongToTriggerList(string songListKey,string songName)
         {
-            var songKeyPair = getSongList(songListKey);
-            var song = getSongFromList(songKeyPair.Value, songName);
-            songKeyPair.Value.Add(song);
+
+            var songKeyPair = getSongList(songListKey); //Get the trigger list
+
+            var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
+            if (song == null)
+            {
+                StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is "+ songName);
+                return;
+            }
+            songKeyPair.Value.Add(song); //add the song from master pool to the trigger list
         }
 
         /// <summary>
@@ -597,7 +580,7 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         /// <param name="songListKey"></param>
         /// <param name="songName"></param>
-        public void removeSongFromList(string songListKey,string songName)
+        public void removeSongFromTriggerList(string songListKey,string songName)
         {
             var songKeyPair = getSongList(songListKey);
             var song = getSongFromList(songKeyPair.Value, songName);
@@ -612,9 +595,12 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public Song getSongFromList(List<Song> songList,string songName)
         {
-            foreach(var song in songList)
+            foreach (var song in songList)
             {
-                if (song.name == songName) return song;
+                if (song.name == songName)
+                {
+                    return song;
+                }
             }
             return null;
         }

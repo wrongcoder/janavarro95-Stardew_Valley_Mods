@@ -354,10 +354,12 @@ namespace StardewSymphonyRemastered.Framework
 
             var musicPackPair = listOfValidMusicPacks.ElementAt(randInt);
 
+
             //used to swap the music packs and stop the last playing song.
             this.swapMusicPacks(musicPackPair.Key.musicPackInformation.name);
 
             int randInt2 = songSelector.Next(0, musicPackPair.Value.Count);
+
 
             var songName = musicPackPair.Value.ElementAt(randInt2);
 

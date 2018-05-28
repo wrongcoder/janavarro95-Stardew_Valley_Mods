@@ -101,7 +101,7 @@ namespace StardewSymphonyRemastered.Framework
                 var pair = this.songInformation.getSongList(node.trigger+".json");
                 foreach (var v in node.songList)
                 {
-                    this.songInformation.addSongToList(node.trigger, v.name);
+                    this.songInformation.addSongToTriggerList(node.trigger, v.name);
                 }
             }
 
