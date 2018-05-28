@@ -296,6 +296,8 @@ namespace StardewSymphonyRemastered
             string saturdayIcon = Path.Combine(path, "DayIcons_Saturday.png");
             string sundayIcon = Path.Combine(path, "DayIcons_Sunday.png");
 
+            string houseIcon = Path.Combine(path, "HouseIcon.png");
+
 
 
 
@@ -317,7 +319,7 @@ namespace StardewSymphonyRemastered
             textureManager.addTexture("RainyIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", rainyIcon)));
             textureManager.addTexture("DebrisSpringIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", debrisIconSpring)));
             textureManager.addTexture("DebrisSummerIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", debrisIconSummer)));
-            textureManager.addTexture("DebrisIconFall", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", debrisIconFall)));
+            textureManager.addTexture("DebrisFallIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", debrisIconFall)));
             textureManager.addTexture("WeatherFestivalIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", weatherFestivalIcon)));
             textureManager.addTexture("SnowIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", snowIcon)));
             textureManager.addTexture("StormIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", stormIcon)));
@@ -334,7 +336,7 @@ namespace StardewSymphonyRemastered
             textureManager.addTexture("SaturdayIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", saturdayIcon)));
             textureManager.addTexture("SundayIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", sundayIcon)));
 
-
+            textureManager.addTexture("HouseIcon", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", houseIcon)));
 
 
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);

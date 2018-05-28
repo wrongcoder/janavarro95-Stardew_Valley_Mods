@@ -20,7 +20,7 @@ namespace StardewSymphonyRemastered.Framework
         public string description;
         public string versionInfo;
         public string pathToMusicPackIcon;
-        public Texture2DExtended Icon;
+        private Texture2DExtended Icon;
         /// <summary>
         /// Constrctor
         /// </summary>
@@ -89,6 +89,10 @@ namespace StardewSymphonyRemastered.Framework
         public void writeToJson(string path)
         {
           StardewSymphony.ModHelper.WriteJsonFile<MusicPackMetaData>(path,this);
+        }
+
+        public Texture2DExtended getTexture() {
+            return this.Icon;
         }
 
 

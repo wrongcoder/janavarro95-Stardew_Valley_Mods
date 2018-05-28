@@ -222,7 +222,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             var b = new Button(this.name, new Rectangle((int)newPosition.X,(int)newPosition.Y,this.bounds.Width,this.bounds.Height), this.animationManager.objectTexture, this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
             if (b.buttonFunctionality.hover == null)
             {
-                StardustCore.ModCore.ModMonitor.Log("I'm null!");
+                //StardustCore.ModCore.ModMonitor.Log("I'm null!");
             }
             return b;
         }
