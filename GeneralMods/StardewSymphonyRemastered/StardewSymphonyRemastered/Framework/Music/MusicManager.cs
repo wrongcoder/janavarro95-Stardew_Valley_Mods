@@ -27,6 +27,8 @@ namespace StardewSymphonyRemastered.Framework
 
         Random packSelector;
         Random songSelector;
+
+        bool lastSongWasLocationSpecific;
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -36,6 +38,7 @@ namespace StardewSymphonyRemastered.Framework
             this.currentMusicPack = null;
             packSelector = new Random(Game1.random.Next(1,1000000));
             songSelector = new Random(Game1.player.deepestMineLevel + Game1.player.facingDirection + packSelector.Next(0,10000));
+            lastSongWasLocationSpecific = false;
         }
 
         /// <summary>
@@ -244,7 +247,9 @@ namespace StardewSymphonyRemastered.Framework
           
             string subKey = songListKey;
             //Try to get more specific.
-            
+
+           
+
             //This chunk is to determine song specifics for location.
             while (listOfValidMusicPacks.Count == 0)
             {
@@ -347,6 +352,22 @@ namespace StardewSymphonyRemastered.Framework
                     return;
                 }
             }
+
+
+            string[] sizeList = subKey.Split(SongSpecifics.seperator);
+
+            if (this.currentMusicPack != null) {
+                //If I am trying to play a generic song and a generic song is playing don't change the music.
+                //If I am trying to play a generic song and a non-generic song is playing, then play my generic song since I don't want to play the specific music anymore.
+                if (sizeList.Length < 3 && (this.currentMusicPack.isPlaying() && this.lastSongWasLocationSpecific==false))
+                {
+                    StardewSymphony.ModMonitor.Log("Non specific music change detected. Not going to change the music this time");
+                    return;
+                }
+            }
+
+            if (sizeList.Length < 3) this.lastSongWasLocationSpecific = false;
+            else this.lastSongWasLocationSpecific = true;
 
             //If there is a valid key for the place/time/event/festival I am at, play it!
 

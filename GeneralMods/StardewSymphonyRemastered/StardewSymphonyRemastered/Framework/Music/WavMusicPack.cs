@@ -262,5 +262,12 @@ namespace StardewSymphonyRemastered.Framework
             }
             return "";
         }
+
+        public override bool isPlaying()
+        {
+            if (this.dynamicSound == null) return false;
+            if (this.dynamicSound.State == SoundState.Playing) return true;
+            else return false;
+        }
     }
 }

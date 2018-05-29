@@ -175,6 +175,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public override string getNameOfCurrentSong()
         {
+            if (this.currentCue == null) return "";
             return this.currentCue.Name;
         }
 
@@ -196,6 +197,12 @@ namespace StardewSymphonyRemastered.Framework
                 }
             }
             this.shortenedDirectory = directoryLocation;
+        }
+
+        public override bool isPlaying()
+        {
+            if (this.currentCue == null) return false;
+            return this.currentCue.IsPlaying;
         }
 
     }

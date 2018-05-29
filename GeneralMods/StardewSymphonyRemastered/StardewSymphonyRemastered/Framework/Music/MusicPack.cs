@@ -13,6 +13,7 @@ namespace StardewSymphonyRemastered.Framework
     /// </summary>
     public class MusicPack 
     {
+        
         public string directory;
         public string shortenedDirectory;
         public StardewSymphonyRemastered.Framework.SongSpecifics songInformation;
@@ -62,6 +63,11 @@ namespace StardewSymphonyRemastered.Framework
         public virtual void playRandomSong()
         {
 
+        }
+
+        public virtual bool isPlaying()
+        {
+            return false;
         }
 
         /// <summary>
