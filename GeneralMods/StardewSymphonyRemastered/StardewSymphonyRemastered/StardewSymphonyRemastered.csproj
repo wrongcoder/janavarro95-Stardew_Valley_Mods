@@ -99,6 +99,9 @@
     <Content Include="Content\Graphics\MusicMenu\AddButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\MusicMenu\BackButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\MusicMenu\DayIcons_Friday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

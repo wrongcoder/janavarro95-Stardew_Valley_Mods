@@ -153,6 +153,9 @@ namespace StardewSymphonyRemastered
             //Locaion initialization MUST occur after load. Anything else can occur before.
             SongSpecifics.initializeLocationsList(); //Gets all Game locations once the player has loaded the game, and all buildings on the player's farm and adds them to a location list.
             musicManager.initializeSeasonalMusic(); //Initialize the seasonal music using all locations gathered in the location list.
+            musicManager.initializeMenuMusic();
+            musicManager.initializeFestivalMusic();
+            musicManager.initializeEventMusic();
 
         }
 
@@ -301,6 +304,8 @@ namespace StardewSymphonyRemastered
             string playButton = Path.Combine(path, "PlayButton.png");
             string stopButton = Path.Combine(path, "StopButton.png");
 
+            string backButton = Path.Combine(path, "BackButton.png");
+
 
 
 
@@ -343,6 +348,7 @@ namespace StardewSymphonyRemastered
 
             textureManager.addTexture("PlayButton", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", playButton)));
             textureManager.addTexture("StopButton", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", stopButton)));
+            textureManager.addTexture("BackButton", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", backButton)));
 
 
             if (!Directory.Exists(MusicPath)) Directory.CreateDirectory(MusicPath);
