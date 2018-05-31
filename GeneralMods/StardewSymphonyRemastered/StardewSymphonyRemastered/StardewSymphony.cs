@@ -17,11 +17,7 @@ namespace StardewSymphonyRemastered
     /// <summary>
     /// BIG WIP. Don't use this at all because it does nothing right now.
     /// TODO:
-    /// -Make way to swap between album menu draw modes
-    /// -make a currently playing menu off to the side to tell you what song is playing from what album.
-    /// Make songs work for festivals and events.
-    /// Finish making triggers menus
-    /// 3.Make interface.
+    /// 3.Finish making menu
     /// 5.Release
     /// 6.Make videos documenting how to make this mod work.
     /// 7.Make way to generate new music packs.

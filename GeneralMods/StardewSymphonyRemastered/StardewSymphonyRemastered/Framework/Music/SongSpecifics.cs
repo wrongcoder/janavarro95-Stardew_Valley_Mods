@@ -575,6 +575,34 @@ namespace StardewSymphonyRemastered.Framework
             songKeyPair.Value.Add(song); //add the song from master pool to the trigger list
         }
 
+        public void addSongToFestivalList(string songName)
+        {
+
+            var songKeyPair = this.festivalSongs;
+
+            var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
+            if (song == null)
+            {
+                StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
+                return;
+            }
+            songKeyPair.Add(song); //add the song from master pool to the trigger list
+        }
+
+        public void addSongToEventList(string songName)
+        {
+
+            var songKeyPair = this.eventSongs;
+
+            var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
+            if (song == null)
+            {
+                StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
+                return;
+            }
+            songKeyPair.Add(song); //add the song from master pool to the trigger list
+        }
+
         /// <summary>
         /// Remove a song name from a specific list of songs to play that will play under certain conditions.
         /// </summary>
