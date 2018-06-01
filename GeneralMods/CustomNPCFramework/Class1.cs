@@ -81,7 +81,7 @@ namespace CustomNPCFramework
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
 
-            StardewModdingAPI.Events.LocationEvents.CurrentLocationChanged += LocationEvents_CurrentLocationChanged;
+            StardewModdingAPI.Events.PlayerEvents.Warped += LocationEvents_CurrentLocationChanged;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             npcTracker = new NPCTracker();
             assetPool = new AssetPool();
@@ -149,7 +149,7 @@ namespace CustomNPCFramework
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsCurrentLocationChanged e)
+        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsPlayerWarped e)
         {
          
         }

@@ -190,14 +190,14 @@ namespace StardustCore.Serialization
                 foreach (KeyValuePair<Vector2, StardewValley.Object> obj in loc.objects.Pairs)
                 {
                     j++;
-                    ModCore.ModMonitor.Log("Parsing location " + loc.Name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
+                    //ModCore.ModMonitor.Log("Parsing location " + loc.Name + " : object number" + j + "/" + i + " : object name: " + obj.Value.name);
                     if (obj.Value is StardewValley.Objects.Chest) {
                         int k = (obj.Value as StardewValley.Objects.Chest).items.Count;
                         int l = 0;
                     foreach (var item in (obj.Value as StardewValley.Objects.Chest).items)
                         {
                             l++;
-                            ModCore.ModMonitor.Log("Parsing Chest at : " + loc.Name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
+                            //ModCore.ModMonitor.Log("Parsing Chest at : " + loc.Name + " X: " + obj.Key.X + " Y: " + obj.Key.Y + " : object number: " + l + "/" + k + "object name: " + item.Name);
                             if (item is CoreObject) removalList.Add(item);
                         }
 
