@@ -18,7 +18,7 @@ namespace Omegasis.BuildEndurance
         private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
 
         /// <summary>The absolute path for the current player's legacy data file.</summary>
-        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.name}.txt");
+        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.Name}.txt");
 
         /// <summary>The mod settings.</summary>
         private ModConfig Config;
@@ -39,6 +39,9 @@ namespace Omegasis.BuildEndurance
         private bool WasEating;
 
 
+        public IModHelper ModHelper;
+        public IMonitor ModMonitor;
+
         /*********
         ** Public methods
         *********/
@@ -52,6 +55,9 @@ namespace Omegasis.BuildEndurance
             GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+
+            this.ModHelper = this.Helper;
+            this.ModMonitor = this.Monitor;
         }
 
 
@@ -77,7 +83,7 @@ namespace Omegasis.BuildEndurance
                 return;
 
             // give XP when player finishes eating
-            if (Game1.isEating)
+            if (Game1.player.isEating)
                 this.WasEating = true;
             else if (this.WasEating)
             {
@@ -86,7 +92,7 @@ namespace Omegasis.BuildEndurance
             }
 
             // give XP when player uses tool
-            if (!this.HasRecentToolExp && Game1.player.usingTool)
+            if (!this.HasRecentToolExp && Game1.player.UsingTool)
             {
                 this.PlayerData.CurrentExp += this.Config.ExpForToolUse;
                 this.HasRecentToolExp = true;
@@ -97,7 +103,7 @@ namespace Omegasis.BuildEndurance
             {
                 this.PlayerData.CurrentExp += this.Config.ExpForExhaustion;
                 this.WasExhausted = true;
-                this.Monitor.Log("The player is exhausted");
+                //this.Monitor.Log("The player is exhausted");
             }
 
             // give XP when player stays up too late or collapses
@@ -105,7 +111,7 @@ namespace Omegasis.BuildEndurance
             {
                 this.PlayerData.CurrentExp += this.Config.ExpForCollapsing;
                 this.WasCollapsed = true;
-                this.Monitor.Log("The player has collapsed!");
+                //this.Monitor.Log("The player has collapsed!");
             }
         }
 

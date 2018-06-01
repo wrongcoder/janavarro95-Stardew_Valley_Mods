@@ -17,7 +17,7 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
         /// </summary>
         public VanillaFont()
         {
-            this.path = Path.Combine(StardustCore.UIUtilities.SpriteFonts.SpriteFont.FontDirectory, "Vanilla");
+            this.path = Path.Combine(SpriteFonts.FontDirectory, "Vanilla");
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             this.characterSheet = new VanillaCharacterSheet(path);
         }
@@ -27,14 +27,14 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public TexturedString voidParseString(string str)
+        public TexturedString ParseString(string str)
         {
             List<TexturedCharacter> characters=new List<TexturedCharacter>();
             foreach(var chr in str)
             {
                characters.Add(characterSheet.getTexturedCharacter(chr));
             }
-            var tStr = new TexturedString(new Microsoft.Xna.Framework.Vector2(0, 0), characters);
+            var tStr = new TexturedString(str,new Microsoft.Xna.Framework.Vector2(0, 0), characters);
             return tStr;
         }
 
@@ -51,7 +51,7 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
             {
                 characters.Add(characterSheet.getTexturedCharacter(chr));
             }
-            var tStr = new TexturedString(Position, characters);
+            var tStr = new TexturedString(str,Position, characters);
             return tStr;
         }
 
@@ -62,7 +62,7 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
         /// <param name="Position"></param>
         /// <param name="stringColor"></param>
         /// <returns></returns>
-        public TexturedString ParseString(string str, Vector2 Position, Color stringColor)
+        public TexturedString ParseString(string str, Vector2 Position, Color stringColor, bool useRightPadding = true)
         {
             List<TexturedCharacter> characters = new List<TexturedCharacter>();
             foreach (var chr in str)
@@ -71,7 +71,28 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
                 c.drawColor = stringColor;
                 characters.Add(c);
             }
-            var tStr = new TexturedString(Position, characters);
+            var tStr = new TexturedString(str,Position, characters,useRightPadding);
+            return tStr;
+        }
+
+        /// <summary>
+        /// Takes a string and returns a textured string in it's place. Also sets the new position, label and string color.
+        /// </summary>
+        /// <param name="label">The label for the string.</param>
+        /// <param name="str">The string that wil be parsed into textured characters.</param>
+        /// <param name="Position">The position to draw the textured string.</param>
+        /// <param name="stringColor">The color of the textured string.</param>
+        /// <returns></returns>
+        public TexturedString ParseString(string label,string str, Vector2 Position, Color stringColor, bool useRightPadding = true)
+        {
+            List<TexturedCharacter> characters = new List<TexturedCharacter>();
+            foreach (var chr in str)
+            {
+                var c = characterSheet.getTexturedCharacter(chr);
+                c.drawColor = stringColor;
+                characters.Add(c);
+            }
+            var tStr = new TexturedString(label, Position, characters,false);
             return tStr;
         }
 
@@ -93,7 +114,7 @@ namespace StardustCore.UIUtilities.SpriteFonts.Fonts
                 characters.Add(c);
                 index++;
             }
-            var tStr = new TexturedString(Position, characters);
+            var tStr = new TexturedString(str,Position, characters);
             return tStr;
         }
 

@@ -9,199 +9,124 @@ using System.Threading.Tasks;
 
 namespace SimpleSoundManager
 {
-    public class SoundManager
+    class SoundManager
     {
-        public WaveBank waveBank;
-        public SoundBank soundBank;
-        WaveBank vanillaWaveBank;
-        SoundBank vanillaSoundBank;
-        List<Cue> currentlyPlayingSounds;
+
+        public Dictionary<string,Sound> sounds;
+        public Dictionary<string, XACTMusicPair> musicBanks;
+
 
         /// <summary>
-        /// Make a new Sound Manager to play and manage sounds in a modded wave bank.
+        /// Constructor for this class.
         /// </summary>
-        /// <param name="newWaveBank">The path to the wave bank in the mod's asset folder.</param>
-        /// <param name="newSoundBank">The path to the sound bank in the mod's asset folder.</param>
-        public SoundManager(string newWaveBank, string newSoundBank)
+        public SoundManager()
         {
-            this.waveBank = new WaveBank(Game1.audioEngine, newWaveBank);
-            this.soundBank = new SoundBank(Game1.audioEngine, newSoundBank);
-            this.currentlyPlayingSounds = new List<Cue>();
-            vanillaWaveBank = Game1.waveBank;
-            vanillaSoundBank = Game1.soundBank;
+            this.sounds = new Dictionary<string, Sound>();
+            this.musicBanks = new Dictionary<string, XACTMusicPair>();
         }
 
         /// <summary>
-        /// Make a new Sound Manager to play and manage sounds in a modded wave bank.
-        /// </summary>
-        /// <param name="newWaveBank">The reference to the wave bank in the mod's asset folder.</param>
-        /// <param name="newSoundBank">The reference to the sound bank in the mod's asset folder.</param>
-        public SoundManager(WaveBank newWaveBank, SoundBank newSoundBank)
-        {
-            this.waveBank = newWaveBank;
-            this.soundBank = newSoundBank;
-            this.currentlyPlayingSounds = new List<Cue>();
-        }
-
-        /// <summary>
-        /// Play a sound from the mod's wave bank.
-        /// </summary>
-        /// <param name="soundName">The name of the sound in the mod's wave bank. This will fail if the sound doesn't exists. This is also case sensitive.</param>
-        public void playSound(string soundName)
-        {
-            Game1.waveBank = this.waveBank;
-            Game1.soundBank = this.soundBank;
-
-            Cue currentCue = this.soundBank.GetCue(soundName);
-            if (currentCue == null) return;
-            else
-            {
-                currentCue.Play();
-                currentlyPlayingSounds.Add(currentCue);
-            }
-
-            Game1.waveBank = this.vanillaWaveBank;
-            Game1.soundBank = this.vanillaSoundBank;
-            removeAllStopedSounds();
-        }
-
-        /// <summary>
-        /// Pauses the first instance of this sound.
+        /// Constructor for wav files.
         /// </summary>
         /// <param name="soundName"></param>
-        public void pauseSound(string soundName)
+        /// <param name="pathToWav"></param>
+        public void loadWavFile(string soundName,string pathToWav)
         {
-            foreach (var v in currentlyPlayingSounds)
-            {
-                if (v.Name == soundName) v.Pause();
-                break;
-            }
-            removeAllStopedSounds();
+            WavSound wav = new WavSound(pathToWav);
+            this.sounds.Add(soundName,wav);
         }
-
+        
         /// <summary>
-        /// Pause all sounds that share the sound name in common.
+        /// Constructor for wav files.
         /// </summary>
+        /// <param name="helper"></param>
         /// <param name="soundName"></param>
-        public void pauseAllSoundsWithThisName(string soundName)
+        /// <param name="pathToWav"></param>
+        public void loadWavFile(IModHelper helper,string soundName,string pathToWav)
         {
-            foreach (var v in currentlyPlayingSounds)
-            {
-                if (v.Name == soundName) v.Pause();
-            }
-            removeAllStopedSounds();
+            WavSound wav = new WavSound(helper ,pathToWav);
+            this.sounds.Add(soundName,wav);
         }
 
         /// <summary>
-        /// Pauses all of the sounds that the SoundManager class is keeping track of.
+        /// Constructor for wav files.
         /// </summary>
-        public void pauseAllSounds()
+        /// <param name="helper"></param>
+        /// <param name="songName"></param>
+        /// <param name="pathToWav"></param>
+        public void loadWavFile(IModHelper helper,string songName,List<string> pathToWav)
         {
-            foreach(var v in currentlyPlayingSounds)
-            {
-                v.Pause();
-            }
-            removeAllStopedSounds();
+            WavSound wav = new WavSound(helper,pathToWav);
+            this.sounds.Add(songName,wav);
         }
 
         /// <summary>
-        /// Resume the first instance of the sound that has this name.
+        /// Constructor for XACT files.
         /// </summary>
-        public void resumeSound(string soundName)
+        /// <param name="waveBank"></param>
+        /// <param name="soundBank"></param>
+        /// <param name="songName"></param>
+        public void loadXACTFile(WaveBank waveBank, ISoundBank soundBank, string songName)
         {
-            foreach(var v in currentlyPlayingSounds)
-            {
-                if (v.Name==soundName&&v.IsPaused) v.Resume();
-                break;
-            }
-            removeAllStopedSounds();
+            XACTSound xactSound = new XACTSound(waveBank, soundBank, songName);
+            this.sounds.Add(songName, xactSound);
         }
 
         /// <summary>
-        /// Resume all paused sounds that have this name.
+        /// Constructor for XACT files based on already added music packs.
         /// </summary>
-        /// <param name="soundName"></param>
-        public void resumeAllSoundsWithThisName(string soundName)
+        /// <param name="pairName"></param>
+        /// <param name="songName"></param>
+        public void loadXACTFile(string pairName, string songName)
         {
-            foreach (var v in currentlyPlayingSounds)
+            XACTMusicPair musicPair = getMusicPack(pairName);
+            if (pairName == null)
             {
-                if (v.Name == soundName && v.IsPaused) v.Resume();           
+                return;
             }
-            removeAllStopedSounds();
+            loadXACTFile(musicPair.waveBank, musicPair.soundBank, songName);
+        }
+
+     
+        /// <summary>
+        /// Creates a music pack pair that holds .xwb and .xsb music files.
+        /// </summary>
+        /// <param name="helper">The mod's helper that will handle the path of the files.</param>
+        /// <param name="pairName">The name of this music pack pair.</param>
+        /// <param name="wavName">The relative path to the .xwb file</param>
+        /// <param name="soundName">The relative path to the .xsb file</param>
+        public void loadXACTMusicBank(IModHelper helper,string pairName,string wavName, string soundName)
+        {
+            this.musicBanks.Add(pairName,new XACTMusicPair(helper, wavName, soundName));
         }
 
         /// <summary>
-        /// Resumes playing all paused sounds.
+        /// Gets the music pack pair from the sound pool.
         /// </summary>
-        public void resumeAllSounds()
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public XACTMusicPair getMusicPack(string name)
         {
-            foreach (var v in currentlyPlayingSounds)
+            foreach(var pack in this.musicBanks)
             {
-                if (v.IsPaused) v.Resume();
+                if (name == pack.Key) return pack.Value;
             }
-            removeAllStopedSounds();
+            return null;
         }
 
         /// <summary>
-        /// Stop the first instance of the sound that has this name.
+        /// Gets a clone of the loaded sound.
         /// </summary>
-        /// <param name="soundName"></param>
-        public void stopSound(string soundName)
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Sound getSoundClone(string name)
         {
-            foreach (var v in currentlyPlayingSounds)
+            foreach(var sound in this.sounds)
             {
-                if (v.Name == soundName)
-                {
-                    v.Stop(AudioStopOptions.Immediate);
-                    break;
-                }
+                if (sound.Key == name) return sound.Value.clone();
             }
-            removeAllStopedSounds();
+            return null;
         }
 
-        /// <summary>
-        /// Stops all of the sounds that share this name.
-        /// </summary>
-        /// <param name="soundName"></param>
-        public void stopAllSoundsWithThisName(string soundName)
-        {
-            foreach (var v in currentlyPlayingSounds)
-            {
-                if (v.Name == soundName)
-                {
-                    v.Stop(AudioStopOptions.Immediate);
-                }
-            }
-            removeAllStopedSounds();
-        }
-
-        /// <summary>
-        /// Stops all of the sounds that the SoundManager is keeping track of.
-        /// </summary>
-        public void stopAllSounds()
-        {
-            foreach(var v in currentlyPlayingSounds)
-            {
-                v.Stop(AudioStopOptions.Immediate);
-            }
-            removeAllStopedSounds();
-        }
-
-        /// <summary>
-        /// Removes all of the sounds that have stoped playing. Used to clean up the list of songs that SoundManager is keeping track of, whether the sound is finished or it manually was stopped.
-        /// </summary>
-        public void removeAllStopedSounds()
-        {
-            List<Cue> cuesToRemove = new List<Cue>();
-            foreach (var v in currentlyPlayingSounds)
-            {
-                if (v.IsStopped) cuesToRemove.Add(v);
-            }
-            foreach (var v in cuesToRemove)
-            {
-                currentlyPlayingSounds.Remove(v);
-            }
-            cuesToRemove.Clear();
-        }
     }
 }

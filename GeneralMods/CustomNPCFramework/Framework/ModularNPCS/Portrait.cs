@@ -8,9 +8,18 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.ModularNPCS
 {
+    /// <summary>
+    /// Used as a wrapper for npc portraits.
+    /// </summary>
     public class Portrait
     {
+        /// <summary>
+        /// Used to display the npc portrait.
+        /// </summary>
         public Texture2D portrait;
+        /// <summary>
+        /// Used to hold the path to the texture to use for the npc portrait.
+        /// </summary>
         public string relativePath;
 
         /// <summary>

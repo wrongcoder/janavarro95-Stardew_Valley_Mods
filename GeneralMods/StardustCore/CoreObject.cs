@@ -6,6 +6,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardustCore.Animations;
+using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -40,7 +41,7 @@ namespace StardustCore
         public string description;
 
         [XmlIgnore]
-        public Texture2D TextureSheet;
+        public Texture2DExtended TextureSheet;
 
         public new bool flipped;
 
@@ -77,6 +78,7 @@ namespace StardustCore
 
         public string serializationName;
 
+
         public override string Name
         {
             get
@@ -86,11 +88,16 @@ namespace StardustCore
 
         }
 
+        /// <summary>
+        /// Initialize some basic custom logic such as inventory for CoreObjects.
+        /// </summary>
+        /// <param name="InvMaxSize">The max size of this object's internal inventory.</param>
+        /// <param name="tile">The location for this object to be positioned.</param>
         public virtual void InitializeBasics(int InvMaxSize, Vector2 tile)
         {
             this.inventory = new List<Item>();
             this.inventoryMaxSize = InvMaxSize;
-            this.tileLocation = tile;
+            this.TileLocation = tile;
             lightsOn = false;
 
             lightColor = Color.Black;
@@ -108,13 +115,13 @@ namespace StardustCore
             //does nothng
         }
 
-        public CoreObject(int which, Vector2 Tile, int InventoryMaxSize)
+        public CoreObject(Texture2DExtended texture,int which, Vector2 Tile, int InventoryMaxSize)
         {
             InitializeBasics(InventoryMaxSize, Tile);
             if (TextureSheet == null)
             {
-                TextureSheet = Game1.content.Load<Texture2D>("TileSheets\\furniture");
-                texturePath = "TileSheets\\furniture";
+                TextureSheet = texture;
+                this.texturePath = texture.path;
             }
             Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
             string[] array = dictionary[which].Split(new char[]
@@ -125,7 +132,7 @@ namespace StardustCore
 
             this.Decoration_type = this.getTypeNumberFromName(array[1]);
             this.description = "Can be placed inside your house.";
-            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
+            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.texture.Width, which * 16 / TextureSheet.texture.Width * 16, 1, 1);
             if (array[2].Equals("-1"))
             {
                 this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
@@ -141,14 +148,14 @@ namespace StardustCore
                 {
                     ' '
                 })[1]);
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.sourceRect = new Rectangle(which * 16 % TextureSheet.texture.Width, which * 16 / TextureSheet.texture.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
             }
-            this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
+            this.defaultBoundingBox = new Rectangle((int)this.TileLocation.X, (int)this.TileLocation.Y, 1, 1);
             if (array[3].Equals("-1"))
             {
-                this.boundingBox = this.getDefaultBoundingBoxForType(this.Decoration_type);
-                this.defaultBoundingBox = this.boundingBox;
+                this.boundingBox.Value = this.getDefaultBoundingBoxForType(this.Decoration_type);
+                this.defaultBoundingBox = this.boundingBox.Value;
             }
             else
             {
@@ -160,13 +167,13 @@ namespace StardustCore
                 {
                     ' '
                 })[1]);
-                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
-                this.defaultBoundingBox = this.boundingBox;
+                this.boundingBox.Value = new Rectangle((int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
+                this.defaultBoundingBox = this.boundingBox.Value;
             }
             this.updateDrawPosition();
             this.rotations = Convert.ToInt32(array[4]);
-            this.price = Convert.ToInt32(array[5]);
-            this.parentSheetIndex = which;
+            this.Price = Convert.ToInt32(array[5]);
+            this.ParentSheetIndex = which;
         }
 
         public override string getDescription()
@@ -184,8 +191,8 @@ namespace StardustCore
         public void fakePlacementAction(GameLocation location, int tileX, int tileY,bool trackSerialization=true)
         {
             this.thisLocation = location;
-            this.tileLocation = new Vector2(tileX, tileY);
-            this.position = this.tileLocation*(Game1.tileSize);
+            this.TileLocation = new Vector2(tileX, tileY);
+            this.position = this.TileLocation*(Game1.tileSize);
             if (trackSerialization)
             {
                 if (ModCore.SerializationManager.trackedObjectList.Contains(this)) return;
@@ -216,7 +223,7 @@ namespace StardustCore
                 // Game1.showRedMessage("YOOO");
                 //do some stuff when the right button is down
                 // rotate();
-                if (this.heldObject != null)
+                if (this.heldObject.Value != null)
                 {
                     //  Game1.player.addItemByMenuIfNecessary(this.heldObject);
                     // this.heldObject = null;
@@ -395,27 +402,41 @@ namespace StardustCore
             }
         }
 
-        public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, StardewValley.Farmer who)
+        /// <summary>
+        /// Drops in an item into this object. I.E putting an egg in a mayo maker.
+        /// </summary>
+        /// <param name="dropIn"></param>
+        /// <param name="probe"></param>
+        /// <param name="who"></param>
+        /// <returns></returns>
+        public override bool performObjectDropInAction(Item dropIn, bool probe, StardewValley.Farmer who)
         {
             // Log.AsyncG("HEY!");
-            if ((this.Decoration_type == 11 || this.Decoration_type == 5) && this.heldObject == null && !dropIn.bigCraftable && (!(dropIn is CoreObject) || ((dropIn as CoreObject).getTilesWide() == 1 && (dropIn as CoreObject).getTilesHigh() == 1)))
+            if (this.heldObject.Value == null && (dropIn is Item)) //Basically who cares accept whatever.
             {
-                this.heldObject = (StardewValley.Object)dropIn.getOne();
-                this.heldObject.tileLocation = this.tileLocation;
-                this.heldObject.boundingBox.X = this.boundingBox.X;
-                this.heldObject.boundingBox.Y = this.boundingBox.Y;
-                // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as CoreObject).Decoration_type));
-                this.heldObject.performDropDownAction(who);
-                if (!probe)
-                {
-                    Game1.playSound("woodyStep");
-                    //  Log.AsyncC("HUH?");
-                    if (who != null)
+                try {
+                    this.heldObject.Value = (StardewValley.Object)dropIn.getOne();
+                    this.heldObject.Value.TileLocation = this.TileLocation;
+                    this.heldObject.Value.boundingBox.X = this.boundingBox.X;
+                    this.heldObject.Value.boundingBox.Y = this.boundingBox.Y;
+                    // Log.AsyncO(getDefaultBoundingBoxForType((dropIn as CoreObject).Decoration_type));
+                    this.heldObject.Value.performDropDownAction(who);
+                    if (!probe)
                     {
-                        who.reduceActiveItemByOne();
+                        Game1.playSound("woodyStep");
+                        //  Log.AsyncC("HUH?");
+                        if (who != null)
+                        {
+                            who.reduceActiveItemByOne();
+                        }
                     }
+                    return true;
                 }
-                return true;
+                catch(Exception err)
+                {
+                    ModCore.ModMonitor.Log(err.ToString(),LogLevel.Error);
+                    return false;
+                }
             }
             return false;
         }
@@ -432,8 +453,8 @@ namespace StardustCore
                 this.sourceIndexOffset = 1;
                 if (this.lightSource == null)
                 {
-                    Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, lightColor, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
+                    Utility.removeLightSource((int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
+                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, lightColor, (int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
                     Game1.currentLightSources.Add(this.lightSource);
                     // Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
                     return;
@@ -464,8 +485,8 @@ namespace StardustCore
                 this.sourceIndexOffset = 1;
                 if (this.lightSource == null)
                 {
-                    Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, lightColor, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
+                    Utility.removeLightSource((int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
+                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, lightColor, (int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
                     Game1.currentLightSources.Add(this.lightSource);
                     return;
                 }
@@ -474,60 +495,32 @@ namespace StardustCore
         }
 
 
+        /// <summary>
+        /// Add a light source to this location.
+        /// </summary>
+        /// <param name="environment">The game location to add the light source in.</param>
+        /// <param name="c">The color of the light to be added</param>
         public virtual void addLights(GameLocation environment, Color c)
         {
-            if (this.Decoration_type == 7)
-            {
-                if (this.sourceIndexOffset == 0)
-                {
-                    this.sourceRect = this.defaultSourceRect;
-                    this.sourceRect.X = this.sourceRect.X + this.sourceRect.Width;
-                }
-                this.sourceIndexOffset = 1;
-                if (this.lightSource == null)
-                {
-                    Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, c, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                    // this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\BlueLight");
-                    Game1.currentLightSources.Add(this.lightSource);
-                    //  Log.AsyncG("LIGHT SOURCE ADDED FFFFFFF");
-                    return;
-                }
+           if (this.sourceIndexOffset == 0)
+           {
+                this.sourceRect = this.defaultSourceRect;
+                this.sourceRect.X = this.sourceRect.X + this.sourceRect.Width;
             }
-            else if (this.Decoration_type == 13)
+            this.sourceIndexOffset = 1;
+            if (this.lightSource == null)
             {
-                if (this.sourceIndexOffset == 0)
-                {
-                    this.sourceRect = this.defaultSourceRect;
-                    this.sourceRect.X = this.sourceRect.X + this.sourceRect.Width;
-                }
-                this.sourceIndexOffset = 1;
-                if (this.lightGlowAdded)
-                {
-                    environment.lightGlows.Remove(new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y + Game1.tileSize)));
-                    this.lightGlowAdded = false;
-                }
-            }
-            else
-            {
-
-                if (this.sourceIndexOffset == 0)
-                {
-                    this.sourceRect = this.defaultSourceRect;
-                    this.sourceRect.X = this.sourceRect.X + this.sourceRect.Width;
-                }
-                this.sourceIndexOffset = 1;
-                if (this.lightSource == null)
-                {
-                    Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                    this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, c, (int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
-                    Game1.currentLightSources.Add(this.lightSource);
-                    return;
-                }
-
+                Utility.removeLightSource((int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
+                this.lightSource = new LightSource(4, new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y - Game1.tileSize)), 2f, c, (int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
+                Game1.currentLightSources.Add(this.lightSource);
+                return;
             }
         }
 
+        /// <summary>
+        /// Removes a lightsource from the game location.
+        /// </summary>
+        /// <param name="environment">The game location to remove the light source from.</param>
         public void removeLights(GameLocation environment)
         {
             if (this.Decoration_type == 7)
@@ -537,7 +530,7 @@ namespace StardustCore
                     this.sourceRect = this.defaultSourceRect;
                 }
                 this.sourceIndexOffset = 0;
-                Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
+                Utility.removeLightSource((int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
                 this.lightSource = null;
                 return;
             }
@@ -567,16 +560,19 @@ namespace StardustCore
                 this.sourceRect = this.defaultSourceRect;
             }
             this.sourceIndexOffset = 0;
-            Utility.removeLightSource((int)(this.tileLocation.X * 2000f + this.tileLocation.Y));
+            Utility.removeLightSource((int)(this.TileLocation.X * 2000f + this.TileLocation.Y));
             this.lightSource = null;
             return;
         }
+
+
+
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
             // Log.Info("minutes passed in"+minutes);
             //  Log.Info("minues remaining" + this.minutesUntilReady);
-            this.minutesUntilReady = (this.minutesUntilReady - minutes);
+            this.MinutesUntilReady = (this.MinutesUntilReady - minutes);
             if (Game1.isDarkOut())
             {
                 // this.addLights(environment,this.lightColor);
@@ -647,7 +643,7 @@ namespace StardustCore
                     }
                     break;
             }
-            bool flag = this.Decoration_type == 5 || this.Decoration_type == 12 || this.parentSheetIndex == 724 || this.parentSheetIndex == 727;
+            bool flag = this.Decoration_type == 5 || this.Decoration_type == 12 || this.ParentSheetIndex == 724 || this.ParentSheetIndex == 727;
             bool flag2 = this.defaultBoundingBox.Width != this.defaultBoundingBox.Height;
             if (flag && this.currentRotation == 2)
             {
@@ -720,10 +716,15 @@ namespace StardustCore
             return this.Decoration_type != 13 && this.Decoration_type != 6 && this.Decoration_type != 13;
         }
 
+        /// <summary>
+        /// Determines whether or not this item can be given as a gift. Default is always false.
+        /// </summary>
+        /// <returns></returns>
         public override bool canBeGivenAsGift()
         {
             return false;
         }
+
         /*
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {
@@ -789,6 +790,8 @@ namespace StardustCore
             }
         }
         */
+
+
         public virtual void updateDrawPosition()
         {
             this.drawPosition = new Vector2((float)this.boundingBox.X, (float)(this.boundingBox.Y - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)));
@@ -803,6 +806,7 @@ namespace StardustCore
         {
             return this.boundingBox.Height / Game1.tileSize;
         }
+
         /*
         public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
@@ -969,6 +973,8 @@ namespace StardustCore
 
         }
         */
+
+
         public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
 
@@ -977,11 +983,11 @@ namespace StardustCore
             {
                 Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
                 List<Rectangle> walls = FarmHouse.getWalls((location as FarmHouse).upgradeLevel);
-                this.tileLocation = new Vector2((float)point.X, (float)point.Y);
+                this.TileLocation = new Vector2((float)point.X, (float)point.Y);
                 bool flag = false;
-                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.parentSheetIndex == 1293)
+                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.ParentSheetIndex == 1293)
                 {
-                    int num = (this.parentSheetIndex == 1293) ? 3 : 0;
+                    int num = (this.ParentSheetIndex == 1293) ? 3 : 0;
                     bool flag2 = false;
                     foreach (Rectangle current in walls)
                     {
@@ -1018,14 +1024,14 @@ namespace StardustCore
                         }
                     }
                 }
-                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
-                foreach (KeyValuePair<Vector2, StardewValley.Object> c in location.objects)
-                {
+                this.boundingBox.Value = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+                foreach (var c in location.objects.Pairs)
+                {                    
                     StardewValley.Object ehh = c.Value;
                     if (((ehh.GetType()).ToString()).Contains("Spawner"))
                     {
                         CoreObject current2 = (CoreObject)ehh;
-                        if (current2.Decoration_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
+                        if (current2.Decoration_type == 11 && current2.heldObject.Value == null && current2.getBoundingBox(current2.TileLocation).Intersects(this.boundingBox.Value))
                         {
                             current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
                             bool result = true;
@@ -1035,7 +1041,7 @@ namespace StardustCore
                 }
                 foreach (StardewValley.Farmer current3 in location.getFarmers())
                 {
-                    if (current3.GetBoundingBox().Intersects(this.boundingBox))
+                    if (current3.GetBoundingBox().Intersects(this.boundingBox.Value))
                     {
                         Game1.showRedMessage("Can't place on top of a person.");
                         bool result = false;
@@ -1060,11 +1066,10 @@ namespace StardustCore
             {
                 Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
                 //  List<Rectangle> walls = FarmHouse.getWalls((location as FarmHouse).upgradeLevel);
-                this.tileLocation = new Vector2((float)point.X, (float)point.Y);
-                bool flag = false;
-                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.parentSheetIndex == 1293)
+                this.TileLocation = new Vector2((float)point.X, (float)point.Y);
+                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.ParentSheetIndex == 1293)
                 {
-                    int num = (this.parentSheetIndex == 1293) ? 3 : 0;
+                    int num = (this.ParentSheetIndex == 1293) ? 3 : 0;
                     bool flag2 = false;
                     /*
                     foreach (Rectangle current in walls)
@@ -1081,7 +1086,6 @@ namespace StardustCore
                         Game1.showRedMessage("Must be placed on wall");
                         return false;
                     }
-                    flag = true;
                 }
                 for (int i = point.X; i < point.X + this.getTilesWide(); i++)
                 {
@@ -1105,7 +1109,7 @@ namespace StardustCore
                         }
                     }
                 }
-                this.boundingBox = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
+                this.boundingBox.Value = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
                 /*
                 foreach (Furniture current2 in (location as FarmHouse).furniture)
                 {
@@ -1119,7 +1123,7 @@ namespace StardustCore
                 */
                 foreach (StardewValley.Farmer current3 in location.getFarmers())
                 {
-                    if (current3.GetBoundingBox().Intersects(this.boundingBox))
+                    if (current3.GetBoundingBox().Intersects(this.boundingBox.Value))
                     {
                         Game1.showRedMessage("Can't place on top of a person.");
                         bool result = false;
@@ -1139,7 +1143,7 @@ namespace StardustCore
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
         {
-            return this.boundingBox;
+            return this.boundingBox.Value;
         }
 
         private Rectangle getDefaultSourceRectForType(int tileIndex, int type)
@@ -1204,7 +1208,7 @@ namespace StardustCore
             num = 1;
             num2 = 2;
             IL_94:
-            return new Rectangle(tileIndex * 16 % TextureSheet.Width, tileIndex * 16 / TextureSheet.Width * 16, num * 16, num2 * 16);
+            return new Rectangle(tileIndex * 16 % TextureSheet.texture.Width, tileIndex * 16 / TextureSheet.texture.Width * 16, num * 16, num2 * 16);
         }
 
         private Rectangle getDefaultBoundingBoxForType(int type)
@@ -1269,7 +1273,7 @@ namespace StardustCore
             num = 1;
             num2 = 1;
             IL_94:
-            return new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, num * Game1.tileSize, num2 * Game1.tileSize);
+            return new Rectangle((int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize, num * Game1.tileSize, num2 * Game1.tileSize);
         }
 
         private int getTypeNumberFromName(string typeName)
@@ -1309,7 +1313,7 @@ namespace StardustCore
 
         public override int salePrice()
         {
-            return this.price;
+            return this.Price;
         }
 
         public override int maximumStackSize()
@@ -1319,7 +1323,7 @@ namespace StardustCore
 
         public override int getStack()
         {
-            return this.stack;
+            return this.Stack;
         }
 
 
@@ -1348,15 +1352,16 @@ namespace StardustCore
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
-            if (f.ActiveObject.bigCraftable)
+            if (f.ActiveObject.bigCraftable.Value)
             {
                 spriteBatch.Draw(Game1.bigCraftableSpriteSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(StardewValley.Object.getSourceRectForBigCraftable(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 return;
             }
-            spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            
+            spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
-                spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
                 {
                     return;
@@ -1370,52 +1375,91 @@ namespace StardustCore
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
+        /// <summary>
+        /// Draws the item's icon in the menu.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="location"></param>
+        /// <param name="scaleSize"></param>
+        /// <param name="transparency"></param>
+        /// <param name="layerDepth"></param>
+        /// <param name="drawStackNumber"></param>
+        /// <param name="c"></param>
+        /// <param name="drawShadow"></param>
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {
             if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
-                Utility.drawTinyDigits(this.stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
-            if (drawStackNumber && this.quality > 0)
+                Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
+            if (drawStackNumber && this.Quality > 0)
             {
-                float num = this.quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
-                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
+                float num = this.Quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
+                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.Quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.Quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
             }
-            spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height)), 1f * this.getScaleSize() * scaleSize * .5f, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet.texture, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height)), 1f * this.getScaleSize() * scaleSize * .5f, SpriteEffects.None, layerDepth);
         }
 
+        /// <summary>
+        /// Draws the object to the screen.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="alpha"></param>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             if (x == -1)
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet.texture, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             else
             {
-                spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
-            if (this.heldObject != null)
+            if (this.heldObject.Value != null)
             {
-                if (this.heldObject is CoreObject)
+                if (this.heldObject.Value is CoreObject)
                 {
-                    (this.heldObject as CoreObject).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as CoreObject).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
+                    (this.heldObject.Value as CoreObject).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject.Value as CoreObject).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
                 spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
             }
         }
 
         public virtual void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
-            spriteBatch.Draw(TextureSheet, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet.texture, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         public override Item getOne()
         {
-            CoreObject CoreObject = new CoreObject(this.parentSheetIndex, this.tileLocation, this.inventoryMaxSize);
+            CoreObject CoreObject = new CoreObject(this.TextureSheet,this.ParentSheetIndex, this.TileLocation, this.inventoryMaxSize);
 
             CoreObject.drawPosition = this.drawPosition;
             CoreObject.defaultBoundingBox = this.defaultBoundingBox;
-            CoreObject.boundingBox = this.boundingBox;
+            CoreObject.boundingBox.Value = this.boundingBox.Value;
+            CoreObject.currentRotation = this.currentRotation - 1;
+            CoreObject.rotations = this.rotations;
+            //rotate();
+
+            return CoreObject;
+        }
+
+
+        /// <summary>
+        /// Used in vertain cases where the mod needs to get an object relative to a content pack's directory.
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <returns></returns>
+        public virtual Item getOne(IModHelper helper)
+        {
+            Texture2DExtended texture = new Texture2DExtended(helper, this.TextureSheet.path);
+            CoreObject CoreObject = new CoreObject(texture,this.ParentSheetIndex, this.TileLocation, this.inventoryMaxSize);
+
+            CoreObject.drawPosition = this.drawPosition;
+            CoreObject.defaultBoundingBox = this.defaultBoundingBox;
+            CoreObject.boundingBox.Value = this.boundingBox.Value;
             CoreObject.currentRotation = this.currentRotation - 1;
             CoreObject.rotations = this.rotations;
             //rotate();
@@ -1499,7 +1543,7 @@ namespace StardustCore
                 Random random = new Random(inventory.Count);
                 int i = random.Next();
                 i = i % 4;
-                Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
+                Vector2 v2 = new Vector2(this.TileLocation.X * Game1.tileSize, this.TileLocation.Y * Game1.tileSize);
                 Game1.createItemDebris(I.getOne(), v2, i);
                 return false;
             }
@@ -1513,7 +1557,7 @@ namespace StardustCore
 
                 // Log.AsyncG("ADD LIGHTS");
                 this.Decoration_type = 7;
-                this.type = "Lamp";
+                this.Type = "Lamp";
 
                 //     this.lightSource.lightTexture = Game1.content.Load<Texture2D>("LooseSprites\\Lighting\\Lantern");
                 // this.lightSource.position = tileLocation;
@@ -1530,9 +1574,14 @@ namespace StardustCore
 
         }
 
+        public virtual void resetTexture(IModHelper helper)
+        {
+            TextureSheet = new Texture2DExtended(helper, TextureSheet.path);
+        }
+
         public virtual void resetTexture()
         {
-            TextureSheet = Game1.content.Load<Texture2D>(this.texturePath);
+            TextureSheet = new Texture2DExtended(TextureSheet.getHelper(), TextureSheet.path);
         }
 
         public override string getCategoryName()
@@ -1554,7 +1603,8 @@ namespace StardustCore
 
         public static Item ParseIntoInventory()
         {
-            Item I = new CoreObject(0, Vector2.Zero, 0);
+            Texture2DExtended texture = new Texture2DExtended();
+            Item I = new CoreObject(texture,0, Vector2.Zero, 0);
             return I;
         }
 

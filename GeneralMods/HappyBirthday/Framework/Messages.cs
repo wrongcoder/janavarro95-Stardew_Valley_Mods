@@ -1,4 +1,6 @@
-﻿using StardewValley;
+﻿
+using StardewValley;
+using System.Collections.Generic;
 
 namespace Omegasis.HappyBirthday.Framework
 {
@@ -12,7 +14,10 @@ namespace Omegasis.HappyBirthday.Framework
         /// <param name="message">The message to display.</param>
         public static void ShowStarMessage(string message)
         {
+            //IEnumerable<Farmer> players= Game1.getAllFarmers();
+
             Game1.addHUDMessage(new HUDMessage(message, 1));
+
             if (!message.Contains("Inventory"))
             {
                 Game1.playSound("cancel");
@@ -23,6 +28,9 @@ namespace Omegasis.HappyBirthday.Framework
                 Game1.player.mailReceived.Add("BackpackTip");
                 Game1.addMailForTomorrow("pierreBackpack", false, false);
             }
+
+
         }
+
     }
 }

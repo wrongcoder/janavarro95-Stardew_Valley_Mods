@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -16,13 +17,15 @@ namespace Omegasis.SaveAnywhere.Framework
         private readonly IReflectedField<bool> SavedYet;
 
 
+
+
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="items">The shipping bin items.</param>
         /// <param name="reflection">Simplifies access to game code.</param>
-        public NewShippingMenu(List<Item> items, IReflectionHelper reflection)
+        public NewShippingMenu(NetCollection<Item> items, IReflectionHelper reflection)
             : base(items)
         {
             this.SavedYet = reflection.GetField<bool>(this, "savedYet");

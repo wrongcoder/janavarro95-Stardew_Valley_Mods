@@ -1,7 +1,7 @@
 {
   "Name": "Custom Shop Redux GUI",
   "Author": "Alpha_Omegasis",
-  "Version": "1.4.1",
+  "Version": "1.5.0",
   "Description": "A nice way to make custom shops.",
   "UniqueID": "Omegasis.CustomShopReduxGui",
   "EntryDll": "CustomShopsRedux.dll",

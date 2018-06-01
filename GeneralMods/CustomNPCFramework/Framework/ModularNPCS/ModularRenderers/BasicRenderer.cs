@@ -1,7 +1,10 @@
-﻿using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
+﻿using CustomNPCFramework.Framework.Enums;
+using CustomNPCFramework.Framework.Graphics;
+using CustomNPCFramework.Framework.ModularNPCS.CharacterAnimationBases;
 using CustomNPCFramework.Framework.NPCS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +13,26 @@ using System.Threading.Tasks;
 
 namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
 {
+    /// <summary>
+    /// A class used to hold all of the textures/animations/information to make modular npc rendering possible.
+    /// </summary>
     public class BasicRenderer
     {
+        /// <summary>
+        /// Dictionary that holds key pair values of (animationName,Animation). USed to manage multiple animations. 
+        /// </summary>
         public Dictionary<string, StandardCharacterAnimation> animationList;
+        /// <summary>
+        /// Used to keep track of what animation is currently being used.
+        /// </summary>
         public StandardCharacterAnimation currentAnimation;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="standingAnimation">The animation information to be used when the character is standing.</param>
+        /// <param name="walkingAnimation">The animation information to be used when the character is walking/moving.</param>
+        /// <param name="swimmingAnimation">The animation information to be used when the character is walking/moving.</param>
         public BasicRenderer(StandardCharacterAnimation standingAnimation,StandardCharacterAnimation walkingAnimation, StandardCharacterAnimation swimmingAnimation)
         {
             animationList = new Dictionary<string, StandardCharacterAnimation>();
@@ -27,13 +45,21 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         /// <summary>
         /// Sets the animation associated with the key name; If it fails the npc will just default to standing.
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">The name of the animation to swap the current animation to.</param>
         public virtual void setAnimation(string key)
         {
             this.currentAnimation = animationList[key];
-            if (this.currentAnimation == null) this.setAnimation(AnimationKeys.standingKey);
+            if (this.currentAnimation == null)
+            {
+                Class1.ModMonitor.Log("ERROR SETTING AN ANIMATION: "+key);
+                this.setAnimation(AnimationKeys.standingKey);
+            }
         }
 
+        /// <summary>
+        /// Sets the direction of the current animated sprite respectively.
+        /// </summary>
+        /// <param name="facingDirection">The direction to face. 0=up, 1=right, 2= down, 3=left.</param>
         public virtual void setDirection(int facingDirection)
         {
             if (facingDirection == 0) setUp();
@@ -42,26 +68,54 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
             if (facingDirection == 2) setLeft();
         }
 
+        /// <summary>
+        /// Sets the direction of the current animated sprite respectively to the direction passed in.
+        /// </summary>
+        /// <param name="direction">The direction to face.</param>
+        public virtual void setDirection(Direction direction)
+        {
+            if (direction == Direction.up) setUp();
+            if (direction == Direction.right) setRight();
+            if (direction == Direction.down) setDown();
+            if (direction == Direction.left) setLeft();
+        }
+
+
+        /// <summary>
+        /// Sets the current animated sprite to face left.
+        /// </summary>
         public virtual void setLeft()
         {
             this.currentAnimation.setLeft();
         }
 
+        /// <summary>
+        /// Sets the current animated sprite to face right.
+        /// </summary>
         public virtual void setRight()
         {
             this.currentAnimation.setRight();
         }
 
+        /// <summary>
+        /// Sets the current animated sprite to face up.
+        /// </summary>
         public virtual void setUp()
         {
             this.currentAnimation.setUp();
         }
-
+        
+        /// <summary>
+        /// Sets the current animated sprite to face down.
+        /// </summary>
         public virtual void setDown()
         {
             this.currentAnimation.setDown();
         }
 
+        /// <summary>
+        /// Used to reload all of the sprites pertaining to all of the animations stored in this renderer.
+        /// </summary>
         public virtual void reloadSprites()
         {
             foreach(var v in this.animationList)
@@ -114,13 +168,19 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         /// <param name="layerDepth"></param>
         public virtual void draw(SpriteBatch b, ExtendedNPC npc, Vector2 position, Rectangle sourceRectangle, Color color, float alpha, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
         {
+
             this.currentAnimation.draw(b, npc, position, sourceRectangle, color, alpha, origin, scale, effects, layerDepth);
         }
 
 
-        public virtual void Animate(float interval)
+        /// <summary>
+        /// Animates the current animation for the current sprite.
+        /// </summary>
+        /// <param name="interval"></param>
+        /// <param name="loop"></param>
+        public virtual void Animate(float interval, bool loop=true)
         {
-            this.currentAnimation.Animate(interval);
+            this.currentAnimation.Animate(interval,loop);
         }
 
 
@@ -137,9 +197,9 @@ namespace CustomNPCFramework.Framework.ModularNPCS.ModularRenderers
         /// <param name="v2"></param>
         /// <param name="spriteEffects"></param>
         /// <param name="v3"></param>
-        public virtual void draw(SpriteBatch b, ExtendedNPC extendedNPC, Vector2 vector21, Rectangle? v1, Color white, float rotation, Vector2 vector22, float v2, SpriteEffects spriteEffects, float v3)
+        public virtual void draw(SpriteBatch b, ExtendedNPC extendedNPC, Vector2 position, Rectangle? v1, Color white, float rotation, Vector2 origin, float scale, SpriteEffects spriteEffects, float v3)
         {
-            this.draw(b, extendedNPC, vector21, v1, white, rotation, vector22, v2, spriteEffects, v3);
+            this.draw(b, extendedNPC, position, new Rectangle(0,0,16,32), white, rotation, origin, scale, spriteEffects, v3);
         }
     }
 }

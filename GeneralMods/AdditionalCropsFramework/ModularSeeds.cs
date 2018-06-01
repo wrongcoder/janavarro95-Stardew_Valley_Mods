@@ -102,11 +102,12 @@ namespace AdditionalCropsFramework
                 }
                 catch (Exception e)
                 {
-
+                    e.ToString();
                 }
             }
             catch (Exception e)
             {
+                e.ToString();
                 this.description = "Some seeds! Maybe you should plant them.";
             }
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, 1, 1);
@@ -126,7 +127,7 @@ namespace AdditionalCropsFramework
                 this.sourceRect = new Rectangle(which * 16 % TextureSheet.Width, which * 16 / TextureSheet.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
             }
-            this.defaultBoundingBox = new Rectangle((int)this.tileLocation.X, (int)this.tileLocation.Y, 1, 1);
+            this.defaultBoundingBox = new Rectangle((int)this.TileLocation.X, (int)this.TileLocation.Y, 1, 1);
             if (array[3].Equals("-1"))
             {
             }
@@ -140,13 +141,13 @@ namespace AdditionalCropsFramework
                 {
                     ' '
                 })[1]);
-                this.boundingBox = new Rectangle((int)this.tileLocation.X * Game1.tileSize, (int)this.tileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
-                this.defaultBoundingBox = this.boundingBox;
+                this.boundingBox.Value = new Rectangle((int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
+                this.defaultBoundingBox = this.boundingBox.Value;
             }
             this.updateDrawPosition();
             this.rotations = Convert.ToInt32(array[4]);
-            this.price = Convert.ToInt32(array[5]);
-            this.parentSheetIndex = which;
+            this.Price = Convert.ToInt32(array[5]);
+            this.ParentSheetIndex = which;
 
         }
 
@@ -178,21 +179,6 @@ namespace AdditionalCropsFramework
             if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 return this.RightClicked(who);
-
-                // Game1.showRedMessage("YOOO");
-                //do some stuff when the right button is down
-                // rotate();
-                if (this.heldObject != null)
-                {
-                    //  Game1.player.addItemByMenuIfNecessary(this.heldObject);
-                    // this.heldObject = null;
-                }
-                else
-                {
-                    //   this.heldObject = Game1.player.ActiveObject;
-                    //  Game1.player.removeItemFromInventory(heldObject);
-                }
-                //this.minutesUntilReady = 30;
             }
             else
             {
@@ -268,7 +254,7 @@ namespace AdditionalCropsFramework
             return false;
         }
 
-        public virtual bool RightClicked(StardewValley.Farmer who)
+        public override bool RightClicked(StardewValley.Farmer who)
         {
 
 
@@ -337,7 +323,7 @@ namespace AdditionalCropsFramework
             this.addLights(thisLocation, lightColor);
         }
 
-        public override bool performObjectDropInAction(StardewValley.Object dropIn, bool probe, StardewValley.Farmer who)
+        public override bool performObjectDropInAction(Item dropIn, bool probe, StardewValley.Farmer who)
         {
             return false;
         }
@@ -363,7 +349,7 @@ namespace AdditionalCropsFramework
             return false;
         }
 
-        public virtual void updateDrawPosition()
+        public override void updateDrawPosition()
         {
             this.drawPosition = new Vector2((float)this.boundingBox.X, (float)(this.boundingBox.Y - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)));
         }
@@ -386,12 +372,12 @@ namespace AdditionalCropsFramework
 
         public override int salePrice()
         {
-            return this.price;
+            return this.Price;
         }
 
         public override int getStack()
         {
-            return this.stack;
+            return this.Stack;
         }
 
 
@@ -421,10 +407,10 @@ namespace AdditionalCropsFramework
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
 
-            spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            spriteBatch.Draw(this.TextureSheet, objectPosition, new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
-                spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(Game1.objectSpriteSheet, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
                 {
                     return;
@@ -437,18 +423,18 @@ namespace AdditionalCropsFramework
             }
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber)
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawWithShadows)
         {
             //spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize, SpriteEffects.None, layerDepth);
             spriteBatch.Draw(TextureSheet, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height / 2)), 1f * this.getScaleSize() * scaleSize * 1.5f, SpriteEffects.None, layerDepth);
 
 
             if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
-                Utility.drawTinyDigits(this.stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
-            if (drawStackNumber && this.quality > 0)
+                Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
+            if (drawStackNumber && this.Quality > 0)
             {
-                float num = this.quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
-                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
+                float num = this.Quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
+                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.Quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.Quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
             }
         }
 
@@ -462,15 +448,15 @@ namespace AdditionalCropsFramework
             {
                 spriteBatch.Draw(TextureSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
-            if (this.heldObject != null)
+            if (this.heldObject.Value != null)
             {
-                if (this.heldObject is ModularSeeds)
+                if (this.heldObject.Value is ModularSeeds)
                 {
-                    (this.heldObject as ModularSeeds).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject as ModularSeeds).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
+                    (this.heldObject.Value as ModularSeeds).drawAtNonTileSpot(spriteBatch, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - (this.heldObject.Value as ModularSeeds).sourceRect.Height * Game1.pixelZoom - Game1.tileSize / 4))), (float)(this.boundingBox.Bottom - 7) / 10000f, alpha);
                     return;
                 }
                 spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize * 5 / 6)), new Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, (float)this.boundingBox.Bottom / 10000f);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(Game1.currentLocation.getSourceRectForObject(this.heldObject.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
+                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
             }
         }
 
@@ -481,7 +467,7 @@ namespace AdditionalCropsFramework
 
         public override Item getOne()
         {
-            ModularSeeds ExtraSeeds = new ModularSeeds(this.parentSheetIndex, this.texturePath, this.dataFilePath,this.cropTextureFilePath,this.cropDataFilePath,this.cropObjectTextureFilePath,this.cropObjectDataFilePath);
+            ModularSeeds ExtraSeeds = new ModularSeeds(this.ParentSheetIndex, this.texturePath, this.dataFilePath,this.cropTextureFilePath,this.cropDataFilePath,this.cropObjectTextureFilePath,this.cropObjectDataFilePath);
             /*
             drawPosition = this.drawPosition;
             defaultBoundingBox = this.defaultBoundingBox;
@@ -594,128 +580,7 @@ namespace AdditionalCropsFramework
 
         public static Item ParseIntoInventory(string s)
         {
-            // PlanterBox p = new PlanterBox();
-            // return p;
-
-
-
-            dynamic obj = JObject.Parse(s);
-
-           ModularSeeds d = new ModularSeeds();
-
-            d.dataFilePath = obj.dataFilePath;
-            d.cropDataFilePath = obj.cropDataFilePath;
-            d.cropObjectDataFilePath = obj.cropObjectDataFilePath;
-
-            
-
-            d.texturePath = obj.texturePath;
-            d.cropTextureFilePath = obj.cropTextureFilePath;
-            d.cropObjectTextureFilePath = obj.cropObjectTextureFilePath;
-
-            d.price = obj.price;
-            d.Decoration_type = obj.Decoration_type;
-            d.rotations = obj.rotations;
-            d.currentRotation = obj.currentRotation;
-            string s1 = Convert.ToString(obj.sourceRect);
-            d.sourceRect = Utilities.parseRectFromJson(s1);
-            string s2 = Convert.ToString(obj.defaultSourceRect);
-            d.defaultSourceRect = Utilities.parseRectFromJson(s2);
-            string s3 = Convert.ToString(obj.defaultBoundingBox);
-            d.defaultBoundingBox = Utilities.parseRectFromJson(s3);
-            d.description = obj.description;
-            d.flipped = obj.flipped;
-            d.flaggedForPickUp = obj.flaggedForPickUp;
-            d.tileLocation = obj.tileLocation;
-            d.parentSheetIndex = obj.parentSheetIndex;
-            d.owner = obj.owner;
-            d.name = obj.name;
-            d.type = obj.type;
-            d.canBeSetDown = obj.canBeSetDown;
-            d.canBeGrabbed = obj.canBeGrabbed;
-            d.isHoedirt = obj.isHoedirt;
-            d.isSpawnedObject = obj.isSpawnedObject;
-            d.questItem = obj.questItem;
-            d.isOn = obj.isOn;
-            d.fragility = obj.fragility;
-            d.edibility = obj.edibility;
-            d.stack = obj.stack;
-            d.quality = obj.quality;
-            d.bigCraftable = obj.bigCraftable;
-            d.setOutdoors = obj.setOutdoors;
-            d.setIndoors = obj.setIndoors;
-            d.readyForHarvest = obj.readyForHarvest;
-            d.showNextIndex = obj.showNextIndex;
-            d.hasBeenPickedUpByFarmer = obj.hasBeenPickedUpByFarmer;
-            d.isRecipe = obj.isRecipe;
-            d.isLamp = obj.isLamp;
-            d.heldObject = obj.heldObject;
-            d.minutesUntilReady = obj.minutesUntilReady;
-            string s4 = Convert.ToString(obj.boundingBox);
-            d.boundingBox = Utilities.parseRectFromJson(s4);
-            d.scale = obj.scale;
-            d.lightSource = obj.lightSource;
-            d.shakeTimer = obj.shakeTimer;
-            d.internalSound = obj.internalSound;
-            d.specialVariable = obj.specialVariable;
-            d.category = obj.category;
-            d.specialItem = obj.specialItem;
-            d.hasBeenInInventory = obj.hasBeenInInventory;
-
-
-            string t = obj.texturePath;
-            d.TextureSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, t));
-            d.texturePath = t;
-            d.itemReadyForHarvest = obj.itemReadyForHarvest;
-            d.lightsOn = obj.lightsOn;
-            d.lightColor = obj.lightColor;
-            d.thisType = obj.thisType;
-            d.removable = obj.removable;
-            d.locationsName = obj.locationsName;
-
-            d.drawColor = obj.drawColor;
-            d.serializationName = obj.serializationName;
-
-            /*
-            //ANIMATIONS
-            var q = obj.animationManager;
-            dynamic obj1 = q;
-            string name = Convert.ToString(obj1.currentAnimationName);
-            int frame = Convert.ToInt32(obj1.currentAnimationListIndex);
-            PlanterBox dummy = new PlanterBox(d.parentSheetIndex, d.tileLocation, d.texturePath, d.dataPath, d.removable, d.IsSolid);
-            d.animationManager = dummy.animationManager;
-            bool f = d.animationManager.setAnimation(name, frame);
-            bool f2;
-            if (f == false)
-            {
-                f2 = d.animationManager.setAnimation(name, 0);
-                if (f2 == false) d.animationManager.currentAnimation = d.animationManager.defaultDrawFrame;
-            }
-            // Log.AsyncC(d.cropInformationString);
-            */
-            
-            //ModularCrop f=  j.ToObject<ModularCrop>();
-            //ModularCrop f = obj.modularCrop;
-
-            // Log.AsyncG("THIS IS CROP: " + c.indexOfHarvest);
-            //Log.AsyncG(cropString);
-
-
-            // d.crop = obj.crop;
-            // d.modularCrop = obj.modularCrop;
-
-
-            try
-            {
-                return d;
-            }
-            catch (Exception e)
-            {
-                // Log.AsyncM(e);
-                return null;
-            }
-
-            //return base.ParseIntoInventory();
+            return AdditionalCropsFramework.ModCore.ModHelper.ReadJsonFile<ModularSeeds>(s);
         }
 
         public static void SerializeFromWorld(Item I)

@@ -39,28 +39,24 @@ namespace EventSystem.Framework.Events
         /// <summary>
         /// Occurs when the player enters the warp tile event position.
         /// </summary>
-        public override void OnPlayerEnter()
+        public override bool OnPlayerEnter()
         {
-            if (isPlayerOnTile() == true&& this.doesInteractionNeedToRun==true)
+            if (base.OnPlayerEnter() == false) return false;
+            else
             {
-                this.doesInteractionNeedToRun = false;
-                this.playerOnTile = true;
-                if (this.playerEvents.onPlayerEnter != null) this.playerEvents.onPlayerEnter.run(); //used to run a function before the warp.
-                Game1.warpFarmer(Game1.getLocationFromName(this.warpInfo.targetMapName),this.warpInfo.targetX,this.warpInfo.targetY,this.warpInfo.facingDirection,this.warpInfo.isStructure);
+                
+                Game1.warpFarmer(this.warpInfo.targetMapName, this.warpInfo.targetX, this.warpInfo.targetY, this.warpInfo.facingDirection, this.warpInfo.isStructure);
+                return true;
             }
         }
 
         /// <summary>
         /// Runs when the player is not on the tile and resets player interaction.
         /// </summary>
-        public override void OnPlayerLeave()
+        public override bool OnPlayerLeave()
         {
-            if (isPlayerOnTile() == false && this.playerOnTile == true)
-            {
-                this.playerOnTile = false;
-                this.doesInteractionNeedToRun = true;
-                if (this.playerEvents.onPlayerLeave != null) this.playerEvents.onPlayerLeave.run();
-            }    
+            if (base.OnPlayerLeave() == false) return false;
+            return true;
         }
 
         /// <summary>

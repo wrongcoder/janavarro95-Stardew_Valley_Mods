@@ -28,8 +28,8 @@ namespace Omegasis.NoMorePets
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         public void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            foreach (Pet pet in Utility.getAllCharacters().OfType<Pet>().ToArray())
+        {   
+            foreach (Pet pet in Game1.player.currentLocation.getCharacters().OfType<Pet>().ToArray())
                 pet.currentLocation.characters.Remove(pet);
         }
     }

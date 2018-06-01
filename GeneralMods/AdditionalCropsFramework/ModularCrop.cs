@@ -6,6 +6,7 @@ using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,7 +48,7 @@ namespace StardewValley
 
         public int experienceGainWhenHarvesting;
 
-        public Texture2D spriteSheet;
+        public Texture2DExtended spriteSheet;
         public string spriteSheetName;
         public string dataFileName;
 
@@ -68,12 +69,12 @@ namespace StardewValley
             this.currentPhase = 5;
         }
 
-        public ModularCrop(int SeedIndex, int tileX, int tileY, string DataFileName, string cropTextureSheet,string AssociatedObjectTextureSheet,string AssociatedObjectDataFile)
+        public ModularCrop(IModHelper helper,int SeedIndex, int tileX, int tileY, string DataFileName, string cropTextureSheet,string AssociatedObjectTextureSheet,string AssociatedObjectDataFile)
         {
             this.seedIndex = SeedIndex;
             this.forageCrop = false;
             this.dataFileName = DataFileName;
-            this.spriteSheet = ModCore.ModHelper.Content.Load<Texture2D>(Path.Combine(Utilities.EntensionsFolderName, cropTextureSheet));
+            this.spriteSheet = new Texture2DExtended(helper, Path.Combine(Utilities.EntensionsFolderName, cropTextureSheet));
             this.spriteSheetName = cropTextureSheet;
             this.experienceGainWhenHarvesting = 0;
             cropObjectTexture = AssociatedObjectTextureSheet;
@@ -193,11 +194,11 @@ namespace StardewValley
                 if (this.whichForageCrop == 1)
                     //@object = new ModularCropObject(399, 1, false, -1, 0);
                 if (Game1.player.professions.Contains(16))
-                    @object.quality = 4;
+                    @object.Quality = 4;
                 else if (Game1.random.NextDouble() < (double)Game1.player.ForagingLevel / 30.0)
-                    @object.quality = 2;
+                    @object.Quality = 2;
                 else if (Game1.random.NextDouble() < (double)Game1.player.ForagingLevel / 15.0)
-                    @object.quality = 1;
+                    @object.Quality = 1;
                 Game1.stats.ItemsForaged += (uint)@object.Stack;
                 if (junimoHarvester != null)
                 {
@@ -229,7 +230,7 @@ namespace StardewValley
                 if (this.indexOfHarvest == 0)
                     return true;
                 Random random = new Random(xTile * 7 + yTile * 11 + (int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame);
-                switch (soil.fertilizer)
+                switch (soil.fertilizer.Value)
                 {
                     case 368:
                         num3 = 1;
@@ -262,9 +263,9 @@ namespace StardewValley
                     for (int index = 0; index < num1; ++index)
                     {
                         if (junimoHarvester != null)
-                            junimoHarvester.tryToAddItemToHut((Item)new ModularCropObject(this.indexOfHarvest, 1, this.cropObjectTexture, this.cropObjectData));
+                            junimoHarvester.tryToAddItemToHut((Item)new ModularCropObject( this.spriteSheet.getHelper(), this.indexOfHarvest, 1, this.cropObjectTexture, this.cropObjectData));
                         else
-                            AdditionalCropsFramework.Utilities.createObjectDebris((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
+                            AdditionalCropsFramework.Utilities.createObjectDebris((Item)new ModularCropObject(this.spriteSheet.getHelper(),this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
                             
                             //Game1.createObjectDebris(this.indexOfHarvest, xTile, yTile, -1, num2, 1f, (GameLocation)null);
                     }
@@ -278,7 +279,7 @@ namespace StardewValley
                     if (junimoHarvester == null)
                     {
                         Farmer player = Game1.player;
-                        ModularCropObject @object= new ModularCropObject(this.indexOfHarvest, 1, this.cropObjectTexture, this.cropObjectData);
+                        ModularCropObject @object= new ModularCropObject(this.spriteSheet.getHelper(),this.indexOfHarvest, 1, this.cropObjectTexture, this.cropObjectData);
                         int num7 = 0;
                         if (!player.addItemToInventoryBool((Item)@object, num7 != 0))
                         {
@@ -295,7 +296,7 @@ namespace StardewValley
                     else
                     {
                         JunimoHarvester junimoHarvester1 = junimoHarvester;
-                        ModularCropObject @object = new ModularCropObject(this.indexOfHarvest, 1, this.cropObjectTexture, this.cropObjectData);
+                        ModularCropObject @object = new ModularCropObject(this.spriteSheet.getHelper() ,this.indexOfHarvest, 1, this.cropObjectTexture, this.cropObjectData);
                         junimoHarvester1.tryToAddItemToHut((Item)@object);
                     }
                     if (random.NextDouble() < (double)Game1.player.LuckLevel / 1500.0 + Game1.dailyLuck / 1200.0 + 9.99999974737875E-05)
@@ -324,9 +325,9 @@ namespace StardewValley
                     for (int index = 0; index < num1 - 1; ++index)
                     {
                         if (junimoHarvester == null)
-                            AdditionalCropsFramework.Utilities.createObjectDebris((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
+                            AdditionalCropsFramework.Utilities.createObjectDebris((Item)new ModularCropObject(this.spriteSheet.getHelper() ,this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData), xTile, yTile, xTile, yTile, -1, this.getQualityOfCrop(), 1);
                         else
-                            junimoHarvester.tryToAddItemToHut((Item)new ModularCropObject(this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData));
+                            junimoHarvester.tryToAddItemToHut((Item)new ModularCropObject(this.spriteSheet.getHelper(),this.indexOfHarvest, this.getAmountForHarvest(), this.cropObjectTexture, this.cropObjectData));
                     }
                     float num8 = (float)(16.0 * Math.Log(0.018 * (double)Convert.ToInt32(this.experienceGainWhenHarvesting + 1.0), Math.E));
                     if (junimoHarvester == null)
@@ -388,7 +389,7 @@ namespace StardewValley
 
         public void newDay(int state, int fertilizer, int xTile, int yTile, GameLocation environment)
         {
-            if (!environment.name.Equals("Greenhouse") && (this.dead || !this.seasonsToGrowIn.Contains(Game1.currentSeason)))
+            if (!environment.Name.Equals("Greenhouse") && (this.dead || !this.seasonsToGrowIn.Contains(Game1.currentSeason)))
             {
                 this.dead = true;
             }
@@ -413,7 +414,7 @@ namespace StardewValley
                             for (int index2 = yTile - 1; index2 <= yTile + 1; ++index2)
                             {
                                 Vector2 key = new Vector2((float)index1, (float)index2);
-                                if (!environment.terrainFeatures.ContainsKey(key) || !(environment.terrainFeatures[key] is HoeDirt) || ((environment.terrainFeatures[key] as HoeDirt).crop == null || (environment.terrainFeatures[key] as HoeDirt).crop.indexOfHarvest != this.indexOfHarvest))
+                                if (!environment.terrainFeatures.ContainsKey(key) || !(environment.terrainFeatures[key] is HoeDirt) || ((environment.terrainFeatures[key] as HoeDirt).crop == null || (environment.terrainFeatures[key] as HoeDirt).crop.indexOfHarvest.Value != this.indexOfHarvest))
                                     return;
                             }
                         }
@@ -449,8 +450,8 @@ namespace StardewValley
                         break;
                 }
                 ModularCropObject @object = this.getRandomWildCropForSeason(season);
-                @object.isSpawnedObject = true;
-                @object.canBeGrabbed = true;
+                @object.IsSpawnedObject = true;
+                @object.CanBeGrabbed = true;
                 environment.objects.Add(index, this.getRandomWildCropForSeason(season));
                 
 
@@ -474,23 +475,23 @@ namespace StardewValley
             }
             else
             {
-                b.Draw(this.spriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(this.getSourceRect((int)tileLocation.X * 7 + (int)tileLocation.Y * 11)), toTint, rotation, new Vector2(8f, 24f), (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
+                b.Draw(this.spriteSheet.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(this.getSourceRect((int)tileLocation.X * 7 + (int)tileLocation.Y * 11)), toTint, rotation, new Vector2(8f, 24f), (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
 
                 //Log.AsyncG((float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
 
                 if (this.tintColor.Equals(Color.White) || this.currentPhase != this.phaseDays.Count - 1 || this.dead)
                     return;
-                b.Draw(this.spriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((this.fullyGrown ? (this.dayOfCurrentPhase <= 0 ? 6 : 7) : this.currentPhase + 1 + 1) * 16 + (this.rowInSpriteSheet % 2 != 0 ? 128 : 0), this.rowInSpriteSheet / 2 * 16 * 2, 16, 32)), this.tintColor, rotation, new Vector2(8f, 24f), (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
+                b.Draw(this.spriteSheet.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (this.raisedSeeds || this.currentPhase >= this.phaseDays.Count - 1 ? 0.0 : ((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((this.fullyGrown ? (this.dayOfCurrentPhase <= 0 ? 6 : 7) : this.currentPhase + 1 + 1) * 16 + (this.rowInSpriteSheet % 2 != 0 ? 128 : 0), this.rowInSpriteSheet / 2 * 16 * 2, 16, 32)), this.tintColor, rotation, new Vector2(8f, 24f), (float)Game1.pixelZoom, this.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0 / (this.currentPhase != 0 || this.raisedSeeds ? 1.0 : 2.0)));
             }
            
         }
         public void drawWhenPlanterBoxHeld(PlanterBox p, SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
-            spriteBatch.Draw(this.spriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2(Game1.player.GetBoundingBox().Center.X-Game1.tileSize/2, (Game1.player.GetBoundingBox().Center.Y- Game1.tileSize * 4 / 3)-(Game1.tileSize*2))), this.getSourceRect(this.rowInSpriteSheet), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(p.boundingBox.Bottom + 1) / 10000f);
+            spriteBatch.Draw(this.spriteSheet.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2(Game1.player.GetBoundingBox().Center.X-Game1.tileSize/2, (Game1.player.GetBoundingBox().Center.Y- Game1.tileSize * 4 / 3)-(Game1.tileSize*2))), this.getSourceRect(this.rowInSpriteSheet), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(p.boundingBox.Bottom + 1) / 10000f);
         }
         public void drawInMenu(PlanterBox p,SpriteBatch b, Vector2 screenPosition, Color toTint, float rotation, float scale, float layerDepth)
         {
-            b.Draw(this.spriteSheet,new Vector2(screenPosition.X, screenPosition.Y-(Game1.tileSize/2)), new Rectangle?(getSourceRect(this.rowInSpriteSheet)), Color.White, 0f, new Vector2((float)(p.defaultSourceRect.Width / 2), (float)(p.defaultSourceRect.Height / 2)), 1f * (2) * scale, SpriteEffects.None, layerDepth);
+            b.Draw(this.spriteSheet.texture,new Vector2(screenPosition.X, screenPosition.Y-(Game1.tileSize/2)), new Rectangle?(getSourceRect(this.rowInSpriteSheet)), Color.White, 0f, new Vector2((float)(p.defaultSourceRect.Width / 2), (float)(p.defaultSourceRect.Height / 2)), 1f * (2) * scale, SpriteEffects.None, layerDepth);
         }
 
         public int getQualityOfCrop()

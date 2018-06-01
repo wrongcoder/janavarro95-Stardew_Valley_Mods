@@ -19,7 +19,7 @@ namespace EventSystem.Framework
             this.mapEvents = new Dictionary<GameLocation, List<MapEvent>>();
             foreach(var v in Game1.locations)
             {
-                addLocation(v.name, false);
+                addLocation(v.Name, false);
             }
         }
 
@@ -32,7 +32,7 @@ namespace EventSystem.Framework
         {
             foreach(var pair in this.mapEvents)
             {
-                if (pair.Key.name == mapName)
+                if (pair.Key.Name == mapName)
                 {
                     pair.Value.Add(mapEvent);
                 }
@@ -62,7 +62,7 @@ namespace EventSystem.Framework
         /// <param name="Location">The location to handle events.</param>
         public virtual void addLocation(GameLocation Location)
         {
-            EventSystem.ModMonitor.Log("Adding event processing for location: " + Location.name);
+            EventSystem.ModMonitor.Log("Adding event processing for location: " + Location.Name);
             this.mapEvents.Add(Location, new List<MapEvent>());
         }
 
@@ -73,7 +73,7 @@ namespace EventSystem.Framework
         /// <param name="Events"></param>
         public virtual void addLocation(GameLocation Location,List<MapEvent> Events)
         {
-            EventSystem.ModMonitor.Log("Adding event processing for location: " + Location.name);
+            EventSystem.ModMonitor.Log("Adding event processing for location: " + Location.Name);
             this.mapEvents.Add(Location, Events);
         }
 

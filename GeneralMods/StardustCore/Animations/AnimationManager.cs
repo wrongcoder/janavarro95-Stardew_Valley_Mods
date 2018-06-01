@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
+using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,7 @@ namespace StardustCore.Animations
        public string currentAnimationName;
        public int currentAnimationListIndex;
        public List<Animation> currentAnimationList = new List<Animation>();
-       public Texture2D objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
+       public Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
        public Animation defaultDrawFrame;
        public Animation currentAnimation;
        bool enabled;
@@ -29,7 +31,7 @@ namespace StardustCore.Animations
         /// <param name="ObjectTexture">The texture that will be used for the animation. This is typically the same as the object this class is attached to.</param>
         /// <param name="DefaultFrame">This is used if no animations will be available to the animation manager.</param>
         /// <param name="EnabledByDefault">Whether or not animations play by default. Default value is true.</param>
-        public AnimationManager (Texture2D ObjectTexture,Animation DefaultFrame, bool EnabledByDefault=true)
+        public AnimationManager (Texture2DExtended ObjectTexture,Animation DefaultFrame, bool EnabledByDefault=true)
         {
             currentAnimationListIndex = 0;
             this.objectTexture = ObjectTexture;
@@ -38,7 +40,7 @@ namespace StardustCore.Animations
             currentAnimation = this.defaultDrawFrame;
         }
     
-        public AnimationManager(Texture2D ObjectTexture,Animation DefaultFrame ,Dictionary<string, List<Animation>> animationsToPlay, string startingAnimationKey, int startingAnimationFrame=0,bool EnabledByDefault=true)
+        public AnimationManager(Texture2DExtended ObjectTexture,Animation DefaultFrame ,Dictionary<string, List<Animation>> animationsToPlay, string startingAnimationKey, int startingAnimationFrame=0,bool EnabledByDefault=true)
         {
             currentAnimationListIndex = 0;
             this.objectTexture = ObjectTexture;
@@ -181,11 +183,39 @@ namespace StardustCore.Animations
                 }
                 catch(Exception err)
                 {
+                    err.ToString();
                     continue;
                 }
             
             }
             return ok;
+        }
+        /// <summary>
+        /// Used to handle general drawing functionality using the animation manager.
+        /// </summary>
+        /// <param name="spriteBatch">We need a spritebatch to draw.</param>
+        /// <param name="texture">The texture to draw.</param>
+        /// <param name="Position">The onscreen position to draw to.</param>
+        /// <param name="sourceRectangle">The source rectangle on the texture to draw.</param>
+        /// <param name="drawColor">The color to draw the thing passed in.</param>
+        /// <param name="rotation">The rotation of the animation texture being drawn.</param>
+        /// <param name="origin">The origin of the texture.</param>
+        /// <param name="scale">The scale of the texture.</param>
+        /// <param name="spriteEffects">Effects that get applied to the sprite.</param>
+        /// <param name="LayerDepth">The dept at which to draw the texture.</param>
+        public void draw(SpriteBatch spriteBatch,Texture2D texture, Vector2 Position, Rectangle? sourceRectangle,Color drawColor, float rotation, Vector2 origin, float scale,SpriteEffects spriteEffects, float LayerDepth)
+        {
+            //Log.AsyncC("Animation Manager is working!");
+            spriteBatch.Draw(texture, Position, sourceRectangle, drawColor, rotation, origin, scale, spriteEffects, LayerDepth);
+            try
+            {
+                this.tickAnimation();
+                // Log.AsyncC("Tick animation");
+            }
+            catch (Exception err)
+            {
+                ModCore.ModMonitor.Log(err.ToString());
+            }
         }
 
     }

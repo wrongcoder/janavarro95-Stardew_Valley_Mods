@@ -41,7 +41,7 @@ namespace Omegasis.StardewSymphony
         private Random Random;
 
         /// <summary>The game's original soundbank.</summary>
-        private SoundBank DefaultSoundbank;
+        private ISoundBank DefaultSoundbank;
 
         /// <summary>The game's original wavebank.</summary>
         private WaveBank DefaultWavebank;
@@ -166,6 +166,7 @@ namespace Omegasis.StardewSymphony
             if (!Context.IsWorldReady)
                 return;
 
+           
             this.SelectMusic();
         }
 
@@ -224,10 +225,10 @@ namespace Omegasis.StardewSymphony
             // load location music
             foreach (GameLocation location in this.GameLocations)
             {
-                manager.Music_Loader_Locations(location.name, this.SongWaveReference);
-                manager.Music_Loader_Locations_Night(location.name + "_night", this.SongWaveReference);
-                manager.Music_Loader_Locations_Rain(location.name + "_rain", this.SongWaveReference);
-                manager.Music_Loader_Locations_Rain_Night(location.name + "_rain_night", this.SongWaveReference);
+                manager.Music_Loader_Locations(location.Name, this.SongWaveReference);
+                manager.Music_Loader_Locations_Night(location.Name + "_night", this.SongWaveReference);
+                manager.Music_Loader_Locations_Rain(location.Name + "_rain", this.SongWaveReference);
+                manager.Music_Loader_Locations_Rain_Night(location.Name + "_rain_night", this.SongWaveReference);
             }
 
             // add everything to master song list
@@ -481,12 +482,12 @@ namespace Omegasis.StardewSymphony
                 //this mess of a while loop iterates across all of my music packs looking for a valid music pack to play music from.
                 while (true)
                 {
-                    if (this.CurrentSoundInfo.LocationSongs.Keys.Contains(Game1.player.currentLocation.name))
+                    if (this.CurrentSoundInfo.LocationSongs.Keys.Contains(Game1.player.currentLocation.Name))
                     {
 
                         foreach (var entry in this.CurrentSoundInfo.LocationSongs)
                         {
-                            if (entry.Key == Game1.player.currentLocation.name)
+                            if (entry.Key == Game1.player.currentLocation.Name)
                             {
                                 if (entry.Value.Count > 0)
                                 {
@@ -594,12 +595,12 @@ namespace Omegasis.StardewSymphony
 
                 while (true)
                 {
-                    if (this.CurrentSoundInfo.LocationRainSongs.Keys.Contains(Game1.player.currentLocation.name + "_rain"))
+                    if (this.CurrentSoundInfo.LocationRainSongs.Keys.Contains(Game1.player.currentLocation.Name + "_rain"))
                     {
 
                         foreach (var entry in this.CurrentSoundInfo.LocationRainSongs)
                         {
-                            if (entry.Key == Game1.player.currentLocation.name + "_rain")
+                            if (entry.Key == Game1.player.currentLocation.Name + "_rain")
                             {
                                 if (entry.Value.Count > 0)
                                 {
@@ -703,11 +704,11 @@ namespace Omegasis.StardewSymphony
 
                 while (true)
                 {
-                    if (this.CurrentSoundInfo.LocationNightSongs.Keys.Contains(Game1.player.currentLocation.name + "_night"))
+                    if (this.CurrentSoundInfo.LocationNightSongs.Keys.Contains(Game1.player.currentLocation.Name + "_night"))
                     {
                         foreach (var entry in this.CurrentSoundInfo.LocationNightSongs)
                         {
-                            if (entry.Key == Game1.player.currentLocation.name + "_night")
+                            if (entry.Key == Game1.player.currentLocation.Name + "_night")
                             {
                                 if (entry.Value.Count > 0)
                                 {
@@ -809,12 +810,12 @@ namespace Omegasis.StardewSymphony
 
                 while (true)
                 {
-                    if (this.CurrentSoundInfo.LocationRainNightSongs.Keys.Contains(Game1.player.currentLocation.name + "_rain_night"))
+                    if (this.CurrentSoundInfo.LocationRainNightSongs.Keys.Contains(Game1.player.currentLocation.Name + "_rain_night"))
                     {
 
                         foreach (var entry in this.CurrentSoundInfo.LocationRainNightSongs)
                         {
-                            if (entry.Key == Game1.player.currentLocation.name + "_rain_night")
+                            if (entry.Key == Game1.player.currentLocation.Name + "_rain_night")
                             {
                                 if (entry.Value.Count > 0)
                                 {

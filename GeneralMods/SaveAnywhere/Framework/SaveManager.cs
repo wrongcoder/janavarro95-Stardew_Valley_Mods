@@ -61,7 +61,7 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>Clear saved data.</summary>
         public void ClearData()
         {
-            Directory.Delete(this.SavePath, recursive: true);
+            File.Delete(this.SavePath);
             this.RemoveLegacyDataForThisPlayer();
         }
 
@@ -72,6 +72,7 @@ namespace Omegasis.SaveAnywhere.Framework
             Farm farm = Game1.getFarm();
             if (farm.shippingBin.Any())
             {
+                
                 Game1.activeClickableMenu = new NewShippingMenu(farm.shippingBin, this.Reflection);
                 farm.shippingBin.Clear();
                 farm.lastItemShipped = null;
@@ -85,7 +86,7 @@ namespace Omegasis.SaveAnywhere.Framework
             {
                 Time = Game1.timeOfDay,
                 Characters = this.GetPositions().ToArray(),
-                IsCharacterSwimming = Game1.player.swimming
+                IsCharacterSwimming = Game1.player.swimming.Value
             };
 
             // save to disk
@@ -124,11 +125,12 @@ namespace Omegasis.SaveAnywhere.Framework
                 if (data.IsCharacterSwimming == true)
                 {
                     Game1.player.changeIntoSwimsuit();
-                    Game1.player.swimming = true;
+                    Game1.player.swimming.Value = true;
                 }
             }
             catch (Exception err)
             {
+                err.ToString();
                 //Here to allow compatability with old save files.
             }
         }
@@ -142,9 +144,9 @@ namespace Omegasis.SaveAnywhere.Framework
             // player
             {
                 var player = Game1.player;
-                string name = player.name;
-                string map = player.currentLocation.uniqueName; //Try to get a unique name for the location and if we can't we are going to default to the actual name of the map.
-                if (map == ""|| map==null) map = player.currentLocation.name; //This is used to account for maps that share the same name but have a unique ID such as Coops, Barns and Sheds.
+                string name = player.Name;
+                string map = player.currentLocation.uniqueName.Value; //Try to get a unique name for the location and if we can't we are going to default to the actual name of the map.
+                if (map == ""|| map==null) map = player.currentLocation.Name; //This is used to account for maps that share the same name but have a unique ID such as Coops, Barns and Sheds.
                 Point tile = player.getTileLocationPoint();
                 int facingDirection = player.facingDirection;
 
@@ -158,8 +160,8 @@ namespace Omegasis.SaveAnywhere.Framework
                 if (type == null)
                     continue;
                 if (npc == null || npc.currentLocation == null) continue;
-                string name = npc.name;
-                string map = npc.currentLocation.name;
+                string name = npc.Name;
+                string map = npc.currentLocation.Name;
                 Point tile = npc.getTileLocationPoint();
                 int facingDirection = npc.facingDirection;
 
@@ -174,15 +176,15 @@ namespace Omegasis.SaveAnywhere.Framework
         {
             // player
             {
-                CharacterData data = positions.FirstOrDefault(p => p.Type == CharacterType.Player && p.Name == Game1.player.name);
+                CharacterData data = positions.FirstOrDefault(p => p.Type == CharacterType.Player && p.Name == Game1.player.Name);
                 if (data != null)
                 {
-                    Game1.player.previousLocationName = Game1.player.currentLocation.name;
-                    Game1.locationAfterWarp = Game1.getLocationFromName(data.Map);
+                    Game1.player.previousLocationName = Game1.player.currentLocation.Name;
+                    //Game1.player. locationAfterWarp = Game1.getLocationFromName(data.Map);
                     Game1.xLocationAfterWarp = data.X;
                     Game1.yLocationAfterWarp = data.Y;
                     Game1.facingDirectionAfterWarp = data.FacingDirection;
-                     Game1.fadeScreenToBlack();
+                    Game1.fadeScreenToBlack();
                     Game1.warpFarmer(data.Map, data.X, data.Y, false);
                     Game1.player.faceDirection(data.FacingDirection);
                 }
@@ -197,12 +199,12 @@ namespace Omegasis.SaveAnywhere.Framework
                     continue;
 
                 // get saved data
-                CharacterData data = positions.FirstOrDefault(p => p.Type == type && p.Name == npc.name);
+                CharacterData data = positions.FirstOrDefault(p => p.Type == type && p.Name == npc.Name);
                 if (data == null)
                     continue;
 
                 // update NPC
-                Game1.warpCharacter(npc, data.Map, new Point(data.X, data.Y), false, true);
+                Game1.warpCharacter(npc, data.Map, new Point(data.X, data.Y));
                 npc.faceDirection(data.FacingDirection);
             }
         }
@@ -224,7 +226,7 @@ namespace Omegasis.SaveAnywhere.Framework
         private void RemoveLegacyDataForThisPlayer()
         {
             DirectoryInfo dataDir = new DirectoryInfo(Path.Combine(this.Helper.DirectoryPath, "Save_Data"));
-            DirectoryInfo playerDir = new DirectoryInfo(Path.Combine(dataDir.FullName, Game1.player.name));
+            DirectoryInfo playerDir = new DirectoryInfo(Path.Combine(dataDir.FullName, Game1.player.Name));
             if (playerDir.Exists)
                 playerDir.Delete(recursive: true);
             if (dataDir.Exists && !dataDir.EnumerateDirectories().Any())

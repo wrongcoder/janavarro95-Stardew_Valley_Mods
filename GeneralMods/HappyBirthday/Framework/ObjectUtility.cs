@@ -27,7 +27,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             foreach (Object obj in ObjectUtility.ObjectList)
             {
-                if (obj.category == category)
+                if (obj.Category == category)
                     yield return obj;
             }
         }

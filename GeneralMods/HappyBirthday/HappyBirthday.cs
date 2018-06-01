@@ -19,10 +19,10 @@ namespace Omegasis.HappyBirthday
         ** Properties
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
-        private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
+        private string DataFilePath;
 
         /// <summary>The absolute path for the current player's legacy data file.</summary>
-        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "Player_Birthdays", $"HappyBirthday_{Game1.player.name}.txt");
+        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "Player_Birthdays", $"HappyBirthday_{Game1.player.Name}.txt");
 
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
@@ -59,12 +59,12 @@ namespace Omegasis.HappyBirthday
             {
                 ["Robin"] = "Hey @, happy birthday! I'm glad you choose this town to move here to. ",
                 ["Demetrius"] = "Happy birthday @! Make sure you take some time off today to enjoy yourself. $h",
-                ["Maru"] = "Happy birthday @. I tried to make you an everlasting candle but sadly that didn't work out. Maybe next year right? $h",
+                ["Maru"] = "Happy birthday @. I tried to make you an everlasting candle for you, but sadly that didn't work out. Maybe next year right? $h",
                 ["Sebastian"] = "Happy birthday @. Here's to another year of chilling. ",
                 ["Linus"] = "Happy birthday @. Thanks for visiting me even on your birthday. It makes me really happy. ",
                 ["Pierre"] = "Hey @, happy birthday! Hopefully this next year for you will be a great one! ",
                 ["Caroline"] = "Happy birthday @. Thank you for all that you've done for our community. I'm sure your parents must be proud of you.$h",
-                ["Abigail"] = "Happy Birthday @! Hopefully this year we can go on even more adventures together $h!",
+                ["Abigail"] = "Happy birthday @! Hopefully this year we can go on even more adventures together $h!",
                 ["Alex"] = "Yo @, happy birthday! Maybe this will be your best year yet.$h",
                 ["George"] = "When you get to my age birthdays come and go. Still happy birthday @.",
                 ["Evelyn"] = "Happy birthday @. You have grown up to be such a fine individual and I'm sure you'll continue to grow. ",
@@ -125,6 +125,8 @@ namespace Omegasis.HappyBirthday
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+
+            //MultiplayerSupport.initializeMultiplayerSupport();
         }
 
 
@@ -154,6 +156,8 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+            this.DataFilePath = Path.Combine("data", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID+".json");
+
             // reset state
             this.VillagerQueue = new List<string>();
             this.PossibleBirthdayGifts = new List<Item>();
@@ -193,8 +197,11 @@ namespace Omegasis.HappyBirthday
                 if (this.IsBirthday())
                 {
                     Messages.ShowStarMessage("It's your birthday today! Happy birthday!");
-                    Game1.mailbox.Enqueue("birthdayMom");
-                    Game1.mailbox.Enqueue("birthdayDad");
+                    //MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
+
+
+                    Game1.player.mailbox.Add("birthdayMom");
+                    Game1.player.mailbox.Add("birthdayDad");
 
                     try
                     {
@@ -213,9 +220,9 @@ namespace Omegasis.HappyBirthday
 
                             try
                             {
-                                Dialogue d = new Dialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.name], npc);
+                                Dialogue d = new Dialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name], npc);
                                 npc.CurrentDialogue.Push(d);
-                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.name]);
+                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name]);
                             }
                             catch
                             {
@@ -276,13 +283,13 @@ namespace Omegasis.HappyBirthday
             // set birthday gift
             if (Game1.currentSpeaker != null)
             {
-                string name = Game1.currentSpeaker.name;
+                string name = Game1.currentSpeaker.Name;
                 if (this.IsBirthday() && this.VillagerQueue.Contains(name))
                 {
                     try
                     {
-                        this.SetNextBirthdayGift(Game1.currentSpeaker.name);
-                        this.VillagerQueue.Remove(Game1.currentSpeaker.name);
+                        this.SetNextBirthdayGift(Game1.currentSpeaker.Name);
+                        this.VillagerQueue.Remove(Game1.currentSpeaker.Name);
                     }
                     catch (Exception ex)
                     {
@@ -293,7 +300,7 @@ namespace Omegasis.HappyBirthday
             if (this.BirthdayGiftToReceive != null && Game1.currentSpeaker != null)
             {
                 while (this.BirthdayGiftToReceive.Name == "Error Item" || this.BirthdayGiftToReceive.Name == "Rock" || this.BirthdayGiftToReceive.Name == "???")
-                    this.SetNextBirthdayGift(Game1.currentSpeaker.name);
+                    this.SetNextBirthdayGift(Game1.currentSpeaker.Name);
                 Game1.player.addItemByMenuIfNecessaryElseHoldUp(this.BirthdayGiftToReceive);
                 this.BirthdayGiftToReceive = null;
             }
@@ -319,9 +326,9 @@ namespace Omegasis.HappyBirthday
                 {
                     if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
                         continue;
-                    if (this.VillagerQueue.Contains(npc.name))
+                    if (this.VillagerQueue.Contains(npc.Name))
                         continue;
-                    this.VillagerQueue.Add(npc.name);
+                    this.VillagerQueue.Add(npc.Name);
                 }
             }
         }
@@ -549,7 +556,7 @@ namespace Omegasis.HappyBirthday
         private IEnumerable<SObject> GetItems(int id, int stack)
         {
             foreach (SObject obj in this.GetItems(id))
-                yield return new SObject(obj.parentSheetIndex, stack);
+                yield return new SObject(obj.ParentSheetIndex, stack);
         }
 
         /// <summary>Get whether today is the player's birthday.</summary>
@@ -572,6 +579,7 @@ namespace Omegasis.HappyBirthday
             }
             catch(Exception err)
             {
+                err.ToString();
                 // migrate to new file
                 try
                 {
@@ -594,5 +602,6 @@ namespace Omegasis.HappyBirthday
             }
             
         }
+
     }
 }

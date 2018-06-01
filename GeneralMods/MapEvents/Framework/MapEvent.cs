@@ -135,24 +135,32 @@ namespace EventSystem.Framework
         /// <summary>
         /// Occurs when the player enters the same tile as this event. The function associated with this event is then ran.
         /// </summary>
-        public virtual void OnPlayerEnter()
+        public virtual bool OnPlayerEnter()
         {
-            if (isPlayerOnTile() == true)
+            if (this.playerEvents == null) return false;
+            if (isPlayerOnTile() == true && this.doesInteractionNeedToRun==true)
             {
                 this.playerOnTile = true;
+                this.doesInteractionNeedToRun = false;
                 if (this.playerEvents.onPlayerEnter != null) this.playerEvents.onPlayerEnter.run();
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// Occurs when the player leaves the same tile that this event is on. The function associated with thie event is then ran.
         /// </summary>
-        public virtual void OnPlayerLeave()
+        public virtual bool OnPlayerLeave()
         {
-           if(isPlayerOnTile() == false && this.playerOnTile==true){
+            if (this.playerEvents == null) return false;
+            if (isPlayerOnTile() == false && this.playerOnTile==true){
                 this.playerOnTile = false;
+                this.doesInteractionNeedToRun = true;
                 if (this.playerEvents.onPlayerLeave != null) this.playerEvents.onPlayerLeave.run();
+                return true;
             }
+            return false;
         }
 
         /// <summary>
@@ -175,53 +183,66 @@ namespace EventSystem.Framework
         /// <summary>
         /// Occurs when the player left clicks the same tile that this event is on.
         /// </summary>
-        public virtual void OnLeftClick()
+        public virtual bool OnLeftClick()
         {
-            if (this.mouseOnTile==false) return;
+            if (this.mouseOnTile==false) return false;
+            if (this.mouseButtonEvents == null) return false;
             if (this.mouseButtonEvents.onLeftClick != null) this.mouseButtonEvents.onLeftClick.run();
+            return true;
+
         }
 
         /// <summary>
         /// Occurs when the player right clicks the same tile that this event is on.
         /// </summary>
-        public virtual void OnRightClick()
+        public virtual bool OnRightClick()
         {
-            if (this.mouseOnTile == false) return;
+            if (this.mouseOnTile == false) return false;
+            if (this.mouseButtonEvents == null) return false;
             if (this.mouseButtonEvents.onRightClick != null) this.mouseButtonEvents.onRightClick.run();
+            return true;
         }
 
         /// <summary>
         /// Occurs when the mouse tile position is the same as this event's x,y position.
         /// </summary>
-        public virtual void OnMouseEnter()
+        public virtual bool OnMouseEnter()
         {
+            if (this.mouseEntryLeaveEvents == null) return false;
             if (isMouseOnTile())
             {
                 this.mouseOnTile = true;
                 if (this.mouseEntryLeaveEvents.onMouseEnter != null) this.mouseEntryLeaveEvents.onMouseEnter.run();
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// Occurs when the mouse tile position leaves the the same x,y position as this event.
         /// </summary>
-        public virtual void OnMouseLeave()
+        public virtual bool OnMouseLeave()
         {
+            if (this.mouseEntryLeaveEvents == null) return false;
             if (isMouseOnTile() == false && this.mouseOnTile == true)
             {
                 this.mouseOnTile = false;
                 if (this.mouseEntryLeaveEvents.onMouseLeave != null) this.mouseEntryLeaveEvents.onMouseLeave.run();
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// UNUSED!!!!
         /// Occurs when the mouse is on the same position as the tile AND the user scrolls the mouse wheel.
         /// </summary>
-        public virtual void OnMouseScroll()
+        public virtual bool OnMouseScroll()
         {
-            if (isMouseOnTile() == false) return;
+
+            if (isMouseOnTile() == false) return false;
             if (this.mouseButtonEvents.onMouseScroll != null) this.mouseButtonEvents.onMouseScroll.run();
+            return true;
         }
 
         /// <summary>
@@ -230,7 +251,7 @@ namespace EventSystem.Framework
         /// <returns></returns>
         public virtual bool isMouseOnTile()
         {
-            Vector2 mousePosition = new Vector2(Game1.getMouseX(), Game1.getMouseY());
+            Vector2 mousePosition = Game1.currentCursorTile;
             if (mousePosition.X == this.tilePosition.X && mousePosition.Y == this.tilePosition.Y) return true;
             return false;
         }
@@ -238,7 +259,7 @@ namespace EventSystem.Framework
         /// <summary>
         /// Occurs when the tile is clicked. Runs the appropriate event.
         /// </summary>
-        public virtual void eventClickEvent()
+        public virtual void clickEvent()
         {
             if (this.mouseOnTile == false) return;
             var mouseState=Mouse.GetState();
@@ -253,7 +274,8 @@ namespace EventSystem.Framework
         /// </summary>
         public virtual void update()
         {
-            eventClickEvent(); //click events
+            if (Game1.activeClickableMenu != null) return;
+            clickEvent(); //click events
             OnPlayerEnter(); //player enter events
             OnPlayerLeave(); //player leave events
             OnMouseEnter(); //on mouse enter events

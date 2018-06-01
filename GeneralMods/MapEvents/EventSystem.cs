@@ -7,7 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EventSystem
-{
+{ 
+    /*
+     *TODO: Make Bed/Sleep Event. 
+     * 
+     *
+     */
     public class EventSystem: Mod
     {
         public static IModHelper ModHelper;

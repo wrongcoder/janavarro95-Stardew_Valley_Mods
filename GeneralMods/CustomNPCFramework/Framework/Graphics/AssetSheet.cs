@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CustomNPCFramework.Framework.Enums;
+using CustomNPCFramework.Framework.Graphics.TextureGroups;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,127 +17,117 @@ namespace CustomNPCFramework.Framework.Graphics
     /// </summary>
     public class AssetSheet
     {
-        public Texture2D texture;
+        /// <summary>
+        /// Used to hold the textures for the AssetSheet.
+        /// </summary>
+        public TextureGroups.TextureGroup textures;
+
+        /// <summary>
+        /// Used to hold the info for the paths to these textures.
+        /// </summary>
         public AssetInfo assetInfo;
+        
+        /// <summary>
+        /// The path to this assetinfo.json file
+        /// </summary>
         public string path;
 
-        public int index;
-
-        private int widthIndex;
-        private int heightIndex;
-        private int widthIndexMax;
-        private int heightIndexMax;
-
+        /// <summary>
+        /// The soruce rectangle for the current texture to draw.
+        /// </summary>
         public Rectangle currentAsset;
 
-        public AssetSheet(AssetInfo info,string path)
+        public int index;
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="info">The asset info file to be read in or created. Holds path information.</param>
+        /// <param name="path">The path to the assetinfo file.</param>
+        /// <param name="direction">The direction to set the animation.</param>
+        public AssetSheet(AssetInfo info,string path,Direction direction=Direction.down)
         {
             this.assetInfo = info;
-            this.texture = Class1.ModHelper.Content.Load<Texture2D>(Class1.getShortenedDirectory(Path.Combine(path,info.name+".png")).Remove(0,1));
+            this.textures = new TextureGroup(info,path,direction);
+            try
+            {
+                this.path = Class1.getShortenedDirectory(path);
+            }
+            catch(Exception err)
+            {
+                this.path = path;
+            }
 
-            this.widthIndexMax = this.texture.Width / (int)this.assetInfo.assetSize.X;
-            this.heightIndexMax = this.texture.Width / (int)this.assetInfo.assetSize.Y;
             this.index = 0;
-            if (this.assetInfo.randomizeUponLoad == false)
-            {
-                this.widthIndex = 0;
-                this.heightIndex = 0;
-            }
-            else
-            {
-                getRandomAssetIndicies();
-                setIndex();
-            }
-            this.currentAsset = new Rectangle(widthIndex * (int)this.assetInfo.assetSize.X, heightIndex * (int)this.assetInfo.assetSize.Y, (int)this.assetInfo.assetSize.X, (int)this.assetInfo.assetSize.Y);
+        }
+        /// <summary>
+        /// Get the path to the current texture.
+        /// </summary>
+        /// <returns></returns>
+        public virtual KeyValuePair<string, Texture2DExtended> getPathTexturePair()
+        {
+            return new KeyValuePair<string, Texture2DExtended>(this.path, this.textures.currentTexture.currentTexture);
         }
 
-        /// <summary>
-        /// Get the next graphic from the texture.
-        /// </summary>
-        public void getNext()
-        {
-            //If I can still iterate through my list but my width is maxed, increment height.
-            if (this.widthIndex == this.widthIndexMax - 1 && this.heightIndex != this.heightIndexMax)
-            {
-                this.widthIndex -= 0;
-                this.heightIndex++;
-            }
-            //If I reached the end of my image loop to 0;
-            else if (this.heightIndex == this.heightIndexMax && this.widthIndex == this.widthIndexMax - 1)
-            {
-                this.heightIndex = 0;
-                this.widthIndex = 0;
-            }
-            else
-            {
-                //If I can still iterate through my list do so.
-                widthIndex++;
-            }
-            this.setIndex();
-            this.setAsset();
-        }
-
-        /// <summary>
-        /// Get the last graphic from my texture.
-        /// </summary>
-        public void getPrevious()
-        {
-            //If my width index is 0 and my height index isn't decrement my height index and set the width index to the far right.
-            if (this.widthIndex == 0 && this.heightIndex != 0)
-            {
-                this.heightIndex--;
-                this.widthIndex = this.widthIndexMax - 1;
-            }
-            //If both my height and width indicies are 0, loop to the bottom right of the texture.
-            else if (this.widthIndex == 0 && this.heightIndex == 0)
-            {
-                this.widthIndex = this.widthIndexMax - 1;
-                this.heightIndex = this.heightIndexMax - 1;
-            }
-            else
-            {
-                //Just decrement my width index by 1.
-                this.widthIndex--;
-            }
-            this.setIndex();
-            this.setAsset();
-        }
-
-        /// <summary>
-        /// sets the current positioning for the rectangle index;
-        /// </summary>
-        private void setAsset()
-        {
-            this.currentAsset.X = widthIndex * (int)this.assetInfo.assetSize.X;
-            this.currentAsset.Y = heightIndex * (int)this.assetInfo.assetSize.Y;
-        }
-
-        /// <summary>
-        /// Used mainly for display purposes and length purposes.
-        /// </summary>
-        public void setIndex()
-        {
-            this.index = heightIndex * widthIndexMax + widthIndex;
-        }
-
-        /// <summary>
-        /// Sets the asset index to a random value.
-        /// </summary>
-        public void getRandomAssetIndicies()
-        {
-            Random r = new Random(DateTime.Now.Millisecond);
-            this.widthIndex = r.Next(0, this.widthIndexMax);
-            this.widthIndex = r.Next(0, this.heightIndexMax);
-            setIndex();
-            setAsset();
-        }
 
         /// <summary>
         /// Used just to get a copy of this asset sheet.
         /// </summary>
-        public void clone()
+        public virtual AssetSheet clone()
         {
             var asset = new AssetSheet(this.assetInfo,(string)this.path.Clone());
+            return asset;
+        }
+
+        /// <summary>
+        /// Sets the textures for this sheet to face left.
+        /// </summary>
+        public virtual void setLeft()
+        {
+            this.textures.setLeft();
+        }
+
+        /// <summary>
+        /// Sets the textures for this sheet to face up.
+        /// </summary>
+        public virtual void setUp()
+        {
+            this.textures.setUp();
+        }
+
+        /// <summary>
+        /// Sets the textures for this sheet to face down.
+        /// </summary>
+        public virtual void setDown()
+        {
+            this.textures.setDown();
+        }
+
+        /// <summary>
+        /// Sets the textures for this sheet to face left.
+        /// </summary>
+        public virtual void setRight()
+        {
+            this.textures.setRight();
+        }
+
+        /// <summary>
+        /// Get the current animation texture.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Texture2DExtended getCurrentSpriteTexture()
+        {
+            return this.textures.currentTexture.currentTexture;
+        }
+
+        /// <summary>
+        /// Get the specific texture depending on the direction and animation type.
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public virtual Texture2DExtended getTexture(Direction direction,AnimationType type)
+        {
+            return this.textures.getTextureFromAnimation(type).getTextureFromDirection(direction);
         }
     }
 }
