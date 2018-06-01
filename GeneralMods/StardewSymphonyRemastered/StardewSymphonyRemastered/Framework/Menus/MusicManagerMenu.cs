@@ -14,12 +14,6 @@ using StardustCore.UIUtilities.SpriteFonts.Components;
 
 namespace StardewSymphonyRemastered.Framework.Menus
 {
-    /* 
-     * make buttons make sounds when clicked
-     * Make sound player mod?
-     * 
-     */
-
     /// <summary>
     /// Interface for the menu for selection music.
     /// </summary>
@@ -537,7 +531,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     Texture2DExtended springTexture = StardewSymphony.textureManager.getTexture("SpringIcon");
                     if (springTexture == null)
                     {
-                        StardewSymphony.ModMonitor.Log("TEXTURE NULL!");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("SPRING TEXTURE NULL!");
                         return;
                     }
                     float scale = 1.00f / ((float)springTexture.texture.Width / 64f);
@@ -550,7 +545,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     Texture2DExtended summerTexture = StardewSymphony.textureManager.getTexture("SummerIcon");
                     if (summerTexture == null)
                     {
-                        StardewSymphony.ModMonitor.Log("TEXTURE NULL!");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("SUMMER TEXTURE NULL!");
                         return;
                     }
                     float scale = 1.00f / ((float)summerTexture.texture.Width / 64f);
@@ -563,7 +559,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     Texture2DExtended fallTexture = StardewSymphony.textureManager.getTexture("FallIcon");
                     if (fallTexture == null)
                     {
-                        StardewSymphony.ModMonitor.Log("TEXTURE NULL!");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("FALL TEXTURE NULL!");
                         return;
                     }
                     float scale = 1.00f / ((float)fallTexture.texture.Width / 64f);
@@ -576,7 +573,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     Texture2DExtended winterTexture = StardewSymphony.textureManager.getTexture("WinterIcon");
                     if (winterTexture == null)
                     {
-                        StardewSymphony.ModMonitor.Log("TEXTURE NULL!");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("WINTER TEXTURE NULL!");
                         return;
                     }
                     float scale = 1.00f / ((float)winterTexture.texture.Width / 64f);
@@ -595,7 +593,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.fancyButtons.Add(new Button("FestivalIcon", new Rectangle((int)festivalPlacement.X, (int)festivalPlacement.Y, 64, 64), festivalTexture, "Festival Music", festivalSrcRect, festivalScale, new Animation(festivalSrcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 if (festivalTexture == null)
                 {
-                    StardewSymphony.ModMonitor.Log("TEXTURE NULL!");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("FESTIVAL TEXTURE NULL!");
                     return;
                 }
 
@@ -607,7 +606,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 if (eventTexture == null)
                 {
-                    StardewSymphony.ModMonitor.Log("TEXTURE NULL!");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("EVENT TEXTURE NULL!");
                     return;
                 }
 
@@ -619,7 +619,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 if (menuTexture == null)
                 {
-                    StardewSymphony.ModMonitor.Log("TEXTURE NULL!");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("MENU TEXTURE NULL!");
                     return;
                 }
             }
@@ -898,35 +899,27 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     {
                         if (v == null)
                         {
-                          //  StardewSymphony.ModMonitor.Log("v is null at count: " + count);
                             continue;
                         }
                         if (v.buttonFunctionality == null)
                         {
-                           // StardewSymphony.ModMonitor.Log("button functionality is null at count: " + count);
                             continue;
                         }
                         if (v.buttonFunctionality.hover == null)
                         {
-                           // StardewSymphony.ModMonitor.Log("hover is null at count: " + count);
                             continue;
                         }
                         if (v.buttonFunctionality.hover.paramaters == null)
                         {
-                           // StardewSymphony.ModMonitor.Log("Params are null at count: " + count);
                             continue;
                         }
                         if (v.buttonFunctionality.hover.paramaters.Count==0)
                         {
-                            //StardewSymphony.ModMonitor.Log("Params are 0 at count: " + count);
                             continue;
                         }
                         var pair = (KeyValuePair<string, MusicPack>)v.buttonFunctionality.hover.paramaters[0];
                         v.hoverText = (string)pair.Key;
-                        //if (v.buttonFunctionality.hover != null) v.buttonFunctionality.hover.run();
-                        //StardewSymphony.ModMonitor.Log(pair.Key);
                         v.onHover();
-                        //StardewSymphony.ModMonitor.Log(pair.Key);
                     }
                     else
                     {
@@ -953,30 +946,35 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if(this.currentSelectedSong!=null && this.currentMusicPackAlbum!=null && this.playButton.containsPoint(x, y))
             {
+                Game1.playSound("coin");
                 playSong();
                 return;
             }
 
             if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.stopButton.containsPoint(x, y))
             {
+                Game1.playSound("coin");
                 stopSong();
                 return;
             }
 
             if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.addButton.containsPoint(x, y))
             {
+                Game1.playSound("coin");
                 addSong();
                 return;
             }
 
             if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.deleteButton.containsPoint(x, y))
             {
+                Game1.playSound("coin");
                 deleteSong();
                 return;
             }
 
             if (this.backButton.containsPoint(x, y))
             {
+                Game1.playSound("coin");
                 goBack();
                 return;
             }
@@ -988,6 +986,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     if (v.containsPoint(x, y))
                     {
+                        Game1.playSound("coin");
                         this.selectAlbum(v);
                         v.onLeftClick();
                     }
@@ -1003,10 +1002,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     if (v.containsPoint(x, y) && v.buttonFunctionality.leftClick != null)
                     {
+                        Game1.playSound("coin");
                         v.onLeftClick();
                         this.currentAlbumIndex += count - 3;
-                        //if (this.currentAlbumIndex >= this.musicAlbumButtons.Count) this.currentAlbumIndex -= (this.musicAlbumButtons.Count);
-                        //StardewSymphony.ModMonitor.Log(this.currentAlbumIndex.ToString());
                         while (currentAlbumIndex < 0)
                         {
                             this.currentAlbumIndex = (this.musicAlbumButtons.Count - (this.currentAlbumIndex * -1));
@@ -1018,9 +1016,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         count++;
                     }
                 }
-                //this.updateFancyButtons();
                 this.selectAlbum(ok);
-                //return;
             }
 
             if (this.drawMode == DrawMode.SongSelectionMode)
@@ -1058,6 +1054,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     if (v.containsPoint(x, y))
                     {
+                        Game1.playSound("coin");
                         selectSong(v);
                         songSelected = true;
                     }
@@ -1105,7 +1102,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         }
                     }
                 }
-                if (buttonSelected == true) this.updateFancyButtons();
+                if (buttonSelected == true)
+                {
+                    Game1.playSound("coin");
+                    this.updateFancyButtons();
+                }
                 return;
             }
 
@@ -1126,7 +1127,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         }
                     }                    
                 }
-                if (buttonSelected == true) this.updateFancyButtons();
+                if (buttonSelected == true)
+                {
+                    Game1.playSound("coin");
+                    this.updateFancyButtons();
+                }
                 return;
             }
 
@@ -1147,7 +1152,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         }
                     }
                 }
-                if (buttonSelected == true) this.updateFancyButtons();
+                if (buttonSelected == true)
+                {
+                    Game1.playSound("coin");
+                    this.updateFancyButtons();
+                }
                 return;
             }
 
@@ -1195,6 +1204,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected == true)
                 {
+                    Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -1244,6 +1254,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected == true)
                 {
+                    Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -1292,6 +1303,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected == true)
                 {
+                    Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -1340,6 +1352,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected == true)
                 {
+                    Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -1361,7 +1374,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         buttonSelected = true;
                     }
                 }
-                if (buttonSelected == true) this.updateFancyButtons();
+                if (buttonSelected == true)
+                {
+                    Game1.playSound("coin");
+                    this.updateFancyButtons();
+                }
                 return;
             }
 
@@ -1916,12 +1933,6 @@ namespace StardewSymphonyRemastered.Framework.Menus
             this.drawMouse(b);
         }
 
-        //Button Functionality
-        #region
-        private void hello(List<object> param)
-        {
-            StardewSymphony.ModMonitor.Log("Hello");
-        }
 
         public void PlayRandomSongFromSelectedMusicPack(List<object> param)
         {
@@ -1940,9 +1951,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
         {
             if (b.label == "Null") return;
             this.currentMusicPackAlbum = b.clone(new Vector2(this.width*.1f+64,this.height*.05f+128));
-            StardewSymphony.ModMonitor.Log("Album Selected!"+b.name);
             this.texturedStrings.Clear();
-            this.texturedStrings.Add(SpriteFonts.vanillaFont.ParseString("Name:" + (string)b.name, new Microsoft.Xna.Framework.Vector2(this.width*.1f, this.height*.05f + 256), b.textColor));
+            this.texturedStrings.Add(SpriteFonts.vanillaFont.ParseString("Name:" + (string)b.name, new Microsoft.Xna.Framework.Vector2(this.width*.1f, this.height*.05f + 256), b.textColor,false));
             this.drawMode = DrawMode.SongSelectionMode;
         }
 
@@ -1962,9 +1972,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// </summary>
         public void playSong()
         {
-            StardewSymphony.ModMonitor.Log("Song Selected!" + this.currentSelectedSong.name);
+            if (StardewSymphony.Config.EnableDebugLog)
+                StardewSymphony.ModMonitor.Log("Song Selected!" + this.currentSelectedSong.name);
             var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
-            StardewSymphony.ModMonitor.Log("Select Pack:" + info.Key);
+            if (StardewSymphony.Config.EnableDebugLog)
+                StardewSymphony.ModMonitor.Log("Select Pack:" + info.Key);
             StardewSymphony.musicManager.swapMusicPacks(info.Key);
             StardewSymphony.musicManager.playSongFromCurrentPack(this.currentSelectedSong.name);
         }
@@ -1974,9 +1986,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// </summary>
         public void stopSong()
         {
-            StardewSymphony.ModMonitor.Log("Song Selected!" + this.currentSelectedSong.name);
+            if (StardewSymphony.Config.EnableDebugLog)
+                StardewSymphony.ModMonitor.Log("Song Selected!" + this.currentSelectedSong.name);
             var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
-            StardewSymphony.ModMonitor.Log("Select Pack:" + info.Key);
+            if (StardewSymphony.Config.EnableDebugLog)
+                StardewSymphony.ModMonitor.Log("Select Pack:" + info.Key);
             StardewSymphony.musicManager.swapMusicPacks(info.Key);
             StardewSymphony.musicManager.stopSongFromCurrentMusicPack();
         }
@@ -2027,12 +2041,15 @@ namespace StardewSymphonyRemastered.Framework.Menus
             string seperator = "_";
             //Seasonal selection region
             #region
-            if (this.currentlySelectedOption.name == "SeasonIcon")
+            if (this.currentlySelectedOption !=null)
             {
-                if (Game1.currentSeason == "spring") key += "spring";
-                if (Game1.currentSeason == "summer") key += "summer";
-                if (Game1.currentSeason == "fall") key += "fall";
-                if (Game1.currentSeason == "winter") key += "winter";
+                if (this.currentlySelectedOption.name == "SeasonIcon")
+                {
+                    if (Game1.currentSeason == "spring") key += "spring";
+                    if (Game1.currentSeason == "summer") key += "summer";
+                    if (Game1.currentSeason == "fall") key += "fall";
+                    if (Game1.currentSeason == "winter") key += "winter";
+                }
             }
             if (this.currentlySelectedWeather != null)
             {
@@ -2064,6 +2081,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedDay.name == "SaturdayIcon") key += seperator + "saturday";
             }
             #endregion
+
+            if (this.currentlySelectedMenu != null)
+            {
+                return this.currentlySelectedMenu.label;
+            }
+            if (this.currentlySelectedFestival != null) return this.currentlySelectedFestival.label;
+            if (this.currentlySelectedEvent != null) return this.currentlySelectedEvent.label;
 
 
             return key;
@@ -2163,6 +2187,5 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
         }
 
-        #endregion
     }
 }

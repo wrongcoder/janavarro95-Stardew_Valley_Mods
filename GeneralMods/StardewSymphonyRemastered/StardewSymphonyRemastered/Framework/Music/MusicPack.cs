@@ -75,7 +75,8 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public virtual void writeToJson()
         {
-            StardewSymphony.ModMonitor.Log("Loading in music for this pack:"+this.musicPackInformation.name+". Please wait.");
+            if (StardewSymphony.Config.EnableDebugLog)
+                StardewSymphony.ModMonitor.Log("Saving music for this pack:"+this.musicPackInformation.name+". Please wait.");
             string data = Path.Combine(this.directory, "data");
             if (!Directory.Exists(data))
             {
@@ -84,6 +85,8 @@ namespace StardewSymphonyRemastered.Framework
             foreach (var list in this.songInformation.listOfSongsWithTriggers)
             {
                 if (list.Value.Count == 0) continue;
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("Saving music: " + list.Key + ". Please wait.");
                 SongListNode node = new SongListNode(list.Key, list.Value);
                 node.WriteToJson(Path.Combine(data, node.trigger+".json"));
             }
@@ -94,7 +97,8 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public virtual void readFromJson()
         {
-            StardewSymphony.ModMonitor.Log("Saving music for this pack:" + this.musicPackInformation.name + ". Please wait as this will take quite soem time.");
+            if (StardewSymphony.Config.EnableDebugLog)
+                StardewSymphony.ModMonitor.Log("Loading music for this pack:" + this.musicPackInformation.name + ". Please wait as this will take quite some time.");
             string data = Path.Combine(this.directory, "data");
             if (!Directory.Exists(data))
             {
@@ -107,7 +111,14 @@ namespace StardewSymphonyRemastered.Framework
                 var pair = this.songInformation.getSongList(node.trigger+".json");
                 foreach (var v in node.songList)
                 {
-                    this.songInformation.addSongToTriggerList(node.trigger, v.name);
+                    try
+                    {
+                        this.songInformation.addSongToTriggerList(node.trigger, v.name);
+                    }
+                    catch(Exception err)
+                    {
+
+                    }
                 }
             }
 

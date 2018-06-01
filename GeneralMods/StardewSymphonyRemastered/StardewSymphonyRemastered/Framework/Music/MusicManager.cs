@@ -57,7 +57,8 @@ namespace StardewSymphonyRemastered.Framework
             }
             else
             {
-                StardewSymphony.ModMonitor.Log("ERROR: Music Pack " + nameOfNewMusicPack + " isn't valid for some reason.", StardewModdingAPI.LogLevel.Alert);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("ERROR: Music Pack " + nameOfNewMusicPack + " isn't valid for some reason.", StardewModdingAPI.LogLevel.Alert);
             }
         }
 
@@ -153,7 +154,8 @@ namespace StardewSymphonyRemastered.Framework
         {
             if (isMusicPackValid(name) == false)
             {
-                StardewSymphony.ModMonitor.Log("Error, the music pack: " + name + " is not found. Please make sure it is loaded in and try again.");
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("Error, the music pack: " + name + " is not found. Please make sure it is loaded in and try again.");
                 return null;
             }
             else
@@ -266,12 +268,14 @@ namespace StardewSymphonyRemastered.Framework
                     }
                 }
                 if (subKey == "") break;
-                StardewSymphony.ModMonitor.Log(subKey,StardewModdingAPI.LogLevel.Alert);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log(subKey,StardewModdingAPI.LogLevel.Alert);
                 listOfValidMusicPacks = getListOfApplicableMusicPacks(subKey);
                 if (listOfValidMusicPacks.Count == 0)
                 {
                     //No valid songs to play at this time.
-                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". 1 Are you sure you did this properly?");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ". 1 Are you sure you did this properly?");
                     //return;
                 }
             }
@@ -297,7 +301,8 @@ namespace StardewSymphonyRemastered.Framework
 
                     if (f == false)
                     {
-                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".2 Are you sure you did this properly?");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".2 Are you sure you did this properly?");
                         StardewSymphony.menuChangedMusic = false;
                         return;
                     }
@@ -307,7 +312,8 @@ namespace StardewSymphonyRemastered.Framework
                 if (listOfValidMusicPacks.Count == 0)
                 {
                     //No valid songs to play at this time.
-                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ".3 Are you sure you did this properly?");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ".3 Are you sure you did this properly?");
                     //return;
                 }
                 //Try to get more specific.
@@ -332,7 +338,8 @@ namespace StardewSymphonyRemastered.Framework
                     if (listOfValidMusicPacks.Count == 0)
                     {
                         //No valid songs to play at this time.
-                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ".4 Are you sure you did this properly?");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + subKey + ".4 Are you sure you did this properly?");
                         //return;
                     }
                 }
@@ -347,7 +354,8 @@ namespace StardewSymphonyRemastered.Framework
                 if (f == false)
                 {
                     //No valid songs to play at this time.
-                    StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".7 Are you sure you did this properly?");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".7 Are you sure you did this properly?");
                     StardewSymphony.menuChangedMusic = false;
                     return;
                 }
@@ -361,7 +369,8 @@ namespace StardewSymphonyRemastered.Framework
                 //If I am trying to play a generic song and a non-generic song is playing, then play my generic song since I don't want to play the specific music anymore.
                 if (sizeList.Length < 3 && (this.currentMusicPack.isPlaying() && this.lastSongWasLocationSpecific==false))
                 {
-                    StardewSymphony.ModMonitor.Log("Non specific music change detected. Not going to change the music this time");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("Non specific music change detected. Not going to change the music this time");
                     return;
                 }
             }
@@ -415,8 +424,10 @@ namespace StardewSymphonyRemastered.Framework
                     }
                     else
                     {
-                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".5 Are you sure you did this properly?");
-                        StardewSymphony.ModMonitor.Log("Also failed playing a festival event song.");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".5 Are you sure you did this properly?");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("Also failed playing a festival event song.");
                         StardewSymphony.menuChangedMusic = false;
                         return false;
                     }
@@ -444,8 +455,10 @@ namespace StardewSymphonyRemastered.Framework
                     }
                     else
                     {
-                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".6 Are you sure you did this properly?");
-                        StardewSymphony.ModMonitor.Log("Also failed playing a generalized event song.");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".6 Are you sure you did this properly?");
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("Also failed playing a generalized event song.");
                         StardewSymphony.menuChangedMusic = false;
                         return false;
                     }
@@ -464,32 +477,28 @@ namespace StardewSymphonyRemastered.Framework
         {
             if (displayLogInformation == true)
             {
-                StardewSymphony.ModMonitor.Log("Adding a new music pack!");
+                if (StardewSymphony.Config.EnableDebugLog)
+                {
+                    StardewSymphony.ModMonitor.Log("Adding a new music pack!");
 
-    
-                StardewSymphony.ModMonitor.Log("    Location:" + musicPack.shortenedDirectory);
-                StardewSymphony.ModMonitor.Log("    Name:" + musicPack.musicPackInformation.name);
-                StardewSymphony.ModMonitor.Log("    Author:" + musicPack.musicPackInformation.author);
-                StardewSymphony.ModMonitor.Log("    Description:" + musicPack.musicPackInformation.description);
-                StardewSymphony.ModMonitor.Log("    Version Info:" + musicPack.musicPackInformation.versionInfo);
-                StardewSymphony.ModMonitor.Log("    Song List:");
+
+                    StardewSymphony.ModMonitor.Log("    Location:" + musicPack.shortenedDirectory);
+                    StardewSymphony.ModMonitor.Log("    Name:" + musicPack.musicPackInformation.name);
+                    StardewSymphony.ModMonitor.Log("    Author:" + musicPack.musicPackInformation.author);
+                    StardewSymphony.ModMonitor.Log("    Description:" + musicPack.musicPackInformation.description);
+                    StardewSymphony.ModMonitor.Log("    Version Info:" + musicPack.musicPackInformation.versionInfo);
+                    StardewSymphony.ModMonitor.Log("    Song List:");
+                }
 
                 if (displaySongs == true)
                 {
                     foreach(var song in musicPack.songInformation.listOfSongsWithoutTriggers)
                     {
-                        StardewSymphony.ModMonitor.Log("        " + song.name);
+                        if (StardewSymphony.Config.EnableDebugLog)
+                            StardewSymphony.ModMonitor.Log("        " + song.name);
                     }
                 }
             }
-            /*
-            if(musicPack.GetType()==typeof(WavMusicPack)){
-                foreach (var song in musicPack.songInformation.listOfSongsWithoutTriggers)
-                {
-                    (musicPack as WavMusicPack).LoadWavFromFileToStream(song.pathToSong);
-                }
-            }
-            */
 
             this.musicPacks.Add(musicPack.musicPackInformation.name,musicPack);
         }

@@ -68,7 +68,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StardustCore">
+    <Reference Include="StardustCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\StardustCore\bin\Release\StardustCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -81,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Framework\Menus\MusicManagerMenu.cs" />
     <Compile Include="Framework\Music\MusicPackMetaData.cs" />
     <Compile Include="Framework\Music\Song.cs" />

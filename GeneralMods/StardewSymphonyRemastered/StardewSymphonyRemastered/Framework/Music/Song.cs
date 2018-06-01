@@ -15,7 +15,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>
         /// The path to the song. In the case of XACT songs this points to the .xwb file. For WAV files this points directly to the WAV file itself.
         /// </summary>
-        public string pathToSong;
+        private string pathToSong;
 
         /// <summary>
         /// The name of the song itself.
@@ -25,7 +25,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>
         /// The relative path to the song.
         /// </summary>
-        public string relativePath;
+        private string relativePath;
 
         /// <summary>
         /// Blank Constructor;
@@ -116,5 +116,14 @@ namespace StardewSymphonyRemastered.Framework
             StardewSymphony.ModHelper.WriteJsonFile<Song>(path, this);
         }
 
+        public string getRelativePath()
+        {
+            return this.relativePath;
+        }
+
+        public string getPathToSong()
+        {
+            return this.pathToSong;
+        }
     }
 }

@@ -42,7 +42,8 @@ namespace StardewSymphonyRemastered.Framework
             catch(Exception err)
             {
                 this.Icon = null;
-                StardewSymphony.ModMonitor.Log(err.ToString());
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log(err.ToString());
             }
         }
         /// <summary>
@@ -77,7 +78,8 @@ namespace StardewSymphonyRemastered.Framework
             catch(Exception err)
             {
                 err.ToString();
-                //StardewSymphony.ModMonitor.Log(err.ToString());
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log(err.ToString());
             }
             return meta;
         }

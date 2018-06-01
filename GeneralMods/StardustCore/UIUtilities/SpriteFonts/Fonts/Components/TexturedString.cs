@@ -14,18 +14,18 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
         public Vector2 position;
         public string label;
 
-        public TexturedString(string Label,Vector2 Position,List<TexturedCharacter> Characters)
+        public TexturedString(string Label, Vector2 Position, List<TexturedCharacter> Characters, bool useRightPadding = true)
         {
             this.label = Label;
             this.characters = Characters;
             this.position = Position;
-            setCharacterPositions();
+            setCharacterPositions(useRightPadding);
         }
 
         /// <summary>
         /// Sets the character positions relative to the string's position on screen.
         /// </summary>
-        public void setCharacterPositions()
+        public void setCharacterPositions(bool useRightPadding=true)
         {
             int index = 0;
             TexturedCharacter lastSeenChar=new TexturedCharacter();
@@ -37,7 +37,14 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
                 }
                 else
                 {
-                    c.position = new Vector2(this.position.X + c.spacing.LeftPadding + lastSeenChar.spacing.RightPadding+lastSeenChar.texture.Width*index, this.position.Y);    
+                    if (useRightPadding)
+                    {
+                        c.position = new Vector2(this.position.X + c.spacing.LeftPadding + lastSeenChar.spacing.RightPadding + lastSeenChar.texture.Width * index, this.position.Y);
+                    }
+                    else
+                    {
+                        c.position = new Vector2(this.position.X + c.spacing.LeftPadding + lastSeenChar.texture.Width * index, this.position.Y);
+                    }
                 }
                 //StardustCore.ModCore.ModMonitor.Log(c.character.ToString());
                 //StardustCore.ModCore.ModMonitor.Log(c.position.ToString());
@@ -50,23 +57,23 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
         /// Adds a textured character to a textured string.
         /// </summary>
         /// <param name="ch"></param>
-        public void addCharacterToEnd(TexturedCharacter ch)
+        public void addCharacterToEnd(TexturedCharacter ch, bool useRightPadding = true)
         {
             this.characters.Add(ch);
-            this.setCharacterPositions();
+            this.setCharacterPositions(useRightPadding);
         }
 
         /// <summary>
         /// Adds a list of textured characters to a textured string.
         /// </summary>
         /// <param name="chList"></param>
-        public void addCharactersToEnd(List<TexturedCharacter> chList)
+        public void addCharactersToEnd(List<TexturedCharacter> chList, bool useRightPadding=true)
         {
             foreach(var ch in chList)
             {
                 this.characters.Add(ch);
             }
-            this.setCharacterPositions();
+            this.setCharacterPositions(useRightPadding);
         }
 
         /// <summary>
@@ -76,11 +83,11 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
         /// <param name="second"></param>
         /// <param name="NewPosition"></param>
         /// <returns></returns>
-        public TexturedString addStrings(TexturedString first,TexturedString second,Vector2 NewPosition)
+        public TexturedString addStrings(TexturedString first, TexturedString second, Vector2 NewPosition, bool useRightPadding = true)
         {
             var newString = first + second;
             newString.position = NewPosition;
-            newString.setCharacterPositions();
+            newString.setCharacterPositions(useRightPadding);
             return newString;
         }
 

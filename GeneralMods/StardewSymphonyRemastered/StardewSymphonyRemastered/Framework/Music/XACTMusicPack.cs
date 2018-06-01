@@ -40,7 +40,8 @@ namespace StardewSymphonyRemastered.Framework
             this.musicPackInformation = MusicPackMetaData.readFromJson(directoryToXwb);
             if (this.musicPackInformation == null)
             {
-                StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.",StardewModdingAPI.LogLevel.Warn);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToXwb + ". Blank information will be put in place.",StardewModdingAPI.LogLevel.Warn);
                 this.musicPackInformation = new MusicPackMetaData("???","???","","0.0.0","");
             }
 
@@ -84,7 +85,8 @@ namespace StardewSymphonyRemastered.Framework
         private Cue getCue(string name) {
             if (this.songInformation.isSongInList(name) == false)
             {
-                StardewSymphony.ModMonitor.Log("Error! The song " + name + " could not be found in music pack " + this.musicPackInformation.name+". Please ensure that this song is part of this music pack located at: "+ this.WaveBankPath+ " or contact the music pack author: "+this.musicPackInformation.author,StardewModdingAPI.LogLevel.Error);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("Error! The song " + name + " could not be found in music pack " + this.musicPackInformation.name+". Please ensure that this song is part of this music pack located at: "+ this.WaveBankPath+ " or contact the music pack author: "+this.musicPackInformation.author,StardewModdingAPI.LogLevel.Error);
                 return null;
             }
             else

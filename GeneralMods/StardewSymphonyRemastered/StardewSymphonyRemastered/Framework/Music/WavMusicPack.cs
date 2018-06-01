@@ -244,7 +244,7 @@ namespace StardewSymphonyRemastered.Framework
         {
             foreach(var song in this.songInformation.listOfSongsWithoutTriggers)
             {
-                if (song.pathToSong == path) return song.name;
+                if (song.getPathToSong()== path) return song.name;
             }
             return "";
         }
@@ -258,7 +258,7 @@ namespace StardewSymphonyRemastered.Framework
         {
             foreach (var song in this.songInformation.listOfSongsWithoutTriggers)
             {
-                if (song.name == name) return song.pathToSong;
+                if (song.name == name) return song.getPathToSong();
             }
             return "";
         }

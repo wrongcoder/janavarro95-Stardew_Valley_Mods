@@ -158,7 +158,8 @@ namespace StardewSymphonyRemastered.Framework
             foreach (var v in Game1.locations)
             {
                 locations.Add(v.Name);
-                StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.Name);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.Name);
             }
 
             //Try to get stardew symphony to recognize builds on the farm and try to give those buildings unique soundtracks as well.
@@ -168,12 +169,14 @@ namespace StardewSymphonyRemastered.Framework
                 foreach(var building in farm.buildings)
                 {
                     locations.Add(building.nameOfIndoors);
-                    StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors);
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors);
                 }
             }
             catch(Exception err)
             {
-                StardewSymphony.ModMonitor.Log(err.ToString());
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log(err.ToString());
             }
 
         }
@@ -428,7 +431,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 catch(Exception err)
                 {
-                    err.ToString();
+                    //err.ToString();
                 }
             }
         }
@@ -569,7 +572,8 @@ namespace StardewSymphonyRemastered.Framework
             var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
             {
-                StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is "+ songName);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is "+ songName);
                 return;
             }
             songKeyPair.Value.Add(song); //add the song from master pool to the trigger list
@@ -583,7 +587,8 @@ namespace StardewSymphonyRemastered.Framework
             var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
             {
-                StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
                 return;
             }
             songKeyPair.Add(song); //add the song from master pool to the trigger list
@@ -597,7 +602,8 @@ namespace StardewSymphonyRemastered.Framework
             var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
             {
-                StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
                 return;
             }
             songKeyPair.Add(song); //add the song from master pool to the trigger list

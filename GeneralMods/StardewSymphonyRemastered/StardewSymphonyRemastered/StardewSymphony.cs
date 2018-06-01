@@ -56,6 +56,8 @@ namespace StardewSymphonyRemastered
 
         public static bool menuChangedMusic;
 
+        public static Config Config;
+
 
 
         public static TextureManager textureManager;
@@ -65,6 +67,7 @@ namespace StardewSymphonyRemastered
         /// <param name="helper"></param>
         public override void Entry(IModHelper helper)
         {
+            Config = helper.ReadConfig<Config>();
             DefaultSoundBank = Game1.soundBank;
             DefaultWaveBank = Game1.waveBank;
             ModHelper = helper;
@@ -153,6 +156,12 @@ namespace StardewSymphonyRemastered
             musicManager.initializeFestivalMusic();
             musicManager.initializeEventMusic();
 
+            foreach (var musicPack in musicManager.musicPacks)
+            {
+                musicPack.Value.readFromJson();
+            }
+            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+
         }
 
 
@@ -181,12 +190,12 @@ namespace StardewSymphonyRemastered
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            /* THIS IS WAY TO LONG to run. Better make it save individual lists when I am editing songs.
+            // THIS IS WAY TO LONG to run. Better make it save individual lists when I am editing songs.
             foreach(var musicPack in musicManager.musicPacks)
             {
                 musicPack.Value.writeToJson();
             }
-            */
+            
         }
 
         /// <summary>
@@ -196,7 +205,7 @@ namespace StardewSymphonyRemastered
         /// <param name="e"></param>
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-            if (e.KeyPressed == Microsoft.Xna.Framework.Input.Keys.K)
+            if (e.KeyPressed.ToString() == Config.KeyBinding)
             {
                 Game1.activeClickableMenu = new Framework.Menus.MusicManagerMenu(Game1.viewport.Width,Game1.viewport.Height);
             }
@@ -210,7 +219,6 @@ namespace StardewSymphonyRemastered
         /// <param name="e"></param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            // ModMonitor.Log("HELLO WORLD");
             if (Game1.currentSong != null)
             {
                 //ModMonitor.Log("STOP THE MUSIC!!!");
@@ -220,10 +228,6 @@ namespace StardewSymphonyRemastered
             }
       
         }
-
-
-
-
 
         /// <summary>
         /// Load in the music packs to the music manager.
@@ -261,7 +265,6 @@ namespace StardewSymphonyRemastered
             string dayIcon = Path.Combine(path, "TimeIcon_Day.png");
             string nightIcon = Path.Combine(path, "TimeIcon_Night.png");
 
-
             //Fun Icons
             string eventIcon = Path.Combine(path, "EventIcon.png");
             string festivalIcon = Path.Combine(path, "FestivalIcon.png");
@@ -277,14 +280,11 @@ namespace StardewSymphonyRemastered
             string stormIcon = Path.Combine(path, "WeatherIcon_Stormy.png");
             string weddingIcon = Path.Combine(path, "WeatherIcon_WeddingHeart.png");
 
-
-
             //Season Icons
             string springIcon = Path.Combine(path, "SeasonIcon_Spring.png");
             string summerIcon = Path.Combine(path, "SeasonIcon_Summer.png");
             string fallIcon = Path.Combine(path, "SeasonIcon_Fall.png");
             string winterIcon = Path.Combine(path, "SeasonIcon_Winter.png");
-
 
             //Day Icons
             string mondayIcon = Path.Combine(path, "DayIcons_Monday.png");
@@ -296,14 +296,9 @@ namespace StardewSymphonyRemastered
             string sundayIcon = Path.Combine(path, "DayIcons_Sunday.png");
 
             string houseIcon = Path.Combine(path, "HouseIcon.png");
-
             string playButton = Path.Combine(path, "PlayButton.png");
             string stopButton = Path.Combine(path, "StopButton.png");
-
             string backButton = Path.Combine(path, "BackButton.png");
-
-
-
 
             textureManager.addTexture("MusicNote",new Texture2DExtended(ModHelper,StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicNote)));
             textureManager.addTexture("MusicDisk", new Texture2DExtended(ModHelper, StardustCore.Utilities.getRelativeDirectory("StardewSymphonyRemastered", musicCD)));
@@ -405,7 +400,7 @@ namespace StardewSymphonyRemastered
         /// <summary>
         /// Load in the XACT music packs.
         /// </summary>
-        public static void loadXACTMusicPacks()
+        public void loadXACTMusicPacks()
         {
             string[] listOfDirectories= Directory.GetDirectories(XACTMusicDirectory);
             foreach(string folder in listOfDirectories)
@@ -417,23 +412,27 @@ namespace StardewSymphonyRemastered
                 string[] debug = Directory.GetFiles(folder);
                 if (xwb.Length == 0)
                 {
-                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no wave bank music file: .xwb located in this directory. AKA there is no valid music here.", LogLevel.Error);
+                    if(Config.EnableDebugLog)
+                        ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no wave bank music file: .xwb located in this directory. AKA there is no valid music here.", LogLevel.Error);
                     return;
                 }
                 if (xwb.Length >= 2)
                 {
-                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There are too many wave bank music files or .xwbs located in this directory. Please ensure that there is only one music pack in this folder. You can make another music pack but putting a wave bank file in a different folder.", LogLevel.Error);
+                    if (Config.EnableDebugLog)
+                        ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There are too many wave bank music files or .xwbs located in this directory. Please ensure that there is only one music pack in this folder. You can make another music pack but putting a wave bank file in a different folder.", LogLevel.Error);
                     return;
                 }
 
                 if (xsb.Length == 0)
                 {
-                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no sound bank music file: .xsb located in this directory. AKA there is no valid music here.", LogLevel.Error);
+                    if (Config.EnableDebugLog)
+                        ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There is no sound bank music file: .xsb located in this directory. AKA there is no valid music here.", LogLevel.Error);
                     return;
                 }
                 if (xsb.Length >= 2)
                 {
-                    ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There are too many sound bank music files or .xsbs located in this directory. Please ensure that there is only one sound reference file in this folder. You can make another music pack but putting a sound file in a different folder.", LogLevel.Error);
+                    if (Config.EnableDebugLog)
+                        ModMonitor.Log("Error loading in attempting to load music pack from: " + folder + ". There are too many sound bank music files or .xsbs located in this directory. Please ensure that there is only one sound reference file in this folder. You can make another music pack but putting a sound file in a different folder.", LogLevel.Error);
                     return;
                 }
 
@@ -443,12 +442,17 @@ namespace StardewSymphonyRemastered
 
                 if (!File.Exists(metaData))
                 {
-                    ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
+                    if (Config.EnableDebugLog)
+                        ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
                 }
                 StardewSymphonyRemastered.Framework.XACTMusicPack musicPack = new XACTMusicPack(folder, waveBank,soundBank);
+
+                musicPack.songInformation.initializeMenuMusic();
+                musicPack.readFromJson();
+
+
                 musicManager.addMusicPack(musicPack,true,true);
                 
-                musicPack.readFromJson();
                 
             }
         }
@@ -456,7 +460,7 @@ namespace StardewSymphonyRemastered
         /// <summary>
         /// Load in WAV music packs.
         /// </summary>
-        public static void loadWAVMusicPacks()
+        public void loadWAVMusicPacks()
         {
             string[] listOfDirectories = Directory.GetDirectories(WavMusicDirectory);
             foreach (string folder in listOfDirectories)
@@ -465,13 +469,17 @@ namespace StardewSymphonyRemastered
 
                 if (!File.Exists(metaData))
                 {
-                    ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
+                    if (Config.EnableDebugLog)
+                        ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
                 }
 
                 StardewSymphonyRemastered.Framework.WavMusicPack musicPack = new WavMusicPack(folder);
-                musicManager.addMusicPack(musicPack,true,true);
-                
+
+                musicPack.songInformation.initializeMenuMusic();
                 musicPack.readFromJson();
+
+                musicManager.addMusicPack(musicPack,true,true);
+               
                 
             }
         }
