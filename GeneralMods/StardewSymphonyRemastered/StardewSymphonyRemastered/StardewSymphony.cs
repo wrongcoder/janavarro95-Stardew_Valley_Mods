@@ -85,6 +85,7 @@ namespace StardewSymphonyRemastered
             StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
             StardewModdingAPI.Events.GameEvents.FirstUpdateTick += GameEvents_FirstUpdateTick;
+            StardewModdingAPI.Events.GameEvents.OneSecondTick += GameEvents_OneSecondTick;
 
 
             musicManager = new MusicManager();
@@ -110,6 +111,15 @@ namespace StardewSymphonyRemastered
             SongSpecifics.initializeFestivalsList();
 
             initializeMusicPacks();
+        }
+
+        private void GameEvents_OneSecondTick(object sender, EventArgs e)
+        {
+            if (musicManager == null) return;
+            else
+            {
+                musicManager.updateTimer();
+            }
         }
 
         /// <summary>
@@ -160,6 +170,12 @@ namespace StardewSymphonyRemastered
             {
                 musicPack.Value.readFromJson();
             }
+
+            SongSpecifics.menus.Sort();
+            SongSpecifics.locations.Sort();
+            SongSpecifics.festivals.Sort();
+            SongSpecifics.events.Sort();
+
             musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
 
         }

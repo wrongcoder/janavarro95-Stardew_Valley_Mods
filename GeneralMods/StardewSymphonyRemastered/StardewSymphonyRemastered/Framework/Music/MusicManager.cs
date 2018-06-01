@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using StardewSymphonyRemastered;
 using StardewValley;
 using System.IO;
+using System.Timers;
 
 namespace StardewSymphonyRemastered.Framework
 {
@@ -27,6 +28,8 @@ namespace StardewSymphonyRemastered.Framework
 
         Random packSelector;
         Random songSelector;
+
+        Timer timer;
 
         bool lastSongWasLocationSpecific;
         /// <summary>
@@ -60,6 +63,27 @@ namespace StardewSymphonyRemastered.Framework
                 if (StardewSymphony.Config.EnableDebugLog)
                     StardewSymphony.ModMonitor.Log("ERROR: Music Pack " + nameOfNewMusicPack + " isn't valid for some reason.", StardewModdingAPI.LogLevel.Alert);
             }
+        }
+
+        public void updateTimer()
+        {
+            if (this.currentMusicPack.isPlaying()) return;
+            else
+            {
+                Random r = new Random(Game1.random.Next());
+
+                int val = r.Next(StardewSymphony.Config.MinimumDelayBetweenSongsInMilliseconds, StardewSymphony.Config.MaximumDelayBetweenSongsInMilliseconds + 1);
+                timer = new Timer(val);
+                timer.Elapsed += onTimerFinished;
+                timer.Enabled = true;
+            }
+
+        }
+
+        public void onTimerFinished(System.Object source, ElapsedEventArgs e)
+        {
+            timer.Enabled = false;
+            selectMusic(SongSpecifics.getCurrentConditionalString());
         }
 
         /// <summary>
@@ -307,7 +331,8 @@ namespace StardewSymphonyRemastered.Framework
                         return;
                     }
                 }
-                StardewSymphony.ModMonitor.Log(subKey, StardewModdingAPI.LogLevel.Alert);
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log(subKey, StardewModdingAPI.LogLevel.Alert);
                 listOfValidMusicPacks = getListOfApplicableMusicPacks(subKey);
                 if (listOfValidMusicPacks.Count == 0)
                 {
@@ -333,7 +358,8 @@ namespace StardewSymphonyRemastered.Framework
                         }
                     }
                     if (subKey == "") break;
-                    StardewSymphony.ModMonitor.Log(subKey, StardewModdingAPI.LogLevel.Alert);
+                    if(StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log(subKey, StardewModdingAPI.LogLevel.Alert);
                     listOfValidMusicPacks = getListOfApplicableMusicPacks(subKey);
                     if (listOfValidMusicPacks.Count == 0)
                     {

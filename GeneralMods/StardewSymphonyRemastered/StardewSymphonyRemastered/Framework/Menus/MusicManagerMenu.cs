@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.Locations;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents;
@@ -459,7 +460,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
             }
 
-            //Song selection mode.
+            //Festival selection mode.
             if (this.drawMode == DrawMode.FestivalSelection)
             {
                 this.fancyButtons.Clear();
@@ -478,11 +479,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
             }
 
-            //Song selection mode.
+            //Menu selection mode.
             if (this.drawMode == DrawMode.MenuSelection)
             {
                 this.fancyButtons.Clear();
                 //Vector4 placement = new Vector4((Game1.viewport.Width / 3), (Game1.viewport.Height / 4) + 128, this.width, this.height / 2);
+
+               
 
                 Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .9f);
                 for (int i = 0; i < SongSpecifics.menus.Count; i++)
@@ -497,7 +500,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
             }
 
-            //Song selection mode.
+            //Event selection mode.
             if (this.drawMode == DrawMode.EventSelection)
             {
                 this.fancyButtons.Clear();
@@ -747,15 +750,56 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
 
 
-            //Song selection mode.
+            //Location selection mode.
             if (this.drawMode == DrawMode.LocationSelection)
             {
                 this.fancyButtons.Clear();
-
+                int numOfEmptyCabin = 1;
                 Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .9f);
                 for (int i = 0; i < SongSpecifics.locations.Count; i++)
                 {
                     string locName = SongSpecifics.locations.ElementAt(i);
+
+                   
+                    if (locName.Contains("Cabin"))
+                    {
+                        try
+                        {
+                            GameLocation loc = Game1.getLocationFromName(locName);
+                            Farmer farmer = (loc as Cabin).getFarmhand().Value;
+                            if (farmer != null)
+                            {
+                                
+                                string displayName = farmer.Name + "'s Cabin";
+                                if (farmer.Name == "")
+                                {
+                                    displayName = "Empty Cabin " + (numOfEmptyCabin);
+                                    numOfEmptyCabin++;
+                                }
+                                Texture2DExtended texture2 = StardewSymphony.textureManager.getTexture("HouseIcon");
+                                float scale2 = 1.00f / ((float)texture2.texture.Width / 64f);
+                                Rectangle srcRect2 = new Rectangle(0, 0, texture2.texture.Width, texture2.texture.Height);
+                                this.fancyButtons.Add(new Button(locName, new Rectangle((int)placement2.X + 25, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture2, displayName, srcRect2, scale2, new Animation(srcRect2), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
+                                continue;
+                            }
+                            if (farmer == null)
+                            {
+                                string displayName = "Empty Cabin "+(numOfEmptyCabin);
+                                numOfEmptyCabin++;
+                                Texture2DExtended texture2 = StardewSymphony.textureManager.getTexture("HouseIcon");
+                                float scale2 = 1.00f / ((float)texture2.texture.Width / 64f);
+                                Rectangle srcRect2 = new Rectangle(0, 0, texture2.texture.Width, texture2.texture.Height);
+                                this.fancyButtons.Add(new Button(locName, new Rectangle((int)placement2.X + 25, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture2, displayName, srcRect2, scale2, new Animation(srcRect2), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
+                                continue;
+                            }
+                        }
+                        catch(Exception err)
+                        {
+
+                        }
+                    }
+
+
                     //Allow 8 songs to be displayed per page.
                     Texture2DExtended texture = StardewSymphony.textureManager.getTexture("HouseIcon");
                     float scale = 1.00f / ((float)texture.texture.Width / 64f);
@@ -1119,7 +1163,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     {
                         if (button == null) continue;
                         Vector2 position = new Vector2(this.width * .1f + 64, this.height * .05f + 384);
-                        if (button.name == "SunnyIcon" || button.name == "RainyIcon" || button.name == "SnowyIcon" || button.name == "WeatherDebrisIcon" || button.name == "StormyIcon" || button.name == "WeatherFestivalIcon" || button.name == "WeddingIcon")
+                        if (button.name == "SunnyIcon" || button.name == "RainyIcon" || button.name == "SnowIcon" || button.name == "WeatherDebrisIcon" || button.name == "StormIcon" || button.name == "WeatherFestivalIcon" || button.name == "WeddingIcon")
                         {
                             this.currentlySelectedWeather = button.clone(position);
                             this.drawMode = DrawMode.TimeSelection;
@@ -1391,6 +1435,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// <param name="b"></param>
         public override void draw(SpriteBatch b)
         {
+            Vector4 placement = new Vector4(this.width * .1f, this.height * .05f - 96, 4 * 100 + 50, this.height + 32);
+
+            Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f - 96, 5 * 100, this.height + 32);
+          
+
+
             if (this.drawMode == DrawMode.AlbumSelection)
             {
                 this.drawDialogueBoxBackground();
@@ -1402,8 +1452,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.AlbumFancySelection)
             {
-                Vector4 placement = new Vector4(Game1.viewport.Width/4-50, Game1.viewport.Height/4, 8 * 100, 128*2);
-                this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 0)));
+                Vector4 placement3 = new Vector4(Game1.viewport.Width/4-50, Game1.viewport.Height/4, 8 * 100, 128*2);
+                this.drawDialogueBoxBackground((int)placement3.X, (int)placement3.Y, (int)placement3.Z, (int)placement3.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 0)));
                
                 foreach(var v in fancyButtons)
                 {
@@ -1417,13 +1467,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.SongSelectionMode)
             {
-                Vector4 placement = new Vector4(this.width*.1f, this.height*.05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height*.95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
+           
                 int amountToShow = 6;
                 this.currentMusicPackAlbum.draw(b);
 
@@ -1464,13 +1510,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.DifferentSelectionTypesMode)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
 
                 this.currentMusicPackAlbum.draw(b);
                 this.currentSelectedSong.draw(b);
@@ -1489,11 +1530,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.WeatherSelection)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 //make 3rd dialogue box option;
@@ -1515,12 +1552,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.TimeSelection)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
+
 
                 //make 3rd dialogue box option;
                 this.currentMusicPackAlbum.draw(b);
@@ -1542,11 +1576,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.LocationSelection)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 int amountToShow = 6;
@@ -1595,11 +1625,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.DaySelection)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 //make 3rd dialogue box option;
@@ -1625,12 +1651,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.NothingElseToDisplay)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
-                this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 //make 3rd dialogue box option;
                 this.currentMusicPackAlbum.draw(b);
@@ -1655,11 +1676,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
            if (this.drawMode == DrawMode.EventSelection)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 int amountToShow = 6;
@@ -1711,11 +1728,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.MenuSelection)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 int amountToShow = 6;
@@ -1767,11 +1780,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.FestivalSelection)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
-
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
                 this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 int amountToShow = 6;
@@ -1823,12 +1832,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.SelectedEvent)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
-                this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 //make 3rd dialogue box option;
                 this.currentMusicPackAlbum.draw(b);
@@ -1855,12 +1860,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.SelectedFestival)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
-                this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 //make 3rd dialogue box option;
                 this.currentMusicPackAlbum.draw(b);
@@ -1887,12 +1888,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.drawMode == DrawMode.SelectedMenu)
             {
-                Vector4 placement = new Vector4(this.width * .1f, this.height * .05f, 4 * 100, 128 * 2);
                 this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
-
-                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .95f);
-                this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
 
                 //make 3rd dialogue box option;
                 this.currentMusicPackAlbum.draw(b);

@@ -1,4 +1,5 @@
 ﻿using StardewValley;
+using StardewValley.Locations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace StardewSymphonyRemastered.Framework
     /// </summary>
     public class SongSpecifics
     {
-        public Dictionary<string, List<Song>> listOfSongsWithTriggers; //triggerName, <songs>. Seasonal music
+        public SortedDictionary<string, List<Song>> listOfSongsWithTriggers; //triggerName, <songs>. Seasonal music
 
 
         public List<Song> listOfSongsWithoutTriggers;
@@ -75,7 +76,7 @@ namespace StardewSymphonyRemastered.Framework
             };
 
 
-            listOfSongsWithTriggers = new Dictionary<string, List<Song>>();
+            listOfSongsWithTriggers = new SortedDictionary<string, List<Song>>();
             this.listOfSongsWithoutTriggers = new List<Song>();
             this.eventSongs = new List<Song>();
             this.festivalSongs = new List<Song>();
