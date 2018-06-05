@@ -1430,6 +1430,38 @@ namespace StardewSymphonyRemastered.Framework.Menus
         }
 
         /// <summary>
+        /// Checks whether or not the currently selected song has already been added for the currently selected music pack.
+        /// </summary>
+        /// <returns>Whether or not the currently selected song has been added to the list of song triggers for the music pack.</returns>
+        public bool doesPackContainMusic()
+        {
+            if (this.currentMusicPackAlbum == null || this.currentSelectedSong == null) return false;
+            var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
+            //Check for generic festival music.
+            if (this.drawMode == DrawMode.FestivalSelection)
+            {
+                var festivalSonglist = info.Value.songInformation.festivalSongs;
+                if (festivalSonglist == null) return false;
+                if (!festivalSonglist.Contains(info.Value.songInformation.getSongFromList(festivalSonglist, this.currentSelectedSong.name))) return false;
+                else return true;
+            }
+            //Check for generic event music.
+            if (this.drawMode == DrawMode.EventSelection)
+            {
+                var eventSonglist = info.Value.songInformation.festivalSongs;
+                if (eventSonglist == null) return false;
+                if (!eventSonglist.Contains(info.Value.songInformation.getSongFromList(eventSonglist, this.currentSelectedSong.name))) return false;
+                else return true;
+            }
+            //Check for seasonal music triggers.
+            var songList = info.Value.songInformation.getSongList(generateSongTriggerKeyFromSelection());
+            if (songList.Value == null) return false;
+            if (!songList.Value.Contains(info.Value.songInformation.getSongFromList(songList.Value, this.currentSelectedSong.name))) return false;
+            else return true;
+
+        }
+
+        /// <summary>
         /// Draws the menu and it's respective components depending on the drawmode that is currently set.
         /// </summary>
         /// <param name="b"></param>
@@ -1684,8 +1716,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentMusicPackAlbum.draw(b);
                 this.currentSelectedSong.draw(b);
                 this.currentlySelectedOption.draw(b);
-                this.addButton.draw(b);
-                this.deleteButton.draw(b);
+                if (!doesPackContainMusic())
+                {
+                    this.addButton.draw(b);
+                }
+                else
+                {
+                    this.deleteButton.draw(b);
+                }
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
 
@@ -1736,8 +1774,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentMusicPackAlbum.draw(b);
                 this.currentSelectedSong.draw(b);
                 this.currentlySelectedOption.draw(b);
-                this.addButton.draw(b);
-                this.deleteButton.draw(b);
+                if (!doesPackContainMusic())
+                {
+                    this.addButton.draw(b);
+                }
+                else
+                {
+                    this.deleteButton.draw(b);
+                }
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
 
@@ -1788,8 +1832,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentMusicPackAlbum.draw(b);
                 this.currentSelectedSong.draw(b);
                 this.currentlySelectedOption.draw(b);
-                this.addButton.draw(b);
-                this.deleteButton.draw(b);
+                if (!doesPackContainMusic())
+                {
+                    this.addButton.draw(b);
+                }
+                else
+                {
+                    this.deleteButton.draw(b);
+                }
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
 
@@ -1842,8 +1892,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentlySelectedEvent.draw(b);
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
-                this.addButton.draw(b);
-                this.deleteButton.draw(b);
+                if (!doesPackContainMusic())
+                {
+                    this.addButton.draw(b);
+                }
+                else
+                {
+                    this.deleteButton.draw(b);
+                }
 
                 foreach (Button button in fancyButtons)
                 {
@@ -1870,8 +1926,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentlySelectedFestival.draw(b);
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
-                this.addButton.draw(b);
-                this.deleteButton.draw(b);
+                if (!doesPackContainMusic())
+                {
+                    this.addButton.draw(b);
+                }
+                else
+                {
+                    this.deleteButton.draw(b);
+                }
 
                 foreach (Button button in fancyButtons)
                 {
@@ -1898,8 +1960,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentlySelectedMenu.draw(b);
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
-                this.addButton.draw(b);
-                this.deleteButton.draw(b);
+                if (!doesPackContainMusic())
+                {
+                    this.addButton.draw(b);
+                }
+                else
+                {
+                    this.deleteButton.draw(b);
+                }
 
                 foreach (Button button in fancyButtons)
                 {
@@ -1919,8 +1987,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 if (this.drawMode == DrawMode.WeatherSelection || this.drawMode == DrawMode.TimeSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.DaySelection || this.drawMode == DrawMode.NothingElseToDisplay)
                 {
-                    this.addButton.draw(b);
-                    this.deleteButton.draw(b);
+                    if (!doesPackContainMusic())
+                    {
+                        this.addButton.draw(b);
+                    }
+                    else
+                    {
+                        this.deleteButton.draw(b);
+                    }
                 }
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
