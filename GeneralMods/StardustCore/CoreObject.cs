@@ -1516,6 +1516,11 @@ namespace StardustCore
             */
         }
 
+        /// <summary>
+        /// Adds an item to this item's internal inventory if it can. Otherwise drop it on the ground as item debris.
+        /// </summary>
+        /// <param name="I"></param>
+        /// <returns></returns>
         public virtual bool addItemToInventoryElseDrop(Item I)
         {
 

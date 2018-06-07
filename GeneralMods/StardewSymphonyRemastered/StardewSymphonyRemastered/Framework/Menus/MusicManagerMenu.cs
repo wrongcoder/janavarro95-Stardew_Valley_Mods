@@ -1061,6 +1061,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     }
                 }
                 this.selectAlbum(ok);
+                return;
             }
 
             if (this.drawMode == DrawMode.SongSelectionMode)
