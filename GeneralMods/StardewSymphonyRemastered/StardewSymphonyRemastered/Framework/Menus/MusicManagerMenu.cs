@@ -386,7 +386,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     {
                         try
                         {
-                            Button button = this.musicAlbumButtons.ElementAt(this.currentAlbumIndex + i).clone();
+                            Button button = this.musicAlbumButtons.ElementAt(Math.Abs((this.currentAlbumIndex + i)%this.musicAlbumButtons.Count)).clone();
                             button.bounds = new Rectangle((int)placement.X + (i * 100) + offsetX, (int)placement.Y, 64, 64);
                             fancyButtons.Add(button);
                         }
@@ -395,7 +395,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                             err.ToString();
                             if (this.currentAlbumIndex + i == 0)
                             {
-                                Button button = this.musicAlbumButtons.ElementAt(0).clone();
+                                Button button = this.musicAlbumButtons.ElementAt(Math.Abs(0 % this.musicAlbumButtons.Count)).clone();
                                 button.bounds = new Rectangle((int)placement.X + (i * 100) + offsetX, (int)placement.Y, 64, 64);
                                 fancyButtons.Add(button);
                             }
@@ -404,14 +404,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                                 try
                                 {
-                                    Button button = this.musicAlbumButtons.ElementAt(((this.currentAlbumIndex + i) - this.musicAlbumButtons.Count) % this.musicAlbumButtons.Count).clone();
+                                    Button button = this.musicAlbumButtons.ElementAt(Math.Abs(((this.currentAlbumIndex + i) - this.musicAlbumButtons.Count) % this.musicAlbumButtons.Count)).clone();
                                     button.bounds = new Rectangle((int)placement.X + (i * 100) + offsetX, (int)placement.Y, 64, 64);
                                     fancyButtons.Add(button);
                                 }
                                 catch (Exception err2)
                                 {
                                     err2.ToString();
-                                    Button button = this.musicAlbumButtons.ElementAt(((this.currentAlbumIndex + i) + this.musicAlbumButtons.Count) % this.musicAlbumButtons.Count).clone();
+                                    Button button = this.musicAlbumButtons.ElementAt(Math.Abs((this.currentAlbumIndex + i) + this.musicAlbumButtons.Count) % this.musicAlbumButtons.Count).clone();
                                     button.bounds = new Rectangle((int)placement.X + (i * 100) + offsetX, (int)placement.Y, 64, 64);
                                     fancyButtons.Add(button);
 
@@ -1061,6 +1061,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     }
                 }
                 this.selectAlbum(ok);
+                return;
             }
 
             if (this.drawMode == DrawMode.SongSelectionMode)

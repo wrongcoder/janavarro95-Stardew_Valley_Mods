@@ -15,21 +15,16 @@ namespace StardewSymphonyRemastered
 {
 
     /// <summary>
-    /// BIG WIP. Don't use this at all because it does nothing right now.
     /// TODO:
-    /// 3.Finish making menu
     /// 5.Release
-    /// 6.Make videos documenting how to make this mod work.
-    /// 7.Make way to generate new music packs.
     /// 
     /// 
     /// Add mod config to have silent rain option.
-    /// Add in song delay function.
     /// Add in shuffle song button that just selects music but probably plays a different song. same as musicManager.selectmusic(getConditionalString);
-    /// 
+    /// Add in a save button to save settings in the menu.
     /// 
     /// Notes:
-    /// All mods must add events/locations/festivals/menu information to this mod during the Entry function of their mod because once the game does it's first update tick, that's when all of the packs are initialized with all of their music.
+    /// All mods must add events/locations/festivals/menu information to this mod during the Entry function of their mod because once the player is loaded that's when all of the packs are initialized with all of their music.
     /// </summary>
     public class StardewSymphony : Mod
     {

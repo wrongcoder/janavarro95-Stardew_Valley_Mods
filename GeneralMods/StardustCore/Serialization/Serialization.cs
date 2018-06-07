@@ -403,7 +403,8 @@ namespace StardustCore.Serialization
             //  Log.AsyncC(data);
             try
             {
-                dynamic obj = JObject.Parse(data);
+                JObject obj2 = JObject.Parse(data);
+                CoreObject obj = (CoreObject)obj2.ToObject(typeof(CoreObject));
 
 
                 //   Log.AsyncC(obj.thisType);
@@ -549,8 +550,8 @@ namespace StardustCore.Serialization
             //  Log.AsyncC(data);
             try
             {
-                dynamic obj = JObject.Parse(data);
-
+                JObject obj2 = JObject.Parse(data);
+                CoreObject obj =(CoreObject)obj2.ToObject(typeof(CoreObject));
 
                 //   Log.AsyncC(obj.thisType);
 
