@@ -74,6 +74,7 @@ namespace Omegasis.NightOwl
             TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             GameEvents.FourthUpdateTick += this.GameEvents_FourthUpdateTick;
         }
 
@@ -104,6 +105,28 @@ namespace Omegasis.NightOwl
                 this.Monitor.Log(ex.ToString(), LogLevel.Error);
                 this.WriteErrorLog();
             }
+        }
+        
+        /// <summary>The method invoked before the game saves.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        public void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            int collapseFee = 0;
+            string[] passOutFees = Game1.player.mailbox
+                 .Where(p => p.Contains("passedOut"))
+                 .ToArray();
+             for (int idx=0; idx<pofees.Length; idx++) 
+             {
+                 string[] msg = passOutFees[idx].Split(' ');
+                 collapseFee += Int32.Parse(msg[1]);
+             }
+             
+             if (this.Config.KeepMoneyAfterCollapse) 
+             {
+                 Game1.player.money += collapseFee;
+             }
+             
         }
 
         /// <summary>The method invoked after the player loads a save.</summary>
@@ -136,8 +159,6 @@ namespace Omegasis.NightOwl
                         Game1.player.stamina = this.PreCollapseStamina;
                     if (this.Config.KeepHealthAfterCollapse)
                         Game1.player.health = this.PreCollapseHealth;
-                    if (this.Config.KeepMoneyAfterCollapse)
-                        Game1.player.money = this.PreCollapseMoney;
                     if (this.Config.KeepPositionAfterCollapse)
                         Game1.warpFarmer(this.PreCollapseMap, this.PreCollapseTile.X, this.PreCollapseTile.Y, false);
                 }
