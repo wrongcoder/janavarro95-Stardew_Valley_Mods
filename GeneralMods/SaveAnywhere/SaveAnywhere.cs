@@ -6,6 +6,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Monsters;
 
 namespace Omegasis.SaveAnywhere
 {
@@ -40,6 +41,10 @@ namespace Omegasis.SaveAnywhere
         /// </summary>
         public static IMonitor ModMonitor;
 
+        private List<Monster> monsters;
+
+        private bool customMenuOpen;
+
         /*********
         ** Public methods
         *********/
@@ -56,9 +61,14 @@ namespace Omegasis.SaveAnywhere
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+
             ModHelper = helper;
             ModMonitor = Monitor;
+            customMenuOpen = false;
         }
+
+
+
 
 
         /*********
@@ -84,7 +94,7 @@ namespace Omegasis.SaveAnywhere
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
             // clear custom data after a normal save (to avoid restoring old state)
-            if (!this.IsCustomSaving)
+            if (!this.IsCustomSaving) 
                 this.SaveManager.ClearData();
         }
 
@@ -115,6 +125,60 @@ namespace Omegasis.SaveAnywhere
             {
                 this.ShouldResetSchedules = false;
                 this.ApplySchedules();
+            }
+
+            if (Game1.activeClickableMenu == null && this.customMenuOpen == false) return;
+            if(Game1.activeClickableMenu==null && this.customMenuOpen == true)
+            {
+                restoreMonsters();
+                this.customMenuOpen = false;
+                return;
+            }
+            if (Game1.activeClickableMenu != null)
+            {
+                if (Game1.activeClickableMenu.GetType() == typeof(NewSaveGameMenu))
+                {
+                    this.customMenuOpen = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves all monsters from the game world.
+        /// </summary>
+        private void cleanMonsters()
+        {
+            monsters = new List<Monster>();
+
+            foreach (var monster in Game1.player.currentLocation.characters)
+            {
+                try
+                {
+                    if (monster is Monster)
+                    {
+                        monsters.Add(monster as Monster);
+                    }
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+
+            foreach (var monster in this.monsters)
+            {
+                Game1.player.currentLocation.characters.Remove(monster);
+            }
+        }
+
+        /// <summary>
+        /// Adds all saved monster back into the game world.
+        /// </summary>
+        private void restoreMonsters()
+        {
+            foreach (var monster in this.monsters)
+            {
+                Game1.player.currentLocation.characters.Add(monster);
             }
         }
 
@@ -150,6 +214,7 @@ namespace Omegasis.SaveAnywhere
             {
                 if (Game1.client==null)
                 {
+                    cleanMonsters();
                     // validate: community center Junimos can't be saved
 
                     if (Game1.player.currentLocation.getCharacters().OfType<Junimo>().Any())
@@ -189,7 +254,7 @@ namespace Omegasis.SaveAnywhere
                 string scheduleData;
                 if (!this.NpcSchedules.TryGetValue(npc.Name, out scheduleData) || string.IsNullOrEmpty(scheduleData))
                 {
-                    this.Monitor.Log("THIS IS AWKWARD");
+                    //this.Monitor.Log("THIS IS AWKWARD");
                     continue;
                 }
 

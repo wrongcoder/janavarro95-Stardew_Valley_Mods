@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DebugSandBoxAndReferences.Framework.Commands;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DebugSandBoxAndReferences
 {
-    public class DebugSandBox
+    public class DebugSandBox : Mod
     {
         /*
          * Notes:
@@ -17,13 +18,13 @@ namespace DebugSandBoxAndReferences
          * Game1.MainPlayer will always target the host player.
          * 
          */
-
-
-        public void Main()
+        public override void Entry(IModHelper helper)
         {
-
+            TimeCommands.registerCommands(helper);
         }
 
+
+        /*
         /// <summary>
         /// This is how you will iterate across a new dictionary in stardew valley
         /// </summary>
@@ -36,5 +37,7 @@ namespace DebugSandBoxAndReferences
             }
 
         }
+        */
+
     }
 }
