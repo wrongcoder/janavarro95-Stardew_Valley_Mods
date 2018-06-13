@@ -192,12 +192,18 @@ namespace StardustCore.Objects
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadows)
         {
-            if (animationManager == null) spriteBatch.Draw(this.TextureSheet.getTexture(), location,this.defaultSourceRect, Color.White * transparency, 0f, new Vector2(0,0), scaleSize, SpriteEffects.None, layerDepth);
-            else
+            foreach (var v in this.objects)
             {
-                spriteBatch.Draw(animationManager.getTexture(), location, animationManager.currentAnimation.sourceRectangle, Color.White * transparency, 0f, new Vector2(0,0), scaleSize, SpriteEffects.None, layerDepth);
-                //this.modularCrop.drawInMenu(spriteBatch, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), Color.White, 0f,true);
-                if (Game1.player.CurrentItem != this) animationManager.tickAnimation();
+                if (animationManager == null)
+                {
+                    spriteBatch.Draw(v.Value.getExtendedTexture().getTexture(), location+new Vector2(v.Key.X*16,v.Key.Y*16), this.defaultSourceRect, Color.White * transparency, 0f, new Vector2(0, 0), 1, SpriteEffects.None, layerDepth);
+                }
+                else
+                {
+                    spriteBatch.Draw(v.Value.animationManager.getTexture(), location + new Vector2(v.Key.X*8, v.Key.Y*8), v.Value.animationManager.currentAnimation.sourceRectangle, Color.White * transparency, 0f, new Vector2(0, 0), scaleSize, SpriteEffects.None, layerDepth);
+                    //this.modularCrop.drawInMenu(spriteBatch, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), Color.White, 0f,true);
+                    if (Game1.player.CurrentItem != this) animationManager.tickAnimation();
+                }
             }
         }
 
