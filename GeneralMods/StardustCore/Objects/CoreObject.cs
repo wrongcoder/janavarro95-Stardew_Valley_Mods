@@ -1602,7 +1602,7 @@ namespace StardustCore
             return Color.Black;
         }
 
-        public virtual Type getCutsomType()
+        public virtual Type getCustomType()
         {
             return this.GetType();
         }

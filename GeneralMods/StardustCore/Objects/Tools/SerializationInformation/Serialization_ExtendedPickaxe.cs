@@ -1,5 +1,4 @@
 ﻿using StardustCore.Interfaces;
-using StardustCore.Objects.Tools.SerializationInformation;
 using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
@@ -9,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace StardustCore.Objects.Tools.SerializationInformation
 {
-    public class Serialization_ExtendedAxe : SerializedObjectBase
+    public class Serialization_ExtendedPickaxe : SerializedObjectBase
     {
         public string Name;
         public string Description;
         public int UpgradeLevel;
         public Texture2DExtended TextureInformation;
 
-        public Serialization_ExtendedAxe() : base()
+        public Serialization_ExtendedPickaxe() : base()
         {
             this.SerializationName = GetSerializationName();
         }
 
-        public Serialization_ExtendedAxe(ExtendedAxe axe) : base()
+        public Serialization_ExtendedPickaxe(ExtendedPickaxe axe) : base()
         {
             this.UpgradeLevel = axe.UpgradeLevel;
             this.Name = axe.Name;
@@ -32,12 +31,12 @@ namespace StardustCore.Objects.Tools.SerializationInformation
 
         public override Type getCustomType()
         {
-           return typeof(ExtendedAxe);
+            return typeof(ExtendedPickaxe);
         }
 
         public override string GetSerializationName()
         {
-            return typeof(ExtendedAxe).ToString();
+            return typeof(ExtendedPickaxe).ToString();
         }
     }
 }

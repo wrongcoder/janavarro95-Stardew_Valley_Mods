@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace StardustCore.Objects.Tools.SerializationInformation
 {
-    public class Serialization_ExtendedAxe : SerializedObjectBase
+    public class Serialization_ExtendedHoe : SerializedObjectBase
     {
         public string Name;
         public string Description;
         public int UpgradeLevel;
         public Texture2DExtended TextureInformation;
 
-        public Serialization_ExtendedAxe() : base()
+        public Serialization_ExtendedHoe() : base()
         {
             this.SerializationName = GetSerializationName();
         }
 
-        public Serialization_ExtendedAxe(ExtendedAxe axe) : base()
+        public Serialization_ExtendedHoe(ExtendedHoe axe) : base()
         {
             this.UpgradeLevel = axe.UpgradeLevel;
             this.Name = axe.Name;
@@ -32,12 +32,12 @@ namespace StardustCore.Objects.Tools.SerializationInformation
 
         public override Type getCustomType()
         {
-           return typeof(ExtendedAxe);
+            return typeof(ExtendedHoe);
         }
 
         public override string GetSerializationName()
         {
-            return typeof(ExtendedAxe).ToString();
+            return typeof(ExtendedHoe).ToString();
         }
     }
 }

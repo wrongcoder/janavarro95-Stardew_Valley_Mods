@@ -5,6 +5,7 @@ using StardewValley.Menus;
 using StardustCore.ModInfo;
 using StardustCore.Objects.Tools;
 using StardustCore.Serialization;
+using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.SpriteFonts;
 using System;
 using System.Collections.Generic;
@@ -56,14 +57,25 @@ namespace StardustCore
         {
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
             
-            ExtendedAxe axe = new ExtendedAxe();
-            axe.UpgradeLevel = 1;
-            axe.Name = "Hello Axe";
-            axe.DisplayName = "Hello Axe";
+            ExtendedAxe axe = new ExtendedAxe(new BasicToolInfo("My First Axe",7,"An axe so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")));
             Game1.player.addItemToInventory(axe);
 
+            ExtendedHoe hoe = new ExtendedHoe(new BasicToolInfo("My First Hoe", 7, "An hoe so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")));
+            Game1.player.addItemToInventory(hoe);
+
+            ExtendedPickaxe pick = new ExtendedPickaxe(new BasicToolInfo("My First pickaxe", 7, "An pickaxe so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")));
+            Game1.player.addItemToInventory(pick);
+
+            ExtendedWateringCan water = new ExtendedWateringCan(new BasicToolInfo("My First Can", 7, "An can so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")),10,3);
+            Game1.player.addItemToInventory(water);
+
+
+
+            ExtendedWateringCan.Serialize(water);
             ExtendedAxe.Serialize(axe);
-            
+            ExtendedPickaxe.Serialize(pick);
+            ExtendedHoe.Serialize(hoe);
+
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)

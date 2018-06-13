@@ -157,7 +157,7 @@ namespace StardustCore.Serialization
             }
             foreach (var i in removalList)
             {
-                if (i.getCutsomType() == typeof(CoreObject))
+                if (i.getCustomType() == typeof(CoreObject))
                 {
                     (i as CoreObject).thisLocation.removeObject((i as CoreObject).TileLocation, false);
                 }
@@ -826,7 +826,7 @@ public string ParseXMLType(string path)
         {
             foreach(var v in StardustCore.ModCore.SerializationManager.trackedObjectList)
             {
-                if (v.getCutsomType() == typeof(CoreObject))
+                if (v.getCustomType() == typeof(CoreObject))
                 {
                     if (c.TileLocation == (v as CoreObject).TileLocation && c.thisLocation == (v as CoreObject).thisLocation)
                     {

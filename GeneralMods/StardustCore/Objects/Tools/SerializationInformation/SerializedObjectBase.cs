@@ -16,7 +16,7 @@ namespace StardustCore.Objects.Tools.SerializationInformation
             this.SerializationName = this.GetSerializationName();
         }
 
-        public virtual Type getCutsomType()
+        public virtual Type getCustomType()
         {
             return this.GetType();
         }

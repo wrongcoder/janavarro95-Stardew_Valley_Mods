@@ -16,7 +16,7 @@ namespace StardustCore.Interfaces
         /// Gets the type of object I am trying to parse.
         /// </summary>
         /// <returns></returns>
-        Type getCutsomType();
+        Type getCustomType();
 
         /// <summary>
         /// Returns the serialization name of the object I am serializing.

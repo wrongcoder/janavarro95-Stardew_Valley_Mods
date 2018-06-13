@@ -89,8 +89,15 @@
     <Compile Include="Interfaces\IToolSerializer.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
+    <Compile Include="Objects\Tools\BasicToolInfo.cs" />
     <Compile Include="Objects\Tools\ExtendedAxe.cs" />
+    <Compile Include="Objects\Tools\ExtendedHoe.cs" />
+    <Compile Include="Objects\Tools\ExtendedPickaxe.cs" />
+    <Compile Include="Objects\Tools\ExtendedWateringCan.cs" />
     <Compile Include="Objects\Tools\SerializationInformation\Serialization_ExtendedAxe.cs" />
+    <Compile Include="Objects\Tools\SerializationInformation\Serialization_ExtendedHoe.cs" />
+    <Compile Include="Objects\Tools\SerializationInformation\Serialization_ExtendedPickaxe.cs" />
+    <Compile Include="Objects\Tools\SerializationInformation\Serialization_ExtendedWateringCan.cs" />
     <Compile Include="Objects\Tools\SerializationInformation\SerializedObjectBase.cs" />
     <Compile Include="UIUtilities\IClickableMenuExtended.cs" />
     <Compile Include="UIUtilities\LayeredTexture.cs" />

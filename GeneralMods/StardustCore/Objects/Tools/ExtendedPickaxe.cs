@@ -14,7 +14,7 @@ using StardustCore.UIUtilities;
 
 namespace StardustCore.Objects.Tools
 {
-    public class ExtendedAxe : StardewValley.Tools.Axe, IItemSerializeable, IToolSerializer
+    public class ExtendedPickaxe : StardewValley.Tools.Pickaxe, IItemSerializeable, IToolSerializer
     {
         public Texture2DExtended texture;
 
@@ -24,12 +24,12 @@ namespace StardustCore.Objects.Tools
         /// <summary>
         /// Generates a default axe. Doens't really do much.
         /// </summary>
-        public ExtendedAxe() : base()
+        public ExtendedPickaxe() : base()
         {
-            this.texture = new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content","Graphics","Tools","CustomAxe.png"));
+            this.texture = new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png"));
         }
 
-        public ExtendedAxe(BasicToolInfo info, Texture2DExtended texture)
+        public ExtendedPickaxe(BasicToolInfo info, Texture2DExtended texture)
         {
             this.texture = texture;
             this.displayName = info.name;
@@ -37,14 +37,24 @@ namespace StardustCore.Objects.Tools
             this.UpgradeLevel = info.level;
         }
 
-        public ExtendedAxe(SerializedObjectBase dataBase) : base()
+        public ExtendedPickaxe(SerializedObjectBase dataBase) : base()
         {
             StardustCore.ModCore.ModMonitor.Log("WTF EVEN " + dataBase.GetType().ToString());
-            StardustCore.ModCore.ModMonitor.Log((dataBase as Serialization_ExtendedAxe).Name);
+            StardustCore.ModCore.ModMonitor.Log((dataBase as Serialization_ExtendedPickaxe).Name);
             this.displayName = "Hello";
-            this.description = (dataBase as Serialization_ExtendedAxe).Description;
+            this.description = (dataBase as Serialization_ExtendedPickaxe).Description;
             this.texture = new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png"));
-            this.UpgradeLevel = (dataBase as Serialization_ExtendedAxe).UpgradeLevel;
+            this.UpgradeLevel = (dataBase as Serialization_ExtendedPickaxe).UpgradeLevel;
+        }
+
+        public override bool canBeDropped()
+        {
+            return true;
+        }
+
+        public override bool canBeTrashed()
+        {
+            return true;
         }
 
         public override void draw(SpriteBatch b)
@@ -54,7 +64,7 @@ namespace StardustCore.Objects.Tools
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color color, bool drawShadow)
         {
-            spriteBatch.Draw(texture.getTexture(), location + new Vector2(32f, 32f), new Rectangle(0, 0, 16 , 16), color * transparency, 0.0f, new Vector2(8f, 8f), 4f * scaleSize, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(texture.getTexture(), location + new Vector2(32f, 32f), new Rectangle(0, 0, 16, 16), color * transparency, 0.0f, new Vector2(8f, 8f), 4f * scaleSize, SpriteEffects.None, layerDepth);
         }
 
         public Type getCustomType()
@@ -72,16 +82,6 @@ namespace StardustCore.Objects.Tools
             return 1;
         }
 
-        public override bool canBeDropped()
-        {
-            return true;
-        }
-
-        public override bool canBeTrashed()
-        {
-            return true;
-        }
-
         public override void setNewTileIndexForUpgradeLevel()
         {
             //Do nothing.
@@ -93,14 +93,14 @@ namespace StardustCore.Objects.Tools
         /// <param name="I"></param>
         public static void Serialize(Item I)
         {
-            SerializationInformation.Serialization_ExtendedAxe sAxe = new SerializationInformation.Serialization_ExtendedAxe((I as ExtendedAxe));
+            SerializationInformation.Serialization_ExtendedPickaxe sAxe = new SerializationInformation.Serialization_ExtendedPickaxe((I as ExtendedPickaxe));
             String savePath = ModCore.SerializationManager.playerInventoryPath;
             String fileName = I.Name + ".json";
             String resultPath = Path.Combine(savePath, fileName);
             int count = 0;
             while (File.Exists(resultPath))
             {
-                resultPath=Serialization.SerializationManager.getValidSavePathIfDuplicatesExist(I, savePath,count);
+                resultPath = Serialization.SerializationManager.getValidSavePathIfDuplicatesExist(I, savePath, count);
                 count++;
             }
             StardustCore.ModCore.ModHelper.WriteJsonFile<SerializedObjectBase>(resultPath, sAxe);
@@ -113,7 +113,7 @@ namespace StardustCore.Objects.Tools
         /// <param name="s"></param>
         public static void SerializeToContainer(Item I, string s)
         {
-            SerializationInformation.Serialization_ExtendedAxe sAxe = new SerializationInformation.Serialization_ExtendedAxe((I as ExtendedAxe));
+            SerializationInformation.Serialization_ExtendedPickaxe sAxe = new SerializationInformation.Serialization_ExtendedPickaxe((I as ExtendedPickaxe));
             String savePath = s;
             String fileName = I.Name + ".json";
             String resultPath = Path.Combine(savePath, fileName);
@@ -131,10 +131,10 @@ namespace StardustCore.Objects.Tools
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static ExtendedAxe Deserialize(string data)
-        {  
-            Serialization_ExtendedAxe axeData= ModCore.ModHelper.ReadJsonFile<Serialization_ExtendedAxe>(data);
-            return new ExtendedAxe(axeData);
+        public static ExtendedPickaxe Deserialize(string data)
+        {
+            Serialization_ExtendedPickaxe axeData = ModCore.ModHelper.ReadJsonFile<Serialization_ExtendedPickaxe>(data);
+            return new ExtendedPickaxe(axeData);
         }
 
 
