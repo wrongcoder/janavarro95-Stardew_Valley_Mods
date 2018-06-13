@@ -204,7 +204,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <returns>A Button object that is identical to the one passed in.</returns>
         public Button clone()
         {
-            var b= new Button(this.name, this.bounds, this.animationManager.objectTexture, this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
+            var b= new Button(this.name, this.bounds, this.animationManager.getExtendedTexture(), this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
             if (b.buttonFunctionality.hover == null)
             {
                 StardustCore.ModCore.ModMonitor.Log("I'm null!");
@@ -219,7 +219,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <returns></returns>
         public Button clone(Vector2 newPosition)
         {
-            var b = new Button(this.name, new Rectangle((int)newPosition.X,(int)newPosition.Y,this.bounds.Width,this.bounds.Height), this.animationManager.objectTexture, this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
+            var b = new Button(this.name, new Rectangle((int)newPosition.X,(int)newPosition.Y,this.bounds.Width,this.bounds.Height), this.animationManager.getExtendedTexture(), this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
             if (b.buttonFunctionality.hover == null)
             {
                 //StardustCore.ModCore.ModMonitor.Log("I'm null!");

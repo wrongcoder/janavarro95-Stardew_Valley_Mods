@@ -42,7 +42,7 @@ namespace StardustCore
         public string description;
 
         [XmlIgnore]
-        public Texture2DExtended TextureSheet;
+        protected Texture2DExtended TextureSheet;
 
         public new bool flipped;
 
@@ -143,7 +143,7 @@ namespace StardustCore
             {
                 this.defaultSourceRect.Width = 16;
                 this.defaultSourceRect.Height = 16;
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.getTexture().Width, which * 16 / TextureSheet.getTexture().Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.sourceRect = new Rectangle((which * 16) % TextureSheet.getTexture().Width, (which * 16) / TextureSheet.getTexture().Width * 16, this.defaultSourceRect.Width, this.defaultSourceRect.Height);
                 this.defaultSourceRect = this.sourceRect;
             }
             this.defaultBoundingBox = new Rectangle((int)this.TileLocation.X, (int)this.TileLocation.Y, 1, 1);
@@ -1370,27 +1370,27 @@ namespace StardustCore
             else return false;
         }
 
-        public virtual void spillInventoryEverywhere()
+        public virtual void getInventoryMenu()
         {
             Game1.activeClickableMenu = new StorageContainer(this.inventory, 3, 3);
             this.itemReadyForHarvest = false;
             /*
-            Log.AsyncC("DROPPING INVENTORY!");
+
+            */
+        }
+
+        public virtual void spillInventoryEverywhere()
+        {
 
             Random random = new Random(inventory.Count);
             int i = random.Next();
             i = i % 4;
-            Vector2 v2 = new Vector2(this.tileLocation.X * Game1.tileSize, this.tileLocation.Y * Game1.tileSize);
+            Vector2 v2 = new Vector2(this.TileLocation.X * Game1.tileSize, this.TileLocation.Y * Game1.tileSize);
             foreach (var I in inventory)
             {
-                Log.AsyncY(I.Name);
-                Log.AsyncO(I.getStack());
-                Log.AsyncM(I.Stack);
-                Log.AsyncC("Dropping an item!");
                 Game1.createItemDebris(I, v2, i);
             }
             inventory.Clear();
-            */
         }
 
         /// <summary>
@@ -1487,45 +1487,11 @@ namespace StardustCore
             return this.GetType().ToString();
         }
 
-        /*
-        public static void Serialize(Item I)
+        
+        public virtual Texture2DExtended getExtendedTexture()
         {
-
+            return this.TextureSheet;
         }
-
-        public static Item ParseIntoInventory()
-        {
-            Texture2DExtended texture = new Texture2DExtended();
-            Item I = new CoreObject(texture,0, Vector2.Zero, 0);
-            return I;
-        }
-
-        public static void ParseIntoWorld()
-        {
-            //Item I = new CoreObject(0, Vector2.Zero, 0);
-            //return I;
-        }
-
-        public void Serialize(Item I)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void deserialize()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ParseIntoWorld()
-        {
-            throw new NotImplementedException();
-        }
-
-        void ISerializeable.ParseIntoInventory()
-        {
-            throw new NotImplementedException();
-        }
-        */
     }
 }
 

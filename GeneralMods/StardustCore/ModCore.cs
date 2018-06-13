@@ -61,10 +61,9 @@ namespace StardustCore
         {
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
             List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
-            MultiTileComponent tile1 = new MultiTileComponent(new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")), 0, Vector2.Zero, 0));
-            MultiTileComponent tile2 = new MultiTileComponent(new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")), 0, Vector2.Zero, 0));
-            MultiTileComponent tile3 = new MultiTileComponent(new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")), 0, Vector2.Zero, 0));
-
+            MultiTileComponent tile1 = new MultiTileComponent(0,"Tileobj1","A basic tile obj",new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
+            MultiTileComponent tile2 = new MultiTileComponent(0,"Tileobj2", "A basic tile obj", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")));
+            MultiTileComponent tile3 = new MultiTileComponent(0,"Tileobj3", "A basic tile obj", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")));
             objs.Add(new KeyValuePair<Vector2, MultiTileComponent>(new Vector2(0, 0), tile1));
             objs.Add(new KeyValuePair<Vector2, MultiTileComponent>(new Vector2(1, 0), tile2));
             objs.Add(new KeyValuePair<Vector2, MultiTileComponent>(new Vector2(2, 0), tile3));

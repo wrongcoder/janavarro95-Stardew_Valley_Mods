@@ -33,18 +33,23 @@ namespace StardustCore.Objects
             }
 
             InitializeBasics(0, tile);
+            this.serializationName = this.GetType().ToString();
+
+            this.defaultSourceRect = new Rectangle(0, 0, 16, 16);
+            this.sourceRect = defaultSourceRect;
         }
 
         public MultiTileObject(String Name, String Description, Vector2 tile, Animations.AnimationManager animationManager, List<KeyValuePair<Vector2, MultiTileComponent>> Objects, Color CategoryColor, String CategoryName)
         {
             this.animationManager = animationManager;
             this.objects = Objects;
-            this.TextureSheet =animationManager.objectTexture;
-            this.texturePath = animationManager.objectTexture.path;
+            this.TextureSheet =animationManager.getExtendedTexture();
+            this.texturePath = animationManager.getExtendedTexture().path;
             this.name = Name;
             this.displayName = Name;
             this.description = Description;
             InitializeBasics(0, tile);
+            this.serializationName = this.GetType().ToString();
         }
 
         public void RemoveAllObjects()
@@ -52,7 +57,7 @@ namespace StardustCore.Objects
             if (Game1.player.isInventoryFull() == false){
                 foreach (var v in this.objects)
                 {
-                    v.Value.performRemoveAction(v.Value.TileLocation, v.Value.objectPart.thisLocation);
+                    v.Value.performRemoveAction(v.Value.TileLocation, v.Value.thisLocation);
                 }
                 Game1.player.addItemToInventory(this);
             }
@@ -75,9 +80,24 @@ namespace StardustCore.Objects
         }
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-            foreach(var pair in this.objects)
+            if (canBePlacedHere(location,new Vector2(x/Game1.tileSize,y/Game1.tileSize)))
             {
-                pair.Value.placementAction(location, x+(int)(pair.Key.X*Game1.tileSize), y+ (int)(pair.Key.Y * Game1.tileSize), who);
+                foreach (var pair in this.objects)
+                {
+                    pair.Value.placementAction(location, x + (int)(pair.Key.X * Game1.tileSize), y + (int)(pair.Key.Y * Game1.tileSize), who);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+        {
+            bool canBePlaced = true;
+            foreach (var v in this.objects)
+            {
+                canBePlaced=v.Value.canBePlacedHere(l, tile+v.Key);
+                if (canBePlaced == false) return false;
             }
             return true;
         }
@@ -128,10 +148,7 @@ namespace StardustCore.Objects
             
             foreach(var v in this.objects)
             {
-                if (v.Value.objectPart.thisLocation != null)
-                {
-                    v.Value.draw(spriteBatch, (int)v.Value.position.X, (int)v.Value.position.Y, alpha);
-                }
+                    v.Value.draw(spriteBatch, (int)x+(int)(v.Key.X), (int)y+(int)(v.Key.Y), alpha);
             }
             
             //base.draw(spriteBatch, x, y, alpha);
@@ -141,7 +158,7 @@ namespace StardustCore.Objects
         {
             foreach (var v in this.objects)
             {
-                //v.Value.draw(spriteBatch, (int)v.Value.position.X, (int)v.Value.position.Y, layerDepth, alpha);
+                v.Value.draw(spriteBatch, (int)xNonTile+(int)(v.Key.X*Game1.tileSize), (int)yNonTile+ (int)(v.Key.Y * Game1.tileSize), layerDepth, alpha);
             }
         }
 
@@ -149,14 +166,28 @@ namespace StardustCore.Objects
         {
             if (animationManager == null)
             {
-                spriteBatch.Draw(this.TextureSheet.getTexture(), objectPosition, new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(f.ActiveObject.ParentSheetIndex)), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                foreach (var v in this.objects)
+                {
+                    spriteBatch.Draw(v.Value.getExtendedTexture().getTexture(), objectPosition + new Vector2(v.Key.X * Game1.tileSize, v.Key.Y * Game1.tileSize), this.sourceRect, Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                }
             }
             else
             {
-                spriteBatch.Draw(animationManager.objectTexture.getTexture(), objectPosition, this.animationManager.currentAnimation.sourceRectangle, Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                foreach (var v in this.objects)
+                {
+                    spriteBatch.Draw(v.Value.animationManager.getTexture(), objectPosition + new Vector2(v.Key.X * Game1.tileSize, v.Key.Y * Game1.tileSize), this.sourceRect, Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                }
             }
 
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
+        }
+
+        public override void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1)
+        {
+            foreach (var v in this.objects)
+            {
+                v.Value.drawAtNonTileSpot(spriteBatch, location+new Vector2(v.Key.X * Game1.tileSize, v.Key.Y * Game1.tileSize), layerDepth, alpha);
+            }
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadows)
@@ -164,7 +195,7 @@ namespace StardustCore.Objects
             if (animationManager == null) spriteBatch.Draw(this.TextureSheet.getTexture(), location,this.defaultSourceRect, Color.White * transparency, 0f, new Vector2(0,0), scaleSize, SpriteEffects.None, layerDepth);
             else
             {
-                spriteBatch.Draw(animationManager.objectTexture.getTexture(), location, animationManager.currentAnimation.sourceRectangle, Color.White * transparency, 0f, new Vector2(0,0), scaleSize, SpriteEffects.None, layerDepth);
+                spriteBatch.Draw(animationManager.getTexture(), location, animationManager.currentAnimation.sourceRectangle, Color.White * transparency, 0f, new Vector2(0,0), scaleSize, SpriteEffects.None, layerDepth);
                 //this.modularCrop.drawInMenu(spriteBatch, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), Color.White, 0f,true);
                 if (Game1.player.CurrentItem != this) animationManager.tickAnimation();
             }

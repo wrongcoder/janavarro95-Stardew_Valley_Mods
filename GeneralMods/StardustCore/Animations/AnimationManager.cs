@@ -20,7 +20,7 @@ namespace StardustCore.Animations
        public string currentAnimationName;
        public int currentAnimationListIndex;
        public List<Animation> currentAnimationList = new List<Animation>();
-       public Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
+       private Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
        public Animation defaultDrawFrame;
        public Animation currentAnimation;
        bool enabled;
@@ -216,6 +216,16 @@ namespace StardustCore.Animations
             {
                 ModCore.ModMonitor.Log(err.ToString());
             }
+        }
+
+        public Texture2DExtended getExtendedTexture()
+        {
+            return this.objectTexture;
+        }
+
+        public Texture2D getTexture()
+        {
+            return this.objectTexture.getTexture();
         }
 
     }
