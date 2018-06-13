@@ -89,6 +89,8 @@
     <Compile Include="Interfaces\IToolSerializer.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
+    <Compile Include="Objects\MultiTileComponent.cs" />
+    <Compile Include="Objects\MultiTileObject.cs" />
     <Compile Include="Objects\Tools\BasicToolInfo.cs" />
     <Compile Include="Objects\Tools\ExtendedAxe.cs" />
     <Compile Include="Objects\Tools\ExtendedHoe.cs" />
@@ -422,6 +424,15 @@
     </Content>
     <Content Include="Content\Graphics\Icons\Prismatic Star Big.png" />
     <Content Include="Content\Graphics\Icons\Prismatic Star.png" />
+    <Content Include="Content\Graphics\MultiTest\Test1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\MultiTest\Test2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\MultiTest\Test3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Tools\CustomAxe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -31,7 +31,7 @@ namespace StardustCore
 
         public int sourceIndexOffset;
 
-        protected Vector2 drawPosition;
+        public Vector2 drawPosition;
 
         public Rectangle sourceRect;
 
@@ -136,19 +136,13 @@ namespace StardustCore
             this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.getTexture().Width, which * 16 / TextureSheet.getTexture().Width * 16, 1, 1);
             if (array[2].Equals("-1"))
             {
-                this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
+                this.sourceRect = new Rectangle(0, 0, 16, 16);
                 this.defaultSourceRect = this.sourceRect;
             }
             else
             {
-                this.defaultSourceRect.Width = Convert.ToInt32(array[2].Split(new char[]
-                {
-                    ' '
-                })[0]);
-                this.defaultSourceRect.Height = Convert.ToInt32(array[2].Split(new char[]
-                {
-                    ' '
-                })[1]);
+                this.defaultSourceRect.Width = 16;
+                this.defaultSourceRect.Height = 16;
                 this.sourceRect = new Rectangle(which * 16 % TextureSheet.getTexture().Width, which * 16 / TextureSheet.getTexture().Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
             }
@@ -168,7 +162,7 @@ namespace StardustCore
                 {
                     ' '
                 })[1]);
-                this.boundingBox.Value = new Rectangle((int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize, this.defaultBoundingBox.Width * Game1.tileSize, this.defaultBoundingBox.Height * Game1.tileSize);
+                this.boundingBox.Value = new Rectangle((int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize, 1 * Game1.tileSize, 1 * Game1.tileSize);
                 this.defaultBoundingBox = this.boundingBox.Value;
             }
             this.updateDrawPosition();
@@ -190,7 +184,7 @@ namespace StardustCore
         /// <param name="tileX">The x tile location to "place".</param>
         /// <param name="tileY">The y tile location to "place".</param>
         /// <param name="trackSerialization">If true then the Serialization manager will keep track of this object.</param>
-        public void fakePlacementAction(GameLocation location, int tileX, int tileY,bool trackSerialization=true)
+        public virtual void fakePlacementAction(GameLocation location, int tileX, int tileY,bool trackSerialization=true)
         {
             this.thisLocation = location;
             this.TileLocation = new Vector2(tileX, tileY);
@@ -605,7 +599,14 @@ namespace StardustCore
                 environment.lightGlows.Remove(new Vector2((float)(this.boundingBox.X + Game1.tileSize / 2), (float)(this.boundingBox.Y + Game1.tileSize)));
                 this.lightGlowAdded = false;
             }
-            this.spillInventoryEverywhere();
+            try
+            {
+                this.spillInventoryEverywhere();
+            }
+            catch(Exception err)
+            {
+
+            }
             base.performRemoveAction(tileLocation, environment);
         }
 
@@ -979,163 +980,37 @@ namespace StardustCore
 
         public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
+            
+            Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
 
 
-            if (location is FarmHouse)
+            this.TileLocation = new Vector2((float)point.X, (float)point.Y);
+            
+            this.boundingBox.Value = new Rectangle(x, y, Game1.tileSize, Game1.tileSize);
+
+            using (List<StardewValley.Farmer>.Enumerator enumerator3 = location.getFarmers().GetEnumerator())
             {
-                Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
-                List<Rectangle> walls = FarmHouse.getWalls((location as FarmHouse).upgradeLevel);
-                this.TileLocation = new Vector2((float)point.X, (float)point.Y);
-                bool flag = false;
-                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.ParentSheetIndex == 1293)
+                while (enumerator3.MoveNext())
                 {
-                    int num = (this.ParentSheetIndex == 1293) ? 3 : 0;
-                    bool flag2 = false;
-                    foreach (Rectangle current in walls)
-                    {
-                        if ((this.Decoration_type == 6 || this.Decoration_type == 13 || num != 0) && current.Y + num == point.Y && current.Contains(point.X, point.Y - num))
-                        {
-                            flag2 = true;
-                            break;
-                        }
-                    }
-                    if (!flag2)
-                    {
-                        Game1.showRedMessage("Must be placed on wall");
-                        return false;
-                    }
-                    flag = true;
-                }
-                for (int i = point.X; i < point.X + this.getTilesWide(); i++)
-                {
-                    for (int j = point.Y; j < point.Y + this.getTilesHigh(); j++)
-                    {
-                        if (location.doesTileHaveProperty(i, j, "NoFurniture", "Back") != null)
-                        {
-                            Game1.showRedMessage("Furniture can't be placed here");
-                            return false;
-                        }
-                        if (!flag && Utility.pointInRectangles(walls, i, j))
-                        {
-                            Game1.showRedMessage("Can't place on wall");
-                            return false;
-                        }
-                        if (location.getTileIndexAt(i, j, "Buildings") != -1)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                this.boundingBox.Value = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
-                foreach (var c in location.objects.Pairs)
-                {                    
-                    StardewValley.Object ehh = c.Value;
-                    if (((ehh.GetType()).ToString()).Contains("Spawner"))
-                    {
-                        CoreObject current2 = (CoreObject)ehh;
-                        if (current2.Decoration_type == 11 && current2.heldObject.Value == null && current2.getBoundingBox(current2.TileLocation).Intersects(this.boundingBox.Value))
-                        {
-                            current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
-                            bool result = true;
-                            return result;
-                        }
-                    }
-                }
-                foreach (StardewValley.Farmer current3 in location.getFarmers())
-                {
-                    if (current3.GetBoundingBox().Intersects(this.boundingBox.Value))
+                    if (enumerator3.Current.GetBoundingBox().Intersects(this.boundingBox.Value))
                     {
                         Game1.showRedMessage("Can't place on top of a person.");
                         bool result = false;
                         return result;
                     }
                 }
-                this.updateDrawPosition();
-                //  Log.AsyncO(this.boundingBox);
-                //   Log.AsyncO(x);
-                //   Log.AsyncY(y);
-                for (int i = 0; i <= this.boundingBox.X / Game1.tileSize; i++)
-                {
-                    base.placementAction(location, x + 1, y, who);
-                }
-                for (int i = 0; i <= this.boundingBox.Y / Game1.tileSize; i++)
-                {
-                    base.placementAction(location, x, y + 1, who);
-                }
-                return true;
             }
-            else
-            {
-                Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
-                //  List<Rectangle> walls = FarmHouse.getWalls((location as FarmHouse).upgradeLevel);
-                this.TileLocation = new Vector2((float)point.X, (float)point.Y);
-                if (this.Decoration_type == 6 || this.Decoration_type == 13 || this.ParentSheetIndex == 1293)
-                {
-                    int num = (this.ParentSheetIndex == 1293) ? 3 : 0;
-                    bool flag2 = false;
-                    /*
-                    foreach (Rectangle current in walls)
-                    {
-                        if ((this.Decoration_type == 6 || this.Decoration_type == 13 || num != 0) && current.Y + num == point.Y && current.Contains(point.X, point.Y - num))
-                        {
-                            flag2 = true;
-                            break;
-                        }
-                    }
-                    */
-                    if (!flag2)
-                    {
-                        Game1.showRedMessage("Must be placed on wall");
-                        return false;
-                    }
-                }
-                for (int i = point.X; i < point.X + this.getTilesWide(); i++)
-                {
-                    for (int j = point.Y; j < point.Y + this.getTilesHigh(); j++)
-                    {
-                        if (location.doesTileHaveProperty(i, j, "NoFurniture", "Back") != null)
-                        {
-                            Game1.showRedMessage("Furniture can't be placed here");
-                            return false;
-                        }
-                        /*
-                        if (!flag && Utility.pointInRectangles(walls, i, j))
-                        {
-                            Game1.showRedMessage("Can't place on wall");
-                            return false;
-                        }
-                        */
-                        if (location.getTileIndexAt(i, j, "Buildings") != -1)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                this.boundingBox.Value = new Rectangle(x / Game1.tileSize, y / Game1.tileSize, this.boundingBox.Width, this.boundingBox.Height);
-                /*
-                foreach (Furniture current2 in (location as FarmHouse).furniture)
-                {
-                    if (current2.furniture_type == 11 && current2.heldObject == null && current2.getBoundingBox(current2.tileLocation).Intersects(this.boundingBox))
-                    {
-                        current2.performObjectDropInAction(this, false, (who == null) ? Game1.player : who);
-                        bool result = true;
-                        return result;
-                    }
-                }
-                */
-                foreach (StardewValley.Farmer current3 in location.getFarmers())
-                {
-                    if (current3.GetBoundingBox().Intersects(this.boundingBox.Value))
-                    {
-                        Game1.showRedMessage("Can't place on top of a person.");
-                        bool result = false;
-                        return result;
-                    }
-                }
-                this.updateDrawPosition();
-                this.thisLocation = Game1.player.currentLocation;
-                return base.placementAction(location, x * Game1.tileSize, y * Game1.tileSize, who);
-            }
+            this.updateDrawPosition();
+
+            bool f = Utilities.placementAction(this, location, x, y, StardustCore.ModCore.SerializationManager,who);
+            this.thisLocation = Game1.player.currentLocation;
+            return f;
+            //  Game1.showRedMessage("Can only be placed in House");
+            //  return false;
+            
+
+
+
         }
 
         public override bool isPlaceable()

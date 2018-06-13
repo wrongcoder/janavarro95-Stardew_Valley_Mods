@@ -116,6 +116,10 @@ namespace StardustCore
             //  cObj.health = 10;
             if (who != null)
             {
+                if (cObj == null)
+                {
+                    StardustCore.ModCore.ModMonitor.Log("WHY IS MY COMPONENT NULL???");
+                }
                 cObj.owner.Value = who.UniqueMultiplayerID;
             }
             else
@@ -267,7 +271,7 @@ namespace StardustCore
                 }
                 if (!cObj.performDropDownAction(who))
                 {
-                    CoreObject @object = (CoreObject)cObj.getOne();
+                    CoreObject @object = cObj;
                     @object.shakeTimer = 50;
                     @object.TileLocation = vector;
                     @object.performDropDownAction(who);
@@ -303,9 +307,8 @@ namespace StardustCore
 
             }
         }
-        
 
-        
+
         public static bool addItemToInventoryAndCleanTrackedList(CoreObject I,Serialization.SerializationManager s)
         {
             if (Game1.player.isInventoryFull() == false)
@@ -461,6 +464,8 @@ namespace StardustCore
             if (inventory.Count == inventory.Capacity) return true;
             else return false;
         }
+
+
 
 
         /// <summary>

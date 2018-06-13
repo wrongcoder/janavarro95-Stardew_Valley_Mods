@@ -501,9 +501,6 @@ namespace AdditionalCropsFramework
                 this.locationsName = "";
                 return true;
             }
-
-
-
             return false;
         }
 

@@ -43,7 +43,7 @@ namespace StardustCore.Objects.Tools
             StardustCore.ModCore.ModMonitor.Log((dataBase as Serialization_ExtendedPickaxe).Name);
             this.displayName = "Hello";
             this.description = (dataBase as Serialization_ExtendedPickaxe).Description;
-            this.texture = new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png"));
+            this.texture = this.texture = StardustCore.ModCore.TextureManager.getTexture((dataBase as Serialization_ExtendedPickaxe).TextureInformation.Name);
             this.UpgradeLevel = (dataBase as Serialization_ExtendedPickaxe).UpgradeLevel;
         }
 

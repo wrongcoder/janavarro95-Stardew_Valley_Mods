@@ -46,7 +46,7 @@ namespace StardustCore.Objects.Tools
             StardustCore.ModCore.ModMonitor.Log((dataBase as Serialization_ExtendedWateringCan).Name);
             this.displayName = "Hello";
             this.description = (dataBase as Serialization_ExtendedWateringCan).Description;
-            this.texture = new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png"));
+            this.texture = StardustCore.ModCore.TextureManager.getTexture((dataBase as Serialization_ExtendedWateringCan).TextureInformation.Name);
             this.UpgradeLevel = (dataBase as Serialization_ExtendedWateringCan).UpgradeLevel;
             this.waterCanMax= (dataBase as Serialization_ExtendedWateringCan).MaxCapacity;
             this.WaterLeft= (dataBase as Serialization_ExtendedWateringCan).WaterLeft;

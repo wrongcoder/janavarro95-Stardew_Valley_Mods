@@ -1,8 +1,10 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardustCore.ModInfo;
+using StardustCore.Objects;
 using StardustCore.Objects.Tools;
 using StardustCore.Serialization;
 using StardustCore.UIUtilities;
@@ -21,6 +23,7 @@ namespace StardustCore
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
         public static Serialization.SerializationManager SerializationManager;
+        public static UIUtilities.TextureManager TextureManager;
 
         public static string ContentDirectory;
         public override void Entry(IModHelper helper)
@@ -47,6 +50,7 @@ namespace StardustCore
             SpriteFonts.initialize();
 
             SerializationManager.initializeDefaultSuportedTypes();
+            TextureManager = new TextureManager();
             
           
         }
@@ -56,26 +60,18 @@ namespace StardustCore
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
-            
-            ExtendedAxe axe = new ExtendedAxe(new BasicToolInfo("My First Axe",7,"An axe so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")));
-            Game1.player.addItemToInventory(axe);
+            List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
+            MultiTileComponent tile1 = new MultiTileComponent(new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")), 0, Vector2.Zero, 0));
+            MultiTileComponent tile2 = new MultiTileComponent(new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")), 0, Vector2.Zero, 0));
+            MultiTileComponent tile3 = new MultiTileComponent(new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")), 0, Vector2.Zero, 0));
 
-            ExtendedHoe hoe = new ExtendedHoe(new BasicToolInfo("My First Hoe", 7, "An hoe so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")));
-            Game1.player.addItemToInventory(hoe);
+            objs.Add(new KeyValuePair<Vector2, MultiTileComponent>(new Vector2(0, 0), tile1));
+            objs.Add(new KeyValuePair<Vector2, MultiTileComponent>(new Vector2(1, 0), tile2));
+            objs.Add(new KeyValuePair<Vector2, MultiTileComponent>(new Vector2(2, 0), tile3));
 
-            ExtendedPickaxe pick = new ExtendedPickaxe(new BasicToolInfo("My First pickaxe", 7, "An pickaxe so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")));
-            Game1.player.addItemToInventory(pick);
+            MultiTileObject collection= new MultiTileObject("MultiTest", "Trying to get multi object testing working", Vector2.Zero, new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")), objs, StardustCore.IlluminateFramework.Colors.invertColor(StardustCore.IlluminateFramework.LightColorsList.Purple), "MultiTest");
 
-            ExtendedWateringCan water = new ExtendedWateringCan(new BasicToolInfo("My First Can", 7, "An can so legendary it shakes the heavens."), new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png")),10,3);
-            Game1.player.addItemToInventory(water);
-
-
-
-            ExtendedWateringCan.Serialize(water);
-            ExtendedAxe.Serialize(axe);
-            ExtendedPickaxe.Serialize(pick);
-            ExtendedHoe.Serialize(hoe);
-
+            Game1.player.addItemToInventory(collection);
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
