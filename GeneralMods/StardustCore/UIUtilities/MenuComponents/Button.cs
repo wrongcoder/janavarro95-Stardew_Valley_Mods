@@ -24,7 +24,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <summary>
         /// Empty Constructor.
         /// </summary>
-        public Button(Rectangle Bounds,Texture2DExtended Texture,Rectangle sourceRect,float Scale): base(Bounds, Texture.texture, sourceRect, Scale)
+        public Button(Rectangle Bounds,Texture2DExtended Texture,Rectangle sourceRect,float Scale): base(Bounds, Texture.getTexture(), sourceRect, Scale)
         {
 
         }
@@ -38,7 +38,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="Scale"></param>
         /// <param name="defaultAnimation"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, ButtonFunctionality Functionality, bool AnimationEnabled=true) : base(Bounds,Texture.texture,sourceRect,Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, ButtonFunctionality Functionality, bool AnimationEnabled=true) : base(Bounds,Texture.getTexture(), sourceRect,Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation,AnimationEnabled);
             this.label = displayText;
@@ -70,7 +70,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="startingAnimationKey"></param>
         /// <param name="startingAnimationFrame"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor, ButtonFunctionality Functionality,int startingAnimationFrame=0,bool AnimationEnabled=true) : base(Bounds, Texture.texture, sourceRect, Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor, ButtonFunctionality Functionality,int startingAnimationFrame=0,bool AnimationEnabled=true) : base(Bounds, Texture.getTexture(), sourceRect, Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation, animationsToPlay, startingAnimationKey, startingAnimationFrame, AnimationEnabled);
             this.label = displayText;

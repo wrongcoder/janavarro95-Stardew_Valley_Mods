@@ -85,8 +85,13 @@
     <Compile Include="Enums\Directions.cs" />
     <Compile Include="Enums\Weather.cs" />
     <Compile Include="IlluminateFramework\Colors.cs" />
+    <Compile Include="Interfaces\ISerializeable.cs" />
+    <Compile Include="Interfaces\IToolSerializer.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
+    <Compile Include="Objects\Tools\ExtendedAxe.cs" />
+    <Compile Include="Objects\Tools\SerializationInformation\Serialization_ExtendedAxe.cs" />
+    <Compile Include="Objects\Tools\SerializationInformation\SerializedObjectBase.cs" />
     <Compile Include="UIUtilities\IClickableMenuExtended.cs" />
     <Compile Include="UIUtilities\LayeredTexture.cs" />
     <Compile Include="UIUtilities\MenuComponents\Delegates\Delegates.cs" />
@@ -99,7 +104,7 @@
     <Compile Include="UIUtilities\SpriteFonts\Fonts\Components\TexturedCharacter.cs" />
     <Compile Include="UIUtilities\SpriteFonts\Fonts\Components\TexturedString.cs" />
     <Compile Include="ModCore.cs" />
-    <Compile Include="CoreObject.cs" />
+    <Compile Include="Objects\CoreObject.cs" />
     <Compile Include="ModInfo\Metadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\Serialization.cs" />
@@ -407,6 +412,11 @@
     </Content>
     <Content Include="Content\Fonts\Vanilla\verticalLine.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Icons\Prismatic Star Big.png" />
+    <Content Include="Content\Graphics\Icons\Prismatic Star.png" />
+    <Content Include="Content\Graphics\Tools\CustomAxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

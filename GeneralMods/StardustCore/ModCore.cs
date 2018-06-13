@@ -3,6 +3,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardustCore.ModInfo;
+using StardustCore.Objects.Tools;
 using StardustCore.Serialization;
 using StardustCore.UIUtilities.SpriteFonts;
 using System;
@@ -23,7 +24,7 @@ namespace StardustCore
         public static string ContentDirectory;
         public override void Entry(IModHelper helper)
         {
-            ModHelper = helper;
+            ModHelper = Helper;
             ModMonitor = Monitor;
             //Unused MetaData information. Works in player inventory but not in chests. Besides who really care where an object is from anyways. Also doesn't work 100% like I intended since it only gets base mod object that this runs from, not extensions?
 
@@ -43,6 +44,8 @@ namespace StardustCore
             ContentDirectory = Path.Combine(ModHelper.DirectoryPath, "Content");
             if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(ContentDirectory);
             SpriteFonts.initialize();
+
+            SerializationManager.initializeDefaultSuportedTypes();
             
           
         }
@@ -52,6 +55,14 @@ namespace StardustCore
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+            
+            ExtendedAxe axe = new ExtendedAxe();
+            axe.UpgradeLevel = 1;
+            axe.Name = "Hello Axe";
+            axe.DisplayName = "Hello Axe";
+            Game1.player.addItemToInventory(axe);
+
+            ExtendedAxe.Serialize(axe);
             
         }
 

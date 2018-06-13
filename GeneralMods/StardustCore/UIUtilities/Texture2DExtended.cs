@@ -12,7 +12,7 @@ namespace StardustCore.UIUtilities
     public class Texture2DExtended
     {
         public string Name;
-        public Texture2D texture;
+        private Texture2D texture;
         public string path;
         IModHelper helper;
         
@@ -47,6 +47,15 @@ namespace StardustCore.UIUtilities
         public IModHelper getHelper()
         {
             return this.helper;
+        }
+
+        /// <summary>
+        /// Returns the actual 2D texture held by this wrapper class.
+        /// </summary>
+        /// <returns></returns>
+        public Texture2D getTexture()
+        {
+            return this.texture;
         }
     }
 }

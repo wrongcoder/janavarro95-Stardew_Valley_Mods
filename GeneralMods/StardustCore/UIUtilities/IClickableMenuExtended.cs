@@ -298,26 +298,26 @@ namespace StardustCore.UIUtilities
             rectangle1.Height = Game1.tileSize;
             rectangle1.X = Game1.tileSize;
             rectangle1.Y = Game1.tileSize * 2;
-            Game1.spriteBatch.Draw(texture.texture, new Microsoft.Xna.Framework.Rectangle(28 + x + dialogueX, 28 + y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2, width - Game1.tileSize, height - Game1.tileSize + addedTileHeightForQuestions * Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Microsoft.Xna.Framework.Rectangle(28 + x + dialogueX, 28 + y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2, width - Game1.tileSize, height - Game1.tileSize + addedTileHeightForQuestions * Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.Y = 0;
             rectangle1.X = 0;
-            Game1.spriteBatch.Draw(texture.texture, new Vector2((float)(x + dialogueX), (float)(y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Vector2((float)(x + dialogueX), (float)(y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.X = Game1.tileSize * 3;
-            Game1.spriteBatch.Draw(texture.texture, new Vector2((float)(x + width + dialogueX - Game1.tileSize), (float)(y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Vector2((float)(x + width + dialogueX - Game1.tileSize), (float)(y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.Y = Game1.tileSize * 3;
-            Game1.spriteBatch.Draw(texture.texture, new Vector2((float)(x + width + dialogueX - Game1.tileSize), (float)(y + height + num1 - Game1.tileSize + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Vector2((float)(x + width + dialogueX - Game1.tileSize), (float)(y + height + num1 - Game1.tileSize + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.X = 0;
-            Game1.spriteBatch.Draw(texture.texture, new Vector2((float)(x + dialogueX), (float)(y + height + num1 - Game1.tileSize + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Vector2((float)(x + dialogueX), (float)(y + height + num1 - Game1.tileSize + num2)), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.X = Game1.tileSize * 2;
             rectangle1.Y = 0;
-            Game1.spriteBatch.Draw(texture.texture, new Microsoft.Xna.Framework.Rectangle(Game1.tileSize + x + dialogueX, y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2, width - Game1.tileSize * 2, Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Microsoft.Xna.Framework.Rectangle(Game1.tileSize + x + dialogueX, y - Game1.tileSize * addedTileHeightForQuestions + num1 + num2, width - Game1.tileSize * 2, Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.Y = 3 * Game1.tileSize;
-            Game1.spriteBatch.Draw(texture.texture, new Microsoft.Xna.Framework.Rectangle(Game1.tileSize + x + dialogueX, y + height + num1 - Game1.tileSize + num2, width - Game1.tileSize * 2, Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Microsoft.Xna.Framework.Rectangle(Game1.tileSize + x + dialogueX, y + height + num1 - Game1.tileSize + num2, width - Game1.tileSize * 2, Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.Y = Game1.tileSize * 2;
             rectangle1.X = 0;
-            Game1.spriteBatch.Draw(texture.texture, new Microsoft.Xna.Framework.Rectangle(x + dialogueX, y - Game1.tileSize * addedTileHeightForQuestions + num1 + Game1.tileSize + num2, Game1.tileSize, height - Game1.tileSize * 2 + addedTileHeightForQuestions * Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Microsoft.Xna.Framework.Rectangle(x + dialogueX, y - Game1.tileSize * addedTileHeightForQuestions + num1 + Game1.tileSize + num2, Game1.tileSize, height - Game1.tileSize * 2 + addedTileHeightForQuestions * Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             rectangle1.X = 3 * Game1.tileSize;
-            Game1.spriteBatch.Draw(texture.texture, new Microsoft.Xna.Framework.Rectangle(x + width + dialogueX - Game1.tileSize, y - Game1.tileSize * addedTileHeightForQuestions + num1 + Game1.tileSize + num2, Game1.tileSize, height - Game1.tileSize * 2 + addedTileHeightForQuestions * Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
+            Game1.spriteBatch.Draw(texture.getTexture(), new Microsoft.Xna.Framework.Rectangle(x + width + dialogueX - Game1.tileSize, y - Game1.tileSize * addedTileHeightForQuestions + num1 + Game1.tileSize + num2, Game1.tileSize, height - Game1.tileSize * 2 + addedTileHeightForQuestions * Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color);
             if (objectDialogueWithPortrait && Game1.objectDialoguePortraitPerson != null || speaker && Game1.currentSpeaker != null && (Game1.currentSpeaker.CurrentDialogue.Count > 0 && Game1.currentSpeaker.CurrentDialogue.Peek().showPortrait))
             {
                 Microsoft.Xna.Framework.Rectangle rectangle2 = new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64);

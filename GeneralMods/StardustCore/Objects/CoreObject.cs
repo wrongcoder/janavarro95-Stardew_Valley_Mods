@@ -6,6 +6,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardustCore.Animations;
+using StardustCore.Interfaces;
 using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace StardustCore
     /// </summary>
     /// 
  
-    public class CoreObject : StardewValley.Object
+    public class CoreObject : StardewValley.Object, IItemSerializeable
     {
         public Vector2 position;
 
@@ -132,7 +133,7 @@ namespace StardustCore
 
             this.Decoration_type = this.getTypeNumberFromName(array[1]);
             this.description = "Can be placed inside your house.";
-            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.texture.Width, which * 16 / TextureSheet.texture.Width * 16, 1, 1);
+            this.defaultSourceRect = new Rectangle(which * 16 % TextureSheet.getTexture().Width, which * 16 / TextureSheet.getTexture().Width * 16, 1, 1);
             if (array[2].Equals("-1"))
             {
                 this.sourceRect = this.getDefaultSourceRectForType(which, this.Decoration_type);
@@ -148,7 +149,7 @@ namespace StardustCore
                 {
                     ' '
                 })[1]);
-                this.sourceRect = new Rectangle(which * 16 % TextureSheet.texture.Width, which * 16 / TextureSheet.texture.Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
+                this.sourceRect = new Rectangle(which * 16 % TextureSheet.getTexture().Width, which * 16 / TextureSheet.getTexture().Width * 16, this.defaultSourceRect.Width * 16, this.defaultSourceRect.Height * 16);
                 this.defaultSourceRect = this.sourceRect;
             }
             this.defaultBoundingBox = new Rectangle((int)this.TileLocation.X, (int)this.TileLocation.Y, 1, 1);
@@ -174,6 +175,7 @@ namespace StardustCore
             this.rotations = Convert.ToInt32(array[4]);
             this.Price = Convert.ToInt32(array[5]);
             this.ParentSheetIndex = which;
+            this.serializationName=this.GetType().ToString();
         }
 
         public override string getDescription()
@@ -1208,7 +1210,7 @@ namespace StardustCore
             num = 1;
             num2 = 2;
             IL_94:
-            return new Rectangle(tileIndex * 16 % TextureSheet.texture.Width, tileIndex * 16 / TextureSheet.texture.Width * 16, num * 16, num2 * 16);
+            return new Rectangle(tileIndex * 16 % TextureSheet.getTexture().Width, tileIndex * 16 / TextureSheet.getTexture().Width * 16, num * 16, num2 * 16);
         }
 
         private Rectangle getDefaultBoundingBoxForType(int type)
@@ -1395,7 +1397,7 @@ namespace StardustCore
                 float num = this.Quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
                 spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.Quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.Quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
             }
-            spriteBatch.Draw(TextureSheet.texture, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height)), 1f * this.getScaleSize() * scaleSize * .5f, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet.getTexture(), location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.defaultSourceRect), Color.White * transparency, 0f, new Vector2((float)(this.defaultSourceRect.Width / 2), (float)(this.defaultSourceRect.Height)), 1f * this.getScaleSize() * scaleSize * .5f, SpriteEffects.None, layerDepth);
         }
 
         /// <summary>
@@ -1409,11 +1411,11 @@ namespace StardustCore
         {
             if (x == -1)
             {
-                spriteBatch.Draw(TextureSheet.texture, Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             else
             {
-                spriteBatch.Draw(TextureSheet.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             if (this.heldObject.Value != null)
             {
@@ -1429,7 +1431,7 @@ namespace StardustCore
 
         public virtual void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
-            spriteBatch.Draw(TextureSheet.texture, location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(TextureSheet.getTexture(), location, new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, layerDepth);
         }
 
         public override Item getOne()
@@ -1600,7 +1602,17 @@ namespace StardustCore
             return Color.Black;
         }
 
+        public virtual Type getCutsomType()
+        {
+            return this.GetType();
+        }
 
+        public virtual string GetSerializationName()
+        {
+            return this.GetType().ToString();
+        }
+
+        /*
         public static void Serialize(Item I)
         {
 
@@ -1619,6 +1631,26 @@ namespace StardustCore
             //return I;
         }
 
+        public void Serialize(Item I)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void deserialize()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ParseIntoWorld()
+        {
+            throw new NotImplementedException();
+        }
+
+        void ISerializeable.ParseIntoInventory()
+        {
+            throw new NotImplementedException();
+        }
+        */
     }
 }
 

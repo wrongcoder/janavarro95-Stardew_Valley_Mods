@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using StardustCore.Objects.Tools;
 using StardustCore.Serialization;
 using System;
 using System.Collections.Generic;

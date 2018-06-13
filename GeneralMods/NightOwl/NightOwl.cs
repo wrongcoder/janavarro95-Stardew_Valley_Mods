@@ -183,7 +183,10 @@ namespace Omegasis.NightOwl
                     if (this.Config.KeepMoneyAfterCollapse)
                         Game1.player.money = this.PreCollapseMoney;
                     if (this.Config.KeepPositionAfterCollapse)
-                        Game1.warpFarmer(this.PreCollapseMap, this.PreCollapseTile.X, this.PreCollapseTile.Y, false);
+                        if (Game1.weddingToday == false)
+                        {
+                            Game1.warpFarmer(this.PreCollapseMap, this.PreCollapseTile.X, this.PreCollapseTile.Y, false);
+                        }
                     if (horse != null && shouldWarpHorse==true)
                     {
                         Game1.warpCharacter(horse, Game1.player.currentLocation, Game1.player.position);
