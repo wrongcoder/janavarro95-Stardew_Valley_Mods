@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Objects;
 using StardustCore.Interfaces;
 using StardustCore.Objects.Tools;
 using StardustCore.Objects.Tools.SerializationInformation;
@@ -458,149 +459,8 @@ namespace StardustCore.Serialization
             
         }
 
+
         /*
-        public void ProcessFileForCleanUp(string path, List<IItemSerializeable> thingsToAddBackIn)
-        {
-
-            //Log.AsyncC(path);
-
-            string[] ehh = File.ReadAllLines(path);
-            Item cObj;
-            string a="";
-            string[] b;
-            string s = "";
-            // Log.AsyncC(path);
-            //  Log.AsyncC(data);
-            CoreObject obj = StardustCore.ModCore.ModHelper.ReadJsonFile<CoreObject>(path);
-            StardustCore.ModCore.ModMonitor.Log("OK FIRST STEP");
-            try
-            {
-                if (StardustCore.ModCore.ModHelper == null) ModCore.ModMonitor.Log("WTF!!!!!");
-                
-                //   Log.AsyncC(obj.thisType);
-                try
-                {
-                    a = obj.SerializationName;
-                }
-                catch(Exception err)
-                {
-                    ModCore.ModMonitor.Log("IDK WHAT EVEN HAPPENED");
-
-                }
-                ModCore.ModMonitor.Log(":THIS IS MY TYPE!!!:" + a);
-                b = a.Split(',');
-                s = b.ElementAt(0);
-             //   Log.AsyncC(s);
-            }
-            catch (Exception e)
-            {
-                
-                ModCore.ModMonitor.Log(e.ToString()); //Get rid of that warning because I'll do other things.
-                //USE XML STYLE DESERIALIZING
-                foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
-                {
-                    var word = ParseXMLType(path);
-                    if (pair.Key == word.ToString())
-                    {
-                        
-                        cObj = pair.Value.parse.Invoke(obj);
-                        if (cObj is CoreObject)
-                        {
-                            (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
-                            (cObj as CoreObject).resetTexture();
-                            if ((cObj as CoreObject).thisLocation == null)
-                            {
-                                Game1.player.addItemToInventory(cObj);
-                                // Log.AsyncY("ADDED ITEM TO INVENTORY");
-                                return;
-                            }
-                            else
-                            {
-                                (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
-                                thingsToAddBackIn.Add(cObj as CoreObject);
-                                //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
-                            }
-                        }
-                        else
-                        {
-                            Game1.player.addItemToInventory(cObj);
-                        }
-                    }
-                }
-
-               // Log.AsyncG("attempting to parse from path and value of s is " + s);
-            }
-
-            // var cObj = parseBagOfHolding(path); //pair.Value.parse.Invoke(path);
-            //  cObj.TextureSheet = Game1.content.Load<Texture2D>(Path.Combine("Revitalize", "CropsNSeeds", "Graphics", "seeds"));
-            /*
-            cObj.thisLocation = Game1.getLocationFromName(cObj.locationsName);
-            if (cObj.thisLocation == null)
-            {
-                Game1.player.addItemToInventory(cObj);
-                return;
-            }
-            else
-            {
-                cObj.thisLocation.objects.Add(cObj.tileLocation, cObj);
-                Lists.trackedObjectList.Add(cObj);
-                //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
-            }
-            *
-            ModCore.ModMonitor.Log("a value: "+a);
-            ModCore.ModMonitor.Log("s value: " + s);
-            //USE JSON STYLE DESERIALIZNG
-            if (acceptedTypes.ContainsKey(s))
-            {
-                  //Log.AsyncC("FUUUUU");
-                foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
-                {
-                  //  Log.AsyncY(pair.Key);
-                    if (pair.Key == s)
-                    {
-                        try
-                        {
-                            //parse from Json Style
-                         //   Log.AsyncR("1");
-                            cObj = pair.Value.parse.Invoke(obj);
-                            if (cObj is CoreObject)
-                            {
-                                (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
-
-                                if ((cObj as CoreObject).thisLocation == null)
-                                {
-                                    Game1.player.addItemToInventory(cObj);
-                                    // Log.AsyncY("ADDED ITEM TO INVENTORY");
-                                    return;
-                                }
-                                else
-                                {
-                                    (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
-                                    thingsToAddBackIn.Add(cObj as CoreObject);
-                                    //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
-                                }
-                            }
-                            else
-                            {
-                                Game1.player.addItemToInventory(cObj);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            ModCore.ModMonitor.Log(e.ToString());
-                           // Log.AsyncO(e);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                ModCore.ModMonitor.Log("Error parsing unknown object type: " + s, LogLevel.Error);
-            }
-            
-        }
-    */
-
         /// <summary>
         /// Process an item from a file back into it's original storage container.
         /// </summary>
@@ -623,7 +483,7 @@ namespace StardustCore.Serialization
             {
                 Log.AsyncC("PART OF PATH2 " + v);
             }
-            */
+            
             if (chestArray2.Length > chestArray.Length) chestArray = chestArray2;
 
             GameLocation loc = Game1.getLocationFromName(chestArray[chestArray.Length - 3]);
@@ -667,7 +527,7 @@ namespace StardustCore.Serialization
                     var word = ParseXMLType(path);
                     if (pair.Key == word.ToString())
                     {
-                        cObj = pair.Value.parse.Invoke("");
+                        cObj = pair.Value.parse.Invoke(path);
                         if (cObj is CoreObject)
                         {
                             (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
@@ -728,7 +588,7 @@ namespace StardustCore.Serialization
                 Lists.trackedObjectList.Add(cObj);
                 //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
             }
-            */
+            
 
             //USE JSON STYLE DESERIALIZNG
             if (acceptedTypes.ContainsKey(s))
@@ -742,7 +602,7 @@ namespace StardustCore.Serialization
                         {
                             //parse from Json Style
                             //   Log.AsyncR("1");
-                            cObj = pair.Value.parse.Invoke("");
+                            cObj = pair.Value.parse.Invoke(path);
                             if (cObj is CoreObject)
                             {
                                 (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
@@ -799,15 +659,130 @@ namespace StardustCore.Serialization
             }
 
         }
+    */
 
-        
+            public void ProcessFileForCleanUpIntoContainer(string path, List<IItemSerializeable> thingsToAddBackIn)
+            {
 
-        /// <summary>
-        /// ???
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public string ParseXMLType(string path)
+
+
+            //Log.AsyncC(path);
+            string newLine = Environment.NewLine;
+
+            string[] chestArray = path.Split(new string[] { "/" }, StringSplitOptions.None);
+            string[] chestArray2 = path.Split(new string[] { "\\" }, StringSplitOptions.None);
+            /*
+            foreach (var v in chestArray)
+            {
+                Log.AsyncC("PART OF PATH "+v);
+            }
+            foreach (var v in chestArray2)
+            {
+                Log.AsyncC("PART OF PATH2 " + v);
+            }
+            */
+            if (chestArray2.Length > chestArray.Length) chestArray = chestArray2;
+
+            GameLocation loc = Game1.getLocationFromName(chestArray[chestArray.Length - 3]);
+            string[] chest = chestArray[chestArray.Length - 2].Split(',');
+        StardewValley.Object chestObject;
+        bool f = loc.objects.TryGetValue(new Microsoft.Xna.Framework.Vector2(Convert.ToInt32(chest[1]), Convert.ToInt32(chest[2])), out chestObject);
+        if (f == true)
+        {
+            ModCore.ModMonitor.Log("YAY");
+        }
+        else
+        {
+            ModCore.ModMonitor.Log("BOO");
+        }
+            try
+            {
+                string type = "";
+                int count = 0;
+                while (type == "" || type == null)
+                {
+                    if (count == 0)
+                    {
+                        //THE ERROR LIES HERE AS IT THINKS IT CAN TRY TO BE A CORE OBJECT WHEN IT IS NOT!!!!
+                        CoreObject core_obj = StardustCore.ModCore.ModHelper.ReadJsonFile<CoreObject>(path); //FIND A WAY TO FIX THIS!!!!
+                        type = (core_obj as CoreObject).thisType;
+                        //ModCore.ModMonitor.Log("UMM THIS CAN't BE RIGHT 1" + type);
+                    }
+
+                    if (count == 1)
+                    {
+                        //THIS NEEDS TO BE SOMETHING GENERIC!!!
+                        SerializedObjectBase core_obj = StardustCore.ModCore.ModHelper.ReadJsonFile<SerializedObjectBase>(path);
+                        type = (core_obj as SerializedObjectBase).SerializationName;
+                        //ModCore.ModMonitor.Log("UMM THIS CAN't BE RIGHT 2" + type);
+                    }
+
+                    if (count == 2)
+                    {
+                        ModCore.ModMonitor.Log("A valid type could not be found for the file: " + path);
+                        return;
+                    }
+
+                    count++;
+                }
+
+                foreach (KeyValuePair<string, SerializerDataNode> pair in acceptedTypes)
+                {
+                    //  Log.AsyncY(pair.Key);
+                    if (pair.Key == type)
+                    {
+                        try
+                        {
+                            //parse from Json Style
+                            //   Log.AsyncR("1");
+                            var cObj = pair.Value.parse.Invoke(path);
+                            if (cObj is CoreObject)
+                            {
+                                (cObj as CoreObject).thisLocation = Game1.getLocationFromName((cObj as CoreObject).locationsName);
+
+                                if ((cObj as CoreObject).thisLocation == null)
+                                {
+                                    Utilities.addItemToOtherInventory((chestObject as Chest).items, cObj);
+                                    // Log.AsyncY("ADDED ITEM TO INVENTORY");
+                                    return;
+                                }
+                                else
+                                {
+                                    (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
+                                    thingsToAddBackIn.Add(cObj as CoreObject);
+                                    //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
+                                }
+                            }
+                            else
+                            {
+                                Utilities.addItemToOtherInventory((chestObject as Chest).items, cObj);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            ModCore.ModMonitor.Log(e.ToString());
+                            // Log.AsyncO(e);
+                        }
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                ModCore.ModMonitor.Log(err.ToString());
+                //Tool t = StardustCore.ModCore.ModHelper.ReadJsonFile<Tool>(path);
+            }
+
+        }
+
+
+
+
+/// <summary>
+/// ???
+/// </summary>
+/// <param name="path"></param>
+/// <returns></returns>
+public string ParseXMLType(string path)
         {
             string[] s = File.ReadAllLines(path);
             string returnString = "";
