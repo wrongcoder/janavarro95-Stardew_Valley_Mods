@@ -5,13 +5,14 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Omegasis.SaveAnywhere.Framework
 {
     /// <summary>A marker subclass to detect when a custom save is in progress.</summary>
     internal class NewSaveGameMenu : IClickableMenu {
+
+        public event EventHandler SaveComplete;
 
         private int completePause = -1;
         private int margin = 500;
@@ -38,6 +39,8 @@ namespace Omegasis.SaveAnywhere.Framework
             this.completePause = 1500;
             this.loader = (IEnumerator<int>)null;
             Game1.game1.IsSaving = false;
+
+            SaveComplete.Invoke(this, EventArgs.Empty);
         }
 
         public override void update(GameTime time)
