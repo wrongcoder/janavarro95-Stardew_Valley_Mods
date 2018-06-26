@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Omegasis.SaveAnywhere.API;
 using Omegasis.SaveAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -52,8 +53,9 @@ namespace Omegasis.SaveAnywhere
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-
             this.Config = helper.ReadConfig<ModConfig>();
+
+            this.SaveManager = new SaveManager(this.Helper, this.Helper.Reflection, onLoaded: () => this.ShouldResetSchedules = true);
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.AfterSave += this.SaveEvents_AfterSave;
@@ -65,6 +67,16 @@ namespace Omegasis.SaveAnywhere
             ModHelper = helper;
             ModMonitor = Monitor;
             customMenuOpen = false;
+        }
+
+        /// <summary>
+        ///     Exposes the SaveAnywhere API to other SMAPI mods
+        /// </summary>
+        /// <returns></returns>
+        public override object GetApi()
+        {
+            SaveAnywhereAPI api = new SaveAnywhereAPI(SaveManager);
+            return api;
         }
 
 
@@ -84,7 +96,6 @@ namespace Omegasis.SaveAnywhere
             this.ShouldResetSchedules = false;
 
             // load positions
-            this.SaveManager = new SaveManager(this.Helper, this.Helper.Reflection, onLoaded: () => this.ShouldResetSchedules = true);
             this.SaveManager.LoadData();
         }
 
