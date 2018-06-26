@@ -196,6 +196,8 @@ namespace StardustCore.Objects
             {
                 if (animationManager == null)
                 {
+                    //FIX SCALE SIZE AND POSITION APPROPRIATELY DEPENDING ON # OF OBJECTS!!!
+                    aosdkpoasdopjsa
                     spriteBatch.Draw(v.Value.getExtendedTexture().getTexture(), location+new Vector2(v.Key.X*16,v.Key.Y*16), this.defaultSourceRect, Color.White * transparency, 0f, new Vector2(0, 0), 1, SpriteEffects.None, layerDepth);
                 }
                 else

@@ -7,8 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleSoundManager
+namespace SimpleSoundManager.Framework
 {
+
+    /// <summary>
+    /// TODO:
+    /// Play, stop, pause songs.
+    /// </summary>
     class SoundManager
     {
 

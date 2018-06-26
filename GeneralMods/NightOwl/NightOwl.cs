@@ -160,7 +160,7 @@ namespace Omegasis.NightOwl
             string[] passOutFees = Game1.player.mailbox
                  .Where(p => p.Contains("passedOut"))
                  .ToArray();
-             for (int idx=0; idx<pofees.Length; idx++) 
+             for (int idx=0; idx< passOutFees.Length; idx++) 
              {
                  string[] msg = passOutFees[idx].Split(' ');
                  collapseFee += Int32.Parse(msg[1]);
@@ -192,7 +192,6 @@ namespace Omegasis.NightOwl
             {
                 // reset data
                 this.IsUpLate = false;
-                Game1.farmerShouldPassOut = false;
 
                 // transition to the next day
                 if (this.ShouldResetPlayerAfterCollapseNow)
@@ -355,7 +354,7 @@ namespace Omegasis.NightOwl
 
                     if (Game1.currentMinigame != null)
                         Game1.currentMinigame = null;
-                    Game1.farmerShouldPassOut = true;
+                    Game1.player.startToPassOut();
 
 
                 }
@@ -385,6 +384,16 @@ namespace Omegasis.NightOwl
             };
             string path = Path.Combine(this.Helper.DirectoryPath, "Error_Logs", "Mod_State.json");
             this.Helper.WriteJsonFile(path, state);
+        }
+
+        /// <summary>
+        /// Try and emulate the old Game1.shouldFarmerPassout logic.
+        /// </summary>
+        /// <returns></returns>
+        public bool shouldFarmerPassout()
+        {
+            if (Game1.player.stamina <= 0 || Game1.player.health <= 0 || Game1.timeOfDay >= 2600) return true;
+            else return false;
         }
     }
 }

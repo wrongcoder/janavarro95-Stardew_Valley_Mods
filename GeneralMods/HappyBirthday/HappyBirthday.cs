@@ -147,6 +147,7 @@ namespace Omegasis.HappyBirthday
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
             // show birthday selection menu
+            if (Game1.activeClickableMenu != null) return;
             if (Context.IsPlayerFree && !this.HasChosenBirthday && e.KeyPressed.ToString() == this.Config.KeyBinding)
                 Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
         }
@@ -240,7 +241,7 @@ namespace Omegasis.HappyBirthday
                     if (Game1.activeClickableMenu.GetType() == typeof(BirthdayMenu)) return;
                 }
                 // ask for birthday date
-                if (!this.HasChosenBirthday)
+                if (!this.HasChosenBirthday && Game1.activeClickableMenu==null)
                 {
                     Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
                     this.CheckedForBirthday = false;
