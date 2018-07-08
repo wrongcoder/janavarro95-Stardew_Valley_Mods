@@ -25,16 +25,22 @@ namespace Vocalization
     /// 
     /// Find way to play said wave files. (Done?)
     /// 
-    /// Sanitize input to remove variables such as pet names, farm names, farmer name. (done?)
+    /// Sanitize input to remove variables such as pet names, farm names, farmer name. (done)
     /// 
     /// !!!!!!!Loop through common variables and add them to the dialogue list inside of ReplacementString.cs
     /// 
-    /// !!!!!!!Add in dialogue for npcs into their respective VoiceCue.json files.
+    /// Add in dialogue for npcs into their respective VoiceCue.json files. (done? Can be improved on)
     /// 
     /// !!!!!!!Add support for different kinds of menus. TV, shops, etc.
     /// 
+    /// !!!!!!!Add support for MarriageDialogue strings.
+    /// 
+    /// !!!!!!!Add support for Extra dialogue via StringsFromCSFiles
     /// 
     /// !!!!!!!!!Make moddable to support other languages, portuguese, russian, etc (Needs testing)
+    ///     -make mod config have a list of supported languages and a variable that is the currently selected language.
+    ///     
+    /// !!!!!!!!! Add support for adding dialogue lines when loading CharacterVoiceCue.json if the line doesn't already exist!
     /// </summary>
     public class Vocalization : Mod
     {
@@ -238,25 +244,15 @@ namespace Vocalization
 
                         foreach(KeyValuePair<string,string>pair in DialogueDict)
                         {
-                            string dialogue = pair.Value;
-                            dialogue = sanitizeDialogueFromDictionaries(dialogue);
+                            string rawDialogue = pair.Value;
+                            List<string> cleanDialogues = new List<string>();
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            foreach(var str in cleanDialogues)
+                            {
+                                cue.dialogueCues.Add(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                            }
                         }
 
-                        //Loop through all variations of...
-                        //time %time
-                        //adjectives $adj
-                        //nouns %noun
-                        //location %place
-                        //spouse %spouse
-
-                        //If found in a string of dialogue in a character file.
-                        /*
-                         *DialogueDict=load dict
-                         * foreach(KeyValuePair<string,string> pair in ){
-                         * dialogue=
-                         * 
-                         * }
-                         */
                         ModHelper.WriteJsonFile<CharacterVoiceCue>(Path.Combine(dir, "VoiceCues.json"), cue);
                         DialogueCues.Add(characterName, cue);
                     }
@@ -280,123 +276,254 @@ namespace Vocalization
         {
             if (dialogue.Contains(Game1.player.Name))
             {
-                dialogue = dialogue.Replace(Game1.player.name, ); //Remove player's name from dialogue.
+                dialogue = dialogue.Replace(Game1.player.name, replacementStrings.farmerName); //Remove player's name from dialogue.
             }
 
             if (Game1.player.hasPet())
             {
                 if (dialogue.Contains(Game1.player.getPetName()))
                 {
-                    dialogue=dialogue.Replace(Game1.player.getPetName(), );
+                    dialogue=dialogue.Replace(Game1.player.getPetName(), replacementStrings.petName);
                 }
             }
 
             if (dialogue.Contains(Game1.player.farmName.Value))
             {
-                dialogue=dialogue.Replace(Game1.player.farmName.Value, );
+                dialogue=dialogue.Replace(Game1.player.farmName.Value, replacementStrings.farmName);
             }
 
             if (dialogue.Contains(Game1.player.favoriteThing.Value))
             {
-                dialogue=dialogue.Replace(Game1.player.favoriteThing.Value, );
+                dialogue=dialogue.Replace(Game1.player.favoriteThing.Value, replacementStrings.favoriteThing);
             }
 
             if (dialogue.Contains(Game1.samBandName))
             {
-                dialogue=dialogue.Replace(Game1.samBandName, );
+                dialogue=dialogue.Replace(Game1.samBandName, replacementStrings.bandName);
             }
 
             if (dialogue.Contains(Game1.elliottBookName))
             {
-                dialogue=dialogue.Replace(Game1.elliottBookName, );
+                dialogue=dialogue.Replace(Game1.elliottBookName, replacementStrings.bookName);
+            }
+
+            //Sanitize children names from the dialogue.
+            if (Game1.player.getChildren().Count > 0)
+            {
+                int count = 1;
+                foreach (var child in Game1.player.getChildren())
+                {
+                    if (dialogue.Contains(child.Name))
+                    {
+                        if (count == 1)
+                        {
+                            dialogue = dialogue.Replace(child.Name, replacementStrings.kid1Name);
+                        }
+                        if (count == 2)
+                        {
+                            dialogue = dialogue.Replace(child.Name, replacementStrings.kid2Name);
+                        }
+                    }
+                    count++;
+                }
             }
 
             return dialogue;
         }
 
-        public string sanitizeDialogueFromDictionaries(string dialogue)
+        public List<string> sanitizeDialogueFromDictionaries(string dialogue)
         {
+            List<string> possibleDialogues = new List<string>();
 
-            if (dialogue.Contains("@"))
+            //remove $ symbols and their corresponding letters.
+
+            if (dialogue.Contains("$neutral"))
             {
-                //replace with farmer name.
-                dialogue=dialogue.Replace("@",);
+                dialogue = dialogue.Replace("$neutral", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
-            if (dialogue.Contains("%adj"))
+            if (dialogue.Contains("$h"))
             {
-                //??? Loop through all possible adj combinations.
+                dialogue = dialogue.Replace("$h", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
-            if (dialogue.Contains("%noun"))
+            if (dialogue.Contains("$s"))
             {
-                //??? Loop through all possible noun combinations.
+                dialogue = dialogue.Replace("$s", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
-            if (dialogue.Contains("%place"))
+            if (dialogue.Contains("$u"))
             {
-                //??? Loop through all place combinations.
+                dialogue = dialogue.Replace("$u", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
-            if (dialogue.Contains("%spouse"))
+            if (dialogue.Contains("$l"))
             {
-                //Replace with all possible marriageable npcs
+                dialogue = dialogue.Replace("$l", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
-            if (dialogue.Contains("%time"))
+            if (dialogue.Contains("$a"))
             {
-                //Replace with all times of day. 600-2600.
-                for(int i = 600; i <= 2600; i += 10)
+                dialogue = dialogue.Replace("$a", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
+            }
+
+            for(int i=0; i<=100; i++)
+            {
+                string combine = "";
+                if (i == 1) continue;
+                combine = "$" + i.ToString();
+                if (dialogue.Contains(combine))
                 {
-                    string time = i.ToString();
-                    dialogue = dialogue.Replace("%time", time);
+                    dialogue = dialogue.Replace(combine, "");
+                    dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
+                    //remove dialogue symbol.
                 }
             }
 
-            if (dialogue.Contains("%band"))
+            //split across % symbol
+            //Just remove the %symbol for generic text boxes. Not for forks.
+            if (dialogue.Contains("%") && dialogue.Contains("%fork") == false)
             {
-                //Replace with<Sam's Band Name>
-                dialogue = dialogue.Replace("%band", );
+                dialogue = dialogue.Replace("%", "");
             }
 
-            if (dialogue.Contains("%book"))
+            //split across # symbol
+            List<string> dialogueSplits1 = dialogue.Split('#').ToList(); //Returns an element size of 1 if # isn't found.
+
+            //Split across choices
+            List<string> orSplit = new List<string>();
+
+            //Split across genders
+            List<string> finalSplit = new List<string>();
+
+            //split across | symbol
+            foreach(var dia in dialogueSplits1)
             {
-                //Replace with<Elliott's Book Name>
-                dialogue = dialogue.Replace("%book",);
+                if (dia.Contains("|")) //If I can split my string do so and add all the split strings into my orSplit list.
+                {
+                    List<string> tempSplits = dia.Split('|').ToList();
+                    orSplit.Concat(tempSplits); //Add the two lists together.
+                }
+                else
+                {
+                    orSplit.Add(dia); //If I can't split the list just add the dialogue and keep processing.
+                }
             }
 
-            if (dialogue.Contains("%rival"))
+            //split across ^ symbol   
+            foreach (var dia in orSplit)
             {
-                //Replace with<Rival Name>
-                dialogue = dialogue.Replace("%rival",);
+                if (dia.Contains("^")) //If I can split my string do so and add all the split strings into my orSplit list.
+                {
+                    List<string> tempSplits = dia.Split('^').ToList();
+                    finalSplit.Concat(tempSplits); //Add the two lists together.
+                }
+                else
+                {
+                    finalSplit.Add(dia); //If I can't split the list just add the dialogue and keep processing.
+                }
             }
 
-            if (dialogue.Contains("%pet"))
+            //iterate across ll dialogues and return a list of them.
+            for (int i= 0;i<finalSplit.Count(); i++)
             {
-                //Replace with <Pet Name>
-                dialogue = dialogue.Replace("%pet",);
-            }
+                string dia = finalSplit.ElementAt(i);
+                if (dia.Contains("@"))
+                {
+                    //replace with farmer name.
+                    dia = dia.Replace("@", replacementStrings.farmerName);
+                }
 
-            if (dialogue.Contains("%farm"))
-            {
-                //Replace with <Farm Name>
-            }
+                if (dia.Contains("%adj"))
+                {
+                    //??? Loop through all possible adj combinations.
+                }
 
-            if (dialogue.Contains("%favorite"))
-            {
-                //Replace with <Favorite thing>
-            }
+                if (dia.Contains("%noun"))
+                {
+                    //??? Loop through all possible noun combinations.
+                }
 
-            if (dialogue.Contains("%kid1"))
-            {
-                //Replace with <Kid 1's Name>
-            }
+                if (dia.Contains("%place"))
+                {
+                    //??? Loop through all place combinations.
+                }
 
-            if (dialogue.Contains("%kid2"))
-            {
-                //Replace with <Kid 2's Name>
+                if (dia.Contains("%spouse"))
+                {
+                    //Replace with all possible marriageable npcs
+                }
+
+                if (dia.Contains("%band"))
+                {
+                    //Replace with<Sam's Band Name>
+                    dia = dia.Replace("%band", replacementStrings.bandName);
+                }
+
+                if (dia.Contains("%book"))
+                {
+                    //Replace with<Elliott's Book Name>
+                    dia = dia.Replace("%book", replacementStrings.bookName);
+                }
+
+                if (dia.Contains("%rival"))
+                {
+                    //Replace with<Rival Name>
+                    dia = dia.Replace("%rival", replacementStrings.rivalName);
+                }
+
+                if (dia.Contains("%pet"))
+                {
+                    //Replace with <Pet Name>
+                    dia = dia.Replace("%pet", replacementStrings.petName);
+                }
+
+                if (dia.Contains("%farm"))
+                {
+                    dia = dia.Replace("%pet", replacementStrings.farmName);
+                }
+
+                if (dia.Contains("%favorite"))
+                {
+                    //Replace with <Favorite thing>
+                    dia = dia.Replace("%pet", replacementStrings.favoriteThing);
+                }
+
+                if (dia.Contains("%kid1"))
+                {
+                    //Replace with <Kid 1's Name>
+                    dia = dia.Replace("%pet", replacementStrings.kid1Name);
+                }
+
+                if (dia.Contains("%kid2"))
+                {
+                    //Replace with <Kid 2's Name>
+                    dia = dia.Replace("%pet", replacementStrings.kid2Name);
+                }
+
+                if (dia.Contains("%time"))
+                {
+                    //Replace with all times of day. 600-2600.
+                    for (int t = 600; t <= 2600; t += 10)
+                    {
+                        string time = t.ToString();
+                        string diaTime = dia.Replace("%time", time);
+                        possibleDialogues.Add(diaTime);
+                    }
+                }
+                else
+                {
+                    possibleDialogues.Add(dia);
+                }
+                
             }
-            return dialogue;
+            return possibleDialogues;
         }
     }
 }
