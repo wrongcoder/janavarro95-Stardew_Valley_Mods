@@ -15,6 +15,12 @@ namespace Vocalization.Framework
         /// The name of the NPC.
         /// </summary>
         public string name;
+
+        /// <summary>
+        /// The name of the dialogue file to scrape for inputting values into the dictionary of dialogueCues.
+        /// </summary>
+        public string dialogueFileName;
+
         /// <summary>
         /// A dictionary of dialogue strings that correspond to audio files.
         /// </summary>
