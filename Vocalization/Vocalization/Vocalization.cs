@@ -25,11 +25,13 @@ namespace Vocalization
     /// 
     /// Find way to play said wave files. (Done?)
     /// 
-    /// Sanitize input to remove variables such as pet names, farm names, farmer name.
+    /// Sanitize input to remove variables such as pet names, farm names, farmer name. (done?)
     /// 
-    /// Add in dialogue for npcs into their respective VoiceCue.json files.
+    /// !!!!!!!Loop through common variables and add them to the dialogue list.
     /// 
-    /// Add support for different kinds of menus. TV, shops, etc.
+    /// !!!!!!!Add in dialogue for npcs into their respective VoiceCue.json files.
+    /// 
+    /// !!!!!!!Add support for different kinds of menus. TV, shops, etc.
     /// </summary>
     public class Vocalization : Mod
     {
@@ -117,17 +119,30 @@ namespace Vocalization
                         previousDialogue = currentDialogue; //Update my previously read dialogue so that I only read the new string once when it appears.
                         ModMonitor.Log(currentDialogue); //Print out my dialogue.
 
-
                         //Do logic here to figure out what audio clips to play.
                         //Sanitize input here!
-                        //Load all game dialogue files and then sanitize input for that???
+                        //Load all game dialogue files and then sanitize input.
+
+                        CharacterVoiceCue voice;
+                        DialogueCues.TryGetValue(speakerName,out voice);
+                        currentDialogue=sanitizeDialogue(currentDialogue); //If contains the stuff in the else statement, change things up.
+                        if (voice.dialogueCues.ContainsKey(currentDialogue))
+                        {
+                            //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
+                            voice.speak(currentDialogue);
+                        }
+                        else
+                        {
+                            ModMonitor.Log("New unregistered dialogue detected for NPC: "+speakerName+" saying: "+currentDialogue,LogLevel.Alert);
+                            ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!",LogLevel.Alert);
+                        }
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Runs after loading.
+        /// Runs after loading and creates necessary mod directories.
         /// </summary>
         private void initialzeDirectories()
         {
@@ -149,9 +164,13 @@ namespace Vocalization
                 }
             }
 
+            if (!Directory.Exists(contentPath)) Directory.CreateDirectory(contentPath);
+            if (!Directory.Exists(audioPath)) Directory.CreateDirectory(audioPath);
+            if (!Directory.Exists(voicePath)) Directory.CreateDirectory(voicePath);
+
             //Create a list of new directories if the corresponding character directory doesn't exist.
             //Note: A modder could also manually add in their own character directory for voice lines instead of having to add it via code.
-            foreach(var dir in characterDialoguePaths)
+            foreach (var dir in characterDialoguePaths)
             {
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             }
@@ -183,6 +202,13 @@ namespace Vocalization
                 if (!File.Exists(voiceCueFile))
                 {
                     CharacterVoiceCue cue= new CharacterVoiceCue(characterName);
+                    //Loop through all variations of...
+                        //time %time
+                        //adjectives $adj
+                        //nouns %noun
+                        //location %place
+                        //spouse %spouse
+                    //If found in a string of dialogue in a character file.
                     ModHelper.WriteJsonFile<CharacterVoiceCue>(Path.Combine(dir, "VoiceCues.json"), cue);
                     DialogueCues.Add(characterName, cue);
                 }
@@ -192,6 +218,56 @@ namespace Vocalization
                     DialogueCues.Add(characterName,cue);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Removes a lot of variables that would be hard to voice act from dkialogue strings such as player's name, pet names, farm names, etc.
+        /// </summary>
+        /// <param name="dialogue"></param>
+        /// <returns></returns>
+        public string sanitizeDialogue(string dialogue)
+        {
+            if (dialogue.Contains(Game1.player.Name))
+            {
+                dialogue = dialogue.Replace(Game1.player.name, ""); //Remove player's name from dialogue.
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward double space that is left when removing player's name.
+            }
+
+            if (Game1.player.hasPet())
+            {
+                if (dialogue.Contains(Game1.player.getPetName()))
+                {
+                    dialogue.Replace(Game1.player.getPetName(), "");
+                    dialogue = dialogue.Replace("  ", " "); //Remove awkward double space that is left when removing player's pet's name.
+                }
+            }
+
+            if (dialogue.Contains(Game1.player.farmName.Value))
+            {
+                dialogue.Replace(Game1.player.farmName.Value, "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward double space that is left when removing player's farm name.
+            }
+
+            if (dialogue.Contains(Game1.player.favoriteThing.Value))
+            {
+                dialogue.Replace(Game1.player.favoriteThing.Value, "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward double space that is left when removing player's favorite thing.
+            }
+
+            if (dialogue.Contains(Game1.samBandName))
+            {
+                dialogue.Replace(Game1.samBandName, "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward double space that is left when removing Sam's band name.
+            }
+
+            if (dialogue.Contains(Game1.elliottBookName))
+            {
+                dialogue.Replace(Game1.elliottBookName, "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward double space that is left when removing Elliott's book name.
+            }
+
+            return dialogue;
         }
     }
 }
