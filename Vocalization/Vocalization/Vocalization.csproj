@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\CharacterVoiceCue.cs" />
+    <Compile Include="Framework\ReplacementStrings.cs" />
     <Compile Include="Vocalization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

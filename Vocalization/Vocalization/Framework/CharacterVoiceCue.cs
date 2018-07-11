@@ -55,5 +55,17 @@ namespace Vocalization.Framework
             }
         }
 
+        public void addDialogue(string key, string value)
+        {
+            if (dialogueCues.ContainsKey(key))
+            {
+                return;
+            }
+            else
+            {
+                this.dialogueCues.Add(key, value);
+            }
+        }
+
     }
 }

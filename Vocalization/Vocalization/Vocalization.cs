@@ -27,20 +27,38 @@ namespace Vocalization
     /// 
     /// Sanitize input to remove variables such as pet names, farm names, farmer name. (done)
     /// 
-    /// !!!!!!!Loop through common variables and add them to the dialogue list inside of ReplacementString.cs
+    /// Loop through common variables and add them to the dialogue list inside of ReplacementString.cs (done)
+    ///     -ERRR that might not be fun to do.......
+    ///     Dialogue.cs
+    ///     adj is 679-698 (done)
+    ///     noun is 699-721 (done)
+    ///     verb is 722-734 ???? Not needed???
+    ///     place is 735-759 (done)
+    ///     colors is 795-810. What does it change though??????
     /// 
     /// Add in dialogue for npcs into their respective VoiceCue.json files. (done? Can be improved on)
     /// 
+    /// 
+    ///Add in sanitization for Dialogue Commands(see the wiki) (done)
+    /// 
+    /// !!!!!!!!!Add in dialogue for npcs into their respective VoiceCue files for events!
+    /// 
     /// !!!!!!!Add support for different kinds of menus. TV, shops, etc.
+    ///     -All of these strings are stored in StringsFromCS and TV/file.yaml
     /// 
     /// !!!!!!!Add support for MarriageDialogue strings.
     /// 
     /// !!!!!!!Add support for Extra dialogue via StringsFromCSFiles
+    ///     -tv
+    ///     -events
+    ///     -above stuff
+    ///     -NPC.cs
+    ///     -Utility.csmmn
     /// 
     /// !!!!!!!!!Make moddable to support other languages, portuguese, russian, etc (Needs testing)
     ///     -make mod config have a list of supported languages and a variable that is the currently selected language.
     ///     
-    /// !!!!!!!!! Add support for adding dialogue lines when loading CharacterVoiceCue.json if the line doesn't already exist!
+    /// Add support for adding dialogue lines when loading CharacterVoiceCue.json if the line doesn't already exist! (done)
     /// </summary>
     public class Vocalization : Mod
     {
@@ -73,17 +91,15 @@ namespace Vocalization
         public override void Entry(IModHelper helper)
         {
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
-            DialogueCues = new Dictionary<string, CharacterVoiceCue>();
-            replacementStrings = new ReplacementStrings();
-
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
-
-            previousDialogue = "";
-
             ModMonitor = Monitor;
             ModHelper = Helper;
+            DialogueCues = new Dictionary<string, CharacterVoiceCue>();
+            replacementStrings = new ReplacementStrings();
+
+            previousDialogue = "";
 
             soundManager = new SimpleSoundManager.Framework.SoundManager();
            
@@ -238,18 +254,23 @@ namespace Vocalization
                     {
                         CharacterVoiceCue cue = new CharacterVoiceCue(characterName);
 
-                        var contentDirectory = Game1.content.RootDirectory;
+                        var dialoguePath = Path.Combine("Characters", "Dialogue");
 
-                        var DialogueDict=ModHelper.Content.Load<Dictionary<string,string>>(cue.dialogueFileName, ContentSource.GameContent);
-
-                        foreach(KeyValuePair<string,string>pair in DialogueDict)
+                        //basically this will never run but can be used below to also add in dialogue.
+                        if (!String.IsNullOrEmpty(cue.dialogueFileName))
                         {
-                            string rawDialogue = pair.Value;
-                            List<string> cleanDialogues = new List<string>();
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
-                            foreach(var str in cleanDialogues)
+                            dialoguePath = Path.Combine(dialoguePath, cue.dialogueFileName);
+                            var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath, ContentSource.GameContent);
+
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
                             {
-                                cue.dialogueCues.Add(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                string rawDialogue = pair.Value;
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
                             }
                         }
 
@@ -260,6 +281,25 @@ namespace Vocalization
                     else
                     {
                         CharacterVoiceCue cue = ModHelper.ReadJsonFile<CharacterVoiceCue>(voiceCueFile);
+                        var dialoguePath = Path.Combine("Characters", "Dialogue");
+                        //Add in all dialogue.
+                        if (!String.IsNullOrEmpty(cue.dialogueFileName))
+                        {
+                            dialoguePath = Path.Combine(dialoguePath, cue.dialogueFileName);
+                            var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath, ContentSource.GameContent);
+
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                string rawDialogue = pair.Value;
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+                            }
+                        }
+                        ModHelper.WriteJsonFile<CharacterVoiceCue>(Path.Combine(dir, "VoiceCues.json"), cue);
                         DialogueCues.Add(characterName, cue);
                     }
                 }
@@ -331,6 +371,11 @@ namespace Vocalization
             return dialogue;
         }
 
+        /// <summary>
+        /// Load in all dialogue.xnb files and attempt to sanitize all of the dialogue from it to help making adding dialogue easier.
+        /// </summary>
+        /// <param name="dialogue"></param>
+        /// <returns></returns>
         public List<string> sanitizeDialogueFromDictionaries(string dialogue)
         {
             List<string> possibleDialogues = new List<string>();
@@ -373,7 +418,15 @@ namespace Vocalization
                 dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
-            for(int i=0; i<=100; i++)
+            if (dialogue.Contains("$q"))
+            {
+                dialogue = dialogue.Replace("$q", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
+            }
+
+
+            //This is probably the worst possible way to do this but I don't have too much a choice.
+            for (int i=0; i<=100; i++)
             {
                 string combine = "";
                 if (i == 1) continue;
@@ -393,6 +446,11 @@ namespace Vocalization
                 dialogue = dialogue.Replace("%", "");
             }
 
+            if (dialogue.Contains("$fork"))
+            {
+                dialogue = dialogue.Replace("%fork", "");
+            }
+
             //split across # symbol
             List<string> dialogueSplits1 = dialogue.Split('#').ToList(); //Returns an element size of 1 if # isn't found.
 
@@ -408,7 +466,10 @@ namespace Vocalization
                 if (dia.Contains("|")) //If I can split my string do so and add all the split strings into my orSplit list.
                 {
                     List<string> tempSplits = dia.Split('|').ToList();
-                    orSplit.Concat(tempSplits); //Add the two lists together.
+                    foreach(var v in tempSplits)
+                    {
+                        orSplit.Add(v);
+                    }
                 }
                 else
                 {
@@ -422,7 +483,10 @@ namespace Vocalization
                 if (dia.Contains("^")) //If I can split my string do so and add all the split strings into my orSplit list.
                 {
                     List<string> tempSplits = dia.Split('^').ToList();
-                    finalSplit.Concat(tempSplits); //Add the two lists together.
+                    foreach (var v in tempSplits)
+                    {
+                        finalSplit.Add(v);
+                    }
                 }
                 else
                 {
@@ -430,34 +494,72 @@ namespace Vocalization
                 }
             }
 
-            //iterate across ll dialogues and return a list of them.
-            for (int i= 0;i<finalSplit.Count(); i++)
+
+            //Loop through all adjectives and add them to our list of possibilities.
+            for (int i = 0; i < finalSplit.Count(); i++)
             {
                 string dia = finalSplit.ElementAt(i);
+                if (dia.Contains("%adj"))
+                {
+                    foreach (var adj in replacementStrings.adjStrings)
+                    {
+                        dia = dia.Replace("%adj", adj);
+                        finalSplit.Add(dia);
+                    }
+                }
+            }
+
+            //Loop through all nouns and add them to our list of possibilities.
+            for (int i = 0; i < finalSplit.Count(); i++)
+            {
+                string dia = finalSplit.ElementAt(i);
+                if (dia.Contains("%noun"))
+                {
+                    foreach (var noun in replacementStrings.nounStrings)
+                    {
+                        dia = dia.Replace("%noun", noun);
+                        finalSplit.Add(dia);
+                    }
+                }
+            }
+
+            //Loop through all places and add them to our list of possibilities.
+            for (int i = 0; i < finalSplit.Count(); i++)
+            {
+                string dia = finalSplit.ElementAt(i);
+                if (dia.Contains("%place"))
+                {
+                    foreach (var place in replacementStrings.placeStrings)
+                    {
+                        dia = dia.Replace("%place", place);
+                        finalSplit.Add(dia);
+                    }
+                }
+            }
+
+            //Loop through all spouses and add them to our list of possibilities.
+            for (int i = 0; i < finalSplit.Count(); i++)
+            {
+                string dia = finalSplit.ElementAt(i);
+                if (dia.Contains("%spouse"))
+                {
+                    foreach (var spouse in replacementStrings.spouseNames)
+                    {
+                        dia = dia.Replace("%spouse", spouse);
+                        finalSplit.Add(dia);
+                    }
+                }
+            }
+
+
+            //iterate across ll dialogues and return a list of them.
+            for (int i= 0;i<finalSplit.Count(); i++){
+                string dia = finalSplit.ElementAt(i);
+
                 if (dia.Contains("@"))
                 {
                     //replace with farmer name.
                     dia = dia.Replace("@", replacementStrings.farmerName);
-                }
-
-                if (dia.Contains("%adj"))
-                {
-                    //??? Loop through all possible adj combinations.
-                }
-
-                if (dia.Contains("%noun"))
-                {
-                    //??? Loop through all possible noun combinations.
-                }
-
-                if (dia.Contains("%place"))
-                {
-                    //??? Loop through all place combinations.
-                }
-
-                if (dia.Contains("%spouse"))
-                {
-                    //Replace with all possible marriageable npcs
                 }
 
                 if (dia.Contains("%band"))
@@ -523,6 +625,49 @@ namespace Vocalization
                 }
                 
             }
+
+            List<string> removalList = new List<string>();
+            //Clean out all dialogue commands.
+            foreach(var dia in possibleDialogues)
+            {
+                if (dia.Contains("$r"))
+                {
+                    removalList.Add(dia);
+                }
+
+                if (dia.Contains("$p"))
+                {
+                    removalList.Add(dia);
+                }
+
+                if (dia.Contains("$b"))
+                {
+                    removalList.Add(dia);
+                }
+
+                if (dia.Contains("$e"))
+                {
+                    removalList.Add(dia);
+                }
+
+                if (dia.Contains("$d"))
+                {
+                    removalList.Add(dia);
+                }
+
+                if (dia.Contains("$k"))
+                {
+                    removalList.Add(dia);
+                }
+            }
+
+            //Delete all garbage dialogues left over.
+            foreach(var v in removalList)
+            {
+                possibleDialogues.Remove(v);
+            }
+
+
             return possibleDialogues;
         }
     }
