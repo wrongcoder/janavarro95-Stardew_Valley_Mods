@@ -17,23 +17,39 @@ namespace Vocalization.Framework
         public string name;
 
         /// <summary>
-        /// The name of the dialogue file to scrape for inputting values into the dictionary of dialogueCues.
+        /// The name of the dialogue file to scrape from Content/Characters/Dialogue for inputting values into the dictionary of dialogueCues.
         /// </summary>
-        public string dialogueFileName;
+        public List<string> dialogueFileNames;
+
+        /// <summary>
+        /// The name of the files in Content/Strings to scrape for dialogue.
+        /// </summary>
+        public List<string> stringsFileNames;
+
+        /// <summary>
+        /// The names of the files in Content/Data to scrape for dialogue.
+        /// </summary>
+        public List<string> dataFileNames;
 
         /// <summary>
         /// A dictionary of dialogue strings that correspond to audio files.
         /// </summary>
         public Dictionary<string, string> dialogueCues;
 
+        public string path;
+
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="name">The name of the NPC.</param>
-        public CharacterVoiceCue(string name)
+        public CharacterVoiceCue(string name,string path)
         {
             this.name = name;
             this.dialogueCues = new Dictionary<string, string>();
+            this.stringsFileNames = new List<string>();
+            this.dialogueFileNames = new List<string>();
+            this.dataFileNames = new List<string>();
+            this.path = path;
         }
 
         /// <summary>
