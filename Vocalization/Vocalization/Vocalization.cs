@@ -14,41 +14,66 @@ namespace Vocalization
     /*
      * Things to sanitize/load in
      * 
-     * NPC Dialogue(sanitized, not loaded); 
+     * NPC Dialogue(sanitized, not loaded);
+     *  -Characters/Dialogue/CharacterName
      * Rainy Dialogue(sanitized, not loaded);
+     *  -Characters/Dialogue/rainy.yaml
      * Marriage dialogue(sanitized?,not loaded);
+     *  -Characters/Dialogue/MarriageDialogue<NPC NAME>
      * Engagement dialogue(sanitized, not loaded);
+     *  -Data/EngagementDialogue
+     * Misc
+     *  -Strings/StringsFromCS.yaml
      * 
      * TV shows
      *  -cooking (sanitized, not loaded)
+     *      -Data/TV/CookingChannel.yaml
      *  -interview(sanitized, not loaded)
+     *      -Data/TV/InterviewShow.yaml
      *  -tip(sanitized, not loaded)
+     *      -Data/TV/TipChannel.yaml
      *  -oracle(sanitized, not loaded)
+     *      -Strings/StringsFromCS.yaml
      *  -weather(sanitized, not loaded)
+     *      -Strings/StringsFromCS.yaml
      * 
      * 
-     * Shops
-     * Extra dialogue
-     * Letters
-     * Events
+     * Shops(sanitized, not loaded);
+     *  -Strings/StringsFromCS.yaml
+     * Extra dialogue(sanitized, not loaded);
+     *  -Data/ExtraDialogue.yaml
      * 
+     * Letters(sanitized, not loaded);
+     *  -Data/mail.yaml
      * 
-     * Strings/Characters.yaml
-     * Strings/Events.yaml
-     * Strings/Locations.yaml
-     * Strings/Notes.yaml
-     * Strings/Objects.yaml
-     * Strings/StringsFromCSFiles.yaml
-     *  -npc
-     *  -events
-     *  -tv shows
-     *  -utility
-     * Strings/StringsFromMaps.yaml
+     * Events(sanitized, not loaded); 
+     *  -Strings/StringsFromCS.yaml
+     *  -Strings/Events.yaml
+     * 
+     * Characters:
+     *  -Strings/Characters.yaml (sanitized, not loaded);
+     *  
+     * Strings/Events.yaml (sanitized, not loaded);
+     *  -Strings/StringsFromCS.yaml
+     *  
+     * Strings/Locations.yaml(sanitized, not loaded);
+     *  -Strings/Loctions.yaml
+     *  -Strings/StringsFromMaps.yaml
+     * 
+     * Strings/Notes.yaml(sanitized, not loaded);
+     *  -Strings/Notes.yaml
+     *  -Data/SecretNotes.yaml
+     * 
+     * Strings/Objects.yaml (not needed);
+     * 
+     * Utility
+     *  -Strings/StringsFromCS.yaml
      */
-
 
     /// <summary>
     /// TODO:
+    /// 
+    /// Validate that all paths are loading from proper places.
     /// 
     /// Make a directory where all of the wav files will be stored. (Done?)
     /// Load in said wav files.(Done?)
@@ -78,19 +103,19 @@ namespace Vocalization
     ///Add in sanitization for Dialogue Commands(see the wiki) (done)
     /// 
     /// 
-    /// !!!!!!!Add support for different kinds of menus. TV, shops, etc.
+    ///Add support for different kinds of menus. TV, shops, etc. (Done)
     ///     -All of these strings are stored in StringsFromCS and TV/file.yaml
     /// 
-    /// !!!!!!!Add support for MarriageDialogue strings.
-    /// !!!!!!!Add support for EngagementDialogue strings.
-    /// !!!!!!!Add support for ExtraDialogue.yaml file
+    ///Add support for MarriageDialogue strings. (Done)
+    ///Add support for EngagementDialogue strings.(Done)
+    ///Add support for ExtraDialogue.yaml file (Done)
     /// 
     /// 
-    /// !!!!!!!Add support for mail dialogue
+    ///Add support for mail dialogue(Done)
     ///         -split using ^ to get the sender's name as the last element in the split list. Then sanitize the % information out by splitting across % and getting the first element.
     /// 
     /// 
-    /// !!!!!!!Add support for Extra dialogue via StringsFromCSFiles
+    ///Add support for Extra dialogue via StringsFromCSFiles(Done)
     ///     -tv
     ///     -events
     ///     -NPC.cs
@@ -197,20 +222,28 @@ namespace Vocalization
                         //Sanitize input here!
                         //Load all game dialogue files and then sanitize input.
 
-                        CharacterVoiceCue voice;
-                        DialogueCues.TryGetValue(speakerName,out voice);
-                        currentDialogue=sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
-                        if (voice.dialogueCues.ContainsKey(currentDialogue))
+                        List<string> tries = new List<string>();
+                        tries.Add(speakerName);
+                        tries.Add("Events");
+                        tries.Add("CharactersStrings");
+                        tries.Add("LocationDialogue");
+                        tries.Add("Utility");
+                        foreach (var v in tries)
                         {
-                            //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
-                            voice.speak(currentDialogue);
-                        }
-                        else
-                        {
-                            ModMonitor.Log("New unregistered dialogue detected for NPC: "+speakerName+" saying: "+currentDialogue,LogLevel.Alert);
-                            ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!",LogLevel.Alert);
-                            voice.addDialogue(currentDialogue, "");
-                            ModHelper.WriteJsonFile<CharacterVoiceCue>(voice.path, voice); //If the dialogue was overlooked somehow, just add it to the player's dialogue lines.
+                            CharacterVoiceCue voice;
+                            DialogueCues.TryGetValue(speakerName, out voice);
+                            currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
+                            if (voice.dialogueCues.ContainsKey(currentDialogue))
+                            {
+                                //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
+                                voice.speak(currentDialogue);
+                            }
+                            else
+                            {
+                                ModMonitor.Log("New unregistered dialogue detected for NPC: " + speakerName + " saying: " + currentDialogue, LogLevel.Alert);
+                                ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
+                                ModHelper.WriteJsonFile<CharacterVoiceCue>(voice.path, voice); //If the dialogue was overlooked somehow, just add it to the player's dialogue lines.
+                            }
                         }
                     }
                 }
@@ -227,10 +260,18 @@ namespace Vocalization
                             previousDialogue = currentDialogue; //Update my previously read dialogue so that I only read the new string once when it appears.
                             ModMonitor.Log(currentDialogue); //Print out my dialogue.
 
-                            
+                        List<string> tries = new List<string>();
+                        tries.Add("TV");
+                        tries.Add("Events");
+                        tries.Add("Characters");
+                        tries.Add("LocationDialogue");
+                        tries.Add("Notes");
+                        tries.Add("Utility");
+                        foreach (var v in tries)
+                        {
                             //Add in support for TV Shows
                             CharacterVoiceCue voice;
-                            DialogueCues.TryGetValue("TV", out voice);
+                            bool f=DialogueCues.TryGetValue(v, out voice);
                             currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
                             if (voice.dialogueCues.ContainsKey(currentDialogue))
                             {
@@ -241,9 +282,9 @@ namespace Vocalization
                             {
                                 ModMonitor.Log("New unregistered dialogue detected saying: " + currentDialogue, LogLevel.Alert);
                                 ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
-                                voice.addDialogue(currentDialogue, "");
                                 ModHelper.WriteJsonFile<CharacterVoiceCue>(voice.path, voice); //If the dialogue was overlooked somehow, just add it to the player's dialogue lines.
                             }
+                        }
                         }
                     }
 
@@ -300,28 +341,14 @@ namespace Vocalization
                     try
                     {
                         //character shops
-                        bool f=DialogueCues.TryGetValue(Path.Combine("Shops", npc.Name), out voice);
+                        bool f=DialogueCues.TryGetValue(Path.Combine("Shops"), out voice);
                         if (f == false)
                         {
                             ModMonitor.Log("Can't find the dialogue for the shop: " + npc.Name);
                         }
                     }
-                    catch(Exception err)
-                    {
-                        try
-                        {
-                            //non npc shops
-                            bool f=DialogueCues.TryGetValue(Path.Combine("Shops", "Misc"), out voice);
-                            if (f == false)
-                            {
-                                ModMonitor.Log("Can't find the dialogue in the misc shop file.");
-                            }
-                        }
-                        catch(Exception errr)
-                        {
-                            ModMonitor.Log("A really big problem happened when trying to load dialogue from shops. Uhh ohh. Make sure the Shops folder exists.");
-                            return;
-                        }
+                    catch(Exception err) { 
+
                     }
                     currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
                     if (voice.dialogueCues.ContainsKey(currentDialogue))
@@ -387,9 +414,6 @@ namespace Vocalization
             {
                 string shop = Path.Combine(translation, "Shops"); //Used to hold NPC Shops
                 characterDialoguePaths.Add(shop);
-
-                string shop2 = Path.Combine(translation, "Shops","Misc"); //Used to hold Misc shops such as traveling merchants and boats.
-                characterDialoguePaths.Add(shop2);
             }
 
             //Add in folder for Mail support.
@@ -398,6 +422,45 @@ namespace Vocalization
                 string mail = Path.Combine(translation, "Mail");
                 characterDialoguePaths.Add(mail);
             }
+
+            //Add in folder for ExtraDiaogue.yaml
+            foreach (var translation in translationFolders)
+            {
+                string extra = Path.Combine(translation, "ExtraDialogue");
+                characterDialoguePaths.Add(extra);
+            }
+
+            foreach (var translation in translationFolders)
+            {
+                string extra = Path.Combine(translation, "Events");
+                characterDialoguePaths.Add(extra);
+            }
+
+            foreach (var translation in translationFolders)
+            {
+                string extra = Path.Combine(translation, "Characters");
+                characterDialoguePaths.Add(extra);
+            }
+
+            foreach (var translation in translationFolders)
+            {
+                string extra = Path.Combine(translation, "LocationDialogue");
+                characterDialoguePaths.Add(extra);
+            }
+
+            foreach (var translation in translationFolders)
+            {
+                string extra = Path.Combine(translation, "Notes");
+                characterDialoguePaths.Add(extra);
+            }
+
+            foreach (var translation in translationFolders)
+            {
+                string extra = Path.Combine(translation, "Utility");
+                characterDialoguePaths.Add(extra);
+            }
+
+
 
             if (!Directory.Exists(contentPath)) Directory.CreateDirectory(contentPath);
             if (!Directory.Exists(audioPath)) Directory.CreateDirectory(audioPath);
@@ -461,7 +524,10 @@ namespace Vocalization
             }
         }
 
-
+        /// <summary>
+        /// Used to obtain all strings for almost all possible dialogue in the game.
+        /// </summary>
+        /// <param name="cue"></param>
         public void scrapeDictionaries(CharacterVoiceCue cue)
         {
 
@@ -472,12 +538,12 @@ namespace Vocalization
             //If the "character"'s name is TV which means I'm watching tv, scrape the data from the TV shows.
             if (cue.name == "TV")
             {
-                foreach (var fileName in cue.dialogueFileNames)
+                foreach (var fileName in cue.dataFileNames)
                 {
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
-                        string dialoguePath2 = Path.Combine(dialoguePath, fileName);
+                        string dialoguePath2 = Path.Combine(dataPath,"TV",fileName);
                         var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
 
                         //Scraping the CookingChannel dialogue
@@ -494,15 +560,13 @@ namespace Vocalization
 
                                 string cookingDialogue = splitDialogues.ElementAt(1);
                                 //If the key contains the character's name.
-                                if (key.Contains(cue.name))
-                                {
                                     List<string> cleanDialogues = new List<string>();
                                     cleanDialogues = sanitizeDialogueFromDictionaries(cookingDialogue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
-                                }
+                                
                             }
                             continue;
                         }
@@ -518,15 +582,13 @@ namespace Vocalization
                                 string rawDialogue = pair.Value;
                                 if (key != "intro") continue;
                                 //If the key contains the character's name.
-                                if (key.Contains(cue.name))
-                                {
                                     List<string> cleanDialogues = new List<string>();
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
-                                }
+                                
                             }
                             continue;
                         }
@@ -540,20 +602,27 @@ namespace Vocalization
                                 //Get the key in the dictionary
                                 string key = pair.Key;
                                 string rawDialogue = pair.Value;
-                                //If the key contains the character's name.
-                                if (key.Contains(cue.name))
-                                {
+
                                     List<string> cleanDialogues = new List<string>();
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
-                                }
+                                
                             }
                             continue;
                         }
+                    }
+                }
 
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
                         if (fileName.Contains("StringsFromCSFiles"))
                         {
                             //Scrape the whole dictionary looking for the character's name.
@@ -564,22 +633,334 @@ namespace Vocalization
                                 string rawDialogue = pair.Value;
                                 if (!key.Contains("TV")) continue;
                                 //If the key contains the character's name.
-                                if (key.Contains(cue.name))
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
                                 {
-                                    List<string> cleanDialogues = new List<string>();
-                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
-                                    foreach (var str in cleanDialogues)
-                                    {
-                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
-                                    }
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
+
                             }
                             continue;
                         }
                     }
                 }
 
+
             }
+
+            //If the "character"'s name is Shops which means I'm talking to a shopkeeper.
+            else if (cue.name == "Shops")
+            {
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        //Scraping the CookingChannel dialogue
+
+                        if (fileName.Contains("StringsFromCSFiles"))
+                        {
+                            //Scrape the whole dictionary looking for the character's name.
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                if (!key.Contains("ShopMenu")) continue;
+                                //If the key contains the character's name.
+                              
+                                    List<string> cleanDialogues = new List<string>();
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                    foreach (var str in cleanDialogues)
+                                    {
+                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    }
+                                
+                            }
+                            continue;
+                        }
+                        //For moddablity add a generic scrape here!
+                    }
+                }
+
+            }
+
+            //Scrape Content/Data/ExtraDialogue.yaml
+            else if (cue.name == "ExtraDialogue")
+            {
+                foreach (var fileName in cue.dataFileNames)
+                {
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(dataPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        //Scraping the CookingChannel dialogue
+                            //Scrape the whole dictionary looking for the character's name.
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                //If the key contains the character's name.
+
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+
+                            }
+                    }
+                }
+
+            }
+
+            //Used to scrape Strings/Locations.yaml and Strings/StringsFromMaps.yaml
+            else if (cue.name == "LocationDialogue")
+            {
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        //Scraping the CookingChannel dialogue
+                        //Scrape the whole dictionary looking for the character's name.
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            //Get the key in the dictionary
+                            string key = pair.Key;
+                            string rawDialogue = pair.Value;
+                            //If the key contains the character's name.
+
+                            List<string> cleanDialogues = new List<string>();
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            foreach (var str in cleanDialogues)
+                            {
+                                cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+            //Scrape for event dialogue.
+            else if (cue.name == "Events")
+            {
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        //Scrape Strings/Events.yaml for dialogue strings
+                        if (fileName.Contains("StringsFromCS"))
+                        {
+                            //Scrape Strings/StringsFromCS.yaml
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                //If the key contains the character's name.
+                                if (!key.Contains("Event")) continue;
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+                            }
+                        }
+                        //Scrape Strings/Events.yaml
+                        if (fileName.Contains("Events"))
+                        {
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                //If the key contains the character's name.
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Scrape for mail dialogue.
+            else if (cue.name == "Mail")
+            {
+                foreach (var fileName in cue.dataFileNames)
+                {
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(dataPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        //Scrape the whole dictionary looking for the character's name.
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            //Get the key in the dictionary
+                            string key = pair.Key;
+                            string rawDialogue = pair.Value;
+                            //If the key contains the character's name.
+
+                            string cleanDialogue = "";
+                            cleanDialogue = sanitizeDialogueFromMailDictionary(rawDialogue);                    
+                            cue.addDialogue(cleanDialogue, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty
+                        }
+                    }
+                }
+
+            }
+
+            //Used to scrape Content/strings/Characters.yaml.
+            else if (cue.name == "Characters")
+            {
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        if (fileName.Contains("Characters"))
+                        {
+                            //Scrape the whole dictionary looking for the character's name.
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                //If the key contains the character's name.
+
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+
+                            }
+                            continue;
+                        }
+                        //!!!!!!!!!!!!If I ever want to make this moddable add a generic scrape here.
+                    }
+                }
+
+            }
+
+            else if (cue.name == "Notes")
+            {
+                //Used mainly to scrape Content/Strings/Notes.yaml
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                            //Scrape the whole dictionary looking for the character's name.
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                //If the key contains the character's name.
+
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+
+                            }
+                            continue;
+                    }
+                }
+
+
+                //Used mainly to scrape Content/Data/SecretNotes.yaml
+                foreach (var fileName in cue.dataFileNames)
+                {
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(dataPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                            //Scrape the whole dictionary looking for the character's name.
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                //If the key contains the character's name.
+
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+
+                            }
+                            continue;
+                        
+                    }
+                }
+
+            }
+
+            //used to scrape Content/Strings/Utility.yaml
+            else if (cue.name == "Utility")
+            {
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        //Scrape the whole dictionary looking for the character's name.
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            //Get the key in the dictionary
+                            string key = pair.Key;
+                            string rawDialogue = pair.Value;
+                            //If the key contains the character's name.
+
+                            string cleanDialogue = "";
+                            cleanDialogue = sanitizeDialogueFromMailDictionary(rawDialogue);
+                            cue.addDialogue(cleanDialogue, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty
+                        }
+                    }
+                }
+
+            }
+
+            //Dialogue scrape for npc specific text.
             else
             {
                 foreach (var fileName in cue.dialogueFileNames)
@@ -663,7 +1044,7 @@ namespace Vocalization
                 }
                 foreach (var fileName in cue.dataFileNames)
                 {
-                    string dialoguePath2 = Path.Combine(dialoguePath, fileName);
+                    string dialoguePath2 = Path.Combine(dataPath, fileName);
                     var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
 
                     //Load in engagement dialogue for this npc.
@@ -677,6 +1058,34 @@ namespace Vocalization
                             string rawDialogue = pair.Value;
                             //If the key contains the character's name.
                             if (key.Contains(cue.name))
+                            {
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+                            }
+                        }
+                        continue;
+                    }
+                }
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                    var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                    //Load in super generic dialogue for this npc. This may or may not be a good idea....
+                    if (fileName.Contains("StringsFromCS"))
+                    {
+                        //Scrape the whole dictionary looking for the character's name.
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            //Get the key in the dictionary
+                            string key = pair.Key;
+                            string rawDialogue = pair.Value;
+                            //If the key contains the character's name.
+                            if (key.Contains("NPC"))
                             {
                                 List<string> cleanDialogues = new List<string>();
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
@@ -1057,6 +1466,37 @@ namespace Vocalization
 
 
             return possibleDialogues;
+        }
+
+        /// <summary>
+        /// Used to remove all garbage strings from Content/Data/mail.yaml
+        /// </summary>
+        /// <param name="mailText"></param>
+        /// <returns></returns>
+        public string sanitizeDialogueFromMailDictionary(string mailText)
+        {
+
+            List<string> texts = mailText.Split('%').ToList();
+
+            string splicedText = texts.ElementAt(0); //The actual message of the mail minus the items stored at the end.
+
+            if (splicedText.Contains("@"))
+            {
+                splicedText = splicedText.Replace("@", replacementStrings.farmerName);
+            }
+
+            if (splicedText.Contains("^"))
+            {
+                splicedText = splicedText.Replace("^", "");
+            }
+
+            if (splicedText.Contains("\""))
+            {
+                splicedText = splicedText.Replace("\"", "");
+            }
+
+            return splicedText;
+
         }
     }
 }
