@@ -36,20 +36,18 @@ namespace Vocalization.Framework
         /// </summary>
         public Dictionary<string, string> dialogueCues;
 
-        public string path;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="name">The name of the NPC.</param>
-        public CharacterVoiceCue(string name,string path)
+        public CharacterVoiceCue(string name)
         {
             this.name = name;
             this.dialogueCues = new Dictionary<string, string>();
             this.stringsFileNames = new List<string>();
             this.dialogueFileNames = new List<string>();
             this.dataFileNames = new List<string>();
-            this.path = path;
         }
 
         /// <summary>
@@ -83,5 +81,67 @@ namespace Vocalization.Framework
             }
         }
 
+
+        public void initializeEnglishScrape()
+        {
+            if (name == "TV")
+            {
+                dataFileNames.Add("CookingChannel.xnb");
+                dataFileNames.Add("InterviewShow.xnb");
+                dataFileNames.Add("TipChannel.xnb");
+                stringsFileNames.Add("StringsFromCSFiles.xnb");
+
+            }
+            else if (name == "Shops")
+            {
+                stringsFileNames.Add("StringsFromCSFiles.xnb");
+            }
+            else if (name == "ExtraDialogue")
+            {
+                dataFileNames.Add("ExtraDialogue.xnb");
+            }
+            else if (name == "LocationDialogue")
+            {
+                stringsFileNames.Add("Locations.xnb");
+                stringsFileNames.Add("StringsFromMaps.xnb");
+            }
+            else if (name == "Events")
+            {
+                stringsFileNames.Add("Events.xnb");
+                stringsFileNames.Add("StringsFromCSFiles.xnb");
+
+            }
+            else if (name == "Mail")
+            {
+                dataFileNames.Add("mail.xnb");
+            }
+            else if (name == "Characters")
+            {
+                stringsFileNames.Add("Characters.xnb");
+            }
+            else if (name == "Notes")
+            {
+                stringsFileNames.Add("Notes.xnb");
+                dataFileNames.Add("SecretNotes.xnb");
+            }
+            else if (name == "Utility")
+            {
+                stringsFileNames.Add("StringsFromCSFiles.xnb");
+            }
+            else
+            {
+                dialogueFileNames.Add(name + ".xnb");
+                dialogueFileNames.Add("rainy.xnb");
+                dialogueFileNames.Add("MarriageDialogue.xnb");
+                dialogueFileNames.Add("MarriageDialogue"+name+".xnb");
+
+                dataFileNames.Add("EngagementDialogue.xnb");
+
+                stringsFileNames.Add("StringsFromCSFiles.xnb");
+            }
+
+
+
+        }
     }
 }

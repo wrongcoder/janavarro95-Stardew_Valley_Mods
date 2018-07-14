@@ -20,10 +20,11 @@ namespace Vocalization
      *  -Characters/Dialogue/rainy.yaml
      * Marriage dialogue(sanitized?,not loaded);
      *  -Characters/Dialogue/MarriageDialogue<NPC NAME>
+     *  -Characters/Dialogue/MarriageDialogue.yaml
      * Engagement dialogue(sanitized, not loaded);
-     *  -Data/EngagementDialogue
+     *  -Data/EngagementDialogue.yaml
      * Misc
-     *  -Strings/StringsFromCS.yaml
+     *  -Strings/StringsFromCSFiles.yaml
      * 
      * TV shows
      *  -cooking (sanitized, not loaded)
@@ -33,13 +34,14 @@ namespace Vocalization
      *  -tip(sanitized, not loaded)
      *      -Data/TV/TipChannel.yaml
      *  -oracle(sanitized, not loaded)
-     *      -Strings/StringsFromCS.yaml
+     *      -Strings/StringsFromCSFiles.yaml
      *  -weather(sanitized, not loaded)
-     *      -Strings/StringsFromCS.yaml
+     *      -Strings/StringsFromCSFiles.yaml
      * 
      * 
      * Shops(sanitized, not loaded);
-     *  -Strings/StringsFromCS.yaml
+     *  -Strings/StringsFromCSFiles.yaml
+     *  
      * Extra dialogue(sanitized, not loaded);
      *  -Data/ExtraDialogue.yaml
      * 
@@ -47,14 +49,14 @@ namespace Vocalization
      *  -Data/mail.yaml
      * 
      * Events(sanitized, not loaded); 
-     *  -Strings/StringsFromCS.yaml
+     *  -Strings/StringsFromCSFiles.yaml
      *  -Strings/Events.yaml
      * 
      * Characters:
      *  -Strings/Characters.yaml (sanitized, not loaded);
      *  
      * Strings/Events.yaml (sanitized, not loaded);
-     *  -Strings/StringsFromCS.yaml
+     *  -Strings/StringsFromCSFiles.yaml
      *  
      * Strings/Locations.yaml(sanitized, not loaded);
      *  -Strings/Loctions.yaml
@@ -182,8 +184,9 @@ namespace Vocalization
         /// <param name="e"></param>
         private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
         {
-            //Clean out my previous dialogue swhen I close any sort of menu.
+            //Clean out my previous dialogue when I close any sort of menu.
             previousDialogue = "";
+            if (String.IsNullOrEmpty(soundManager.previousSound.Key) || soundManager.previousSound.Value == null) return;
             soundManager.stopPreviousSound();
         }
 
@@ -242,7 +245,7 @@ namespace Vocalization
                             {
                                 ModMonitor.Log("New unregistered dialogue detected for NPC: " + speakerName + " saying: " + currentDialogue, LogLevel.Alert);
                                 ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
-                                ModHelper.WriteJsonFile<CharacterVoiceCue>(voice.path, voice); //If the dialogue was overlooked somehow, just add it to the player's dialogue lines.
+                               
                             }
                         }
                     }
@@ -250,6 +253,7 @@ namespace Vocalization
             }
             else
             {
+                if (Game1.activeClickableMenu == null) return;
                     //Support for TV
                     if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.DialogueBox))
                     {
@@ -282,7 +286,7 @@ namespace Vocalization
                             {
                                 ModMonitor.Log("New unregistered dialogue detected saying: " + currentDialogue, LogLevel.Alert);
                                 ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
-                                ModHelper.WriteJsonFile<CharacterVoiceCue>(voice.path, voice); //If the dialogue was overlooked somehow, just add it to the player's dialogue lines.
+                               
                             }
                         }
                         }
@@ -318,8 +322,6 @@ namespace Vocalization
                     {
                         ModMonitor.Log("New unregistered Mail dialogue detected saying: " + currentDialogue, LogLevel.Alert);
                         ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
-                        voice.addDialogue(currentDialogue, "");
-                        ModHelper.WriteJsonFile<CharacterVoiceCue>(voice.path, voice);
                     }
                 
                 }
@@ -337,7 +339,7 @@ namespace Vocalization
 
 
                     //Add in support for Shops
-                    CharacterVoiceCue voice=new CharacterVoiceCue("","");
+                    CharacterVoiceCue voice=new CharacterVoiceCue("");
                     try
                     {
                         //character shops
@@ -360,8 +362,6 @@ namespace Vocalization
                     {
                         ModMonitor.Log("New unregistered dialogue detected saying: " + currentDialogue, LogLevel.Alert);
                         ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
-                        voice.addDialogue(currentDialogue, "");
-                        ModHelper.WriteJsonFile<CharacterVoiceCue>(voice.path, voice);
                     }
                     
                 }
@@ -460,6 +460,27 @@ namespace Vocalization
                 characterDialoguePaths.Add(extra);
             }
 
+            foreach (var translation in translationFolders)
+            {
+                string kent = Path.Combine(translation, "Kent");
+                characterDialoguePaths.Add(kent);
+
+
+                string gil = Path.Combine(translation, "Gil");
+                characterDialoguePaths.Add(gil);
+
+
+                string governor = Path.Combine(translation, "Governor");
+                characterDialoguePaths.Add(governor);
+
+
+                string grandpa = Path.Combine(translation, "Grandpa");
+                characterDialoguePaths.Add(grandpa);
+
+
+                string morris = Path.Combine(translation, "Morris");
+                characterDialoguePaths.Add(morris);
+            }
 
 
             if (!Directory.Exists(contentPath)) Directory.CreateDirectory(contentPath);
@@ -512,13 +533,14 @@ namespace Vocalization
                     //If a file was not found, create one and add it to the list of character voice cues.
                     if (!File.Exists(voiceCueFile))
                     {
-                        CharacterVoiceCue cue = new CharacterVoiceCue(characterName, Path.Combine(dir, "VoiceCues.json"));
-                        scrapeDictionaries(cue);
+                        CharacterVoiceCue cue = new CharacterVoiceCue(characterName);
+                        cue.initializeEnglishScrape();
+                        scrapeDictionaries(voiceCueFile,cue);
                     }
                     else
                     {
                         CharacterVoiceCue cue = ModHelper.ReadJsonFile<CharacterVoiceCue>(voiceCueFile);
-                        scrapeDictionaries(cue);
+                        scrapeDictionaries(voiceCueFile,cue);
                     }
                 }
             }
@@ -528,18 +550,21 @@ namespace Vocalization
         /// Used to obtain all strings for almost all possible dialogue in the game.
         /// </summary>
         /// <param name="cue"></param>
-        public void scrapeDictionaries(CharacterVoiceCue cue)
+        public void scrapeDictionaries(string path,CharacterVoiceCue cue)
         {
 
             var dialoguePath = Path.Combine("Characters", "Dialogue");
             var stringsPath = Path.Combine("Strings"); //Used for all sorts of extra strings and stuff for like StringsFromCS
             var dataPath = Path.Combine("Data"); //Used for engagement dialogue strings, and ExtraDialogue, Notes, Secret Notes, Mail
 
+            ModMonitor.Log("Scraping dialogue for character: " + cue.name,LogLevel.Info);
             //If the "character"'s name is TV which means I'm watching tv, scrape the data from the TV shows.
             if (cue.name == "TV")
             {
+                
                 foreach (var fileName in cue.dataFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName,LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -618,6 +643,7 @@ namespace Vocalization
 
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -635,9 +661,11 @@ namespace Vocalization
                                 //If the key contains the character's name.
                                 List<string> cleanDialogues = new List<string>();
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    string ahh = sanitizeDialogueFromMailDictionary(str);
+                                    cue.addDialogue(ahh, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
 
                             }
@@ -654,6 +682,7 @@ namespace Vocalization
             {
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -694,6 +723,7 @@ namespace Vocalization
             {
                 foreach (var fileName in cue.dataFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -727,6 +757,7 @@ namespace Vocalization
             {
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -760,15 +791,16 @@ namespace Vocalization
             {
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     if (!String.IsNullOrEmpty(fileName))
                     {
                         string dialoguePath2 = Path.Combine(stringsPath, fileName);
                         var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
 
                         //Scrape Strings/Events.yaml for dialogue strings
-                        if (fileName.Contains("StringsFromCS"))
+                        if (fileName.Contains("StringsFromCSFiles"))
                         {
-                            //Scrape Strings/StringsFromCS.yaml
+                            //Scrape Strings/StringsFromCSFiles.yaml
                             foreach (KeyValuePair<string, string> pair in DialogueDict)
                             {
                                 //Get the key in the dictionary
@@ -810,6 +842,7 @@ namespace Vocalization
             {
                 foreach (var fileName in cue.dataFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -835,9 +868,10 @@ namespace Vocalization
 
             //Used to scrape Content/strings/Characters.yaml.
             else if (cue.name == "Characters")
-            {
+            {         
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     if (!String.IsNullOrEmpty(fileName))
                     {
                         string dialoguePath2 = Path.Combine(stringsPath, fileName);
@@ -874,6 +908,7 @@ namespace Vocalization
                 //Used mainly to scrape Content/Strings/Notes.yaml
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -904,16 +939,17 @@ namespace Vocalization
                 //Used mainly to scrape Content/Data/SecretNotes.yaml
                 foreach (var fileName in cue.dataFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     if (!String.IsNullOrEmpty(fileName))
                     {
                         string dialoguePath2 = Path.Combine(dataPath, fileName);
-                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<int, string>>(dialoguePath2, ContentSource.GameContent);
 
                             //Scrape the whole dictionary looking for the character's name.
-                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            foreach (KeyValuePair<int, string> pair in DialogueDict)
                             {
                                 //Get the key in the dictionary
-                                string key = pair.Key;
+                                int key = pair.Key;
                                 string rawDialogue = pair.Value;
                                 //If the key contains the character's name.
 
@@ -937,6 +973,7 @@ namespace Vocalization
             {
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
@@ -965,10 +1002,17 @@ namespace Vocalization
             {
                 foreach (var fileName in cue.dialogueFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     //basically this will never run but can be used below to also add in dialogue.
                     if (!String.IsNullOrEmpty(fileName))
                     {
                         string dialoguePath2 = Path.Combine(dialoguePath, fileName);
+                        string root=Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                        if (!File.Exists(Path.Combine(root,dialoguePath2)))
+                        {
+                            ModMonitor.Log("Dialogue file not found for:" + fileName+". This might not necessarily be a mistake just a safety check.");
+                            continue; //If the file is not found for some reason...
+                        }
                         var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
 
                         //Scraping the rainy dialogue file.
@@ -994,10 +1038,11 @@ namespace Vocalization
                             continue;
                         }
 
-                        if (fileName.Contains("MarriageDialogue"))
+                        //Check for just my generic file
+                        if (fileName.Contains("MarriageDialogue") && !fileName.Contains("MarriageDialogue"+cue.name))
                         {
                             //Scrape the whole dictionary looking for other character's names to ignore.
-
+                            if (!replacementStrings.spouseNames.Contains(cue.name)) continue;
                             foreach (KeyValuePair<string, string> pair in DialogueDict)
                             {
                                 //Get the key in the dictionary
@@ -1030,6 +1075,28 @@ namespace Vocalization
 
                         }
 
+                        //Check for character specific marriage dialogue
+                        if (fileName.Contains("MarriageDialogue"+cue.name))
+                        {
+                            //Scrape the whole dictionary looking for other character's names to ignore.
+                            if (!replacementStrings.spouseNames.Contains(cue.name)) continue;
+                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                            {
+                                //Get the key in the dictionary
+                                string key = pair.Key;
+                                string rawDialogue = pair.Value;
+                                //If the key contains the character's name or is generic dialogue.
+                                if (key.Contains(cue.name))
+                                {
+                                    List<string> cleanDialogues = new List<string>();
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                    foreach (var str in cleanDialogues)
+                                    {
+                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    }
+                                }
+                            }
+                        }
                         foreach (KeyValuePair<string, string> pair in DialogueDict)
                         {
                             string rawDialogue = pair.Value;
@@ -1044,7 +1111,15 @@ namespace Vocalization
                 }
                 foreach (var fileName in cue.dataFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     string dialoguePath2 = Path.Combine(dataPath, fileName);
+                    string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                    if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                    {
+                        ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                        continue; //If the file is not found for some reason...
+                    }
+
                     var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
 
                     //Load in engagement dialogue for this npc.
@@ -1072,11 +1147,18 @@ namespace Vocalization
                 }
                 foreach (var fileName in cue.stringsFileNames)
                 {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                    string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                    if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                    {
+                        ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                        continue; //If the file is not found for some reason...
+                    }
                     var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
 
                     //Load in super generic dialogue for this npc. This may or may not be a good idea....
-                    if (fileName.Contains("StringsFromCS"))
+                    if (fileName.Contains("StringsFromCSFiles"))
                     {
                         //Scrape the whole dictionary looking for the character's name.
                         foreach (KeyValuePair<string, string> pair in DialogueDict)
@@ -1100,7 +1182,7 @@ namespace Vocalization
                 }
             }
 
-            ModHelper.WriteJsonFile<CharacterVoiceCue>(cue.path, cue);
+            ModHelper.WriteJsonFile<CharacterVoiceCue>(path,cue);
             DialogueCues.Add(cue.name, cue);
         }
 
