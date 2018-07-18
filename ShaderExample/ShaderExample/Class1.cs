@@ -159,6 +159,39 @@ namespace ShaderExample
                             Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2((float)(tab.bounds.X + 8), (float)(tab.bounds.Y + 12 + ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == (Game1.activeClickableMenu as StardewValley.Menus.GameMenu).getTabNumberFromName(tab.name) ? 8 : 0))), 0.00011f, 3f, 2, Game1.player);
                     }
                 }
+
+                if ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 2)
+                {
+                    var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
+                    var pages = (List<IClickableMenu>)pageField;
+                    var v = pages.ElementAt(2);
+                    if (v == null)
+                    {
+                        Monitor.Log("WHATTT?????");
+                    }
+                    int slotPosition2=(int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "slotPosition");
+
+                    var sprites = (List<ClickableTextureComponent>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "sprites");
+                    var names = (List<object>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "names");
+                    for (int slotPosition = slotPosition2; slotPosition < slotPosition2 + 5; ++slotPosition)
+                    {
+                        if (slotPosition < sprites.Count)
+                        {
+                            if (names[slotPosition] is string)
+                                getInvokeMethod(v, "drawNPCSlot", new object[]{
+                                    Game1.spriteBatch, slotPosition
+                                    });
+                            else if (names[slotPosition] is long)
+                                getInvokeMethod(v, "drawFarmerSlot", new object[]{
+                                    Game1.spriteBatch, slotPosition
+                                    });
+                        }
+                    }
+                }
+
+                
+               
+
                 
                 Game1.activeClickableMenu.upperRightCloseButton.draw(Game1.spriteBatch);
                 Game1.activeClickableMenu.drawMouse(Game1.spriteBatch);
@@ -192,6 +225,12 @@ namespace ShaderExample
 
             }
             //Game1.spriteBatch.End();
+        }
+
+        public void getInvokeMethod(object target, string name ,object[] param)
+        {
+            var hello=target.GetType().GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic| BindingFlags.Instance| BindingFlags.Static);
+            hello.Invoke(target, param);
         }
 
         public void drawMapPart2()
