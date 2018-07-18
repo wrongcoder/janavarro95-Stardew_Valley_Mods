@@ -1,0 +1,11 @@
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\manifest.json
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\ShaderExample.dll
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\ShaderExample.pdb
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\obj\Debug\ShaderExample.csproj.CoreCompileInputs.cache
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\obj\Debug\ShaderExample.dll
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\obj\Debug\ShaderExample.pdb
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\Content\Shaders\GreyScaleEffect.xnb
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\Content\Shaders\NoEffect.xnb
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\Netcode.dll
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\Netcode.pdb
+C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\obj\Debug\ShaderExample.csproj.CopyComplete
