@@ -48,6 +48,7 @@ namespace ShaderExample
         { 
             try
             {
+
                 Game1.spriteBatch.End();
             }
             catch(Exception err)
@@ -264,7 +265,18 @@ namespace ShaderExample
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
             Class1.effect.CurrentTechnique.Passes[0].Apply();
+            Monitor.Log(Game1.getMousePosition().ToString());
+            drawMouse();
+            Game1.spriteBatch.End();
+
+
+            Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            drawMouse();
         }
+
+        
 
         private int rowPosition(IClickableMenu menu,int i)
         {
@@ -338,6 +350,116 @@ namespace ShaderExample
             return;
         }
 
+        public void mouse(SpriteBatch b)
+        {
+            if (Game1.options.hardwareCursor)
+                return;
+            b.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, !Game1.options.snappyMenus || !Game1.options.gamepadControls ? 0 : 44, 16, 16)), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
+        }
+
+        public void drawMouseCursor()
+        { 
+            InputState input =(InputState) GetInstanceField(typeof(Game1), Program.gamePtr, "input");
+            if (Game1.timerUntilMouseFade > 0)
+            {
+                Game1.timerUntilMouseFade -= Game1.currentGameTime.ElapsedGameTime.Milliseconds;
+                if (Game1.timerUntilMouseFade <= 0)
+                    Game1.lastMousePositionBeforeFade = Game1.getMousePosition();
+            }
+            if (Game1.options.gamepadControls && Game1.timerUntilMouseFade <= 0 && Game1.activeClickableMenu == null)
+            {
+                Game1.mouseCursorTransparency = 0.0f;
+                if (Program.gamePtr.IsActive)
+                {
+                    IClickableMenu activeClickableMenu = Game1.activeClickableMenu;
+                }
+            }
+            if (Game1.activeClickableMenu == null && Game1.mouseCursor > -1)
+            {
+                MouseState mouseState =input.GetMouseState();
+                if (mouseState.X == 0)
+                {
+                    mouseState = input.GetMouseState();
+                    if (mouseState.Y == 0)
+                        goto label_20;
+                }
+                if ((Game1.getOldMouseX() != 0 || Game1.getOldMouseY() != 0) && Game1.currentLocation != null)
+                {
+                    if ((double)Game1.mouseCursorTransparency <= 0.0 || !Utility.canGrabSomethingFromHere(Game1.getOldMouseX() + Game1.viewport.X, Game1.getOldMouseY() + Game1.viewport.Y, Game1.player) || Game1.mouseCursor == 3)
+                    {
+                        if (Game1.player.ActiveObject != null && Game1.mouseCursor != 3 && !Game1.eventUp)
+                        {
+                            if ((double)Game1.mouseCursorTransparency > 0.0 || Game1.options.showPlacementTileForGamepad)
+                            {
+                                Game1.player.ActiveObject.drawPlacementBounds(Game1.spriteBatch, Game1.currentLocation);
+                                if ((double)Game1.mouseCursorTransparency > 0.0)
+                                {
+                                    bool flag = Utility.playerCanPlaceItemHere(Game1.currentLocation, Game1.player.CurrentItem, Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y, Game1.player) || Utility.isThereAnObjectHereWhichAcceptsThisItem(Game1.currentLocation, Game1.player.CurrentItem, Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y) && Utility.withinRadiusOfPlayer(Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y, 1, Game1.player);
+                                    Game1.player.CurrentItem.drawInMenu(Game1.spriteBatch, new Vector2((float)(Game1.getMouseX() + 16), (float)(Game1.getMouseY() + 16)), flag ? (float)((double)Game1.dialogueButtonScale / 75.0 + 1.0) : 1f, flag ? 1f : 0.5f, 0.999f);
+                                }
+                            }
+                        }
+                        else if (Game1.mouseCursor == 0 && Game1.isActionAtCurrentCursorTile)
+                            Game1.mouseCursor = Game1.isInspectionAtCurrentCursorTile ? 5 : 2;
+                    }
+                    if (!Game1.options.hardwareCursor)
+                        Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.mouseCursor, 16, 16)), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
+                    Game1.wasMouseVisibleThisFrame = (double)Game1.mouseCursorTransparency > 0.0;
+                }
+            }
+            label_20:
+            Game1.mouseCursor = 0;
+            if (Game1.isActionAtCurrentCursorTile || Game1.activeClickableMenu != null)
+                return;
+            Game1.mouseCursorTransparency = 1f;
+        }
+
+        public void drawMouse()
+        {
+            
+            if ((Game1.getOldMouseX() != 0 || Game1.getOldMouseY() != 0) && Game1.currentLocation != null)
+            {
+                if ((double)Game1.mouseCursorTransparency <= 0.0 || !Utility.canGrabSomethingFromHere(Game1.getOldMouseX() + Game1.viewport.X, Game1.getOldMouseY() + Game1.viewport.Y, Game1.player) || Game1.mouseCursor == 3)
+                {
+                    if (Game1.player.ActiveObject != null && Game1.mouseCursor != 3 && !Game1.eventUp)
+                    {
+                        if ((double)Game1.mouseCursorTransparency >= 0.0 || Game1.options.showPlacementTileForGamepad)
+                        {
+                            Game1.player.ActiveObject.drawPlacementBounds(Game1.spriteBatch, Game1.currentLocation);
+                            if ((double)Game1.mouseCursorTransparency >= 0.0)
+                            {
+                                bool flag = Utility.playerCanPlaceItemHere(Game1.currentLocation, Game1.player.CurrentItem, Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y, Game1.player) || Utility.isThereAnObjectHereWhichAcceptsThisItem(Game1.currentLocation, Game1.player.CurrentItem, Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y) && Utility.withinRadiusOfPlayer(Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y, 1, Game1.player);
+                                Game1.player.CurrentItem.drawInMenu(Game1.spriteBatch, new Vector2((float)(Game1.getMouseX() + 16), (float)(Game1.getMouseY() + 16)), flag ? (float)((double)Game1.dialogueButtonScale / 75.0 + 1.0) : 1f, flag ? 1f : 0.5f, 0.999f);
+                            }
+                        }
+                    }
+                    else if (Game1.mouseCursor == 0 && Game1.isActionAtCurrentCursorTile)
+                    {
+                        
+                        Game1.mouseCursor = Game1.isInspectionAtCurrentCursorTile ? 5 : 2;
+                    }
+                }
+                if (!Game1.options.hardwareCursor)
+                {
+                    
+                    Game1.mouseCursorTransparency = 0.0001f;
+                    Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.mouseCursor, 16, 16)), Color.White, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
+                   
+                }
+                    Game1.wasMouseVisibleThisFrame = (double)Game1.mouseCursorTransparency > 0.0;
+            }
+
+            /*
+            Game1.mouseCursorTransparency = 0;
+            if(Game1.mouseCursor!=5|| Game1.mouseCursor != 2)
+            {
+                Game1.mouseCursor = 0;
+                Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMousePosition().X, (float)Game1.getMousePosition().Y), new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.mouseCursor, 16, 16)), Color.White, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
+            }
+            */
+            
+            
+        }
 
 
         protected void drawOverlays()
@@ -350,8 +472,8 @@ namespace ShaderExample
             {
                 v.draw(spriteBatch);
             }
-            //if ((Game1.displayHUD || Game1.eventUp) && (Game1.currentBillboard == 0 && Game1.gameMode == (byte)3) && (!Game1.freezeControls && !Game1.panMode))
-            //Game1.drawMouseCursor();
+            if ((Game1.displayHUD || Game1.eventUp) && (Game1.currentBillboard == 0 && Game1.gameMode == (byte)3) && (!Game1.freezeControls && !Game1.panMode))
+                drawMouse();
             //spriteBatch.End();
         }
     }
