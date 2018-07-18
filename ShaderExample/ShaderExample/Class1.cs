@@ -45,12 +45,7 @@ namespace ShaderExample
         }
 
         private void GraphicsEvents_OnPreRenderEvent(object sender, EventArgs e)
-        {
-
-          
-
-            
-
+        { 
             try
             {
                 Game1.spriteBatch.End();
@@ -65,7 +60,6 @@ namespace ShaderExample
                 SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
                 Class1.effect.CurrentTechnique.Passes[0].Apply();
                 Game1.activeClickableMenu.draw(Game1.spriteBatch);
-                Monitor.Log("DRAW");
                 Game1.spriteBatch.End();
             }
 
@@ -115,6 +109,60 @@ namespace ShaderExample
                 Class1.effect.CurrentTechnique.Passes[0].Apply();
                 Game1.activeClickableMenu.draw(Game1.spriteBatch);
                 Game1.spriteBatch.End();
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+                SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+                Class1.effect.CurrentTechnique.Passes[0].Apply();
+                if (Game1.activeClickableMenu is StardewValley.Menus.GameMenu)
+                {
+                    if ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 3) return;
+                    //Draw menu tabs.
+                    var tabField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "tabs");
+                    var tabs = (List<ClickableComponent>)tabField;
+                    foreach (ClickableComponent tab in tabs)
+                    {
+                        int num = 0;
+                        switch (tab.name)
+                        {
+                            case "catalogue":
+                                num = 7;
+                                break;
+                            case "collections":
+                                num = 5;
+                                break;
+                            case "coop":
+                                num = 1;
+                                break;
+                            case "crafting":
+                                num = 4;
+                                break;
+                            case "exit":
+                                num = 7;
+                                break;
+                            case "inventory":
+                                num = 0;
+                                break;
+                            case "map":
+                                num = 3;
+                                break;
+                            case "options":
+                                num = 6;
+                                break;
+                            case "skills":
+                                num = 1;
+                                break;
+                            case "social":
+                                num = 2;
+                                break;
+                        }
+                        Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)tab.bounds.X, (float)(tab.bounds.Y + ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == (Game1.activeClickableMenu as StardewValley.Menus.GameMenu).getTabNumberFromName(tab.name) ? 8 : 0))), new Rectangle?(new Rectangle(num * 16, 368, 16, 16)), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.00001f);
+                        if (tab.name.Equals("skills"))
+                            Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2((float)(tab.bounds.X + 8), (float)(tab.bounds.Y + 12 + ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == (Game1.activeClickableMenu as StardewValley.Menus.GameMenu).getTabNumberFromName(tab.name) ? 8 : 0))), 0.00011f, 3f, 2, Game1.player);
+                    }
+                }
+                
+                Game1.activeClickableMenu.upperRightCloseButton.draw(Game1.spriteBatch);
+                Game1.activeClickableMenu.drawMouse(Game1.spriteBatch);
+                Game1.spriteBatch.End();
             }
             //Location specific drawing done here
 
@@ -122,6 +170,8 @@ namespace ShaderExample
             //Game1.spriteBatch.End();
 
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+            Class1.effect.CurrentTechnique.Passes[0].Apply();
         }
 
 
@@ -160,6 +210,13 @@ namespace ShaderExample
             //Game1.spriteBatch.End();
         }
 
+        /// <summary>
+        /// Returns the value of the data snagged by reflection.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="instance"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
         public static object GetInstanceField(Type type, object instance, string fieldName)
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
