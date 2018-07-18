@@ -162,14 +162,65 @@ namespace ShaderExample
 
                 if ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 2)
                 {
+                    
+
                     var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
                     var pages = (List<IClickableMenu>)pageField;
-                    var v = pages.ElementAt(2);
+                    var socialPage = pages.ElementAt(2);
+                    var v = (StardewValley.Menus.SocialPage)socialPage;
                     if (v == null)
                     {
                         Monitor.Log("WHATTT?????");
                     }
+                    v = (StardewValley.Menus.SocialPage)v;
+
+
+                    int numFarmers = (int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "numFarmers");
+
+                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 128 + 4, true
+                        });
+                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 192 + 32 + 20, true
+                        });
+                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 320 + 36, true
+                        });
+                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 384 + 32 + 52, true
+                        });
+                    Rectangle scissorRectangle = Game1.spriteBatch.GraphicsDevice.ScissorRectangle;
+                    Rectangle rectangle = scissorRectangle;
+                    rectangle.Y = Math.Max(0, rowPosition(v,numFarmers - 1));
+                    rectangle.Height -= rectangle.Y;
+                    Game1.spriteBatch.GraphicsDevice.ScissorRectangle = rectangle;
+                    try
+                    {
+                           
+                        getInvokeMethod(v, "drawVerticalPartition", new object[]
+                        {
+                            Game1.spriteBatch,
+                             v.xPositionOnScreen + 256 + 12,
+                             true
+                        });
+                    }
+                    finally
+                    {
+                        Game1.spriteBatch.GraphicsDevice.ScissorRectangle = scissorRectangle;
+                    }
+                    getInvokeMethod(v, "drawVerticalPartition", new object[]
+                        {
+                            Game1.spriteBatch,
+                             v.xPositionOnScreen + 256 + 12+340,
+                             true
+                        });
+
+
+
                     int slotPosition2=(int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "slotPosition");
+
+
+
 
                     var sprites = (List<ClickableTextureComponent>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "sprites");
                     var names = (List<object>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "names");
@@ -187,12 +238,20 @@ namespace ShaderExample
                                     });
                         }
                     }
+
+
+                    (GetInstanceField(typeof(SocialPage),v,"upButton") as ClickableTextureComponent).draw(Game1.spriteBatch);
+                    (GetInstanceField(typeof(SocialPage), v, "downButton") as ClickableTextureComponent).draw(Game1.spriteBatch);
+                    Rectangle scrollBarRunner=(Rectangle)(GetInstanceField(typeof(SocialPage), v, "scrollBarRunner"));
+                    IClickableMenu.drawTextureBox(Game1.spriteBatch, Game1.mouseCursors, new Rectangle(403, 383, 6, 6), scrollBarRunner.X, scrollBarRunner.Y, scrollBarRunner.Width, scrollBarRunner.Height, Color.White, 4f, true);
+                    (GetInstanceField(typeof(SocialPage), v, "scrollBar") as ClickableTextureComponent).draw(Game1.spriteBatch);
+                    string hoverText = (GetInstanceField(typeof(SocialPage), v, "hoverText") as string);
+                    if (!hoverText.Equals(""))
+                        IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.smallFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
                 }
-
                 
-               
 
-                
+
                 Game1.activeClickableMenu.upperRightCloseButton.draw(Game1.spriteBatch);
                 Game1.activeClickableMenu.drawMouse(Game1.spriteBatch);
                 Game1.spriteBatch.End();
@@ -207,7 +266,13 @@ namespace ShaderExample
             Class1.effect.CurrentTechnique.Passes[0].Apply();
         }
 
-
+        private int rowPosition(IClickableMenu menu,int i)
+        {
+            int slotPosition2 = (int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), menu, "slotPosition");
+            int num1 = i - slotPosition2;
+            int num2 = 112;
+            return menu.yPositionOnScreen + IClickableMenu.borderWidth + 160 + 4 + num1 * num2;
+        }
 
 
 
