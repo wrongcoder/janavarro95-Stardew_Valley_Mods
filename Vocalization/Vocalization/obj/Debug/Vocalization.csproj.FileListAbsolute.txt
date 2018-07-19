@@ -8,3 +8,4 @@ C:\Users\iD Student\Desktop\Stardew\Vocalization\Vocalization\bin\Debug\Netcode.
 C:\Users\iD Student\Desktop\Stardew\Vocalization\Vocalization\obj\Debug\Vocalization.csproj.CopyComplete
 C:\Users\iD Student\Desktop\Stardew\Vocalization\Vocalization\bin\Debug\SimpleSoundManager.dll
 C:\Users\iD Student\Desktop\Stardew\Vocalization\Vocalization\bin\Debug\SimpleSoundManager.pdb
+C:\Users\iD Student\Desktop\Stardew\Vocalization\Vocalization\obj\Debug\Vocalization.csprojResolveAssemblyReference.cache

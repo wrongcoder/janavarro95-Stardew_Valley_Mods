@@ -138,6 +138,7 @@ namespace Vocalization.Framework
                 dataFileNames.Add("EngagementDialogue.xnb");
 
                 stringsFileNames.Add("StringsFromCSFiles.xnb");
+                stringsFileNames.Add(name + ".xnb");
             }
 
 

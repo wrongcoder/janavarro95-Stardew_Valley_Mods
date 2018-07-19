@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -70,6 +71,9 @@ namespace Vocalization
      * 
      * Utility
      *  -Strings/StringsFromCS.yaml
+     *  
+     *  Quests
+     *  -Strings/Quests
      */
 
     /// <summary>
@@ -123,10 +127,23 @@ namespace Vocalization
     ///     -NPC.cs
     ///     -Utility.cs
     /// 
-    /// !!!!!!!!!Make moddable to support other languages, portuguese, russian, etc (Needs testing)
+    /// Make moddable to support other languages, portuguese, russian, etc (Needs testing)
     ///     -make mod config have a list of supported languages and a variable that is the currently selected language.
     ///     
+    /// Remove text typing sound from game? (done) Just turn off the option for Game1.options.dialogueTyping.
+    ///     
     /// Add support for adding dialogue lines when loading CharacterVoiceCue.json if the line doesn't already exist! (done)
+    /// 
+    /// 
+    /// 
+    /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /// -Quests (done)
+    /// -NPC Gift tastes
+    /// speach bubbles
+    /// -temp
+    /// -ui
+    /// /// 
+    /// 
     /// </summary>
     public class Vocalization : Mod
     {
@@ -143,6 +160,8 @@ namespace Vocalization
         /// </summary>
         public static SimpleSoundManager.Framework.SoundManager soundManager;
 
+
+        
         /// <summary>
         /// The path to the folder where all of the NPC folders for dialogue .wav files are kept.
         /// </summary>
@@ -164,7 +183,9 @@ namespace Vocalization
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
-            ModMonitor = Monitor;
+            Effect eff;
+            eff.pa
+                ModMonitor = Monitor;
             ModHelper = Helper;
             DialogueCues = new Dictionary<string, CharacterVoiceCue>();
             replacementStrings = new ReplacementStrings();
@@ -380,11 +401,6 @@ namespace Vocalization
             string voicePath = Path.Combine(audioPath, "VoiceFiles");
 
 
-            List<string> translationFolders = new List<string>();
-
-            //TODO: Add more translations.
-            translationFolders.Add(Path.Combine(voicePath, "English"));
-
             VoicePath = voicePath; //Set a static reference to my voice files directory.
 
             List<string> characterDialoguePaths = new List<string>();
@@ -394,7 +410,7 @@ namespace Vocalization
             {
                 foreach(var NPC in loc.characters)
                 {
-                    foreach (var translation in translationFolders)
+                    foreach (var translation in config.translations)
                     {
                         string characterPath = Path.Combine(translation, NPC.Name);
                         characterDialoguePaths.Add(characterPath);
@@ -403,64 +419,64 @@ namespace Vocalization
             }
 
             //Add in folder for TV Shows
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string TVPath = Path.Combine(translation, "TV");
                 characterDialoguePaths.Add(TVPath);
             }
 
             //Add in folder for shop support
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string shop = Path.Combine(translation, "Shops"); //Used to hold NPC Shops
                 characterDialoguePaths.Add(shop);
             }
 
             //Add in folder for Mail support.
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string mail = Path.Combine(translation, "Mail");
                 characterDialoguePaths.Add(mail);
             }
 
             //Add in folder for ExtraDiaogue.yaml
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string extra = Path.Combine(translation, "ExtraDialogue");
                 characterDialoguePaths.Add(extra);
             }
 
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string extra = Path.Combine(translation, "Events");
                 characterDialoguePaths.Add(extra);
             }
 
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string extra = Path.Combine(translation, "Characters");
                 characterDialoguePaths.Add(extra);
             }
 
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string extra = Path.Combine(translation, "LocationDialogue");
                 characterDialoguePaths.Add(extra);
             }
 
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string extra = Path.Combine(translation, "Notes");
                 characterDialoguePaths.Add(extra);
             }
 
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string extra = Path.Combine(translation, "Utility");
                 characterDialoguePaths.Add(extra);
             }
 
-            foreach (var translation in translationFolders)
+            foreach (var translation in config.translations)
             {
                 string kent = Path.Combine(translation, "Kent");
                 characterDialoguePaths.Add(kent);
@@ -483,13 +499,20 @@ namespace Vocalization
             }
 
 
+
+            foreach (var translation in config.translations)
+            {
+                string extra = Path.Combine(translation, "Quests");
+                characterDialoguePaths.Add(extra);
+            }
+
             if (!Directory.Exists(contentPath)) Directory.CreateDirectory(contentPath);
             if (!Directory.Exists(audioPath)) Directory.CreateDirectory(audioPath);
             if (!Directory.Exists(voicePath)) Directory.CreateDirectory(voicePath);
 
 
             //Create all of the necessary folders for different translations.
-            foreach(var dir in translationFolders)
+            foreach(var dir in config.translations)
             {
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             }
@@ -997,6 +1020,55 @@ namespace Vocalization
 
             }
 
+            else if (cue.name == "Quests")
+            {
+                foreach (var fileName in cue.stringsFileNames)
+                {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
+                    string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                    string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                    if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                    {
+                        ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                        continue; //If the file is not found for some reason...
+                    }
+                    var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+                        //Scrape the whole dictionary looking for the character's name.
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            //Get the key in the dictionary
+                            string key = pair.Key;
+                            string rawDialogue = pair.Value;
+                        //If the key contains the character's name.
+
+                        List<string> strippedRawQuestDialogue = new List<string>();
+                        List<string> strippedFreshQuestDialogue = new List<string>();
+                        strippedRawQuestDialogue = rawDialogue.Split('/').ToList();
+                        string prompt = strippedRawQuestDialogue.ElementAt(2);
+                        string response = strippedRawQuestDialogue.ElementAt(strippedRawQuestDialogue.Count - 1);
+
+                        strippedFreshQuestDialogue.Add(prompt);
+                        if (response != "true" || response != "false")
+                        {
+                            strippedFreshQuestDialogue.Add(response);
+                        }
+                       
+                        List<string> cleanDialogues = new List<string>();
+                        foreach (var dia in strippedFreshQuestDialogue)
+                        {
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            foreach (var str in cleanDialogues)
+                            {
+                                cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                            }
+                        }
+                        }
+                        continue;
+                    
+
+                }
+                }
+
             //Dialogue scrape for npc specific text.
             else
             {
@@ -1176,6 +1248,34 @@ namespace Vocalization
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
                             }
+                        }
+                        continue;
+                    }
+
+                    if (fileName.Contains(cue.name))
+                    {
+                        dialoguePath2 = Path.Combine(stringsPath,"schedules", fileName);
+                        root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                        if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                        {
+                            ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                            continue; //If the file is not found for some reason...
+                        }
+                        DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+                        //Scrape the whole dictionary looking for the character's name.
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            //Get the key in the dictionary
+                            string key = pair.Key;
+                            string rawDialogue = pair.Value;
+                            //If the key contains the character's name.
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
+                            
                         }
                         continue;
                     }

@@ -283,8 +283,14 @@ namespace ShaderExample
                     }
 
                 }
+                try
+                {
+                    Game1.activeClickableMenu.upperRightCloseButton.draw(Game1.spriteBatch);
+                }
+                catch(Exception err)
+                {
 
-                Game1.activeClickableMenu.upperRightCloseButton.draw(Game1.spriteBatch);
+                }
                 Game1.activeClickableMenu.drawMouse(Game1.spriteBatch);
                 Game1.spriteBatch.End();
             }
