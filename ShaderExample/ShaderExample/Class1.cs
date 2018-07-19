@@ -167,6 +167,7 @@ namespace ShaderExample
 
                     var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
                     var pages = (List<IClickableMenu>)pageField;
+
                     var socialPage = pages.ElementAt(2);
                     var v = (StardewValley.Menus.SocialPage)socialPage;
                     if (v == null)
@@ -251,7 +252,16 @@ namespace ShaderExample
                         IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.smallFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
                 }
                 
+                if((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 4)
+                {
+                    var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
+                    var pages = (List<IClickableMenu>)pageField;
 
+                    var craftingPage = pages.ElementAt(4);
+                    Monitor.Log(craftingPage.GetType().ToString());
+                    var v = (StardewValley.Menus.CraftingPage)craftingPage;
+                   Framework.Drawers.Menus.craftingPageDraw((craftingPage as StardewValley.Menus.CraftingPage), Game1.spriteBatch);
+                }
 
                 Game1.activeClickableMenu.upperRightCloseButton.draw(Game1.spriteBatch);
                 Game1.activeClickableMenu.drawMouse(Game1.spriteBatch);
@@ -265,7 +275,7 @@ namespace ShaderExample
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
             Class1.effect.CurrentTechnique.Passes[0].Apply();
-            Monitor.Log(Game1.getMousePosition().ToString());
+            if(Game1.activeClickableMenu==null&& Game1.eventUp==false)getInvokeMethod(Program.gamePtr, "drawHUD", new object[] { });
             drawMouse();
             Game1.spriteBatch.End();
 
@@ -276,7 +286,6 @@ namespace ShaderExample
             drawMouse();
         }
 
-        
 
         private int rowPosition(IClickableMenu menu,int i)
         {
@@ -285,7 +294,7 @@ namespace ShaderExample
             int num2 = 112;
             return menu.yPositionOnScreen + IClickableMenu.borderWidth + 160 + 4 + num1 * num2;
         }
-
+        
 
 
         public void drawMapPart1()
@@ -304,10 +313,10 @@ namespace ShaderExample
             //Game1.spriteBatch.End();
         }
 
-        public void getInvokeMethod(object target, string name ,object[] param)
+        public static object getInvokeMethod(object target, string name ,object[] param)
         {
             var hello=target.GetType().GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic| BindingFlags.Instance| BindingFlags.Static);
-            hello.Invoke(target, param);
+            return hello.Invoke(target, param);
         }
 
         public void drawMapPart2()
@@ -335,9 +344,19 @@ namespace ShaderExample
         /// <returns></returns>
         public static object GetInstanceField(Type type, object instance, string fieldName)
         {
-            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
-                | BindingFlags.Static;
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic| BindingFlags.Static;
             FieldInfo field = type.GetField(fieldName, bindFlags);
+            /*
+            FieldInfo[] meh = type.GetFields(bindFlags);
+            foreach(var v in meh)
+            {
+                if (v.Name == null)
+                {
+                    continue;
+                }
+                Monitor.Log(v.Name);
+            }
+            */
             return field.GetValue(instance);
         }
 
@@ -350,73 +369,9 @@ namespace ShaderExample
             return;
         }
 
-        public void mouse(SpriteBatch b)
-        {
-            if (Game1.options.hardwareCursor)
-                return;
-            b.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, !Game1.options.snappyMenus || !Game1.options.gamepadControls ? 0 : 44, 16, 16)), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
-        }
-
-        public void drawMouseCursor()
-        { 
-            InputState input =(InputState) GetInstanceField(typeof(Game1), Program.gamePtr, "input");
-            if (Game1.timerUntilMouseFade > 0)
-            {
-                Game1.timerUntilMouseFade -= Game1.currentGameTime.ElapsedGameTime.Milliseconds;
-                if (Game1.timerUntilMouseFade <= 0)
-                    Game1.lastMousePositionBeforeFade = Game1.getMousePosition();
-            }
-            if (Game1.options.gamepadControls && Game1.timerUntilMouseFade <= 0 && Game1.activeClickableMenu == null)
-            {
-                Game1.mouseCursorTransparency = 0.0f;
-                if (Program.gamePtr.IsActive)
-                {
-                    IClickableMenu activeClickableMenu = Game1.activeClickableMenu;
-                }
-            }
-            if (Game1.activeClickableMenu == null && Game1.mouseCursor > -1)
-            {
-                MouseState mouseState =input.GetMouseState();
-                if (mouseState.X == 0)
-                {
-                    mouseState = input.GetMouseState();
-                    if (mouseState.Y == 0)
-                        goto label_20;
-                }
-                if ((Game1.getOldMouseX() != 0 || Game1.getOldMouseY() != 0) && Game1.currentLocation != null)
-                {
-                    if ((double)Game1.mouseCursorTransparency <= 0.0 || !Utility.canGrabSomethingFromHere(Game1.getOldMouseX() + Game1.viewport.X, Game1.getOldMouseY() + Game1.viewport.Y, Game1.player) || Game1.mouseCursor == 3)
-                    {
-                        if (Game1.player.ActiveObject != null && Game1.mouseCursor != 3 && !Game1.eventUp)
-                        {
-                            if ((double)Game1.mouseCursorTransparency > 0.0 || Game1.options.showPlacementTileForGamepad)
-                            {
-                                Game1.player.ActiveObject.drawPlacementBounds(Game1.spriteBatch, Game1.currentLocation);
-                                if ((double)Game1.mouseCursorTransparency > 0.0)
-                                {
-                                    bool flag = Utility.playerCanPlaceItemHere(Game1.currentLocation, Game1.player.CurrentItem, Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y, Game1.player) || Utility.isThereAnObjectHereWhichAcceptsThisItem(Game1.currentLocation, Game1.player.CurrentItem, Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y) && Utility.withinRadiusOfPlayer(Game1.getMouseX() + Game1.viewport.X, Game1.getMouseY() + Game1.viewport.Y, 1, Game1.player);
-                                    Game1.player.CurrentItem.drawInMenu(Game1.spriteBatch, new Vector2((float)(Game1.getMouseX() + 16), (float)(Game1.getMouseY() + 16)), flag ? (float)((double)Game1.dialogueButtonScale / 75.0 + 1.0) : 1f, flag ? 1f : 0.5f, 0.999f);
-                                }
-                            }
-                        }
-                        else if (Game1.mouseCursor == 0 && Game1.isActionAtCurrentCursorTile)
-                            Game1.mouseCursor = Game1.isInspectionAtCurrentCursorTile ? 5 : 2;
-                    }
-                    if (!Game1.options.hardwareCursor)
-                        Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.mouseCursor, 16, 16)), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
-                    Game1.wasMouseVisibleThisFrame = (double)Game1.mouseCursorTransparency > 0.0;
-                }
-            }
-            label_20:
-            Game1.mouseCursor = 0;
-            if (Game1.isActionAtCurrentCursorTile || Game1.activeClickableMenu != null)
-                return;
-            Game1.mouseCursorTransparency = 1f;
-        }
-
         public void drawMouse()
         {
-            
+
             if ((Game1.getOldMouseX() != 0 || Game1.getOldMouseY() != 0) && Game1.currentLocation != null)
             {
                 if ((double)Game1.mouseCursorTransparency <= 0.0 || !Utility.canGrabSomethingFromHere(Game1.getOldMouseX() + Game1.viewport.X, Game1.getOldMouseY() + Game1.viewport.Y, Game1.player) || Game1.mouseCursor == 3)
@@ -435,18 +390,18 @@ namespace ShaderExample
                     }
                     else if (Game1.mouseCursor == 0 && Game1.isActionAtCurrentCursorTile)
                     {
-                        
+
                         Game1.mouseCursor = Game1.isInspectionAtCurrentCursorTile ? 5 : 2;
                     }
                 }
                 if (!Game1.options.hardwareCursor)
                 {
-                    
+
                     Game1.mouseCursorTransparency = 0.0001f;
                     Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.mouseCursor, 16, 16)), Color.White, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
-                   
+
                 }
-                    Game1.wasMouseVisibleThisFrame = (double)Game1.mouseCursorTransparency > 0.0;
+                Game1.wasMouseVisibleThisFrame = (double)Game1.mouseCursorTransparency > 0.0;
             }
 
             /*
@@ -457,10 +412,9 @@ namespace ShaderExample
                 Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMousePosition().X, (float)Game1.getMousePosition().Y), new Microsoft.Xna.Framework.Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.mouseCursor, 16, 16)), Color.White, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
             }
             */
-            
-            
-        }
 
+
+        }
 
         protected void drawOverlays()
         {
