@@ -49,6 +49,7 @@
     <Compile Include="Framework\Delegates.cs" />
     <Compile Include="Framework\Drawers\Characters.cs" />
     <Compile Include="Framework\Drawers\Layer.cs" />
+    <Compile Include="Framework\Drawers\Menus.cs" />
     <Compile Include="Framework\Drawers\Monsters.cs" />
     <Compile Include="Framework\DrawManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

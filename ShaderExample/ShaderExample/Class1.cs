@@ -74,7 +74,7 @@ namespace ShaderExample
             drawMapPart1();
             Game1.spriteBatch.End();
 
-
+            /*
             Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             Framework.Drawers.Characters.drawFarmer();
             Framework.Drawers.Characters.drawCharacters();
@@ -90,16 +90,36 @@ namespace ShaderExample
                     index++;
                 }
             }
+            
             Game1.spriteBatch.End();
+            */
 
             //Game1.spriteBatch.End();
 
             //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             //drawFront();
 
-            Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            drawMapPart2();
+            //The perfect map draw order.
+            Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+            //drawMapPart2();
+            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            AHHHH();
+            Game1.spriteBatch.End();
 
+            
+            Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            Game1.player.currentLocation.drawAboveFrontLayer(Game1.spriteBatch);
+            if (Game1.currentLocation.Map.GetLayer("AlwaysFront") != null)
+            {
+                Game1.mapDisplayDevice.BeginScene(Game1.spriteBatch);
+                Game1.currentLocation.Map.GetLayer("AlwaysFront").Draw(Game1.mapDisplayDevice, Game1.viewport, Location.Origin, false, 4);
+                Game1.mapDisplayDevice.EndScene();
+            }
+            //Game1.currentLocation.drawAboveAlwaysFrontLayer(Game1.spriteBatch);
+            Game1.player.currentLocation.drawAboveAlwaysFrontLayer(Game1.spriteBatch);
             drawOverlays();
             Game1.spriteBatch.End();
 
@@ -159,108 +179,109 @@ namespace ShaderExample
                         if (tab.name.Equals("skills"))
                             Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2((float)(tab.bounds.X + 8), (float)(tab.bounds.Y + 12 + ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == (Game1.activeClickableMenu as StardewValley.Menus.GameMenu).getTabNumberFromName(tab.name) ? 8 : 0))), 0.00011f, 3f, 2, Game1.player);
                     }
-                }
 
-                if ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 2)
-                {
-                    
-
-                    var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
-                    var pages = (List<IClickableMenu>)pageField;
-
-                    var socialPage = pages.ElementAt(2);
-                    var v = (StardewValley.Menus.SocialPage)socialPage;
-                    if (v == null)
+                    if ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 2)
                     {
-                        Monitor.Log("WHATTT?????");
-                    }
-                    v = (StardewValley.Menus.SocialPage)v;
 
 
-                    int numFarmers = (int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "numFarmers");
+                        var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
+                        var pages = (List<IClickableMenu>)pageField;
 
-                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        var socialPage = pages.ElementAt(2);
+                        var v = (StardewValley.Menus.SocialPage)socialPage;
+                        if (v == null)
+                        {
+                            Monitor.Log("WHATTT?????");
+                        }
+                        v = (StardewValley.Menus.SocialPage)v;
+
+
+                        int numFarmers = (int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "numFarmers");
+
+                        getInvokeMethod(v, "drawHorizontalPartition", new object[]{
                         Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 128 + 4, true
                         });
-                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        getInvokeMethod(v, "drawHorizontalPartition", new object[]{
                         Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 192 + 32 + 20, true
                         });
-                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        getInvokeMethod(v, "drawHorizontalPartition", new object[]{
                         Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 320 + 36, true
                         });
-                    getInvokeMethod(v, "drawHorizontalPartition", new object[]{
+                        getInvokeMethod(v, "drawHorizontalPartition", new object[]{
                         Game1.spriteBatch, v.yPositionOnScreen + IClickableMenu.borderWidth + 384 + 32 + 52, true
                         });
-                    Rectangle scissorRectangle = Game1.spriteBatch.GraphicsDevice.ScissorRectangle;
-                    Rectangle rectangle = scissorRectangle;
-                    rectangle.Y = Math.Max(0, rowPosition(v,numFarmers - 1));
-                    rectangle.Height -= rectangle.Y;
-                    Game1.spriteBatch.GraphicsDevice.ScissorRectangle = rectangle;
-                    try
-                    {
-                           
-                        getInvokeMethod(v, "drawVerticalPartition", new object[]
+                        Rectangle scissorRectangle = Game1.spriteBatch.GraphicsDevice.ScissorRectangle;
+                        Rectangle rectangle = scissorRectangle;
+                        rectangle.Y = Math.Max(0, rowPosition(v, numFarmers - 1));
+                        rectangle.Height -= rectangle.Y;
+                        Game1.spriteBatch.GraphicsDevice.ScissorRectangle = rectangle;
+                        try
                         {
+
+                            getInvokeMethod(v, "drawVerticalPartition", new object[]
+                            {
                             Game1.spriteBatch,
                              v.xPositionOnScreen + 256 + 12,
                              true
-                        });
-                    }
-                    finally
-                    {
-                        Game1.spriteBatch.GraphicsDevice.ScissorRectangle = scissorRectangle;
-                    }
-                    getInvokeMethod(v, "drawVerticalPartition", new object[]
+                            });
+                        }
+                        finally
                         {
+                            Game1.spriteBatch.GraphicsDevice.ScissorRectangle = scissorRectangle;
+                        }
+                        getInvokeMethod(v, "drawVerticalPartition", new object[]
+                            {
                             Game1.spriteBatch,
                              v.xPositionOnScreen + 256 + 12+340,
                              true
-                        });
+                            });
 
 
 
-                    int slotPosition2=(int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "slotPosition");
+                        int slotPosition2 = (int)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "slotPosition");
 
 
 
 
-                    var sprites = (List<ClickableTextureComponent>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "sprites");
-                    var names = (List<object>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "names");
-                    for (int slotPosition = slotPosition2; slotPosition < slotPosition2 + 5; ++slotPosition)
-                    {
-                        if (slotPosition < sprites.Count)
+                        var sprites = (List<ClickableTextureComponent>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "sprites");
+                        var names = (List<object>)GetInstanceField(typeof(StardewValley.Menus.SocialPage), v, "names");
+                        for (int slotPosition = slotPosition2; slotPosition < slotPosition2 + 5; ++slotPosition)
                         {
-                            if (names[slotPosition] is string)
-                                getInvokeMethod(v, "drawNPCSlot", new object[]{
+                            if (slotPosition < sprites.Count)
+                            {
+                                if (names[slotPosition] is string)
+                                    getInvokeMethod(v, "drawNPCSlot", new object[]{
                                     Game1.spriteBatch, slotPosition
                                     });
-                            else if (names[slotPosition] is long)
-                                getInvokeMethod(v, "drawFarmerSlot", new object[]{
+                                else if (names[slotPosition] is long)
+                                    getInvokeMethod(v, "drawFarmerSlot", new object[]{
                                     Game1.spriteBatch, slotPosition
                                     });
+                            }
                         }
+
+
+                        (GetInstanceField(typeof(SocialPage), v, "upButton") as ClickableTextureComponent).draw(Game1.spriteBatch);
+                        (GetInstanceField(typeof(SocialPage), v, "downButton") as ClickableTextureComponent).draw(Game1.spriteBatch);
+                        Rectangle scrollBarRunner = (Rectangle)(GetInstanceField(typeof(SocialPage), v, "scrollBarRunner"));
+                        IClickableMenu.drawTextureBox(Game1.spriteBatch, Game1.mouseCursors, new Rectangle(403, 383, 6, 6), scrollBarRunner.X, scrollBarRunner.Y, scrollBarRunner.Width, scrollBarRunner.Height, Color.White, 4f, true);
+                        (GetInstanceField(typeof(SocialPage), v, "scrollBar") as ClickableTextureComponent).draw(Game1.spriteBatch);
+                        string hoverText = (GetInstanceField(typeof(SocialPage), v, "hoverText") as string);
+                        if (!hoverText.Equals(""))
+                            IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.smallFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
                     }
 
+                    if ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 4)
+                    {
+                        var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
+                        var pages = (List<IClickableMenu>)pageField;
 
-                    (GetInstanceField(typeof(SocialPage),v,"upButton") as ClickableTextureComponent).draw(Game1.spriteBatch);
-                    (GetInstanceField(typeof(SocialPage), v, "downButton") as ClickableTextureComponent).draw(Game1.spriteBatch);
-                    Rectangle scrollBarRunner=(Rectangle)(GetInstanceField(typeof(SocialPage), v, "scrollBarRunner"));
-                    IClickableMenu.drawTextureBox(Game1.spriteBatch, Game1.mouseCursors, new Rectangle(403, 383, 6, 6), scrollBarRunner.X, scrollBarRunner.Y, scrollBarRunner.Width, scrollBarRunner.Height, Color.White, 4f, true);
-                    (GetInstanceField(typeof(SocialPage), v, "scrollBar") as ClickableTextureComponent).draw(Game1.spriteBatch);
-                    string hoverText = (GetInstanceField(typeof(SocialPage), v, "hoverText") as string);
-                    if (!hoverText.Equals(""))
-                        IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.smallFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
-                }
-                
-                if((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 4)
-                {
-                    var pageField = GetInstanceField(typeof(StardewValley.Menus.GameMenu), Game1.activeClickableMenu, "pages");
-                    var pages = (List<IClickableMenu>)pageField;
+                        var craftingPage = pages.ElementAt(4);
+                        Monitor.Log(craftingPage.GetType().ToString());
+                        var v = (StardewValley.Menus.CraftingPage)craftingPage;
+                        Framework.Drawers.Menus.craftingPageDraw((craftingPage as StardewValley.Menus.CraftingPage), Game1.spriteBatch);
+                    }
 
-                    var craftingPage = pages.ElementAt(4);
-                    Monitor.Log(craftingPage.GetType().ToString());
-                    var v = (StardewValley.Menus.CraftingPage)craftingPage;
-                   Framework.Drawers.Menus.craftingPageDraw((craftingPage as StardewValley.Menus.CraftingPage), Game1.spriteBatch);
                 }
 
                 Game1.activeClickableMenu.upperRightCloseButton.draw(Game1.spriteBatch);
@@ -317,6 +338,78 @@ namespace ShaderExample
         {
             var hello=target.GetType().GetMethod(name, BindingFlags.Public | BindingFlags.NonPublic| BindingFlags.Instance| BindingFlags.Static);
             return hello.Invoke(target, param);
+        }
+
+
+        public void AHHHH()
+        {
+            if (!Game1.currentLocation.shouldHideCharacters())
+            {
+                if (Game1.CurrentEvent == null)
+                {
+                    foreach (NPC character in Game1.currentLocation.characters)
+                    {
+                        if (!(bool)(character.swimming) && !character.HideShadow && Game1.currentLocation.shouldShadowBeDrawnAboveBuildingsLayer(character.getTileLocation()))
+                            Game1.spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, character.Position + new Vector2((float)(character.Sprite.SpriteWidth * 4) / 2f, (float)(character.GetBoundingBox().Height + (character.IsMonster ? 0 : 12)))), new Microsoft.Xna.Framework.Rectangle?(Game1.shadowTexture.Bounds), Color.White, 0.0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), (float)(4.0 + (double)character.yJumpOffset / 40.0) * (float)(character.scale), SpriteEffects.None, Math.Max(0.0f, (float)character.getStandingY() / 10000f) - 1E-06f);
+                    }
+                }
+                else
+                {
+                    foreach (NPC actor in Game1.CurrentEvent.actors)
+                    {
+                        if (!(bool)(actor.swimming) && !actor.HideShadow && Game1.currentLocation.shouldShadowBeDrawnAboveBuildingsLayer(actor.getTileLocation()))
+                            Game1.spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, actor.Position + new Vector2((float)(actor.Sprite.SpriteWidth * 4) / 2f, (float)(actor.GetBoundingBox().Height + (actor.IsMonster ? 0 : 12)))), new Microsoft.Xna.Framework.Rectangle?(Game1.shadowTexture.Bounds), Color.White, 0.0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), (float)(4.0 + (double)actor.yJumpOffset / 40.0) * (float)(actor.scale), SpriteEffects.None, Math.Max(0.0f, (float)actor.getStandingY() / 10000f) - 1E-06f);
+                    }
+                }
+                foreach (Farmer farmer in Game1.currentLocation.farmers)
+                {
+                    if (!(bool)(farmer.swimming) && !farmer.isRidingHorse() && (Game1.currentLocation != null && Game1.currentLocation.shouldShadowBeDrawnAboveBuildingsLayer(farmer.getTileLocation())))
+                    {
+                        SpriteBatch spriteBatch = Game1.spriteBatch;
+                        Texture2D shadowTexture = Game1.shadowTexture;
+                        Vector2 local = Game1.GlobalToLocal(farmer.Position + new Vector2(32f, 24f));
+                        Microsoft.Xna.Framework.Rectangle? sourceRectangle = new Microsoft.Xna.Framework.Rectangle?(Game1.shadowTexture.Bounds);
+                        Color white = Color.White;
+                        double num1 = 0.0;
+                        Microsoft.Xna.Framework.Rectangle bounds = Game1.shadowTexture.Bounds;
+                        double x = (double)bounds.Center.X;
+                        bounds = Game1.shadowTexture.Bounds;
+                        double y = (double)bounds.Center.Y;
+                        Vector2 origin = new Vector2((float)x, (float)y);
+                        double num2 = 4.0 - (!farmer.running && !farmer.UsingTool || farmer.FarmerSprite.currentAnimationIndex <= 1 ? 0.0 : (double)Math.Abs(FarmerRenderer.featureYOffsetPerFrame[farmer.FarmerSprite.CurrentFrame]) * 0.5);
+                        int num3 = 0;
+                        double num4 = 0.0;
+                        spriteBatch.Draw(shadowTexture, local, sourceRectangle, white, (float)num1, origin, (float)num2, (SpriteEffects)num3, (float)num4);
+                    }
+                }
+            }
+            if ((Game1.eventUp || Game1.killScreen) && (!Game1.killScreen && Game1.currentLocation.currentEvent != null))
+                Game1.currentLocation.currentEvent.draw(Game1.spriteBatch);
+            if (Game1.player.currentUpgrade != null && Game1.player.currentUpgrade.daysLeftTillUpgradeDone <= 3 && Game1.currentLocation.Name.Equals("Farm"))
+                Game1.spriteBatch.Draw(Game1.player.currentUpgrade.workerTexture, Game1.GlobalToLocal(Game1.viewport, Game1.player.currentUpgrade.positionOfCarpenter), new Microsoft.Xna.Framework.Rectangle?(Game1.player.currentUpgrade.getSourceRectangle()), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, (float)(((double)Game1.player.currentUpgrade.positionOfCarpenter.Y + 48.0) / 10000.0));
+            Game1.currentLocation.draw(Game1.spriteBatch);
+            if (Game1.eventUp && Game1.currentLocation.currentEvent != null)
+            {
+                string messageToScreen = Game1.currentLocation.currentEvent.messageToScreen;
+            }
+            if (Game1.player.ActiveObject == null && (Game1.player.UsingTool || Game1.pickingTool) && (Game1.player.CurrentTool != null && (!Game1.player.CurrentTool.Name.Equals("Seeds") || Game1.pickingTool)))
+                Game1.drawTool(Game1.player);
+            if (Game1.currentLocation.Name.Equals("Farm"))
+                Monitor.Log("DRAW farm buildings here");
+                //getInvokeMethod((Game1.currentLocation as GameLocation), "drawFarmBuildings", new object[] { });
+            if (Game1.tvStation >= 0)
+                Game1.spriteBatch.Draw(Game1.tvStationTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2(400f, 160f)), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(Game1.tvStation * 24, 0, 24, 15)), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1E-08f);
+            if (Game1.panMode)
+            {
+                Game1.spriteBatch.Draw(Game1.fadeToBlackRect, new Microsoft.Xna.Framework.Rectangle((int)Math.Floor((double)(Game1.getOldMouseX() + Game1.viewport.X) / 64.0) * 64 - Game1.viewport.X, (int)Math.Floor((double)(Game1.getOldMouseY() + Game1.viewport.Y) / 64.0) * 64 - Game1.viewport.Y, 64, 64), Color.Lime * 0.75f);
+                foreach (Warp warp in (Game1.currentLocation.warps))
+                    Game1.spriteBatch.Draw(Game1.fadeToBlackRect, new Microsoft.Xna.Framework.Rectangle(warp.X * 64 - Game1.viewport.X, warp.Y * 64 - Game1.viewport.Y, 64, 64), Color.Red * 0.75f);
+            }
+            Game1.mapDisplayDevice.BeginScene(Game1.spriteBatch);
+            Game1.currentLocation.Map.GetLayer("Front").Draw(Game1.mapDisplayDevice, Game1.viewport, Location.Origin, false, 4);
+            Game1.mapDisplayDevice.EndScene();
+            //Game1.currentLocation.drawAboveFrontLayer(Game1.spriteBatch);
+            //Game1.spriteBatch.End();
         }
 
         public void drawMapPart2()
