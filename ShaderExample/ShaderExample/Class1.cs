@@ -40,12 +40,47 @@ namespace ShaderExample
 
             //StardewModdingAPI.Events.GraphicsEvents.OnPostRenderEvent += GraphicsEvents_OnPreRenderEvent1;
             effect = Helper.Content.Load<Effect>(Path.Combine("Content", "Shaders", "GreyScaleEffect.xnb"));
+        }
 
-
+        public void applyCurrentShader(bool ignoreOutdoorLight=false)
+        {
+            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            if (Game1.player.currentLocation != null && Game1.activeClickableMenu==null)
+            {
+                if (Game1.currentLocation.ignoreOutdoorLighting.Value == false&&ignoreOutdoorLight==false)
+                {
+                    //Monitor.Log("WTF");
+                    Monitor.Log(Game1.outdoorLight.ToString());
+                    Matrix projection = Matrix.CreateOrthographicOffCenter(0,Game1.graphics.GraphicsDevice.Viewport.Width, Game1.graphics.GraphicsDevice.Viewport.Height, 0, 0, 1);
+                    Matrix halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0);
+                    //effect.Parameters["MatrixTransform"].SetValue(halfPixelOffset * projection);
+                    effect.Parameters["ambientRed"].SetValue(Game1.outdoorLight.R);
+                    effect.Parameters["ambientGreen"].SetValue(Game1.outdoorLight.G);
+                    effect.Parameters["ambientBlue"].SetValue(Game1.outdoorLight.B);
+                    effect.Parameters["timeOfDay"].SetValue(Game1.timeOfDay);
+                }
+                else
+                {
+                    //Set to 255 to symbolize a white effect.
+                    effect.Parameters["ambientRed"].SetValue(255f);
+                    effect.Parameters["ambientGreen"].SetValue(255f);
+                    effect.Parameters["ambientBlue"].SetValue(255f);
+                    effect.Parameters["timeOfDay"].SetValue(600f);
+                }
+            }
+            else
+            {
+                effect.Parameters["ambientRed"].SetValue(255f);
+                effect.Parameters["ambientGreen"].SetValue(255f);
+                effect.Parameters["ambientBlue"].SetValue(255f);
+                effect.Parameters["timeOfDay"].SetValue(600f);
+            }
         }
 
         private void GraphicsEvents_OnPreRenderEvent(object sender, EventArgs e)
-        { 
+        {
+          
             try
             {
 
@@ -58,8 +93,7 @@ namespace ShaderExample
             if (Game1.activeClickableMenu != null)
             {
                 Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-                SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-                Class1.effect.CurrentTechnique.Passes[0].Apply();
+                applyCurrentShader();
                 Game1.activeClickableMenu.draw(Game1.spriteBatch);
                 Game1.spriteBatch.End();
             }
@@ -102,15 +136,13 @@ namespace ShaderExample
             //The perfect map draw order.
             Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             //drawMapPart2();
-            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            applyCurrentShader();
             AHHHH();
             Game1.spriteBatch.End();
 
             
             Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            applyCurrentShader();
             Game1.player.currentLocation.drawAboveFrontLayer(Game1.spriteBatch);
             if (Game1.currentLocation.Map.GetLayer("AlwaysFront") != null)
             {
@@ -120,19 +152,18 @@ namespace ShaderExample
             }
             //Game1.currentLocation.drawAboveAlwaysFrontLayer(Game1.spriteBatch);
             Game1.player.currentLocation.drawAboveAlwaysFrontLayer(Game1.spriteBatch);
-            drawOverlays();
+            
             Game1.spriteBatch.End();
+
 
             if (Game1.activeClickableMenu != null)
             {
                 Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-                SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-                Class1.effect.CurrentTechnique.Passes[0].Apply();
+                applyCurrentShader();
                 Game1.activeClickableMenu.draw(Game1.spriteBatch);
                 Game1.spriteBatch.End();
                 Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-                SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-                Class1.effect.CurrentTechnique.Passes[0].Apply();
+                applyCurrentShader();
                 if (Game1.activeClickableMenu is StardewValley.Menus.GameMenu)
                 {
                     if ((Game1.activeClickableMenu as StardewValley.Menus.GameMenu).currentTab == 3) return;
@@ -300,17 +331,27 @@ namespace ShaderExample
             //Game1.spriteBatch.End();
 
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            applyCurrentShader(true);
             if(Game1.activeClickableMenu==null&& Game1.eventUp==false)getInvokeMethod(Program.gamePtr, "drawHUD", new object[] { });
-            drawMouse();
+
+            if (Game1.hudMessages.Count > 0 && (!Game1.eventUp || Game1.isFestival()))
+            {
+                for (int i = Game1.hudMessages.Count - 1; i >= 0; --i)
+                    Game1.hudMessages[i].draw(Game1.spriteBatch, i);
+            }
+
             Game1.spriteBatch.End();
 
 
-            Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-            Class1.effect.CurrentTechnique.Passes[0].Apply();
+            Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+            applyCurrentShader(true);
             drawMouse();
+            Game1.spriteBatch.End();
+            
+
+            Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+            //applyCurrentShader();
+            //drawMouse();
         }
 
 
@@ -327,7 +368,7 @@ namespace ShaderExample
         public void drawMapPart1()
         {
             //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+            applyCurrentShader();
             foreach (var layer in Game1.player.currentLocation.map.Layers)
             {
                 //do back and buildings
@@ -421,7 +462,7 @@ namespace ShaderExample
         public void drawMapPart2()
         {
             //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
+            applyCurrentShader();
             foreach (var layer in Game1.player.currentLocation.map.Layers)
             {
                 //do front, and always front.
@@ -518,9 +559,8 @@ namespace ShaderExample
         protected void drawOverlays()
         {
             SpriteBatch spriteBatch = Game1.spriteBatch;
-           // spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
-            SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
-            effect.CurrentTechnique.Passes[0].Apply();
+            // spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
+            applyCurrentShader(true);
             foreach(var v in Game1.onScreenMenus)
             {
                 v.draw(spriteBatch);

@@ -17,13 +17,13 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\iD Student\Desktop\Stardew\WindowsGame2\WindowsGame2\WindowsGame2\bin\x86\Debug\Content\GreyScaleEffect.xnb</Output>
-      <Time>2018-07-18T22:20:40.2080638-07:00</Time>
+      <Time>2018-07-19T21:12:39.9018516-07:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{58C274AC-3DD6-4FC1-9E6B-9E2D8D885F08}</ContentProjectGUID>
       <TargetPlatform>Windows</TargetPlatform>
-      <TargetProfile>Reach</TargetProfile>
+      <TargetProfile>HiDef</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
       <RootDirectory>C:\Users\iD Student\Desktop\Stardew\WindowsGame2\WindowsGame2\WindowsGame2Content\</RootDirectory>

@@ -9,4 +9,3 @@ C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\Conten
 C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\Netcode.dll
 C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\bin\Debug\Netcode.pdb
 C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\obj\Debug\ShaderExample.csproj.CopyComplete
-C:\Users\iD Student\Desktop\Stardew\ShaderExample\ShaderExample\obj\Debug\ShaderExample.csprojResolveAssemblyReference.cache
