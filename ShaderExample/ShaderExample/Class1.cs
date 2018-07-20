@@ -42,8 +42,9 @@ namespace ShaderExample
             effect = Helper.Content.Load<Effect>(Path.Combine("Content", "Shaders", "GreyScaleEffect.xnb"));
         }
 
-        public void applyCurrentShader(bool ignoreOutdoorLight=false)
+        public void applyCurrentShader(bool ignoreOutdoorLight = false,bool addLightGlow=false,int r=0, int g=0, int b=0,int a=0)
         {
+            
             SetInstanceField(typeof(SpriteBatch), Game1.spriteBatch, effect, "customEffect");
             Class1.effect.CurrentTechnique.Passes[0].Apply();
             if (Game1.player.currentLocation != null && Game1.activeClickableMenu==null)
@@ -58,6 +59,14 @@ namespace ShaderExample
                     effect.Parameters["ambientRed"].SetValue(Game1.outdoorLight.R);
                     effect.Parameters["ambientGreen"].SetValue(Game1.outdoorLight.G);
                     effect.Parameters["ambientBlue"].SetValue(Game1.outdoorLight.B);
+
+                    effect.Parameters["addLightGlow"].SetValue(addLightGlow);
+
+                    effect.Parameters["addedRed"].SetValue(r);
+                    effect.Parameters["addedGreen"].SetValue(g);
+                    effect.Parameters["addedBlue"].SetValue(b);
+                    effect.Parameters["addedAlpha"].SetValue(b);
+
                     effect.Parameters["timeOfDay"].SetValue(Game1.timeOfDay);
                 }
                 else
@@ -67,6 +76,13 @@ namespace ShaderExample
                     effect.Parameters["ambientGreen"].SetValue(255f);
                     effect.Parameters["ambientBlue"].SetValue(255f);
                     effect.Parameters["timeOfDay"].SetValue(600f);
+
+                    effect.Parameters["addLightGlow"].SetValue(addLightGlow);
+
+                    effect.Parameters["addedRed"].SetValue(r);
+                    effect.Parameters["addedGreen"].SetValue(g);
+                    effect.Parameters["addedBlue"].SetValue(b);
+                    effect.Parameters["addedAlpha"].SetValue(b);
                 }
             }
             else
@@ -75,6 +91,13 @@ namespace ShaderExample
                 effect.Parameters["ambientGreen"].SetValue(255f);
                 effect.Parameters["ambientBlue"].SetValue(255f);
                 effect.Parameters["timeOfDay"].SetValue(600f);
+
+                effect.Parameters["addLightGlow"].SetValue(addLightGlow);
+
+                effect.Parameters["addedRed"].SetValue(r);
+                effect.Parameters["addedGreen"].SetValue(g);
+                effect.Parameters["addedBlue"].SetValue(b);
+                effect.Parameters["addedAlpha"].SetValue(b);
             }
         }
 
@@ -108,32 +131,6 @@ namespace ShaderExample
             drawMapPart1();
             Game1.spriteBatch.End();
 
-            /*
-            Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            Framework.Drawers.Characters.drawFarmer();
-            Framework.Drawers.Characters.drawCharacters();
-
-            foreach (var v in Game1.player.currentLocation.terrainFeatures)
-            {
-                var value = v.Values;
-                var keys = v.Keys;
-                int index = 0;
-                foreach(var terrain in value)
-                {
-                    terrain.draw(Game1.spriteBatch, keys.ElementAt(index));
-                    index++;
-                }
-            }
-            
-            Game1.spriteBatch.End();
-            */
-
-            //Game1.spriteBatch.End();
-
-            //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
-            //drawFront();
-
-            //The perfect map draw order.
             Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             //drawMapPart2();
             applyCurrentShader();
@@ -141,9 +138,13 @@ namespace ShaderExample
             Game1.spriteBatch.End();
 
             
+            Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+            applyCurrentShader(false);
+            Game1.player.currentLocation.drawAboveFrontLayer(Game1.spriteBatch);
+            Game1.spriteBatch.End();
+
             Game1.spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             applyCurrentShader();
-            Game1.player.currentLocation.drawAboveFrontLayer(Game1.spriteBatch);
             if (Game1.currentLocation.Map.GetLayer("AlwaysFront") != null)
             {
                 Game1.mapDisplayDevice.BeginScene(Game1.spriteBatch);
@@ -333,15 +334,29 @@ namespace ShaderExample
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             applyCurrentShader(true);
             if(Game1.activeClickableMenu==null&& Game1.eventUp==false)getInvokeMethod(Program.gamePtr, "drawHUD", new object[] { });
-
-            if (Game1.hudMessages.Count > 0 && (!Game1.eventUp || Game1.isFestival()))
-            {
-                for (int i = Game1.hudMessages.Count - 1; i >= 0; --i)
-                    Game1.hudMessages[i].draw(Game1.spriteBatch, i);
-            }
+            
+                     if (Game1.hudMessages.Count > 0 && (!Game1.eventUp || Game1.isFestival()))
+                            {
+                                for (int i = Game1.hudMessages.Count - 1; i >= 0; --i)
+                                    Game1.hudMessages[i].draw(Game1.spriteBatch, i);
+                            }
 
             Game1.spriteBatch.End();
 
+            
+            for (int index = 0; index < Game1.currentLightSources.Count; ++index)
+            {
+                if (Utility.isOnScreen((Vector2)(Game1.currentLightSources.ElementAt<LightSource>(index).position), (int)((double)(float)(Game1.currentLightSources.ElementAt<LightSource>(index).radius) * 64.0 * 4.0)))
+                {
+                    //Game1.spriteBatch.Draw(Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture, Game1.GlobalToLocal(Game1.viewport, (Vector2)(Game1.currentLightSources.ElementAt<LightSource>(index).position)) / (float)(Game1.options.lightingQuality / 2), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture.Bounds), (Color)(Game1.currentLightSources.ElementAt<LightSource>(index).color), 0.0f, new Vector2((float)Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture.Bounds.Center.X, (float)Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture.Bounds.Center.Y), (float)(Game1.currentLightSources.ElementAt<LightSource>(index).radius) / (float)(Game1.options.lightingQuality / 2), SpriteEffects.None, 0.9f);
+                    Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+                    Color c = (Color)(Game1.currentLightSources.ElementAt<LightSource>(index).color);
+                    applyCurrentShader(false,true,0,0,0);
+                    Game1.spriteBatch.Draw(Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture, Game1.GlobalToLocal(Game1.viewport, (Vector2)(Game1.currentLightSources.ElementAt<LightSource>(index).position)), new Microsoft.Xna.Framework.Rectangle?(Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture.Bounds), (Color)(Game1.currentLightSources.ElementAt<LightSource>(index).color.Value), 0.0f, new Vector2((float)Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture.Bounds.Center.X, (float)Game1.currentLightSources.ElementAt<LightSource>(index).lightTexture.Bounds.Center.Y), (float)(Game1.currentLightSources.ElementAt<LightSource>(index).radius/2), SpriteEffects.None, 0.9f);
+                    Game1.spriteBatch.End();
+                }
+            }
+           
 
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
             applyCurrentShader(true);
