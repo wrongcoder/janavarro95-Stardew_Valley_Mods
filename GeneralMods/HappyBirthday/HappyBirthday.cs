@@ -189,8 +189,13 @@ namespace Omegasis.HappyBirthday
         {
             if (!Context.IsWorldReady || Game1.eventUp || Game1.isFestival())
                 return;
+            if (!this.HasChosenBirthday && Game1.activeClickableMenu == null)
+            {
+                Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
+                this.CheckedForBirthday = false;
+            }
 
-            if (!this.CheckedForBirthday)
+            if (!this.CheckedForBirthday && Game1.activeClickableMenu==null)
             {
                 this.CheckedForBirthday = true;
 

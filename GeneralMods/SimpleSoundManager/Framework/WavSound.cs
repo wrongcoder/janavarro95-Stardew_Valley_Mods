@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Audio;
+using SimpleSoundManager.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using System;

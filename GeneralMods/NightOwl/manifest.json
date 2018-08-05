@@ -1,7 +1,7 @@
 {
   "Name": "Night Owl",
   "Author": "Alpha_Omegasis",
-  "Version": "1.5.1",
+  "Version": "1.6.0",
   "Description": "Lets you stay up all night.",
   "UniqueID": "Omegasis.NightOwl",
   "EntryDll": "NightOwl.dll",
