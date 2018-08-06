@@ -103,17 +103,21 @@ namespace StardustCore
 
             lightColor = Color.Black;
             thisType = this.GetType().ToString();
+
+            this.NetFields.AddField(new NetCode.NetCoreObject(this));
             
         }
 
         public CoreObject()
         {
             this.updateDrawPosition();
+            this.NetFields.AddField(new NetCode.NetCoreObject(this));
         }
 
         public CoreObject(bool f)
         {
             //does nothng
+            this.NetFields.AddField(new NetCode.NetCoreObject(this));
         }
 
         public CoreObject(Texture2DExtended texture,int which, Vector2 Tile, int InventoryMaxSize)
@@ -1286,11 +1290,16 @@ namespace StardustCore
         {
             if (x == -1)
             {
+                //ERROR IS HERE?!?!?!?!?
+                if (TextureSheet == null)
+                {
+                    ModCore.ModMonitor.Log("WHY IS EX TEXT NULL?????");
+                }
                 spriteBatch.Draw(TextureSheet.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
             }
             else
             {
-                spriteBatch.Draw(TextureSheet.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize - (this.sourceRect.Height * Game1.pixelZoom - this.boundingBox.Height)))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, (this.Decoration_type == 12) ? 0f : ((float)(this.boundingBox.Bottom - 8) / 10000f));
+                spriteBatch.Draw(TextureSheet.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), (float)(y * Game1.tileSize))), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             }
             if (this.heldObject.Value != null)
             {
@@ -1491,6 +1500,11 @@ namespace StardustCore
         public virtual Texture2DExtended getExtendedTexture()
         {
             return this.TextureSheet;
+        }
+
+        public virtual void setExtendedTexture(Texture2DExtended texture)
+        {
+            this.TextureSheet = texture;
         }
     }
 }

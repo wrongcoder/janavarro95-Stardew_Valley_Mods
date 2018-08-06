@@ -189,7 +189,7 @@ namespace Omegasis.HappyBirthday
         {
             if (!Context.IsWorldReady || Game1.eventUp || Game1.isFestival())
                 return;
-            if (!this.HasChosenBirthday && Game1.activeClickableMenu == null)
+            if (!this.HasChosenBirthday && Game1.activeClickableMenu == null && Game1.player.Name.ToLower()!="unnamed farmhand")
             {
                 Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
                 this.CheckedForBirthday = false;
@@ -362,6 +362,16 @@ namespace Omegasis.HappyBirthday
             Random rnd2 = new Random();
             int r2 = rnd2.Next(this.PossibleBirthdayGifts.Count);
             gift = this.PossibleBirthdayGifts.ElementAt(r2);
+            //Attempt to balance sapplings from being too OP as a birthday gift.
+            if (gift.Name.Contains("Sapling"))
+            {
+                gift.Stack = 1; //A good investment?
+            }
+            if(gift.Name.Contains("Rare Seed"))
+            {
+                gift.Stack = 2; //Still a little op but less so than 5.
+            }
+
             if (Game1.player.isInventoryFull())
                 Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
             else

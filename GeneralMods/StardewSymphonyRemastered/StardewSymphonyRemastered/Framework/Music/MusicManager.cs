@@ -67,6 +67,7 @@ namespace StardewSymphonyRemastered.Framework
 
         public void updateTimer()
         {
+            if (this.currentMusicPack == null) return;
             if (this.currentMusicPack.isPlaying()) return;
             else
             {

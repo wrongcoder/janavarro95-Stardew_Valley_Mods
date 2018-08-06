@@ -216,7 +216,7 @@ namespace StardewSymphonyRemastered
         /// <param name="e"></param>
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-            if (e.KeyPressed.ToString() == Config.KeyBinding)
+            if (e.KeyPressed.ToString() == Config.KeyBinding && Game1.activeClickableMenu==null)
             {
                 Game1.activeClickableMenu = new Framework.Menus.MusicManagerMenu(Game1.viewport.Width,Game1.viewport.Height);
             }

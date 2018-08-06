@@ -130,5 +130,19 @@ namespace SimpleSoundManager.Framework
         {
             return new XACTSound(this.waveBank, this.soundBank, this.soundName);
         }
+
+        public string getSoundName()
+        {
+            return this.soundName;
+        }
+
+        public bool isStopped()
+        {
+            if (this.song == null) return true;
+            if (this.song.IsStopped) return true;
+            return false;
+        }
+
+
     }
 }

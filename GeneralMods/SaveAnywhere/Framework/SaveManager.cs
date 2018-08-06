@@ -63,6 +63,16 @@ namespace Omegasis.SaveAnywhere.Framework
             this.Helper = helper;
             this.Reflection = reflection;
             this.OnLoaded = onLoaded;
+
+            this.BeforeSave = new EventHandler(empty);
+            this.AfterSave = new EventHandler(empty);
+            this.AfterLoad = new EventHandler(empty);
+
+        }
+
+        private void empty(object o, EventArgs args)
+        {
+
         }
 
         /// <summary>Perform any required update logic.</summary>
@@ -87,8 +97,8 @@ namespace Omegasis.SaveAnywhere.Framework
         {
             currentSaveMenu.SaveComplete -= CurrentSaveMenu_SaveComplete;
             currentSaveMenu = null;
-
             AfterSave.Invoke(this, EventArgs.Empty);
+            
         }
 
         /// <summary>Clear saved data.</summary>
@@ -103,7 +113,7 @@ namespace Omegasis.SaveAnywhere.Framework
         {
             // Fire Event before saving data
             BeforeSave.Invoke(this, EventArgs.Empty);
-
+            
             // save game data
             Farm farm = Game1.getFarm();
             if (farm.shippingBin.Any())
@@ -155,6 +165,7 @@ namespace Omegasis.SaveAnywhere.Framework
 
             // Notify other mods that load is complete
             AfterLoad.Invoke(this, EventArgs.Empty);
+            
         }
 
         /// <summary>

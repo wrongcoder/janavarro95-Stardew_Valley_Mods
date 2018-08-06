@@ -49,7 +49,7 @@ namespace Omegasis.TimeFreeze
         /// <param name="location">The location to check.</param>
         private bool ShouldFreezeTime(StardewValley.Farmer player, GameLocation location)
         {
-            if (location.Name == "Mine" || location.Name == "SkullCave" || location.Name == "UndergroundMine" || location.IsOutdoors)
+            if (location.Name == "Mine" || location.Name == "SkullCave"|| location.Name.StartsWith("SkullCave") || location.Name.StartsWith("UndergroundMine") || location.IsOutdoors)
                 return false;
             if (player.swimming.Value)
             {

@@ -112,7 +112,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (v.Value.musicPackInformation.getTexture() == null)
                 {
                     Texture2DExtended texture = StardewSymphony.textureManager.getTexture("MusicDisk");
-                    float scale = 1.00f / ((float)texture.texture.Width / 64f);
+                    float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
        
                     this.musicAlbumButtons.Add(new Button(v.Key, new Rectangle(100 + (numOfButtons * 100), 125 + (rows * 100), 64, 64),texture, "", new Rectangle(0, 0, 16, 16), scale, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), StardustCore.IlluminateFramework.Colors.randomColor(), Color.White,new ButtonFunctionality(new DelegatePairing(null, new List<object>
                     {
@@ -125,8 +125,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 else
                 {
-                    float scale = 1.00f / ((float)v.Value.musicPackInformation.getTexture().texture.Width / 64f);
-                    this.musicAlbumButtons.Add(new Button(v.Key, new Rectangle(100 + (numOfButtons * 100), 125 + (rows * 100), 64, 64), v.Value.musicPackInformation.getTexture(), "", new Rectangle(0, 0, v.Value.musicPackInformation.getTexture().texture.Width, v.Value.musicPackInformation.getTexture().texture.Height), scale, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), StardustCore.IlluminateFramework.LightColorsList.Black, StardustCore.IlluminateFramework.LightColorsList.Black, new ButtonFunctionality(new DelegatePairing(null, new List<object>
+                    float scale = 1.00f / ((float)v.Value.musicPackInformation.getTexture().getTexture().Width / 64f);
+                    this.musicAlbumButtons.Add(new Button(v.Key, new Rectangle(100 + (numOfButtons * 100), 125 + (rows * 100), 64, 64), v.Value.musicPackInformation.getTexture(), "", new Rectangle(0, 0, v.Value.musicPackInformation.getTexture().getTexture().Width, v.Value.musicPackInformation.getTexture().getTexture().Height), scale, new StardustCore.Animations.Animation(new Rectangle(0, 0, 16, 16)), StardustCore.IlluminateFramework.LightColorsList.Black, StardustCore.IlluminateFramework.LightColorsList.Black, new ButtonFunctionality(new DelegatePairing(null, new List<object>
                     {
                         (object)v
                     }
@@ -452,9 +452,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                         //Allow 8 songs to be displayed per page.
                         Texture2DExtended texture = StardewSymphony.textureManager.getTexture("MusicNote");
-                        float scale = 1.00f / ((float)texture.texture.Width / 64f);
+                        float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
                         Song s = musicPackSongList.ElementAt(i);
-                        Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                        Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                         this.fancyButtons.Add(new Button(s.name, new Rectangle((int)placement2.X+25, (int)placement2.Y + ((i%6) * 100)+100, 64, 64), texture, s.name, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                     
                 }
@@ -472,8 +472,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                     //Allow 8 songs to be displayed per page.
                     Texture2DExtended texture = StardewSymphony.textureManager.getTexture("GreenBallon");
-                    float scale = 1.00f / ((float)texture.texture.Height / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                    float scale = 1.00f / ((float)texture.getTexture().Height / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                     this.fancyButtons.Add(new Button(SongSpecifics.festivals.ElementAt(i), new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture, SongSpecifics.festivals.ElementAt(i), srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 }
@@ -493,8 +493,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                     //Allow 8 songs to be displayed per page.
                     Texture2DExtended texture = StardewSymphony.textureManager.getTexture("MenuIcon");
-                    float scale = 1.00f / ((float)texture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                    float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                     this.fancyButtons.Add(new Button(SongSpecifics.menus.ElementAt(i), new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture, SongSpecifics.menus.ElementAt(i), srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 }
@@ -512,8 +512,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                     //Allow 8 songs to be displayed per page.
                     Texture2DExtended texture = StardewSymphony.textureManager.getTexture("StarIcon");
-                    float scale = 1.00f / ((float)texture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                    float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                     this.fancyButtons.Add(new Button(SongSpecifics.events.ElementAt(i), new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture, SongSpecifics.events.ElementAt(i), srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 }
@@ -538,8 +538,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                             StardewSymphony.ModMonitor.Log("SPRING TEXTURE NULL!");
                         return;
                     }
-                    float scale = 1.00f / ((float)springTexture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, springTexture.texture.Width, springTexture.texture.Height);
+                    float scale = 1.00f / ((float)springTexture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, springTexture.getTexture().Width, springTexture.getTexture().Height);
                     this.fancyButtons.Add(new Button("SeasonIcon", new Rectangle((int)seasonPlacement.X, (int)seasonPlacement.Y, 64, 64), springTexture, "Spring Music", srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 }
                 if (Game1.currentSeason == "summer")
@@ -552,8 +552,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                             StardewSymphony.ModMonitor.Log("SUMMER TEXTURE NULL!");
                         return;
                     }
-                    float scale = 1.00f / ((float)summerTexture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, summerTexture.texture.Width, summerTexture.texture.Height);
+                    float scale = 1.00f / ((float)summerTexture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, summerTexture.getTexture().Width, summerTexture.getTexture().Height);
                     this.fancyButtons.Add(new Button("SeasonIcon", new Rectangle((int)seasonPlacement.X, (int)seasonPlacement.Y, 64, 64), summerTexture, "Summer Music", srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 }
                 if (Game1.currentSeason == "fall")
@@ -566,8 +566,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                             StardewSymphony.ModMonitor.Log("FALL TEXTURE NULL!");
                         return;
                     }
-                    float scale = 1.00f / ((float)fallTexture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, fallTexture.texture.Width, fallTexture.texture.Height);
+                    float scale = 1.00f / ((float)fallTexture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, fallTexture.getTexture().Width, fallTexture.getTexture().Height);
                     this.fancyButtons.Add(new Button("SeasonIcon", new Rectangle((int)seasonPlacement.X, (int)seasonPlacement.Y, 64, 64), fallTexture, "Fall Music", srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 }
                 if (Game1.currentSeason == "winter")
@@ -580,8 +580,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                             StardewSymphony.ModMonitor.Log("WINTER TEXTURE NULL!");
                         return;
                     }
-                    float scale = 1.00f / ((float)winterTexture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, winterTexture.texture.Width, winterTexture.texture.Height);
+                    float scale = 1.00f / ((float)winterTexture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, winterTexture.getTexture().Width, winterTexture.getTexture().Height);
                     this.fancyButtons.Add(new Button("SeasonIcon", new Rectangle((int)seasonPlacement.X, (int)seasonPlacement.Y, 64, 64), winterTexture, "Winter Music", srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 }
 
@@ -591,8 +591,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 //Festival Icon placement.
                 Texture2DExtended festivalTexture = StardewSymphony.textureManager.getTexture("FestivalIcon");
-                float festivalScale = 1.00f / ((float)festivalTexture.texture.Width / 64f);
-                Rectangle festivalSrcRect = new Rectangle(0, 0, festivalTexture.texture.Width, festivalTexture.texture.Height);
+                float festivalScale = 1.00f / ((float)festivalTexture.getTexture().Width / 64f);
+                Rectangle festivalSrcRect = new Rectangle(0, 0, festivalTexture.getTexture().Width, festivalTexture.getTexture().Height);
                 this.fancyButtons.Add(new Button("FestivalIcon", new Rectangle((int)festivalPlacement.X, (int)festivalPlacement.Y, 64, 64), festivalTexture, "Festival Music", festivalSrcRect, festivalScale, new Animation(festivalSrcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 if (festivalTexture == null)
                 {
@@ -603,8 +603,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 //Event Icon placement.
                 Texture2DExtended eventTexture = StardewSymphony.textureManager.getTexture("EventIcon");
-                float eventScale = 1.00f / ((float)eventTexture.texture.Width / 64f);
-                Rectangle eventSrcRectangle = new Rectangle(0, 0, eventTexture.texture.Width, eventTexture.texture.Height);
+                float eventScale = 1.00f / ((float)eventTexture.getTexture().Width / 64f);
+                Rectangle eventSrcRectangle = new Rectangle(0, 0, eventTexture.getTexture().Width, eventTexture.getTexture().Height);
                 this.fancyButtons.Add(new Button("EventIcon", new Rectangle((int)eventPlacement.X, (int)eventPlacement.Y, 64, 64), eventTexture, "Event Music", eventSrcRectangle, eventScale, new Animation(eventSrcRectangle), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 if (eventTexture == null)
@@ -616,8 +616,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 //Menu Icon placement.
                 Texture2DExtended menuTexture = StardewSymphony.textureManager.getTexture("MenuIcon");
-                float menuScale = 1.00f / ((float)menuTexture.texture.Width / 64f);
-                Rectangle menuSrcRectangle = new Rectangle(0, 0, menuTexture.texture.Width, menuTexture.texture.Height);
+                float menuScale = 1.00f / ((float)menuTexture.getTexture().Width / 64f);
+                Rectangle menuSrcRectangle = new Rectangle(0, 0, menuTexture.getTexture().Width, menuTexture.getTexture().Height);
                 this.fancyButtons.Add(new Button("MenuIcon", new Rectangle((int)menuPlacement.X, (int)menuPlacement.Y, 64, 64), menuTexture, "Menu Music", menuSrcRectangle, menuScale, new Animation(menuSrcRectangle), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 if (menuTexture == null)
@@ -705,8 +705,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         display = "Wedding Music";
                     }
 
-                    float scale = 1.00f / ((float)texture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                    float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                     this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 7) * 100), 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 }
@@ -742,8 +742,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     {
                         StardewSymphony.ModMonitor.Log("HMM A TEXTURE IS NULL: " + i.ToString());
                     }
-                    float scale = 1.00f / ((float)texture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                    float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                     this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 7) * 100), 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 }
@@ -777,8 +777,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                                     numOfEmptyCabin++;
                                 }
                                 Texture2DExtended texture2 = StardewSymphony.textureManager.getTexture("HouseIcon");
-                                float scale2 = 1.00f / ((float)texture2.texture.Width / 64f);
-                                Rectangle srcRect2 = new Rectangle(0, 0, texture2.texture.Width, texture2.texture.Height);
+                                float scale2 = 1.00f / ((float)texture2.getTexture().Width / 64f);
+                                Rectangle srcRect2 = new Rectangle(0, 0, texture2.getTexture().Width, texture2.getTexture().Height);
                                 this.fancyButtons.Add(new Button(locName, new Rectangle((int)placement2.X + 25, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture2, displayName, srcRect2, scale2, new Animation(srcRect2), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                                 continue;
                             }
@@ -787,8 +787,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                                 string displayName = "Empty Cabin "+(numOfEmptyCabin);
                                 numOfEmptyCabin++;
                                 Texture2DExtended texture2 = StardewSymphony.textureManager.getTexture("HouseIcon");
-                                float scale2 = 1.00f / ((float)texture2.texture.Width / 64f);
-                                Rectangle srcRect2 = new Rectangle(0, 0, texture2.texture.Width, texture2.texture.Height);
+                                float scale2 = 1.00f / ((float)texture2.getTexture().Width / 64f);
+                                Rectangle srcRect2 = new Rectangle(0, 0, texture2.getTexture().Width, texture2.getTexture().Height);
                                 this.fancyButtons.Add(new Button(locName, new Rectangle((int)placement2.X + 25, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture2, displayName, srcRect2, scale2, new Animation(srcRect2), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                                 continue;
                             }
@@ -802,8 +802,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                     //Allow 8 songs to be displayed per page.
                     Texture2DExtended texture = StardewSymphony.textureManager.getTexture("HouseIcon");
-                    float scale = 1.00f / ((float)texture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                    float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                     this.fancyButtons.Add(new Button(locName, new Rectangle((int)placement2.X + 25, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture, locName, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 }
@@ -866,8 +866,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         display = "Saturday Music";
                     }
 
-                    float scale = 1.00f / ((float)texture.texture.Width / 64f);
-                    Rectangle srcRect = new Rectangle(0, 0, texture.texture.Width, texture.texture.Height);
+                    float scale = 1.00f / ((float)texture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
                     this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 7) * 100), 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
                 }

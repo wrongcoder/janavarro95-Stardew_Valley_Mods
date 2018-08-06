@@ -89,6 +89,8 @@
     <Compile Include="Interfaces\IToolSerializer.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
+    <Compile Include="NetCode\NetCoreObject.cs" />
+    <Compile Include="NetCode\NetTexure2DExtended.cs" />
     <Compile Include="Objects\MultiTileComponent.cs" />
     <Compile Include="Objects\MultiTileObject.cs" />
     <Compile Include="Objects\Tools\BasicToolInfo.cs" />

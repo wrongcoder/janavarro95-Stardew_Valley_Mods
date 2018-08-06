@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SimpleSoundManager
 {
-    class XACTMusicPair
+    public class XACTMusicPair
     {
         public WaveBank waveBank;
         public ISoundBank soundBank;

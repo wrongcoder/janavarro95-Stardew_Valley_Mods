@@ -15,6 +15,11 @@ namespace StardustCore.Objects
         //Pass in different function pointers that return bool to check if this default code will run. If not 
         public MultiTileObject containerObject;
         
+        public MultiTileComponent()
+        {
+            //this.TextureSheet = new Texture2DExtended();
+            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
+        }
 
         public MultiTileComponent(CoreObject part)
         {
@@ -28,6 +33,8 @@ namespace StardustCore.Objects
             }
             this.defaultBoundingBox = new Rectangle(0, 0, 16, 16);
             this.boundingBox.Value = new Rectangle((int)0 * Game1.tileSize, (int)0* Game1.tileSize, 1 * Game1.tileSize, 1 * Game1.tileSize);
+
+            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
         }
 
         public MultiTileComponent(int which,String name, String description, Texture2DExtended texture)
@@ -44,6 +51,8 @@ namespace StardustCore.Objects
             this.defaultSourceRect = this.sourceRect;
             this.serializationName = this.GetType().ToString();
             this.ParentSheetIndex = which;
+
+            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
         }
 
         public MultiTileComponent(int which,String name, String description, Animations.AnimationManager animationManager)
@@ -61,6 +70,8 @@ namespace StardustCore.Objects
             this.defaultSourceRect = this.sourceRect;
             this.serializationName = this.GetType().ToString();
             this.ParentSheetIndex = which;
+
+            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
         }
 
         public override bool clicked(Farmer who)
@@ -148,6 +159,12 @@ namespace StardustCore.Objects
                 //The actual planter box being drawn.
                 if (animationManager == null)
                 {
+                    if (this.TextureSheet == null)
+                    {
+                        ModCore.ModMonitor.Log("Tex Extended is null???");
+                       
+                    }
+
                     spriteBatch.Draw(this.TextureSheet.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
                     // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
                 }

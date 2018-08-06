@@ -31,20 +31,20 @@ namespace SimpleSoundManager
         /// </summary>
         byte[] byteArray;
 
-        public List<string> sounds;
 
         public string path;
 
-
+        public string soundName;
 
         /// <summary>
         /// Get a raw disk path to the wav file.
         /// </summary>
         /// <param name="pathToWavFile"></param>
-        public WavSound(string pathToWavFile)
+        public WavSound(string name,string pathToWavFile)
         {
             this.path = pathToWavFile;
             LoadWavFromFileToStream();
+            this.soundName = name;
         }
 
         /// <summary>
@@ -52,10 +52,11 @@ namespace SimpleSoundManager
         /// </summary>
         /// <param name="modHelper"></param>
         /// <param name="pathInModDirectory"></param>
-        public WavSound(IModHelper modHelper, string pathInModDirectory)
+        public WavSound(IModHelper modHelper,string name, string pathInModDirectory)
         {
             string path = Path.Combine(modHelper.DirectoryPath, pathInModDirectory);
             this.path = path;
+            this.soundName = name;
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace SimpleSoundManager
         /// </summary>
         /// <param name="modHelper">The mod helper for the mod you wish to use to load the music files from.</param>
         /// <param name="pathPieces">The list of folders and files that make up a complete path.</param>
-        public WavSound(IModHelper modHelper, List<string> pathPieces)
+        public WavSound(IModHelper modHelper,string soundName, List<string> pathPieces)
         {
             string s = modHelper.DirectoryPath;
             foreach(var str in pathPieces)
@@ -71,6 +72,7 @@ namespace SimpleSoundManager
                 s = Path.Combine(s, str);
             }
             this.path = s;
+            this.soundName = soundName;
         }
 
         /// <summary>
@@ -224,7 +226,12 @@ namespace SimpleSoundManager
 
         public Sound clone()
         {
-            return new WavSound(this.path);
+            return new WavSound(this.getSoundName(),this.path);
+        }
+
+        public string getSoundName()
+        {
+            return this.soundName;
         }
 
         public void restart()

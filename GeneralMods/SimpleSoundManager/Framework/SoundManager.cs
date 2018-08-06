@@ -9,18 +9,14 @@ using System.Threading.Tasks;
 
 namespace SimpleSoundManager.Framework
 {
-
-    /// <summary>
-    /// TODO:
-    /// Play, stop, pause songs.
-    /// </summary>
-    class SoundManager
+    public class SoundManager
     {
 
         public Dictionary<string,Sound> sounds;
         public Dictionary<string, XACTMusicPair> musicBanks;
 
 
+        public List<Sound> currentlyPlayingSounds = new List<Sound>();
         /// <summary>
         /// Constructor for this class.
         /// </summary>
@@ -28,6 +24,7 @@ namespace SimpleSoundManager.Framework
         {
             this.sounds = new Dictionary<string, Sound>();
             this.musicBanks = new Dictionary<string, XACTMusicPair>();
+            currentlyPlayingSounds = new List<Sound>();
         }
 
         /// <summary>
@@ -37,7 +34,7 @@ namespace SimpleSoundManager.Framework
         /// <param name="pathToWav"></param>
         public void loadWavFile(string soundName,string pathToWav)
         {
-            WavSound wav = new WavSound(pathToWav);
+            WavSound wav = new WavSound(soundName,pathToWav);
             this.sounds.Add(soundName,wav);
         }
         
@@ -49,7 +46,7 @@ namespace SimpleSoundManager.Framework
         /// <param name="pathToWav"></param>
         public void loadWavFile(IModHelper helper,string soundName,string pathToWav)
         {
-            WavSound wav = new WavSound(helper ,pathToWav);
+            WavSound wav = new WavSound(helper ,soundName,pathToWav);
             this.sounds.Add(soundName,wav);
         }
 
@@ -61,7 +58,7 @@ namespace SimpleSoundManager.Framework
         /// <param name="pathToWav"></param>
         public void loadWavFile(IModHelper helper,string songName,List<string> pathToWav)
         {
-            WavSound wav = new WavSound(helper,pathToWav);
+            WavSound wav = new WavSound(helper,songName,pathToWav);
             this.sounds.Add(songName,wav);
         }
 
@@ -132,6 +129,93 @@ namespace SimpleSoundManager.Framework
             }
             return null;
         }
+
+        /// <summary>
+        /// Play the sound with the given name.
+        /// </summary>
+        /// <param name="soundName"></param>
+        public void playSound(string soundName)
+        {
+            foreach(var sound in this.sounds)
+            {
+                if (sound.Key == soundName)
+                {
+                    var s=getSoundClone(soundName);
+                    s.play();
+                    this.currentlyPlayingSounds.Add(s);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Stop the sound that is playing.
+        /// </summary>
+        /// <param name="soundName"></param>
+        public void stopSound(string soundName)
+        {
+            List<Sound> removalList = new List<Sound>();
+            foreach (var sound in this.currentlyPlayingSounds)
+            {
+                if (sound.getSoundName() == soundName)
+                {
+                    sound.stop();
+                    removalList.Add(sound);
+                }
+            }
+            foreach(var v in removalList)
+            {
+                this.currentlyPlayingSounds.Remove(v);
+            }
+        }
+
+        /// <summary>
+        /// Pause the sound with this name?
+        /// </summary>
+        /// <param name="soundName"></param>
+        public void pauseSound(string soundName)
+        {
+            List<Sound> removalList = new List<Sound>();
+            foreach (var sound in this.currentlyPlayingSounds)
+            {
+                if (sound.getSoundName() == soundName)
+                {
+                    sound.pause();
+                    removalList.Add(sound);
+                }
+            }
+            foreach (var v in removalList)
+            {
+                this.currentlyPlayingSounds.Remove(v);
+            }
+        }
+
+        public void update()
+        {
+            List<Sound> removalList = new List<Sound>();
+            foreach(Sound song in this.currentlyPlayingSounds)
+            {
+                if (song.isStopped())
+                {
+                    removalList.Add(song);
+                }
+            }
+            foreach(var v in removalList)
+            {
+                this.currentlyPlayingSounds.Remove(v);
+            }
+        }
+
+        public void stopAllSounds()
+        {
+            foreach(var v in this.currentlyPlayingSounds)
+            {
+                v.stop();
+            }
+        }
+
+
+
 
     }
 }

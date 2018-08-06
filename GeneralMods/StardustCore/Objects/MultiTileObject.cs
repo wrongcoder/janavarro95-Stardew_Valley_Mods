@@ -4,7 +4,9 @@ using StardewValley;
 using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,11 @@ namespace StardustCore.Objects
         public List<KeyValuePair<Vector2,MultiTileComponent>> objects;
         public Color categoryColor;
         public String categoryName;
+
+        public MultiTileObject()
+        {
+            
+        }
 
         public MultiTileObject(String Name, String Description,Vector2 tile, Texture2DExtended texture, List<KeyValuePair<Vector2, MultiTileComponent>> Objects, Color CategoryColor, String CategoryName) :base(texture,0,tile,0)
         {
@@ -197,7 +204,7 @@ namespace StardustCore.Objects
                 if (animationManager == null)
                 {
                     //FIX SCALE SIZE AND POSITION APPROPRIATELY DEPENDING ON # OF OBJECTS!!!
-                    aosdkpoasdopjsa
+                    //fsfsd
                     spriteBatch.Draw(v.Value.getExtendedTexture().getTexture(), location+new Vector2(v.Key.X*16,v.Key.Y*16), this.defaultSourceRect, Color.White * transparency, 0f, new Vector2(0, 0), 1, SpriteEffects.None, layerDepth);
                 }
                 else

@@ -32,5 +32,9 @@ namespace SimpleSoundManager.Framework
         /// </summary>
         /// <returns></returns>
         Sound clone();
+
+        string getSoundName();
+
+        bool isStopped();
     }
 }
