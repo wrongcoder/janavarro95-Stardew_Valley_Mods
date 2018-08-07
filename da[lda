@@ -1,0 +1,1847 @@
+[33mcommit 2276faa610b3704cefb88ecf796f36d0d75498a8[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Aug 6 20:01:59 2018 -0700
+
+    Wrote netcode to support Animations, AnimationManagers, and CoreObjects.
+
+[33mcommit 3af2da68fae217abed5efbe28ec85845789ccd27[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Aug 6 14:01:44 2018 -0700
+
+    Tons of 1.3 updates. Also support for multiplayer custom objects in Stardust is slowly coming about!
+
+[33mcommit 0cf9b68560143924cc071b9f9780110128806a5a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Aug 5 09:33:00 2018 -0700
+
+    Rebuilt some mods for 1.3 compatability. In the process of fixing Happy Birthday glitches.
+
+[33mcommit 808e44fff71b87f2bdf49f7010048591eb650f92[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Fri Jul 20 00:33:59 2018 -0700
+
+    Added in light glows!!!!
+
+[33mcommit 50f84167aae97e62ecd07784fafbbf321c36ad8c[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Thu Jul 19 21:33:50 2018 -0700
+
+    Shader color upgrade+simple night shader.
+    
+    Added in better color shader with nighttime support.
+
+[33mcommit e545d4232db845affbfe5ff2cfc8293978e51062[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Thu Jul 19 13:28:20 2018 -0700
+
+    Backup all my work thus far.
+
+[33mcommit f188c12f0ae09e41e700b6bba97de2ab6ee1cad2[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Wed Jul 18 23:13:39 2018 -0700
+
+    Draw order fixed.
+    
+    Better greyscale shader and draw order fixed for drawing things to the screen. WOOT!
+
+[33mcommit c4f6f981c39cc517f128e20a966c909fa4a58b70[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Wed Jul 18 17:41:38 2018 -0700
+
+    Crafting menus fixed!
+
+[33mcommit 2141c151ca5f66b8b5e46baff3d9adb900e9997a[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Wed Jul 18 16:06:15 2018 -0700
+
+    Fixed mouse cursor shader issue.
+
+[33mcommit a921b2ba780de30dc4b87ebc95d3e44cb2c7ca40[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Wed Jul 18 14:57:58 2018 -0700
+
+    Add files via upload
+
+[33mcommit 0509259a2ee95f4f65d85d9c4c3cbd637f9d5d7a[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Wed Jul 18 11:48:37 2018 -0700
+
+    Social Page: NPC Shader
+
+[33mcommit 9c6b2efccd394ed143b54d130c877a2e6f5c0dfb[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Wed Jul 18 07:47:16 2018 -0700
+
+    Updated game menu fix
+    
+    Applied shader to more game menu components
+
+[33mcommit b127a000a52ebda9b2a2e5d9dd57d521100e3790[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Tue Jul 17 22:38:15 2018 -0700
+
+    Made a mod.
+    
+    Shaders?
+
+[33mcommit b68643989e115f5b46b92af7c7b30168fef8bbac[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Fri Jul 13 23:18:17 2018 -0700
+
+    Finished dialogue scrape update.
+    
+    Ready for alpha testing. Need audio clips, putting audio clips in place, and quality of life features.
+
+[33mcommit 4b500182fa6b7acc4a1ba5bc57dedea8f6026646[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Fri Jul 13 20:28:26 2018 -0700
+
+    Finished writing dialogue scraper.
+    
+     Needs to be tested.
+
+[33mcommit a3b3442c6f2877f5baf7513648106f88a90d3b03[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Thu Jul 12 22:25:21 2018 -0700
+
+    Added Mod config, scrape npc dialogue and TVs.
+    
+    See todo list. Next is shops.
+
+[33mcommit 1497980aea8b4cfb2c8ad289024db8f4221953e1[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Tue Jul 10 23:23:50 2018 -0700
+
+    Finished dictionary sanitization.
+    
+    See todo list for next task.
+
+[33mcommit fd5972d0b9e054a3c0136538d8879f7384b5b6b7[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Sun Jul 8 14:11:06 2018 -0700
+
+    More sanitation work.
+    
+    Should work for the most part, just need to add in adjectives, nouns, and places.
+
+[33mcommit 2acd5f32a1e96b04345674405e5e2018f66568db[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Sun Jul 8 09:22:21 2018 -0700
+
+    Started work on translation update and sanitizing input.
+    
+    Translation update will allow for dialogue scraping of dictionaries for different supported languages.
+    
+    Sanitizing input will replace game variables with a generic string so that voice acting can be more flexible and not have to record a million lines.
+
+[33mcommit 4e10d7efc6f155630a9d0276b8a04af80c057c46[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Sun Jul 8 01:40:46 2018 -0700
+
+    Updated vocalization with notes on what to do next.
+
+[33mcommit 32c4ba1d65815893bfcce267e46d629b74e51e89[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Sun Jul 8 00:49:49 2018 -0700
+
+    Creating new voice acting mod at request of another author.
+
+[33mcommit c474ce1a8d4f0898c1621aac87499d23b41f9168[m
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Sun Jul 8 00:48:13 2018 -0700
+
+    Updated SSM to allow for playing/stoping of sound files.
+
+[33mcommit 8f0f692a60d658aedc6f2b4a539d9d5b4d9a1620[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Jun 25 21:13:40 2018 -0700
+
+    Fixed Game1.shouldFarmerPassOut issue, need to test night owl, started fixing Happy bday, need to update SimpleSoundManager
+
+[33mcommit 349d053727a2ff088773714aa95aa9380ed8f321[m
+Merge: 71efefa 5e5c79c
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Mon Jun 25 20:09:30 2018 -0700
+
+    Merge pull request #39 from perkinslr/patch-1
+    
+    Reset money to previous value before the save
+
+[33mcommit 71efefae3e59798cd5cdf1aec9f59caf37afe655[m
+Merge: 7018239 b620e4e
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Mon Jun 25 19:58:42 2018 -0700
+
+    Merge pull request #40 from DefenTheNation/master
+    
+    Add API for other mods to hook into Save Anywhere save events
+
+[33mcommit b620e4eaf5fb147b67b5ce7e5103e519100b893b[m
+Author: DefenTheNation <defenthenation@github>
+Date:   Sat Jun 23 00:31:40 2018 -0700
+
+    Add API for other mods to hook into Save Anywhere save events
+
+[33mcommit 701823925f3413c2204a4dd4efcec223f03e9ff7[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Jun 13 12:08:14 2018 -0700
+
+    Updated menu drawing. Now to fix the scale size of the object
+
+[33mcommit bcf76f9163daed6c475c5a97691087a4c83106cd[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Jun 13 11:11:56 2018 -0700
+
+    Fixed draw issues with multi tile obects. Next up menu drawing and functionality.
+
+[33mcommit 4469fbd9b353e543f6d5fb1d437853142e6f431b[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Jun 13 02:36:52 2018 -0700
+
+    Made multi tile objects that can be used in the future for things like machines and more furniture. Bigger things here we come. Need to edit sme click functionality however.
+
+[33mcommit a928f7d18e35f5f3316121b8c25a186297ae766a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Jun 12 23:25:36 2018 -0700
+
+    Added tool support for axe, hoe, watering can and pickaxe.
+
+[33mcommit 70106444987f57f8aed1dbbf50a341a40e237f16[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Jun 12 21:45:42 2018 -0700
+
+    Fixed serializing items to a chest.
+
+[33mcommit 19e6202e3a007960761e588a87cbe519bd642095[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Jun 12 18:42:31 2018 -0700
+
+    Rewrote the serialization fuctions of SDust Core to support custom tools. A huge pain but it should work.
+
+[33mcommit ad7f9754ef2b95e54c3caacaa65026dfbf3bc063[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Jun 8 11:40:23 2018 -0700
+
+    Console commands, bug fixes, and more!
+
+[33mcommit 5e5c79c0a0dfad170b18ea07f0708365d2ca4a01[m
+Author: Logan Perkins <perkins@github.alestan.publicvm.com>
+Date:   Fri Jun 8 09:47:34 2018 -0700
+
+    Reset money to previous value before the save
+    
+    So, if you let the timer run down to 6:00 A.M., you lose 10% of your cash, the game saves, the new day starts, and NightOwl resets your money to what it was at 5:59.  There are two problems with this.  First, if you quit to the title and reload, your money doesn't get reset again on load, so you lose the 10%.  Second, if you shipped anything the day before, the cash reset wipes out the cash gained from shipping items.  This fixes both.  The first is fixed by resetting the cash value during the before save event, the second is fixed by reading the cash penalty amount from the mailbox before the mailbox is cleared, and adding the value rather than setting the total.
+
+[33mcommit c38f2599f2d0aec75030acb9997127761102a09d[m
+Merge: 39e91bf 5b0de7f
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Thu Jun 7 14:02:55 2018 -0700
+
+    Merge pull request #38 from janavarro95/Development
+    
+    Development
+
+[33mcommit 5b0de7f73656a78452ccb84b6803ed2980ac8f66[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Jun 7 13:58:52 2018 -0700
+
+    Fixed SDust dynamic warning, and a glitch with the music menu when selecting an album.
+
+[33mcommit f2ed5c3acb20fef575f497c8bbf9eef052d20871[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Jun 6 01:00:59 2018 -0700
+
+    Fixed glitch pertaining to the music menu not being able to get a correct album index and crashing.
+
+[33mcommit 39e91bf962f5148e478c03120e16dfc0a5ce4c34[m
+Merge: fdebd3a fba0cd7
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Mon Jun 4 19:04:44 2018 -0700
+
+    Merge pull request #37 from janavarro95/Development
+    
+    Added in an aesthetic feature that draws the add or delete button on …
+
+[33mcommit fba0cd75f128de02bdd596bd0b94fca3afb83069[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Jun 4 19:03:25 2018 -0700
+
+    Added in an aesthetic feature that draws the add or delete button on the music manager menu depending on whether or not you added the music to the music pack yet or not.
+
+[33mcommit fdebd3a8e838ab337dcc5bc71a29b4f8fdef68f0[m
+Merge: b35746f ba7d0ae
+Author: Joshua Navarro <janavarro95@users.noreply.github.com>
+Date:   Fri Jun 1 15:20:34 2018 -0700
+
+    Merge pull request #36 from janavarro95/Development
+    
+    Development
+
+[33mcommit ba7d0ae9b047b8c7f61f3ff03b401d722a8aa1cc[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Jun 1 15:18:49 2018 -0700
+
+    Updated mod manifest files for nexus release
+
+[33mcommit f7ffec1799599246b0c5545b09bd09d9eb87b517[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Jun 1 14:43:47 2018 -0700
+
+    The beta of Stardew Symphony is complete! WOOO!
+
+[33mcommit 70885979ed9e57a95e8f2ae0a6f249904efda35f[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Jun 1 12:09:50 2018 -0700
+
+    Mod config, log surpressing, menu/location music working, just need to polish the menu and I'll be done!
+
+[33mcommit 02d3ab39e5a5e08a8c77b4ca6b7fd92e11d6cf84[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu May 31 14:38:24 2018 -0700
+
+    Updated SSM to be able to handle XWB and WAV files.
+
+[33mcommit 9fe6a075de9f27864d64860c62e63c057608c122[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed May 30 18:14:06 2018 -0700
+
+    Repositioned menu elements and added options for generic festivals and events.
+
+[33mcommit 04dd0432f0a3d9547cabfab7e123517fbb7950e1[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed May 30 13:58:14 2018 -0700
+
+    Almost done with symphony remastered menu. Needs some tweaks but works for the most part.
+
+[33mcommit 5e8f2ccdfdeb7bfe889d43a34a36386f3ff2dd80[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue May 29 01:04:47 2018 -0700
+
+    More menu work for symphony.
+
+[33mcommit eb90e537a510e02c18b334300be544a99efbd6a6[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon May 28 03:17:36 2018 -0700
+
+    Symphony can now add songs to triggers for changing location. Need to find a way to surpress always changing songs when changing location if it isn't location specific.
+
+[33mcommit 7c693c90514bd9f04f88f65cddccd1966cd448cc[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun May 27 19:08:01 2018 -0700
+
+    Created layout for menu selection options for standard selections.
+
+[33mcommit 6afca47caa8997bfa1c3e0270da3a00b0c63d8b3[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri May 18 14:24:59 2018 -0700
+
+    Rename save backup, fix happy birthday, disable net core, add info to symphony for first page of icons.
+
+[33mcommit 651cd8a26b99fda535791695ed8f4c1b3693c4ec[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu May 10 00:16:05 2018 -0700
+
+    Updated ModNet to be compatable with SDV 1.3.10, which adds bug fixes for sprite errors.
+
+[33mcommit 0fb7e729c1f77625c425024721fe138623a9af90[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed May 9 15:57:20 2018 -0700
+
+    Updated NetMod to prevent redundant messages and errors.
+
+[33mcommit bd656c444b945043ebd37809c91aa19fcc2201ad[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed May 9 14:23:42 2018 -0700
+
+    Fiexed some blaring error messages, gave Happy Birthday it's much needed multiplayer support.
+
+[33mcommit 11025947fb2d97d8180e519679c4099e2e85d4a0[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue May 8 21:34:32 2018 -0700
+
+    added function to get all farmers except the current player.
+
+[33mcommit a0ddb5994b4012f682b654957a69049bf0487280[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue May 8 18:18:53 2018 -0700
+
+    Made functionality to get first, second, third, and fourth player.
+
+[33mcommit 947e0c557fb307c3bd0532bb4335c19966548960[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue May 8 17:21:59 2018 -0700
+
+    Added support to send a message to a specific farmer.
+
+[33mcommit 9c1314480c7a2fa925e8343b04d110af815e3e8a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue May 8 10:45:26 2018 -0700
+
+    Added in network functionality so that clients can send data to server and other clients.
+
+[33mcommit 20f52e27071b6da95543f0ea8d72683670c586b8[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon May 7 22:37:02 2018 -0700
+
+    Allowed for custom types to be added in how to process a class multiple ways. Also added support for SDV.HUDMessages
+
+[33mcommit b3a9cb7b0ab75736691c754a9779c74f2f11cb9b[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon May 7 05:41:16 2018 -0700
+
+    Updated network utils to be able to sync a custom class that can hold info to a different sync type of data. This allows for users to add in custom data types now.
+
+[33mcommit 62f07d731ccd316674ab51169b8906cdbcd02781[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun May 6 19:31:10 2018 -0700
+
+    Changed BinaryReaderExtention files to be more split up.
+    Also added in function that simply logs which supported types are added for reading/saving.
+
+[33mcommit 42b039cf89a7074f81ab8130c10ddb63d46a19bd[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun May 6 19:11:24 2018 -0700
+
+    Added in functionality to read/write to List<string>
+
+[33mcommit ea31aec34fdc37e938eed4d99178c25b1f0b3edd[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun May 6 18:23:45 2018 -0700
+
+    File cleanup
+
+[33mcommit b5a7d9797c93f6f1fa25b30ca2555971939cf8b6[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun May 6 18:21:31 2018 -0700
+
+    Slowly updating mods. Managed to create mod that syncs mod data between clients and server.
+
+[33mcommit ccddf1d4239fac7a0b96d884717ee8306cdf77f5[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Apr 30 18:21:31 2018 -0700
+
+    The BIG 1.3 update. Everything has been touched and some mods have been reworked a bit.
+
+[33mcommit 7e5d4349caeac5861f2a18d8d311b854a1b9d4b9[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Apr 27 11:49:52 2018 -0700
+
+    Big update to Symphony Remastered. Added in support for festivals, events, and menus. Also added in support for adding in support for mods that use Symphony.
+
+[33mcommit e42e91e30d2c9562c8ccd22125dd02efb4686d79[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Mar 31 01:47:10 2018 -0700
+
+    Made the song selection menu. Can now click songs to play them. Now to make the selected songmenu where you can play the song or set triggers.
+
+[33mcommit 6ef666af6ef84e83d762e5581fcbb3e5a302e8d8[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Mar 30 05:46:24 2018 -0700
+
+    Colored background menus for UIUtilities, and a fancier menu for Symphony.
+
+[33mcommit dad514a6d63f5bf27d369f53824d1e23935546fd[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Mar 21 13:02:50 2018 -0700
+
+    Symphony now takes priority over StardewValley music. Can be changed simply by adding in a StardewValley Music Pack. Also Music Album Icons!
+
+[33mcommit fd53797c5f4dd15cc5cf799fa840a8839863b4e0[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Mar 21 02:04:05 2018 -0700
+
+    Wav music packs now work correctly. WOOT!
+
+[33mcommit def22386c586027a66568cbe3b935ef90e7a87c4[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Mar 21 00:46:00 2018 -0700
+
+    Got wav music packs working! Just need to figure out the buffer size for the files now.
+
+[33mcommit 1bbf3f2503ebfc7c51304b1d2d7ca218b5564d1c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Mar 20 23:24:11 2018 -0700
+
+    Play some randome music and play wav packs.
+
+[33mcommit ed899b49d905c651a9898f64a9c3d441fecb8696[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Mar 20 16:45:07 2018 -0700
+
+    symphony menu is coming along.
+
+[33mcommit 67c110f282ed44258577080215e03f178e3c121a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Mar 20 03:10:02 2018 -0700
+
+    attempted rough implementation of farmers market. Needs a lot more work before rough prototype would be complete.
+
+[33mcommit 44d2f4e7e9de61f88afdb06c2c42f1bdbfce3984[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Mar 19 23:01:43 2018 -0700
+
+    Finished commenting on all functions in the mod. Now just to write up some documentation.
+
+[33mcommit a915a06460fcdce27400946ba9605fefa4e00da1[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Mar 19 03:32:00 2018 -0700
+
+    More comments round 2
+
+[33mcommit fabef6ba82b03f0036ec1d1c61443a81fe692c3a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 18 19:06:08 2018 -0700
+
+    Started the great comment update.
+
+[33mcommit 9834bbcf28ca2db1f429f2df6ae3f15061cb0a9f[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 18 16:06:49 2018 -0700
+
+    Fixed npc movment, npcs now correctly animate when moving, need to fix graphics for it though.
+
+[33mcommit 5c1f09b266d9fef91f8262f3fca375c9030a2f6a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 18 03:20:06 2018 -0700
+
+    Fixed modular npc breathing.
+
+[33mcommit bd6e479b4fcc74d8e6248fe31c490ecc4da56cbe[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 18 01:48:01 2018 -0700
+
+    Finished the basics of the npc renderer. I have included the base art assets for generating a female npc and polished off all of the code. Base goal achived.
+
+[33mcommit 91620913298339e5dbdf493301769e7a83629e88[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Mar 17 21:49:22 2018 -0700
+
+    Fixed drawing glitches with the custom npc renderer. Now just have to get individual assets and make a nice compilation.
+
+[33mcommit f8517e37c362c2fc01bd3797a1806ecd9c482ba5[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Mar 17 04:39:46 2018 -0700
+
+    Implemented code for custom npc merchants. Pretty simple actually and the result is very pleasing.
+
+[33mcommit 07757dac1fedcecd09a194a5ea8a6f8da23e088d[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Mar 17 04:18:35 2018 -0700
+
+    Discovered that the mod is now corectly rendering npcs. Issue: AnimatedSpriteCollection.draw functionality is inconsistent and needs to be fixed.
+
+[33mcommit 43573f0bbab3eded32c9140efa0d1a741645cff3[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Mar 17 04:04:04 2018 -0700
+
+    Fixed glitches pertaining to loading assets in and generating random npcs. Need to fix layer depth to see if NPC will properly render.
+
+[33mcommit 8d1eef7329c405b7be8dcd8f8e9d6f9e2c4e22d7[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Mar 5 23:46:24 2018 -0800
+
+    Cleaned up code regarding the Event System mod to prevent lots of redundant code.
+
+[33mcommit 16c77a1497310dd42164f0d694b84dd7f6429862[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Mar 5 23:06:39 2018 -0800
+
+    Ui buttons work, dialogue events now work for left click which could lead to some spicy mods.
+
+[33mcommit 4fc3466608153c51ca8f51b525d98b26cd4517d5[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Mar 5 20:46:45 2018 -0800
+
+    Made dialogue map event, and updated Button for UIUtilities to use Texture2DExtended. Spent awhile just fixing it.
+
+[33mcommit 68c831029b212706b736ca7d349f331222f1362d[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 15:21:39 2018 -0800
+
+    New constructors for ExtendedNPC that don't take a CharacterRenderer, just a basic Sprite.
+
+[33mcommit e17dd9ea7c3f8030edc5173805fffcc342b7564a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 14:44:52 2018 -0800
+
+    Made a function to generate renderers.
+
+[33mcommit c73702459951b298c735724e87b5fb6d5dbeef79[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 14:32:59 2018 -0800
+
+    The asset loader should now have all like assets bundled together. So all swimming animations will pull from the same body sprite as defined instead of always random.
+
+[33mcommit d5536b9e52d31fceaa07b265d5bd056d41880705[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 13:23:40 2018 -0800
+
+    Getting closer to the finished product. Assets are grouped together now with .json holding all the info for the different animation types.
+
+[33mcommit 005ad14cfd45853792c45069d918c1e8e047fe54[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 07:53:55 2018 -0800
+
+    I think the asset loader works this time. I can have 4 pngs assigned per .json file. Only way to know for sure is to start loading in a ton of art...
+
+[33mcommit b9e42ae256d3317e8fcc73bf7ea82a2928895590[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 04:36:46 2018 -0800
+
+    Got the asset loaded up and running. Currently I can load in normal npc sprites using .json files.
+
+[33mcommit e6696d8bb09878042c35d4500377289b8961a69e[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 03:36:19 2018 -0800
+
+    Made a way to keep track of npcs so that way they can be safely removed before saving and NOT crash the game.
+
+[33mcommit aa8d59b67b2251d18df04c7077cd2e90b4b05f6e[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 03:05:01 2018 -0800
+
+    Updated the mainifest for Happy Birthday to reflect a new version of the mod.
+
+[33mcommit b35746f85e725d8d48782c9b3af5a7032c204dc8[m
+Merge: 6330b49 ded9895
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sun Mar 4 03:03:30 2018 -0800
+
+    Merge pull request #34 from janavarro95/Development
+    
+    Fixed Happy Birthday Spamming the SMAPI console when the player still…
+
+[33mcommit ded9895c12d0ea2563ca13620ae8aee60b34cb25[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Mar 4 03:02:54 2018 -0800
+
+    Fixed Happy Birthday Spamming the SMAPI console when the player still hasn't choosen their birthday.
+
+[33mcommit 6330b495f23be18eb5001d143599904109369215[m
+Merge: 93f863b e5808ee
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Mar 3 19:25:40 2018 -0800
+
+    Merge pull request #33 from janavarro95/Development
+    
+    Development
+
+[33mcommit e5808eeb5cabfe45808ad9250634d5ba4f3a7bbb[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Mar 3 19:24:36 2018 -0800
+
+    Yup.
+
+[33mcommit 93f863bcca0a207087889c894a733b3b3c681c09[m
+Merge: a745213 f6ac929
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Mar 3 19:19:50 2018 -0800
+
+    Merge pull request #32 from JohnsonNicholas/master
+    
+    Update to convert to SMAPI Content API
+
+[33mcommit f6ac9291f1987225c81910629b532abaf92e71cf[m
+Author: Nicholas Johnson <koihimenakamura@gmail.com>
+Date:   Fri Mar 2 16:28:07 2018 -0800
+
+    Update to convert to SMAPI Content API
+
+[33mcommit 4fb792db11ff7912f78ccc595bfd00ea9b3b6ba8[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Feb 24 01:36:41 2018 -0800
+
+    Fixed the default non-modular spriter renderer to draw normal npcs again.
+
+[33mcommit 45c5b69ba0e8c02939812f350b37d642337d1eaa[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Feb 24 01:05:58 2018 -0800
+
+    Updated a constuctor to used the new character sprite class.
+
+[33mcommit fd9f5d97030ce0b2d4474fe7b26f5c8dfb4896e4[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Feb 24 01:04:35 2018 -0800
+
+    I think the integration is finished for the custom npc renderer. Who knows though.
+
+[33mcommit b19de2348741455d4f128b83e04c3c83ef2d4e0c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 23 23:40:34 2018 -0800
+
+    integrated code to ExtendedNPC that needs to be overwritten to fix the this.sprite issue.
+
+[33mcommit b57a5f506fe9fa9e3bf0b6cd58766ace75d0662f[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 23 23:16:10 2018 -0800
+
+    Finished base code for basic renderer. Now all I have to do is create the character renderer and AssetManager...
+
+[33mcommit 1fc38b964c3ccc8db2d692313f2b6b8707c95fd8[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 23 19:10:56 2018 -0800
+
+    Started work on custom npcs. Can load in new npcs from graphics. They don't do anything but stand there...
+
+[33mcommit 534eda1414c93ab51952cccc3bda3a52fde06ff3[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 23 13:55:51 2018 -0800
+
+    finished work on warp events
+
+[33mcommit 44a5887e1b933a34a4165bafb17343b06c8da799[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Feb 22 15:30:35 2018 -0800
+
+    Working on mouse button events.
+
+[33mcommit bebcefa76517daa7778275af2df2f27f1657815a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Feb 22 11:43:18 2018 -0800
+
+    Started work on new mod to add map events with code.
+
+[33mcommit aa71ab8ec4562bec8889ad8de1986950f83c368e[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Feb 21 13:41:43 2018 -0800
+
+    Started work on Hex32 class for color conversion because why not.
+
+[33mcommit 1b41fc47e92d2a4a9456e705fc419263a2c380cc[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Feb 6 02:13:21 2018 -0800
+
+    Made layered texture to be able to have textures on textures. Might be used in the near future.
+
+[33mcommit 13e1d9591ad414f53e15605b37b19d2153fa154c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Feb 6 01:27:28 2018 -0800
+
+    Integrated StardustCore with UIUtilities a new framework that makes making menus easier. It adds buttons and TexturedFonts that are loaded in as individual images for each character. Colors can be applied to these chararacters for some nice graphical effects.
+
+[33mcommit ff6456d9ec52c37c8f823e80513259c8662782c5[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Feb 5 19:07:29 2018 -0800
+
+    Added in ability to save and load music packs. Needs lots of work. Next step, menus.
+
+[33mcommit 45bfa5731f8b59ab9fbcbf20192b78ab97bb68b1[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Feb 5 17:31:59 2018 -0800
+
+    Finished writing functionality for WAV music packs. fixed issue when loading in songs, made sure initial sound keys are propperly loaded, and have implemented support for custom title screen music.
+
+[33mcommit aed71ac4db43297582da31528f4c35e8b18f6674[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Feb 3 21:11:38 2018 -0800
+
+    Just some summary tags to explain some functions.
+
+[33mcommit b5b6c2083095cb33c81b0db8c0b89fc8b4e108bd[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Feb 3 20:40:03 2018 -0800
+
+    Sucessfully loaded in songs with the WAV music packs. Just need to implement functionality in the WAV "packs"
+
+[33mcommit 1fb92f7cf7a1afed1db17d64bd8e231ed3d8c26c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Feb 3 11:50:56 2018 -0800
+
+    Finally got XACT music packs to load in again. Next up is loading in WAV files.
+
+[33mcommit a7452139900a589da7b76d3e5cb83dee8358fb2b[m
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Fri Feb 2 18:37:32 2018 -0800
+
+    Create ReadMe.md
+
+[33mcommit 575766a03dc89a7fe88d32216fcf9723800f77ec[m
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Fri Feb 2 18:36:06 2018 -0800
+
+    Delete Readme.txt
+
+[33mcommit 17cf699e1def6e9727df937996281a2d1c95c56a[m
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Fri Feb 2 18:35:36 2018 -0800
+
+    Create Readme.txt
+
+[33mcommit c21c6a4fc1d5e9a9960eb93982e8cbaf7f6c82f0[m
+Merge: c905457 5426a98
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Fri Feb 2 18:34:49 2018 -0800
+
+    Merge pull request #31 from janavarro95/Development
+    
+    Development
+
+[33mcommit 5426a98885ef5b2c87a7c35ece0af7a23c1bf23a[m
+Merge: fd962b5 930d982
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 2 18:34:22 2018 -0800
+
+    Merge branch 'Development' of https://github.com/janavarro95/Stardew_Valley_Mods into Development
+
+[33mcommit fd962b562dfa85e02a18dc8fe496e6d937df2bbf[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 2 18:33:39 2018 -0800
+
+    Removed an accidental directory naming from going one level too deep.
+
+[33mcommit c9054570a972f9b2387671c9f0e174309b98218c[m
+Merge: 74a7fa9 930d982
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Fri Feb 2 18:31:58 2018 -0800
+
+    Merge pull request #30 from janavarro95/Development
+    
+    Merge from Development
+
+[33mcommit 930d982972ec418bfb9ca8ef03d8db209bbffca2[m
+Merge: b8965d7 74a7fa9
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Fri Feb 2 18:31:35 2018 -0800
+
+    Merge branch 'master' into Development
+
+[33mcommit b8965d77e4708ad457270c3ea0da80394a06450b[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 2 18:15:00 2018 -0800
+
+    More work completed on Symphony remastered and close to finishing loading XACT music packs. Finished new mod CustomAssetModifier that essentially can modify ObjectInformation.xnb information without modifying .xnb files.
+
+[33mcommit 100f43f486739c2be91e04bd16a1b3472f9f7b52[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Feb 2 14:27:47 2018 -0800
+
+    Fixed a glitch where you could click the day buttons on the birthday select menu even if they weren't visable.
+
+[33mcommit b72de658a618e7273af3e536a77cf373b1c7d386[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Jan 30 12:46:04 2018 -0800
+
+    Work on SymponyRemasteered Music manager to be almost working, and fixed glitch with Happy Birthday when reading legacy save data.
+
+[33mcommit 5b894e32e8b61721111269b857bcb619db33006d[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Jan 28 19:06:36 2018 -0800
+
+    Updated xwb music pack to be almost complete. Need to do wav and music manager.
+
+[33mcommit 1cd732cf4ed58e863f55829bbc836c99cc90da75[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Jan 23 01:54:08 2018 -0800
+
+    Started work on StardewSymphonyRemastered. New features, more options, and a UI are in the works.
+
+[33mcommit efe185e76df43afe5b6b26f8b2d4b7701095880d[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Jan 16 14:34:10 2018 -0800
+
+    Fixed Revitalize to be compilable again so I can extract the code and make it into other smaller mods.
+
+[33mcommit 74a7fa97cb3483ee812cafa85dd6d340635f0284[m
+Merge: 8d1d091 c4e92f5
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Thu Jan 11 15:22:18 2018 -0800
+
+    Merge pull request #29 from Pathoschild/update-code
+    
+    Update manifests + reflection API
+
+[33mcommit c4e92f5cf3b6f2f56cf37872ed9035ef34e108bb[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Jan 11 00:50:16 2018 -0500
+
+    update deprecated reflection API
+
+[33mcommit 402c27b29c24c5f01897d20804e70ed88a64fc84[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Jan 11 00:43:32 2018 -0500
+
+    update manifest format
+
+[33mcommit 8d1d09114a297628c32ddfbaf6af8a7f441bcd19[m
+Merge: 928df83 34c3326
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Wed Jan 10 13:25:03 2018 -0800
+
+    Merge pull request #28 from janavarro95/Development
+    
+    Forgot to update the manifest
+
+[33mcommit 34c3326dd6333f4984e688999fdce50f921e7119[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Jan 10 13:24:34 2018 -0800
+
+    Forgot to udate the manifest
+
+[33mcommit 928df83457a31888a567daa548a341edc31e3289[m
+Merge: ad2ba95 3b744a4
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Wed Jan 10 13:17:42 2018 -0800
+
+    Merge pull request #27 from janavarro95/Development
+    
+    Development
+
+[33mcommit 3b744a4f5994ad786ab4362546c4093f1121d9db[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Jan 10 13:14:19 2018 -0800
+
+    Updated SaveAnywhere to fix the shipping menu not closing leading to errors in saving, and players not swimming when reloading the game.
+
+[33mcommit 2591602239527c8f2ffef246164437c6575d6057[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Dec 13 20:35:28 2017 -0800
+
+    Doing live code updates can be bad. Lots of last minute hot-fixes before the project is due.
+
+[33mcommit 4b62f3746e19a37261ebc362498003911c83f27c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Dec 12 01:38:22 2017 -0800
+
+    TaskMetaData now displays info about goal and location of the task.
+
+[33mcommit 34d072e7a41d1e1e622d99d5745f9f97bf102430[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Dec 12 01:19:41 2017 -0800
+
+    Fixed an NAN error and glitching the interface logic.
+
+[33mcommit b7c76ee0d690f9f692d179b0cbcdad51a41c3050[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Dec 11 23:32:46 2017 -0800
+
+    Fixed one away error for debris, and added graphics for pathing.
+
+[33mcommit b4d82f972a4f7a1362e2167ffe02ed7db9bb765c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Dec 11 14:54:59 2017 -0800
+
+    Can now fall asleep and open the shipping menu if things have been shipped.
+
+[33mcommit ce355fd2c065ba7dfdd85b72ff75c9376ab44d7e[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Dec 11 13:39:48 2017 -0800
+
+    Updated the AI to dig dirt and plant seeds.
+
+[33mcommit 2f6d4978da4589b129e3e97969de3575ce36dd47[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Dec 6 16:36:28 2017 -0800
+
+    Added functionality to buy seeds and started work on being able to dig out dirt.
+
+[33mcommit 79f2b2d038c333331a423a4b7237c3ca1a2f2bf3[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Dec 5 16:59:13 2017 -0800
+
+    hotfix to crop utility menu for component placement.
+
+[33mcommit eb3a1e15091d727560e727326db4e6c508fc6193[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Dec 5 16:39:34 2017 -0800
+
+    Made the AI utility functions and interface menu. AI's opinion will be calculated heaviest without user input and heavier the more user input is introduced.
+
+[33mcommit c9f1450ae84705ea371f719223b89f04eba590fa[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Dec 4 23:08:31 2017 -0800
+
+    made crop utility counting function
+
+[33mcommit 5a03d2bb2bb57ed0c1f4c28b9563d733df15df07[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Dec 4 12:57:29 2017 -0800
+
+    Fixed more pathifinding glitches when recalculating paths.
+
+[33mcommit 29238793065b7ee95cd24d49c8a8a0960c21428c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Dec 3 22:55:23 2017 -0800
+
+    Updated debris logic for twigs/stones/weeds to use better path finding.
+
+[33mcommit 4fcef655a8bab1fd2a127191a6d110a40db45abe[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Dec 3 17:44:31 2017 -0800
+
+    Waypoints, pathing in and out of buildings, to specific tiles, and returning home at the end of day.
+
+[33mcommit ea2e7c134f2514c8dae5470c382dc30b5a99b077[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Dec 2 21:53:30 2017 -0800
+
+    Fixed a really dumb stack overflow error on pathfinding across the world. THANK YOU.
+
+[33mcommit 31ddb0e7f15984834941f288626ff6998abfbb42[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sat Dec 2 15:13:31 2017 -0800
+
+    Reworked path calculation logic so it can now calculate costs of multiple paths.
+
+[33mcommit 58bb6cb285dc28de4f9ce04acd8051ad57ff3532[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Dec 1 21:42:44 2017 -0800
+
+    Made PathTo which allows me to get from one path to another.
+
+[33mcommit 4eea726db3512f4464eac123c382d41678236bf6[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Dec 1 02:18:37 2017 -0800
+
+    Pathfinding is now much faster on initial calculation after removing unused delay code. Also can path to adjacent maps. Needs work to chain the effect.
+
+[33mcommit 175a38597703896a9477f2a528fecb48f5ce8db9[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Dec 1 00:16:53 2017 -0800
+
+    Added functionality for shipping objects
+
+[33mcommit 3e9d7f6f49c011f324d03e0d60fe57eb47a3fc31[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 30 16:59:21 2017 -0800
+
+    Can path to nearest water tile and also if I need to water crops and need water path, get water, and path back to where I was.
+
+[33mcommit 38af511cfd99aca2a56c2fcc13e2ffdd048dd8fc[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 30 16:06:19 2017 -0800
+
+    Now pathfinds to closest tree possible. Probably want to do the same for the other tasks.
+
+[33mcommit 992ef687e7629b62cd99fef6cf825ebd1719cdda[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 30 11:58:05 2017 -0800
+
+    Can cut weeds.
+
+[33mcommit 365808a50437f5b5d077e3db826f361cf191123a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 30 10:45:43 2017 -0800
+
+    Changed some code to be in SDust Core and now the AI can break stones!
+
+[33mcommit eae0eb82bf72c232a3daff37630fbe9d9f7434df[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Nov 29 23:51:44 2017 -0800
+
+    Upgraded pathfinding to try and find all 4 cardinal goals simultaneously and whichever one it finds first must be the shortest path. Saves a TON of time as long as there is a path that we can pathfind to and is 4 times faster if there isn't a path at all.
+
+[33mcommit e58ab6ba055fb1fb917772e65579643ec7f525aa[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Nov 29 20:52:23 2017 -0800
+
+    Fixed overcalculating paths WAY TOO MUCH.
+
+[33mcommit b05ee04e2b8769bffc78d7ea7b6136c4702e744d[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Nov 29 20:06:48 2017 -0800
+
+    Made the stick choping work and upgraded the pathfinding to store the cheapest path to prevent a TON of crashes and calculation time.
+
+[33mcommit 671eb1be49480afb21d59ef92345021c7f2fdf8a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Nov 29 18:34:53 2017 -0800
+
+    RIP can now chop sticks but took HOURS to figure out how. Also if I can't find the path my code becomes vunerable to crash.
+
+[33mcommit ad2ba9527bc86413da30bef0bd61c7bf3137e83d[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Nov 27 23:38:12 2017 -0800
+
+    Path find through grass and made prereq for making sure I don't stay up too late.
+
+[33mcommit c748f64c2a5902ffbacd509c52663437a2cc37ab[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Nov 27 14:25:31 2017 -0800
+
+    Made TaskMetaDataStatistics that will help calculate path cost and make isInventoryFull Pre-req
+
+[33mcommit edd769b151d52a52b031507294744923ccf2b961[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Nov 26 18:20:23 2017 -0800
+
+    Fixed minor glitch where I would calculate cheapest task too often.
+
+[33mcommit e44ec0ee5be78565306a351cd62d40949690d015[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Nov 26 18:11:04 2017 -0800
+
+    Updates execution of tasks, added taskMetaData, (which is a lot) some pre-requisites, and chests show seeds.
+
+[33mcommit 069a6a5e8bf250f80751988cf25a1346ae210dcf[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Nov 24 20:05:34 2017 -0800
+
+    Forgot to include logic to get low grade seeds from chest. (Though I'm sure it would have worked fine anyways).
+
+[33mcommit de15a965f54d3ab4e68dcf50f381c086f9cc7f47[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Nov 24 19:56:10 2017 -0800
+
+    Added functionality to path to chest and pull seasonal seeds from it.
+
+[33mcommit cf3a77d9dee77d450e7180fcb40b0ba838b1518c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Nov 24 13:42:35 2017 -0800
+
+    Pathfind fixes
+
+[33mcommit 836d6861d89f13537b142ab82c9fa28f88cf5bc2[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Nov 24 13:12:36 2017 -0800
+
+    I guess fixing pathfind and spritebatch errors.
+
+[33mcommit e51a8fbac5d91e1bd78db5ae0d86a603875ef315[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Nov 24 11:21:03 2017 -0800
+
+    Changed from system tasks system to delegate system that made more sense but not really??? Also still dealing with nasty issue of sprite batch error but atleast now I can harvest crops.
+
+[33mcommit 0c860a1516b7f8de1fe9da1848733fc5528a8d6b[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 23 16:42:28 2017 -0800
+
+    Water all crops works correctly and now is stored in the execution list. Need to make some metadata for tasks and some statistics fr weights and stuff.
+
+[33mcommit e95ffa45db405bceb76366c4613ed5f3650b45a8[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 23 12:56:49 2017 -0800
+
+    Working on watering functionality for AI
+
+[33mcommit b17d56a51b97970e7c9099460c8c32ccad277b15[m
+Merge: 1a2295e fefea5f
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 23 00:53:00 2017 -0800
+
+    Merge branch 'master' of https://github.com/janavarro95/Stardew_Valley_Mods
+
+[33mcommit 1a2295e84e55ffce62b289bf03237369255af245[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 23 00:51:50 2017 -0800
+
+    Almost got crop watering code working. Need to get simulated presses working and proper tile targeting
+
+[33mcommit fefea5f26ad864d46b3a97fb473ec9da1ade8f18[m
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Wed Nov 22 19:43:37 2017 -0800
+
+    Update README.md
+
+[33mcommit b28c253d0fba261250eed2671ac41afa6bff947b[m
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Wed Nov 22 19:38:39 2017 -0800
+
+    Update README.md
+
+[33mcommit c7c65e06decac2e8686232ac5ebaa16ca989099d[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Nov 20 03:53:33 2017 -0800
+
+    Commit the good stuff. Fixed multipath finding recursing over goals.
+
+[33mcommit d4470e0ebb1364fa5ee6cc4bab87ceeb7b75a778[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Nov 20 01:54:33 2017 -0800
+
+    Changes to pathTo to work better than addTask for some reason. Not 100% sure but will figure it out.
+
+[33mcommit ac4a7e5a8a9d9b81646915b6a213452e3a947aa1[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Nov 20 01:03:21 2017 -0800
+
+    Fixed the large amounts of lag that happened during movement and key presses.
+
+[33mcommit 12ea388897cbdce5abba9cd853f8bd026b3a03c6[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Nov 19 22:32:24 2017 -0800
+
+    Started working on Execution task list that will queue up different tasks for the AI to do and execute them in order.
+
+[33mcommit 1d0b0a6b16bfbee40ed49db9c449d9fd9667908a[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Nov 19 21:20:41 2017 -0800
+
+    Added functionality to add multiple goals and path to each on in sequence from one another.
+
+[33mcommit cd0ac16a2272f64adefec3218a78b7a85c893c7f[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Nov 19 17:00:12 2017 -0800
+
+    Fined tuned some pathfinding stuff b adding pathTo and Delay functions. As long as I don't have to cross a bridge pathfinding works.
+
+[33mcommit d722144c21a5a6cf6c17ad8aa11bf0f71e6307d2[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Nov 17 02:50:22 2017 -0800
+
+    Finished BFS path finding and added in animations for the path. Also updated Animation Manager to be able to take multiple frames of animation per single animation set now.
+
+[33mcommit fa3c4389ae39cb1f5e0c6ff9344e54130e9bcd59[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 16 23:07:30 2017 -0800
+
+    Added Illumination framework to stardust for different colors, and made BFS path finding work for StarAI!
+
+[33mcommit a12250b8cc06dab460ad119828c99041d84bebc0[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 16 10:29:02 2017 -0800
+
+    Stared work on tileObject that will depict what is occuring with path finding and planning.
+
+[33mcommit 28421f07ffa389b2e42c6dabe3f4403b60bb01e0[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Nov 16 03:47:02 2017 -0800
+
+    Updated all mods to use most recent version of pathos netgu package and started work on StarAI for CS146 Game AI
+
+[33mcommit 170c12e750cc0424960205176e6301a50b2e4a09[m
+Merge: 71c846a 1868dd4
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Wed Oct 11 18:14:28 2017 -0700
+
+    Merge pull request #24 from Pathoschild/update-code
+    
+    Update new mods for SMAPI 2.0, enable update checks
+
+[33mcommit 1868dd4bd95ba0e19b5c5db15ec706c4c056e531[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Wed Oct 11 16:20:46 2017 -0400
+
+    update for release
+
+[33mcommit 16d5461a4e7105fa14262e5e836a614e5146ee3f[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Wed Oct 11 16:09:12 2017 -0400
+
+    standardise SimpleSoundManager entry class & prevent other mods from accessing its mod helper
+
+[33mcommit 3e01276c56d04cf8d16048deec0e40ffbb55a578[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Wed Oct 11 16:06:26 2017 -0400
+
+    add readme for SimpleSoundManager
+
+[33mcommit 344058de8866aeb9dcb0e23433fb876f46ecabf3[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Wed Oct 11 15:57:36 2017 -0400
+
+    enable update checks in SMAPI 2.0
+
+[33mcommit 3ab404499519cbb3be546395a61686c0df647c60[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Wed Oct 11 15:55:59 2017 -0400
+
+    update deprecated code
+
+[33mcommit 76bd5b7f337fb8959718ccf233997bb020539c8f[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Wed Oct 11 15:45:48 2017 -0400
+
+    fix project references
+
+[33mcommit 4393b6318c65d5af75325eb3e9f79947902cc52a[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Wed Oct 11 15:45:29 2017 -0400
+
+    update to mod build package 2.0
+
+[33mcommit 71c846acc5d6d8585977244fe9516ea2c277be69[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Sep 27 19:06:41 2017 -0700
+
+    Implemente correct interaction range with planter boxes.
+
+[33mcommit bce270d6ce599dda19552676d13ab2cb395465f0[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Sep 27 18:17:45 2017 -0700
+
+    Updated PlanterBox to correctly draw crops when held and in the menu. Planter boxes also are auto-watered by rain.
+
+[33mcommit a67a4d7380557994466661688d520ff194b03e4c[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Fri Sep 15 11:15:51 2017 -0700
+
+    Fixed animation glitch when harvesting crops, and now draw green + when crops are fully grown.
+
+[33mcommit f0e1e696f9f465e48d958735dbd1a6cee7b13537[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Sep 14 13:49:19 2017 -0700
+
+    Made Planter Boxes be a possible greenhouse, self watering, dead crops work again and are removed automatical per mod config, and dead crops can be removed by tools.
+
+[33mcommit 9888dacd22c089ec7a3a4d2c07361e04f2a43959[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Sep 13 17:11:05 2017 -0700
+
+    Stuff serializes into chests
+
+[33mcommit cf33b0228e3d4bb79f222a82fd0fd439e47b6e36[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Sep 13 13:53:12 2017 -0700
+
+    Changed serialization manager, all objects serialize in world and inventory. Next is chests.
+
+[33mcommit b3193b52fcd1c6712a43bad8eaf9b66d58ff899f[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Sep 13 10:52:27 2017 -0700
+
+    Fixed regular crops to grow now, and now can propperly harvest crops that don't regrow.
+
+[33mcommit dcafabcaa0b4e429e019d81218fdf56578fb0269[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Wed Sep 13 02:39:50 2017 -0700
+
+    Added in a custom shipping menu for coreObjects. Called before normal shipping menu. Modded crops can be harvested. Need to fix regular crops.
+
+[33mcommit 37fc678d449cbd77c617fc309dfa2d897d2b4e87[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Sep 12 17:00:36 2017 -0700
+
+    Added in the content to start being released with the mod. Still have some things to do such as crop growth/harvesting and serializing everything else. Also added in appropriate functionality for when planterboxes are watered.
+
+[33mcommit 2ebe3f981ae9102440a86e45263659c0397f4f81[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Sep 12 16:30:30 2017 -0700
+
+    Finished animation manager to work on animating things it is attached to. Serialize/Deserialize will be handled by each mod object. Changed files from AdditionalCrops to be hosted in R.F.CropsMod as proof that AdditionalCrops can be extended upon.
+
+[33mcommit a67baa4c095ec449cfd75dca1136a2c5c8831a54[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Sep 12 11:20:18 2017 -0700
+
+    Updates Stardust.metadata to work correctly in InventoryMenu, and ItemGrabMenu context. It shows the origin mod source of the item, and what class that item is. Hopefully will be useful for future modders.
+
+[33mcommit 3111f8bad09da020008f69154643bd41a4836a05[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Sep 11 23:39:59 2017 -0700
+
+    Updated Stardust with functionality to get MetaData about what mod an item belongs to. Useful for all modders and players who may wonder about origin of future objects.
+
+[33mcommit 28af12174800b668da086caabf7f7e72bd5d0575[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Sep 11 18:35:31 2017 -0700
+
+    Adding in Animation manager to animate objects. Also updating Stardust to be able to display info for objects from mods such as what mod an object is from.
+
+[33mcommit 6437efe2cf792d122ac644e2d5f0f967c60e60cb[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Sep 11 12:58:46 2017 -0700
+
+    Updated AdditionalCropsFramework to properly serialize and deserialze the crops in the planterbox object.
+
+[33mcommit fa5970661b0aa907616533e5c38c6ea2855500a3[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Sep 5 04:13:42 2017 -0700
+
+    Moved around soem files, made a core library mod that will include a bunch of things in the future. For the moment, a custom serializer/deserializer. Implemented it with AdditionalCrops. Needs some more work.
+
+[33mcommit 4fd79dae21299f0f8f2b90cb8655cfbb1c199cfd[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Tue Aug 22 17:45:30 2017 -0700
+
+    Started AdditionalCropsFramework. Addedin proof for modded crop seeds, seed bags, (crop objects? needs testing) and planter boxes. Still more to do.
+
+[33mcommit 4c52e557177a841f53e3dcf856f11122c287abd8[m
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Mon Aug 21 16:29:24 2017 -0700
+
+    Create Readme.txt
+
+[33mcommit 9aca5b19d3443f5360b1df24a6db4f5b31c98161[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Aug 21 16:28:41 2017 -0700
+
+    Small comment update
+
+[33mcommit 01c3822a8797faaf9882a9d2ba7d868e6c3941c9[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Mon Aug 21 16:18:21 2017 -0700
+
+    Made SimpleSoundManager for allowing mods to be able to use custom sounds when things happen. Also made an example mod for it.
+
+[33mcommit 3ed8072436cbe76054837427d43b651165cf20ce[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Aug 20 10:38:59 2017 -0700
+
+    Fixed glitch with Save Anywhere where saving in a building on a farm wouldn't warp you correctly back to the location when loading again.
+
+[33mcommit c4d7e7500b807e1b802c8d1e7120097280147267[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Sun Aug 6 01:21:18 2017 -0700
+
+    Updating revitalize. Modular furniture can be placed. Now how to remove it...
+
+[33mcommit 7089475d46488cd47012f9bf883d0a9818211886[m
+Merge: 80c4633 5396d11
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Aug 5 21:59:33 2017 -0700
+
+    Merge pull request #22 from Pathoschild/save-anywhere-fixes
+    
+    Overhaul Save Anywhere file format, various fixes
+
+[33mcommit 5396d11675df03e215f576421d36bda206ac77e3[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:46:29 2017 -0400
+
+    add missing release note
+
+[33mcommit cf5a01bf413b764491c44880fa3f9cec66af5466[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:38:07 2017 -0400
+
+    fix bug in non-vanilla save detection
+
+[33mcommit 146d79d3b75a544717de064e57fa244e9e110f3b[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:23:46 2017 -0400
+
+    add a few missing release notes
+
+[33mcommit 3a9bfd177d3d4402a0619ce2b6d97763d6c370b9[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:22:15 2017 -0400
+
+    fix save crash in the community center when Junimos are present (#11)
+
+[33mcommit fad849f80062a6a93f76e9177b6990140ef2b563[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:20:48 2017 -0400
+
+    migrate Save Anywhere to SMAPI's config API
+
+[33mcommit c980d587a8dfc123492477ea46ff083196cc510d[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:19:38 2017 -0400
+
+    overhaul Save Anywhere data format, add facing direction
+
+[33mcommit 26aa5530ca09d74b02b74d479f7e98cf835c6261[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:17:51 2017 -0400
+
+    fix issue where loading a game after sleeping warps player back to last custom save (#12, #15)
+
+[33mcommit 80c4633e9968422c712b218908fbc5b300b205de[m
+Merge: 6ed1bf6 e43f3bf
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Aug 5 20:15:45 2017 -0700
+
+    Merge pull request #21 from Pathoschild/reimplement-no-more-pets
+    
+    Reimplement NoMorePets
+
+[33mcommit 6ed1bf61a40a432b557a5492babff0cb229648ed[m
+Merge: fec79ee 81af6a4
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Aug 5 20:15:30 2017 -0700
+
+    Merge pull request #20 from Pathoschild/fix-autospeed-default
+    
+    Tweak AutoSpeed's default speed
+
+[33mcommit fec79eee5801d1f1cbbf71f18260c22d32b2181f[m
+Merge: f5069f8 cec3523
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Aug 5 20:15:15 2017 -0700
+
+    Merge pull request #19 from Pathoschild/fix-exit-to-title
+    
+    Fix exit to title
+
+[33mcommit e43f3bf160a19733d1786808cab5d9727c60a3a1[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:08:42 2017 -0400
+
+    reimplement NoMorePets to simplify code & fix bugs
+
+[33mcommit 81af6a4767b7753c2e743b340b2fe8c4bec5673b[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:08:11 2017 -0400
+
+    fix AutoSpeed config defaulting to normal walking speed
+
+[33mcommit cec352336cf8bdfa937adedd014d7d5f9faa93db[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 23:00:37 2017 -0400
+
+    fix issues when player exits to title
+
+[33mcommit f5069f8ca56acca5e38ef830b9f4adfe74fd9ca7[m
+Merge: 21d3a16 2a5c17f
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Aug 5 16:27:18 2017 -0700
+
+    Merge pull request #18 from Pathoschild/simplify-config
+    
+    Simplify config/data parsing using SMAPI APIs
+
+[33mcommit 2a5c17ff2fafe9285d239b4095076da75077446a[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:51:44 2017 -0400
+
+    replace manual file parsing with SMAPI's APIs
+
+[33mcommit 9257605595c8e6a172a9db3087ca0ba8b3e4822d[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:49:27 2017 -0400
+
+    replace manual JSON parsing with SMAPI's config API
+
+[33mcommit 21d3a165a50c6634355d61ecc586843b47d5d989[m
+Merge: fc7aff3 b201863
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Aug 5 12:47:41 2017 -0700
+
+    Merge pull request #17 from Pathoschild/update-code
+    
+    Update for SMAPI 2.0 and simplify code using new APIs
+
+[33mcommit b201863cd27d18b3ab66cf1be57eff0de7f0fab0[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:36:00 2017 -0400
+
+    bump mod versions for release
+
+[33mcommit 69798daae10e226ae4a429b460eb62c3f8b016bb[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:24:01 2017 -0400
+
+    use SMAPI's reflection API to access private fields & methods
+    
+    It takes care of caching, validation, etc.
+
+[33mcommit 9526d90dbf19223ad4a1fd42e7fee1bfa8a2f287[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:23:33 2017 -0400
+
+    fix uses of Console.WriteLine
+
+[33mcommit 8fd29a88715aa4a7289710821d6915469c6b8bc0[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:23:10 2017 -0400
+
+    simplify context checks using new SMAPI features
+
+[33mcommit a03da96aa83a8c9b7f968f85fd82ae7bdb823169[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:20:46 2017 -0400
+
+    fix compatibility with SMAPI 2.0
+
+[33mcommit 0f333877561111819060ac3bc78d4b99b280c7f5[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:20:15 2017 -0400
+
+    update release notes
+
+[33mcommit dc62581ddfa2d8bc57504bbd8789ff9e35311ed5[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:19:45 2017 -0400
+
+    correct manifest versions
+
+[33mcommit 0af7cf45620df579fdc07e74bfafbdd7a852f559[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Aug 5 15:19:24 2017 -0400
+
+    standardise manifests
+
+[33mcommit fc7aff35645235bb31957d7a80168027777b999c[m
+Merge: c5f2ae0 23270ed
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Sat Aug 5 10:02:24 2017 -0700
+
+    Merge pull request #16 from Pathoschild/refactor
+    
+    Refactor mod code & add READMEs
+
+[33mcommit 23270ed54328b1f557262c20c14506e2941edd29[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Aug 3 21:05:48 2017 -0400
+
+    disable new log message in Save Anywhere that spams errors
+
+[33mcommit 7d84f5d64f6ffcaa338ff2c63504b61c347e92f5[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Aug 3 19:43:40 2017 -0400
+
+    minor cleanup in Stardew Symphony code
+
+[33mcommit 7fe227bd78a3eb3cbd03007d6541b6d75328be93[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Mon Jul 31 01:24:31 2017 -0400
+
+    add GlobalAssemblyInfo.cs
+
+[33mcommit 962360579e381bd5878d5bc10b77a13c4b776cc3[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Mon Jul 31 01:15:45 2017 -0400
+
+    clean up config/data file parsing a bit, fix redundant code
+
+[33mcommit cf86505338ea87035d7d3b259ce2d19d29fd5aab[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Mon Jul 31 01:01:26 2017 -0400
+
+    remove unneeded build output
+
+[33mcommit 3c43972fdbd0ec36a14ab1f9c5fbed9eabee2f61[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Mon Jul 31 00:56:32 2017 -0400
+
+    add main README and per-mod READMEs
+
+[33mcommit 9d363573956d3892734da302a20274c9bf01c621[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 23:10:15 2017 -0400
+
+    remove compiled file
+
+[33mcommit 49f2c0e8d03db319108b7a2648f97aa1b5d6db89[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 23:09:39 2017 -0400
+
+    move Revitalize readme into its folder
+
+[33mcommit e214952305226170976bcb99ab835e76cf6aae02[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 23:07:07 2017 -0400
+
+    update filenames to class type names, move internal code into framework namespace
+
+[33mcommit 62bc47d02db4ed9a7409d756fc0ac8ec69cfb700[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 22:55:58 2017 -0400
+
+    refactor SaveAnywhere's main class
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, removes unused code, decouples classes, etc.
+
+[33mcommit c14f7c8b2424041aa69b2e804f40e24f06f47b54[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 21:58:48 2017 -0400
+
+    refactor SaveAnywhere utilities & simplify save/load logic
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, removes unused code, decouples classes, etc.
+
+[33mcommit e88bc4615b154e3a58515c42fa32ef7d27f20e83[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 18:26:22 2017 -0400
+
+    reimplement SaveAnywhere's shipping menu to avoid duplicating game logic
+
+[33mcommit 9fc6a3c3f92aa80fef553c2e91e68f5fc38b1c12[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 17:57:00 2017 -0400
+
+    make SaveAnywhere's utilities non-static
+
+[33mcommit 5a7bac7ea55ba1a2f2936ddef3ef5eda45e72169[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 17:42:15 2017 -0400
+
+    unify SaveAnywhere's save utilities
+
+[33mcommit d99a45144ed18e699faa48ca7df15d26fc52b680[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 02:45:00 2017 -0400
+
+    fix some mod files not being deployed
+
+[33mcommit 1846b7e570b63cb60ee0915c758e7147daf54618[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 02:43:37 2017 -0400
+
+    refactor StardewSymphony to unify duplicated per-season logic
+
+[33mcommit 698f5d84986e089b2fd55b27b469c52c7ad6bf0b[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sun Jul 30 01:44:38 2017 -0400
+
+    refactor StardewSymphony
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, removes unused code, etc.
+
+[33mcommit 916722fe4ce5647110dc072181c82238cf8daa24[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 22:55:10 2017 -0400
+
+    refactor TimeFreeze
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit 8f836be9972876ed74a545b1384c325ca39db75d[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 20:53:26 2017 -0400
+
+    refactor SaveBackup
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit db9cda9e8b6ef7238c3aad4044b742fe827739e2[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 20:03:22 2017 -0400
+
+    refactor NoMorePets
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit a71aeb5147399233f675eb82d7a00c6dce7c609a[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 19:59:16 2017 -0400
+
+    refactor NightOwl
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, removes redundant code, etc.
+
+[33mcommit 022f12e1ed56cb2b6278b5dc5b819e8a229cfbf2[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 18:16:23 2017 -0400
+
+    refactor MoreRain
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit 62dc662da416de1eb96cb03d9f40cc6b366453f6[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 18:02:49 2017 -0400
+
+    refactor HappyBirthday
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, removes unused code, comments out unreachable code, etc.
+
+[33mcommit a6f27c1c72429cf6041ab5d724defdcf684236c0[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 14:29:05 2017 -0400
+
+    refactor Fall28SnowDay
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit fa36c03028078fc4df6f86beca86799f75ba0329[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 14:28:23 2017 -0400
+
+    refactor DailyQuestAnywhere
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit a498fcd62a2a0816e2d324b0dd97dab6e59dd4a0[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 14:24:47 2017 -0400
+
+    refactor CustomShopsRedux GUI
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, comments out unused code, etc.
+
+[33mcommit 6c2555d7484ef05c8225fd3814bb427a5a1773dd[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 14:18:46 2017 -0400
+
+    refactor BuyBackCollectables
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, removes unused code, etc.
+
+[33mcommit 18fc258f8009f7a3eaf4294fce29732d830357d9[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 14:05:24 2017 -0400
+
+    refactor BuildEndurance and BuildHealth
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, splits Config into its own file, etc.
+
+[33mcommit 935ad499afed403314c7d33802250e613292cac3[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 13:54:26 2017 -0400
+
+    refactor BillboardAnywhere
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit bd07b482d61a7df0e927f97aff7611c90de73bb9[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 13:47:19 2017 -0400
+
+    refactor AutoSpeed
+    
+    This commit formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit 7d7f7abe2ef3582618c8e39b779e3961b59bff58[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Sat Jul 29 13:30:04 2017 -0400
+
+    refactor Museum Rearranger
+    
+    This commit simplifies the code by overriding the base MuseumMenu instead of redefining it, formats/documents/simplifies code, standardises naming conventions, etc.
+
+[33mcommit c5f2ae0cbdf4a81efb0825ffe2bed91437dafa90[m
+Merge: 2f3a1df 0ac43b2
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Thu Jul 27 21:54:36 2017 -0700
+
+    Merge pull request #14 from Pathoschild/revamp-project-structure
+    
+    Revamp general mods structure, and simplify editing & deployment
+
+[33mcommit 0ac43b2541cdde76ca44952a42a7f62333472730[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Fri Jul 28 00:45:36 2017 -0400
+
+    only create release zips when building in release mode
+
+[33mcommit 87729915480b703d8b4937cd9e6fa5af01b20e7a[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Fri Jul 28 00:26:09 2017 -0400
+
+    replace packaging script with new build config package feature
+
+[33mcommit f907a18d63090fcc2ad0c1cfe36a863b98480173[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Fri Jul 28 00:16:26 2017 -0400
+
+    centralise deploy configuration
+
+[33mcommit f94936b76f7d3376e74d8c06dd2af72fbbdf7086[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Jul 27 20:28:39 2017 -0400
+
+    standardise namespaces
+
+[33mcommit 9d141837962553e65e7ac4e77f2653534328eab8[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Jul 27 20:21:29 2017 -0400
+
+    fix hardcoded reference to Json.NET
+
+[33mcommit f5f32206f5e682f256696b1d82a1bb34f4171825[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Jul 27 20:18:36 2017 -0400
+
+    use latest mod build config package, simplify references & deployment
+
+[33mcommit 2470bbc361d4ecbfc124834e1dc9e46e79124a49[m
+Author: Jesse Plamondon-Willard <github@jplamondonw.com>
+Date:   Thu Jul 27 20:18:19 2017 -0400
+
+    simplify project structure & unify mod solutions
+    
+    This commit combines the general mods into one solution, removes compiled/generated files, and standardises the project names.
+
+[33mcommit 2f3a1df33f2fe3c2889975b65edf916b7ad821f9[m
+Author: janavarro95 <janavarro95@users.noreply.github.com>
+Date:   Thu Jul 13 20:30:57 2017 -0700
+
+    Update README.md
+
+[33mcommit 4e5505552b001a1d32196f570e8e1c8ea1385352[m
+Author:  <JoshuaNavarro@DESKTOP-1AFQIIL.localdomain>
+Date:   Thu Jul 13 20:27:48 2017 -0700
+
+    A big boring update to attempt tp streamline my own personal modding in the future. Also renames some files because the old names were awful.

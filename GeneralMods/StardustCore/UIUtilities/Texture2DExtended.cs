@@ -57,5 +57,10 @@ namespace StardustCore.UIUtilities
         {
             return this.texture;
         }
+
+        public void setTexure(Texture2D text)
+        {
+            this.texture = text;
+        }
     }
 }

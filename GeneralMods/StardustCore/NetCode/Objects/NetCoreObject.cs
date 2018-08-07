@@ -6,19 +6,54 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using Netcode;
+using StardewValley;
+using StardustCore.NetCode.Graphics;
 using StardustCore.UIUtilities;
 
 namespace StardustCore.NetCode
 {
-    class NetCoreObject : Netcode.NetField<CoreObject,NetCoreObject>
+    public class NetCoreObject : Netcode.NetField<CoreObject, NetCoreObject>
     {
 
-        public NetTexture2DExtended texture;
+
         public NetInt which;
         public NetVector2 tilePos;
-        public NetInt InventoryMaxSize;
-        public NetRectangle sourceRect;
+
+
         public NetRectangle boundingBox;
+
+
+
+        public NetVector2 position;
+        public NetInt Decoration_type;
+        public NetInt rotations;
+        public NetInt currentRotation;
+        public NetInt sourceIndexOffset;
+        public NetVector2 drawPosition;
+        public NetRectangle sourceRect;
+        public NetRectangle defaultSourceRect;
+        public NetRectangle defaultBoundingBox;
+        public NetString description;
+        public NetTexture2DExtended texture;
+        public NetBool flipped;
+        public NetBool flaggedForPickup;
+        public NetBool lightGlowAdded;
+        public NetObjectList<Item> inventory;
+        public NetInt InventoryMaxSize;
+        public NetBool itemReadyForHarvest;
+        public NetBool lightsOn;
+        public NetString locationName;
+        public NetColor lightColor;
+        public NetBool removable;
+        public NetColor drawColor;
+        public NetBool useXML;
+        public NetString serializationName;
+
+        //Animation Manager.....
+        public NetAnimationManager animationManager;
+
+
+
 
         public NetCoreObject()
         {
@@ -32,9 +67,8 @@ namespace StardustCore.NetCode
 
         protected override void ReadDelta(BinaryReader reader, NetVersion version)
         {
-            
             texture = new NetTexture2DExtended();
-            texture.ReadFull(reader, version);
+            texture.Read(reader, version);
             Value.setExtendedTexture(texture.Value);
 
             which = new NetInt();
@@ -56,14 +90,20 @@ namespace StardustCore.NetCode
             boundingBox = new NetRectangle();
             boundingBox.Read(reader, version);
             Value.boundingBox.Value = boundingBox.Value;
-            
+
+            drawPosition = new NetVector2();
+            drawPosition.Read(reader, version);
+            Value.drawPosition = drawPosition.Value;
+
+            animationManager = new NetAnimationManager();
+            animationManager.Read(reader, version);
+            Value.animationManager = animationManager.Value;
         }
 
         protected override void WriteDelta(BinaryWriter writer)
         {
-            
             texture = new NetTexture2DExtended(Value.getExtendedTexture());
-            texture.WriteFull(writer);
+            texture.Write(writer);
 
             which = new NetInt(Value.ParentSheetIndex);
             which.Write(writer);
@@ -79,7 +119,15 @@ namespace StardustCore.NetCode
 
             boundingBox = new NetRectangle(Value.boundingBox.Value);
             sourceRect.Write(writer);
-            
+
+            drawPosition = new NetVector2(Value.drawPosition);
+            drawPosition.Write(writer);
+
+            if (Value.animationManager != null)
+            {
+                animationManager = new NetAnimationManager(Value.animationManager);
+                animationManager.Write(writer);
+            }
         }
     }
 }
