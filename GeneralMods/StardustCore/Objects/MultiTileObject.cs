@@ -27,7 +27,6 @@ namespace StardustCore.Objects
         {
             this.objects = Objects;
             this.TextureSheet = texture;
-            this.texturePath = texture.path;
             this.categoryColor = CategoryColor;
             this.categoryName = CategoryName;
             this.name = Name;
@@ -51,7 +50,6 @@ namespace StardustCore.Objects
             this.animationManager = animationManager;
             this.objects = Objects;
             this.TextureSheet =animationManager.getExtendedTexture();
-            this.texturePath = animationManager.getExtendedTexture().path;
             this.name = Name;
             this.displayName = Name;
             this.description = Description;

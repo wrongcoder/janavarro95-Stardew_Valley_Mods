@@ -390,7 +390,7 @@ namespace StardustCore.Serialization
                     {
                         //THE ERROR LIES HERE AS IT THINKS IT CAN TRY TO BE A CORE OBJECT WHEN IT IS NOT!!!!
                         CoreObject core_obj = StardustCore.ModCore.ModHelper.ReadJsonFile<CoreObject>(path); //FIND A WAY TO FIX THIS!!!!
-                        type = (core_obj as CoreObject).thisType;
+                        type = (core_obj as CoreObject).serializationName;
                         //ModCore.ModMonitor.Log("UMM THIS CAN't BE RIGHT 1" + type);
                     }
 
@@ -705,7 +705,7 @@ namespace StardustCore.Serialization
                     {
                         //THE ERROR LIES HERE AS IT THINKS IT CAN TRY TO BE A CORE OBJECT WHEN IT IS NOT!!!!
                         CoreObject core_obj = StardustCore.ModCore.ModHelper.ReadJsonFile<CoreObject>(path); //FIND A WAY TO FIX THIS!!!!
-                        type = (core_obj as CoreObject).thisType;
+                        type = (core_obj as CoreObject).serializationName;
                         //ModCore.ModMonitor.Log("UMM THIS CAN't BE RIGHT 1" + type);
                     }
 

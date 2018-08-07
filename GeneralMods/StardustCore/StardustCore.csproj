@@ -89,7 +89,10 @@
     <Compile Include="Interfaces\IToolSerializer.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
+    <Compile Include="NetCode\NetAnimation.cs" />
+    <Compile Include="NetCode\NetAnimationManager.cs" />
     <Compile Include="NetCode\NetCoreObject.cs" />
+    <Compile Include="NetCode\NetKeyValuePair.cs" />
     <Compile Include="NetCode\NetTexure2DExtended.cs" />
     <Compile Include="Objects\MultiTileComponent.cs" />
     <Compile Include="Objects\MultiTileObject.cs" />
@@ -438,6 +441,10 @@
     <Content Include="Content\Graphics\Tools\CustomAxe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NetCode\NetDictionaries\" />
+    <Folder Include="NetCode\NetLists\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\deploy.targets" />

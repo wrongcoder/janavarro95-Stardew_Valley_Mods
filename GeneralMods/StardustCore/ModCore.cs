@@ -78,6 +78,8 @@ namespace StardustCore
             tile1.Name = "test";
             tile1.displayName = "test";
             Game1.player.addItemToInventory(tile1);
+
+            
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)

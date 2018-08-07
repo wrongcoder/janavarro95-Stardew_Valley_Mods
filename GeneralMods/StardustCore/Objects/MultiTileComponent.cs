@@ -26,7 +26,6 @@ namespace StardustCore.Objects
             this.name = part.name;
             this.description = part.description;
             this.TextureSheet = part.getExtendedTexture();
-            this.texturePath = this.TextureSheet.path;
             if (part.animationManager != null)
             {
                 this.animationManager = part.animationManager;
