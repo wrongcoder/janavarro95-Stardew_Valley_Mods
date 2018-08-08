@@ -16,6 +16,8 @@ namespace Omegasis.TimeFreeze
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        public int oldInterval;
+
 
         /*********
         ** Public methods
@@ -40,8 +42,92 @@ namespace Omegasis.TimeFreeze
             if (!Context.IsWorldReady)
                 return;
 
-            if (this.ShouldFreezeTime(Game1.player, Game1.player.currentLocation))
-                Game1.gameTimeInterval = 0;
+            if (Game1.gameTimeInterval != 0)
+            {
+                oldInterval = Game1.gameTimeInterval;
+            }
+
+            if (Game1.IsMultiplayer)
+            {
+                if (Config.freezeIfEvenOnePlayerMeetsTimeFreezeConditions)
+                {
+                    bool isAnyFarmerSuitable = false;
+                    foreach (Farmer farmer in Game1.getAllFarmers())
+                    {
+                        if (this.ShouldFreezeTime(farmer, farmer.currentLocation))
+                        {
+                            Game1.gameTimeInterval = 0;
+                            isAnyFarmerSuitable = true;
+                        }
+                    }
+                    if (isAnyFarmerSuitable == false)
+                    {
+                        Game1.gameTimeInterval = oldInterval;
+                    }
+                }
+
+                else if (Config.freezeIfMajorityPlayersMeetsTimeFreezeConditions)
+                {
+                    int freezeCount = 0;
+                    int playerCount = 0;
+                    foreach (Farmer farmer in Game1.getAllFarmers())
+                    {
+                        playerCount++;
+                        if (this.ShouldFreezeTime(farmer, farmer.currentLocation))
+                        {
+                            //Game1.gameTimeInterval = 0;
+                            freezeCount++;
+                        }
+                    }
+                    if (freezeCount >= (playerCount / 2))
+                    {
+                        Game1.gameTimeInterval = 0;
+
+                    }
+                    else
+                    {
+                        Game1.gameTimeInterval = oldInterval;
+                    }
+                }
+
+                else if (Config.freezeIfAllPlayersMeetTimeFreezeConditions)
+                {
+                    int freezeCount = 0;
+                    int playerCount = 0;
+                    foreach (Farmer farmer in Game1.getAllFarmers())
+                    {
+                        playerCount++;
+                        if (this.ShouldFreezeTime(farmer, farmer.currentLocation))
+                        {
+                            //Game1.gameTimeInterval = 0;
+                            freezeCount++;
+                        }
+                    }
+                    if (freezeCount >= playerCount)
+                    {
+                        Game1.gameTimeInterval = 0;
+
+                    }
+                    else
+                    {
+                        Game1.gameTimeInterval = oldInterval;
+                    }
+                }
+
+
+            }
+            else
+            {
+                Farmer player = Game1.player;
+                if (this.ShouldFreezeTime(player, player.currentLocation))
+                {
+                    Game1.gameTimeInterval = 0;
+                }
+                else
+                {
+                    Game1.gameTimeInterval = oldInterval;
+                }
+            }
         }
 
         /// <summary>Get whether time should be frozen for the player at the given location.</summary>
@@ -49,8 +135,26 @@ namespace Omegasis.TimeFreeze
         /// <param name="location">The location to check.</param>
         private bool ShouldFreezeTime(StardewValley.Farmer player, GameLocation location)
         {
-            if (location.Name == "Mine" || location.Name == "SkullCave"|| location.Name.StartsWith("SkullCave") || location.Name.StartsWith("UndergroundMine") || location.IsOutdoors)
+
+            if (Config.PassTimeWhileInsideMine==false)
+            {
+                if(location.Name == "Mine" || location.Name.StartsWith("UndergroundMine"))
+                {
+                    return true;
+                }
+            }
+
+            if (Config.PassTimeWhileInsideSkullCave==false)
+            {
+                if (location.Name == "SkullCave" || location.Name.StartsWith("SkullCave"))
+                {
+                    return true;
+                }
+            }
+
+            if (location.IsOutdoors)
                 return false;
+
             if (player.swimming.Value)
             {
                 if (this.Config.PassTimeWhileSwimmingInBathhouse && location is BathHousePool)

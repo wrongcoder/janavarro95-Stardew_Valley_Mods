@@ -69,7 +69,7 @@ namespace StardustCore.NetCode
         {
             
             texture = new NetTexture2DExtended();
-            texture.ReadFull(reader, version);
+            texture.ReadData(reader, version);
             Value.setExtendedTexture(texture.Value);
 
             which = new NetInt();
@@ -95,10 +95,11 @@ namespace StardustCore.NetCode
             drawPosition = new NetVector2();
             drawPosition.Read(reader, version);
             Value.drawPosition = drawPosition.Value;
-
+            /*
             animationManager = new NetAnimationManager();
             animationManager.Read(reader, version);
             Value.animationManager = animationManager.Value;
+            */
 
         }
 
@@ -106,7 +107,7 @@ namespace StardustCore.NetCode
         {
             
             texture = new NetTexture2DExtended(Value.getExtendedTexture());
-            texture.Write(writer);
+            texture.WriteData(writer);
 
             which = new NetInt(Value.ParentSheetIndex);
             which.Write(writer);
@@ -126,11 +127,13 @@ namespace StardustCore.NetCode
             drawPosition = new NetVector2(Value.drawPosition);
             drawPosition.Write(writer);
 
+            /*
             if (Value.animationManager != null)
             {
                 animationManager = new NetAnimationManager(Value.animationManager);
                 animationManager.Write(writer);
             }
+            */
         }
     }
 }
