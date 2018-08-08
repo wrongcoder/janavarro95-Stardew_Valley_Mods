@@ -63,7 +63,7 @@ namespace StardustCore.NetCode
         {
             
             texture = new NetTexture2DExtended(Value.getExtendedTexture());
-            texture.WriteFull(writer);
+            texture.Write(writer);
 
             which = new NetInt(Value.ParentSheetIndex);
             which.Write(writer);

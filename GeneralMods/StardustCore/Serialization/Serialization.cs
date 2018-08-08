@@ -842,6 +842,12 @@ public string ParseXMLType(string path)
         public void initializeDefaultSuportedTypes()
         {
             initializeSupportedToolTypes();
+            initializeSupportedObjectTypes();
+        }
+
+        private void initializeSupportedObjectTypes()
+        {
+            this.acceptedTypes.Add(typeof(CoreObject).ToString(), new SerializerDataNode(CoreObject.Serialize, CoreObject.Deserialize, new SerializerDataNode.WorldParsingFunction(CoreObject.Serialize), new SerializerDataNode.SerializingToContainerFunction(CoreObject.SerializeToContainer)));
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace StardustCore.UIUtilities
         {
             foreach(var v in textures)
             {
-                if (v.Key == name) return v.Value;
+                if (v.Key == name) return v.Value.Copy();
             }
             return null;
         }

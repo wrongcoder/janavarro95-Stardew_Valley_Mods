@@ -12,7 +12,7 @@ namespace StardustCore.UIUtilities
     public class Texture2DExtended
     {
         public string Name;
-        private Texture2D texture;
+        public Texture2D texture;
         public string path;
         IModHelper helper;
         

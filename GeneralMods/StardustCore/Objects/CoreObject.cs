@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -11,6 +12,7 @@ using StardustCore.Interfaces;
 using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace StardustCore
@@ -42,7 +44,7 @@ namespace StardustCore
 
         public string description;
 
-        [XmlIgnore]
+        
         protected Texture2DExtended TextureSheet;
 
         public new bool flipped;
@@ -80,6 +82,7 @@ namespace StardustCore
 
         public string serializationName;
 
+        public string textureName;
 
         public override string Name
         {
@@ -130,10 +133,6 @@ namespace StardustCore
         public CoreObject(Texture2DExtended texture,int which, Vector2 Tile, int InventoryMaxSize):base()
         {
             var ok=Game1.getAllFarmers();
-            foreach (var v in ok){
-                this.owner.Value = v.UniqueMultiplayerID;
-                break;
-            }
             this.Type = "Not Sure";
             this.CanBeSetDown = true;
             this.CanBeGrabbed = true;
@@ -1222,6 +1221,66 @@ namespace StardustCore
         public virtual void setExtendedTexture(Texture2DExtended texture)
         {
             this.TextureSheet = texture;
+        }
+
+
+        /// <summary>
+        /// Serializes the said item properly.
+        /// </summary>
+        /// <param name="I"></param>
+        public static void Serialize(Item I)
+        {
+            String savePath = ModCore.SerializationManager.playerInventoryPath;
+            String fileName = I.Name + ".json";
+            String resultPath = Path.Combine(savePath, fileName);
+            int count = 0;
+            while (File.Exists(resultPath))
+            {
+                resultPath = Serialization.SerializationManager.getValidSavePathIfDuplicatesExist(I, savePath, count);
+                count++;
+            }
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            (I as CoreObject).textureName = (I as CoreObject).TextureSheet.Name;
+            string json = JsonConvert.SerializeObject(I, Formatting.Indented,settings);
+            System.IO.File.WriteAllText(resultPath, json);
+            //StardustCore.ModCore.ModHelper.WriteJsonFile<CoreObject>(resultPath, (CoreObject)I);
+        }
+
+        /// <summary>
+        /// Serializes the said item to a chest.
+        /// </summary>
+        /// <param name="I"></param>
+        /// <param name="s"></param>
+        public static void SerializeToContainer(Item I, string s)
+        {
+            String savePath = s;
+            String fileName = I.Name + ".json";
+            String resultPath = Path.Combine(savePath, fileName);
+            int count = 0;
+            while (File.Exists(resultPath))
+            {
+                resultPath = Serialization.SerializationManager.getValidSavePathIfDuplicatesExist(I, savePath, count);
+                count++;
+            }
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            (I as CoreObject).textureName = (I as CoreObject).TextureSheet.Name;
+            string json = JsonConvert.SerializeObject(I, Formatting.Indented, settings);
+            System.IO.File.WriteAllText(resultPath, json);
+            //StardustCore.ModCore.ModHelper.WriteJsonFile<CoreObject>(resultPath, (CoreObject)I);
+        }
+
+        /// <summary>
+        /// Deserializes the object from a .json.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static CoreObject Deserialize(string data)
+        {
+            CoreObject obj = ModCore.ModHelper.ReadJsonFile<CoreObject>(data);
+            obj.TextureSheet = ModCore.TextureManager.getTexture(obj.textureName);
+            return obj;
         }
     }
 }

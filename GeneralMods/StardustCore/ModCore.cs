@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Network;
 using StardustCore.ModInfo;
+using StardustCore.NetCode;
 using StardustCore.Objects;
 using StardustCore.Objects.Tools;
 using StardustCore.Serialization;
@@ -13,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +27,9 @@ namespace StardustCore
         public static IMonitor ModMonitor;
         public static Serialization.SerializationManager SerializationManager;
         public static UIUtilities.TextureManager TextureManager;
+
+        public static Multiplayer multiplayer;
+        bool serverHack;
 
         public static string ContentDirectory;
         public override void Entry(IModHelper helper)
@@ -51,18 +57,88 @@ namespace StardustCore
 
             SerializationManager.initializeDefaultSuportedTypes();
             TextureManager = new TextureManager();
-
+            TextureManager.addTexture("Test1.png", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
 
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
 
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
+            serverHack = false;
+            
+        }
+
+        /// <summary>
+        /// Returns the value of the data snagged by reflection.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="instance"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public static object GetInstanceField(Type type, object instance, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+            FieldInfo field = type.GetField(fieldName, bindFlags);
+            /*
+            FieldInfo[] meh = type.GetFields(bindFlags);
+            foreach(var v in meh)
+            {
+                if (v.Name == null)
+                {
+                    continue;
+                }
+                Monitor.Log(v.Name);
+            }
+            */
+            return field.GetValue(instance);
+        }
+
+        public static void SetInstanceField(Type type, object instance, object value, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+                | BindingFlags.Static;
+            FieldInfo field = type.GetField(fieldName, bindFlags);
+            field.SetValue(instance, value);
+            return;
         }
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
 
+            if (Game1.activeClickableMenu != null)
+            {
+                if(Game1.activeClickableMenu is StardewValley.Menus.TitleMenu)
+                {
+                    if (TitleMenu.subMenu == null) return;
+                    if (TitleMenu.subMenu.GetType() == typeof(FarmhandMenu))
+                    {
+                        if ((TitleMenu.subMenu as FarmhandMenu).client.GetType() != typeof(ModdedClient))
+                        {
+                            ModCore.ModMonitor.Log("OK!");
+                            multiplayer = (Multiplayer)GetInstanceField(typeof(Game1), Program.gamePtr, "multiplayer");
+                            ModCore.ModMonitor.Log("CODE!!!!!!!");
+                            string address = (string)GetInstanceField(typeof(LidgrenClient), (TitleMenu.subMenu as FarmhandMenu).client, "address");
+                            (TitleMenu.subMenu as FarmhandMenu).client = new NetCode.ModdedClient(address);
+                        }
+                    }
+                }
+            }
 
+            if (Game1.server!=null&& serverHack==false)
+            {
+                ModCore.ModMonitor.Log("OK!");
+                multiplayer = (Multiplayer)GetInstanceField(typeof(Game1), Program.gamePtr, "multiplayer");
+                //List<Server> servers = Helper.Reflection.GetField<List<Server>>(Game1.server, "servers", true).GetValue();
+                NetCode.GameServer server = new NetCode.GameServer();
+                Game1.server.stopServer();
+                Game1.server = server;
+                server.startServer();
+
+                serverHack = true;
+            }
+            if (Game1.client !=null && serverHack == false)
+            {
+
+            }
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -95,6 +171,7 @@ namespace StardustCore
 
             // Game1.player.addItemToInventory(collection);
             CoreObject tile1 = new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")),3, Vector2.Zero,9);
+           
             tile1.description = "Hello";
             tile1.Name = "test";
             tile1.displayName = "test";
