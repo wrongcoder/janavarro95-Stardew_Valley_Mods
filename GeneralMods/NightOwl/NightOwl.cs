@@ -95,8 +95,13 @@ namespace Omegasis.NightOwl
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            
             this.Config = helper.ReadConfig<ModConfig>();
 
+            if (Config.UseInternalNightFishAssetEditor)
+            {
+                this.Helper.Content.AssetEditors.Add(new NightFishing());
+            }
             TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;

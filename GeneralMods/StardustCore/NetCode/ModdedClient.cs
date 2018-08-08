@@ -148,14 +148,7 @@ namespace StardustCore.NetCode
                         while ((long)dataMsg.LengthBits - dataMsg.Position >= 8L)
                         {
                             message.Read(reader);
-                            try
-                            {
-                                this.processIncomingMessage(message);
-                            }
-                            catch(Exception err)
-                            {
-
-                            }
+                            this.processIncomingMessage(message);    
                         }
                     }
                 }

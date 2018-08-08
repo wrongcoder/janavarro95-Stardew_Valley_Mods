@@ -179,21 +179,13 @@ namespace StardustCore
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
-            if (e.KeyPressed == Keys.V)
-            {
-                CoreObject tile1 = new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")), 3, Vector2.Zero, 9);
-                tile1.description = "Hello";
-                tile1.Name = "test";
-                tile1.displayName = "test";
-                Game1.player.addItemToInventory(tile1);
-            }
         }
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
            
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
-            List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
+            //List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
             /*
             MultiTileComponent tile1 = new MultiTileComponent(0,"Tileobj1","A basic tile obj",new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
             MultiTileComponent tile2 = new MultiTileComponent(0,"Tileobj2", "A basic tile obj", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")));
@@ -206,13 +198,14 @@ namespace StardustCore
             */
 
             // Game1.player.addItemToInventory(collection);
+            
             CoreObject tile1 = new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")),3, Vector2.Zero,9);
            
             tile1.description = "Hello";
             tile1.Name = "test";
             tile1.displayName = "test";
             Game1.player.addItemToInventory(tile1);
-
+            
             
         }
 

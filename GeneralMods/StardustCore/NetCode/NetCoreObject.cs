@@ -95,11 +95,15 @@ namespace StardustCore.NetCode
             drawPosition = new NetVector2();
             drawPosition.Read(reader, version);
             Value.drawPosition = drawPosition.Value;
-            /*
+
+            NetBool isNull = new NetBool();
+            isNull.Read(reader, version);
+            if (isNull.Value) return;
+            
             animationManager = new NetAnimationManager();
             animationManager.Read(reader, version);
             Value.animationManager = animationManager.Value;
-            */
+            
 
         }
 
@@ -127,13 +131,14 @@ namespace StardustCore.NetCode
             drawPosition = new NetVector2(Value.drawPosition);
             drawPosition.Write(writer);
 
-            /*
-            if (Value.animationManager != null)
-            {
-                animationManager = new NetAnimationManager(Value.animationManager);
-                animationManager.Write(writer);
-            }
-            */
+
+            NetBool isNull = new NetBool(Value.animationManager == null);
+            isNull.Write(writer);
+            if (isNull.Value == true) return;
+
+            animationManager = new NetAnimationManager(Value.animationManager);
+            animationManager.Write(writer);
+            
         }
     }
 }
