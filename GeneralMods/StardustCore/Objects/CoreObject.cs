@@ -54,8 +54,6 @@ namespace StardustCore
 
         public bool lightGlowAdded;
 
-        public string texturePath;
-
         public List<Item> inventory;
 
         public int inventoryMaxSize;
@@ -67,8 +65,6 @@ namespace StardustCore
         public GameLocation thisLocation;
 
         public Color lightColor;
-
-        public string thisType;
 
         public bool removable;
 
@@ -106,7 +102,6 @@ namespace StardustCore
             lightsOn = false;
 
             lightColor = Color.Black;
-            thisType = this.GetType().ToString();
 
             base.initNetFields();
             this.NetFields.AddField(new NetCode.NetCoreObject(this));
@@ -148,7 +143,6 @@ namespace StardustCore
             if (TextureSheet == null)
             {
                 TextureSheet = texture;
-                this.texturePath = texture.path;
             }
             Dictionary<int, string> dictionary = Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
             string[] array = dictionary[which].Split(new char[]
