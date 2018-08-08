@@ -1052,7 +1052,7 @@ namespace StardustCore
         /// <returns></returns>
         public virtual Item getOne(IModHelper helper)
         {
-            Texture2DExtended texture = new Texture2DExtended(helper, this.TextureSheet.path);
+            Texture2DExtended texture = new Texture2DExtended(helper, this.TextureSheet.modID,this.TextureSheet.path);
             CoreObject CoreObject = new CoreObject(texture,this.ParentSheetIndex, this.TileLocation, this.inventoryMaxSize);
 
             CoreObject.drawPosition = this.drawPosition;
@@ -1179,12 +1179,12 @@ namespace StardustCore
 
         public virtual void resetTexture(IModHelper helper)
         {
-            TextureSheet = new Texture2DExtended(helper, TextureSheet.path);
+            TextureSheet = new Texture2DExtended(helper, this.TextureSheet.modID,TextureSheet.path);
         }
 
         public virtual void resetTexture()
         {
-            TextureSheet = new Texture2DExtended(TextureSheet.getHelper(), TextureSheet.path);
+            TextureSheet = new Texture2DExtended(TextureSheet.getHelper(),TextureSheet.modID, TextureSheet.path);
         }
 
         public override string getCategoryName()

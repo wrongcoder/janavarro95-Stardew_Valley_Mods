@@ -37,7 +37,7 @@ namespace StardewSymphonyRemastered.Framework
             this.pathToMusicPackIcon = PathToMusicPackIcon;
             try
             {
-                this.Icon = new Texture2DExtended(StardewSymphony.ModHelper, this.pathToMusicPackIcon+".png");
+                this.Icon = new Texture2DExtended(StardewSymphony.ModHelper, StardewSymphony.Manifest,this.pathToMusicPackIcon+".png");
             }
             catch(Exception err)
             {
@@ -67,12 +67,12 @@ namespace StardewSymphonyRemastered.Framework
             {
                 try
                 {
-                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper, StardewSymphony.getRelativeDirectory(Path.Combine(path, meta.pathToMusicPackIcon + ".png")));
+                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper,StardewSymphony.Manifest, StardewSymphony.getRelativeDirectory(Path.Combine(path, meta.pathToMusicPackIcon + ".png")));
                 }
                 catch(Exception errr)
                 {
                     errr.ToString();
-                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper, StardewSymphony.getRelativeDirectory(Path.Combine(path, meta.pathToMusicPackIcon)));
+                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper,StardewSymphony.Manifest ,StardewSymphony.getRelativeDirectory(Path.Combine(path, meta.pathToMusicPackIcon)));
                 }
             }
             catch(Exception err)

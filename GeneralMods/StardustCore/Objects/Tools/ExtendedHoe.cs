@@ -26,7 +26,7 @@ namespace StardustCore.Objects.Tools
         /// </summary>
         public ExtendedHoe() : base()
         {
-            this.texture = new Texture2DExtended(StardustCore.ModCore.ModHelper, Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png"));
+            this.texture = new Texture2DExtended(StardustCore.ModCore.ModHelper,ModCore.Manifest ,Path.Combine("Content", "Graphics", "Tools", "CustomAxe.png"));
         }
 
         public ExtendedHoe(BasicToolInfo info, Texture2DExtended texture)

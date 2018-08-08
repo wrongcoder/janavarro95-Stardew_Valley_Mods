@@ -41,9 +41,11 @@ namespace StardustCore.NetCode
             NetString name = new NetString();
             name.Read(reader, version);
 
+            NetString iD = new NetString();
+            iD.Read(reader, version);
 
             //Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice,width,height);
-            Texture2DExtended texture = ModCore.TextureManager.getTexture(name.Value);
+            Texture2DExtended texture = ModCore.TextureManagers[iD.Value].getTexture(name.Value);
             this.Value = texture;
             
         }
@@ -52,6 +54,9 @@ namespace StardustCore.NetCode
         {
             NetString name = new NetString(Value.Name);
             name.Write(writer);
+
+            NetString iD = new NetString(Value.modID);
+            iD.Write(writer);
             
         }
 

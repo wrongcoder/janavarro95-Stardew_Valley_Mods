@@ -25,8 +25,11 @@ namespace StardustCore
     {
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
+        public static IManifest Manifest;
         public static Serialization.SerializationManager SerializationManager;
         public static UIUtilities.TextureManager TextureManager;
+        public static Dictionary<string, TextureManager> TextureManagers;
+
 
         public static Multiplayer multiplayer;
         bool serverHack;
@@ -38,6 +41,7 @@ namespace StardustCore
         {
             ModHelper = Helper;
             ModMonitor = Monitor;
+            Manifest = ModManifest;
             //Unused MetaData information. Works in player inventory but not in chests. Besides who really care where an object is from anyways. Also doesn't work 100% like I intended since it only gets base mod object that this runs from, not extensions?
 
             //  StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += Metadata.GameEvents_UpdateTick;
@@ -60,9 +64,10 @@ namespace StardustCore
             SpriteFonts.initialize();
 
             SerializationManager.initializeDefaultSuportedTypes();
+            TextureManagers = new Dictionary<string, TextureManager>();
             TextureManager = new TextureManager();
-            TextureManager.addTexture("Test1.png", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
-
+            TextureManager.addTexture("Test1.png", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
+            TextureManagers.Add(ModManifest.UniqueID, TextureManager);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
 
 
@@ -198,14 +203,14 @@ namespace StardustCore
             */
 
             // Game1.player.addItemToInventory(collection);
-            
+            /*
             CoreObject tile1 = new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")),3, Vector2.Zero,9);
            
             tile1.description = "Hello";
             tile1.Name = "test";
             tile1.displayName = "test";
             Game1.player.addItemToInventory(tile1);
-            
+            */
             
         }
 
