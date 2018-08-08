@@ -205,6 +205,8 @@ namespace StardustCore
             this.locationsName = "";
             this.position = this.TileLocation * (Game1.tileSize);
             this.thisLocation = null;
+
+            this.textureName = this.TextureSheet.Name;
         }
 
         public override string getDescription()
