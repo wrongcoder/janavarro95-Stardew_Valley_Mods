@@ -29,6 +29,7 @@ namespace Omegasis.TimeFreeze
             this.Config = helper.ReadConfig<ModConfig>();
 
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            //oldInterval = 7;
         }
 
         /*********
@@ -42,17 +43,22 @@ namespace Omegasis.TimeFreeze
             if (!Context.IsWorldReady)
                 return;
 
+            /*
             if (Game1.gameTimeInterval != 0)
             {
                 oldInterval = Game1.gameTimeInterval;
+                if (oldInterval < 3)
+                {
+                    oldInterval = 7;
+                }
             }
-
+            */
             if (Game1.IsMultiplayer)
             {
                 if (Config.freezeIfEvenOnePlayerMeetsTimeFreezeConditions)
                 {
                     bool isAnyFarmerSuitable = false;
-                    foreach (Farmer farmer in Game1.getAllFarmers())
+                    foreach (Farmer farmer in Game1.getOnlineFarmers())
                     {
                         if (this.ShouldFreezeTime(farmer, farmer.currentLocation))
                         {
@@ -62,7 +68,7 @@ namespace Omegasis.TimeFreeze
                     }
                     if (isAnyFarmerSuitable == false)
                     {
-                        Game1.gameTimeInterval = oldInterval;
+                       // Game1.gameTimeInterval += Game1.currentGameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
 
@@ -70,7 +76,7 @@ namespace Omegasis.TimeFreeze
                 {
                     int freezeCount = 0;
                     int playerCount = 0;
-                    foreach (Farmer farmer in Game1.getAllFarmers())
+                    foreach (Farmer farmer in Game1.getOnlineFarmers())
                     {
                         playerCount++;
                         if (this.ShouldFreezeTime(farmer, farmer.currentLocation))
@@ -86,7 +92,7 @@ namespace Omegasis.TimeFreeze
                     }
                     else
                     {
-                        Game1.gameTimeInterval = oldInterval;
+                       // Game1.gameTimeInterval += Game1.currentGameTime.ElapsedGameTime.Milliseconds;
                     }
                 }
 
@@ -94,7 +100,7 @@ namespace Omegasis.TimeFreeze
                 {
                     int freezeCount = 0;
                     int playerCount = 0;
-                    foreach (Farmer farmer in Game1.getAllFarmers())
+                    foreach (Farmer farmer in Game1.getOnlineFarmers())
                     {
                         playerCount++;
                         if (this.ShouldFreezeTime(farmer, farmer.currentLocation))
@@ -110,7 +116,7 @@ namespace Omegasis.TimeFreeze
                     }
                     else
                     {
-                        Game1.gameTimeInterval = oldInterval;
+                       // Game1.gameTimeInterval = oldInterval;
                     }
                 }
 
@@ -125,7 +131,7 @@ namespace Omegasis.TimeFreeze
                 }
                 else
                 {
-                    Game1.gameTimeInterval = oldInterval;
+                   // Game1.gameTimeInterval = oldInterval;
                 }
             }
         }
@@ -152,8 +158,8 @@ namespace Omegasis.TimeFreeze
                 }
             }
 
-            if (location.IsOutdoors)
-                return false;
+            if (location.IsOutdoors==false)
+                return true;
 
             if (player.swimming.Value)
             {
@@ -162,7 +168,7 @@ namespace Omegasis.TimeFreeze
                 if (this.Config.PassTimeWhileSwimming)
                     return false;
             }
-            return true;
+            return false;
         }
     }
 }
