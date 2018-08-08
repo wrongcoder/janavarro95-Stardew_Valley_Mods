@@ -31,6 +31,8 @@ namespace StardustCore
         public static Multiplayer multiplayer;
         bool serverHack;
 
+        private Type lastMenuType;
+
         public static string ContentDirectory;
         public override void Entry(IModHelper helper)
         {
@@ -49,6 +51,8 @@ namespace StardustCore
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+            StardewModdingAPI.Events.MenuEvents.MenuChanged += MenuEvents_MenuChanged;
+            StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
             IlluminateFramework.Colors.initializeColors();
             ContentDirectory = Path.Combine(ModHelper.DirectoryPath, "Content");
@@ -65,6 +69,38 @@ namespace StardustCore
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             serverHack = false;
             
+        }
+
+        private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
+        {
+            if (Game1.IsMasterGame == false)
+            {
+                if (this.lastMenuType == null)
+                {
+                    return;
+                }
+                else
+                {
+                    if (lastMenuType == typeof(StardewValley.Menus.SaveGameMenu) ||lastMenuType==typeof(StardewValley.Menus.ReadyCheckDialog))
+                    {
+                        SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+                    }
+                }
+            }
+        }
+
+        private void MenuEvents_MenuChanged(object sender, StardewModdingAPI.Events.EventArgsClickableMenuChanged e)
+        {
+            if (Game1.IsMasterGame == false)
+            {
+                if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.ReadyCheckDialog))
+                {
+                    SerializationManager.cleanUpInventory();
+                    SerializationManager.cleanUpWorld();
+                    SerializationManager.cleanUpStorageContainers();
+                }
+            }
+            lastMenuType = Game1.activeClickableMenu.GetType();
         }
 
         /// <summary>
