@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
@@ -138,8 +139,8 @@ namespace Vocalization
     /// 
     /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! All in Strings folder
     /// -Quests (done)
-    /// -NPC Gift tastes
-    /// speach bubbles
+    /// -NPC Gift tastes (done)
+    /// speech bubbles (done)
     /// -temp
     /// -ui
     /// /// 
@@ -219,6 +220,23 @@ namespace Vocalization
             loadAllVoiceFiles();
         }
 
+        public static object GetInstanceField(Type type, object instance, string fieldName)
+        {
+            BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+            FieldInfo field = type.GetField(fieldName, bindFlags);
+            /*
+            FieldInfo[] meh = type.GetFields(bindFlags);
+            foreach(var v in meh)
+            {
+                if (v.Name == null)
+                {
+                    continue;
+                }
+                Monitor.Log(v.Name);
+            }
+            */
+            return field.GetValue(instance);
+        }
         /// <summary>
         /// Runs every game tick to check if the player is talking to an npc.
         /// </summary>
@@ -226,6 +244,39 @@ namespace Vocalization
         /// <param name="e"></param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            if (Game1.player != null) {
+                if (Game1.player.currentLocation != null) {
+                    foreach (NPC v in Game1.currentLocation.characters)
+                    {
+                        string text = (string)GetInstanceField(typeof(NPC), v, "textAboveHead");
+                        if (text == null) continue;
+                        string currentDialogue = text;
+                        if (previousDialogue != currentDialogue)
+                        {
+                            List<string> tries = new List<string>();
+                            tries.Add("SpeechBubbles");
+                            foreach (var speech in tries)
+                            {
+                                CharacterVoiceCue voice;
+                                DialogueCues.TryGetValue(speech, out voice);
+                                currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
+                                if (voice.dialogueCues.ContainsKey(currentDialogue))
+                                {
+                                    //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
+                                    voice.speak(currentDialogue);
+                                }
+                                else
+                                {
+                                    ModMonitor.Log("New unregistered dialogue detected for NPC: " + speech + " saying: " + currentDialogue, LogLevel.Alert);
+                                    ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             if (Game1.currentSpeaker != null)
             {
                 string speakerName = Game1.currentSpeaker.Name;
@@ -249,10 +300,12 @@ namespace Vocalization
                         tries.Add("CharactersStrings");
                         tries.Add("LocationDialogue");
                         tries.Add("Utility");
+                        tries.Add("Quests");
+                        tries.Add("NPCGiftTastes");
                         foreach (var v in tries)
                         {
                             CharacterVoiceCue voice;
-                            DialogueCues.TryGetValue(speakerName, out voice);
+                            DialogueCues.TryGetValue(v, out voice);
                             currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
                             if (voice.dialogueCues.ContainsKey(currentDialogue))
                             {
@@ -261,7 +314,7 @@ namespace Vocalization
                             }
                             else
                             {
-                                ModMonitor.Log("New unregistered dialogue detected for NPC: " + speakerName + " saying: " + currentDialogue, LogLevel.Alert);
+                                ModMonitor.Log("New unregistered dialogue detected for NPC: " + v + " saying: " + currentDialogue, LogLevel.Alert);
                                 ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
                                
                             }
@@ -289,6 +342,8 @@ namespace Vocalization
                         tries.Add("LocationDialogue");
                         tries.Add("Notes");
                         tries.Add("Utility");
+                        tries.Add("Quests");
+                        tries.Add("NPCGiftTastes");
                         foreach (var v in tries)
                         {
                             //Add in support for TV Shows
@@ -470,6 +525,18 @@ namespace Vocalization
             foreach (var translation in config.translations)
             {
                 string extra = Path.Combine(translation, "Utility");
+                characterDialoguePaths.Add(extra);
+            }
+
+            foreach (var translation in config.translations)
+            {
+                string extra = Path.Combine(translation, "NPCGiftTastes");
+                characterDialoguePaths.Add(extra);
+            }
+
+            foreach (var translation in config.translations)
+            {
+                string extra = Path.Combine(translation, "SpeechBubbles");
                 characterDialoguePaths.Add(extra);
             }
 
@@ -1066,6 +1133,105 @@ namespace Vocalization
                 }
                 }
 
+            else if (cue.name == "NPCGiftTastes")
+            {
+                foreach (var fileName in cue.dataFileNames)
+                {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
+                    string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                    string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                    if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                    {
+                        ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                        continue; //If the file is not found for some reason...
+                    }
+                    var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+                    //Scrape the whole dictionary looking for the character's name.
+
+                    List<string> ignoreKeys = new List<string>();
+                    ignoreKeys.Add("Universal_Love");
+                    ignoreKeys.Add("Universal_Like");
+                    ignoreKeys.Add("Universal_Neutral");
+                    ignoreKeys.Add("Universal_Dislike");
+                    ignoreKeys.Add("Universal_Hate");
+
+                    foreach (KeyValuePair<string, string> pair in DialogueDict)
+                    {
+                        //Get the key in the dictionary
+                        string key = pair.Key;
+                        string rawDialogue = pair.Value;
+
+                       //Check to see if I need to ignore this key in my dictionary I am scaping.
+                        bool ignore = false;
+                        foreach(var value in ignoreKeys)
+                        {
+                            if (key == value)
+                            {
+                                ignore = true;
+                                break;
+                            }
+                        }
+
+                        if (ignore) continue;
+
+                        List<string> strippedRawQuestDialogue = new List<string>();
+                        List<string> strippedFreshQuestDialogue = new List<string>();
+                        strippedRawQuestDialogue = rawDialogue.Split('/').ToList();
+
+                        string prompt1 = strippedRawQuestDialogue.ElementAt(0);
+                        string prompt2 = strippedRawQuestDialogue.ElementAt(2);
+                        string prompt3 = strippedRawQuestDialogue.ElementAt(4);
+                        string prompt4 = strippedRawQuestDialogue.ElementAt(6);
+                        string prompt5 = strippedRawQuestDialogue.ElementAt(8);
+
+                        strippedFreshQuestDialogue.Add(prompt1);
+                        strippedFreshQuestDialogue.Add(prompt2);
+                        strippedFreshQuestDialogue.Add(prompt3);
+                        strippedFreshQuestDialogue.Add(prompt4);
+                        strippedFreshQuestDialogue.Add(prompt5);
+
+                        List<string> cleanDialogues = new List<string>();
+                        foreach (var dia in strippedFreshQuestDialogue)
+                        {
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            foreach (var str in cleanDialogues)
+                            {
+                                cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                            }
+                        }
+                    }
+                    continue;
+                }
+            }
+
+            else if (cue.name == "SpeechBubbles")
+            {
+                foreach (var fileName in cue.dataFileNames)
+                {
+                    ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
+                    string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                    string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                    if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                    {
+                        ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                        continue; //If the file is not found for some reason...
+                    }
+                    var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+                    //Scrape the whole dictionary looking for the character's name.
+
+                    foreach (KeyValuePair<string, string> pair in DialogueDict)
+                    {
+                        //Get the key in the dictionary
+                        string key = pair.Key;
+                        string rawDialogue = pair.Value;
+                        string cleanString = sanitizeDialogueFromSpeechBubblesDictionary(rawDialogue);
+                        cue.addDialogue(cleanString, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                    }
+                    continue;
+                }
+            }
+
+
             //Dialogue scrape for npc specific text.
             else
             {
@@ -1645,6 +1811,19 @@ namespace Vocalization
 
 
             return possibleDialogues;
+        }
+
+        public string sanitizeDialogueFromSpeechBubblesDictionary(string text)
+        {
+            if (text.Contains("{0}"))
+            {
+                text = text.Replace("{0}", replacementStrings.farmerName);
+            }
+            if (text.Contains("{1}"))
+            {
+                text = text.Replace("{1}", replacementStrings.farmName);
+            }
+            return text;
         }
 
         /// <summary>

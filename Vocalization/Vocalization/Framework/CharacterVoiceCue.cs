@@ -128,6 +128,17 @@ namespace Vocalization.Framework
             {
                 stringsFileNames.Add("StringsFromCSFiles.xnb");
             }
+
+            else if (name == "GiftTastes")
+            {
+                dataFileNames.Add("NPCGiftTastes.xnb");
+            }
+
+            else if (name == "SpeechBubbles")
+            {
+                stringsFileNames.Add("SpeechBubbles.xnb");
+            }
+
             else
             {
                 dialogueFileNames.Add(name + ".xnb");
