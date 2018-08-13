@@ -344,6 +344,8 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 //Try to get more specific.
 
+
+                //????? What does this part even do anymore???
                 while (listOfValidMusicPacks.Count == 0)
                 {
                     if (subKey.Length == 0) break;
@@ -372,7 +374,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
             }
 
-            //If the list of valid packs are 0, check if I'm currently at an event or festival and try to play a generalized song from there.
+            //If the list of valid packs are 0, check if I'm currently at an event or festival or get some location specific music and try to play a generalized song from there.
             if (listOfValidMusicPacks.Count == 0)
             {
 
@@ -424,6 +426,30 @@ namespace StardewSymphonyRemastered.Framework
         }
 
 
+        public Dictionary<MusicPack,List<Song>> getLocationSpecificMusic()
+        {
+            Dictionary<MusicPack, List<Song>> listOfValidDictionaries = new Dictionary<MusicPack, List<Song>>();
+            StardewSymphony.ModMonitor.Log(SongSpecifics.getCurrentConditionalString(true));
+
+            foreach (var v in this.musicPacks)
+            {
+                try
+                {
+                    var songList = v.Value.songInformation.getSongList(SongSpecifics.getCurrentConditionalString(true)).Value;
+                    if (songList == null) return null;
+                    if (songList.Count > 0)
+                    {
+                        listOfValidDictionaries.Add(v.Value, songList);
+                    }
+                }
+                catch (Exception err)
+                {
+                    err.ToString();
+                }
+            }
+            return listOfValidDictionaries;
+        }
+
         public bool checkGenericMusic(string songListKey)
         {
             if (Game1.CurrentEvent != null)
@@ -459,6 +485,7 @@ namespace StardewSymphonyRemastered.Framework
                         return false;
                     }
                 }
+                
                 else
                 {
                     //Try to play a generalized event song.
@@ -491,6 +518,39 @@ namespace StardewSymphonyRemastered.Framework
                     }
                 }
             }
+            else
+            {
+                StardewSymphony.ModMonitor.Log("HELLO??? LOCATION????");
+                //Try to play a generalized festival song.
+                var listOfLocationPacks = this.getLocationSpecificMusic();
+                if (listOfLocationPacks.Count > 0)
+                {
+                    int randFestivalPack = packSelector.Next(0, listOfLocationPacks.Count - 1);
+
+                    var locationMusicPackPair = listOfLocationPacks.ElementAt(randFestivalPack);
+
+                    //used to swap the music packs and stop the last playing song.
+                    this.swapMusicPacks(locationMusicPackPair.Key.musicPackInformation.name);
+
+                    int randLocPack2 = songSelector.Next(0, locationMusicPackPair.Value.Count);
+
+                    var songName = locationMusicPackPair.Value.ElementAt(randLocPack2);
+
+                    this.currentMusicPack.playSong(songName.name);
+                    StardewSymphony.menuChangedMusic = false;
+                    return true;
+                }
+                else
+                {
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".5 Are you sure you did this properly?");
+                    if (StardewSymphony.Config.EnableDebugLog)
+                        StardewSymphony.ModMonitor.Log("Also failed playing a festival event song.");
+                    StardewSymphony.menuChangedMusic = false;
+                    return false;
+                }
+
+            }
             return false;
         }
 
@@ -509,7 +569,7 @@ namespace StardewSymphonyRemastered.Framework
                     StardewSymphony.ModMonitor.Log("Adding a new music pack!");
 
 
-                    StardewSymphony.ModMonitor.Log("    Location:" + musicPack.shortenedDirectory);
+                    //StardewSymphony.ModMonitor.Log("    Location:" + musicPack.shortenedDirectory);
                     StardewSymphony.ModMonitor.Log("    Name:" + musicPack.musicPackInformation.name);
                     StardewSymphony.ModMonitor.Log("    Author:" + musicPack.musicPackInformation.author);
                     StardewSymphony.ModMonitor.Log("    Description:" + musicPack.musicPackInformation.description);

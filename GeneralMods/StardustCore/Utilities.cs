@@ -33,18 +33,6 @@ namespace StardustCore
             return spliter[1];
         }
 
-        public static string getRelativeDirectory(string modName,string path)
-        {
-            string s = getShortenedDirectory(modName,path);
-            return s.Remove(0, 1);
-        }
-
-        public static string getRelativeDiretory(IModHelper modHelper, string path)
-        {
-            string s = getShortenedDirectory(modHelper, path);
-            return s.Remove(0, 1);
-        }
-
         public static string getShortenedDirectory(IModHelper modHelper, string path)
         {
             string lol = (string)path.Clone();
@@ -57,16 +45,6 @@ namespace StardustCore
             return  (int)((double)c.Price * (1.0 + (double)c.Quality * 0.25));
         }
 
-        /// <summary>
-        /// Returns an absolute path past the mod's directory.
-        /// </summary>
-        /// <param name="absolutePath"></param>
-        /// <returns></returns>
-        public static string getRelativePath(string absolutePath)
-        {
-            var ok= absolutePath.Split(new string[] { "StardustCore" }, StringSplitOptions.None);
-            return ok.ElementAt(1);
-        }
 
 
         /// <summary>

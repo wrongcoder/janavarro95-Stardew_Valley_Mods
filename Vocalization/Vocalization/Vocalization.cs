@@ -72,7 +72,7 @@ namespace Vocalization
      * Utility
      *  -Strings/StringsFromCS.yaml
      *  
-     *  Quests
+     *  Quests (done)
      *  -Strings/Quests
      */
 
@@ -136,7 +136,7 @@ namespace Vocalization
     /// 
     /// 
     /// 
-    /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! All in Strings folder
     /// -Quests (done)
     /// -NPC Gift tastes
     /// speach bubbles
@@ -182,10 +182,7 @@ namespace Vocalization
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
-
-            Effect eff;
-            eff.pa
-                ModMonitor = Monitor;
+            ModMonitor = Monitor;
             ModHelper = Helper;
             DialogueCues = new Dictionary<string, CharacterVoiceCue>();
             replacementStrings = new ReplacementStrings();

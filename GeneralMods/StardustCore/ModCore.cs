@@ -59,8 +59,8 @@ namespace StardustCore
             StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
             IlluminateFramework.Colors.initializeColors();
-            ContentDirectory = Path.Combine(ModHelper.DirectoryPath, "Content");
-            if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(ContentDirectory);
+            ContentDirectory = "Content";
+            if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Content"));
             SpriteFonts.initialize();
 
             SerializationManager.initializeDefaultSuportedTypes();

@@ -27,7 +27,7 @@
         /// <summary>
         /// Checks if the majority of players can freeze time and then freeze time.
         /// </summary>
-        public bool freezeIfMajorityPlayersMeetsTimeFreezeConditions { get; set; } = false;
+        public bool freezeIfMajorityPlayersMeetsTimeFreezeConditions { get; set; } = true;
 
         /// <summary>
         /// Checks if all players can freeze time and if so, do so.

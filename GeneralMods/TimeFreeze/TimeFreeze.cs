@@ -142,24 +142,27 @@ namespace Omegasis.TimeFreeze
         private bool ShouldFreezeTime(StardewValley.Farmer player, GameLocation location)
         {
 
-            if (Config.PassTimeWhileInsideMine==false)
+            if (Config.PassTimeWhileInsideMine==true)
             {
                 if(location.Name == "Mine" || location.Name.StartsWith("UndergroundMine"))
                 {
-                    return true;
+                    return false;
                 }
             }
 
-            if (Config.PassTimeWhileInsideSkullCave==false)
+            if (Config.PassTimeWhileInsideSkullCave==true)
             {
                 if (location.Name == "SkullCave" || location.Name.StartsWith("SkullCave"))
                 {
-                    return true;
+                    return false;
                 }
             }
 
-            if (location.IsOutdoors==false)
-                return true;
+            if (location.IsOutdoors == true)
+            {
+                return false;
+            }
+                
 
             if (player.swimming.Value)
             {
@@ -168,7 +171,9 @@ namespace Omegasis.TimeFreeze
                 if (this.Config.PassTimeWhileSwimming)
                     return false;
             }
-            return false;
+
+
+            return true;
         }
     }
 }

@@ -47,12 +47,14 @@ namespace StardewSymphonyRemastered.Framework
             this.songInformation = new SongSpecifics();
             this.musicPackInformation = MusicPackMetaData.readFromJson(directoryToMusicPack);
 
+            /*
             if (this.musicPackInformation == null)
             {
                 //StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToMusicPack + ". Blank information will be put in place.", StardewModdingAPI.LogLevel.Warn);
                 //this.musicPackInformation = new MusicPackMetaData("???", "???", "", "0.0.0","");
             }
-            StardewSymphony.ModMonitor.Log(this.musicPackInformation.name.ToString());
+            */
+            //StardewSymphony.ModMonitor.Log(this.musicPackInformation.name.ToString());
             this.loadMusicFiles();
         }
 
@@ -73,7 +75,6 @@ namespace StardewSymphonyRemastered.Framework
                     directoryLocation += Path.DirectorySeparatorChar;
                 }
             }
-            this.shortenedDirectory = directoryLocation;
         }
 
         /// <summary>

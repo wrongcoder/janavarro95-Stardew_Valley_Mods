@@ -94,55 +94,55 @@ namespace StardewSymphonyRemastered.Framework
         /// Sum up some conditionals to parse the correct string key to access the songs list.
         /// </summary>
         /// <returns></returns>
-        public static string getCurrentConditionalString()
+        public static string getCurrentConditionalString(bool getJustLocation=false)
         {
             string key = "";
-            bool foundMenuString = false;
             //Event id's are the number found before the : for the event in Content/events/<location>.yaml file where location is the name of the stardew valley location.
-            if (Game1.eventUp == true && Game1.CurrentEvent.isFestival==false)
-            {
-                //Get the event id an hijack it with some different music
-                //String key="Event_EventName";
 
-                var reflected = StardewSymphony.ModHelper.Reflection.GetField<int>(Game1.CurrentEvent, "id", true);
-
-                int id = reflected.GetValue();
-                key= id.ToString(); //get the event id. Really really messy.
-                return key;
-               
-            }
-            else if (Game1.isFestival())
+            if (getJustLocation == false)
             {
-                //hijack the date of the festival and load some different songs
-                // string s="Festival name"
-                key = Game1.CurrentEvent.FestivalName;
-                return key;
-            }
-            else if (Game1.activeClickableMenu!=null)
-            {
-                String name = Game1.activeClickableMenu.GetType().ToString().Replace('.', seperator);
-                //Iterate through all of the potential menu options and check if it is valid.
-                foreach (var menuNamespaceName in menus)
+                if (Game1.eventUp == true && Game1.CurrentEvent.isFestival == false)
                 {
-                    if (name == menuNamespaceName)
-                    {
-                        key =name;
-                        foundMenuString = true;
-                        StardewSymphony.menuChangedMusic = true;
-                        return key;
-                    }
+                    //Get the event id an hijack it with some different music
+                    //String key="Event_EventName";
+
+                    var reflected = StardewSymphony.ModHelper.Reflection.GetField<int>(Game1.CurrentEvent, "id", true);
+
+                    int id = reflected.GetValue();
+                    key = id.ToString(); //get the event id. Really really messy.
+                    return key;
+
                 }
-                return ""; //No menu found so don't event try to change the music.
+                else if (Game1.isFestival())
+                {
+                    //hijack the date of the festival and load some different songs
+                    // string s="Festival name"
+                    key = Game1.CurrentEvent.FestivalName;
+                    return key;
+                }
+                else if (Game1.activeClickableMenu != null)
+                {
+                    String name = Game1.activeClickableMenu.GetType().ToString().Replace('.', seperator);
+                    //Iterate through all of the potential menu options and check if it is valid.
+                    foreach (var menuNamespaceName in menus)
+                    {
+                        if (name == menuNamespaceName)
+                        {
+                            key = name;
+                            StardewSymphony.menuChangedMusic = true;
+                            return key;
+                        }
+                    }
+                    return ""; //No menu found so don't event try to change the music.
 
+                }
+                else
+                {
+                    key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString() + seperator + getLocationString() + seperator + getDayOfWeekString();
+                }
             }
-            else
-            {
-                key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString() + seperator + getLocationString() + seperator + getDayOfWeekString();
-            }
-
-            if(foundMenuString==false && key == "")
-            {
-                key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString() + seperator + getLocationString() + seperator + getDayOfWeekString();
+            else { 
+                key = getLocationString();
             }
 
             return key;
@@ -162,6 +162,11 @@ namespace StardewSymphonyRemastered.Framework
                 if (StardewSymphony.Config.EnableDebugLog)
                     StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.Name);
             }
+
+            locations.Add("UndergroundMine Floors 1-39");
+            locations.Add("UndergroundMine Floors 40-69");
+            locations.Add("UndergroundMine Floors 70-79");
+            locations.Add("UndergroundMine Floors 80-120");
 
             //Try to get stardew symphony to recognize builds on the farm and try to give those buildings unique soundtracks as well.
             try
@@ -219,7 +224,7 @@ namespace StardewSymphonyRemastered.Framework
         }
 
         /// <summary>
-        /// TODO: Custom way to add in event to hijack music.
+        /// Custom way to add in event to hijack music.
         /// </summary>
         /// <param name="name"></param>
         public static void addEvent(string id)
@@ -319,11 +324,41 @@ namespace StardewSymphonyRemastered.Framework
         {
             try
             {
-                return Game1.currentLocation.Name;
+                string locName = Game1.currentLocation.Name;
+                if (locName.StartsWith("UndergroundMine"))
+                {
+                    StardewSymphony.DebugLog("LOC VALUE:" + locName);
+                    string splits = locName.Replace("UndergroundMine", "");
+                    StardewSymphony.DebugLog("DEBUG VALUE:" + splits);
+                    int number =Convert.ToInt32(splits);
+                    if (number >= 1 && number <= 39)
+                    {
+                        return "UndergroundMine" + " Floors 1-39";
+                    }
+                    if(number >=40 && number <= 69)
+                    {
+                        return "UndergroundMine" + " Floors 40-69";
+                    }
+                    if(number >=70 && number <= 79)
+                    {
+                        return "UndergroundMine" + " Floors 70-79";
+                    }
+                    if(number >= 80&& number <= 120)
+                    {
+                        return "UndergroundMine" + " Floors 80-120";
+                    }
+                }
+                if (locName.Contains("Cabin") || Game1.currentLocation.isFarmBuildingInterior())
+                {
+                    locName = Game1.currentLocation.uniqueName;
+                }
+
+                return locName;
             }
             catch(Exception err)
             {
                 err.ToString();
+                StardewSymphony.ModMonitor.Log(err.ToString());
                 return "";
             }
         }
@@ -489,6 +524,12 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public void initializeSeasonalMusic()
         {
+
+            foreach(var loc in locations)
+            {
+                listOfSongsWithTriggers.Add(loc, new List<Song>());
+            }
+
             foreach(var season in seasons)
             {
                 listOfSongsWithTriggers.Add(season, new List<Song>());
@@ -567,6 +608,10 @@ namespace StardewSymphonyRemastered.Framework
         /// <param name="songName"></param>
         public void addSongToTriggerList(string songListKey,string songName)
         {
+            if (StardewSymphony.Config.EnableDebugLog)
+            {
+                StardewSymphony.ModMonitor.Log(songListKey);
+            }
 
             var songKeyPair = getSongList(songListKey); //Get the trigger list
 
