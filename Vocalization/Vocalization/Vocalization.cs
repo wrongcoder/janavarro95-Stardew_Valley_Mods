@@ -142,7 +142,7 @@ namespace Vocalization
     /// -NPC Gift tastes (done)
     /// speech bubbles (done)
     /// -temp
-    /// -ui
+    /// -ui (not needed???)
     /// /// 
     /// 
     /// </summary>
@@ -204,9 +204,10 @@ namespace Vocalization
         private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
         {
             //Clean out my previous dialogue when I close any sort of menu.
+            
+            if (String.IsNullOrEmpty(previousDialogue) || soundManager.sounds[previousDialogue]==null) return;
+            soundManager.stopSound(previousDialogue);
             previousDialogue = "";
-            if (String.IsNullOrEmpty(soundManager.previousSound.Key) || soundManager.previousSound.Value == null) return;
-            soundManager.stopPreviousSound();
         }
 
         /// <summary>
@@ -244,6 +245,7 @@ namespace Vocalization
         /// <param name="e"></param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            soundManager.update();
             if (Game1.player != null) {
                 if (Game1.player.currentLocation != null) {
                     foreach (NPC v in Game1.currentLocation.characters)
@@ -296,21 +298,30 @@ namespace Vocalization
 
                         List<string> tries = new List<string>();
                         tries.Add(speakerName);
+                        tries.Add("ExtraDialogue");
                         tries.Add("Events");
                         tries.Add("CharactersStrings");
                         tries.Add("LocationDialogue");
                         tries.Add("Utility");
                         tries.Add("Quests");
                         tries.Add("NPCGiftTastes");
+                        tries.Add("Temp");
                         foreach (var v in tries)
                         {
                             CharacterVoiceCue voice;
                             DialogueCues.TryGetValue(v, out voice);
                             currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
+
+                            if (voice == null)
+                            {
+                                ModMonitor.Log("WHY IS MY VOICE NULL??");
+                            }
                             if (voice.dialogueCues.ContainsKey(currentDialogue))
                             {
                                 //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
                                 voice.speak(currentDialogue);
+                                ModMonitor.Log("SPEAK????");
+                                return;
                             }
                             else
                             {
@@ -470,6 +481,12 @@ namespace Vocalization
                 }
             }
 
+            //Create all of the necessary folders for different translations.
+            foreach (var dir in config.translations)
+            {
+                if (!Directory.Exists(Path.Combine(voicePath,dir))) Directory.CreateDirectory(Path.Combine(voicePath, dir));
+            }
+
             //Add in folder for TV Shows
             foreach (var translation in config.translations)
             {
@@ -570,22 +587,23 @@ namespace Vocalization
                 characterDialoguePaths.Add(extra);
             }
 
+
+            foreach (var translation in config.translations)
+            {
+                string extra = Path.Combine(translation, "Temp");
+                characterDialoguePaths.Add(extra);
+            }
+
             if (!Directory.Exists(contentPath)) Directory.CreateDirectory(contentPath);
             if (!Directory.Exists(audioPath)) Directory.CreateDirectory(audioPath);
             if (!Directory.Exists(voicePath)) Directory.CreateDirectory(voicePath);
 
 
-            //Create all of the necessary folders for different translations.
-            foreach(var dir in config.translations)
-            {
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            }
-
             //Create a list of new directories if the corresponding character directory doesn't exist.
             //Note: A modder could also manually add in their own character directory for voice lines instead of having to add it via code.
             foreach (var dir in characterDialoguePaths)
             {
-                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                if (!Directory.Exists(Path.Combine(voicePath, dir))) Directory.CreateDirectory(Path.Combine(voicePath, dir));
             }
         }
 
@@ -603,10 +621,12 @@ namespace Vocalization
                 //get a list of all characters supported in this translation and load their voice cue file.
                 foreach (var dir in characterVoiceLines)
                 {
+                    ModMonitor.Log(dir);
 
-                    List<string> audioClips = Directory.GetFiles(dir, ".wav").ToList();
+                    string[] clips = Directory.GetFiles(dir,"*.wav");
+
                     //For every .wav file in every character voice clip directory load in the voice clip.
-                    foreach (var file in audioClips)
+                    foreach (var file in clips)
                     {
                         string fileName = Path.GetFileNameWithoutExtension(file);
                         soundManager.loadWavFile(ModHelper, fileName, file);
@@ -623,11 +643,29 @@ namespace Vocalization
                         CharacterVoiceCue cue = new CharacterVoiceCue(characterName);
                         cue.initializeEnglishScrape();
                         scrapeDictionaries(voiceCueFile,cue);
+                        ///??? DO I NEVER ACTUALLY ADD IT IN???
+                        try
+                        {
+                            DialogueCues.Add(characterName, cue);
+                        }
+                        catch(Exception err)
+                        {
+
+                        }
                     }
                     else
                     {
                         CharacterVoiceCue cue = ModHelper.ReadJsonFile<CharacterVoiceCue>(voiceCueFile);
-                        scrapeDictionaries(voiceCueFile,cue);
+                        //scrapeDictionaries(voiceCueFile,cue);
+                        try
+                        {
+                            DialogueCues.Add(characterName, cue);
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+                        ///??? DO I ACTUALLY NEVER ADD IT IN???
                     }
                 }
             }
@@ -1086,7 +1124,7 @@ namespace Vocalization
 
             else if (cue.name == "Quests")
             {
-                foreach (var fileName in cue.stringsFileNames)
+                foreach (var fileName in cue.dataFileNames)
                 {
                     ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     string dialoguePath2 = Path.Combine(stringsPath, fileName);
@@ -1518,7 +1556,7 @@ namespace Vocalization
         /// </summary>
         /// <param name="dialogue"></param>
         /// <returns></returns>
-        public List<string> sanitizeDialogueFromDictionaries(string dialogue)
+        public static List<string> sanitizeDialogueFromDictionaries(string dialogue)
         {
             List<string> possibleDialogues = new List<string>();
 
@@ -1599,6 +1637,8 @@ namespace Vocalization
             //Split across choices
             List<string> orSplit = new List<string>();
 
+            List<string> quoteSplit = new List<string>();
+
             //Split across genders
             List<string> finalSplit = new List<string>();
 
@@ -1619,8 +1659,24 @@ namespace Vocalization
                 }
             }
 
+            foreach(var dia in orSplit)
+            {
+                if (dia.Contains("\"")) //If I can split my string do so and add all the split strings into my orSplit list.
+                {
+                    List<string> tempSplits = dia.Split('\"').ToList();
+                    foreach (var v in tempSplits)
+                    {
+                        quoteSplit.Add(v);
+                    }
+                }
+                else
+                {
+                    quoteSplit.Add(dia); //If I can't split the list just add the dialogue and keep processing.
+                }
+            }
+
             //split across ^ symbol   
-            foreach (var dia in orSplit)
+            foreach (var dia in quoteSplit)
             {
                 if (dia.Contains("^")) //If I can split my string do so and add all the split strings into my orSplit list.
                 {

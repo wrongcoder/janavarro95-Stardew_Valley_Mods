@@ -11,9 +11,9 @@ C:\Users\iD Student\Desktop\Stardew\Vocalization\Vocalization\bin\Debug\SimpleSo
 C:\Users\iD Student\Desktop\Stardew\Vocalization\Vocalization\obj\Debug\Vocalization.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\bin\Debug\Vocalization.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\bin\Debug\Vocalization.pdb
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\bin\Debug\Netcode.pdb
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\bin\Debug\SimpleSoundManager.pdb
-C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\obj\Debug\Vocalization.csprojResolveAssemblyReference.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\obj\Debug\Vocalization.csproj.CoreCompileInputs.cache
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\obj\Debug\Vocalization.dll
 C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\obj\Debug\Vocalization.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\bin\Debug\SimpleSoundManager.dll
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\bin\Debug\SimpleSoundManager.pdb
+C:\Users\owner\Documents\Visual Studio 2015\Projects\github\StardewValleyMods\Vocalization\Vocalization\obj\Debug\Vocalization.csprojResolveAssemblyReference.cache

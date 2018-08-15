@@ -113,7 +113,9 @@ namespace SimpleSoundManager
 
 
             dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
-            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
+            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(1000));
+
+            dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
 
         }
 
@@ -125,7 +127,7 @@ namespace SimpleSoundManager
             }
             catch (Exception err)
             {
-
+                SimpleSoundManagerMod.ModMonitor.Log(err.ToString());
             }
 
             position += count;
@@ -150,7 +152,8 @@ namespace SimpleSoundManager
         public void play()
         {
             if (this.isPlaying() == true) return;
-            dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
+            LoadWavFromFileToStream();
+            SimpleSoundManagerMod.ModMonitor.Log("OK NOW WE ACTUALLY PLAY THE SONG");
             dynamicSound.Play();
         }
 

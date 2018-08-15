@@ -35,6 +35,7 @@ namespace SimpleSoundManager.Framework
         public void loadWavFile(string soundName,string pathToWav)
         {
             WavSound wav = new WavSound(soundName,pathToWav);
+            SimpleSoundManagerMod.ModMonitor.Log("Getting sound file:" + soundName);
             this.sounds.Add(soundName,wav);
         }
         
@@ -47,6 +48,7 @@ namespace SimpleSoundManager.Framework
         public void loadWavFile(IModHelper helper,string soundName,string pathToWav)
         {
             WavSound wav = new WavSound(helper ,soundName,pathToWav);
+            SimpleSoundManagerMod.ModMonitor.Log("Getting sound file:" + soundName);
             this.sounds.Add(soundName,wav);
         }
 
@@ -59,6 +61,7 @@ namespace SimpleSoundManager.Framework
         public void loadWavFile(IModHelper helper,string songName,List<string> pathToWav)
         {
             WavSound wav = new WavSound(helper,songName,pathToWav);
+            SimpleSoundManagerMod.ModMonitor.Log("Getting sound file:" + songName);
             this.sounds.Add(songName,wav);
         }
 
@@ -136,10 +139,12 @@ namespace SimpleSoundManager.Framework
         /// <param name="soundName"></param>
         public void playSound(string soundName)
         {
+            SimpleSoundManagerMod.ModMonitor.Log("Trying to play sound: " + soundName);
             foreach(var sound in this.sounds)
             {
                 if (sound.Key == soundName)
                 {
+                    SimpleSoundManagerMod.ModMonitor.Log("Time to play sound: " + soundName);
                     var s=getSoundClone(soundName);
                     s.play();
                     this.currentlyPlayingSounds.Add(s);
@@ -188,6 +193,11 @@ namespace SimpleSoundManager.Framework
             {
                 this.currentlyPlayingSounds.Remove(v);
             }
+        }
+
+        public void swapSounds(string newSong)
+        {
+            this.playSound(newSong);
         }
 
         public void update()

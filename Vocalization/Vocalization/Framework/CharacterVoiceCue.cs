@@ -1,5 +1,7 @@
-﻿using System;
+﻿using StardewValley;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -137,6 +139,119 @@ namespace Vocalization.Framework
             else if (name == "SpeechBubbles")
             {
                 stringsFileNames.Add("SpeechBubbles.xnb");
+            }
+
+            else if (name == "Temp")
+            {
+                Vocalization.ModMonitor.Log("Scraping dialogue file: Temp.xnb", StardewModdingAPI.LogLevel.Debug);
+                //dataFileNames.Add(Path.Combine("Events", "Temp.xnb"));
+
+                Dictionary<string, string> meh = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "Events", "Temp.xnb"));
+
+                foreach(KeyValuePair<string,string> pair in meh)
+                {
+                    if(pair.Key== "decorate")
+                    {
+                        string dia = pair.Value;
+                        Vocalization.ModMonitor.Log(dia);
+                        string[]values = dia.Split('\"');
+                        
+                        foreach(var v in values)
+                        {
+                            Vocalization.ModMonitor.Log(v);
+                            Vocalization.ModMonitor.Log("HELLO?");
+                        }
+
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+                        goodValues.Add(values.ElementAt(3));
+                        goodValues.Add(values.ElementAt(5));
+
+                        foreach(var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            foreach(var cleanSentence in clean)
+                            {
+                                this.dialogueCues.Add(cleanSentence, "");
+                            }
+                        }
+                        
+                    }
+
+                    if (pair.Key == "leave")
+                    {
+                        string dia = pair.Value;
+                        string[] values = dia.Split('\"');
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+                        goodValues.Add(values.ElementAt(3));
+                        goodValues.Add(values.ElementAt(5));
+
+                        foreach (var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            foreach (var cleanSentence in clean)
+                            {
+                                this.dialogueCues.Add(cleanSentence, "");
+                            }
+                        }
+
+                    }
+
+                    if (pair.Key == "tooBold")
+                    {
+                        string dia = pair.Value;
+                        string[] values = dia.Split('\"');
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+
+                        foreach (var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            foreach (var cleanSentence in clean)
+                            {
+                                this.dialogueCues.Add(cleanSentence, "");
+                            }
+                        }
+                    }
+
+                    if (pair.Key == "poppy" || pair.Key=="heavy" || pair.Key=="techno"|| pair.Key=="honkytonk")
+                    {
+                        string dia = pair.Value;
+                        string[] values = dia.Split('\"');
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+                        goodValues.Add(values.ElementAt(3));
+                        goodValues.Add(values.ElementAt(5));
+                        goodValues.Add(values.ElementAt(7));
+                        goodValues.Add(values.ElementAt(9));
+                        goodValues.Add(values.ElementAt(11));
+                        goodValues.Add(values.ElementAt(13));
+                        goodValues.Add(values.ElementAt(15));
+                        goodValues.Add(values.ElementAt(17));
+                        goodValues.Add(values.ElementAt(19));
+
+                        foreach (var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            foreach (var cleanSentence in clean)
+                            {
+                                try
+                                {
+                                    this.dialogueCues.Add(cleanSentence, "");
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+
+
             }
 
             else
