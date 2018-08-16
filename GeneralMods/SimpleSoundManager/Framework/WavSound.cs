@@ -122,7 +122,7 @@ namespace SimpleSoundManager
             count = byteArray.Length;//dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(1000));
 
             dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
-
+            
         }
 
         void DynamicSound_BufferNeeded(object sender, EventArgs e)
@@ -167,7 +167,19 @@ namespace SimpleSoundManager
         {
             if (this.isPlaying() == true) return;
             LoadWavFromFileToStream();
-            SimpleSoundManagerMod.ModMonitor.Log("OK NOW WE ACTUALLY PLAY THE SONG");
+            dynamicSound.Play();
+        }
+
+        /// <summary>
+        /// Used to play a song.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="volume">How lound the sound is when playing. 0~1.0f</param>
+        public void play(float volume)
+        {
+            if (this.isPlaying() == true) return;
+            LoadWavFromFileToStream();
+            dynamicSound.Volume = volume;
             dynamicSound.Play();
         }
 

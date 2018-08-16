@@ -15,6 +15,7 @@ namespace SimpleSoundManager.Framework
         public Dictionary<string,Sound> sounds;
         public Dictionary<string, XACTMusicPair> musicBanks;
 
+        public float volume;
 
         public List<Sound> currentlyPlayingSounds = new List<Sound>();
         /// <summary>
@@ -25,6 +26,7 @@ namespace SimpleSoundManager.Framework
             this.sounds = new Dictionary<string, Sound>();
             this.musicBanks = new Dictionary<string, XACTMusicPair>();
             currentlyPlayingSounds = new List<Sound>();
+            this.volume = 1.0f;
         }
 
         /// <summary>
@@ -167,7 +169,28 @@ namespace SimpleSoundManager.Framework
                 {
                     SimpleSoundManagerMod.ModMonitor.Log("Time to play sound: " + soundName);
                     var s=getSoundClone(soundName);
-                    s.play();
+                    s.play(this.volume);
+                    this.currentlyPlayingSounds.Add(s);
+                    break;
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Play the sound with the given name and volume.
+        /// </summary>
+        /// <param name="soundName"></param>
+        /// <param name="volume"></param>
+        public void playSound(string soundName,float volume=1.0f)
+        {
+            SimpleSoundManagerMod.ModMonitor.Log("Trying to play sound: " + soundName);
+            foreach (var sound in this.sounds)
+            {
+                if (sound.Key == soundName)
+                {
+                    SimpleSoundManagerMod.ModMonitor.Log("Time to play sound: " + soundName);
+                    var s = getSoundClone(soundName);
+                    s.play(volume);
                     this.currentlyPlayingSounds.Add(s);
                     break;
                 }

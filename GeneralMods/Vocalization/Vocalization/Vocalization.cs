@@ -172,7 +172,9 @@ namespace Vocalization
 
         public static ModConfig config;
 
-        
+
+        public List<string> onScreenSpeechBubbleDialogues;
+
         /// <summary>
         /// A dictionary that keeps track of all of the npcs whom have voice acting for their dialogue.
         /// </summary>
@@ -188,12 +190,16 @@ namespace Vocalization
             DialogueCues = new Dictionary<string, CharacterVoiceCue>();
             replacementStrings = new ReplacementStrings();
 
+            onScreenSpeechBubbleDialogues = new List<string>();
+
             previousDialogue = "";
 
             soundManager = new SimpleSoundManager.Framework.SoundManager();
 
-            config = new ModConfig();
-            ModHelper.ReadConfig<ModConfig>();
+            config = ModHelper.ReadConfig<ModConfig>();
+
+            config.verifyValidMode(); //Make sure the current mode is valid.
+            soundManager.volume = config.voiceVolume; //Set the volume for voices.
         }
 
         /// <summary>
@@ -257,9 +263,12 @@ namespace Vocalization
                     {
                         string text = (string)GetInstanceField(typeof(NPC), v, "textAboveHead");
                         int timer = (int)GetInstanceField(typeof(NPC), v, "textAboveHeadTimer");
-                        if (text == null || timer<=0) continue;
+                        if (text == null) continue;
                         string currentDialogue = text;
-                        if (previousDialogue != currentDialogue)
+
+                        if (onScreenSpeechBubbleDialogues.Contains(currentDialogue) && timer > 0) continue; //If I have already added this dialogue and the timer has not run out, do nothing.
+
+                        if (!onScreenSpeechBubbleDialogues.Contains(currentDialogue) && timer>0) //If I have not added this dialogue and the timer has not run out, add it.
                         {
                             List<string> tries = new List<string>();
                             tries.Add("SpeechBubbles");
@@ -272,6 +281,8 @@ namespace Vocalization
                                 {
                                     //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
                                     voice.speak(currentDialogue);
+                                    onScreenSpeechBubbleDialogues.Add(currentDialogue);
+                                    return;
                                 }
                                 else
                                 {
@@ -279,6 +290,17 @@ namespace Vocalization
                                     ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
 
                                 }
+                            }
+                        }
+                        else
+                        {
+                            if (timer <= 0 && onScreenSpeechBubbleDialogues.Contains(currentDialogue)) //If the timer has run out and I still contain the dialogue, remove it.
+                            {
+                                onScreenSpeechBubbleDialogues.Remove(currentDialogue);
+                            }
+                            if(timer<=0 && !onScreenSpeechBubbleDialogues.Contains(currentDialogue)) //If the timer has run out and I no longer contain the dialogue, continue on.
+                            {
+                                continue;
                             }
                         }
                     }
@@ -736,7 +758,7 @@ namespace Vocalization
                                     cleanDialogues = sanitizeDialogueFromDictionaries(cookingDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
-                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
                                 
                             }
@@ -758,7 +780,7 @@ namespace Vocalization
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
-                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
                                 
                             }
@@ -779,7 +801,7 @@ namespace Vocalization
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
-                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
                                 
                             }
@@ -812,7 +834,7 @@ namespace Vocalization
                                 foreach (var str in cleanDialogues)
                                 {
                                     string ahh = sanitizeDialogueFromMailDictionary(str);
-                                    cue.addDialogue(ahh, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(ahh, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
 
                             }
@@ -853,7 +875,7 @@ namespace Vocalization
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
-                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
                                 
                             }
@@ -891,7 +913,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
 
                             }
@@ -925,7 +947,7 @@ namespace Vocalization
                             cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
-                                cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                             }
 
                         }
@@ -960,7 +982,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
                             }
                         }
@@ -977,7 +999,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
                             }
                         }
@@ -1007,7 +1029,7 @@ namespace Vocalization
 
                             string cleanDialogue = "";
                             cleanDialogue = sanitizeDialogueFromMailDictionary(rawDialogue);                    
-                            cue.addDialogue(cleanDialogue, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty
+                            cue.addDialogue(cleanDialogue, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty
                         }
                     }
                 }
@@ -1039,7 +1061,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
 
                             }
@@ -1075,7 +1097,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
 
                             }
@@ -1105,7 +1127,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
 
                             }
@@ -1141,7 +1163,7 @@ namespace Vocalization
 
                             foreach (var v in cleanDialogue)
                             {
-                                cue.addDialogue(v, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty
+                                cue.addDialogue(v, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty
                             }
                         }
                     }
@@ -1188,7 +1210,7 @@ namespace Vocalization
                             cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
-                                cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                             }
                         }
                         }
@@ -1261,7 +1283,7 @@ namespace Vocalization
                             cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
-                                cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                             }
                         }
                     }
@@ -1290,7 +1312,7 @@ namespace Vocalization
                         string key = pair.Key;
                         string rawDialogue = pair.Value;
                         string cleanString = sanitizeDialogueFromSpeechBubblesDictionary(rawDialogue);
-                        cue.addDialogue(cleanString, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                        cue.addDialogue(cleanString, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                     }
                     continue;
                 }
@@ -1331,7 +1353,7 @@ namespace Vocalization
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
-                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
                                 }
                             }
@@ -1367,7 +1389,7 @@ namespace Vocalization
                                         cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                         foreach (var str in cleanDialogues)
                                         {
-                                            cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                            cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                         }
                                     }
                                 }
@@ -1392,7 +1414,7 @@ namespace Vocalization
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
-                                        cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
                                 }
                             }
@@ -1404,7 +1426,7 @@ namespace Vocalization
                             cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
-                                cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                             }
                         }
                     }
@@ -1438,7 +1460,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
                             }
                         }
@@ -1473,7 +1495,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
                             }
                         }
@@ -1501,7 +1523,7 @@ namespace Vocalization
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
-                                    cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                 }
                             
                         }

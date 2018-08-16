@@ -15,6 +15,8 @@ namespace SimpleSoundManager.Framework
         /// Handles playing a sound.
         /// </summary>
         void play();
+
+        void play(float volume);
         /// <summary>
         /// Handles pausing a song.
         /// </summary>

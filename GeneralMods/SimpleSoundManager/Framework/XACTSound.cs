@@ -98,6 +98,14 @@ namespace SimpleSoundManager.Framework
         }
 
         /// <summary>
+        /// Plays this song.
+        /// </summary>
+        public void play(float volume)
+        {
+            this.play(this.soundName);
+        }
+
+        /// <summary>
         /// Pauses this song.
         /// </summary>
         public void pause()

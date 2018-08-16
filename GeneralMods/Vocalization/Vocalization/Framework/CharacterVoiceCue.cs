@@ -36,7 +36,7 @@ namespace Vocalization.Framework
         /// <summary>
         /// A dictionary of dialogue strings that correspond to audio files.
         /// </summary>
-        public Dictionary<string, string> dialogueCues;
+        public Dictionary<string, VoiceAudioOptions> dialogueCues;
 
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Vocalization.Framework
         public CharacterVoiceCue(string name)
         {
             this.name = name;
-            this.dialogueCues = new Dictionary<string, string>();
+            this.dialogueCues = new Dictionary<string, VoiceAudioOptions>();
             this.stringsFileNames = new List<string>();
             this.dialogueFileNames = new List<string>();
             this.dataFileNames = new List<string>();
@@ -58,12 +58,12 @@ namespace Vocalization.Framework
         /// <param name="dialogueString">The current dialogue string to play audio for.</param>
         public void speak(string dialogueString)
         {
-            string voiceFileName = "";
+            VoiceAudioOptions voiceFileName =new VoiceAudioOptions();
             bool exists = dialogueCues.TryGetValue(dialogueString, out voiceFileName);
             if (exists)
             {
                 Vocalization.soundManager.stopAllSounds();
-                Vocalization.soundManager.playSound(voiceFileName);
+                Vocalization.soundManager.playSound(voiceFileName.getAudioClip());
             }
             else
             {
@@ -72,7 +72,7 @@ namespace Vocalization.Framework
             }
         }
 
-        public void addDialogue(string key, string value)
+        public void addDialogue(string key, VoiceAudioOptions value)
         {
             if (dialogueCues.ContainsKey(key))
             {
@@ -98,7 +98,7 @@ namespace Vocalization.Framework
             else if (name == "Shops")
             {
                 stringsFileNames.Add("StringsFromCSFiles.xnb");
-                this.addDialogue("Welcome to Pierre's! Need some supplies?", "");
+                this.addDialogue("Welcome to Pierre's! Need some supplies?", new VoiceAudioOptions());
             }
             else if (name == "ExtraDialogue")
             {
@@ -174,7 +174,7 @@ namespace Vocalization.Framework
                             List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach(var cleanSentence in clean)
                             {
-                                this.dialogueCues.Add(cleanSentence, "");
+                                this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
                             }
                         }
                         
@@ -194,7 +194,7 @@ namespace Vocalization.Framework
                             List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach (var cleanSentence in clean)
                             {
-                                this.dialogueCues.Add(cleanSentence, "");
+                                this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
                             }
                         }
 
@@ -212,7 +212,7 @@ namespace Vocalization.Framework
                             List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach (var cleanSentence in clean)
                             {
-                                this.dialogueCues.Add(cleanSentence, "");
+                                this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
                             }
                         }
                     }
@@ -240,7 +240,7 @@ namespace Vocalization.Framework
                             {
                                 try
                                 {
-                                    this.dialogueCues.Add(cleanSentence, "");
+                                    this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
                                 }
                                 catch (Exception err)
                                 {
