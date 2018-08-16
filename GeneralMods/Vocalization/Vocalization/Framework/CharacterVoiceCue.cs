@@ -62,7 +62,8 @@ namespace Vocalization.Framework
             bool exists = dialogueCues.TryGetValue(dialogueString, out voiceFileName);
             if (exists)
             {
-                Vocalization.soundManager.swapSounds(voiceFileName);
+                Vocalization.soundManager.stopAllSounds();
+                Vocalization.soundManager.playSound(voiceFileName);
             }
             else
             {
@@ -97,6 +98,7 @@ namespace Vocalization.Framework
             else if (name == "Shops")
             {
                 stringsFileNames.Add("StringsFromCSFiles.xnb");
+                this.addDialogue("Welcome to Pierre's! Need some supplies?", "");
             }
             else if (name == "ExtraDialogue")
             {
@@ -169,7 +171,7 @@ namespace Vocalization.Framework
 
                         foreach(var sentence in goodValues)
                         {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach(var cleanSentence in clean)
                             {
                                 this.dialogueCues.Add(cleanSentence, "");
@@ -189,7 +191,7 @@ namespace Vocalization.Framework
 
                         foreach (var sentence in goodValues)
                         {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach (var cleanSentence in clean)
                             {
                                 this.dialogueCues.Add(cleanSentence, "");
@@ -207,7 +209,7 @@ namespace Vocalization.Framework
 
                         foreach (var sentence in goodValues)
                         {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach (var cleanSentence in clean)
                             {
                                 this.dialogueCues.Add(cleanSentence, "");
@@ -233,7 +235,7 @@ namespace Vocalization.Framework
 
                         foreach (var sentence in goodValues)
                         {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence);
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach (var cleanSentence in clean)
                             {
                                 try

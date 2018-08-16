@@ -36,15 +36,19 @@ namespace SimpleSoundManager
 
         public string soundName;
 
+
+        public bool loop;
+
         /// <summary>
         /// Get a raw disk path to the wav file.
         /// </summary>
         /// <param name="pathToWavFile"></param>
-        public WavSound(string name,string pathToWavFile)
+        public WavSound(string name,string pathToWavFile,bool Loop=false)
         {
             this.path = pathToWavFile;
             LoadWavFromFileToStream();
             this.soundName = name;
+            this.loop = Loop;
         }
 
         /// <summary>
@@ -52,11 +56,12 @@ namespace SimpleSoundManager
         /// </summary>
         /// <param name="modHelper"></param>
         /// <param name="pathInModDirectory"></param>
-        public WavSound(IModHelper modHelper,string name, string pathInModDirectory)
+        public WavSound(IModHelper modHelper,string name, string pathInModDirectory,bool Loop=false)
         {
             string path = Path.Combine(modHelper.DirectoryPath, pathInModDirectory);
             this.path = path;
             this.soundName = name;
+            this.loop = Loop;
         }
 
         /// <summary>
@@ -64,7 +69,7 @@ namespace SimpleSoundManager
         /// </summary>
         /// <param name="modHelper">The mod helper for the mod you wish to use to load the music files from.</param>
         /// <param name="pathPieces">The list of folders and files that make up a complete path.</param>
-        public WavSound(IModHelper modHelper,string soundName, List<string> pathPieces)
+        public WavSound(IModHelper modHelper,string soundName, List<string> pathPieces,bool Loop=false)
         {
             string s = modHelper.DirectoryPath;
             foreach(var str in pathPieces)
@@ -73,6 +78,7 @@ namespace SimpleSoundManager
             }
             this.path = s;
             this.soundName = soundName;
+            this.loop = Loop;
         }
 
         /// <summary>
@@ -113,7 +119,7 @@ namespace SimpleSoundManager
 
 
             dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
-            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(1000));
+            count = byteArray.Length;//dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(1000));
 
             dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
 
@@ -127,13 +133,21 @@ namespace SimpleSoundManager
             }
             catch (Exception err)
             {
-                SimpleSoundManagerMod.ModMonitor.Log(err.ToString());
+                //SimpleSoundManagerMod.ModMonitor.Log(err.ToString());
             }
 
             position += count;
             if (position + count > byteArray.Length)
             {
-                position = 0;
+
+                if (loop)
+                {
+                    position = 0;
+                }
+                else
+                {
+                    //this.stop();
+                }
             }
         }
 

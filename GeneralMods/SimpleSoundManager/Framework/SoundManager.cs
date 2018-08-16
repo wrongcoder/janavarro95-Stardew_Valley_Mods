@@ -36,7 +36,14 @@ namespace SimpleSoundManager.Framework
         {
             WavSound wav = new WavSound(soundName,pathToWav);
             SimpleSoundManagerMod.ModMonitor.Log("Getting sound file:" + soundName);
-            this.sounds.Add(soundName,wav);
+            try
+            {
+                this.sounds.Add(soundName, wav);
+            }
+            catch(Exception err)
+            {
+
+            }
         }
         
         /// <summary>
@@ -49,7 +56,14 @@ namespace SimpleSoundManager.Framework
         {
             WavSound wav = new WavSound(helper ,soundName,pathToWav);
             SimpleSoundManagerMod.ModMonitor.Log("Getting sound file:" + soundName);
-            this.sounds.Add(soundName,wav);
+            try
+            {
+                this.sounds.Add(soundName, wav);
+            }
+            catch(Exception err)
+            {
+                //Sound already added so no need to worry?
+            }
         }
 
         /// <summary>
@@ -62,7 +76,14 @@ namespace SimpleSoundManager.Framework
         {
             WavSound wav = new WavSound(helper,songName,pathToWav);
             SimpleSoundManagerMod.ModMonitor.Log("Getting sound file:" + songName);
-            this.sounds.Add(songName,wav);
+            try
+            {
+                this.sounds.Add(songName, wav);
+            }
+            catch(Exception err)
+            {
+
+            }
         }
 
         /// <summary>

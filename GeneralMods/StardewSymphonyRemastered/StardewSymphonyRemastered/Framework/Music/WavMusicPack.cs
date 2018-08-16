@@ -35,18 +35,21 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         byte[] byteArray;
 
+
+        bool loop;
+
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="directoryToMusicPack"></param>
-        public WavMusicPack(string directoryToMusicPack)
+        public WavMusicPack(string directoryToMusicPack, bool Loop = false)
         {
             this.directory = directoryToMusicPack;
             this.setModDirectoryFromFullDirectory();
             this.songsDirectory = Path.Combine(this.directory, "Songs");
             this.songInformation = new SongSpecifics();
             this.musicPackInformation = MusicPackMetaData.readFromJson(directoryToMusicPack);
-
+            this.loop = Loop;
             /*
             if (this.musicPackInformation == null)
             {
@@ -115,7 +118,7 @@ namespace StardewSymphonyRemastered.Framework
 
 
             dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
-            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
+            count = byteArray.Length;//dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
 
             dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
             this.currentSong = new Song(p);
@@ -141,7 +144,13 @@ namespace StardewSymphonyRemastered.Framework
             position += count;
             if (position + count > byteArray.Length)
             {
-                position = 0;
+                if (loop)
+                {
+                    position = 0;
+                }
+                else
+                {
+                }
             }
         }
 

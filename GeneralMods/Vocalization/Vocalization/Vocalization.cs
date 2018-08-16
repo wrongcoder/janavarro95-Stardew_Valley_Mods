@@ -204,10 +204,15 @@ namespace Vocalization
         private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
         {
             //Clean out my previous dialogue when I close any sort of menu.
-            
-            if (String.IsNullOrEmpty(previousDialogue) || soundManager.sounds[previousDialogue]==null) return;
-            soundManager.stopSound(previousDialogue);
-            previousDialogue = "";
+            try
+            {
+                soundManager.stopAllSounds();
+                previousDialogue = "";
+            }
+            catch(Exception err)
+            {
+                previousDialogue = "";
+            }
         }
 
         /// <summary>
@@ -251,7 +256,8 @@ namespace Vocalization
                     foreach (NPC v in Game1.currentLocation.characters)
                     {
                         string text = (string)GetInstanceField(typeof(NPC), v, "textAboveHead");
-                        if (text == null) continue;
+                        int timer = (int)GetInstanceField(typeof(NPC), v, "textAboveHeadTimer");
+                        if (text == null || timer<=0) continue;
                         string currentDialogue = text;
                         if (previousDialogue != currentDialogue)
                         {
@@ -365,6 +371,9 @@ namespace Vocalization
                             {
                                 //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
                                 voice.speak(currentDialogue);
+
+                                ModMonitor.Log("SPEAK THE TELLE");
+                                return;
                             }
                             else
                             {
@@ -415,36 +424,49 @@ namespace Vocalization
                 {
 
                     var menu = (StardewValley.Menus.ShopMenu)Game1.activeClickableMenu;
-                    string currentDialogue = menu.potraitPersonDialogue; //Check this string to the dict of voice cues
+                    string shopDialogue = menu.potraitPersonDialogue; //Check this string to the dict of voice cues
+
+                    shopDialogue = shopDialogue.Replace(Environment.NewLine, "");
+
                     NPC npc = menu.portraitPerson;
-                    
-                    previousDialogue = currentDialogue; //Update my previously read dialogue so that I only read the new string once when it appears.
-                    ModMonitor.Log(currentDialogue); //Print out my dialogue.
+
+                    if (previousDialogue == shopDialogue) return;
+                    previousDialogue = shopDialogue; //Update my previously read dialogue so that I only read the new string once when it appears.
+                    ModMonitor.Log(shopDialogue); //Print out my dialogue.
 
 
                     //Add in support for Shops
-                    CharacterVoiceCue voice=new CharacterVoiceCue("");
-                    try
+                    CharacterVoiceCue voice;
+                    //character shops
+                    bool f=DialogueCues.TryGetValue("Shops", out voice);
+                    if (f == false)
                     {
-                        //character shops
-                        bool f=DialogueCues.TryGetValue(Path.Combine("Shops"), out voice);
-                        if (f == false)
-                        {
                             ModMonitor.Log("Can't find the dialogue for the shop: " + npc.Name);
-                        }
                     }
-                    catch(Exception err) { 
+                    shopDialogue = sanitizeDialogueInGame(shopDialogue); //If contains the stuff in the else statement, change things up.
 
+
+                    //I have no clue why the parsing adds in an extra character sometimes but I guess I have to do this in some cases....
+                    if (!voice.dialogueCues.ContainsKey(shopDialogue))
+                    {
+                        shopDialogue = shopDialogue.Substring(0, shopDialogue.Length - 1);
                     }
-                    currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
-                    if (voice.dialogueCues.ContainsKey(currentDialogue))
+
+
+                    if (voice.dialogueCues.ContainsKey(shopDialogue))
                     {
                         //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
-                        voice.speak(currentDialogue);
+                        voice.speak(shopDialogue);
                     }
                     else
                     {
-                        ModMonitor.Log("New unregistered dialogue detected saying: " + currentDialogue, LogLevel.Alert);
+                        foreach(var v in voice.dialogueCues)
+                        {
+                            ModMonitor.Log(v.Key + " " + v.Value);
+                        }
+
+
+                        ModMonitor.Log("New unregistered dialogue detected saying: " + shopDialogue, LogLevel.Alert);
                         ModMonitor.Log("Make sure to add this to their respective VoiceCue.json file if you wish for this dialogue to have voice acting associated with it!", LogLevel.Alert);
                     }
                     
@@ -663,7 +685,7 @@ namespace Vocalization
                         }
                         catch (Exception err)
                         {
-
+                            ModMonitor.Log("WHY NO ADD IN???"+err.ToString());
                         }
                         ///??? DO I ACTUALLY NEVER ADD IT IN???
                     }
@@ -711,7 +733,7 @@ namespace Vocalization
                                 string cookingDialogue = splitDialogues.ElementAt(1);
                                 //If the key contains the character's name.
                                     List<string> cleanDialogues = new List<string>();
-                                    cleanDialogues = sanitizeDialogueFromDictionaries(cookingDialogue);
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(cookingDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -733,7 +755,7 @@ namespace Vocalization
                                 if (key != "intro") continue;
                                 //If the key contains the character's name.
                                     List<string> cleanDialogues = new List<string>();
-                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -754,7 +776,7 @@ namespace Vocalization
                                 string rawDialogue = pair.Value;
 
                                     List<string> cleanDialogues = new List<string>();
-                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -785,7 +807,7 @@ namespace Vocalization
                                 if (!key.Contains("TV")) continue;
                                 //If the key contains the character's name.
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 
                                 foreach (var str in cleanDialogues)
                                 {
@@ -828,13 +850,14 @@ namespace Vocalization
                                 //If the key contains the character's name.
                               
                                     List<string> cleanDialogues = new List<string>();
-                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
                                     }
                                 
                             }
+                            
                             continue;
                         }
                         //For moddablity add a generic scrape here!
@@ -865,7 +888,7 @@ namespace Vocalization
                                 //If the key contains the character's name.
 
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -899,7 +922,7 @@ namespace Vocalization
                             //If the key contains the character's name.
 
                             List<string> cleanDialogues = new List<string>();
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
                                 cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -934,7 +957,7 @@ namespace Vocalization
                                 //If the key contains the character's name.
                                 if (!key.Contains("Event")) continue;
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -951,7 +974,7 @@ namespace Vocalization
                                 string rawDialogue = pair.Value;
                                 //If the key contains the character's name.
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1013,7 +1036,7 @@ namespace Vocalization
                                 //If the key contains the character's name.
 
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1049,7 +1072,7 @@ namespace Vocalization
                                 //If the key contains the character's name.
 
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1079,7 +1102,7 @@ namespace Vocalization
                                 //If the key contains the character's name.
 
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1113,9 +1136,13 @@ namespace Vocalization
                             string rawDialogue = pair.Value;
                             //If the key contains the character's name.
 
-                            string cleanDialogue = "";
-                            cleanDialogue = sanitizeDialogueFromMailDictionary(rawDialogue);
-                            cue.addDialogue(cleanDialogue, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty
+                            List<string> cleanDialogue = new List<string>();
+                            cleanDialogue = sanitizeDialogueFromDictionaries(rawDialogue,cue);
+
+                            foreach (var v in cleanDialogue)
+                            {
+                                cue.addDialogue(v, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty
+                            }
                         }
                     }
                 }
@@ -1158,7 +1185,7 @@ namespace Vocalization
                         List<string> cleanDialogues = new List<string>();
                         foreach (var dia in strippedFreshQuestDialogue)
                         {
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
                                 cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1231,7 +1258,7 @@ namespace Vocalization
                         List<string> cleanDialogues = new List<string>();
                         foreach (var dia in strippedFreshQuestDialogue)
                         {
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
                                 cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1301,7 +1328,7 @@ namespace Vocalization
                                 if (key.Contains(cue.name))
                                 {
                                     List<string> cleanDialogues = new List<string>();
-                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1337,7 +1364,7 @@ namespace Vocalization
                                     if (key.Contains(cue.name))
                                     {
                                         List<string> cleanDialogues = new List<string>();
-                                        cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                        cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                         foreach (var str in cleanDialogues)
                                         {
                                             cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1362,7 +1389,7 @@ namespace Vocalization
                                 if (key.Contains(cue.name))
                                 {
                                     List<string> cleanDialogues = new List<string>();
-                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                    cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {
                                         cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1374,7 +1401,7 @@ namespace Vocalization
                         {
                             string rawDialogue = pair.Value;
                             List<string> cleanDialogues = new List<string>();
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                             foreach (var str in cleanDialogues)
                             {
                                 cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1408,7 +1435,7 @@ namespace Vocalization
                             if (key.Contains(cue.name))
                             {
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1443,7 +1470,7 @@ namespace Vocalization
                             if (key.Contains("NPC"))
                             {
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1471,7 +1498,7 @@ namespace Vocalization
                             string rawDialogue = pair.Value;
                             //If the key contains the character's name.
                                 List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue);
+                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 foreach (var str in cleanDialogues)
                                 {
                                     cue.addDialogue(str, ""); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1556,7 +1583,7 @@ namespace Vocalization
         /// </summary>
         /// <param name="dialogue"></param>
         /// <returns></returns>
-        public static List<string> sanitizeDialogueFromDictionaries(string dialogue)
+        public static List<string> sanitizeDialogueFromDictionaries(string dialogue,CharacterVoiceCue cue)
         {
             List<string> possibleDialogues = new List<string>();
 
@@ -1661,7 +1688,7 @@ namespace Vocalization
 
             foreach(var dia in orSplit)
             {
-                if (dia.Contains("\"")) //If I can split my string do so and add all the split strings into my orSplit list.
+                if (dia.Contains("\"") && cue.name.StartsWith("Temp")) //If I can split my string do so and add all the split strings into my orSplit list.
                 {
                     List<string> tempSplits = dia.Split('\"').ToList();
                     foreach (var v in tempSplits)
