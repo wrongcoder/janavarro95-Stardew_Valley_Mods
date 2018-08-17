@@ -5,9 +5,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
 using Vocalization.Framework;
 
@@ -901,24 +904,107 @@ namespace Vocalization
                     {
                         string dialoguePath2 = Path.Combine(dataPath, fileName);
                         var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
-
-                        //Scraping the CookingChannel dialogue
-                            //Scrape the whole dictionary looking for the character's name.
-                            foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
                             {
-                                //Get the key in the dictionary
-                                string key = pair.Key;
-                                string rawDialogue = pair.Value;
-                                //If the key contains the character's name.
+                            //Get the key in the dictionary
+                            string key = pair.Key;
+                            string rawDialogue = pair.Value;
 
-                                List<string> cleanDialogues = new List<string>();
-                                cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
-                                foreach (var str in cleanDialogues)
+                            List<string> cleanDialogues = new List<string>();
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
+                            foreach (var str in cleanDialogues)
+                            {
+
+                                if(key== "NewChild_Adoption") {
+                                    cue.addDialogue(Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:"+key),replacementStrings.kid1Name), new VoiceAudioOptions());
+                                    cue.addDialogue(Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), replacementStrings.kid2Name), new VoiceAudioOptions());
+                                    continue;
+                                }
+                                if(key== "NewChild_FirstChild")
                                 {
-                                    cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                    cue.addDialogue(Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), replacementStrings.kid1Name), new VoiceAudioOptions());
+                                    continue;
                                 }
 
+                                if(key== "Farm_RobinWorking_ReadyTomorrow" || key== "Robin_NewConstruction_Festival"||key== "Robin_NewConstruction" || key== "Robin_Instant")
+                                {
+                                    string buildingsPath = Path.Combine(dataPath, "Blueprints.xnb");
+                                    var BuildingDict = ModHelper.Content.Load<Dictionary<string, string>>(buildingsPath, ContentSource.GameContent);
+
+                                    foreach(KeyValuePair<string, string> pair2 in BuildingDict)
+                                    {
+                                        List<string> cleanedDialogues = sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), pair2.Key),cue);
+                                        foreach (var clean_str in cleanedDialogues) {
+                                            cue.addDialogue(clean_str, new VoiceAudioOptions());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                if (key == "Farm_RobinWorking1" || key== "Farm_RobinWorking2")
+                                {
+                                    string buildingsPath = Path.Combine(dataPath, "Blueprints.xnb");
+                                    var BuildingDict = ModHelper.Content.Load<Dictionary<string, string>>(buildingsPath, ContentSource.GameContent);
+
+                                    foreach (KeyValuePair<string, string> pair2 in BuildingDict)
+                                    {
+                                        for (int i = 1; i <= 3; i++)
+                                        {
+                                            cue.addDialogue(Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), pair2.Key,i.ToString()), new VoiceAudioOptions());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                //Generate all possible tool combinations for clint.
+                                if(key== "Clint_StillWorking")
+                                {
+                                    List<string> tools = new List<string>();
+                                    tools.Add("Hoe");
+                                    tools.Add("Pickaxe");
+                                    tools.Add("Axe");
+                                    tools.Add("Watering Can");
+
+                                    List<string> levels = new List<string>();
+                                    levels.Add("Copper ");
+                                    levels.Add("Steel ");
+                                    levels.Add("Gold ");
+                                    levels.Add("Iridium ");
+
+                                    foreach(var tool in tools)
+                                    {
+                                        foreach(var lvl in levels)
+                                        {
+                                            cue.addDialogue(Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), lvl+tool), new VoiceAudioOptions());
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                if(key== "Morris_WeekendGreeting_MembershipAvailable" || key=="Morris_FirstGreeting_MembershipAvailable")
+                                {
+                                    List<string> cleanedDialogues = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                                    foreach(var dia in cleanedDialogues)
+                                    {
+                                        if (dia.Contains("{0}"))
+                                        {
+                                            string actual = dia.Replace("{0}", "5000");
+                                            cue.addDialogue(actual, new VoiceAudioOptions());
+                                        }
+                                        else
+                                        {
+                                            cue.addDialogue(dia, new VoiceAudioOptions());
+                                        }
+                                        continue;
+                                    }
+                                    continue;
+                                }
+
+
+                                cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
                             }
+
                     }
                 }
 
@@ -1648,11 +1734,183 @@ namespace Vocalization
                         continue;
                     }
                 }
+
+                //LOad item dictionary, pass in item and npc, sanitize the output string using the sanitizationDictionary function, and add in the cue!
+                Dictionary<int, string> objDict = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Data", "ObjectInformation.xnb"));
+                foreach(KeyValuePair<int,string> pair in objDict)
+                {
+                    for(int i=0; i<=3; i++) {
+                        StardewValley.Object obj = new StardewValley.Object(pair.Key,1,false,-1,i);
+
+                        string[] strArray = Game1.content.LoadString(Path.Combine("Strings","Lexicon:GenericPlayerTerm")).Split('^');
+                        string str2 = strArray[0];
+                        if (strArray.Length > 1 && !(bool)((NetFieldBase<bool, NetBool>)Game1.player.isMale))
+                            str2 = strArray[1];
+                        string str3 = Game1.player.Name;
+
+                        List<string> rawScrape = getPurchasedItemDialogueForNPC(obj, cue.name,str3);
+
+                        foreach (string raw in rawScrape)
+                        {
+
+                            List<string> cleanDialogues = sanitizeDialogueFromDictionaries(raw, cue);
+                            foreach (var dia in cleanDialogues)
+                            {
+                                ModMonitor.Log(dia);
+                                cue.addDialogue(dia, new VoiceAudioOptions());
+                            }
+                        }
+
+                        str3 = str2;
+                        List<string> rawScrape2 = getPurchasedItemDialogueForNPC(obj, cue.name, str3);
+                        foreach (string raw in rawScrape2)
+                        {
+                            List<string> cleanDialogues2 = sanitizeDialogueFromDictionaries(raw, cue);
+                            foreach (var dia in cleanDialogues2)
+                            {
+                                cue.addDialogue(dia, new VoiceAudioOptions());
+                            }
+                        }
+                    }
+                }
             }
 
             ModHelper.WriteJsonFile<CharacterVoiceCue>(path,cue);
             DialogueCues.Add(cue.name, cue);
         }
+
+
+        /// <summary>
+        /// Function taken from game code to satisfy all dialogue options.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="npcName"></param>
+        /// <returns></returns>
+        public List<string> getPurchasedItemDialogueForNPC(StardewValley.Object i, string npcName, string str3)
+        {
+            NPC n = Game1.getCharacterFromName(npcName);
+            if (n == null) return new List<string>();
+            List<string> dialogueReturn = new List<string>();
+
+            if (n.Age != 0)
+                str3 = Game1.player.Name;
+            string str4 = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? Lexicon.getProperArticleForWord(i.name) : "";
+            if ((i.Category == -4 || i.Category == -75 || i.Category == -79) && Game1.random.NextDouble() < 0.5)
+                str4 = Game1.content.LoadString(Path.Combine("Strings", "StringsFromCSFiles:SeedShop.cs.9701"));
+
+            for (int v = 0; v <= 5; v++)
+            {
+                int num = v;
+
+                switch (num)
+                {
+                    case 0:
+                        if (i.quality.Value == 1)
+                        {
+                            foreach (string str in Vocabulary.getRandomDeliciousAdjectives(n))
+                            {
+                                string str19 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_1_QualityHigh"), (object)str3, (object)str4, (object)i.DisplayName, (object)str);
+                                dialogueReturn.Add(str19);
+                            }
+                            //break;
+                        }
+                        if (i.quality.Value == 0)
+                        {
+                            foreach (string str in Vocabulary.getRandomNegativeFoodAdjectives(n))
+                            {
+                                string str18 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_1_QualityLow"), (object)str3, (object)str4, (object)i.DisplayName, (object)str);
+                                dialogueReturn.Add(str18);
+                            }
+                        }
+                        break;
+                    case 1:
+                        string str2 = (i.quality.Value) != 0 ? (!n.Name.Equals("Jodi") ? Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_2_QualityHigh"), (object)str3, (object)str4, (object)i.DisplayName) : Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_2_QualityHigh_Jodi"), (object)str3, (object)str4, (object)i.DisplayName)) : Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_2_QualityLow"), (object)str3, (object)str4, (object)i.DisplayName);
+                        dialogueReturn.Add(str2);
+                        break;
+                    case 2:
+                        if (n.Manners == 2)
+                        {
+                            if (i.quality.Value != 2)
+                            {
+                                string str17 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityLow_Rude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)Vocabulary.getRandomNegativeFoodAdjective(n), (object)Vocabulary.getRandomNegativeItemSlanderNoun());
+                                dialogueReturn.Add(str17);
+                                break;
+                            }
+                            string str10 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityHigh_Rude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)Vocabulary.getRandomSlightlyPositiveAdjectiveForEdibleNoun(n));
+                            dialogueReturn.Add(str10);
+                            break;
+                        }
+                        string str11 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_NonRude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2));
+                        dialogueReturn.Add(str11);
+                        break;
+                    case 3:
+                        string str12 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_4"), (object)str3, (object)str4, (object)i.DisplayName);
+                        dialogueReturn.Add(str12);
+                        break;
+                    case 4:
+                        if (i.Category == -75 || i.Category == -79)
+                        {
+                            string str13 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_5_VegetableOrFruit"), (object)str3, (object)str4, (object)i.DisplayName);
+                            dialogueReturn.Add(str13);
+                            break;
+                        }
+                        if (i.Category == -7)
+                        {
+                            string forEventOrPerson = Vocabulary.getRandomPositiveAdjectiveForEventOrPerson(n);
+                            string str14 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_5_Cooking"), (object)str3, (object)str4, (object)i.DisplayName, (object)Vocabulary.getProperArticleForWord(forEventOrPerson), (object)forEventOrPerson);
+                            dialogueReturn.Add(str14);
+                            break;
+                        }
+                        string str15 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_5_Foraged"), (object)str3, (object)str4, (object)i.DisplayName);
+                        dialogueReturn.Add(str15);
+                        break;
+                }
+            }
+            if (n.Age == 1) {
+                string str16 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Teen"), (object)str3, (object)str4, (object)i.DisplayName);
+                dialogueReturn.Add(str16);
+            }
+
+            string name = n.Name;
+            string str1 = "";
+            if (name == "Alex")
+            {
+                str1 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Alex"), (object)str3, (object)str4, (object)i.DisplayName);
+            }
+            if (name == "Caroline")
+            {
+                str1 = (int)((NetFieldBase<int, NetInt>)i.quality) != 0 ? Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Caroline_QualityHigh"), (object)str3, (object)str4, (object)i.DisplayName) : Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Caroline_QualityLow"), (object)str3, (object)str4, (object)i.DisplayName);
+            }
+            if (name == "Pierre")
+            {
+                str1 = (int)((NetFieldBase<int, NetInt>)i.quality) != 0 ? Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Pierre_QualityHigh"), (object)str3, (object)str4, (object)i.DisplayName) : Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Pierre_QualityLow"), (object)str3, (object)str4, (object)i.DisplayName);
+            }
+
+
+            if (name == "Abigail")
+            {
+                if (i.quality.Value == 0)
+                {
+                    str1 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Abigail_QualityLow"), (object)str3, (object)str4, (object)i.DisplayName, (object)Vocabulary.getRandomNegativeItemSlanderNoun());
+                }
+                else {
+                    str1 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Abigail_QualityHigh"), (object)str3, (object)str4, (object)i.DisplayName);
+                }
+
+            }
+        
+
+                if (name == "Haley")
+                    str1 = Game1.content.LoadString(Path.Combine("Data","ExtraDialogue:PurchasedItem_Haley"), (object)str3, (object)str4, (object)i.DisplayName);
+                if (name == "Elliott")
+                    str1 = Game1.content.LoadString(Path.Combine("Data","ExtraDialogue:PurchasedItem_Elliott"), (object)str3, (object)str4, (object)i.DisplayName);
+                if (name == "Leah")
+                    str1 = Game1.content.LoadString(Path.Combine("Data","ExtraDialogue:PurchasedItem_Leah"), (object)str3, (object)str4, (object)i.DisplayName);
+
+            dialogueReturn.Add(str1);
+            return dialogueReturn;
+        }
+
 
         /// <summary>
         /// Removes a lot of variables that would be hard to voice act from dkialogue strings such as player's name, pet names, farm names, etc.
@@ -1741,6 +1999,12 @@ namespace Vocalization
                 dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
+            if (dialogue.Contains("$b"))
+            {
+                dialogue = dialogue.Replace("$b", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
+            }
+
             if (dialogue.Contains("$s"))
             {
                 dialogue = dialogue.Replace("$s", "");
@@ -1798,8 +2062,17 @@ namespace Vocalization
                 dialogue = dialogue.Replace("%fork", "");
             }
 
-            //split across # symbol
-            List<string> dialogueSplits1 = dialogue.Split('#').ToList(); //Returns an element size of 1 if # isn't found.
+
+            string[] split = dialogue.Split('#');
+            List<string> dialogueSplits1 = new List<string>(); //Returns an element size of 1 if # isn't found.
+
+            foreach (var s in split)
+            {
+                ModMonitor.Log(s);
+                dialogueSplits1.Add(s);
+            }
+
+
 
             //Split across choices
             List<string> orSplit = new List<string>();
@@ -1812,6 +2085,7 @@ namespace Vocalization
             //split across | symbol
             foreach(var dia in dialogueSplits1)
             {
+                ModMonitor.Log(dia);
                 if (dia.Contains("|")) //If I can split my string do so and add all the split strings into my orSplit list.
                 {
                     List<string> tempSplits = dia.Split('|').ToList();
