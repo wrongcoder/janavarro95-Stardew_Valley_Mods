@@ -321,9 +321,9 @@ namespace Vocalization
                     string currentDialogue = dialogueBox.getCurrentString();
                     if (previousDialogue != currentDialogue)
                     {
-                        ModMonitor.Log(speakerName);
+                        //ModMonitor.Log(speakerName);
                         previousDialogue = currentDialogue; //Update my previously read dialogue so that I only read the new string once when it appears.
-                        ModMonitor.Log(currentDialogue); //Print out my dialogue.
+                        //ModMonitor.Log(currentDialogue); //Print out my dialogue.
 
                         //Do logic here to figure out what audio clips to play.
                         //Sanitize input here!
@@ -345,15 +345,10 @@ namespace Vocalization
                             DialogueCues.TryGetValue(v, out voice);
                             currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
 
-                            if (voice == null)
-                            {
-                                ModMonitor.Log("WHY IS MY VOICE NULL??");
-                            }
                             if (voice.dialogueCues.ContainsKey(currentDialogue))
                             {
                                 //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
                                 voice.speak(currentDialogue);
-                                ModMonitor.Log("SPEAK????");
                                 return;
                             }
                             else
@@ -399,7 +394,7 @@ namespace Vocalization
                                 //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
                                 voice.speak(currentDialogue);
 
-                                ModMonitor.Log("SPEAK THE TELLE");
+                                //ModMonitor.Log("SPEAK THE TELLE");
                                 return;
                             }
                             else
@@ -426,7 +421,6 @@ namespace Vocalization
                     }
 
                     previousDialogue = currentDialogue; //Update my previously read dialogue so that I only read the new string once when it appears.
-                    ModMonitor.Log(currentDialogue); //Print out my dialogue.
 
 
                     //Add in support for TV Shows
@@ -459,7 +453,6 @@ namespace Vocalization
 
                     if (previousDialogue == shopDialogue) return;
                     previousDialogue = shopDialogue; //Update my previously read dialogue so that I only read the new string once when it appears.
-                    ModMonitor.Log(shopDialogue); //Print out my dialogue.
 
 
                     //Add in support for Shops
@@ -487,10 +480,6 @@ namespace Vocalization
                     }
                     else
                     {
-                        foreach(var v in voice.dialogueCues)
-                        {
-                            ModMonitor.Log(v.Key + " " + v.Value);
-                        }
 
 
                         ModMonitor.Log("New unregistered dialogue detected saying: " + shopDialogue, LogLevel.Alert);
@@ -690,7 +679,11 @@ namespace Vocalization
                     if (!File.Exists(voiceCueFile))
                     {
                         CharacterVoiceCue cue = new CharacterVoiceCue(characterName);
-                        cue.initializeEnglishScrape();
+                        //Change this up for different translations???
+                        if (translation == "English")
+                        {
+                            cue.initializeEnglishScrape();
+                        }
                         scrapeDictionaries(voiceCueFile,cue);
                         ///??? DO I NEVER ACTUALLY ADD IT IN???
                         try
@@ -1288,8 +1281,6 @@ namespace Vocalization
                             string rawDialogue = pair.Value;
                         //If the key contains the character's name.
 
-                        ModMonitor.Log(rawDialogue);
-
                         int count = rawDialogue.Split('/').Length-1;
                         string[] strippedRawQuestDialogue = new string[count];
                         List<string> strippedFreshQuestDialogue = new List<string>();
@@ -1363,13 +1354,7 @@ namespace Vocalization
 
                         string[]strippedRawQuestDialogue = new string[20];
                         List<string>strippedFreshQuestDialogue = new List<string>();
-                        ModMonitor.Log(rawDialogue);
                         strippedRawQuestDialogue = rawDialogue.Split(new string[] {"/" },StringSplitOptions.None);
-
-                        foreach(var v in strippedRawQuestDialogue)
-                        {
-                            ModMonitor.Log("I AM SO CONFUSED:   " + v);
-                        }
 
 
                         string prompt1 = strippedRawQuestDialogue.ElementAt(0);
@@ -1756,7 +1741,6 @@ namespace Vocalization
                             List<string> cleanDialogues = sanitizeDialogueFromDictionaries(raw, cue);
                             foreach (var dia in cleanDialogues)
                             {
-                                ModMonitor.Log(dia);
                                 cue.addDialogue(dia, new VoiceAudioOptions());
                             }
                         }
@@ -1832,12 +1816,20 @@ namespace Vocalization
                         {
                             if (i.quality.Value != 2)
                             {
-                                string str17 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityLow_Rude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)Vocabulary.getRandomNegativeFoodAdjective(n), (object)Vocabulary.getRandomNegativeItemSlanderNoun());
-                                dialogueReturn.Add(str17);
+                                foreach (var word1 in Vocabulary.getRandomNegativeFoodAdjectives(n))
+                                {
+                                    foreach (string word2 in Vocabulary.getRandomNegativeItemSlanderNouns()) { 
+                                        string str17 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityLow_Rude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)word1, (object)word2);
+                                        dialogueReturn.Add(str17);
+                                }
+                            }
                                 break;
                             }
-                            string str10 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityHigh_Rude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)Vocabulary.getRandomSlightlyPositiveAdjectiveForEdibleNoun(n));
-                            dialogueReturn.Add(str10);
+                            foreach (string word1 in Vocabulary.getRandomSlightlyPositiveAdjectivesForEdibleNoun(n))
+                            {
+                                string str10 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityHigh_Rude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)word1);
+                                dialogueReturn.Add(str10);
+                            }
                             break;
                         }
                         string str11 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_NonRude"), (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2));
@@ -1856,9 +1848,11 @@ namespace Vocalization
                         }
                         if (i.Category == -7)
                         {
-                            string forEventOrPerson = Vocabulary.getRandomPositiveAdjectiveForEventOrPerson(n);
-                            string str14 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_5_Cooking"), (object)str3, (object)str4, (object)i.DisplayName, (object)Vocabulary.getProperArticleForWord(forEventOrPerson), (object)forEventOrPerson);
-                            dialogueReturn.Add(str14);
+                            foreach (string forEventOrPerson in Vocabulary.getRandomPositiveAdjectivesForEventOrPerson(n))
+                            {
+                                string str14 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_5_Cooking"), (object)str3, (object)str4, (object)i.DisplayName, (object)Lexicon.getProperArticleForWord(forEventOrPerson), (object)forEventOrPerson);
+                                dialogueReturn.Add(str14);
+                            }
                             break;
                         }
                         string str15 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_5_Foraged"), (object)str3, (object)str4, (object)i.DisplayName);
@@ -1891,7 +1885,11 @@ namespace Vocalization
             {
                 if (i.quality.Value == 0)
                 {
-                    str1 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Abigail_QualityLow"), (object)str3, (object)str4, (object)i.DisplayName, (object)Vocabulary.getRandomNegativeItemSlanderNoun());
+                    foreach (string word1 in Vocabulary.getRandomNegativeItemSlanderNouns())
+                    {
+                        string str12 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Abigail_QualityLow"), (object)str3, (object)str4, (object)i.DisplayName, (object)word1);
+                        dialogueReturn.Add(str12);
+                    }
                 }
                 else {
                     str1 = Game1.content.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Abigail_QualityHigh"), (object)str3, (object)str4, (object)i.DisplayName);
@@ -1906,8 +1904,10 @@ namespace Vocalization
                     str1 = Game1.content.LoadString(Path.Combine("Data","ExtraDialogue:PurchasedItem_Elliott"), (object)str3, (object)str4, (object)i.DisplayName);
                 if (name == "Leah")
                     str1 = Game1.content.LoadString(Path.Combine("Data","ExtraDialogue:PurchasedItem_Leah"), (object)str3, (object)str4, (object)i.DisplayName);
-
-            dialogueReturn.Add(str1);
+            if (str1 != "")
+            {
+                dialogueReturn.Add(str1);
+            }
             return dialogueReturn;
         }
 
@@ -2035,6 +2035,12 @@ namespace Vocalization
                 dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
             }
 
+            if (dialogue.Contains("$e"))
+            {
+                dialogue = dialogue.Replace("$e", "");
+                dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
+            }
+
 
             //This is probably the worst possible way to do this but I don't have too much a choice.
             for (int i=0; i<=100; i++)
@@ -2068,7 +2074,6 @@ namespace Vocalization
 
             foreach (var s in split)
             {
-                ModMonitor.Log(s);
                 dialogueSplits1.Add(s);
             }
 
@@ -2085,7 +2090,6 @@ namespace Vocalization
             //split across | symbol
             foreach(var dia in dialogueSplits1)
             {
-                ModMonitor.Log(dia);
                 if (dia.Contains("|")) //If I can split my string do so and add all the split strings into my orSplit list.
                 {
                     List<string> tempSplits = dia.Split('|').ToList();

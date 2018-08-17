@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Framework\CharacterVoiceCue.cs" />
     <Compile Include="Framework\ReplacementStrings.cs" />
+    <Compile Include="Framework\Vocabulary.cs" />
     <Compile Include="Framework\VoiceAudioOptions.cs" />
     <Compile Include="ModConfig.cs" />
     <Compile Include="Vocalization.cs" />

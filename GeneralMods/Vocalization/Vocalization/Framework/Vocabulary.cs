@@ -45,5 +45,35 @@ namespace Vocalization.Framework
             return strArray;
         }
 
+        public static string[] getRandomNegativeAdjectivesForEventOrPerson(NPC n = null)
+        {
+            Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
+            string[] strArray;
+            if (n != null && n.Age != 0)
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomNegativeAdjective_Child").Split('#');
+            else if (n != null && n.Gender == 0)
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomNegativeAdjective_AdultMale").Split('#');
+            else if (n != null && n.Gender == 1)
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomNegativeAdjective_AdultFemale").Split('#');
+            else
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomNegativeAdjective_PlaceOrEvent").Split('#');
+            return strArray;
+        }
+
+        public static string[] getRandomPositiveAdjectivesForEventOrPerson(NPC n = null)
+        {
+            Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
+            string[] strArray;
+            if (n != null && n.Age != 0)
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomPositiveAdjective_Child").Split('#');
+            else if (n != null && n.Gender == 0)
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomPositiveAdjective_AdultMale").Split('#');
+            else if (n != null && n.Gender == 1)
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomPositiveAdjective_AdultFemale").Split('#');
+            else
+                strArray = Game1.content.LoadString("Strings\\Lexicon:RandomPositiveAdjective_PlaceOrEvent").Split('#');
+            return strArray;
+        }
+
     }
 }
