@@ -156,6 +156,8 @@ namespace Vocalization
         /// </summary>
         public static string previousDialogue;
 
+        List<string> characterDialoguePaths = new List<string>();
+
         /// <summary>
         /// Simple Sound Manager class that handles playing and stoping dialogue.
         /// </summary>
@@ -510,7 +512,7 @@ namespace Vocalization
 
             VoicePath = voicePath; //Set a static reference to my voice files directory.
 
-            List<string> characterDialoguePaths = new List<string>();
+            
 
             //Get a list of all characters in the game and make voice directories for them in each supported translation of the mod.
             foreach (var loc in Game1.locations)
@@ -1293,7 +1295,7 @@ namespace Vocalization
 
             else if (cue.name == "SpeechBubbles")
             {
-                foreach (var fileName in cue.dataFileNames)
+                foreach (var fileName in cue.stringsFileNames)
                 {
                     ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
                     string dialoguePath2 = Path.Combine(stringsPath, fileName);
@@ -1316,6 +1318,35 @@ namespace Vocalization
                     }
                     continue;
                 }
+
+                string basePath = ModHelper.DirectoryPath;
+                string contentPath = Path.Combine(basePath, "Content");
+                string audioPath = Path.Combine(contentPath, "Audio");
+                string voicePath = Path.Combine(audioPath, "VoiceFiles");
+                string[] dirs = Directory.GetDirectories(Path.Combine(voicePath,"English"));
+                //Some additional scraping to put together better options for speech bubbles.
+                foreach (var v in dirs)
+                {
+                    string name = Path.GetFileName(v);
+                    cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4068", (object)name), new VoiceAudioOptions());
+                    cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4065") + ", " + Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4066", (object)name), new VoiceAudioOptions());
+                    cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4071", (object)name), new VoiceAudioOptions());
+                }
+
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4060"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4072"), new VoiceAudioOptions());
+
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4063"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4064"), new VoiceAudioOptions());
+
+                cue.addDialogue("Hey it's farmer, " + replacementStrings.farmerName,new VoiceAudioOptions());
+
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4062"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4061"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4060"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4059"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4058"), new VoiceAudioOptions());
+
             }
 
 
