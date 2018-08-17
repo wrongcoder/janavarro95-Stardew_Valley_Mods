@@ -1069,6 +1069,14 @@ namespace Vocalization
                             }
                             continue;
                         }
+
+                        if (fileName.Contains("StringsFromCSFiles"))
+                        {
+                            //do nothing.....for now.....
+                            //FORTUNE TELLER DIALOGUE SCRAPE GOES HERE!!!!
+                        }
+
+
                         //!!!!!!!!!!!!If I ever want to make this moddable add a generic scrape here.
                     }
                 }
@@ -1178,30 +1186,33 @@ namespace Vocalization
                 foreach (var fileName in cue.dataFileNames)
                 {
                     ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
-                    string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                    string dialoguePath2 = Path.Combine(dataPath, fileName);
                     string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
                     if (!File.Exists(Path.Combine(root, dialoguePath2)))
                     {
                         ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
                         continue; //If the file is not found for some reason...
                     }
-                    var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+                    var DialogueDict = ModHelper.Content.Load<Dictionary<int, string>>(dialoguePath2, ContentSource.GameContent);
                         //Scrape the whole dictionary looking for the character's name.
-                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        foreach (KeyValuePair<int, string> pair in DialogueDict)
                         {
                             //Get the key in the dictionary
-                            string key = pair.Key;
+                            string key = pair.Key.ToString();
                             string rawDialogue = pair.Value;
                         //If the key contains the character's name.
 
-                        List<string> strippedRawQuestDialogue = new List<string>();
+                        ModMonitor.Log(rawDialogue);
+
+                        int count = rawDialogue.Split('/').Length-1;
+                        string[] strippedRawQuestDialogue = new string[count];
                         List<string> strippedFreshQuestDialogue = new List<string>();
-                        strippedRawQuestDialogue = rawDialogue.Split('/').ToList();
+                        strippedRawQuestDialogue = rawDialogue.Split('/');
                         string prompt = strippedRawQuestDialogue.ElementAt(2);
-                        string response = strippedRawQuestDialogue.ElementAt(strippedRawQuestDialogue.Count - 1);
+                        string response = strippedRawQuestDialogue.ElementAt(strippedRawQuestDialogue.Length - 1);
 
                         strippedFreshQuestDialogue.Add(prompt);
-                        if (response != "true" || response != "false")
+                        if (response != "true" && response != "false")
                         {
                             strippedFreshQuestDialogue.Add(response);
                         }
@@ -1209,7 +1220,7 @@ namespace Vocalization
                         List<string> cleanDialogues = new List<string>();
                         foreach (var dia in strippedFreshQuestDialogue)
                         {
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
+                            cleanDialogues = sanitizeDialogueFromDictionaries(dia,cue);
                             foreach (var str in cleanDialogues)
                             {
                                 cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1222,12 +1233,13 @@ namespace Vocalization
                 }
                 }
 
+            //ADD THIS TO THE ACTUAL NPC????
             else if (cue.name == "NPCGiftTastes")
             {
                 foreach (var fileName in cue.dataFileNames)
                 {
                     ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
-                    string dialoguePath2 = Path.Combine(stringsPath, fileName);
+                    string dialoguePath2 = Path.Combine(dataPath, fileName);
                     string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
                     if (!File.Exists(Path.Combine(root, dialoguePath2)))
                     {
@@ -1263,9 +1275,16 @@ namespace Vocalization
 
                         if (ignore) continue;
 
-                        List<string> strippedRawQuestDialogue = new List<string>();
-                        List<string> strippedFreshQuestDialogue = new List<string>();
-                        strippedRawQuestDialogue = rawDialogue.Split('/').ToList();
+                        string[]strippedRawQuestDialogue = new string[20];
+                        List<string>strippedFreshQuestDialogue = new List<string>();
+                        ModMonitor.Log(rawDialogue);
+                        strippedRawQuestDialogue = rawDialogue.Split(new string[] {"/" },StringSplitOptions.None);
+
+                        foreach(var v in strippedRawQuestDialogue)
+                        {
+                            ModMonitor.Log("I AM SO CONFUSED:   " + v);
+                        }
+
 
                         string prompt1 = strippedRawQuestDialogue.ElementAt(0);
                         string prompt2 = strippedRawQuestDialogue.ElementAt(2);
@@ -1282,7 +1301,7 @@ namespace Vocalization
                         List<string> cleanDialogues = new List<string>();
                         foreach (var dia in strippedFreshQuestDialogue)
                         {
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
+                            cleanDialogues = sanitizeDialogueFromDictionaries(dia,cue);
                             foreach (var str in cleanDialogues)
                             {
                                 cue.addDialogue(str,new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
@@ -1328,24 +1347,24 @@ namespace Vocalization
                 foreach (var v in dirs)
                 {
                     string name = Path.GetFileName(v);
-                    cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4068", (object)name), new VoiceAudioOptions());
-                    cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4065") + ", " + Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4066", (object)name), new VoiceAudioOptions());
-                    cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4071", (object)name), new VoiceAudioOptions());
+                    cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4068"), (object)name), new VoiceAudioOptions());
+                    cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4065")) + ", " + Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4066"), (object)name), new VoiceAudioOptions());
+                    cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4071"), (object)name), new VoiceAudioOptions());
                 }
 
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4060"), new VoiceAudioOptions());
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4072"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4060")), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4072")), new VoiceAudioOptions());
 
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4063"), new VoiceAudioOptions());
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4064"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4063")), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4064")), new VoiceAudioOptions());
 
-                cue.addDialogue("Hey it's farmer, " + replacementStrings.farmerName,new VoiceAudioOptions());
+                //cue.addDialogue("Hey, it's farmer, " + replacementStrings.farmerName,new VoiceAudioOptions());
 
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4062"), new VoiceAudioOptions());
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4061"), new VoiceAudioOptions());
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4060"), new VoiceAudioOptions());
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4059"), new VoiceAudioOptions());
-                cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.4058"), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4062")), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4061")), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4060")), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4059")), new VoiceAudioOptions());
+                cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4058")), new VoiceAudioOptions());
 
             }
 
@@ -1513,12 +1532,40 @@ namespace Vocalization
                     //Load in super generic dialogue for this npc. This may or may not be a good idea....
                     if (fileName.Contains("StringsFromCSFiles"))
                     {
+                        //Have a list of generic dialogue that I won't scrape since I do a more specific scrape after the main scrape.
+                        List<string> ignoreKeys = new List<string>();
+                        ignoreKeys.Add("NPC.cs.3955");
+                        ignoreKeys.Add("NPC.cs.3969");
+                        ignoreKeys.Add("NPC.cs.3981");
+                        ignoreKeys.Add("NPC.cs.3985");
+                        ignoreKeys.Add("NPC.cs.3987");
+                        ignoreKeys.Add("NPC.cs.4066");
+                        ignoreKeys.Add("NPC.cs.4068");
+                        ignoreKeys.Add("NPC.cs.4071");
+                        ignoreKeys.Add("NPC.cs.4440");
+                        ignoreKeys.Add("NPC.cs.4441");
+                        ignoreKeys.Add("NPC.cs.4444");
+                        ignoreKeys.Add("NPC.cs.4445");
+                        ignoreKeys.Add("NPC.cs.4447");
+                        ignoreKeys.Add("NPC.cs.4448");
+                        ignoreKeys.Add("NPC.cs.4463");
+                        ignoreKeys.Add("NPC.cs.4465");
+                        ignoreKeys.Add("NPC.cs.4466");
+                        ignoreKeys.Add("NPC.cs.4486");
                         //Scrape the whole dictionary looking for the character's name.
                         foreach (KeyValuePair<string, string> pair in DialogueDict)
                         {
                             //Get the key in the dictionary
                             string key = pair.Key;
+                            if (ignoreKeys.Contains(key)) continue;
                             string rawDialogue = pair.Value;
+
+                            //This helps eliminate the fortune teller dialogue from more specific npcs.
+                            if(rawDialogue.Contains("{0}") && !ignoreKeys.Contains(key))
+                            {
+                                continue;
+                            }
+
                             //If the key contains the character's name.
                             if (key.Contains("NPC"))
                             {
@@ -1530,6 +1577,46 @@ namespace Vocalization
                                 }
                             }
                         }
+                        //Scrape dialogue more specifically and replace some generic {0}'s and {1}'s
+                        cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.3955"), (object)cue.name), new VoiceAudioOptions());
+                        cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.3969"), (object)cue.name), new VoiceAudioOptions());
+                        cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.3981"), (object)cue.name), new VoiceAudioOptions());
+                        cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.3987"), (object)cue.name,"2"),new VoiceAudioOptions());
+                        cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings", "StringsFromCSFiles:NPC.cs.4066"), (object)replacementStrings.farmerName), new VoiceAudioOptions());
+                        cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings", "StringsFromCSFiles:NPC.cs.4068"), (object)replacementStrings.farmerName), new VoiceAudioOptions());
+                        cue.addDialogue(Game1.content.LoadString(Path.Combine("Strings", "StringsFromCSFiles:NPC.cs.4071"), (object)replacementStrings.farmerName), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4440"), (object)replacementStrings.farmerName),cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4441"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4444"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4445"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4447"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4448"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4463"), (object)replacementStrings.petName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4465"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4466"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings", "StringsFromCSFiles:NPC.cs.4486"), (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
+                        for (int i = 4507; i <= 4523; i++)
+                        {
+                            cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4465"), (object)Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.")+i.ToString())), cue).ElementAt(0), new VoiceAudioOptions());
+                            cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4466"), (object)Game1.content.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.") + i.ToString())), cue).ElementAt(0), new VoiceAudioOptions());
+                        }
+
+
+                        //DO PARSE LOGIC HERE   
+                        //cue.addDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.3985", (object)cue.name), new VoiceAudioOptions());
+
+                        string basePath = ModHelper.DirectoryPath;
+                        string contentPath = Path.Combine(basePath, "Content");
+                        string audioPath = Path.Combine(contentPath, "Audio");
+                        string voicePath = Path.Combine(audioPath, "VoiceFiles");
+                        string[] dirs = Directory.GetDirectories(Path.Combine(voicePath, "English"));
+                        //Some additional scraping to put together better options for speech bubbles.
+                        foreach (var v in dirs)
+                        {
+                            string name = Path.GetFileName(v);
+                            cue.addDialogue(sanitizeDialogueFromDictionaries(Game1.content.LoadString(Path.Combine("Strings", "StringsFromCSFiles:NPC.cs.3985"), (object)name), cue).ElementAt(0), new VoiceAudioOptions());
+                        }
+
                         continue;
                     }
 

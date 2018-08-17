@@ -122,6 +122,7 @@ namespace Vocalization.Framework
             else if (name == "Characters")
             {
                 stringsFileNames.Add("Characters.xnb");
+                stringsFileNames.Add("StringsFromCSFiles.xnb");
             }
             else if (name == "Notes")
             {
@@ -133,7 +134,7 @@ namespace Vocalization.Framework
                 stringsFileNames.Add("StringsFromCSFiles.xnb");
             }
 
-            else if (name == "GiftTastes")
+            else if (name == "NPCGiftTastes")
             {
                 dataFileNames.Add("NPCGiftTastes.xnb");
             }
@@ -141,6 +142,11 @@ namespace Vocalization.Framework
             else if (name == "SpeechBubbles")
             {
                 stringsFileNames.Add("SpeechBubbles.xnb");
+            }
+
+            else if (name == "Quests")
+            {
+                dataFileNames.Add("Quests.xnb");
             }
 
             else if (name == "Temp")
