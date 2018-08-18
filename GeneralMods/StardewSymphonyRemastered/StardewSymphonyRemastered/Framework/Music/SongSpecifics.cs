@@ -174,6 +174,7 @@ namespace StardewSymphonyRemastered.Framework
                 var farm = (Farm)Game1.getLocationFromName("Farm");
                 foreach(var building in farm.buildings)
                 {
+                    if (locations.Contains(building.nameOfIndoors)) continue;
                     locations.Add(building.nameOfIndoors);
                     if (StardewSymphony.Config.EnableDebugLog)
                         StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + building.nameOfIndoors);

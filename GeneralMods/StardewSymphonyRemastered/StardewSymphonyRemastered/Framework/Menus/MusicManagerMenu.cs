@@ -1255,26 +1255,26 @@ namespace StardewSymphonyRemastered.Framework.Menus
                         Vector2 position = new Vector2(this.width * .1f + 64, this.height * .05f + 320);
                         if (button.name == "SeasonIcon")
                         {
-                            //this.currentlySelectedOption = button.clone(position);
+                            this.currentlySelectedOption = button.clone(position);
                             this.drawMode = DrawMode.SeasonSelection;
                             buttonSelected = true;
                         }
                         if (button.name == "FestivalIcon")
                         {
-                            //this.currentlySelectedOption = button.clone(position);
+                            this.currentlySelectedOption = button.clone(position);
                             this.drawMode = DrawMode.FestivalSelection;
                             buttonSelected = true;
 
                         }
                         if (button.name == "EventIcon")
                         {
-                            //this.currentlySelectedOption = button.clone(position);
+                            this.currentlySelectedOption = button.clone(position);
                             this.drawMode = DrawMode.EventSelection;
                             buttonSelected = true;
                         }
                         if (button.name == "MenuIcon")
                         {
-                            //this.currentlySelectedOption = button.clone(position);
+                            this.currentlySelectedOption = button.clone(position);
                             this.drawMode = DrawMode.MenuSelection;
                             buttonSelected = true;
                         }
