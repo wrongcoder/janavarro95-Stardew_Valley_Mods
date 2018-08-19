@@ -677,19 +677,16 @@ namespace Vocalization
                     string characterName = Path.GetFileName(dir);
 
                     //If a file was not found, create one and add it to the list of character voice cues.
+                    //I have to scrape all files if they don't exist so that way all options are available for release.
                     if (!File.Exists(voiceCueFile))
                     {
                         CharacterVoiceCue cue = new CharacterVoiceCue(characterName);
-                        //Change this up for different translations???
-                        ModMonitor.Log("WTF???");
                         cue.initializeEnglishScrape();
-                        ModMonitor.Log("OK SERIOUSLY WTF???");
                         cue.initializeForTranslation(translation);
                         scrapeDictionaries(voiceCueFile,cue,translation);
-                        ///??? DO I NEVER ACTUALLY ADD IT IN???
                         try
                         {
-                            if (translation == config.translationInfo.currentTranslation)
+                            if (Path.GetFileName(translation) == config.translationInfo.currentTranslation)
                             {
                                 DialogueCues.Add(characterName, cue);
                             }
@@ -701,12 +698,13 @@ namespace Vocalization
                     }
                     else
                     {
-                        CharacterVoiceCue cue = ModHelper.ReadJsonFile<CharacterVoiceCue>(voiceCueFile);
-                        //scrapeDictionaries(voiceCueFile,cue);
                         try
                         {
-                            if (translation == config.translationInfo.currentTranslation)
+                            //Only load in the cues for the current translation.
+                            if (Path.GetFileName(translation) == config.translationInfo.currentTranslation)
                             {
+                                CharacterVoiceCue cue = ModHelper.ReadJsonFile<CharacterVoiceCue>(voiceCueFile);
+                                //scrapeDictionaries(voiceCueFile,cue);
                                 DialogueCues.Add(characterName, cue);
                             }
                         }
@@ -714,7 +712,6 @@ namespace Vocalization
                         {
                             ModMonitor.Log("WHY NO ADD IN???"+err.ToString());
                         }
-                        ///??? DO I ACTUALLY NEVER ADD IT IN???
                     }
                 }
             }
@@ -950,7 +947,7 @@ namespace Vocalization
                                     {
                                         for (int i = 1; i <= 3; i++)
                                         {
-                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), pair2.Key,i.ToString()), new VoiceAudioOptions());
+                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key),translation, pair2.Key,i.ToString()), new VoiceAudioOptions());
                                         }
                                     }
                                     continue;
