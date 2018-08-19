@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vocalization.Framework;
 
 namespace Vocalization
 {
@@ -11,14 +12,11 @@ namespace Vocalization
     /// </summary>
     public class ModConfig
     {
+
         /// <summary>
-        /// A list of all of the translations currently supported by this mod.
+        /// Handles all of the translation information and parsing.
         /// </summary>
-        public List<string> translations;
-        /// <summary>
-        /// The currently selected translation to use.
-        /// </summary>
-        public string currentTranslation;
+        public TranslationInfo translationInfo;
 
         /// <summary>
         /// Keeps track of the voice modes for determining how much audio is played.
@@ -37,7 +35,6 @@ namespace Vocalization
 
         public ModConfig()
         {
-            translations = new List<string>();
             modes = new List<string>();
 
             modes.Add("Simple");
@@ -46,9 +43,8 @@ namespace Vocalization
             modes.Add("SimpleAndHeartEvents");
             currentMode = "Full";
 
+            translationInfo = new TranslationInfo();
 
-            translations.Add("English");
-            currentTranslation = "English";
 
             this.voiceVolume = 1.0f;
         }
@@ -64,6 +60,8 @@ namespace Vocalization
                 currentMode = "Full";
             }
         }
+
+
 
 
     }

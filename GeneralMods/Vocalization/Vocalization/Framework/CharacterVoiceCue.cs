@@ -180,7 +180,14 @@ namespace Vocalization.Framework
                             List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach(var cleanSentence in clean)
                             {
-                                this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                try
+                                {
+                                    this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                }
+                                catch(Exception err)
+                                {
+
+                                }
                             }
                         }
                         
@@ -200,7 +207,15 @@ namespace Vocalization.Framework
                             List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
                             foreach (var cleanSentence in clean)
                             {
-                                this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                try
+                                {
+                                    this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                }
+                                catch(Exception err)
+                                {
+
+                                }
+
                             }
                         }
 
@@ -254,12 +269,8 @@ namespace Vocalization.Framework
                                 }
                             }
                         }
-
                     }
                 }
-
-
-
             }
 
             else
@@ -278,5 +289,37 @@ namespace Vocalization.Framework
 
 
         }
+
+
+        /// <summary>
+        /// Change all of the files to the ones that are appropriate for that translation version.
+        /// </summary>
+        /// <param name="translation"></param>
+        public void initializeForTranslation(string translation)
+        {
+            for (int i = 0; i < this.dataFileNames.Count; i++)
+            {
+                string s = dataFileNames.ElementAt(i);
+                s=dataFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                dataFileNames[i] = s;
+            }
+
+            for (int i = 0; i < this.dialogueFileNames.Count; i++)
+            {
+                string s = dialogueFileNames.ElementAt(i);
+                s=dialogueFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                dialogueFileNames[i] = s;
+            }
+
+            for (int i = 0; i < this.stringsFileNames.Count; i++)
+            {
+                string s = stringsFileNames.ElementAt(i);
+                s=stringsFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                stringsFileNames[i] = s;
+            }   
+        }
+
+
+
     }
 }
