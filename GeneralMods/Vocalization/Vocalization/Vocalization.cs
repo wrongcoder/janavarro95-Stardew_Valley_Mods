@@ -727,6 +727,7 @@ namespace Vocalization
             var dialoguePath = Path.Combine("Characters", "Dialogue");
             var stringsPath = Path.Combine("Strings"); //Used for all sorts of extra strings and stuff for like StringsFromCS
             var dataPath = Path.Combine("Data"); //Used for engagement dialogue strings, and ExtraDialogue, Notes, Secret Notes, Mail
+            var festivalPath = Path.Combine(dataPath, "Festivals");
 
             ModMonitor.Log("Scraping dialogue for character: " + cue.name,LogLevel.Info);
             //If the "character"'s name is TV which means I'm watching tv, scrape the data from the TV shows.
@@ -1692,6 +1693,35 @@ namespace Vocalization
                         }
                     }
                 }
+                foreach (var fileName in cue.festivalFileNames)
+                {
+                    ModMonitor.Log("    Scraping festival file: " + fileName, LogLevel.Info);
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(festivalPath, fileName);
+                        string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                        if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                        {
+                            ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                            continue; //If the file is not found for some reason...
+                        }
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            string key = pair.Key;
+                            if (key != cue.name) continue;
+                            string rawDialogue = pair.Value;
+                            List<string> cleanDialogues = new List<string>();
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                            foreach (var str in cleanDialogues)
+                            {
+                                cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                            }
+                        }
+                    }
+                }
                 foreach (var fileName in cue.dataFileNames)
                 {
                     ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
@@ -1865,6 +1895,7 @@ namespace Vocalization
                         continue;
                     }
                 }
+
 
                 //LOad item dictionary, pass in item and npc, sanitize the output string using the sanitizationDictionary function, and add in the cue!
                 Dictionary<int, string> objDict = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Data", config.translationInfo.getXNBForTranslation("ObjectInformation",translation)));

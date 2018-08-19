@@ -33,10 +33,17 @@ namespace Vocalization.Framework
         /// </summary>
         public List<string> dataFileNames;
 
+
+        public List<string> festivalFileNames;
+        public List<string> eventFileNames;
+
+
         /// <summary>
         /// A dictionary of dialogue strings that correspond to audio files.
         /// </summary>
         public Dictionary<string, VoiceAudioOptions> dialogueCues;
+
+
 
 
         /// <summary>
@@ -50,6 +57,9 @@ namespace Vocalization.Framework
             this.stringsFileNames = new List<string>();
             this.dialogueFileNames = new List<string>();
             this.dataFileNames = new List<string>();
+
+            this.festivalFileNames = new List<string>();
+            this.eventFileNames = new List<string>();
         }
 
         /// <summary>
@@ -166,6 +176,18 @@ namespace Vocalization.Framework
 
                 stringsFileNames.Add("StringsFromCSFiles.xnb");
                 stringsFileNames.Add(name + ".xnb");
+
+                festivalFileNames.Add("fall16.xnb");
+                festivalFileNames.Add("fall27.xnb");
+
+                festivalFileNames.Add("spring13.xnb");
+                festivalFileNames.Add("spring24.xnb");
+
+                festivalFileNames.Add("summer11.xnb");
+                festivalFileNames.Add("summer28.xnb");
+
+                festivalFileNames.Add("winter8.xnb");
+                festivalFileNames.Add("winter25.xnb");
             }
         }
 
