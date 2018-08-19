@@ -1743,18 +1743,19 @@ namespace Vocalization
                         foreach (KeyValuePair<string, string> pair in DialogueDict)
                         {
                             string key = pair.Key;
-                            if (key != cue.name) continue;
                             string rawDialogue = pair.Value;
 
                             List<string> speakingLines = getEventSpeakerLines(rawDialogue, cue.name);
                             //Sanitize Event info here!
 
-
-                            List<string> cleanDialogues = new List<string>();
-                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue, cue);
-                            foreach (var str in cleanDialogues)
+                            foreach (var line in speakingLines)
                             {
-                                cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                List<string> cleanDialogues = new List<string>();
+                                cleanDialogues = sanitizeDialogueFromDictionaries(line, cue);
+                                foreach (var str in cleanDialogues)
+                                {
+                                    cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                }
                             }
                         }
                     }
@@ -1987,10 +1988,12 @@ namespace Vocalization
             List<string> speakingData = new List<string>();
             foreach(var dia in dialogueSplit)
             {
-                if (!dia.Contains("speak") && !dia.Contains("textAboveHead") && !dia.Contains(speakerName)) continue;
+                //ModMonitor.Log(dia);
+                if (!dia.Contains("speak") && !dia.Contains("textAboveHead")) continue;
                 string[] actualDialogue = dia.Split(new string[] { "\"" }, StringSplitOptions.None);
-
-                ModMonitor.Log(actualDialogue[1]);
+                //Check to make sure this is the speaker's line.
+                if (!actualDialogue[0].Contains(speakerName)) continue;
+                //ModMonitor.Log(actualDialogue[1],LogLevel.Alert);
                 //Get the actual dialogue line from this npc.
                 speakingData.Add(actualDialogue[1]);
             }

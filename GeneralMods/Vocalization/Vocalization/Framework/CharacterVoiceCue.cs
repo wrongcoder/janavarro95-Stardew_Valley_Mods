@@ -195,9 +195,13 @@ namespace Vocalization.Framework
                 string[] files = Directory.GetFiles(dir);
                 foreach(var file in files)
                 {
-                    string eventFileName = Path.GetFileNameWithoutExtension(file)+".xnb";
-                    if (eventFileNames.Contains(eventFileName)) continue;
-                    else eventFileNames.Add(eventFileName);
+                    string eventFileName = Path.GetFileNameWithoutExtension(file);
+
+                    string actualName = eventFileName.Split('.').ElementAt(0)+".xnb";
+
+                    //Gte first position of . and split it. The 0 element will be teh actual filename.
+                    if (eventFileNames.Contains(actualName)) continue;
+                    else eventFileNames.Add(actualName);
                 }
             }
         }
