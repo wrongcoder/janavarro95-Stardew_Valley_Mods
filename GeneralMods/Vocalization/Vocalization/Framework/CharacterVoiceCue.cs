@@ -38,6 +38,7 @@ namespace Vocalization.Framework
         public List<string> eventFileNames;
 
 
+
         /// <summary>
         /// A dictionary of dialogue strings that correspond to audio files.
         /// </summary>
@@ -188,6 +189,16 @@ namespace Vocalization.Framework
 
                 festivalFileNames.Add("winter8.xnb");
                 festivalFileNames.Add("winter25.xnb");
+
+                string content = Game1.content.RootDirectory;
+                string dir = Path.Combine(content, "Data", "Events");
+                string[] files = Directory.GetFiles(dir);
+                foreach(var file in files)
+                {
+                    string eventFileName = Path.GetFileNameWithoutExtension(file)+".xnb";
+                    if (eventFileNames.Contains(eventFileName)) continue;
+                    else eventFileNames.Add(eventFileName);
+                }
             }
         }
 
@@ -224,7 +235,25 @@ namespace Vocalization.Framework
                 s=stringsFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
                 stringsFileNames[i] = s;
                 Vocalization.ModMonitor.Log(stringsFileNames.ElementAt(i));
-            }   
+            }
+
+            for (int i = 0; i < this.festivalFileNames.Count; i++)
+            {
+                Vocalization.ModMonitor.Log(festivalFileNames.ElementAt(i));
+                string s = festivalFileNames.ElementAt(i);
+                s = festivalFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                festivalFileNames[i] = s;
+                Vocalization.ModMonitor.Log(festivalFileNames.ElementAt(i));
+            }
+
+            for (int i = 0; i < this.eventFileNames.Count; i++)
+            {
+                Vocalization.ModMonitor.Log(eventFileNames.ElementAt(i));
+                string s = eventFileNames.ElementAt(i);
+                s = eventFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                eventFileNames[i] = s;
+                Vocalization.ModMonitor.Log(eventFileNames.ElementAt(i));
+            }
         }
 
 

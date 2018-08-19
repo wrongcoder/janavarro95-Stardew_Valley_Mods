@@ -728,6 +728,7 @@ namespace Vocalization
             var stringsPath = Path.Combine("Strings"); //Used for all sorts of extra strings and stuff for like StringsFromCS
             var dataPath = Path.Combine("Data"); //Used for engagement dialogue strings, and ExtraDialogue, Notes, Secret Notes, Mail
             var festivalPath = Path.Combine(dataPath, "Festivals");
+            var eventPath = Path.Combine(dataPath, "Events");
 
             ModMonitor.Log("Scraping dialogue for character: " + cue.name,LogLevel.Info);
             //If the "character"'s name is TV which means I'm watching tv, scrape the data from the TV shows.
@@ -1722,6 +1723,46 @@ namespace Vocalization
                         }
                     }
                 }
+
+
+                foreach (var fileName in cue.eventFileNames)
+                {
+                    ModMonitor.Log("    Scraping event file: " + fileName, LogLevel.Info);
+                    //basically this will never run but can be used below to also add in dialogue.
+                    if (!String.IsNullOrEmpty(fileName))
+                    {
+                        string dialoguePath2 = Path.Combine(eventPath, fileName);
+                        string root = Game1.content.RootDirectory;///////USE THIS TO CHECK FOR EXISTENCE!!!!!
+                        if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                        {
+                            ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                            continue; //If the file is not found for some reason...
+                        }
+                        var DialogueDict = ModHelper.Content.Load<Dictionary<string, string>>(dialoguePath2, ContentSource.GameContent);
+
+                        foreach (KeyValuePair<string, string> pair in DialogueDict)
+                        {
+                            string key = pair.Key;
+                            if (key != cue.name) continue;
+                            string rawDialogue = pair.Value;
+
+                            List<string> speakingLines = getEventSpeakerLines(rawDialogue, cue.name);
+                            //Sanitize Event info here!
+
+
+                            List<string> cleanDialogues = new List<string>();
+                            cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                            foreach (var str in cleanDialogues)
+                            {
+                                cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                            }
+                        }
+                    }
+                }
+
+
+
+
                 foreach (var fileName in cue.dataFileNames)
                 {
                     ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
@@ -1938,6 +1979,24 @@ namespace Vocalization
 
             ModHelper.WriteJsonFile<CharacterVoiceCue>(path,cue);
             //DialogueCues.Add(cue.name, cue);
+        }
+
+        public List<string> getEventSpeakerLines(string rawDialogue, string speakerName)
+        {
+            string[] dialogueSplit= rawDialogue.Split('/');
+            List<string> speakingData = new List<string>();
+            foreach(var dia in dialogueSplit)
+            {
+                if (!dia.Contains("speak") && !dia.Contains("textAboveHead") && !dia.Contains(speakerName)) continue;
+                string[] actualDialogue = dia.Split(new string[] { "\"" }, StringSplitOptions.None);
+
+                ModMonitor.Log(actualDialogue[1]);
+                //Get the actual dialogue line from this npc.
+                speakingData.Add(actualDialogue[1]);
+            }
+
+
+            return speakingData;
         }
 
 
