@@ -656,7 +656,7 @@ namespace Vocalization
             List<string> translations = Directory.GetDirectories(VoicePath).ToList();
             foreach (var translation in translations)
             {
-                List<string> characterVoiceLines = Directory.GetDirectories(translation).ToList();
+                string[] characterVoiceLines = Directory.GetDirectories(translation);
                 //get a list of all characters supported in this translation and load their voice cue file.
                 foreach (var dir in characterVoiceLines)
                 {
@@ -681,7 +681,9 @@ namespace Vocalization
                     {
                         CharacterVoiceCue cue = new CharacterVoiceCue(characterName);
                         //Change this up for different translations???
+                        ModMonitor.Log("WTF???");
                         cue.initializeEnglishScrape();
+                        ModMonitor.Log("OK SERIOUSLY WTF???");
                         cue.initializeForTranslation(translation);
                         scrapeDictionaries(voiceCueFile,cue,translation);
                         ///??? DO I NEVER ACTUALLY ADD IT IN???
@@ -914,13 +916,13 @@ namespace Vocalization
                             {
 
                                 if(key== "NewChild_Adoption") {
-                                    cue.addDialogue(config.translationInfo.LoadStringFromDataFile("ExtraDialogue",key,translation,replacementStrings.kid1Name), new VoiceAudioOptions());
-                                    cue.addDialogue(config.translationInfo.LoadStringFromDataFile("ExtraDialogue", key, translation, replacementStrings.kid2Name), new VoiceAudioOptions());
+                                    cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data","ExtraDialogue:"+key),translation,replacementStrings.kid1Name), new VoiceAudioOptions());
+                                    cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data","ExtraDialogue:"+key), translation, replacementStrings.kid2Name), new VoiceAudioOptions());
                                     continue;
                                 }
                                 if(key== "NewChild_FirstChild")
                                 {
-                                    cue.addDialogue(config.translationInfo.LoadStringFromDataFile("ExtraDialogue", key, translation, replacementStrings.kid1Name), new VoiceAudioOptions());
+                                    cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:"+key), translation, replacementStrings.kid1Name), new VoiceAudioOptions());
                                     continue;
                                 }
 
@@ -931,7 +933,7 @@ namespace Vocalization
 
                                     foreach(KeyValuePair<string, string> pair2 in BuildingDict)
                                     {
-                                        List<string> cleanedDialogues = sanitizeDialogueFromDictionaries(config.translationInfo.LoadStringFromDataFile("ExtraDialogue",key,translation,pair2.Key),cue);
+                                        List<string> cleanedDialogues = sanitizeDialogueFromDictionaries(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:"+key),translation,pair2.Key),cue);
                                         foreach (var clean_str in cleanedDialogues) {
                                             cue.addDialogue(clean_str, new VoiceAudioOptions());
                                         }
@@ -973,7 +975,7 @@ namespace Vocalization
                                     {
                                         foreach(var lvl in levels)
                                         {
-                                            cue.addDialogue(config.translationInfo.LoadStringFromDataFile("ExtraDialogue", key,translation ,lvl+tool), new VoiceAudioOptions());
+                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data","ExtraDialogue:"+key),translation ,lvl+tool), new VoiceAudioOptions());
                                         }
                                     }
                                     continue;
@@ -1447,6 +1449,139 @@ namespace Vocalization
 
             }
 
+            else if (cue.name == "Temp")
+            {
+                Vocalization.ModMonitor.Log("Scraping dialogue file: Temp.xnb", StardewModdingAPI.LogLevel.Debug);
+                //dataFileNames.Add(Path.Combine("Events", "Temp.xnb"));
+
+                Dictionary<string, string> meh = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "Events", config.translationInfo.getXNBForTranslation("Temp", translation)));
+
+
+                foreach (KeyValuePair<string, string> pair in meh)
+                {
+                    if (pair.Key == "decorate")
+                    {
+                        string dia = pair.Value;
+                        Vocalization.ModMonitor.Log(dia);
+                        string[] values = dia.Split('\"');
+
+                        foreach (var v in values)
+                        {
+                            Vocalization.ModMonitor.Log(v);
+                            Vocalization.ModMonitor.Log("HELLO?");
+                        }
+
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+                        goodValues.Add(values.ElementAt(3));
+                        goodValues.Add(values.ElementAt(5));
+
+                        foreach (var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence, cue);
+                            foreach (var cleanSentence in clean)
+                            {
+                                try
+                                {
+                                    cue.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+                            }
+                        }
+
+                    }
+
+                    if (pair.Key == "leave")
+                    {
+                        string dia = pair.Value;
+                        string[] values = dia.Split('\"');
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+                        goodValues.Add(values.ElementAt(3));
+                        goodValues.Add(values.ElementAt(5));
+
+                        foreach (var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence, cue);
+                            foreach (var cleanSentence in clean)
+                            {
+                                try
+                                {
+                                    cue.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    if (pair.Key == "tooBold")
+                    {
+                        string dia = pair.Value;
+                        string[] values = dia.Split('\"');
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+
+                        foreach (var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence, cue);
+                            foreach (var cleanSentence in clean)
+                            {
+                                try
+                                {
+                                    cue.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+                            }
+                        }
+                    }
+
+                    if (pair.Key == "poppy" || pair.Key == "heavy" || pair.Key == "techno" || pair.Key == "honkytonk")
+                    {
+                        string dia = pair.Value;
+                        string[] values = dia.Split('\"');
+                        List<string> goodValues = new List<string>();
+                        goodValues.Add(values.ElementAt(1));
+                        goodValues.Add(values.ElementAt(3));
+                        goodValues.Add(values.ElementAt(5));
+                        goodValues.Add(values.ElementAt(7));
+                        goodValues.Add(values.ElementAt(9));
+                        goodValues.Add(values.ElementAt(11));
+                        goodValues.Add(values.ElementAt(13));
+                        goodValues.Add(values.ElementAt(15));
+                        goodValues.Add(values.ElementAt(17));
+                        goodValues.Add(values.ElementAt(19));
+
+                        foreach (var sentence in goodValues)
+                        {
+                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence, cue);
+                            foreach (var cleanSentence in clean)
+                            {
+                                try
+                                {
+                                    cue.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
 
             //Dialogue scrape for npc specific text.
             else
@@ -1676,7 +1811,11 @@ namespace Vocalization
                         cue.addDialogue(sanitizeDialogueFromDictionaries(config.translationInfo.LoadString(Path.Combine("Strings", "StringsFromCSFiles:NPC.cs.4486"), translation, (object)replacementStrings.farmerName), cue).ElementAt(0), new VoiceAudioOptions());
                         for (int i = 4507; i <= 4523; i++)
                         {
-                            cue.addDialogue(sanitizeDialogueFromDictionaries(config.translationInfo.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4465"), translation, (object)config.translationInfo.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.")+i.ToString(),translation)), cue).ElementAt(0), new VoiceAudioOptions());
+                            if(i==20 || i == 21)
+                            {
+                                continue;
+                            }
+                            cue.addDialogue(sanitizeDialogueFromDictionaries(config.translationInfo.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4465"), translation,(object)config.translationInfo.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.")+i.ToString(),translation)), cue).ElementAt(0), new VoiceAudioOptions());
                             cue.addDialogue(sanitizeDialogueFromDictionaries(config.translationInfo.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.4466"), translation, (object)config.translationInfo.LoadString(Path.Combine("Strings","StringsFromCSFiles:NPC.cs.") + i.ToString(),translation)), cue).ElementAt(0), new VoiceAudioOptions());
                         }
 
@@ -1731,7 +1870,8 @@ namespace Vocalization
                 }
 
                 //LOad item dictionary, pass in item and npc, sanitize the output string using the sanitizationDictionary function, and add in the cue!
-                Dictionary<int, string> objDict = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Data", "ObjectInformation.xnb"));
+                Dictionary<int, string> objDict = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Data", config.translationInfo.getXNBForTranslation("ObjectInformation",translation)));
+                ModMonitor.Log("LOAD THE OBJECT INFO: ", LogLevel.Alert);
                 foreach(KeyValuePair<int,string> pair in objDict)
                 {
                     for(int i=0; i<=3; i++) {
@@ -1747,7 +1887,6 @@ namespace Vocalization
 
                         foreach (string raw in rawScrape)
                         {
-
                             List<string> cleanDialogues = sanitizeDialogueFromDictionaries(raw, cue);
                             foreach (var dia in cleanDialogues)
                             {
@@ -1801,7 +1940,7 @@ namespace Vocalization
                     case 0:
                         if (i.quality.Value == 1)
                         {
-                            foreach (string str in Vocabulary.getRandomDeliciousAdjectives(n))
+                            foreach (string str in Vocabulary.getRandomDeliciousAdjectives(translation,n))
                             {
                                 string str19 = config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_1_QualityHigh"), translation, (object)str3, (object)str4, (object)i.DisplayName, (object)str);
                                 dialogueReturn.Add(str19);
@@ -1810,7 +1949,7 @@ namespace Vocalization
                         }
                         if (i.quality.Value == 0)
                         {
-                            foreach (string str in Vocabulary.getRandomNegativeFoodAdjectives(n))
+                            foreach (string str in Vocabulary.getRandomNegativeFoodAdjectives(translation,n))
                             {
                                 string str18 = config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_1_QualityLow"), translation, (object)str3, (object)str4, (object)i.DisplayName, (object)str);
                                 dialogueReturn.Add(str18);
@@ -1826,16 +1965,16 @@ namespace Vocalization
                         {
                             if (i.quality.Value != 2)
                             {
-                                foreach (var word1 in Vocabulary.getRandomNegativeFoodAdjectives(n))
+                                foreach (var word1 in Vocabulary.getRandomNegativeFoodAdjectives(translation,n))
                                 {
-                                    foreach (string word2 in Vocabulary.getRandomNegativeItemSlanderNouns()) { 
+                                    foreach (string word2 in Vocabulary.getRandomNegativeItemSlanderNouns(translation)) { 
                                         string str17 = config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityLow_Rude"), translation, (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)word1, (object)word2);
                                         dialogueReturn.Add(str17);
                                 }
                             }
                                 break;
                             }
-                            foreach (string word1 in Vocabulary.getRandomSlightlyPositiveAdjectivesForEdibleNoun(n))
+                            foreach (string word1 in Vocabulary.getRandomSlightlyPositiveAdjectivesForEdibleNoun(translation))
                             {
                                 string str10 = config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_3_QualityHigh_Rude"), translation, (object)str3, (object)str4, (object)i.DisplayName, (object)(i.salePrice() / 2), (object)word1);
                                 dialogueReturn.Add(str10);
@@ -1858,7 +1997,7 @@ namespace Vocalization
                         }
                         if (i.Category == -7)
                         {
-                            foreach (string forEventOrPerson in Vocabulary.getRandomPositiveAdjectivesForEventOrPerson(n))
+                            foreach (string forEventOrPerson in Vocabulary.getRandomPositiveAdjectivesForEventOrPerson(translation))
                             {
                                 string str14 = config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_5_Cooking"), translation, (object)str3, (object)str4, (object)i.DisplayName, (object)Lexicon.getProperArticleForWord(forEventOrPerson), (object)forEventOrPerson);
                                 dialogueReturn.Add(str14);
@@ -1895,7 +2034,7 @@ namespace Vocalization
             {
                 if (i.quality.Value == 0)
                 {
-                    foreach (string word1 in Vocabulary.getRandomNegativeItemSlanderNouns())
+                    foreach (string word1 in Vocabulary.getRandomNegativeItemSlanderNouns(translation))
                     {
                         string str12 = config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:PurchasedItem_Abigail_QualityLow"), translation, (object)str3, (object)str4, (object)i.DisplayName, (object)word1);
                         dialogueReturn.Add(str12);

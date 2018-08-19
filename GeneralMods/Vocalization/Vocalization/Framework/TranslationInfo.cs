@@ -48,7 +48,7 @@ namespace Vocalization.Framework
             currentTranslation = "English";
 
             translationFileInfo.Add("English", ".xnb");
-            translationFileInfo.Add("Spanish", ".es - ES.xnb");
+            translationFileInfo.Add("Spanish", ".es-ES.xnb");
             translationFileInfo.Add("Chinese", ".zh-CN.xnb");
             translationFileInfo.Add("Japanese", ".ja-JP.xnb");
             translationFileInfo.Add("Russian", ".ru-RU.xnb");
@@ -61,13 +61,27 @@ namespace Vocalization.Framework
         /// <summary>
         /// Gets the proper file extension for the current translation.
         /// </summary>
-        /// <param name="translation"></param>
+        /// <param name="path"></param>
         /// <returns></returns>
-        public string getFileExtentionForTranslation(string translation)
+        public string getFileExtentionForTranslation(string path)
         {
+            /*
             bool f = translationFileInfo.TryGetValue(translation, out string value);
             if (f == false) return ".xnb";
             else return value;
+            */
+            string translation = Path.GetFileName(path);
+            try
+            {
+                return translationFileInfo[translation];
+            }
+            catch(Exception err)
+            {
+                
+                Vocalization.ModMonitor.Log(err.ToString());
+                Vocalization.ModMonitor.Log("Attempted to get translation: " + translation);
+                return ".xnb";
+            }
         }
 
         /// <summary>
@@ -89,227 +103,73 @@ namespace Vocalization.Framework
         /// <returns></returns>
         public string getXNBForTranslation(string xnbFileName, string translation)
         {
-            return xnbFileName + translation;
+            return xnbFileName + getFileExtentionForTranslation(translation);
         }
 
+
+
         /// <summary>
-        /// Loads a coresponding string from a data file in Content/Strings
+        /// Loads an XNB file from StardewValley/Content
         /// </summary>
         /// <param name="xnbFileName"></param>
         /// <param name="key"></param>
         /// <param name="translation"></param>
         /// <returns></returns>
-        public string LoadStringFromStringsFile(string xnbFileName,string key,string translation)
+        public string LoadXNBFile(string xnbFileName, string key, string translation)
         {
-            string str = "Strings";
             string xnb = xnbFileName + getFileExtentionForTranslation(translation);
-            string path = Path.Combine(str, xnbFileName);
-            Dictionary<string,string> loadedDict = Game1.content.Load<Dictionary<string, string>>(path);
-            return loadedDict[key];
-        }
+            Dictionary<string, string> loadedDict = Game1.content.Load<Dictionary<string, string>>(xnb);
 
-        public string LoadStringFromStringsFile(string xnbFileName, string key, string translation, object sub1)
-        {
-            string loaded = LoadStringFromStringsFile(xnbFileName, key, translation);
-            try
+            string loaded;
+            bool f = loadedDict.TryGetValue(key, out loaded);
+            if (f == false)
             {
-                return string.Format(loaded, sub1);
+                Vocalization.ModMonitor.Log("Big issue: Key not found in file:" + xnb + " " + key);
+                return "";
             }
-            catch (Exception err)
-            {
-                return loaded;
-            }
-        }
-
-        public string LoadStringFromStringsFile(string xnbFileName, string key, string translation, object sub1, object sub2)
-        {
-            string loaded = LoadStringFromStringsFile(xnbFileName, key, translation);
-            try
-            {
-                return string.Format(loaded, sub1,sub2);
-            }
-            catch (Exception err)
-            {
-                return loaded;
-            }
-        }
-
-        public string LoadStringFromStringsFile(string xnbFileName, string key, string translation, object sub1, object sub2, object sub3)
-        {
-            string loaded = LoadStringFromStringsFile(xnbFileName, key, translation);
-            try
-            {
-                return string.Format(loaded, sub1, sub2,sub3);
-            }
-            catch (Exception err)
-            {
-                return loaded;
-            }
-        }
-
-        /// <summary>
-        /// Loads a corresponding string from a data file in Content/Data
-        /// </summary>
-        /// <param name="xnbFileName"></param>
-        /// <param name="key"></param>
-        /// <param name="translation"></param>
-        /// <returns></returns>
-        public string LoadStringFromDataFile(string xnbFileName, string key, string translation)
-        {
-            string str = "Data";
-            string xnb = xnbFileName + getFileExtentionForTranslation(translation);
-            string path = Path.Combine(str, xnbFileName);
-            Dictionary<string, string> loadedDict = Game1.content.Load<Dictionary<string, string>>(path);
-            string loaded = loadedDict[key];
-            return loaded;
-        }
-
-        public string LoadStringFromDataFile(string xnbFileName, string key, string translation, object sub1)
-        {
-            string loaded = LoadStringFromDataFile(xnbFileName, key, translation);
-            try
-            {
-                return string.Format(loaded, sub1);
-            }
-            catch (Exception err)
-            {
-                return loaded;
-            }
-        }
-
-        public string LoadStringFromDataFile(string xnbFileName, string key, string translation, object sub1, object sub2)
-        {
-            string loaded = LoadStringFromDataFile(xnbFileName, key, translation);
-            try
-            {
-                return string.Format(loaded, sub1,sub2);
-            }
-            catch (Exception err)
-            {
-                return loaded;
-            }
-        }
-
-        public string LoadStringFromDataFile(string xnbFileName, string key, string translation, object sub1, object sub2, object sub3)
-        {
-            string loaded = LoadStringFromDataFile(xnbFileName, key, translation);
-            try
-            {
-                return string.Format(loaded, sub1,sub2,sub3);
-            }
-            catch (Exception err)
-            {
-                return loaded;
-            }
+            else return loaded;
         }
 
         public virtual string LoadString(string path, string translation,object sub1, object sub2, object sub3)
         {
-            string assetName;
-            string key;
-            this.parseStringPath(path, out assetName, out key);
-
-            string[] split = path.Split(new string[]{ Environment.NewLine },StringSplitOptions.None);
-            string folder = split[0];
-            if (folder == "Data")
+            string format = this.LoadString(path, translation);
+            try
             {
-                if (sub3 != null) {
-                    return LoadStringFromDataFile(assetName, key, translation, sub1, sub2, sub3);
-                }
-                if (sub2 != null)
-                {
-                    return LoadStringFromDataFile(assetName, key, translation, sub1, sub2);
-                }
-
-                if (sub1 != null)
-                {
-                    return LoadStringFromDataFile(assetName, key, translation, sub1);
-                }
-                return LoadStringFromDataFile(assetName, key, translation);
+                return string.Format(format, sub1,sub2,sub3);
             }
-            if (folder == "Strings")
+            catch (Exception ex)
             {
-                if (sub3 != null)
-                {
-                    return LoadStringFromStringsFile(assetName, key, translation, sub1, sub2, sub3);
-                }
-                if (sub2 != null)
-                {
-                    return LoadStringFromStringsFile(assetName, key, translation, sub1, sub2);
-                }
-
-                if (sub1 != null)
-                {
-                    return LoadStringFromStringsFile(assetName, key, translation, sub1);
-                }
-                return LoadStringFromStringsFile(assetName, key, translation);
             }
-            return "";
+
+            return format;
         }
 
         public virtual string LoadString(string path, string translation, object sub1, object sub2)
         {
-            string assetName;
-            string key;
-            this.parseStringPath(path, out assetName, out key);
-
-            string[] split = path.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-            string folder = split[0];
-            if (folder == "Data")
+            string format = this.LoadString(path, translation);
+            try
             {
-                if (sub2 != null)
-                {
-                    return LoadStringFromDataFile(assetName, key, translation, sub1, sub2);
-                }
-
-                if (sub1 != null)
-                {
-                    return LoadStringFromDataFile(assetName, key, translation, sub1);
-                }
-                return LoadStringFromDataFile(assetName, key, translation);
+                return string.Format(format, sub1,sub2);
             }
-            if (folder == "Strings")
+            catch (Exception ex)
             {
-                if (sub2 != null)
-                {
-                    return LoadStringFromStringsFile(assetName, key, translation, sub1, sub2);
-                }
-
-                if (sub1 != null)
-                {
-                    return LoadStringFromStringsFile(assetName, key, translation, sub1);
-                }
-                return LoadStringFromStringsFile(assetName, key, translation);
             }
-            return "";
+
+            return format;
         }
 
         public virtual string LoadString(string path, string translation, object sub1)
         {
-            string assetName;
-            string key;
-            this.parseStringPath(path, out assetName, out key);
-
-            string[] split = path.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-            string folder = split[0];
-            if (folder == "Data")
-            {
-
-                if (sub1 != null)
+            string format = this.LoadString(path, translation);
+                try
                 {
-                    return LoadStringFromDataFile(assetName, key, translation, sub1);
+                    return string.Format(format, sub1);
                 }
-                return LoadStringFromDataFile(assetName, key, translation);
-            }
-            if (folder == "Strings")
-            {
-                if (sub1 != null)
+                catch (Exception ex)
                 {
-                    return LoadStringFromStringsFile(assetName, key, translation, sub1);
                 }
-                return LoadStringFromStringsFile(assetName, key, translation);
-            }
-            return "";
+            
+            return format;
         }
 
         public virtual string LoadString(string path, string translation)
@@ -318,17 +178,7 @@ namespace Vocalization.Framework
             string key;
             this.parseStringPath(path, out assetName, out key);
 
-            string[] split = path.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-            string folder = split[0];
-            if (folder == "Data")
-            {
-                return LoadStringFromDataFile(assetName, key, translation);
-            }
-            if (folder == "Strings") {
-
-                return LoadStringFromStringsFile(assetName, key, translation);
-            }
-            return "";
+            return LoadXNBFile(assetName, key, translation);
         }
 
         public virtual string LoadString(string path,string translation, params object[] substitutions)

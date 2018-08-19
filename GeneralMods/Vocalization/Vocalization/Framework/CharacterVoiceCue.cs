@@ -87,6 +87,7 @@ namespace Vocalization.Framework
 
         public void initializeEnglishScrape()
         {
+            
             if (name == "TV")
             {
                 dataFileNames.Add("CookingChannel.xnb");
@@ -151,126 +152,7 @@ namespace Vocalization.Framework
 
             else if (name == "Temp")
             {
-                Vocalization.ModMonitor.Log("Scraping dialogue file: Temp.xnb", StardewModdingAPI.LogLevel.Debug);
-                //dataFileNames.Add(Path.Combine("Events", "Temp.xnb"));
-
-                Dictionary<string, string> meh = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "Events", "Temp.xnb"));
-
-                foreach(KeyValuePair<string,string> pair in meh)
-                {
-                    if(pair.Key== "decorate")
-                    {
-                        string dia = pair.Value;
-                        Vocalization.ModMonitor.Log(dia);
-                        string[]values = dia.Split('\"');
-                        
-                        foreach(var v in values)
-                        {
-                            Vocalization.ModMonitor.Log(v);
-                            Vocalization.ModMonitor.Log("HELLO?");
-                        }
-
-                        List<string> goodValues = new List<string>();
-                        goodValues.Add(values.ElementAt(1));
-                        goodValues.Add(values.ElementAt(3));
-                        goodValues.Add(values.ElementAt(5));
-
-                        foreach(var sentence in goodValues)
-                        {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
-                            foreach(var cleanSentence in clean)
-                            {
-                                try
-                                {
-                                    this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
-                                }
-                                catch(Exception err)
-                                {
-
-                                }
-                            }
-                        }
-                        
-                    }
-
-                    if (pair.Key == "leave")
-                    {
-                        string dia = pair.Value;
-                        string[] values = dia.Split('\"');
-                        List<string> goodValues = new List<string>();
-                        goodValues.Add(values.ElementAt(1));
-                        goodValues.Add(values.ElementAt(3));
-                        goodValues.Add(values.ElementAt(5));
-
-                        foreach (var sentence in goodValues)
-                        {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
-                            foreach (var cleanSentence in clean)
-                            {
-                                try
-                                {
-                                    this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
-                                }
-                                catch(Exception err)
-                                {
-
-                                }
-
-                            }
-                        }
-
-                    }
-
-                    if (pair.Key == "tooBold")
-                    {
-                        string dia = pair.Value;
-                        string[] values = dia.Split('\"');
-                        List<string> goodValues = new List<string>();
-                        goodValues.Add(values.ElementAt(1));
-
-                        foreach (var sentence in goodValues)
-                        {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
-                            foreach (var cleanSentence in clean)
-                            {
-                                this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
-                            }
-                        }
-                    }
-
-                    if (pair.Key == "poppy" || pair.Key=="heavy" || pair.Key=="techno"|| pair.Key=="honkytonk")
-                    {
-                        string dia = pair.Value;
-                        string[] values = dia.Split('\"');
-                        List<string> goodValues = new List<string>();
-                        goodValues.Add(values.ElementAt(1));
-                        goodValues.Add(values.ElementAt(3));
-                        goodValues.Add(values.ElementAt(5));
-                        goodValues.Add(values.ElementAt(7));
-                        goodValues.Add(values.ElementAt(9));
-                        goodValues.Add(values.ElementAt(11));
-                        goodValues.Add(values.ElementAt(13));
-                        goodValues.Add(values.ElementAt(15));
-                        goodValues.Add(values.ElementAt(17));
-                        goodValues.Add(values.ElementAt(19));
-
-                        foreach (var sentence in goodValues)
-                        {
-                            List<string> clean = Vocalization.sanitizeDialogueFromDictionaries(sentence,this);
-                            foreach (var cleanSentence in clean)
-                            {
-                                try
-                                {
-                                    this.dialogueCues.Add(cleanSentence, new VoiceAudioOptions());
-                                }
-                                catch (Exception err)
-                                {
-
-                                }
-                            }
-                        }
-                    }
-                }
+                stringsFileNames.Add("Temp.xnb");
             }
 
             else
@@ -278,16 +160,13 @@ namespace Vocalization.Framework
                 dialogueFileNames.Add(name + ".xnb");
                 dialogueFileNames.Add("rainy.xnb");
                 dialogueFileNames.Add("MarriageDialogue.xnb");
-                dialogueFileNames.Add("MarriageDialogue"+name+".xnb");
+                dialogueFileNames.Add("MarriageDialogue" + name + ".xnb");
 
                 dataFileNames.Add("EngagementDialogue.xnb");
 
                 stringsFileNames.Add("StringsFromCSFiles.xnb");
                 stringsFileNames.Add(name + ".xnb");
             }
-
-
-
         }
 
 
@@ -299,23 +178,30 @@ namespace Vocalization.Framework
         {
             for (int i = 0; i < this.dataFileNames.Count; i++)
             {
+                Vocalization.ModMonitor.Log(dataFileNames.ElementAt(i));
                 string s = dataFileNames.ElementAt(i);
                 s=dataFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
                 dataFileNames[i] = s;
+                Vocalization.ModMonitor.Log(dataFileNames.ElementAt(i));
+
             }
 
             for (int i = 0; i < this.dialogueFileNames.Count; i++)
             {
+                Vocalization.ModMonitor.Log(dialogueFileNames.ElementAt(i));
                 string s = dialogueFileNames.ElementAt(i);
                 s=dialogueFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
                 dialogueFileNames[i] = s;
+                Vocalization.ModMonitor.Log(dialogueFileNames.ElementAt(i));
             }
 
             for (int i = 0; i < this.stringsFileNames.Count; i++)
             {
+                Vocalization.ModMonitor.Log(stringsFileNames.ElementAt(i));
                 string s = stringsFileNames.ElementAt(i);
                 s=stringsFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
                 stringsFileNames[i] = s;
+                Vocalization.ModMonitor.Log(stringsFileNames.ElementAt(i));
             }   
         }
 
