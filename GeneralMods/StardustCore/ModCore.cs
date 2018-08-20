@@ -36,6 +36,8 @@ namespace StardustCore
 
         private Type lastMenuType;
 
+        public ModConfig config;
+
         public static string ContentDirectory;
         public override void Entry(IModHelper helper)
         {
@@ -70,7 +72,8 @@ namespace StardustCore
             TextureManagers.Add(ModManifest.UniqueID, TextureManager);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
 
-
+            config = ModHelper.ReadConfig<ModConfig>();
+            
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             serverHack = false;
             
@@ -78,7 +81,7 @@ namespace StardustCore
 
         private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
         {
-            if (Game1.IsMasterGame == false)
+            if (Game1.IsMasterGame == false && config.enableMultiplayerHack)
             {
                 if (this.lastMenuType == null)
                 {
@@ -96,7 +99,7 @@ namespace StardustCore
 
         private void MenuEvents_MenuChanged(object sender, StardewModdingAPI.Events.EventArgsClickableMenuChanged e)
         {
-            if (Game1.IsMasterGame == false)
+            if (Game1.IsMasterGame == false && config.enableMultiplayerHack)
             {
                 if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.ReadyCheckDialog))
                 {
@@ -147,7 +150,7 @@ namespace StardustCore
 
             if (Game1.activeClickableMenu != null)
             {
-                if(Game1.activeClickableMenu is StardewValley.Menus.TitleMenu)
+                if(Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && config.enableMultiplayerHack)
                 {
                     if (TitleMenu.subMenu == null) return;
                     if (TitleMenu.subMenu.GetType() == typeof(FarmhandMenu))
@@ -164,7 +167,7 @@ namespace StardustCore
                 }
             }
 
-            if (Game1.server!=null&& serverHack==false)
+            if (Game1.server!=null&& serverHack==false && config.enableMultiplayerHack)
             {
                 ModCore.ModMonitor.Log("OK!");
                 multiplayer = (Multiplayer)GetInstanceField(typeof(Game1), Program.gamePtr, "multiplayer");
@@ -176,7 +179,7 @@ namespace StardustCore
 
                 serverHack = true;
             }
-            if (Game1.client !=null && serverHack == false)
+            if (Game1.client !=null && serverHack == false && config.enableMultiplayerHack)
             {
 
             }

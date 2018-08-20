@@ -164,7 +164,6 @@ namespace StardustCore.NetCode
             ModCore.SerializationManager.cleanUpInventory();
             ModCore.SerializationManager.cleanUpWorld();
             ModCore.SerializationManager.cleanUpStorageContainers();
-            ModCore.ModMonitor.Log("HELLO LOVE!!!");
             this.sendMessage(peer, new OutgoingMessage((byte)1, Game1.serverHost.Value, new object[3]
             {
                 (object)ModCore.multiplayer.writeObjectFullBytes<Farmer>((NetRoot<Farmer>)Game1.serverHost, new long?(peer)),

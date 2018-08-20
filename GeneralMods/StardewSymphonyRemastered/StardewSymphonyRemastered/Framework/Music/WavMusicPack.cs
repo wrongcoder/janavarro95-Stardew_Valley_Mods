@@ -118,8 +118,11 @@ namespace StardewSymphonyRemastered.Framework
 
 
             dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
-            count = byteArray.Length;//dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
-
+            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
+            if (count > byteArray.Length)
+            {
+                count = byteArray.Length;
+            }
             dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
             this.currentSong = new Song(p);
         }
@@ -131,10 +134,14 @@ namespace StardewSymphonyRemastered.Framework
             //StardewSymphony.ModMonitor.Log(count.ToString());
             try
             {
+
                 dynamicSound.SubmitBuffer(byteArray, position, count);
             }
             catch(Exception err)
             {
+                StardewSymphony.ModMonitor.Log(byteArray.Length.ToString());
+                StardewSymphony.ModMonitor.Log(position.ToString());
+                StardewSymphony.ModMonitor.Log(count.ToString());
                 StardewSymphony.ModMonitor.Log(err.ToString(), StardewModdingAPI.LogLevel.Error);
             }
             
@@ -150,6 +157,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 else
                 {
+
                 }
             }
         }

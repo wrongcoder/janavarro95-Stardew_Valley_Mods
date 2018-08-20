@@ -239,11 +239,13 @@ namespace StardustCore.Serialization
                       }
                 }
             }
-
+            if (Game1.getFarm() == null) return;
+            if (Game1.getFarm().buildings == null) return;
             //Look through all farm buildings for custom items.
             foreach (Building building in Game1.getFarm().buildings)
             {
-               
+                if (building == null) continue;
+                if (String.IsNullOrEmpty(building.nameOfIndoors)) continue;
                 GameLocation loc =Game1.getLocationFromName(building.nameOfIndoors,true);
               //ModCore.ModMonitor.Log("Cleaning up farm building: "+loc.uniqueName.Value);
                 int i = loc.objects.Pairs.Count();
