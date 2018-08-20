@@ -429,7 +429,7 @@ namespace StardewSymphonyRemastered.Framework
         public Dictionary<MusicPack,List<Song>> getLocationSpecificMusic()
         {
             Dictionary<MusicPack, List<Song>> listOfValidDictionaries = new Dictionary<MusicPack, List<Song>>();
-            StardewSymphony.ModMonitor.Log(SongSpecifics.getCurrentConditionalString(true));
+            //StardewSymphony.ModMonitor.Log(SongSpecifics.getCurrentConditionalString(true));
 
             foreach (var v in this.musicPacks)
             {
@@ -520,7 +520,7 @@ namespace StardewSymphonyRemastered.Framework
             }
             else
             {
-                StardewSymphony.ModMonitor.Log("HELLO??? LOCATION????");
+                //StardewSymphony.ModMonitor.Log("HELLO??? LOCATION????");
                 //Try to play a generalized festival song.
                 var listOfLocationPacks = this.getLocationSpecificMusic();
                 if (listOfLocationPacks.Count > 0)

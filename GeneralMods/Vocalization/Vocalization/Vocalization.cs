@@ -277,6 +277,7 @@ namespace Vocalization
                         {
                             List<string> tries = new List<string>();
                             tries.Add("SpeechBubbles");
+                            tries.Add(v.Name);
                             foreach (var speech in tries)
                             {
                                 CharacterVoiceCue voice;
@@ -875,7 +876,57 @@ namespace Vocalization
                                 if (!key.Contains("ShopMenu")) continue;
                                 //If the key contains the character's name.
                               
-                                    List<string> cleanDialogues = new List<string>();
+
+                                if(key== "ShopMenu.cs.11464")
+                                {
+                                    foreach (var obj in Vocabulary.getCarpenterStock(translation)) {
+                                        foreach (string word1 in Vocabulary.getRandomPositiveAdjectivesForEventOrPerson(translation, null))
+                                        {
+
+                                            rawDialogue=config.translationInfo.LoadString(Path.Combine("Strings", "StringsFromCSFiles:ShopMenu.cs.11464"), translation, (object)obj, (object)word1, (object)Vocabulary.getProperArticleForWord(obj,translation));
+                                            List<string> cleanDialogues2 = new List<string>();
+                                            cleanDialogues2 = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                                            foreach (var str in cleanDialogues2)
+                                            {
+                                                cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                            }
+                                        }
+                                    }
+                                    continue;
+                                }
+                                if(key== "ShopMenu.cs.11502")
+                                {
+                                    foreach (var obj in Vocabulary.getMerchantStock(translation))
+                                    {
+                                            rawDialogue = config.translationInfo.LoadString(Path.Combine("Strings", "StringsFromCSFiles:ShopMenu.cs.11502"), translation, (object)obj);
+                                            List<string> cleanDialogues2 = new List<string>();
+                                            cleanDialogues2 = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                                            foreach (var str in cleanDialogues2)
+                                            {
+                                                cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                            }
+                                        
+                                    }
+                                    continue;
+                                }
+
+                                if (key == "ShopMenu.cs.11512")
+                                {
+                                    foreach (var obj in Vocabulary.getMerchantStock(translation))
+                                    {
+                                        rawDialogue = config.translationInfo.LoadString(Path.Combine("Strings", "StringsFromCSFiles:ShopMenu.cs.11512"), translation, (object)obj);
+                                        List<string> cleanDialogues2 = new List<string>();
+                                        cleanDialogues2 = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                                        foreach (var str in cleanDialogues2)
+                                        {
+                                            cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        }
+
+                                    }
+                                    continue;
+                                }
+
+                                List<string> cleanDialogues = new List<string>();
                                     cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                     foreach (var str in cleanDialogues)
                                     {

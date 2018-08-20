@@ -28,6 +28,8 @@ namespace Vocalization.Framework
         /// </summary>
         public Dictionary<string, string> translationFileInfo;
 
+
+        public Dictionary<string, LocalizedContentManager.LanguageCode> translationCodes;
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -36,7 +38,7 @@ namespace Vocalization.Framework
             translations = new List<string>();
 
             translationFileInfo = new Dictionary<string, string>();
-
+            translationCodes = new Dictionary<string, LocalizedContentManager.LanguageCode>();
             translations.Add("English");
             translations.Add("Spanish");
             translations.Add("Chinese");
@@ -56,6 +58,34 @@ namespace Vocalization.Framework
             translationFileInfo.Add("Brazillian Portuguese", ".pt-BR.xnb");
 
 
+            translationCodes.Add("English", LocalizedContentManager.LanguageCode.en);
+            translationCodes.Add("Spanish", LocalizedContentManager.LanguageCode.es);
+            translationCodes.Add("Chinese", LocalizedContentManager.LanguageCode.zh);
+            translationCodes.Add("Japanese", LocalizedContentManager.LanguageCode.ja);
+            translationCodes.Add("Russian", LocalizedContentManager.LanguageCode.ru);
+            translationCodes.Add("German", LocalizedContentManager.LanguageCode.de);
+            translationCodes.Add("Brazillian Portuguese", LocalizedContentManager.LanguageCode.pt);
+
+        }
+
+        public string getTranslationNameFromPath(string fullPath)
+        {
+            return Path.GetFileName(fullPath);
+        }
+
+
+        public void changeLocalizedContentManagerFromTranslation(string translation)
+        {
+            string tra = getTranslationNameFromPath(translation);
+            bool f = translationCodes.TryGetValue(tra, out LocalizedContentManager.LanguageCode code);
+            if (f == false) LocalizedContentManager.CurrentLanguageCode = LocalizedContentManager.LanguageCode.en;
+            else LocalizedContentManager.CurrentLanguageCode = code;
+            return;
+        }
+
+        public void resetLocalizationCode()
+        {
+            LocalizedContentManager.CurrentLanguageCode = LocalizedContentManager.LanguageCode.en;
         }
 
         /// <summary>
