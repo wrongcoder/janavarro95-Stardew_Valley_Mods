@@ -134,15 +134,10 @@ namespace StardewSymphonyRemastered.Framework
             //StardewSymphony.ModMonitor.Log(count.ToString());
             try
             {
-
                 dynamicSound.SubmitBuffer(byteArray, position, count);
             }
             catch(Exception err)
             {
-                StardewSymphony.ModMonitor.Log(byteArray.Length.ToString());
-                StardewSymphony.ModMonitor.Log(position.ToString());
-                StardewSymphony.ModMonitor.Log(count.ToString());
-                StardewSymphony.ModMonitor.Log(err.ToString(), StardewModdingAPI.LogLevel.Error);
             }
             
             //dynamicSound.SubmitBuffer(byteArray);

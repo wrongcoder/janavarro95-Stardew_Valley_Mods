@@ -834,6 +834,79 @@ namespace Vocalization
                                 if (!key.Contains("TV")) continue;
                                 //If the key contains the character's name.
                                 List<string> cleanDialogues = new List<string>();
+
+
+                                if(key== "TV.cs.13151")
+                                {
+                                    foreach(string recipe in Vocabulary.getAllCookingRecipes(translation))
+                                    {
+                                        rawDialogue = config.translationInfo.LoadString(Path.Combine("Strings", "StringsFromCSFiles:TV.cs.13151"), translation, (object)recipe);
+                                        List<string> cleanDialogues2 = new List<string>();
+                                        cleanDialogues2 = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                                        foreach (var str in cleanDialogues2)
+                                        {
+                                            cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        }
+                                    }
+                                    continue;
+                                }
+
+
+                                if (key == "TV.cs.13153")
+                                {
+                                    foreach (string recipe in Vocabulary.getAllCookingRecipes(translation))
+                                    {
+                                        rawDialogue = config.translationInfo.LoadString(Path.Combine("Strings", "StringsFromCSFiles:TV.cs.13153"), translation, (object)recipe);
+                                        List<string> cleanDialogues2 = new List<string>();
+                                        cleanDialogues2 = sanitizeDialogueFromDictionaries(rawDialogue, cue);
+                                        foreach (var str in cleanDialogues2)
+                                        {
+                                            cue.addDialogue(str, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                        }
+                                    }
+                                    continue;
+                                }
+
+                                if (key == "TV.cs.13175")
+                                {
+                                    Dictionary<string, string> dictionary;
+                                    foreach (string season in Vocabulary.getSeasons())
+                                    {
+                                        for (int i = 1; i <= 28; i++)
+                                        {
+                                            try
+                                            {
+                                                dictionary = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "Festivals", config.translationInfo.getXNBForTranslation(season + (object)(i.ToString()), translation)));
+                                                ModMonitor.Log("Scraping TV Festival File: " + season + i.ToString());
+                                                dictionary.TryGetValue("name", out string name);
+                                                dictionary.TryGetValue("conditions", out string condition);
+                                                string location = condition.Split('/').ElementAt(0);
+                                                string times = condition.Split('/').ElementAt(1);
+                                                string startTime = times.Split(' ').ElementAt(0);
+                                                string finishTime = times.Split(' ').ElementAt(1);
+                                                config.translationInfo.changeLocalizedContentManagerFromTranslation(translation);
+                                                string dialogueString=config.translationInfo.LoadString(Path.Combine("Strings", "StringsFromCSFiles:TV.cs.13175"), translation, (object)name, (object)location, (object)Game1.getTimeOfDayString(Convert.ToInt32(startTime)), (object)Game1.getTimeOfDayString(Convert.ToInt32(finishTime)));
+                                                config.translationInfo.resetLocalizationCode();
+
+                                                cleanDialogues = sanitizeDialogueFromDictionaries(dialogueString, cue);
+
+                                                foreach (var str in cleanDialogues)
+                                                {
+                                                    string ahh = sanitizeDialogueFromMailDictionary(str);
+                                                    cue.addDialogue(ahh, new VoiceAudioOptions()); //Make a new dialogue line based off of the text, but have the .wav value as empty.
+                                                }
+
+
+                                            }
+                                            catch(Exception err)
+                                            {
+                                                //ModMonitor.Log(err.ToString());
+                                            }
+                                        }
+                                    }
+                                    continue;
+                                }
+
                                 cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue,cue);
                                 
                                 foreach (var str in cleanDialogues)
@@ -1763,7 +1836,7 @@ namespace Vocalization
                         foreach (KeyValuePair<string, string> pair in DialogueDict)
                         {
                             string key = pair.Key;
-                            if (key != cue.name) continue;
+                            if (key != cue.name && key!=cue.name+"_spouse") continue;
                             string rawDialogue = pair.Value;
                             List<string> cleanDialogues = new List<string>();
                             cleanDialogues = sanitizeDialogueFromDictionaries(rawDialogue, cue);

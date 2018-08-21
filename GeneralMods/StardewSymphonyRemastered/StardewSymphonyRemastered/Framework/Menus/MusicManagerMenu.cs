@@ -2264,6 +2264,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 return;
             }
 
+            if (this.currentSelectedSong == null) return;
+            if (this.currentSelectedSong.label == null) return;
             info.Value.songInformation.addSongToTriggerList(generateSongTriggerKeyFromSelection(), this.currentSelectedSong.label);
         }
 

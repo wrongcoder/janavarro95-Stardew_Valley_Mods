@@ -81,6 +81,46 @@ namespace Vocalization.Framework
         }
 
 
+        public static List<string> getSeasons()
+        {
+            List<string> seasons = new List<string>();
+            seasons.Add("spring");
+            seasons.Add("summer");
+            seasons.Add("fall");
+            seasons.Add("winter");
+            return seasons;
+        }
+
+        /// <summary>
+        /// Gets a list of all of the possible cooking recipes in Stardew Valley.
+        /// </summary>
+        /// <param name="translation"></param>
+        /// <returns></returns>
+        public static List<string> getAllCookingRecipes(string translation)
+        {
+            List<string> recipes = new List<string>();
+            Dictionary<string, string> cookingDict = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "TV", Vocalization.config.translationInfo.getXNBForTranslation("CookingChannel", translation)));
+
+            if (Vocalization.config.translationInfo.getTranslationNameFromPath(translation) == "English")
+            {
+                foreach(KeyValuePair<string,string> pair in cookingDict)
+                {
+                    string name = pair.Value.Split('/').ElementAt(0);
+                    recipes.Add(name);
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<string, string> pair in cookingDict)
+                {
+                    string[] data = pair.Value.Split('/');
+                    string name = data.ElementAt(data.Length - 1);
+                    recipes.Add(name);
+                }
+            }
+            return recipes;
+        }
+
         public static List<string> getCarpenterStock(string translation)
         {
             List<string> stock = new List<string>();

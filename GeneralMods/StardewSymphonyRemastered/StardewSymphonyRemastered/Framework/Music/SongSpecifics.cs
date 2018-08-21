@@ -583,7 +583,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
 
             //return new KeyValuePair<string, List<string>>(key, listOfSongsWithTriggers[key]);
-
+            StardewSymphonyRemastered.StardewSymphony.ModMonitor.Log("Getting an invalid song list with key: " + key);
             return new KeyValuePair<string, List<Song>>("",null);
         }
 
@@ -616,7 +616,12 @@ namespace StardewSymphonyRemastered.Framework
             }
 
             var songKeyPair = getSongList(songListKey); //Get the trigger list
-
+            if (songKeyPair.Value == null)
+            {
+                if (StardewSymphony.Config.EnableDebugLog)
+                    StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song to a list that is null. The name of the song list is " + songListKey);
+                return;
+            }
             var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
             {
