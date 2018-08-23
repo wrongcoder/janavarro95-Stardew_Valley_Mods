@@ -93,6 +93,7 @@
     <Compile Include="Interfaces\IToolSerializer.cs" />
     <Compile Include="Math\Hex.cs" />
     <Compile Include="Math\Hex32.cs" />
+    <Compile Include="Menus\ModualGameMenu.cs" />
     <Compile Include="ModConfig.cs" />
     <Compile Include="NetCode\Graphics\NetAnimation.cs" />
     <Compile Include="NetCode\Graphics\NetAnimationManager.cs" />

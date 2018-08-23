@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.Menus;
 using StardustCore.UIUtilities.MenuComponents.Delegates;
 using StardustCore.UIUtilities.MenuComponents.Delegates.Functionality;
 using System;
@@ -12,14 +13,27 @@ using static StardustCore.UIUtilities.MenuComponents.Delegates.Delegates;
 
 namespace StardustCore.UIUtilities.MenuComponents
 {
+    public enum ExtraTextureDrawOrder
+    {
+        before,
+        after
+    }
+
     public class Button : StardewValley.Menus.ClickableTextureComponent
     {
+
+
+
         public Animations.AnimationManager animationManager;
         public Color textureColor;
         public Color textColor;
 
         public ButtonFunctionality buttonFunctionality;
 
+        /// <summary>
+        /// A list of textures to be drawn on top of the button.
+        /// </summary>
+        public List<KeyValuePair<StardewValley.Menus.ClickableTextureComponent,ExtraTextureDrawOrder>> extraTextures;
 
         /// <summary>
         /// Empty Constructor.
@@ -38,7 +52,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="Scale"></param>
         /// <param name="defaultAnimation"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, ButtonFunctionality Functionality, bool AnimationEnabled=true) : base(Bounds,Texture.getTexture(), sourceRect,Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture,string displayText,Rectangle sourceRect,float Scale,Animations.Animation defaultAnimation, Color DrawColor,Color TextColor, ButtonFunctionality Functionality, bool AnimationEnabled=true,List<KeyValuePair<ClickableTextureComponent,ExtraTextureDrawOrder>> extraTexture=null) : base(Bounds,Texture.getTexture(), sourceRect,Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation,AnimationEnabled);
             this.label = displayText;
@@ -54,6 +68,10 @@ namespace StardustCore.UIUtilities.MenuComponents
                 this.textColor = StardustCore.IlluminateFramework.Colors.getColorFromList("White");
             }
             this.buttonFunctionality = Functionality;
+            if (extraTexture == null) extraTexture = new List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>>();
+            extraTextures = extraTexture;
+
+            this.scale = Scale;
         }
 
         /// <summary>
@@ -70,7 +88,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="startingAnimationKey"></param>
         /// <param name="startingAnimationFrame"></param>
         /// <param name="AnimationEnabled"></param>
-        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor, ButtonFunctionality Functionality,int startingAnimationFrame=0,bool AnimationEnabled=true) : base(Bounds, Texture.getTexture(), sourceRect, Scale)
+        public Button(string Name,Rectangle Bounds,Texture2DExtended Texture, string displayText, Rectangle sourceRect,float Scale, Animations.Animation defaultAnimation,Dictionary<string, List<Animations.Animation>> animationsToPlay,string startingAnimationKey,Color DrawColor,Color TextColor, ButtonFunctionality Functionality,int startingAnimationFrame=0,bool AnimationEnabled=true, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture =null) : base(Bounds, Texture.getTexture(), sourceRect, Scale)
         {
             this.animationManager = new Animations.AnimationManager(Texture, defaultAnimation, animationsToPlay, startingAnimationKey, startingAnimationFrame, AnimationEnabled);
             this.label = displayText;
@@ -86,6 +104,10 @@ namespace StardustCore.UIUtilities.MenuComponents
                 this.textColor = StardustCore.IlluminateFramework.Colors.getColorFromList("White");
             }
             this.buttonFunctionality = Functionality;
+            if (extraTexture == null) extraTexture = new List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>>();
+            this.extraTextures = extraTexture;
+
+            this.scale = Scale;
         }
 
         /// <summary>
@@ -94,9 +116,19 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="b"></param>
         /// <param name="c"></param>
         /// <param name="layerDepth"></param>
-        public void draw(SpriteBatch b,Color color ,float layerDepth)
+        public new void draw(SpriteBatch b,Color color ,float layerDepth)
         {
-            
+            if (this.extraTextures != null)
+            {
+                foreach (var v in this.extraTextures)
+                {
+                    if (v.Value == ExtraTextureDrawOrder.before)
+                    {
+                        v.Key.draw(b);
+                    }
+                }
+            }
+
             this.animationManager.tickAnimation();
             if (!this.visible)
                 return;
@@ -119,7 +151,17 @@ namespace StardustCore.UIUtilities.MenuComponents
             {
                 //Game1.drawDialogueBox(Game1.getMousePosition().X, Game1.getMousePosition().Y, false, false, this.hoverText);
                 //StardustCore.ModCore.ModMonitor.Log("HOVER???");
-                b.DrawString(Game1.smallFont, this.hoverText, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor,0f,Vector2.Zero,1f,SpriteEffects.None,layerDepth-0.5f);
+                b.DrawString(Game1.smallFont, this.hoverText, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor,0f,Vector2.Zero,scale,SpriteEffects.None,layerDepth-0.5f);
+            }
+            if (this.extraTextures != null)
+            {
+                foreach(var v in this.extraTextures)
+                {
+                    if (v.Value == ExtraTextureDrawOrder.after)
+                    {
+                        v.Key.draw(b);
+                    }
+                }
             }
 
         }
@@ -132,7 +174,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         {
             if (!this.visible)
                 return;
-            this.draw(b, Color.White, (float)(0.860000014305115 + (double)this.bounds.Y / 20000.0));
+            this.draw(b, Color.White, Vector2.Zero);
         }
 
         /// <summary>
@@ -144,7 +186,35 @@ namespace StardustCore.UIUtilities.MenuComponents
         {
             if (!this.visible)
                 return;
-            this.draw(b, color, (float)(0.860000014305115 + (double)this.bounds.Y / 20000.0));
+            this.draw(b, color, Vector2.Zero);
+        }
+
+        public virtual void draw(SpriteBatch b, Color color, Vector2 offset)
+        {
+            if (this.extraTextures != null)
+            {
+                foreach (var v in this.extraTextures)
+                {
+                    if (v.Value == ExtraTextureDrawOrder.before)
+                    {
+                        v.Key.draw(b,color,0.4f);
+                    }
+                }
+            }
+
+            float depth = 0.4f;
+            b.Draw(this.animationManager.getTexture(), new Vector2(this.bounds.X + (int)offset.X, this.bounds.Y + (int)offset.Y),this.sourceRect,color,0f,Vector2.Zero,this.scale,SpriteEffects.None, depth);
+
+            if (this.extraTextures != null)
+            {
+                foreach (var v in this.extraTextures)
+                {
+                    if (v.Value == ExtraTextureDrawOrder.after)
+                    {
+                        v.Key.draw(b,color,0.4f);
+                    }
+                }
+            }
         }
 
         /// <summary>

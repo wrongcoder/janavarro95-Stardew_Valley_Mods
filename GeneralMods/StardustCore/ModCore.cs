@@ -4,6 +4,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Network;
+using StardustCore.Menus;
 using StardustCore.ModInfo;
 using StardustCore.NetCode;
 using StardustCore.Objects;
@@ -30,6 +31,7 @@ namespace StardustCore
         public static UIUtilities.TextureManager TextureManager;
         public static Dictionary<string, TextureManager> TextureManagers;
 
+        
 
         public static Multiplayer multiplayer;
         bool serverHack;
@@ -187,6 +189,10 @@ namespace StardustCore
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
         {
+            if(e.KeyPressed.ToString()== config.modularMenuKey && Game1.activeClickableMenu==null)
+            {
+                Game1.activeClickableMenu = new ModularGameMenu(0);
+            }
         }
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
@@ -232,7 +238,8 @@ namespace StardustCore
 
         private void ControlEvents_MouseChanged(object sender, StardewModdingAPI.Events.EventArgsMouseStateChanged e)
         {
-       
+            //??? 
+            return;
             if (Game1.activeClickableMenu == null) return;
             var MouseState = Mouse.GetState();
             if (Game1.activeClickableMenu is StardewValley.Menus.ItemGrabMenu && MouseState.LeftButton == ButtonState.Released)

@@ -12,6 +12,9 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
+using StardustCore.Menus;
+using StardustCore.UIUtilities;
+using StardustCore.UIUtilities.MenuComponents;
 using Vocalization.Framework;
 
 namespace Vocalization
@@ -166,6 +169,7 @@ namespace Vocalization
         /// </summary>
         public static SimpleSoundManager.Framework.SoundManager soundManager;
 
+        
 
         
         /// <summary>
@@ -190,6 +194,7 @@ namespace Vocalization
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
+            StardewModdingAPI.Events.MenuEvents.MenuChanged += MenuEvents_MenuChanged;
             ModMonitor = Monitor;
             ModHelper = Helper;
             DialogueCues = new Dictionary<string, CharacterVoiceCue>();
@@ -205,6 +210,15 @@ namespace Vocalization
 
             config.verifyValidMode(); //Make sure the current mode is valid.
             soundManager.volume = config.voiceVolume; //Set the volume for voices.
+            
+        }
+
+        private void MenuEvents_MenuChanged(object sender, StardewModdingAPI.Events.EventArgsClickableMenuChanged e)
+        {
+            if (Game1.activeClickableMenu.GetType() == typeof(ModularGameMenu))
+            {
+                npcPortraitHack();
+            }
         }
 
         /// <summary>
@@ -233,8 +247,84 @@ namespace Vocalization
         /// <param name="e"></param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+
+
+            initialzeModualGameMenuHack();
             initialzeDirectories();
             loadAllVoiceFiles();
+        }
+
+        /// <summary>
+        /// Initializes the menu tab for Vocalization for the modular menu.
+        /// </summary>
+        public void initialzeModualGameMenuHack()
+        {
+            List<Texture2D> textures = new List<Texture2D>();
+            foreach (GameLocation loc in Game1.locations)
+            {
+                foreach (NPC npc in loc.characters)
+                {
+                    if (npc.isVillager() == false) continue;
+                    Texture2D text = npc.Sprite.Texture;
+                    if (text == null) continue;
+                    textures.Add(text);
+                }
+            }
+            int randNum = Game1.random.Next(0, textures.Count);
+            Texture2D myText = textures.ElementAt(randNum);
+            ClickableTextureComponent c = new ClickableTextureComponent(new Rectangle(0, 16, 16, 24), myText, new Rectangle(0, 0, 16, 24), 2f, false);
+
+            ClickableTextureComponent speech = new ClickableTextureComponent(new Rectangle(0, 0, 32, 32), ModHelper.Content.Load<Texture2D> (Path.Combine("Content", "Graphics", "SpeechBubble.png")), new Rectangle(0, 0, 32, 32), 2f, false);
+            List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> components = new List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>>();
+
+            components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(c,ExtraTextureDrawOrder.after));
+            components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(speech, ExtraTextureDrawOrder.after));
+
+            Button menuTab = new Button("Vocalization", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "Vocalization", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null)), false, components);
+
+            //Change this to take the vocalization menu instead
+            List<KeyValuePair<Button, IClickableMenuExtended>> modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>();
+            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new IClickableMenuExtended(0,0,300,300,false)));
+            StardustCore.Menus.ModularGameMenu.AddTabsForMod(ModManifest,modTabs);
+
+            ModMonitor.Log("VOCALIZATION MENU HACK COMPLETE!", LogLevel.Alert);
+        }
+
+        /// <summary>
+        /// Randomize the npc below the speech bubble every time the modular game menu is drawn.
+        /// </summary>
+        public void npcPortraitHack()
+        {
+            List<KeyValuePair<Button, IClickableMenuExtended>> menuHacks = new List<KeyValuePair<Button, IClickableMenuExtended>>();
+
+            List<Texture2D> textures = new List<Texture2D>();
+            foreach (GameLocation loc in Game1.locations)
+            {
+                foreach (NPC npc in loc.characters)
+                {
+                    if (npc.isVillager() == false) continue;
+                    Texture2D text = npc.Sprite.Texture;
+                    textures.Add(text);
+                }
+            }
+            int randNum = Game1.random.Next(0, textures.Count);
+            Texture2D myText = textures.ElementAt(randNum);
+            ClickableTextureComponent c = new ClickableTextureComponent(new Rectangle(0, 16, 16, 24), myText, new Rectangle(0, 0, 16, 24), 2f, false);
+            List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> components = new List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>>();
+
+
+            ClickableTextureComponent speech = new ClickableTextureComponent(new Rectangle(0, 0, 32, 32), ModHelper.Content.Load<Texture2D>(Path.Combine("Content", "Graphics", "SpeechBubble.png")), new Rectangle(0, 0, 32, 32), 2f, false);
+
+            components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(c, ExtraTextureDrawOrder.after));
+            components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(speech, ExtraTextureDrawOrder.after));
+
+            Button menuTab = new Button("Vocalization", new Rectangle(0,0, 32, 32), new Texture2DExtended(ModHelper, ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "Vocalization", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(null, null, null), false, components);
+
+            //Change this to take the vocalization menu instead
+            List<KeyValuePair<Button, IClickableMenuExtended>> modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>();
+            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new IClickableMenuExtended(0, 0, 300, 300,false)));
+
+            StardustCore.Menus.ModularGameMenu.StaticMenuTabsAndPages[ModManifest.UniqueID] = modTabs;
         }
 
         public static object GetInstanceField(Type type, object instance, string fieldName)
@@ -499,9 +589,11 @@ namespace Vocalization
         {
             string basePath = ModHelper.DirectoryPath;
             string contentPath = Path.Combine(basePath, "Content");
+            string graphicsPath = Path.Combine(contentPath, "Graphics");
             string audioPath = Path.Combine(contentPath, "Audio");
             string voicePath = Path.Combine(audioPath, "VoiceFiles");
 
+            if (!Directory.Exists(graphicsPath)) Directory.CreateDirectory(graphicsPath);
 
             VoicePath = voicePath; //Set a static reference to my voice files directory.
 

@@ -15,8 +15,28 @@ namespace StardustCore.UIUtilities
         public List<StardustCore.UIUtilities.MenuComponents.Button> buttons;
         public Color dialogueBoxBackgroundColor;
         public List<Texture2DExtended> menuTextures;
+
+        public bool showRightCloseButton;
+
+        public IClickableMenuExtended(): base()
+        {
+
+        }
+
+        public IClickableMenuExtended(int x, int y, int width, int height, bool showCloseButton): base(x, y, width, height, showCloseButton)
+        {
+            this.showRightCloseButton = showCloseButton;
+        }
+
+
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
+            
+        }
+
+        public virtual IClickableMenuExtended clone()
+        {
+                return new IClickableMenuExtended(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.showRightCloseButton);
             
         }
 
