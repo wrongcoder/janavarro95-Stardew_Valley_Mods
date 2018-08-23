@@ -12,6 +12,10 @@ using StardustCore.UIUtilities.MenuComponents;
 
 namespace StardustCore.Menus
 {
+    /// <summary>
+    /// TODO:
+    /// makebuttons to cycle through page
+    /// </summary>
     public class ModularGameMenu : StardustCore.UIUtilities.IClickableMenuExtended
     {
         public static SortedDictionary<string, List<KeyValuePair<StardustCore.UIUtilities.MenuComponents.Button, IClickableMenuExtended>>> StaticMenuTabsAndPages = new SortedDictionary<string, List<KeyValuePair<Button, IClickableMenuExtended>>>();
@@ -29,6 +33,8 @@ namespace StardustCore.Menus
         public static bool forcePreventClose;
 
         public const int tabsPerPage = 12;
+
+        public int currentPageIndex;
 
         public ModularGameMenu()
             : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
@@ -114,7 +120,34 @@ namespace StardustCore.Menus
                 }
                 //this.menuTabsAndPages.Add(v.Key,v.Value.clone());
             }
+            currentPageIndex = startingTab % tabsPerPage;
                 this.changeTab(startingTab);
+        }
+
+        /// <summary>
+        /// Takes in the static declared tabs and tries to set the menu tabs to that.
+        /// </summary>
+        /// <param name="startingTab"></param>
+        public ModularGameMenu(string startingTab) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
+        {
+            ModCore.ModMonitor.Log("INITIALIZE MENU: ", LogLevel.Alert);
+            if (Game1.activeClickableMenu == null)
+                Game1.playSound("bigSelect");
+            GameMenu.forcePreventClose = false;
+
+            this.menuTabsAndPages = new Dictionary<Button, IClickableMenuExtended>();
+            ModCore.ModMonitor.Log("INITIALIZE MENU: ", LogLevel.Alert);
+            foreach (var v in StaticMenuTabsAndPages)
+            {
+                ModCore.ModMonitor.Log("LIST A GO GO", LogLevel.Alert);
+                foreach (var pair in v.Value)
+                {
+                    this.AddMenuTab(pair.Key, pair.Value.clone());
+                    ModCore.ModMonitor.Log("ADD IN A PART", LogLevel.Alert);
+                }
+                //this.menuTabsAndPages.Add(v.Key,v.Value.clone());
+            }
+            this.changeTab(getTabIndexFromName(startingTab));
         }
 
         /// <summary>
@@ -122,14 +155,41 @@ namespace StardustCore.Menus
         /// </summary>
         /// <param name="startingTab"></param>
         /// <param name="tabsAndPages"></param>
-        public ModularGameMenu(int startingTab, Dictionary<Button, IClickableMenuExtended> tabsAndPages)
-    : this()
+        public ModularGameMenu(int startingTab, Dictionary<Button, IClickableMenuExtended> tabsAndPages): base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth* 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth* 2) / 2, 800 + IClickableMenu.borderWidth* 2, 600 + IClickableMenu.borderWidth* 2, true)
         {
             foreach (var v in tabsAndPages)
             {
                 this.AddMenuTab(v.Key, v.Value.clone());
             }
             this.changeTab(startingTab);
+        }
+
+        /// <summary>
+        /// More modular menu to only have a subset of buttons and pages.
+        /// </summary>
+        /// <param name="startingTab"></param>
+        /// <param name="tabsAndPages"></param>
+        public ModularGameMenu(string startingTab, Dictionary<Button, IClickableMenuExtended> tabsAndPages) : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
+        {
+            foreach (var v in tabsAndPages)
+            {
+                this.AddMenuTab(v.Key, v.Value.clone());
+            }
+            this.changeTab(getTabIndexFromName(startingTab));
+        }
+
+
+        public int getTabIndexFromName(string tabLabel)
+        {
+            for(int i=0; i < this.menuTabsAndPages.Count; i++)
+            {
+                var ok = this.menuTabsAndPages.ElementAt(i);
+                if (ok.Key.label == tabLabel)
+                {
+                    return i;
+                }
+            }
+            return 0; //If I can't find it just do a default.
         }
 
         public override void snapToDefaultClickableComponent()
@@ -189,13 +249,30 @@ namespace StardustCore.Menus
         {
             base.receiveLeftClick(x, y, playSound);
             //click the menu and stuff here I guess.
-            foreach (var v in menuTabsAndPages)
+            Dictionary<Button, IClickableMenuExtended> subTabs = new Dictionary<Button, IClickableMenuExtended>();
+            for (int i = currentPageIndex * tabsPerPage; i < (currentPageIndex + 1) * tabsPerPage; i++)
             {
-                if (v.Key.containsPoint(x, y))
+                if (i >= menuTabsAndPages.Count) break;
+                else
                 {
-                    //Make sub menu this menu value.
+                    var pair = menuTabsAndPages.ElementAt(i);
+                    subTabs.Add(pair.Key, pair.Value);
                 }
             }
+
+            foreach (var tab in subTabs)
+            {
+                if (tab.Key.containsPoint(x, y))
+                {
+                    ModCore.ModMonitor.Log(tab.Key.label);
+                    //this.hoverText = tab.Key.label;
+                    changeTab(tab.Key, tab.Value);
+
+                    return;
+                }
+            }
+
+
             //Check for submenu leftclick
             currentMenu.receiveLeftClick(x, y, playSound);
         }
@@ -204,13 +281,7 @@ namespace StardustCore.Menus
         {
             //base.receiveLeftClick(x, y, playSound);
             //click the menu and stuff here I guess.
-            foreach (var v in menuTabsAndPages)
-            {
-                if (v.Key.containsPoint(x, y))
-                {
-                    //Make sub menu this menu value.
-                }
-            }
+
             //Check for submenu right
             currentMenu.receiveRightClick(x, y);
         }
@@ -229,7 +300,19 @@ namespace StardustCore.Menus
             this.hoverText = "";
             currentMenu.performHoverAction(x, y);
             //this.pages[this.currentTab].performHoverAction(x, y);
-            foreach (var tab in this.menuTabsAndPages)
+
+            Dictionary<Button, IClickableMenuExtended> subTabs = new Dictionary<Button, IClickableMenuExtended>();
+            for (int i = currentPageIndex * tabsPerPage; i < (currentPageIndex + 1) * tabsPerPage; i++)
+            {
+                if (i >= menuTabsAndPages.Count) break;
+                else
+                {
+                    var pair = menuTabsAndPages.ElementAt(i);
+                    subTabs.Add(pair.Key, pair.Value);
+                }
+            }
+
+            foreach (var tab in subTabs)
             {
                 if (tab.Key.containsPoint(x, y))
                 {
@@ -243,7 +326,21 @@ namespace StardustCore.Menus
         {
             base.releaseLeftClick(x, y);
             //this.pages[this.currentTab].releaseLeftClick(x, y);
+
+
             currentMenu.releaseLeftClick(x, y);
+        }
+
+        public void pageBack()
+        {
+            if (this.currentPageIndex == 0) return;
+            else this.currentPageIndex--;
+        }
+
+        public void pageForward()
+        {
+            if (this.currentPageIndex >= getNumberOfPages()) return;
+            else currentPageIndex++;
         }
 
         public override void leftClickHeld(int x, int y)
@@ -262,8 +359,15 @@ namespace StardustCore.Menus
 
         public void changeTab(int which)
         {
+            currentPageIndex = which % tabsPerPage;
             currentButton = menuTabsAndPages.ElementAt(which).Key;
             currentMenu = menuTabsAndPages.ElementAt(which).Value;
+        }
+
+        public void changeTab(Button b, IClickableMenuExtended menu)
+        {
+            currentButton = b;
+            currentMenu = menu;
         }
 
         public void setTabNeighborsForCurrentPage()
@@ -284,7 +388,7 @@ namespace StardustCore.Menus
                 b.End();
                 b.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
                 Dictionary<Button, IClickableMenuExtended> subTabs = new Dictionary<Button, IClickableMenuExtended>();
-                for (int i = getNumberOfPages() * tabsPerPage; i < (getNumberOfPages() + 1) * tabsPerPage; i++)
+                for (int i = currentPageIndex * tabsPerPage; i < (currentPageIndex + 1) * tabsPerPage; i++)
                 {
                     if (i >= menuTabsAndPages.Count) break;
                     else
