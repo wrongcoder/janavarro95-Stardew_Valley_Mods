@@ -2248,7 +2248,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             
 
             var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
-
+            StardewSymphony.ModMonitor.Log(generateSongTriggerKeyFromSelection());
             //Add generic festival music.
             if (this.drawMode == DrawMode.FestivalSelection)
             {
@@ -2304,10 +2304,20 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 if (this.currentlySelectedOption.name == "SpringButton" || this.currentlySelectedOption.name == "SummerButton" || this.currentlySelectedOption.name=="FallButton"|| this.currentlySelectedOption.name=="WinterButton")
                 {
-                    if (this.currentlySelectedOption.name== "SpringButton") key += "spring";
-                    if (this.currentlySelectedOption.name == "SummerButton") key += "summer";
-                    if (this.currentlySelectedOption.name == "FallButton") key += "fall";
-                    if (this.currentlySelectedOption.name == "WinterButton") key += "winter";
+                    if (this.currentlySelectedOption.name == "SpringButton") key += "spring";
+                    else if (this.currentlySelectedOption.name == "SummerButton") key += "summer";
+                    else if (this.currentlySelectedOption.name == "FallButton") key += "fall";
+                    else if (this.currentlySelectedOption.name == "WinterButton") key += "winter";
+                    else
+                    {
+                        StardewSymphony.ModMonitor.Log("Error: You are not in a valid menu area to set the song information. Please make sure that a valid season is selected for the song options", StardewModdingAPI.LogLevel.Alert);
+                        return "";
+                    }
+                }
+                else
+                {
+                    StardewSymphony.ModMonitor.Log("Error: You are not in a valid menu area to set the song information. Please make sure that a valid season is selected for the song options", StardewModdingAPI.LogLevel.Alert);
+                    return "";
                 }
             }
             if (this.currentlySelectedWeather != null)
@@ -2374,6 +2384,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 this.texturedStrings.Clear();
                 this.drawMode = DrawMode.AlbumFancySelection;
+                this.currentMusicPackAlbum = null;
                 updateFancyButtons();
                 return;
             }
@@ -2381,6 +2392,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.DifferentSelectionTypesMode)
             {
                 this.drawMode = DrawMode.SongSelectionMode;
+                this.currentSelectedSong = null;
                 this.currentSongPageIndex = 0;
                 updateFancyButtons();
                 return;
@@ -2389,6 +2401,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.WeatherSelection)
             {
                 this.drawMode = DrawMode.SeasonSelection;
+                //Error check is already done for this in the getKey function
                 updateFancyButtons();
                 return;
             }
@@ -2396,6 +2409,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.TimeSelection)
             {
                 this.drawMode = DrawMode.WeatherSelection;
+                this.currentlySelectedWeather = null;
                 updateFancyButtons();
                 return;
             }
@@ -2406,10 +2420,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     selectedJustLocation = false;
                     this.drawMode = DrawMode.DifferentSelectionTypesMode;
+                    this.currentlySelectedOption = null;
                     updateFancyButtons();
                     return;
                 }
                 this.drawMode = DrawMode.TimeSelection;
+                this.currentlySelectedTime = null;
                 updateFancyButtons();
                 return;
             }
@@ -2417,6 +2433,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.DaySelection)
             {
                 this.drawMode = DrawMode.LocationSelection;
+                this.currentlySelectedLocation = null;
                 this.locationPageIndex = 0;
                 updateFancyButtons();
                 return;
@@ -2427,10 +2444,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.selectedJustLocation)
                 {
                     this.drawMode = DrawMode.LocationSelection;
+                    this.currentlySelectedLocation = null;
                     updateFancyButtons();
                     return;
                 }
                 this.drawMode = DrawMode.DaySelection;
+                this.currentlySelectedDay = null;
                 updateFancyButtons();
                 return;
             }
@@ -2438,6 +2457,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.EventSelection || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.MenuSelection)
             {
                 this.drawMode = DrawMode.DifferentSelectionTypesMode;
+                this.currentlySelectedOption = null;
                 updateFancyButtons();
                 return;
             }
@@ -2445,6 +2465,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.SelectedEvent)
             {
                 this.drawMode = DrawMode.EventSelection;
+                this.currentlySelectedEvent = null;
                 updateFancyButtons();
                 this.eventPageIndex = 0;
                 return;
@@ -2453,6 +2474,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.SelectedFestival)
             {
                 this.drawMode = DrawMode.FestivalSelection;
+                this.currentlySelectedFestival = null;
                 updateFancyButtons();
                 this.festivalPageIndex = 0;
                 return;
@@ -2461,6 +2483,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.SelectedMenu)
             {
                 this.drawMode = DrawMode.MenuSelection;
+                this.currentlySelectedMenu = null;
                 updateFancyButtons();
                 this.menuPageIndex = 0;
                 return;
@@ -2469,6 +2492,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.SeasonSelection)
             {
                 this.drawMode = DrawMode.DifferentSelectionTypesMode;
+                this.currentlySelectedOption = null;
                 updateFancyButtons();
                 this.menuPageIndex = 0;
                 return;

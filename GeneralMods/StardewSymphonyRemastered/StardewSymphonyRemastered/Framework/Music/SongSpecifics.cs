@@ -53,10 +53,11 @@ namespace StardewSymphonyRemastered.Framework
             weather = new string[]
             {
                 "sunny",
-                "rainy",
+                "rain",
                 "debris",
                 "lightning",
                 "snow",
+                "festival",
                 "wedding"
             };
             daysOfWeek = new string[]
@@ -299,7 +300,7 @@ namespace StardewSymphonyRemastered.Framework
         public static string getWeatherString()
         {
 
-            if (Game1.isRaining && Game1.isLightning==false) return "rainy";
+            if (Game1.isRaining && Game1.isLightning==false) return "rain";
             if (Game1.isLightning) return "lightning";
             if (Game1.isDebrisWeather) return "debris"; //????
             if (Game1.isSnowing) return "snow";
@@ -562,28 +563,17 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public KeyValuePair<string,List<Song>>getSongList(string key)
         {
-            string keyPhrase = "";
-            string keyPhraseInfo = "";
-            try
+
+            if (!listOfSongsWithTriggers.ContainsKey(key)) return new KeyValuePair<string, List<Song>>("",null);
+
+            //This is just the plain song name with no extra info.
+            foreach (KeyValuePair<string,List<Song>> pair in listOfSongsWithTriggers)
             {
-                 keyPhrase= key.Split(seperator).ElementAt(0);
-                 keyPhraseInfo= key.Split(seperator).ElementAt(1);
-            }
-            catch(Exception err)
-            {
-                err.ToString();
-                 keyPhrase = key;
-            }
-            
-                //This is just the plain song name with no extra info.
-                foreach(KeyValuePair<string,List<Song>> pair in listOfSongsWithTriggers)
-                {
                     //StardewSymphony.ModMonitor.Log(pair.Key);
                     if (pair.Key == key) return pair;
-                }
+            }
 
-            //return new KeyValuePair<string, List<string>>(key, listOfSongsWithTriggers[key]);
-            StardewSymphonyRemastered.StardewSymphony.ModMonitor.Log("Getting an invalid song list with key: " + key);
+
             return new KeyValuePair<string, List<Song>>("",null);
         }
 
