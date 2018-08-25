@@ -65,7 +65,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <summary>
         /// Enum dealing with what kind of slider this is.
         /// </summary>
-        SliderStyle sliderStyle;
+        public SliderStyle sliderStyle;
 
         /// <summary>
         /// Constructor.
@@ -297,29 +297,66 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="y"></param>
         public void offset(int x, int y)
         {
-            int xOffset = x - (this.bounds.X+this.bounds.Width/2);
-            int yOffset = y - (this.bounds.Y+this.bounds.Height/2);
+
+            if (x < sliderBar.bounds.X)
+            {
+                x = sliderBar.bounds.X;
+            }
+            if (y < sliderBar.bounds.Y)
+            {
+                y = sliderBar.bounds.Y;
+            }
+            if (x > (sliderBar.bounds.X) + (sliderBar.bounds.Width))
+            {
+                x = (sliderBar.bounds.X) + (sliderBar.bounds.Width);
+            }
+            if (y > (sliderBar.bounds.Y) + (sliderBar.bounds.Height))
+            {
+                y = (sliderBar.bounds.Y) + (sliderBar.bounds.Height);
+            }
+
+            //Get offset from button.
+            int xOffset = (bounds.X - x); //267-300
+            int yOffset = (bounds.Y - y);
 
 
-            this.sliderInformation.offset(xOffset, yOffset);
-            offsetBounds();
+            if (sliderInformation.sliderStyle == SliderStyle.Horizontal || sliderInformation.sliderStyle== SliderStyle.Square)
+            {
+
+                this.sliderInformation.xPos = (x - sliderBar.bounds.X) / (int)scale;
+                this.bounds.X = this.sliderBar.bounds.X + this.sliderInformation.xPos*(int)scale;
+                if (this.bounds.X > this.sliderBar.bounds.X + this.sliderBar.bounds.Width)
+                {
+                    this.bounds.X = this.sliderBar.bounds.X + this.sliderBar.bounds.Width;
+                }
+            }
+
+            if (sliderInformation.sliderStyle == SliderStyle.Vertical || sliderInformation.sliderStyle == SliderStyle.Square)
+            {
+                this.sliderInformation.yPos = (y - sliderBar.bounds.Y) / (int)scale;
+                this.bounds.Y = this.sliderBar.bounds.Y + this.sliderInformation.yPos*(int)scale;
+
+                if (this.bounds.Y > this.sliderBar.bounds.Y + this.sliderBar.bounds.Height)
+                {
+                    this.bounds.Y = this.sliderBar.bounds.Y + this.sliderBar.bounds.Height;
+                }
+            }
+
+            
+            
+
+          
+            //this.sliderInformation.offset(xOffset, yOffset);
         }
 
-        public void offsetBounds()
-        {
-            //EX: 200+(200+(3-200)) = (200)+(200-197)= 200+3 =203;
-            //EX: 200+(200+(-3-200)) = (200)+(200-203)= 200-3 =197;
-            this.bounds.X =this.bounds.X+(this.bounds.X + (this.sliderInformation.xPos-bounds.X));
-            this.bounds.Y =this.bounds.Y+(this.bounds.Y + (this.sliderInformation.yPos-bounds.Y));
-        }
 
         /// <summary>
         /// Sets the initial position for the button at sliderPosition.x=0;
         /// </summary>
         public void initializeBounds()
         {
-            this.bounds.X +=this.sliderInformation.xPos;
-            this.bounds.Y +=this.sliderInformation.yPos;
+            this.bounds.X +=this.sliderInformation.xPos*(int)scale;
+            this.bounds.Y +=this.sliderInformation.yPos*(int)scale;
         }
 
         /// <summary>
@@ -329,8 +366,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="y"></param>
         public void movementOffset(int x, int y)
         {
-            this.sliderInformation.movementOffset(x, y);
-            offsetBounds();
+            offset(x, y);
         }
 
         /// <summary>
@@ -381,16 +417,14 @@ namespace StardustCore.UIUtilities.MenuComponents
         {
             if (this.containsPoint(x, y))
             {
-                int xPos = x - this.sliderBar.bounds.X;
-                int yPos = y - this.sliderBar.bounds.Y;
-                this.movementOffset(xPos, yPos);
+                this.movementOffset(x, y);
             }
         }
 
 
 
         /// <summary>
-        /// Draws the slider.
+        /// D   raws the slider.
         /// </summary>
         /// <param name="b"></param>
         /// <param name="color"></param>
@@ -428,7 +462,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             
             if (string.IsNullOrEmpty(this.label))
                 return;
-            b.DrawString(Game1.smallFont, this.label+this.sliderInformation.getLabelInformation(this.getLabelXYPos), new Vector2((float)(this.bounds.X + this.bounds.Width+offset.X+this.sliderInformation.xPos), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)+offset.X+this.sliderInformation.yPos), textColor);
+            b.DrawString(Game1.smallFont, this.label+this.sliderInformation.getLabelInformation(this.getLabelXYPos), new Vector2((float)((this.bounds.X + this.bounds.Width+offset.X)*this.scale), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)+offset.X+this.sliderInformation.yPos), textColor);
             
         }
 
