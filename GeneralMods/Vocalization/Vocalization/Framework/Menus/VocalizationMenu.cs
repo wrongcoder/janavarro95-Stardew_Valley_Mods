@@ -11,6 +11,14 @@ using System.Threading.Tasks;
 
 namespace Vocalization.Framework.Menus
 {
+
+    /// <summary>
+    /// TODO:
+    /// Make Ok button that saves settings and closes menu instead  of readyToCloseFunction()
+    /// Make Cyclic buttons(aka a button that holds a ton of buttons)
+    /// Make cyclic translation button. (english, spanish, etc)
+    /// Make cyclic audio modes button. (full, simple, etc)
+    /// </summary>
     public class VocalizationMenu: IClickableMenuExtended
     {
         SliderButton sliderButton;
@@ -73,7 +81,34 @@ namespace Vocalization.Framework.Menus
             Vocalization.ModMonitor.Log(Vocalization.config.voiceVolume.ToString());
             Vocalization.ModHelper.WriteConfig<ModConfig>(Vocalization.config);
             Vocalization.soundManager.volume =(float) Vocalization.config.voiceVolume;
+
+            if (Vocalization.config.translationInfo.currentTranslation != getTranslationInfo())
+            {
+                //Change the mod config translation info
+                //Clear out the Sound manager sounds and Vocalization Dialogue Cues
+                //Reload all of the dialogue files
+                //Change the game's localized code
+            }
+
+            if (Vocalization.config.currentMode != getAudioMode())
+            {
+                Vocalization.config.currentMode = getAudioMode();
+            }
+
+
             return true;
+        }
+
+        public string getTranslationInfo()
+        {
+            //Return the name of the button which will have the translation stuff here!
+            return "English";
+        }
+
+        public string getAudioMode()
+        {
+            //Return the name of the mode that the current mode button is selected on.
+            return "Full";
         }
 
 
