@@ -212,7 +212,7 @@ namespace Vocalization
             config = ModHelper.ReadConfig<ModConfig>();
 
             config.verifyValidMode(); //Make sure the current mode is valid.
-            soundManager.volume = config.voiceVolume; //Set the volume for voices.
+            soundManager.volume = (float)config.voiceVolume; //Set the volume for voices.
             
         }
 
@@ -287,7 +287,7 @@ namespace Vocalization
 
             //Change this to take the vocalization menu instead
             List<KeyValuePair<Button, IClickableMenuExtended>> modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>();
-            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new VocalizationMenu(100,100,300,300,true)));
+            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new VocalizationMenu(100,64,600,300,true)));
             StardustCore.Menus.ModularGameMenu.AddTabsForMod(ModManifest,modTabs);
 
             ModMonitor.Log("VOCALIZATION MENU HACK COMPLETE!", LogLevel.Alert);
@@ -325,7 +325,7 @@ namespace Vocalization
 
             //Change this to take the vocalization menu instead
             List<KeyValuePair<Button, IClickableMenuExtended>> modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>();
-            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new VocalizationMenu(100, 100, 300, 300,true)));
+            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new VocalizationMenu(100, 64, 600, 300,true)));
 
             StardustCore.Menus.ModularGameMenu.StaticMenuTabsAndPages[ModManifest.UniqueID] = modTabs;
         }

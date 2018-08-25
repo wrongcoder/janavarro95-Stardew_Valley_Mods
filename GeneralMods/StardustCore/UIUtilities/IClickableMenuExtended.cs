@@ -84,6 +84,66 @@ namespace StardustCore.UIUtilities
             this.drawDialogueBoxBackground(xPosition, yPosition, width, height, false, true, color);
         }
 
+        public virtual void drawOnlyDialogueBoxBackground(int x, int y, int width, int height, Color color, float depth)
+        {
+
+            int height1 = Game1.graphics.GraphicsDevice.Viewport.TitleSafeArea.Height;
+            int width1 = Game1.graphics.GraphicsDevice.Viewport.TitleSafeArea.Width;
+            int dialogueX = 0;
+            int num1 = y > Game1.graphics.GraphicsDevice.Viewport.TitleSafeArea.Y ? 0 : Game1.graphics.GraphicsDevice.Viewport.TitleSafeArea.Y;
+            int num2 = 0;
+            width = Math.Min(Game1.graphics.GraphicsDevice.Viewport.TitleSafeArea.Width, width);
+ 
+            Microsoft.Xna.Framework.Rectangle rectangle1 = new Microsoft.Xna.Framework.Rectangle(0, 0, Game1.tileSize, Game1.tileSize);
+            int addedTileHeightForQuestions = -1;
+
+            if (Game1.questionChoices.Count >= 3)
+                addedTileHeightForQuestions = Game1.questionChoices.Count - 3;
+
+            rectangle1.Width = Game1.tileSize;
+            rectangle1.Height = Game1.tileSize;
+            rectangle1.X = Game1.tileSize;
+            rectangle1.Y = Game1.tileSize * 2;
+            depth += 0.001f;
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Microsoft.Xna.Framework.Rectangle(x+Game1.tileSize/2,y+Game1.tileSize/2,width, height), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color,0f,Vector2.Zero,SpriteEffects.None,depth);
+            rectangle1.Y = 0;
+            rectangle1.X = 0;
+            depth += 0.001f;
+
+            //Draw the corners
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Rectangle((x), (y),rectangle1.Width,rectangle1.Height), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            rectangle1.X = Game1.tileSize * 3;
+            depth += 0.001f;
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Rectangle((x + width), (y),rectangle1.Width,rectangle1.Height), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            rectangle1.Y = Game1.tileSize * 3;
+            depth += 0.001f;
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Rectangle((x + width), (y + height),rectangle1.Width,rectangle1.Height), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            rectangle1.X = 0;
+            depth += 0.001f;
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Rectangle((x), (y + height),rectangle1.Width,rectangle1.Height), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+
+            
+            rectangle1.X = Game1.tileSize * 2;
+            rectangle1.Y = 0;
+            depth += 0.001f;
+            //top
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Microsoft.Xna.Framework.Rectangle(x+Game1.tileSize, y, width-Game1.tileSize, Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            rectangle1.Y = 3 * Game1.tileSize;
+            depth += 0.001f;
+            //bottom??
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Microsoft.Xna.Framework.Rectangle(Game1.tileSize + x, y + height,width-Game1.tileSize, Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            rectangle1.Y = Game1.tileSize * 2;
+            rectangle1.X = 0;
+            depth += 0.001f;
+            //left
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Microsoft.Xna.Framework.Rectangle(x, y+Game1.tileSize, Game1.tileSize,height-Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            rectangle1.X = 3 * Game1.tileSize;
+            depth += 0.001f;
+            //right
+            Game1.spriteBatch.Draw(Game1.menuTexture, new Microsoft.Xna.Framework.Rectangle(x + width, y+Game1.tileSize ,Game1.tileSize, height-Game1.tileSize), new Microsoft.Xna.Framework.Rectangle?(rectangle1), color, 0f, Vector2.Zero, SpriteEffects.None, depth);
+            
+        }
+
         /// <summary>
         /// Draws the dialogue box background. Takes in a color.
         /// </summary>

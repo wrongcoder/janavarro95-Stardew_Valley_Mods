@@ -446,7 +446,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             //Draw the slider bar.
             sliderBar.draw(b, color, offset, layerDepth);
             //b.Draw(this..getTexture(), new Vector2(this.bounds.X + (int)offset.X, this.bounds.Y + (int)offset.Y), this.sourceRect, color, 0f, Vector2.Zero, this.scale, SpriteEffects.None, layerDepth);
-            b.Draw(this.animationManager.getTexture(), new Vector2(this.bounds.X + (int)offset.X, this.bounds.Y), this.sourceRect, color, 0f, Vector2.Zero, this.scale, SpriteEffects.None, layerDepth);
+            b.Draw(this.animationManager.getTexture(), new Vector2(this.bounds.X + (int)offset.X, this.bounds.Y), this.sourceRect, color, 0f, Vector2.Zero, this.scale, SpriteEffects.None, layerDepth+0.01f);
 
             if (this.extraTextures != null)
             {
@@ -462,7 +462,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             
             if (string.IsNullOrEmpty(this.label))
                 return;
-            b.DrawString(Game1.smallFont, this.label+this.sliderInformation.getLabelInformation(this.getLabelXYPos), new Vector2((float)((this.bounds.X + this.bounds.Width+offset.X)*this.scale), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)+offset.X+this.sliderInformation.yPos), textColor);
+            b.DrawString(Game1.smallFont, this.label+this.sliderInformation.getLabelInformation(this.getLabelXYPos), new Vector2((float)((sliderBar.bounds.X + sliderBar.bounds.Width+offset.X+this.bounds.Width)), (float)sliderBar.bounds.Y + ((float)(sliderBar.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)+offset.X), textColor,0f,Vector2.Zero,1f,SpriteEffects.None,layerDepth+0.02f);
             
         }
 

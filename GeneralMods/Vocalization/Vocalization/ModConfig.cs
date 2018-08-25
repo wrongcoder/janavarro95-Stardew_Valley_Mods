@@ -31,7 +31,7 @@ namespace Vocalization
         /// <summary>
         /// The volume at which the sound for voices is played at.
         /// </summary>
-        public float voiceVolume;
+        public decimal voiceVolume;
 
         public ModConfig()
         {
@@ -46,7 +46,7 @@ namespace Vocalization
             translationInfo = new TranslationInfo();
 
 
-            this.voiceVolume = 1.0f;
+            this.voiceVolume = (decimal)1.0f;
         }
 
         /// <summary>
