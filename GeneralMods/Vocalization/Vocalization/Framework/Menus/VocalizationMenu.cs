@@ -87,7 +87,6 @@ namespace Vocalization.Framework.Menus
                 //Change the mod config translation info
                 //Clear out the Sound manager sounds and Vocalization Dialogue Cues
                 //Reload all of the dialogue files
-                //Change the game's localized code
             }
 
             if (Vocalization.config.currentMode != getAudioMode())

@@ -170,7 +170,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// Draw the button.
         /// </summary>
         /// <param name="b"></param>
-        public new void draw(SpriteBatch b)
+        public virtual void draw(SpriteBatch b)
         {
             if (!this.visible)
                 return;
@@ -333,7 +333,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// Returns a new object based off of the data of this object.
         /// </summary>
         /// <returns>A Button object that is identical to the one passed in.</returns>
-        public Button clone()
+        public virtual Button clone()
         {
             var b= new Button(this.name, this.bounds, this.animationManager.getExtendedTexture(), this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
             if (b.buttonFunctionality.hover == null)
@@ -348,7 +348,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// </summary>
         /// <param name="newPosition"></param>
         /// <returns></returns>
-        public Button clone(Vector2 newPosition)
+        public virtual Button clone(Vector2 newPosition)
         {
             var b = new Button(this.name, new Rectangle((int)newPosition.X,(int)newPosition.Y,this.bounds.Width,this.bounds.Height), this.animationManager.getExtendedTexture(), this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
             if (b.buttonFunctionality.hover == null)
@@ -362,7 +362,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// Returns a new object based off of the data of this object.
         /// </summary>
         /// <returns>A Button object that is identical to the one passed in.</returns>
-        public Button copy()
+        public virtual Button copy()
         {
             return this.clone();
         }
