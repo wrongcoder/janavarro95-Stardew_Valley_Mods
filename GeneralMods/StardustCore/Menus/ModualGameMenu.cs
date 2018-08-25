@@ -410,7 +410,7 @@ namespace StardustCore.Menus
                         tab.Key.draw(b);
                     }
                 }
-                //currentMenu.draw(b);
+                currentMenu.draw(b);
 
                 if (Game1.options.hardwareCursor)
                     return;

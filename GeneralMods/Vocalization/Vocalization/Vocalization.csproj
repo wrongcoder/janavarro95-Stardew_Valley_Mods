@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\CharacterVoiceCue.cs" />
+    <Compile Include="Framework\Menus\VocalizationMenu.cs" />
     <Compile Include="Framework\ReplacementStrings.cs" />
     <Compile Include="Framework\TranslationInfo.cs" />
     <Compile Include="Framework\Vocabulary.cs" />
@@ -72,6 +73,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Graphics\MenuTab.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\SliderBar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\SliderButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\SpeechBubble.png">

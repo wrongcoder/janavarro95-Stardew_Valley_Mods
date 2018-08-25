@@ -16,6 +16,7 @@ using StardustCore.Menus;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents;
 using Vocalization.Framework;
+using Vocalization.Framework.Menus;
 
 namespace Vocalization
 {
@@ -156,6 +157,7 @@ namespace Vocalization
     {
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
+        public static IManifest Manifest;
 
         /// <summary>
         /// A string that keeps track of the previous dialogue said to ensure that dialogue isn't constantly repeated while the text box is open.
@@ -197,6 +199,7 @@ namespace Vocalization
             StardewModdingAPI.Events.MenuEvents.MenuChanged += MenuEvents_MenuChanged;
             ModMonitor = Monitor;
             ModHelper = Helper;
+            Manifest = ModManifest;
             DialogueCues = new Dictionary<string, CharacterVoiceCue>();
             replacementStrings = new ReplacementStrings();
 
@@ -280,11 +283,11 @@ namespace Vocalization
             components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(c,ExtraTextureDrawOrder.after));
             components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(speech, ExtraTextureDrawOrder.after));
 
-            Button menuTab = new Button("Vocalization", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "Vocalization", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null)), false, components);
+            Button menuTab = new Button("", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null,null)), false, components);
 
             //Change this to take the vocalization menu instead
             List<KeyValuePair<Button, IClickableMenuExtended>> modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>();
-            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new IClickableMenuExtended(0,0,300,300,false)));
+            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new VocalizationMenu(100,100,300,300,true)));
             StardustCore.Menus.ModularGameMenu.AddTabsForMod(ModManifest,modTabs);
 
             ModMonitor.Log("VOCALIZATION MENU HACK COMPLETE!", LogLevel.Alert);
@@ -318,11 +321,11 @@ namespace Vocalization
             components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(c, ExtraTextureDrawOrder.after));
             components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(speech, ExtraTextureDrawOrder.after));
 
-            Button menuTab = new Button("Vocalization", new Rectangle(0,0, 32, 32), new Texture2DExtended(ModHelper, ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "Vocalization", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(null, null, null), false, components);
+            Button menuTab = new Button("", new Rectangle(0,0, 32, 32), new Texture2DExtended(ModHelper, ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(null, null, null), false, components);
 
             //Change this to take the vocalization menu instead
             List<KeyValuePair<Button, IClickableMenuExtended>> modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>();
-            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new IClickableMenuExtended(0, 0, 300, 300,false)));
+            modTabs.Add(new KeyValuePair<Button, IClickableMenuExtended>(menuTab, new VocalizationMenu(100, 100, 300, 300,true)));
 
             StardustCore.Menus.ModularGameMenu.StaticMenuTabsAndPages[ModManifest.UniqueID] = modTabs;
         }

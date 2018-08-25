@@ -40,7 +40,7 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// </summary>
         public Button(Rectangle Bounds,Texture2DExtended Texture,Rectangle sourceRect,float Scale): base(Bounds, Texture.getTexture(), sourceRect, Scale)
         {
-
+            this.animationManager = new Animations.AnimationManager(Texture, new Animations.Animation(sourceRect), false);
         }
 
         /// <summary>
@@ -221,6 +221,39 @@ namespace StardustCore.UIUtilities.MenuComponents
 
         }
 
+        public virtual void draw(SpriteBatch b, Color color, Vector2 offset, float layerDepth)
+        {
+
+            if (this.extraTextures != null)
+            {
+                foreach (var v in this.extraTextures)
+                {
+                    if (v.Value == ExtraTextureDrawOrder.before)
+                    {
+                        v.Key.draw(b, color, layerDepth);
+                    }
+                }
+            }
+
+            b.Draw(this.animationManager.getTexture(), new Vector2(this.bounds.X + (int)offset.X, this.bounds.Y + (int)offset.Y), this.sourceRect, color, 0f, Vector2.Zero, this.scale, SpriteEffects.None, layerDepth);
+
+            if (this.extraTextures != null)
+            {
+                foreach (var v in this.extraTextures)
+                {
+                    if (v.Value == ExtraTextureDrawOrder.after)
+                    {
+                        v.Key.draw(b, color, layerDepth);
+                    }
+                }
+            }
+            if (string.IsNullOrEmpty(this.label))
+                return;
+            b.DrawString(Game1.smallFont, this.label, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)), textColor);
+
+        }
+
+
         /// <summary>
         /// Swaps if the button is visible or not. Also toggles the animation manager appropriately.
         /// </summary>
@@ -257,6 +290,30 @@ namespace StardustCore.UIUtilities.MenuComponents
                 if (this.buttonFunctionality.leftClick == null) return;
                 else this.buttonFunctionality.leftClick.run();
             }
+        }
+
+        public virtual void onLeftClick(int x, int y)
+        {
+            //IDK do something???
+            if (this.containsPoint(x, y))
+            {
+                if (this.buttonFunctionality == null) return;
+                else
+                {
+                    if (this.buttonFunctionality.leftClick == null) return;
+                    else this.buttonFunctionality.leftClick.run();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Triggers when the button is consistently held.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public virtual void onLeftClickHeld(int x, int y)
+        {
+
         }
 
         /// <summary>
