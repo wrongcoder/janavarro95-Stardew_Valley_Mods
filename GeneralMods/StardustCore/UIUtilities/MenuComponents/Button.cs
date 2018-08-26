@@ -43,6 +43,19 @@ namespace StardustCore.UIUtilities.MenuComponents
             this.animationManager = new Animations.AnimationManager(Texture, new Animations.Animation(sourceRect), false);
         }
 
+        public Button(string Name,Rectangle Bounds, Texture2DExtended Texture, Rectangle sourceRect, float Scale) : base(Bounds, Texture.getTexture(), sourceRect, Scale)
+        {
+            this.name = Name;
+            this.animationManager = new Animations.AnimationManager(Texture, new Animations.Animation(sourceRect), false);
+        }
+
+        public Button(string Name, string displayText, Rectangle Bounds, Texture2DExtended Texture, Rectangle sourceRect, float Scale) : base(Bounds, Texture.getTexture(), sourceRect, Scale)
+        {
+            this.name = Name;
+            this.label = displayText;
+            this.animationManager = new Animations.AnimationManager(Texture, new Animations.Animation(sourceRect), false);
+        }
+
         /// <summary>
         /// Basic Button constructor.
         /// </summary>

@@ -21,16 +21,19 @@ namespace StardustCore.UIUtilities.MenuComponents
         public CycleButton(Rectangle bounds, List<Button> buttons, Rectangle SourceRect, float scale) : base(bounds, buttons.ElementAt(0).animationManager.getExtendedTexture(), SourceRect, scale)
         {
             this.buttons = buttons;
+            this.buttonIndex = 0;
         }
 
         public CycleButton(string Name, string displayText, Rectangle bounds, List<Button> buttons, Rectangle SourceRect, float scale, Animations.Animation defaultAnimation, Color DrawColor, Color TextColor, ButtonFunctionality buttonFunctionality, bool AnimationEnabled, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture) : base(Name, bounds, buttons.ElementAt(0).animationManager.getExtendedTexture(), displayText, SourceRect, scale, defaultAnimation, DrawColor, TextColor, buttonFunctionality, AnimationEnabled, extraTexture)
         {
             this.buttons = buttons;
+            this.buttonIndex = 0;
         }
 
         public CycleButton(string Name, string displayText, Rectangle bounds, List<Button> buttons, Rectangle SourceRect, float scale, Animations.Animation defaultAnimation, Color DrawColor, Color TextColor, ButtonFunctionality buttonFunctionality, bool AnimationEnabled, Dictionary<string, List<Animations.Animation>> animationsToPlay, string startingKey, int startingAnimationFrame, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture) : base(Name, bounds, buttons.ElementAt(0).animationManager.getExtendedTexture(), displayText, SourceRect, scale, defaultAnimation, animationsToPlay, startingKey, DrawColor, TextColor, buttonFunctionality, startingAnimationFrame, AnimationEnabled, extraTexture)
         {
             this.buttons = buttons;
+            this.buttonIndex = 0;
         }
 
         public override void onLeftClick()
@@ -50,10 +53,13 @@ namespace StardustCore.UIUtilities.MenuComponents
         {
             if (this.containsPoint(x, y))
             {
+                StardustCore.ModCore.ModMonitor.Log("CLICK THE CYCLE BUTTON!");
                 //cycle button to next button and loop around if necessary.
                 buttonIndex++;
+                StardustCore.ModCore.ModMonitor.Log("Index is! "+buttonIndex.ToString());
                 if (buttonIndex >= buttons.Count)
                 {
+                    StardustCore.ModCore.ModMonitor.Log("NANIIII????");
                     buttonIndex = 0;
                 }
 
@@ -69,6 +75,11 @@ namespace StardustCore.UIUtilities.MenuComponents
         public string getCurrentButtonLabel()
         {
             return buttons.ElementAt(buttonIndex).label;
+        }
+
+        public string getCurrentButtonName()
+        {
+            return buttons.ElementAt(buttonIndex).name;
         }
 
         public override void draw(SpriteBatch b)
@@ -103,7 +114,7 @@ namespace StardustCore.UIUtilities.MenuComponents
                 }
             }
 
-            b.Draw(getCurrentButton().animationManager.getTexture(), new Vector2(this.bounds.X + (int)offset.X, this.bounds.Y + (int)offset.Y), this.sourceRect, color, 0f, Vector2.Zero, this.scale, SpriteEffects.None, layerDepth);
+            b.Draw(getCurrentButton().animationManager.getTexture(), new Vector2(this.bounds.X + (int)offset.X, this.bounds.Y + (int)offset.Y), getCurrentButton().sourceRect, color, 0f, Vector2.Zero, getCurrentButton().scale, SpriteEffects.None, layerDepth);
 
             if (this.extraTextures != null)
             {

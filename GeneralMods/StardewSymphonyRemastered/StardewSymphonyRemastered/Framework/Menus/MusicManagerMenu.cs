@@ -2299,6 +2299,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 return key;
             }
 
+
+            if (this.currentlySelectedMenu != null)
+            {
+                return this.currentlySelectedMenu.label;
+            }
+            if (this.currentlySelectedFestival != null) return this.currentlySelectedFestival.label;
+            if (this.currentlySelectedEvent != null) return this.currentlySelectedEvent.label;
+
             #region
             if (this.currentlySelectedOption != null)
             {
@@ -2357,13 +2365,6 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedDay.name == "SaturdayIcon") key += seperator + "saturday";
             }
             #endregion
-
-            if (this.currentlySelectedMenu != null)
-            {
-                return this.currentlySelectedMenu.label;
-            }
-            if (this.currentlySelectedFestival != null) return this.currentlySelectedFestival.label;
-            if (this.currentlySelectedEvent != null) return this.currentlySelectedEvent.label;
 
 
             return key;

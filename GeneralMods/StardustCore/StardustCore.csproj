@@ -118,6 +118,7 @@
     <Compile Include="Objects\Tools\SerializationInformation\SerializedObjectBase.cs" />
     <Compile Include="UIUtilities\IClickableMenuExtended.cs" />
     <Compile Include="UIUtilities\LayeredTexture.cs" />
+    <Compile Include="UIUtilities\MenuComponents\CycleButton.cs" />
     <Compile Include="UIUtilities\MenuComponents\Delegates\Delegates.cs" />
     <Compile Include="UIUtilities\MenuComponents\Delegates\DelegatePairing.cs" />
     <Compile Include="UIUtilities\MenuComponents\Delegates\Functionality\ButtonFunctionality.cs" />

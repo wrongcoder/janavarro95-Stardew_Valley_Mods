@@ -746,7 +746,7 @@ namespace Vocalization
         /// <summary>
         /// Loads in all of the .wav files associated with voice acting clips.
         /// </summary>
-        public void loadAllVoiceFiles()
+        public static void loadAllVoiceFiles()
         {
             //get a list of all translations supported by this mod.
             List<string> translations = Directory.GetDirectories(VoicePath).ToList();
@@ -806,7 +806,7 @@ namespace Vocalization
                         }
                         catch (Exception err)
                         {
-                            ModMonitor.Log("WHY NO ADD IN???"+err.ToString());
+                            ModMonitor.Log(err.ToString());
                         }
                     }
                 }
@@ -817,7 +817,7 @@ namespace Vocalization
         /// Used to obtain all strings for almost all possible dialogue in the game.
         /// </summary>
         /// <param name="cue"></param>
-        public void scrapeDictionaries(string path,CharacterVoiceCue cue,string translation)
+        public static void scrapeDictionaries(string path,CharacterVoiceCue cue,string translation)
         {
 
             var dialoguePath = Path.Combine("Characters", "Dialogue");
@@ -2201,7 +2201,7 @@ namespace Vocalization
             //DialogueCues.Add(cue.name, cue);
         }
 
-        public List<string> getEventSpeakerLines(string rawDialogue, string speakerName)
+        public static List<string> getEventSpeakerLines(string rawDialogue, string speakerName)
         {
             string[] dialogueSplit= rawDialogue.Split('/');
             List<string> speakingData = new List<string>();
@@ -2228,7 +2228,7 @@ namespace Vocalization
         /// <param name="i"></param>
         /// <param name="npcName"></param>
         /// <returns></returns>
-        public List<string> getPurchasedItemDialogueForNPC(StardewValley.Object i, string npcName, string str3,string translation)
+        public static  List<string> getPurchasedItemDialogueForNPC(StardewValley.Object i, string npcName, string str3,string translation)
         {
             NPC n = Game1.getCharacterFromName(npcName);
             if (n == null) return new List<string>();
@@ -2375,7 +2375,7 @@ namespace Vocalization
         /// </summary>
         /// <param name="dialogue"></param>
         /// <returns></returns>
-        public string sanitizeDialogueInGame(string dialogue)
+        public static  string sanitizeDialogueInGame(string dialogue)
         {
             if (dialogue.Contains(Game1.player.Name))
             {
@@ -2772,7 +2772,7 @@ namespace Vocalization
             return possibleDialogues;
         }
 
-        public string sanitizeDialogueFromSpeechBubblesDictionary(string text)
+        public static  string sanitizeDialogueFromSpeechBubblesDictionary(string text)
         {
             if (text.Contains("{0}"))
             {
@@ -2790,7 +2790,7 @@ namespace Vocalization
         /// </summary>
         /// <param name="mailText"></param>
         /// <returns></returns>
-        public string sanitizeDialogueFromMailDictionary(string mailText)
+        public static  string sanitizeDialogueFromMailDictionary(string mailText)
         {
 
             List<string> texts = mailText.Split('%').ToList();

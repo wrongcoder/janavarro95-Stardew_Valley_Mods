@@ -16,6 +16,7 @@ namespace StardustCore.UIUtilities
         public string path;
         IModHelper helper;
         public string modID;
+        public ContentSource source;
         
         /// <summary>
         /// Empty/null constructor.
@@ -33,22 +34,24 @@ namespace StardustCore.UIUtilities
         /// Constructor.
         /// </summary>
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
-        public Texture2DExtended(IModHelper helper,IManifest manifest,string path)
+        public Texture2DExtended(IModHelper helper,IManifest manifest,string path,ContentSource contentSource=ContentSource.ModFolder)
         {
             this.Name = Path.GetFileNameWithoutExtension(path);
             this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path);
+            this.texture = helper.Content.Load<Texture2D>(path,contentSource);
             this.helper = helper;
             this.modID = manifest.UniqueID;
+            this.source = contentSource;
         }
 
-        public Texture2DExtended(IModHelper helper, string modID, string path)
+        public Texture2DExtended(IModHelper helper, string modID, string path, ContentSource contentSource = ContentSource.ModFolder)
         {
             this.Name = Path.GetFileNameWithoutExtension(path);
             this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path);
+            this.texture = helper.Content.Load<Texture2D>(path,contentSource);
             this.helper = helper;
             this.modID = modID;
+            this.source = contentSource;
         }
 
         public Texture2DExtended Copy()
