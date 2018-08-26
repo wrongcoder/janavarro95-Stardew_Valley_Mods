@@ -7,5 +7,8 @@
   "EntryDll": "Vocalization.dll",
   "MinimumApiVersion": "2.0",
   "UpdateKeys": [],
-  "Dependencies": [ "Omegasis.SimpleSoundManager" ]
+  "Dependencies": [
+	"Omegasis.SimpleSoundManager",
+	"Omegasis.StardustCore"
+	]
 }

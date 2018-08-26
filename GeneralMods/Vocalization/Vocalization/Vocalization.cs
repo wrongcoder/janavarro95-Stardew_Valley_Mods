@@ -3770,6 +3770,16 @@ namespace Vocalization
                 splicedText = splicedText.Replace("\"", "");
             }
 
+            if (splicedText.Contains("+"))
+            {
+                splicedText = splicedText.Replace("+", "");
+            }
+
+            if (splicedText.Contains("\n"))
+            {
+                splicedText = splicedText.Replace("\n", "");
+            }
+
             return splicedText;
 
         }
