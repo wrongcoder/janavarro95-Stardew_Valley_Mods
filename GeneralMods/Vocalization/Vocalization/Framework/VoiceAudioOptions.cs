@@ -39,6 +39,14 @@ namespace Vocalization.Framework
             simpleAndHeartEvents = "";
         }
 
+        public VoiceAudioOptions(string simple, string full, string heartEvent, string simpleAndHeartEvent)
+        {
+            this.simple = simple;
+            this.full = full;
+            this.heartEvents = heartEvent;
+            this.simpleAndHeartEvents = simpleAndHeartEvent;
+        }
+
         public string getAudioClip()
         {
             if (Vocalization.config.currentMode == "Simple") return simple;

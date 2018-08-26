@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\AudioCues.cs" />
     <Compile Include="Framework\CharacterVoiceCue.cs" />
     <Compile Include="Framework\Menus\VocalizationMenu.cs" />
     <Compile Include="Framework\ReplacementStrings.cs" />

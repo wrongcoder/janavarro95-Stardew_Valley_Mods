@@ -146,7 +146,7 @@ namespace Vocalization.Framework
         {
             List<string> stock = new List<string>();
             Dictionary<int, string> objDict = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Data", Vocalization.config.translationInfo.getXNBForTranslation("ObjectInformation", translation)));
-            Vocalization.ModMonitor.Log("LOAD THE OBJECT INFO: ", LogLevel.Alert);
+            //Vocalization.ModMonitor.Log("LOAD THE OBJECT INFO: ", LogLevel.Alert);
             foreach (KeyValuePair<int, string> pair in objDict)
             {
                 for (int i = 0; i <= 3; i++)
