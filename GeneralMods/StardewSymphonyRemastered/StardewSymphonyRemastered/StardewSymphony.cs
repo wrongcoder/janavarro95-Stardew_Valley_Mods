@@ -508,36 +508,6 @@ namespace StardewSymphonyRemastered
             Game1.soundBank = DefaultSoundBank;
         }
 
-        /// <summary>
-        /// Used to splice the mod directory to get relative paths.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string getShortenedDirectory(string path)
-        {
-            string lol = (string)path.Clone();
-            string[] spliter = lol.Split(new string[] { ModHelper.DirectoryPath }, StringSplitOptions.None);
-            try
-            {
-                return spliter[1];
-            }
-            catch (Exception err)
-            {
-                err.ToString();
-                return spliter[0];
-            }
-        }
-
-        /// <summary>
-        /// Used to finish cleaning up absolute asset paths into a shortened relative path.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string getRelativeDirectory(string path)
-        {
-            string s = getShortenedDirectory(path);
-            return s.Remove(0, 1);
-        }
 
         public static void DebugLog(string s)
         {

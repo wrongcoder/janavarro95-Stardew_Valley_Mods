@@ -23,12 +23,7 @@ namespace StardustCore.NetCode.Graphics
 
         }
 
-        public NetString currentAnimationName;
-        public NetInt currentAnimationListIndex;
-        public NetTexture2DExtended objectTexture;
-        public NetAnimation defaultDrawFrame;
-        public NetBool enabled;
-        public NetString animationDataString;
+
 
         protected override void ReadDelta(BinaryReader reader, NetVersion version)
         {
@@ -64,13 +59,13 @@ namespace StardustCore.NetCode.Graphics
             }
             else
             {
-                Value.currentAnimation = defaultDrawFrame.Value;
+                Value.currentAnimation = defaultAnimation.Value;
             }
         }
 
         protected override void WriteDelta(BinaryWriter writer)
         {
-           NetString curentAnimationName = new NetString(Value.currentAnimationName);
+           NetString currentAnimationName = new NetString(Value.currentAnimationName);
            currentAnimationName.Write(writer);
             
 

@@ -1586,7 +1586,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.currentMusicPackAlbum == null || this.currentSelectedSong == null) return false;
             var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
             //Check for generic festival music.
-            if (this.drawMode == DrawMode.FestivalSelection)
+            if (this.drawMode == DrawMode.SelectedFestival)
             {
                 var festivalSonglist = info.Value.songInformation.festivalSongs;
                 if (festivalSonglist == null) return false;
@@ -1594,9 +1594,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 else return true;
             }
             //Check for generic event music.
-            if (this.drawMode == DrawMode.EventSelection)
+            if (this.drawMode == DrawMode.SelectedEvent)
             {
-                var eventSonglist = info.Value.songInformation.festivalSongs;
+                var eventSonglist = info.Value.songInformation.eventSongs;
                 if (eventSonglist == null) return false;
                 if (!eventSonglist.Contains(info.Value.songInformation.getSongFromList(eventSonglist, this.currentSelectedSong.name))) return false;
                 else return true;
@@ -1894,6 +1894,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentMusicPackAlbum.draw(b);
                 this.currentSelectedSong.draw(b);
                 this.currentlySelectedOption.draw(b);
+                /*
                 if (!doesPackContainMusic())
                 {
                     this.addButton.draw(b);
@@ -1902,6 +1903,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     this.deleteButton.draw(b);
                 }
+                */
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
 
@@ -1952,6 +1954,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentMusicPackAlbum.draw(b);
                 this.currentSelectedSong.draw(b);
                 this.currentlySelectedOption.draw(b);
+                /*
                 if (!doesPackContainMusic())
                 {
                     this.addButton.draw(b);
@@ -1960,6 +1963,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     this.deleteButton.draw(b);
                 }
+                */
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
 
@@ -2010,6 +2014,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.currentMusicPackAlbum.draw(b);
                 this.currentSelectedSong.draw(b);
                 this.currentlySelectedOption.draw(b);
+                /*
                 if (!doesPackContainMusic())
                 {
                     this.addButton.draw(b);
@@ -2018,6 +2023,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     this.deleteButton.draw(b);
                 }
+                */
                 this.playButton.draw(b);
                 this.stopButton.draw(b);
 
@@ -2161,13 +2167,16 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 if (this.drawMode == DrawMode.WeatherSelection || this.drawMode == DrawMode.TimeSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.DaySelection || this.drawMode == DrawMode.NothingElseToDisplay)
                 {
-                    if (!doesPackContainMusic())
+                    if (this.selectedJustLocation==false)
                     {
-                        this.addButton.draw(b);
-                    }
-                    else
-                    {
-                        this.deleteButton.draw(b);
+                        if (!doesPackContainMusic())
+                        {
+                            this.addButton.draw(b);
+                        }
+                        else
+                        {
+                            this.deleteButton.draw(b);
+                        }
                     }
                 }
                 this.playButton.draw(b);
@@ -2248,19 +2257,18 @@ namespace StardewSymphonyRemastered.Framework.Menus
             
 
             var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
-            StardewSymphony.ModMonitor.Log(generateSongTriggerKeyFromSelection());
+            //StardewSymphony.ModMonitor.Log(generateSongTriggerKeyFromSelection());
             //Add generic festival music.
-            if (this.drawMode == DrawMode.FestivalSelection)
+            if (this.drawMode == DrawMode.SelectedFestival)
             {
-
-                info.Value.songInformation.addSongToFestivalList(this.currentlySelectedFestival.label);
+                info.Value.songInformation.addSongToFestivalList(this.currentSelectedSong.label);
                 return;
             }
 
             //Add generic event music.
-            if(this.drawMode== DrawMode.EventSelection)
+            if(this.drawMode== DrawMode.SelectedEvent)
             {
-                info.Value.songInformation.addSongToEventList(this.currentlySelectedEvent.label);
+                info.Value.songInformation.addSongToEventList(this.currentSelectedSong.label);
                 return;
             }
 
@@ -2274,7 +2282,25 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// </summary>
         public void deleteSong()
         {
+
+
+
             var info = (KeyValuePair<string, MusicPack>)this.currentMusicPackAlbum.buttonFunctionality.leftClick.paramaters[0];
+
+
+            if (this.drawMode == DrawMode.SelectedFestival)
+            {
+                info.Value.songInformation.removeSongFromFestivalList(this.currentSelectedSong.label);
+                return;
+            }
+
+            //Add generic event music.
+            if (this.drawMode == DrawMode.SelectedEvent)
+            {
+                info.Value.songInformation.removeSongFromEventList(this.currentSelectedSong.label);
+                return;
+            }
+
             info.Value.songInformation.removeSongFromTriggerList(generateSongTriggerKeyFromSelection(), this.currentSelectedSong.label);
         }
 
@@ -2318,13 +2344,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     else if (this.currentlySelectedOption.name == "WinterButton") key += "winter";
                     else
                     {
-                        StardewSymphony.ModMonitor.Log("Error: You are not in a valid menu area to set the song information. Please make sure that a valid season is selected for the song options", StardewModdingAPI.LogLevel.Alert);
+                        //StardewSymphony.ModMonitor.Log("Error: You are not in a valid menu area to set the song information. Please make sure that a valid season is selected for the song options", StardewModdingAPI.LogLevel.Alert);
                         return "";
                     }
                 }
                 else
                 {
-                    StardewSymphony.ModMonitor.Log("Error: You are not in a valid menu area to set the song information. Please make sure that a valid season is selected for the song options", StardewModdingAPI.LogLevel.Alert);
+                    //StardewSymphony.ModMonitor.Log("Error: You are not in a valid menu area to set the song information. Please make sure that a valid season is selected for the song options", StardewModdingAPI.LogLevel.Alert);
                     return "";
                 }
             }

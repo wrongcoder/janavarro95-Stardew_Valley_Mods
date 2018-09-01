@@ -65,26 +65,55 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
+        /// <summary>
+        /// Updtes the timer every second to check if a song is playing or not.
+        /// </summary>
         public void updateTimer()
         {
+            
             if (this.currentMusicPack == null) return;
-            if (this.currentMusicPack.isPlaying()) return;
+            if (this.currentMusicPack.isPlaying())
+            {
+                return;
+            }
             else
             {
-                Random r = new Random(Game1.random.Next());
-
-                int val = r.Next(StardewSymphony.Config.MinimumDelayBetweenSongsInMilliseconds, StardewSymphony.Config.MaximumDelayBetweenSongsInMilliseconds + 1);
-                timer = new Timer(val);
-                timer.Elapsed += onTimerFinished;
-                timer.Enabled = true;
+                if (timer == null)
+                {
+                    Random r = new Random(Game1.random.Next());
+                    int val = r.Next(StardewSymphony.Config.MinimumDelayBetweenSongsInMilliseconds, StardewSymphony.Config.MaximumDelayBetweenSongsInMilliseconds + 1);
+                    //StardewSymphony.ModMonitor.Log("Music Pack is not playing! Generate a new timer! Delay: "+val.ToString());
+                    timer = new Timer(val);
+                    timer.Elapsed += onTimerFinished;
+                    timer.Enabled = true;
+                }
+                else
+                {
+                    timer.Enabled = true;
+                    timer.Elapsed += onTimerFinished;
+                }
             }
 
         }
 
+        /// <summary>
+        /// Selects a new song when the timer delay runs out.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
         public void onTimerFinished(System.Object source, ElapsedEventArgs e)
         {
+            if (this.currentMusicPack.isPlaying())
+            {
+                timer.Enabled = false;
+                timer = null;
+                return;
+            }
+            //StardewSymphony.ModMonitor.Log("AHH THE TIMER FINISHED!");
             timer.Enabled = false;
+            timer.Elapsed -= onTimerFinished;
             selectMusic(SongSpecifics.getCurrentConditionalString());
+            timer = null;
         }
 
         /// <summary>
@@ -269,6 +298,11 @@ namespace StardewSymphonyRemastered.Framework
         /// <param name="songListKey"></param>
         public void selectMusic(string songListKey)
         {
+            //Nullify the timer when new music is selected.
+            if (this.timer != null)
+            {
+                this.timer = null;
+            }
            
             var listOfValidMusicPacks = getListOfApplicableMusicPacks(songListKey);
           

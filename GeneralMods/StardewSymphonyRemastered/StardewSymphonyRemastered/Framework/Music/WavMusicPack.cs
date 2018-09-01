@@ -18,26 +18,12 @@ namespace StardewSymphonyRemastered.Framework
         public Song currentSong;
         public string songsDirectory;
 
-        /// <summary>
-        /// Used to actually play the song.
-        /// </summary>
-        DynamicSoundEffectInstance dynamicSound;
-        /// <summary>
-        /// Used to keep track of where in the song we are.
-        /// </summary>
-        int position;
-        /// <summary>
-        /// ???
-        /// </summary>
-        int count;
-        /// <summary>
-        /// Used to store the info for the song.
-        /// </summary>
-        byte[] byteArray;
-
+        public SoundEffectInstance sound;
 
         bool loop;
 
+
+        public Dictionary<string,SoundEffectInstance> sounds;
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -50,6 +36,7 @@ namespace StardewSymphonyRemastered.Framework
             this.songInformation = new SongSpecifics();
             this.musicPackInformation = MusicPackMetaData.readFromJson(directoryToMusicPack);
             this.loop = Loop;
+            this.sounds = new Dictionary<string, SoundEffectInstance>();
             /*
             if (this.musicPackInformation == null)
             {
@@ -80,83 +67,21 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
+        /*
         /// <summary>
         /// Load a wav file into the stream to be played.
         /// </summary>
-        public void LoadWavFromFileToStream(string p)
+        public void LoadWavFromFileToStream(string file)
         {
             // Create a new SpriteBatch, which can be used to draw textures.
 
-            string file =p;
             System.IO.Stream waveFileStream = File.OpenRead(file); //TitleContainer.OpenStream(file);
-          
-            BinaryReader reader = new BinaryReader(waveFileStream);
-
-            int chunkID = reader.ReadInt32();
-            int fileSize = reader.ReadInt32();
-            int riffType = reader.ReadInt32();
-            int fmtID = reader.ReadInt32();
-            int fmtSize = reader.ReadInt32();
-            int fmtCode = reader.ReadInt16();
-            int channels = reader.ReadInt16();
-            int sampleRate = reader.ReadInt32();
-            int fmtAvgBPS = reader.ReadInt32();
-            int fmtBlockAlign = reader.ReadInt16();
-            int bitDepth = reader.ReadInt16();
-
-            if (fmtSize == 18)
-            {
-                // Read any extra values
-                int fmtExtraSize = reader.ReadInt16();
-                reader.ReadBytes(fmtExtraSize);
-            }
-
-            int dataID = reader.ReadInt32();
-            int dataSize = reader.ReadInt32();
-
-            byteArray = reader.ReadBytes(dataSize);
-
-
-            dynamicSound = new DynamicSoundEffectInstance(sampleRate, (AudioChannels)channels);
-            count = dynamicSound.GetSampleSizeInBytes(TimeSpan.FromMilliseconds(10000));
-            if (count > byteArray.Length)
-            {
-                count = byteArray.Length;
-            }
-            dynamicSound.BufferNeeded += new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
-            this.currentSong = new Song(p);
+            this.effect = SoundEffect.FromStream(waveFileStream);
+            this.sound=this.effect.CreateInstance();
+            this.currentSong = new Song(file);
+            waveFileStream.Dispose();
         }
-
-        void DynamicSound_BufferNeeded(object sender, EventArgs e)
-        {
-            //StardewSymphony.ModMonitor.Log(byteArray.Length.ToString());
-            //StardewSymphony.ModMonitor.Log(position.ToString());
-            //StardewSymphony.ModMonitor.Log(count.ToString());
-            try
-            {
-                dynamicSound.SubmitBuffer(byteArray, position, count);
-            }
-            catch(Exception err)
-            {
-            }
-            
-            //dynamicSound.SubmitBuffer(byteArray);
-            //dynamicSound.SubmitBuffer(byteArray, position + count / 2, count / 2);
-
-            position += count;
-            if (position + count > byteArray.Length)
-            {
-                if (loop)
-                {
-                    position = 0;
-                }
-                else
-                {
-
-                }
-            }
-        }
-
+        */
 
         /// <summary>
         /// Returns the name of the currently playing song.
@@ -177,10 +102,18 @@ namespace StardewSymphonyRemastered.Framework
             List<Song> listOfSongs = new List<Song>();
             foreach(var wav in wavFiles)
             {
+
+                System.IO.Stream waveFileStream = File.OpenRead(wav); //TitleContainer.OpenStream(file);
+                SoundEffect eff = SoundEffect.FromStream(waveFileStream);
+                SoundEffectInstance instance = eff.CreateInstance();
+                string name = Path.GetFileNameWithoutExtension(wav);
+                this.sounds.Add(name, instance);
+
+                waveFileStream.Dispose();
                 Song song = new Song(wav);
-                listOfSongs.Add(song);
+                this.songInformation.listOfSongsWithoutTriggers.Add(song);
+                //listOfSongs.Add(song);
             }
-            this.songInformation.listOfSongsWithoutTriggers = listOfSongs;
         }
 
         /// <summary>
@@ -188,7 +121,7 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void pauseSong()
         {
-            if (dynamicSound != null) dynamicSound.Pause();
+            if (this.sound != null) sound.Pause();
         }
 
         /// <summary>
@@ -198,8 +131,19 @@ namespace StardewSymphonyRemastered.Framework
         public override void playSong(string name)
         {
             string pathToSong = getSongPathFromName(name);
-            LoadWavFromFileToStream(pathToSong);
-            dynamicSound.Play();
+
+            bool exists=this.sounds.TryGetValue(name,out this.sound);
+
+            if (exists)
+            {
+                this.currentSong = new Song(name);
+                sound.Play();
+            }
+            else
+            {
+                StardewSymphony.ModMonitor.Log("An error occured where we can't find the song anymore. Weird. Please contact Omegasis with a SMAPI Log and describe when/how the event occured.");
+            }
+            
         }
 
         public override void playRandomSong()
@@ -215,8 +159,8 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void resumeSong()
         {
-            if (dynamicSound == null) return;
-            dynamicSound.Resume();
+            if (sound == null) return;
+            sound.Resume();
         }
 
         /// <summary>
@@ -226,15 +170,10 @@ namespace StardewSymphonyRemastered.Framework
         {
             if (Game1.currentSong != null) Game1.currentSong.Stop(AudioStopOptions.Immediate);
             if (this.currentSong == null) return;
-            if (dynamicSound != null)
+            if (sound != null)
             {
-                dynamicSound.Stop(true);
-                dynamicSound.BufferNeeded -= new EventHandler<EventArgs>(DynamicSound_BufferNeeded);
-                dynamicSound = null;
+                sound.Stop(true);
                 this.currentSong = null;
-                position = 0;
-                count = 0;
-                byteArray = new byte[0];
             }
         }
 
@@ -252,7 +191,7 @@ namespace StardewSymphonyRemastered.Framework
         /// Get the son's name from the path.
         /// </summary>
         /// <param name="path"></param>
-        /// <returns></returns>
+        /// <returns></returns>11111111111111
         public string getSongNameFromPath(string path)
         {
             foreach(var song in this.songInformation.listOfSongsWithoutTriggers)
@@ -278,8 +217,8 @@ namespace StardewSymphonyRemastered.Framework
 
         public override bool isPlaying()
         {
-            if (this.dynamicSound == null) return false;
-            if (this.dynamicSound.State == SoundState.Playing) return true;
+            if (this.sound == null) return false;
+            if (this.sound.State == SoundState.Playing) return true;
             else return false;
         }
     }

@@ -625,7 +625,6 @@ namespace StardewSymphonyRemastered.Framework
         public void addSongToFestivalList(string songName)
         {
 
-            var songKeyPair = this.festivalSongs;
 
             var song = getSongFromList(listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
@@ -634,7 +633,7 @@ namespace StardewSymphonyRemastered.Framework
                     StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
                 return;
             }
-            songKeyPair.Add(song); //add the song from master pool to the trigger list
+            this.festivalSongs.Add(song); //add the song from master pool to the trigger list
         }
 
         public void addSongToEventList(string songName)
@@ -665,6 +664,28 @@ namespace StardewSymphonyRemastered.Framework
         }
 
         /// <summary>
+        /// Remove a song from the event list.
+        /// </summary>
+        /// <param name="songListKey"></param>
+        /// <param name="songName"></param>
+        public void removeSongFromEventList( string songName)
+        {
+            var song = getSongFromList(this.eventSongs, songName);
+            this.eventSongs.Remove(song);
+        }
+
+        /// <summary>
+        /// Remove a song from the festival list.
+        /// </summary>
+        /// <param name="songListKey"></param>
+        /// <param name="songName"></param>
+        public void removeSongFromFestivalList( string songName)
+        {
+            var song = getSongFromList(this.festivalSongs, songName);
+            this.festivalSongs.Remove(song);
+        }
+
+        /// <summary>
         /// Get the Song instance that is referenced with the song's name.
         /// </summary>
         /// <param name="songList"></param>
@@ -672,8 +693,10 @@ namespace StardewSymphonyRemastered.Framework
         /// <returns></returns>
         public Song getSongFromList(List<Song> songList,string songName)
         {
+            //StardewSymphony.ModMonitor.Log("Get the song: " + songName);
             foreach (var song in songList)
             {
+                //StardewSymphony.ModMonitor.Log("Looking at song: " + song.name);
                 if (song.name == songName)
                 {
                     return song;
