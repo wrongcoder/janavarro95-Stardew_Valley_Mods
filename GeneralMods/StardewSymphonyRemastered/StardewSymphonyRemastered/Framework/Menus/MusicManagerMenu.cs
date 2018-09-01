@@ -2167,7 +2167,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 if (this.drawMode == DrawMode.WeatherSelection || this.drawMode == DrawMode.TimeSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.DaySelection || this.drawMode == DrawMode.NothingElseToDisplay)
                 {
-                    if (this.selectedJustLocation==false)
+                    if (this.drawMode == DrawMode.LocationSelection && this.selectedJustLocation == true)
+                    {
+
+                    }
+                    else
                     {
                         if (!doesPackContainMusic())
                         {

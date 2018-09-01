@@ -35,5 +35,10 @@ namespace StardewSymphonyRemastered
         /// Used to write a .json file for every possible option for a music pack. Use at your own risk!
         /// </summary>
         public bool writeAllConfigMusicOptions { get; set; } = false;
+
+        /// <summary>
+        /// Used to completely disable the Stardew Valley OST.
+        /// </summary>
+        public bool disableStardewMusic { get; set; } = false;
     }
 }

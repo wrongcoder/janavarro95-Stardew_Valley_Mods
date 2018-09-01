@@ -72,12 +72,32 @@ namespace StardewSymphonyRemastered.Framework
         {
             
             if (this.currentMusicPack == null) return;
-            if (this.currentMusicPack.isPlaying())
+            if (StardewSymphonyRemastered.StardewSymphony.Config.disableStardewMusic==true)
             {
-                return;
+                if (this.currentMusicPack.isPlaying())
+                {
+                    return;
+                }
             }
             else
             {
+                try
+                {
+                    string songName = Game1.currentSong.Name.ToLower();
+
+                    if (this.currentMusicPack.isPlaying() || (Game1.currentSong.IsPlaying && !songName.Contains("ambient")) )
+                    {
+                        return;
+                    }
+                }
+                catch (Exception err)
+                {
+                    if (this.currentMusicPack.isPlaying())
+                    {
+                        return;
+                    }
+                }
+            }
                 if (timer == null)
                 {
                     Random r = new Random(Game1.random.Next());
@@ -92,7 +112,7 @@ namespace StardewSymphonyRemastered.Framework
                     timer.Enabled = true;
                     timer.Elapsed += onTimerFinished;
                 }
-            }
+            
 
         }
 
@@ -112,6 +132,9 @@ namespace StardewSymphonyRemastered.Framework
             //StardewSymphony.ModMonitor.Log("AHH THE TIMER FINISHED!");
             timer.Enabled = false;
             timer.Elapsed -= onTimerFinished;
+
+            
+
             selectMusic(SongSpecifics.getCurrentConditionalString());
             timer = null;
         }
@@ -292,6 +315,39 @@ namespace StardewSymphonyRemastered.Framework
             return listOfValidDictionaries;
         }
 
+
+
+        public void selectMenuMusic(string songListKey)
+        {
+            //Nullify the timer when new music is selected.
+            if (this.timer != null)
+            {
+                this.timer = null;
+            }
+
+            var listOfValidMusicPacks = getListOfApplicableMusicPacks(songListKey);
+
+            if (listOfValidMusicPacks.Count == 0) return;
+
+
+            int randInt = packSelector.Next(0, listOfValidMusicPacks.Count - 1);
+
+            var musicPackPair = listOfValidMusicPacks.ElementAt(randInt);
+
+
+            //used to swap the music packs and stop the last playing song.
+            this.swapMusicPacks(musicPackPair.Key.musicPackInformation.name);
+
+            int randInt2 = songSelector.Next(0, musicPackPair.Value.Count);
+
+
+            var songName = musicPackPair.Value.ElementAt(randInt2);
+
+            this.currentMusicPack.playSong(songName.name);
+
+            StardewSymphony.menuChangedMusic = true;
+
+        }
         /// <summary>
         /// Selects the actual song to be played right now based off of the selector key. The selector key should be called when the player's location changes.
         /// </summary>

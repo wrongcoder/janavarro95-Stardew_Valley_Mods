@@ -66,13 +66,13 @@ namespace StardewSymphonyRemastered
         /// <param name="helper"></param>
         public override void Entry(IModHelper helper)
         {
-            Config = helper.ReadConfig<Config>();
+            
             DefaultSoundBank = Game1.soundBank;
             DefaultWaveBank = Game1.waveBank;
             ModHelper = helper;
             ModMonitor = Monitor;
             Manifest = ModManifest;
-
+            Config = helper.ReadConfig<Config>();
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             // StardewModdingAPI.Events.EventArgsLocationsChanged += LocationEvents_CurrentLocationChanged;
 
@@ -199,7 +199,8 @@ namespace StardewSymphonyRemastered
         /// <param name="e"></param>
         private void MenuEvents_MenuChanged(object sender, StardewModdingAPI.Events.EventArgsClickableMenuChanged e)
         {
-            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+            //var ok = musicManager.currentMusicPack.getNameOfCurrentSong();
+            musicManager.selectMenuMusic(SongSpecifics.getCurrentConditionalString());
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
@@ -233,12 +234,27 @@ namespace StardewSymphonyRemastered
         /// <param name="e"></param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.currentSong != null)
+            if (musicManager == null) return;
+            
+            if (Config.disableStardewMusic==true)
             {
-                //ModMonitor.Log("STOP THE MUSIC!!!");
-                Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
-                Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
-                Game1.nextMusicTrack = "";  //same as above line
+                if (Game1.currentSong != null)
+                {
+                    Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
+                    Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
+                    Game1.nextMusicTrack = "";  //same as above line
+                }
+            }
+            else
+            {
+                if (musicManager.currentMusicPack == null) return;
+                if (Game1.currentSong != null && musicManager.currentMusicPack.isPlaying())
+                {
+                    //ModMonitor.Log("STOP THE MUSIC!!!");
+                    Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
+                    Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
+                    //Game1.nextMusicTrack = "";  //same as above line
+                }
             }
       
         }
