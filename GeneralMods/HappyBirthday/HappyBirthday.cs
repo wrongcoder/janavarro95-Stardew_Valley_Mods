@@ -79,7 +79,7 @@ namespace Omegasis.HappyBirthday
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            helper.Content.AssetLoaders.Add(new PossibleGifts());
+            //helper.Content.AssetLoaders.Add(new PossibleGifts());
             Config = helper.ReadConfig<ModConfig>();
 
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -523,20 +523,29 @@ namespace Omegasis.HappyBirthday
                 if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
                     this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Neutral", false));
             }
+
+            if (Game1.player.isMarried())
+            {
+                if (name == Game1.player.spouse)
+                {
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(198, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(204, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(220, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(221, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(223, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(233, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(234, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(286, 5));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(368, 5));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(608, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(612, 1));
+                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(773, 1));
+                }
+            }
+
             //TODO: Make different tiers of gifts depending on the friendship, and if it is the spouse.
             /*
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(198, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(204, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(220, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(221, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(223, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(233, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(234, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(286, 5));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(368, 5));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(608, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(612, 1));
-                this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(773, 1));
+
                 */
 
             return gifts;

@@ -3,19 +3,9 @@ using System.Collections.Generic;
 
 namespace Omegasis.HappyBirthday
 {
-    class PossibleGifts : IAssetLoader
+    public class PossibleGifts
     {
-        public bool CanLoad<T>(IAssetInfo asset)
-        {
-            return asset.AssetNameEquals(@"Data\PossibleBirthdayGifts");
-        }
-
-        /// <summary>Load a matched asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
-        public T Load<T>(IAssetInfo asset)
-        {
-            return (T)(object)new Dictionary<string, string> // (T)(object) is a trick to cast anything to T if we know it's compatible
-            {
+        private Dictionary<string,string> defaultBirthdayGifts=new Dictionary<string, string>() { 
                 ["Universal_Love_Gift"] = "74 1 446 1 204 1 446 5 773 1",
                 ["Universal_Like_Gift"] = "-2 3 -7 1 -26 2 -75 5 -80 3 72 1 220 1 221 1 395 1 613 1 634 1 635 1 636 1 637 1 638 1 724 1 233 1 223 1 465 20 -79 5",
                 ["Universal_Neutral_Gift"] = "194 1 262 5 -74 5 -75 3 334 5 335 1 390 20 388 20 -81 5 -79 3",
@@ -53,6 +43,33 @@ namespace Omegasis.HappyBirthday
                 ["Willy"] = " Best/72 1 143 1 149 1 154 1 276 1 337 1 698 1 /Good/66 1 336 1 340 1 699 1 707 1 /Neutral/-4 3 / ",
                 ["Krobus"] = " Best/72 1 16 1 276 1 337 1 305 1 /Good/66 1 336 1 340 1 /Neutral// "
             };
+
+        private Dictionary<string, string> defaultSpouseBirthdayGifts = new Dictionary<string, string>() {
+
+            ["Universal_Love_Gift"] = "74 1 446 1 204 1 446 5 773 1",
+            ["Universal_Like_Gift"] = "-2 3 -7 1 -26 2 -75 5 -80 3 72 1 220 1 221 1 395 1 613 1 634 1 635 1 636 1 637 1 638 1 724 1 233 1 223 1 465 20 -79 5",
+            ["Universal_Neutral_Gift"] = "194 1 262 5 -74 5 -75 3 334 5 335 1 390 20 388 20 -81 5 -79 3",
+            ["Alex"] = "",
+            ["Elliott"] = "",
+            ["Harvey"] = "",
+            ["Sam"] = "",
+            ["Sebastian"] = "",
+            ["Shane"] = "",
+            ["Abigail"] = "",
+            ["Emily"] = "",
+            ["Haley"] = "",
+            ["Leah"] = "",
+            ["Maru"] = "",
+            ["Penny"] = "",
+
+
+        };
+
+        public Dictionary<string, string> BirthdayGifts;
+
+        public PossibleGifts()
+        {
+
         }
     }
 }

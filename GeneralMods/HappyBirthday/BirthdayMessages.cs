@@ -86,11 +86,11 @@ namespace Omegasis.HappyBirthday
             serializer.Formatting = Formatting.Indented;
 
             //English logic.
-            string defaultPath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", "English");
+            string defaultPath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation);
             if (!Directory.Exists(defaultPath)) Directory.CreateDirectory(defaultPath);
 
             string birthdayFileDict=HappyBirthday.Config.translationInfo.getjsonForTranslation("BirthdayWishes", HappyBirthday.Config.translationInfo.currentTranslation);
-            string path = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue","English", birthdayFileDict);
+            string path = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, birthdayFileDict);
 
             //Handle normal birthday wishes.
             if (!File.Exists(path))
@@ -109,7 +109,7 @@ namespace Omegasis.HappyBirthday
 
             //handle spouse birthday wishes.
             string spouseBirthdayFileDict = HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", HappyBirthday.Config.translationInfo.currentTranslation);
-            string spousePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue","English",spouseBirthdayFileDict);
+            string spousePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, spouseBirthdayFileDict);
             if (!File.Exists(path))
             {
 
