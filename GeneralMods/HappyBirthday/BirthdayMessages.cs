@@ -20,7 +20,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>
         /// TODO: Make this.
         /// </summary>
-        public Dictionary<string, string> defaultSpouseBirthdayWishes = new Dictionary<string, string>()
+        private Dictionary<string, string> defaultSpouseBirthdayWishes = new Dictionary<string, string>()
         {
             ["Alex"] = "",
             ["Elliott"] = "",
@@ -79,7 +79,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>
         /// Used to load all of the default birthday greetings.
         /// </summary>
-        private void createBirthdayGreetings()
+        public void createBirthdayGreetings()
         {
 
             var serializer = JsonSerializer.Create();

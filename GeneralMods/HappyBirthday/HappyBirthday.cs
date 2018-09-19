@@ -69,6 +69,7 @@ namespace Omegasis.HappyBirthday
 
         public static IModHelper ModHelper;
 
+        public BirthdayMessages messages;
 
 
         /*********
@@ -79,7 +80,7 @@ namespace Omegasis.HappyBirthday
         public override void Entry(IModHelper helper)
         {
             helper.Content.AssetLoaders.Add(new PossibleGifts());
-            this.Config = helper.ReadConfig<ModConfig>();
+            Config = helper.ReadConfig<ModConfig>();
 
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
@@ -92,6 +93,8 @@ namespace Omegasis.HappyBirthday
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += GraphicsEvents_OnPostRenderHudEvent; ;
             //MultiplayerSupport.initializeMultiplayerSupport();
             ModHelper = Helper;
+
+            messages = new BirthdayMessages();
         }
 
 
@@ -199,7 +202,7 @@ namespace Omegasis.HappyBirthday
         {
             // show birthday selection menu
             if (Game1.activeClickableMenu != null) return;
-            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.KeyPressed.ToString() == this.Config.KeyBinding)
+            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.KeyPressed.ToString() == Config.KeyBinding)
                 Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
         }
 
@@ -220,7 +223,7 @@ namespace Omegasis.HappyBirthday
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
 
-            createBirthdayGreetings();
+            messages.createBirthdayGreetings();
             //this.SeenEvent = false;
             //this.Dialogue = new Dictionary<string, Dialogue>();
         }
@@ -280,9 +283,9 @@ namespace Omegasis.HappyBirthday
                             {
                                 if (Game1.player.getFriendshipHeartLevelForNPC(npc.Name) >= Config.minimumFriendshipLevelForBirthdayWish)
                                 {
-                                    Dialogue d = new Dialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name], npc);
+                                    Dialogue d = new Dialogue(messages.birthdayWishes[npc.Name], npc);
                                     npc.CurrentDialogue.Push(d);
-                                    if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name]);
+                                    if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(messages.birthdayWishes[npc.Name]);
                                 }
                             }
                             catch
