@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using Omegasis.HappyBirthday.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Menus;
 using StardewValley.Monsters;
 using SObject = StardewValley.Object;
 
 namespace Omegasis.HappyBirthday
 {
     /// <summary>The mod entry point.</summary>
-    public class HappyBirthday : Mod, IAssetEditor, IAssetLoader
+    public class HappyBirthday : Mod, IAssetEditor
     {
         /*********
         ** Properties
@@ -25,7 +29,7 @@ namespace Omegasis.HappyBirthday
         private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "Player_Birthdays", $"HappyBirthday_{Game1.player.Name}.txt");
 
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        public static ModConfig Config;
 
         /// <summary>The data for the current player.</summary>
         private PlayerData PlayerData;
@@ -46,52 +50,6 @@ namespace Omegasis.HappyBirthday
         private bool CheckedForBirthday;
         //private Dictionary<string, Dialogue> Dialogue;
         //private bool SeenEvent;
-        public bool CanLoad<T>(IAssetInfo asset)
-        {
-            return asset.AssetNameEquals(@"Data\FarmerBirthdayDialogue");
-        }
-
-        /// <summary>Load a matched asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
-        public T Load<T>(IAssetInfo asset)
-        {
-            return (T)(object)new Dictionary<string, string> // (T)(object) is a trick to cast anything to T if we know it's compatible
-            {
-                ["Robin"] = "Hey @, happy birthday! I'm glad you choose this town to move here to. ",
-                ["Demetrius"] = "Happy birthday @! Make sure you take some time off today to enjoy yourself. $h",
-                ["Maru"] = "Happy birthday @. I tried to make you an everlasting candle for you, but sadly that didn't work out. Maybe next year right? $h",
-                ["Sebastian"] = "Happy birthday @. Here's to another year of chilling. ",
-                ["Linus"] = "Happy birthday @. Thanks for visiting me even on your birthday. It makes me really happy. ",
-                ["Pierre"] = "Hey @, happy birthday! Hopefully this next year for you will be a great one! ",
-                ["Caroline"] = "Happy birthday @. Thank you for all that you've done for our community. I'm sure your parents must be proud of you.$h",
-                ["Abigail"] = "Happy birthday @! Hopefully this year we can go on even more adventures together $h!",
-                ["Alex"] = "Yo @, happy birthday! Maybe this will be your best year yet.$h",
-                ["George"] = "When you get to my age birthdays come and go. Still happy birthday @.",
-                ["Evelyn"] = "Happy birthday @. You have grown up to be such a fine individual and I'm sure you'll continue to grow. ",
-                ["Lewis"] = "Happy birthday @! I'm thankful for what you have done for the town and I'm sure your grandfather would be proud of you.",
-                ["Clint"] = "Hey happy birthday @. I'm sure this year is going to be great for you.",
-                ["Penny"] = "Happy birthday @. May you enjoy all of life's blessings this year. ",
-                ["Pam"] = "Happy birthday kid. We should have a drink to celebrate another year of life for you! $h",
-                ["Emily"] = "I'm sensing a strong positive life energy about you, so it must be your birthday. Happy birthday @!$h",
-                ["Haley"] = "Happy birthday @. Hopefully this year you'll get some good presents!$h",
-                ["Jas"] = "Happy birthday @. I hope you have a good birthday.",
-                ["Vincent"] = "Hey @ have you come to pl...oh it's your birthday? Happy birthday! ",
-                ["Jodi"] = "Hello there @. Rumor has it that today is your birthday. In that case, happy birthday!$h",
-                ["Kent"] = "Jodi told me that it was your birthday today @. Happy birthday and make sure to cherish every single day.",
-                ["Sam"] = "Yo @ happy birthday! We'll have to have a birthday jam session for you some time!$h ",
-                ["Leah"] = "Hey @ happy birthday! We should go to the saloon tonight and celebrate!$h ",
-                ["Shane"] = "Happy birthday @. Keep working hard and I'm sure this next year for you will be a great one.",
-                ["Marnie"] = "Hello there @. Everyone is talking about your birthday today and I wanted to make sure that I wished you a happy birthday as well, so happy birthday! $h ",
-                ["Elliott"] = "What a wonderful day isn't it @? Especially since today is your birthday. I tried to make you a poem but I feel like the best way of putting it is simply, happy birthday. $h ",
-                ["Gus"] = "Hey @ happy birthday! Hopefully you enjoy the rest of the day and make sure you aren't a stranger at the saloon!",
-                ["Dwarf"] = "Happy birthday @. I hope that what I got you is acceptable for humans as well. ",
-                ["Wizard"] = "The spirits told me that today is your birthday. In that case happy birthday @. ",
-                ["Harvey"] = "Hey @, happy birthday! Make sure to come in for a checkup some time to make sure you live many more years! ",
-                ["Sandy"] = "Hello there @. I heard that today was your birthday and I didn't want you feeling left out, so happy birthday!",
-                ["Willy"] = "Aye @ happy birthday. Looking at you reminds me of ye days when I was just a guppy swimming out to sea. Continue to enjoy them youngin.$h",
-                ["Krobus"] = "I have heard that it is tradition to give a gift to others on their birthday. In that case, happy birthday @."
-            };
-        }
 
         public bool CanEdit<T>(IAssetInfo asset)
         {
@@ -109,6 +67,9 @@ namespace Omegasis.HappyBirthday
             .Set("birthdayDad", "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%");
         }
 
+        public static IModHelper ModHelper;
+
+
 
         /*********
         ** Public methods
@@ -125,8 +86,98 @@ namespace Omegasis.HappyBirthday
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+            MenuEvents.MenuChanged += MenuEvents_MenuChanged;
 
+            GraphicsEvents.OnPostRenderGuiEvent += GraphicsEvents_OnPostRenderGuiEvent;
+            StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += GraphicsEvents_OnPostRenderHudEvent; ;
             //MultiplayerSupport.initializeMultiplayerSupport();
+            ModHelper = Helper;
+        }
+
+
+        /// <summary>
+        /// Used to properly display hovertext for all events happening on a calendar day.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
+        {
+            if (Game1.activeClickableMenu == null) return;
+            if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
+            if (Game1.activeClickableMenu is Billboard)
+            {
+                int index = PlayerData.BirthdayDay;
+                //Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 1f, 4f, 2, Game1.player);
+
+                string hoverText = "";
+                foreach (var clicky in (Game1.activeClickableMenu as Billboard).calendarDays)
+                {
+                    if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                    {
+                        hoverText += clicky.hoverText + Environment.NewLine;
+                    }
+                }
+                
+                if (!String.IsNullOrEmpty(hoverText))
+                {
+                    hoverText.Remove(hoverText.Length - 2, 1);
+                    var oldText = Helper.Reflection.GetField<string>(Game1.activeClickableMenu, "hoverText", true);
+                    oldText.SetValue(hoverText);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Used to show the farmer's portrait on the billboard menu.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GraphicsEvents_OnPostRenderGuiEvent(object sender, EventArgs e)
+        {
+            if (Game1.activeClickableMenu == null) return;
+            if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
+            if (Game1.activeClickableMenu is Billboard)
+            {
+                int index = PlayerData.BirthdayDay;
+                Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.player);
+
+                string hoverText = "";
+                foreach(var clicky in (Game1.activeClickableMenu as Billboard).calendarDays)
+                {
+                    if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                    {
+                        hoverText += clicky.hoverText+Environment.NewLine;
+                    }
+                }
+                if (hoverText != "")
+                {
+                    var oldText=Helper.Reflection.GetField<string>(Game1.activeClickableMenu, "hoverText", true);
+                    oldText.SetValue(hoverText);
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Functionality to display the player's birthday on the billboard.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            if (Game1.activeClickableMenu == null) return;
+            if(Game1.activeClickableMenu is Billboard)
+            {
+                Texture2D text = new Texture2D(Game1.graphics.GraphicsDevice,1,1);
+                Color[] col = new Color[1];
+                col[0] = new Color(0, 0, 0, 1);
+                text.SetData<Color>(col);
+                //players birthdy position rect=new ....
+                int index = PlayerData.BirthdayDay;
+                Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
+                (Game1.activeClickableMenu as Billboard).calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", Game1.player.name + "'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+            }
         }
 
 
@@ -168,7 +219,8 @@ namespace Omegasis.HappyBirthday
             // load settings
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
-            
+
+            createBirthdayGreetings();
             //this.SeenEvent = false;
             //this.Dialogue = new Dictionary<string, Dialogue>();
         }
@@ -226,16 +278,22 @@ namespace Omegasis.HappyBirthday
 
                             try
                             {
-                                Dialogue d = new Dialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name], npc);
-                                npc.CurrentDialogue.Push(d);
-                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name]);
+                                if (Game1.player.getFriendshipHeartLevelForNPC(npc.Name) >= Config.minimumFriendshipLevelForBirthdayWish)
+                                {
+                                    Dialogue d = new Dialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name], npc);
+                                    npc.CurrentDialogue.Push(d);
+                                    if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(Game1.content.Load<Dictionary<string, string>>("Data\\FarmerBirthdayDialogue")[npc.Name]);
+                                }
                             }
                             catch
                             {
-                                Dialogue d = new Dialogue("Happy Birthday @!", npc);
-                                npc.CurrentDialogue.Push(d);
-                                if (npc.CurrentDialogue.ElementAt(0) != d)
-                                    npc.setNewDialogue("Happy Birthday @!");
+                                if (Game1.player.getFriendshipHeartLevelForNPC(npc.Name) >= Config.minimumFriendshipLevelForBirthdayWish)
+                                {
+                                    Dialogue d = new Dialogue("Happy Birthday @!", npc);
+                                    npc.CurrentDialogue.Push(d);
+                                    if (npc.CurrentDialogue.ElementAt(0) != d)
+                                        npc.setNewDialogue("Happy Birthday @!");
+                                }
                             }
                         }
                     }
@@ -341,7 +399,7 @@ namespace Omegasis.HappyBirthday
 
         /// <summary>Set the next birthday gift the player will receive.</summary>
         /// <param name="name">The villager's name who's giving the gift.</param>
-        /// <remarks>This returns gifts based on the speaker's heart level towards the player: neutral for 0-3, good for 4-6, and best for 7-10.</remarks>
+        /// <remarks>This returns gifts based on the speaker's heart level towards the player: neutral for 3-4, good for 5-6, and best for 7-10.</remarks>
         private void SetNextBirthdayGift(string name)
         {
             Item gift;
@@ -395,7 +453,7 @@ namespace Omegasis.HappyBirthday
                     string[] fields = text.Split('/');
 
                     // love
-                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 7)
+                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLoveFriendshipLevel)
                     {
                         string[] loveFields = fields[1].Split(' ');
                         for (int i = 0; i < loveFields.Length; i += 2)
@@ -409,7 +467,7 @@ namespace Omegasis.HappyBirthday
                     }
 
                     // like
-                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 6)
+                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLikeFriendshipLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxLikeFriendshipLevel)
                     {
                         string[] likeFields = fields[3].Split(' ');
                         for (int i = 0; i < likeFields.Length; i += 2)
@@ -423,7 +481,7 @@ namespace Omegasis.HappyBirthday
                     }
 
                     // neutral
-                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 3)
+                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
                     {
                         string[] neutralFields = fields[5].Split(' ');
 
@@ -439,27 +497,27 @@ namespace Omegasis.HappyBirthday
                 }
 
                 // get NPC's preferred gifts
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 7)
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLoveFriendshipLevel)
                     gifts.AddRange(this.GetUniversalItems("Love", true));
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 6)
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLikeFriendshipLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxLikeFriendshipLevel)
                     this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Like", true));
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 3)
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
                     this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Neutral", true));
             }
             catch
             {
                 // get NPC's preferred gifts
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 7)
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLoveFriendshipLevel)
                 {
                     this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Love", false));
                     this.PossibleBirthdayGifts.AddRange(this.GetLovedItems(name));
                 }
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 4 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 6)
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLikeFriendshipLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxLikeFriendshipLevel)
                 {
                     this.PossibleBirthdayGifts.AddRange(this.GetLikedItems(name));
                     this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Like", false));
                 }
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= 0 && Game1.player.getFriendshipHeartLevelForNPC(name) <= 3)
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
                     this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Neutral", false));
             }
             //TODO: Make different tiers of gifts depending on the friendship, and if it is the spouse.

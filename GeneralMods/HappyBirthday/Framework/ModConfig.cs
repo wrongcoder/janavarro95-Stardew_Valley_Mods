@@ -1,9 +1,52 @@
 ﻿namespace Omegasis.HappyBirthday.Framework
 {
     /// <summary>The mod configuration.</summary>
-    internal class ModConfig
+    public class ModConfig
     {
         /// <summary>The key which shows the menu.</summary>
         public string KeyBinding { get; set; } = "O";
+
+        /// <summary>
+        /// The minimum amount of friendship needed to get a birthday gift.
+        /// </summary>
+        public int minNeutralFriendshipGiftLevel = 3;
+
+        /// <summary>
+        /// The max amount of friendship needed to get a neutral gift from an npc.
+        /// </summary>
+        public int maxNeutralFriendshipGiftLevel = 4;
+
+        /// <summary>
+        ///The minimum amount of friendship to get a like gift from an npc. 
+        /// </summary>
+        public int minLikeFriendshipLevel = 5;
+
+        /// <summary>
+        /// The max amount of friendship needed to get a liked gift from an npc.
+        /// </summary>
+        public int maxLikeFriendshipLevel = 6;
+
+        /// <summary>
+        /// The minimum amount of friendship needed to get a loved gift from an npc.
+        /// </summary>
+        public int minLoveFriendshipLevel = 7;
+
+        /// <summary>
+        /// The minimum amount of friendship needed to get a happy birthday greeting from an npc.
+        /// </summary>
+        public int minimumFriendshipLevelForBirthdayWish=2;
+
+        /// <summary>
+        /// Handles different translations of files.
+        /// </summary>
+        public TranslationInfo translationInfo;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ModConfig()
+        {
+            this.translationInfo = new TranslationInfo();
+        }
     }
 }

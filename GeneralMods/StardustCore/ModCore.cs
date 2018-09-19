@@ -191,7 +191,7 @@ namespace StardustCore
         {
             if(e.KeyPressed.ToString()== config.modularMenuKey && Game1.activeClickableMenu==null)
             {
-                Game1.activeClickableMenu = new ModularGameMenu(0);
+                //Game1.activeClickableMenu = new ModularGameMenu(0);
             }
         }
 

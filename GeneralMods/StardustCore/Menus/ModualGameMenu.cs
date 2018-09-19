@@ -39,20 +39,20 @@ namespace StardustCore.Menus
         public ModularGameMenu()
             : base(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, true)
         {
-            ModCore.ModMonitor.Log("INITIALIZE MENU: ", LogLevel.Alert);
+            //ModCore.ModMonitor.Log("INITIALIZE MENU: ", LogLevel.Alert);
             if (Game1.activeClickableMenu == null)
                 Game1.playSound("bigSelect");
             GameMenu.forcePreventClose = false;
 
             this.menuTabsAndPages = new Dictionary<Button, IClickableMenuExtended>();
-            ModCore.ModMonitor.Log("INITIALIZE MENU: ", LogLevel.Alert);
+            //ModCore.ModMonitor.Log("INITIALIZE MENU: ", LogLevel.Alert);
             foreach (var v in StaticMenuTabsAndPages)
             {
-                ModCore.ModMonitor.Log("LIST A GO GO", LogLevel.Alert);
+                //ModCore.ModMonitor.Log("LIST A GO GO", LogLevel.Alert);
                 foreach (var pair in v.Value)
                 {
                     this.AddMenuTab(pair.Key, pair.Value.clone());
-                    ModCore.ModMonitor.Log("ADD IN A PART", LogLevel.Alert);
+                    //ModCore.ModMonitor.Log("ADD IN A PART", LogLevel.Alert);
                 }
                 //this.menuTabsAndPages.Add(v.Key,v.Value.clone());
             }
