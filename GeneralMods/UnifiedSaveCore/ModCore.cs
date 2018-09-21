@@ -75,6 +75,7 @@ namespace UnifiedSaveCore
                 "xTile",
             };
 
+            //taken from attribute example.
             foreach (Assembly asm in assemblies)
             {
 
@@ -127,13 +128,14 @@ namespace UnifiedSaveCore
                 //Console.WriteLine("{0} VERSIONS: (A){1}  (F){2}  (P){3}", name, asmV, fileV, prodV);
             }
 
-            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
-            StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+            //StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
+            //StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
+            //StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
             saveCoreAPI = new SaveCoreAPI();
 
             dataHandlers = new List<IInformationHandler>();
             dataHandlers.Add(new LocationHandler());
+            dataHandlers.Add(new NPCHandler());
 
         }
 
