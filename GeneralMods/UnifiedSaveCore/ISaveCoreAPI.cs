@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Omegasis.SaveAnywhere.API
+namespace UnifiedSaveCore
 {
-    /// <summary>
-    ///     Interface for the Save Anywhere API
-    ///     Other mods can use this interface to get the
-    ///         API from the SMAPI helper
-    /// </summary>
-    public interface ISaveAnywhereAPI
+    public interface ISaveCoreAPI
     {
         /*********
         ** Events

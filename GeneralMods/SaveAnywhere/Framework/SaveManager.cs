@@ -35,21 +35,7 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary> Currently displayed save menu (null if no menu is displayed) </summary>
         private NewSaveGameMenu currentSaveMenu;
 
-        /*********
-        ** Events
-        *********/
-        /// <summary>
-        ///     Event that fires before game save
-        /// </summary>
-        public event EventHandler BeforeSave;
-        /// <summary>
-        ///     Event that fires after game save
-        /// </summary>
-        public event EventHandler AfterSave;
-        /// <summary>
-        ///     Event that fires after game load
-        /// </summary>
-        public event EventHandler AfterLoad;
+
 
         /*********
         ** Public methods
@@ -63,10 +49,6 @@ namespace Omegasis.SaveAnywhere.Framework
             this.Helper = helper;
             this.Reflection = reflection;
             this.OnLoaded = onLoaded;
-
-            this.BeforeSave = new EventHandler(empty);
-            this.AfterSave = new EventHandler(empty);
-            this.AfterLoad = new EventHandler(empty);
 
         }
 
@@ -97,8 +79,8 @@ namespace Omegasis.SaveAnywhere.Framework
         {
             currentSaveMenu.SaveComplete -= CurrentSaveMenu_SaveComplete;
             currentSaveMenu = null;
-            AfterSave.Invoke(this, EventArgs.Empty);
-            
+            //AfterSave.Invoke(this, EventArgs.Empty);
+            UnifiedSaveCore.UnifiedSaveCore.SaveEvents_AfterSave(this, EventArgs.Empty);
         }
 
         /// <summary>Clear saved data.</summary>
@@ -111,8 +93,8 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>Initiate a game save.</summary>
         public void BeginSaveData()
         {
-            // Fire Event before saving data
-            BeforeSave.Invoke(this, EventArgs.Empty);
+            SaveAnywhere.ModMonitor.Log("SVE ANYWHERE WHAT YOU DOING???");
+            UnifiedSaveCore.UnifiedSaveCore.SaveEvents_BeforeSave(this, EventArgs.Empty);
             
             // save game data
             Farm farm = Game1.getFarm();
@@ -164,8 +146,8 @@ namespace Omegasis.SaveAnywhere.Framework
             this.OnLoaded?.Invoke();
 
             // Notify other mods that load is complete
-            AfterLoad.Invoke(this, EventArgs.Empty);
-            
+            //AfterLoad.Invoke(this, EventArgs.Empty);
+            UnifiedSaveCore.UnifiedSaveCore.SaveEvents_AfterLoad(this, EventArgs.Empty);
         }
 
         /// <summary>

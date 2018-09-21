@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Omegasis.SaveAnywhere.API;
 using Omegasis.SaveAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -67,16 +66,6 @@ namespace Omegasis.SaveAnywhere
             ModHelper = helper;
             ModMonitor = Monitor;
             customMenuOpen = false;
-        }
-
-        /// <summary>
-        ///     Exposes the SaveAnywhere API to other SMAPI mods
-        /// </summary>
-        /// <returns></returns>
-        public override object GetApi()
-        {
-            SaveAnywhereAPI api = new SaveAnywhereAPI(SaveManager);
-            return api;
         }
 
         /*Notes. Mods that want to support save anywhere will get the api for Save anywhere and then add their clean up code to the events that happen for Before/After Save and Loading. 
