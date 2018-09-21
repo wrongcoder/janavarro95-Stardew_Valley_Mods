@@ -18,6 +18,15 @@ namespace UnifiedSaveCore
 {
     /// <summary>
     /// Bare bones mod that interfaces events for saving.
+    /// 
+    /// Must go from really big to really small.
+    /// I.E locations->characters->objects->items....
+    /// TODO:
+    /// Characters
+    /// Animals
+    /// Trees?
+    /// Chests
+    /// Items
     /// </summary>
     public class UnifiedSaveCore:Mod
     {
@@ -54,6 +63,7 @@ namespace UnifiedSaveCore
                 "System",
                 "Mono",
                 "StardewModdingAPI",
+                "StardewValley",
                 "Lidgren",
                 "Microsoft",
                 "Monogames",
@@ -63,7 +73,6 @@ namespace UnifiedSaveCore
                 "Steamworks",
                 "GalaxyCSharp",
                 "xTile",
-                "StardewModdingAPI"
             };
 
             foreach (Assembly asm in assemblies)

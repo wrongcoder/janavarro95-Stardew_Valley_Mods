@@ -34,29 +34,28 @@ namespace UnifiedSaveCore.Framework
                 Game1.locations.Add(loc);
             }
             locations.Clear();
-            Game1.warpFarmer(oldLocation.name, (int)position.X*Game1.tileSize, (int)position.Y*Game1.tileSize, oldFacingDirection);
+            //Game1.warpFarmer(oldLocation.name, (int)position.X*Game1.tileSize, (int)position.Y*Game1.tileSize, oldFacingDirection);
         }
 
         //Removes all game locations for the game to save.
         public void beforeSave()
         {
-            UnifiedSaveCore.monitor.Log("BEFORE SAVE HAS BEEN CALLED!");
 
             oldLocation = Game1.player.currentLocation;
             position = Game1.player.position;
             oldFacingDirection = Game1.player.facingDirection;
 
             Vector2 bed = Game1.player.mostRecentBed;
-            Game1.warpFarmer("Farmhouse", (int)bed.X, (int)bed.Y, 2);
+            //Game1.warpFarmer("Farmhouse", (int)bed.X, (int)bed.Y, 2);
             foreach (var loc in Game1.locations)
             {
-                UnifiedSaveCore.monitor.Log(loc.GetType().ToString());
+                //UnifiedSaveCore.monitor.Log(loc.GetType().ToString());
                 //ModCore.monitor.Log();
                 foreach (var type in UnifiedSaveCore.modTypes)
                 {
                     if (loc.GetType().ToString() == type.ToString())
                     {
-                        UnifiedSaveCore.monitor.Log("Temporarily removing unexpected location type: " + loc.GetType().ToString());
+                        UnifiedSaveCore.monitor.Log("Temporarily removing unexpected location:"+ loc.name+" type: " + loc.GetType().ToString());
                         locations.Add(loc);
                     }
                 }
