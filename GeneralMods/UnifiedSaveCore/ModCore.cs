@@ -22,11 +22,13 @@ namespace UnifiedSaveCore
     /// Must go from really big to really small.
     /// I.E locations->characters->objects->items....
     /// TODO:
-    /// Characters
     /// Animals
     /// Trees?
     /// Chests
     /// Items
+    /// 
+    /// This mod will rewrite the network (server, client) code and have events that fire when a player connects, disconnects, messages are sent, and messages are received.
+    /// 
     /// </summary>
     public class UnifiedSaveCore:Mod
     {
