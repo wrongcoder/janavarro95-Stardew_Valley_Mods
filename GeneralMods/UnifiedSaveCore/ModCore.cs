@@ -77,6 +77,7 @@ namespace UnifiedSaveCore
                 "xTile",
             };
 
+
             //taken from attribute example.
             foreach (Assembly asm in assemblies)
             {
@@ -138,6 +139,7 @@ namespace UnifiedSaveCore
             dataHandlers = new List<IInformationHandler>();
             dataHandlers.Add(new LocationHandler());
             dataHandlers.Add(new NPCHandler());
+            dataHandlers.Add(new ObjectHandler());
 
         }
 

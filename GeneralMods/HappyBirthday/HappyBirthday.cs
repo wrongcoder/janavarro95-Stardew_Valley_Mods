@@ -40,11 +40,6 @@ namespace Omegasis.HappyBirthday
         /// <summary>The queue of villagers who haven't given a gift yet.</summary>
         private List<string> VillagerQueue;
 
-        /// <summary>The gifts that villagers can give.</summary>
-        private List<Item> PossibleBirthdayGifts;
-
-        /// <summary>The next birthday gift the player will receive.</summary>
-        private Item BirthdayGiftToReceive;
 
         /// <summary>Whether we've already checked for and (if applicable) set up the player's birthday today.</summary>
         private bool CheckedForBirthday;
@@ -71,6 +66,7 @@ namespace Omegasis.HappyBirthday
 
         public BirthdayMessages messages;
 
+        public GiftManager giftManager;
 
         /*********
         ** Public methods
@@ -95,6 +91,8 @@ namespace Omegasis.HappyBirthday
             ModHelper = Helper;
 
             messages = new BirthdayMessages();
+            giftManager = new GiftManager();
+            
         }
 
 
@@ -215,13 +213,11 @@ namespace Omegasis.HappyBirthday
 
             // reset state
             this.VillagerQueue = new List<string>();
-            this.PossibleBirthdayGifts = new List<Item>();
-            this.BirthdayGiftToReceive = null;
             this.CheckedForBirthday = false;
 
             // load settings
             this.MigrateLegacyData();
-            this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
+            this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
 
             messages.createBirthdayGreetings();
             //this.SeenEvent = false;
@@ -234,7 +230,7 @@ namespace Omegasis.HappyBirthday
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             if (this.HasChosenBirthday)
-                this.Helper.WriteJsonFile(this.DataFilePath, this.PlayerData);
+                this.Helper.Data.WriteJsonFile(this.DataFilePath, this.PlayerData);
         }
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
@@ -302,6 +298,7 @@ namespace Omegasis.HappyBirthday
                     }
                 }
 
+                //Don't constantly set the birthday menu.
                 if (Game1.activeClickableMenu != null)
                 {
                     if (Game1.activeClickableMenu.GetType() == typeof(BirthdayMenu)) return;
@@ -314,40 +311,7 @@ namespace Omegasis.HappyBirthday
                 }
             }
 
-            // unreachable since we exit early if Game1.eventUp
-            //if (Game1.eventUp)
-            //{
-            //    foreach (string npcName in this.VillagerQueue)
-            //    {
-            //        NPC npc = Game1.getCharacterFromName(npcName);
-
-            //        try
-            //        {
-            //            this.Dialogue.Add(npcName, npc.CurrentDialogue.Pop());
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            this.Monitor.Log(ex.ToString(), LogLevel.Error);
-            //            this.Dialogue.Add(npcName, npc.CurrentDialogue.ElementAt(0));
-            //            npc.loadSeasonalDialogue();
-            //        }
-
-            //        this.SeenEvent = true;
-            //    }
-            //}
-
-            //if (!Game1.eventUp && this.SeenEvent)
-            //{
-            //    foreach (KeyValuePair<string, Dialogue> v in this.Dialogue)
-            //    {
-            //        NPC npc = Game1.getCharacterFromName(v.Key);
-            //        npc.CurrentDialogue.Push(v.Value);
-            //    }
-            //    this.Dialogue.Clear();
-            //    this.SeenEvent = false;
-            //}
-
-            // set birthday gift
+            // Set birthday gift for the player to recieve from the npc they are currently talking with.
             if (Game1.currentSpeaker != null)
             {
                 string name = Game1.currentSpeaker.Name;
@@ -355,7 +319,7 @@ namespace Omegasis.HappyBirthday
                 {
                     try
                     {
-                        this.SetNextBirthdayGift(Game1.currentSpeaker.Name);
+                        giftManager.SetNextBirthdayGift(Game1.currentSpeaker.Name);
                         this.VillagerQueue.Remove(Game1.currentSpeaker.Name);
                     }
                     catch (Exception ex)
@@ -363,17 +327,20 @@ namespace Omegasis.HappyBirthday
                         this.Monitor.Log(ex.ToString(), LogLevel.Error);
                     }
                 }
+
+                //Validate the gift and give it to the player.
+                if (giftManager.BirthdayGiftToReceive != null)
+                {
+                    while (giftManager.BirthdayGiftToReceive.Name == "Error Item" || giftManager.BirthdayGiftToReceive.Name == "Rock" || giftManager.BirthdayGiftToReceive.Name == "???")
+                        giftManager.SetNextBirthdayGift(Game1.currentSpeaker.Name);
+                    Game1.player.addItemByMenuIfNecessaryElseHoldUp(giftManager.BirthdayGiftToReceive);
+                    giftManager.BirthdayGiftToReceive = null;
+                }
             }
-            if (this.BirthdayGiftToReceive != null && Game1.currentSpeaker != null)
-            {
-                while (this.BirthdayGiftToReceive.Name == "Error Item" || this.BirthdayGiftToReceive.Name == "Rock" || this.BirthdayGiftToReceive.Name == "???")
-                    this.SetNextBirthdayGift(Game1.currentSpeaker.Name);
-                Game1.player.addItemByMenuIfNecessaryElseHoldUp(this.BirthdayGiftToReceive);
-                this.BirthdayGiftToReceive = null;
-            }
+
         }
 
-        /// <summary>Set the player's birtday/</summary>
+        /// <summary>Set the player's birthday/</summary>
         /// <param name="season">The birthday season.</param>
         /// <param name="day">The birthday day.</param>
         private void SetBirthday(string season, int day)
@@ -398,251 +365,6 @@ namespace Omegasis.HappyBirthday
                     this.VillagerQueue.Add(npc.Name);
                 }
             }
-        }
-
-        /// <summary>Set the next birthday gift the player will receive.</summary>
-        /// <param name="name">The villager's name who's giving the gift.</param>
-        /// <remarks>This returns gifts based on the speaker's heart level towards the player: neutral for 3-4, good for 5-6, and best for 7-10.</remarks>
-        private void SetNextBirthdayGift(string name)
-        {
-            Item gift;
-            if (this.PossibleBirthdayGifts.Count > 0)
-            {
-                Random random = new Random();
-                int index = random.Next(this.PossibleBirthdayGifts.Count);
-                gift = this.PossibleBirthdayGifts[index];
-                if (Game1.player.isInventoryFull())
-                    Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-                else
-                    this.BirthdayGiftToReceive = gift;
-                return;
-            }
-
-            this.PossibleBirthdayGifts.AddRange(this.GetDefaultBirthdayGifts(name));
-
-            Random rnd2 = new Random();
-            int r2 = rnd2.Next(this.PossibleBirthdayGifts.Count);
-            gift = this.PossibleBirthdayGifts.ElementAt(r2);
-            //Attempt to balance sapplings from being too OP as a birthday gift.
-            if (gift.Name.Contains("Sapling"))
-            {
-                gift.Stack = 1; //A good investment?
-            }
-            if(gift.Name.Contains("Rare Seed"))
-            {
-                gift.Stack = 2; //Still a little op but less so than 5.
-            }
-
-            if (Game1.player.isInventoryFull())
-                Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-            else
-                this.BirthdayGiftToReceive = gift;
-
-            this.PossibleBirthdayGifts.Clear();
-        }
-
-        /// <summary>Get the default gift items.</summary>
-        /// <param name="name">The villager's name.</param>
-        private IEnumerable<SObject> GetDefaultBirthdayGifts(string name)
-        {
-            List<SObject> gifts = new List<SObject>();
-            try
-            {
-                // read from birthday gifts file
-                IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-                data.TryGetValue(name, out string text);
-                if (text != null)
-                {
-                    string[] fields = text.Split('/');
-
-                    // love
-                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLoveFriendshipLevel)
-                    {
-                        string[] loveFields = fields[1].Split(' ');
-                        for (int i = 0; i < loveFields.Length; i += 2)
-                        {
-                            try
-                            {
-                                gifts.AddRange(this.GetItems(Convert.ToInt32(loveFields[i]), Convert.ToInt32(loveFields[i + 1])));
-                            }
-                            catch { }
-                        }
-                    }
-
-                    // like
-                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLikeFriendshipLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxLikeFriendshipLevel)
-                    {
-                        string[] likeFields = fields[3].Split(' ');
-                        for (int i = 0; i < likeFields.Length; i += 2)
-                        {
-                            try
-                            {
-                                gifts.AddRange(this.GetItems(Convert.ToInt32(likeFields[i]), Convert.ToInt32(likeFields[i + 1])));
-                            }
-                            catch { }
-                        }
-                    }
-
-                    // neutral
-                    if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
-                    {
-                        string[] neutralFields = fields[5].Split(' ');
-
-                        for (int i = 0; i < neutralFields.Length; i += 2)
-                        {
-                            try
-                            {
-                                gifts.AddRange(this.GetItems(Convert.ToInt32(neutralFields[i]), Convert.ToInt32(neutralFields[i + 1])));
-                            }
-                            catch { }
-                        }
-                    }
-                }
-
-                // get NPC's preferred gifts
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLoveFriendshipLevel)
-                    gifts.AddRange(this.GetUniversalItems("Love", true));
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLikeFriendshipLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxLikeFriendshipLevel)
-                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Like", true));
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
-                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Neutral", true));
-            }
-            catch
-            {
-                // get NPC's preferred gifts
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLoveFriendshipLevel)
-                {
-                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Love", false));
-                    this.PossibleBirthdayGifts.AddRange(this.GetLovedItems(name));
-                }
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minLikeFriendshipLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxLikeFriendshipLevel)
-                {
-                    this.PossibleBirthdayGifts.AddRange(this.GetLikedItems(name));
-                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Like", false));
-                }
-                if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
-                    this.PossibleBirthdayGifts.AddRange(this.GetUniversalItems("Neutral", false));
-            }
-
-            if (Game1.player.isMarried())
-            {
-                if (name == Game1.player.spouse)
-                {
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(198, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(204, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(220, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(221, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(223, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(233, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(234, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(286, 5));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(368, 5));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(608, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(612, 1));
-                    this.possible_birthday_gifts.Add((Item)new SytardewValley.Object(773, 1));
-                }
-            }
-
-            //TODO: Make different tiers of gifts depending on the friendship, and if it is the spouse.
-            /*
-
-                */
-
-            return gifts;
-        }
-
-        /// <summary>Get the items loved by all villagers.</summary>
-        /// <param name="group">The group to get (one of <c>Like</c>, <c>Love</c>, <c>Neutral</c>).</param>
-        /// <param name="isBirthdayGiftList">Whether to get data from <c>Data\PossibleBirthdayGifts.xnb</c> instead of the game data.</param>
-        private IEnumerable<SObject> GetUniversalItems(string group, bool isBirthdayGiftList)
-        {
-            if (!isBirthdayGiftList)
-            {
-                // get raw data
-                Game1.NPCGiftTastes.TryGetValue($"Universal_{group}", out string text);
-                if (text == null)
-                    yield break;
-
-                // parse
-                string[] neutralIDs = text.Split(' ');
-                foreach (string neutralID in neutralIDs)
-                {
-                    foreach (SObject obj in this.GetItems(Convert.ToInt32(neutralID)))
-                        yield return obj;
-                }
-            }
-            else
-            {
-                // get raw data
-                Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\PossibleBirthdayGifts");
-                data.TryGetValue($"Universal_{group}_Gift", out string text);
-                if (text == null)
-                    yield break;
-
-                // parse
-                string[] array = text.Split(' ');
-                for (int i = 0; i < array.Length; i += 2)
-                {
-                    foreach (SObject obj in this.GetItems(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1])))
-                        yield return obj;
-                }
-            }
-        }
-
-        /// <summary>Get a villager's loved items.</summary>
-        /// <param name="name">The villager's name.</param>
-        private IEnumerable<SObject> GetLikedItems(string name)
-        {
-            // get raw data
-            Game1.NPCGiftTastes.TryGetValue(name, out string text);
-            if (text == null)
-                yield break;
-
-            // parse
-            string[] data = text.Split('/');
-            string[] likedIDs = data[3].Split(' ');
-            foreach (string likedID in likedIDs)
-            {
-                foreach (SObject obj in this.GetItems(Convert.ToInt32(likedID)))
-                    yield return obj;
-            }
-        }
-
-        /// <summary>Get a villager's loved items.</summary>
-        /// <param name="name">The villager's name.</param>
-        private IEnumerable<SObject> GetLovedItems(string name)
-        {
-            // get raw data
-            Game1.NPCGiftTastes.TryGetValue(name, out string text);
-            if (text == null)
-                yield break;
-
-            // parse
-            string[] data = text.Split('/');
-            string[] lovedIDs = data[1].Split(' ');
-            foreach (string lovedID in lovedIDs)
-            {
-                foreach (SObject obj in this.GetItems(Convert.ToInt32(lovedID)))
-                    yield return obj;
-            }
-        }
-
-        /// <summary>Get the items matching the given ID.</summary>
-        /// <param name="id">The category or item ID.</param>
-        private IEnumerable<SObject> GetItems(int id)
-        {
-            return id < 0
-                ? ObjectUtility.GetObjectsInCategory(id)
-                : new[] { new SObject(id, 1) };
-        }
-
-        /// <summary>Get the items matching the given ID.</summary>
-        /// <param name="id">The category or item ID.</param>
-        /// <param name="stack">The stack size.</param>
-        private IEnumerable<SObject> GetItems(int id, int stack)
-        {
-            foreach (SObject obj in this.GetItems(id))
-                yield return new SObject(obj.ParentSheetIndex, stack);
         }
 
         /// <summary>Get whether today is the player's birthday.</summary>
@@ -670,7 +392,7 @@ namespace Omegasis.HappyBirthday
                 try
                 {
                     string[] text = File.ReadAllLines(this.LegacyDataFilePath);
-                    this.Helper.WriteJsonFile(this.DataFilePath, new PlayerData
+                    this.Helper.Data.WriteJsonFile(this.DataFilePath, new PlayerData
                     {
                         BirthdaySeason = text[3],
                         BirthdayDay = Convert.ToInt32(text[5])

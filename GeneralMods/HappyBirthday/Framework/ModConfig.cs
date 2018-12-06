@@ -42,11 +42,17 @@
         public TranslationInfo translationInfo;
 
         /// <summary>
+        /// Whether or not to load from the old BirthdayGifts.xnb located in StardewValley/Data or from the new BirthdayGifts.json located in the mod directory.
+        /// </summary>
+        public bool useLegacyBirthdayFiles;
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public ModConfig()
         {
             this.translationInfo = new TranslationInfo();
+            this.useLegacyBirthdayFiles = true;
         }
     }
 }
