@@ -20,7 +20,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>
         /// TODO: Make this.
         /// </summary>
-        private Dictionary<string, string> defaultSpouseBirthdayWishes = new Dictionary<string, string>()
+        public Dictionary<string, string> defaultSpouseBirthdayWishes = new Dictionary<string, string>()
         {
             ["Alex"] = "",
             ["Elliott"] = "",
@@ -39,7 +39,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>
         /// Used to contain
         /// </summary>
-        private Dictionary<string, string> defaultBirthdayWishes = new Dictionary<string, string>()
+        public Dictionary<string, string> defaultBirthdayWishes = new Dictionary<string, string>()
         {
             ["Robin"] = "Hey @, happy birthday! I'm glad you choose this town to move here to. ",
             ["Demetrius"] = "Happy birthday @! Make sure you take some time off today to enjoy yourself. $h",
@@ -69,7 +69,7 @@ namespace Omegasis.HappyBirthday
             ["Elliott"] = "What a wonderful day isn't it @? Especially since today is your birthday. I tried to make you a poem but I feel like the best way of putting it is simply, happy birthday. $h ",
             ["Gus"] = "Hey @ happy birthday! Hopefully you enjoy the rest of the day and make sure you aren't a stranger at the saloon!",
             ["Dwarf"] = "Happy birthday @. I hope that what I got you is acceptable for humans as well. ",
-            ["Wizard"] = "The spirits told me that today is your birthday. In that case happy birthday @. ",
+            ["Wizard"] = "The spirits told me that today is your birthday. In that case happy birthday @. May your year shine bright! ",
             ["Harvey"] = "Hey @, happy birthday! Make sure to come in for a checkup some time to make sure you live many more years! ",
             ["Sandy"] = "Hello there @. I heard that today was your birthday and I didn't want you feeling left out, so happy birthday!",
             ["Willy"] = "Aye @ happy birthday. Looking at you reminds me of ye days when I was just a guppy swimming out to sea. Continue to enjoy them youngin.$h",
@@ -90,38 +90,32 @@ namespace Omegasis.HappyBirthday
             if (!Directory.Exists(defaultPath)) Directory.CreateDirectory(defaultPath);
 
             string birthdayFileDict=HappyBirthday.Config.translationInfo.getjsonForTranslation("BirthdayWishes", HappyBirthday.Config.translationInfo.currentTranslation);
-            string path = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, birthdayFileDict);
+            string path = Path.Combine( "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, birthdayFileDict);
 
             //Handle normal birthday wishes.
             if (!File.Exists(path))
             {
 
-                StreamWriter writer = new StreamWriter(path);
-                serializer.Serialize(writer, defaultBirthdayWishes);
+                HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(path, defaultBirthdayWishes);
                 this.birthdayWishes = defaultBirthdayWishes;
             }
             else
             {
-                StreamReader reader = new StreamReader(path);
-                birthdayWishes = new Dictionary<string, string>();
-                birthdayWishes = (Dictionary<string, string>)serializer.Deserialize(reader, typeof(Dictionary<string, string>));
+                birthdayWishes = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(path);
             }
 
             //handle spouse birthday wishes.
             string spouseBirthdayFileDict = HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", HappyBirthday.Config.translationInfo.currentTranslation);
-            string spousePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, spouseBirthdayFileDict);
-            if (!File.Exists(path))
+            string spousePath = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, spouseBirthdayFileDict);
+            if (!File.Exists(spousePath))
             {
 
-                StreamWriter writer = new StreamWriter(spousePath);
-                serializer.Serialize(writer, defaultSpouseBirthdayWishes);
+                HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(spousePath, defaultSpouseBirthdayWishes);
                 this.spouseBirthdayWishes = defaultSpouseBirthdayWishes;
             }
             else
             {
-                StreamReader reader = new StreamReader(path);
-                birthdayWishes = new Dictionary<string, string>();
-                birthdayWishes = (Dictionary<string, string>)serializer.Deserialize(reader, typeof(Dictionary<string, string>));
+                spouseBirthdayWishes = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(spousePath);
             }
 
             //Non-english logic
