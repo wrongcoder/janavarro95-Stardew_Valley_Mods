@@ -64,8 +64,16 @@ namespace Omegasis.HappyBirthday
 
         public static IModHelper ModHelper;
 
+        public static IMonitor ModMonitor;
+
+        /// <summary>
+        /// Class to handle all birthday messages for this mod.
+        /// </summary>
         public BirthdayMessages messages;
 
+        /// <summary>
+        /// Class to handle all birthday gifts for this mod.
+        /// </summary>
         public GiftManager giftManager;
 
         /*********
@@ -89,6 +97,7 @@ namespace Omegasis.HappyBirthday
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += GraphicsEvents_OnPostRenderHudEvent; ;
             //MultiplayerSupport.initializeMultiplayerSupport();
             ModHelper = Helper;
+            ModMonitor = Monitor;
 
             messages = new BirthdayMessages();
             giftManager = new GiftManager();
@@ -137,6 +146,10 @@ namespace Omegasis.HappyBirthday
         private void GraphicsEvents_OnPostRenderGuiEvent(object sender, EventArgs e)
         {
             if (Game1.activeClickableMenu == null) return;
+            //Don't do anything if birthday has not been chosen yet.
+            if (PlayerData == null) return;
+            if (PlayerData.BirthdaySeason == null || PlayerData.BirthdayDay==0) return;
+
             if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
             if (Game1.activeClickableMenu is Billboard)
             {

@@ -89,19 +89,47 @@ namespace Omegasis.HappyBirthday
         public GiftManager()
         {
             this.BirthdayGifts = new List<Item>();
+            this.loadVillagerBirthdayGifts();
         }
 
-        public void loadVillagerBirthdayGifts()
+        /// <summary>
+        /// Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string,string> loadVillagerBirthdayGifts()
         {
-            if (File.Exists("BirthdayGifts.json"))
+            if (HappyBirthday.Config.useLegacyBirthdayFiles == false)
             {
-
+                if (File.Exists("BirthdayGifts.json"))
+                {
+                    HappyBirthday.ModMonitor.Log("Load from BirthdayGifts.json");
+                    this.defaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "BirthdayGifts.json"));
+                    return this.defaultBirthdayGifts;
+                }
+                else
+                {
+                    HappyBirthday.ModMonitor.Log("BirthdayGifts.json created from default birthday gift information and can be overridden.");
+                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "BirthdayGifts.json"), this.defaultBirthdayGifts);
+                    return defaultBirthdayGifts;
+                }
             }
             else
             {
-                HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(HappyBirthday.ModHelper.DirectoryPath, this.defaultBirthdayGifts);
+
+                if (File.Exists(Path.Combine(Game1.content.RootDirectory, "Data", "PossibleBirthdayGifts.xnb"))){
+                    HappyBirthday.ModMonitor.Log("Legacy loading detected. Attempting to load from StardewValley/Content/Data/PossibleBirthdayGifts.xnb");
+                    this.defaultBirthdayGifts = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "PossibleBirthdayGifts"));
+                        return this.defaultBirthdayGifts;
+                }
+                else
+                {
+                    HappyBirthday.ModMonitor.Log("No birthday gift information found. Loading from internal birthday list");
+                    return this.defaultBirthdayGifts;
+                }
             }
         }
+
+        
 
 
 
@@ -113,7 +141,7 @@ namespace Omegasis.HappyBirthday
             try
             {
                 // read from birthday gifts file
-                IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\BirthdayGifts");
+                IDictionary<string, string> data = loadVillagerBirthdayGifts();
                 data.TryGetValue(name, out string text);
                 if (text != null)
                 {

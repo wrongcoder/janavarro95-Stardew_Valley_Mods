@@ -91,7 +91,7 @@
     <Compile Include="HappyBirthday.cs" />
     <Compile Include="Framework\Messages.cs" />
     <Compile Include="Framework\ObjectUtility.cs" />
-    <Compile Include="PossibleGifts.cs" />
+    <Compile Include="GiftManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
