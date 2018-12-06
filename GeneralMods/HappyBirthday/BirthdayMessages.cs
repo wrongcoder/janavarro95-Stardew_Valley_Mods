@@ -118,11 +118,11 @@ namespace Omegasis.HappyBirthday
                 spouseBirthdayWishes = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(spousePath);
             }
 
-            //Non-english logic
+            //Non-english logic for creating templates.
             foreach(var translation in HappyBirthday.Config.translationInfo.translationCodes)
             {
                 if (translation.Key == "English") continue;
-                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", translation.Key);
+                string basePath = Path.Combine("Content", "Dialogue", translation.Key);
                 if (!Directory.Exists(basePath)) Directory.CreateDirectory(basePath);
                 string tempBirthdayFile =Path.Combine(basePath,HappyBirthday.Config.translationInfo.getjsonForTranslation("BirthdayWishes", translation.Key));
                 string tempSpouseBirthdayFile =Path.Combine(basePath,HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", translation.Key));
@@ -133,17 +133,23 @@ namespace Omegasis.HappyBirthday
                 {
                     tempBirthdayDict.Add(pair.Key, "");
                 }
-                StreamWriter writer = new StreamWriter(tempBirthdayFile);
-                serializer.Serialize(writer, tempBirthdayDict);
-
+                if(!File.Exists(tempBirthdayFile)) HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(tempBirthdayFile, tempBirthdayDict);
 
                 Dictionary<string, string> tempSpouseBirthdayDict = new Dictionary<string, string>();
                 foreach (var pair in defaultSpouseBirthdayWishes)
                 {
                     tempSpouseBirthdayDict.Add(pair.Key, "");
                 }
-                StreamWriter writer2 = new StreamWriter(tempSpouseBirthdayFile);
-                serializer.Serialize(writer, tempSpouseBirthdayDict);
+
+                if (!File.Exists(tempSpouseBirthdayFile)) HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(tempSpouseBirthdayFile, tempSpouseBirthdayDict);
+
+                //Set translated birthday info.
+                if (HappyBirthday.Config.translationInfo.currentTranslation == translation.Key)
+                {
+                    this.birthdayWishes = tempBirthdayDict;
+                    this.spouseBirthdayWishes = tempSpouseBirthdayDict;
+                }
+
             }
         }
 
