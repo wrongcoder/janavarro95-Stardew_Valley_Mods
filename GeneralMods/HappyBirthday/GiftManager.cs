@@ -129,7 +129,10 @@ namespace Omegasis.HappyBirthday
             }
         }
 
-
+        /// <summary>
+        /// Used to load spouse birthday gifts from disk.
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, string> loadSpouseBirthdayGifts()
         {
             throw new NotImplementedException();

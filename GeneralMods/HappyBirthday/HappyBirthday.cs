@@ -113,6 +113,8 @@ namespace Omegasis.HappyBirthday
         private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
         {
             if (Game1.activeClickableMenu == null) return;
+            if (PlayerData == null) return;
+            if (PlayerData.BirthdaySeason == null) return;
             if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
             if (Game1.activeClickableMenu is Billboard)
             {
@@ -124,13 +126,18 @@ namespace Omegasis.HappyBirthday
                 {
                     if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
                     {
+                        if (String.IsNullOrEmpty(clicky.hoverText)) continue;
                         hoverText += clicky.hoverText + Environment.NewLine;
+                    }
+                    else
+                    {
+                        //hoverText = "";
                     }
                 }
                 
                 if (!String.IsNullOrEmpty(hoverText))
                 {
-                    hoverText.Remove(hoverText.Length - 2, 1);
+                    hoverText=hoverText.Remove(hoverText.Length - 2, 1);
                     var oldText = Helper.Reflection.GetField<string>(Game1.activeClickableMenu, "hoverText", true);
                     oldText.SetValue(hoverText);
                 }
@@ -148,28 +155,13 @@ namespace Omegasis.HappyBirthday
             if (Game1.activeClickableMenu == null) return;
             //Don't do anything if birthday has not been chosen yet.
             if (PlayerData == null) return;
-            if (PlayerData.BirthdaySeason == null || PlayerData.BirthdayDay==0) return;
+            if (String.IsNullOrEmpty(PlayerData.BirthdaySeason)) return;
 
             if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
             if (Game1.activeClickableMenu is Billboard)
             {
                 int index = PlayerData.BirthdayDay;
                 Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.player);
-
-                string hoverText = "";
-                foreach(var clicky in (Game1.activeClickableMenu as Billboard).calendarDays)
-                {
-                    if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                    {
-                        hoverText += clicky.hoverText+Environment.NewLine;
-                    }
-                }
-                if (hoverText != "")
-                {
-                    var oldText=Helper.Reflection.GetField<string>(Game1.activeClickableMenu, "hoverText", true);
-                    oldText.SetValue(hoverText);
-                }
-
             }
         }
 
