@@ -122,22 +122,35 @@ namespace Omegasis.HappyBirthday
                 //Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 1f, 4f, 2, Game1.player);
 
                 string hoverText = "";
+                List<string> texts = new List<string>();
                 foreach (var clicky in (Game1.activeClickableMenu as Billboard).calendarDays)
                 {
                     if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
                     {
-                        if (String.IsNullOrEmpty(clicky.hoverText)) continue;
-                        hoverText += clicky.hoverText + Environment.NewLine;
-                    }
-                    else
-                    {
-                        //hoverText = "";
+                        if (!String.IsNullOrEmpty(clicky.hoverText))
+                        {
+                            texts.Add(clicky.hoverText); //catches npc birhday names.
+                        }
+                        else if (!String.IsNullOrEmpty(clicky.name))
+                        {
+                            texts.Add(clicky.name); //catches festival dates.
+                        }
                     }
                 }
                 
+                for(int i = 0; i< texts.Count; i++)
+                {
+
+                    hoverText += texts[i]; //Append text.
+                    if (i == texts.Count - 1) continue;
+                    else
+                    {
+                        hoverText += Environment.NewLine; //Append new line.
+                    }
+                }
+
                 if (!String.IsNullOrEmpty(hoverText))
                 {
-                    hoverText=hoverText.Remove(hoverText.Length - 2, 1);
                     var oldText = Helper.Reflection.GetField<string>(Game1.activeClickableMenu, "hoverText", true);
                     oldText.SetValue(hoverText);
                 }
