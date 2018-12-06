@@ -129,8 +129,11 @@ namespace Omegasis.HappyBirthday
             }
         }
 
-        
 
+        public Dictionary<string, string> loadSpouseBirthdayGifts()
+        {
+            throw new NotImplementedException();
+        }
 
 
         /// <summary>Get the default gift items.</summary>
