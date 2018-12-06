@@ -76,6 +76,11 @@ namespace Omegasis.HappyBirthday
         /// </summary>
         public GiftManager giftManager;
 
+        /// <summary>
+        /// Checks if the current billboard is the daily quest screen or not.
+        /// </summary>
+        bool isDailyQuestBoard;
+
         /*********
         ** Public methods
         *********/
@@ -92,6 +97,7 @@ namespace Omegasis.HappyBirthday
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             MenuEvents.MenuChanged += MenuEvents_MenuChanged;
+            MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
             GraphicsEvents.OnPostRenderGuiEvent += GraphicsEvents_OnPostRenderGuiEvent;
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += GraphicsEvents_OnPostRenderHudEvent; ;
@@ -101,7 +107,13 @@ namespace Omegasis.HappyBirthday
 
             messages = new BirthdayMessages();
             giftManager = new GiftManager();
+            isDailyQuestBoard = false;
             
+        }
+
+        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
+        {
+            this.isDailyQuestBoard = false;
         }
 
 
@@ -118,11 +130,15 @@ namespace Omegasis.HappyBirthday
             if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
             if (Game1.activeClickableMenu is Billboard)
             {
+                if (isDailyQuestBoard) return;
+                if ((Game1.activeClickableMenu as Billboard).calendarDays == null) return;
+
                 int index = PlayerData.BirthdayDay;
                 //Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 1f, 4f, 2, Game1.player);
 
                 string hoverText = "";
                 List<string> texts = new List<string>();
+
                 foreach (var clicky in (Game1.activeClickableMenu as Billboard).calendarDays)
                 {
                     if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
@@ -173,6 +189,7 @@ namespace Omegasis.HappyBirthday
             if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
             if (Game1.activeClickableMenu is Billboard)
             {
+                if (isDailyQuestBoard) return;
                 int index = PlayerData.BirthdayDay;
                 Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.player);
             }
@@ -185,9 +202,17 @@ namespace Omegasis.HappyBirthday
         /// <param name="e"></param>
         public void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
-            if (Game1.activeClickableMenu == null) return;
+            if (Game1.activeClickableMenu == null)
+            {
+                isDailyQuestBoard = false;
+                return;
+            }
             if(Game1.activeClickableMenu is Billboard)
             {
+                isDailyQuestBoard = ModHelper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
+                if (isDailyQuestBoard) return;
+
+
                 Texture2D text = new Texture2D(Game1.graphics.GraphicsDevice,1,1);
                 Color[] col = new Color[1];
                 col[0] = new Color(0, 0, 0, 1);
