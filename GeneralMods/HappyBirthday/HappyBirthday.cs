@@ -111,6 +111,11 @@ namespace Omegasis.HappyBirthday
             
         }
 
+        /// <summary>
+        /// Used to check when a menu is closed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
         {
             this.isDailyQuestBoard = false;
@@ -318,13 +323,36 @@ namespace Omegasis.HappyBirthday
                             if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
                                 continue;
 
+                            //Add in birthday dialogues for npc.
                             try
                             {
                                 if (Game1.player.getFriendshipHeartLevelForNPC(npc.Name) >= Config.minimumFriendshipLevelForBirthdayWish)
                                 {
-                                    Dialogue d = new Dialogue(messages.birthdayWishes[npc.Name], npc);
-                                    npc.CurrentDialogue.Push(d);
-                                    if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(messages.birthdayWishes[npc.Name]);
+                                    bool spouseMessage = false; //Used to determine if there is a valid spouse message for the player. If false load in the generic birthday wish.
+                                    //Check if npc name is spouse's name. If no spouse then add in generic dialogue.
+                                    if (messages.spouseBirthdayWishes.ContainsKey(npc.Name) && Game1.player.isMarried())
+                                    {
+                                        Monitor.Log("Spouse Checks out");
+                                        //Check to see if spouse message exists.
+                                        if (!String.IsNullOrEmpty(messages.spouseBirthdayWishes[npc.Name]))
+                                        {
+                                            spouseMessage = true;
+                                            Dialogue d = new Dialogue(messages.spouseBirthdayWishes[npc.Name], npc);
+                                            npc.CurrentDialogue.Push(d);
+                                            if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(messages.spouseBirthdayWishes[npc.Name]);
+                                        }
+                                        else
+                                        {
+                                            Monitor.Log("No spouse message???", LogLevel.Warn);
+                                        }
+                                    }
+                                    if (spouseMessage == false)
+                                    {
+                                        //Load in 
+                                        Dialogue d = new Dialogue(messages.birthdayWishes[npc.Name], npc);
+                                        npc.CurrentDialogue.Push(d);
+                                        if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(messages.birthdayWishes[npc.Name]);
+                                    }
                                 }
                             }
                             catch

@@ -93,7 +93,7 @@ namespace Omegasis.HappyBirthday
             string path = Path.Combine( "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, birthdayFileDict);
 
             //Handle normal birthday wishes.
-            if (!File.Exists(path))
+            if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath,path)))
             {
 
                 HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(path, defaultBirthdayWishes);
@@ -107,9 +107,9 @@ namespace Omegasis.HappyBirthday
             //handle spouse birthday wishes.
             string spouseBirthdayFileDict = HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", HappyBirthday.Config.translationInfo.currentTranslation);
             string spousePath = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, spouseBirthdayFileDict);
-            if (!File.Exists(spousePath))
+            if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath,spousePath)))
             {
-
+                HappyBirthday.ModMonitor.Log("Creating Spouse Messages", StardewModdingAPI.LogLevel.Alert);
                 HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(spousePath, defaultSpouseBirthdayWishes);
                 this.spouseBirthdayWishes = defaultSpouseBirthdayWishes;
             }
@@ -122,32 +122,49 @@ namespace Omegasis.HappyBirthday
             foreach(var translation in HappyBirthday.Config.translationInfo.translationCodes)
             {
                 if (translation.Key == "English") continue;
-                string basePath = Path.Combine("Content", "Dialogue", translation.Key);
+                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath,"Content", "Dialogue", translation.Key);
                 if (!Directory.Exists(basePath)) Directory.CreateDirectory(basePath);
-                string tempBirthdayFile =Path.Combine(basePath,HappyBirthday.Config.translationInfo.getjsonForTranslation("BirthdayWishes", translation.Key));
-                string tempSpouseBirthdayFile =Path.Combine(basePath,HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", translation.Key));
+                string tempBirthdayFile =Path.Combine("Content", "Dialogue", translation.Key,  HappyBirthday.Config.translationInfo.getjsonForTranslation("BirthdayWishes", translation.Key));
+                string tempSpouseBirthdayFile =Path.Combine("Content", "Dialogue", translation.Key, HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", translation.Key));
 
-                
+
                 Dictionary<string, string> tempBirthdayDict = new Dictionary<string, string>();
-                foreach(var pair in defaultBirthdayWishes)
+                if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, tempBirthdayFile)))
                 {
-                    tempBirthdayDict.Add(pair.Key, "");
+                    
+                    foreach (var pair in defaultBirthdayWishes)
+                    {
+                        tempBirthdayDict.Add(pair.Key, "");
+                    }
+                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(tempBirthdayFile, tempBirthdayDict);
                 }
-                if(!File.Exists(tempBirthdayFile)) HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(tempBirthdayFile, tempBirthdayDict);
+                else
+                {
+                    tempBirthdayDict = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(tempBirthdayFile);
+                }
+
 
                 Dictionary<string, string> tempSpouseBirthdayDict = new Dictionary<string, string>();
-                foreach (var pair in defaultSpouseBirthdayWishes)
+                if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, tempSpouseBirthdayFile)))
                 {
-                    tempSpouseBirthdayDict.Add(pair.Key, "");
+                    
+                    foreach (var pair in defaultSpouseBirthdayWishes)
+                    {
+                        tempSpouseBirthdayDict.Add(pair.Key, "");
+                    }
+                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(tempSpouseBirthdayFile, tempSpouseBirthdayDict);
                 }
-
-                if (!File.Exists(tempSpouseBirthdayFile)) HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(tempSpouseBirthdayFile, tempSpouseBirthdayDict);
+                else
+                {
+                    tempBirthdayDict = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(tempSpouseBirthdayFile);
+                }
 
                 //Set translated birthday info.
                 if (HappyBirthday.Config.translationInfo.currentTranslation == translation.Key)
                 {
                     this.birthdayWishes = tempBirthdayDict;
                     this.spouseBirthdayWishes = tempSpouseBirthdayDict;
+                    HappyBirthday.ModMonitor.Log("Language set to: " + translation);
                 }
 
             }

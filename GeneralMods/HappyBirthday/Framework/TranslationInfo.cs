@@ -107,7 +107,7 @@ namespace Omegasis.HappyBirthday.Framework
             }
             catch (Exception err)
             {
-
+                HappyBirthday.ModMonitor.Log("WTF SOMETHING IS WRONG!", StardewModdingAPI.LogLevel.Warn);
                 //Vocalization.ModMonitor.Log(err.ToString());
                 //Vocalization.ModMonitor.Log("Attempted to get translation: " + translation);
                 return ".json";

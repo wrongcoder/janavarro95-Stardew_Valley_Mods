@@ -61,9 +61,7 @@ namespace Omegasis.HappyBirthday
 
         public Dictionary<string, string> defaultSpouseBirthdayGifts = new Dictionary<string, string>() {
 
-            ["Universal_Love_Gift"] = "74 1 446 1 204 1 446 5 773 1",
-            ["Universal_Like_Gift"] = "-2 3 -7 1 -26 2 -75 5 -80 3 72 1 220 1 221 1 395 1 613 1 634 1 635 1 636 1 637 1 638 1 724 1 233 1 223 1 465 20 -79 5",
-            ["Universal_Neutral_Gift"] = "194 1 262 5 -74 5 -75 3 334 5 335 1 390 20 388 20 -81 5 -79 3",
+            ["Universal_Gifts"] = "74 1 446 1 204 1 446 5 773 1",
             ["Alex"] = "",
             ["Elliott"] = "",
             ["Harvey"] = "",
@@ -90,28 +88,28 @@ namespace Omegasis.HappyBirthday
         {
             this.BirthdayGifts = new List<Item>();
             this.loadVillagerBirthdayGifts();
+            this.loadSpouseBirthdayGifts();
         }
 
         /// <summary>
         /// Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string,string> loadVillagerBirthdayGifts()
+        public void loadVillagerBirthdayGifts()
         {
             if (HappyBirthday.Config.useLegacyBirthdayFiles == false)
             {
-                if (File.Exists("BirthdayGifts.json"))
+                string villagerGifts = Path.Combine("Content", "Gifts", "BirthdayGifts.json");
+
+                if (File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, villagerGifts)))
                 {
-                    HappyBirthday.ModMonitor.Log("Load from BirthdayGifts.json");
-                    this.defaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "BirthdayGifts.json"));
-                    return this.defaultBirthdayGifts;
+                    this.defaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(villagerGifts);
                 }
                 else
                 {
-                    HappyBirthday.ModMonitor.Log("BirthdayGifts.json created from default birthday gift information and can be overridden.");
-                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "BirthdayGifts.json"), this.defaultBirthdayGifts);
-                    return defaultBirthdayGifts;
+                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(villagerGifts, this.defaultBirthdayGifts);
                 }
+
             }
             else
             {
@@ -119,12 +117,10 @@ namespace Omegasis.HappyBirthday
                 if (File.Exists(Path.Combine(Game1.content.RootDirectory, "Data", "PossibleBirthdayGifts.xnb"))){
                     HappyBirthday.ModMonitor.Log("Legacy loading detected. Attempting to load from StardewValley/Content/Data/PossibleBirthdayGifts.xnb");
                     this.defaultBirthdayGifts = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "PossibleBirthdayGifts"));
-                        return this.defaultBirthdayGifts;
                 }
                 else
                 {
                     HappyBirthday.ModMonitor.Log("No birthday gift information found. Loading from internal birthday list");
-                    return this.defaultBirthdayGifts;
                 }
             }
         }
@@ -133,9 +129,19 @@ namespace Omegasis.HappyBirthday
         /// Used to load spouse birthday gifts from disk.
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, string> loadSpouseBirthdayGifts()
+        public void loadSpouseBirthdayGifts()
         {
-            throw new NotImplementedException();
+            string spouseGifts = Path.Combine("Content", "Gifts", "SpouseBirthdayGifts.json");
+            if (File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, spouseGifts)))
+            {
+                HappyBirthday.ModMonitor.Log("Load from SpouseBirthdayGifts.json");
+                this.defaultSpouseBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(spouseGifts);
+            }
+            else
+            {
+                HappyBirthday.ModMonitor.Log("SpouseBirthdayGifts.json created from default spouse birthday gift information and can be overridden.");
+                HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(spouseGifts, this.defaultSpouseBirthdayGifts);
+            }
         }
 
 
@@ -147,7 +153,7 @@ namespace Omegasis.HappyBirthday
             try
             {
                 // read from birthday gifts file
-                IDictionary<string, string> data = loadVillagerBirthdayGifts();
+                IDictionary<string, string> data = defaultBirthdayGifts;
                 data.TryGetValue(name, out string text);
                 if (text != null)
                 {
@@ -221,30 +227,42 @@ namespace Omegasis.HappyBirthday
                 if (Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel && Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.maxNeutralFriendshipGiftLevel)
                     this.BirthdayGifts.AddRange(this.GetUniversalItems("Neutral", false));
             }
-
+            
+            //Add in spouse specific birthday gifts.
             if (Game1.player.isMarried())
             {
                 if (name == Game1.player.spouse)
                 {
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(204, 1));
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(220, 1));
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(221, 1));
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(223, 3));
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(233, 3));
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(234, 1));
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(608, 1)); //pumpkin pie
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(612, 5));
-                    this.BirthdayGifts.Add((Item)new StardewValley.Object(773, 1)); //life elixer
+                    this.BirthdayGifts.AddRange(getSpouseBirthdayGifts(name));
+                    this.BirthdayGifts.AddRange(getSpouseBirthdayGifts("Universal_Gifts"));
                 }
             }
 
-            //TODO: Make different tiers of gifts depending on the friendship, and if it is the spouse.
-            /*
-
-                */
-
             return gifts;
         }
+
+        /// <summary>
+        /// Get
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        private IEnumerable<Item> getSpouseBirthdayGifts(string npcName)
+        {
+            Dictionary<string, string> data = this.defaultSpouseBirthdayGifts;
+            data.TryGetValue(npcName, out string text);
+            if (String.IsNullOrEmpty(text))
+                yield break;
+
+            // parse
+            string[] array = text.Split(' ');
+            for (int i = 0; i < array.Length; i += 2)
+            {
+                foreach (SObject obj in this.GetItems(Convert.ToInt32(array[i]), Convert.ToInt32(array[i + 1])))
+                    yield return obj;
+            }
+        }
+
 
         /// <summary>Get the items loved by all villagers.</summary>
         /// <param name="group">The group to get (one of <c>Like</c>, <c>Love</c>, <c>Neutral</c>).</param>
