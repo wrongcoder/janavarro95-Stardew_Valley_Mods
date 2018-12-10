@@ -95,15 +95,6 @@
     <Compile Include="Math\Hex32.cs" />
     <Compile Include="Menus\ModualGameMenu.cs" />
     <Compile Include="ModConfig.cs" />
-    <Compile Include="NetCode\Graphics\NetAnimation.cs" />
-    <Compile Include="NetCode\Graphics\NetAnimationManager.cs" />
-    <Compile Include="NetCode\ModdedClient.cs" />
-    <Compile Include="NetCode\ModdedGameServer.cs" />
-    <Compile Include="NetCode\NetBufferReadStream.cs" />
-    <Compile Include="NetCode\NetBufferWriteStream.cs" />
-    <Compile Include="NetCode\NetCoreObject.cs" />
-    <Compile Include="NetCode\NetKeyValuePair.cs" />
-    <Compile Include="NetCode\NetTexure2DExtended.cs" />
     <Compile Include="Objects\MultiTileComponent.cs" />
     <Compile Include="Objects\MultiTileObject.cs" />
     <Compile Include="Objects\Tools\BasicToolInfo.cs" />
@@ -451,10 +442,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NetCode\NetDictionaries\" />
-    <Folder Include="NetCode\NetLists\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\Pathoschild.Stardew.ModBuildConfig.2.2.0-beta-20180819\analyzers\dotnet\cs\StardewModdingAPI.ModBuildConfig.Analyzer.dll" />
   </ItemGroup>

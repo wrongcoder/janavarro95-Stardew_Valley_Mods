@@ -18,7 +18,6 @@ namespace StardustCore.Objects
         public MultiTileComponent()
         {
             //this.TextureSheet = new Texture2DExtended();
-            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
         }
 
         public MultiTileComponent(CoreObject part)
@@ -33,7 +32,6 @@ namespace StardustCore.Objects
             this.defaultBoundingBox = new Rectangle(0, 0, 16, 16);
             this.boundingBox.Value = new Rectangle((int)0 * Game1.tileSize, (int)0* Game1.tileSize, 1 * Game1.tileSize, 1 * Game1.tileSize);
 
-            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
         }
 
         public MultiTileComponent(int which,String name, String description, Texture2DExtended texture)
@@ -51,7 +49,6 @@ namespace StardustCore.Objects
             this.serializationName = this.GetType().ToString();
             this.ParentSheetIndex = which;
 
-            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
         }
 
         public MultiTileComponent(int which,String name, String description, Animations.AnimationManager animationManager)
@@ -69,8 +66,6 @@ namespace StardustCore.Objects
             this.defaultSourceRect = this.sourceRect;
             this.serializationName = this.GetType().ToString();
             this.ParentSheetIndex = which;
-
-            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
         }
 
         public override bool clicked(Farmer who)
@@ -107,16 +102,14 @@ namespace StardustCore.Objects
             this.position = new Vector2(point.X, point.Y);
             this.TileLocation = new Vector2((float)point.X, (float)point.Y);
             this.boundingBox.Value = new Rectangle((int)TileLocation.X * Game1.tileSize, (int)TileLocation.Y * Game1.tileSize, 1 * Game1.tileSize, 1 * Game1.tileSize);
-            using (List<StardewValley.Farmer>.Enumerator enumerator3 = location.getFarmers().GetEnumerator())
+            foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                while (enumerator3.MoveNext())
+                if (farmer.currentLocation != location) continue;
+                if (farmer.GetBoundingBox().Intersects(this.boundingBox.Value))
                 {
-                    if (enumerator3.Current.GetBoundingBox().Intersects(this.boundingBox.Value))
-                    {
-                        Game1.showRedMessage("Can't place on top of a person.");
-                        bool result = false;
-                        return result;
-                    }
+                    Game1.showRedMessage("Can't place on top of a person.");
+                    bool result = false;
+                    return result;
                 }
             }
             this.updateDrawPosition();

@@ -13,6 +13,7 @@ using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace StardustCore
@@ -104,7 +105,6 @@ namespace StardustCore
             lightColor = Color.Black;
 
             base.initNetFields();
-            this.NetFields.AddField(new NetCode.NetCoreObject(this));
             
 
         }
@@ -113,7 +113,6 @@ namespace StardustCore
         {
             base.initNetFields();
             this.updateDrawPosition();
-            this.NetFields.AddField(new NetCode.NetCoreObject(this));
            
         }
 
@@ -121,7 +120,6 @@ namespace StardustCore
         {
             base.initNetFields();
             //does nothng
-            this.NetFields.AddField(new NetCode.NetCoreObject(this));
             
         }
 
@@ -709,16 +707,14 @@ namespace StardustCore
             
             this.boundingBox.Value = new Rectangle(x, y, Game1.tileSize, Game1.tileSize);
 
-            using (List<StardewValley.Farmer>.Enumerator enumerator3 = location.getFarmers().GetEnumerator())
+            foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                while (enumerator3.MoveNext())
+                if (farmer.currentLocation != location) continue;
+                if (farmer.GetBoundingBox().Intersects(this.boundingBox.Value))
                 {
-                    if (enumerator3.Current.GetBoundingBox().Intersects(this.boundingBox.Value))
-                    {
-                        Game1.showRedMessage("Can't place on top of a person.");
-                        bool result = false;
-                        return result;
-                    }
+                    Game1.showRedMessage("Can't place on top of a person.");
+                    bool result = false;
+                    return result;
                 }
             }
             this.updateDrawPosition();

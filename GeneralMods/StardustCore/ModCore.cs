@@ -6,7 +6,6 @@ using StardewValley.Menus;
 using StardewValley.Network;
 using StardustCore.Menus;
 using StardustCore.ModInfo;
-using StardustCore.NetCode;
 using StardustCore.Objects;
 using StardustCore.Objects.Tools;
 using StardustCore.Serialization;
@@ -150,37 +149,7 @@ namespace StardustCore
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
 
-            if (Game1.activeClickableMenu != null)
-            {
-                if(Game1.activeClickableMenu is StardewValley.Menus.TitleMenu && config.enableMultiplayerHack)
-                {
-                    if (TitleMenu.subMenu == null) return;
-                    if (TitleMenu.subMenu.GetType() == typeof(FarmhandMenu))
-                    {
-                        if ((TitleMenu.subMenu as FarmhandMenu).client.GetType() != typeof(ModdedClient))
-                        {
-                            ModCore.ModMonitor.Log("OK!");
-                            multiplayer = (Multiplayer)GetInstanceField(typeof(Game1), Program.gamePtr, "multiplayer");
-                            ModCore.ModMonitor.Log("CODE!!!!!!!");
-                            string address = (string)GetInstanceField(typeof(LidgrenClient), (TitleMenu.subMenu as FarmhandMenu).client, "address");
-                            (TitleMenu.subMenu as FarmhandMenu).client = new NetCode.ModdedClient(address);
-                        }
-                    }
-                }
-            }
 
-            if (Game1.server!=null&& serverHack==false && config.enableMultiplayerHack)
-            {
-                ModCore.ModMonitor.Log("OK!");
-                multiplayer = (Multiplayer)GetInstanceField(typeof(Game1), Program.gamePtr, "multiplayer");
-                //List<Server> servers = Helper.Reflection.GetField<List<Server>>(Game1.server, "servers", true).GetValue();
-                NetCode.GameServer server = new NetCode.GameServer();
-                Game1.server.stopServer();
-                Game1.server = server;
-                server.startServer();
-
-                serverHack = true;
-            }
             if (Game1.client !=null && serverHack == false && config.enableMultiplayerHack)
             {
 
