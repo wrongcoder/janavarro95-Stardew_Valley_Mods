@@ -144,14 +144,7 @@ namespace StardewSymphonyRemastered.Framework
                     eff = SoundEffect.FromStream(waveFileStream);
                 }
                 else if (wav.Contains(".mp3"))
-                {
-                    /*
-                    Mp3FileReader mp3 = new Mp3FileReader(waveFileStream);
-                    mp3.CopyTo(memoryStream); ;
-                    wavData = memoryStream.ToArray();
-                    eff = new SoundEffect(wavData, mp3.Mp3WaveFormat.SampleRate, AudioChannels.Mono);
-                    */
-                    
+                {                   
                     using (Mp3FileReader reader = new Mp3FileReader(waveFileStream))
                     {
                         using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
@@ -165,6 +158,11 @@ namespace StardewSymphonyRemastered.Framework
                             File.Delete(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")));
                         }
                     }
+                }
+                else if (wav.Contains(".ogg"))
+                {
+                    StardewSymphony.ModMonitor.Log("Sorry, but .ogg files are currently not supported. Keep bugging the mod author (me) for this if you want it!", StardewModdingAPI.LogLevel.Alert);
+                    continue;
                 }
 
 
