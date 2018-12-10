@@ -97,7 +97,7 @@ namespace Omegasis.HappyBirthday
         bool isDailyQuestBoard;
 
 
-        List<PlayerData> othersBirthdays;
+        Dictionary<long,PlayerData> othersBirthdays;
 
         /*********
         ** Public methods
@@ -120,7 +120,7 @@ namespace Omegasis.HappyBirthday
             
 
             GraphicsEvents.OnPostRenderGuiEvent += GraphicsEvents_OnPostRenderGuiEvent;
-            StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += GraphicsEvents_OnPostRenderHudEvent; ;
+            StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += GraphicsEvents_OnPostRenderHudEvent;
             //MultiplayerSupport.initializeMultiplayerSupport();
             ModHelper = Helper;
             ModMonitor = Monitor;
@@ -130,8 +130,21 @@ namespace Omegasis.HappyBirthday
             isDailyQuestBoard = false;
 
             ModHelper.Events.Multiplayer.ModMessageReceived += Multiplayer_ModMessageReceived;
-            this.othersBirthdays = new List<PlayerData>();
 
+            ModHelper.Events.Multiplayer.PeerDisconnected += Multiplayer_PeerDisconnected;
+
+            this.othersBirthdays = new Dictionary<long, PlayerData>();
+
+        }
+
+        /// <summary>
+        /// Used to check for player disconnections.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Multiplayer_PeerDisconnected(object sender, PeerDisconnectedEventArgs e)
+        {
+            this.othersBirthdays.Remove(e.Peer.PlayerID);
         }
 
         private void Multiplayer_ModMessageReceived(object sender, ModMessageReceivedEventArgs e)
@@ -142,10 +155,25 @@ namespace Omegasis.HappyBirthday
                 Game1.hudMessages.Add(new HUDMessage(message,1));
             }
 
-            if (e.FromModID == ModHelper.Multiplayer.ModID && e.Type == MultiplayerSupport.FSTRING_SendBirthdayMessageToOthers)
+            if (e.FromModID == ModHelper.Multiplayer.ModID && e.Type == MultiplayerSupport.FSTRING_SendBirthdayInfoToOthers)
             {
-                string message = e.ReadAs<string>();
-                Game1.hudMessages.Add(new HUDMessage(message, 1));
+                KeyValuePair<long,PlayerData> message = e.ReadAs<KeyValuePair<long,PlayerData>>();
+                if (!this.othersBirthdays.ContainsKey(message.Key))
+                {
+                    this.othersBirthdays.Add(message.Key,message.Value);
+                    MultiplayerSupport.SendBirthdayInfoToConnectingPlayer(e.FromPlayerID);
+                    Monitor.Log("Got other player's birthday data from: "+ Game1.getFarmer(e.FromPlayerID).name);
+                }
+                else
+                {
+                    //Brute force update birthday info if it has already been recevived but dont send birthday info again.
+                    this.othersBirthdays.Remove(message.Key);
+                    this.othersBirthdays.Add(message.Key, message.Value);
+                    Monitor.Log("Got other player's birthday data from: " + Game1.getFarmer(e.FromPlayerID).name);
+                }
+                
+
+
             }
 
         }
@@ -177,7 +205,6 @@ namespace Omegasis.HappyBirthday
                 if (isDailyQuestBoard) return;
                 if ((Game1.activeClickableMenu as Billboard).calendarDays == null) return;
 
-                int index = PlayerData.BirthdayDay;
                 //Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 1f, 4f, 2, Game1.player);
 
                 string hoverText = "";
@@ -228,14 +255,30 @@ namespace Omegasis.HappyBirthday
             if (Game1.activeClickableMenu == null) return;
             //Don't do anything if birthday has not been chosen yet.
             if (PlayerData == null) return;
-            if (String.IsNullOrEmpty(PlayerData.BirthdaySeason)) return;
+            
 
-            if (PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
+
             if (Game1.activeClickableMenu is Billboard)
             {
                 if (isDailyQuestBoard) return;
-                int index = PlayerData.BirthdayDay;
-                Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.player);
+
+                if (!String.IsNullOrEmpty(PlayerData.BirthdaySeason))
+                {
+                    if (PlayerData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
+                    {
+                        int index = PlayerData.BirthdayDay;
+                        Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.player);
+                    }
+                }
+
+                foreach(var pair in this.othersBirthdays)
+                {
+                    int index = pair.Value.BirthdayDay;
+                    if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue; //Hide out of season birthdays.
+                    index = pair.Value.BirthdayDay;
+                    Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.getFarmer(pair.Key));
+                }
+
             }
         }
 
@@ -256,15 +299,34 @@ namespace Omegasis.HappyBirthday
                 isDailyQuestBoard = ModHelper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
                 if (isDailyQuestBoard) return;
 
+                
 
                 Texture2D text = new Texture2D(Game1.graphics.GraphicsDevice,1,1);
                 Color[] col = new Color[1];
                 col[0] = new Color(0, 0, 0, 1);
                 text.SetData<Color>(col);
                 //players birthdy position rect=new ....
-                int index = PlayerData.BirthdayDay;
-                Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
-                (Game1.activeClickableMenu as Billboard).calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", Game1.player.name + "'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+
+                if (!String.IsNullOrEmpty(PlayerData.BirthdaySeason))
+                {
+                    if (PlayerData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
+                    {
+                        int index = PlayerData.BirthdayDay;
+                        Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
+                        (Game1.activeClickableMenu as Billboard).calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", Game1.player.name + "'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+
+                    }
+                }
+
+
+                foreach (var pair in this.othersBirthdays)
+                {
+                    if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue;
+                    int index = pair.Value.BirthdayDay;
+                    Rectangle otherBirthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
+                    (Game1.activeClickableMenu as Billboard).calendarDays.Add(new ClickableTextureComponent("", otherBirthdayRect, "", Game1.getFarmer(pair.Key).name + "'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+                }
+
             }
         }
 
@@ -307,6 +369,11 @@ namespace Omegasis.HappyBirthday
             this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
 
             messages.createBirthdayGreetings();
+
+            if (PlayerBirthdayData != null)
+            {
+                MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
+            }
             //this.SeenEvent = false;
             //this.Dialogue = new Dictionary<string, Dialogue>();
         }
