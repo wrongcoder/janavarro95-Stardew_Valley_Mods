@@ -58,7 +58,6 @@ namespace Omegasis.SaveAnywhere
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             SaveEvents.AfterSave += this.SaveEvents_AfterSave;
-            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -98,15 +97,12 @@ namespace Omegasis.SaveAnywhere
             // clear custom data after a normal save (to avoid restoring old state)
             if (!this.IsCustomSaving) 
                 this.SaveManager.ClearData();
+            else
+            {
+                IsCustomSaving = false;
+            }
         }
 
-        /// <summary>The method invoked after a menu is opened or changed.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
-        {
-            this.IsCustomSaving = e.NewMenu != null && (e.NewMenu is NewSaveGameMenu || e.NewMenu is NewShippingMenu);
-        }
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
@@ -225,7 +221,9 @@ namespace Omegasis.SaveAnywhere
                         return;
                     }
 
+
                     // save
+                    this.IsCustomSaving = true;
                     this.SaveManager.BeginSaveData();
                 }
                 else

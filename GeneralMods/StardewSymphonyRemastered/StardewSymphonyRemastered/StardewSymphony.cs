@@ -10,6 +10,7 @@ using StardewValley;
 using StardewSymphonyRemastered.Framework;
 using System.IO;
 using StardustCore.UIUtilities;
+using NAudio.Wave;
 
 namespace StardewSymphonyRemastered
 {
@@ -405,6 +406,8 @@ namespace StardewSymphonyRemastered
         /// </summary>
         public void createBlankWAVTemplate()
         {
+            
+
             string path = Path.Combine(TemplateMusicDirectory, "WAV");
             string pathSongs = Path.Combine(path, "Songs");
             if (!Directory.Exists(path))

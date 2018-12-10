@@ -9,8 +9,9 @@ using System.Text;
 
 namespace Omegasis.SaveAnywhere.Framework
 {
+
     /// <summary>A marker subclass to detect when a custom save is in progress.</summary>
-    internal class NewSaveGameMenu : IClickableMenu {
+    internal class NewSaveGameMenu : SaveGameMenu {
 
         public event EventHandler SaveComplete;
 
@@ -23,7 +24,7 @@ namespace Omegasis.SaveAnywhere.Framework
         public bool hasDrawn;
         private SparklingText saveText;
         private int _ellipsisCount;
-
+        
         public NewSaveGameMenu()
         {
             this.saveText = new SparklingText(Game1.dialogueFont, Game1.content.LoadString("Strings\\StringsFromCSFiles:SaveGameMenu.cs.11378"), Color.LimeGreen, new Color((int)(Color.Black.R * (1.0 / 1000.0)),(int)( Color.Black.G * (1.0 / 1000.0)),(int)( Color.Black.B * (1.0 / 1000.0)),255), false, 0.1, 1500, 32, 500);
@@ -33,7 +34,8 @@ namespace Omegasis.SaveAnywhere.Framework
         {
         }
 
-        public void complete()
+
+        public new void complete()
         {
             Game1.playSound("money");
             this.completePause = 1500;
@@ -47,7 +49,7 @@ namespace Omegasis.SaveAnywhere.Framework
         {
             if (this.quit)
                 return;
-            base.update(time);
+            //base.update(time);
             if (Game1.client != null && Game1.client.timedOut)
             {
                 this.quit = true;
@@ -164,7 +166,7 @@ namespace Omegasis.SaveAnywhere.Framework
             this.hasDrawn = true;
         }
 
-        public void Dispose()
+        public new void Dispose()
         {
             Game1.game1.IsSaving = false;
         }

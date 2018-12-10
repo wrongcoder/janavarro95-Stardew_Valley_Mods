@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using NAudio.Wave;
 using StardewValley;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,34 @@ namespace StardewSymphonyRemastered.Framework
     /// </summary>
     public class WavMusicPack : MusicPack
     {
+        /// <summary>
+        /// The refererence to the information for the current song.
+        /// </summary>
         public Song currentSong;
+
+        /// <summary>
+        /// The directory where all of the songs are stored.
+        /// </summary>
         public string songsDirectory;
 
+        /// <summary>
+        /// The currently playing sound.
+        /// </summary>
         public SoundEffectInstance sound;
 
+        
         bool loop;
 
+        /// <summary>
+        /// The name of the music pack/
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return musicPackInformation.name;
+            }
+        }
 
         public Dictionary<string,SoundEffectInstance> sounds;
         /// <summary>
@@ -98,22 +120,76 @@ namespace StardewSymphonyRemastered.Framework
         /// </summary>
         public override void loadMusicFiles()
         {
-            string[] wavFiles = Directory.GetFiles(this.songsDirectory, "*.wav");
+            List<string> wavFiles = Directory.GetFiles(this.songsDirectory, "*.wav").ToList();
+            wavFiles.AddRange(Directory.GetFiles(this.songsDirectory, "*.mp3"));
+
             List<Song> listOfSongs = new List<Song>();
-            foreach(var wav in wavFiles)
+
+            DateTime span = DateTime.Now;
+
+            foreach (var wav in wavFiles)
             {
 
-                System.IO.Stream waveFileStream = File.OpenRead(wav); //TitleContainer.OpenStream(file);
-                SoundEffect eff = SoundEffect.FromStream(waveFileStream);
+                MemoryStream memoryStream = new MemoryStream();
+                AudioFileReader fileReader = new AudioFileReader(wav);
+                fileReader.CopyTo(memoryStream);
+                byte[] wavData=memoryStream.ToArray();
+
+                SoundEffect eff = null;
+
+                System.IO.Stream waveFileStream= waveFileStream = File.OpenRead(wav); //TitleContainer.OpenStream(file);
+
+                if (wav.Contains(".wav"))
+                {
+                    eff = SoundEffect.FromStream(waveFileStream);
+                }
+                else if (wav.Contains(".mp3"))
+                {
+                    /*
+                    Mp3FileReader mp3 = new Mp3FileReader(waveFileStream);
+                    mp3.CopyTo(memoryStream); ;
+                    wavData = memoryStream.ToArray();
+                    eff = new SoundEffect(wavData, mp3.Mp3WaveFormat.SampleRate, AudioChannels.Mono);
+                    */
+                    
+                    using (Mp3FileReader reader = new Mp3FileReader(waveFileStream))
+                    {
+                        using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
+                        {
+                            StardewSymphony.ModMonitor.Log("MP3 CONVERT! "+ Path.GetFileNameWithoutExtension(wav) + ".wav");
+                            WaveFileWriter.CreateWaveFile(Path.Combine(this.songsDirectory,(Path.GetFileNameWithoutExtension(wav)+".wav")), pcmStream);
+
+                            waveFileStream = File.OpenRead((Path.GetFileNameWithoutExtension(wav) + ".wav")); //TitleContainer.OpenStream(file);
+                            eff = SoundEffect.FromStream(waveFileStream);
+
+                            File.Delete(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")));
+                        }
+                    }
+                }
+
+
+
+
+                //SoundEffect eff = new SoundEffect(wavData, 48000 , AudioChannels.Mono);
+
+                if (eff == null) continue;
                 SoundEffectInstance instance = eff.CreateInstance();
+                
+                
                 string name = Path.GetFileNameWithoutExtension(wav);
+                if (this.sounds.ContainsKey(name))
+                {
+                    continue;
+                }
                 this.sounds.Add(name, instance);
 
-                waveFileStream.Dispose();
+                //waveFileStream.Dispose();
                 Song song = new Song(wav);
                 this.songInformation.listOfSongsWithoutTriggers.Add(song);
                 //listOfSongs.Add(song);
             }
+            if(StardewSymphony.Config.EnableDebugLog) StardewSymphony.ModMonitor.Log("Time to load WAV music pack: "+this.musicPackInformation.name+span.Subtract(DateTime.Now).ToString());
+
         }
 
         /// <summary>

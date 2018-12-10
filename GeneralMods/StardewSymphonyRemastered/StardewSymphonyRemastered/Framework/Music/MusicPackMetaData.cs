@@ -70,12 +70,12 @@ namespace StardewSymphonyRemastered.Framework
             {
                 try
                 {
-                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper,StardewSymphony.Manifest, Path.Combine(pathParse[1], meta.pathToMusicPackIcon + ".png"));
+                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper,StardewSymphony.Manifest, Path.Combine(pathParse[1].Remove(0,1), meta.pathToMusicPackIcon + ".png"));
                 }
                 catch(Exception errr)
                 {
                     errr.ToString();
-                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper,StardewSymphony.Manifest ,Path.Combine(pathParse[1], meta.pathToMusicPackIcon));
+                    meta.Icon = new Texture2DExtended(StardewSymphony.ModHelper,StardewSymphony.Manifest ,Path.Combine(pathParse[1].Remove(0,1), meta.pathToMusicPackIcon));
                 }
             }
             catch(Exception err)

@@ -80,7 +80,6 @@ namespace Omegasis.SaveAnywhere.Framework
             currentSaveMenu.SaveComplete -= CurrentSaveMenu_SaveComplete;
             currentSaveMenu = null;
             //AfterSave.Invoke(this, EventArgs.Empty);
-            UnifiedSaveCore.UnifiedSaveCore.SaveEvents_AfterSave(this, EventArgs.Empty);
         }
 
         /// <summary>Clear saved data.</summary>
@@ -93,8 +92,6 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>Initiate a game save.</summary>
         public void BeginSaveData()
         {
-            SaveAnywhere.ModMonitor.Log("SVE ANYWHERE WHAT YOU DOING???");
-            UnifiedSaveCore.UnifiedSaveCore.SaveEvents_BeforeSave(this, EventArgs.Empty);
             
             // save game data
             Farm farm = Game1.getFarm();
@@ -147,7 +144,6 @@ namespace Omegasis.SaveAnywhere.Framework
 
             // Notify other mods that load is complete
             //AfterLoad.Invoke(this, EventArgs.Empty);
-            UnifiedSaveCore.UnifiedSaveCore.SaveEvents_AfterLoad(this, EventArgs.Empty);
         }
 
         /// <summary>

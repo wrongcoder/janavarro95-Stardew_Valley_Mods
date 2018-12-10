@@ -31,6 +31,11 @@ namespace StardustCore.Animations
        public NetFields NetFields { get; } = new NetFields();
 
 
+        public Animation()
+        {
+            sourceRectangle = new Rectangle();
+            frameDuration = -1;
+        }
 
         /// <summary>
         /// Constructor that causes the animation frame count to be set to -1; This forces it to never change.
