@@ -73,7 +73,31 @@ namespace StardewSymphonyRemastered.Framework
             timesOfDay = new string[]
             {
                 "day",
-                "night"
+                "night",
+                "12A.M.",
+                "1A.M.",
+                "2A.M.",
+                "3A.M.",
+                "4A.M.",
+                "5A.M.",
+                "6A.M.",
+                "7A.M.",
+                "8A.M.",
+                "9A.M.",
+                "10A.M.",
+                "11A.M.",
+                "12P.M.",
+                "1P.M.",
+                "2P.M.",
+                "3P.M.",
+                "4P.M.",
+                "5P.M.",
+                "6P.M.",
+                "7P.M.",
+                "8P.M.",
+                "9P.M.",
+                "10P.M.",
+                "11P.M.",
             };
 
 
@@ -139,7 +163,12 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 else
                 {
-                    key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString() + seperator + getLocationString() + seperator + getDayOfWeekString();
+                    key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(true) + seperator + getLocationString() + seperator + getDayOfWeekString();
+
+                    if (StardewSymphony.musicManager.getListOfApplicableMusicPacks(key).Count == 0)
+                    {
+                        key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(false) + seperator + getLocationString() + seperator + getDayOfWeekString();
+                    }
                 }
             }
             else { 
@@ -313,10 +342,22 @@ namespace StardewSymphonyRemastered.Framework
         /// Get the name for the time of day that it currently is.
         /// </summary>
         /// <returns></returns>
-        public static string getTimeOfDayString()
+        public static string getTimeOfDayString(bool hourly)
         {
-            if (Game1.timeOfDay < Game1.getModeratelyDarkTime()) return "day";
-            else return "night";
+            if (hourly == false)
+            {
+                if (Game1.timeOfDay < Game1.getModeratelyDarkTime()) return "day";
+                else return "night";
+            }
+            else
+            {
+                int hour = Game1.timeOfDay / 100;
+                string suffix = "";
+                if (hour < 12 && hour >= 24) suffix = "A.M.";
+                else suffix = "P.M.";
+
+                return hour.ToString() + suffix;
+            }
         }
 
         /// <summary>

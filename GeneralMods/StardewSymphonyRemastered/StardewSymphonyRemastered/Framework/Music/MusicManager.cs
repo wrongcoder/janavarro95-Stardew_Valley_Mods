@@ -11,11 +11,7 @@ using System.Timers;
 namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>
-    /// TODO: Make this manage all of the music.
-    /// 
-    /// Make it be able to load in multiple music packs from a general mod/MusicPacks Directory
-    /// 
-    /// 
+    /// Manages all music for the mod.
     /// </summary>
     public class MusicManager
     {
