@@ -32,7 +32,22 @@ namespace Omegasis.HappyBirthday
         public static ModConfig Config;
 
         /// <summary>The data for the current player.</summary>
-        private PlayerData PlayerData;
+        public static PlayerData PlayerBirthdayData;
+
+        /// <summary>
+        /// Wrapper for static field PlayerBirthdayData;
+        /// </summary>
+        public PlayerData PlayerData
+        {
+            get
+            {
+                return PlayerBirthdayData;
+            }
+            set
+            {
+                PlayerBirthdayData = value;
+            }
+        }
 
         /// <summary>Whether the player has chosen a birthday.</summary>
         private bool HasChosenBirthday => !string.IsNullOrEmpty(this.PlayerData.BirthdaySeason) && this.PlayerData.BirthdayDay != 0;
@@ -81,6 +96,9 @@ namespace Omegasis.HappyBirthday
         /// </summary>
         bool isDailyQuestBoard;
 
+
+        List<PlayerData> othersBirthdays;
+
         /*********
         ** Public methods
         *********/
@@ -99,6 +117,8 @@ namespace Omegasis.HappyBirthday
             MenuEvents.MenuChanged += MenuEvents_MenuChanged;
             MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
+            
+
             GraphicsEvents.OnPostRenderGuiEvent += GraphicsEvents_OnPostRenderGuiEvent;
             StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += GraphicsEvents_OnPostRenderHudEvent; ;
             //MultiplayerSupport.initializeMultiplayerSupport();
@@ -108,7 +128,26 @@ namespace Omegasis.HappyBirthday
             messages = new BirthdayMessages();
             giftManager = new GiftManager();
             isDailyQuestBoard = false;
-            
+
+            ModHelper.Events.Multiplayer.ModMessageReceived += Multiplayer_ModMessageReceived;
+            this.othersBirthdays = new List<PlayerData>();
+
+        }
+
+        private void Multiplayer_ModMessageReceived(object sender, ModMessageReceivedEventArgs e)
+        {
+            if (e.FromModID == ModHelper.Multiplayer.ModID && e.Type==MultiplayerSupport.FSTRING_SendBirthdayMessageToOthers)
+            {
+                string message = e.ReadAs<string>();
+                Game1.hudMessages.Add(new HUDMessage(message,1));
+            }
+
+            if (e.FromModID == ModHelper.Multiplayer.ModID && e.Type == MultiplayerSupport.FSTRING_SendBirthdayMessageToOthers)
+            {
+                string message = e.ReadAs<string>();
+                Game1.hudMessages.Add(new HUDMessage(message, 1));
+            }
+
         }
 
         /// <summary>
@@ -302,7 +341,9 @@ namespace Omegasis.HappyBirthday
                 if (this.IsBirthday())
                 {
                     Messages.ShowStarMessage("It's your birthday today! Happy birthday!");
-                    //MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
+                    MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
+
+
 
 
                     Game1.player.mailbox.Add("birthdayMom");
@@ -481,6 +522,8 @@ namespace Omegasis.HappyBirthday
             }
             
         }
+
+        
 
     }
 }

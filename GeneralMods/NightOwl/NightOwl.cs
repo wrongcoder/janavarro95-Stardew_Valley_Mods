@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -88,6 +89,10 @@ namespace Omegasis.NightOwl
         /// </summary>
         StardewValley.Events.SoundInTheNightEvent eve;
 
+
+        private List<NetByte> oldAnimalHappiness;
+
+
         /*********
         ** Public methods
         *********/
@@ -95,7 +100,7 @@ namespace Omegasis.NightOwl
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            
+            this.oldAnimalHappiness = new List<NetByte>();
             this.Config = helper.ReadConfig<ModConfig>();
 
             if (Config.UseInternalNightFishAssetEditor)
@@ -317,6 +322,11 @@ namespace Omegasis.NightOwl
                     Game1.isRaining = false; // remove rain, otherwise lighting gets screwy
                     Game1.updateWeatherIcon();
                     Game1.timeOfDay = 150; //change it from 1:50 am late, to 1:50 am early
+                    foreach(FarmAnimal animal in Game1.getFarm().getAllFarmAnimals())
+                    {
+                        this.oldAnimalHappiness.Add(animal.happiness);
+                    }
+
                 }
 
                 // collapse player at 6am to save & reset
@@ -359,6 +369,17 @@ namespace Omegasis.NightOwl
 
                     if (Game1.currentMinigame != null)
                         Game1.currentMinigame = null;
+
+                    if (Game1.activeClickableMenu != null) Game1.activeClickableMenu.exitThisMenu(true); //Exit menus.
+
+                    Game1.timeOfDay += 2400; //Recalculate for the sake of technically being up a whole day.
+
+                    //Reset animal happiness since it drains over night.
+                    for(int i=0; i < oldAnimalHappiness.Count; i++)
+                    {
+                        Game1.getFarm().getAllFarmAnimals()[i].happiness.Value = oldAnimalHappiness[i].Value;
+                    }
+
                     Game1.player.startToPassOut();
 
 
