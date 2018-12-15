@@ -30,11 +30,10 @@ namespace StardustCore.Animations
        [XmlIgnore]
        public NetFields NetFields { get; } = new NetFields();
 
-
         public Animation()
         {
-            sourceRectangle = new Rectangle();
-            frameDuration = -1;
+            this.sourceRectangle = new Rectangle();
+            this.frameDuration = -1;
         }
 
         /// <summary>

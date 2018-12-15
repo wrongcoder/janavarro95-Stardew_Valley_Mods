@@ -32,7 +32,7 @@ namespace StardustCore.Objects
             this.name = Name;
             this.displayName = Name;
             this.description = Description;
-
+            this.animationManager = new Animations.AnimationManager(this.TextureSheet, new Animations.Animation(), false);
             foreach(var v in this.objects)
             {
                 v.Value.containerObject = this;
@@ -81,7 +81,15 @@ namespace StardustCore.Objects
 
         public override void InitializeBasics(int InvMaxSize, Vector2 tile)
         {
-            base.InitializeBasics(InvMaxSize, tile);
+            this.inventory = new List<Item>();
+            this.inventoryMaxSize = InvMaxSize;
+            this.TileLocation = tile;
+            lightsOn = false;
+
+            lightColor = Color.Black;
+
+            base.initNetFields();
+            this.NetFields.AddField(new NetCode.Objects.NetMultiTileObject(this));
         }
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {

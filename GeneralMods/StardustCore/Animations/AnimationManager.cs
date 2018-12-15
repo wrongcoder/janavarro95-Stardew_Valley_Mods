@@ -54,10 +54,15 @@ namespace StardustCore.Animations
             this.animationDataString = animationString;
             this.animations = parseAnimationsFromXNB(animationString);
             bool f = animations.TryGetValue(startingAnimationKey, out currentAnimationList);
-            if (f == true) {
+            if (f == true)
+            {
                 setAnimation(startingAnimationKey, startingAnimationFrame);
             }
-            else currentAnimation = this.defaultDrawFrame;
+            else
+            {
+                currentAnimation = this.defaultDrawFrame;
+                this.currentAnimationName = "";
+            }
         }
 
         public AnimationManager(Texture2DExtended ObjectTexture, Animation DefaultFrame, Dictionary<string,List<Animations.Animation>> animationString, string startingAnimationKey, int startingAnimationFrame = 0, bool EnabledByDefault = true)
@@ -73,7 +78,11 @@ namespace StardustCore.Animations
             {
                 setAnimation(startingAnimationKey, startingAnimationFrame);
             }
-            else currentAnimation = this.defaultDrawFrame;
+            else
+            {
+                currentAnimation = this.defaultDrawFrame;
+                this.currentAnimationName = "";
+            }
         }
 
         /// <summary>

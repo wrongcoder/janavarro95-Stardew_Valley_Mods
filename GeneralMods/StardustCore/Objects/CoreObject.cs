@@ -13,7 +13,6 @@ using StardustCore.UIUtilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Serialization;
 
 namespace StardustCore
@@ -105,6 +104,7 @@ namespace StardustCore
             lightColor = Color.Black;
 
             base.initNetFields();
+            this.NetFields.AddField(new NetCode.NetCoreObject(this));
             
 
         }
@@ -113,6 +113,7 @@ namespace StardustCore
         {
             base.initNetFields();
             this.updateDrawPosition();
+            this.NetFields.AddField(new NetCode.NetCoreObject(this));
            
         }
 
@@ -120,6 +121,7 @@ namespace StardustCore
         {
             base.initNetFields();
             //does nothng
+            this.NetFields.AddField(new NetCode.NetCoreObject(this));
             
         }
 
@@ -709,14 +711,17 @@ namespace StardustCore
 
             foreach (Farmer farmer in Game1.getAllFarmers())
             {
-                if (farmer.currentLocation != location) continue;
-                if (farmer.GetBoundingBox().Intersects(this.boundingBox.Value))
+                if (location == farmer.currentLocation)
                 {
-                    Game1.showRedMessage("Can't place on top of a person.");
-                    bool result = false;
-                    return result;
+                    if (farmer.GetBoundingBox().Intersects(this.boundingBox.Value))
+                    {
+                        Game1.showRedMessage("Can't place on top of a person.");
+                        bool result = false;
+                        return result;
+                    }
                 }
             }
+
             this.updateDrawPosition();
 
             bool f = Utilities.placementAction(this, location, x, y, StardustCore.ModCore.SerializationManager,who);
