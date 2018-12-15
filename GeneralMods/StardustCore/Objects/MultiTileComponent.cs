@@ -34,7 +34,7 @@ namespace StardustCore.Objects
             this.boundingBox.Value = new Rectangle((int)0 * Game1.tileSize, (int)0* Game1.tileSize, 1 * Game1.tileSize, 1 * Game1.tileSize);
 
             
-            //this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
+            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
 
             this.InitializeBasics(0, Vector2.Zero);
         }
@@ -56,7 +56,7 @@ namespace StardustCore.Objects
 
             this.animationManager = new Animations.AnimationManager(texture, new Animations.Animation(this.defaultSourceRect), false);
 
-            //this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
+            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
 
             this.InitializeBasics(0, Vector2.Zero);
         }
@@ -77,7 +77,7 @@ namespace StardustCore.Objects
             this.serializationName = this.GetType().ToString();
             this.ParentSheetIndex = which;
 
-            //this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
+            this.NetFields.AddField(new NetCode.NetTexture2DExtended(this.getExtendedTexture()));
 
             this.InitializeBasics(0,Vector2.Zero);
         }
@@ -163,10 +163,11 @@ namespace StardustCore.Objects
             }
             catch(Exception err)
             {
-
+                
             }
             StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(this);
-            this.thisLocation.objects.Remove(this.TileLocation);
+            this.thisLocation.removeObject(this.tileLocation, false);
+            //this.thisLocation.objects.Remove(this.TileLocation);
             this.thisLocation = null;
             this.locationsName = "";
             base.performRemoveAction(tileLocation, environment);

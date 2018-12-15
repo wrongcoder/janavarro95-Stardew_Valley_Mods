@@ -99,8 +99,6 @@
     <Compile Include="NetCode\Graphics\NetAnimationManager.cs" />
     <Compile Include="NetCode\ModdedClient.cs" />
     <Compile Include="NetCode\ModdedGameServer.cs" />
-    <Compile Include="NetCode\NetAnimation.cs" />
-    <Compile Include="NetCode\NetAnimationManager.cs" />
     <Compile Include="NetCode\NetBufferReadStream.cs" />
     <Compile Include="NetCode\NetBufferWriteStream.cs" />
     <Compile Include="NetCode\NetKeyValuePair.cs" />

@@ -201,6 +201,8 @@ namespace StardustCore
             this.thisLocation = null;
 
             this.textureName = this.TextureSheet.Name;
+
+            this.animationManager = new AnimationManager(this.TextureSheet, new Animation(this.sourceRect), false);
         }
 
         public override string getDescription()
@@ -273,6 +275,13 @@ namespace StardustCore
                 return true;
             }
             return this.clicked(who);
+        }
+
+        public override bool clicked(Farmer who)
+        {
+            performRemoveAction(this.TileLocation, this.thisLocation);
+            who.addItemToInventory(this);
+            return true;
         }
 
         public virtual bool RightClicked(StardewValley.Farmer who)
@@ -701,13 +710,14 @@ namespace StardustCore
 
         public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
-            
-            Point point = new Point(x / Game1.tileSize, y / Game1.tileSize);
+
+            StardustCore.ModCore.ModMonitor.Log("X Value:" + x);
+            Point point = new Point(x, y);
 
 
-            this.TileLocation = new Vector2((float)point.X, (float)point.Y);
+            this.TileLocation = new Vector2((float)point.X/Game1.tileSize, (float)point.Y/Game1.tileSize);
             
-            this.boundingBox.Value = new Rectangle(x, y, Game1.tileSize, Game1.tileSize);
+            this.boundingBox.Value = new Rectangle((int)tileLocation.X, (int)tileLocation.Y, Game1.tileSize, Game1.tileSize);
 
             foreach (Farmer farmer in Game1.getAllFarmers())
             {
@@ -1006,6 +1016,10 @@ namespace StardustCore
         /// <param name="alpha"></param>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
+            if (TextureSheet == null)
+            {
+                ModCore.ModMonitor.Log("WTF? Why is texture sheet null???");
+            }
             if (x == -1)
             {
                 spriteBatch.Draw(TextureSheet.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.drawPosition), new Rectangle?(this.sourceRect), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
@@ -1025,6 +1039,13 @@ namespace StardustCore
                 spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.boundingBox.Center.X - Game1.tileSize / 2), (float)(this.boundingBox.Center.Y - Game1.tileSize * 4 / 3))), new Rectangle?(GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex)), Color.White * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, (float)(this.boundingBox.Bottom + 1) / 10000f);
             }
         }
+
+        public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
+        {
+            this.draw(spriteBatch, xNonTile, yNonTile, alpha);
+        }
+
+        
 
         public virtual void drawAtNonTileSpot(SpriteBatch spriteBatch, Vector2 location, float layerDepth, float alpha = 1f)
         {
@@ -1278,6 +1299,12 @@ namespace StardustCore
             CoreObject obj = ModCore.ModHelper.ReadJsonFile<CoreObject>(data);
             obj.TextureSheet = ModCore.TextureManager.getTexture(obj.textureName);
             return obj;
+        }
+
+        public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
+        {
+            //Do nothing.
+            this.updateDrawPosition();
         }
     }
 }

@@ -11,7 +11,7 @@ using StardustCore.Animations;
 
 namespace StardustCore.NetCode.Graphics
 {
-    public class NetAnimationManager : Netcode.NetField<Animations.AnimationManager,NetAnimationManager>
+    public class NetAnimationManager : Netcode.NetField<Animations.AnimationManager, NetAnimationManager>
     {
 
         public NetAnimationManager()
@@ -19,18 +19,38 @@ namespace StardustCore.NetCode.Graphics
 
         }
 
-        public NetAnimationManager(Animations.AnimationManager manager): base(manager)
+        public NetAnimationManager(Animations.AnimationManager manager) : base(manager)
         {
-
+            this.Set(manager);
         }
 
-        public override void Set(AnimationManager newValue)
-        {
-            throw new NotImplementedException();
-        }
+        public NetString currentAnimationName;
+        public NetInt currentAnimationListIndex;
+        public NetTexture2DExtended objectTexture;
+        public NetAnimation defaultDrawFrame;
+        public NetBool enabled;
+        public NetString animationDataString;
 
         protected override void ReadDelta(BinaryReader reader, NetVersion version)
         {
+            //Checks to see if the current animation is nothing, aka null.
+            NetBool isNull = new NetBool();
+            isNull.Read(reader, version);
+            bool valueIsNull = isNull.Value;
+            if (isNull)
+            {
+                NetTexture2DExtended nullTexture = new NetTexture2DExtended();
+                nullTexture.Read(reader, version);
+
+                NetAnimation nullAnimation = new NetAnimation();
+                nullAnimation.Read(reader, version);
+
+                Value.setExtendedTexture(nullTexture.Value);
+                Value.defaultDrawFrame = nullAnimation.Value;
+                return;
+            }
+
+
             NetString currentAnimationName = new NetString();
             currentAnimationName.Read(reader, version);
 
@@ -63,15 +83,39 @@ namespace StardustCore.NetCode.Graphics
             }
             else
             {
-                Value.currentAnimation = defaultAnimation.Value;
+                Value.currentAnimation = defaultDrawFrame.Value;
             }
         }
 
         protected override void WriteDelta(BinaryWriter writer)
         {
-           NetString currentAnimationName = new NetString(Value.currentAnimationName);
-           currentAnimationName.Write(writer);
-            
+
+
+            if (String.IsNullOrEmpty(Value.currentAnimationName))
+            {
+                NetBool isNull = new NetBool(true);
+                writer.Write(isNull);
+
+
+
+                NetTexture2DExtended defaultTexture = new NetTexture2DExtended(Value.getExtendedTexture());
+                defaultTexture.Write(writer);
+
+                //do read/write null values here!!!
+                if (Value == null) throw new Exception("DONT WRITE A NULL VALUE!!!!");
+                NetAnimation drawFrame = new NetAnimation(Value.defaultDrawFrame);
+                drawFrame.Write(writer);
+                return;
+                //throw new Exception("Null string value for currentAnimationName!");
+            }
+            else
+            {
+                NetBool isNull = new NetBool(false);
+                writer.Write(isNull);
+            }
+            NetString curentAnimationName = new NetString(!String.IsNullOrEmpty(Value.currentAnimationName) ? Value.currentAnimationName : "");
+            currentAnimationName.Write(writer);
+
 
             NetInt currentAnimationListIndex = new NetInt(Value.currentAnimationListIndex);
             currentAnimationListIndex.Write(writer);
@@ -79,6 +123,7 @@ namespace StardustCore.NetCode.Graphics
             NetTexture2DExtended texture = new NetTexture2DExtended(Value.getExtendedTexture());
             texture.Write(writer);
 
+            //do read/write null values here!!!
             NetAnimation defaultDrawFrame = new NetAnimation(Value.defaultDrawFrame);
             defaultDrawFrame.Write(writer);
 
@@ -87,7 +132,12 @@ namespace StardustCore.NetCode.Graphics
 
             NetString animationData = new NetString(Value.animationDataString);
             animationData.Write(writer);
-            
+
+        }
+
+        public override void Set(AnimationManager newValue)
+        {
+            this.value = newValue;
         }
     }
 }

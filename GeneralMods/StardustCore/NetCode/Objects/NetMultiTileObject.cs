@@ -35,7 +35,17 @@ namespace StardustCore.NetCode.Objects
 
             NetList<KeyValuePair<Vector2, MultiTileComponent>, NetKeyValuePair<Vector2, MultiTileComponent, NetVector2, NetMultiTileComponent>> netList = new NetList<KeyValuePair<Vector2, MultiTileComponent>, NetKeyValuePair<Vector2, MultiTileComponent, NetVector2, NetMultiTileComponent>>();
             netList.Read(reader, version);
+            if (netList.ToList() == null) throw new Exception("WTF WHY IS NETLIST NULL?!?!?!?!");
+
+            foreach(var v in netList.ToList())
+            {
+                StardustCore.ModCore.ModMonitor.Log(v.Value.name, StardewModdingAPI.LogLevel.Alert);
+            }
+
             Value.objects = netList.ToList();
+            //this.value.objects=netList.ToArray().ToList();
+
+
 
             NetColor col = new NetColor();
             col.Read(reader, version);
@@ -52,8 +62,11 @@ namespace StardustCore.NetCode.Objects
             obj.Write(writer);
 
             NetList<KeyValuePair<Vector2, MultiTileComponent>, NetKeyValuePair<Vector2, MultiTileComponent, NetVector2, NetMultiTileComponent>> netList = new NetList<KeyValuePair<Vector2, MultiTileComponent>, NetKeyValuePair<Vector2, MultiTileComponent, NetVector2, NetMultiTileComponent>>();
+
+            if (Value.objects == null) throw new Exception("Trying to write null object list!");
             foreach (var v in Value.objects)
             {
+                StardustCore.ModCore.ModMonitor.Log(v.Value.name);
                 netList.Add(v);
             }
             netList.Write(writer);

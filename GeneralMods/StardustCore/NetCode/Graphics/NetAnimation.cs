@@ -22,17 +22,20 @@ namespace StardustCore.NetCode.Graphics
         }
         public NetAnimation(Animations.Animation animation) : base(animation)
         {
-
+            this.Set(animation);
         }
 
         public override void Set(Animation newValue)
         {
-            throw new NotImplementedException();
+            this.value = newValue;
         }
 
         protected override void ReadDelta(BinaryReader reader, NetVersion version)
         {
             sourceRect = new NetRectangle();
+            if (sourceRect == null) throw new Exception("WTF??? Why is netfield null");
+            if (reader == null) throw new Exception("reader null");
+            if (value == null) this.Set(new Animation());
             sourceRect.Read(reader, version);
             Value.sourceRectangle = sourceRect.Value;
 
@@ -42,11 +45,13 @@ namespace StardustCore.NetCode.Graphics
 
             frameDurationUntilNextAnimation = new NetInt();
             frameDurationUntilNextAnimation.Read(reader, version);
-            Value.frameDuration = frameDuration.Value;
+            Value.frameCountUntilNextAnimation = frameDurationUntilNextAnimation.Value;
         }
 
         protected override void WriteDelta(BinaryWriter writer)
         {
+
+
             sourceRect = new NetRectangle(Value.sourceRectangle);
             sourceRect.Write(writer);
 

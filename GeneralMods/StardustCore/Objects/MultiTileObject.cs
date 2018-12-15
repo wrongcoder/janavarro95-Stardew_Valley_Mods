@@ -97,6 +97,7 @@ namespace StardustCore.Objects
             {
                 foreach (var pair in this.objects)
                 {
+
                     pair.Value.placementAction(location, x + (int)(pair.Key.X * Game1.tileSize), y + (int)(pair.Key.Y * Game1.tileSize), who);
                 }
                 return true;
@@ -179,15 +180,23 @@ namespace StardustCore.Objects
         {
             if (animationManager == null)
             {
+                if (this.objects == null) return;
+                if (this.sourceRect == null) throw new Exception("Source rect null???");
                 foreach (var v in this.objects)
                 {
+                    
+                    if (v.Value.getExtendedTexture() == null) throw new Exception("Extended texture is null!");
+                    if (v.Value.getExtendedTexture().getTexture() == null) throw new Exception("Texture is null!");
                     spriteBatch.Draw(v.Value.getExtendedTexture().getTexture(), objectPosition + new Vector2(v.Key.X * Game1.tileSize, v.Key.Y * Game1.tileSize), this.sourceRect, Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 }
             }
             else
             {
+                
                 foreach (var v in this.objects)
                 {
+                    if(v.Value.getExtendedTexture() == null) throw new Exception("Extended texture is null!");
+                    if (v.Value.getExtendedTexture().getTexture() == null) throw new Exception("Texture is null!");
                     spriteBatch.Draw(v.Value.animationManager.getTexture(), objectPosition + new Vector2(v.Key.X * Game1.tileSize, v.Key.Y * Game1.tileSize), this.sourceRect, Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 }
             }
@@ -221,6 +230,7 @@ namespace StardustCore.Objects
                 }
             }
         }
+        
 
         public override Color getCategoryColor()
         {

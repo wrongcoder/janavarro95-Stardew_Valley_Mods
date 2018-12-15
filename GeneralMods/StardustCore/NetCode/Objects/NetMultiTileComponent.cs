@@ -27,7 +27,7 @@ namespace StardustCore.NetCode.Objects
 
         public NetMultiTileComponent(MultiTileComponent obj): base(obj)
         {
-
+            Set(obj);
         }
 
         public NetInt InventoryMaxSize { get; private set; }

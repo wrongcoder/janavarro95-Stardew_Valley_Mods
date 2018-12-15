@@ -24,6 +24,7 @@ namespace StardustCore.NetCode
 
         public NetTexture2DExtended(Texture2DExtended value) : base(value)
         {
+            this.Set(value);
         }
 
         public void ReadData(BinaryReader reader, NetVersion version)
@@ -55,10 +56,15 @@ namespace StardustCore.NetCode
 
 
             //Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice,width,height);
-            if (String.IsNullOrEmpty(iD.Value) || String.IsNullOrEmpty(name.Value)) return;
+            if (String.IsNullOrEmpty(iD.Value) || String.IsNullOrEmpty(name.Value))
+            {
+                ModCore.ModMonitor.Log("FOR SOME REASON THE TEXTURE INFO IS NULL????");
+                return;
+            }
 
 
             Texture2DExtended texture = ModCore.TextureManagers[iD.Value].getTexture(name.Value);
+            if (texture == null) throw new Exception("FOR SOME REASON NULL IS BEING READ???");
             this.Value = texture;
             
         }

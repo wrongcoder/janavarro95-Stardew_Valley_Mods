@@ -32,7 +32,8 @@ namespace StardustCore.Animations
 
         public Animation()
         {
-            this.sourceRectangle = new Rectangle();
+            this.sourceRectangle = new Rectangle(0,0,16,16);
+            this.frameCountUntilNextAnimation = -1;
             this.frameDuration = -1;
         }
 
@@ -43,6 +44,7 @@ namespace StardustCore.Animations
         public Animation(Rectangle SourceRectangle)
         {
             sourceRectangle = SourceRectangle;
+            this.frameCountUntilNextAnimation = -1;
             frameDuration = -1;
         }
 

@@ -69,7 +69,9 @@ namespace StardustCore
             SerializationManager.initializeDefaultSuportedTypes();
             TextureManagers = new Dictionary<string, TextureManager>();
             TextureManager = new TextureManager();
-            TextureManager.addTexture("Test1.png", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
+            TextureManager.addTexture("Test1", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
+            TextureManager.addTexture("Test2", new Texture2DExtended(ModCore.ModHelper, Manifest, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")));
+            TextureManager.addTexture("Test3", new Texture2DExtended(ModCore.ModHelper, Manifest, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")));
             TextureManagers.Add(ModManifest.UniqueID, TextureManager);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
 
@@ -169,6 +171,7 @@ namespace StardustCore
            
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
 
+            /*
             List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
             
             MultiTileComponent tile1 = new MultiTileComponent(0,"Tileobj1","A basic tile obj",new Texture2DExtended(ModCore.ModHelper,ModCore.Manifest ,Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
@@ -182,14 +185,16 @@ namespace StardustCore
             
 
             Game1.player.addItemToInventory(collection);
-            /*
-            CoreObject tile1 = new CoreObject(new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")),3, Vector2.Zero,9);
-           
-            tile1.description = "Hello";
-            tile1.Name = "test";
-            tile1.displayName = "test";
-            Game1.player.addItemToInventory(tile1);
             */
+            
+            
+            CoreObject testTile = new CoreObject(new Texture2DExtended(ModCore.ModHelper,ModCore.Manifest, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")),3, Vector2.Zero,9);
+
+            testTile.description = "Hello";
+            testTile.Name = "test";
+            testTile.displayName = "test";
+            Game1.player.addItemToInventory(testTile);
+            
             
         }
 
