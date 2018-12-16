@@ -40,6 +40,8 @@ namespace StardustCore
 
         public ModConfig config;
 
+        public bool playerJustDisconnected;
+
         public static string ContentDirectory;
         public override void Entry(IModHelper helper)
         {
@@ -50,11 +52,7 @@ namespace StardustCore
 
             //  StardewModdingAPI.Events.GraphicsEvents.OnPostRenderGuiEvent += Metadata.GameEvents_UpdateTick;
             //StardewModdingAPI.Events.ControlEvents.MouseChanged += ControlEvents_MouseChanged;
-            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name, "PlayerInventory");
-            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.Name, "ObjectsInWorld"); ;
-            string trashPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "ModTrashFolder");
-            string chestPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "StorageContainers");
-            SerializationManager = new SerializationManager(invPath, trashPath, worldPath,chestPath);
+
 
             StardewModdingAPI.Events.SaveEvents.AfterSave += SaveEvents_AfterSave;
             StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
@@ -64,13 +62,19 @@ namespace StardustCore
 
             ModHelper.Events.Multiplayer.PeerContextReceived += Multiplayer_PeerContextReceived;
             ModHelper.Events.Multiplayer.ModMessageReceived += Multiplayer_ModMessageReceived;
+            ModHelper.Events.Multiplayer.PeerDisconnected += Multiplayer_PeerDisconnected;
+            
+
+            StardewModdingAPI.Events.TimeEvents.AfterDayStarted += TimeEvents_AfterDayStarted;
+
+            playerJustDisconnected = false;
 
             IlluminateFramework.Colors.initializeColors();
             ContentDirectory = "Content";
             if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Content"));
             SpriteFonts.initialize();
 
-            SerializationManager.initializeDefaultSuportedTypes();
+
             TextureManagers = new Dictionary<string, TextureManager>();
             TextureManager = new TextureManager();
             TextureManager.addTexture("Test1", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
@@ -84,6 +88,37 @@ namespace StardustCore
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             serverHack = false;
             
+        }
+
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        {
+            return;
+            if (lastMenuType == null) return;
+            if (lastMenuType == typeof(StardewValley.Menus.TitleMenu)) return;
+            if(lastMenuType== typeof(StardewValley.Menus.SaveGameMenu) || lastMenuType== typeof(StardewValley.Menus.ShippingMenu))
+            {
+                ModMonitor.Log("Start a new day clean!");
+                SerializationManager.cleanUpInventory();
+                SerializationManager.cleanUpWorld();
+                SerializationManager.cleanUpStorageContainers();
+
+                List<long> playerIds = new List<long>();
+                foreach (Farmer f in Game1.getAllFarmers())
+                {
+                    if (f == Game1.player) continue;
+                    playerIds.Add(f.uniqueMultiplayerID);
+
+                }
+                ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.CleanUpModObjects, MultiplayerSupport.CleanUpModObjects, new string[] { ModManifest.UniqueID }, playerIds.ToArray());
+            }
+        }
+
+        private void Multiplayer_PeerDisconnected(object sender, StardewModdingAPI.Events.PeerDisconnectedEventArgs e)
+        {
+            this.playerJustDisconnected = true;
+            SerializationManager.cleanUpInventory();
+            SerializationManager.cleanUpWorld();
+            SerializationManager.cleanUpStorageContainers();
         }
 
         private void Multiplayer_ModMessageReceived(object sender, StardewModdingAPI.Events.ModMessageReceivedEventArgs e)
@@ -106,6 +141,8 @@ namespace StardustCore
         private void Multiplayer_PeerContextReceived(object sender, StardewModdingAPI.Events.PeerContextReceivedEventArgs e)
         {
             //ModMonitor.Log("TRY TO CLEAN UP THE MESS!!!!");
+            if (SerializationManager == null) return;
+            
             SerializationManager.cleanUpInventory();
             SerializationManager.cleanUpWorld();
             SerializationManager.cleanUpStorageContainers();
@@ -113,33 +150,53 @@ namespace StardustCore
 
         private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
         {
-            if (Game1.IsMasterGame == false && config.enableMultiplayerHack)
-            {
                 if (this.lastMenuType == null)
                 {
                     return;
                 }
                 else
                 {
-                    if (lastMenuType == typeof(StardewValley.Menus.SaveGameMenu) ||lastMenuType==typeof(StardewValley.Menus.ReadyCheckDialog))
+                /*
+                    if (lastMenuType == typeof(StardewValley.Menus.SaveGameMenu) ||lastMenuType==typeof(StardewValley.Menus.ShippingMenu))
                     {
                         SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+
+                        List<long> playerIds = new List<long>();
+                        foreach (Farmer f in Game1.getAllFarmers())
+                        {
+                            if (f == Game1.player) continue;
+                            playerIds.Add(f.uniqueMultiplayerID);
+
+                        }
+                        ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.RestoreModObjects, MultiplayerSupport.RestoreModObjects, new string[] { ModManifest.UniqueID }, playerIds.ToArray());
                     }
+                    */
+                    //Only fires in multiplayer since ReadyCheckDialogue only appears in multiplayer
+                    if (lastMenuType == typeof(StardewValley.Menus.ReadyCheckDialog) && Game1.player.canMove==false && Game1.player.isInBed)
+                    {
+                        ModMonitor.Log("Sleepy Time!");
+                        SerializationManager.cleanUpInventory();
+                        SerializationManager.cleanUpWorld();
+                        SerializationManager.cleanUpStorageContainers();
+                        
+                        /*
+                        List<long> playerIds = new List<long>();
+                        foreach (Farmer f in Game1.getAllFarmers())
+                        {
+                        if (f == null) continue;
+                            if (f == Game1.player) continue;
+                            playerIds.Add(f.uniqueMultiplayerID);
+
+                        }
+                        */
+                        //ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.CleanUpModObjects, MultiplayerSupport.CleanUpModObjects, new string[] { ModManifest.UniqueID }, playerIds.ToArray());
+
                 }
             }
         }
 
         private void MenuEvents_MenuChanged(object sender, StardewModdingAPI.Events.EventArgsClickableMenuChanged e)
-        {
-            if (Game1.IsMasterGame == false && config.enableMultiplayerHack)
-            {
-                if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.ReadyCheckDialog))
-                {
-                    SerializationManager.cleanUpInventory();
-                    SerializationManager.cleanUpWorld();
-                    SerializationManager.cleanUpStorageContainers();
-                }
-            }
+        {            
             lastMenuType = Game1.activeClickableMenu.GetType();
         }
 
@@ -179,11 +236,10 @@ namespace StardustCore
 
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-
-
-            if (Game1.client !=null && serverHack == false && config.enableMultiplayerHack)
+            if (playerJustDisconnected)
             {
-
+                playerJustDisconnected = false;
+                SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
             }
         }
 
@@ -197,11 +253,24 @@ namespace StardustCore
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-           
+
+            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name, "PlayerInventory");
+            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.Name, "ObjectsInWorld"); ;
+            string trashPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "ModTrashFolder");
+            string chestPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "StorageContainers");
+            SerializationManager = new SerializationManager(invPath, trashPath, worldPath, chestPath);
+            SerializationManager.initializeDefaultSuportedTypes();
+
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
 
-            ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.RestoreModObjects, MultiplayerSupport.RestoreModObjects,new string[] { ModManifest.UniqueID }, null);
-
+            List<long> playerIds = new List<long>();
+            foreach (Farmer f in Game1.getAllFarmers())
+            {
+                if (f == Game1.player) continue;
+                playerIds.Add(f.uniqueMultiplayerID);
+                
+            }
+            ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.RestoreModObjects, MultiplayerSupport.RestoreModObjects, new string[] { ModManifest.UniqueID },playerIds.ToArray());
             /*
             List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
             
@@ -217,8 +286,8 @@ namespace StardustCore
 
             Game1.player.addItemToInventory(collection);
             */
-            
-            
+
+
             CoreObject testTile = new CoreObject(new Texture2DExtended(ModCore.ModHelper,ModCore.Manifest, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")),3, Vector2.Zero,9);
 
             testTile.description = "Hello";
@@ -231,15 +300,22 @@ namespace StardustCore
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
+            
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
 
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            SerializationManager.cleanUpInventory();
-            SerializationManager.cleanUpWorld();
-            SerializationManager.cleanUpStorageContainers();
+            //Call the serialization if alone since the ReadyCheckDialogue menu never shows with just 1 player online.
+            if (Game1.IsMultiplayer == false || (Game1.IsMultiplayer && Game1.getOnlineFarmers().Count==1))
+            {
+                SerializationManager.cleanUpInventory();
+                SerializationManager.cleanUpWorld();
+                SerializationManager.cleanUpStorageContainers();
+            }
+
+
         }
 
         private void ControlEvents_MouseChanged(object sender, StardewModdingAPI.Events.EventArgsMouseStateChanged e)

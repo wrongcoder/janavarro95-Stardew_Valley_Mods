@@ -708,6 +708,12 @@ namespace StardustCore
             return this.boundingBox.Height / Game1.tileSize;
         }
 
+        public override bool canStackWith(Item other)
+        {
+            if (other.Name == this.name && (other as CoreObject).textureName == this.textureName) return true;
+            else return false;
+        }
+
         public override bool placementAction(GameLocation location, int x, int y, StardewValley.Farmer who = null)
         {
 

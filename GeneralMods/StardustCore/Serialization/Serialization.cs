@@ -435,8 +435,15 @@ namespace StardustCore.Serialization
                                 }
                                 else
                                 {
-                                    (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
-                                    thingsToAddBackIn.Add(cObj as CoreObject);
+                                    try
+                                    {
+                                        (cObj as CoreObject).thisLocation.objects.Add((cObj as CoreObject).TileLocation, (StardewValley.Object)cObj);
+                                        thingsToAddBackIn.Add(cObj as CoreObject);
+                                    }
+                                    catch(Exception err)
+                                    {
+                                        return;
+                                    }
                                     //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);
                                 }
                             }
