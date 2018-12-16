@@ -100,6 +100,7 @@ namespace StardustCore.Serialization
             {
                 foreach (Farmer f in Game1.getAllFarmhands())
                 {
+                    
                     f.items.Clear();
                 }
             }
@@ -450,6 +451,7 @@ namespace StardustCore.Serialization
                                     }
                                     catch(Exception err)
                                     {
+                                        throw new Exception(err.ToString());
                                         return;
                                     }
                                     //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);

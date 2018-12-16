@@ -22,6 +22,13 @@ using System.Threading.Tasks;
 
 namespace StardustCore
 {
+    /*
+     *Known issues:
+     * Clients have a error on Serialization that says they run across unknown XML elements such as core objects. However, inventories for farmhands and modded objects still get serialized properly.
+     * Host loose serialized objects when closing the server.
+     */
+
+
     public class ModCore : Mod
     {
         public static IModHelper ModHelper;
@@ -108,6 +115,9 @@ namespace StardustCore
         private void Multiplayer_PeerDisconnected(object sender, StardewModdingAPI.Events.PeerDisconnectedEventArgs e)
         {
             this.playerJustDisconnected = true;
+
+            ModMonitor.Log("Peer disconnected!!!");
+
             SerializationManager.cleanUpInventory();
             SerializationManager.cleanUpWorld();
             SerializationManager.cleanUpStorageContainers();
@@ -126,6 +136,7 @@ namespace StardustCore
                 }
                 else if (e.Type == MultiplayerSupport.RestoreModObjects)
                 {
+                    ModMonitor.Log("HEAL ALL BOBOS!");
                     SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
                 }
             }
@@ -133,9 +144,11 @@ namespace StardustCore
 
         private void Multiplayer_PeerContextReceived(object sender, StardewModdingAPI.Events.PeerContextReceivedEventArgs e)
         {
-            //ModMonitor.Log("TRY TO CLEAN UP THE MESS!!!!");
+           
             if (SerializationManager == null) return;
-            
+
+            ModMonitor.Log("TRY TO CLEAN UP THE MESS!!!!");
+
             SerializationManager.cleanUpInventory();
             SerializationManager.cleanUpWorld();
             SerializationManager.cleanUpStorageContainers();
@@ -271,6 +284,7 @@ namespace StardustCore
                 playerIds.Add(f.uniqueMultiplayerID);
                 
             }
+            ModMonitor.Log("RESEND ALL DATA!!!");
             ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.RestoreModObjects, MultiplayerSupport.RestoreModObjects, new string[] { ModManifest.UniqueID },playerIds.ToArray());
             /*
             List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
@@ -322,6 +336,7 @@ namespace StardustCore
             //Call the serialization if alone since the ReadyCheckDialogue menu never shows with just 1 player online.
             if (Game1.IsMultiplayer == false || (Game1.IsMultiplayer && Game1.getOnlineFarmers().Count==1))
             {
+                ModMonitor.Log("SQUEEKY CLEAN!");
                 SerializationManager.cleanUpInventory();
                 SerializationManager.cleanUpWorld();
                 SerializationManager.cleanUpStorageContainers();
