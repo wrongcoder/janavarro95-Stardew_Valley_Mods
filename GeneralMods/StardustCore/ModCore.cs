@@ -63,9 +63,7 @@ namespace StardustCore
             ModHelper.Events.Multiplayer.PeerContextReceived += Multiplayer_PeerContextReceived;
             ModHelper.Events.Multiplayer.ModMessageReceived += Multiplayer_ModMessageReceived;
             ModHelper.Events.Multiplayer.PeerDisconnected += Multiplayer_PeerDisconnected;
-            
 
-            StardewModdingAPI.Events.TimeEvents.AfterDayStarted += TimeEvents_AfterDayStarted;
 
             playerJustDisconnected = false;
 
@@ -87,29 +85,23 @@ namespace StardustCore
             
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             serverHack = false;
+
+            ModHelper.Events.GameLoop.ReturnedToTitle += GameLoop_ReturnedToTitle;
             
         }
 
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
-            return;
-            if (lastMenuType == null) return;
-            if (lastMenuType == typeof(StardewValley.Menus.TitleMenu)) return;
-            if(lastMenuType== typeof(StardewValley.Menus.SaveGameMenu) || lastMenuType== typeof(StardewValley.Menus.ShippingMenu))
+            if (Game1.player != null)
             {
-                ModMonitor.Log("Start a new day clean!");
                 SerializationManager.cleanUpInventory();
                 SerializationManager.cleanUpWorld();
                 SerializationManager.cleanUpStorageContainers();
-
-                List<long> playerIds = new List<long>();
-                foreach (Farmer f in Game1.getAllFarmers())
-                {
-                    if (f == Game1.player) continue;
-                    playerIds.Add(f.uniqueMultiplayerID);
-
-                }
-                ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.CleanUpModObjects, MultiplayerSupport.CleanUpModObjects, new string[] { ModManifest.UniqueID }, playerIds.ToArray());
+                Monitor.Log("Saved the player data!");
+            }
+            else
+            {
+                Monitor.Log("NOPE NOT WORKING!");
             }
         }
 
@@ -119,6 +111,7 @@ namespace StardustCore
             SerializationManager.cleanUpInventory();
             SerializationManager.cleanUpWorld();
             SerializationManager.cleanUpStorageContainers();
+            
         }
 
         private void Multiplayer_ModMessageReceived(object sender, StardewModdingAPI.Events.ModMessageReceivedEventArgs e)
@@ -146,6 +139,8 @@ namespace StardustCore
             SerializationManager.cleanUpInventory();
             SerializationManager.cleanUpWorld();
             SerializationManager.cleanUpStorageContainers();
+
+            
         }
 
         private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
@@ -239,6 +234,11 @@ namespace StardustCore
             if (playerJustDisconnected)
             {
                 playerJustDisconnected = false;
+                if (Game1.activeClickableMenu != null)
+                {
+                    if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.TitleMenu)) return;
+                }
+                ModMonitor.Log("Restore after disconnect!");
                 SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
             }
         }
@@ -253,6 +253,7 @@ namespace StardustCore
 
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+            Game1.game1.Disposed += Game1_Disposed;
 
             string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name, "PlayerInventory");
             string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.Name, "ObjectsInWorld"); ;
@@ -296,6 +297,17 @@ namespace StardustCore
             Game1.player.addItemToInventory(testTile);
             
             
+        }
+
+        private void Game1_Disposed(object sender, EventArgs e)
+        {
+            if (Game1.player != null && lastMenuType!= typeof(StardewValley.Menus.TitleMenu))
+            {
+                ModMonitor.Log("EXIT THE GAME!!!!");
+                SerializationManager.cleanUpInventory();
+                SerializationManager.cleanUpWorld();
+                SerializationManager.cleanUpStorageContainers();
+            }
         }
 
         private void SaveEvents_AfterSave(object sender, EventArgs e)

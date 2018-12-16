@@ -95,6 +95,14 @@ namespace StardustCore.Serialization
             {
                 Game1.player.removeItemFromInventory(i);
             }
+
+            if (Game1.IsMasterGame)
+            {
+                foreach (Farmer f in Game1.getAllFarmhands())
+                {
+                    f.items.Clear();
+                }
+            }
             removalList.Clear();
         }
         
