@@ -372,6 +372,7 @@ namespace Omegasis.HappyBirthday
 
             if (PlayerBirthdayData != null)
             {
+                ModMonitor.Log("Send all birthday information from " + Game1.player.name);
                 MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
             }
             //this.SeenEvent = false;

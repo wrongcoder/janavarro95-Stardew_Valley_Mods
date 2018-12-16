@@ -103,6 +103,7 @@ namespace StardustCore.Serialization
                     List<Item> farmHandCleaner = new List<Item>();
                     foreach (Item i in f.Items)
                     {
+                        if (i == null) continue;
                         string s = Convert.ToString((i.GetType()));
 
                         if (acceptedTypes.ContainsKey(s))
