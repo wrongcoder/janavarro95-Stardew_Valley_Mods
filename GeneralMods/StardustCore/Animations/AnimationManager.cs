@@ -27,6 +27,16 @@ namespace StardustCore.Animations
 
 
         public string animationDataString;
+
+        /// <summary>
+        /// Empty constructor.
+        /// </summary>
+        public AnimationManager()
+        {
+
+        }
+
+
         /// <summary>
         /// Constructor for Animation Manager class.
         /// </summary>

@@ -6,6 +6,7 @@ using StardewValley.Menus;
 using StardewValley.Network;
 using StardustCore.Menus;
 using StardustCore.ModInfo;
+using StardustCore.NetCode;
 using StardustCore.Objects;
 using StardustCore.Objects.Tools;
 using StardustCore.Serialization;
@@ -61,6 +62,9 @@ namespace StardustCore
             StardewModdingAPI.Events.MenuEvents.MenuChanged += MenuEvents_MenuChanged;
             StardewModdingAPI.Events.MenuEvents.MenuClosed += MenuEvents_MenuClosed;
 
+            ModHelper.Events.Multiplayer.PeerContextReceived += Multiplayer_PeerContextReceived;
+            ModHelper.Events.Multiplayer.ModMessageReceived += Multiplayer_ModMessageReceived;
+
             IlluminateFramework.Colors.initializeColors();
             ContentDirectory = "Content";
             if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Content"));
@@ -80,6 +84,31 @@ namespace StardustCore
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
             serverHack = false;
             
+        }
+
+        private void Multiplayer_ModMessageReceived(object sender, StardewModdingAPI.Events.ModMessageReceivedEventArgs e)
+        {
+            if (e.FromModID == this.ModManifest.UniqueID)
+            {
+                if (e.Type == MultiplayerSupport.CleanUpModObjects)
+                {
+                    SerializationManager.cleanUpInventory();
+                    SerializationManager.cleanUpWorld();
+                    SerializationManager.cleanUpStorageContainers();
+                }
+                else if (e.Type == MultiplayerSupport.RestoreModObjects)
+                {
+                    SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+                }
+            }
+        }
+
+        private void Multiplayer_PeerContextReceived(object sender, StardewModdingAPI.Events.PeerContextReceivedEventArgs e)
+        {
+            //ModMonitor.Log("TRY TO CLEAN UP THE MESS!!!!");
+            SerializationManager.cleanUpInventory();
+            SerializationManager.cleanUpWorld();
+            SerializationManager.cleanUpStorageContainers();
         }
 
         private void MenuEvents_MenuClosed(object sender, StardewModdingAPI.Events.EventArgsClickableMenuClosed e)
@@ -170,6 +199,8 @@ namespace StardustCore
         {
            
             SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
+
+            ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.RestoreModObjects, MultiplayerSupport.RestoreModObjects,new string[] { ModManifest.UniqueID }, null);
 
             /*
             List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
