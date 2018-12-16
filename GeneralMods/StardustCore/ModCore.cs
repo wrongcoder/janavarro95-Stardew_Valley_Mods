@@ -25,7 +25,6 @@ namespace StardustCore
     /*
      *Known issues:
      * Clients have a error on Serialization that says they run across unknown XML elements such as core objects. However, inventories for farmhands and modded objects still get serialized properly.
-     * Host loose serialized objects when closing the server.
      */
 
 
@@ -38,10 +37,6 @@ namespace StardustCore
         public static UIUtilities.TextureManager TextureManager;
         public static Dictionary<string, TextureManager> TextureManagers;
 
-        
-
-        public static Multiplayer multiplayer;
-        bool serverHack;
 
         private Type lastMenuType;
 
@@ -91,7 +86,6 @@ namespace StardustCore
             config = ModHelper.ReadConfig<ModConfig>();
             
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
-            serverHack = false;
 
             ModHelper.Events.GameLoop.ReturnedToTitle += GameLoop_ReturnedToTitle;
             
@@ -268,8 +262,8 @@ namespace StardustCore
         {
             Game1.game1.Disposed += Game1_Disposed;
 
-            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name, "PlayerInventory");
-            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.Name, "ObjectsInWorld"); ;
+            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name+"_"+Game1.player.uniqueMultiplayerID, "PlayerInventory");
+            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.Name+"_"+Game1.player.uniqueMultiplayerID, "ObjectsInWorld"); ;
             string trashPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "ModTrashFolder");
             string chestPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "StorageContainers");
             SerializationManager = new SerializationManager(invPath, trashPath, worldPath, chestPath);

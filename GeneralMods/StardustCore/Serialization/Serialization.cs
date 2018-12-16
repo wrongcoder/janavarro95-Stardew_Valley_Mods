@@ -100,8 +100,28 @@ namespace StardustCore.Serialization
             {
                 foreach (Farmer f in Game1.getAllFarmhands())
                 {
-                    
-                    f.items.Clear();
+                    List<Item> farmHandCleaner = new List<Item>();
+                    foreach (Item i in f.Items)
+                    {
+                        string s = Convert.ToString((i.GetType()));
+
+                        if (acceptedTypes.ContainsKey(s))
+                        {
+                            SerializerDataNode t;
+
+                            bool works = acceptedTypes.TryGetValue(s, out t);
+                            if (works == true)
+                            {
+                                farmHandCleaner.Add(i);
+                            }
+                        }
+
+
+                    }
+                    foreach(Item i in farmHandCleaner)
+                    {
+                        f.removeItemFromInventory(i);
+                    }
                 }
             }
             removalList.Clear();
@@ -706,14 +726,7 @@ namespace StardustCore.Serialization
             string[] chest = chestArray[chestArray.Length - 2].Split(',');
         StardewValley.Object chestObject;
         bool f = loc.objects.TryGetValue(new Microsoft.Xna.Framework.Vector2(Convert.ToInt32(chest[1]), Convert.ToInt32(chest[2])), out chestObject);
-        if (f == true)
-        {
-            ModCore.ModMonitor.Log("YAY");
-        }
-        else
-        {
-            ModCore.ModMonitor.Log("BOO");
-        }
+
             try
             {
                 string type = "";
