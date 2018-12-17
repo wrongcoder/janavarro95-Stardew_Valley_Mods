@@ -12,6 +12,12 @@ using StardustCore.UIUtilities;
 
 namespace StardustCore.NetCode
 {
+    /*
+     * Need to send default source rect and width
+     * 
+     */
+
+
     public class NetCoreObject : Netcode.NetField<CoreObject, NetCoreObject>
     {
 

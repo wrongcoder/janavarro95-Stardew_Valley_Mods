@@ -129,7 +129,7 @@ namespace StardustCore
                 SerializationManager.cleanUpInventory();
                 //SerializationManager.cleanUpWorld();
                 //SerializationManager.cleanUpStorageContainers();
-                Monitor.Log("Saved the player data after returning to title!");
+                //Monitor.Log("Saved the player data after returning to title!");
             }
         }
 
@@ -137,7 +137,7 @@ namespace StardustCore
         {
             this.playerJustDisconnected = true;
 
-            ModMonitor.Log("Peer disconnected! Serializing custom objects");
+            //ModMonitor.Log("Peer disconnected! Serializing custom objects");
 
             SerializationManager.cleanUpInventory();
             //SerializationManager.cleanUpWorld();
@@ -147,8 +147,8 @@ namespace StardustCore
 
         private void Multiplayer_ModMessageReceived(object sender, StardewModdingAPI.Events.ModMessageReceivedEventArgs e)
         {
-            ModMonitor.Log("Get messages from"+e.FromModID);
-            ModMonitor.Log("Message type: " + e.Type);
+            //ModMonitor.Log("Get messages from"+e.FromModID);
+            //ModMonitor.Log("Message type: " + e.Type);
 
             if (e.FromModID == this.ModManifest.UniqueID)
             {
@@ -161,7 +161,7 @@ namespace StardustCore
                 else if (e.Type == MultiplayerSupport.RestoreModObjects)
                 {
                     if (Game1.eventUp) return; //Prevent item duplication.
-                    ModMonitor.Log("Restoring custom objects.");
+                    //ModMonitor.Log("Restoring custom objects.");
                     SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
                 }
             }
@@ -177,7 +177,7 @@ namespace StardustCore
             {
                 SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList); //Force a restore and then a serialize save to prevent deletions.
             }
-            ModMonitor.Log("Got peer context. Serialize/remove all custom objects really quick to prevent loading errors.");
+            //ModMonitor.Log("Got peer context. Serialize/remove all custom objects really quick to prevent loading errors.");
 
             
             SerializationManager.cleanUpInventory();
@@ -213,7 +213,7 @@ namespace StardustCore
                     //Only fires in multiplayer since ReadyCheckDialogue only appears in multiplayer
                     if (lastMenuType == typeof(StardewValley.Menus.ReadyCheckDialog) && Game1.player.canMove==false && Game1.player.isInBed)
                     {
-                        ModMonitor.Log("Time to sleep/serialize all objects!");
+                        //ModMonitor.Log("Time to sleep/serialize all objects!");
                         SerializationManager.cleanUpInventory();
                         SerializationManager.cleanUpWorld();
                         SerializationManager.cleanUpStorageContainers();
@@ -282,13 +282,13 @@ namespace StardustCore
                 {
                     if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.TitleMenu)) return;
                 }
-                ModMonitor.Log("Restore objects after peer disconnect!");
+                //ModMonitor.Log("Restore objects after peer disconnect!");
                 SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
             }
             else if (justWarped && Game1.eventUp==false && Game1.activeClickableMenu==null)
             {
                 justWarped = false;
-                ModMonitor.Log("Restore objects after player warping!");
+                //ModMonitor.Log("Restore objects after player warping!");
                 SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList,true);
             }
         }
@@ -323,7 +323,7 @@ namespace StardustCore
                 playerIds.Add(f.uniqueMultiplayerID);
                 ModMonitor.Log("Sending Message to peer ID: "+f.uniqueMultiplayerID.ToString());
             }
-            ModMonitor.Log("Send message to restore mod objects after load!");
+            //ModMonitor.Log("Send message to restore mod objects after load!");
             ModHelper.Multiplayer.SendMessage<string>(MultiplayerSupport.RestoreModObjects, MultiplayerSupport.RestoreModObjects, new string[] { ModManifest.UniqueID },playerIds.ToArray());
             /*
             List<KeyValuePair<Vector2, MultiTileComponent>> objs = new List<KeyValuePair<Vector2, MultiTileComponent>>();
@@ -341,14 +341,14 @@ namespace StardustCore
             Game1.player.addItemToInventory(collection);
             */
 
-
+            /*
             CoreObject testTile = new CoreObject(new Texture2DExtended(ModCore.ModHelper,ModCore.Manifest, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")),3, Vector2.Zero,9);
 
             testTile.description = "Hello";
             testTile.Name = "test";
             testTile.displayName = "test";
             Game1.player.addItemToInventory(testTile);
-            
+            */
             
         }
 
@@ -356,7 +356,7 @@ namespace StardustCore
         {
             if (Game1.player != null && lastMenuType!= typeof(StardewValley.Menus.TitleMenu))
             {
-                ModMonitor.Log("Serialize all objects on disposing!");
+                //ModMonitor.Log("Serialize all objects on disposing!");
                 SerializationManager.cleanUpInventory();
                 //SerializationManager.cleanUpWorld();
                 //SerializationManager.cleanUpStorageContainers();
@@ -375,7 +375,7 @@ namespace StardustCore
             //Call the serialization if alone since the ReadyCheckDialogue menu never shows with just 1 player online.
             if (Game1.IsMultiplayer == false || (Game1.IsMultiplayer && Game1.getOnlineFarmers().Count==1))
             {
-                ModMonitor.Log("Serialize all objects before save when only 1 farmer present!");
+                //ModMonitor.Log("Serialize all objects before save when only 1 farmer present!");
                 SerializationManager.cleanUpInventory();
                 SerializationManager.cleanUpWorld();
                 SerializationManager.cleanUpStorageContainers();

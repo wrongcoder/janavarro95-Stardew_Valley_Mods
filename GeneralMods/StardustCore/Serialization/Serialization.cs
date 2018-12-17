@@ -56,6 +56,9 @@ namespace StardustCore.Serialization
 
         public void cleanUpInventory()
         {
+
+            return;
+
             ProcessDirectoryForDeletion(playerInventoryPath);
 
             //ProcessDirectoryForDeletion(SerializerTrashPath);
@@ -133,7 +136,7 @@ namespace StardustCore.Serialization
         /// </summary>
         public void cleanUpWorld()
         {
-            
+            return;
 
             try
             {
@@ -292,6 +295,7 @@ namespace StardustCore.Serialization
         /// </summary>
         public void cleanUpStorageContainers()
         {
+            return;
             ProcessDirectoryForDeletion(storageContainerPath);
 
             List<Item> removalList = new List<Item>();
@@ -384,7 +388,7 @@ namespace StardustCore.Serialization
         /// <param name="thingsToAddBackIn"></param>
         public void restoreAllModObjects(List<IItemSerializeable> thingsToAddBackIn, bool onlyInventory=false)
         {
-          
+            return;
             processDirectoryForDeserialization(playerInventoryPath,thingsToAddBackIn);
             if (onlyInventory) return;
 

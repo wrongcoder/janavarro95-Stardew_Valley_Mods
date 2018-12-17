@@ -105,6 +105,7 @@ namespace StardustCore
 
             base.initNetFields();
             this.NetFields.AddField(new NetCode.NetCoreObject(this));
+            this.NetFields.AddFields(new INetSerializable[] { new NetString(this.Name), new NetRectangle(this.defaultSourceRect), new NetString(this.description) });
             
 
         }
