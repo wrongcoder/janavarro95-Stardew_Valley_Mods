@@ -19,6 +19,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace StardustCore
 {
@@ -43,6 +45,8 @@ namespace StardustCore
         public ModConfig config;
 
         public bool playerJustDisconnected;
+
+        public bool justWarped;
 
         public static string ContentDirectory;
         public override void Entry(IModHelper helper)
@@ -87,9 +91,21 @@ namespace StardustCore
             
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
 
+            Helper.Events.Player.Warped += Player_Warped;
+
             ModHelper.Events.GameLoop.ReturnedToTitle += GameLoop_ReturnedToTitle;
             
         }
+
+        private void Player_Warped(object sender, StardewModdingAPI.Events.WarpedEventArgs e)
+        {
+
+            SerializationManager.cleanUpInventory();
+            //SerializationManager.cleanUpWorld();
+            //SerializationManager.cleanUpStorageContainers();
+            justWarped = true;
+        }
+
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
@@ -247,6 +263,12 @@ namespace StardustCore
                 ModMonitor.Log("Restore objects after peer disconnect!");
                 SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
             }
+            else if (justWarped && Game1.eventUp==false && Game1.activeClickableMenu==null)
+            {
+                justWarped = false;
+                ModMonitor.Log("Restore objects after player warping!");
+                SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList,true);
+            }
         }
 
         private void ControlEvents_KeyPressed(object sender, StardewModdingAPI.Events.EventArgsKeyPressed e)
@@ -261,10 +283,12 @@ namespace StardustCore
         {
             Game1.game1.Disposed += Game1_Disposed;
 
-            string invPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name+"_"+Game1.player.uniqueMultiplayerID, "PlayerInventory");
-            string worldPath = Path.Combine(ModCore.ModHelper.DirectoryPath, Game1.player.Name+"_"+Game1.player.uniqueMultiplayerID, "ObjectsInWorld"); ;
-            string trashPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "ModTrashFolder");
-            string chestPath = Path.Combine(ModCore.ModHelper.DirectoryPath, "StorageContainers");
+            string basePath=Path.Combine( ModCore.ModHelper.DirectoryPath, "PlayerData", Game1.player.Name + "_" + Game1.player.uniqueMultiplayerID);
+
+            string invPath = Path.Combine(basePath,"PlayerInventory");
+            string worldPath = Path.Combine(basePath, "ObjectsInWorld");
+            string trashPath = Path.Combine(basePath,"ModTrashFolder");
+            string chestPath = Path.Combine(basePath, "StorageContainers");
             SerializationManager = new SerializationManager(invPath, trashPath, worldPath, chestPath);
             SerializationManager.initializeDefaultSuportedTypes();
 

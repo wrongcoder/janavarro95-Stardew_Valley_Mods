@@ -318,10 +318,11 @@ namespace StardustCore.Serialization
         /// Reloads all modded objects added by this mod back to the game in proper locations.
         /// </summary>
         /// <param name="thingsToAddBackIn"></param>
-        public void restoreAllModObjects(List<IItemSerializeable> thingsToAddBackIn)
+        public void restoreAllModObjects(List<IItemSerializeable> thingsToAddBackIn, bool onlyInventory=false)
         {
+          
             processDirectoryForDeserialization(playerInventoryPath,thingsToAddBackIn);
-            
+            if (onlyInventory) return;
 
            // Log.AsyncG("Done deserializing player inventory.");
             try
@@ -472,7 +473,7 @@ namespace StardustCore.Serialization
                                     }
                                     catch(Exception err)
                                     {
-                                        throw new Exception(err.ToString());
+                                        //throw new Exception(err.ToString());
                                         return;
                                     }
                                     //Util.placementAction(cObj, cObj.thisLocation,(int)cObj.tileLocation.X,(int) cObj.tileLocation.Y,null,false);

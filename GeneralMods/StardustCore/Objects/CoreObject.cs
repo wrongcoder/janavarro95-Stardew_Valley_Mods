@@ -281,6 +281,7 @@ namespace StardustCore
         {
             performRemoveAction(this.TileLocation, this.thisLocation);
             who.addItemToInventory(this);
+            
             return true;
         }
 
@@ -571,6 +572,8 @@ namespace StardustCore
             {
 
             }
+
+            this.thisLocation = null;
             base.performRemoveAction(tileLocation, environment);
         }
 
@@ -1254,6 +1257,13 @@ namespace StardustCore
         /// <param name="I"></param>
         public static void Serialize(Item I)
         {
+
+            if((I as CoreObject).thisLocation != null)
+            {
+                SerializeToWorldPath(I);
+                return;
+            }
+
             String savePath = ModCore.SerializationManager.playerInventoryPath;
             String fileName = I.Name + ".json";
             String resultPath = Path.Combine(savePath, fileName);
@@ -1270,6 +1280,26 @@ namespace StardustCore
             System.IO.File.WriteAllText(resultPath, json);
             //StardustCore.ModCore.ModHelper.WriteJsonFile<CoreObject>(resultPath, (CoreObject)I);
         }
+
+        public static void SerializeToWorldPath(Item I)
+        {
+            String savePath = ModCore.SerializationManager.objectsInWorldPath;
+            String fileName = I.Name + ".json";
+            String resultPath = Path.Combine(savePath, fileName);
+            int count = 0;
+            while (File.Exists(resultPath))
+            {
+                resultPath = Serialization.SerializationManager.getValidSavePathIfDuplicatesExist(I, savePath, count);
+                count++;
+            }
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            (I as CoreObject).textureName = (I as CoreObject).TextureSheet.Name;
+            string json = JsonConvert.SerializeObject(I, Formatting.Indented, settings);
+            System.IO.File.WriteAllText(resultPath, json);
+        }
+
+
 
         /// <summary>
         /// Serializes the said item to a chest.
