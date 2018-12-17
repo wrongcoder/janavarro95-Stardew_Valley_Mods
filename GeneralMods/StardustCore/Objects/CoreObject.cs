@@ -576,7 +576,6 @@ namespace StardustCore
 
             StardustCore.ModCore.SerializationManager.trackedObjectList.Remove(this);
             this.thisLocation.removeObject(this.TileLocation, false);
-
             this.thisLocation = null;
             this.locationsName = "";
 

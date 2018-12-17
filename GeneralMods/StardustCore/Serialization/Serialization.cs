@@ -133,6 +133,8 @@ namespace StardustCore.Serialization
         /// </summary>
         public void cleanUpWorld()
         {
+            
+
             try
             {
                 ProcessDirectoryForDeletion(objectsInWorldPath);
@@ -144,8 +146,70 @@ namespace StardustCore.Serialization
             List<IItemSerializeable> removalList = new List<IItemSerializeable>();
             int countProcessed = 0;
             List<Item> idk = new List<Item>();
+
+            List<GameLocation> allLocations = new List<GameLocation>();
+            foreach (GameLocation location in Game1.locations)
+            {
+                allLocations.Add(location);
+            }
+            foreach(Building b in Game1.getFarm().buildings)
+            {
+                allLocations.Add(b.indoors);
+            }
+
+            foreach(GameLocation loc in allLocations)
+            {
+                foreach(var layer in loc.objects)
+                {
+                    foreach(var pair in layer)
+                    {
+                        if (removalList.Contains((pair.Value as CoreObject))) continue;
+                        try
+                        {
+                            if (pair.Value == null)
+                            {
+                                //Log.AsyncG("WTF");
+                                continue;
+                            }
+                            // Log.AsyncC(d.GetType());
+                        }
+                        catch (Exception e)
+                        {
+                            //ModCore.ModMonitor.Log(e.ToString());
+                        }
+                        string s = Convert.ToString((pair.Value.GetType()));
+
+                        if (acceptedTypes.ContainsKey(s))
+                        {
+                            // Log.AsyncM("Object is of accepted type: " + s);
+                            SerializerDataNode t;
+
+                            bool works = acceptedTypes.TryGetValue(s, out t);
+                            if (works == true)
+                            {
+                                countProcessed++;
+                                if ((pair.Value as CoreObject).useXML == false)
+                                {
+                                    // Log.AsyncY("Saving the object");
+                                    //Removes the object from the world and saves it to a file.
+                                    t.worldObj.Invoke((pair.Value as CoreObject));
+                                }
+                                else
+                                {
+                                    idk.Add((pair.Value as CoreObject));
+                                }
+                                //  Log.AsyncC("Progress on saving objects: " + countProcessed + "/" + Lists.trackedObjectList.Count);
+                                removalList.Add((pair.Value as CoreObject));
+                            }
+                        }
+                    }
+                }
+            }
+
             foreach (CoreObject d in trackedObjectList)
             {
+
+                if (removalList.Contains(d)) continue;
                 try
                 {
                     if (d == null)

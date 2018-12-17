@@ -27,7 +27,8 @@ namespace StardustCore
     /*
      *Known issues:
      * Clients have a error on Serialization that says they run across unknown XML elements such as core objects. However, inventories for farmhands and modded objects still get serialized properly.
-     */
+     * Inventories get wiped after being returned home from a festival.
+         */
 
 
     public class ModCore : Mod
@@ -87,6 +88,8 @@ namespace StardustCore
             TextureManagers.Add(ModManifest.UniqueID, TextureManager);
             StardewModdingAPI.Events.ControlEvents.KeyPressed += ControlEvents_KeyPressed;
 
+            ModHelper.Events.World.ObjectListChanged += World_ObjectListChanged;
+
             config = ModHelper.ReadConfig<ModConfig>();
             
             StardewModdingAPI.Events.GameEvents.UpdateTick += GameEvents_UpdateTick;
@@ -97,9 +100,21 @@ namespace StardustCore
             
         }
 
+        private void World_ObjectListChanged(object sender, StardewModdingAPI.Events.ObjectListChangedEventArgs e)
+        {
+            if (e.Added != null)
+            {
+                
+            }
+            else if (e.Removed != null)
+            {
+
+            }
+        }
+
         private void Player_Warped(object sender, StardewModdingAPI.Events.WarpedEventArgs e)
         {
-
+            if (justWarped) return;
             SerializationManager.cleanUpInventory();
             //SerializationManager.cleanUpWorld();
             //SerializationManager.cleanUpStorageContainers();
@@ -112,8 +127,8 @@ namespace StardustCore
             if (Game1.player != null)
             {
                 SerializationManager.cleanUpInventory();
-                SerializationManager.cleanUpWorld();
-                SerializationManager.cleanUpStorageContainers();
+                //SerializationManager.cleanUpWorld();
+                //SerializationManager.cleanUpStorageContainers();
                 Monitor.Log("Saved the player data after returning to title!");
             }
         }
@@ -125,8 +140,8 @@ namespace StardustCore
             ModMonitor.Log("Peer disconnected! Serializing custom objects");
 
             SerializationManager.cleanUpInventory();
-            SerializationManager.cleanUpWorld();
-            SerializationManager.cleanUpStorageContainers();
+            //SerializationManager.cleanUpWorld();
+            //SerializationManager.cleanUpStorageContainers();
             
         }
 
@@ -145,6 +160,7 @@ namespace StardustCore
                 }
                 else if (e.Type == MultiplayerSupport.RestoreModObjects)
                 {
+                    if (Game1.eventUp) return; //Prevent item duplication.
                     ModMonitor.Log("Restoring custom objects.");
                     SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList);
                 }
@@ -156,11 +172,17 @@ namespace StardustCore
            
             if (SerializationManager == null) return;
 
+
+            if (Game1.eventUp)
+            {
+                SerializationManager.restoreAllModObjects(SerializationManager.trackedObjectList); //Force a restore and then a serialize save to prevent deletions.
+            }
             ModMonitor.Log("Got peer context. Serialize/remove all custom objects really quick to prevent loading errors.");
 
+            
             SerializationManager.cleanUpInventory();
-            SerializationManager.cleanUpWorld();
-            SerializationManager.cleanUpStorageContainers();
+            //SerializationManager.cleanUpWorld();
+            //SerializationManager.cleanUpStorageContainers();
 
             
         }
@@ -336,8 +358,8 @@ namespace StardustCore
             {
                 ModMonitor.Log("Serialize all objects on disposing!");
                 SerializationManager.cleanUpInventory();
-                SerializationManager.cleanUpWorld();
-                SerializationManager.cleanUpStorageContainers();
+                //SerializationManager.cleanUpWorld();
+                //SerializationManager.cleanUpStorageContainers();
             }
         }
 

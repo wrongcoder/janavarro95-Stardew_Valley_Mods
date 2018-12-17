@@ -49,6 +49,7 @@ namespace StardustCore.NetCode
         public NetBool useXML;
         public NetString serializationName;
 
+
         //Animation Manager.....
         public NetAnimationManager animationManager;
 
@@ -101,6 +102,11 @@ namespace StardustCore.NetCode
             drawPosition.Read(reader, version);
             Value.drawPosition = drawPosition.Value;
 
+            locationName = new NetString();
+            locationName.Read(reader, version);
+            Value.locationsName = locationName.Value;
+            Value.thisLocation = Game1.getLocationFromName(locationName.Value);
+
             /*
             animationManager = new NetAnimationManager();
             animationManager.Read(reader, version);
@@ -131,6 +137,9 @@ namespace StardustCore.NetCode
 
             drawPosition = new NetVector2(Value.drawPosition);
             drawPosition.Write(writer);
+
+            locationName = new NetString(Value.locationsName);
+            locationName.Write(writer);
 
             /*
             if (Value.animationManager == null)
