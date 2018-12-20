@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Graphics;
 using StardewValley;
@@ -63,10 +64,25 @@ namespace Revitalize.Framework.Objects
 
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
+            var mState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+            var keyboardState = Game1.GetKeyboardState();
+
+            if (mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift))==false)
+            {
+                Revitalize.ModCore.log("Right clicked!");
+                return rightClicked(who);
+            }
+            else if(mState.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift)))
+            {
+                return shiftRightClicked(who);
+            }
+
             if (justCheckingForActivity)
+            {
                 return true;
-            Revitalize.ModCore.ModMonitor.Log("Interact with core object!");
-            return true;
+            }
+            Revitalize.ModCore.log("Left clicked!");
+            return this.clicked(who);
         }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
@@ -75,6 +91,36 @@ namespace Revitalize.Framework.Objects
             return new CustomObject((BasicItemInformation) CustomObjectData.collection[additionalSaveData["id"]], (replacement as Chest).TileLocation);
         }
 
+
+        public virtual bool rightClicked(Farmer who)
+        {
+            // Game1.showRedMessage("YOOO");
+            //do some stuff when the right button is down
+            // rotate();
+            if (this.heldObject.Value != null)
+            {
+                //  Game1.player.addItemByMenuIfNecessary(this.heldObject);
+                // this.heldObject = null;
+            }
+            else
+            {
+                //   this.heldObject = Game1.player.ActiveObject;
+                //  Game1.player.removeItemFromInventory(heldObject);
+            }
+            return true;
+        }
+
+        public virtual bool shiftRightClicked(Farmer who)
+        {
+            Revitalize.ModCore.log("Shift right clicked!");
+            return true;
+        }
+
+        public override bool clicked(Farmer who)
+        {
+            Revitalize.ModCore.log("Clicky click!");
+            return base.clicked(who);
+        }
 
         public override Color getCategoryColor()
         {
