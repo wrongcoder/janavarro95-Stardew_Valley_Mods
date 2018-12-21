@@ -95,7 +95,7 @@ namespace Omegasis.HappyBirthday
             //Handle normal birthday wishes.
             if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath,path)))
             {
-
+                HappyBirthday.ModMonitor.Log("Creating Villager Birthday Messages", StardewModdingAPI.LogLevel.Alert);
                 HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(path, defaultBirthdayWishes);
                 this.birthdayWishes = defaultBirthdayWishes;
             }
@@ -156,7 +156,7 @@ namespace Omegasis.HappyBirthday
                 }
                 else
                 {
-                    tempBirthdayDict = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(tempSpouseBirthdayFile);
+                    tempSpouseBirthdayDict = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(tempSpouseBirthdayFile);
                 }
 
                 //Set translated birthday info.

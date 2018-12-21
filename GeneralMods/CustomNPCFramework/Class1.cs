@@ -66,6 +66,8 @@ namespace CustomNPCFramework
         /// Keeps track of all of the asets/textures added in by the framework. Also manages all of the asset managers that are the ones actually managing the textures.
         /// </summary>
         public static AssetPool assetPool;
+
+        public static IManifest Manifest;
         
         /// <summary>
         /// Ran when loading the SMAPI. Used to initialize data.
@@ -75,6 +77,7 @@ namespace CustomNPCFramework
         {
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
+            Manifest = ModManifest;
 
             StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_LoadChar;
 

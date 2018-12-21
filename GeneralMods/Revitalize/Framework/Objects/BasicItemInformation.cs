@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
+using Revitalize.Framework.Graphics.Animations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,9 @@ namespace Revitalize.Framework.Objects
         public bool canBeSetOutdoors;
         public bool isLamp;
 
+        public AnimationManager animationManager;
+        public Vector2 drawPosition;
+
         public BasicItemInformation() : base()
         {
             name = "";
@@ -34,9 +38,12 @@ namespace Revitalize.Framework.Objects
             this.edibility = -300;
             this.canBeSetIndoors = false;
             this.canBeSetOutdoors = false;
+
+            this.animationManager = null;
+            this.drawPosition = Vector2.Zero;
         }
 
-        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData ):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
+        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
         {
             this.name = name;
             this.description = description;
@@ -51,6 +58,19 @@ namespace Revitalize.Framework.Objects
             this.fragility = fragility;
             this.isLamp = isLamp;
 
+            this.animationManager = animationManager;
+            if (this.animationManager.IsNull)
+            {
+                this.animationManager = new AnimationManager(new Graphics.Texture2DExtended(), new Animation(new Rectangle(0, 0, 16, 16)), false);
+                this.animationManager.getExtendedTexture().texture = this.texture;
+            }
+            else
+            {
+                this.texture = this.animationManager.getTexture();
+            }
+
+            this.drawPosition = Vector2.Zero;
+
             recreateDataString();
         }
 
@@ -58,6 +78,8 @@ namespace Revitalize.Framework.Objects
         {
             this.data=this.name+"/"+this.price+"/"+this.edibility+"/"+"Crafting -9"+"/"+this.description+"/"+this.canBeSetOutdoors+"/"+this.canBeSetIndoors+"/"+this.fragility+"/"+this.isLamp+"/"+this.name;
         }
+
+
 
     }
 }

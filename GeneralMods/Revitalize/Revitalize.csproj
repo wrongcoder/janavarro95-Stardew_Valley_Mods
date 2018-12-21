@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Graphics\Animations\Animation.cs" />
+    <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
     <Compile Include="Framework\Graphics\Texture2DExtended.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />

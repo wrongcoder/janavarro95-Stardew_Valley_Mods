@@ -66,7 +66,7 @@ namespace CustomNPCFramework.Framework.Graphics
         public DirectionalTexture(IModHelper helper ,NamePairings info, string path, Direction direction = Direction.down)
         {
 
-            new Texture2DExtended(helper, path);
+            new Texture2DExtended(helper, Class1.Manifest, path);
 
             string leftString= Class1.getShortenedDirectory(Path.Combine(path, info.leftString + ".png")).Remove(0, 1);
             string rightString = Class1.getShortenedDirectory(Path.Combine(path, info.rightString + ".png")).Remove(0, 1);
@@ -74,10 +74,10 @@ namespace CustomNPCFramework.Framework.Graphics
             string downString = Class1.getShortenedDirectory(Path.Combine(path, info.downString + ".png")).Remove(0, 1);
 
 
-            this.leftTexture = new Texture2DExtended(helper, leftString);
-            this.rightTexture = new Texture2DExtended(helper, rightString);
-            this.upTexture = new Texture2DExtended(helper, upString);
-            this.downTexture = new Texture2DExtended(helper, downString);
+            this.leftTexture = new Texture2DExtended(helper, Class1.Manifest, leftString);
+            this.rightTexture = new Texture2DExtended(helper, Class1.Manifest, rightString);
+            this.upTexture = new Texture2DExtended(helper, Class1.Manifest, upString);
+            this.downTexture = new Texture2DExtended(helper, Class1.Manifest, downString);
 
             if (direction == Direction.left) this.currentTexture = leftTexture;
             if (direction == Direction.right) this.currentTexture = rightTexture;

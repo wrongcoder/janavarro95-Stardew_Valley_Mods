@@ -127,6 +127,7 @@ namespace Omegasis.HappyBirthday
 
             messages = new BirthdayMessages();
             giftManager = new GiftManager();
+            messages.createBirthdayGreetings();
             isDailyQuestBoard = false;
 
             ModHelper.Events.Multiplayer.ModMessageReceived += Multiplayer_ModMessageReceived;
@@ -368,7 +369,7 @@ namespace Omegasis.HappyBirthday
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
 
-            messages.createBirthdayGreetings();
+            ;
 
             if (PlayerBirthdayData != null)
             {
@@ -495,6 +496,7 @@ namespace Omegasis.HappyBirthday
             if (Game1.currentSpeaker != null)
             {
                 string name = Game1.currentSpeaker.Name;
+                if (Game1.player.getFriendshipHeartLevelForNPC(name) <= Config.minNeutralFriendshipGiftLevel) return;
                 if (this.IsBirthday() && this.VillagerQueue.Contains(name))
                 {
                     try

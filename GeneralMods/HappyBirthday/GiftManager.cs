@@ -117,6 +117,9 @@ namespace Omegasis.HappyBirthday
                 if (File.Exists(Path.Combine(Game1.content.RootDirectory, "Data", "PossibleBirthdayGifts.xnb"))){
                     HappyBirthday.ModMonitor.Log("Legacy loading detected. Attempting to load from StardewValley/Content/Data/PossibleBirthdayGifts.xnb");
                     this.defaultBirthdayGifts = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "PossibleBirthdayGifts"));
+
+                    string villagerGifts = Path.Combine("Content", "Gifts", "BirthdayGifts.json");
+                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(villagerGifts, this.defaultBirthdayGifts);
                 }
                 else
                 {
