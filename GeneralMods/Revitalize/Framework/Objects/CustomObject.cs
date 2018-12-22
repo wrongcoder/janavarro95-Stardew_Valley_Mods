@@ -74,6 +74,7 @@ namespace Revitalize.Framework.Objects
 
             this.updateDrawPosition();
 
+            this.bigCraftable.Value = false;
             
         }
 
@@ -134,7 +135,35 @@ namespace Revitalize.Framework.Objects
         public override bool clicked(Farmer who)
         {
             Revitalize.ModCore.log("Clicky click!");
-            return base.clicked(who);
+
+            return removeAndAddToPlayersInventory();
+            //return base.clicked(who);
+        }
+
+        public override bool performToolAction(Tool t, GameLocation location)
+        {
+
+            if(t.GetType()== typeof(StardewValley.Tools.Axe) || t.GetType()== typeof(StardewValley.Tools.Pickaxe))
+            {
+                Game1.createItemDebris(this, Game1.player.getStandingPosition(), Game1.player.getDirection());
+                Game1.player.currentLocation.removeObject(this.TileLocation, false);
+                return false;
+            }
+
+            return false;
+            //return base.performToolAction(t, location);
+        }
+
+        public virtual bool removeAndAddToPlayersInventory()
+        {
+            if (Game1.player.isInventoryFull())
+            {
+                Game1.showRedMessage("Inventory full.");
+                return false;
+            }
+            Game1.player.currentLocation.removeObject(this.TileLocation, false);
+            Game1.player.addItemToInventory(this);
+            return true;
         }
 
         public override Color getCategoryColor()
@@ -233,10 +262,12 @@ namespace Revitalize.Framework.Objects
             double num2 = (double)this.scale.Y > 1.0 ? (double)this.getScale().Y : 4.0;
             int num3 = (bool)(this.flipped) ? 1 : 0;
             double num4 = (double)layerDepth;
-            spriteBatch1.Draw(this.displayTexture, local, sourceRectangle, color, (float)num1, origin, (float)num2, (SpriteEffects)num3, (float)num4);
+
+            spriteBatch1.Draw(this.displayTexture, local, this.animationManager.defaultDrawFrame.sourceRectangle, color, (float)num1, origin, (float)num2, (SpriteEffects)num3, (float)num4);
 
         }
 
+       
 
         public override void drawAsProp(SpriteBatch b)
         {
@@ -257,7 +288,7 @@ namespace Revitalize.Framework.Objects
                 float num = this.Quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
                 spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.Quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.Quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
             }
-            spriteBatch.Draw(this.displayTexture, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), Color.White * transparency, 0f, new Vector2((float)(this.animationManager.currentAnimation.sourceRectangle.Width / 2), (float)(this.animationManager.currentAnimation.sourceRectangle.Height)), 1f * 1 * scaleSize * .5f, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(this.displayTexture, location + new Vector2((float)(Game1.tileSize), (float)(Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), Color.White * transparency, 0f, new Vector2((float)(this.animationManager.currentAnimation.sourceRectangle.Width / 2), (float)(this.animationManager.currentAnimation.sourceRectangle.Height)), scaleSize, SpriteEffects.None, layerDepth);
         }
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
