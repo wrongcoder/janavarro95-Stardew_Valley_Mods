@@ -263,7 +263,7 @@ namespace Revitalize.Framework.Objects
             int num3 = (bool)(this.flipped) ? 1 : 0;
             double num4 = (double)layerDepth;
 
-            spriteBatch1.Draw(this.displayTexture, local, this.animationManager.defaultDrawFrame.sourceRectangle, color, (float)num1, origin, (float)num2, (SpriteEffects)num3, (float)num4);
+            spriteBatch1.Draw(this.displayTexture, local, this.animationManager.defaultDrawFrame.sourceRectangle, color, (float)num1, origin, (float)4f, (SpriteEffects)num3, (float)num4);
 
         }
 
