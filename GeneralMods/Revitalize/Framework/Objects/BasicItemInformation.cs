@@ -27,6 +27,8 @@ namespace Revitalize.Framework.Objects
         public AnimationManager animationManager;
         public Vector2 drawPosition;
 
+        public Color drawColor;
+
         public BasicItemInformation() : base()
         {
             name = "";
@@ -41,9 +43,10 @@ namespace Revitalize.Framework.Objects
 
             this.animationManager = null;
             this.drawPosition = Vector2.Zero;
+            this.drawColor = Color.White;
         }
 
-        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
+        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager,Color DrawColor):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
         {
             this.name = name;
             this.description = description;
@@ -70,6 +73,16 @@ namespace Revitalize.Framework.Objects
             }
 
             this.drawPosition = Vector2.Zero;
+
+            if (DrawColor == null)
+            {
+                this.drawColor = Color.White;
+            }
+            else
+            {
+                this.drawColor = DrawColor;
+            }
+                
 
             recreateDataString();
         }

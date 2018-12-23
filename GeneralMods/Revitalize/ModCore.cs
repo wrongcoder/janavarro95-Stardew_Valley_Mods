@@ -30,7 +30,7 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
-            CustomObject obj = new CustomObject(new BasicItemInformation("CoreObjectTest","YAY FUN!","Omegasis.Revitalize.CoreObject",Color.Violet,-300,0,false,100,Vector2.Zero,true,true,"Omegasis.bleh", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet,Color.White,0,true,typeof(CustomObject),null,new Framework.Graphics.Animations.AnimationManager()));
+            CustomObject obj = new CustomObject(new BasicItemInformation("CoreObjectTest","YAY FUN!","Omegasis.Revitalize.CoreObject",Color.Violet,-300,0,false,100,Vector2.Zero,true,true,"Omegasis.bleh", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet,Color.White,0,true,typeof(CustomObject),null,new Framework.Graphics.Animations.AnimationManager(),Color.Red));
 
 
             new InventoryItem(obj, 100,1).addToNPCShop("Gus");
