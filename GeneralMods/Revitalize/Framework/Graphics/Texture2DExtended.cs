@@ -30,6 +30,15 @@ namespace Revitalize.Framework.Graphics
             this.modID = "";
         }
 
+        public Texture2DExtended(Texture2D Texture)
+        {
+            this.Name = "";
+            this.texture = Texture;
+            this.path = "";
+            this.helper = null;
+            this.modID = "";
+        }
+
         /// <summary>
         /// Constructor.
         /// </summary>

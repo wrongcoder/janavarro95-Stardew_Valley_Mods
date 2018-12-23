@@ -50,6 +50,8 @@
     <Compile Include="Framework\Graphics\Texture2DExtended.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
+    <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
+    <Compile Include="Framework\Objects\MultiTiledObject.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

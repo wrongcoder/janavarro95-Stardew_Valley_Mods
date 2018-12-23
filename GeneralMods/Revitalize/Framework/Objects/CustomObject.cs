@@ -24,6 +24,8 @@ namespace Revitalize.Framework.Objects
         public string id;
         public BasicItemInformation info;
 
+        public GameLocation location;
+
         /// <summary>
         /// The animation manager.
         /// </summary>
@@ -174,6 +176,8 @@ namespace Revitalize.Framework.Objects
         {
             Revitalize.ModCore.log("Clicky click!");
 
+            Revitalize.ModCore.log(System.Environment.StackTrace);
+
             return removeAndAddToPlayersInventory();
             //return base.clicked(who);
         }
@@ -190,6 +194,7 @@ namespace Revitalize.Framework.Objects
             if(t.GetType()== typeof(StardewValley.Tools.Axe) || t.GetType()== typeof(StardewValley.Tools.Pickaxe))
             {
                 Game1.createItemDebris(this, Game1.player.getStandingPosition(), Game1.player.getDirection());
+                this.location = null;
                 Game1.player.currentLocation.removeObject(this.TileLocation, false);
                 return false;
             }
@@ -209,6 +214,7 @@ namespace Revitalize.Framework.Objects
                 Game1.showRedMessage("Inventory full.");
                 return false;
             }
+            this.location = null;
             Game1.player.currentLocation.removeObject(this.TileLocation, false);
             Game1.player.addItemToInventory(this);
             return true;
@@ -256,6 +262,7 @@ namespace Revitalize.Framework.Objects
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
             this.updateDrawPosition();
+            this.location = location;
             return base.placementAction(location, x, y, who);
         }
 
