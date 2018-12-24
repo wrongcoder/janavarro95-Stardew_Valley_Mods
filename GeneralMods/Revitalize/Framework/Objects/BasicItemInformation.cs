@@ -29,6 +29,8 @@ namespace Revitalize.Framework.Objects
 
         public Color drawColor;
 
+        public bool ignoreBoundingBox;
+
         public BasicItemInformation() : base()
         {
             name = "";
@@ -46,7 +48,7 @@ namespace Revitalize.Framework.Objects
             this.drawColor = Color.White;
         }
 
-        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager,Color DrawColor):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
+        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager,Color DrawColor,bool ignoreBoundingBox):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
         {
             this.name = name;
             this.description = description;
@@ -82,7 +84,8 @@ namespace Revitalize.Framework.Objects
             {
                 this.drawColor = DrawColor;
             }
-                
+
+            this.ignoreBoundingBox = ignoreBoundingBox;
 
             recreateDataString();
         }

@@ -92,10 +92,27 @@ namespace Revitalize.Framework.Objects
             this.isLamp.Value = false;
             this.fragility.Value = 0;
 
-            this.updateDrawPosition();
+            this.updateDrawPosition(0,0);
 
             this.bigCraftable.Value = false;
-            
+
+
+            if (this.info.ignoreBoundingBox)
+            {
+                this.boundingBox.Value = new Rectangle(Int32.MinValue, Int32.MinValue, 0, 0);
+            }
+        }
+
+        public override Rectangle getBoundingBox(Vector2 tileLocation)
+        {
+            if (this.info.ignoreBoundingBox)
+            {
+                return new Rectangle(Int32.MinValue, Int32.MinValue, 0, 0);
+            }
+            else
+            {
+                return base.getBoundingBox(tileLocation);
+            }
         }
 
         /// <summary>
@@ -195,7 +212,9 @@ namespace Revitalize.Framework.Objects
             {
                 Game1.createItemDebris(this, Game1.player.getStandingPosition(), Game1.player.getDirection());
                 this.location = null;
+                this.updateDrawPosition(0, 0);
                 Game1.player.currentLocation.removeObject(this.TileLocation, false);
+                this.updateDrawPosition(0, 0);
                 return false;
             }
 
@@ -217,6 +236,7 @@ namespace Revitalize.Framework.Objects
             this.location = null;
             Game1.player.currentLocation.removeObject(this.TileLocation, false);
             Game1.player.addItemToInventory(this);
+            this.updateDrawPosition(0, 0);
             return true;
         }
 
@@ -261,7 +281,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-            this.updateDrawPosition();
+            this.updateDrawPosition(x,y);
             this.location = location;
             return base.placementAction(location, x, y, who);
         }
@@ -269,9 +289,10 @@ namespace Revitalize.Framework.Objects
         /// <summary>
         /// Updates a visual draw position.
         /// </summary>
-        public virtual void updateDrawPosition()
+        public virtual void updateDrawPosition(int x, int y)
         {
-            this.info.drawPosition = new Vector2((float)this.boundingBox.X, (float)(this.boundingBox.Y - (this.animationManager.currentAnimation.sourceRectangle.Height * Game1.pixelZoom - this.boundingBox.Height)));
+            this.info.drawPosition = new Vector2((int)(x / Game1.tileSize), (int)(y / Game1.tileSize));
+            //this.info.drawPosition = new Vector2((float)this.boundingBox.X, (float)(this.boundingBox.Y - (this.animationManager.currentAnimation.sourceRectangle.Height * Game1.pixelZoom - this.boundingBox.Height)));
         }
 
         /// <summary>
@@ -292,9 +313,9 @@ namespace Revitalize.Framework.Objects
         /// <param name="alpha"></param>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            if (x == -1)
+            if (x <= -1)
             {
-                spriteBatch.Draw(this.info.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.info.drawPosition), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                spriteBatch.Draw(this.info.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.info.drawPosition), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y*Game1.tileSize) / 10000f));
             }
             else
             {
@@ -307,14 +328,14 @@ namespace Revitalize.Framework.Objects
 
                     }
 
-                    spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                    spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y*Game1.tileSize) / 10000f));
                     // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
                 }
 
                 else
                 {
                     //Log.AsyncC("Animation Manager is working!");
-                    this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                    this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y*Game1.tileSize) / 10000f));
                     try
                     {
                         this.animationManager.tickAnimation();
