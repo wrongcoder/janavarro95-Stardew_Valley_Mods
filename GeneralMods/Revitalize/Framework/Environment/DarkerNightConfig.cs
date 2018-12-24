@@ -10,8 +10,6 @@ namespace Revitalize.Framework.Environment
     public class DarkerNightConfig
     {
         public float DarknessIntensity;
-
-
         public DarkerNightConfig()
         {
             this.DarknessIntensity = .9f;
