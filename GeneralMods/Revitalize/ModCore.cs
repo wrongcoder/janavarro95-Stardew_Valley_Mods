@@ -35,6 +35,7 @@ namespace Revitalize
 
             ModHelper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
             ModHelper.Events.GameLoop.TimeChanged += GameLoop_TimeChanged;
+            ModHelper.Events.GameLoop.UpdateTicked += GameLoop_UpdateTicked;
         }
 
 
@@ -49,9 +50,14 @@ namespace Revitalize
         }
 
 
+        private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
+        {
+            DarkerNight.SetDarkerColor();
+        }
+
         private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
         {
-            DarkerNight.setDarkerNightColor();
+            DarkerNight.CalculateDarkerNightColor();
         }
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
