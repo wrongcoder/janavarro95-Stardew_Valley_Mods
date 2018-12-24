@@ -61,6 +61,8 @@ namespace Revitalize.Framework.Environment
         public static void SetDarkerColor()
         {
             if (Config.Enabled == false) return;
+            if (Game1.player == null) return;
+            if (Game1.player.currentLocation == null) return;
             if (Game1.player.currentLocation.IsOutdoors && Game1.timeOfDay >= Game1.getStartingToGetDarkTime())
             {
                 Game1.outdoorLight = CalculatedColor;
@@ -74,7 +76,7 @@ namespace Revitalize.Framework.Environment
         {
             if (Config.Enabled == false) return;
             if (Game1.player == null) return;
-
+            if (Game1.player.currentLocation == null) return;
             //Calculate original lighting.
             if (Game1.timeOfDay >= Game1.getTrulyDarkTime())
             {
