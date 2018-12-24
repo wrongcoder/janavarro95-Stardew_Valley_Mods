@@ -45,9 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Environment\DarkerNight.cs" />
+    <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
     <Compile Include="Framework\Graphics\Animations\Animation.cs" />
     <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
     <Compile Include="Framework\Graphics\Texture2DExtended.cs" />
+    <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />

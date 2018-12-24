@@ -17,13 +17,16 @@ namespace Revitalize.Framework.Objects
 {
     /// <summary>
     /// A custom object template.
+    /// 
+    /// Todo:
+    ///     -Multiple Lights
+    ///     -Events when walking over?
+    ///     -Inventories
     /// </summary>
     public class CustomObject : PySObject
     {
-
         public string id;
         public BasicItemInformation info;
-
         public GameLocation location;
 
         /// <summary>

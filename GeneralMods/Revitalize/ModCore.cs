@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Revitalize.Framework.Graphics;
 using Revitalize.Framework.Graphics.Animations;
+using Revitalize.Framework.Environment;
+using System.IO;
 
 namespace Revitalize
 {
@@ -27,7 +29,29 @@ namespace Revitalize
             ModHelper = helper;
             ModMonitor = Monitor;
 
+            createDirectories();
+            initailizeComponents();
+
+
             ModHelper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
+            ModHelper.Events.GameLoop.TimeChanged += GameLoop_TimeChanged;
+        }
+
+
+        private void createDirectories()
+        {
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
+        }
+
+        private void initailizeComponents()
+        {
+            DarkerNight.InitializeConfig();
+        }
+
+
+        private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
+        {
+            DarkerNight.setDarkerNightColor();
         }
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
