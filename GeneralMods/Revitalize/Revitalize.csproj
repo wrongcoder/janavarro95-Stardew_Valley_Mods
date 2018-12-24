@@ -55,6 +55,7 @@
     <Compile Include="Framework\Objects\CustomObject.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
+    <Compile Include="Framework\Utilities\InventoryManager.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
