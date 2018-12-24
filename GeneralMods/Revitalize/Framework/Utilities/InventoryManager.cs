@@ -60,6 +60,18 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Checks to see if this core object actually has a valid inventory.
+        /// </summary>
+        public bool HasInventory
+        {
+            get
+            {
+                if (this.capacity <= 0) return false;
+                return true;
+            }
+        }
+
         public InventoryManager()
         {
             this.capacity = 0;
