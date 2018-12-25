@@ -128,6 +128,7 @@ namespace Revitalize.Framework.Utilities
             {
                 foreach(Item self in this.items)
                 {
+                    if (self == null) continue;
                     if (self.canStackWith(I))
                     {
                         self.addToStack(I.Stack);

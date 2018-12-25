@@ -13,6 +13,8 @@ using Revitalize.Framework.Graphics;
 using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Environment;
 using System.IO;
+using Revitalize.Framework.Crafting;
+using StardewValley.Objects;
 
 namespace Revitalize
 {
@@ -71,9 +73,19 @@ namespace Revitalize
             bigObject.addComponent(new Vector2(1, 0), obj2);
             bigObject.addComponent(new Vector2(2, 0), obj3);
 
+            Recipe pie = new Recipe(new Dictionary<Item, int>()
+            {
+                [bigObject] = 1
+            },new KeyValuePair<Item, int>(new Furniture(3,Vector2.Zero),1));
+
 
             new InventoryItem(bigObject, 100,1).addToNPCShop("Gus");
             Game1.player.addItemToInventory(bigObject);
+
+            if (pie.PlayerCanCraft())
+            {
+                pie.craft();
+            }
             
         }
 
