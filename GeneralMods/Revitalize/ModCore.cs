@@ -18,6 +18,67 @@ using StardewValley.Objects;
 
 namespace Revitalize
 {
+
+    /*
+     * Todo:
+     *  -Multiple Lights On Object
+     *  -Illumination Colors
+     *  Furniture:
+     *      -rugs
+     *      -tables
+     *      -lamps
+     *      -chairs
+     *      -dressers/other storage containers
+     *      -fun interactables
+     *      -More crafting tables
+     *  -Machines
+     *      !=Energy
+     *      -Furnace
+     *      -Seed Maker
+     *      -Stone Quarry
+     *  -Materials
+     *      -Tin/Bronze/Alluminum/Silver?Platinum/Etc
+     *  -Crafting Menu
+     *  -Item Grab Menu (Extendable)
+     *  -Gift Boxes
+     *  Magic!
+     *      -Alchemy Bags
+     *      -Transmutation
+     *      -Effect Crystals
+     *      -Spell books
+     *      -Potions!
+     *      -Magic Meter
+     *  Festivals
+     *      -Firework festival?
+     *  Stargazing???
+     *      -Moon Phases+DarkerNight
+     *  Bigger/Better Museum?
+     *  More Crops?
+     *  More Food?
+     * 
+     *  Equippables!
+     *      -accessories that provide buffs/regen/friendship
+     *      
+     *  Music???
+     *      -IDK maybe add in instruments???
+     *      
+     *  More buildings????
+     *  
+     *  More Animals???
+     *  
+     *  Readable Books?
+     *  
+     *  Custom NPCs for shops???
+     *  
+     *  Frisbee Minigame?
+     *  
+     *  HorseRace Minigame/Betting?
+     *  
+     *  Locations:
+     *      -Small Island Home?
+     *      
+     */
+
     public class ModCore : Mod
     {
         public static IModHelper ModHelper;
