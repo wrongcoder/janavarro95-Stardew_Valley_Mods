@@ -165,9 +165,17 @@ namespace Revitalize.Framework.Crafting
             from = manager.items;
         }
 
-        public void produce(ref List<Item> to,bool dropToGround=false)
+        public void produce(ref List<Item> to,bool dropToGround=false,bool isPlayerInventory=false)
         {
-            InventoryManager manager = new InventoryManager(to);
+            InventoryManager manager;
+            if (isPlayerInventory == true)
+            {
+                manager = new InventoryManager(new List<Item>());
+            }
+            else
+            {
+                manager = new InventoryManager(to);
+            }
             foreach(KeyValuePair<Item,int> pair in this.outputs)
             {
                 Item I = pair.Key.getOne();
@@ -181,17 +189,29 @@ namespace Revitalize.Framework.Crafting
             to = manager.items;
         }
 
-        public void craft(ref List<Item> from,ref List<Item> to,bool dropToGround=false)
+        public void craft(ref List<Item> from,ref List<Item> to,bool dropToGround=false,bool isPlayerInventory=false)
         {
+            InventoryManager manager = new InventoryManager(to);
+            if (manager.ItemCount + this.outputs.Count >= manager.capacity)
+            {
+                if (isPlayerInventory) Game1.showRedMessage("Inventory Full");
+                else return;
+            }
             consume(ref from);
-            produce(ref to);
+            produce(ref to,dropToGround,isPlayerInventory);
         }
 
         public void craft()
         {
             List<Item> playerItems = Game1.player.Items.ToList();
-            craft(ref playerItems,ref playerItems, true);
-            Game1.player.Items = playerItems;
+            List<Item> outPutItems = new List<Item>();
+            craft(ref playerItems,ref outPutItems, true,true);
+
+            Game1.player.Items = playerItems; //Set the items to be post consumption.
+            foreach(Item I in outPutItems)
+            {
+                Game1.player.addItemToInventory(I); //Add all items produced.
+            }
         }
 
         public bool PlayerCanCraft()
