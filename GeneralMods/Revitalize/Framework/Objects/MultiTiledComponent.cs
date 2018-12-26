@@ -46,16 +46,28 @@ namespace Revitalize.Framework.Objects
             //return base.clicked(who);
         }
 
-        
+        public override bool rightClicked(Farmer who)
+        {
+            if (this.location == null)
+            {
+                this.location = Game1.player.currentLocation;
+            }
+            this.info.lightManager.toggleLights(this.location, this);
+            return true;
+        }
+
+
 
         public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)
         {
+            this.location = null;
             base.performRemoveAction(this.TileLocation, environment);
         }
 
         public virtual void removeFromLocation(GameLocation location,Vector2 offset)
         {
             location.removeObject(this.TileLocation,false);
+            this.location = null;
             //this.performRemoveAction(this.TileLocation,location);
         }
 
@@ -73,6 +85,7 @@ namespace Revitalize.Framework.Objects
             this.updateDrawPosition(x,y);
             this.location = location;
 
+            if (this.location == null) this.location = Game1.player.currentLocation;
             this.TileLocation = new Vector2((int)(x / Game1.tileSize), (int)(y / Game1.tileSize));
 
             return base.placementAction(location, x, y, who);

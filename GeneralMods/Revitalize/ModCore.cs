@@ -15,6 +15,7 @@ using Revitalize.Framework.Environment;
 using System.IO;
 using Revitalize.Framework.Crafting;
 using StardewValley.Objects;
+using Revitalize.Framework.Illuminate;
 
 namespace Revitalize
 {
@@ -77,6 +78,7 @@ namespace Revitalize
      *  Locations:
      *      -Small Island Home?
      *      
+     *  More crops
      */
 
     public class ModCore : Mod
@@ -125,11 +127,14 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
-            MultiTiledComponent obj = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest","YAY FUN!","Omegasis.Revitalize.MultiTiledComponent",Color.White,-300,0,false,100,Vector2.Zero,true,true,"Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet,Color.White,0,true,typeof(MultiTiledComponent),null,new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet),new Animation(new Rectangle(0,0,16,16))),Color.Red,true,null));
-            MultiTiledComponent obj2 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest2", "SomeFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 16, 16, 16))), Color.Red,false,null));
-            MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red,false,null));
+            MultiTiledComponent obj = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest","YAY FUN!","Omegasis.Revitalize.MultiTiledComponent",Color.White,-300,0,false,100,Vector2.Zero,true,true,"Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet,Color.White,0,true,typeof(MultiTiledComponent),null,new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet),new Animation(new Rectangle(0,0,16,16))),Color.Red,true,null,null));
+            MultiTiledComponent obj2 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest2", "SomeFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 16, 16, 16))), Color.Red,false,null,null));
+            MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red,false,null,null));
 
-            MultiTiledObject bigObject= new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White,false,null));
+
+            obj.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj);
+
+            MultiTiledObject bigObject= new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White,false,null,null));
             bigObject.addComponent(new Vector2(0, 0), obj);
             bigObject.addComponent(new Vector2(1, 0), obj2);
             bigObject.addComponent(new Vector2(2, 0), obj3);
@@ -142,10 +147,10 @@ namespace Revitalize
 
             new InventoryItem(bigObject, 100,1).addToNPCShop("Gus");
             Game1.player.addItemToInventory(bigObject);
-
+            
             if (pie.PlayerCanCraft())
             {
-                pie.craft();
+                //pie.craft();
             }
             
         }

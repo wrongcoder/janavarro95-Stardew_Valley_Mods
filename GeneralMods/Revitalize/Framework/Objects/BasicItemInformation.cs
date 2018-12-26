@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Graphics.Animations;
+using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,8 @@ namespace Revitalize.Framework.Objects
 
         public InventoryManager inventory;
 
+        public LightManager lightManager;
+
         public BasicItemInformation() : base()
         {
             name = "";
@@ -50,9 +53,10 @@ namespace Revitalize.Framework.Objects
             this.drawPosition = Vector2.Zero;
             this.drawColor = Color.White;
             this.inventory = new InventoryManager();
+            this.lightManager = new LightManager();
         }
 
-        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager,Color DrawColor,bool ignoreBoundingBox, InventoryManager Inventory):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
+        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager,Color DrawColor,bool ignoreBoundingBox, InventoryManager Inventory,LightManager Lights):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
         {
             this.name = name;
             this.description = description;
@@ -99,6 +103,15 @@ namespace Revitalize.Framework.Objects
             else
             {
                 this.inventory = Inventory;
+            }
+
+            if (Lights == null)
+            {
+                this.lightManager = new LightManager();
+            }
+            else
+            {
+                this.lightManager = Lights;
             }
         }
 

@@ -15,5 +15,13 @@ namespace Revitalize.Framework.Illuminate
             return new Color(new Vector3(value));
         }
 
+        public static Color Invert(this Color color)
+        {
+            int r = Math.Abs(255 - color.R);
+            int g = Math.Abs(255 - color.G);
+            int b = Math.Abs(255 - color.B);
+            return new Color(r, g, b);
+        }
+
     }
 }

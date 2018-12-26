@@ -894,7 +894,8 @@ namespace StardustCore
                     num2 = 2;
                     goto IL_94;
             }
-            num = 1;
+  
+          num = 1;
             num2 = 1;
             IL_94:
             return new Rectangle((int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize, num * Game1.tileSize, num2 * Game1.tileSize);
