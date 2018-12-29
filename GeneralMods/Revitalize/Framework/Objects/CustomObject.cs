@@ -99,11 +99,18 @@ namespace Revitalize.Framework.Objects
 
             this.bigCraftable.Value = false;
 
-
+            
             if (this.info.ignoreBoundingBox)
             {
-                this.boundingBox.Value = new Rectangle(Int32.MinValue, Int32.MinValue, 0, 0);
+                //this.boundingBox.Value = new Rectangle(Int32.MinValue, Int32.MinValue, 0, 0);
             }
+            
+            
+        }
+
+        public override bool isPassable()
+        {
+            return this.info.ignoreBoundingBox;
         }
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
