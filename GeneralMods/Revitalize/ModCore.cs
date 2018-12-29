@@ -16,6 +16,7 @@ using System.IO;
 using Revitalize.Framework.Crafting;
 using StardewValley.Objects;
 using Revitalize.Framework.Illuminate;
+using Revitalize.Framework.Player;
 
 namespace Revitalize
 {
@@ -88,6 +89,7 @@ namespace Revitalize
 
         public static Dictionary<string, CustomObject> customObjects;
 
+        public static PlayerInfo playerInfo;
 
         public override void Entry(IModHelper helper)
         {
@@ -101,6 +103,7 @@ namespace Revitalize
             ModHelper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
             ModHelper.Events.GameLoop.TimeChanged += GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += GameLoop_UpdateTicked;
+            playerInfo = new PlayerInfo();
         }
 
 
@@ -118,6 +121,7 @@ namespace Revitalize
         private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
         {
             DarkerNight.SetDarkerColor();
+            playerInfo.update();
         }
 
         private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
