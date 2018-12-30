@@ -34,7 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PyTK">
-      <HintPath>..\..\..\..\..\..\..\Desktop\New folder (2)\PyTK.dll</HintPath>
+      <HintPath>$(GamePath)\Mods\PyTK\PyTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

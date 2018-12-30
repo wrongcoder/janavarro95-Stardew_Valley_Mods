@@ -34,10 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Netcode">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Netcode.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleSoundManager">
-      <HintPath>..\..\SimpleSoundManager\bin\Release\SimpleSoundManager.dll</HintPath>
+      <HintPath>$(GamePath)\Netcode.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,6 +61,10 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SimpleSoundManager\SimpleSoundManager.csproj">
+      <Project>{7b1e9a54-ed9e-47aa-bbaa-98a6e7cb527a}</Project>
+      <Name>SimpleSoundManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StardustCore\StardustCore.csproj">
       <Project>{0756D36A-95C8-480D-8EA6-4584C03010C6}</Project>
       <Name>StardustCore</Name>
