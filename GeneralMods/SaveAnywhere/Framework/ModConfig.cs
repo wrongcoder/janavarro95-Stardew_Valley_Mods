@@ -1,4 +1,4 @@
-﻿namespace Omegasis.SaveAnywhere.Framework
+namespace Omegasis.SaveAnywhere.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig

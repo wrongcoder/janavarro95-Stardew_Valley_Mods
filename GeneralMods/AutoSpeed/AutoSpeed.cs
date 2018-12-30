@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Omegasis.AutoSpeed.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

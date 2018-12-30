@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Omegasis.SaveAnywhere.Framework;
@@ -31,19 +31,16 @@ namespace Omegasis.SaveAnywhere
         /// <summary>Whether we're performing a non-vanilla save (i.e. not by sleeping in bed).</summary>
         private bool IsCustomSaving;
 
-
-        /// <summary>
-        /// Used to access the Mod's helper from other files associated with the mod.
-        /// </summary>
+        /// <summary>Used to access the Mod's helper from other files associated with the mod.</summary>
         public static IModHelper ModHelper;
-        /// <summary>
-        /// Used to access the Mod's monitor to allow for debug logging in other files associated with the mod.
-        /// </summary>
+
+        /// <summary>Used to access the Mod's monitor to allow for debug logging in other files associated with the mod.</summary>
         public static IMonitor ModMonitor;
 
         private List<Monster> monsters;
 
         private bool customMenuOpen;
+
 
         /*********
         ** Public methods
@@ -63,9 +60,10 @@ namespace Omegasis.SaveAnywhere
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
             ModHelper = helper;
-            ModMonitor = Monitor;
-            customMenuOpen = false;
+            ModMonitor = this.Monitor;
+            this.customMenuOpen = false;
         }
+
 
         /*********
         ** Private methods
@@ -89,28 +87,25 @@ namespace Omegasis.SaveAnywhere
         private void SaveEvents_AfterSave(object sender, EventArgs e)
         {
             // clear custom data after a normal save (to avoid restoring old state)
-            if (!this.IsCustomSaving) 
+            if (!this.IsCustomSaving)
                 this.SaveManager.ClearData();
             else
             {
-                IsCustomSaving = false;
+                this.IsCustomSaving = false;
             }
         }
-
 
         /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            
             // let save manager run background logic
             if (Context.IsWorldReady)
             {
-                if (Game1.player.IsMainPlayer == false) return;
+                if (!Game1.player.IsMainPlayer) return;
                 this.SaveManager.Update();
             }
-               
 
             // reset NPC schedules
             if (Context.IsWorldReady && this.ShouldResetSchedules)
@@ -119,10 +114,10 @@ namespace Omegasis.SaveAnywhere
                 this.ApplySchedules();
             }
 
-            if (Game1.activeClickableMenu == null && this.customMenuOpen == false) return;
-            if(Game1.activeClickableMenu==null && this.customMenuOpen == true)
+            if (Game1.activeClickableMenu == null && !this.customMenuOpen) return;
+            if (Game1.activeClickableMenu == null && this.customMenuOpen)
             {
-                restoreMonsters();
+                this.restoreMonsters();
                 this.customMenuOpen = false;
                 return;
             }
@@ -135,43 +130,30 @@ namespace Omegasis.SaveAnywhere
             }
         }
 
-        /// <summary>
-        /// Saves all monsters from the game world.
-        /// </summary>
+        /// <summary>Saves all monsters from the game world.</summary>
         private void cleanMonsters()
         {
-            monsters = new List<Monster>();
+            this.monsters = new List<Monster>();
 
-            foreach (var monster in Game1.player.currentLocation.characters)
+            foreach (var npc in Game1.player.currentLocation.characters)
             {
                 try
                 {
-                    if (monster is Monster)
-                    {
-                        monsters.Add(monster as Monster);
-                    }
+                    if (npc is Monster monster)
+                        this.monsters.Add(monster);
                 }
-                catch (Exception err)
-                {
-
-                }
+                catch { }
             }
 
             foreach (var monster in this.monsters)
-            {
                 Game1.player.currentLocation.characters.Remove(monster);
-            }
         }
 
-        /// <summary>
-        /// Adds all saved monster back into the game world.
-        /// </summary>
+        /// <summary>Adds all saved monster back into the game world.</summary>
         private void restoreMonsters()
         {
             foreach (var monster in this.monsters)
-            {
                 Game1.player.currentLocation.characters.Add(monster);
-            }
         }
 
         /// <summary>The method invoked after a new day starts.</summary>
@@ -199,14 +181,12 @@ namespace Omegasis.SaveAnywhere
             if (!Context.IsPlayerFree)
                 return;
 
-
-
             // initiate save (if valid context)
             if (e.KeyPressed.ToString() == this.Config.SaveKey)
             {
-                if (Game1.client==null)
+                if (Game1.client == null)
                 {
-                    cleanMonsters();
+                    this.cleanMonsters();
                     // validate: community center Junimos can't be saved
 
                     if (Game1.player.currentLocation.getCharacters().OfType<Junimo>().Any())
@@ -215,14 +195,13 @@ namespace Omegasis.SaveAnywhere
                         return;
                     }
 
-
                     // save
                     this.IsCustomSaving = true;
                     this.SaveManager.BeginSaveData();
                 }
                 else
                 {
-                    Game1.addHUDMessage(new HUDMessage("Only server hosts can save anywhere.",HUDMessage.error_type));
+                    Game1.addHUDMessage(new HUDMessage("Only server hosts can save anywhere.", HUDMessage.error_type));
                 }
             }
         }
@@ -245,16 +224,14 @@ namespace Omegasis.SaveAnywhere
                     continue;
 
                 // get schedule data
-                string scheduleData;
-                if (!this.NpcSchedules.TryGetValue(npc.Name, out scheduleData) || string.IsNullOrEmpty(scheduleData))
+                if (!this.NpcSchedules.TryGetValue(npc.Name, out string scheduleData) || string.IsNullOrEmpty(scheduleData))
                 {
                     //this.Monitor.Log("THIS IS AWKWARD");
                     continue;
                 }
 
                 // get schedule script
-                string script;
-                if (!rawSchedule.TryGetValue(scheduleData, out script))
+                if (!rawSchedule.TryGetValue(scheduleData, out string script))
                     continue;
 
                 // parse entries
@@ -294,10 +271,8 @@ namespace Omegasis.SaveAnywhere
                             .Invoke<SchedulePathDescription>(npc.currentLocation.Name, npc.getTileX(), npc.getTileY(), endMap, x, y, endFacingDir, null, null);
                         index++;
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        ex.ToString();
-                        //this.Monitor.Log($"Error pathfinding NPC {npc.name}: {ex}", LogLevel.Error);
                         continue;
                     }
 
@@ -320,7 +295,7 @@ namespace Omegasis.SaveAnywhere
             {
                 return Game1.content.Load<Dictionary<string, string>>($"Characters\\schedules\\{npcName}");
             }
-            catch (Exception)
+            catch
             {
                 return null;
             }
@@ -369,9 +344,8 @@ namespace Omegasis.SaveAnywhere
                 if (schedule.ContainsKey(Game1.currentSeason + "_" + Game1.dayOfMonth))
                     return Game1.currentSeason + "_" + Game1.dayOfMonth;
                 int i;
-                Friendship f;
-                Game1.player.friendshipData.TryGetValue(npc.Name, out f);
-                for (i = (Game1.player.friendshipData.ContainsKey(npc.Name) ? (f.Points/ 250) : -1); i > 0; i--)
+                Game1.player.friendshipData.TryGetValue(npc.Name, out Friendship f);
+                for (i = (Game1.player.friendshipData.ContainsKey(npc.Name) ? (f.Points / 250) : -1); i > 0; i--)
                 {
                     if (schedule.ContainsKey(Game1.dayOfMonth + "_" + i))
                         return Game1.dayOfMonth + "_" + i;
@@ -388,8 +362,7 @@ namespace Omegasis.SaveAnywhere
                         return "rain";
                 }
                 List<string> list = new List<string> { Game1.currentSeason, Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth) };
-                Friendship friendship;
-                Game1.player.friendshipData.TryGetValue(npc.Name, out friendship);
+                Game1.player.friendshipData.TryGetValue(npc.Name, out Friendship friendship);
                 i = (Game1.player.friendshipData.ContainsKey(npc.Name) ? (friendship.Points / 250) : -1);
                 while (i > 0)
                 {
@@ -419,8 +392,7 @@ namespace Omegasis.SaveAnywhere
                 }
                 list.RemoveAt(list.Count - 1);
                 list.Add("spring");
-                Friendship friendship2;
-                Game1.player.friendshipData.TryGetValue(npc.Name, out friendship2);
+                Game1.player.friendshipData.TryGetValue(npc.Name, out Friendship friendship2);
                 i = (Game1.player.friendshipData.ContainsKey(npc.Name) ? (friendship2.Points / 250) : -1);
                 while (i > 0)
                 {
@@ -430,9 +402,9 @@ namespace Omegasis.SaveAnywhere
                     i--;
                     list.RemoveAt(list.Count - 1);
                 }
-                if (schedule.ContainsKey("spring"))
-                    return "spring";
-                return null;
+                return schedule.ContainsKey("spring")
+                    ? "spring"
+                    : null;
             }
         }
     }

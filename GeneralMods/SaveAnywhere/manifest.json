@@ -7,5 +7,5 @@
   "EntryDll": "SaveAnywhere.dll",
   "MinimumApiVersion": "2.4",
   "Dependencies": [
-	]
+  ]
 }

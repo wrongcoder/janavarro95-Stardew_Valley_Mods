@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Netcode;
 using StardewModdingAPI;
 using StardewValley;
@@ -16,8 +16,6 @@ namespace Omegasis.SaveAnywhere.Framework
         private readonly IReflectedField<bool> SavedYet;
 
 
-
-
         /*********
         ** Public methods
         *********/
@@ -30,12 +28,7 @@ namespace Omegasis.SaveAnywhere.Framework
             this.SavedYet = reflection.GetField<bool>(this, "savedYet");
         }
 
-        /// <summary>
-        /// Overrides some base functionality of the shipping menu to enable proper closing.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="playSound"></param>
+        /// <summary>Overrides some base functionality of the shipping menu to enable proper closing.</summary>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             if (this.okButton.containsPoint(x, y)) this.exitThisMenu(true);

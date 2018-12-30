@@ -87,7 +87,6 @@
     <Compile Include="Framework\Music\MusicPackMetaData.cs" />
     <Compile Include="Framework\Music\Song.cs" />
     <Compile Include="Framework\Music\SongListNode.cs" />
-    <Compile Include="StaticExtentions.cs" />
     <Compile Include="StardewSymphony.cs" />
     <Compile Include="Framework\Music\MusicHexProcessor.cs" />
     <Compile Include="Framework\Music\MusicManager.cs" />

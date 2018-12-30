@@ -1,46 +1,32 @@
-﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
 using StardewValley;
 using StardewValley.Objects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Revitalize.Framework.Objects
 {
-    public class MultiTiledComponent:CustomObject
+    public class MultiTiledComponent : CustomObject
     {
-
         public MultiTiledObject containerObject;
 
-        public MultiTiledComponent():base()
-        {
+        public MultiTiledComponent() { }
 
-        }
+        public MultiTiledComponent(BasicItemInformation info) : base(info) { }
 
-        public MultiTiledComponent(BasicItemInformation info):base(info)
-        {
-
-        }
-
-        public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation): base(info, TileLocation)
-        {
-
-        }
+        public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation) : base(info, TileLocation) { }
 
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
-            //Revitalize.ModCore.log("Checking for a clicky click???");
+            //ModCore.log("Checking for a clicky click???");
             return base.checkForAction(who, justCheckingForActivity);
         }
 
         public override bool clicked(Farmer who)
         {
-
-            Revitalize.ModCore.log("Clicked a multiTiledComponent!");
+            ModCore.log("Clicked a multiTiledComponent!");
             this.containerObject.pickUp();
             return true;
             //return base.clicked(who);
@@ -49,12 +35,10 @@ namespace Revitalize.Framework.Objects
         public override bool rightClicked(Farmer who)
         {
             if (this.location == null)
-            {
                 this.location = Game1.player.currentLocation;
-            }
             this.info.lightManager.toggleLights(this.location, this);
 
-            Revitalize.ModCore.playerInfo.sittingInfo.sit(this, Vector2.Zero);
+            ModCore.playerInfo.sittingInfo.sit(this, Vector2.Zero);
 
             return true;
         }
@@ -67,25 +51,18 @@ namespace Revitalize.Framework.Objects
             base.performRemoveAction(this.TileLocation, environment);
         }
 
-        public virtual void removeFromLocation(GameLocation location,Vector2 offset)
+        public virtual void removeFromLocation(GameLocation location, Vector2 offset)
         {
-            location.removeObject(this.TileLocation,false);
+            location.removeObject(this.TileLocation, false);
             this.location = null;
             //this.performRemoveAction(this.TileLocation,location);
         }
 
-        /// <summary>
-        /// Places an object down.
-        /// </summary>
-        /// <param name="location"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="who"></param>
-        /// <returns></returns>
+        /// <summary>Places an object down.</summary>
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-            Revitalize.ModCore.ModMonitor.Log("SCREAMING!!!!");
-            this.updateDrawPosition(x,y);
+            ModCore.ModMonitor.Log("SCREAMING!!!!");
+            this.updateDrawPosition(x, y);
             this.location = location;
 
             if (this.location == null) this.location = Game1.player.currentLocation;
@@ -103,24 +80,23 @@ namespace Revitalize.Framework.Objects
                 float num = this.Quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
                 spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.Quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.Quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
             }
-            spriteBatch.Draw(this.displayTexture, location + new Vector2((float)(Game1.tileSize / 4), (float)(Game1.tileSize * .75)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), info.drawColor * transparency, 0f, new Vector2((float)(this.animationManager.currentAnimation.sourceRectangle.Width / 2), (float)(this.animationManager.currentAnimation.sourceRectangle.Height)), scaleSize, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(this.displayTexture, location + new Vector2((float)(Game1.tileSize / 4), (float)(Game1.tileSize * .75)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * transparency, 0f, new Vector2((float)(this.animationManager.currentAnimation.sourceRectangle.Width / 2), (float)(this.animationManager.currentAnimation.sourceRectangle.Height)), scaleSize, SpriteEffects.None, layerDepth);
         }
 
         public override Item getOne()
         {
-            MultiTiledComponent component=new MultiTiledComponent(this.info, this.TileLocation);
+            MultiTiledComponent component = new MultiTiledComponent(this.info, this.TileLocation);
             component.containerObject = this.containerObject;
             return component;
-
         }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
             BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
-            MultiTiledComponent component= new MultiTiledComponent((BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]], (replacement as Chest).TileLocation);
-            component.containerObject = this.containerObject;
-            return containerObject;
+            return new MultiTiledComponent(data, (replacement as Chest).TileLocation)
+            {
+                containerObject = this.containerObject
+            };
         }
-
     }
 }

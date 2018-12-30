@@ -89,5 +89,8 @@
       <Name>EventSystem</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="manifest.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

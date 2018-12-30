@@ -1,11 +1,4 @@
-﻿using Microsoft.Xna.Framework;
 using Revitalize.Framework.Player.Managers;
-using StardewValley;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Revitalize.Framework.Player
 {
@@ -15,13 +8,12 @@ namespace Revitalize.Framework.Player
 
         public PlayerInfo()
         {
-            sittingInfo = new SittingInfo();
+            this.sittingInfo = new SittingInfo();
         }
-
 
         public void update()
         {
-            sittingInfo.update();
+            this.sittingInfo.update();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Omegasis.BuildHealth.Framework;
@@ -103,7 +103,7 @@ namespace Omegasis.BuildHealth
                 this.LastHealth = player.health;
 
             // give XP when player stays up too late or collapses
-            if (!this.WasCollapsed && shouldFarmerPassout())
+            if (!this.WasCollapsed && this.shouldFarmerPassout())
             {
                 this.PlayerData.CurrentExp += this.Config.ExpForCollapsing;
                 this.WasCollapsed = true;

@@ -1,4 +1,4 @@
-﻿using Omegasis.BillboardAnywhere.Framework;
+using Omegasis.BillboardAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;

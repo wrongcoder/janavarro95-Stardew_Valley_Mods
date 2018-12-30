@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using StardewModdingAPI;
 using StardustCore.UIUtilities;
@@ -14,10 +14,12 @@ namespace StardustCore
         public static TextureManager TextureManager;
         public static Dictionary<string, TextureManager> TextureManagers;
 
-
         public ModConfig config;
 
         public static string ContentDirectory;
+
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
             ModHelper = this.Helper;
@@ -28,7 +30,6 @@ namespace StardustCore
             ContentDirectory = "Content";
             if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Content"));
             SpriteFonts.initialize();
-
 
             TextureManagers = new Dictionary<string, TextureManager>();
             TextureManager = new TextureManager();

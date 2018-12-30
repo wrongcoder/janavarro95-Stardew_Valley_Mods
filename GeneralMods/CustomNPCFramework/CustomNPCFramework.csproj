@@ -93,20 +93,20 @@
     <Compile Include="Framework\Enums\Genders.cs" />
     <Compile Include="Framework\Graphics\AssetPool.cs" />
     <Compile Include="Framework\Graphics\TextureGroups\TextureGroup.cs" />
-    <Compile Include="Framework\ModularNPCS\AnimatedSpriteCollection.cs" />
-    <Compile Include="Framework\ModularNPCS\AnimatedSpriteExtended.cs" />
-    <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\StandardCharacterAnimation.cs" />
-    <Compile Include="Framework\ModularNPCS\CharacterAnimationBases\CharacterAnimationBase.cs" />
+    <Compile Include="Framework\ModularNpcs\AnimatedSpriteCollection.cs" />
+    <Compile Include="Framework\ModularNpcs\AnimatedSpriteExtended.cs" />
+    <Compile Include="Framework\ModularNpcs\CharacterAnimationBases\StandardCharacterAnimation.cs" />
+    <Compile Include="Framework\ModularNpcs\CharacterAnimationBases\CharacterAnimationBase.cs" />
     <Compile Include="Framework\Enums\Direction.cs" />
-    <Compile Include="Framework\ModularNPCS\ColorCollections\StandardColorCollection.cs" />
-    <Compile Include="Framework\ModularNPCS\ModularRenderers\AnimationKeys.cs" />
-    <Compile Include="Framework\ModularNPCS\ModularRenderers\BasicRenderer.cs" />
-    <Compile Include="Framework\ModularNPCS\Portrait.cs" />
-    <Compile Include="Framework\ModularNPCS\Sprite.cs" />
-    <Compile Include="Framework\NPCNames.cs" />
-    <Compile Include="Framework\NPCS\ExtendedNPC.cs" />
-    <Compile Include="Framework\NPCS\MerchantNPC.cs" />
-    <Compile Include="Framework\Utilities\NPCTracker.cs" />
+    <Compile Include="Framework\ModularNpcs\ColorCollections\StandardColorCollection.cs" />
+    <Compile Include="Framework\ModularNpcs\ModularRenderers\AnimationKeys.cs" />
+    <Compile Include="Framework\ModularNpcs\ModularRenderers\BasicRenderer.cs" />
+    <Compile Include="Framework\ModularNpcs\Portrait.cs" />
+    <Compile Include="Framework\ModularNpcs\Sprite.cs" />
+    <Compile Include="Framework\NpcNames.cs" />
+    <Compile Include="Framework\NPCS\ExtendedNpc.cs" />
+    <Compile Include="Framework\NPCS\MerchantNpc.cs" />
+    <Compile Include="Framework\Utilities\NpcTracker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +114,9 @@
       <Project>{0756D36A-95C8-480D-8EA6-4584C03010C6}</Project>
       <Name>StardustCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="manifest.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

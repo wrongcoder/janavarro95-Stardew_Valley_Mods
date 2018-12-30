@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using Omegasis.BuildEndurance.Framework;
@@ -107,9 +107,9 @@ namespace Omegasis.BuildEndurance
             }
 
             // give XP when player stays up too late or collapses
-            if (!this.WasCollapsed && shouldFarmerPassout())
+            if (!this.WasCollapsed && this.shouldFarmerPassout())
             {
-                
+
                 this.PlayerData.CurrentExp += this.Config.ExpForCollapsing;
                 this.WasCollapsed = true;
                 //this.Monitor.Log("The player has collapsed!");
@@ -221,10 +221,7 @@ namespace Omegasis.BuildEndurance
             }
         }
 
-        /// <summary>
-        /// Try and emulate the old Game1.shouldFarmerPassout logic.
-        /// </summary>
-        /// <returns></returns>
+        /// <summary>Try and emulate the old Game1.shouldFarmerPassout logic.</summary>
         public bool shouldFarmerPassout()
         {
             if (Game1.player.stamina <= 0 || Game1.player.health <= 0 || Game1.timeOfDay >= 2600) return true;

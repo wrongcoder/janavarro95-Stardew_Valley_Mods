@@ -1,11 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 
 namespace Revitalize.Framework.Graphics
 {
@@ -14,13 +9,11 @@ namespace Revitalize.Framework.Graphics
         public string Name;
         public Texture2D texture;
         public string path;
-        IModHelper helper;
         public string modID;
         public ContentSource source;
+        private readonly IModHelper helper;
 
-        /// <summary>
-        /// Empty/null constructor.
-        /// </summary>
+        /// <summary>Empty/null constructor.</summary>
         public Texture2DExtended()
         {
             this.Name = "";
@@ -39,9 +32,7 @@ namespace Revitalize.Framework.Graphics
             this.modID = "";
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
+        /// <summary>Construct an instance.</summary>
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
         public Texture2DExtended(IModHelper helper, IManifest manifest, string path, ContentSource contentSource = ContentSource.ModFolder)
         {
@@ -73,10 +64,7 @@ namespace Revitalize.Framework.Graphics
             return this.helper;
         }
 
-        /// <summary>
-        /// Returns the actual 2D texture held by this wrapper class.
-        /// </summary>
-        /// <returns></returns>
+        /// <summary>Returns the actual 2D texture held by this wrapper class.</summary>
         public Texture2D getTexture()
         {
             return this.texture;

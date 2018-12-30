@@ -8,7 +8,7 @@
   "MinimumApiVersion": "2.0",
   "UpdateKeys": [],
   "Dependencies": [
-	"Omegasis.SimpleSoundManager",
-	"Omegasis.StardustCore"
-	]
+    { "UniqueID": "Omegasis.SimpleSoundManager" },
+    { "UniqueID": "Omegasis.StardustCore" }
+  ]
 }

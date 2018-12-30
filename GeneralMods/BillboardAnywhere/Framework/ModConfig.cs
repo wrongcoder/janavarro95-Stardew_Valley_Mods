@@ -1,4 +1,4 @@
-﻿namespace Omegasis.BillboardAnywhere.Framework
+namespace Omegasis.BillboardAnywhere.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig
