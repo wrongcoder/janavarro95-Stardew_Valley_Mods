@@ -67,12 +67,6 @@ namespace Omegasis.SaveAnywhere
             customMenuOpen = false;
         }
 
-        /*Notes. Mods that want to support save anywhere will get the api for Save anywhere and then add their clean up code to the events that happen for Before/After Save and Loading. 
-        Example with pseudo code.
-        SaveAnywhere.api.BeforeSave+=StardustCore.Objects.CleanUpBeforeSave;
-        We then can use function wrapping (is that what it's called?) to just handle calling the actual function that deals with clean-up code.
-
-        */
         /*********
         ** Private methods
         *********/
