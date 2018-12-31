@@ -1,17 +1,12 @@
-﻿using EventSystem.Framework.FunctionEvents;
+using System;
+using EventSystem.Framework.FunctionEvents;
 using FarmersMarketStall.Framework.MapEvents;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FarmersMarketStall
 {
-
     /// <summary>
     /// TODO:
     /// Make a farmers market menu
@@ -21,21 +16,21 @@ namespace FarmersMarketStall
     /// Make a selling menu
     /// Make a minigame event for bonus money to earn.
     /// </summary>
-    /// <param name="helper"></param>
-
-    public class Class1 :Mod
+    public class Class1 : Mod
     {
-
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
-        public static FarmersMarketStall.Framework.MarketStall marketStall;
+        public static Framework.MarketStall marketStall;
+
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            ModHelper = Helper;
-            ModMonitor = Monitor;
+            ModHelper = this.Helper;
+            ModMonitor = this.Monitor;
 
-            StardewModdingAPI.Events.SaveEvents.BeforeSave += SaveEvents_BeforeSave;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += SaveEvents_AfterLoad;
+            StardewModdingAPI.Events.SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            StardewModdingAPI.Events.SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             marketStall = new Framework.MarketStall();
         }
 
@@ -46,7 +41,8 @@ namespace FarmersMarketStall
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            if (marketStall.stock.Count > 0) {
+            if (marketStall.stock.Count > 0)
+            {
                 // Game1.endOfNightMenus.Push(new StardewValley.Menus.ShippingMenu(marketStall.stock));
                 marketStall.sellAllItems();
             }

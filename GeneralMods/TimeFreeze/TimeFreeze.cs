@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Omegasis.TimeFreeze.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -32,6 +32,7 @@ namespace Omegasis.TimeFreeze
             //oldInterval = 7;
         }
 
+
         /*********
         ** Private methods
         *********/
@@ -55,24 +56,24 @@ namespace Omegasis.TimeFreeze
             */
             if (Game1.IsMultiplayer)
             {
-                if (Config.freezeIfEvenOnePlayerMeetsTimeFreezeConditions)
+                if (this.Config.freezeIfEvenOnePlayerMeetsTimeFreezeConditions)
                 {
-                    bool isAnyFarmerSuitable = false;
+                    //bool isAnyFarmerSuitable = false;
                     foreach (Farmer farmer in Game1.getOnlineFarmers())
                     {
                         if (this.ShouldFreezeTime(farmer, farmer.currentLocation))
                         {
                             Game1.gameTimeInterval = 0;
-                            isAnyFarmerSuitable = true;
+                            //isAnyFarmerSuitable = true;
                         }
                     }
-                    if (isAnyFarmerSuitable == false)
-                    {
-                       // Game1.gameTimeInterval += Game1.currentGameTime.ElapsedGameTime.Milliseconds;
-                    }
+                    //if (!isAnyFarmerSuitable)
+                    //{
+                    //    Game1.gameTimeInterval += Game1.currentGameTime.ElapsedGameTime.Milliseconds;
+                    //}
                 }
 
-                else if (Config.freezeIfMajorityPlayersMeetsTimeFreezeConditions)
+                else if (this.Config.freezeIfMajorityPlayersMeetsTimeFreezeConditions)
                 {
                     int freezeCount = 0;
                     int playerCount = 0;
@@ -86,17 +87,12 @@ namespace Omegasis.TimeFreeze
                         }
                     }
                     if (freezeCount >= (playerCount / 2))
-                    {
                         Game1.gameTimeInterval = 0;
-
-                    }
-                    else
-                    {
-                       // Game1.gameTimeInterval += Game1.currentGameTime.ElapsedGameTime.Milliseconds;
-                    }
+                    //else
+                    //    Game1.gameTimeInterval += Game1.currentGameTime.ElapsedGameTime.Milliseconds;
                 }
 
-                else if (Config.freezeIfAllPlayersMeetTimeFreezeConditions)
+                else if (this.Config.freezeIfAllPlayersMeetTimeFreezeConditions)
                 {
                     int freezeCount = 0;
                     int playerCount = 0;
@@ -110,59 +106,40 @@ namespace Omegasis.TimeFreeze
                         }
                     }
                     if (freezeCount >= playerCount)
-                    {
                         Game1.gameTimeInterval = 0;
-
-                    }
-                    else
-                    {
-                       // Game1.gameTimeInterval = oldInterval;
-                    }
+                    //else
+                    //    Game1.gameTimeInterval = this.oldInterval;
                 }
-
-
             }
             else
             {
                 Farmer player = Game1.player;
                 if (this.ShouldFreezeTime(player, player.currentLocation))
-                {
                     Game1.gameTimeInterval = 0;
-                }
-                else
-                {
-                   // Game1.gameTimeInterval = oldInterval;
-                }
+                //else
+                //    Game1.gameTimeInterval = this.oldInterval;
             }
         }
 
         /// <summary>Get whether time should be frozen for the player at the given location.</summary>
         /// <param name="player">The player to check.</param>
         /// <param name="location">The location to check.</param>
-        private bool ShouldFreezeTime(StardewValley.Farmer player, GameLocation location)
+        private bool ShouldFreezeTime(Farmer player, GameLocation location)
         {
-
-            if (Config.PassTimeWhileInsideMine==true)
+            if (this.Config.PassTimeWhileInsideMine)
             {
-                if(location.Name == "Mine" || location.Name.StartsWith("UndergroundMine"))
-                {
+                if (location.Name == "Mine" || location.Name.StartsWith("UndergroundMine"))
                     return false;
-                }
             }
 
-            if (Config.PassTimeWhileInsideSkullCave==true)
+            if (this.Config.PassTimeWhileInsideSkullCave)
             {
                 if (location.Name == "SkullCave" || location.Name.StartsWith("SkullCave"))
-                {
                     return false;
-                }
             }
 
-            if (location.IsOutdoors == true)
-            {
+            if (location.IsOutdoors)
                 return false;
-            }
-                
 
             if (player.swimming.Value)
             {
@@ -171,7 +148,6 @@ namespace Omegasis.TimeFreeze
                 if (this.Config.PassTimeWhileSwimming)
                     return false;
             }
-
 
             return true;
         }

@@ -1,21 +1,15 @@
-﻿using Microsoft.Xna.Framework;
-using Netcode;
-using StardewModdingAPI;
-using StardewValley;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using sObj = StardewValley.Object;
+using Microsoft.Xna.Framework;
+using StardewValley;
+using StardewValley.BellsAndWhistles;
+using StardewValley.Objects;
 namespace Vocalization.Framework
 {
     public class Vocabulary
     {
-
         public static string[] getRandomNegativeItemSlanderNouns(string translation)
         {
             string[] strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeItemNoun"), translation).Split('#');
@@ -67,7 +61,7 @@ namespace Vocalization.Framework
 
         public static string[] getRandomPositiveAdjectivesForEventOrPerson(string translation, NPC n = null)
         {
-            Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
+            //Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
             string[] strArray;
             if (n != null && n.Age != 0)
                 strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_Child"), translation).Split('#');
@@ -80,22 +74,12 @@ namespace Vocalization.Framework
             return strArray;
         }
 
-
         public static List<string> getSeasons()
         {
-            List<string> seasons = new List<string>();
-            seasons.Add("spring");
-            seasons.Add("summer");
-            seasons.Add("fall");
-            seasons.Add("winter");
-            return seasons;
+            return new List<string> { "spring", "summer", "fall", "winter" };
         }
 
-        /// <summary>
-        /// Gets a list of all of the possible cooking recipes in Stardew Valley.
-        /// </summary>
-        /// <param name="translation"></param>
-        /// <returns></returns>
+        /// <summary>Gets a list of all of the possible cooking recipes in Stardew Valley.</summary>
         public static List<string> getAllCookingRecipes(string translation)
         {
             List<string> recipes = new List<string>();
@@ -103,7 +87,7 @@ namespace Vocalization.Framework
 
             if (Vocalization.config.translationInfo.getTranslationNameFromPath(translation) == "English")
             {
-                foreach(KeyValuePair<string,string> pair in cookingDict)
+                foreach (KeyValuePair<string, string> pair in cookingDict)
                 {
                     string name = pair.Value.Split('/').ElementAt(0);
                     recipes.Add(name);
@@ -126,17 +110,14 @@ namespace Vocalization.Framework
             List<string> stock = new List<string>();
             Vocalization.config.translationInfo.changeLocalizedContentManagerFromTranslation(translation);
 
-            for(int i=0; i <= 1854; i++)
+            for (int i = 0; i <= 1854; i++)
             {
                 try
                 {
                     Furniture f = new Furniture(i, Vector2.Zero);
                     stock.Add(f.DisplayName);
                 }
-                catch(Exception err)
-                {
-
-                }
+                catch { }
             }
             Vocalization.config.translationInfo.resetLocalizationCode();
             return stock;
@@ -155,17 +136,15 @@ namespace Vocalization.Framework
                     stock.Add(obj.DisplayName);
                 }
             }
-            foreach(var item in getCarpenterStock(translation))
-            {
+            foreach (string item in getCarpenterStock(translation))
                 stock.Add(item);
-            }
             return stock;
         }
 
         public static string getProperArticleForWord(string displayName, string translation)
         {
             Vocalization.config.translationInfo.changeLocalizedContentManagerFromTranslation(translation);
-            string s=Lexicon.getProperArticleForWord(displayName);
+            string s = Lexicon.getProperArticleForWord(displayName);
             Vocalization.config.translationInfo.resetLocalizationCode();
             return s;
         }

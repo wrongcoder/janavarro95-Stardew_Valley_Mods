@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using StardewValley;
-using StardewSymphonyRemastered.Framework;
 
 namespace StardewSymphonyRemastered.Framework
 {
@@ -41,91 +40,84 @@ namespace StardewSymphonyRemastered.Framework
             this.SoundBanks.Add(path);
         }
 
-        /// <summary>
-        /// Process the soundbank.swb file's hex info and extract the song names from it.
-        /// </summary>
-        /// <param name="musicPack"></param>
-        /// <param name="reset"></param>
-        /// <param name="FileName"></param>
-        /// <returns></returns>
+        /// <summary>Process the soundbank.swb file's hex info and extract the song names from it.</summary>
         public static List<string> ProcessSongNamesFromHex(XACTMusicPack musicPack, Action reset, string FileName)
         {
-                
-                List<string> cleanCueNames = new List<string>();
-                byte[] array = File.ReadAllBytes(FileName);
-                string rawName = FileName.Substring(0, FileName.Length - 4);
-                string cueName = rawName + "CueList.txt";
 
-                //Not used as the music pack can change between loads
-                /*
-                if (File.Exists(cueName))
+            List<string> cleanCueNames = new List<string>();
+            byte[] array = File.ReadAllBytes(FileName);
+            string rawName = FileName.Substring(0, FileName.Length - 4);
+            string cueName = rawName + "CueList.txt";
+
+            //Not used as the music pack can change between loads
+            /*
+            if (File.Exists(cueName))
+            {
+                string[] arr = File.ReadAllLines(cueName);
+                List<string> names = new List<string>();
+                foreach(var v in arr)
                 {
-                    string[] arr = File.ReadAllLines(cueName);
-                    List<string> names = new List<string>();
-                    foreach(var v in arr)
-                    {
-                        names.Add(v);
-                    }
-                    return names;
+                    names.Add(v);
                 }
-                */
-                string hexDumpContents = HexDump(array);
+                return names;
+            }
+            */
+            string hexDumpContents = HexDump(array);
 
-                string rawHexName = rawName + "HexDump.txt";
-                File.WriteAllText(rawHexName, hexDumpContents);
+            string rawHexName = rawName + "HexDump.txt";
+            File.WriteAllText(rawHexName, hexDumpContents);
 
-                string[] readText = File.ReadAllLines(rawHexName);
-                string largeString = "";
-                foreach (var line in readText)
+            string[] readText = File.ReadAllLines(rawHexName);
+            string largeString = "";
+            foreach (string line in readText)
+            {
+                try
                 {
-                    try
-                    {
-                        string newString = "";
-                        for (int i = 62; i <= 77; i++)
-                            newString += line[i];
-                        largeString += newString;
-                    }
-                    catch { }
+                    string newString = "";
+                    for (int i = 62; i <= 77; i++)
+                        newString += line[i];
+                    largeString += newString;
                 }
-                string[] splits = largeString.Split('ÿ');
-                string fix = "";
-                foreach (string s in splits)
-                {
-                    if (s == "") continue;
-                    fix += s;
-                }
-                splits = fix.Split('.');
+                catch { }
+            }
+            string[] splits = largeString.Split('ÿ');
+            string fix = "";
+            foreach (string s in splits)
+            {
+                if (s == "")
+                    continue;
+                fix += s;
+            }
+            splits = fix.Split('.');
 
-                foreach (var split in splits)
+            foreach (string split in splits)
+            {
+                if (split == "")
+                    continue;
+                try
                 {
-                    if (split == "") continue;
-                    try
-                    {
-                        Game1.waveBank = musicPack.WaveBank;
-                        Game1.soundBank = musicPack.SoundBank;
+                    Game1.waveBank = musicPack.WaveBank;
+                    Game1.soundBank = musicPack.SoundBank;
 
                     if (Game1.soundBank.GetCue(split) != null)
-                    {
                         cleanCueNames.Add(split);
-                    }
 
-                        reset.Invoke();
-                    }
-                    catch(Exception err)
-                    {
-                    err.ToString();
                     reset.Invoke();
-                    }
                 }
-
-
-                return cleanCueNames;
+                catch
+                {
+                    reset.Invoke();
+                }
+            }
+            
+            return cleanCueNames;
         }
+
 
         /*********
         ** Private methods
         *********/
-        public static string HexDump(byte[] bytes, int bytesPerLine = 16)
+        private static string HexDump(byte[] bytes, int bytesPerLine = 16)
         {
             if (bytes == null)
                 return "<null>";
@@ -147,7 +139,7 @@ namespace StardewSymphonyRemastered.Framework
                 + bytesPerLine           // - characters to show the ascii value
                 + Environment.NewLine.Length; // Carriage return and line feed (should normally be 2)
 
-            char[] line = (new String(' ', lineLength - 2) + Environment.NewLine).ToCharArray();
+            char[] line = (new string(' ', lineLength - 2) + Environment.NewLine).ToCharArray();
             int expectedLines = (bytesLength + bytesPerLine - 1) / bytesPerLine;
             StringBuilder result = new StringBuilder(expectedLines * lineLength);
 

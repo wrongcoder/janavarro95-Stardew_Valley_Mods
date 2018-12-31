@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Omegasis.MoreRain.Framework;
 using StardewModdingAPI;
@@ -88,7 +88,6 @@ namespace Omegasis.MoreRain
                         this.VerboseLog("It will be stormy tomorrow.");
                         return;
                     }
-                    
                     break;
 
                 case "summer":
@@ -143,7 +142,7 @@ namespace Omegasis.MoreRain
             }
         }
 
-        /// <summary>Log a message if <see cref="SuppressLog"/> is <c>false</c>.</summary>
+        /// <summary>Log a message if <see cref="ModConfig.SuppressLog"/> is <c>false</c>.</summary>
         /// <param name="message">The message to log.</param>
         private void VerboseLog(string message)
         {

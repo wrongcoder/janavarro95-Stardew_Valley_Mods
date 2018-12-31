@@ -1,4 +1,4 @@
-﻿namespace Omegasis.BuyBackCollectables.Framework
+namespace Omegasis.BuyBackCollectables.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig

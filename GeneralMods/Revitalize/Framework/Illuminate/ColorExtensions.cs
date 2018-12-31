@@ -1,9 +1,5 @@
-﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace Revitalize.Framework.Illuminate
 {
@@ -22,6 +18,5 @@ namespace Revitalize.Framework.Illuminate
             int b = Math.Abs(255 - color.B);
             return new Color(r, g, b);
         }
-
     }
 }

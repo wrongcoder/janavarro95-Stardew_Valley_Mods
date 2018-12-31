@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Linq;
 using Omegasis.BuildEndurance.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -16,9 +15,6 @@ namespace Omegasis.BuildEndurance
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
         private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
-
-        /// <summary>The absolute path for the current player's legacy data file.</summary>
-        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "PlayerData", $"BuildEndurance_data_{Game1.player.Name}.txt");
 
         /// <summary>The mod settings.</summary>
         private ModConfig Config;
@@ -38,9 +34,9 @@ namespace Omegasis.BuildEndurance
         /// <summary>Whether the player was eating last time we checked.</summary>
         private bool WasEating;
 
-
         public IModHelper ModHelper;
         public IMonitor ModMonitor;
+
 
         /*********
         ** Public methods
@@ -107,9 +103,9 @@ namespace Omegasis.BuildEndurance
             }
 
             // give XP when player stays up too late or collapses
-            if (!this.WasCollapsed && shouldFarmerPassout())
+            if (!this.WasCollapsed && this.shouldFarmerPassout())
             {
-                
+
                 this.PlayerData.CurrentExp += this.Config.ExpForCollapsing;
                 this.WasCollapsed = true;
                 //this.Monitor.Log("The player has collapsed!");
@@ -128,7 +124,6 @@ namespace Omegasis.BuildEndurance
             this.WasEating = false;
 
             // load player data
-            this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
             if (this.PlayerData.OriginalMaxStamina == 0)
                 this.PlayerData.OriginalMaxStamina = Game1.player.MaxStamina;
@@ -187,44 +182,7 @@ namespace Omegasis.BuildEndurance
             this.Helper.WriteJsonFile(this.DataFilePath, this.PlayerData);
         }
 
-        /// <summary>Migrate the legacy settings for the current player.</summary>
-        private void MigrateLegacyData()
-        {
-            // skip if no legacy data or new data already exists
-            if (!File.Exists(this.LegacyDataFilePath) || File.Exists(this.DataFilePath))
-                return;
-
-            // migrate to new file
-            try
-            {
-                string[] text = File.ReadAllLines(this.LegacyDataFilePath);
-                this.Helper.WriteJsonFile(this.DataFilePath, new PlayerData
-                {
-                    CurrentLevel = Convert.ToInt32(text[3]),
-                    CurrentExp = Convert.ToDouble(text[5]),
-                    ExpToNextLevel = Convert.ToDouble(text[7]),
-                    BaseStaminaBonus = Convert.ToInt32(text[9]),
-                    CurrentLevelStaminaBonus = Convert.ToInt32(text[11]),
-                    ClearModEffects = Convert.ToBoolean(text[14]),
-                    OriginalMaxStamina = Convert.ToInt32(text[16]),
-                    NightlyStamina = Convert.ToInt32(text[18])
-                });
-
-                FileInfo file = new FileInfo(this.LegacyDataFilePath);
-                file.Delete();
-                if (!file.Directory.EnumerateFiles().Any())
-                    file.Directory.Delete();
-            }
-            catch (Exception ex)
-            {
-                this.Monitor.Log($"Error migrating data from the legacy 'PlayerData' folder for the current player. Technical details:\n {ex}", LogLevel.Error);
-            }
-        }
-
-        /// <summary>
-        /// Try and emulate the old Game1.shouldFarmerPassout logic.
-        /// </summary>
-        /// <returns></returns>
+        /// <summary>Try and emulate the old Game1.shouldFarmerPassout logic.</summary>
         public bool shouldFarmerPassout()
         {
             if (Game1.player.stamina <= 0 || Game1.player.health <= 0 || Game1.timeOfDay >= 2600) return true;

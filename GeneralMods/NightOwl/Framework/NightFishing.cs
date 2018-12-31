@@ -1,9 +1,5 @@
-﻿using StardewModdingAPI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StardewModdingAPI;
 
 namespace Omegasis.NightOwl.Framework
 {
@@ -16,7 +12,7 @@ namespace Omegasis.NightOwl.Framework
 
         public void Edit<T>(IAssetData asset)
         {
-            Dictionary<int,string> nightFish=new Dictionary<int, string> // (T)(object) is a trick to cast anything to T if we know it's compatible
+            Dictionary<int, string> nightFish = new Dictionary<int, string> // (T)(object) is a trick to cast anything to T if we know it's compatible
             {
                 [128] = "Pufferfish/80/floater/1/36/1200 1600/summer/sunny/690 .4 685 .1/4/.3/.5/0",
                 [129] = "Anchovy/30/dart/1/16/600 3000/spring fall/both/682 .2/1/.25/.3/0",
@@ -82,10 +78,10 @@ namespace Omegasis.NightOwl.Framework
                 [799] = "Spook Fish/60/dart/8/25/600 3000/spring summer fall winter/both/685 .35/3/.4/.1/0",
                 [800] = "Blobfish/75/floater/8/25/600 3000/spring summer fall winter/both/685 .35/3/.4/.1/0",
             };
-            foreach (KeyValuePair<int, string> pair in nightFish) {
+            foreach (KeyValuePair<int, string> pair in nightFish)
+            {
                 asset.AsDictionary<int, string>().Set(pair.Key, pair.Value);
             }
         }
-
     }
 }

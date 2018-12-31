@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Linq;
 using Omegasis.BuildHealth.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -16,9 +15,6 @@ namespace Omegasis.BuildHealth
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
         private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
-
-        /// <summary>The absolute path for the current player's legacy data file.</summary>
-        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "PlayerData", $"BuildHealth_data_{Game1.player.Name}.txt");
 
         /// <summary>The mod settings and player data.</summary>
         private ModConfig Config;
@@ -103,7 +99,7 @@ namespace Omegasis.BuildHealth
                 this.LastHealth = player.health;
 
             // give XP when player stays up too late or collapses
-            if (!this.WasCollapsed && shouldFarmerPassout())
+            if (!this.WasCollapsed && this.shouldFarmerPassout())
             {
                 this.PlayerData.CurrentExp += this.Config.ExpForCollapsing;
                 this.WasCollapsed = true;
@@ -122,7 +118,6 @@ namespace Omegasis.BuildHealth
             this.WasCollapsed = false;
 
             // load player data
-            this.MigrateLegacyData();
             this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
             if (this.PlayerData.OriginalMaxHealth == 0)
                 this.PlayerData.OriginalMaxHealth = Game1.player.maxHealth;
@@ -175,39 +170,6 @@ namespace Omegasis.BuildHealth
 
             // save data
             this.Helper.WriteJsonFile(this.DataFilePath, this.PlayerData);
-        }
-
-        /// <summary>Migrate the legacy settings for the current player.</summary>
-        private void MigrateLegacyData()
-        {
-            // skip if no legacy data or new data already exists
-            if (!File.Exists(this.LegacyDataFilePath) || File.Exists(this.DataFilePath))
-                return;
-
-            // migrate to new file
-            try
-            {
-                string[] text = File.ReadAllLines(this.LegacyDataFilePath);
-                this.Helper.WriteJsonFile(this.DataFilePath, new PlayerData
-                {
-                    CurrentLevel = Convert.ToInt32(text[3]),
-                    CurrentExp = Convert.ToDouble(text[5]),
-                    ExpToNextLevel = Convert.ToDouble(text[7]),
-                    BaseHealthBonus = Convert.ToInt32(text[9]),
-                    CurrentLevelHealthBonus = Convert.ToInt32(text[11]),
-                    ClearModEffects = Convert.ToBoolean(text[14]),
-                    OriginalMaxHealth = Convert.ToInt32(text[16])
-                });
-
-                FileInfo file = new FileInfo(this.LegacyDataFilePath);
-                file.Delete();
-                if (!file.Directory.EnumerateFiles().Any())
-                    file.Directory.Delete();
-            }
-            catch (Exception ex)
-            {
-                this.Monitor.Log($"Error migrating data from the legacy 'PlayerData' folder for the current player. Technical details:\n {ex}", LogLevel.Error);
-            }
         }
 
         public bool shouldFarmerPassout()

@@ -8,9 +8,6 @@
   "MinimumApiVersion": "2.0",
   "UpdateKeys": [ "Nexus:425" ],
   "Dependencies": [
-   {
-      "UniqueID": "Omegasis.StardustCore",
-      "IsRequired": true
-   }
-]
+    { "UniqueID": "Omegasis.StardustCore" }
+  ]
 }

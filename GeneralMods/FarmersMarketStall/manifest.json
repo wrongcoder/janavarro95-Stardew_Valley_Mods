@@ -6,11 +6,8 @@
   "UniqueID": "SunDrop.SunDropMapEvents.FarmersMarketStall",
   "EntryDll": "FarmersMarketStall.dll",
   "MinimumApiVersion": "2.0",
-  "UpdateKeys": [ ],
+  "UpdateKeys": [],
   "Dependencies": [
-   {
-      "UniqueID": "Omegasis.EventSystem",
-      "IsRequired": true
-   }
-]
+    { "UniqueID": "Omegasis.EventSystem" }
+  ]
 }

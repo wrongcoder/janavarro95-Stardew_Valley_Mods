@@ -1,11 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 
 namespace StardustCore.UIUtilities
 {
@@ -14,13 +9,11 @@ namespace StardustCore.UIUtilities
         public string Name;
         public Texture2D texture;
         public string path;
-        IModHelper helper;
+        readonly IModHelper helper;
         public string modID;
         public ContentSource source;
-        
-        /// <summary>
-        /// Empty/null constructor.
-        /// </summary>
+
+        /// <summary>Empty/null constructor.</summary>
         public Texture2DExtended()
         {
             this.Name = "";
@@ -30,15 +23,13 @@ namespace StardustCore.UIUtilities
             this.modID = "";
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
+        /// <summary>Construct an instance.</summary>
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
-        public Texture2DExtended(IModHelper helper,IManifest manifest,string path,ContentSource contentSource=ContentSource.ModFolder)
+        public Texture2DExtended(IModHelper helper, IManifest manifest, string path, ContentSource contentSource = ContentSource.ModFolder)
         {
             this.Name = Path.GetFileNameWithoutExtension(path);
             this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path,contentSource);
+            this.texture = helper.Content.Load<Texture2D>(path, contentSource);
             this.helper = helper;
             this.modID = manifest.UniqueID;
             this.source = contentSource;
@@ -48,7 +39,7 @@ namespace StardustCore.UIUtilities
         {
             this.Name = Path.GetFileNameWithoutExtension(path);
             this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path,contentSource);
+            this.texture = helper.Content.Load<Texture2D>(path, contentSource);
             this.helper = helper;
             this.modID = modID;
             this.source = contentSource;
@@ -56,18 +47,15 @@ namespace StardustCore.UIUtilities
 
         public Texture2DExtended Copy()
         {
-            return new Texture2DExtended(this.helper,this.modID,this.path);
-        } 
+            return new Texture2DExtended(this.helper, this.modID, this.path);
+        }
 
         public IModHelper getHelper()
         {
             return this.helper;
         }
 
-        /// <summary>
-        /// Returns the actual 2D texture held by this wrapper class.
-        /// </summary>
-        /// <returns></returns>
+        /// <summary>Returns the actual 2D texture held by this wrapper class.</summary>
         public Texture2D getTexture()
         {
             return this.texture;

@@ -1,4 +1,4 @@
-﻿namespace Omegasis.MuseumRearranger.Framework
+namespace Omegasis.MuseumRearranger.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig

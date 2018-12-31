@@ -1,18 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Revitalize.Framework.Objects
 {
-    public class BasicItemInformation: CustomObjectData
+    public class BasicItemInformation : CustomObjectData
     {
         public string name;
         public string description;
@@ -37,14 +33,14 @@ namespace Revitalize.Framework.Objects
 
         public LightManager lightManager;
 
-        public BasicItemInformation() : base()
+        public BasicItemInformation()
         {
-            name = "";
-            description = "";
-            categoryName = "";
-            categoryColor = new Color(0, 0, 0);
-            price = 0;
-            TileLocation = Vector2.Zero;
+            this.name = "";
+            this.description = "";
+            this.categoryName = "";
+            this.categoryColor = new Color(0, 0, 0);
+            this.price = 0;
+            this.TileLocation = Vector2.Zero;
             this.edibility = -300;
             this.canBeSetIndoors = false;
             this.canBeSetOutdoors = false;
@@ -56,7 +52,7 @@ namespace Revitalize.Framework.Objects
             this.lightManager = new LightManager();
         }
 
-        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility,int fragility,bool isLamp,int price, Vector2 TileLocation,bool canBeSetOutdoors,bool canBeSetIndoors,string id, string data, Texture2D texture, Color color,int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager,Color DrawColor,bool ignoreBoundingBox, InventoryManager Inventory,LightManager Lights):base(id,data,texture,color,tileIndex,bigCraftable,type,craftingData)
+        public BasicItemInformation(string name, string description, string categoryName, Color categoryColor, int edibility, int fragility, bool isLamp, int price, Vector2 TileLocation, bool canBeSetOutdoors, bool canBeSetIndoors, string id, string data, Texture2D texture, Color color, int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights) : base(id, data, texture, color, tileIndex, bigCraftable, type, craftingData)
         {
             this.name = name;
             this.description = description;
@@ -78,49 +74,19 @@ namespace Revitalize.Framework.Objects
                 this.animationManager.getExtendedTexture().texture = this.texture;
             }
             else
-            {
                 this.texture = this.animationManager.getTexture();
-            }
 
             this.drawPosition = Vector2.Zero;
-
-            if (DrawColor == null)
-            {
-                this.drawColor = Color.White;
-            }
-            else
-            {
-                this.drawColor = DrawColor;
-            }
-
+            this.drawColor = drawColor;
             this.ignoreBoundingBox = ignoreBoundingBox;
-
-            recreateDataString();
-            if (Inventory == null)
-            {
-                this.inventory = new InventoryManager();
-            }
-            else
-            {
-                this.inventory = Inventory;
-            }
-
-            if (Lights == null)
-            {
-                this.lightManager = new LightManager();
-            }
-            else
-            {
-                this.lightManager = Lights;
-            }
+            this.recreateDataString();
+            this.inventory = Inventory ?? new InventoryManager();
+            this.lightManager = Lights ?? new LightManager();
         }
 
         public void recreateDataString()
         {
-            this.data=this.name+"/"+this.price+"/"+this.edibility+"/"+"Crafting -9"+"/"+this.description+"/"+this.canBeSetOutdoors+"/"+this.canBeSetIndoors+"/"+this.fragility+"/"+this.isLamp+"/"+this.name;
+            this.data = $"{this.name}/{this.price}/{this.edibility}/Crafting -9/{this.description}/{this.canBeSetOutdoors}/{this.canBeSetIndoors}/{this.fragility}/{this.isLamp}/{this.name}";
         }
-
-
-
     }
 }
