@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using StardewValley;
 using static System.String;
 
@@ -8,12 +9,12 @@ namespace StardewSymphonyRemastered.Framework
     /// <summary>Stores information about what songs play when.</summary>
     public class SongSpecifics
     {
-        public SortedDictionary<string, List<Song>> listOfSongsWithTriggers; //triggerName, <songs>. Seasonal music
+        public SortedDictionary<string, List<string>> listOfSongsWithTriggers; //triggerName, <songs>. Seasonal music
 
-        public List<Song> listOfSongsWithoutTriggers;
+        public List<string> listOfSongsWithoutTriggers;
 
-        public List<Song> festivalSongs;
-        public List<Song> eventSongs;
+        public List<string> festivalSongs;
+        public List<string> eventSongs;
 
         public static List<string> locations = new List<string>();
         public static List<string> festivals = new List<string>();
@@ -90,10 +91,10 @@ namespace StardewSymphonyRemastered.Framework
             };
 
 
-            this.listOfSongsWithTriggers = new SortedDictionary<string, List<Song>>();
-            this.listOfSongsWithoutTriggers = new List<Song>();
-            this.eventSongs = new List<Song>();
-            this.festivalSongs = new List<Song>();
+            this.listOfSongsWithTriggers = new SortedDictionary<string, List<string>>();
+            this.listOfSongsWithoutTriggers = new List<string>();
+            this.eventSongs = new List<string>();
+            this.festivalSongs = new List<string>();
 
         }
 
@@ -151,7 +152,7 @@ namespace StardewSymphonyRemastered.Framework
                 {
                     key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(true) + seperator + getLocationString() + seperator + getDayOfWeekString();
 
-                    if (StardewSymphony.musicManager.getListOfApplicableMusicPacks(key).Count == 0)
+                    if (StardewSymphony.musicManager.GetApplicableMusicPacks(key).Count == 0)
                     {
                         key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(false) + seperator + getLocationString() + seperator + getDayOfWeekString();
                     }
@@ -378,7 +379,7 @@ namespace StardewSymphonyRemastered.Framework
             {
                 try
                 {
-                    this.listOfSongsWithTriggers.Add(v, new List<Song>());
+                    this.listOfSongsWithTriggers.Add(v, new List<string>());
                 }
                 catch { }
             }
@@ -390,7 +391,7 @@ namespace StardewSymphonyRemastered.Framework
             {
                 try
                 {
-                    this.listOfSongsWithTriggers.Add(v, new List<Song>());
+                    this.listOfSongsWithTriggers.Add(v, new List<string>());
                 }
                 catch { }
             }
@@ -402,7 +403,7 @@ namespace StardewSymphonyRemastered.Framework
             {
                 try
                 {
-                    this.listOfSongsWithTriggers.Add(v, new List<Song>());
+                    this.listOfSongsWithTriggers.Add(v, new List<string>());
                 }
                 catch { }
             }
@@ -412,23 +413,23 @@ namespace StardewSymphonyRemastered.Framework
         public void initializeSeasonalMusic()
         {
             foreach (string loc in locations)
-                this.listOfSongsWithTriggers.Add(loc, new List<Song>());
+                this.listOfSongsWithTriggers.Add(loc, new List<string>());
 
             foreach (string season in this.seasons)
             {
-                this.listOfSongsWithTriggers.Add(season, new List<Song>());
+                this.listOfSongsWithTriggers.Add(season, new List<string>());
                 foreach (string weather in this.weather)
                 {
-                    this.listOfSongsWithTriggers.Add(season + seperator + weather, new List<Song>());
+                    this.listOfSongsWithTriggers.Add(season + seperator + weather, new List<string>());
                     foreach (string time in this.timesOfDay)
                     {
-                        this.listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time, new List<Song>());
+                        this.listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time, new List<string>());
                         foreach (string loc in locations)
                         {
-                            this.listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time + seperator + loc, new List<Song>());
+                            this.listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time + seperator + loc, new List<string>());
                             foreach (string day in this.daysOfWeek)
                             {
-                                this.listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time + seperator + loc + seperator + day, new List<Song>());
+                                this.listOfSongsWithTriggers.Add(season + seperator + weather + seperator + time + seperator + loc + seperator + day, new List<string>());
                             }
                         }
                     }
@@ -437,28 +438,28 @@ namespace StardewSymphonyRemastered.Framework
         }
 
         /// <summary>Used to access the master list of songs this music pack contains.</summary>
-        public KeyValuePair<string, List<Song>> getSongList(string key)
+        public KeyValuePair<string, List<string>> getSongList(string key)
         {
             if (!this.listOfSongsWithTriggers.ContainsKey(key))
-                return new KeyValuePair<string, List<Song>>("", null);
+                return new KeyValuePair<string, List<string>>("", null);
 
             //This is just the plain song name with no extra info.
-            foreach (KeyValuePair<string, List<Song>> pair in this.listOfSongsWithTriggers)
+            foreach (KeyValuePair<string, List<string>> pair in this.listOfSongsWithTriggers)
             {
                 //StardewSymphony.ModMonitor.Log(pair.Key);
                 if (pair.Key == key)
                     return pair;
             }
 
-            return new KeyValuePair<string, List<Song>>("", null);
+            return new KeyValuePair<string, List<string>>("", null);
         }
 
-        public List<Song> getFestivalMusic()
+        public List<string> getFestivalMusic()
         {
             return this.festivalSongs;
         }
 
-        public List<Song> getEventMusic()
+        public List<string> getEventMusic()
         {
             return this.eventSongs;
         }
@@ -476,7 +477,7 @@ namespace StardewSymphonyRemastered.Framework
                     StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song to a list that is null. The name of the song list is " + songListKey);
                 return;
             }
-            var song = this.getSongFromList(this.listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
+            string song = this.getSongFromList(this.listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
             {
                 if (StardewSymphony.Config.EnableDebugLog)
@@ -488,7 +489,7 @@ namespace StardewSymphonyRemastered.Framework
 
         public void addSongToFestivalList(string songName)
         {
-            var song = this.getSongFromList(this.listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
+            string song = this.getSongFromList(this.listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
             {
                 if (StardewSymphony.Config.EnableDebugLog)
@@ -502,7 +503,7 @@ namespace StardewSymphonyRemastered.Framework
         {
             var songKeyPair = this.eventSongs;
 
-            var song = this.getSongFromList(this.listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
+            string song = this.getSongFromList(this.listOfSongsWithoutTriggers, songName); //Get the song from the master song pool
             if (song == null)
             {
                 if (StardewSymphony.Config.EnableDebugLog)
@@ -516,35 +517,28 @@ namespace StardewSymphonyRemastered.Framework
         public void removeSongFromTriggerList(string songListKey, string songName)
         {
             var songKeyPair = this.getSongList(songListKey);
-            var song = this.getSongFromList(songKeyPair.Value, songName);
+            string song = this.getSongFromList(songKeyPair.Value, songName);
             songKeyPair.Value.Remove(song);
         }
 
         /// <summary>Remove a song from the event list.</summary>
         public void removeSongFromEventList(string songName)
         {
-            var song = this.getSongFromList(this.eventSongs, songName);
+            string song = this.getSongFromList(this.eventSongs, songName);
             this.eventSongs.Remove(song);
         }
 
         /// <summary>Remove a song from the festival list.</summary>
         public void removeSongFromFestivalList(string songName)
         {
-            var song = this.getSongFromList(this.festivalSongs, songName);
+            string song = this.getSongFromList(this.festivalSongs, songName);
             this.festivalSongs.Remove(song);
         }
 
         /// <summary>Get the Song instance that is referenced with the song's name.</summary>
-        public Song getSongFromList(List<Song> songList, string songName)
+        public string getSongFromList(List<string> songList, string songName)
         {
-            //StardewSymphony.ModMonitor.Log("Get the song: " + songName);
-            foreach (var song in songList)
-            {
-                //StardewSymphony.ModMonitor.Log("Looking at song: " + song.name);
-                if (song.name == songName)
-                    return song;
-            }
-            return null;
+            return songList.FirstOrDefault(p => p == songName);
         }
         #endregion
     }

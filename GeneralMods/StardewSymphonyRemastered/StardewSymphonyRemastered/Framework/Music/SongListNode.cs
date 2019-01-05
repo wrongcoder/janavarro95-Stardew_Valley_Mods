@@ -1,33 +1,31 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewSymphonyRemastered.Framework
 {
     /// <summary>A class that keeps track of the trigger and the list of songs associated with that trigger.</summary>
-    class SongListNode
+    internal class SongListNode
     {
+        /*********
+        ** Accessors
+        *********/
         /// <summary>The trigger name for the list of songs.</summary>
-        public string trigger;
+        public string Trigger { get; }
 
         /// <summary>The list of songs associated with a trigger.</summary>
-        public List<Song> songList;
+        public string[] SongList { get; }
 
+
+        /*********
+        ** Public methods
+        *********/
         /// <summary>Construct an instance.</summary>
-        public SongListNode(string Trigger, List<Song> SongList)
+        /// <param name="trigger">The trigger name for the list of songs.</param>
+        /// <param name="songList">The list of songs associated with a trigger.</param>
+        public SongListNode(string trigger, IEnumerable<string> songList)
         {
-            this.trigger = Trigger;
-            this.songList = SongList;
-        }
-
-        /// <summary>Save functionality.</summary>
-        public void WriteToJson(string path)
-        {
-            StardewSymphony.ModHelper.WriteJsonFile(path, this);
-        }
-
-        /// <summary>Load functionality.</summary>
-        public static SongListNode ReadFromJson(string path)
-        {
-            return StardewSymphony.ModHelper.ReadJsonFile<SongListNode>(path);
+            this.Trigger = trigger;
+            this.SongList = songList.ToArray();
         }
     }
 }

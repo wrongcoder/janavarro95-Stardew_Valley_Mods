@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewSymphonyRemastered.Framework;
@@ -25,35 +26,26 @@ namespace StardewSymphonyRemastered
     // All mods must add events/locations/festivals/menu information to this mod during the Entry function of their mod because once the player is loaded that's when all of the packs are initialized with all of their music.
     public class StardewSymphony : Mod
     {
-        public static WaveBank DefaultWaveBank;
-        public static ISoundBank DefaultSoundBank;
-
+        /*********
+        ** Accessors
+        *********/
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
-        public static IManifest Manifest;
-
         public static MusicManager musicManager;
-
-        private string MusicPath;
-        public static string WavMusicDirectory;
-
-        public bool musicPacksInitialized;
-
         public static bool menuChangedMusic;
-
         public static Config Config;
-
         public static TextureManager textureManager;
 
+
+        /*********
+        ** Public methods
+        *********/
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            DefaultSoundBank = Game1.soundBank;
-            DefaultWaveBank = Game1.waveBank;
             ModHelper = helper;
             ModMonitor = this.Monitor;
-            Manifest = this.ModManifest;
             Config = helper.ReadConfig<Config>();
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             // EventArgsLocationsChanged += LocationEvents_CurrentLocationChanged;
@@ -71,14 +63,9 @@ namespace StardewSymphonyRemastered
 
 
             musicManager = new MusicManager();
-
-            this.MusicPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Music");
-            WavMusicDirectory = Path.Combine(this.MusicPath, "Wav");
-
             textureManager = new TextureManager();
-            this.createDirectories();
+            this.LoadTextures();
 
-            this.musicPacksInitialized = false;
             menuChangedMusic = false;
 
 
@@ -86,12 +73,12 @@ namespace StardewSymphonyRemastered
             SongSpecifics.initializeMenuList();
             SongSpecifics.initializeFestivalsList();
 
-            this.initializeMusicPacks();
+            this.LoadMusicPacks();
         }
 
         private void GameEvents_OneSecondTick(object sender, EventArgs e)
         {
-            musicManager?.updateTimer();
+            musicManager?.UpdateTimer();
         }
 
         /// <summary>Raised when the player changes locations. This should determine the next song to play.</summary>
@@ -108,13 +95,9 @@ namespace StardewSymphonyRemastered
         /// <param name="e">The event arguments.</param>
         private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
         {
-            if (!this.musicPacksInitialized)
-            {
-                musicManager.initializeMenuMusic(); //Initialize menu music that has been added to SongSpecifics.menus from all other mods during their Entry function.
-                musicManager.initializeFestivalMusic();//Initialize festival music that has been added to SongSpecifics.menus from all other mods during their Entry function.
-                musicManager.initializeEventMusic();//Initialize event music that has been added to SongSpecifics.menus from all other mods during their Entry function.
-                this.musicPacksInitialized = true;
-            }
+            musicManager.initializeMenuMusic(); //Initialize menu music that has been added to SongSpecifics.menus from all other mods during their Entry function.
+            musicManager.initializeFestivalMusic(); //Initialize festival music that has been added to SongSpecifics.menus from all other mods during their Entry function.
+            musicManager.initializeEventMusic(); //Initialize event music that has been added to SongSpecifics.menus from all other mods during their Entry function.
         }
 
         /// <summary>Events to occur after the game has loaded in.</summary>
@@ -129,8 +112,8 @@ namespace StardewSymphonyRemastered
             musicManager.initializeFestivalMusic();
             musicManager.initializeEventMusic();
 
-            foreach (var musicPack in musicManager.musicPacks)
-                musicPack.Value.readFromJson();
+            foreach (var musicPack in musicManager.MusicPacks)
+                musicPack.Value.LoadSettings();
 
             SongSpecifics.menus.Sort();
             SongSpecifics.locations.Sort();
@@ -138,7 +121,6 @@ namespace StardewSymphonyRemastered
             SongSpecifics.events.Sort();
 
             musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
-
         }
 
 
@@ -157,16 +139,14 @@ namespace StardewSymphonyRemastered
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             //var ok = musicManager.currentMusicPack.getNameOfCurrentSong();
-            musicManager.selectMenuMusic(SongSpecifics.getCurrentConditionalString());
+            musicManager.SelectMenuMusic(SongSpecifics.getCurrentConditionalString());
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             // THIS IS WAY TO LONG to run. Better make it save individual lists when I am editing songs.
-            foreach (var musicPack in musicManager.musicPacks)
-            {
-                musicPack.Value.writeToJson();
-            }
+            foreach (var musicPack in musicManager.MusicPacks)
+                musicPack.Value.SaveSettings();
         }
 
         /// <summary>Fires when a key is pressed to open the music selection menu.</summary>
@@ -197,8 +177,8 @@ namespace StardewSymphonyRemastered
             }
             else
             {
-                if (musicManager.currentMusicPack == null) return;
-                if (Game1.currentSong != null && musicManager.currentMusicPack.isPlaying())
+                if (musicManager.CurrentMusicPack == null) return;
+                if (Game1.currentSong != null && musicManager.CurrentMusicPack.IsPlaying())
                 {
                     //ModMonitor.Log("STOP THE MUSIC!!!");
                     Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
@@ -208,136 +188,75 @@ namespace StardewSymphonyRemastered
             }
         }
 
-        /// <summary>Load in the music packs to the music manager.</summary>
-        public void initializeMusicPacks()
+        /// <summary>Load the textures needed by the mod.</summary>
+        public void LoadTextures()
         {
-            //load in all packs here.
-            this.loadWAVMusicPacks();
-        }
-
-        /// <summary>Create the core directories needed by the mod.</summary>
-        public void createDirectories()
-        {
-            string path = Path.Combine("assets");
+            Texture2DExtended LoadTexture(string name)
+            {
+                return new Texture2DExtended(this.Helper.Content.Load<Texture2D>($"assets/{name}"));
+            }
 
             //Generic Icons
-            string musicNote = Path.Combine(path, "MusicNote.png");
-            string musicCD = Path.Combine(path, "MusicDisk.png");
-            string outlineBox = Path.Combine(path, "OutlineBox.png");
-
-            string addIcon = Path.Combine(path, "AddButton.png");
-            string deleteButton = Path.Combine(path, "DeleteButton.png");
-
-            string greenBallon = Path.Combine(path, "GreenBallon.png");
-            string redBallon = Path.Combine(path, "RedBallon.png");
-            string starIcon = Path.Combine(path, "StarIcon.png");
-
-            string menuIcon = Path.Combine(path, "MenuIcon.png");
+            textureManager.addTexture("MusicNote", LoadTexture("MusicNote.png"));
+            textureManager.addTexture("MusicDisk", LoadTexture("MusicDisk.png"));
+            textureManager.addTexture("MusicCD", LoadTexture("MusicDisk.png"));
+            textureManager.addTexture("OutlineBox", LoadTexture("OutlineBox.png"));
+            textureManager.addTexture("AddIcon", LoadTexture("AddButton.png"));
+            textureManager.addTexture("DeleteIcon", LoadTexture("DeleteButton.png"));
+            textureManager.addTexture("GreenBallon", LoadTexture("GreenBallon.png"));
+            textureManager.addTexture("RedBallon", LoadTexture("RedBallon.png"));
+            textureManager.addTexture("StarIcon", LoadTexture("StarIcon.png"));
+            textureManager.addTexture("MenuIcon", LoadTexture("MenuIcon.png"));
 
             //Time Icons
-            string dayIcon = Path.Combine(path, "TimeIcon_Day.png");
-            string nightIcon = Path.Combine(path, "TimeIcon_Night.png");
+            textureManager.addTexture("DayIcon", LoadTexture("TimeIcon_Day.png"));
+            textureManager.addTexture("NightIcon", LoadTexture("TimeIcon_Night.png"));
 
             //Fun Icons
-            string eventIcon = Path.Combine(path, "EventIcon.png");
-            string festivalIcon = Path.Combine(path, "FestivalIcon.png");
+            textureManager.addTexture("EventIcon", LoadTexture("EventIcon.png"));
+            textureManager.addTexture("FestivalIcon", LoadTexture("FestivalIcon.png"));
 
             //WeatherIcons
-            string sunnyIcon = Path.Combine(path, "WeatherIcon_Sunny.png");
-            string rainyIcon = Path.Combine(path, "WeatherIcon_Rainy.png");
-            string debrisIconSpring = Path.Combine(path, "WeatherIcon_DebrisSpring.png");
-            string debrisIconSummer = Path.Combine(path, "WeatherIcon_DebrisSummer.png");
-            string debrisIconFall = Path.Combine(path, "WeatherIcon_DebrisFall.png");
-            string weatherFestivalIcon = Path.Combine(path, "WeatherIcon_Festival.png");
-            string snowIcon = Path.Combine(path, "WeatherIcon_Snowing.png");
-            string stormIcon = Path.Combine(path, "WeatherIcon_Stormy.png");
-            string weddingIcon = Path.Combine(path, "WeatherIcon_WeddingHeart.png");
+            textureManager.addTexture("SunnyIcon", LoadTexture("WeatherIcon_Sunny.png"));
+            textureManager.addTexture("RainyIcon", LoadTexture("WeatherIcon_Rainy.png"));
+            textureManager.addTexture("DebrisSpringIcon", LoadTexture("WeatherIcon_DebrisSpring.png"));
+            textureManager.addTexture("DebrisSummerIcon", LoadTexture("WeatherIcon_DebrisSummer.png"));
+            textureManager.addTexture("DebrisFallIcon", LoadTexture("WeatherIcon_DebrisFall.png"));
+            textureManager.addTexture("WeatherFestivalIcon", LoadTexture("WeatherIcon_Festival.png"));
+            textureManager.addTexture("SnowIcon", LoadTexture("WeatherIcon_Snowing.png"));
+            textureManager.addTexture("StormIcon", LoadTexture("WeatherIcon_Stormy.png"));
+            textureManager.addTexture("WeddingIcon", LoadTexture("WeatherIcon_WeddingHeart.png"));
 
             //Season Icons
-            string springIcon = Path.Combine(path, "SeasonIcon_Spring.png");
-            string summerIcon = Path.Combine(path, "SeasonIcon_Summer.png");
-            string fallIcon = Path.Combine(path, "SeasonIcon_Fall.png");
-            string winterIcon = Path.Combine(path, "SeasonIcon_Winter.png");
+            textureManager.addTexture("SpringIcon", LoadTexture("SeasonIcon_Spring.png"));
+            textureManager.addTexture("SummerIcon", LoadTexture("SeasonIcon_Summer.png"));
+            textureManager.addTexture("FallIcon", LoadTexture("SeasonIcon_Fall.png"));
+            textureManager.addTexture("WinterIcon", LoadTexture("SeasonIcon_Winter.png"));
 
             //Day Icons
-            string mondayIcon = Path.Combine(path, "DayIcons_Monday.png");
-            string tuesdayIcon = Path.Combine(path, "DayIcons_Tuesday.png");
-            string wednesdayIcon = Path.Combine(path, "DayIcons_Wednesday.png");
-            string thursdayIcon = Path.Combine(path, "DayIcons_Thursday.png");
-            string fridayIcon = Path.Combine(path, "DayIcons_Friday.png");
-            string saturdayIcon = Path.Combine(path, "DayIcons_Saturday.png");
-            string sundayIcon = Path.Combine(path, "DayIcons_Sunday.png");
+            textureManager.addTexture("MondayIcon", LoadTexture("DayIcons_Monday.png"));
+            textureManager.addTexture("TuesdayIcon", LoadTexture("DayIcons_Tuesday.png"));
+            textureManager.addTexture("WednesdayIcon", LoadTexture("DayIcons_Wednesday.png"));
+            textureManager.addTexture("ThursdayIcon", LoadTexture("DayIcons_Thursday.png"));
+            textureManager.addTexture("FridayIcon", LoadTexture("DayIcons_Friday.png"));
+            textureManager.addTexture("SaturdayIcon", LoadTexture("DayIcons_Saturday.png"));
+            textureManager.addTexture("SundayIcon", LoadTexture("DayIcons_Sunday.png"));
 
-            string houseIcon = Path.Combine(path, "HouseIcon.png");
-            string playButton = Path.Combine(path, "PlayButton.png");
-            string stopButton = Path.Combine(path, "StopButton.png");
-            string backButton = Path.Combine(path, "BackButton.png");
+            textureManager.addTexture("HouseIcon", LoadTexture("HouseIcon.png"));
 
-            textureManager.addTexture("MusicNote", new Texture2DExtended(ModHelper, Manifest.UniqueID, musicNote));
-            textureManager.addTexture("MusicDisk", new Texture2DExtended(ModHelper, Manifest.UniqueID, musicCD));
-            textureManager.addTexture("MusicCD", new Texture2DExtended(ModHelper, Manifest.UniqueID, musicCD));
-            textureManager.addTexture("OutlineBox", new Texture2DExtended(ModHelper, Manifest.UniqueID, outlineBox));
-            textureManager.addTexture("AddIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, addIcon));
-            textureManager.addTexture("DeleteIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, deleteButton));
-            textureManager.addTexture("GreenBallon", new Texture2DExtended(ModHelper, Manifest.UniqueID, greenBallon));
-            textureManager.addTexture("RedBallon", new Texture2DExtended(ModHelper, Manifest.UniqueID, redBallon));
-            textureManager.addTexture("StarIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, starIcon));
-            textureManager.addTexture("MenuIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, menuIcon));
-            textureManager.addTexture("DayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, dayIcon));
-            textureManager.addTexture("NightIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, nightIcon));
-            textureManager.addTexture("EventIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, eventIcon));
-            textureManager.addTexture("FestivalIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, festivalIcon));
-            textureManager.addTexture("SunnyIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, sunnyIcon));
-            textureManager.addTexture("RainyIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, rainyIcon));
-            textureManager.addTexture("DebrisSpringIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, debrisIconSpring));
-            textureManager.addTexture("DebrisSummerIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, debrisIconSummer));
-            textureManager.addTexture("DebrisFallIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, debrisIconFall));
-            textureManager.addTexture("WeatherFestivalIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, weatherFestivalIcon));
-            textureManager.addTexture("SnowIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, snowIcon));
-            textureManager.addTexture("StormIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, stormIcon));
-            textureManager.addTexture("WeddingIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, weddingIcon));
-            textureManager.addTexture("SpringIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, springIcon));
-            textureManager.addTexture("SummerIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, summerIcon));
-            textureManager.addTexture("FallIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, fallIcon));
-            textureManager.addTexture("WinterIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, winterIcon));
-            textureManager.addTexture("MondayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, mondayIcon));
-            textureManager.addTexture("TuesdayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, tuesdayIcon));
-            textureManager.addTexture("WednesdayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, wednesdayIcon));
-            textureManager.addTexture("ThursdayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, thursdayIcon));
-            textureManager.addTexture("FridayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, fridayIcon));
-            textureManager.addTexture("SaturdayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, saturdayIcon));
-            textureManager.addTexture("SundayIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, sundayIcon));
-
-            textureManager.addTexture("HouseIcon", new Texture2DExtended(ModHelper, Manifest.UniqueID, houseIcon));
-
-            textureManager.addTexture("PlayButton", new Texture2DExtended(ModHelper, Manifest.UniqueID, playButton));
-            textureManager.addTexture("StopButton", new Texture2DExtended(ModHelper, Manifest.UniqueID, stopButton));
-            textureManager.addTexture("BackButton", new Texture2DExtended(ModHelper, Manifest.UniqueID, backButton));
-
-
-            Directory.CreateDirectory(this.MusicPath);
-            Directory.CreateDirectory(WavMusicDirectory);
+            textureManager.addTexture("PlayButton", LoadTexture("PlayButton.png"));
+            textureManager.addTexture("StopButton", LoadTexture("StopButton.png"));
+            textureManager.addTexture("BackButton", LoadTexture("BackButton.png"));
         }
 
-        /// <summary>Load in WAV music packs.</summary>
-        public void loadWAVMusicPacks()
+        /// <summary>Load the available music packs.</summary>
+        public void LoadMusicPacks()
         {
-            string[] listOfDirectories = Directory.GetDirectories(WavMusicDirectory);
-            foreach (string folder in listOfDirectories)
+            foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
             {
-                string metaData = Path.Combine(folder, "MusicPackInformation.json");
-
-                if (!File.Exists(metaData))
-                {
-                    if (Config.EnableDebugLog)
-                        ModMonitor.Log("WARNING! Loading in a music pack from: " + folder + ". There is no MusicPackInformation.json associated with this music pack meaning that while songs can be played from this pack, no information about it will be displayed.", LogLevel.Error);
-                }
-
-                WavMusicPack musicPack = new WavMusicPack(folder);
-
-                musicPack.songInformation.initializeMenuMusic();
-                musicPack.readFromJson();
-
+                MusicPack musicPack = new MusicPack(contentPack);
+                musicPack.SongInformation.initializeMenuMusic();
+                musicPack.LoadSettings();
                 musicManager.addMusicPack(musicPack, true, true);
             }
         }
