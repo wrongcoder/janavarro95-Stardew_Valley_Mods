@@ -29,7 +29,7 @@ namespace StardewSymphonyRemastered.Framework
                 Directory.CreateDirectory(data);
             foreach (var list in this.songInformation.listOfSongsWithTriggers)
             {
-                if (!StardewSymphony.Config.writeAllConfigMusicOptions)
+                if (!StardewSymphony.Config.WriteAllConfigMusicOptions)
                 {
                     if (list.Value.Count == 0)
                         continue;

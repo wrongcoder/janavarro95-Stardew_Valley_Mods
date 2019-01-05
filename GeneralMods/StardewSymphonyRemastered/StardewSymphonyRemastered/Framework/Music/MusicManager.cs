@@ -48,7 +48,7 @@ namespace StardewSymphonyRemastered.Framework
         {
 
             if (this.currentMusicPack == null) return;
-            if (StardewSymphony.Config.disableStardewMusic)
+            if (StardewSymphony.Config.DisableStardewMusic)
             {
                 if (this.currentMusicPack.isPlaying())
                     return;

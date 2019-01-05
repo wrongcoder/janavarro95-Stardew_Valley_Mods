@@ -190,7 +190,7 @@ namespace StardewSymphonyRemastered
         {
             if (musicManager == null) return;
 
-            if (Config.disableStardewMusic)
+            if (Config.DisableStardewMusic)
             {
                 if (Game1.currentSong != null)
                 {
