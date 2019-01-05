@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using StardewModdingAPI;
 using StardewValley;
@@ -166,10 +167,6 @@ namespace StardewSymphonyRemastered.Framework
             DirectoryInfo songFolder = new DirectoryInfo(Path.Combine(this.ContentPack.DirectoryPath, this.MusicFolderName));
             foreach (FileInfo file in songFolder.GetFiles())
             {
-                //MemoryStream memoryStream = new MemoryStream();
-                //AudioFileReader fileReader = new AudioFileReader(file.FullName);
-                //fileReader.CopyTo(memoryStream);
-
                 // get name
                 string name = Path.GetFileNameWithoutExtension(file.Name);
                 if (this.Sounds.ContainsKey(name))
@@ -190,9 +187,23 @@ namespace StardewSymphonyRemastered.Framework
                             using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
                             {
                                 string tempPath = Path.Combine(songFolder.FullName, $"{name}.wav");
-                                StardewSymphony.ModMonitor.Log($"MP3 CONVERT! {tempPath}");
+                                StardewSymphony.ModMonitor.Log($"Converting: {tempPath}");
 
                                 WaveFileWriter.CreateWaveFile(tempPath, pcmStream);
+                                using (Stream tempStream = File.OpenRead(tempPath))
+                                    effect = SoundEffect.FromStream(tempStream);
+                                File.Delete(tempPath);
+                            }
+                            break;
+
+                        case ".ogg":
+                            // Credits: https://social.msdn.microsoft.com/Forums/vstudio/en-US/100a97af-2a1c-4b28-b464-d43611b9b5d6/converting-multichannel-ogg-to-stereo-wav-file?forum=csharpgeneral
+                            using (VorbisWaveReader vorbisStream = new VorbisWaveReader(file.FullName))
+                            {
+                                string tempPath = Path.Combine(songFolder.FullName, $"{name}.wav");
+                                StardewSymphony.DebugLog($"Converting: {tempPath}");
+
+                                WaveFileWriter.CreateWaveFile(tempPath, vorbisStream.ToWaveProvider16());
                                 using (Stream tempStream = File.OpenRead(tempPath))
                                     effect = SoundEffect.FromStream(tempStream);
                                 File.Delete(tempPath);

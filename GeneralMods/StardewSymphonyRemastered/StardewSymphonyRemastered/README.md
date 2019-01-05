@@ -58,8 +58,8 @@ To create a content pack:
 
 1. [Create a standard content pack](https://stardewvalleywiki.com/Modding:Content_packs), using `Omegasis.StardewSymphonyRemastered` as the 'content pack for' ID.
 2. Add an `icon.png` image, which is the album logo to show in-game.
-2. Create a `songs` subfolder containing the `.mp3` or `.wav` files to include. The file names
-   (without extensions) will be shown in-game as the song names.
+2. Create a `songs` subfolder containing the `.mp3`, `.ogg`, or `.wav` files to include. The file
+   names (without extensions) will be shown in-game as the song names.
 
 ## For SMAPI mod creators
 You can reference Stardew Symphony in your own SMAPI mods in order to add new events, festivals,
