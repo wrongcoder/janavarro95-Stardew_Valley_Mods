@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Audio;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using StardewValley;
 
@@ -87,41 +88,58 @@ namespace StardewSymphonyRemastered.Framework
         {
             List<string> wavFiles = Directory.GetFiles(this.songsDirectory, "*.wav").ToList();
             wavFiles.AddRange(Directory.GetFiles(this.songsDirectory, "*.mp3"));
+            wavFiles.AddRange(Directory.GetFiles(this.songsDirectory, "*.ogg"));
 
             DateTime span = DateTime.Now;
             foreach (string wav in wavFiles)
             {
-                MemoryStream memoryStream = new MemoryStream();
-                AudioFileReader fileReader = new AudioFileReader(wav);
-                fileReader.CopyTo(memoryStream);
-                byte[] wavData = memoryStream.ToArray();
-
                 SoundEffect eff = null;
 
                 Stream waveFileStream = File.OpenRead(wav); //TitleContainer.OpenStream(file);
+                
 
                 if (wav.Contains(".wav"))
+                {
                     eff = SoundEffect.FromStream(waveFileStream);
+                    waveFileStream.Close();
+                }
                 else if (wav.Contains(".mp3"))
                 {
                     using (Mp3FileReader reader = new Mp3FileReader(waveFileStream))
                     {
-                        using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
+                        using (WaveStream pcmMP3Stream = WaveFormatConversionStream.CreatePcmStream(reader))
                         {
-                            StardewSymphony.ModMonitor.Log("MP3 CONVERT! " + Path.GetFileNameWithoutExtension(wav) + ".wav");
-                            WaveFileWriter.CreateWaveFile(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")), pcmStream);
+                            StardewSymphony.DebugLog("Converting: " + this.songsDirectory + Path.GetFileName(wav));
+                            WaveFileWriter.CreateWaveFile(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")), pcmMP3Stream);
 
-                            waveFileStream = File.OpenRead((Path.GetFileNameWithoutExtension(wav) + ".wav")); //TitleContainer.OpenStream(file);
+                            waveFileStream = File.OpenRead(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav"))); //TitleContainer.OpenStream(file);
                             eff = SoundEffect.FromStream(waveFileStream);
 
+                            waveFileStream.Close();
                             File.Delete(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")));
                         }
                     }
                 }
                 else if (wav.Contains(".ogg"))
                 {
-                    StardewSymphony.ModMonitor.Log("Sorry, but .ogg files are currently not supported. Keep bugging the mod author (me) for this if you want it!", StardewModdingAPI.LogLevel.Alert);
-                    continue;
+
+                    //Credits: https://social.msdn.microsoft.com/Forums/vstudio/en-US/100a97af-2a1c-4b28-b464-d43611b9b5d6/converting-multichannel-ogg-to-stereo-wav-file?forum=csharpgeneral
+
+                    using (VorbisWaveReader vorbisStream = new VorbisWaveReader(wav))
+                    {
+
+                        StardewSymphony.DebugLog("Converting: " + this.songsDirectory+Path.GetFileName(wav));
+                        WaveFileWriter.CreateWaveFile(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")), vorbisStream.ToWaveProvider16());
+
+                        //WaveFileReader reader = new WaveFileReader(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")));
+                        
+                        waveFileStream = File.OpenRead(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav"))); //TitleContainer.OpenStream(file);
+                        eff = SoundEffect.FromStream(waveFileStream);
+
+                        waveFileStream.Close();
+
+                        File.Delete(Path.Combine(this.songsDirectory, (Path.GetFileNameWithoutExtension(wav) + ".wav")));
+                    }
                 }
 
 
