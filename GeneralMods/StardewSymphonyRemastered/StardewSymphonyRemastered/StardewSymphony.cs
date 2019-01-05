@@ -218,9 +218,8 @@ namespace StardewSymphonyRemastered
         /// <summary>Create the core directories needed by the mod.</summary>
         public void createDirectories()
         {
-            string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "MusicMenu");
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            path = Path.Combine("Content", "Graphics", "MusicMenu");
+            string path = Path.Combine("assets");
+
             //Generic Icons
             string musicNote = Path.Combine(path, "MusicNote.png");
             string musicCD = Path.Combine(path, "MusicDisk.png");

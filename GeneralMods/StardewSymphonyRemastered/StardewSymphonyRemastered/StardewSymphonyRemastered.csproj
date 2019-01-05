@@ -93,122 +93,122 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Graphics\MusicMenu\AddButton.png">
+    <Content Include="assets\AddButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\BackButton.png">
+    <Content Include="assets\BackButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DayIcons_Friday.png">
+    <Content Include="assets\DayIcons_Friday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DayIcons_Monday.png">
+    <Content Include="assets\DayIcons_Monday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DayIcons_Saturday.png">
+    <Content Include="assets\DayIcons_Saturday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DayIcons_Sunday.png">
+    <Content Include="assets\DayIcons_Sunday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DayIcons_Thursday.png">
+    <Content Include="assets\DayIcons_Thursday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DayIcons_Tuesday.png">
+    <Content Include="assets\DayIcons_Tuesday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DayIcons_Wednesday.png">
+    <Content Include="assets\DayIcons_Wednesday.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\DeleteButton.png">
+    <Content Include="assets\DeleteButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\EventIcon.png">
+    <Content Include="assets\EventIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\FestivalIcon.png">
+    <Content Include="assets\FestivalIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\GreenBallon.png">
+    <Content Include="assets\GreenBallon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\HouseIcon.png">
+    <Content Include="assets\HouseIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\MenuIcon.png">
+    <Content Include="assets\MenuIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\OutlineBox.png">
+    <Content Include="assets\OutlineBox.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\PlayButton.png">
+    <Content Include="assets\PlayButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\RedBallon.png">
+    <Content Include="assets\RedBallon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\SeasonIcon_Fall.png">
+    <Content Include="assets\SeasonIcon_Fall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\SeasonIcon_Spring.png">
+    <Content Include="assets\SeasonIcon_Spring.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\SeasonIcon_Summer.png">
+    <Content Include="assets\SeasonIcon_Summer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\SeasonIcon_Winter.png">
+    <Content Include="assets\SeasonIcon_Winter.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\StarIcon.png">
+    <Content Include="assets\StarIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\StopButton.png">
+    <Content Include="assets\StopButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\TimeIcon_Day.png">
+    <Content Include="assets\TimeIcon_Day.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\TimeIcon_Night.png">
+    <Content Include="assets\TimeIcon_Night.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_DebrisFall.png">
+    <Content Include="assets\WeatherIcon_DebrisFall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_DebrisSpring.png">
+    <Content Include="assets\WeatherIcon_DebrisSpring.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_DebrisSummer.png">
+    <Content Include="assets\WeatherIcon_DebrisSummer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_Festival.png">
+    <Content Include="assets\WeatherIcon_Festival.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_Rainy.png">
+    <Content Include="assets\WeatherIcon_Rainy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_Snowing.png">
+    <Content Include="assets\WeatherIcon_Snowing.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_Stormy.png">
+    <Content Include="assets\WeatherIcon_Stormy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_Sunny.png">
+    <Content Include="assets\WeatherIcon_Sunny.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_WeddingHeart.png">
+    <Content Include="assets\WeatherIcon_WeddingHeart.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\WeatherIcon_WeddingLetter.png">
+    <Content Include="assets\WeatherIcon_WeddingLetter.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="manifest.json" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Graphics\MusicMenu\MusicDisk.png">
+    <Content Include="assets\MusicDisk.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MusicMenu\MusicNote.png">
+    <Content Include="assets\MusicNote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
