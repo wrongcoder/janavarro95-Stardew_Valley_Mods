@@ -222,6 +222,19 @@ namespace StardewSymphonyRemastered.Framework
             festivals.Add(name);
         }
 
+        /// <summary>Custom way to add in event to hijack music.</summary>
+        public static void addEvent(string id)
+        {
+            events.Add(id);
+            //Do some logic here
+        }
+
+        /// <summary>Add a location to the loctaion list.</summary>
+        public static void addLocation(string name)
+        {
+            locations.Add(name);
+        }
+
         /// <summary>Get the name of the day of the week from what game day it is.</summary>
         public static string getDayOfWeekString()
         {
