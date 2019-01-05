@@ -107,7 +107,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>Sum up some conditionals to parse the correct string key to access the songs list.</summary>
         public static string getCurrentConditionalString(bool getJustLocation = false)
         {
-            string key = "";
+            string key;
             //Event id's are the number found before the : for the event in Content/events/<location>.yaml file where location is the name of the stardew valley location.
 
             if (!getJustLocation)
@@ -117,7 +117,7 @@ namespace StardewSymphonyRemastered.Framework
                     //Get the event id an hijack it with some different music
                     //String key="Event_EventName";
 
-                    var reflected = StardewSymphony.ModHelper.Reflection.GetField<int>(Game1.CurrentEvent, "id", true);
+                    var reflected = StardewSymphony.ModHelper.Reflection.GetField<int>(Game1.CurrentEvent, "id");
 
                     int id = reflected.GetValue();
                     key = id.ToString(); //get the event id. Really really messy.
@@ -221,26 +221,6 @@ namespace StardewSymphonyRemastered.Framework
             festivals.Add(name);
         }
 
-        // TODO: Get a list of all of the vanilla events in the game. But how to determine what event is playing is the question.
-        public static void initializeEventsList()
-        {
-            //Do some logic here
-            //addEvent(12345.ToString());
-        }
-
-        /// <summary>Custom way to add in event to hijack music.</summary>
-        public static void addEvent(string id)
-        {
-            events.Add(id);
-            //Do some logic here
-        }
-
-        /// <summary>Add a location to the loctaion list.</summary>
-        public static void addLocation(string name)
-        {
-            locations.Add(name);
-        }
-
         /// <summary>Get the name of the day of the week from what game day it is.</summary>
         public static string getDayOfWeekString()
         {
@@ -340,10 +320,6 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
-        public static string getCurrentMenuString()
-        {
-            return Game1.activeClickableMenu == null ? "" : Game1.activeClickableMenu.GetType().ToString();
-        }
         #endregion
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -352,13 +328,6 @@ namespace StardewSymphonyRemastered.Framework
 
 
         #region
-        /// <summary>Adds the song's reference to a music pack.</summary>
-        /// <param name="song">The FULL namespace of the menu. Example is StardewValley.Menus.TitleMenu</param>
-        public void addSongToMusicPack(Song song)
-        {
-            this.listOfSongsWithoutTriggers.Add(song);
-        }
-
         /// <summary>Initialize a basic list of menus supported.</summary>
         public static void initializeMenuList()
         {
@@ -388,20 +357,6 @@ namespace StardewSymphonyRemastered.Framework
             addMenu(typeof(StardewValley.Menus.ShippingMenu)); //Shipping screen.
             addMenu(typeof(StardewValley.Menus.ShopMenu)); //Buying things
 
-        }
-
-        /// <summary>Add a menu to stardew symphony so that it may have unique music.</summary>
-        public static void addMenu(string name)
-        {
-            try
-            {
-                name = name.Replace('.', seperator); //Sanitize the name passed in to use my parsing conventions.
-                menus.Add(name);
-            }
-            catch (Exception err)
-            {
-                err.ToString();
-            }
         }
 
         /// <summary>Add amenu to stardew symphony so that it may have unique music.</summary>
@@ -452,7 +407,7 @@ namespace StardewSymphonyRemastered.Framework
                 catch { }
             }
         }
-        
+
         /// <summary>Checks if the song exists at all in this music pack.</summary>
         public bool isSongInList(string songName)
         {
@@ -501,7 +456,7 @@ namespace StardewSymphonyRemastered.Framework
                 if (pair.Key == key)
                     return pair;
             }
-            
+
             return new KeyValuePair<string, List<Song>>("", null);
         }
 
@@ -513,12 +468,6 @@ namespace StardewSymphonyRemastered.Framework
         public List<Song> getEventMusic()
         {
             return this.eventSongs;
-        }
-
-        public List<Song> getMenuMusic()
-        {
-            return null;
-            //return this.menuSongs();
         }
 
         /// <summary>Add a song name to a specific list of songs to play that will play under certain conditions.</summary>

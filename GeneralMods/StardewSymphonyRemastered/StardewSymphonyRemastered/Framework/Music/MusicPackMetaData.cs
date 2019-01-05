@@ -37,16 +37,13 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
-        /// <summary>Construct an instance.</summary>
-        public MusicPackMetaData() { }
-
         /// <summary>Loads the music pack information from a json file.</summary>
         public static MusicPackMetaData readFromJson(string path)
         {
             string json = Path.Combine(path, "MusicPackInformation.json");
             var meta = StardewSymphony.ModHelper.ReadJsonFile<MusicPackMetaData>(json);
 
-            string[] pathParse = path.Split(new string[] { StardewSymphony.ModHelper.DirectoryPath }, StringSplitOptions.None);
+            string[] pathParse = path.Split(new[] { StardewSymphony.ModHelper.DirectoryPath }, StringSplitOptions.None);
 
             try
             {

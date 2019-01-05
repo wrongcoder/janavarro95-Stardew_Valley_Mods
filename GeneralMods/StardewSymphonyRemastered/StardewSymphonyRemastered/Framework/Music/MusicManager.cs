@@ -108,34 +108,10 @@ namespace StardewSymphonyRemastered.Framework
             this.currentMusicPack?.playSong(songName);
         }
 
-        /// <summary>Resumes the paused song from the current music pack.</summary>
-        public void pauseSongFromCurrentPack()
-        {
-            this.currentMusicPack?.pauseSong();
-        }
-
         /// <summary>Stops the song from the current music pack.</summary>
         public void stopSongFromCurrentMusicPack()
         {
             this.currentMusicPack?.stopSong();
-        }
-
-        /// <summary>Resumes the song from the current music pack.</summary>
-        public void resumeSongFromCurrentMusicPack()
-        {
-            this.currentMusicPack?.resumeSong();
-        }
-
-        /// <summary>Returns the name of the currently playing song.</summary>
-        public string getNameOfCurrentlyPlayingSong()
-        {
-            return this.currentMusicPack?.getNameOfCurrentSong() ?? "";
-        }
-
-        /// <summary>Get the information associated with the current music pack.</summary>
-        public MusicPackMetaData getMusicPackInformation()
-        {
-            return this.currentMusicPack?.musicPackInformation;
         }
 
         /// <summary>Checks to see if the music pack has been loaded into the Music Manager.</summary>
@@ -581,15 +557,6 @@ namespace StardewSymphonyRemastered.Framework
         {
             foreach (var pack in this.musicPacks)
                 pack.Value.songInformation.initializeEventMusic();
-        }
-
-        /// <summary>Play a random song from a given music pack.</summary>
-        public void playRandomSongFromPack(string musicPackName)
-        {
-            this.musicPacks.TryGetValue(musicPackName, out MusicPack musicPack);
-            this.currentMusicPack?.stopSong();
-            musicPack.playRandomSong();
-            this.currentMusicPack = musicPack;
         }
     }
 }

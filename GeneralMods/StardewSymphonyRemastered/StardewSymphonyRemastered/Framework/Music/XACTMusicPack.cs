@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Microsoft.Xna.Framework.Audio;
 using StardewValley;
 
@@ -24,7 +21,6 @@ namespace StardewSymphonyRemastered.Framework
             this.directory = directoryToXwb;
             this.WaveBankPath = pathToWaveBank;
             this.SoundBankPath = pathToSoundBank;
-            this.setModDirectoryFromFullDirectory();
             this.songInformation = new SongSpecifics();
             this.currentCue = null;
             this.musicPackInformation = MusicPackMetaData.readFromJson(directoryToXwb);
@@ -41,26 +37,18 @@ namespace StardewSymphonyRemastered.Framework
         }
 
         /// <summary>Load all of the generic music file names into the music pack's information.</summary>
-        public override void loadMusicFiles()
+        private void loadMusicFiles()
         {
             var listOfSongStrings = MusicHexProcessor.ProcessSongNamesFromHex(this, StardewSymphony.Reset, this.SoundBankPath);
 
             List<Song> listofSongs = new List<Song>();
             foreach (string songname in listOfSongStrings)
             {
-                Song song = new Song(this.WaveBankPath, songname);
+                Song song = new Song(songname);
                 listofSongs.Add(song);
             }
 
             this.songInformation.listOfSongsWithoutTriggers = listofSongs;
-        }
-
-        public override void playRandomSong()
-        {
-            Random r = new Random();
-            int value = r.Next(0, this.songInformation.listOfSongsWithoutTriggers.Count);
-            Song s = this.songInformation.listOfSongsWithoutTriggers.ElementAt(value);
-            this.swapSong(s.name);
         }
 
         /// <summary>Get the cue from the list of songs.</summary>
@@ -93,30 +81,6 @@ namespace StardewSymphonyRemastered.Framework
             StardewSymphony.Reset();
         }
 
-        /// <summary>Pause the currently playing song.</summary>
-        public override void pauseSong()
-        {
-            if (this.currentCue != null)
-            {
-                Game1.waveBank = this.WaveBank;
-                Game1.soundBank = this.SoundBank;
-                this.currentCue.Pause();
-                StardewSymphony.Reset();
-            }
-        }
-
-        /// <summary>Resume playing the current set cue.</summary>
-        public override void resumeSong()
-        {
-            if (this.currentCue != null)
-            {
-                Game1.waveBank = this.WaveBank;
-                Game1.soundBank = this.SoundBank;
-                this.currentCue.Resume();
-                StardewSymphony.Reset();
-            }
-        }
-
         /// <summary>Stops the currently playing song and nulls the current song.</summary>
         public override void stopSong()
         {
@@ -128,34 +92,6 @@ namespace StardewSymphonyRemastered.Framework
                 this.currentCue.Stop(AudioStopOptions.Immediate);
                 StardewSymphony.Reset();
                 this.currentCue = null;
-            }
-        }
-
-        /// <summary>Stops the currently playing song and starts playing a new song.</summary>
-        /// <param name="newSongName">The name of the new song to play.</param>
-        public override void swapSong(string newSongName)
-        {
-            this.stopSong();
-            this.playSong(newSongName);
-        }
-
-        /// <summary>Returns the name of the currently playing song.</summary>
-        public override string getNameOfCurrentSong()
-        {
-            return this.currentCue?.Name ?? "";
-        }
-
-        /// <summary>Returns a shortened directory name for display purposes.</summary>
-        public override void setModDirectoryFromFullDirectory()
-        {
-            string[] spliter = this.WaveBankPath.Split(Path.DirectorySeparatorChar);
-            string directoryLocation = "";
-            for (int i = spliter.Length - 5; i < spliter.Length; i++)
-            {
-                directoryLocation += spliter[i];
-
-                if (i != spliter.Length - 1)
-                    directoryLocation += Path.DirectorySeparatorChar;
             }
         }
 

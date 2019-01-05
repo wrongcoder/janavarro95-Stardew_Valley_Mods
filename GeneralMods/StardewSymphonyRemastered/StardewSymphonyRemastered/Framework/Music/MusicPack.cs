@@ -12,24 +12,7 @@ namespace StardewSymphonyRemastered.Framework
 
         public virtual void playSong(string name) { }
 
-        public virtual void pauseSong() { }
-
         public virtual void stopSong() { }
-
-        public virtual void resumeSong() { }
-
-        public virtual void loadMusicFiles() { }
-
-        public virtual void swapSong(string songName) { }
-
-        public virtual string getNameOfCurrentSong()
-        {
-            return "";
-        }
-
-        public virtual void setModDirectoryFromFullDirectory() { }
-
-        public virtual void playRandomSong() { }
 
         public virtual bool isPlaying()
         {

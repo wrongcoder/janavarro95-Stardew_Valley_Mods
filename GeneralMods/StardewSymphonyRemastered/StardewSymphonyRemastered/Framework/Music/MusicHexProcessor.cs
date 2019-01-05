@@ -9,59 +9,15 @@ namespace StardewSymphonyRemastered.Framework
     public class MusicHexProcessor
     {
         /*********
-        ** Properties
-        *********/
-        /// <summary>All of the music/soundbanks and their locations.</summary>
-        private readonly XACTMusicPack MasterList;
-
-        /// <summary>The registered soundbanks.</summary>
-        private readonly List<string> SoundBanks = new List<string>();
-
-        /// <summary>The callback to reset the game audio.</summary>
-        private readonly Action Reset;
-
-
-        /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="masterList">All of the music/soundbanks and their locations.</param>
-        /// <param name="reset">The callback to reset the game audio.</param>
-        public MusicHexProcessor(XACTMusicPack masterList, Action reset)
-        {
-            this.MasterList = masterList;
-            this.Reset = reset;
-        }
-
-        /// <summary>Add a file path to the list of soundbanks.</summary>
-        /// <param name="path">The soundbank file path.</param>
-        public void AddSoundBank(string path)
-        {
-            this.SoundBanks.Add(path);
-        }
-
         /// <summary>Process the soundbank.swb file's hex info and extract the song names from it.</summary>
         public static List<string> ProcessSongNamesFromHex(XACTMusicPack musicPack, Action reset, string FileName)
         {
-
             List<string> cleanCueNames = new List<string>();
             byte[] array = File.ReadAllBytes(FileName);
             string rawName = FileName.Substring(0, FileName.Length - 4);
-            string cueName = rawName + "CueList.txt";
 
-            //Not used as the music pack can change between loads
-            /*
-            if (File.Exists(cueName))
-            {
-                string[] arr = File.ReadAllLines(cueName);
-                List<string> names = new List<string>();
-                foreach(var v in arr)
-                {
-                    names.Add(v);
-                }
-                return names;
-            }
-            */
             string hexDumpContents = HexDump(array);
 
             string rawHexName = rawName + "HexDump.txt";

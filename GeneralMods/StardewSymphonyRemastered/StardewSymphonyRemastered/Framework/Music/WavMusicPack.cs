@@ -20,70 +20,24 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>The currently playing sound.</summary>
         public SoundEffectInstance sound;
 
-        bool loop;
-
         /// <summary>The name of the music pack/</summary>
         public string Name => this.musicPackInformation.name;
 
         public Dictionary<string, SoundEffectInstance> sounds;
         /// <summary>Construct an instance.</summary>
         /// <param name="directoryToMusicPack"></param>
-        public WavMusicPack(string directoryToMusicPack, bool loop = false)
+        public WavMusicPack(string directoryToMusicPack)
         {
             this.directory = directoryToMusicPack;
-            this.setModDirectoryFromFullDirectory();
             this.songsDirectory = Path.Combine(this.directory, "Songs");
             this.songInformation = new SongSpecifics();
             this.musicPackInformation = MusicPackMetaData.readFromJson(directoryToMusicPack);
-            this.loop = loop;
             this.sounds = new Dictionary<string, SoundEffectInstance>();
-            /*
-            if (this.musicPackInformation == null)
-            {
-                //StardewSymphony.ModMonitor.Log("Error: MusicPackInformation.json not found at: " + directoryToMusicPack + ". Blank information will be put in place.", StardewModdingAPI.LogLevel.Warn);
-                //this.musicPackInformation = new MusicPackMetaData("???", "???", "", "0.0.0","");
-            }
-            */
-            //StardewSymphony.ModMonitor.Log(this.musicPackInformation.name.ToString());
             this.loadMusicFiles();
         }
 
-        /// <summary>A shortened directory name for display purposes.</summary>
-        public override void setModDirectoryFromFullDirectory()
-        {
-            string[] spliter = this.directory.Split(Path.DirectorySeparatorChar);
-            string directoryLocation = "";
-            for (int i = spliter.Length - 6; i < spliter.Length; i++)
-            {
-                directoryLocation += spliter[i];
-
-                if (i != spliter.Length - 1)
-                    directoryLocation += Path.DirectorySeparatorChar;
-            }
-        }
-
-        /*
-        /// <summary>Load a wav file into the stream to be played.</summary>
-        public void LoadWavFromFileToStream(string file)
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-
-            System.IO.Stream waveFileStream = File.OpenRead(file); //TitleContainer.OpenStream(file);
-            this.effect = SoundEffect.FromStream(waveFileStream);
-            this.sound=this.effect.CreateInstance();
-            this.currentSong = new Song(file);
-            waveFileStream.Dispose();
-        }
-        */
-
-        /// <summary>Returns the name of the currently playing song.</summary>
-        public override string getNameOfCurrentSong()
-        {
-            return this.currentSong?.name ?? "";
-        }
-
         /// <summary>Load in the music files from the pack's respective Directory/Songs folder. Typically Content/Music/Wav/FolderName/Songs</summary>
-        public override void loadMusicFiles()
+        private void loadMusicFiles()
         {
             List<string> wavFiles = Directory.GetFiles(this.songsDirectory, "*.wav").ToList();
             wavFiles.AddRange(Directory.GetFiles(this.songsDirectory, "*.mp3"));
@@ -94,7 +48,6 @@ namespace StardewSymphonyRemastered.Framework
                 MemoryStream memoryStream = new MemoryStream();
                 AudioFileReader fileReader = new AudioFileReader(wav);
                 fileReader.CopyTo(memoryStream);
-                byte[] wavData = memoryStream.ToArray();
 
                 SoundEffect eff = null;
 
@@ -138,18 +91,12 @@ namespace StardewSymphonyRemastered.Framework
                 this.sounds.Add(name, instance);
 
                 //waveFileStream.Dispose();
-                Song song = new Song(wav);
+                Song song = new Song(name);
                 this.songInformation.listOfSongsWithoutTriggers.Add(song);
                 //listOfSongs.Add(song);
             }
             if (StardewSymphony.Config.EnableDebugLog)
                 StardewSymphony.ModMonitor.Log("Time to load WAV music pack: " + this.musicPackInformation.name + span.Subtract(DateTime.Now).ToString());
-        }
-
-        /// <summary>Used to pause the current song.</summary>
-        public override void pauseSong()
-        {
-            this.sound?.Pause();
         }
 
         /// <summary>Used to play a song.</summary>
@@ -170,20 +117,6 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
-        public override void playRandomSong()
-        {
-            Random r = Game1.random;
-            int value = r.Next(0, this.songInformation.listOfSongsWithoutTriggers.Count);
-            Song s = this.songInformation.listOfSongsWithoutTriggers.ElementAt(value);
-            this.swapSong(s.name);
-        }
-
-        /// <summary>Used to resume the currently playing song.</summary>
-        public override void resumeSong()
-        {
-            this.sound?.Resume();
-        }
-
         /// <summary>Used to stop the currently playing song.</summary>
         public override void stopSong()
         {
@@ -193,35 +126,6 @@ namespace StardewSymphonyRemastered.Framework
 
             this.sound?.Stop(true);
             this.currentSong = null;
-        }
-
-        /// <summary>Used to change from one playing song to another;</summary>
-        public override void swapSong(string songName)
-        {
-            this.stopSong();
-            this.playSong(songName);
-        }
-
-        /// <summary>Get the son's name from the path.</summary>
-        public string getSongNameFromPath(string path)
-        {
-            foreach (var song in this.songInformation.listOfSongsWithoutTriggers)
-            {
-                if (song.getPathToSong() == path)
-                    return song.name;
-            }
-            return "";
-        }
-
-        /// <summary>Gets the song's path that shares the same name.</summary>
-        public string getSongPathFromName(string name)
-        {
-            foreach (var song in this.songInformation.listOfSongsWithoutTriggers)
-            {
-                if (song.name == name)
-                    return song.getPathToSong();
-            }
-            return "";
         }
 
         public override bool isPlaying()

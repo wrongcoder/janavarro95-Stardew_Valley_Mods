@@ -11,12 +11,7 @@ namespace StardewSymphonyRemastered.Framework
         /// <summary>The list of songs associated with a trigger.</summary>
         public List<Song> songList;
 
-        /// <summary>Empty constructor.</summary>
-        public SongListNode() { }
-
         /// <summary>Construct an instance.</summary>
-        /// <param name="Trigger"></param>
-        /// <param name="SongList"></param>
         public SongListNode(string Trigger, List<Song> SongList)
         {
             this.trigger = Trigger;

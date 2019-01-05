@@ -41,9 +41,6 @@ namespace StardewSymphonyRemastered
 
         public bool musicPacksInitialized;
 
-        public static bool festivalStart;
-        public static bool eventStart;
-
         public static bool menuChangedMusic;
 
         public static Config Config;
@@ -94,7 +91,6 @@ namespace StardewSymphonyRemastered
 
             //Initialize all of the lists upon creation during entry.
             SongSpecifics.initializeMenuList();
-            SongSpecifics.initializeEventsList();
             SongSpecifics.initializeFestivalsList();
 
             this.initializeMusicPacks();
