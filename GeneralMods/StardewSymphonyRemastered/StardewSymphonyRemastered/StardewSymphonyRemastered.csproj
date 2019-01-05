@@ -86,12 +86,10 @@
     <Compile Include="Framework\Music\Song.cs" />
     <Compile Include="Framework\Music\SongListNode.cs" />
     <Compile Include="StardewSymphony.cs" />
-    <Compile Include="Framework\Music\MusicHexProcessor.cs" />
     <Compile Include="Framework\Music\MusicManager.cs" />
     <Compile Include="Framework\Music\MusicPack.cs" />
     <Compile Include="Framework\Music\SongSpecifics.cs" />
     <Compile Include="Framework\Music\WavMusicPack.cs" />
-    <Compile Include="Framework\Music\XACTMusicPack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +207,6 @@
     <Content Include="Content\Music\Templates\WAV\Songs\SongsGoHere.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Music\Templates\XACT\MusicPackInformation.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
@@ -222,9 +217,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Music\Templates\WAV\readme.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\Templates\XACT\readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

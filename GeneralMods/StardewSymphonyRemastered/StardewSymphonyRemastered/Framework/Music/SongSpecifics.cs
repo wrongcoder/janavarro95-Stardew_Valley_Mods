@@ -408,13 +408,6 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
-        /// <summary>Checks if the song exists at all in this music pack.</summary>
-        public bool isSongInList(string songName)
-        {
-            Song song = this.getSongFromList(this.listOfSongsWithoutTriggers, songName);
-            return song != null && this.listOfSongsWithoutTriggers.Contains(song);
-        }
-
         /// <summary>A pretty big function to add in all of the specific songs that play at certain locations_seasons_weather_dayOfWeek_times. </summary>
         public void initializeSeasonalMusic()
         {
