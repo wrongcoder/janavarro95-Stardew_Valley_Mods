@@ -36,7 +36,6 @@ namespace StardewSymphonyRemastered
 
         private string MusicPath;
         public static string WavMusicDirectory;
-        public static string TemplateMusicDirectory;
 
         public bool musicPacksInitialized;
 
@@ -75,12 +74,9 @@ namespace StardewSymphonyRemastered
 
             this.MusicPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Music");
             WavMusicDirectory = Path.Combine(this.MusicPath, "Wav");
-            TemplateMusicDirectory = Path.Combine(this.MusicPath, "Templates");
-
 
             textureManager = new TextureManager();
             this.createDirectories();
-            this.createBlankWAVTemplate();
 
             this.musicPacksInitialized = false;
             menuChangedMusic = false;
@@ -322,26 +318,6 @@ namespace StardewSymphonyRemastered
 
             Directory.CreateDirectory(this.MusicPath);
             Directory.CreateDirectory(WavMusicDirectory);
-            Directory.CreateDirectory(TemplateMusicDirectory);
-        }
-
-        /// <summary>USed to create a blank WAV music pack example.</summary>
-        public void createBlankWAVTemplate()
-        {
-            string path = Path.Combine(TemplateMusicDirectory, "WAV");
-            string pathSongs = Path.Combine(path, "Songs");
-            Directory.CreateDirectory(path);
-            Directory.CreateDirectory(pathSongs);
-            if (!File.Exists(Path.Combine(path, "MusicPackInformation.json")))
-            {
-                MusicPackMetaData blankMetaData = new MusicPackMetaData("Omegas's Music Data Example", "Omegasis", "Just a simple example of how metadata is formated for music packs. Feel free to copy and edit this one!", "1.0.0 CoolExample", "Icon");
-                blankMetaData.writeToJson(Path.Combine(path, "MusicPackInformation.json"));
-            }
-            if (!File.Exists(Path.Combine(path, "readme.txt")))
-            {
-                string info = "Place the .wav song files in the Songs folder, modify the MusicPackInformation.json as desired, and then run!";
-                File.WriteAllText(Path.Combine(path, "readme.txt"), info);
-            }
         }
 
         /// <summary>Load in WAV music packs.</summary>

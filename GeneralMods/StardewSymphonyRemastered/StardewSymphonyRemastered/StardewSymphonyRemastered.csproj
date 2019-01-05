@@ -201,12 +201,6 @@
     <Content Include="Content\Graphics\MusicMenu\WeatherIcon_WeddingLetter.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Music\Templates\WAV\MusicPackInformation.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Music\Templates\WAV\Songs\SongsGoHere.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="manifest.json" />
     <None Include="README.md" />
   </ItemGroup>
@@ -217,13 +211,6 @@
     <Content Include="Content\Graphics\MusicMenu\MusicNote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Music\Templates\WAV\readme.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\Music\Wav\" />
-    <Folder Include="Content\Music\XACT\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\StardustCore\StardustCore.csproj">
