@@ -80,7 +80,10 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>Clear saved data.</summary>
         public void ClearData()
         {
-            File.Delete(Path.Combine(this.Helper.DirectoryPath, this.RelativeDataPath));
+            if (File.Exists(Path.Combine(this.Helper.DirectoryPath, this.RelativeDataPath)))
+            {
+                File.Delete(Path.Combine(this.Helper.DirectoryPath, this.RelativeDataPath));
+            }
             this.RemoveLegacyDataForThisPlayer();
         }
 
