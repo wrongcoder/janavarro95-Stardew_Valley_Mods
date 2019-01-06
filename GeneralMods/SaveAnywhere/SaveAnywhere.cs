@@ -325,14 +325,14 @@ namespace Omegasis.SaveAnywhere
                 if ((npc.Name.Equals("Penny") && (dayName.Equals("Tue") || dayName.Equals("Wed") || dayName.Equals("Fri"))) || (npc.Name.Equals("Maru") && (dayName.Equals("Tue") || dayName.Equals("Thu"))) || (npc.Name.Equals("Harvey") && (dayName.Equals("Tue") || dayName.Equals("Thu"))))
                 {
                     this.Helper.Reflection
-                        .GetField<string>(npc, "nameofTodaysSchedule")
+                        .GetField<string>(npc, "nameOfTodaysSchedule")
                         .SetValue("marriageJob");
                     return "marriageJob";
                 }
                 if (!Game1.isRaining && schedule.ContainsKey("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth)))
                 {
                     this.Helper.Reflection
-                        .GetField<string>(npc, "nameofTodaysSchedule")
+                        .GetField<string>(npc, "nameOfTodaysSchedule")
                         .SetValue("marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth));
                     return "marriage_" + Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 }
