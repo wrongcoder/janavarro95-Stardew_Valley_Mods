@@ -14,7 +14,7 @@ namespace Omegasis.BuildEndurance
         ** Properties
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
-        private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
+        private string RelativeDataPath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
 
         /// <summary>The mod settings.</summary>
         private ModConfig Config;
@@ -124,7 +124,7 @@ namespace Omegasis.BuildEndurance
             this.WasEating = false;
 
             // load player data
-            this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
+            this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.RelativeDataPath) ?? new PlayerData();
             if (this.PlayerData.OriginalMaxStamina == 0)
                 this.PlayerData.OriginalMaxStamina = Game1.player.MaxStamina;
 
@@ -179,7 +179,7 @@ namespace Omegasis.BuildEndurance
             this.PlayerData.NightlyStamina = Game1.player.MaxStamina;
 
             // save data
-            this.Helper.WriteJsonFile(this.DataFilePath, this.PlayerData);
+            this.Helper.Data.WriteJsonFile(this.RelativeDataPath, this.PlayerData);
         }
 
         /// <summary>Try and emulate the old Game1.shouldFarmerPassout logic.</summary>

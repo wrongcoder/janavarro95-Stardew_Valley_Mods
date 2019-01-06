@@ -353,8 +353,7 @@ namespace Omegasis.NightOwl
                 this.PreCollapseStamina,
                 this.PreCollapseHealth
             };
-            string path = Path.Combine(this.Helper.DirectoryPath, "Error_Logs", "Mod_State.json");
-            this.Helper.WriteJsonFile(path, state);
+            this.Helper.Data.WriteJsonFile("Error_Logs/Mod_State.json", state);
         }
 
         /// <summary>Try and emulate the old Game1.shouldFarmerPassout logic.</summary>

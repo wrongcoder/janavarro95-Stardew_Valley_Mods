@@ -14,7 +14,7 @@ namespace Omegasis.BuildHealth
         ** Properties
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
-        private string DataFilePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
+        private string RelativeDataPath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
 
         /// <summary>The mod settings and player data.</summary>
         private ModConfig Config;
@@ -118,7 +118,7 @@ namespace Omegasis.BuildHealth
             this.WasCollapsed = false;
 
             // load player data
-            this.PlayerData = this.Helper.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
+            this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.RelativeDataPath) ?? new PlayerData();
             if (this.PlayerData.OriginalMaxHealth == 0)
                 this.PlayerData.OriginalMaxHealth = Game1.player.maxHealth;
 
@@ -169,7 +169,7 @@ namespace Omegasis.BuildHealth
             }
 
             // save data
-            this.Helper.WriteJsonFile(this.DataFilePath, this.PlayerData);
+            this.Helper.Data.WriteJsonFile(this.RelativeDataPath, this.PlayerData);
         }
 
         public bool shouldFarmerPassout()

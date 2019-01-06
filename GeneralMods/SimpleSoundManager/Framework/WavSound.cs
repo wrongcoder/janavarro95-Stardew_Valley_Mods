@@ -37,9 +37,9 @@ namespace SimpleSoundManager
         }
 
         /// <summary>A constructor that takes a mod helper and a relative path to a wav file.</summary>
-        public WavSound(IModHelper modHelper, string name, string pathInModDirectory, bool loop = false)
+        public WavSound(IModHelper modHelper, string name, string relativePath, bool loop = false)
         {
-            string path = Path.Combine(modHelper.DirectoryPath, pathInModDirectory);
+            string path = Path.Combine(modHelper.DirectoryPath, relativePath);
             this.path = path;
             this.soundName = name;
             this.loop = loop;

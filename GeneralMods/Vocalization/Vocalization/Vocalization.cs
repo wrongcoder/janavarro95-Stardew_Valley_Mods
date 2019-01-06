@@ -609,38 +609,35 @@ namespace Vocalization
         {
             foreach (LanguageName language in config.translationInfo.LanguageNames)
             {
+                string relativeLanguagePath = Path.Combine(RelativeVoicePath, language.ToString());
+
                 // check if mod supports language
-                DirectoryInfo languageDir = new DirectoryInfo(Path.Combine(ModHelper.DirectoryPath, RelativeVoicePath, language.ToString()));
+                DirectoryInfo languageDir = new DirectoryInfo(Path.Combine(ModHelper.DirectoryPath, relativeLanguagePath));
                 if (!languageDir.Exists)
                     return;
 
                 // get characters supported in this translation and load their voice cue file
-                foreach (string dir in Directory.GetDirectories(languageDir.FullName))
+                foreach (DirectoryInfo subdir in languageDir.GetDirectories())
                 {
-                    ModMonitor.Log(dir);
-
-                    string[] clips = Directory.GetFiles(dir, "*.wav");
+                    string characterName = subdir.Name;
+                    string relativeCuePath = Path.Combine(relativeLanguagePath, subdir.Name, "VoiceCues.json"); // dialogue cues (aka when the character should "speak")
 
                     //For every .wav file in every character voice clip directory load in the voice clip.
-                    foreach (string file in clips)
+                    foreach (FileInfo file in subdir.GetFiles("*.wav"))
                     {
-                        string fileName = Path.GetFileNameWithoutExtension(file);
-                        soundManager.loadWavFile(ModHelper, fileName, file);
-                        ModMonitor.Log("Loaded sound file: " + fileName + " from: " + file);
+                        string fileName = Path.GetFileNameWithoutExtension(file.Name);
+                        soundManager.loadWavFile(ModHelper, fileName, file.FullName);
+                        ModMonitor.Log($"Loaded sound file: {fileName} from: {file.FullName}");
                     }
-
-                    //Get the character dialogue cues (aka when the character should "speak") from the .json file.
-                    string voiceCueFile = Path.Combine(dir, "VoiceCues.json");
-                    string characterName = Path.GetFileName(dir);
 
                     //If a file was not found, create one and add it to the list of character voice cues.
                     //I have to scrape all files if they don't exist so that way all options are available for release.
-                    if (!File.Exists(voiceCueFile))
+                    if (!File.Exists(Path.Combine(ModHelper.DirectoryPath, relativeCuePath)))
                     {
                         CharacterVoiceCue cue = new CharacterVoiceCue(characterName);
                         cue.initializeEnglishScrape();
                         cue.initializeForTranslation(language);
-                        scrapeDictionaries(voiceCueFile, cue, language, languageDir);
+                        scrapeDictionaries(relativeCuePath, cue, language, languageDir);
                         try
                         {
                             if (language == config.translationInfo.CurrentTranslation)
@@ -655,7 +652,7 @@ namespace Vocalization
                             //Only load in the cues for the current translation.
                             if (language == config.translationInfo.CurrentTranslation)
                             {
-                                CharacterVoiceCue cue = ModHelper.ReadJsonFile<CharacterVoiceCue>(voiceCueFile);
+                                CharacterVoiceCue cue = ModHelper.Data.ReadJsonFile<CharacterVoiceCue>(relativeCuePath);
                                 //scrapeDictionaries(voiceCueFile,cue);
                                 DialogueCues.Add(characterName, cue);
                             }
@@ -670,7 +667,7 @@ namespace Vocalization
         }
 
         /// <summary>Used to obtain all strings for almost all possible dialogue in the game.</summary>
-        public static void scrapeDictionaries(string cuePath, CharacterVoiceCue cue, LanguageName language, DirectoryInfo languageDir)
+        public static void scrapeDictionaries(string relativeCuePath, CharacterVoiceCue cue, LanguageName language, DirectoryInfo languageDir)
         {
             string dialoguePath = Path.Combine("Characters", "Dialogue");
             string stringsPath = Path.Combine("Strings"); //Used for all sorts of extra strings and stuff for like StringsFromCS
@@ -2860,7 +2857,7 @@ namespace Vocalization
                 }
             }
 
-            ModHelper.WriteJsonFile<CharacterVoiceCue>(cuePath, cue);
+            ModHelper.Data.WriteJsonFile(relativeCuePath, cue);
             //DialogueCues.Add(cue.name, cue);
         }
 

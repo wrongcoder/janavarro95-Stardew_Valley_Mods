@@ -44,8 +44,7 @@ namespace Vocalization.Framework
         {
             foreach (LanguageName language in Vocalization.config.translationInfo.LanguageNames)
             {
-                var loaded =
-                    Vocalization.ModHelper.ReadJsonFile<SortedDictionary<string, VoiceAudioOptions>>(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues", "AudioCues" + Seperator + language + ".json"))
+                var loaded = Vocalization.ModHelper.Data.ReadJsonFile<SortedDictionary<string, VoiceAudioOptions>>($"AudioCues/AudioCues{Seperator}{language}.json")
                     ?? new SortedDictionary<string, VoiceAudioOptions>();
                 DictionaryReferences.Add(Vocalization.config.translationInfo.getTranslationName(language), loaded);
             }
@@ -54,7 +53,7 @@ namespace Vocalization.Framework
         public static void saveAudioCues()
         {
             foreach (var v in DictionaryReferences)
-                Vocalization.ModHelper.WriteJsonFile<SortedDictionary<string, VoiceAudioOptions>>(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues", "AudioCues" + Seperator + v.Key + ".json"), v.Value);
+                Vocalization.ModHelper.Data.WriteJsonFile($"AudioCues/AudioCues{Seperator}{v.Key}.json", v.Value);
         }
     }
 }

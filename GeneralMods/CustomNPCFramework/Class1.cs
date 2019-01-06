@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CustomNPCFramework.Framework.Enums;
 using CustomNPCFramework.Framework.Graphics;
 using CustomNPCFramework.Framework.ModularNpcs.ColorCollections;
@@ -82,8 +83,8 @@ namespace CustomNPCFramework
         /// <summary>Initialize the asset pool with some test variables.</summary>
         public void initializeAssetPool()
         {
-            string path = Path.Combine(ModHelper.DirectoryPath, "Content", "Graphics", "NPCS");
-            assetPool.getAssetManager("testNPC").addPathCreateDirectory(new KeyValuePair<string, string>("characters", path));
+            string relativePath = Path.Combine("Content", "Graphics", "NPCS");
+            assetPool.getAssetManager("testNPC").addPathCreateDirectory(new KeyValuePair<string, string>("characters", relativePath));
         }
 
         /// <summary>A function that is called when the game finishes saving.</summary>
@@ -145,52 +146,40 @@ namespace CustomNPCFramework
         public void initializeExamples()
         {
             return;
-            string dirPath = Path.Combine(ModHelper.DirectoryPath, "Content", "Templates");
+            string relativeDirPath = Path.Combine("Content", "Templates");
             var aManager = assetPool.getAssetManager("testNPC");
-            aManager.addPathCreateDirectory(new KeyValuePair<string, string>("templates", dirPath));
-            string filePath = Path.Combine(dirPath, "Example.json");
-            if (!File.Exists(filePath))
-            {
-                string getRelativePath = getShortenedDirectory(filePath);
-                ModMonitor.Log("THIS IS THE PATH::: " + getRelativePath);
-                AssetInfo info = new AssetInfo("MyExample", new NamePairings("StandingExampleL", "StandingExampleR", "StandingExampleU", "StandingExampleD"), new NamePairings("MovingExampleL", "MovingExampleR", "MovingExampleU", "MovingExampleD"), new NamePairings("SwimmingExampleL", "SwimmingExampleR", "SwimmingExampleU", "SwimmingExampleD"), new NamePairings("SittingExampleL", "SittingExampleR", "SittingExampleU", "SittingExampleD"), new Vector2(16, 16), false);
-                info.writeToJson(filePath);
+            aManager.addPathCreateDirectory(new KeyValuePair<string, string>("templates", relativeDirPath));
 
-            }
-            string filePath2 = Path.Combine(dirPath, "AdvancedExample.json");
-            if (!File.Exists(filePath2))
+            // write example
             {
+                string relativeFilePath = Path.Combine(relativeDirPath, "Example.json");
+                if (!File.Exists(Path.Combine(this.Helper.DirectoryPath, relativeFilePath)))
+                {
+                    ModMonitor.Log("THIS IS THE PATH::: " + relativeFilePath);
+                    AssetInfo info = new AssetInfo("MyExample", new NamePairings("StandingExampleL", "StandingExampleR", "StandingExampleU", "StandingExampleD"), new NamePairings("MovingExampleL", "MovingExampleR", "MovingExampleU", "MovingExampleD"), new NamePairings("SwimmingExampleL", "SwimmingExampleR", "SwimmingExampleU", "SwimmingExampleD"), new NamePairings("SittingExampleL", "SittingExampleR", "SittingExampleU", "SittingExampleD"), new Vector2(16, 16), false);
+                    info.writeToJson(relativeFilePath);
 
-                ExtendedAssetInfo info2 = new ExtendedAssetInfo("AdvancedExample", new NamePairings("AdvancedStandingExampleL", "AdvancedStandingExampleR", "AdvancedStandingExampleU", "AdvancedStandingExampleD"), new NamePairings("AdvancedMovingExampleL", "AdvancedMovingExampleR", "AdvancedMovingExampleU", "AdvancedMovingExampleD"), new NamePairings("AdvancedSwimmingExampleL", "AdvancedSwimmingExampleR", "AdvancedSwimmingExampleU", "AdvancedSwimmingExampleD"), new NamePairings("AdvancedSittingExampleL", "AdvancedSittingExampleR", "AdvancedSittingExampleU", "AdvancedSittingExampleD"), new Vector2(16, 16), false, Genders.female, new List<Seasons>()
-            {
-                Seasons.spring,
-                Seasons.summer
-            }, PartType.hair
-                );
-                info2.writeToJson(filePath2);
+                }
             }
-        }
 
-        /// <summary>Used to splice the mod directory to get relative paths.</summary>
-        public static string getShortenedDirectory(string path)
-        {
-            string lol = (string)path.Clone();
-            string[] spliter = lol.Split(new string[] { ModHelper.DirectoryPath }, StringSplitOptions.None);
-            try
+            // write advanced example
             {
-                return spliter[1];
-            }
-            catch
-            {
-                return spliter[0];
+                string relativeFilePath = Path.Combine(relativeDirPath, "AdvancedExample.json");
+                if (!File.Exists(Path.Combine(this.Helper.DirectoryPath, relativeFilePath)))
+                {
+                    ExtendedAssetInfo info2 = new ExtendedAssetInfo("AdvancedExample", new NamePairings("AdvancedStandingExampleL", "AdvancedStandingExampleR", "AdvancedStandingExampleU", "AdvancedStandingExampleD"), new NamePairings("AdvancedMovingExampleL", "AdvancedMovingExampleR", "AdvancedMovingExampleU", "AdvancedMovingExampleD"), new NamePairings("AdvancedSwimmingExampleL", "AdvancedSwimmingExampleR", "AdvancedSwimmingExampleU", "AdvancedSwimmingExampleD"), new NamePairings("AdvancedSittingExampleL", "AdvancedSittingExampleR", "AdvancedSittingExampleU", "AdvancedSittingExampleD"), new Vector2(16, 16), false, Genders.female, new List<Seasons>() { Seasons.spring, Seasons.summer }, PartType.hair);
+                    info2.writeToJson(relativeFilePath);
+                }
             }
         }
 
         /// <summary>Used to finish cleaning up absolute asset paths into a shortened relative path.</summary>
         public static string getRelativeDirectory(string path)
         {
-            string s = getShortenedDirectory(path);
-            return s.Remove(0, 1);
+            return path
+                .Split(new[] { ModHelper.DirectoryPath }, 2, StringSplitOptions.None)
+                .Last()
+                .TrimStart(Path.DirectorySeparatorChar);
         }
     }
 }
