@@ -61,7 +61,7 @@ namespace Vocalization.Framework.Menus
 
             for (int i = 0; i < this.languages.buttons.Count; i++)
             {
-                if (Vocalization.config.translationInfo.currentTranslation == this.languages.buttons.ElementAt(i).label)
+                if (Vocalization.config.translationInfo.CurrentTranslation == this.languages.buttons.ElementAt(i).label)
                     this.languages.buttonIndex = i;
             }
         }
@@ -99,9 +99,9 @@ namespace Vocalization.Framework.Menus
             Vocalization.ModHelper.WriteConfig<ModConfig>(Vocalization.config);
             Vocalization.soundManager.volume = (float)Vocalization.config.voiceVolume;
 
-            if (Vocalization.config.translationInfo.currentTranslation != this.getTranslationInfo())
+            if (Vocalization.config.translationInfo.CurrentTranslation != this.getTranslationInfo())
             {
-                Vocalization.config.translationInfo.currentTranslation = this.getTranslationInfo();
+                Vocalization.config.translationInfo.CurrentTranslation = this.getTranslationInfo();
                 Vocalization.soundManager.sounds.Clear();
                 Vocalization.DialogueCues.Clear();
                 Vocalization.loadAllVoiceFiles();

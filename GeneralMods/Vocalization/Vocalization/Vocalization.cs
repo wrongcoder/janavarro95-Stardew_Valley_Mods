@@ -153,6 +153,36 @@ namespace Vocalization
     /// </summary>
     public class Vocalization : Mod
     {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>The subfolders to create for each language, in addition to a subfolder for each detected NPC.</summary>
+        private readonly string[] DefaultSubfolders = new[]
+        {
+            "Characters",
+            "Events",
+            "ExtraDialogue", // folder for ExtraDialogue.yaml
+            "Gil",
+            "Governor",
+            "Grandpa",
+            "Kent",
+            "LocationDialogue",
+            "Mail",
+            "Morris",
+            "Notes",
+            "NPCGiftTastes",
+            "Quests",
+            "Shops", // NPC shops
+            "SpeechBubbles",
+            "Temp",
+            "TV", // TV Shows
+            "Utility"
+        };
+
+
+        /*********
+        ** Accessors
+        *********/
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
         public static IManifest Manifest;
@@ -160,13 +190,11 @@ namespace Vocalization
         /// <summary>A string that keeps track of the previous dialogue said to ensure that dialogue isn't constantly repeated while the text box is open.</summary>
         public static string previousDialogue;
 
-        List<string> characterDialoguePaths = new List<string>();
-
         /// <summary>Simple Sound Manager class that handles playing and stoping dialogue.</summary>
         public static SimpleSoundManager.Framework.SoundManager soundManager;
 
-        /// <summary>The path to the folder where all of the NPC folders for dialogue .wav files are kept.</summary>
-        public static string VoicePath = "";
+        /// <summary>The path to the folder where all of the NPC folders for dialogue .wav files are kept, relative to the mod folder.</summary>
+        private static readonly string RelativeVoicePath = Path.Combine("Content", "Audio", "VoiceFiles");
 
         public static ReplacementStrings replacementStrings;
 
@@ -177,6 +205,10 @@ namespace Vocalization
         /// <summary>A dictionary that keeps track of all of the npcs whom have voice acting for their dialogue.</summary>
         public static Dictionary<string, CharacterVoiceCue> DialogueCues;
 
+
+        /*********
+        ** Public methods
+        *********/
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
@@ -554,156 +586,21 @@ namespace Vocalization
         /// <summary>Runs after loading and creates necessary mod directories.</summary>
         private void initialzeDirectories()
         {
-            string basePath = ModHelper.DirectoryPath;
-            string contentPath = Path.Combine(basePath, "Content");
-            string graphicsPath = Path.Combine(contentPath, "Graphics");
-            string audioPath = Path.Combine(contentPath, "Audio");
-            string voicePath = Path.Combine(audioPath, "VoiceFiles");
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, RelativeVoicePath));
 
-            if (!Directory.Exists(graphicsPath))
-                Directory.CreateDirectory(graphicsPath);
+            // get list of subfolders to create
+            List<string> subfolderNames = new List<string>(this.DefaultSubfolders);
+            foreach (NPC npc in Game1.locations.SelectMany(loc => loc.characters))
+                subfolderNames.Add(npc.Name);
 
-            VoicePath = voicePath; //Set a static reference to my voice files directory.
-
-            //Get a list of all characters in the game and make voice directories for them in each supported translation of the mod.
-            foreach (var loc in Game1.locations)
+            // create subfolders for each translation
+            // Note: a modder could also manually add their own character directory for voice lines instead of having to add it via code.
+            foreach (string language in config.translationInfo.LanguageNames)
             {
-                foreach (var npc in loc.characters)
-                {
-                    foreach (string translation in config.translationInfo.translations)
-                    {
-                        string characterPath = Path.Combine(translation, npc.Name);
-                        this.characterDialoguePaths.Add(characterPath);
-                    }
-                }
-            }
-
-            //Create all of the necessary folders for different translations.
-            foreach (string dir in config.translationInfo.translations)
-            {
-                if (!Directory.Exists(Path.Combine(voicePath, dir))) Directory.CreateDirectory(Path.Combine(voicePath, dir));
-            }
-
-            //Add in folder for TV Shows
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string TVPath = Path.Combine(translation, "TV");
-                this.characterDialoguePaths.Add(TVPath);
-            }
-
-            //Add in folder for shop support
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string shop = Path.Combine(translation, "Shops"); //Used to hold NPC Shops
-                this.characterDialoguePaths.Add(shop);
-            }
-
-            //Add in folder for Mail support.
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string mail = Path.Combine(translation, "Mail");
-                this.characterDialoguePaths.Add(mail);
-            }
-
-            //Add in folder for ExtraDiaogue.yaml
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "ExtraDialogue");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "Events");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "Characters");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "LocationDialogue");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "Notes");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "Utility");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "NPCGiftTastes");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "SpeechBubbles");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string kent = Path.Combine(translation, "Kent");
-                this.characterDialoguePaths.Add(kent);
-
-
-                string gil = Path.Combine(translation, "Gil");
-                this.characterDialoguePaths.Add(gil);
-
-
-                string governor = Path.Combine(translation, "Governor");
-                this.characterDialoguePaths.Add(governor);
-
-
-                string grandpa = Path.Combine(translation, "Grandpa");
-                this.characterDialoguePaths.Add(grandpa);
-
-
-                string morris = Path.Combine(translation, "Morris");
-                this.characterDialoguePaths.Add(morris);
-            }
-
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "Quests");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-
-            foreach (string translation in config.translationInfo.translations)
-            {
-                string extra = Path.Combine(translation, "Temp");
-                this.characterDialoguePaths.Add(extra);
-            }
-
-            if (!Directory.Exists(contentPath))
-                Directory.CreateDirectory(contentPath);
-            if (!Directory.Exists(audioPath))
-                Directory.CreateDirectory(audioPath);
-            if (!Directory.Exists(voicePath))
-                Directory.CreateDirectory(voicePath);
-
-
-            //Create a list of new directories if the corresponding character directory doesn't exist.
-            //Note: A modder could also manually add in their own character directory for voice lines instead of having to add it via code.
-            foreach (string dir in this.characterDialoguePaths)
-            {
-                if (!Directory.Exists(Path.Combine(voicePath, dir)))
-                    Directory.CreateDirectory(Path.Combine(voicePath, dir));
+                DirectoryInfo translationPath = new DirectoryInfo(Path.Combine(this.Helper.DirectoryPath, RelativeVoicePath, language));
+                foreach (string subfolderName in subfolderNames)
+                    Directory.CreateDirectory(Path.Combine(translationPath.FullName, subfolderName));
             }
         }
 
@@ -711,7 +608,7 @@ namespace Vocalization
         public static void loadAllVoiceFiles()
         {
             //get a list of all translations supported by this mod.
-            List<string> translations = Directory.GetDirectories(VoicePath).ToList();
+            List<string> translations = Directory.GetDirectories(Path.Combine(ModHelper.DirectoryPath, RelativeVoicePath)).ToList();
             foreach (string translation in translations)
             {
                 string[] characterVoiceLines = Directory.GetDirectories(translation);
@@ -744,7 +641,7 @@ namespace Vocalization
                         scrapeDictionaries(voiceCueFile, cue, translation);
                         try
                         {
-                            if (Path.GetFileName(translation) == config.translationInfo.currentTranslation)
+                            if (Path.GetFileName(translation) == config.translationInfo.CurrentTranslation)
                                 DialogueCues.Add(characterName, cue);
                         }
                         catch { }
@@ -754,7 +651,7 @@ namespace Vocalization
                         try
                         {
                             //Only load in the cues for the current translation.
-                            if (Path.GetFileName(translation) == config.translationInfo.currentTranslation)
+                            if (Path.GetFileName(translation) == config.translationInfo.CurrentTranslation)
                             {
                                 CharacterVoiceCue cue = ModHelper.ReadJsonFile<CharacterVoiceCue>(voiceCueFile);
                                 //scrapeDictionaries(voiceCueFile,cue);

@@ -45,7 +45,7 @@ namespace Vocalization.Framework
 
         public static void loadAudioCues()
         {
-            foreach (string v in Vocalization.config.translationInfo.translations)
+            foreach (string v in Vocalization.config.translationInfo.LanguageNames)
             {
                 var loaded = Vocalization.ModHelper.ReadJsonFile<SortedDictionary<string, VoiceAudioOptions>>(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues", "AudioCues" + Seperator + v + ".json"));
                 if (loaded == null) loaded = new SortedDictionary<string, VoiceAudioOptions>();
