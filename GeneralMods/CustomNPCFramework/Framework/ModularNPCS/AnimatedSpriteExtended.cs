@@ -19,7 +19,7 @@ namespace CustomNPCFramework.Framework.ModularNpcs
         {
             //Set the sprite texture
             this.sprite = new AnimatedSprite();
-            Texture2D load = texture.Copy().texture;
+            Texture2D load = texture.Copy().Texture;
             var thing = Class1.ModHelper.Reflection.GetField<Texture2D>(this.sprite, "Texture", true);
             thing.SetValue(load);
 

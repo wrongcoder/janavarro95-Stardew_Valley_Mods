@@ -63,10 +63,10 @@ namespace CustomNPCFramework.Framework.Graphics
             string upString = Class1.getShortenedDirectory(Path.Combine(path, info.upString + ".png")).Remove(0, 1);
             string downString = Class1.getShortenedDirectory(Path.Combine(path, info.downString + ".png")).Remove(0, 1);
 
-            this.leftTexture = new Texture2DExtended(helper, Class1.Manifest, leftString);
-            this.rightTexture = new Texture2DExtended(helper, Class1.Manifest, rightString);
-            this.upTexture = new Texture2DExtended(helper, Class1.Manifest, upString);
-            this.downTexture = new Texture2DExtended(helper, Class1.Manifest, downString);
+            this.leftTexture = new Texture2DExtended(helper, leftString);
+            this.rightTexture = new Texture2DExtended(helper, rightString);
+            this.upTexture = new Texture2DExtended(helper, upString);
+            this.downTexture = new Texture2DExtended(helper,  downString);
 
             switch (direction)
             {
