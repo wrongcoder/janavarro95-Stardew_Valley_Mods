@@ -18,7 +18,7 @@ namespace Omegasis.HappyBirthday
     public class HappyBirthday : Mod, IAssetEditor
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
         private string DataFilePath;

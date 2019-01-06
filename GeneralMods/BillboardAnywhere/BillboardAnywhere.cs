@@ -10,7 +10,7 @@ namespace Omegasis.BillboardAnywhere
     public class BillboardAnywhere : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

@@ -9,7 +9,7 @@ namespace Omegasis.AutoSpeed
     public class AutoSpeed : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

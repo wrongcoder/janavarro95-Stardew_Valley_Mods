@@ -10,7 +10,7 @@ namespace Omegasis.TimeFreeze
     public class TimeFreeze : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

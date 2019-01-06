@@ -12,7 +12,7 @@ namespace Omegasis.SaveBackup
     public class SaveBackup : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The folder path containing the game's app data.</summary>
         private static readonly string AppDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StardewValley");

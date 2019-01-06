@@ -15,7 +15,7 @@ namespace Omegasis.SaveAnywhere.Framework
     public class SaveManager
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to game code.</summary>
         private readonly IReflectionHelper Reflection;

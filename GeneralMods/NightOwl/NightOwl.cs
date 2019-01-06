@@ -21,7 +21,7 @@ namespace Omegasis.NightOwl
     public class NightOwl : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

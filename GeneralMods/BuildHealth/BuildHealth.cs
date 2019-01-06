@@ -10,7 +10,7 @@ namespace Omegasis.BuildHealth
     public class BuildHealth : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The relative path for the current player's data file.</summary>
         private string RelativeDataPath => Path.Combine("data", $"{Constants.SaveFolderName}.json");

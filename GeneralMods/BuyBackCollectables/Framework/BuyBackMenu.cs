@@ -13,7 +13,7 @@ namespace Omegasis.BuyBackCollectables.Framework
     internal class BuyBackMenu : IClickableMenu
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The organics tab ID.</summary>
         private const int OrganicsTab = 0;

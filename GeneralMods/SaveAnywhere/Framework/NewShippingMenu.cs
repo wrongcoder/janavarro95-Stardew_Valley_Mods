@@ -10,7 +10,7 @@ namespace Omegasis.SaveAnywhere.Framework
     internal class NewShippingMenu : ShippingMenu
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The private field on the shipping menu which indicates the game has already been saved, which prevents it from saving.</summary>
         private readonly IReflectedField<bool> SavedYet;

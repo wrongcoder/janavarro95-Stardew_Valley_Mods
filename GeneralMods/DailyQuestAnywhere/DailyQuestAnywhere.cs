@@ -15,7 +15,7 @@ namespace Omegasis.DailyQuestAnywhere
     public class DailyQuestAnywhere : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

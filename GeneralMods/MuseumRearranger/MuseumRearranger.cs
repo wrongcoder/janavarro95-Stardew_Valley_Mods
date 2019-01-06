@@ -10,7 +10,7 @@ namespace Omegasis.MuseumRearranger
     public class MuseumRearranger : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

@@ -14,7 +14,7 @@ namespace Omegasis.SaveAnywhere
     public class SaveAnywhere : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

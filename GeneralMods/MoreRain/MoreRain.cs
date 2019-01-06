@@ -11,7 +11,7 @@ namespace Omegasis.MoreRain
     public class MoreRain : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The weathers that can be safely overridden.</summary>
         private readonly HashSet<int> NormalWeathers = new HashSet<int> { Game1.weather_sunny, Game1.weather_rain, Game1.weather_lightning, Game1.weather_debris, Game1.weather_snow };

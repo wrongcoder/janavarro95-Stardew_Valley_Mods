@@ -11,7 +11,7 @@ namespace Omegasis.HappyBirthday.Framework
     internal class BirthdayMenu : IClickableMenu
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The labels to draw.</summary>
         private readonly List<ClickableComponent> Labels = new List<ClickableComponent>();

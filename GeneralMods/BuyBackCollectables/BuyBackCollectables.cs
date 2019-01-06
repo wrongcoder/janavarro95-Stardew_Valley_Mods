@@ -9,7 +9,7 @@ namespace Omegasis.BuyBackCollectables
     public class BuyBackCollectables : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
