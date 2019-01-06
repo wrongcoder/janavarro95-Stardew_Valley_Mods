@@ -15,7 +15,7 @@ namespace Omegasis.DailyQuestAnywhere
     public class DailyQuestAnywhere : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
@@ -32,43 +32,43 @@ namespace Omegasis.DailyQuestAnywhere
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            SaveEvents.AfterSave += this.SaveEvents_AfterSave;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        /// <param name="e">The event arguments.</param>
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            if (Context.IsPlayerFree && e.KeyPressed.ToString() == this.Config.KeyBinding)
+            if (Context.IsPlayerFree && e.Button == this.Config.KeyBinding)
+            {
                 if (!Game1.player.hasDailyQuest())
                 {
                     if (this.dailyQuest == null)
-                    {
                         this.dailyQuest = this.generateDailyQuest();
-                    }
                     Game1.questOfTheDay = this.dailyQuest;
                     Game1.activeClickableMenu = new Billboard(true);
                 }
+            }
         }
 
-        /// <summary>Makes my daily quest referene null so we can't just keep getting a new reference.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterSave(object sender, System.EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            this.dailyQuest = null; //Nullify my quest reference.
+            // makes daily quest null so we can't just keep getting a new reference
+            this.dailyQuest = null;
         }
 
         /// <summary>Generate a daily quest for sure.</summary>
         public Quest generateDailyQuest()
         {
-
             Random chanceRandom = new Random((int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed);
             int chance = chanceRandom.Next(0, 101);
             float actualChance = chance / 100;
@@ -85,15 +85,15 @@ namespace Omegasis.DailyQuestAnywhere
                     case 1:
                         return new FishingQuest();
                     case 2:
-                        return new StardewValley.Quests.CraftingQuest();
+                        return new CraftingQuest();
                     case 3:
-                        return new StardewValley.Quests.ItemDeliveryQuest();
+                        return new ItemDeliveryQuest();
                     case 4:
-                        return new StardewValley.Quests.ItemHarvestQuest();
+                        return new ItemHarvestQuest();
                     case 5:
-                        return new StardewValley.Quests.ResourceCollectionQuest();
+                        return new ResourceCollectionQuest();
                     case 6:
-                        return new StardewValley.Quests.SlayMonsterQuest();
+                        return new SlayMonsterQuest();
                 }
             }
             return null; //This should never happen.

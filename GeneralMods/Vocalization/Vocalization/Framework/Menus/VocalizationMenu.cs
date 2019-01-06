@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,13 +40,13 @@ namespace Vocalization.Framework.Menus
             Rectangle sourceRect = new Rectangle(0, 0, 4, 16);
             this.sliderButton = new SliderButton("Slider", "Volume", new Rectangle(this.xPositionOnScreen + 100, this.yPositionOnScreen + 220, 4, 16), buttonTexture, bar, sourceRect, 2f, new SliderInformation(SliderStyle.Horizontal, (int)(Vocalization.config.voiceVolume * 100), 1), new StardustCore.Animations.Animation(sourceRect), Color.White, Color.Black, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(null, null, null), false, null, true);
 
-            Button english = new Button("EnglishButton", "English", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 0, 174, 39), 1f);
-            Button spanish = new Button("SpanishButton", "Spanish", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 2, 174, 39), 1f);
-            Button portuguese = new Button("PortugueseButton", "Brazillian Portuguese", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 4, 174, 39), 1f);
-            Button russian = new Button("RussianButton", "Russian", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 6, 174, 39), 1f);
-            Button chinese = new Button("ChineseButton", "Chinese", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 8, 174, 39), 1f);
-            Button japanese = new Button("JapaneseButton", "Japanese", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 10, 174, 39), 1f);
-            Button german = new Button("GermanButton", "German", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 12, 174, 39), 1f);
+            Button english = new Button(LanguageName.English.ToString(), "English", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 0, 174, 39), 1f);
+            Button spanish = new Button(LanguageName.Spanish.ToString(), "Spanish", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 2, 174, 39), 1f);
+            Button portuguese = new Button(LanguageName.Portuguese.ToString(), "Brazillian Portuguese", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 4, 174, 39), 1f);
+            Button russian = new Button(LanguageName.Russian.ToString(), "Russian", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 6, 174, 39), 1f);
+            Button chinese = new Button(LanguageName.Chinese.ToString(), "Chinese", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 8, 174, 39), 1f);
+            Button japanese = new Button(LanguageName.Japanese.ToString(), "Japanese", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 10, 174, 39), 1f);
+            Button german = new Button(LanguageName.German.ToString(), "German", new Rectangle(0, 0, 174, 39), new Texture2DExtended(Vocalization.ModHelper, Path.Combine("LooseSprites", "LanguageButtons.xnb"), StardewModdingAPI.ContentSource.GameContent), new Rectangle(0, 39 * 12, 174, 39), 1f);
             List<Button> buttons = new List<Button>
             {
                 english,
@@ -61,7 +62,7 @@ namespace Vocalization.Framework.Menus
 
             for (int i = 0; i < this.languages.buttons.Count; i++)
             {
-                if (Vocalization.config.translationInfo.currentTranslation == this.languages.buttons.ElementAt(i).label)
+                if (Vocalization.config.translationInfo.CurrentTranslation == (LanguageName)Enum.Parse(typeof(LanguageName), this.languages.buttons.ElementAt(i).name))
                     this.languages.buttonIndex = i;
             }
         }
@@ -99,9 +100,9 @@ namespace Vocalization.Framework.Menus
             Vocalization.ModHelper.WriteConfig<ModConfig>(Vocalization.config);
             Vocalization.soundManager.volume = (float)Vocalization.config.voiceVolume;
 
-            if (Vocalization.config.translationInfo.currentTranslation != this.getTranslationInfo())
+            if (Vocalization.config.translationInfo.CurrentTranslation != this.getTranslationInfo())
             {
-                Vocalization.config.translationInfo.currentTranslation = this.getTranslationInfo();
+                Vocalization.config.translationInfo.CurrentTranslation = this.getTranslationInfo();
                 Vocalization.soundManager.sounds.Clear();
                 Vocalization.DialogueCues.Clear();
                 Vocalization.loadAllVoiceFiles();
@@ -112,10 +113,11 @@ namespace Vocalization.Framework.Menus
             return true;
         }
 
-        public string getTranslationInfo()
+        public LanguageName getTranslationInfo()
         {
             //Return the name of the button which will have the translation stuff here!
-            return this.languages.getCurrentButtonLabel();
+            string currentName = this.languages.getCurrentButtonName();
+            return (LanguageName)Enum.Parse(typeof(LanguageName), currentName);
         }
 
         public string getAudioMode()

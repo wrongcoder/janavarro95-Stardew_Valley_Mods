@@ -36,9 +36,9 @@ namespace SimpleSoundManager.Framework
         }
 
         /// <summary>Constructor for wav files.</summary>
-        public void loadWavFile(IModHelper helper, string soundName, string pathToWav)
+        public void loadWavFile(IModHelper helper, string soundName, string relativePath)
         {
-            WavSound wav = new WavSound(helper, soundName, pathToWav);
+            WavSound wav = new WavSound(helper, soundName, relativePath);
             SimpleSoundManagerMod.ModMonitor.Log("Getting sound file:" + soundName);
             try
             {

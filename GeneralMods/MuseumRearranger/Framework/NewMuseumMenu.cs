@@ -11,7 +11,7 @@ namespace Omegasis.MuseumRearranger.Framework
     internal class NewMuseumMenu : MuseumMenu
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Whether to show the inventory screen.</summary>
         private bool ShowInventory = true;

@@ -25,21 +25,13 @@ namespace CustomNPCFramework.Framework.Graphics
 
         /// <summary>Construct an instance.</summary>
         /// <param name="info">The asset info file to be read in or created. Holds path information.</param>
-        /// <param name="path">The path to the assetinfo file.</param>
+        /// <param name="relativeDirPath">The relative path to the assetinfo file.</param>
         /// <param name="direction">The direction to set the animation.</param>
-        public AssetSheet(AssetInfo info, string path, Direction direction = Direction.down)
+        public AssetSheet(AssetInfo info, string relativeDirPath, Direction direction = Direction.down)
         {
             this.assetInfo = info;
-            this.textures = new TextureGroup(info, path, direction);
-            try
-            {
-                this.path = Class1.getShortenedDirectory(path);
-            }
-            catch
-            {
-                this.path = path;
-            }
-
+            this.textures = new TextureGroup(info, relativeDirPath, direction);
+            this.path = relativeDirPath;
             this.index = 0;
         }
 

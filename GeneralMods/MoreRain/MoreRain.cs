@@ -11,7 +11,7 @@ namespace Omegasis.MoreRain
     public class MoreRain : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The weathers that can be safely overridden.</summary>
         private readonly HashSet<int> NormalWeathers = new HashSet<int> { Game1.weather_sunny, Game1.weather_rain, Game1.weather_lightning, Game1.weather_debris, Game1.weather_snow };
@@ -29,26 +29,26 @@ namespace Omegasis.MoreRain
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.Saving += this.OnSaving;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             this.HandleNewDay();
         }
 
-        /// <summary>The method invoked before the game is saved.</summary>
+        /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaving(object sender, SavingEventArgs e)
         {
             this.HandleNewDay();
         }

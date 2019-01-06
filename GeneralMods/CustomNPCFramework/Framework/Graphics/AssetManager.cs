@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using CustomNPCFramework.Framework.Enums;
@@ -9,65 +8,48 @@ namespace CustomNPCFramework.Framework.Graphics
     public class AssetManager
     {
         /// <summary>A list of all of the assets held by this asset manager.</summary>
-        public List<AssetSheet> assets;
+        public List<AssetSheet> assets { get; } = new List<AssetSheet>();
 
-        /// <summary>A list of all of the directories managed by this asset manager.</summary>
-        public Dictionary<string, string> paths;
-
-        /// <summary>Construct an instance.</summary>
-        public AssetManager()
-        {
-            this.assets = new List<AssetSheet>();
-            this.paths = new Dictionary<string, string>();
-        }
-
-        /// <summary>Construct an instance.</summary>
-        /// <param name="assetsPathsToLoadFrom">A list of all directories to be managed by the asset manager. Name, path is the key pair value.</param>
-        public AssetManager(Dictionary<string, string> assetsPathsToLoadFrom)
-        {
-            this.assets = new List<AssetSheet>();
-            this.paths = assetsPathsToLoadFrom;
-        }
+        /// <summary>A list of directories managed by this asset manager, relative to the mod folder.</summary>
+        public Dictionary<string, string> relativePaths { get; } = new Dictionary<string, string>();
 
         /// <summary>Default loading function from hardcoded paths.</summary>
         public void loadAssets()
         {
-            foreach (var path in this.paths)
-                this.ProcessDirectory(path.Value);
+            foreach (var relativePath in this.relativePaths)
+                this.ProcessDirectory(relativePath.Value);
         }
 
         /// <summary>Process all .json files in the given directory. If there are more nested directories, keep digging to find more .json files. Also allows us to specify a broader directory like Content/Grahphics/ModularNPC/Hair to have multiple hair styles.</summary>
-        /// <param name="targetDirectory">The absolute directory path to process.</param>
+        /// <param name="relativeDirPath">The relative directory path to process.</param>
         /// <remarks>Taken from Microsoft c# documented webpages.</remarks>
-        private void ProcessDirectory(string targetDirectory)
+        private void ProcessDirectory(string relativeDirPath)
         {
-            // Process the list of files found in the directory.
-            string[] files = Directory.GetFiles(targetDirectory, "*.json");
-            foreach (string file in files)
-                this.ProcessFile(file, targetDirectory);
+            DirectoryInfo root = new DirectoryInfo(Path.Combine(Class1.ModHelper.DirectoryPath, relativeDirPath));
+            foreach (FileInfo file in root.GetFiles("*.json"))
+                this.ProcessFile(Path.Combine(relativeDirPath, file.Name), relativeDirPath);
 
             // Recurse into subdirectories of this directory.
-            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
-            foreach (string subdirectory in subdirectoryEntries)
-                this.ProcessDirectory(subdirectory);
+            foreach (DirectoryInfo subdir in root.GetDirectories())
+                this.ProcessDirectory(Path.Combine(relativeDirPath, subdir.Name));
         }
 
         /// <summary>Actually load in the asset information.</summary>
-        /// <param name="file">The absolute file path to process.</param>
-        /// <param name="path">The absolute directory path containing the file.</param>
-        private void ProcessFile(string file, string path)
+        /// <param name="relativeFilePath">The relative path to the file to process.</param>
+        /// <param name="relativeDirPath">The relative path containing the file.</param>
+        private void ProcessFile(string relativeFilePath, string relativeDirPath)
         {
             try
             {
-                ExtendedAssetInfo info = ExtendedAssetInfo.readFromJson(file);
-                AssetSheet sheet = new AssetSheet(info, path);
+                ExtendedAssetInfo info = ExtendedAssetInfo.readFromJson(relativeFilePath);
+                AssetSheet sheet = new AssetSheet(info, relativeDirPath);
                 this.addAsset(sheet);
                 Class1.ModMonitor.Log("Loaded in new modular asset: " + info.assetName + " asset type: " + info.type);
             }
             catch
             {
-                AssetInfo info = AssetInfo.readFromJson(file);
-                AssetSheet sheet = new AssetSheet(info, path);
+                AssetInfo info = AssetInfo.readFromJson(relativeFilePath);
+                AssetSheet sheet = new AssetSheet(info, relativeDirPath);
                 this.addAsset(sheet);
             }
         }
@@ -102,16 +84,16 @@ namespace CustomNPCFramework.Framework.Graphics
         }
 
         /// <summary>Add a path to the dictionary.</summary>
-        /// <param name="path">The absolute path to add.</param>
+        /// <param name="path">The relative path to add.</param>
         private void addPath(KeyValuePair<string, string> path)
         {
-            this.paths.Add(path.Key, path.Value);
+            this.relativePaths.Add(path.Key, path.Value);
         }
 
         /// <summary>Create appropriate directories for the path.</summary>
         private void createDirectoriesFromPaths()
         {
-            foreach (var v in this.paths)
+            foreach (var v in this.relativePaths)
                 Directory.CreateDirectory(Path.Combine(Class1.ModHelper.DirectoryPath, v.Value));
         }
 

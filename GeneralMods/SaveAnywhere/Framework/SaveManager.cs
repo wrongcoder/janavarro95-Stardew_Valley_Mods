@@ -15,7 +15,7 @@ namespace Omegasis.SaveAnywhere.Framework
     public class SaveManager
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to game code.</summary>
         private readonly IReflectionHelper Reflection;
@@ -26,8 +26,8 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>SMAPI's APIs for this mod.</summary>
         private readonly IModHelper Helper;
 
-        /// <summary>The full path to the player data file.</summary>
-        private string SavePath => Path.Combine(this.Helper.DirectoryPath, "data", $"{Constants.SaveFolderName}.json");
+        /// <summary>The relative path to the player data file.</summary>
+        private string RelativeDataPath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
 
         /// <summary>Whether we should save at the next opportunity.</summary>
         private bool WaitingToSave;
@@ -80,7 +80,7 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>Clear saved data.</summary>
         public void ClearData()
         {
-            File.Delete(this.SavePath);
+            File.Delete(Path.Combine(this.Helper.DirectoryPath, this.RelativeDataPath));
             this.RemoveLegacyDataForThisPlayer();
         }
 
@@ -105,20 +105,16 @@ namespace Omegasis.SaveAnywhere.Framework
             }
 
 
-            // get data
+            // save data to disk
             PlayerData data = new PlayerData
             {
                 Time = Game1.timeOfDay,
                 Characters = this.GetPositions().ToArray(),
                 IsCharacterSwimming = Game1.player.swimming.Value
             };
+            this.Helper.Data.WriteJsonFile(this.RelativeDataPath, data);
 
-            // save to disk
-            // ReSharper disable once PossibleNullReferenceException -- not applicable
-            Directory.CreateDirectory(new FileInfo(this.SavePath).Directory.FullName);
-            this.Helper.WriteJsonFile(this.SavePath, data);
-
-            // clear any legacy data (no longer needed as backup)1
+            // clear any legacy data (no longer needed as backup)
             this.RemoveLegacyDataForThisPlayer();
         }
 
@@ -126,7 +122,7 @@ namespace Omegasis.SaveAnywhere.Framework
         public void LoadData()
         {
             // get data
-            PlayerData data = this.Helper.ReadJsonFile<PlayerData>(this.SavePath);
+            PlayerData data = this.Helper.Data.ReadJsonFile<PlayerData>(this.RelativeDataPath);
             if (data == null)
                 return;
 

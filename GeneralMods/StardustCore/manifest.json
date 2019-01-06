@@ -5,6 +5,6 @@
   "Description": "A core mod that allows for other mods of mine to be run.",
   "UniqueID": "Omegasis.StardustCore",
   "EntryDll": "StardustCore.dll",
-  "MinimumApiVersion": "2.3",
+  "MinimumApiVersion": "2.10.1",
   "UpdateKeys": []
 }
