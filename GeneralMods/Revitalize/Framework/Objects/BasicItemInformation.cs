@@ -33,6 +33,8 @@ namespace Revitalize.Framework.Objects
 
         public LightManager lightManager;
 
+        public Enums.Direction facingDirection;
+
         public BasicItemInformation()
         {
             this.name = "";
@@ -50,6 +52,8 @@ namespace Revitalize.Framework.Objects
             this.drawColor = Color.White;
             this.inventory = new InventoryManager();
             this.lightManager = new LightManager();
+
+            this.facingDirection = Enums.Direction.Down;
         }
 
         public BasicItemInformation(string name, string description, string categoryName, Color categoryColor, int edibility, int fragility, bool isLamp, int price, Vector2 TileLocation, bool canBeSetOutdoors, bool canBeSetIndoors, string id, string data, Texture2D texture, Color color, int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights) : base(id, data, texture, color, tileIndex, bigCraftable, type, craftingData)
@@ -82,6 +86,7 @@ namespace Revitalize.Framework.Objects
             this.recreateDataString();
             this.inventory = Inventory ?? new InventoryManager();
             this.lightManager = Lights ?? new LightManager();
+            this.facingDirection = Enums.Direction.Down;
         }
 
         public void recreateDataString()

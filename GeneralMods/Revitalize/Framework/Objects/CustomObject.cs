@@ -70,7 +70,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool isPassable()
         {
-            return this.info.ignoreBoundingBox;
+            return this.info.ignoreBoundingBox || Revitalize.ModCore.playerInfo.sittingInfo.SittingObject==this;
         }
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
