@@ -149,16 +149,16 @@ namespace Revitalize
             Recipe pie = new Recipe(new Dictionary<Item, int>()
             {
                 [bigObject] = 1
-            }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1));
+            }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1),new StatCost(100,50,0,0));
 
 
             new InventoryItem(bigObject, 100, 1).addToNPCShop("Gus");
             Game1.player.addItemToInventory(bigObject);
 
-            //if (pie.PlayerCanCraft())
-            //{
-            //    pie.craft();
-            //}
+            if (pie.PlayerCanCraft())
+            {
+                pie.craft();
+            }
         }
 
         public static void log(object message)

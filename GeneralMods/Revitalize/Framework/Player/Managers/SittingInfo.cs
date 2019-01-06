@@ -7,7 +7,6 @@ namespace Revitalize.Framework.Player.Managers
     // TODO:
     // - Make chair
     // - animate player better
-    // - have it where when player is sitting on chair it is passable so it can't be destoryed underneath
     public class SittingInfo
     {
         /// <summary>If the player is currently sitting.</summary>

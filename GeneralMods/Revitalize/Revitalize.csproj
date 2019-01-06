@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\Crafting\Recipe.cs" />
+    <Compile Include="Framework\Crafting\StatCost.cs" />
     <Compile Include="Framework\Enums\Enums.cs" />
     <Compile Include="Framework\Environment\DarkerNight.cs" />
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
@@ -57,8 +58,13 @@
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
+    <Compile Include="Framework\Objects\Furniture\Chair.cs" />
+    <Compile Include="Framework\Objects\Furniture\FurnitureTileComponent.cs" />
+    <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
+    <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
+    <Compile Include="Framework\Player\Managers\MagicManager.cs" />
     <Compile Include="Framework\Player\Managers\SittingInfo.cs" />
     <Compile Include="Framework\Player\PlayerInfo.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />

@@ -21,13 +21,14 @@ namespace Revitalize.Framework.Crafting
         public string outputDescription;
         public string outputName;
 
+        public StatCost statCost;
 
         public Recipe() { }
 
         /// <summary>Constructor for single item output.</summary>
         /// <param name="inputs">All the ingredients required to make the output.</param>
         /// <param name="output">The item given as output with how many</param>
-        public Recipe(Dictionary<Item, int> inputs, KeyValuePair<Item, int> output)
+        public Recipe(Dictionary<Item, int> inputs, KeyValuePair<Item, int> output, StatCost StatCost=null)
         {
             this.ingredients = inputs;
             this.DisplayItem = output.Key;
@@ -37,15 +38,17 @@ namespace Revitalize.Framework.Crafting
             {
                 [output.Key] = output.Value
             };
+            this.statCost = StatCost ?? new StatCost();
         }
 
-        public Recipe(Dictionary<Item, int> inputs, Dictionary<Item, int> outputs, string OutputName, string OutputDescription, Item DisplayItem = null)
+        public Recipe(Dictionary<Item, int> inputs, Dictionary<Item, int> outputs, string OutputName, string OutputDescription, Item DisplayItem = null,StatCost StatCost=null)
         {
             this.ingredients = inputs;
             this.outputs = outputs;
             this.outputName = OutputName;
             this.outputDescription = OutputDescription;
             this.DisplayItem = DisplayItem;
+            this.statCost = StatCost ?? new StatCost();
         }
 
         /// <summary>Checks if a player contains all recipe ingredients.</summary>
@@ -90,7 +93,7 @@ namespace Revitalize.Framework.Crafting
 
         public void consume(ref List<Item> from)
         {
-            if (!this.InventoryContainsAllIngredient(from))
+            if (this.InventoryContainsAllIngredient(from)==false)
                 return;
 
             InventoryManager manager = new InventoryManager(from);
@@ -154,11 +157,12 @@ namespace Revitalize.Framework.Crafting
             Game1.player.Items = playerItems; //Set the items to be post consumption.
             foreach (Item I in outPutItems)
                 Game1.player.addItemToInventory(I); //Add all items produced.
+            this.statCost.payCost();
         }
 
         public bool PlayerCanCraft()
         {
-            return this.PlayerContainsAllIngredients();
+            return this.PlayerContainsAllIngredients() && this.statCost.canSafelyAffordCost();
         }
 
         public bool CanCraft(List<Item> items)
