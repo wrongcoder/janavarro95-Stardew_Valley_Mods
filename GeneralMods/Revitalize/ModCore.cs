@@ -44,6 +44,12 @@ namespace Revitalize
     //      -Spell books
     //      -Potions!
     //      -Magic Meter
+    //      -Connected chests much like Project EE2 from MC
+    //
+    //
+    //
+    //  -Bigger chests
+    //
     //  Festivals
     //      -Firework festival?
     //  Stargazing???
@@ -54,6 +60,7 @@ namespace Revitalize
     // 
     //  Equippables!
     //      -accessories that provide buffs/regen/friendship
+    //      -braclets/rings/broaches....more crafting for these???
     //      
     //  Music???
     //      -IDK maybe add in instruments???
@@ -74,6 +81,12 @@ namespace Revitalize
     //      -Small Island Home?
     //      
     //  More crops
+    //
+    //  More monsters
+    //  -boss fights
+    //
+    //  More dungeons??
+
 
     public class ModCore : Mod
     {

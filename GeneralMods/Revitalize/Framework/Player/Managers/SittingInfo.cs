@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Revitalize.Framework.Objects;
 using StardewValley;
 
 namespace Revitalize.Framework.Player.Managers
@@ -24,6 +25,15 @@ namespace Revitalize.Framework.Player.Managers
         /// <summary>How long a player has to sit to recover energy/health;</summary>
         public int SittingSpan { get; }
 
+        StardewValley.Object sittingObject;
+
+        public StardewValley.Object SittingObject
+        {
+            get
+            {
+                return this.sittingObject;
+            }
+        }
 
         /// <summary>Construct an instance.</summary>
         public SittingInfo()
@@ -41,6 +51,7 @@ namespace Revitalize.Framework.Player.Managers
             {
                 this.isSitting = false;
                 this.elapsedTime = 0;
+                this.sittingObject = null;
             }
             if (this.isSitting && Game1.player.CanMove)
             {
@@ -55,26 +66,53 @@ namespace Revitalize.Framework.Player.Managers
                 Game1.player.health++;
                 Game1.player.Stamina++;
             }
-            ModCore.log(this.elapsedTime);
 
         }
 
         public void showSitting()
         {
-            switch (Game1.player.FacingDirection)
+            if (this.sittingObject == null)
             {
-                case 0:
-                    Game1.player.FarmerSprite.setCurrentSingleFrame(113);
-                    break;
-                case 1:
-                    Game1.player.FarmerSprite.setCurrentSingleFrame(106);
-                    break;
-                case 2:
-                    Game1.player.FarmerSprite.setCurrentSingleFrame(107);
-                    break;
-                case 3:
-                    Game1.player.FarmerSprite.setCurrentSingleFrame(106);
-                    break;
+                Revitalize.ModCore.log("Does THIS HAPPEN AT ALL???");
+                switch (Game1.player.FacingDirection)
+                {
+                    case 0:
+                        Game1.player.FarmerSprite.setCurrentSingleFrame(113);
+                        break;
+                    case 1:
+                        Game1.player.FarmerSprite.setCurrentSingleFrame(106);
+                        break;
+                    case 2:
+                        Game1.player.FarmerSprite.setCurrentSingleFrame(107);
+                        break;
+                    case 3:
+                        Game1.player.FarmerSprite.setCurrentSingleFrame(106);
+                        break;
+                }
+            }
+            else
+            {
+                if(this.sittingObject is CustomObject)
+                {
+                    Game1.player.faceDirection((int)(this.sittingObject as CustomObject).info.facingDirection);
+                    switch ((this.sittingObject as CustomObject).info.facingDirection)
+                    {
+                        
+                        case Enums.Direction.Up:
+                            
+                            Game1.player.FarmerSprite.setCurrentSingleFrame(113);
+                            break;
+                        case Enums.Direction.Right:
+                            Game1.player.FarmerSprite.setCurrentSingleFrame(106);
+                            break;
+                        case Enums.Direction.Down:
+                            Game1.player.FarmerSprite.setCurrentSingleFrame(107);
+                            break;
+                        case Enums.Direction.Left:
+                            Game1.player.FarmerSprite.setCurrentSingleFrame(106,32000,false,true);
+                            break;
+                    }
+                }
             }
         }
 
@@ -83,6 +121,7 @@ namespace Revitalize.Framework.Player.Managers
             this.isSitting = true;
             Game1.player.Position = (obj.TileLocation * Game1.tileSize + offset);
             Game1.player.position.Y += Game1.tileSize / 2;
+            this.sittingObject = obj;
         }
     }
 }
