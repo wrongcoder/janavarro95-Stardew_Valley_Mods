@@ -5,6 +5,6 @@
   "Description": "Backs up your save files when loading SMAPI and every in game night when saving.",
   "UniqueID": "Omegasis.AdvancedSaveBackup",
   "EntryDll": "AdvancedSaveBackup.dll",
-  "MinimumApiVersion": "2.0",
+  "MinimumApiVersion": "2.10.1",
   "UpdateKeys": [ "Nexus:435" ]
 }

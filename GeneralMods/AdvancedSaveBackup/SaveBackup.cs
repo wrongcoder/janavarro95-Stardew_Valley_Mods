@@ -41,17 +41,17 @@ namespace Omegasis.SaveBackup
 
             this.BackupSaves(SaveBackup.PrePlayBackupsPath);
 
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            helper.Events.GameLoop.Saving += this.OnSaving;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked before the save is updated.</summary>
+        /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaving(object sender, SavingEventArgs e)
         {
             this.BackupSaves(SaveBackup.NightlyBackupsPath);
         }

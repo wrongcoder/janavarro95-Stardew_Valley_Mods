@@ -9,6 +9,7 @@ using CustomNPCFramework.Framework.NPCS;
 using CustomNPCFramework.Framework.Utilities;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 
 namespace CustomNPCFramework
@@ -64,13 +65,10 @@ namespace CustomNPCFramework
             ModMonitor = this.Monitor;
             Manifest = this.ModManifest;
 
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += this.SaveEvents_LoadChar;
-
-            StardewModdingAPI.Events.SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
-            StardewModdingAPI.Events.SaveEvents.AfterSave += this.SaveEvents_AfterSave;
-
-            StardewModdingAPI.Events.PlayerEvents.Warped += this.LocationEvents_CurrentLocationChanged;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.Saving += this.OnSaving;
+            helper.Events.GameLoop.Saved += this.OnSaved;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             npcTracker = new NpcTracker();
             assetPool = new AssetPool();
             var assetManager = new AssetManager();
@@ -87,27 +85,30 @@ namespace CustomNPCFramework
             assetPool.getAssetManager("testNPC").addPathCreateDirectory(new KeyValuePair<string, string>("characters", relativePath));
         }
 
-        /// <summary>A function that is called when the game finishes saving.</summary>
+        /// <summary>Raised after the game finishes writing data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        private void OnSaved(object sender, SavedEventArgs e)
         {
             npcTracker.afterSave();
         }
 
-        /// <summary>A function that is called when the game is about to load. Used to clean up all the npcs from the game world to prevent it from crashing.</summary>
+        /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        private void OnSaving(object sender, SavingEventArgs e)
         {
+            // clean up all the npcs from the game world to prevent it from crashing
             npcTracker.cleanUpBeforeSave();
         }
 
-        /// <summary>Called upon 60 times a second. For testing purposes only. Will remove in future release.</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
+            // TODO For testing purposes only. Will remove in future release.
+
             /*
             if (Game1.player.currentLocation == null) return;
             if (Game1.activeClickableMenu != null) return;
@@ -124,16 +125,13 @@ namespace CustomNPCFramework
             */
         }
 
-        /// <summary>Called when the player's location changes.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_CurrentLocationChanged(object sender, StardewModdingAPI.Events.EventArgsPlayerWarped e) { }
-
-        /// <summary>Used to spawn a custom npc just as an example. Don't keep this code. GENERATE NPC AND CALL THE CODE</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_LoadChar(object sender, EventArgs e)
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
+            // TODO Used to spawn a custom npc just as an example. Don't keep this code. GENERATE NPC AND CALL THE CODE
+
             ExtendedNpc myNpc3 = assetPool.generateNPC(Genders.female, 0, 1, new StandardColorCollection(null, null, Color.Blue, null, Color.Yellow, null));
             MerchantNpc merch = new MerchantNpc(new List<Item>()
             {

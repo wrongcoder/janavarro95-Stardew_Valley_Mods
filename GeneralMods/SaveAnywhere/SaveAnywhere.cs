@@ -53,11 +53,11 @@ namespace Omegasis.SaveAnywhere
 
             this.SaveManager = new SaveManager(this.Helper, this.Helper.Reflection, onLoaded: () => this.ShouldResetSchedules = true);
 
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            SaveEvents.AfterSave += this.SaveEvents_AfterSave;
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.Saved += this.OnSaved;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
             ModHelper = helper;
             ModMonitor = this.Monitor;
@@ -68,10 +68,10 @@ namespace Omegasis.SaveAnywhere
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // reset state
             this.IsCustomSaving = false;
@@ -81,10 +81,10 @@ namespace Omegasis.SaveAnywhere
             this.SaveManager.LoadData();
         }
 
-        /// <summary>The method invoked after the player finishes saving.</summary>
+        /// <summary>Raised after the game finishes writing data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterSave(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaved(object sender, SavedEventArgs e)
         {
             // clear custom data after a normal save (to avoid restoring old state)
             if (!this.IsCustomSaving)
@@ -95,10 +95,10 @@ namespace Omegasis.SaveAnywhere
             }
         }
 
-        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             // let save manager run background logic
             if (Context.IsWorldReady)
@@ -156,10 +156,10 @@ namespace Omegasis.SaveAnywhere
                 Game1.player.currentLocation.characters.Add(monster);
         }
 
-        /// <summary>The method invoked after a new day starts.</summary>
+        /// <summary>Raised after the game begins a new day (including when the player loads a save).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             // reload NPC schedules
             this.ShouldResetSchedules = true;
@@ -173,16 +173,16 @@ namespace Omegasis.SaveAnywhere
             }
         }
 
-        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        /// <param name="e">The event arguments.</param>
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             if (!Context.IsPlayerFree)
                 return;
 
             // initiate save (if valid context)
-            if (e.KeyPressed.ToString() == this.Config.SaveKey)
+            if (e.Button == this.Config.SaveKey)
             {
                 if (Game1.client == null)
                 {

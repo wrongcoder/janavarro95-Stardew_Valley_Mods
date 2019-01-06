@@ -1,3 +1,5 @@
+using StardewModdingAPI;
+
 namespace StardewSymphonyRemastered
 {
     /// <summary>A class that handles all of the config files for this mod.</summary>
@@ -13,7 +15,7 @@ namespace StardewSymphonyRemastered
         public int MaximumDelayBetweenSongsInMilliseconds { get; set; } = 60000;
 
         /// <summary>The key binding to open the menu music.</summary>
-        public string KeyBinding { get; set; } = "L";
+        public SButton KeyBinding { get; set; } = SButton.L;
 
         /// <summary>Whether to write a JSON file for every possible option for a music pack. Use at your own risk!</summary>
         public bool WriteAllConfigMusicOptions { get; set; } = false;

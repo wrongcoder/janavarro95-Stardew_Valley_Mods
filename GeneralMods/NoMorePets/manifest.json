@@ -5,6 +5,6 @@
   "Description": "Removes all pets from the game.",
   "UniqueID": "Omegasis.NoMorePets",
   "EntryDll": "NoMorePets.dll",
-  "MinimumApiVersion": "2.0",
+  "MinimumApiVersion": "2.10.1",
   "UpdateKeys": [ "Nexus:506" ]
 }

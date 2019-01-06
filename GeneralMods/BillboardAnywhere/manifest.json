@@ -5,6 +5,6 @@
   "Description": "Lets you view the billboard from anywhere.",
   "UniqueID": "Omegasis.BillboardAnywhere",
   "EntryDll": "BillboardAnywhere.dll",
-  "MinimumApiVersion": "2.0",
+  "MinimumApiVersion": "2.10.1",
   "UpdateKeys": [ "Nexus:492" ]
 }

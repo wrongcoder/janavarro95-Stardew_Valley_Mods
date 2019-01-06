@@ -1,10 +1,12 @@
+using StardewModdingAPI;
+
 namespace Omegasis.HappyBirthday.Framework
 {
     /// <summary>The mod configuration.</summary>
     public class ModConfig
     {
         /// <summary>The key which shows the menu.</summary>
-        public string KeyBinding { get; set; } = "O";
+        public SButton KeyBinding { get; set; } = SButton.O;
 
         /// <summary>The minimum amount of friendship needed to get a birthday gift.</summary>
         public int minNeutralFriendshipGiftLevel = 3;

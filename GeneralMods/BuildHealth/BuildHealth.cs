@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Omegasis.BuildHealth.Framework;
 using StardewModdingAPI;
@@ -42,10 +41,9 @@ namespace Omegasis.BuildHealth
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
-            TimeEvents.AfterDayStarted += this.SaveEvents_BeforeSave;
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoaded;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
             this.Config = helper.ReadConfig<ModConfig>();
         }
@@ -54,23 +52,17 @@ namespace Omegasis.BuildHealth
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked once per second during a game update.</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void GameEvents_OneSecondTick(object sender, EventArgs e)
-        {
-            // nerf how quickly tool xp is gained (I hope)
-            if (this.HasRecentToolExp)
-                this.HasRecentToolExp = false;
-        }
-
-        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;
+
+            // nerf how quickly tool xp is gained (I hope)
+            if (e.IsOneSecond && this.HasRecentToolExp)
+                this.HasRecentToolExp = false;
 
             // give XP when player finishes eating
             if (Game1.player.isEating)
@@ -106,10 +98,10 @@ namespace Omegasis.BuildHealth
             }
         }
 
-        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterLoaded(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // reset state
             this.HasRecentToolExp = false;
@@ -140,10 +132,10 @@ namespace Omegasis.BuildHealth
                 Game1.player.maxHealth = this.PlayerData.BaseHealthBonus + this.PlayerData.CurrentLevelHealthBonus + this.PlayerData.OriginalMaxHealth;
         }
 
-        /// <summary>The method invoked just before the game saves.</summary>
+        /// <summary>Raised after the game begins a new day (including when the player loads a save).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             // reset data
             this.LastHealth = Game1.player.maxHealth;

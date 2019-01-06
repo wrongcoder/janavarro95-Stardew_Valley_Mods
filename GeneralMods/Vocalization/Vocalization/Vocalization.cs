@@ -213,10 +213,9 @@ namespace Vocalization
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
-            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.Display.MenuChanged += this.MenuEvents_MenuChanged;
             ModMonitor = this.Monitor;
             ModHelper = this.Helper;
             Manifest = this.ModManifest;
@@ -238,33 +237,30 @@ namespace Vocalization
 
         }
 
-        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        /// <summary>Raised after a game menu is opened, closed, or replaced.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void MenuEvents_MenuChanged(object sender, MenuChangedEventArgs e)
         {
-            if (Game1.activeClickableMenu is ModularGameMenu)
+            //Clean out my previous dialogue when I close any sort of menu.
+            if (e.NewMenu == null)
+            {
+                try
+                {
+                    soundManager.stopAllSounds();
+                }
+                catch { }
+                previousDialogue = "";
+            }
+
+            else if (Game1.activeClickableMenu is ModularGameMenu)
                 this.npcPortraitHack();
         }
 
-        /// <summary>Runs whenever any onscreen menu is closed.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
-        {
-            //Clean out my previous dialogue when I close any sort of menu.
-            try
-            {
-                soundManager.stopAllSounds();
-                previousDialogue = "";
-            }
-            catch
-            {
-                previousDialogue = "";
-            }
-        }
-
-        /// <summary>Runs after the game is loaded to initialize all of the mod's files.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             this.initialzeModualGameMenuHack();
             this.initialzeDirectories();
@@ -366,10 +362,11 @@ namespace Vocalization
             */
             return field.GetValue(instance);
         }
-        /// <summary>Runs every game tick to check if the player is talking to an npc.</summary>
+
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             soundManager.update();
             if (Game1.player != null)

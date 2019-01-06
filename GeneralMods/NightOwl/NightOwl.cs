@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -91,12 +90,11 @@ namespace Omegasis.NightOwl
             if (this.Config.UseInternalNightFishAssetEditor)
                 this.Helper.Content.AssetEditors.Add(new NightFishing());
 
-            TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
-            GameEvents.FourthUpdateTick += this.GameEvents_FourthUpdateTick;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.Saving += this.OnSaving;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             this.shouldWarpHorse = false;
         }
 
@@ -104,43 +102,40 @@ namespace Omegasis.NightOwl
         /*********
         ** Private methods
         *********/
-        /// <summary>Updates the earthquake event.</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             this.eve?.tickUpdate(Game1.currentGameTime);
-        }
 
-        /// <summary>The method invoked every fourth game update (roughly 15 times per second).</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        public void GameEvents_FourthUpdateTick(object sender, EventArgs e)
-        {
-            try
+            if (e.IsMultipleOf(4)) // ≈15 times per second
             {
-                // reset position after collapse
-                if (Context.IsWorldReady && this.JustStartedNewDay && this.Config.KeepPositionAfterCollapse)
+                try
                 {
-                    if (this.PreCollapseMap != null)
-                        Game1.warpFarmer(this.PreCollapseMap, this.PreCollapseTile.X, this.PreCollapseTile.Y, false);
+                    // reset position after collapse
+                    if (Context.IsWorldReady && this.JustStartedNewDay && this.Config.KeepPositionAfterCollapse)
+                    {
+                        if (this.PreCollapseMap != null)
+                            Game1.warpFarmer(this.PreCollapseMap, this.PreCollapseTile.X, this.PreCollapseTile.Y, false);
 
-                    this.PreCollapseMap = null;
-                    this.JustStartedNewDay = false;
-                    this.JustCollapsed = false;
+                        this.PreCollapseMap = null;
+                        this.JustStartedNewDay = false;
+                        this.JustCollapsed = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log(ex.ToString(), LogLevel.Error);
+                    this.WriteErrorLog();
                 }
             }
-            catch (Exception ex)
-            {
-                this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                this.WriteErrorLog();
-            }
         }
 
-        /// <summary>The method invoked before the game saves.</summary>
+        /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        public void SaveEvents_BeforeSave(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        public void OnSaving(object sender, SavingEventArgs e)
         {
             int collapseFee = 0;
             string[] passOutFees = Game1.player.mailbox
@@ -156,20 +151,20 @@ namespace Omegasis.NightOwl
                 Game1.player.money += collapseFee;
         }
 
-        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        public void SaveEvents_AfterLoad(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        public void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             this.IsUpLate = false;
             this.JustStartedNewDay = false;
             this.JustCollapsed = false;
         }
 
-        /// <summary>The method invoked when a new day starts.</summary>
+        /// <summary>Raised after the game begins a new day (including when the player loads a save).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        public void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        public void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             try
             {
@@ -252,10 +247,10 @@ namespace Omegasis.NightOwl
             this.Helper.Reflection.GetField<Rectangle>(mountain, "railroadBlockRect").SetValue(Rectangle.Empty);
         }
 
-        /// <summary>The method invoked when <see cref="Game1.timeOfDay"/> changes.</summary>
+        /// <summary>Raised after the in-game clock time changes.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void TimeEvents_TimeOfDayChanged(object sender, EventArgsIntChanged e)
+        /// <param name="e">The event arguments.</param>
+        private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;

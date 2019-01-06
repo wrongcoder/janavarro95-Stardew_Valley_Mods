@@ -76,16 +76,15 @@ namespace Omegasis.HappyBirthday
             //helper.Content.AssetLoaders.Add(new PossibleGifts());
             Config = helper.ReadConfig<ModConfig>();
 
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.Saving += this.OnSaving;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Display.MenuChanged += this.OnMenuChanged;
 
-            GraphicsEvents.OnPostRenderGuiEvent += this.GraphicsEvents_OnPostRenderGuiEvent;
-            StardewModdingAPI.Events.GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
+            helper.Events.Display.RenderedActiveMenu += this.OnRenderedActiveMenu;
+            helper.Events.Display.RenderedHud += this.OnRenderedHud;
             //MultiplayerSupport.initializeMultiplayerSupport();
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
@@ -113,13 +112,9 @@ namespace Omegasis.HappyBirthday
         /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
         public void Edit<T>(IAssetData asset)
         {
-            asset
-                .AsDictionary<string, string>()
-                .Set("birthdayMom", "Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %%");
-
-            asset
-                .AsDictionary<string, string>()
-                .Set("birthdayDad", "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%");
+            IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
+            data["birthdayMom"] = "Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %%";
+            data["birthdayDad"] = "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%";
         }
 
 
@@ -161,33 +156,25 @@ namespace Omegasis.HappyBirthday
             }
         }
 
-        /// <summary>Used to check when a menu is closed.</summary>
+        /// <summary>Raised after drawing the HUD (item toolbar, clock, etc) to the sprite batch, but before it's rendered to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
+        private void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
-            this.isDailyQuestBoard = false;
-        }
+            if (Game1.activeClickableMenu == null || this.PlayerData?.BirthdaySeason?.ToLower() != Game1.currentSeason.ToLower())
+                return;
 
-        /// <summary>Used to properly display hovertext for all events happening on a calendar day.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
-        {
-            if (Game1.activeClickableMenu == null) return;
-            if (this.PlayerData?.BirthdaySeason == null) return;
-            if (this.PlayerData.BirthdaySeason.ToLower() != Game1.currentSeason.ToLower()) return;
-            if (Game1.activeClickableMenu is Billboard)
+            if (Game1.activeClickableMenu is Billboard billboard)
             {
-                if (this.isDailyQuestBoard) return;
-                if ((Game1.activeClickableMenu as Billboard).calendarDays == null) return;
+                if (this.isDailyQuestBoard || billboard.calendarDays == null)
+                    return;
 
                 //Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 1f, 4f, 2, Game1.player);
 
                 string hoverText = "";
                 List<string> texts = new List<string>();
 
-                foreach (var clicky in ((Billboard)Game1.activeClickableMenu).calendarDays)
+                foreach (var clicky in billboard.calendarDays)
                 {
                     if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
                     {
@@ -213,10 +200,10 @@ namespace Omegasis.HappyBirthday
             }
         }
 
-        /// <summary>Used to show the farmer's portrait on the billboard menu.</summary>
+        /// <summary>When a menu is open (<see cref="Game1.activeClickableMenu"/> isn't null), raised after that menu is drawn to the sprite batch but before it's rendered to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GraphicsEvents_OnPostRenderGuiEvent(object sender, EventArgs e)
+        private void OnRenderedActiveMenu(object sender, RenderedActiveMenuEventArgs e)
         {
             if (Game1.activeClickableMenu == null || this.isDailyQuestBoard)
                 return;
@@ -246,72 +233,77 @@ namespace Omegasis.HappyBirthday
             }
         }
 
-        /// <summary>Functionality to display the player's birthday on the billboard.</summary>
+        /// <summary>Raised after a game menu is opened, closed, or replaced.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            if (Game1.activeClickableMenu == null)
+            switch (e.NewMenu)
             {
-                this.isDailyQuestBoard = false;
-                return;
-            }
-            if (Game1.activeClickableMenu is Billboard)
-            {
-                this.isDailyQuestBoard = ModHelper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
-                if (this.isDailyQuestBoard) return;
+                case null:
+                    this.isDailyQuestBoard = false;
+                    return;
 
-                Texture2D text = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
-                Color[] col = new Color[1];
-                col[0] = new Color(0, 0, 0, 1);
-                text.SetData<Color>(col);
-                //players birthday position rect=new ....
-
-                if (!string.IsNullOrEmpty(this.PlayerData.BirthdaySeason))
-                {
-                    if (this.PlayerData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
+                case Billboard billboard:
                     {
-                        int index = this.PlayerData.BirthdayDay;
-                        Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
-                        (Game1.activeClickableMenu as Billboard).calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", Game1.player.name + "'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
-                    }
-                }
+                        this.isDailyQuestBoard = ModHelper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
+                        if (this.isDailyQuestBoard)
+                            return;
 
-                foreach (var pair in this.othersBirthdays)
-                {
-                    if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue;
-                    int index = pair.Value.BirthdayDay;
-                    Rectangle otherBirthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
-                    (Game1.activeClickableMenu as Billboard).calendarDays.Add(new ClickableTextureComponent("", otherBirthdayRect, "", Game1.getFarmer(pair.Key).name + "'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
-                }
+                        Texture2D text = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
+                        Color[] col = new Color[1];
+                        col[0] = new Color(0, 0, 0, 1);
+                        text.SetData<Color>(col);
+                        //players birthday position rect=new ....
+
+                        if (!string.IsNullOrEmpty(this.PlayerData.BirthdaySeason))
+                        {
+                            if (this.PlayerData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
+                            {
+                                int index = this.PlayerData.BirthdayDay;
+                                Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
+                                billboard.calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", $"{Game1.player.Name}'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+                            }
+                        }
+
+                        foreach (var pair in this.othersBirthdays)
+                        {
+                            if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue;
+                            int index = pair.Value.BirthdayDay;
+                            Rectangle otherBirthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
+                            billboard.calendarDays.Add(new ClickableTextureComponent("", otherBirthdayRect, "", $"{Game1.getFarmer(pair.Key).Name}'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+                        }
+
+                        break;
+                    }
             }
         }
 
-        /// <summary>The method invoked after a new day starts.</summary>
+        /// <summary>Raised after the game begins a new day (including when the player loads a save).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             this.CheckedForBirthday = false;
         }
 
-        /// <summary>The method invoked when the presses a keyboard button.</summary>
+        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        /// <param name="e">The event arguments.</param>
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             // show birthday selection menu
             if (Game1.activeClickableMenu != null) return;
-            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.KeyPressed.ToString() == Config.KeyBinding)
+            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.Button == Config.KeyBinding)
                 Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
         }
 
-        /// <summary>The method invoked after the player loads a save.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            this.DataFilePath = Path.Combine("data", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID + ".json");
+            this.DataFilePath = Path.Combine("data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}.json");
 
             // reset state
             this.VillagerQueue = new List<string>();
@@ -332,19 +324,19 @@ namespace Omegasis.HappyBirthday
             //this.Dialogue = new Dictionary<string, Dialogue>();
         }
 
-        /// <summary>The method invoked just before the game updates the saves.</summary>
+        /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnSaving(object sender, SavingEventArgs e)
         {
             if (this.HasChosenBirthday)
                 this.Helper.Data.WriteJsonFile(this.DataFilePath, this.PlayerData);
         }
 
-        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || Game1.isFestival())
                 return;

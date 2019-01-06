@@ -3,6 +3,7 @@ using EventSystem.Framework.FunctionEvents;
 using FarmersMarketStall.Framework.MapEvents;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 
 namespace FarmersMarketStall
@@ -29,17 +30,23 @@ namespace FarmersMarketStall
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
 
-            StardewModdingAPI.Events.SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            helper.Events.GameLoop.Saving += this.OnSaving;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             marketStall = new Framework.MarketStall();
         }
 
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, EventArgs e)
         {
             EventSystem.EventSystem.eventManager.addEvent(Game1.getLocationFromName("BusStop"), new ShopInteractionEvent("FarmersMarketStall", Game1.getLocationFromName("BusStop"), new Vector2(6, 11), new MouseButtonEvents(null, true), new MouseEntryLeaveEvent(null, null)));
         }
 
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnSaving(object sender, SavingEventArgs e)
         {
             if (marketStall.stock.Count > 0)
             {

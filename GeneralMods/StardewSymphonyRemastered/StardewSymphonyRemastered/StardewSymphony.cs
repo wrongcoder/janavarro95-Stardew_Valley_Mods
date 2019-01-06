@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -47,19 +45,16 @@ namespace StardewSymphonyRemastered
             ModHelper = helper;
             ModMonitor = this.Monitor;
             Config = helper.ReadConfig<Config>();
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            // EventArgsLocationsChanged += LocationEvents_CurrentLocationChanged;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
 
-            PlayerEvents.Warped += this.PlayerEvents_Warped;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            helper.Events.Player.Warped += this.OnPlayerWarped;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.GameLoop.Saving += this.OnSaving;
 
-            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
+            helper.Events.Display.MenuChanged += this.OnMenuChanged;
 
-            GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
-            GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
 
             musicManager = new MusicManager();
@@ -76,34 +71,31 @@ namespace StardewSymphonyRemastered
             this.LoadMusicPacks();
         }
 
-        private void GameEvents_OneSecondTick(object sender, EventArgs e)
-        {
-            musicManager?.UpdateTimer();
-        }
-
-        /// <summary>Raised when the player changes locations. This should determine the next song to play.</summary>
+        /// <summary>Raised after a player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
+        private void OnPlayerWarped(object sender, WarpedEventArgs e)
         {
-            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
-
+            if (e.IsLocalPlayer)
+                musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
         }
 
-        /// <summary>Ran once all of teh entry methods are ran. This will ensure that all custom music from other mods has been properly loaded in.</summary>
+        /// <summary>Raised after the game is launched, right before the first update tick. This happens once per game session (unrelated to loading saves). All mods are loaded and initialised at this point, so this is a good time to set up mod integrations.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
+            // Ran once all of the entry methods are ran. This will ensure that all custom music from other mods has been properly loaded in.
+
             musicManager.initializeMenuMusic(); //Initialize menu music that has been added to SongSpecifics.menus from all other mods during their Entry function.
             musicManager.initializeFestivalMusic(); //Initialize festival music that has been added to SongSpecifics.menus from all other mods during their Entry function.
             musicManager.initializeEventMusic(); //Initialize event music that has been added to SongSpecifics.menus from all other mods during their Entry function.
         }
 
-        /// <summary>Events to occur after the game has loaded in.</summary>
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             //Locaion initialization MUST occur after load. Anything else can occur before.
             SongSpecifics.initializeLocationsList(); //Gets all Game locations once the player has loaded the game, and all buildings on the player's farm and adds them to a location list.
@@ -123,67 +115,74 @@ namespace StardewSymphonyRemastered
             musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
         }
 
-
-        /// <summary>Choose new music when a menu is closed.</summary>
+        /// <summary>Raised after a game menu is opened, closed, or replaced.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
+        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            if (menuChangedMusic)
-                musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+            // menu closed
+            if (e.NewMenu == null)
+            {
+                if (menuChangedMusic)
+                    musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
+            }
+
+            // menu changed
+            else
+                musicManager.SelectMenuMusic(SongSpecifics.getCurrentConditionalString());
         }
 
-        /// <summary>Choose new music when a menu is opened.</summary>
+        /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
-        {
-            //var ok = musicManager.currentMusicPack.getNameOfCurrentSong();
-            musicManager.SelectMenuMusic(SongSpecifics.getCurrentConditionalString());
-        }
-
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        private void OnSaving(object sender, SavingEventArgs e)
         {
             // THIS IS WAY TO LONG to run. Better make it save individual lists when I am editing songs.
             foreach (var musicPack in musicManager.MusicPacks)
                 musicPack.Value.SaveSettings();
         }
 
-        /// <summary>Fires when a key is pressed to open the music selection menu.</summary>
+        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            if (e.KeyPressed.ToString() == Config.KeyBinding && Game1.activeClickableMenu == null)
+            if (e.Button == Config.KeyBinding && Game1.activeClickableMenu == null)
                 Game1.activeClickableMenu = new Framework.Menus.MusicManagerMenu(Game1.viewport.Width, Game1.viewport.Height);
         }
 
 
-        /// <summary>Raised every frame. Mainly used just to initiate the music packs. Probably not needed.</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            if (musicManager == null) return;
+            // update delay timer
+            if (e.IsOneSecond)
+                musicManager?.UpdateTimer();
 
-            if (Config.DisableStardewMusic)
+            // initiate music packs
+            if (musicManager != null)
             {
-                if (Game1.currentSong != null)
+                if (Config.DisableStardewMusic)
                 {
-                    Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
-                    Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
-                    Game1.nextMusicTrack = "";  //same as above line
+                    if (Game1.currentSong != null)
+                    {
+                        Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
+                        Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
+                        Game1.nextMusicTrack = "";  //same as above line
+                    }
                 }
-            }
-            else
-            {
-                if (musicManager.CurrentMusicPack == null) return;
-                if (Game1.currentSong != null && musicManager.CurrentMusicPack.IsPlaying())
+                else
                 {
-                    //ModMonitor.Log("STOP THE MUSIC!!!");
-                    Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
-                    Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
-                    //Game1.nextMusicTrack = "";  //same as above line
+                    if (musicManager.CurrentMusicPack == null) return;
+                    if (Game1.currentSong != null && musicManager.CurrentMusicPack.IsPlaying())
+                    {
+                        //ModMonitor.Log("STOP THE MUSIC!!!");
+                        Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
+                        Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
+                        //Game1.nextMusicTrack = "";  //same as above line
+                    }
                 }
             }
         }
