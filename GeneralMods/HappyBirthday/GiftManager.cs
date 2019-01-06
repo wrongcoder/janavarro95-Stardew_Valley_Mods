@@ -87,9 +87,9 @@ namespace Omegasis.HappyBirthday
         /// <summary>Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.</summary>
         public void loadVillagerBirthdayGifts()
         {
+            string villagerGifts = Path.Combine("Content", "Gifts", "BirthdayGifts.json");
             if (!HappyBirthday.Config.useLegacyBirthdayFiles)
             {
-                string villagerGifts = Path.Combine("Content", "Gifts", "BirthdayGifts.json");
 
                 if (File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, villagerGifts)))
                     this.defaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(villagerGifts);
@@ -103,11 +103,13 @@ namespace Omegasis.HappyBirthday
                     HappyBirthday.ModMonitor.Log("Legacy loading detected. Attempting to load from StardewValley/Content/Data/PossibleBirthdayGifts.xnb");
                     this.defaultBirthdayGifts = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "PossibleBirthdayGifts"));
 
-                    string villagerGifts = Path.Combine("Content", "Gifts", "BirthdayGifts.json");
                     HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(villagerGifts, this.defaultBirthdayGifts);
                 }
                 else
-                    HappyBirthday.ModMonitor.Log("No birthday gift information found. Loading from internal birthday list");
+                {
+                    HappyBirthday.ModMonitor.Log("No birthday gift information found. Loading from internal birthday list and generating villagerGifts.json");
+                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(villagerGifts, this.defaultBirthdayGifts);
+                }
             }
         }
 
