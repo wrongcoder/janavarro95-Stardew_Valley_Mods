@@ -68,11 +68,13 @@ namespace Revitalize.Framework.Player.Managers
 
         }
 
+        /// <summary>
+        /// Display the farmer actually sitting.
+        /// </summary>
         public void showSitting()
         {
             if (this.sittingObject == null)
             {
-                Revitalize.ModCore.log("Does THIS HAPPEN AT ALL???");
                 switch (Game1.player.FacingDirection)
                 {
                     case 0:
@@ -115,6 +117,11 @@ namespace Revitalize.Framework.Player.Managers
             }
         }
 
+        /// <summary>
+        /// Make the player sit.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="offset"></param>
         public void sit(StardewValley.Object obj, Vector2 offset)
         {
             this.isSitting = true;
