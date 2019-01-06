@@ -10,67 +10,67 @@ namespace Vocalization.Framework
 {
     public class Vocabulary
     {
-        public static string[] getRandomNegativeItemSlanderNouns(string translation)
+        public static string[] getRandomNegativeItemSlanderNouns(LanguageName language)
         {
-            string[] strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeItemNoun"), translation).Split('#');
+            string[] strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeItemNoun"), language).Split('#');
             return strArray;
         }
 
-        public static string[] getRandomDeliciousAdjectives(string translation, NPC n = null)
+        public static string[] getRandomDeliciousAdjectives(LanguageName language, NPC n = null)
         {
             string[] strArray;
             if (n != null && n.Age == 2)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomDeliciousAdjective_Child"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomDeliciousAdjective_Child"), language).Split('#');
             else
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomDeliciousAdjective"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomDeliciousAdjective"), language).Split('#');
             return strArray;
         }
 
-        public static string[] getRandomNegativeFoodAdjectives(string translation, NPC n = null)
+        public static string[] getRandomNegativeFoodAdjectives(LanguageName language, NPC n = null)
         {
             string[] strArray;
             if (n != null && n.Age == 2)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeFoodAdjective_Child"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeFoodAdjective_Child"), language).Split('#');
             else if (n != null && n.Manners == 1)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeFoodAdjective_Polite"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeFoodAdjective_Polite"), language).Split('#');
             else
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeFoodAdjective"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeFoodAdjective"), language).Split('#');
             return strArray;
         }
 
-        public static string[] getRandomSlightlyPositiveAdjectivesForEdibleNoun(string translation, NPC n = null)
+        public static string[] getRandomSlightlyPositiveAdjectivesForEdibleNoun(LanguageName language, NPC n = null)
         {
-            string[] strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomSlightlyPositiveFoodAdjective"), translation).Split('#');
+            string[] strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomSlightlyPositiveFoodAdjective"), language).Split('#');
             return strArray;
         }
 
-        public static string[] getRandomNegativeAdjectivesForEventOrPerson(string translation, NPC n = null)
+        public static string[] getRandomNegativeAdjectivesForEventOrPerson(LanguageName language, NPC n = null)
         {
             Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
             string[] strArray;
             if (n != null && n.Age != 0)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_Child"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_Child"), language).Split('#');
             else if (n != null && n.Gender == 0)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_AdultMale"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_AdultMale"), language).Split('#');
             else if (n != null && n.Gender == 1)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_AdultFemale"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_AdultFemale"), language).Split('#');
             else
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_PlaceOrEvent"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomNegativeAdjective_PlaceOrEvent"), language).Split('#');
             return strArray;
         }
 
-        public static string[] getRandomPositiveAdjectivesForEventOrPerson(string translation, NPC n = null)
+        public static string[] getRandomPositiveAdjectivesForEventOrPerson(LanguageName language, NPC n = null)
         {
             //Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
             string[] strArray;
             if (n != null && n.Age != 0)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_Child"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_Child"), language).Split('#');
             else if (n != null && n.Gender == 0)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_AdultMale"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_AdultMale"), language).Split('#');
             else if (n != null && n.Gender == 1)
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_AdultFemale"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_AdultFemale"), language).Split('#');
             else
-                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_PlaceOrEvent"), translation).Split('#');
+                strArray = Vocalization.config.translationInfo.LoadString(Path.Combine("Strings", "Lexicon:RandomPositiveAdjective_PlaceOrEvent"), language).Split('#');
             return strArray;
         }
 
@@ -80,12 +80,12 @@ namespace Vocalization.Framework
         }
 
         /// <summary>Gets a list of all of the possible cooking recipes in Stardew Valley.</summary>
-        public static List<string> getAllCookingRecipes(string translation)
+        public static List<string> getAllCookingRecipes(LanguageName language)
         {
             List<string> recipes = new List<string>();
-            Dictionary<string, string> cookingDict = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "TV", Vocalization.config.translationInfo.getXNBForTranslation("CookingChannel", translation)));
+            Dictionary<string, string> cookingDict = Game1.content.Load<Dictionary<string, string>>(Path.Combine("Data", "TV", Vocalization.config.translationInfo.getXNBForTranslation("CookingChannel", language)));
 
-            if (Vocalization.config.translationInfo.getTranslationNameFromPath(translation) == "English")
+            if (language == LanguageName.English)
             {
                 foreach (KeyValuePair<string, string> pair in cookingDict)
                 {
@@ -105,10 +105,10 @@ namespace Vocalization.Framework
             return recipes;
         }
 
-        public static List<string> getCarpenterStock(string translation)
+        public static List<string> getCarpenterStock(LanguageName language)
         {
             List<string> stock = new List<string>();
-            Vocalization.config.translationInfo.changeLocalizedContentManagerFromTranslation(translation);
+            Vocalization.config.translationInfo.changeLocalizedContentManagerFromTranslation(language);
 
             for (int i = 0; i <= 1854; i++)
             {
@@ -123,10 +123,10 @@ namespace Vocalization.Framework
             return stock;
         }
 
-        public static List<string> getMerchantStock(string translation)
+        public static List<string> getMerchantStock(LanguageName language)
         {
             List<string> stock = new List<string>();
-            Dictionary<int, string> objDict = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Data", Vocalization.config.translationInfo.getXNBForTranslation("ObjectInformation", translation)));
+            Dictionary<int, string> objDict = Game1.content.Load<Dictionary<int, string>>(Path.Combine("Data", Vocalization.config.translationInfo.getXNBForTranslation("ObjectInformation", language)));
             //Vocalization.ModMonitor.Log("LOAD THE OBJECT INFO: ", LogLevel.Alert);
             foreach (KeyValuePair<int, string> pair in objDict)
             {
@@ -136,14 +136,14 @@ namespace Vocalization.Framework
                     stock.Add(obj.DisplayName);
                 }
             }
-            foreach (string item in getCarpenterStock(translation))
+            foreach (string item in getCarpenterStock(language))
                 stock.Add(item);
             return stock;
         }
 
-        public static string getProperArticleForWord(string displayName, string translation)
+        public static string getProperArticleForWord(string displayName, LanguageName language)
         {
-            Vocalization.config.translationInfo.changeLocalizedContentManagerFromTranslation(translation);
+            Vocalization.config.translationInfo.changeLocalizedContentManagerFromTranslation(language);
             string s = Lexicon.getProperArticleForWord(displayName);
             Vocalization.config.translationInfo.resetLocalizationCode();
             return s;

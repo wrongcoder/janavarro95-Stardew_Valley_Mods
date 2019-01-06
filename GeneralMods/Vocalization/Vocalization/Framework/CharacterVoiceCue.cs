@@ -172,13 +172,16 @@ namespace Vocalization.Framework
         }
         
         /// <summary>Change all of the files to the ones that are appropriate for that translation version.</summary>
-        public void initializeForTranslation(string translation)
+        /// <param name="language">The translation language name.</param>
+        public void initializeForTranslation(LanguageName language)
         {
+            string extension = Vocalization.config.translationInfo.getFileExtentionForTranslation(language);
+
             for (int i = 0; i < this.dataFileNames.Count; i++)
             {
                 Vocalization.ModMonitor.Log(this.dataFileNames.ElementAt(i));
                 string s = this.dataFileNames.ElementAt(i);
-                s = this.dataFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                s = this.dataFileNames.ElementAt(i).Replace(".xnb", extension);
                 this.dataFileNames[i] = s;
                 Vocalization.ModMonitor.Log(this.dataFileNames.ElementAt(i));
             }
@@ -187,7 +190,7 @@ namespace Vocalization.Framework
             {
                 Vocalization.ModMonitor.Log(this.dialogueFileNames.ElementAt(i));
                 string s = this.dialogueFileNames.ElementAt(i);
-                s = this.dialogueFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                s = this.dialogueFileNames.ElementAt(i).Replace(".xnb", extension);
                 this.dialogueFileNames[i] = s;
                 Vocalization.ModMonitor.Log(this.dialogueFileNames.ElementAt(i));
             }
@@ -196,7 +199,7 @@ namespace Vocalization.Framework
             {
                 Vocalization.ModMonitor.Log(this.stringsFileNames.ElementAt(i));
                 string s = this.stringsFileNames.ElementAt(i);
-                s = this.stringsFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                s = this.stringsFileNames.ElementAt(i).Replace(".xnb", extension);
                 this.stringsFileNames[i] = s;
                 Vocalization.ModMonitor.Log(this.stringsFileNames.ElementAt(i));
             }
@@ -205,7 +208,7 @@ namespace Vocalization.Framework
             {
                 Vocalization.ModMonitor.Log(this.festivalFileNames.ElementAt(i));
                 string s = this.festivalFileNames.ElementAt(i);
-                s = this.festivalFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                s = this.festivalFileNames.ElementAt(i).Replace(".xnb", extension);
                 this.festivalFileNames[i] = s;
                 Vocalization.ModMonitor.Log(this.festivalFileNames.ElementAt(i));
             }
@@ -214,7 +217,7 @@ namespace Vocalization.Framework
             {
                 Vocalization.ModMonitor.Log(this.eventFileNames.ElementAt(i));
                 string s = this.eventFileNames.ElementAt(i);
-                s = this.eventFileNames.ElementAt(i).Replace(".xnb", Vocalization.config.translationInfo.getFileExtentionForTranslation(translation));
+                s = this.eventFileNames.ElementAt(i).Replace(".xnb", extension);
                 this.eventFileNames[i] = s;
                 Vocalization.ModMonitor.Log(this.eventFileNames.ElementAt(i));
             }

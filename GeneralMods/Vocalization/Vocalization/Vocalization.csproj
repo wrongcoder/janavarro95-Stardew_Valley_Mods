@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Framework\AudioCues.cs" />
     <Compile Include="Framework\CharacterVoiceCue.cs" />
+    <Compile Include="Framework\LanguageName.cs" />
     <Compile Include="Framework\Menus\VocalizationMenu.cs" />
     <Compile Include="Framework\ReplacementStrings.cs" />
     <Compile Include="Framework\TranslationInfo.cs" />
