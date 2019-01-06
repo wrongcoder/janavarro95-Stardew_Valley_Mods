@@ -6,5 +6,8 @@
   "UniqueID": "Omegasis.CustomNPCFramework",
   "EntryDll": "CustomNPCFramework.dll",
   "MinimumApiVersion": "2.0",
-  "UpdateKeys": []
+  "UpdateKeys": [],
+  "Dependencies": [
+    { "UniqueID": "Omegasis.StardustCore" }
+  ]
 }
