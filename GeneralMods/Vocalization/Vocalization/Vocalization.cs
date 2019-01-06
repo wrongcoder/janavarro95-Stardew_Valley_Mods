@@ -270,7 +270,7 @@ namespace Vocalization
                 new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(speech, ExtraTextureDrawOrder.after)
             };
 
-            Button menuTab = new Button("", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null)), false, components);
+            Button menuTab = new Button("", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null)), false, components);
 
             //Change this to take the vocalization menu instead
             var modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>
@@ -308,7 +308,7 @@ namespace Vocalization
             components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(c, ExtraTextureDrawOrder.after));
             components.Add(new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(speech, ExtraTextureDrawOrder.after));
 
-            Button menuTab = new Button("", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(null, null, null), false, components);
+            Button menuTab = new Button("", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(null, null, null), false, components);
 
             //Change this to take the vocalization menu instead
             List<KeyValuePair<Button, IClickableMenuExtended>> modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>();

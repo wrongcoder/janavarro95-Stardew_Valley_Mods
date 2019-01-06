@@ -1,4 +1,5 @@
 using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -6,64 +7,53 @@ namespace StardustCore.UIUtilities
 {
     public class Texture2DExtended
     {
-        public string Name;
-        public Texture2D texture;
-        public string path;
-        readonly IModHelper helper;
-        public string modID;
-        public ContentSource source;
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The underlying texture.</summary>
+        public Texture2D Texture { get; }
 
+        /// <summary>The texture width.</summary>
+        public int Width => this.Texture.Width;
+
+        /// <summary>The texture height.</summary>
+        public int Height => this.Texture.Height;
+
+
+        /*********
+        ** Public methods
+        *********/
         /// <summary>Empty/null constructor.</summary>
         public Texture2DExtended()
         {
-            this.Name = "";
-            this.texture = null;
-            this.path = "";
-            this.helper = null;
-            this.modID = "";
+            this.Texture = null;
         }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
-        public Texture2DExtended(IModHelper helper, IManifest manifest, string path, ContentSource contentSource = ContentSource.ModFolder)
+        public Texture2DExtended(Texture2D texture)
         {
-            this.Name = Path.GetFileNameWithoutExtension(path);
-            this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path, contentSource);
-            this.helper = helper;
-            this.modID = manifest.UniqueID;
-            this.source = contentSource;
+            this.Texture = texture;
         }
 
-        public Texture2DExtended(IModHelper helper, string modID, string path, ContentSource contentSource = ContentSource.ModFolder)
+        public Texture2DExtended(IModHelper helper, string path, ContentSource contentSource = ContentSource.ModFolder)
         {
-            this.Name = Path.GetFileNameWithoutExtension(path);
-            this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path, contentSource);
-            this.helper = helper;
-            this.modID = modID;
-            this.source = contentSource;
+            this.Texture = helper.Content.Load<Texture2D>(path, contentSource);
         }
 
         public Texture2DExtended Copy()
         {
-            return new Texture2DExtended(this.helper, this.modID, this.path);
-        }
+            Texture2D clone = new Texture2D(this.Texture.GraphicsDevice, this.Texture.Width, this.Texture.Height);
+            Color[] data = new Color[clone.Width * clone.Height];
+            this.Texture.GetData(data);
+            clone.SetData(data);
 
-        public IModHelper getHelper()
-        {
-            return this.helper;
+            return new Texture2DExtended(clone);
         }
 
         /// <summary>Returns the actual 2D texture held by this wrapper class.</summary>
         public Texture2D getTexture()
         {
-            return this.texture;
-        }
-
-        public void setTexure(Texture2D text)
-        {
-            this.texture = text;
+            return this.Texture;
         }
     }
 }
