@@ -1,4 +1,3 @@
-using System;
 using Omegasis.TimeFreeze.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -11,12 +10,10 @@ namespace Omegasis.TimeFreeze
     public class TimeFreeze : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
-
-        public int oldInterval;
 
 
         /*********
@@ -28,18 +25,17 @@ namespace Omegasis.TimeFreeze
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            //oldInterval = 7;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the game updates (roughly 60 times per second).</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        /// <param name="e">The event arguments.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;

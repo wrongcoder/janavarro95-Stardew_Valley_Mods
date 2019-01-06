@@ -351,7 +351,7 @@ namespace CustomNPCFramework.Framework.Graphics
             return new StandardCharacterAnimation(bodySprite, eyesSprite, hairSprite, shirtSprite, pantsSprite, shoesSprite, accessoryCollection, drawColors);
         }
 
-        /// <summary>Get the string for the standard character sprite to be used from this asset sheet.</summary>
+        /// <summary>Get the relative path for the standard character sprite to be used from this asset sheet.</summary>
         /// <param name="imageGraphics">The standard asset sheet to be used.</param>
         public virtual string getDefaultSpriteImage(AssetSheet imageGraphics)
         {

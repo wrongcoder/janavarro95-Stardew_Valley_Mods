@@ -1,6 +1,6 @@
-using System;
 using EventSystem.Framework;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 
 namespace EventSystem
 {
@@ -18,16 +18,22 @@ namespace EventSystem
         {
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
-            StardewModdingAPI.Events.GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            StardewModdingAPI.Events.SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
         }
 
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             eventManager = new EventManager();
         }
 
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             eventManager?.update();
         }

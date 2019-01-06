@@ -26,17 +26,5 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
             this.TopPadding = top;
             this.BottomPadding = bottom;
         }
-
-        /// <summary>Save this to a .json file.</summary>
-        public void WriteToJson(string path)
-        {
-            StardustCore.ModCore.ModHelper.WriteJsonFile(path, this);
-        }
-
-        /// <summary>Read the data from the .json file.</summary>
-        public static CharacterSpacing ReadFromJson(string path)
-        {
-            return StardustCore.ModCore.ModHelper.ReadJsonFile<CharacterSpacing>(path);
-        }
     }
 }

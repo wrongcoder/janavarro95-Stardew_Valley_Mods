@@ -49,17 +49,17 @@ namespace CustomNPCFramework.Framework.Graphics
         }
 
         /// <summary>Save the json to a certain location.</summary>
-        /// <param name="path">The absolute path to save.</param>
-        public void writeToJson(string path)
+        /// <param name="relativeFilePath">The relative path to save.</param>
+        public void writeToJson(string relativeFilePath)
         {
-            Class1.ModHelper.WriteJsonFile<AssetInfo>(path, this);
+            Class1.ModHelper.Data.WriteJsonFile(relativeFilePath, this);
         }
 
         /// <summary>Read the json from a certain location.</summary>
-        /// <param name="path">The absolute path to save.</param>
-        public static AssetInfo readFromJson(string path)
+        /// <param name="relativePath">The relative path to save.</param>
+        public static AssetInfo readFromJson(string relativePath)
         {
-            return Class1.ModHelper.ReadJsonFile<AssetInfo>(path);
+            return Class1.ModHelper.Data.ReadJsonFile<AssetInfo>(relativePath);
         }
     }
 }

@@ -14,17 +14,10 @@ namespace CustomNPCFramework.Framework.ModularNpcs
         public string relativePath;
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="path">The full path to the file.</param>
-        public Sprite(string path)
+        /// <param name="relativePath">The relative path to the file.</param>
+        public Sprite(string relativePath)
         {
-            try
-            {
-                this.relativePath = Class1.getShortenedDirectory(path);
-            }
-            catch
-            {
-                this.relativePath = path;
-            }
+            this.relativePath = relativePath;
             try
             {
                 this.sprite = new AnimatedSprite();

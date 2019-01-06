@@ -5,6 +5,6 @@
   "Description": "Open the daily quest board from anywhere in the game.",
   "UniqueID": "Omegasis.DailyQuestAnywhere",
   "EntryDll": "DailyQuestAnywhere.dll",
-  "MinimumApiVersion": "2.0",
+  "MinimumApiVersion": "2.10.1",
   "UpdateKeys": [ "Nexus:513" ]
 }

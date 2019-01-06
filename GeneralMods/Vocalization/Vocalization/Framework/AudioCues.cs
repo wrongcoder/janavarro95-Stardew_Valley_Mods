@@ -11,22 +11,19 @@ namespace Vocalization.Framework
 
         public static Dictionary<string, SortedDictionary<string, VoiceAudioOptions>> DictionaryReferences = new Dictionary<string, SortedDictionary<string, VoiceAudioOptions>>();
 
-        public static string generateKey(string translationPath, string SpeakerName, string fileName, string dialogueKey)
+        public static string generateKey(LanguageName language, string SpeakerName, string fileName, string dialogueKey)
         {
-            return Vocalization.config.translationInfo.getTranslationNameFromPath(translationPath) + Seperator + SpeakerName + Seperator + fileName + Seperator + dialogueKey;
+            return Vocalization.config.translationInfo.getTranslationName(language) + Seperator + SpeakerName + Seperator + fileName + Seperator + dialogueKey;
         }
 
-        public static SortedDictionary<string, VoiceAudioOptions> getWavFileReferences(string translation)
+        public static SortedDictionary<string, VoiceAudioOptions> getWavFileReferences(LanguageName language)
         {
-            return DictionaryReferences[Vocalization.config.translationInfo.getTranslationNameFromPath(translation)];
+            return DictionaryReferences[Vocalization.config.translationInfo.getTranslationName(language)];
         }
 
         public static void initialize()
         {
-            if (!Directory.Exists(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues")))
-            {
-                Directory.CreateDirectory(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues"));
-            }
+            Directory.CreateDirectory(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues"));
             loadAudioCues();
 
         }
@@ -45,20 +42,18 @@ namespace Vocalization.Framework
 
         public static void loadAudioCues()
         {
-            foreach (string v in Vocalization.config.translationInfo.translations)
+            foreach (LanguageName language in Vocalization.config.translationInfo.LanguageNames)
             {
-                var loaded = Vocalization.ModHelper.ReadJsonFile<SortedDictionary<string, VoiceAudioOptions>>(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues", "AudioCues" + Seperator + v + ".json"));
-                if (loaded == null) loaded = new SortedDictionary<string, VoiceAudioOptions>();
-                DictionaryReferences.Add(v, loaded);
+                var loaded = Vocalization.ModHelper.Data.ReadJsonFile<SortedDictionary<string, VoiceAudioOptions>>($"AudioCues/AudioCues{Seperator}{language}.json")
+                    ?? new SortedDictionary<string, VoiceAudioOptions>();
+                DictionaryReferences.Add(Vocalization.config.translationInfo.getTranslationName(language), loaded);
             }
         }
 
         public static void saveAudioCues()
         {
             foreach (var v in DictionaryReferences)
-            {
-                Vocalization.ModHelper.WriteJsonFile<SortedDictionary<string, VoiceAudioOptions>>(Path.Combine(Vocalization.ModHelper.DirectoryPath, "AudioCues", "AudioCues" + Seperator + v.Key + ".json"), v.Value);
-            }
+                Vocalization.ModHelper.Data.WriteJsonFile($"AudioCues/AudioCues{Seperator}{v.Key}.json", v.Value);
         }
     }
 }

@@ -56,17 +56,12 @@ namespace CustomNPCFramework.Framework.Graphics
             }
         }
 
-        public DirectionalTexture(IModHelper helper, NamePairings info, string path, Direction direction = Direction.down)
+        public DirectionalTexture(IModHelper helper, NamePairings info, string relativePath, Direction direction = Direction.down)
         {
-            string leftString = Class1.getShortenedDirectory(Path.Combine(path, info.leftString + ".png")).Remove(0, 1);
-            string rightString = Class1.getShortenedDirectory(Path.Combine(path, info.rightString + ".png")).Remove(0, 1);
-            string upString = Class1.getShortenedDirectory(Path.Combine(path, info.upString + ".png")).Remove(0, 1);
-            string downString = Class1.getShortenedDirectory(Path.Combine(path, info.downString + ".png")).Remove(0, 1);
-
-            this.leftTexture = new Texture2DExtended(helper, leftString);
-            this.rightTexture = new Texture2DExtended(helper, rightString);
-            this.upTexture = new Texture2DExtended(helper, upString);
-            this.downTexture = new Texture2DExtended(helper,  downString);
+            this.leftTexture = new Texture2DExtended(helper, Path.Combine(relativePath, $"{info.leftString}.png"));
+            this.rightTexture = new Texture2DExtended(helper, Path.Combine(relativePath, $"{info.rightString}.png"));
+            this.upTexture = new Texture2DExtended(helper, Path.Combine(relativePath, $"{info.upString}.png"));
+            this.downTexture = new Texture2DExtended(helper, Path.Combine(relativePath, $"{info.downString}.png"));
 
             switch (direction)
             {
