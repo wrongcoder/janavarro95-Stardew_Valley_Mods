@@ -109,11 +109,29 @@ namespace Revitalize.Framework.Objects
         {
             //instead of using this.offsetkey.x use get additional save data function and store offset key there
 
-            if (this.offsetKey.X == 0 && this.offsetKey.Y == 0)
+            Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
+
+            if (offsetKey.X == 0 && offsetKey.Y == 0)
             {
                 Revitalize.ModCore.log(recreateParentId(additionalSaveData["id"]) + ".Object");
-                var obj=(Revitalize.ModCore.customObjects[recreateParentId(additionalSaveData["id"])+".Object"].getOne());
+                CustomObject obj=(CustomObject)(Revitalize.ModCore.customObjects[recreateParentId(additionalSaveData["id"])+".Object"].getOne());
                 obj.Stack =Convert.ToInt32( additionalSaveData["stack"]);
+
+                string saveLocation = additionalSaveData["GameLocationName"];
+
+
+                Enums.Direction facingDirection = (Enums.Direction)Convert.ToInt32(additionalSaveData["Rotation"]);
+                while (obj.info.facingDirection != facingDirection)
+                {
+                    obj.rotate();
+                }
+
+                if (!string.IsNullOrEmpty(saveLocation))
+                {
+                    obj.placementAction(Game1.getLocationFromName(saveLocation), (int)(replacement as Chest).TileLocation.X, (int)(replacement as Chest).TileLocation.Y);
+                    return null;
+                }
+
                 return (ICustomObject)obj;
                 BasicItemInformation data = Revitalize.ModCore.customObjects[additionalSaveData["id"]].info;
                 return new MultiTiledComponent(data, (replacement as Chest).TileLocation)
@@ -127,6 +145,31 @@ namespace Revitalize.Framework.Objects
             {
                 return null;
             }
+        }
+
+        public override Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string,string> saveData= base.getAdditionalSaveData();
+            saveData.Add("offsetKeyX", this.offsetKey.X.ToString());
+            saveData.Add("offsetKeyY", this.offsetKey.Y.ToString());
+            string saveLocation = "";
+            if (this.location == null)
+            {
+                saveLocation = "";
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(this.location.uniqueName.Value)) saveLocation = this.location.uniqueName.Value;
+                else
+                {
+                    saveLocation = this.location.Name;
+                }
+            }
+            saveData.Add("GameLocationName", saveLocation);
+            saveData.Add("Rotation", ((int)this.info.facingDirection).ToString());
+
+            return saveData;
+
         }
 
         protected string recreateParentId(string id)
