@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
@@ -8,7 +9,7 @@ using StardewValley.Objects;
 
 namespace Revitalize.Framework.Objects
 {
-    public class MultiTiledComponent : CustomObject
+    public class MultiTiledComponent : CustomObject,ISaveElement
     {
         public MultiTiledObject containerObject;
 
@@ -18,8 +19,14 @@ namespace Revitalize.Framework.Objects
 
         public MultiTiledComponent(BasicItemInformation info) : base(info) { }
 
-        public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation) : base(info, TileLocation) { }
+        public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation,MultiTiledObject obj=null) : base(info, TileLocation) {
+            this.containerObject = obj;
+        }
 
+        public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation,Vector2 offsetKey ,MultiTiledObject obj = null) : base(info, TileLocation) {
+            this.offsetKey = offsetKey;
+            this.containerObject = obj;
+        }
 
         public override bool isPassable()
         {
@@ -93,22 +100,47 @@ namespace Revitalize.Framework.Objects
 
         public override Item getOne()
         {
-            MultiTiledComponent component = new MultiTiledComponent(this.info, this.TileLocation);
-            component.containerObject = this.containerObject;
-            component.offsetKey = this.offsetKey;
+            MultiTiledComponent component = new MultiTiledComponent(this.info, this.TileLocation,this.offsetKey,this.containerObject);
             return component;
         }
 
+        
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
-            return new MultiTiledComponent(data, (replacement as Chest).TileLocation)
+            //instead of using this.offsetkey.x use get additional save data function and store offset key there
+
+            if (this.offsetKey.X == 0 && this.offsetKey.Y == 0)
             {
-                containerObject = this.containerObject,
-                offsetKey = this.offsetKey
-            };
+                Revitalize.ModCore.log(recreateParentId(additionalSaveData["id"]) + ".Object");
+                var obj=(Revitalize.ModCore.customObjects[recreateParentId(additionalSaveData["id"])+".Object"].getOne());
+                obj.Stack =Convert.ToInt32( additionalSaveData["stack"]);
+                return (ICustomObject)obj;
+                BasicItemInformation data = Revitalize.ModCore.customObjects[additionalSaveData["id"]].info;
+                return new MultiTiledComponent(data, (replacement as Chest).TileLocation)
+                {
+                    containerObject = this.containerObject,
+                    offsetKey = this.offsetKey,
+                    Stack = Convert.ToInt32(additionalSaveData["stack"])
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
+        protected string recreateParentId(string id)
+        {
+            StringBuilder b = new StringBuilder();
+            string[] splits = id.Split('.');
+            for(int i = 0; i < splits.Length - 1; i++)
+            {
+                b.Append(splits[i]);
+                if (i == splits.Length - 2) continue;
+                b.Append(".");
+            }
+            return b.ToString();
+        }
 
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
