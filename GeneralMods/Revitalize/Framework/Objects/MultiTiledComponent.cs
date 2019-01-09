@@ -12,11 +12,19 @@ namespace Revitalize.Framework.Objects
     {
         public MultiTiledObject containerObject;
 
+        public Vector2 offsetKey;
+
         public MultiTiledComponent() { }
 
         public MultiTiledComponent(BasicItemInformation info) : base(info) { }
 
         public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation) : base(info, TileLocation) { }
+
+
+        public override bool isPassable()
+        {
+            return this.info.ignoreBoundingBox || Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this.containerObject;
+        }
 
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
@@ -36,9 +44,9 @@ namespace Revitalize.Framework.Objects
         {
             if (this.location == null)
                 this.location = Game1.player.currentLocation;
-            this.info.lightManager.toggleLights(this.location, this);
+            //this.info.lightManager.toggleLights(this.location, this);
 
-            ModCore.playerInfo.sittingInfo.sit(this, Vector2.Zero);
+            //ModCore.playerInfo.sittingInfo.sit(this, Vector2.Zero);
 
             return true;
         }
@@ -87,6 +95,7 @@ namespace Revitalize.Framework.Objects
         {
             MultiTiledComponent component = new MultiTiledComponent(this.info, this.TileLocation);
             component.containerObject = this.containerObject;
+            component.offsetKey = this.offsetKey;
             return component;
         }
 
@@ -95,8 +104,57 @@ namespace Revitalize.Framework.Objects
             BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
             return new MultiTiledComponent(data, (replacement as Chest).TileLocation)
             {
-                containerObject = this.containerObject
+                containerObject = this.containerObject,
+                offsetKey = this.offsetKey
             };
         }
+
+
+        /// <summary>What happens when the object is drawn at a tile location.</summary>
+        public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
+        {
+            if (x <= -1)
+            {
+                spriteBatch.Draw(this.info.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.info.drawPosition), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
+            }
+            else
+            {
+                //The actual planter box being drawn.
+                if (this.animationManager == null)
+                {
+                    if (this.animationManager.getExtendedTexture() == null)
+                        ModCore.ModMonitor.Log("Tex Extended is null???");
+
+                    spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
+                    // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
+                }
+
+                else
+                {
+                    //Log.AsyncC("Animation Manager is working!");
+                    float addedDepth = 0;
+                    
+
+                    if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this.containerObject && this.info.facingDirection == Enums.Direction.Up)
+                    {
+                        addedDepth += (this.containerObject.Height - 1) - ((int)(this.offsetKey.Y));
+                        if (this.info.ignoreBoundingBox) addedDepth+=1.5f;
+                    }
+                    this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((this.TileLocation.Y + addedDepth) * Game1.tileSize) / 10000f));
+                    try
+                    {
+                        this.animationManager.tickAnimation();
+                        // Log.AsyncC("Tick animation");
+                    }
+                    catch (Exception err)
+                    {
+                        ModCore.ModMonitor.Log(err.ToString());
+                    }
+                }
+
+                // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
+            }
+        }
+
     }
 }

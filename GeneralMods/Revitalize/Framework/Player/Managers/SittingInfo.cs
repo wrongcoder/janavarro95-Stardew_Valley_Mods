@@ -50,6 +50,11 @@ namespace Revitalize.Framework.Player.Managers
             {
                 this.isSitting = false;
                 this.elapsedTime = 0;
+                if(this.sittingObject is MultiTiledObject)
+                {
+                    (this.sittingObject as MultiTiledObject).setAllAnimationsToDefault();
+                }
+
                 this.sittingObject = null;
             }
             if (this.isSitting && Game1.player.CanMove)

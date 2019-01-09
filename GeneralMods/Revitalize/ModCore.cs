@@ -109,11 +109,21 @@ namespace Revitalize
             ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
             playerInfo = new PlayerInfo();
+
+            Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager());
+            TextureManager.TextureManagers["Furniture"].addTexture("Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "OakChair.png")));
+
+
         }
 
         private void createDirectories()
         {
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
+
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath,"Content" ,"Graphics"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture","Chairs"));
         }
 
         private void initailizeComponents()
@@ -152,12 +162,107 @@ namespace Revitalize
             }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1),new StatCost(100,50,0,0));
 
 
+
+            Framework.Objects.Furniture.ChairTileComponent chairTop = new Framework.Objects.Furniture.ChairTileComponent(new BasicItemInformation("Oak Chair", "A basic wooden chair", "Chairs", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.Revitalize.Furniture.Basic.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Framework.Graphics.TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, false, typeof(Framework.Objects.Furniture.ChairTileComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16)), new Dictionary<string, List<Animation>>() {
+                { "Default_" + (int)Framework.Enums.Direction.Down , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(0,0,16,16))
+                    }
+                },
+                { "Sitting_" + (int)Framework.Enums.Direction.Down , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(0,0,16,16))
+                    }
+                },
+                { "Default_" + (int)Framework.Enums.Direction.Right , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(16,0,16,16))
+                    }
+                },
+                { "Sitting_" + (int)Framework.Enums.Direction.Right , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(16,0,16,16))
+                    }
+                },
+                { "Default_" + (int)Framework.Enums.Direction.Up , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(32,0,16,16))
+                    }
+                },
+                { "Sitting_" + (int)Framework.Enums.Direction.Up , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(32,32,16,32))
+                    }
+                },
+                { "Default_" + (int)Framework.Enums.Direction.Left , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(48,0,16,16))
+                    }
+                },
+                { "Sitting_" + (int)Framework.Enums.Direction.Left , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(48,0,16,16))
+                    }
+                }
+            }, "Default_" + (int)Framework.Enums.Direction.Down), Color.White, true, new Framework.Utilities.InventoryManager(), new LightManager()),new Framework.Objects.InformationFiles.Furniture.ChairInformation(false));
+
+
+            Framework.Objects.Furniture.ChairTileComponent chairBottom = new Framework.Objects.Furniture.ChairTileComponent(new BasicItemInformation("Oak Chair", "A basic wooden chair", "Chairs", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.Revitalize.Furniture.Basic.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Framework.Graphics.TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, false, typeof(Framework.Objects.Furniture.ChairTileComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16)), new Dictionary<string, List<Animation>>() {
+                { "Default_" + (int)Framework.Enums.Direction.Down , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(0,16,16,16))
+                    }
+                },
+                { "Sitting_" + (int)Framework.Enums.Direction.Down , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(0,16,16,16))
+                    }
+                },
+                { "Default_" + (int)Framework.Enums.Direction.Right , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(16,16,16,16))
+                    }
+                },
+                { "Sitting_" + (int)Framework.Enums.Direction.Right , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(16,16,16,16))
+                    }
+                },
+                { "Default_" + (int)Framework.Enums.Direction.Up , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(32,16,16,16))
+                    }
+                },
+                { "Sitting_" + (int)Framework.Enums.Direction.Up , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(48,32,16,32))
+                    }
+                },
+                { "Default_" + (int)Framework.Enums.Direction.Left , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(48,16,16,16))
+                    }
+                },
+                { "Sitting" + (int)Framework.Enums.Direction.Left , new List<Animation>()
+                    {
+                        new Animation(new Rectangle(48,16,16,16))
+                    }
+                }
+            }, "Default_"+(int)Framework.Enums.Direction.Down), Color.White, false, new Framework.Utilities.InventoryManager(), new LightManager()), new Framework.Objects.InformationFiles.Furniture.ChairInformation(true));
+
+
+            Framework.Objects.Furniture.ChairMultiTiledObject oakChair = new Framework.Objects.Furniture.ChairMultiTiledObject(new BasicItemInformation("Oak Chair","A wood chair you can place anywhere.","Chair",Color.White,-300,0,true,100,Vector2.Zero,true,true,"Omegasis.Revitalize.Furniture.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048",TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture,Color.White,0,true,typeof(Revitalize.Framework.Objects.Furniture.ChairMultiTiledObject),null,new AnimationManager(),Color.White,false,new Framework.Utilities.InventoryManager(), new LightManager()));
+            oakChair.addComponent(new Vector2(0, 0), chairTop);
+            oakChair.addComponent(new Vector2(0, 1), chairBottom);
+
+            Game1.player.addItemToInventory(oakChair);
+
             new InventoryItem(bigObject, 100, 1).addToNPCShop("Gus");
             Game1.player.addItemToInventory(bigObject);
 
             if (pie.PlayerCanCraft())
             {
-                pie.craft();
+                //pie.craft();
             }
         }
 

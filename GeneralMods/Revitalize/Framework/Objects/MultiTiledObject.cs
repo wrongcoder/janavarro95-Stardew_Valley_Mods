@@ -10,33 +10,56 @@ namespace Revitalize.Framework.Objects
     public class MultiTiledObject : CustomObject
     {
         public Dictionary<Vector2, MultiTiledComponent> objects;
+        public Dictionary<MultiTiledComponent, Vector2> offSets;
+
+        private int width;
+        private int height;
+        public int Width
+        {
+            get
+            {
+                return this.width+1;
+            }
+        }
+        public int Height
+        {
+            get
+            {
+                return this.height+1;
+            }
+        }
 
         public MultiTiledObject()
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
+            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
         }
 
         public MultiTiledObject(BasicItemInformation info)
             : base(info)
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
+            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation)
             : base(info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
+            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation, Dictionary<Vector2, MultiTiledComponent> ObjectsList)
             : base(info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
+            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
             foreach (var v in ObjectsList)
             {
                 MultiTiledComponent component = (MultiTiledComponent)v.Value.getOne();
                 this.addComponent(v.Key, component);
             }
+
         }
 
         public bool addComponent(Vector2 key, MultiTiledComponent obj)
@@ -45,7 +68,11 @@ namespace Revitalize.Framework.Objects
                 return false;
 
             this.objects.Add(key, obj);
+            this.offSets.Add(obj, key);
+            if (key.X > this.width) this.width = (int)key.X;
+            if (key.Y > this.height) this.height = (int)key.Y;
             obj.containerObject = this;
+            obj.offsetKey = key;
             return true;
         }
 
@@ -169,6 +196,18 @@ namespace Revitalize.Framework.Objects
         {
             BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
             return new MultiTiledObject(data, (replacement as Chest).TileLocation, this.objects);
+        }
+
+        public void setAllAnimationsToDefault()
+        {
+            foreach(KeyValuePair<Vector2,MultiTiledComponent> pair in this.objects)
+            {
+                string animationKey = pair.Value.generateDefaultRotationalAnimationKey();
+                if (pair.Value.animationManager.animations.ContainsKey(animationKey))
+                {
+                    pair.Value.animationManager.setAnimation(animationKey);
+                }
+            }
         }
     }
 }

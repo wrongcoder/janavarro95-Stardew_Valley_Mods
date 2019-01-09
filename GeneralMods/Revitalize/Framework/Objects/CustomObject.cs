@@ -206,6 +206,34 @@ namespace Revitalize.Framework.Objects
             return base.placementAction(location, x, y, who);
         }
 
+        public virtual void rotate()
+        {
+            if (this.info.facingDirection == Enums.Direction.Down) this.info.facingDirection = Enums.Direction.Right;
+            else if (this.info.facingDirection == Enums.Direction.Right) this.info.facingDirection = Enums.Direction.Up;
+            else if (this.info.facingDirection == Enums.Direction.Up) this.info.facingDirection = Enums.Direction.Left;
+            else if (this.info.facingDirection == Enums.Direction.Left) this.info.facingDirection = Enums.Direction.Down;
+
+            if (this.info.animationManager.animations.ContainsKey(generateRotationalAnimationKey()))
+            {
+                this.info.animationManager.setAnimation(generateRotationalAnimationKey());
+            }
+            else
+            {
+                //Revitalize.ModCore.log("Animation does not exist...." + generateRotationalAnimationKey());
+            }
+        }
+
+
+        public string generateRotationalAnimationKey()
+        {          
+            return (this.info.animationManager.currentAnimationName.Split('_')[0]) +"_"+ (int)this.info.facingDirection;
+        }
+
+        public string generateDefaultRotationalAnimationKey()
+        {
+            return ("Default" + "_" + (int)this.info.facingDirection);
+        }
+
         /// <summary>Updates a visual draw position.</summary>
         public virtual void updateDrawPosition(int x, int y)
         {
@@ -241,7 +269,10 @@ namespace Revitalize.Framework.Objects
                 else
                 {
                     //Log.AsyncC("Animation Manager is working!");
-                    this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
+                    int addedDepth = 0;
+                    if (this.info.ignoreBoundingBox) addedDepth++;
+                    if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this) addedDepth++;
+                    this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)( (this.TileLocation.Y+addedDepth) * Game1.tileSize) / 10000f));
                     try
                     {
                         this.animationManager.tickAnimation();

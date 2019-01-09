@@ -54,11 +54,13 @@
     <Compile Include="Framework\Graphics\Animations\Animation.cs" />
     <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
     <Compile Include="Framework\Graphics\Texture2DExtended.cs" />
+    <Compile Include="Framework\Graphics\TextureManager.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
-    <Compile Include="Framework\Objects\Furniture\Chair.cs" />
+    <Compile Include="Framework\Objects\Furniture\ChairMultiTiledObject.cs" />
+    <Compile Include="Framework\Objects\Furniture\ChairTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\FurnitureTileComponent.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
