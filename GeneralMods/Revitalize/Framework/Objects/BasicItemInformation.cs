@@ -49,7 +49,7 @@ namespace Revitalize.Framework.Objects
             this.canBeSetIndoors = false;
             this.canBeSetOutdoors = false;
 
-            this.animationManager = null;
+            this.animationManager = new AnimationManager();
             this.drawPosition = Vector2.Zero;
             this.drawColor = Color.White;
             this.inventory = new InventoryManager();

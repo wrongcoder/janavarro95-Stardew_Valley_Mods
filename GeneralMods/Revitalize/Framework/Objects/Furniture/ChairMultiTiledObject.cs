@@ -31,7 +31,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info,Vector2 TilePosition,Dictionary<Vector2, StardewValley.Object> Objects) : base(Info, TilePosition, Objects) {
+        public ChairMultiTiledObject(BasicItemInformation Info,Vector2 TilePosition,Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects) {
 
 
         }
@@ -42,11 +42,11 @@ namespace Revitalize.Framework.Objects.Furniture
         public override void rotate()
         {
             Revitalize.ModCore.log("Rotate!");
-            foreach(KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            foreach(KeyValuePair<Vector2, MultiTiledComponent> pair in this.objects)
             {
                 (pair.Value as ChairTileComponent).rotate();
             }
-            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            foreach (KeyValuePair<Vector2, MultiTiledComponent> pair in this.objects)
             {
                 (pair.Value as ChairTileComponent).checkForSpecialUpSittingAnimation();
             }

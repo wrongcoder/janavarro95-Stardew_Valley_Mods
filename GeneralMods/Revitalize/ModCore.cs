@@ -20,6 +20,7 @@ using StardewValley.Objects;
 namespace Revitalize
 {
     // TODO:
+    //Need to find a way to recreate objects again.
     //Make guid object list to keep track of container objects on rebuild. Container objects have guid, on getAdditionalSaveData, store it. On rebuild keep a list, get a reference to container object, clear those objects, and reset them as we are rebuilting multiTiledComponents.
     //
     //  -Multiple Lights On Object
@@ -282,12 +283,28 @@ namespace Revitalize
 
 
             
-            var hello=Serializer.Deserialize<MultiTiledObject>(Path.Combine(this.Helper.DirectoryPath, (obj as MultiTiledObject).guid + ".json"));
+            MultiTiledObject hello=Serializer.Deserialize<MultiTiledObject>(Path.Combine(this.Helper.DirectoryPath, (obj as MultiTiledObject).guid + ".json"));
             //(hello as MultiTiledObject).info.drawColor = Color.Blue;
             customObjects["Omegasis.BigTiledTest"].info.drawColor = hello.info.drawColor;
-            Game1.player.addItemToInventory(hello);
+            if (hello == null) log("WTF");
+            else
+            {
+                log("AHHHH" + hello.name);
+            }
+            hello.info.drawColor = Color.Blue;
+
+            foreach(KeyValuePair<Vector2,MultiTiledComponent> pair in hello.objects){
+                pair.Value.containerObject = hello;
+            }
+
+            Game1.player.items.Add(hello);
+
             
 
+            Game1.activeClickableMenu = new StardewValley.Menus.ItemGrabMenu(new List<Item>()
+            {
+                hello
+            });
         }
 
         

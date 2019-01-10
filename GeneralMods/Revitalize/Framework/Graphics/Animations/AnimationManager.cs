@@ -13,7 +13,7 @@ namespace Revitalize.Framework.Graphics.Animations
         public string currentAnimationName;
         public int currentAnimationListIndex;
         public List<Animation> currentAnimationList = new List<Animation>();
-        private Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
+        public Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
         public Animation defaultDrawFrame;
         public Animation currentAnimation;
         public bool enabled;
