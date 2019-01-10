@@ -77,6 +77,9 @@ namespace Revitalize.Framework.Objects
 
             this.bigCraftable.Value = false;
 
+            this.initNetFields();
+            
+
             //if (this.info.ignoreBoundingBox)
             //    this.boundingBox.Value = new Rectangle(int.MinValue, int.MinValue, 0, 0);
         }
@@ -369,6 +372,8 @@ namespace Revitalize.Framework.Objects
         public void InitNetFields()
         {
             this.initNetFields();
+            this.syncObject = new PySync(this);
+            this.NetFields.AddField(this.syncObject);
         }
 
 

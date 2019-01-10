@@ -228,11 +228,13 @@ namespace Revitalize.Framework.Objects
                     obj.childrenGuids.Remove(pair.Key);
                     Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
                     MultiTiledComponent component= (MultiTiledComponent)Revitalize.ModCore.Serializer.Deserialize<MultiTiledComponent>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, pair.Value + ".json"));
-                    obj.addComponent(pair.Key, component);
+                component.InitNetFields();
+
+                obj.addComponent(pair.Key, component);
                     
                 
             }
-            
+            obj.InitNetFields();
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
             {

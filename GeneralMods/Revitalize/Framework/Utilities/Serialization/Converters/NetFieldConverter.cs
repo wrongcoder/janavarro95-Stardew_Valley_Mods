@@ -18,7 +18,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
-
+        
             string str = (string)reader.Value;
             //string str=jsonObject.ToObject<string>(serializer);
 
