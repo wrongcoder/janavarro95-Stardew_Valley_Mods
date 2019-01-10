@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Illuminate;
@@ -9,7 +11,11 @@ using StardewValley;
 
 namespace Revitalize.Framework.Objects
 {
-    public class BasicItemInformation : CustomObjectData
+
+    /// <summary>
+    /// In Order to make this network compatible, I MUST, MUST, MUST make it use this INetSerializable functionality.
+    /// </summary>
+    public class BasicItemInformation : CustomObjectData, INetSerializable
     {
         public string name;
         public string description;
@@ -93,11 +99,54 @@ namespace Revitalize.Framework.Objects
             this.facingDirection = Enums.Direction.Down;
         }
 
+        public uint DirtyTick { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public bool Dirty => throw new NotImplementedException();
+
+        public bool NeedsTick { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool ChildNeedsTick { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public INetSerializable Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public INetRoot Root => throw new NotImplementedException();
+
+        public void MarkClean()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MarkDirty()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Read(BinaryReader reader, NetVersion version)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReadFull(BinaryReader reader, NetVersion version)
+        {
+            throw new NotImplementedException();
+        }
+
         public void recreateDataString()
         {
             this.data = $"{this.name}/{this.price}/{this.edibility}/Crafting -9/{this.description}/{this.canBeSetOutdoors}/{this.canBeSetIndoors}/{this.fragility}/{this.isLamp}/{this.name}";
         }
 
-        
+        public bool Tick()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Write(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteFull(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
