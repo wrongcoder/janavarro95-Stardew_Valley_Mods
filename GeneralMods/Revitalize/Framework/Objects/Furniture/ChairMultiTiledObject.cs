@@ -56,13 +56,26 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            return new ChairMultiTiledObject(this.info, this.TileLocation, this.objects);
+            Dictionary<Vector2, MultiTiledComponent> objs = new Dictionary<Vector2, MultiTiledComponent>();
+            foreach (var pair in this.objects)
+            {
+                objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
+            }
+
+            return new ChairMultiTiledObject(this.info, this.TileLocation, objs);
         }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
             BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
-            return new ChairMultiTiledObject(data, (replacement as Chest).TileLocation, this.objects);
+
+            Dictionary<Vector2, MultiTiledComponent> objs = new Dictionary<Vector2, MultiTiledComponent>();
+            foreach (var pair in this.objects)
+            {
+                objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
+            }
+
+            return new ChairMultiTiledObject(data, (replacement as Chest).TileLocation, objs);
         }
 
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)

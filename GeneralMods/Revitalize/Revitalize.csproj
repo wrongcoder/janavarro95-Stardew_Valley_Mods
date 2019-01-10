@@ -75,6 +75,8 @@
     <Compile Include="Framework\Player\PlayerInfo.cs" />
     <Compile Include="Framework\Utilities\BoundingBoxInfo.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
+    <Compile Include="Framework\Utilities\Serialization\ContractResolvers\NetFieldContract.cs" />
+    <Compile Include="Framework\Utilities\Serialization\Converters\NetFieldConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\RectangleConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\Texture2DConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\Vector2Converter.cs" />

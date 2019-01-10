@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
 
 namespace Revitalize.Framework.Utilities
 {
@@ -25,8 +26,11 @@ namespace Revitalize.Framework.Utilities
             this.serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             this.serializer.NullValueHandling = NullValueHandling.Include;
 
+            this.serializer.ContractResolver = new NetFieldContract();
+
             this.addConverter(new Framework.Utilities.Serialization.Converters.RectangleConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.Texture2DConverter());
+            this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
         }
 

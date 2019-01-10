@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -104,7 +105,11 @@ namespace Revitalize.Framework.Objects
             return component;
         }
 
-        
+        public override object getReplacement()
+        {
+            return base.getReplacement();
+        }
+
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
             //instead of using this.offsetkey.x use get additional save data function and store offset key there
@@ -121,9 +126,10 @@ namespace Revitalize.Framework.Objects
 
                 if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
                 {
-                    //Get new container
-                    CustomObject obj = (CustomObject)(Revitalize.ModCore.customObjects[additionalSaveData["ParentID"]].getOne());
+                //Get new container
+                MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.Deserialize<MultiTiledObject>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["GUID"] + ".json"));
                     self = (MultiTiledComponent)(obj as MultiTiledObject).objects[offsetKey];
+                    self.containerObject = obj;
                     Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], (MultiTiledObject)obj);
                 }
                 else
@@ -131,19 +137,6 @@ namespace Revitalize.Framework.Objects
                     self =(MultiTiledComponent)Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].objects[offsetKey];
                     self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]];
                 }
-
-            self.TileLocation = (replacement as Chest).TileLocation;
-
-                Enums.Direction facingDirection = (Enums.Direction)Convert.ToInt32(additionalSaveData["Rotation"]);
-                while (self.info.facingDirection != facingDirection)
-                {
-                    self.rotate();
-                }
-
-            if (!string.IsNullOrEmpty(additionalSaveData["GameLocationName"]))
-            {
-                self.location = Game1.getLocationFromName(additionalSaveData["GameLocationName"]);
-            }
 
                 return (ICustomObject)self;
                 BasicItemInformation data = Revitalize.ModCore.customObjects[additionalSaveData["id"]].info;
@@ -246,6 +239,11 @@ namespace Revitalize.Framework.Objects
 
                 // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
             }
+        }
+
+        public static implicit operator MultiTiledComponent(Chest chest)
+        {
+            return new MultiTiledComponent(new BasicItemInformation(),chest.TileLocation);
         }
 
     }

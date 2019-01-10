@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -11,8 +12,6 @@ namespace Revitalize.Framework.Objects
     public class MultiTiledObject : CustomObject
     {
         public Dictionary<Vector2, MultiTiledComponent> objects;
-        [JsonIgnore]
-        public Dictionary<MultiTiledComponent, Vector2> offSets;
 
         public Guid guid;
 
@@ -36,7 +35,6 @@ namespace Revitalize.Framework.Objects
         public MultiTiledObject()
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
-            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
             this.guid = Guid.NewGuid();
         }
 
@@ -44,7 +42,6 @@ namespace Revitalize.Framework.Objects
             : base(info)
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
-            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
             this.guid = Guid.NewGuid();
         }
 
@@ -52,7 +49,6 @@ namespace Revitalize.Framework.Objects
             : base(info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
-            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
             this.guid = Guid.NewGuid();
         }
 
@@ -60,7 +56,6 @@ namespace Revitalize.Framework.Objects
             : base(info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, MultiTiledComponent>();
-            this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
             foreach (var v in ObjectsList)
             {
                 MultiTiledComponent component =(MultiTiledComponent) v.Value.getOne();
@@ -75,8 +70,7 @@ namespace Revitalize.Framework.Objects
             if (this.objects.ContainsKey(key))
                 return false;
 
-            this.objects.Add(key, (obj as MultiTiledComponent));
-            this.offSets.Add((obj as MultiTiledComponent), key);
+            this.objects.Add(key, obj);
             if (key.X > this.width) this.width = (int)key.X;
             if (key.Y > this.height) this.height = (int)key.Y;
             (obj as MultiTiledComponent).containerObject = this;
@@ -202,15 +196,20 @@ namespace Revitalize.Framework.Objects
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-
             
 
-            MultiTiledObject self=(MultiTiledObject)Revitalize.ModCore.customObjects[additionalSaveData["id"]].getOne();
+
+            MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.Deserialize<MultiTiledObject>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["GUID"] + ".json"));
+
+            foreach(KeyValuePair<Vector2,MultiTiledComponent> pair in this.objects)
+            {
+                pair.Value.containerObject = obj;
+            }
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
             {
-                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], self);
-                return self;
+                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], obj);
+                return obj;
             }
             else
             {

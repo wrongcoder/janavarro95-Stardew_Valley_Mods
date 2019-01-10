@@ -284,6 +284,7 @@ namespace Revitalize
 
             
             MultiTiledObject hello=Serializer.Deserialize<MultiTiledObject>(Path.Combine(this.Helper.DirectoryPath, (obj as MultiTiledObject).guid + ".json"));
+            
             //(hello as MultiTiledObject).info.drawColor = Color.Blue;
             customObjects["Omegasis.BigTiledTest"].info.drawColor = hello.info.drawColor;
             if (hello == null) log("WTF");
@@ -292,9 +293,13 @@ namespace Revitalize
                 log("AHHHH" + hello.name);
             }
             hello.info.drawColor = Color.Blue;
-
-            foreach(KeyValuePair<Vector2,MultiTiledComponent> pair in hello.objects){
-                pair.Value.containerObject = hello;
+            if (hello.objects == null)
+            {
+                log("NEVER MIND");
+            }
+            foreach(KeyValuePair<Vector2, MultiTiledComponent> pair in hello.objects){
+               pair.Value.containerObject = hello;
+               //log((pair.Value as CustomObject).name);
             }
 
             Game1.player.items.Add(hello);

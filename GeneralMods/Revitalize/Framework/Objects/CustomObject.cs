@@ -357,6 +357,12 @@ namespace Revitalize.Framework.Objects
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
+        public void InitNetFields()
+        {
+            this.initNetFields();
+        }
+
+
         public string getDisplayNameFromStringsFile(string objectID)
         {
             //Load in a file that has all object names referenced here or something.
