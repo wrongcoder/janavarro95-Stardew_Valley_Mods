@@ -25,6 +25,8 @@ namespace Revitalize.Framework.Objects
         public BasicItemInformation info;
         public GameLocation location;
 
+
+        public Guid guid;
       
         /// <summary>The animation manager.</summary>
         public AnimationManager animationManager => this.info.animationManager;
@@ -36,7 +38,9 @@ namespace Revitalize.Framework.Objects
 
 
         /// <summary>Empty constructor.</summary>
-        public CustomObject() { }
+        public CustomObject() {
+            this.guid = Guid.NewGuid();
+        }
 
         /// <summary>Construct an instance.</summary>
         public CustomObject(BasicItemInformation info)
@@ -44,6 +48,7 @@ namespace Revitalize.Framework.Objects
         {
             this.info = info;
             this.initializeBasics();
+            this.guid = Guid.NewGuid();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -52,6 +57,7 @@ namespace Revitalize.Framework.Objects
         {
             this.info = info;
             this.initializeBasics();
+            this.guid = Guid.NewGuid();
         }
 
         /// <summary>Sets some basic information up.</summary>
@@ -334,6 +340,8 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn when held by a player.</summary>
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
+            if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
+            if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
             if (f.ActiveObject.bigCraftable.Value)
             {
                 spriteBatch.Draw(this.displayTexture, objectPosition, this.animationManager.currentAnimation.sourceRectangle, this.info.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));

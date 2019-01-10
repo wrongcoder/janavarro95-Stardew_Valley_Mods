@@ -42,11 +42,11 @@ namespace Revitalize.Framework.Objects.Furniture
         public override void rotate()
         {
             Revitalize.ModCore.log("Rotate!");
-            foreach(KeyValuePair<Vector2, MultiTiledComponent> pair in this.objects)
+            foreach(KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 (pair.Value as ChairTileComponent).rotate();
             }
-            foreach (KeyValuePair<Vector2, MultiTiledComponent> pair in this.objects)
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 (pair.Value as ChairTileComponent).checkForSpecialUpSittingAnimation();
             }

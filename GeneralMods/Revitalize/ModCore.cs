@@ -277,39 +277,9 @@ namespace Revitalize
         {
 
             Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"]);
-            var obj = customObjects["Omegasis.BigTiledTest"];
-            Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, (obj as MultiTiledObject).guid + ".json"), obj);
 
 
 
-            
-            MultiTiledObject hello=Serializer.Deserialize<MultiTiledObject>(Path.Combine(this.Helper.DirectoryPath, (obj as MultiTiledObject).guid + ".json"));
-            
-            //(hello as MultiTiledObject).info.drawColor = Color.Blue;
-            customObjects["Omegasis.BigTiledTest"].info.drawColor = hello.info.drawColor;
-            if (hello == null) log("WTF");
-            else
-            {
-                log("AHHHH" + hello.name);
-            }
-            hello.info.drawColor = Color.Blue;
-            if (hello.objects == null)
-            {
-                log("NEVER MIND");
-            }
-            foreach(KeyValuePair<Vector2, MultiTiledComponent> pair in hello.objects){
-               pair.Value.containerObject = hello;
-               //log((pair.Value as CustomObject).name);
-            }
-
-            Game1.player.items.Add(hello);
-
-            
-
-            Game1.activeClickableMenu = new StardewValley.Menus.ItemGrabMenu(new List<Item>()
-            {
-                hello
-            });
         }
 
         

@@ -116,26 +116,28 @@ namespace Revitalize.Framework.Objects
 
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
 
- 
-                
+
+            Revitalize.ModCore.log("HELLO WORLD!");    
 
                 //do same container creation logic in multitiled object
 
 
-                MultiTiledComponent self = null;
+                MultiTiledComponent self = Revitalize.ModCore.Serializer.Deserialize<MultiTiledComponent>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["GUID"] + ".json"));
 
-                if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
+            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
                 {
                 //Get new container
-                MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.Deserialize<MultiTiledObject>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["GUID"] + ".json"));
-                    self = (MultiTiledComponent)(obj as MultiTiledObject).objects[offsetKey];
-                    self.containerObject = obj;
-                    Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], (MultiTiledObject)obj);
+                MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.Deserialize<MultiTiledObject>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["ParentGUID"] + ".json"));
+                self.containerObject = obj;
+                obj.addComponent(offsetKey, self);
+                Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
+                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], (MultiTiledObject)obj);
                 }
                 else
                 {
-                    self =(MultiTiledComponent)Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].objects[offsetKey];
                     self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]];
+                Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].addComponent(offsetKey, self);
+                Revitalize.ModCore.log("READD AN OBJECT!!!!");
                 }
 
                 return (ICustomObject)self;
@@ -174,7 +176,9 @@ namespace Revitalize.Framework.Objects
             saveData.Add("GameLocationName", saveLocation);
             saveData.Add("Rotation", ((int)this.info.facingDirection).ToString());
 
-            saveData.Add("GUID", this.containerObject.guid.ToString());
+            saveData.Add("ParentGUID", this.containerObject.guid.ToString());
+            saveData.Add("GUID", this.guid.ToString());
+            Revitalize.ModCore.Serializer.Serialize(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, this.containerObject.childrenGuids[this.offsetKey].ToString() + ".json"),this);
 
             return saveData;
 
@@ -197,7 +201,9 @@ namespace Revitalize.Framework.Objects
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             Revitalize.ModCore.log("DRAW THE THING!!!");
-
+            if (this.info == null) Revitalize.ModCore.log("info is null");
+            if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
+            if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
             if (x <= -1)
             {
                 spriteBatch.Draw(this.info.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.info.drawPosition), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
@@ -241,10 +247,7 @@ namespace Revitalize.Framework.Objects
             }
         }
 
-        public static implicit operator MultiTiledComponent(Chest chest)
-        {
-            return new MultiTiledComponent(new BasicItemInformation(),chest.TileLocation);
-        }
+
 
     }
 }
