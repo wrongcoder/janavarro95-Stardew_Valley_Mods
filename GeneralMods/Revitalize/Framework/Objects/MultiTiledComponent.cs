@@ -111,28 +111,41 @@ namespace Revitalize.Framework.Objects
 
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
 
-            if (offsetKey.X == 0 && offsetKey.Y == 0)
-            {
-                Revitalize.ModCore.log(recreateParentId(additionalSaveData["id"]) + ".Object");
-                CustomObject obj=(CustomObject)(Revitalize.ModCore.customObjects[recreateParentId(additionalSaveData["id"])+".Object"].getOne());
-                obj.Stack =Convert.ToInt32( additionalSaveData["stack"]);
+ 
+                
 
-                string saveLocation = additionalSaveData["GameLocationName"];
+                //do same container creation logic in multitiled object
 
+
+                MultiTiledComponent self = null;
+
+                if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
+                {
+                    //Get new container
+                    CustomObject obj = (CustomObject)(Revitalize.ModCore.customObjects[additionalSaveData["ParentID"]].getOne());
+                    self = (MultiTiledComponent)(obj as MultiTiledObject).objects[offsetKey];
+                    Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], (MultiTiledObject)obj);
+                }
+                else
+                {
+                    self =(MultiTiledComponent)Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].objects[offsetKey];
+                    self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]];
+                }
+
+            self.TileLocation = (replacement as Chest).TileLocation;
 
                 Enums.Direction facingDirection = (Enums.Direction)Convert.ToInt32(additionalSaveData["Rotation"]);
-                while (obj.info.facingDirection != facingDirection)
+                while (self.info.facingDirection != facingDirection)
                 {
-                    obj.rotate();
+                    self.rotate();
                 }
 
-                if (!string.IsNullOrEmpty(saveLocation))
-                {
-                    obj.placementAction(Game1.getLocationFromName(saveLocation), (int)(replacement as Chest).TileLocation.X, (int)(replacement as Chest).TileLocation.Y);
-                    return null;
-                }
+            if (!string.IsNullOrEmpty(additionalSaveData["GameLocationName"]))
+            {
+                self.location = Game1.getLocationFromName(additionalSaveData["GameLocationName"]);
+            }
 
-                return (ICustomObject)obj;
+                return (ICustomObject)self;
                 BasicItemInformation data = Revitalize.ModCore.customObjects[additionalSaveData["id"]].info;
                 return new MultiTiledComponent(data, (replacement as Chest).TileLocation)
                 {
@@ -140,21 +153,18 @@ namespace Revitalize.Framework.Objects
                     offsetKey = this.offsetKey,
                     Stack = Convert.ToInt32(additionalSaveData["stack"])
                 };
-            }
-            else
-            {
-                return null;
-            }
         }
 
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string,string> saveData= base.getAdditionalSaveData();
+            saveData.Add("ParentID", this.containerObject.info.id);
             saveData.Add("offsetKeyX", this.offsetKey.X.ToString());
             saveData.Add("offsetKeyY", this.offsetKey.Y.ToString());
             string saveLocation = "";
             if (this.location == null)
             {
+                Revitalize.ModCore.log("WHY IS LOCTION NULL???");
                 saveLocation = "";
             }
             else
@@ -165,8 +175,13 @@ namespace Revitalize.Framework.Objects
                     saveLocation = this.location.Name;
                 }
             }
+
+            Revitalize.ModCore.log("SAVE LOCATION: " + saveLocation);
+
             saveData.Add("GameLocationName", saveLocation);
             saveData.Add("Rotation", ((int)this.info.facingDirection).ToString());
+
+            saveData.Add("GUID", this.containerObject.guid.ToString());
 
             return saveData;
 

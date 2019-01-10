@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using StardewValley;
 using StardewValley.Objects;
@@ -10,7 +12,10 @@ namespace Revitalize.Framework.Objects
     public class MultiTiledObject : CustomObject
     {
         public Dictionary<Vector2, StardewValley.Object> objects;
+        [JsonIgnore]
         public Dictionary<MultiTiledComponent, Vector2> offSets;
+
+        public Guid guid;
 
         private int width;
         private int height;
@@ -33,6 +38,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
+            this.guid = Guid.NewGuid();
         }
 
         public MultiTiledObject(BasicItemInformation info)
@@ -40,6 +46,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
+            this.guid = Guid.NewGuid();
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation)
@@ -47,6 +54,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.offSets = new Dictionary<MultiTiledComponent, Vector2>();
+            this.guid = Guid.NewGuid();
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation, Dictionary<Vector2, StardewValley.Object> ObjectsList)
@@ -59,6 +67,7 @@ namespace Revitalize.Framework.Objects
                 MultiTiledComponent component = (MultiTiledComponent)v.Value.getOne();
                 this.addComponent(v.Key, component);
             }
+            this.guid = Guid.NewGuid();
 
         }
 
@@ -194,8 +203,29 @@ namespace Revitalize.Framework.Objects
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
-            return new MultiTiledObject(data, (replacement as Chest).TileLocation, this.objects);
+
+            
+
+            MultiTiledObject self=(MultiTiledObject)Revitalize.ModCore.customObjects[additionalSaveData["id"]].getOne();
+
+            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
+            {
+                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], self);
+                return self;
+            }
+            else
+            {
+                return Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]];
+            }
+
+            
+        }
+
+        public override Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string,string> saveData= base.getAdditionalSaveData();
+            saveData.Add("GUID", this.guid.ToString());
+            return saveData;
         }
 
         public void setAllAnimationsToDefault()

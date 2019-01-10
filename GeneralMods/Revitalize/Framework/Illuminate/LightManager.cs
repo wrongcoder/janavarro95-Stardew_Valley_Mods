@@ -38,7 +38,7 @@ namespace Revitalize.Framework.Illuminate
 
             this.lights.TryGetValue(IdKey, out LightSource light);
             Game1.currentLightSources.Remove(light);
-            location.sharedLights.Remove(light);
+            location.sharedLights.Remove((int)IdKey.X * 1000000 + (int)IdKey.Y);
             return true;
         }
 
@@ -61,7 +61,7 @@ namespace Revitalize.Framework.Illuminate
 
             Game1.showRedMessage("TURN ON!");
             Game1.currentLightSources.Add(light);
-            location.sharedLights.Add(light);
+            location.sharedLights.Add((int)IdKey.X*10000+(int)IdKey.Y,light);
             this.repositionLight(light, IdKey, gameObject);
             return true;
         }

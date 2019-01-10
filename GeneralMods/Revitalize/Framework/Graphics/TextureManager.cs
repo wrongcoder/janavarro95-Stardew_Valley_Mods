@@ -33,5 +33,12 @@ namespace Revitalize.Framework.Graphics
             }
             throw new Exception("Error, texture name not found!!!");
         }
+
+        public static void addTexture(string managerName, string textureName, Texture2DExtended Texture)
+        {
+            Texture.texture.Name = managerName + '.' + textureName;
+            TextureManagers[managerName].addTexture(textureName, Texture);
+        }
+
     }
 }

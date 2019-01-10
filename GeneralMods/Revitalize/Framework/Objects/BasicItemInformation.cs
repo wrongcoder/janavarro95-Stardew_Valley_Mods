@@ -5,6 +5,7 @@ using PyTK.CustomElementHandler;
 using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities;
+using StardewValley;
 
 namespace Revitalize.Framework.Objects
 {
@@ -21,6 +22,7 @@ namespace Revitalize.Framework.Objects
         public bool canBeSetIndoors;
         public bool canBeSetOutdoors;
         public bool isLamp;
+
 
         public AnimationManager animationManager;
         public Vector2 drawPosition;
@@ -54,10 +56,12 @@ namespace Revitalize.Framework.Objects
             this.lightManager = new LightManager();
 
             this.facingDirection = Enums.Direction.Down;
+           
         }
 
         public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, Vector2 TileLocation, bool canBeSetOutdoors, bool canBeSetIndoors, string id, string data, Texture2D texture, Color color, int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights) : base(id, data, texture, color, tileIndex, bigCraftable, type, craftingData)
         {
+            
             this.name = name;
             this.description = description;
             this.categoryName = categoryName;
@@ -93,5 +97,7 @@ namespace Revitalize.Framework.Objects
         {
             this.data = $"{this.name}/{this.price}/{this.edibility}/Crafting -9/{this.description}/{this.canBeSetOutdoors}/{this.canBeSetIndoors}/{this.fragility}/{this.isLamp}/{this.name}";
         }
+
+        
     }
 }

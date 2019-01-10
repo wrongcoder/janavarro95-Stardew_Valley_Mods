@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework;
@@ -11,6 +12,7 @@ using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Player;
+using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -18,6 +20,8 @@ using StardewValley.Objects;
 namespace Revitalize
 {
     // TODO:
+    //Make guid object list to keep track of container objects on rebuild. Container objects have guid, on getAdditionalSaveData, store it. On rebuild keep a list, get a reference to container object, clear those objects, and reset them as we are rebuilting multiTiledComponents.
+    //
     //  -Multiple Lights On Object
     //  -Illumination Colors
     //  Furniture:
@@ -96,7 +100,11 @@ namespace Revitalize
 
         public static Dictionary<string, CustomObject> customObjects;
 
+        public static Dictionary<string, MultiTiledObject>ObjectGroups;
+
         public static PlayerInfo playerInfo;
+
+        public static Serializer Serializer;
 
         public override void Entry(IModHelper helper)
         {
@@ -112,48 +120,26 @@ namespace Revitalize
             playerInfo = new PlayerInfo();
 
             Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager());
-            TextureManager.TextureManagers["Furniture"].addTexture("Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "OakChair.png")));
+            TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "OakChair.png")));
 
+            customObjects = new Dictionary<string, CustomObject>();
+            ObjectGroups = new Dictionary<string, MultiTiledObject>();
 
+            loadContent();
+            Serializer = new Serializer();
+            
         }
 
-        private void createDirectories()
+        private void loadContent()
         {
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
-
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath,"Content" ,"Graphics"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture","Chairs"));
-        }
-
-        private void initailizeComponents()
-        {
-            DarkerNight.InitializeConfig();
-        }
-
-        private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
-        {
-            DarkerNight.SetDarkerColor();
-            playerInfo.update();
-        }
-
-        private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
-        {
-            DarkerNight.CalculateDarkerNightColor();
-        }
-
-        private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
-        {
-
-            MultiTiledComponent obj = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 0, 16, 16))), Color.Red, true, null, null));
-            MultiTiledComponent obj2 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest2", "SomeFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 16, 16, 16))), Color.Red, false, null, null));
-            MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
+            MultiTiledComponent obj = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.Red, true, null, null));
+            MultiTiledComponent obj2 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest2", "SomeFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.Red, false, null, null));
+            MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
             obj.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj);
 
-            MultiTiledObject bigObject = new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White, false, null, null));
+            MultiTiledObject bigObject = new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White, false, null, null));
             bigObject.addComponent(new Vector2(0, 0), obj);
             bigObject.addComponent(new Vector2(1, 0), obj2);
             bigObject.addComponent(new Vector2(2, 0), obj3);
@@ -257,15 +243,50 @@ namespace Revitalize
             oakChair.addComponent(new Vector2(0, 0), chairTop);
             oakChair.addComponent(new Vector2(0, 1), chairBottom);
 
-            Game1.player.addItemToInventory(oakChair);
+            customObjects.Add("Omegasis.BigTiledTest", bigObject);
+        }
 
-            new InventoryItem(bigObject, 100, 1).addToNPCShop("Gus");
-            Game1.player.addItemToInventory(bigObject);
+        private void createDirectories()
+        {
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
 
-            if (pie.PlayerCanCraft())
-            {
-                //pie.craft();
-            }
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath,"Content" ,"Graphics"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture","Chairs"));
+        }
+
+        private void initailizeComponents()
+        {
+            DarkerNight.InitializeConfig();
+        }
+
+        private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
+        {
+            DarkerNight.SetDarkerColor();
+            playerInfo.update();
+        }
+
+        private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
+        {
+            DarkerNight.CalculateDarkerNightColor();
+        }
+
+        private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
+        {
+
+            Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"]);
+            var obj = customObjects["Omegasis.BigTiledTest"];
+            Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, (obj as MultiTiledObject).guid + ".json"), obj);
+
+
+
+            
+            var hello=Serializer.Deserialize<MultiTiledObject>(Path.Combine(this.Helper.DirectoryPath, (obj as MultiTiledObject).guid + ".json"));
+            //(hello as MultiTiledObject).info.drawColor = Color.Blue;
+            customObjects["Omegasis.BigTiledTest"].info.drawColor = hello.info.drawColor;
+            Game1.player.addItemToInventory(hello);
+            
 
         }
 

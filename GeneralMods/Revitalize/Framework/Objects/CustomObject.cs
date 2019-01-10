@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Graphics.Animations;
 using StardewValley;
@@ -19,14 +20,20 @@ namespace Revitalize.Framework.Objects
     public class CustomObject : PySObject
     {
         public string id;
+
+
         public BasicItemInformation info;
         public GameLocation location;
 
+      
         /// <summary>The animation manager.</summary>
         public AnimationManager animationManager => this.info.animationManager;
 
         /// <summary>The display texture for this object.</summary>
+        [JsonIgnore]
         public Texture2D displayTexture => this.animationManager.getTexture();
+
+
 
         /// <summary>Empty constructor.</summary>
         public CustomObject() { }
