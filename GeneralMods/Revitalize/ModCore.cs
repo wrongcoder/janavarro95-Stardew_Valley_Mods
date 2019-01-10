@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using PyTK.Extensions;
 using PyTK.Types;
+using Revitalize.Framework;
 using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Environment;
 using Revitalize.Framework.Graphics;
@@ -144,6 +145,7 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
+
             MultiTiledComponent obj = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 0, 16, 16))), Color.Red, true, null, null));
             MultiTiledComponent obj2 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest2", "SomeFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 16, 16, 16))), Color.Red, false, null, null));
             MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Game1.objectSpriteSheet, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(new Texture2DExtended(Game1.objectSpriteSheet), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
@@ -159,7 +161,7 @@ namespace Revitalize
             Recipe pie = new Recipe(new Dictionary<Item, int>()
             {
                 [bigObject] = 1
-            }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1),new StatCost(100,50,0,0));
+            }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1), new StatCost(100, 50, 0, 0));
 
 
 
@@ -204,7 +206,7 @@ namespace Revitalize
                         new Animation(new Rectangle(48,0,16,16))
                     }
                 }
-            }, "Default_" + (int)Framework.Enums.Direction.Down), Color.White, true, new Framework.Utilities.InventoryManager(), new LightManager()),new Framework.Objects.InformationFiles.Furniture.ChairInformation(false));
+            }, "Default_" + (int)Framework.Enums.Direction.Down), Color.White, true, new Framework.Utilities.InventoryManager(), new LightManager()), new Framework.Objects.InformationFiles.Furniture.ChairInformation(false));
 
 
             Framework.Objects.Furniture.ChairTileComponent chairBottom = new Framework.Objects.Furniture.ChairTileComponent(new BasicItemInformation("Oak Chair", "A basic wooden chair", "Chairs", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.Revitalize.Furniture.Basic.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Framework.Graphics.TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, false, typeof(Framework.Objects.Furniture.ChairTileComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16)), new Dictionary<string, List<Animation>>() {
@@ -248,10 +250,10 @@ namespace Revitalize
                         new Animation(new Rectangle(48,16,16,16))
                     }
                 }
-            }, "Default_"+(int)Framework.Enums.Direction.Down), Color.White, false, new Framework.Utilities.InventoryManager(), new LightManager()), new Framework.Objects.InformationFiles.Furniture.ChairInformation(true));
+            }, "Default_" + (int)Framework.Enums.Direction.Down), Color.White, false, new Framework.Utilities.InventoryManager(), new LightManager()), new Framework.Objects.InformationFiles.Furniture.ChairInformation(true));
 
 
-            Framework.Objects.Furniture.ChairMultiTiledObject oakChair = new Framework.Objects.Furniture.ChairMultiTiledObject(new BasicItemInformation("Oak Chair","A wood chair you can place anywhere.","Chair",Color.White,-300,0,true,100,Vector2.Zero,true,true,"Omegasis.Revitalize.Furniture.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048",TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture,Color.White,0,true,typeof(Revitalize.Framework.Objects.Furniture.ChairMultiTiledObject),null,new AnimationManager(),Color.White,false,new Framework.Utilities.InventoryManager(), new LightManager()));
+            Framework.Objects.Furniture.ChairMultiTiledObject oakChair = new Framework.Objects.Furniture.ChairMultiTiledObject(new BasicItemInformation("Oak Chair", "A wood chair you can place anywhere.", "Chair", Color.White, -300, 0, true, 100, Vector2.Zero, true, true, "Omegasis.Revitalize.Furniture.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(Revitalize.Framework.Objects.Furniture.ChairMultiTiledObject), null, new AnimationManager(), Color.White, false, new Framework.Utilities.InventoryManager(), new LightManager()));
             oakChair.addComponent(new Vector2(0, 0), chairTop);
             oakChair.addComponent(new Vector2(0, 1), chairBottom);
 
@@ -264,11 +266,19 @@ namespace Revitalize
             {
                 //pie.craft();
             }
+
         }
+
+        
 
         public static void log(object message)
         {
             ModMonitor.Log(message.ToString());
+        }
+
+        public static string generatePlaceholderString()
+        {
+            return "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048";
         }
     }
 }

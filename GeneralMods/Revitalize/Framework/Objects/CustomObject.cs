@@ -75,6 +75,7 @@ namespace Revitalize.Framework.Objects
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
         {
+            //Revitalize.ModCore.log(System.Environment.StackTrace);
             return this.info.ignoreBoundingBox
                 ? new Rectangle(int.MinValue, int.MinValue, 0, 0)
                 : base.getBoundingBox(tileLocation);

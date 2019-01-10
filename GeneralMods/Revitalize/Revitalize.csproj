@@ -61,6 +61,7 @@
     <Compile Include="Framework\Objects\CustomObject.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairTileComponent.cs" />
+    <Compile Include="Framework\Objects\Furniture\CustomFurniture.cs" />
     <Compile Include="Framework\Objects\Furniture\FurnitureTileComponent.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Framework\Player\Managers\MagicManager.cs" />
     <Compile Include="Framework\Player\Managers\SittingInfo.cs" />
     <Compile Include="Framework\Player\PlayerInfo.cs" />
+    <Compile Include="Framework\Utilities\BoundingBoxInfo.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
