@@ -201,6 +201,7 @@ namespace Revitalize.Framework.Objects
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             Revitalize.ModCore.log("DRAW THE THING!!!");
+            Revitalize.ModCore.log(this.Name);
             if (this.info == null) Revitalize.ModCore.log("info is null");
             if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");

@@ -275,9 +275,10 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
+            
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
             {
-                throw new Exception("Can't run in multiplayer!");
+                //throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
             Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"]);
 

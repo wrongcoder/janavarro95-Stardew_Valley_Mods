@@ -30,6 +30,7 @@ namespace Revitalize.Framework.Utilities
 
             this.addConverter(new Framework.Utilities.Serialization.Converters.RectangleConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.Texture2DConverter());
+            this.addConverter(new Framework.Utilities.Serialization.Converters.ItemCoverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
         }
