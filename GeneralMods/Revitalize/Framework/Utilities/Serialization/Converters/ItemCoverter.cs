@@ -11,12 +11,9 @@ using StardewValley;
 
 namespace Revitalize.Framework.Utilities.Serialization.Converters
 {
-    /// <summary>
-    /// TODO:
-    /// Add support for all vanilla SDV objects in deserialization.
-    /// </summary>
     public class ItemCoverter:Newtonsoft.Json.JsonConverter
     {
+        public static Dictionary<string, Type> AllTypes = new Dictionary<string, Type>();
 
         JsonSerializerSettings settings;
         public ItemCoverter()
@@ -77,6 +74,12 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
             string t = jo["Type"].Value<string>();
 
+            //See if the type has already been cached and if so return it for deserialization.
+            if (AllTypes.ContainsKey(t))
+            {
+
+                return JsonConvert.DeserializeObject(jo["Item"].ToString(), AllTypes[t], this.settings);
+            }
 
             Assembly asm = typeof(StardewValley.Object).Assembly;
             Type type = null;
@@ -88,6 +91,25 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 asm = typeof(Revitalize.ModCore).Assembly;
                 type = asm.GetType(t);
             }
+
+            if (type == null)
+            {
+                foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    asm = assembly;
+                    type = asm.GetType(t);
+                    if (t != null) break;
+                }
+            }
+
+            if (type == null)
+            {
+                throw new Exception("Unsupported type found when Deserializing Unsure what to do so we can;t deserialize this thing!: " + t);
+            }
+
+            //Cache the newly found type.
+            AllTypes.Add(t, type);
+
             return JsonConvert.DeserializeObject(jo["Item"].ToString(),type, this.settings);
             /*
             if (t== typeof(StardewValley.Tools.Axe).FullName.ToString())

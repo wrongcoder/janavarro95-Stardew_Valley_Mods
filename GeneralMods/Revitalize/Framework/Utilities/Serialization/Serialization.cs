@@ -11,6 +11,8 @@ namespace Revitalize.Framework.Utilities
 {
     /// <summary>
     /// Handles serialization of all objects in existence.
+    ///
+    /// TODO: Make JConvert that has same settings to implement a toJSon string obj
     /// </summary>
     public class Serializer
     {
