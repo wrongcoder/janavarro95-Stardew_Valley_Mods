@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -10,6 +11,10 @@ using StardewValley;
 
 namespace Revitalize.Framework.Utilities.Serialization.Converters
 {
+    /// <summary>
+    /// TODO:
+    /// Add support for all vanilla SDV objects in deserialization.
+    /// </summary>
     public class ItemCoverter:Newtonsoft.Json.JsonConverter
     {
 
@@ -72,7 +77,20 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
             string t = jo["Type"].Value<string>();
 
-            if(t== typeof(StardewValley.Tools.Axe).FullName.ToString())
+
+            Assembly asm = typeof(StardewValley.Object).Assembly;
+            Type type = null;
+            
+            type = asm.GetType(t);
+
+            if (type == null)
+            {
+                asm = typeof(Revitalize.ModCore).Assembly;
+                type = asm.GetType(t);
+            }
+            return JsonConvert.DeserializeObject(jo["Item"].ToString(),type, this.settings);
+            /*
+            if (t== typeof(StardewValley.Tools.Axe).FullName.ToString())
             {
                 Revitalize.ModCore.log("DESERIALIZE AXE!!!");
                 //return jo["Item"].Value<StardewValley.Tools.Axe>();
@@ -80,7 +98,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             }
             else if (t == typeof(Revitalize.Framework.Objects.MultiTiledObject).FullName.ToString())
             {
-
+                
                 Revitalize.ModCore.log("DESERIALIZE Multi Tile Object!!!");
                 return JsonConvert.DeserializeObject<Revitalize.Framework.Objects.MultiTiledObject>(jo["Item"].ToString(), this.settings);
                 // return jo["Item"].Value<Revitalize.Framework.Objects.MultiTiledObject>();
@@ -100,6 +118,8 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                
                 throw new NotImplementedException("CANT DESERIALIZE: " + t.ToString());
             }
+            */
+
 
         }
 

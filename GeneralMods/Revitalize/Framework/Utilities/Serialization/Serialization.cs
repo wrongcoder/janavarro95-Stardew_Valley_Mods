@@ -66,6 +66,21 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        public object Deserialize(string p,Type T)
+        {
+            string json = "";
+            foreach (string line in File.ReadLines(p))
+            {
+                json += line;
+            }
+            using (StreamReader sw = new StreamReader(p))
+            using (JsonReader reader = new JsonTextReader(sw))
+            {
+                object obj = this.serializer.Deserialize(reader,T);
+                return obj;
+            }
+        }
+
         /// <summary>
         /// Serializes an object to a .json file.
         /// </summary>

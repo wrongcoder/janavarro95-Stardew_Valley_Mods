@@ -282,6 +282,10 @@ namespace Revitalize
             }
             Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"]);
 
+            StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
+            Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);
+            axe =(StardewValley.Tools.Axe)Serializer.Deserialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"),typeof(StardewValley.Tools.Axe));
+            Game1.player.addItemToInventory(axe);
 
 
         }
