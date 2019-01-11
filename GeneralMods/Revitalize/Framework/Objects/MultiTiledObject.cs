@@ -212,9 +212,8 @@ namespace Revitalize.Framework.Objects
             
 
 
-            MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.Deserialize<MultiTiledObject>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["GUID"] + ".json"));
-
-            Revitalize.ModCore.log("OK I SUPPOSE");
+            MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["GUID"]);
+            
 
             Dictionary<Vector2, Guid> guids = new Dictionary<Vector2, Guid>();
 
@@ -226,8 +225,8 @@ namespace Revitalize.Framework.Objects
             foreach(KeyValuePair<Vector2,Guid> pair  in guids)
             {
                     obj.childrenGuids.Remove(pair.Key);
-                    Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
-                    MultiTiledComponent component= (MultiTiledComponent)Revitalize.ModCore.Serializer.Deserialize<MultiTiledComponent>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, pair.Value + ".json"));
+                    //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
+                    MultiTiledComponent component= Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>(pair.Value.ToString());
                 component.InitNetFields();
 
                 obj.addComponent(pair.Key, component);
@@ -254,7 +253,7 @@ namespace Revitalize.Framework.Objects
             Dictionary<string,string> saveData= base.getAdditionalSaveData();
             saveData.Add("GUID", this.guid.ToString());
 
-            Revitalize.ModCore.Serializer.Serialize(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, this.guid.ToString() + ".json"), this);
+            Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
             return saveData;
         }
 

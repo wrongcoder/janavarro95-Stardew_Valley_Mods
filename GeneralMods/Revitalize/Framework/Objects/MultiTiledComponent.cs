@@ -122,12 +122,12 @@ namespace Revitalize.Framework.Objects
                 //do same container creation logic in multitiled object
 
 
-                MultiTiledComponent self = Revitalize.ModCore.Serializer.Deserialize<MultiTiledComponent>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["GUID"] + ".json"));
+                MultiTiledComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>( additionalSaveData["GUID"]);
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
                 {
                 //Get new container
-                MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.Deserialize<MultiTiledObject>(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, additionalSaveData["ParentGUID"] + ".json"));
+                MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["ParentGUID"]);
                 self.containerObject = obj;
                 obj.addComponent(offsetKey, self);
                 Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
@@ -178,7 +178,7 @@ namespace Revitalize.Framework.Objects
 
             saveData.Add("ParentGUID", this.containerObject.guid.ToString());
             saveData.Add("GUID", this.guid.ToString());
-            Revitalize.ModCore.Serializer.Serialize(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, this.containerObject.childrenGuids[this.offsetKey].ToString() + ".json"),this);
+            Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(),this);
 
             return saveData;
 

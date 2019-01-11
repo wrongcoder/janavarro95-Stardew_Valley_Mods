@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
+using StardewValley;
 
 namespace Revitalize.Framework.Utilities
 {
@@ -95,6 +96,25 @@ namespace Revitalize.Framework.Utilities
             {
                 this.serializer.Serialize(writer, o);
             }
+        }
+
+        public void SerializeGUID(string fileName,object obj)
+        {
+            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            Serialize(path, obj);
+        }
+
+        public object DeserializeGUID(string fileName,Type T)
+        {
+            string path=Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            return Deserialize(path, T);
+        }
+
+        public T DeserializeGUID<T>(string fileName)
+        {
+            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            return Deserialize<T>(path);
         }
     }
 }
