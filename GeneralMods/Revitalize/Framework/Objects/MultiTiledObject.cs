@@ -174,7 +174,6 @@ namespace Revitalize.Framework.Objects
         }
         public override bool clicked(Farmer who)
         {
-            ModCore.log("WTF IS HAPPENING???");
             bool cleanUp = this.clicked(who);
             if (cleanUp)
                 this.pickUp();
@@ -213,7 +212,10 @@ namespace Revitalize.Framework.Objects
 
 
             MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["GUID"]);
-            if (obj == null) return null;
+            if (obj == null)
+            {
+                return null;
+            }
 
             Dictionary<Vector2, Guid> guids = new Dictionary<Vector2, Guid>();
 

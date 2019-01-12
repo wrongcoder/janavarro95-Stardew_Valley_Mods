@@ -20,9 +20,6 @@ using StardewValley.Objects;
 namespace Revitalize
 {
     // TODO:
-    // Find a way to delete unnecessary files in SaveData/Player/SaveObjectInformation
-    //
-    //
     //
     //  -Multiple Lights On Object
     //  -Illumination Colors
@@ -119,6 +116,7 @@ namespace Revitalize
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
             ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
+            ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             playerInfo = new PlayerInfo();
 
             Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager());
@@ -130,6 +128,11 @@ namespace Revitalize
             loadContent();
             Serializer = new Serializer();
             
+        }
+
+        private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
+        {
+            Serializer.returnToTitle();
         }
 
         private void loadContent()

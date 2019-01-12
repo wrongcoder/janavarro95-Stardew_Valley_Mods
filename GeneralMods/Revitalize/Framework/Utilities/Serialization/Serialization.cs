@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Revitalize.Framework.Utilities
 {
@@ -24,7 +25,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         private Dictionary<string, List<string>> filesToDelete = new Dictionary<string, List<string>>();
 
-
+        public List<Item> itemsToRemove = new List<Item>();
 
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         private void gatherAllFilesForCleanup()
         {
-
+            this.filesToDelete.Clear();
             string[] directories = Directory.GetDirectories(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"));
             foreach (string playerData in directories)
             {
@@ -85,6 +86,30 @@ namespace Revitalize.Framework.Utilities
         public void afterLoad()
         {
             deleteAllUnusedFiles();
+            removeNullObjects();
+        }
+
+        public void returnToTitle()
+        {
+            gatherAllFilesForCleanup();
+        }
+
+        private void removeNullObjects()
+        {
+            List<Item> removalList = new List<Item>();
+            foreach(Item I in Game1.player.items)
+            {
+                if (I == null) continue;
+                if (I.DisplayName.Contains("Revitalize.Framework") && (I is Chest))
+                {
+                    removalList.Add(I);
+                }
+                
+            }
+            foreach(Item I in removalList)
+            {
+                Game1.player.items.Remove(I);
+            }
         }
 
         /// <summary>

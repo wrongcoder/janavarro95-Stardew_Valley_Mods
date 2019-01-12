@@ -25,6 +25,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
         {
             string textureName = reader.Value as string;
             //ModCore.log(textureName);
+            if (string.IsNullOrEmpty(textureName)) return new Texture2D(Game1.graphics.GraphicsDevice, 2, 2);
             string[] names = textureName.Split('.');
             if (names.Length == 0) return null;
 

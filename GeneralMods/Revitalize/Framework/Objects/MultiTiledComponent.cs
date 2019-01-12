@@ -77,7 +77,6 @@ namespace Revitalize.Framework.Objects
         /// <summary>Places an object down.</summary>
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
-            ModCore.ModMonitor.Log("SCREAMING!!!!");
             this.updateDrawPosition(x, y);
             this.location = location;
 
@@ -115,38 +114,29 @@ namespace Revitalize.Framework.Objects
             //instead of using this.offsetkey.x use get additional save data function and store offset key there
 
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
-
-
-                //do same container creation logic in multitiled object
-
-
-                MultiTiledComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>( additionalSaveData["GUID"]);
-            if (self == null) return null;
+            MultiTiledComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>( additionalSaveData["GUID"]);
+            if (self == null)
+            {
+                return null;
+            }
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
-                {
+            {
                 //Get new container
                 MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["ParentGUID"]);
                 self.containerObject = obj;
                 obj.addComponent(offsetKey, self);
                 //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
                 Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], (MultiTiledObject)obj);
-                }
-                else
-                {
-                    self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
+            }
+            else
+            {
+                self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
                 Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].addComponent(offsetKey, self);
                 //Revitalize.ModCore.log("READD AN OBJECT!!!!");
-                }
+            }
 
-                return (ICustomObject)self;
-                BasicItemInformation data = Revitalize.ModCore.customObjects[additionalSaveData["id"]].info;
-                return new MultiTiledComponent(data, (replacement as Chest).TileLocation)
-                {
-                    containerObject = this.containerObject,
-                    offsetKey = this.offsetKey,
-                    Stack = Convert.ToInt32(additionalSaveData["stack"])
-                };
+            return (ICustomObject)self;
         }
 
         public override Dictionary<string, string> getAdditionalSaveData()
@@ -158,7 +148,7 @@ namespace Revitalize.Framework.Objects
             string saveLocation = "";
             if (this.location == null)
             {
-                Revitalize.ModCore.log("WHY IS LOCTION NULL???");
+                //Revitalize.ModCore.log("WHY IS LOCTION NULL???");
                 saveLocation = "";
             }
             else
@@ -170,7 +160,6 @@ namespace Revitalize.Framework.Objects
                 }
             }
 
-            Revitalize.ModCore.log("SAVE LOCATION: " + saveLocation);
 
             saveData.Add("GameLocationName", saveLocation);
             saveData.Add("Rotation", ((int)this.info.facingDirection).ToString());
@@ -199,8 +188,6 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            Revitalize.ModCore.log("DRAW THE THING!!!");
-            Revitalize.ModCore.log(this.Name);
             if (this.info == null) Revitalize.ModCore.log("info is null");
             if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
