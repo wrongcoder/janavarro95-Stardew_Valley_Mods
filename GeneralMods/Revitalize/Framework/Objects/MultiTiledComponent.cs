@@ -42,7 +42,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool clicked(Farmer who)
         {
-            ModCore.log("Clicked a multiTiledComponent!");
+            //ModCore.log("Clicked a multiTiledComponent!");
             this.containerObject.pickUp();
             return true;
             //return base.clicked(who);
@@ -117,12 +117,11 @@ namespace Revitalize.Framework.Objects
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
 
 
-            Revitalize.ModCore.log("HELLO WORLD!");    
-
                 //do same container creation logic in multitiled object
 
 
                 MultiTiledComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>( additionalSaveData["GUID"]);
+            if (self == null) return null;
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
                 {
@@ -130,14 +129,14 @@ namespace Revitalize.Framework.Objects
                 MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["ParentGUID"]);
                 self.containerObject = obj;
                 obj.addComponent(offsetKey, self);
-                Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
-                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], (MultiTiledObject)obj);
+                //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
+                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], (MultiTiledObject)obj);
                 }
                 else
                 {
-                    self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]];
+                    self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
                 Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].addComponent(offsetKey, self);
-                Revitalize.ModCore.log("READD AN OBJECT!!!!");
+                //Revitalize.ModCore.log("READD AN OBJECT!!!!");
                 }
 
                 return (ICustomObject)self;

@@ -20,6 +20,14 @@ namespace Revitalize.Framework.Utilities
         private JsonSerializer serializer;
 
         /// <summary>
+        /// All files to be cleaned up after loading.
+        /// </summary>
+        private Dictionary<string, List<string>> filesToDelete = new Dictionary<string, List<string>>();
+
+
+
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public Serializer()
@@ -36,12 +44,86 @@ namespace Revitalize.Framework.Utilities
             this.addConverter(new Framework.Utilities.Serialization.Converters.ItemCoverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
+
+            gatherAllFilesForCleanup();
+
+        }
+
+        /// <summary>
+        /// Process all the save data for objects to be deleted by this mod.
+        /// </summary>
+        private void gatherAllFilesForCleanup()
+        {
+
+            string[] directories = Directory.GetDirectories(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"));
+            foreach (string playerData in directories)
+            {
+                string objectPath = Path.Combine(playerData, "SavedObjectInformation");
+                string[] objectFiles = Directory.GetFiles(objectPath);
+                foreach (string file in objectFiles)
+                {
+                    string playerName = new DirectoryInfo(objectPath).Parent.Name;
+                    if (this.filesToDelete.ContainsKey(playerName)){
+                        this.filesToDelete[playerName].Add(file);
+                        //Revitalize.ModCore.log("Added File: " + file);
+                    }
+                    else
+                    {
+                        this.filesToDelete.Add(playerName, new List<string>());
+                        //Revitalize.ModCore.log("Added Player Key: " + playerName);
+                        this.filesToDelete[playerName].Add(file);
+                        //Revitalize.ModCore.log("Added File: " + file);
+                    }
+                    
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called after load to deal with internal file cleanUp
+        /// </summary>
+        public void afterLoad()
+        {
+            deleteAllUnusedFiles();
+        }
+
+        /// <summary>
+        /// Removes the file from all files that will be deleted.
+        /// </summary>
+        /// <param name="playerDirectory"></param>
+        /// <param name="fileName"></param>
+        private void removeFileFromDeletion(string playerDirectory, string fileName)
+        {
+            if (this.filesToDelete.ContainsKey(playerDirectory))
+            {
+                //Revitalize.ModCore.log("Removing from deletion: " + fileName);
+                this.filesToDelete[playerDirectory].Remove(fileName);
+            }
+            else
+            {
+                //Revitalize.ModCore.log("Found key: " + playerDirectory);
+                //Revitalize.ModCore.log("Found file: " + fileName);
+            }
+        }
+
+        /// <summary>
+        /// Deletes unused object data.
+        /// </summary>
+        private void deleteAllUnusedFiles()
+        {
+            foreach(KeyValuePair<string,List<string>> pair in this.filesToDelete)
+            {
+                foreach (string file in pair.Value)
+                {
+                    File.Delete(file);
+                }
+            }
         }
 
         /// <summary>
         /// Adds a new converter to the json serializer.
         /// </summary>
-        /// <param name="converter"></param>
+        /// <param name="converter">The type of json converter to add to the Serializer.</param>
         public void addConverter(JsonConverter converter)
         {
             this.serializer.Converters.Add(converter);
@@ -51,9 +133,9 @@ namespace Revitalize.Framework.Utilities
         /// <summary>
         /// Deserializes an object from a .json file.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="p"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">The type of object to deserialize into.</typeparam>
+        /// <param name="p">The path to the file.</param>
+        /// <returns>An object of specified type T.</returns>
         public T Deserialize<T>(string p)
         {
             string json = "";
@@ -69,6 +151,12 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Deserializes an object from a .json file.
+        /// </summary>
+        /// <typeparam name="T">The type of object to deserialize into.</typeparam>
+        /// <param name="p">The path to the file.</param>
+        /// <returns>An object of specified type T.</returns>
         public object Deserialize(string p,Type T)
         {
             string json = "";
@@ -98,6 +186,11 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Serialize a data structure into an file.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="obj"></param>
         public void SerializeGUID(string fileName,object obj)
         {
             string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
@@ -105,16 +198,41 @@ namespace Revitalize.Framework.Utilities
             Serialize(path, obj);
         }
 
+        /// <summary>
+        /// Deserialze a file into it's proper data structure.
+        /// </summary>
+        /// <typeparam name="T">The type of data structure to deserialze to.</typeparam>
+        /// <param name="fileName">The name of the file to deserialize from.</param>
+        /// <returns>A data structure object deserialize from a json string in a file.</returns>
         public object DeserializeGUID(string fileName,Type T)
         {
             string path=Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            removeFileFromDeletion((Game1.player.name + "_" + Game1.player.uniqueMultiplayerID), path);
             return Deserialize(path, T);
         }
 
+        /// <summary>
+        /// Deserialze a file into it's proper data structure.
+        /// </summary>
+        /// <typeparam name="T">The type of data structure to deserialze to.</typeparam>
+        /// <param name="fileName">The name of the file to deserialize from.</param>
+        /// <returns>A data structure object deserialize from a json string in a file.</returns>
         public T DeserializeGUID<T>(string fileName)
         {
             string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
-            return Deserialize<T>(path);
+            removeFileFromDeletion((Game1.player.name + "_" + Game1.player.uniqueMultiplayerID),path);
+            if (File.Exists(path))
+            {
+
+                return Deserialize<T>(path);
+            }
+            else
+            {
+                return default(T);
+            }
         }
+
+
+
     }
 }

@@ -213,7 +213,7 @@ namespace Revitalize.Framework.Objects
 
 
             MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["GUID"]);
-            
+            if (obj == null) return null;
 
             Dictionary<Vector2, Guid> guids = new Dictionary<Vector2, Guid>();
 

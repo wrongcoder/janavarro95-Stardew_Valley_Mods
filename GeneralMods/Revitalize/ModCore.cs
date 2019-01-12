@@ -20,8 +20,9 @@ using StardewValley.Objects;
 namespace Revitalize
 {
     // TODO:
-    //Need to find a way to recreate objects again.
-    //Make guid object list to keep track of container objects on rebuild. Container objects have guid, on getAdditionalSaveData, store it. On rebuild keep a list, get a reference to container object, clear those objects, and reset them as we are rebuilting multiTiledComponents.
+    // Find a way to delete unnecessary files in SaveData/Player/SaveObjectInformation
+    //
+    //
     //
     //  -Multiple Lights On Object
     //  -Illumination Colors
@@ -275,18 +276,20 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
+            Serializer.afterLoad();
             
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
             {
-                //throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
+                throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
             Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"]);
 
+            /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
             Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);
             axe =(StardewValley.Tools.Axe)Serializer.Deserialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"),typeof(StardewValley.Tools.Axe));
-            Game1.player.addItemToInventory(axe);
-
+            //Game1.player.addItemToInventory(axe);
+            */
 
         }
 

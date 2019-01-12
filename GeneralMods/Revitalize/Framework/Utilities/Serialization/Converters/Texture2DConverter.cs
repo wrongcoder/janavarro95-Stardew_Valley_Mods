@@ -24,7 +24,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             string textureName = reader.Value as string;
-            ModCore.log(textureName);
+            //ModCore.log(textureName);
             string[] names = textureName.Split('.');
             if (names.Length == 0) return null;
 
