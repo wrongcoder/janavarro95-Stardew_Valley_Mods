@@ -253,6 +253,9 @@ namespace Revitalize.Framework.Objects
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string,string> saveData= base.getAdditionalSaveData();
+
+            Revitalize.ModCore.log("Serialize: " + this.guid.ToString());
+
             saveData.Add("GUID", this.guid.ToString());
 
             Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);

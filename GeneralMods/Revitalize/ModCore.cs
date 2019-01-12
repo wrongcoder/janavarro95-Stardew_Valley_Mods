@@ -285,7 +285,7 @@ namespace Revitalize
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
-            Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"]);
+            Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
 
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();

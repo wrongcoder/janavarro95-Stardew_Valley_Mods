@@ -34,16 +34,8 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            
-
             string convertedString = JsonConvert.SerializeObject((Item)value, this.settings);
-            Revitalize.ModCore.log("SERIALIZE AN ITEM!: " + convertedString);
-
-            
-
             DefaultContractResolver resolver = serializer.ContractResolver as DefaultContractResolver;
-
-
             writer.WriteStartObject();
             writer.WritePropertyName("Type");
             serializer.Serialize(writer, value.GetType().FullName.ToString());
