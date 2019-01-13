@@ -218,6 +218,10 @@ namespace Revitalize.Framework.Objects
                         addedDepth += (this.containerObject.Height - 1) - ((int)(this.offsetKey.Y));
                         if (this.info.ignoreBoundingBox) addedDepth+=1.5f;
                     }
+                    else if (this.info.ignoreBoundingBox)
+                    {
+                        addedDepth += 1.0f;
+                    }
                     this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((this.TileLocation.Y + addedDepth) * Game1.tileSize) / 10000f));
                     try
                     {

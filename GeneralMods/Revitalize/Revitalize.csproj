@@ -62,6 +62,7 @@
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
+    <Compile Include="Framework\Objects\Furniture\Bench.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\CustomFurniture.cs" />

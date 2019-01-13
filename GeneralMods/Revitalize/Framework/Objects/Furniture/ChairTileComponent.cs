@@ -71,6 +71,10 @@ namespace Revitalize.Framework.Objects.Furniture
             if (this.CanSitHere)
             {
                 Revitalize.ModCore.playerInfo.sittingInfo.sit(this.containerObject, this.TileLocation*Game1.tileSize);
+                if(this.containerObject is Bench)
+                {
+                    (this.containerObject as Bench).playersSittingHere.Add(Game1.player.uniqueMultiplayerID);
+                }
                 foreach(KeyValuePair<Vector2, StardewValley.Object> pair in this.containerObject.objects)
                 {
                     (pair.Value as ChairTileComponent).checkForSpecialUpSittingAnimation();

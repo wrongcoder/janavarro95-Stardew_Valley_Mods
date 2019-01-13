@@ -27,6 +27,7 @@ namespace Revitalize.Framework.Utilities
 
         public List<Item> itemsToRemove = new List<Item>();
 
+        private JsonSerializerSettings settings;
 
         /// <summary>
         /// Constructor.
@@ -48,6 +49,15 @@ namespace Revitalize.Framework.Utilities
 
             gatherAllFilesForCleanup();
 
+            this.settings = new JsonSerializerSettings();
+            foreach(JsonConverter converter in this.serializer.Converters)
+            {
+                this.settings.Converters.Add(converter);
+            }
+            this.settings.Formatting = Formatting.Indented;
+            this.settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            this.settings.NullValueHandling = NullValueHandling.Include;
+            this.settings.ContractResolver = new NetFieldContract();
         }
 
         /// <summary>
@@ -257,7 +267,37 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Converts objects to json form.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public string ToJSONString(object o)
+        {
+            return JsonConvert.SerializeObject(o, this.settings);
+        }
 
+        /// <summary>
+        /// Converts from json form to objects.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public T DeserializeFromJSONString<T>(string info)
+        {
+            return JsonConvert.DeserializeObject<T>(info,this.settings);
+        }
+
+        /// <summary>
+        /// Converts from json form to objects.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="T"></param>
+        /// <returns></returns>
+        public object DeserializeFromJSONString(string info, Type T)
+        {
+            return JsonConvert.DeserializeObject(info, T, this.settings);
+        }
 
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Revitalize.Framework.Objects
 {
@@ -88,6 +89,8 @@ namespace Revitalize.Framework.Objects
 
         public bool removeComponent(Vector2 key)
         {
+             
+
             if (!this.objects.ContainsKey(key))
                 return false;
 
@@ -123,7 +126,33 @@ namespace Revitalize.Framework.Objects
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
-        //IMPLEMENT THESE!
+        
+        public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
+        {
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            {
+                if (!this.isPlaceable())
+                    return;
+                int x = Game1.getOldMouseX() + Game1.viewport.X+ (int)((pair.Value as MultiTiledComponent).offsetKey.X*Game1.tileSize);
+                int y = Game1.getOldMouseY() + Game1.viewport.Y+ (int)((pair.Value as MultiTiledComponent).offsetKey.Y * Game1.tileSize);
+                if ((double)Game1.mouseCursorTransparency == 0.0)
+                {
+                    x = ((int)Game1.player.GetGrabTile().X+ (int)((pair.Value as MultiTiledComponent).offsetKey.X))  * 64;
+                    y = ((int)Game1.player.GetGrabTile().Y + (int)((pair.Value as MultiTiledComponent).offsetKey.Y)) * 64;
+                }
+                if (Game1.player.GetGrabTile().Equals(Game1.player.getTileLocation()) && (double)Game1.mouseCursorTransparency == 0.0)
+                {
+                    Vector2 translatedVector2 = Utility.getTranslatedVector2(Game1.player.GetGrabTile(), Game1.player.FacingDirection, 1f);
+                    translatedVector2 += (pair.Value as MultiTiledComponent).offsetKey;
+                    x = (int)translatedVector2.X * 64;
+                    y = (int)translatedVector2.Y * 64;
+                }
+                bool flag = Utility.playerCanPlaceItemHere(location, (Item)pair.Value, x, y, Game1.player);
+                spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)(x / 64 * 64 - Game1.viewport.X), (float)(y / 64 * 64 - Game1.viewport.Y)), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(flag ? 194 : 210, 388, 16, 16)), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.01f);
+                this.draw(spriteBatch, x / 64, y / 64, 0.5f);
+            }
+        }
+        
 
 
         public virtual void pickUp()
@@ -270,6 +299,7 @@ namespace Revitalize.Framework.Objects
                 }
             }
         }
+
         public override bool canStackWith(Item other)
         {
             return false;

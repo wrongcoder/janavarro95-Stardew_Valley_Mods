@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Objects;
+using Revitalize.Framework.Objects.Furniture;
 using StardewValley;
 
 namespace Revitalize.Framework.Player.Managers
@@ -50,12 +51,22 @@ namespace Revitalize.Framework.Player.Managers
             {
                 this.isSitting = false;
                 this.elapsedTime = 0;
-                if(this.sittingObject is MultiTiledObject)
+                if(this.sittingObject is MultiTiledObject && (this.sittingObject.GetType()!=typeof(Bench)))
                 {
                     (this.sittingObject as MultiTiledObject).setAllAnimationsToDefault();
+                    this.sittingObject = null;
                 }
-
+                else if(this.sittingObject is Bench)
+                {
+                    (this.sittingObject as Bench).playersSittingHere.Remove(Game1.player.uniqueMultiplayerID);
+                    if((this.sittingObject as Bench).playersSittingHere.Count == 0)
+                    {
+                        (this.sittingObject as MultiTiledObject).setAllAnimationsToDefault();
+                    }
+                }
                 this.sittingObject = null;
+
+
             }
             if (this.isSitting && Game1.player.CanMove)
             {
