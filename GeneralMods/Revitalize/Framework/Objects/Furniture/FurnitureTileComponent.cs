@@ -11,7 +11,6 @@ namespace Revitalize.Framework.Objects.Furniture
 {
     public class FurnitureTileComponent:MultiTiledComponent
     {
-        public FurnitureInformation furnitureInfo;
 
 
         public FurnitureTileComponent():base()
@@ -19,14 +18,13 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public FurnitureTileComponent(BasicItemInformation itemInfo,FurnitureInformation furnitureInfo):base(itemInfo)
+        public FurnitureTileComponent(BasicItemInformation itemInfo):base(itemInfo)
         {
-            this.furnitureInfo = furnitureInfo;
         }
 
-        public FurnitureTileComponent(BasicItemInformation itemInfo,Vector2 TileLocation ,FurnitureInformation furnitureInfo) : base(itemInfo,TileLocation)
+        public FurnitureTileComponent(BasicItemInformation itemInfo,Vector2 TileLocation) : base(itemInfo,TileLocation)
         {
-            this.furnitureInfo = furnitureInfo;
+
         }
 
     }

@@ -65,18 +65,48 @@ namespace Revitalize.Framework.Objects.Furniture
             return new ChairMultiTiledObject(this.info, this.TileLocation, objs);
         }
 
+
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
-
-            Dictionary<Vector2, MultiTiledComponent> objs = new Dictionary<Vector2, MultiTiledComponent>();
-            foreach (var pair in this.objects)
+            ChairMultiTiledObject obj = (ChairMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<ChairMultiTiledObject>(additionalSaveData["GUID"]);
+            if (obj == null)
             {
-                objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
+                return null;
             }
 
-            return new ChairMultiTiledObject(data, (replacement as Chest).TileLocation, objs);
+            Dictionary<Vector2, Guid> guids = new Dictionary<Vector2, Guid>();
+
+            foreach (KeyValuePair<Vector2, Guid> pair in obj.childrenGuids)
+            {
+                guids.Add(pair.Key, pair.Value);
+            }
+
+            foreach (KeyValuePair<Vector2, Guid> pair in guids)
+            {
+                obj.childrenGuids.Remove(pair.Key);
+                //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
+                ChairTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<ChairTileComponent>(pair.Value.ToString());
+                component.InitNetFields();
+
+                obj.addComponent(pair.Key, component);
+
+
+            }
+            obj.InitNetFields();
+
+            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
+            {
+                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["GUID"], obj);
+                return obj;
+            }
+            else
+            {
+                return Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]];
+            }
+
+
         }
+
 
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {

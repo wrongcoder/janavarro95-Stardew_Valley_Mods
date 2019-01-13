@@ -208,9 +208,6 @@ namespace Revitalize.Framework.Objects
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            
-
-
             MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["GUID"]);
             if (obj == null)
             {

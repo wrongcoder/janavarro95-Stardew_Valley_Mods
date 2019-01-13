@@ -249,6 +249,7 @@ namespace Revitalize
             oakChair.addComponent(new Vector2(0, 1), chairBottom);
 
             customObjects.Add("Omegasis.BigTiledTest", bigObject);
+            customObjects.Add("Omegasis.Revitalize.Furniture.Chairs.OakChair",oakChair);
         }
 
         private void createDirectories()
@@ -285,7 +286,8 @@ namespace Revitalize
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
-            Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
+            //Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
+            Game1.player.addItemToInventory(getObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
 
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
@@ -296,6 +298,17 @@ namespace Revitalize
 
         }
 
+        public Item getObjectFromPool(string objName)
+        {
+            if (customObjects.ContainsKey(objName))
+            {
+                return customObjects[objName];
+            }
+            else
+            {
+                throw new Exception("Object Key name not found: " + objName);
+            }
+        }
         
 
         public static void log(object message)

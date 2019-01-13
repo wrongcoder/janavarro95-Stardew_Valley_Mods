@@ -16,6 +16,8 @@ namespace Revitalize.Framework.Objects.Furniture
     /// </summary>
     public class ChairTileComponent:FurnitureTileComponent
     {
+        public ChairInformation furnitureInfo;
+
         /// <summary>
         /// Checks if the player can sit "on" this component.
         /// </summary>
@@ -32,14 +34,14 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public ChairTileComponent(BasicItemInformation Info,ChairInformation FurnitureInfo) : base(Info,FurnitureInfo)
+        public ChairTileComponent(BasicItemInformation Info,ChairInformation FurnitureInfo) : base(Info)
         {
-           
+            this.furnitureInfo = FurnitureInfo;
         }
 
-        public ChairTileComponent(BasicItemInformation Info,Vector2 TileLocation, ChairInformation FurnitureInfo) : base(Info, TileLocation,FurnitureInfo)
+        public ChairTileComponent(BasicItemInformation Info,Vector2 TileLocation, ChairInformation FurnitureInfo) : base(Info, TileLocation)
         {
-            
+            this.furnitureInfo = FurnitureInfo;
         }
 
         
@@ -89,13 +91,43 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
-            return new ChairTileComponent(data, (replacement as Chest).TileLocation,(ChairInformation)this.furnitureInfo)
+            //instead of using this.offsetkey.x use get additional save data function and store offset key there
+
+            Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
+            ChairTileComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<ChairTileComponent>(additionalSaveData["GUID"]);
+            if (self == null)
             {
-                containerObject = this.containerObject,
-                offsetKey = this.offsetKey
-            };
+                return null;
+            }
+
+            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
+            {
+                //Get new container
+                ChairMultiTiledObject obj = (ChairMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<ChairMultiTiledObject>(additionalSaveData["ParentGUID"]);
+                self.containerObject = obj;
+                obj.addComponent(offsetKey, self);
+                //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
+                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], obj);
+            }
+            else
+            {
+                self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
+                Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].addComponent(offsetKey, self);
+                //Revitalize.ModCore.log("READD AN OBJECT!!!!");
+            }
+
+            return (ICustomObject)self;
         }
+
+        public override Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string, string> saveData = base.getAdditionalSaveData();
+            Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
+
+            return saveData;
+
+        }
+
 
         /// <summary>
         ///Used to manage graphics for chairs that need to deal with special "layering" for transparent chair backs. Otherwise the player would be hidden.
