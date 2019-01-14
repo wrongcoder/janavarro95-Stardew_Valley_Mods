@@ -27,7 +27,8 @@ namespace Revitalize
     //      -rugs
     //      -tables
     //      -lamps
-    //      -chairs
+    //      -chairs (done)
+    //      -benches
     //      -dressers/other storage containers
     //      -fun interactables
     //      -More crafting tables

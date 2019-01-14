@@ -11,7 +11,6 @@ namespace Omegasis.HappyBirthday
 
         public Dictionary<string, string> spouseBirthdayWishes;
 
-        // TODO: Make this.
         public Dictionary<string, string> defaultSpouseBirthdayWishes = new Dictionary<string, string>()
         {
             ["Alex"] = "",
@@ -28,7 +27,7 @@ namespace Omegasis.HappyBirthday
             ["Penny"] = "",
         };
 
-        /// <summary>Used to contain</summary>
+        /// <summary>Used to contain birthday wishes should the mod not find any available.</summary>
         public Dictionary<string, string> defaultBirthdayWishes = new Dictionary<string, string>()
         {
             ["Robin"] = "Hey @, happy birthday! I'm glad you choose this town to move here to. ",
@@ -65,6 +64,76 @@ namespace Omegasis.HappyBirthday
             ["Willy"] = "Aye @ happy birthday. Looking at you reminds me of ye days when I was just a guppy swimming out to sea. Continue to enjoy them youngin.$h",
             ["Krobus"] = "I have heard that it is tradition to give a gift to others on their birthday. In that case, happy birthday @."
         };
+
+        public BirthdayMessages()
+        {
+            createBirthdayGreetings();
+            loadTranslationStrings();
+        }
+
+
+        public Dictionary<StardewValley.LocalizedContentManager.LanguageCode, Dictionary<string, string>> translatedStrings = new Dictionary<StardewValley.LocalizedContentManager.LanguageCode, Dictionary<string, string>>()
+        {
+            [StardewValley.LocalizedContentManager.LanguageCode.de] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "",
+                ["Mail:birthdayDad"] = "",
+                ["Happy Birthday: Star Message"] = "",
+                ["Happy Birthday: Farmhand Birthday Message"] = ""
+            },
+            [StardewValley.LocalizedContentManager.LanguageCode.en] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %%",
+                ["Mail:birthdayDad"] = "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%",
+                ["Happy Birthday: Star Message"] = "It's your birthday today! Happy birthday!",
+                ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!"
+            },
+            [StardewValley.LocalizedContentManager.LanguageCode.es] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "",
+                ["Mail:birthdayDad"] = "",
+                ["Happy Birthday: Star Message"] = "",
+                ["Happy Birthday: Farmhand Birthday Message"] = ""
+            },
+            [StardewValley.LocalizedContentManager.LanguageCode.ja] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "",
+                ["Mail:birthdayDad"] = "",
+                ["Happy Birthday: Star Message"] = "",
+                ["Happy Birthday: Farmhand Birthday Message"] = ""
+            },
+            [StardewValley.LocalizedContentManager.LanguageCode.pt] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "",
+                ["Mail:birthdayDad"] = "",
+                ["Happy Birthday: Star Message"] = "",
+                ["Happy Birthday: Farmhand Birthday Message"] = ""
+            },
+            [StardewValley.LocalizedContentManager.LanguageCode.ru] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "",
+                ["Mail:birthdayDad"] = "",
+                ["Happy Birthday: Star Message"] = "",
+                ["Happy Birthday: Farmhand Birthday Message"] = ""
+            },
+            [StardewValley.LocalizedContentManager.LanguageCode.th] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "",
+                ["Mail:birthdayDad"] = "",
+                ["Happy Birthday: Star Message"] = "",
+                ["Happy Birthday: Farmhand Birthday Message"] = ""
+            },
+            [StardewValley.LocalizedContentManager.LanguageCode.zh] = new Dictionary<string, string>()
+            {
+                ["Mail:birthdayMom"] = "亲爱的@，^  生日快乐宝贝。看着你成长成为一个善良努力的人，就如我一直梦想着你成为的样子，我感到十分欣喜。我希望你能继续跟你爱的人制造更多美好的回忆。 ^  爱你的，妈妈 ^ 附言：这是我给你做的一点小礼物。 %item object 221 1 %%",
+                ["Mail:birthdayDad"] = "亲爱的@，^  生日快乐孩子。你生日的这天没有你，我们这儿还挺寂寞的，但我和你妈妈都知道你让我们和你爷爷感到骄傲。我们知道你一个人生活可能会很艰难，但我们百分百相信你能做到，所以继续追求你的梦想吧。^  爱你的，爸爸 ^ 附言：这是能在农场上帮到你的一些零用钱。祝你好运！ %item money 5000 5001 %%",
+                ["Happy Birthday: Star Message"] = "今天是你的生日！生日快乐！",
+                ["Happy Birthday: Farmhand Birthday Message"] = ""
+            }
+        };
+
+
+
 
         /// <summary>Used to load all of the default birthday greetings.</summary>
         public void createBirthdayGreetings()
@@ -144,5 +213,48 @@ namespace Omegasis.HappyBirthday
                 }
             }
         }
+
+        public static string GetTranslatedString(string key)
+        {
+            StardewValley.LocalizedContentManager.LanguageCode code = HappyBirthday.Config.translationInfo.translationCodes[HappyBirthday.Config.translationInfo.currentTranslation];
+            string value= HappyBirthday.Instance.messages.translatedStrings[code][key];
+            if (string.IsNullOrEmpty(value))
+            {
+                return GetEnglishMessageString(key);
+            }
+            else return value;
+        }
+
+        public static string GetEnglishMessageString(string key)
+        {
+            StardewValley.LocalizedContentManager.LanguageCode code = StardewValley.LocalizedContentManager.LanguageCode.en;
+            return HappyBirthday.Instance.messages.translatedStrings[code][key];
+        }
+
+        public void loadTranslationStrings()
+        {
+
+            //Non-english logic for creating templates.
+            foreach (var translation in HappyBirthday.Config.translationInfo.translationCodes)
+            {
+
+                StardewValley.LocalizedContentManager.LanguageCode code = translation.Value;
+
+                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", translation.Key);
+                if (!Directory.Exists(basePath))
+                    Directory.CreateDirectory(basePath);
+                string stringsFile = Path.Combine("Content", "Dialogue", translation.Key, HappyBirthday.Config.translationInfo.getjsonForTranslation("TranslatedStrings", translation.Key));
+
+
+                if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, stringsFile)))
+                {
+                    HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(stringsFile, this.translatedStrings[code]);
+                }
+                else
+                    this.translatedStrings[code] = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(stringsFile);
+
+            }
+        }
+
     }
 }

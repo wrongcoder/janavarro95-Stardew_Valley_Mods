@@ -65,6 +65,7 @@ namespace Omegasis.HappyBirthday
 
         Dictionary<long, PlayerData> othersBirthdays;
 
+        public static HappyBirthday Instance;
 
         /*********
         ** Public methods
@@ -73,6 +74,9 @@ namespace Omegasis.HappyBirthday
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+
+            Instance = this;
+
             //helper.Content.AssetLoaders.Add(new PossibleGifts());
             Config = helper.ReadConfig<ModConfig>();
 
@@ -91,7 +95,6 @@ namespace Omegasis.HappyBirthday
 
             this.messages = new BirthdayMessages();
             this.giftManager = new GiftManager();
-            this.messages.createBirthdayGreetings();
             this.isDailyQuestBoard = false;
 
             ModHelper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
@@ -99,6 +102,8 @@ namespace Omegasis.HappyBirthday
             ModHelper.Events.Multiplayer.PeerDisconnected += this.Multiplayer_PeerDisconnected;
 
             this.othersBirthdays = new Dictionary<long, PlayerData>();
+
+            
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -113,8 +118,12 @@ namespace Omegasis.HappyBirthday
         public void Edit<T>(IAssetData asset)
         {
             IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
-            data["birthdayMom"] = "Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %%";
-            data["birthdayDad"] = "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%";
+
+            string momMail = BirthdayMessages.GetTranslatedString("Mail:birthdayMom");
+            string dadMail = BirthdayMessages.GetTranslatedString("Mail:birthdayDad");
+
+            data["birthdayMom"] = momMail;
+            data["birthdayDad"] = dadMail;
         }
 
 
@@ -353,7 +362,9 @@ namespace Omegasis.HappyBirthday
                 // set up birthday
                 if (this.IsBirthday())
                 {
-                    Messages.ShowStarMessage("It's your birthday today! Happy birthday!");
+                    string starMessage = BirthdayMessages.GetTranslatedString("Happy Birthday: Star Message");
+
+                    Messages.ShowStarMessage(starMessage);
                     MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
 
 
@@ -386,7 +397,7 @@ namespace Omegasis.HappyBirthday
                                     //Check if npc name is spouse's name. If no spouse then add in generic dialogue.
                                     if (this.messages.spouseBirthdayWishes.ContainsKey(npc.Name) && Game1.player.isMarried())
                                     {
-                                        this.Monitor.Log("Spouse Checks out");
+                                        //this.Monitor.Log("Spouse Checks out");
                                         //Check to see if spouse message exists.
                                         if (!string.IsNullOrEmpty(this.messages.spouseBirthdayWishes[npc.Name]))
                                         {
