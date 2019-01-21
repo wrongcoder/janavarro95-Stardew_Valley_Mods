@@ -106,6 +106,8 @@ namespace Revitalize
 
         public static Serializer Serializer;
 
+        public static Dictionary<GameLocation,MultiTiledObject> ObjectsToDraw;
+
         public override void Entry(IModHelper helper)
         {
             ModHelper = helper;
@@ -128,6 +130,7 @@ namespace Revitalize
 
             loadContent();
             Serializer = new Serializer();
+            ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
             
         }
 
@@ -155,6 +158,7 @@ namespace Revitalize
                 [bigObject] = 1
             }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1), new StatCost(100, 50, 0, 0));
 
+         
 
 
             Framework.Objects.Furniture.ChairTileComponent chairTop = new Framework.Objects.Furniture.ChairTileComponent(new BasicItemInformation("Oak Chair", "A basic wooden chair", "Chairs", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.Revitalize.Furniture.Basic.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", Framework.Graphics.TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, false, typeof(Framework.Objects.Furniture.ChairTileComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16)), new Dictionary<string, List<Animation>>() {
@@ -246,8 +250,8 @@ namespace Revitalize
 
 
             Framework.Objects.Furniture.ChairMultiTiledObject oakChair = new Framework.Objects.Furniture.ChairMultiTiledObject(new BasicItemInformation("Oak Chair", "A wood chair you can place anywhere.", "Chair", Color.White, -300, 0, true, 100, Vector2.Zero, true, true, "Omegasis.Revitalize.Furniture.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(Revitalize.Framework.Objects.Furniture.ChairMultiTiledObject), null, new AnimationManager(), Color.White, false, new Framework.Utilities.InventoryManager(), new LightManager()));
-            oakChair.addComponent(new Vector2(0, 0), chairTop);
-            oakChair.addComponent(new Vector2(0, 1), chairBottom);
+            oakChair.addComponent(new Vector2(0, -1), chairTop);
+            oakChair.addComponent(new Vector2(0, 0), chairBottom);
 
             customObjects.Add("Omegasis.BigTiledTest", bigObject);
             customObjects.Add("Omegasis.Revitalize.Furniture.Chairs.OakChair",oakChair);
@@ -289,6 +293,9 @@ namespace Revitalize
             }
             //Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
             Game1.player.addItemToInventory(getObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+
+            Netcode.NetString str = new Netcode.NetString("AHHH");
+            Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "str.json"),str);
 
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
