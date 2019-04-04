@@ -6,32 +6,28 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PyTK.CustomElementHandler;
 using StardewValley;
-using StardewValley.Objects;
 
 namespace Revitalize.Framework.Objects.Furniture
 {
-    /// <summary>
-    /// Object which encapsulates all of the pieces that make up a chair object in-game.
-    /// </summary>
-    public class ChairMultiTiledObject:MultiTiledObject
+    public class RugMultiTiledObject:MultiTiledObject
     {
-
-        public ChairMultiTiledObject() : base()
+        public RugMultiTiledObject() : base()
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info) : base(Info)
+        public RugMultiTiledObject(BasicItemInformation Info) : base(Info)
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
+        public RugMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info,Vector2 TilePosition,Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects) {
+        public RugMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects)
+        {
 
 
         }
@@ -42,13 +38,13 @@ namespace Revitalize.Framework.Objects.Furniture
         public override void rotate()
         {
             Revitalize.ModCore.log("Rotate!");
-            foreach(KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
-                (pair.Value as ChairTileComponent).rotate();
+                (pair.Value as RugTileComponent).rotate();
             }
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
-                (pair.Value as ChairTileComponent).checkForSpecialUpSittingAnimation();
+                (pair.Value as RugTileComponent).checkForSpecialUpSittingAnimation();
             }
 
             base.rotate();
@@ -63,13 +59,13 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
 
-            return new ChairMultiTiledObject(this.info, this.TileLocation, objs);
+            return new RugMultiTiledObject(this.info, this.TileLocation, objs);
         }
 
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            ChairMultiTiledObject obj = (ChairMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<ChairMultiTiledObject>(additionalSaveData["GUID"]);
+            RugMultiTiledObject obj = (RugMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<RugMultiTiledObject>(additionalSaveData["GUID"]);
             if (obj == null)
             {
                 return null;
@@ -86,7 +82,7 @@ namespace Revitalize.Framework.Objects.Furniture
             {
                 obj.childrenGuids.Remove(pair.Key);
                 //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
-                ChairTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<ChairTileComponent>(pair.Value.ToString());
+                RugTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<RugTileComponent>(pair.Value.ToString());
                 component.InitNetFields();
 
                 obj.addComponent(pair.Key, component);
@@ -113,6 +109,5 @@ namespace Revitalize.Framework.Objects.Furniture
         {
             return base.canBePlacedHere(l, tile);
         }
-
     }
 }

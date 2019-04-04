@@ -150,7 +150,7 @@ namespace SimpleSoundManager
         /// <summary>Used to resume the currently playing song.</summary>
         public void resume()
         {
-            dynamicSound?.Resume();
+            this.dynamicSound?.Resume();
         }
 
         /// <summary>Used to stop the currently playing song.</summary>
