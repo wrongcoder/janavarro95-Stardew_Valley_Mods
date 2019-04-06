@@ -4,6 +4,13 @@ using StardewModdingAPI;
 
 namespace SimpleSoundManager
 {
+    /// <summary>
+    /// Mod core.
+    ///
+    /// Needs testing.
+    ///
+    /// Seems like the current structure will require both content packs and a programmed mod to request when to play specific sounds. Interesting.
+    /// </summary>
     public class ModCore : Mod
     {
         internal static IModHelper ModHelper;
@@ -20,6 +27,15 @@ namespace SimpleSoundManager
             Config = helper.ReadConfig<Config>();
             this.loadContentPacks();
             this.Helper.Events.GameLoop.OneSecondUpdateTicked += this.GameLoop_OneSecondUpdateTicked;
+
+            this.Helper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
+        }
+
+        private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
+        {
+            
+            //MusicManager.MusicPacks["Your Project Name"].PlaySound("toby fox - UNDERTALE Soundtrack - 01 Once Upon a Time");
+            //DebugLog("PLAY SOME SOUNDS");
         }
 
         /// <summary>
@@ -47,6 +63,8 @@ namespace SimpleSoundManager
                 MusicPack musicPack = new MusicPack(contentPack);
                 MusicManager.addMusicPack(musicPack, true, true);
             }
+
+            
         }
 
         /// <summary>
