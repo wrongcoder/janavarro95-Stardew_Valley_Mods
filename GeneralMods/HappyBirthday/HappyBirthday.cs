@@ -153,14 +153,14 @@ namespace Omegasis.HappyBirthday
                 {
                     this.othersBirthdays.Add(message.Key, message.Value);
                     MultiplayerSupport.SendBirthdayInfoToConnectingPlayer(e.FromPlayerID);
-                    this.Monitor.Log("Got other player's birthday data from: " + Game1.getFarmer(e.FromPlayerID).name);
+                    this.Monitor.Log("Got other player's birthday data from: " + Game1.getFarmer(e.FromPlayerID).Name);
                 }
                 else
                 {
                     //Brute force update birthday info if it has already been recevived but dont send birthday info again.
                     this.othersBirthdays.Remove(message.Key);
                     this.othersBirthdays.Add(message.Key, message.Value);
-                    this.Monitor.Log("Got other player's birthday data from: " + Game1.getFarmer(e.FromPlayerID).name);
+                    this.Monitor.Log("Got other player's birthday data from: " + Game1.getFarmer(e.FromPlayerID).Name);
                 }
             }
         }
@@ -229,6 +229,13 @@ namespace Omegasis.HappyBirthday
                     {
                         int index = this.PlayerData.BirthdayDay;
                         Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.player);
+                        (Game1.activeClickableMenu as Billboard).drawMouse(e.SpriteBatch);
+
+                        string hoverText = this.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
+                        if (hoverText.Length > 0)
+                        {
+                            IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
+                        }
                     }
                 }
 
@@ -238,6 +245,13 @@ namespace Omegasis.HappyBirthday
                     if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue; //Hide out of season birthdays.
                     index = pair.Value.BirthdayDay;
                     Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.getFarmer(pair.Key));
+                    (Game1.activeClickableMenu as Billboard).drawMouse(e.SpriteBatch);
+
+                    string hoverText=this.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
+                    if (hoverText.Length > 0)
+                    {
+                        IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
+                    }
                 }
             }
         }
@@ -326,7 +340,7 @@ namespace Omegasis.HappyBirthday
 
             if (PlayerBirthdayData != null)
             {
-                ModMonitor.Log("Send all birthday information from " + Game1.player.name);
+                ModMonitor.Log("Send all birthday information from " + Game1.player.Name);
                 MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
             }
             //this.SeenEvent = false;
@@ -347,6 +361,7 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
+
             if (!Context.IsWorldReady || Game1.eventUp || Game1.isFestival())
                 return;
             if (!this.HasChosenBirthday && Game1.activeClickableMenu == null && Game1.player.Name.ToLower() != "unnamed farmhand")
@@ -364,11 +379,11 @@ namespace Omegasis.HappyBirthday
                 {
                     string starMessage = BirthdayMessages.GetTranslatedString("Happy Birthday: Star Message");
 
+
+                    ModMonitor.Log(starMessage);
                     Messages.ShowStarMessage(starMessage);
                     MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
-
-
-
+                    
 
                     Game1.player.mailbox.Add("birthdayMom");
                     Game1.player.mailbox.Add("birthdayDad");

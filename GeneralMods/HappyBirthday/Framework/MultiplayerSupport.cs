@@ -14,6 +14,8 @@ namespace Omegasis.HappyBirthday.Framework
             str.Replace("@", Game1.player.name);
             HUDMessage message = new HUDMessage(str, 1);
 
+            
+
             foreach (KeyValuePair<long, Farmer> f in Game1.otherFarmers)
             {
                 HappyBirthday.ModHelper.Multiplayer.SendMessage<string>(message.message, FSTRING_SendBirthdayMessageToOthers, new string[] { HappyBirthday.ModHelper.Multiplayer.ModID }, new long[] { f.Key });
