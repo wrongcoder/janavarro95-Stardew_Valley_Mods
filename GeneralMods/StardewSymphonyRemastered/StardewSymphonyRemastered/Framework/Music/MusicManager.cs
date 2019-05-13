@@ -146,6 +146,10 @@ namespace StardewSymphonyRemastered.Framework
             return listOfValidDictionaries;
         }
 
+        /// <summary>
+        /// Get a list of applicable songs to play in the given menu and find one to play.
+        /// </summary>
+        /// <param name="songListKey"></param>
         public void SelectMenuMusic(string songListKey)
         {
             // stop timer when new music is selected

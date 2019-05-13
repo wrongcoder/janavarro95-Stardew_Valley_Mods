@@ -55,7 +55,7 @@ namespace Revitalize.Framework.Objects.Furniture
         {
             this.containerObject.rotate(); //Ensure that all of the chair pieces rotate at the same time.
 
-            checkForSpecialUpSittingAnimation();
+            this.checkForSpecialUpSittingAnimation();
             return true;
             //return base.rightClicked(who);
         }

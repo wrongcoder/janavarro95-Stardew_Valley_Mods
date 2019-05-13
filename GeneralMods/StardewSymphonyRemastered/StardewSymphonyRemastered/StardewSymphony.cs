@@ -51,6 +51,7 @@ namespace StardewSymphonyRemastered
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.GameLoop.Saving += this.OnSaving;
+            helper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
 
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
 
@@ -69,6 +70,11 @@ namespace StardewSymphonyRemastered
             SongSpecifics.initializeFestivalsList();
 
             this.LoadMusicPacks();
+        }
+
+        private void GameLoop_TimeChanged(object sender, TimeChangedEventArgs e)
+        {
+            musicManager.selectMusic(SongSpecifics.getCurrentConditionalString());
         }
 
         /// <summary>Raised after a player warps to a new location.</summary>
@@ -246,6 +252,31 @@ namespace StardewSymphonyRemastered
             textureManager.addTexture("PlayButton", LoadTexture("PlayButton.png"));
             textureManager.addTexture("StopButton", LoadTexture("StopButton.png"));
             textureManager.addTexture("BackButton", LoadTexture("BackButton.png"));
+
+            textureManager.addTexture("12AM", LoadTexture("12AM.png"));
+            textureManager.addTexture("1AM", LoadTexture("1AM.png"));
+            textureManager.addTexture("2AM", LoadTexture("2AM.png"));
+            textureManager.addTexture("3AM", LoadTexture("3AM.png"));
+            textureManager.addTexture("4AM", LoadTexture("4AM.png"));
+            textureManager.addTexture("5AM", LoadTexture("5AM.png"));
+            textureManager.addTexture("6AM", LoadTexture("6AM.png"));
+            textureManager.addTexture("7AM", LoadTexture("7AM.png"));
+            textureManager.addTexture("8AM", LoadTexture("8AM.png"));
+            textureManager.addTexture("9AM", LoadTexture("9AM.png"));
+            textureManager.addTexture("10AM", LoadTexture("10AM.png"));
+            textureManager.addTexture("11AM", LoadTexture("11AM.png"));
+            textureManager.addTexture("12PM", LoadTexture("12PM.png"));
+            textureManager.addTexture("1PM", LoadTexture("1PM.png"));
+            textureManager.addTexture("2PM", LoadTexture("2PM.png"));
+            textureManager.addTexture("3PM", LoadTexture("3PM.png"));
+            textureManager.addTexture("4PM", LoadTexture("4PM.png"));
+            textureManager.addTexture("5PM", LoadTexture("5PM.png"));
+            textureManager.addTexture("6PM", LoadTexture("6PM.png"));
+            textureManager.addTexture("7PM", LoadTexture("7PM.png"));
+            textureManager.addTexture("8PM", LoadTexture("8PM.png"));
+            textureManager.addTexture("9PM", LoadTexture("9PM.png"));
+            textureManager.addTexture("10PM", LoadTexture("10PM.png"));
+            textureManager.addTexture("11PM", LoadTexture("11PM.png"));
         }
 
         /// <summary>Load the available music packs.</summary>

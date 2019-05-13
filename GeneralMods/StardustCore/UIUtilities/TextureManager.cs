@@ -25,7 +25,7 @@ namespace StardustCore.UIUtilities
                 if (v.Key == name)
                     return v.Value.Copy();
             }
-            throw new Exception("Error, texture name not found!!!");
+            throw new Exception("Error, texture name not found!!! Name: "+name);
         }
     }
 }

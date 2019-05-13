@@ -29,6 +29,14 @@ namespace StardewSymphonyRemastered.Framework
         private readonly string[] timesOfDay;
         public static char seperator = '_';
 
+        public string[] TimesOfDay
+        {
+            get
+            {
+                return this.timesOfDay;
+            }
+        }
+
         /// <summary>Construct an instance.</summary>
         public SongSpecifics()
         {
@@ -150,11 +158,37 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 else
                 {
-                    key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(true) + seperator + getLocationString() + seperator + getDayOfWeekString();
+                    key = getCurrentConditionalKey(true, true, true, true, true, true);
+                    int mode =6;
 
-                    if (StardewSymphony.musicManager.GetApplicableMusicPacks(key).Count == 0)
+                    while (StardewSymphony.musicManager.GetApplicableMusicPacks(key).Count == 0 && mode>0)
                     {
-                        key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(false) + seperator + getLocationString() + seperator + getDayOfWeekString();
+                        mode--;
+                        if (mode == 5)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, true, true, false);
+                        }
+                        if (mode == 4)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, true, false, false);
+                        }
+                        if (mode == 3)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, false, false, false);
+                        }
+                        if (mode == 2)
+                        {
+                            key = getCurrentConditionalKey(true, true, false, false, false, false);
+                        }
+                        if (mode == 1)
+                        {
+                            key = getCurrentConditionalKey(true, false, false, false, false, false);
+                        }
+                        if (mode == 0)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, true, true, true);
+                        }
+
                     }
                 }
             }
@@ -164,7 +198,26 @@ namespace StardewSymphonyRemastered.Framework
             return key;
         }
 
-
+        /// <summary>
+        /// Gets an appropriate key combination from for selecting music
+        /// </summary>
+        /// <param name="season"></param>
+        /// <param name="weather"></param>
+        /// <param name="time"></param>
+        /// <param name="hourly"></param>
+        /// <param name="location"></param>
+        /// <param name="dayOfWeek"></param>
+        /// <returns></returns>
+        public static string getCurrentConditionalKey(bool season = true, bool weather = true, bool time = true,bool hourly=true, bool location = true, bool dayOfWeek = true)
+        {
+            string key = "";
+            if (season == true) key += getSeasonNameString();
+            if (weather == true) key +=seperator+ getWeatherString();
+            if (time == true) key +=seperator+ getTimeOfDayString(hourly);
+            if (location == true) key +=seperator+ getLocationString();
+            if (dayOfWeek == true) key +=seperator+ getDayOfWeekString();
+            return key;
+        }
 
         /// <summary>Initialize the location lists with the names of all of the major locations in the game.</summary>
         public static void initializeLocationsList()
@@ -295,7 +348,16 @@ namespace StardewSymphonyRemastered.Framework
             else
             {
                 int hour = Game1.timeOfDay / 100;
-                string suffix = hour < 12 && hour >= 24 ? "A.M." : "P.M.";
+                string suffix = "";
+                if(hour<12 || hour >= 24)
+                {
+                    suffix = "A.M.";
+                }
+                if(hour>=12 && hour < 24)
+                {
+                    suffix = "P.M";
+                }
+
                 return hour + suffix;
             }
         }

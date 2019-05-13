@@ -55,7 +55,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Empty constructor.</summary>
         public CustomObject() {
             this.guid = Guid.NewGuid();
-            InitNetFields();
+            this.InitNetFields();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -94,7 +94,7 @@ namespace Revitalize.Framework.Objects
             this.bigCraftable.Value = false;
 
             //this.initNetFields();
-            InitNetFields();
+            this.InitNetFields();
             //if (this.info.ignoreBoundingBox)
             //    this.boundingBox.Value = new Rectangle(int.MinValue, int.MinValue, 0, 0);
         }
@@ -253,9 +253,9 @@ namespace Revitalize.Framework.Objects
             else if (this.info.facingDirection == Enums.Direction.Up) this.info.facingDirection = Enums.Direction.Left;
             else if (this.info.facingDirection == Enums.Direction.Left) this.info.facingDirection = Enums.Direction.Down;
 
-            if (this.info.animationManager.animations.ContainsKey(generateRotationalAnimationKey()))
+            if (this.info.animationManager.animations.ContainsKey(this.generateRotationalAnimationKey()))
             {
-                this.info.animationManager.setAnimation(generateRotationalAnimationKey());
+                this.info.animationManager.setAnimation(this.generateRotationalAnimationKey());
             }
             else
             {

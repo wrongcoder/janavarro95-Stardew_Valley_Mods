@@ -21,7 +21,7 @@ namespace StardewSymphonyRemastered.Framework
         private readonly string DataFolderName = "data";
 
         /// <summary>The name of the folder which contains available music.</summary>
-        private readonly string MusicFolderName = "music";
+        private readonly string MusicFolderName = "songs";
 
 
         /*********

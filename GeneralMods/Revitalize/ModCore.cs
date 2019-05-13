@@ -128,7 +128,7 @@ namespace Revitalize
             customObjects = new Dictionary<string, CustomObject>();
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
 
-            loadContent();
+            this.loadContent();
             Serializer = new Serializer();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
             
@@ -296,8 +296,8 @@ namespace Revitalize
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
             //Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
-            Game1.player.addItemToInventory(getObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
-            Game1.player.addItemToInventory(getObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
+            Game1.player.addItemToInventory(this.getObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+            Game1.player.addItemToInventory(this.getObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
 
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
