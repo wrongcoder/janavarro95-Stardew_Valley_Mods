@@ -89,31 +89,16 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-
-        /// <summary>
-        ///Used to manage graphics for chairs that need to deal with special "layering" for transparent chair backs. Otherwise the player would be hidden.
-        /// </summary>
-        public void checkForSpecialUpSittingAnimation()
-        {
-            if (this.info.facingDirection == Enums.Direction.Up && Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this.containerObject)
-            {
-                string animationKey = "Sitting_" + (int)Enums.Direction.Up;
-                if (this.animationManager.animations.ContainsKey(animationKey))
-                {
-                    this.animationManager.setAnimation(animationKey);
-                }
-            }
-        }
-
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
+            /*
             if (this.info.ignoreBoundingBox == true)
             {
                 x *= -1;
                 y *= -1;
             }
-
+            */
             if (this.info == null)
             {
                 Revitalize.ModCore.log("info is null");

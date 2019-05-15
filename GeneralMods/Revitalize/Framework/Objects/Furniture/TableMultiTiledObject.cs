@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
 using StardewValley;
 
@@ -96,6 +97,36 @@ namespace Revitalize.Framework.Objects.Furniture
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {
             return base.canBePlacedHere(l, tile);
+        }
+
+        public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
+        {
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            {
+                if (!this.isPlaceable())
+                    return;
+                int x = Game1.getOldMouseX() + Game1.viewport.X + (int)((pair.Value as MultiTiledComponent).offsetKey.X * Game1.tileSize);
+                int y = Game1.getOldMouseY() + Game1.viewport.Y + (int)((pair.Value as MultiTiledComponent).offsetKey.Y * Game1.tileSize);
+                if ((double)Game1.mouseCursorTransparency == 0.0)
+                {
+                    x = ((int)Game1.player.GetGrabTile().X + (int)((pair.Value as MultiTiledComponent).offsetKey.X)) * 64;
+                    y = ((int)Game1.player.GetGrabTile().Y + (int)((pair.Value as MultiTiledComponent).offsetKey.Y)) * 64;
+                }
+                if (Game1.player.GetGrabTile().Equals(Game1.player.getTileLocation()) && (double)Game1.mouseCursorTransparency == 0.0)
+                {
+                    Vector2 translatedVector2 = Utility.getTranslatedVector2(Game1.player.GetGrabTile(), Game1.player.FacingDirection, 1f);
+                    translatedVector2 += (pair.Value as MultiTiledComponent).offsetKey;
+                    x = (int)translatedVector2.X * 64;
+                    y = (int)translatedVector2.Y * 64;
+                }
+                bool flag = (pair.Value as MultiTiledComponent).canBePlacedHere(location, new Vector2(x / Game1.tileSize, y / Game1.tileSize));
+                spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)(x / 64 * 64 - Game1.viewport.X), (float)(y / 64 * 64 - Game1.viewport.Y)), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(flag ? 194 : 210, 388, 16, 16)), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.01f);
+
+
+                (pair.Value as MultiTiledComponent).draw(spriteBatch, x / Game1.tileSize, y / Game1.tileSize, 0.5f);
+                //break;
+                //this.draw(spriteBatch, x / 64, y / 64, 0.5f);
+            }
         }
 
     }

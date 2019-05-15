@@ -196,6 +196,7 @@ namespace Revitalize.Framework.Objects
         {
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
+                /*
                 if ((pair.Value as CustomObject).info.ignoreBoundingBox)
                 {
                     pair.Value.placementAction(location, -1 * (x + (int)pair.Key.X * Game1.tileSize), -1 * (y + (int)pair.Key.Y * Game1.tileSize), who);
@@ -203,7 +204,8 @@ namespace Revitalize.Framework.Objects
                 else
                 {
                     pair.Value.placementAction(location, x + (int)pair.Key.X * Game1.tileSize, y + (int)pair.Key.Y * Game1.tileSize, who);
-                }
+                }*/
+                pair.Value.placementAction(location, x + (int)pair.Key.X * Game1.tileSize, y + (int)pair.Key.Y * Game1.tileSize, who);
                 //ModCore.log(pair.Value.TileLocation);
             }
             this.location = location;

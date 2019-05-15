@@ -22,14 +22,15 @@ namespace Revitalize
 {
     // TODO:
     //
+    //
     //  -Multiple Lights On Object
     //  -Illumination Colors
     //  Furniture:
-    //      -rugs
+    //      -rugs (WIP but buggy for clicking)
     //      -tables
     //      -lamps
     //      -chairs (done)
-    //      -benches
+    //      -benches (done but needs factory info/sprite)
     //      -dressers/other storage containers
     //      -fun interactables
     //      -More crafting tables

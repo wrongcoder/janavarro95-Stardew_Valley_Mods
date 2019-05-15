@@ -37,17 +37,7 @@ namespace Revitalize.Framework.Objects.Furniture
         /// </summary>
         public override void rotate()
         {
-            Revitalize.ModCore.log("Rotate!");
-            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-            {
-                (pair.Value as RugTileComponent).rotate();
-            }
-            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-            {
-                (pair.Value as RugTileComponent).checkForSpecialUpSittingAnimation();
-            }
-
-            base.rotate();
+            
         }
 
         public override Item getOne()
