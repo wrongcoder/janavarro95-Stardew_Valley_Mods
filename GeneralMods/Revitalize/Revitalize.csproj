@@ -54,6 +54,8 @@
     <Compile Include="Framework\Enums\Enums.cs" />
     <Compile Include="Framework\Environment\DarkerNight.cs" />
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
+    <Compile Include="Framework\Factories\Objects\FurnitureFactory.cs" />
+    <Compile Include="Framework\Factories\Objects\Furniture\ChairFactoryInfo.cs" />
     <Compile Include="Framework\Graphics\Animations\Animation.cs" />
     <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
     <Compile Include="Framework\Graphics\Texture2DExtended.cs" />
@@ -92,5 +94,6 @@
   <ItemGroup>
     <None Include="manifest.json" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

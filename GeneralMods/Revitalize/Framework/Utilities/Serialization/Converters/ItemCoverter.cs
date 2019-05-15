@@ -142,7 +142,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
         public override bool CanConvert(Type objectType)
         {
-            return IsSameOrSubclass(typeof(StardewValley.Item),objectType);
+            return this.IsSameOrSubclass(typeof(StardewValley.Item),objectType);
         }
 
         /// <summary>

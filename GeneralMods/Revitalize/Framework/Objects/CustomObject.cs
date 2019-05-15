@@ -19,7 +19,13 @@ namespace Revitalize.Framework.Objects
     /// <summary>A custom object template.</summary>
     public class CustomObject : PySObject
     {
-        public string id;
+        public string id
+        {
+            get
+            {
+                return this.info.id;
+            }
+        }
 
 
         public BasicItemInformation info;

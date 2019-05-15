@@ -47,7 +47,7 @@ namespace Revitalize.Framework.Utilities
             //this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
 
-            gatherAllFilesForCleanup();
+            this.gatherAllFilesForCleanup();
 
             this.settings = new JsonSerializerSettings();
             foreach(JsonConverter converter in this.serializer.Converters)
@@ -65,6 +65,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         private void gatherAllFilesForCleanup()
         {
+            if (!Directory.Exists(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"))) Directory.CreateDirectory(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"));
             this.filesToDelete.Clear();
             string[] directories = Directory.GetDirectories(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"));
             foreach (string playerData in directories)
@@ -95,19 +96,19 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         public void afterLoad()
         {
-            deleteAllUnusedFiles();
-            removeNullObjects();
+            this.deleteAllUnusedFiles();
+            this.removeNullObjects();
         }
 
         public void returnToTitle()
         {
-            gatherAllFilesForCleanup();
+            this.gatherAllFilesForCleanup();
         }
 
         private void removeNullObjects()
         {
             List<Item> removalList = new List<Item>();
-            foreach(Item I in Game1.player.items)
+            foreach(Item I in Game1.player.Items)
             {
                 if (I == null) continue;
                 if (I.DisplayName.Contains("Revitalize.Framework") && (I is Chest))
@@ -118,7 +119,7 @@ namespace Revitalize.Framework.Utilities
             }
             foreach(Item I in removalList)
             {
-                Game1.player.items.Remove(I);
+                Game1.player.Items.Remove(I);
             }
         }
 
@@ -228,9 +229,9 @@ namespace Revitalize.Framework.Utilities
         /// <param name="obj"></param>
         public void SerializeGUID(string fileName,object obj)
         {
-            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
-            Serialize(path, obj);
+            this.Serialize(path, obj);
         }
 
         /// <summary>
@@ -241,9 +242,9 @@ namespace Revitalize.Framework.Utilities
         /// <returns>A data structure object deserialize from a json string in a file.</returns>
         public object DeserializeGUID(string fileName,Type T)
         {
-            string path=Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
-            removeFileFromDeletion((Game1.player.name + "_" + Game1.player.uniqueMultiplayerID), path);
-            return Deserialize(path, T);
+            string path=Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            this.removeFileFromDeletion((Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID), path);
+            return this.Deserialize(path, T);
         }
 
         /// <summary>
@@ -254,12 +255,12 @@ namespace Revitalize.Framework.Utilities
         /// <returns>A data structure object deserialize from a json string in a file.</returns>
         public T DeserializeGUID<T>(string fileName)
         {
-            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.name + "_" + Game1.player.uniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
-            removeFileFromDeletion((Game1.player.name + "_" + Game1.player.uniqueMultiplayerID),path);
+            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            this.removeFileFromDeletion((Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID),path);
             if (File.Exists(path))
             {
 
-                return Deserialize<T>(path);
+                return this.Deserialize<T>(path);
             }
             else
             {
@@ -297,6 +298,29 @@ namespace Revitalize.Framework.Utilities
         public object DeserializeFromJSONString(string info, Type T)
         {
             return JsonConvert.DeserializeObject(info, T, this.settings);
+        }
+
+
+
+        public T DeserializeContentFile<T>(string pathToFile)
+        {
+            if (File.Exists(pathToFile))
+            {
+
+                return this.Deserialize<T>(pathToFile);
+            }
+            else
+            {
+                return default(T);
+            }
+        }
+
+        public void SerializeContentFile(string fileName, object obj,string extensionFolder)
+        {
+            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "Content", extensionFolder,fileName+ ".json");
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            if (File.Exists(path)) return;
+            this.Serialize(path, obj);
         }
 
     }
