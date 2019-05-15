@@ -56,6 +56,7 @@
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
     <Compile Include="Framework\Factories\Objects\FurnitureFactory.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\ChairFactoryInfo.cs" />
+    <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
     <Compile Include="Framework\Graphics\Animations\Animation.cs" />
     <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
     <Compile Include="Framework\Graphics\Texture2DExtended.cs" />
@@ -71,8 +72,11 @@
     <Compile Include="Framework\Objects\Furniture\FurnitureTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\RugMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\RugTileComponent.cs" />
+    <Compile Include="Framework\Objects\Furniture\TableMultiTiledObject.cs" />
+    <Compile Include="Framework\Objects\Furniture\TableTileComponent.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
+    <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ObjectGUIDInfo.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />

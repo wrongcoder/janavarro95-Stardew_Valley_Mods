@@ -131,7 +131,7 @@ namespace Revitalize
 
             Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager());
             TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "OakChair.png")));
-
+            TextureManager.addTexture("Furniture", "Oak Table", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Tables", "OakTable.png")));
             customObjects = new Dictionary<string, CustomObject>();
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
 
@@ -175,8 +175,10 @@ namespace Revitalize
             rug.addComponent(new Vector2(0, 0), rug1);
 
             customObjects.Add("Omegasis.Revitalize.Furniture.Rugs.RugTest", rug);
+
             
-            FurnitureFactory.LoadChairFiles();
+            
+            FurnitureFactory.LoadFurnitureFiles();
         }
 
         private void createDirectories()
@@ -219,7 +221,7 @@ namespace Revitalize
             //Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-
+            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
             Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);

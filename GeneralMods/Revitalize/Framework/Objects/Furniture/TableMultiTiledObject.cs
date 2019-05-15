@@ -6,49 +6,34 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using PyTK.CustomElementHandler;
 using StardewValley;
-using StardewValley.Objects;
 
 namespace Revitalize.Framework.Objects.Furniture
 {
-    /// <summary>
-    /// Object which encapsulates all of the pieces that make up a chair object in-game.
-    /// </summary>
-    public class ChairMultiTiledObject:MultiTiledObject
+    public class TableMultiTiledObject:MultiTiledObject
     {
-
-        public ChairMultiTiledObject() : base()
+        public TableMultiTiledObject() : base()
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info) : base(Info)
+        public TableMultiTiledObject(BasicItemInformation Info) : base(Info)
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
+        public TableMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info,Vector2 TilePosition,Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects) {
+        public TableMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects)
+        {
 
 
         }
 
-        /// <summary>
-        /// Rotate all chair components associated with this chair object.
-        /// </summary>
         public override void rotate()
         {
-            foreach(KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-            {
-                (pair.Value as ChairTileComponent).rotate();
-            }
-            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-            {
-                (pair.Value as ChairTileComponent).checkForSpecialUpSittingAnimation();
-            }
 
             base.rotate();
         }
@@ -58,17 +43,17 @@ namespace Revitalize.Framework.Objects.Furniture
             Dictionary<Vector2, MultiTiledComponent> objs = new Dictionary<Vector2, MultiTiledComponent>();
             foreach (var pair in this.objects)
             {
-                objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
+                objs.Add(pair.Key, (MultiTiledComponent)pair.Value.getOne());
             }
 
 
-            return new ChairMultiTiledObject(this.info, this.TileLocation, objs);
+            return new TableMultiTiledObject(this.info, this.TileLocation, objs);
         }
 
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            ChairMultiTiledObject obj = (ChairMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<ChairMultiTiledObject>(additionalSaveData["GUID"]);
+            TableMultiTiledObject obj = (TableMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<TableMultiTiledObject>(additionalSaveData["GUID"]);
             if (obj == null)
             {
                 return null;
@@ -85,7 +70,7 @@ namespace Revitalize.Framework.Objects.Furniture
             {
                 obj.childrenGuids.Remove(pair.Key);
                 //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
-                ChairTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<ChairTileComponent>(pair.Value.ToString());
+                TableTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<TableTileComponent>(pair.Value.ToString());
                 component.InitNetFields();
 
                 obj.addComponent(pair.Key, component);
