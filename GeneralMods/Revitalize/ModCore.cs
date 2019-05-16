@@ -20,7 +20,14 @@ using StardewValley.Objects;
 
 namespace Revitalize
 {
+
+    //Bugs:
+    //  -Chair tops cut off objects
+    //  -ignoring bounding box cuts off objects
+    //  -Tables don't draw their held objects
+
     // TODO:
+    //
     //
     //
     //  -Multiple Lights On Object

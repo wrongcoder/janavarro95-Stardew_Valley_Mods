@@ -323,5 +323,22 @@ namespace Revitalize.Framework.Utilities
             this.Serialize(path, obj);
         }
 
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/2742276/how-do-i-check-if-a-type-is-a-subtype-or-the-type-of-an-object
+        /// </summary>
+        /// <param name="potentialBase"></param>
+        /// <param name="potentialDescendant"></param>
+        /// <returns></returns>
+        public bool IsSameOrSubclass(Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase)
+                   || potentialDescendant == potentialBase;
+        }
+
+        public bool IsSubclass(Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase);
+        }
     }
 }

@@ -123,6 +123,8 @@ namespace Revitalize.Framework.Objects
         /// <summary>Checks for interaction with the object.</summary>
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
+            
+
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
 
@@ -134,6 +136,8 @@ namespace Revitalize.Framework.Objects
 
             if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift)))
                 return this.shiftRightClicked(who);
+
+            return base.checkForAction(who, justCheckingForActivity);
 
             if (justCheckingForActivity)
                 return true;

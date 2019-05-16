@@ -129,5 +129,22 @@ namespace Revitalize.Framework.Objects.Furniture
             }
         }
 
+        public override void pickUp()
+        {
+
+            bool canPickUp = this.removeAndAddToPlayersInventory();
+            if (canPickUp)
+            {
+                foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+                {
+                    (pair.Value as TableTileComponent).removeFromLocation((pair.Value as TableTileComponent).location, pair.Key);
+                    (pair.Value as TableTileComponent).pickUpItem(true);
+                }
+                this.location = null;
+            }
+            else
+                Game1.showRedMessage("NOOOOOOOO");
+            
+        }
     }
 }

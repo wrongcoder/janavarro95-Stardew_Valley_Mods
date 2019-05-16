@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles.Furniture;
+using Revitalize.Framework.Utilities.Serialization;
 using StardewValley;
 
 namespace Revitalize.Framework.Objects.Furniture
@@ -15,12 +16,30 @@ namespace Revitalize.Framework.Objects.Furniture
     {
         public TableInformation furnitureInfo;
 
+        public StardewValley.Object heldItem
+        {
+            get
+            {
+                return this.heldObject.Value;
+            }
+            set
+            {
+                this.heldObject.Value = value;
+            }
+        }
+
         public bool CanPlaceItemsHere
         {
             get
             {
                 return this.furnitureInfo.canPlaceItemsHere;
             }
+        }
+
+        public enum PickUpState
+        {
+            RemoveContainer,
+            DoNothing,
         }
 
 
@@ -40,17 +59,126 @@ namespace Revitalize.Framework.Objects.Furniture
         }
 
 
-        public override bool clicked(Farmer who)
+        public PickUpState pickUpItem(bool forCleanUp = false)
         {
-            return base.clicked(who);
+
+            ModCore.log("Pick up!");
+            if (this.CanPlaceItemsHere == false) return PickUpState.DoNothing;
+            if (forCleanUp == true)
+            {
+                ModCore.log("Clean up: " + this.TileLocation);
+                if (this.heldItem != null)
+                {
+                    if (Game1.player.isInventoryFull() == true)
+                    {
+                        Game1.createItemDebris(this.heldItem.getOne(), Vector2.Zero, 0, this.location);
+                        this.heldItem = null;
+                        return PickUpState.DoNothing;
+                    }
+                    else
+                    {
+                        Game1.player.addItemToInventoryBool(this.heldItem.getOne());
+                        this.heldItem = null;
+                        return PickUpState.DoNothing;
+                    }
+                }
+                else
+                {
+                    ModCore.log("Nothing here...");
+                    return PickUpState.DoNothing;
+                }
+            }
+
+            if (this.heldItem == null)
+            {
+                if (this.CanPlaceItemsHere == true && this.heldItem == null && Game1.player.ActiveObject != null)
+                {
+
+                    ModCore.log("Hello1");
+                    this.heldItem = (StardewValley.Object)Game1.player.ActiveObject.getOne();
+                    Game1.player.reduceActiveItemByOne();
+                    ModCore.log(System.Environment.StackTrace);
+                    return PickUpState.DoNothing;
+                }
+                else if (this.CanPlaceItemsHere == true && this.heldItem == null && Game1.player.ActiveObject == null)
+                {
+                    return PickUpState.RemoveContainer;
+                }
+                return PickUpState.DoNothing;
+            }
+            else if(this.heldItem!=null)
+            {
+                if (this.CanPlaceItemsHere == true && this.heldItem != null && Game1.player.ActiveObject == null)
+                {
+                    ModCore.log("Hello2");
+                    if (Game1.player.isInventoryFull() == false)
+                    {
+                        Game1.player.addItemToInventoryBool(this.heldItem);
+                        this.heldItem = null;
+                        ModCore.log("Get rid of it11111");
+                        return PickUpState.DoNothing;
+                    }
+                    else
+                    {
+                        ModCore.log("I'm not sure....");
+                        //do nothing.
+                        return PickUpState.DoNothing;
+                    }
+                    
+                }
+                else if (this.CanPlaceItemsHere == true && this.heldItem != null && Game1.player.ActiveObject != null)
+                {
+                    ModCore.log("Hello3");
+                    if (Game1.player.isInventoryFull() == false)
+                    {
+                        Game1.player.addItemToInventoryBool(this.heldItem);
+                        this.heldItem = null;
+                        ModCore.log("Get rid of it222222");
+                        ModCore.log(System.Environment.StackTrace);
+                        return PickUpState.DoNothing;
+                    }
+                    else
+                    {
+                        ModCore.log("I'm not sure....");
+                        //do nothing.
+                        return PickUpState.DoNothing;
+                    }
+                }
+            }
+            return PickUpState.DoNothing;
+        }
+        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        {
+            ModCore.log("DropInAnItem");
+            return false;
+            //return base.performObjectDropInAction(dropInItem, probe, who);
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool performDropDownAction(Farmer who)
         {
+            ModCore.log("HELLO WORLD!!!!");
+            return base.performDropDownAction(who);
+        }
+
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
+        {
+            return base.checkForAction(who, justCheckingForActivity);
+        }
+
+        public override bool clicked(Farmer who)
+        {
+            ModCore.log("Click a table");
+            if (this.pickUpItem() == PickUpState.DoNothing) return false;
+            else
+            {
+                return base.clicked(who);
+            }
+
             ///Not sure.
-            return true;
+            return false;
             //return base.rightClicked(who);
         }
+
 
         public override bool shiftRightClicked(Farmer who)
         {
@@ -159,6 +287,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 {
                     ModCore.ModMonitor.Log(err.ToString());
                 }
+                if (this.heldItem != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldItem, alpha, 99f);
             }
 
             // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));

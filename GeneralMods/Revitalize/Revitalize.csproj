@@ -92,6 +92,7 @@
     <Compile Include="Framework\Utilities\Serialization\Converters\Texture2DConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\Vector2Converter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Serialization.cs" />
+    <Compile Include="Framework\Utilities\Serialization\SpriteBatchUtilities.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
