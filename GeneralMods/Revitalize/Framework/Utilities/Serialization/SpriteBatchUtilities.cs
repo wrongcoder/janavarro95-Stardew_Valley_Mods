@@ -30,7 +30,9 @@ namespace Revitalize.Framework.Utilities.Serialization
                 Vector2 origin = new Vector2((float)x1, (float)y1);
                 double num = (double)obj.boundingBox.Bottom / 10000.0;
                 spriteBatch1.Draw(shadowTexture, position, sourceRectangle, color, 0.0f, origin, 4f, SpriteEffects.None, (float)num);
-                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(obj.boundingBox.Center.X - 32), (float)(obj.boundingBox.Center.Y))), obj.animationManager.currentAnimation.sourceRectangle, Color.White * alpha, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, ((float)(obj.boundingBox.Bottom + 1) / 10000f)+ addedDepth);
+                spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, obj.TileLocation*Game1.tileSize), Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet,itemToDraw.ParentSheetIndex,16,16), Color.White * alpha, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, ((float)(obj.boundingBox.Bottom + 1) / 10000f)+ addedDepth);
+
+                (itemToDraw as StardewValley.Object).draw(spriteBatch, (int)obj.TileLocation.X, (int)obj.TileLocation.Y);
             }
             if (ModCore.Serializer.IsSameOrSubclass(typeof(CustomObject),itemToDraw.GetType()))
             {
