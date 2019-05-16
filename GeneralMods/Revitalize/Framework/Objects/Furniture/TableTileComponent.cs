@@ -17,17 +17,6 @@ namespace Revitalize.Framework.Objects.Furniture
     {
         public TableInformation furnitureInfo;
 
-        public StardewValley.Object heldItem
-        {
-            get
-            {
-                return this.heldObject.Value;
-            }
-            set
-            {
-                this.heldObject.Value = value;
-            }
-        }
 
         public bool CanPlaceItemsHere
         {
@@ -59,165 +48,95 @@ namespace Revitalize.Framework.Objects.Furniture
             this.furnitureInfo = FurnitureInfo;
         }
 
-
-        public PickUpState pickUpItem(bool forCleanUp = false)
+        /// <summary>
+        /// Forcefully clears the held object without much fuss.
+        /// </summary>
+        public void clearHeldObject()
         {
-
-            //ModCore.log("Pick up!");
-            if (this.CanPlaceItemsHere == false) return PickUpState.DoNothing;
-            if (forCleanUp == true)
+            if (this.heldObject.Value != null)
             {
-                ModCore.log("Clean up: " + this.TileLocation);
-                if (this.heldItem != null)
+                ModCore.log("Help the held object!");
+                if (Game1.player.isInventoryFull() == false)
                 {
-                    if (Game1.player.isInventoryFull() == true)
-                    {
-                        Game1.createItemDebris(this.heldItem.getOne(), Vector2.Zero, 0, this.location);
-                        this.heldItem = null;
-                        return PickUpState.DoNothing;
-                    }
-                    else
-                    {
-                        Game1.player.addItemToInventoryBool(this.heldItem);
-                        this.heldItem = null;
-                        return PickUpState.DoNothing;
-                    }
+                    
+                    Game1.player.addItemToInventoryBool(this.heldObject.Value, false);
+                    this.heldObject.Value = null;
+                    ModCore.log("Recover item");
+                    return;
                 }
                 else
                 {
-                    ModCore.log("Nothing here...");
-                    return PickUpState.DoNothing;
+                    Game1.createItemDebris(this.heldObject.Value, Vector2.Zero, 0);
                 }
             }
-
-            if (this.heldItem == null)
+            else
             {
-                if (this.CanPlaceItemsHere == true && this.heldItem == null && Game1.player.ActiveObject != null)
-                {
-
-                    //ModCore.log("Hello1");
-                    this.heldItem = (StardewValley.Object)Game1.player.ActiveObject.getOne();
-                    Game1.player.reduceActiveItemByOne();
-                    return PickUpState.DoNothing;
-                }
-                else if (this.CanPlaceItemsHere == true && this.heldItem == null && Game1.player.ActiveObject == null)
-                {
-                    ModCore.log("Hello1Pickup");
-                    return PickUpState.RemoveContainer;
-                }
-                return PickUpState.DoNothing;
+                ModCore.log("Why is there no held object here???");
             }
-            else if(this.heldItem!=null)
-            {
-                if (this.CanPlaceItemsHere == true && this.heldItem != null && Game1.player.ActiveObject == null)
-                {
-                    //ModCore.log("Hello2");
-                    if (Game1.player.isInventoryFull() == false)
-                    {
-                        Game1.player.addItemToInventoryBool(this.heldItem);
-                        this.heldItem = null;
-                        //ModCore.log("Get rid of it11111");
-                        return PickUpState.DoNothing;
-                    }
-                    else
-                    {
-                        ModCore.log("I'm not sure....");
-                        //do nothing.
-                        return PickUpState.DoNothing;
-                    }
-                    
-                }
-                else if (this.CanPlaceItemsHere == true && this.heldItem != null && Game1.player.ActiveObject != null)
-                {
-                    ModCore.log("Hello3");
-                    if (Game1.player.isInventoryFull() == false)
-                    {
-                        Game1.player.addItemToInventoryBool(this.heldItem);
-                        this.heldItem = null;
-                        //ModCore.log("Get rid of it222222");
-                        //ModCore.log(System.Environment.StackTrace);
-                        return PickUpState.DoNothing;
-                    }
-                    else
-                    {
-                        ModCore.log("I'm not sure....");
-                        //do nothing.
-                        return PickUpState.DoNothing;
-                    }
-                }
-            }
-            return PickUpState.DoNothing;
         }
 
-        public PickUpState pickUpItemCheck(bool forCleanUp = false)
+        /// <summary>
+        /// Picks up the held item from this tile.
+        /// </summary>
+        /// <param name="justChecking"></param>
+        /// <returns></returns>
+        public PickUpState pickUpItem(bool justChecking = true)
         {
-
-            //ModCore.log("Pick up!");
-            if (this.CanPlaceItemsHere == false) return PickUpState.DoNothing;
-            
-
-            if (this.heldItem == null)
+            if (this.heldObject.Value == null && Game1.player.ActiveObject != null)
             {
-                if (this.CanPlaceItemsHere == true && this.heldItem == null && Game1.player.ActiveObject != null)
+                if (justChecking == false)
                 {
+                    this.heldObject.Value = (StardewValley.Object)Game1.player.ActiveObject.getOne();
+                    Game1.player.reduceActiveItemByOne();
 
-                    //ModCore.log("Hello1");
-                    //this.heldItem = (StardewValley.Object)Game1.player.ActiveObject.getOne();
-                    //Game1.player.reduceActiveItemByOne();
-                    return PickUpState.DoNothing;
-                }
-                else if (this.CanPlaceItemsHere == true && this.heldItem == null && Game1.player.ActiveObject == null)
-                {
-                    ModCore.log("Hello1Pickup");
-                    return PickUpState.RemoveContainer;
+                    ModCore.log("My guid: "+this.guid);
+                    ModCore.log("Container guid: " + this.containerObject.guid);
+                    foreach (var v in this.containerObject.objects)
+                    {
+                        if (v.Value.heldObject.Value != null) ModCore.log("Found a keeper to put down!");
+                        else
+                        {
+                            ModCore.log("Nothing here seriously");
+                           
+                        }
+                        if (v.Value == this) ModCore.log("I AM PRESENT!");
+                        ModCore.log("Other guid: " + (v.Value as TableTileComponent).guid);
+                    }
+
+
                 }
                 return PickUpState.DoNothing;
             }
-            else if (this.heldItem != null)
+            else if (this.heldObject.Value != null)
             {
-                if (this.CanPlaceItemsHere == true && this.heldItem != null && Game1.player.ActiveObject == null)
+                if (justChecking == false)
                 {
-                    //ModCore.log("Hello2");
                     if (Game1.player.isInventoryFull() == false)
                     {
-                        //Game1.player.addItemToInventoryBool(this.heldItem);
-                        //this.heldItem = null;
-                        //ModCore.log("Get rid of it11111");
-                        return PickUpState.DoNothing;
+                        Game1.player.addItemToInventoryBool(this.heldObject.Value, false);
+                        this.heldObject.Value = null;
                     }
                     else
                     {
-                        ModCore.log("I'm not sure....");
-                        //do nothing.
-                        return PickUpState.DoNothing;
-                    }
-
-                }
-                else if (this.CanPlaceItemsHere == true && this.heldItem != null && Game1.player.ActiveObject != null)
-                {
-                    ModCore.log("Hello3");
-                    if (Game1.player.isInventoryFull() == false)
-                    {
-                       //Game1.player.addItemToInventoryBool(this.heldItem);
-                        //ModCore.log("Get rid of it222222");
-                        //ModCore.log(System.Environment.StackTrace);
-                        return PickUpState.DoNothing;
-                    }
-                    else
-                    {
-                        ModCore.log("I'm not sure....");
-                        //do nothing.
-                        return PickUpState.DoNothing;
+                        Game1.createItemDebris(this.heldObject.Value, Vector2.Zero, 0);
                     }
                 }
+                return PickUpState.DoNothing;
             }
+            else if (this.heldObject.Value == null && Game1.player.ActiveObject == null)
+            {
+                return PickUpState.RemoveContainer;
+            }
+
+
             return PickUpState.DoNothing;
+            
         }
 
+        
 
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
-            ModCore.log("Drop In");
             return false; //this.pickUpItem()==PickUpState.DoNothing;
             //return base.performObjectDropInAction(dropInItem, probe, who);
         }
@@ -227,6 +146,7 @@ namespace Revitalize.Framework.Objects.Furniture
             return base.performDropDownAction(who);
         }
 
+        //Checks for any sort of interaction IF and only IF there is a held object on this tile.
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
             MouseState mState = Mouse.GetState();
@@ -234,7 +154,6 @@ namespace Revitalize.Framework.Objects.Furniture
 
             if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || !keyboardState.IsKeyDown(Keys.RightShift)))
             {
-                ModCore.log("Right clicked!");
                 return this.rightClicked(who);
             }
 
@@ -246,6 +165,8 @@ namespace Revitalize.Framework.Objects.Furniture
 
             if (justCheckingForActivity)
                 return true;
+
+            ModCore.log("Check for action");
             this.pickUpItem(false);
             return true;
 
@@ -253,16 +174,36 @@ namespace Revitalize.Framework.Objects.Furniture
             //return false;
         }
 
+        public override bool performToolAction(Tool t, GameLocation location)
+        {
+            ModCore.log("Perform tool action");
+            return base.performToolAction(t, location);
+        }
+
+        public override bool performUseAction(GameLocation location)
+        {
+            ModCore.log("Perform use action");
+            return base.performUseAction(location);
+        }
+
+        /// <summary>
+        /// Gets called when there is no actively held item on the tile.
+        /// </summary>
+        /// <param name="who"></param>
+        /// <returns></returns>
         public override bool clicked(Farmer who)
         {
-            
-            ModCore.log("Click a table");
-            if (this.pickUpItemCheck() == PickUpState.DoNothing) return false;
-            else
+            if (this.pickUpItem() ==  PickUpState.DoNothing) return false;
+            ModCore.log("Clicked!");
+            foreach(var v in this.containerObject.objects)
             {
-                return base.clicked(who);
+                if (v.Value.heldObject.Value != null) ModCore.log("Found a keeper!");
+                else
+                {
+                    ModCore.log("Already null!");
+                }
             }
-            
+
             ///Not sure.
             return base.clicked(who);
             //return base.rightClicked(who);
@@ -376,7 +317,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 {
                     ModCore.ModMonitor.Log(err.ToString());
                 }
-                if (this.heldItem != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldItem, alpha, -1f);
+                if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, addedDepth);
             }
 
             // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));

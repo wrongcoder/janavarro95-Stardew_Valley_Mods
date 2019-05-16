@@ -39,7 +39,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
-            this.guid = Guid.NewGuid();
+            
         }
 
         public MultiTiledObject(BasicItemInformation info)
@@ -47,7 +47,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
-            this.guid = Guid.NewGuid();
+           
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation)
@@ -55,7 +55,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
-            this.guid = Guid.NewGuid();
+            
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation, Dictionary<Vector2, MultiTiledComponent> ObjectsList)
@@ -65,20 +65,25 @@ namespace Revitalize.Framework.Objects
             this.childrenGuids = new Dictionary<Vector2, Guid>();
             foreach (var v in ObjectsList)
             {
+                ModCore.log("Original GUID: "+(v.Value as CustomObject).guid);
                 MultiTiledComponent component =(MultiTiledComponent) v.Value.getOne();
-                this.addComponent(v.Key, (component as MultiTiledComponent));
+                ModCore.log("Altered GUID: " + component.guid);
+                this.addComponent(v.Key, component);
             }
-            this.guid = Guid.NewGuid();
+            
 
         }
 
         public bool addComponent(Vector2 key, MultiTiledComponent obj)
         {
             if (this.objects.ContainsKey(key))
+            {
+                ModCore.log("Bad DATA");
                 return false;
+            }
 
             this.objects.Add(key, obj);
-            this.childrenGuids.Add(key, Guid.NewGuid());
+            this.childrenGuids.Add(key, new Guid());
 
             if (key.X > this.width) this.width = (int)key.X;
             if (key.Y > this.height) this.height = (int)key.Y;
@@ -205,7 +210,7 @@ namespace Revitalize.Framework.Objects
                 {
                     pair.Value.placementAction(location, x + (int)pair.Key.X * Game1.tileSize, y + (int)pair.Key.Y * Game1.tileSize, who);
                 }*/
-                pair.Value.placementAction(location, x + (int)pair.Key.X * Game1.tileSize, y + (int)pair.Key.Y * Game1.tileSize, who);
+                (pair.Value as MultiTiledComponent).placementAction(location, x + (int)pair.Key.X * Game1.tileSize, y + (int)pair.Key.Y * Game1.tileSize, who);
                 //ModCore.log(pair.Value.TileLocation);
             }
             this.location = location;

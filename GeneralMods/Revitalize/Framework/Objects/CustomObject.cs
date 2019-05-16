@@ -61,7 +61,9 @@ namespace Revitalize.Framework.Objects
         /// <summary>Empty constructor.</summary>
         public CustomObject() {
             this.guid = Guid.NewGuid();
+            ModCore.log("Created new obj with guid: " + this.guid);
             this.InitNetFields();
+            ModCore.log(System.Environment.StackTrace);
         }
 
         /// <summary>Construct an instance.</summary>
@@ -71,6 +73,8 @@ namespace Revitalize.Framework.Objects
             this.info = info;
             this.initializeBasics();
             this.guid = Guid.NewGuid();
+            ModCore.log("Created new obj with guid: " + this.guid);
+            ModCore.log(System.Environment.StackTrace);
         }
 
         /// <summary>Construct an instance.</summary>
@@ -80,6 +84,8 @@ namespace Revitalize.Framework.Objects
             this.info = info;
             this.initializeBasics();
             this.guid = Guid.NewGuid();
+            ModCore.log("Created new obj with guid: " + this.guid);
+            ModCore.log(System.Environment.StackTrace);
         }
 
         /// <summary>Sets some basic information up.</summary>

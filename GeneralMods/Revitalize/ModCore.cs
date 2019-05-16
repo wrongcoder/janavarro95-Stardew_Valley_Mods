@@ -12,6 +12,7 @@ using Revitalize.Framework.Graphics;
 using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Objects;
+using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Player;
 using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
@@ -25,7 +26,8 @@ namespace Revitalize
     //  -Chair tops cut off objects
     //  -ignoring bounding box cuts off objects
     //  -Tables don't draw their held objects
-
+    // -load content MUST be enabled for the table to be placed?????? WTF
+    // -multitiledobject cs 213 in placementAction must have special logic so that new components aren't being placed
     // TODO:
     //
     //
@@ -155,21 +157,24 @@ namespace Revitalize
         {
             Serializer.returnToTitle();
         }
-
+        /// <summary>
+        /// Must be enabled for the tabled to be placed????
+        /// </summary>
         private void loadContent()
         {
+            
             MultiTiledComponent obj = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.Red, true, null, null));
             MultiTiledComponent obj2 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest2", "SomeFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.Red, false, null, null));
             MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
-            obj.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj);
-
+            //obj.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj);
+            
             MultiTiledObject bigObject = new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White, false, null, null));
-            bigObject.addComponent(new Vector2(0, 0), obj);
-            bigObject.addComponent(new Vector2(1, 0), obj2);
-            bigObject.addComponent(new Vector2(2, 0), obj3);
-
+            //bigObject.addComponent(new Vector2(0, 0), obj);
+            //bigObject.addComponent(new Vector2(1, 0), obj2);
+            //bigObject.addComponent(new Vector2(2, 0), obj3);
+            
             Recipe pie = new Recipe(new Dictionary<Item, int>()
             {
                 [bigObject] = 1
@@ -177,7 +182,7 @@ namespace Revitalize
 
             customObjects.Add("Omegasis.BigTiledTest", bigObject);
             
-
+            
             Framework.Objects.Furniture.RugTileComponent rug1 = new Framework.Objects.Furniture.RugTileComponent(new BasicItemInformation("BasicRugTile", "A basic rug", "Rug", Color.Brown, -300, 0, false, 100, new Vector2(0, 0), true, true, "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", generatePlaceholderString(), TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0,true, typeof(Framework.Objects.Furniture.RugTileComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, null, null));
             Framework.Objects.Furniture.RugMultiTiledObject rug = new Framework.Objects.Furniture.RugMultiTiledObject(new BasicItemInformation("BasicRugTile", "A basic rug", "Rug", Color.Brown, -300, 0, false, 100, new Vector2(0, 0), true, true, "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", generatePlaceholderString(), TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(Framework.Objects.Furniture.RugMultiTiledObject), null, new AnimationManager(), Color.White, true, null, null));
             rug.addComponent(new Vector2(0, 0), rug1);
@@ -227,8 +232,8 @@ namespace Revitalize
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
             //Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
-            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
-            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
+            //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+            //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
@@ -243,7 +248,21 @@ namespace Revitalize
         {
             if (customObjects.ContainsKey(objName))
             {
-                return customObjects[objName];
+
+                TableMultiTiledObject old = (TableMultiTiledObject)customObjects[objName];
+                ModCore.log("Old GUID:" + old.guid);
+                foreach (var v in old.objects)
+                {
+                    log("OLD GUID PART: "+(v.Value as TableTileComponent).guid);
+                }
+
+                TableMultiTiledObject i =(TableMultiTiledObject)customObjects[objName].getOne();
+                foreach (var v in i.objects)
+                {
+                    log("OLD GUID PART: " + (v.Value as TableTileComponent).guid);
+                }
+                ModCore.log("New GUID:" + i.guid);
+                return i;
             }
             else
             {

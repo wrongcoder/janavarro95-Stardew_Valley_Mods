@@ -82,8 +82,15 @@ namespace Revitalize.Framework.Objects
 
             if (this.location == null) this.location = Game1.player.currentLocation;
             this.TileLocation = new Vector2((int)(x / Game1.tileSize), (int)(y / Game1.tileSize));
-
+            /*
             return base.placementAction(location, x, y, who);
+            */
+
+                
+            this.performDropDownAction(who);
+            location.objects.Add(this.TileLocation, this);
+            return true;
+
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
