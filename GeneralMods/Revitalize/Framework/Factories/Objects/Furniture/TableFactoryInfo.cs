@@ -9,9 +9,8 @@ using Revitalize.Framework.Objects.InformationFiles.Furniture;
 
 namespace Revitalize.Framework.Factories.Objects.Furniture
 {
-    public class TableFactoryInfo
+    public class TableFactoryInfo:FactoryInfo
     {
-        public BasicItemInformation info;
         public TableInformation tableInfo;
 
 

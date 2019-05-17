@@ -52,7 +52,7 @@ namespace Revitalize.Framework.Objects
         {
             if (this.location == null)
                 this.location = Game1.player.currentLocation;
-            //this.info.lightManager.toggleLights(this.location, this);
+            if(this.info.lightManager!=null)this.info.lightManager.toggleLights(this.location, this);
 
             //ModCore.playerInfo.sittingInfo.sit(this, Vector2.Zero);
 
@@ -69,9 +69,15 @@ namespace Revitalize.Framework.Objects
 
         public virtual void removeFromLocation(GameLocation location, Vector2 offset)
         {
+            this.cleanUpLights();
             location.removeObject(this.TileLocation, false);
             this.location = null;
             //this.performRemoveAction(this.TileLocation,location);
+        }
+
+        public virtual void cleanUpLights()
+        {
+            if (this.info.lightManager != null) this.info.lightManager.removeForCleanUp(this.location);
         }
 
         /// <summary>Places an object down.</summary>
@@ -85,13 +91,14 @@ namespace Revitalize.Framework.Objects
             /*
             return base.placementAction(location, x, y, who);
             */
-
+            //this.updateLightManager();
                 
             this.performDropDownAction(who);
             location.objects.Add(this.TileLocation, this);
             return true;
 
         }
+
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {

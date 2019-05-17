@@ -24,10 +24,7 @@ namespace Revitalize
 
     //Bugs:
     //  -Chair tops cut off objects
-    //  -ignoring bounding box cuts off objects
-    //  -Tables don't draw their held objects
     // -load content MUST be enabled for the table to be placed?????? WTF
-    // -multitiledobject cs 213 in placementAction must have special logic so that new components aren't being placed
     // TODO:
     //
     //
@@ -35,8 +32,8 @@ namespace Revitalize
     //  -Multiple Lights On Object
     //  -Illumination Colors
     //  Furniture:
-    //      -rugs (WIP but buggy for clicking)
-    //      -tables
+    //      -rugs (done, needs factory info/sprite)
+    //      -tables (done)
     //      -lamps
     //      -chairs (done)
     //      -benches (done but needs factory info/sprite)
@@ -168,12 +165,12 @@ namespace Revitalize
             MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
-            //obj.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj);
+            obj3.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj);
             
             MultiTiledObject bigObject = new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White, false, null, null));
-            //bigObject.addComponent(new Vector2(0, 0), obj);
-            //bigObject.addComponent(new Vector2(1, 0), obj2);
-            //bigObject.addComponent(new Vector2(2, 0), obj3);
+            bigObject.addComponent(new Vector2(0, 0), obj);
+            bigObject.addComponent(new Vector2(1, 0), obj2);
+            bigObject.addComponent(new Vector2(2, 0), obj3);
             
             Recipe pie = new Recipe(new Dictionary<Item, int>()
             {
@@ -231,7 +228,7 @@ namespace Revitalize
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
-            //Game1.player.addItemToInventory(customObjects["Omegasis.BigTiledTest"].getOne());
+            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
@@ -248,20 +245,7 @@ namespace Revitalize
         {
             if (customObjects.ContainsKey(objName))
             {
-
-                TableMultiTiledObject old = (TableMultiTiledObject)customObjects[objName];
-                ModCore.log("Old GUID:" + old.guid);
-                foreach (var v in old.objects)
-                {
-                    log("OLD GUID PART: "+(v.Value as TableTileComponent).guid);
-                }
-
-                TableMultiTiledObject i =(TableMultiTiledObject)customObjects[objName].getOne();
-                foreach (var v in i.objects)
-                {
-                    log("OLD GUID PART: " + (v.Value as TableTileComponent).guid);
-                }
-                ModCore.log("New GUID:" + i.guid);
+                CustomObject i =(CustomObject)customObjects[objName].getOne();
                 return i;
             }
             else

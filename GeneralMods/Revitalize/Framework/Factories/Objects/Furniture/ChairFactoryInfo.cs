@@ -9,10 +9,9 @@ using Revitalize.Framework.Objects.InformationFiles.Furniture;
 
 namespace Revitalize.Framework.Factories.Objects.Furniture
 {
-    public class ChairFactoryInfo
+    public class ChairFactoryInfo:FactoryInfo
     {
         public ChairInformation chairInfo;
-        public BasicItemInformation itemInfo;
 
         public ChairFactoryInfo()
         {
@@ -22,13 +21,13 @@ namespace Revitalize.Framework.Factories.Objects.Furniture
         public ChairFactoryInfo(ChairMultiTiledObject chair)
         {
             this.chairInfo = null;
-            this.itemInfo = chair.info;
+            this.info = chair.info;
         }
 
         public ChairFactoryInfo(ChairTileComponent chair)
         {
             this.chairInfo = chair.furnitureInfo;
-            this.itemInfo = chair.info;
+            this.info = chair.info;
         }
 
     }

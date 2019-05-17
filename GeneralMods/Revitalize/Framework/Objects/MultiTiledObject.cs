@@ -16,7 +16,7 @@ namespace Revitalize.Framework.Objects
         [JsonIgnore]
         public Dictionary<Vector2, StardewValley.Object> objects;
 
-        public Dictionary<Vector2,Guid> childrenGuids;
+        public Dictionary<Vector2, Guid> childrenGuids;
 
         private int width;
         private int height;
@@ -24,14 +24,14 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
-                return this.width+1;
+                return this.width + 1;
             }
         }
         public int Height
         {
             get
             {
-                return this.height+1;
+                return this.height + 1;
             }
         }
 
@@ -39,7 +39,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
-            
+
         }
 
         public MultiTiledObject(BasicItemInformation info)
@@ -47,7 +47,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
-           
+
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation)
@@ -55,7 +55,7 @@ namespace Revitalize.Framework.Objects
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
-            
+
         }
 
         public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation, Dictionary<Vector2, MultiTiledComponent> ObjectsList)
@@ -65,12 +65,10 @@ namespace Revitalize.Framework.Objects
             this.childrenGuids = new Dictionary<Vector2, Guid>();
             foreach (var v in ObjectsList)
             {
-                ModCore.log("Original GUID: "+(v.Value as CustomObject).guid);
-                MultiTiledComponent component =(MultiTiledComponent) v.Value.getOne();
-                ModCore.log("Altered GUID: " + component.guid);
+                MultiTiledComponent component = (MultiTiledComponent)v.Value.getOne();
                 this.addComponent(v.Key, component);
             }
-            
+
 
         }
 
@@ -94,7 +92,7 @@ namespace Revitalize.Framework.Objects
 
         public bool removeComponent(Vector2 key)
         {
-             
+
 
             if (!this.objects.ContainsKey(key))
                 return false;
@@ -135,18 +133,18 @@ namespace Revitalize.Framework.Objects
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
-        
+
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
         {
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 if (!this.isPlaceable())
                     return;
-                int x = Game1.getOldMouseX() + Game1.viewport.X+ (int)((pair.Value as MultiTiledComponent).offsetKey.X*Game1.tileSize);
-                int y = Game1.getOldMouseY() + Game1.viewport.Y+ (int)((pair.Value as MultiTiledComponent).offsetKey.Y * Game1.tileSize);
+                int x = Game1.getOldMouseX() + Game1.viewport.X + (int)((pair.Value as MultiTiledComponent).offsetKey.X * Game1.tileSize);
+                int y = Game1.getOldMouseY() + Game1.viewport.Y + (int)((pair.Value as MultiTiledComponent).offsetKey.Y * Game1.tileSize);
                 if ((double)Game1.mouseCursorTransparency == 0.0)
                 {
-                    x = ((int)Game1.player.GetGrabTile().X+ (int)((pair.Value as MultiTiledComponent).offsetKey.X))  * 64;
+                    x = ((int)Game1.player.GetGrabTile().X + (int)((pair.Value as MultiTiledComponent).offsetKey.X)) * 64;
                     y = ((int)Game1.player.GetGrabTile().Y + (int)((pair.Value as MultiTiledComponent).offsetKey.Y)) * 64;
                 }
                 if (Game1.player.GetGrabTile().Equals(Game1.player.getTileLocation()) && (double)Game1.mouseCursorTransparency == 0.0)
@@ -156,21 +154,21 @@ namespace Revitalize.Framework.Objects
                     x = (int)translatedVector2.X * 64;
                     y = (int)translatedVector2.Y * 64;
                 }
-                bool flag = (pair.Value as MultiTiledComponent).canBePlacedHere(location, new Vector2(x/Game1.tileSize, y/Game1.tileSize));
+                bool flag = (pair.Value as MultiTiledComponent).canBePlacedHere(location, new Vector2(x / Game1.tileSize, y / Game1.tileSize));
                 spriteBatch.Draw(Game1.mouseCursors, new Vector2((float)(x / 64 * 64 - Game1.viewport.X), (float)(y / 64 * 64 - Game1.viewport.Y)), new Microsoft.Xna.Framework.Rectangle?(new Microsoft.Xna.Framework.Rectangle(flag ? 194 : 210, 388, 16, 16)), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.01f);
 
                 //Revitalize.ModCore.log(new Vector2(x + ((int)pair.Key.X), y + ((int)pair.Key.Y)));
-                if((pair.Value as MultiTiledComponent).info.ignoreBoundingBox)
+                if ((pair.Value as MultiTiledComponent).info.ignoreBoundingBox)
                 {
                     x *= -1;
                     y *= -1;
                 }
-                (pair.Value as MultiTiledComponent).draw(spriteBatch, x/Game1.tileSize, y/Game1.tileSize, 0.5f);
+                (pair.Value as MultiTiledComponent).draw(spriteBatch, x / Game1.tileSize, y / Game1.tileSize, 0.5f);
                 //break;
                 //this.draw(spriteBatch, x / 64, y / 64, 0.5f);
             }
         }
-        
+
 
 
         public virtual void pickUp()
@@ -179,7 +177,18 @@ namespace Revitalize.Framework.Objects
             if (canPickUp)
             {
                 foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+                {
+                    if ((pair.Value as MultiTiledComponent).info.lightManager != null)
+                    {
+                        ModCore.log("Let there be light.");
+                        if ((pair.Value as MultiTiledComponent).info.lightManager.lightsOn == true)
+                        {
+                            ModCore.log("Got a light???");
+                        }
+                    }
                     (pair.Value as MultiTiledComponent).removeFromLocation((pair.Value as MultiTiledComponent).location, pair.Key);
+
+                }
                 this.location = null;
             }
             else
@@ -272,21 +281,21 @@ namespace Revitalize.Framework.Objects
 
             Dictionary<Vector2, Guid> guids = new Dictionary<Vector2, Guid>();
 
-            foreach(KeyValuePair<Vector2,Guid> pair in obj.childrenGuids)
+            foreach (KeyValuePair<Vector2, Guid> pair in obj.childrenGuids)
             {
                 guids.Add(pair.Key, pair.Value);
             }
 
-            foreach(KeyValuePair<Vector2,Guid> pair  in guids)
+            foreach (KeyValuePair<Vector2, Guid> pair in guids)
             {
-                    obj.childrenGuids.Remove(pair.Key);
-                    //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
-                    MultiTiledComponent component= Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>(pair.Value.ToString());
+                obj.childrenGuids.Remove(pair.Key);
+                //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
+                MultiTiledComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>(pair.Value.ToString());
                 component.InitNetFields();
 
                 obj.addComponent(pair.Key, component);
-                    
-                
+
+
             }
             obj.InitNetFields();
 
@@ -300,12 +309,12 @@ namespace Revitalize.Framework.Objects
                 return Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]];
             }
 
-            
+
         }
 
         public override Dictionary<string, string> getAdditionalSaveData()
         {
-            Dictionary<string,string> saveData= base.getAdditionalSaveData();
+            Dictionary<string, string> saveData = base.getAdditionalSaveData();
 
             Revitalize.ModCore.log("Serialize: " + this.guid.ToString());
 
@@ -317,9 +326,9 @@ namespace Revitalize.Framework.Objects
 
         public void setAllAnimationsToDefault()
         {
-            foreach(KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
-                string animationKey = (pair.Value as MultiTiledComponent) .generateDefaultRotationalAnimationKey();
+                string animationKey = (pair.Value as MultiTiledComponent).generateDefaultRotationalAnimationKey();
                 if ((pair.Value as MultiTiledComponent).animationManager.animations.ContainsKey(animationKey))
                 {
                     (pair.Value as MultiTiledComponent).animationManager.setAnimation(animationKey);

@@ -54,8 +54,9 @@
     <Compile Include="Framework\Enums\Enums.cs" />
     <Compile Include="Framework\Environment\DarkerNight.cs" />
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
-    <Compile Include="Framework\Factories\Objects\FurnitureFactory.cs" />
+    <Compile Include="Framework\Factories\Objects\Furniture\FurnitureFactory.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\ChairFactoryInfo.cs" />
+    <Compile Include="Framework\Factories\Objects\FactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
     <Compile Include="Framework\Graphics\Animations\Animation.cs" />
     <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
@@ -70,6 +71,8 @@
     <Compile Include="Framework\Objects\Furniture\ChairTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\CustomFurniture.cs" />
     <Compile Include="Framework\Objects\Furniture\FurnitureTileComponent.cs" />
+    <Compile Include="Framework\Objects\Furniture\LampMultiTiledObject.cs" />
+    <Compile Include="Framework\Objects\Furniture\LampTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\RugMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\RugTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\TableMultiTiledObject.cs" />

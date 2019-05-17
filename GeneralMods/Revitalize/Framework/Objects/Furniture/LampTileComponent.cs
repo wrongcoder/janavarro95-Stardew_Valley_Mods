@@ -7,45 +7,44 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PyTK.CustomElementHandler;
-using Revitalize.Framework.Objects.InformationFiles.Furniture;
+using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities.Serialization;
 using StardewValley;
 
 namespace Revitalize.Framework.Objects.Furniture
 {
-    public class TableTileComponent : FurnitureTileComponent
+    public class LampTileComponent:FurnitureTileComponent
     {
-        public TableInformation furnitureInfo;
-
-
-        public bool CanPlaceItemsHere
+        public bool canTurnOn
         {
             get
             {
-                return this.furnitureInfo.canPlaceItemsHere;
+                return this.info.lightManager != null;
             }
         }
 
-        public enum PickUpState
+        public LightManager lights
         {
-            RemoveContainer,
-            DoNothing,
+            get
+            {
+                return this.info.lightManager;
+            }
         }
 
 
-        public TableTileComponent() : base()
+        public LampTileComponent() : base()
         {
 
         }
 
-        public TableTileComponent(BasicItemInformation Info, TableInformation FurnitureInfo) : base(Info)
+        public LampTileComponent(BasicItemInformation Info) : base(Info)
         {
-            this.furnitureInfo = FurnitureInfo;
+          
         }
 
-        public TableTileComponent(BasicItemInformation Info, Vector2 TileLocation, TableInformation FurnitureInfo) : base(Info, TileLocation)
+        public LampTileComponent(BasicItemInformation Info, Vector2 TileLocation) : base(Info, TileLocation)
         {
-            this.furnitureInfo = FurnitureInfo;
+            
         }
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace Revitalize.Framework.Objects.Furniture
             if (this.heldObject.Value != null)
             {
                 if (Game1.player.isInventoryFull() == false)
-                {                   
+                {
                     Game1.player.addItemToInventoryBool(this.heldObject.Value, false);
                     this.heldObject.Value = null;
                     return;
@@ -67,50 +66,6 @@ namespace Revitalize.Framework.Objects.Furniture
                 }
             }
         }
-
-        /// <summary>
-        /// Picks up the held item from this tile.
-        /// </summary>
-        /// <param name="justChecking"></param>
-        /// <returns></returns>
-        public PickUpState pickUpItem(bool justChecking = true)
-        {
-            if (this.heldObject.Value == null && Game1.player.ActiveObject != null)
-            {
-                if (justChecking == false)
-                {
-                    this.heldObject.Value = (StardewValley.Object)Game1.player.ActiveObject.getOne();
-                    Game1.player.reduceActiveItemByOne();
-                }
-                return PickUpState.DoNothing;
-            }
-            else if (this.heldObject.Value != null)
-            {
-                if (justChecking == false)
-                {
-                    if (Game1.player.isInventoryFull() == false)
-                    {
-                        Game1.player.addItemToInventoryBool(this.heldObject.Value, false);
-                        this.heldObject.Value = null;
-                    }
-                    else
-                    {
-                        Game1.createItemDebris(this.heldObject.Value, Vector2.Zero, 0);
-                    }
-                }
-                return PickUpState.DoNothing;
-            }
-            else if (this.heldObject.Value == null && Game1.player.ActiveObject == null)
-            {
-                return PickUpState.RemoveContainer;
-            }
-
-
-            return PickUpState.DoNothing;
-            
-        }
-
-        
 
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
@@ -129,7 +84,7 @@ namespace Revitalize.Framework.Objects.Furniture
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
 
-            if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || !keyboardState.IsKeyDown(Keys.RightShift)))
+            if (mState.RightButton == ButtonState.Pressed && (!keyboardState.IsKeyDown(Keys.LeftShift) || !keyboardState.IsKeyDown(Keys.RightShift)))
             {
                 return this.rightClicked(who);
             }
@@ -137,13 +92,12 @@ namespace Revitalize.Framework.Objects.Furniture
             if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift)))
                 return this.shiftRightClicked(who);
 
-           
+
             //return base.checkForAction(who, justCheckingForActivity);
 
             if (justCheckingForActivity)
                 return true;
 
-            this.pickUpItem(false);
             return true;
 
             //return this.clicked(who);
@@ -167,8 +121,17 @@ namespace Revitalize.Framework.Objects.Furniture
         /// <returns></returns>
         public override bool clicked(Farmer who)
         {
-            if (this.pickUpItem() ==  PickUpState.DoNothing) return false;
             return base.clicked(who);
+        }
+
+        public override bool rightClicked(Farmer who)
+        {
+            if (this.canTurnOn)
+            {
+                this.info.lightManager.toggleLights(this.location, this);
+                return true;
+            }
+            return false;
         }
 
 
@@ -180,7 +143,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            TableTileComponent component = new TableTileComponent(this.info, (TableInformation)this.furnitureInfo);
+            LampTileComponent component = new LampTileComponent(this.info);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;
@@ -191,7 +154,7 @@ namespace Revitalize.Framework.Objects.Furniture
             //instead of using this.offsetkey.x use get additional save data function and store offset key there
 
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
-            TableTileComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<TableTileComponent>(additionalSaveData["GUID"]);
+            LampTileComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<LampTileComponent>(additionalSaveData["GUID"]);
             if (self == null)
             {
                 return null;
@@ -200,7 +163,7 @@ namespace Revitalize.Framework.Objects.Furniture
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
             {
                 //Get new container
-                TableMultiTiledObject obj = (TableMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<TableMultiTiledObject>(additionalSaveData["ParentGUID"]);
+                LampMultiTiledObject obj = (LampMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<LampMultiTiledObject>(additionalSaveData["ParentGUID"]);
                 self.containerObject = obj;
                 obj.addComponent(offsetKey, self);
                 //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");

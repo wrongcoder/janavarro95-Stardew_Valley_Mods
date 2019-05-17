@@ -37,6 +37,10 @@ namespace Revitalize.Framework.Factories.Objects
             DeserializeTableFiles();
         }
 
+        private static void SerializeLamps()
+        {
+            LampTileComponent lampTop = new LampTileComponent(new BasicItemInformation("Oak Chair", "A basic wooden chair", "Chairs", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.Revitalize.Furniture.Chairs.OakChair", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(Framework.Objects.Furniture.ChairTileComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, new Framework.Utilities.InventoryManager(), new LightManager()));
+        }
 
 
         private static void SerializeChairs()
@@ -149,7 +153,7 @@ namespace Revitalize.Framework.Factories.Objects
                 if ((Path.GetFileName(file)).Contains("_")==true) continue;
                 else
                 {
-                    chairObjects.Add(Path.GetFileNameWithoutExtension(file), new ChairMultiTiledObject(ModCore.Serializer.DeserializeContentFile<ChairFactoryInfo>(file).itemInfo));
+                    chairObjects.Add(Path.GetFileNameWithoutExtension(file), new ChairMultiTiledObject(ModCore.Serializer.DeserializeContentFile<ChairFactoryInfo>(file).info));
                 }
             }
             //Deseralize components
@@ -163,7 +167,7 @@ namespace Revitalize.Framework.Factories.Objects
                     string name = splits[0];
                     Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
                     ChairFactoryInfo info = ModCore.Serializer.DeserializeContentFile<ChairFactoryInfo>(file);
-                    chairObjects[name].addComponent(offset, new ChairTileComponent(info.itemInfo, info.chairInfo));
+                    chairObjects[name].addComponent(offset, new ChairTileComponent(info.info, info.chairInfo));
                 }
             }
             foreach (var v in chairObjects)

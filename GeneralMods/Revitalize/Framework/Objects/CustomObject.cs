@@ -49,7 +49,6 @@ namespace Revitalize.Framework.Objects
             }
             set
             {
-                Revitalize.ModCore.log("GUESS SERIALIZATION IS WORKING???");
                 this.info =(BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(value, typeof(BasicItemInformation));
             }
         }
@@ -61,9 +60,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Empty constructor.</summary>
         public CustomObject() {
             this.guid = Guid.NewGuid();
-            ModCore.log("Created new obj with guid: " + this.guid);
             this.InitNetFields();
-            ModCore.log(System.Environment.StackTrace);
         }
 
         /// <summary>Construct an instance.</summary>
@@ -73,8 +70,7 @@ namespace Revitalize.Framework.Objects
             this.info = info;
             this.initializeBasics();
             this.guid = Guid.NewGuid();
-            ModCore.log("Created new obj with guid: " + this.guid);
-            ModCore.log(System.Environment.StackTrace);
+
         }
 
         /// <summary>Construct an instance.</summary>
@@ -84,8 +80,7 @@ namespace Revitalize.Framework.Objects
             this.info = info;
             this.initializeBasics();
             this.guid = Guid.NewGuid();
-            ModCore.log("Created new obj with guid: " + this.guid);
-            ModCore.log(System.Environment.StackTrace);
+
         }
 
         /// <summary>Sets some basic information up.</summary>
@@ -258,7 +253,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {
-            if (this.info.ignoreBoundingBox) return true;
+            if (this.info.ignoreBoundingBox && l.isObjectAtTile((int)tile.X,(int)tile.Y)==false) return true;
             return base.canBePlacedHere(l, tile);
         }
 

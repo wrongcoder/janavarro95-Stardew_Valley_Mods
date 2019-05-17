@@ -10,6 +10,8 @@ namespace Revitalize.Framework.Illuminate
         public Dictionary<Vector2, LightSource> lights;
         public bool lightsOn;
 
+        public const int lightBigNumber= 1000000;
+
         public LightManager()
         {
             this.lights = new Dictionary<Vector2, LightSource>();
@@ -38,7 +40,7 @@ namespace Revitalize.Framework.Illuminate
 
             this.lights.TryGetValue(IdKey, out LightSource light);
             Game1.currentLightSources.Remove(light);
-            location.sharedLights.Remove((int)IdKey.X * 1000000 + (int)IdKey.Y);
+            location.sharedLights.Remove((int)IdKey.X * lightBigNumber + (int)IdKey.Y);
             return true;
         }
 
@@ -61,7 +63,7 @@ namespace Revitalize.Framework.Illuminate
 
             Game1.showRedMessage("TURN ON!");
             Game1.currentLightSources.Add(light);
-            location.sharedLights.Add((int)IdKey.X*10000+(int)IdKey.Y,light);
+            location.sharedLights.Add((int)IdKey.X*lightBigNumber+(int)IdKey.Y,light);
             this.repositionLight(light, IdKey, gameObject);
             return true;
         }
@@ -101,12 +103,19 @@ namespace Revitalize.Framework.Illuminate
             {
                 this.turnOnLights(location, gameObject);
                 this.lightsOn = true;
+                return;
             }
             else if (this.lightsOn)
             {
                 this.turnOffLights(Game1.player.currentLocation);
                 this.lightsOn = false;
+                return;
             }
+        }
+
+        public virtual void removeForCleanUp(GameLocation loc)
+        {
+            this.turnOffLights(loc);
         }
     }
 }
