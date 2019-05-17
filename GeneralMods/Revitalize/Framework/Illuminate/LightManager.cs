@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
 namespace Revitalize.Framework.Illuminate
@@ -8,6 +9,7 @@ namespace Revitalize.Framework.Illuminate
     public class LightManager
     {
         public Dictionary<Vector2, LightSource> lights;
+        public Dictionary<Vector2, FakeLightSource> fakeLights;
         public bool lightsOn;
 
         public const int lightBigNumber= 1000000;
@@ -15,12 +17,16 @@ namespace Revitalize.Framework.Illuminate
         public LightManager()
         {
             this.lights = new Dictionary<Vector2, LightSource>();
+            this.fakeLights = new Dictionary<Vector2, FakeLightSource>();
             this.lightsOn = false;
         }
 
         /// <summary>Add a light to the list of tracked lights.</summary>
         public bool addLight(Vector2 IdKey, LightSource light, StardewValley.Object gameObject)
         {
+            if (gameObject.TileLocation.X < 0) gameObject.TileLocation = new Vector2(gameObject.TileLocation.X * -1, gameObject.TileLocation.Y);
+            if (gameObject.TileLocation.Y < 0) gameObject.TileLocation = new Vector2(gameObject.TileLocation.X, gameObject.TileLocation.Y*-1);
+
             Vector2 initialPosition = gameObject.TileLocation * Game1.tileSize;
             initialPosition += IdKey;
 
@@ -29,6 +35,8 @@ namespace Revitalize.Framework.Illuminate
 
             light.position.Value = initialPosition;
             this.lights.Add(IdKey, light);
+            if (this.fakeLights.ContainsKey(IdKey)) return true;
+            this.fakeLights.Add(IdKey, new FakeLightSource(light.Identifier, light.position.Value, light.color.Value.Invert(), light.radius.Value));
             return true;
         }
 
@@ -62,6 +70,12 @@ namespace Revitalize.Framework.Illuminate
                 throw new Exception("Locational lights is null!");
 
             Game1.showRedMessage("TURN ON!");
+
+            if (light.lightTexture == null)
+            {
+                light.lightTexture = this.loadTextureFromConstantValue(light.Identifier);
+            }
+
             Game1.currentLightSources.Add(light);
             location.sharedLights.Add((int)IdKey.X*lightBigNumber+(int)IdKey.Y,light);
             this.repositionLight(light, IdKey, gameObject);
@@ -116,6 +130,29 @@ namespace Revitalize.Framework.Illuminate
         public virtual void removeForCleanUp(GameLocation loc)
         {
             this.turnOffLights(loc);
+        }
+
+        private Texture2D loadTextureFromConstantValue(int value)
+        {
+            switch (value)
+            {
+                case 1:
+                    return Game1.lantern;
+                    break;
+                case 2:
+                    return Game1.windowLight;
+                    break;
+                case 4:
+                    return Game1.sconceLight;
+                    break;
+                case 5:
+                    return Game1.cauldronLight;
+                    break;
+                case 6:
+                    return Game1.indoorWindowLight;
+                    break;
+            }
+            return Game1.sconceLight;
         }
     }
 }

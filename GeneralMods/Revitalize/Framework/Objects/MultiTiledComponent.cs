@@ -52,7 +52,6 @@ namespace Revitalize.Framework.Objects
         {
             if (this.location == null)
                 this.location = Game1.player.currentLocation;
-            if(this.info.lightManager!=null)this.info.lightManager.toggleLights(this.location, this);
 
             //ModCore.playerInfo.sittingInfo.sit(this, Vector2.Zero);
 

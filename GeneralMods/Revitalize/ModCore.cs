@@ -27,7 +27,9 @@ namespace Revitalize
     // -load content MUST be enabled for the table to be placed?????? WTF
     // TODO:
     //
-    //
+    // -Get way to read in textures at runtime without having to load them in...
+    // -Make this mod able to load content packs for easier future modding
+    // -Make deserialize/serialize look through sub directories instead of just one directory. 
     //
     //  -Multiple Lights On Object
     //  -Illumination Colors
@@ -139,13 +141,14 @@ namespace Revitalize
             Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager());
             TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "OakChair.png")));
             TextureManager.addTexture("Furniture", "Oak Table", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Tables", "OakTable.png")));
+            TextureManager.addTexture("Furniture", "Oak Lamp", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Lamps", "OakLamp.png")));
             customObjects = new Dictionary<string, CustomObject>();
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
 
 
             Serializer = new Serializer();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
-            this.loadContent();
+            
 
 
         }
@@ -165,7 +168,7 @@ namespace Revitalize
             MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
-            obj3.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj);
+            obj3.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj3);
             
             MultiTiledObject bigObject = new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White, false, null, null));
             bigObject.addComponent(new Vector2(0, 0), obj);
@@ -219,7 +222,7 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
-            
+            this.loadContent();
 
 
             Serializer.afterLoad();
@@ -232,6 +235,7 @@ namespace Revitalize
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
             Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);

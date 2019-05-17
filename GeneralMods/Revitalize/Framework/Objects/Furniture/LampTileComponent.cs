@@ -47,25 +47,6 @@ namespace Revitalize.Framework.Objects.Furniture
             
         }
 
-        /// <summary>
-        /// Forcefully clears the held object without much fuss.
-        /// </summary>
-        public void clearHeldObject()
-        {
-            if (this.heldObject.Value != null)
-            {
-                if (Game1.player.isInventoryFull() == false)
-                {
-                    Game1.player.addItemToInventoryBool(this.heldObject.Value, false);
-                    this.heldObject.Value = null;
-                    return;
-                }
-                else
-                {
-                    Game1.createItemDebris(this.heldObject.Value, Vector2.Zero, 0);
-                }
-            }
-        }
 
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
