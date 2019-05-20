@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
+using StardewValley;
 
 namespace Revitalize.Framework.Graphics
 {
@@ -16,6 +21,19 @@ namespace Revitalize.Framework.Graphics
         public TextureManager()
         {
             this.textures = new Dictionary<string, Texture2DExtended>();
+            this.searchForTextures();
+        }
+
+        public TextureManager(bool doNothing=false)
+        {
+            this.textures = new Dictionary<string, Texture2DExtended>();
+            //
+        }
+
+        public TextureManager(IContentPack ContentPack)
+        {
+            this.textures = new Dictionary<string, Texture2DExtended>();
+            this.searchForTextures(ContentPack);
         }
 
         public void addTexture(string name, Texture2DExtended texture)
@@ -36,8 +54,100 @@ namespace Revitalize.Framework.Graphics
 
         public static void addTexture(string managerName, string textureName, Texture2DExtended Texture)
         {
-            Texture.texture.Name = managerName + '.' + textureName;
+            Texture.texture.Name = textureName;
             TextureManagers[managerName].addTexture(textureName, Texture);
+        }
+
+
+        /// <summary>
+        /// Content pack search.
+        /// </summary>
+        public void searchForTextures(IContentPack content)
+        {
+            string path = content.DirectoryPath;
+            this.searchDirectories(path,"",content);
+        }
+
+        /// <summary>
+        /// Non-Content pack search.
+        /// </summary>
+        public void searchForTextures()
+        {
+            string path = ModCore.ModHelper.DirectoryPath;
+            this.searchDirectories(path,"",ModCore.Manifest);
+        }
+
+        private void searchDirectories(string path,string relativePath,IManifest manifest)
+        {
+            string[] dirs = Directory.GetDirectories(path);
+            string[] files = Directory.GetFiles(path);
+
+            string[] extensions = new string[2]
+            {
+                ".png",
+                ".jpg"
+            };
+
+            foreach (string directory in dirs)
+            {
+                string combo = string.IsNullOrEmpty(relativePath) ? Path.GetFileName(directory) : Path.Combine(relativePath, Path.GetFileName(directory));
+                this.searchDirectories(directory,combo,manifest);
+            }
+
+            foreach (string file in files)
+            {
+                if (extensions.Contains(Path.GetExtension(file)))
+                {
+                    this.processFoundTexture(file,relativePath);
+
+                }
+            }
+
+        }
+        private void searchDirectories(string path, string relativePath,IContentPack ContentPack)
+        {
+            string[] dirs = Directory.GetDirectories(path);
+            string[] files = Directory.GetFiles(path);
+
+            string[] extensions = new string[2]
+            {
+                ".png",
+                ".jpg"
+            };
+
+            foreach (string directory in dirs)
+            {
+                string combo = string.IsNullOrEmpty(relativePath) ? Path.GetFileName(directory) : Path.Combine(relativePath, Path.GetFileName(directory));
+                this.searchDirectories(directory, combo, ContentPack);
+            }
+
+            foreach (string file in files)
+            {
+                if (extensions.Contains(Path.GetExtension(file)))
+                {
+                    this.processFoundTexture(file, relativePath,ContentPack);
+
+                }
+            }
+
+        }
+
+        private void processFoundTexture(string file,string relativePath)
+        {
+            Texture2DExtended textureExtended = new Texture2DExtended(ModCore.ModHelper,ModCore.Manifest,Path.Combine(relativePath,Path.GetFileName(file)));
+
+            ModCore.log("Found texture: " + textureExtended.Name);
+
+            this.addTexture(textureExtended.Name, textureExtended);
+        }
+
+        private void processFoundTexture(string file, string relativePath, IContentPack ContentPack)
+        {
+            Texture2DExtended textureExtended = new Texture2DExtended(ContentPack, ContentPack.Manifest, Path.Combine(relativePath, Path.GetFileName(file)));
+
+            ModCore.log("Found texture: " + textureExtended.Name);
+
+            this.addTexture(textureExtended.Name, textureExtended);
         }
 
     }

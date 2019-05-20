@@ -25,6 +25,7 @@ namespace Revitalize
     //Bugs:
     //  -Chair tops cut off objects
     // -load content MUST be enabled for the table to be placed?????? WTF
+    //-paths for extensive texture search are too long. need to be relative?
     // TODO:
     //
     // -Get way to read in textures at runtime without having to load them in...
@@ -113,6 +114,7 @@ namespace Revitalize
     {
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
+        public static IManifest Manifest;
 
         public static Dictionary<string, CustomObject> customObjects;
 
@@ -128,6 +130,7 @@ namespace Revitalize
         {
             ModHelper = helper;
             ModMonitor = this.Monitor;
+            Manifest = this.ModManifest;
 
             this.createDirectories();
             this.initailizeComponents();
@@ -138,10 +141,14 @@ namespace Revitalize
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             playerInfo = new PlayerInfo();
 
+            //Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager(this.Helper.DirectoryPath, Path.Combine("Content", "Graphics", "Furniture")));
             Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager());
-            TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "OakChair.png")));
-            TextureManager.addTexture("Furniture", "Oak Table", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Tables", "OakTable.png")));
-            TextureManager.addTexture("Furniture", "Oak Lamp", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Lamps", "OakLamp.png")));
+            //Rename graphic files tohave spaces and comment out below lines
+
+            //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
+            //
+            //TextureManager.addTexture("Furniture", "Oak Table", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Tables", "Oak Table.png")));
+            //TextureManager.addTexture("Furniture", "Oak Lamp", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Lamps", "Oak Lamp.png")));
             customObjects = new Dictionary<string, CustomObject>();
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
 

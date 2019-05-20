@@ -61,7 +61,6 @@ namespace Revitalize.Framework.Objects
 
         public BasicItemInformation(string name, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, Vector2 TileLocation, bool canBeSetOutdoors, bool canBeSetIndoors, string id, string data, Texture2D texture, Color color, int tileIndex, bool bigCraftable, Type type, CraftingData craftingData, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights) : base(id, data, texture, color, tileIndex, bigCraftable, type, craftingData)
         {
-            
             this.name = name;
             this.description = description;
             this.categoryName = categoryName;
@@ -79,10 +78,10 @@ namespace Revitalize.Framework.Objects
             if (this.animationManager.IsNull)
             {
                 this.animationManager = new AnimationManager(new Graphics.Texture2DExtended(), new Animation(new Rectangle(0, 0, 16, 16)), false);
-                this.animationManager.getExtendedTexture().texture = this.texture;
+                this.animationManager.getExtendedTexture().texture = texture;
             }
             else
-                this.texture = this.animationManager.getTexture();
+                this.texture = texture;
 
             this.drawPosition = Vector2.Zero;
             this.drawColor = drawColor;

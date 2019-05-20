@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace Revitalize.Framework.Graphics
 {
@@ -12,6 +13,7 @@ namespace Revitalize.Framework.Graphics
         public string modID;
         public ContentSource source;
         private readonly IModHelper helper;
+        private readonly IContentPack contentPack;
 
         /// <summary>Empty/null constructor.</summary>
         public Texture2DExtended()
@@ -25,12 +27,14 @@ namespace Revitalize.Framework.Graphics
 
         public Texture2DExtended(Texture2D Texture)
         {
-            this.Name = "";
+            this.Name = Texture.Name;
             this.texture = Texture;
             this.path = "";
             this.helper = null;
             this.modID = "";
+            this.contentPack = null;
         }
+
 
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
@@ -42,6 +46,7 @@ namespace Revitalize.Framework.Graphics
             this.helper = helper;
             this.modID = manifest.UniqueID;
             this.source = contentSource;
+            this.contentPack = null;
         }
 
         public Texture2DExtended(IModHelper helper, string modID, string path, ContentSource contentSource = ContentSource.ModFolder)
@@ -52,11 +57,45 @@ namespace Revitalize.Framework.Graphics
             this.helper = helper;
             this.modID = modID;
             this.source = contentSource;
+            this.contentPack = null;
+        }
+
+        public Texture2DExtended(IContentPack ContentPack, IManifest manifest, string path)
+        {
+            this.Name = Path.GetFileNameWithoutExtension(path);
+            this.path = path;
+            this.texture = ContentPack.LoadAsset<Texture2D>(path);
+            this.helper = null;
+            this.modID = manifest.UniqueID;
+            this.source = ContentSource.ModFolder;
+            this.contentPack = null;
+        }
+        public Texture2DExtended(IContentPack ContentPack, string modID, string path)
+        {
+            this.Name = Path.GetFileNameWithoutExtension(path);
+            this.path = path;
+            this.texture = ContentPack.LoadAsset<Texture2D>(path);
+            this.helper = null;
+            this.modID = modID;
+            this.source = ContentSource.ModFolder;
+            this.contentPack = null;
         }
 
         public Texture2DExtended Copy()
         {
-            return new Texture2DExtended(this.helper, this.modID, this.path);
+            //return this;
+            if (this.helper != null)
+            {
+                return new Texture2DExtended(this.helper, this.modID, this.path);
+            }
+            else if(this.contentPack!=null)
+            {
+                return new Texture2DExtended(this.contentPack,this.modID,this.path);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public IModHelper getHelper()
