@@ -12,6 +12,7 @@ namespace Revitalize.Framework.Graphics
         public string modID;
         public ContentSource source;
         private readonly IModHelper helper;
+        private readonly IContentPack content;
 
         /// <summary>Empty/null constructor.</summary>
         public Texture2DExtended()
@@ -54,9 +55,30 @@ namespace Revitalize.Framework.Graphics
             this.source = contentSource;
         }
 
+        public Texture2DExtended(IContentPack content, string path)
+        {
+            this.Name = Path.GetFileNameWithoutExtension(path);
+            this.path = path;
+            this.content = content;
+            this.texture = content.LoadAsset<Texture2D>(path);
+            this.helper = null;
+            this.modID = content.Manifest.UniqueID;
+        }
+
         public Texture2DExtended Copy()
         {
-            return new Texture2DExtended(this.helper, this.modID, this.path);
+            if (this.helper != null)
+            {
+                return new Texture2DExtended(this.helper, this.modID, this.path);
+            }
+            else if (this.content != null)
+            {
+                return new Texture2DExtended(this.content, this.path);
+            }
+            else
+            {
+                throw new System.Exception("Trying to copy a texture that isn't from a mod or a content pack!!!");
+            }
         }
 
         public IModHelper getHelper()
