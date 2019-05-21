@@ -141,7 +141,7 @@ namespace Revitalize
             playerInfo = new PlayerInfo();
 
             Framework.Graphics.TextureManager.AddTextureManager(Manifest,"Furniture");
-            TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures();
+            TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures(Path.Combine("Content", "Graphics", "Furniture"));
 
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
 

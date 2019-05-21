@@ -26,6 +26,7 @@ namespace Revitalize.Framework.Graphics
             this.textures = new Dictionary<string, Texture2DExtended>();
         }
 
+
         public TextureManager(string Name,IContentPack ContentPack)
         {
             this.name = Name;
@@ -52,19 +53,35 @@ namespace Revitalize.Framework.Graphics
         /// <summary>
         /// Content pack search.
         /// </summary>
-        public void searchForTextures(IContentPack content)
+        public void searchForTextures(IContentPack content,string RelativePath)
         {
-            string path = content.DirectoryPath;
-            this.searchDirectories(path, "", content);
+            if (string.IsNullOrEmpty(RelativePath))
+            {
+                string path = content.DirectoryPath;
+                this.searchDirectories(path, "", content);
+            }
+            else
+            {
+                string path =Path.Combine(content.DirectoryPath,RelativePath);
+                this.searchDirectories(path, RelativePath, content);
+            }
         }
 
         /// <summary>
         /// Non-Content pack search.
         /// </summary>
-        public void searchForTextures()
+        public void searchForTextures(string RelativePath="")
         {
-            string path = ModCore.ModHelper.DirectoryPath;
-            this.searchDirectories(path, "", ModCore.Manifest);
+            if (string.IsNullOrEmpty(RelativePath))
+            {
+                string path = ModCore.ModHelper.DirectoryPath;
+                this.searchDirectories(path, "", ModCore.Manifest);
+            }
+            else
+            {
+                string path = Path.Combine(ModCore.ModHelper.DirectoryPath,RelativePath);
+                this.searchDirectories(path, RelativePath, ModCore.Manifest);
+            }
         }
 
         private void searchDirectories(string path, string relativePath, IManifest manifest)
