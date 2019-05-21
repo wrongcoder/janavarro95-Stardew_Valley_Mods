@@ -1,6 +1,7 @@
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace Revitalize.Framework.Graphics
 {
@@ -24,14 +25,6 @@ namespace Revitalize.Framework.Graphics
             this.modID = "";
         }
 
-        public Texture2DExtended(Texture2D Texture)
-        {
-            this.Name = "";
-            this.texture = Texture;
-            this.path = "";
-            this.helper = null;
-            this.modID = "";
-        }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
@@ -53,6 +46,25 @@ namespace Revitalize.Framework.Graphics
             this.helper = helper;
             this.modID = modID;
             this.source = contentSource;
+        }
+
+        public Texture2DExtended(IContentPack ContentPack, IManifest manifest, string path)
+        {
+            this.Name = Path.GetFileNameWithoutExtension(path);
+            this.path = path;
+            this.texture = ContentPack.LoadAsset<Texture2D>(path);
+            this.helper = null;
+            this.modID = manifest.UniqueID;
+            this.source = ContentSource.ModFolder;
+        }
+        public Texture2DExtended(IContentPack ContentPack, string modID, string path)
+        {
+            this.Name = Path.GetFileNameWithoutExtension(path);
+            this.path = path;
+            this.texture = ContentPack.LoadAsset<Texture2D>(path);
+            this.helper = null;
+            this.modID = modID;
+            this.source = ContentSource.ModFolder;
         }
 
         public Texture2DExtended(IContentPack content, string path)

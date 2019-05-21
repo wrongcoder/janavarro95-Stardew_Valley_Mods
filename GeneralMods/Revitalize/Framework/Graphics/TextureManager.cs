@@ -24,6 +24,19 @@ namespace Revitalize.Framework.Graphics
         {
             this.name = Name;
             this.textures = new Dictionary<string, Texture2DExtended>();
+            this.searchForTextures();
+        }
+
+        public TextureManager(bool doNothing=false)
+        {
+            this.textures = new Dictionary<string, Texture2DExtended>();
+            //
+        }
+
+        public TextureManager(IContentPack ContentPack)
+        {
+            this.textures = new Dictionary<string, Texture2DExtended>();
+            this.searchForTextures(ContentPack);
         }
 
         public void addTexture(string name, Texture2DExtended texture)
@@ -165,6 +178,8 @@ namespace Revitalize.Framework.Graphics
         {
             return TextureManagers[Manifest.UniqueID][Name];
         }
+
+
 
     }
 }
