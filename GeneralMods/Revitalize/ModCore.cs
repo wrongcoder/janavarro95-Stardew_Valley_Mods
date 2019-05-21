@@ -140,19 +140,17 @@ namespace Revitalize
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             playerInfo = new PlayerInfo();
 
-<<<<<<< HEAD
             Framework.Graphics.TextureManager.AddTextureManager(Manifest,"Furniture");
             TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures();
 
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
-=======
+
             //Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager(this.Helper.DirectoryPath, Path.Combine("Content", "Graphics", "Furniture")));
-            Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager());
             //Rename graphic files tohave spaces and comment out below lines
 
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
             //
->>>>>>> 596aedac77fc182f58bd38415ed86de0b1a6483e
+
             //TextureManager.addTexture("Furniture", "Oak Table", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Tables", "Oak Table.png")));
             //TextureManager.addTexture("Furniture", "Oak Lamp", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Lamps", "Oak Lamp.png")));
             customObjects = new Dictionary<string, CustomObject>();

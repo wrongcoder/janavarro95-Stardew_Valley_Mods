@@ -24,19 +24,12 @@ namespace Revitalize.Framework.Graphics
         {
             this.name = Name;
             this.textures = new Dictionary<string, Texture2DExtended>();
-            this.searchForTextures();
         }
 
-        public TextureManager(bool doNothing=false)
+        public TextureManager(string Name,IContentPack ContentPack)
         {
+            this.name = Name;
             this.textures = new Dictionary<string, Texture2DExtended>();
-            //
-        }
-
-        public TextureManager(IContentPack ContentPack)
-        {
-            this.textures = new Dictionary<string, Texture2DExtended>();
-            this.searchForTextures(ContentPack);
         }
 
         public void addTexture(string name, Texture2DExtended texture)
