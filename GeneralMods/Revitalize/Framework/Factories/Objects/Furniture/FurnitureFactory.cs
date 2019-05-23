@@ -65,10 +65,10 @@ namespace Revitalize.Framework.Factories.Objects
 
             FactoryInfo lO = new FactoryInfo(lamp);
 
-            ModCore.Serializer.SerializeContentFile("OakLamp_0_-2", lT, LampsFolder);
-            ModCore.Serializer.SerializeContentFile("OakLamp_0_-1", lM, LampsFolder);
-            ModCore.Serializer.SerializeContentFile("OakLamp_0_0", lB, LampsFolder);
-            ModCore.Serializer.SerializeContentFile("OakLamp", lO, LampsFolder);
+            ModCore.Serializer.SerializeContentFile("OakLamp_0_-2", lT,Path.Combine(LampsFolder,"OakLamp"));
+            ModCore.Serializer.SerializeContentFile("OakLamp_0_-1", lM, Path.Combine(LampsFolder, "OakLamp"));
+            ModCore.Serializer.SerializeContentFile("OakLamp_0_0", lB, Path.Combine(LampsFolder, "OakLamp"));
+            ModCore.Serializer.SerializeContentFile("OakLamp", lO, Path.Combine(LampsFolder, "OakLamp"));
 
             //ModCore.customObjects.Add(lamp.info.id, lamp);
         }
@@ -76,51 +76,58 @@ namespace Revitalize.Framework.Factories.Objects
         private static void DeserializeLamps()
         {
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", LampsFolder))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", LampsFolder));
-            string[] files = Directory.GetFiles(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", LampsFolder));
+            string[] directories = Directory.GetDirectories(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", LampsFolder));
 
-            Dictionary<string, LampMultiTiledObject> objs = new Dictionary<string, LampMultiTiledObject>();
-
-            //Deserialize container.
-            foreach (string file in files)
+            foreach(string directory in directories)
             {
-                if ((Path.GetFileName(file)).Contains("_") == true) continue;
-                else
-                {
-                    objs.Add(Path.GetFileNameWithoutExtension(file), new LampMultiTiledObject(ModCore.Serializer.DeserializeContentFile<FactoryInfo>(file).info));
-                }
-            }
-            //Deseralize components
-            foreach (string file in files)
-            {
-                if ((Path.GetFileName(file)).Contains("_") == false) continue;
-                else
-                {
+                string[] files = Directory.GetFiles(directory);
 
-                    string[] splits = Path.GetFileNameWithoutExtension(file).Split('_');
-                    string name = splits[0];
-                    Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
-                    FactoryInfo info = ModCore.Serializer.DeserializeContentFile<FactoryInfo>(file);
+                Dictionary<string, LampMultiTiledObject> objs = new Dictionary<string, LampMultiTiledObject>();
 
-                    LampTileComponent lampPiece = new LampTileComponent(info.info);
-                    //Recreate the lights info.
-                    if (lampPiece.lights != null)
+                //Deserialize container.
+                foreach (string file in files)
+                {
+                    if ((Path.GetFileName(file)).Contains("_") == true) continue;
+                    else
                     {
-                        //ModCore.log("Info for file"+Path.GetFileNameWithoutExtension(file)+" has this many lights: " + info.info.lightManager.fakeLights.Count);
-                        lampPiece.lights.lights.Clear();
-                        foreach (KeyValuePair<Vector2, FakeLightSource> light in info.info.lightManager.fakeLights)
-                        {
-                            lampPiece.lights.addLight(new Vector2(Game1.tileSize), new LightSource(light.Value.id, new Vector2(0, 0), light.Value.radius,light.Value.color.Invert()), lampPiece);
-                        }
+                        objs.Add(Path.GetFileNameWithoutExtension(file), new LampMultiTiledObject(ModCore.Serializer.DeserializeContentFile<FactoryInfo>(file).info));
                     }
+                }
+                //Deseralize components
+                foreach (string file in files)
+                {
+                    if ((Path.GetFileName(file)).Contains("_") == false) continue;
+                    else
+                    {
+
+                        string[] splits = Path.GetFileNameWithoutExtension(file).Split('_');
+                        string name = splits[0];
+                        Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
+                        FactoryInfo info = ModCore.Serializer.DeserializeContentFile<FactoryInfo>(file);
+
+                        LampTileComponent lampPiece = new LampTileComponent(info.info);
+                        //Recreate the lights info.
+                        if (lampPiece.lights != null)
+                        {
+                            //ModCore.log("Info for file"+Path.GetFileNameWithoutExtension(file)+" has this many lights: " + info.info.lightManager.fakeLights.Count);
+                            lampPiece.lights.lights.Clear();
+                            foreach (KeyValuePair<Vector2, FakeLightSource> light in info.info.lightManager.fakeLights)
+                            {
+                                lampPiece.lights.addLight(new Vector2(Game1.tileSize), new LightSource(light.Value.id, new Vector2(0, 0), light.Value.radius, light.Value.color.Invert()), lampPiece);
+                            }
+                        }
 
 
-                    objs[name].addComponent(offset,lampPiece );
+                        objs[name].addComponent(offset, lampPiece);
+                    }
+                }
+                foreach (var v in objs)
+                {
+                    ModCore.customObjects.Add(v.Value.info.id, v.Value);
                 }
             }
-            foreach (var v in objs)
-            {
-                ModCore.customObjects.Add(v.Value.info.id, v.Value);
-            }
+
+
         }
 
 
@@ -219,43 +226,48 @@ namespace Revitalize.Framework.Factories.Objects
             ChairFactoryInfo obj = new ChairFactoryInfo(oakChair);
 
 
-            ModCore.Serializer.SerializeContentFile("OakChair_0_-1", top, ChairFolder);
-            ModCore.Serializer.SerializeContentFile("OakChair_0_0", bottom, ChairFolder);
-            ModCore.Serializer.SerializeContentFile("OakChair", obj, ChairFolder);
+            ModCore.Serializer.SerializeContentFile("OakChair_0_-1", top, Path.Combine(ChairFolder, "OakChair"));
+            ModCore.Serializer.SerializeContentFile("OakChair_0_0", bottom, Path.Combine(ChairFolder, "OakChair"));
+            ModCore.Serializer.SerializeContentFile("OakChair", obj, Path.Combine(ChairFolder, "OakChair"));
         }
         private static void DeserializeChairs()
         {
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", ChairFolder))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", ChairFolder));
-            string[] files = Directory.GetFiles(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", ChairFolder));
+            string[] directories = Directory.GetDirectories(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", ChairFolder));
 
-            Dictionary<string, ChairMultiTiledObject> chairObjects = new Dictionary<string, ChairMultiTiledObject>();
-
-            //Deserialize container.
-            foreach (string file in files)
+            foreach (string directory in directories)
             {
-                if ((Path.GetFileName(file)).Contains("_") == true) continue;
-                else
+                string[] files = Directory.GetFiles(directory);
+
+                Dictionary<string, ChairMultiTiledObject> chairObjects = new Dictionary<string, ChairMultiTiledObject>();
+
+                //Deserialize container.
+                foreach (string file in files)
                 {
-                    chairObjects.Add(Path.GetFileNameWithoutExtension(file), new ChairMultiTiledObject(ModCore.Serializer.DeserializeContentFile<ChairFactoryInfo>(file).info));
+                    if ((Path.GetFileName(file)).Contains("_") == true) continue;
+                    else
+                    {
+                        chairObjects.Add(Path.GetFileNameWithoutExtension(file), new ChairMultiTiledObject(ModCore.Serializer.DeserializeContentFile<ChairFactoryInfo>(file).info));
+                    }
                 }
-            }
-            //Deseralize components
-            foreach (string file in files)
-            {
-                if ((Path.GetFileName(file)).Contains("_") == false) continue;
-                else
+                //Deseralize components
+                foreach (string file in files)
                 {
+                    if ((Path.GetFileName(file)).Contains("_") == false) continue;
+                    else
+                    {
 
-                    string[] splits = Path.GetFileNameWithoutExtension(file).Split('_');
-                    string name = splits[0];
-                    Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
-                    ChairFactoryInfo info = ModCore.Serializer.DeserializeContentFile<ChairFactoryInfo>(file);
-                    chairObjects[name].addComponent(offset, new ChairTileComponent(info.info, info.chairInfo));
+                        string[] splits = Path.GetFileNameWithoutExtension(file).Split('_');
+                        string name = splits[0];
+                        Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
+                        ChairFactoryInfo info = ModCore.Serializer.DeserializeContentFile<ChairFactoryInfo>(file);
+                        chairObjects[name].addComponent(offset, new ChairTileComponent(info.info, info.chairInfo));
+                    }
                 }
-            }
-            foreach (var v in chairObjects)
-            {
-                ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                foreach (var v in chairObjects)
+                {
+                    ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                }
             }
         }
 
@@ -280,50 +292,56 @@ namespace Revitalize.Framework.Factories.Objects
             TableFactoryInfo table = new TableFactoryInfo(obj);
 
 
-            ModCore.Serializer.SerializeContentFile("OakTable_0_0", uL, TablesFolder);
-            ModCore.Serializer.SerializeContentFile("OakTable_1_0", uR, TablesFolder);
-            ModCore.Serializer.SerializeContentFile("OakTable_0_1", cL, TablesFolder);
-            ModCore.Serializer.SerializeContentFile("OakTable_1_1", cR, TablesFolder);
-            ModCore.Serializer.SerializeContentFile("OakTable_0_2", bL, TablesFolder);
-            ModCore.Serializer.SerializeContentFile("OakTable_1_2", bR, TablesFolder);
+            ModCore.Serializer.SerializeContentFile("OakTable_0_0", uL, Path.Combine(TablesFolder, "OakTable"));
+            ModCore.Serializer.SerializeContentFile("OakTable_1_0", uR, Path.Combine(TablesFolder, "OakTable"));
+            ModCore.Serializer.SerializeContentFile("OakTable_0_1", cL, Path.Combine(TablesFolder, "OakTable"));
+            ModCore.Serializer.SerializeContentFile("OakTable_1_1", cR, Path.Combine(TablesFolder, "OakTable"));
+            ModCore.Serializer.SerializeContentFile("OakTable_0_2", bL, Path.Combine(TablesFolder, "OakTable"));
+            ModCore.Serializer.SerializeContentFile("OakTable_1_2", bR, Path.Combine(TablesFolder, "OakTable"));
 
-            ModCore.Serializer.SerializeContentFile("OakTable", table, TablesFolder);
+            ModCore.Serializer.SerializeContentFile("OakTable", table, Path.Combine(TablesFolder, "OakTable"));
 
         }
 
         private static void DeserializeTableFiles()
         {
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", TablesFolder))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", TablesFolder));
-            string[] files = Directory.GetFiles(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", TablesFolder));
 
-            Dictionary<string, TableMultiTiledObject> chairObjects = new Dictionary<string, TableMultiTiledObject>();
-
-            //Deserialize container.
-            foreach (string file in files)
+            string[] directories = Directory.GetDirectories(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", TablesFolder));
+            foreach (string directory in directories)
             {
-                if ((Path.GetFileName(file)).Contains("_") == true) continue;
-                else
+
+                string[] files = Directory.GetFiles(directory);
+
+                Dictionary<string, TableMultiTiledObject> chairObjects = new Dictionary<string, TableMultiTiledObject>();
+
+                //Deserialize container.
+                foreach (string file in files)
                 {
-                    chairObjects.Add(Path.GetFileNameWithoutExtension(file), new TableMultiTiledObject(ModCore.Serializer.DeserializeContentFile<TableFactoryInfo>(file).info));
+                    if ((Path.GetFileName(file)).Contains("_") == true) continue;
+                    else
+                    {
+                        chairObjects.Add(Path.GetFileNameWithoutExtension(file), new TableMultiTiledObject(ModCore.Serializer.DeserializeContentFile<TableFactoryInfo>(file).info));
+                    }
                 }
-            }
-            //Deseralize components
-            foreach (string file in files)
-            {
-                if ((Path.GetFileName(file)).Contains("_") == false) continue;
-                else
+                //Deseralize components
+                foreach (string file in files)
                 {
+                    if ((Path.GetFileName(file)).Contains("_") == false) continue;
+                    else
+                    {
 
-                    string[] splits = Path.GetFileNameWithoutExtension(file).Split('_');
-                    string name = splits[0];
-                    Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
-                    TableFactoryInfo info = ModCore.Serializer.DeserializeContentFile<TableFactoryInfo>(file);
-                    chairObjects[name].addComponent(offset, new TableTileComponent(info.info, info.tableInfo));
+                        string[] splits = Path.GetFileNameWithoutExtension(file).Split('_');
+                        string name = splits[0];
+                        Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
+                        TableFactoryInfo info = ModCore.Serializer.DeserializeContentFile<TableFactoryInfo>(file);
+                        chairObjects[name].addComponent(offset, new TableTileComponent(info.info, info.tableInfo));
+                    }
                 }
-            }
-            foreach (var v in chairObjects)
-            {
-                ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                foreach (var v in chairObjects)
+                {
+                    ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                }
             }
         }
 

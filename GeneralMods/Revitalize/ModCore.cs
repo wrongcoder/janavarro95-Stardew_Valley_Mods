@@ -27,9 +27,8 @@ namespace Revitalize
     // -load content MUST be enabled for the table to be placed?????? WTF
     // TODO:
     //
-    // -Add in object pool class to handle the multitudes of objects I'll be making.
+    // -Add in object pool class to handle the multitudes of objects I'll be making. (WIP)
     // -Make this mod able to load content packs for easier future modding
-    // -Make deserialize/serialize look through sub directories instead of just one directory. 
     //
     //  -Multiple Lights On Object
     //  -Illumination Colors
@@ -57,6 +56,8 @@ namespace Revitalize
     //      -Tin/Bronze/Alluminum/Silver?Platinum/Etc
     //  -Crafting Menu
     //  -Item Grab Menu (Extendable)
+    //   -Yes/No Dialogue Box
+    //   -Multi Choice dialogue box
     //  -Gift Boxes
     //  Magic!
     //      -Alchemy Bags
@@ -68,7 +69,7 @@ namespace Revitalize
     //      -Connected chests much like Project EE2 from MC
     //
     //
-    //
+    //  -Food? 
     //  -Bigger chests
     //
     //  Festivals
@@ -118,6 +119,9 @@ namespace Revitalize
         public static Dictionary<string, CustomObject> customObjects;
 
         public static Dictionary<string, MultiTiledObject>ObjectGroups;
+
+        
+
 
         public static PlayerInfo playerInfo;
 
@@ -211,8 +215,10 @@ namespace Revitalize
 
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath,"Content" ,"Graphics"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
+            //Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture","Chairs"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Lamps"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Tables"));
         }
 
         private void initailizeComponents()
