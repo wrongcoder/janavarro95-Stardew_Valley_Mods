@@ -152,6 +152,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             Vector2 backPos = new Vector2(this.width * .1f + 64, this.height * .05f); //Put it to the right of the music disk
             this.backButton = new Button("BackButton", new Rectangle((int)backPos.X, (int)backPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("BackButton"), "", new Rectangle(0, 0, 16, 16), 4f, new Animation(new Rectangle(0, 0, 16, 16)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
+
+
         }
 
         /// <summary>Runs every game tick to check for stuff.</summary>
@@ -576,7 +578,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 Rectangle menuSrcRectangle = new Rectangle(0, 0, menuTexture.getTexture().Width, menuTexture.getTexture().Height);
                 this.fancyButtons.Add(new Button("MenuIcon", new Rectangle((int)menuPlacement.X, (int)menuPlacement.Y, 64, 64), menuTexture, "Menu Music", menuSrcRectangle, menuScale, new Animation(menuSrcRectangle), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
-                //Menu Icon placement.
+                //Location Icon placement.
                 Texture2DExtended locationTexture = StardewSymphony.textureManager.getTexture("HouseIcon");
                 float locationScale = 1.00f / (locationTexture.getTexture().Width / 64f);
                 Rectangle locationRect = new Rectangle(0, 0, locationTexture.getTexture().Width, locationTexture.getTexture().Height);
@@ -606,19 +608,19 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 Rectangle srcRect = new Rectangle(0, 0, springTexture.getTexture().Width, springTexture.getTexture().Height);
                 this.fancyButtons.Add(new Button("SpringButton", new Rectangle((int)springPlacement.X, (int)springPlacement.Y, 64, 64), springTexture, "Spring Music", srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
-                //Festival Icon placement.
+                //Summer Icon placement.
                 Texture2DExtended festivalTexture = StardewSymphony.textureManager.getTexture("SummerIcon");
                 float festivalScale = 1.00f / (festivalTexture.getTexture().Width / 64f);
                 Rectangle festivalSrcRect = new Rectangle(0, 0, festivalTexture.getTexture().Width, festivalTexture.getTexture().Height);
                 this.fancyButtons.Add(new Button("SummerButton", new Rectangle((int)summerPlacement.X, (int)summerPlacement.Y, 64, 64), festivalTexture, "Summer Music", festivalSrcRect, festivalScale, new Animation(festivalSrcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
-                //Event Icon placement.
+                //Fall Icon placement.
                 Texture2DExtended eventTexture = StardewSymphony.textureManager.getTexture("FallIcon");
                 float eventScale = 1.00f / (eventTexture.getTexture().Width / 64f);
                 Rectangle eventSrcRectangle = new Rectangle(0, 0, eventTexture.getTexture().Width, eventTexture.getTexture().Height);
                 this.fancyButtons.Add(new Button("FallButton", new Rectangle((int)fallPlacement.X, (int)fallPlacement.Y, 64, 64), eventTexture, "Fall Music", eventSrcRectangle, eventScale, new Animation(eventSrcRectangle), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
 
-                //Menu Icon placement.
+                //Winter Icon placement.
                 Texture2DExtended menuTexture = StardewSymphony.textureManager.getTexture("WinterIcon");
                 float menuScale = 1.00f / (menuTexture.getTexture().Width / 64f);
                 Rectangle menuSrcRectangle = new Rectangle(0, 0, menuTexture.getTexture().Width, menuTexture.getTexture().Height);
@@ -1466,7 +1468,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
             //Check for seasonal music triggers.
             var songList = musicPack.SongInformation.getSongList(this.generateSongTriggerKeyFromSelection());
-            return songList.Value != null && songList.Value.Contains(musicPack.SongInformation.getSongFromList(songList.Value, this.currentSelectedSong.name));
+            return songList != null && songList.Contains(musicPack.SongInformation.getSongFromList(songList, this.currentSelectedSong.name));
         }
 
         /// <summary>Draws the menu and it's respective components depending on the drawmode that is currently set.</summary>

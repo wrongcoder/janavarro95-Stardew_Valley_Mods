@@ -84,6 +84,7 @@
     <Compile Include="Framework\Objects\InformationFiles\ObjectGUIDInfo.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
+    <Compile Include="Framework\Objects\ObjectManager.cs" />
     <Compile Include="Framework\Player\Managers\MagicManager.cs" />
     <Compile Include="Framework\Player\Managers\SittingInfo.cs" />
     <Compile Include="Framework\Player\PlayerInfo.cs" />

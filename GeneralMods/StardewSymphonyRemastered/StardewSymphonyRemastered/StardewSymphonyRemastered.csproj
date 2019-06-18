@@ -82,12 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="Framework\Menus\MusicManagerMenu.cs" />
-    <Compile Include="Framework\Music\SongListNode.cs" />
+    <Compile Include="Framework\Menus\MusicManagerMenuV2.cs" />
+    <Compile Include="Framework\V2\MusicManagerV2.cs" />
+    <Compile Include="Framework\V2\MusicPackV2.cs" />
+    <Compile Include="Framework\V2\SongConditionals.cs" />
+    <Compile Include="Framework\V2\SongInformation.cs" />
+    <Compile Include="Framework\V2\SongSpecificsV2.cs" />
     <Compile Include="StardewSymphony.cs" />
-    <Compile Include="Framework\Music\MusicManager.cs" />
-    <Compile Include="Framework\Music\SongSpecifics.cs" />
-    <Compile Include="Framework\Music\MusicPack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +242,9 @@
     <Content Include="assets\TimeIcon_Night.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="assets\WeatherIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="assets\WeatherIcon_DebrisFall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -288,6 +292,9 @@
       <Name>StardustCore</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Framework\Music\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\deploy.targets" />

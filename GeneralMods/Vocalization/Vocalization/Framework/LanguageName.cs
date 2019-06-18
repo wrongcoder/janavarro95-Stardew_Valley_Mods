@@ -9,6 +9,11 @@ namespace Vocalization.Framework
         Japanese,
         Russian,
         German,
-        Portuguese
+        Portuguese,
+        Italian,
+        French,
+        Korean,
+        Turkish,
+        Hungarian
     }
 }

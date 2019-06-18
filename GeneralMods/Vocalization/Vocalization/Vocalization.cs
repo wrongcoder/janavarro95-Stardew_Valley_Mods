@@ -84,6 +84,9 @@ namespace Vocalization
 
     /// <summary>
     /// TODO:
+    ///
+    /// Update menu to work with new 1.3 languages...
+    ///
     /// 
     /// Validate that all paths are loading from proper places.
     /// 
@@ -2352,7 +2355,70 @@ namespace Vocalization
                         }
                         continue;
                     }
+
+                    if (fileName.Contains("NPCGiftTastes"))
+                    {
+
+                        ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
+                        if (!File.Exists(Path.Combine(root, dialoguePath2)))
+                        {
+                            ModMonitor.Log("Dialogue file not found for:" + fileName + ". This might not necessarily be a mistake just a safety check.");
+                            continue; //If the file is not found for some reason...
+                        }
+                        if (!dialogueDict.ContainsKey(cue.name)) continue;
+
+                        string rawDialogue = dialogueDict[cue.name];
+                        string[] strippedRawQuestDialogue = new string[20];
+                        List<string> strippedFreshQuestDialogue = new List<string>();
+                        strippedRawQuestDialogue = rawDialogue.Split(new string[] { "/" }, StringSplitOptions.None);
+
+
+                        string prompt1 = strippedRawQuestDialogue.ElementAt(0);
+                        string prompt2 = strippedRawQuestDialogue.ElementAt(2);
+                        string prompt3 = strippedRawQuestDialogue.ElementAt(4);
+                        string prompt4 = strippedRawQuestDialogue.ElementAt(6);
+                        string prompt5 = strippedRawQuestDialogue.ElementAt(8);
+
+                        strippedFreshQuestDialogue.Add(prompt1);
+                        strippedFreshQuestDialogue.Add(prompt2);
+                        strippedFreshQuestDialogue.Add(prompt3);
+                        strippedFreshQuestDialogue.Add(prompt4);
+                        strippedFreshQuestDialogue.Add(prompt5);
+
+                        List<string> cleanDialogues = new List<string>();
+
+                        int count = 0;
+
+                        foreach (string dia in strippedFreshQuestDialogue)
+                        {
+                            string key = "";
+                            if (count == 0) key = "Love";
+                            if (count == 0) key = "Like";
+                            if (count == 0) key = "Dislike";
+                            if (count == 0) key = "Hate";
+                            if (count == 0) key = "Neutral";
+                            count++;
+                            cleanDialogues = sanitizeDialogueFromDictionaries(dia, cue);
+                            foreach (string str in cleanDialogues)
+                            {
+                                ModMonitor.Log("POST SANITIZARION: "+str);
+                                if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
+                                {
+                                    AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                }
+                                else
+                                {
+                                    cue.addDialogue(str, new VoiceAudioOptions());
+                                    AudioCues.addWavReference(AudioCues.generateKey(language, cue.name, fileName, key), new VoiceAudioOptions());
+                                }
+                            }
+
+                        }
+                        continue;
+                    }
                 }
+
                 foreach (string fileName in cue.stringsFileNames)
                 {
                     ModMonitor.Log("    Scraping dialogue file: " + fileName, LogLevel.Info);
@@ -3151,7 +3217,7 @@ namespace Vocalization
                 {
                     dialogue = dialogue.Replace(combine, "");
                     dialogue = dialogue.Replace("  ", " "); //Remove awkward spacing.
-                    //remove dialogue symbol.
+                                                            //remove dialogue symbol.
                 }
             }
 

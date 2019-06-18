@@ -105,7 +105,7 @@ namespace StardewSymphonyRemastered.Framework
             {
                 try
                 {
-                    var songList = v.Value.SongInformation.getSongList(songListKey).Value;
+                    var songList = v.Value.SongInformation.getSongList(songListKey);
                     if (songList.Count > 0)
                         listOfValidDictionaries.Add(v.Value, songList);
                 }
@@ -170,8 +170,32 @@ namespace StardewSymphonyRemastered.Framework
 
         }
         /// <summary>Select the actual song to be played right now based on the selector key. The selector key should be called when the player's location changes.</summary>
-        public void selectMusic(string songListKey)
+        public void selectMusic(string songListKey,bool warpCheck=false)
         {
+            StardewSymphony.DebugLog(SongSpecifics.GetKeySpecificity(songListKey).ToString());
+            StardewSymphony.DebugLog(songListKey);
+            //Prevent generic song changes when running about.
+            if (SongSpecifics.GetKeySpecificity(songListKey) == SongSpecifics.SongKeyType.None) return;
+
+            if (SongSpecifics.IsKeyGeneric(songListKey))
+            {
+                if(this.CurrentMusicPack != null)
+                {
+                    if (this.CurrentMusicPack.IsPlaying()) return;
+                }
+            }
+
+            
+
+            //If I have warped and the key only is to be played when time changes prevent a new song from playing.
+            //If the key is more specific (I.E has a location associated with it) then music will change.
+            if (warpCheck==true && SongSpecifics.IsKeyTimeSpecific(songListKey)) {
+                if (this.CurrentMusicPack != null)
+                {
+                    if (this.CurrentMusicPack.IsPlaying()) return;
+                }
+            }
+
             // stop timer timer when music is selected
             this.Timer.Enabled = false;
 
@@ -327,7 +351,7 @@ namespace StardewSymphonyRemastered.Framework
             {
                 try
                 {
-                    var songList = v.Value.SongInformation.getSongList(SongSpecifics.getCurrentConditionalString(true)).Value;
+                    var songList = v.Value.SongInformation.getSongList(SongSpecifics.getCurrentConditionalString(true));
                     if (songList == null) return null;
                     if (songList.Count > 0)
                     {
