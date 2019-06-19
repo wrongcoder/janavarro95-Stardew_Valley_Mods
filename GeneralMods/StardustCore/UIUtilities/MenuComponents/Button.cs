@@ -24,31 +24,36 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <summary>A list of textures to be drawn on top of the button.</summary>
         public List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTextures;
 
+        public bool drawLabel;
+
         /// <summary>Empty Constructor.</summary>
-        public Button(Rectangle bounds, Texture2DExtended texture, Rectangle sourceRect, float scale)
+        public Button(Rectangle bounds, Texture2DExtended texture, Rectangle sourceRect, float scale, bool DrawLabel = true)
             : base(bounds, texture.getTexture(), sourceRect, scale)
         {
             this.animationManager = new Animations.AnimationManager(texture, new Animations.Animation(sourceRect), false);
+            this.drawLabel = DrawLabel;
         }
 
-        public Button(string name, Rectangle bounds, Texture2DExtended texture, Rectangle sourceRect, float scale)
+        public Button(string name, Rectangle bounds, Texture2DExtended texture, Rectangle sourceRect, float scale,bool DrawLabel=true)
             : base(bounds, texture.getTexture(), sourceRect, scale)
         {
             this.name = name;
             this.animationManager = new Animations.AnimationManager(texture, new Animations.Animation(sourceRect), false);
+            this.drawLabel = DrawLabel;
         }
 
-        public Button(string name, string displayText, Rectangle bounds, Texture2DExtended texture, Rectangle sourceRect, float scale)
+        public Button(string name, string displayText, Rectangle bounds, Texture2DExtended texture, Rectangle sourceRect, float scale,bool DrawLabel=true)
             : base(bounds, texture.getTexture(), sourceRect, scale)
         {
             this.name = name;
             this.label = displayText;
             this.animationManager = new Animations.AnimationManager(texture, new Animations.Animation(sourceRect), false);
+            this.drawLabel = DrawLabel;
         }
 
         /// <summary>Basic Button constructor.</summary>
         /// <param name="texture">The texture sheet to be drawn to the screen. Used with the animation manager this allows you to reference different parts of the sheet at any given time.</param>
-        public Button(string name, Rectangle bounds, Texture2DExtended texture, string displayText, Rectangle sourceRect, float scale, Animations.Animation defaultAnimation, Color drawColor, Color textColor, ButtonFunctionality functionality, bool animationEnabled = true, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture = null)
+        public Button(string name, Rectangle bounds, Texture2DExtended texture, string displayText, Rectangle sourceRect, float scale, Animations.Animation defaultAnimation, Color drawColor, Color textColor, ButtonFunctionality functionality, bool animationEnabled = true, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture = null, bool DrawLabel=true)
             : base(bounds, texture.getTexture(), sourceRect, scale)
         {
             this.animationManager = new Animations.AnimationManager(texture, defaultAnimation, animationEnabled);
@@ -59,10 +64,11 @@ namespace StardustCore.UIUtilities.MenuComponents
             this.buttonFunctionality = functionality;
             this.extraTextures = extraTexture ?? new List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>>();
             this.scale = scale;
+            this.drawLabel = DrawLabel;
         }
 
         /// <summary>A more advanced Button constructor that deals with an animation manager.</summary>
-        public Button(string name, Rectangle bounds, Texture2DExtended texture, string displayText, Rectangle sourceRect, float scale, Animations.Animation defaultAnimation, Dictionary<string, List<Animations.Animation>> animationsToPlay, string startingAnimationKey, Color drawColor, Color textColor, ButtonFunctionality functionality, int startingAnimationFrame = 0, bool animationEnabled = true, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture = null)
+        public Button(string name, Rectangle bounds, Texture2DExtended texture, string displayText, Rectangle sourceRect, float scale, Animations.Animation defaultAnimation, Dictionary<string, List<Animations.Animation>> animationsToPlay, string startingAnimationKey, Color drawColor, Color textColor, ButtonFunctionality functionality, int startingAnimationFrame = 0, bool animationEnabled = true, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture = null,bool DrawLabel=true)
             : base(bounds, texture.getTexture(), sourceRect, scale)
         {
             this.animationManager = new Animations.AnimationManager(texture, defaultAnimation, animationsToPlay, startingAnimationKey, startingAnimationFrame, animationEnabled);
@@ -73,6 +79,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             this.buttonFunctionality = functionality;
             this.extraTextures = extraTexture ?? new List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>>();
             this.scale = scale;
+            this.drawLabel = DrawLabel;
         }
 
         /// <summary>Draws the button and all of it's components.</summary>
@@ -96,7 +103,7 @@ namespace StardustCore.UIUtilities.MenuComponents
                 b.Draw(this.texture, new Vector2((float)this.bounds.X + (float)(this.sourceRect.Width / 2) * this.baseScale, (float)this.bounds.Y + (float)(this.sourceRect.Height / 2) * this.baseScale), new Rectangle?(this.sourceRect), this.textureColor, 0.0f, new Vector2((float)(this.sourceRect.Width / 2), (float)(this.sourceRect.Height / 2)), this.scale, SpriteEffects.None, layerDepth);
             if (!string.IsNullOrEmpty(this.label))
             {
-                b.DrawString(Game1.smallFont, this.label, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor);
+              if(this.drawLabel)b.DrawString(Game1.smallFont, this.label, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor);
             }
 
             if (this.hoverText != "")
@@ -156,7 +163,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             }
             if (string.IsNullOrEmpty(this.label))
                 return;
-            b.DrawString(Game1.smallFont, this.label, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor);
+            if (this.drawLabel) b.DrawString(Game1.smallFont, this.label, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor);
 
         }
 
@@ -183,7 +190,7 @@ namespace StardustCore.UIUtilities.MenuComponents
             }
             if (string.IsNullOrEmpty(this.label))
                 return;
-            b.DrawString(Game1.smallFont, this.label, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor);
+            if (this.drawLabel) b.DrawString(Game1.smallFont, this.label, new Vector2((float)(this.bounds.X + this.bounds.Width), (float)this.bounds.Y + ((float)(this.bounds.Height / 2) - Game1.smallFont.MeasureString(this.label).Y / 2f)), this.textColor);
         }
 
         /// <summary>Swaps if the button is visible or not. Also toggles the animation manager appropriately.</summary>
@@ -238,7 +245,20 @@ namespace StardustCore.UIUtilities.MenuComponents
         /// <param name="newPosition"></param>
         public virtual Button clone(Vector2 newPosition)
         {
-            return new Button(this.name, new Rectangle((int)newPosition.X, (int)newPosition.Y, this.bounds.Width, this.bounds.Height), this.animationManager.getExtendedTexture(), this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true);
+            return new Button(this.name, new Rectangle((int)newPosition.X, (int)newPosition.Y, this.bounds.Width, this.bounds.Height), this.animationManager.getExtendedTexture(), this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true, this.extraTextures == null? null:this.extraTextures,this.drawLabel);
+            //if (b.buttonFunctionality.hover == null)
+            //    StardustCore.ModCore.ModMonitor.Log("I'm null!");
+        }
+
+        /// <summary>
+        /// Get's a clone of the button.
+        /// </summary>
+        /// <param name="newPosition">The new position for the cloned button.</param>
+        /// <param name="DrawLabel">If the cloned button should also draw it's label</param>
+        /// <returns></returns>
+        public virtual Button clone(Vector2 newPosition,bool DrawLabel)
+        {
+            return new Button(this.name, new Rectangle((int)newPosition.X, (int)newPosition.Y, this.bounds.Width, this.bounds.Height), this.animationManager.getExtendedTexture(), this.label, this.sourceRect, this.scale, this.animationManager.defaultDrawFrame, this.textureColor, this.textColor, this.buttonFunctionality, true, this.extraTextures == null ? null : this.extraTextures, DrawLabel);
             //if (b.buttonFunctionality.hover == null)
             //    StardustCore.ModCore.ModMonitor.Log("I'm null!");
         }

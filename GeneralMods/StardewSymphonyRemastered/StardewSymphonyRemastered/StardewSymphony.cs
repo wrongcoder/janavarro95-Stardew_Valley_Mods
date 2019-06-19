@@ -251,6 +251,13 @@ namespace StardewSymphonyRemastered
             textureManager.addTexture("WinterIcon", LoadTexture("SeasonIcon_Winter.png"));
 
             //Day Icons
+            textureManager.addTexture("CalendarMonday", LoadTexture("CalendarMonday.png"));
+            textureManager.addTexture("CalendarTuesday", LoadTexture("CalendarTuesday.png"));
+            textureManager.addTexture("CalendarWednesday", LoadTexture("CalendarWednesday.png"));
+            textureManager.addTexture("CalendarThursday", LoadTexture("CalendarThursday.png"));
+            textureManager.addTexture("CalendarFriday", LoadTexture("CalendarFriday.png"));
+            textureManager.addTexture("CalendarSaturday", LoadTexture("CalendarSaturday.png"));
+            textureManager.addTexture("CalendarSunday", LoadTexture("CalendarSunday.png"));
             textureManager.addTexture("MondayIcon", LoadTexture("DayIcons_Monday.png"));
             textureManager.addTexture("TuesdayIcon", LoadTexture("DayIcons_Tuesday.png"));
             textureManager.addTexture("WednesdayIcon", LoadTexture("DayIcons_Wednesday.png"));
@@ -265,6 +272,8 @@ namespace StardewSymphonyRemastered
             textureManager.addTexture("StopButton", LoadTexture("StopButton.png"));
             textureManager.addTexture("BackButton", LoadTexture("BackButton.png"));
 
+
+            textureManager.addTexture("DayNightIcon", LoadTexture("DayNightIcon.png"));
             textureManager.addTexture("12AM", LoadTexture("12AM.png"));
             textureManager.addTexture("1AM", LoadTexture("1AM.png"));
             textureManager.addTexture("2AM", LoadTexture("2AM.png"));

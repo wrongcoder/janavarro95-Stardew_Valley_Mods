@@ -79,6 +79,7 @@ namespace StardewSymphonyRemastered.Framework.V2
             }
 
             // play sound
+            this.StopSong();
             this.CurrentSongName = name;
             this.CurrentSound = sound;
             this.CurrentSound.Play();
