@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using StardewModdingAPI;
 
 namespace StardewSymphonyRemastered
@@ -17,10 +18,14 @@ namespace StardewSymphonyRemastered
         /// <summary>The key binding to open the menu music.</summary>
         public SButton KeyBinding { get; set; } = SButton.L;
 
-        /// <summary>Whether to write a JSON file for every possible option for a music pack. Use at your own risk!</summary>
-        public bool WriteAllConfigMusicOptions { get; set; } = false;
-
         /// <summary>Whether to completely disable the Stardew Valley OST.</summary>
         public bool DisableStardewMusic { get; set; } = false;
+
+        public List<string> LocationsToIgnoreWarpMusicChange { get; set; } = new List<string>();
+
+        public Config()
+        {
+            this.LocationsToIgnoreWarpMusicChange = new List<string>();
+        }
     }
 }

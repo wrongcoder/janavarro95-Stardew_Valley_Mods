@@ -9,15 +9,14 @@ namespace StardewSymphonyRemastered.Framework.V2
 {
     public class SongConditionals
     {
-        string season;
-        string weather;
-        string time;
-        string location;
-        string dayOfWeek;
-
-        string eventKey;
-        string festival;
-        string menu;
+        public string season;
+        public string weather;
+        public string time;
+        public string location;
+        public string dayOfWeek;
+        public string eventKey;
+        public string festival;
+        public string menu;
 
         private readonly string[] seasons;
         private readonly string[] weathers;
@@ -141,62 +140,13 @@ namespace StardewSymphonyRemastered.Framework.V2
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool canBePlayed(string key)
+        public bool canBePlayed(SongConditionals other)
         {
-
-            string tempSeason = "";
-            string tempWeather = "";
-            string tempTime = "";
-            string tempLocation = "";
-            string tempDayOfWeek = "";
-            string tempMenu = "";
-            string tempFestival = "";
-            string tempEvent = "";
-
-            string[] splits = key.Split(seperator);
-            foreach (string split in splits)
-            {
-                //Parse key into conditionals.
-                if (this.seasons.Contains(split))
-                {
-                    tempSeason = split;
-                }
-                else if (this.weathers.Contains(split))
-                {
-                    tempWeather = split;
-                }
-                else if (this.daysOfWeek.Contains(split))
-                {
-                    tempDayOfWeek = split;
-                }
-                else if (this.timesOfDay.Contains(split))
-                {
-                    tempTime = split;
-                }
-                else if (SongSpecificsV2.menus.Contains(split))
-                {
-                    tempMenu = split;
-                }
-                else if (SongSpecificsV2.locations.Contains(split))
-                {
-                    tempLocation = split;
-                }
-                else if (SongSpecificsV2.events.Contains(split))
-                {
-                    tempEvent = split;
-                }
-                else if (SongSpecificsV2.festivals.Contains(split))
-                {
-                    tempFestival = split;
-                }
-            }
-
-
             if (this.isLocationSpecific())
             {
-                if (!string.IsNullOrEmpty(tempLocation))
+                if (!string.IsNullOrEmpty(other.location))
                 {
-                    if (this.dayOfWeek != tempDayOfWeek) return false; //If there is a check but not the right location return false
+                    if (this.location.Equals(other.location)==false) return false; //If there is a check but not the right location return false
                 }
                 else
                 {
@@ -205,9 +155,9 @@ namespace StardewSymphonyRemastered.Framework.V2
             }
             if (this.isTimeSpecific())
             {
-                if (!string.IsNullOrEmpty(tempTime))
+                if (!string.IsNullOrEmpty(other.time))
                 {
-                    if (this.time != tempTime) return false; //If the two times don't match return false
+                    if (this.time.Equals(other.time)==false) return false; //If the two times don't match return false
                 }
                 else
                 {
@@ -219,9 +169,9 @@ namespace StardewSymphonyRemastered.Framework.V2
             if (this.isDaySpecific())
             {
                 //condition specific check
-                if (!string.IsNullOrEmpty(tempDayOfWeek))
+                if (!string.IsNullOrEmpty(other.dayOfWeek))
                 {
-                    if (this.dayOfWeek != tempDayOfWeek) return false;
+                    if (this.dayOfWeek.Equals(other.dayOfWeek)==false) return false;
                 }
                 else
                 {
@@ -232,9 +182,9 @@ namespace StardewSymphonyRemastered.Framework.V2
             //Check for season.
             if (this.isSeasonSpecific())
             {
-                if (!string.IsNullOrEmpty(tempSeason))
+                if (!string.IsNullOrEmpty(other.season))
                 {
-                    if (this.season != tempSeason) return false;
+                    if (this.season.Equals(other.season)==false) return false;
                 }
                 else
                 {
@@ -245,9 +195,9 @@ namespace StardewSymphonyRemastered.Framework.V2
             //Check for weather.
             if (this.isWeatherSpecific())
             {
-                if (!string.IsNullOrEmpty(tempWeather))
+                if (!string.IsNullOrEmpty(other.weather))
                 {
-                    if (this.weather != tempWeather) return false;
+                    if (this.weather.Equals(other.weather)==false) return false;
                 }
                 else
                 {
@@ -258,30 +208,29 @@ namespace StardewSymphonyRemastered.Framework.V2
 
             if (!string.IsNullOrEmpty(this.menu))
             {
-                if (!string.IsNullOrEmpty(tempMenu))
+                if (!string.IsNullOrEmpty(other.menu))
                 {
-                    if (this.menu != tempMenu) return false;
+                    if (this.menu.Equals(other.menu)==false) return false;
                 }
             }
 
             if (!string.IsNullOrEmpty(this.festival))
             {
-                if (!string.IsNullOrEmpty(tempFestival))
+                if (!string.IsNullOrEmpty(other.festival))
                 {
-                    if (this.festival != tempFestival) return false;
+                    if (this.festival.Equals(other.festival)==false) return false;
                 }
             }
 
             if (!string.IsNullOrEmpty(this.eventKey))
             {
-                if (!string.IsNullOrEmpty(tempEvent))
+                if (!string.IsNullOrEmpty(other.eventKey))
                 {
-                    if (this.eventKey != tempEvent) return false;
+                    if (this.eventKey.Equals(other.eventKey)==false) return false;
                 }
             }
             return true;
         }
-
 
         public bool isLocationSpecific()
         {
@@ -306,6 +255,16 @@ namespace StardewSymphonyRemastered.Framework.V2
             return !string.IsNullOrEmpty(this.dayOfWeek);
         }
 
+        /// <summary>
+        /// Checks if the given conditonal is generic or not.
+        /// </summary>
+        /// <returns></returns>
+        public bool isKeyGeneric()
+        {
+            if (this.isTimeSpecific() == false && this.isLocationSpecific() == false) return true;
+            else return false;
+        }
+        /*
         public override bool Equals(object obj)
         {
             if (obj.GetType() != typeof(SongConditionals)) return false;
@@ -321,5 +280,20 @@ namespace StardewSymphonyRemastered.Framework.V2
 
             return true;
         }
+        */
+        public override string ToString()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Season: " + this.season+Environment.NewLine);
+            b.Append("Weather: " + this.weather + Environment.NewLine);
+            b.Append("Time: " + this.time + Environment.NewLine);
+            b.Append("Location: " + this.location + Environment.NewLine);
+            b.Append("Day: " + this.dayOfWeek + Environment.NewLine);
+            b.Append("Festival: " + this.festival + Environment.NewLine);
+            b.Append("Event: " + this.eventKey + Environment.NewLine);
+            b.Append("Menu: " + this.menu + Environment.NewLine);
+            return b.ToString();
+        }
+        
     }
 }

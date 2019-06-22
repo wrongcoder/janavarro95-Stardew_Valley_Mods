@@ -52,7 +52,8 @@ namespace StardewSymphonyRemastered.Framework.V2
         {
             foreach(KeyValuePair<string,SongConditionals> pair in this.songConditionals)
             {
-                if (pair.Value.canBePlayed(key) == true) return true;
+                SongConditionals temp = new SongConditionals(key);
+                if (pair.Value.canBePlayed(temp) == true) return true;
             }
             return false;
         }

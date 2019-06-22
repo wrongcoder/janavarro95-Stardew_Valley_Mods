@@ -82,6 +82,7 @@ namespace StardewSymphonyRemastered.Framework.V2
             this.StopSong();
             this.CurrentSongName = name;
             this.CurrentSound = sound;
+            this.CurrentSound.Volume = Game1.options.musicVolumeLevel;
             this.CurrentSound.Play();
         }
 
@@ -124,11 +125,14 @@ namespace StardewSymphonyRemastered.Framework.V2
                 foreach (FileInfo file in dataFolder.GetFiles())
                 {
                     SongInformation node = this.ContentPack.ReadJsonFile<SongInformation>($"{this.DataFolderName}/{file.Name}");
-                    try
+                    if (this.SongInformation.songs.ContainsKey(Path.GetFileNameWithoutExtension(file.Name)))
                     {
-                        this.SongInformation.songs.Add(file.Name, node);
+                        this.SongInformation.songs[Path.GetFileNameWithoutExtension(file.Name)].songConditionals = node.songConditionals;
                     }
-                    catch { }
+                    else
+                    {
+                        this.SongInformation.songs.Add(Path.GetFileNameWithoutExtension(file.Name), node);
+                    }
                 }
             }
         }

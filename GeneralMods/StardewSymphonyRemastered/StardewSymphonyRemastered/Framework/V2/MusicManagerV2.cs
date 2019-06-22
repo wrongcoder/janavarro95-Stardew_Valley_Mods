@@ -20,9 +20,6 @@ namespace StardewSymphonyRemastered.Framework.V2
         /// <summary>The delay timer between songs.</summary>
         private readonly Timer Timer = new Timer();
 
-        private bool lastSongWasLocationSpecific;
-
-
         /*********
         ** Accessors
         *********/
@@ -152,49 +149,29 @@ namespace StardewSymphonyRemastered.Framework.V2
         /// Get a list of applicable songs to play in the given menu and find one to play.
         /// </summary>
         /// <param name="songListKey"></param>
-        public void SelectMenuMusic(string songListKey)
+        public bool SelectMenuMusic(string songListKey)
         {
-            // stop timer when new music is selected
-            this.Timer.Enabled = false;
 
-            // get applicable music packs
-            var listOfValidMusicPacks = this.GetApplicableMusicPacks(songListKey);
-            if (listOfValidMusicPacks.Count == 0)
-                return;
-
-            // swap to new music pack
-            var pair = listOfValidMusicPacks.ElementAt(this.Random.Next(0, listOfValidMusicPacks.Count - 1));
-            this.SwapMusicPacks(pair.Key.Name);
-            string songName = pair.Value.ElementAt(this.Random.Next(0, pair.Value.Count));
-            this.CurrentMusicPack.PlaySong(songName);
-
-            StardewSymphony.menuChangedMusic = true;
+            if (this.selectMusic(songListKey, false))
+            {
+                StardewSymphony.menuChangedMusic = true;
+                return true;
+            }
+            StardewSymphony.menuChangedMusic = false;
+            return false;
 
         }
         /// <summary>Select the actual song to be played right now based on the selector key. The selector key should be called when the player's location changes.</summary>
-        public void selectMusic(string songListKey, bool warpCheck = false)
+        public bool selectMusic(string songListKey, bool warpCheck = false)
         {
+
+            if (warpCheck == true && StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.Contains(Game1.player.currentLocation.Name))
+            {
+                return false;
+            }
             //Prevent generic song changes when running about.
 
-            if (SongSpecificsV2.IsKeyGeneric(songListKey))
-            {
-                if (this.CurrentMusicPack != null)
-                {
-                    if (this.CurrentMusicPack.IsPlaying()) return;
-                }
-            }
-
-
-
-            //If I have warped and the key only is to be played when time changes prevent a new song from playing.
-            //If the key is more specific (I.E has a location associated with it) then music will change.
-            if (warpCheck == true && SongSpecificsV2.IsKeyTimeSpecific(songListKey))
-            {
-                if (this.CurrentMusicPack != null)
-                {
-                    if (this.CurrentMusicPack.IsPlaying()) return;
-                }
-            }
+            SongConditionals conditional = new SongConditionals(songListKey);
 
             // stop timer timer when music is selected
             this.Timer.Enabled = false;
@@ -205,44 +182,124 @@ namespace StardewSymphonyRemastered.Framework.V2
             //If the list of valid packs are 0, check if I'm currently at an event or festival or get some location specific music and try to play a generalized song from there.
             if (listOfValidMusicPacks.Count == 0)
             {
-
                 //No valid songs to play at this time.
                 if (StardewSymphony.Config.EnableDebugLog)
                     StardewSymphony.ModMonitor.Log("Error: There are no songs to play across any music pack for the song key: " + songListKey + ".7 Are you sure you did this properly?");
                 StardewSymphony.menuChangedMusic = false;
-                return;
+                return false;
 
 
             }
+            //All music packs that have songs have been taken into acount.
+            //Check all songs in all music packs to see if it can be played here.
 
-            SongConditionals conditional = new SongConditionals(songListKey);
-
-            if (this.CurrentMusicPack != null)
+            List<KeyValuePair<MusicPackV2, string>> packSongNames = new List<KeyValuePair<MusicPackV2, string>>();
+            List<KeyValuePair<MusicPackV2, string>> locpackSongNames = new List<KeyValuePair<MusicPackV2, string>>();
+            foreach (var ok in listOfValidMusicPacks)
             {
-                
-                //If I am trying to play a generic song and a generic song is playing don't change the music.
-                //If I am trying to play a generic song and a non-generic song is playing, then play my generic song since I don't want to play the specific music anymore.
-                if ((conditional.isLocationSpecific()==false&&conditional.isTimeSpecific()==false) && (this.CurrentMusicPack.IsPlaying() && !this.lastSongWasLocationSpecific))
+                foreach (SongInformation song in ok.Key.SongInformation.songs.Values)
                 {
-                    if (StardewSymphony.Config.EnableDebugLog)
-                        StardewSymphony.ModMonitor.Log("Non specific music change detected. Not going to change the music this time");
-                    return;
+                    if (song.canBePlayed(songListKey))
+                    {
+                        foreach(SongConditionals con in song.songConditionals.Values)
+                        {
+                            if (con.isLocationSpecific() == false)
+                            {
+                                //If the key is generic skip over it.
+                                if (con.isKeyGeneric())
+                                {
+                                    if (this.CurrentMusicPack != null)
+                                    {
+                                        if (this.CurrentMusicPack.IsPlaying()) continue;
+                                    }
+                                }
+                                //If I have warped and the key only is to be played when time changes prevent a new song from playing.
+                                //If the key is more specific (I.E has a location associated with it) then music will change.
+                                if (warpCheck == true && con.isTimeSpecific())
+                                {
+                                    if (this.CurrentMusicPack != null)
+                                    {
+                                        if (this.CurrentMusicPack.IsPlaying()) continue;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                locpackSongNames.Add(new KeyValuePair<MusicPackV2, string>(ok.Key, song.name));
+                            }
+                        }
+                        packSongNames.Add(new KeyValuePair<MusicPackV2, string>(ok.Key, song.name));
+                    }
                 }
             }
 
-            this.lastSongWasLocationSpecific = conditional.isLocationSpecific();
-
             //If there is a valid key for the place/time/event/festival I am at, play it!
 
-            int randInt = this.Random.Next(0, listOfValidMusicPacks.Count - 1);
+            int randInt = this.Random.Next(0, packSongNames.Count - 1);
 
-            var musicPackPair = listOfValidMusicPacks.ElementAt(randInt);
+            var musicPackPair = packSongNames.ElementAt(randInt);
 
+            /*
+            //Check to see if the only location song was the one I was just playing. If so ignore it and chose more generic music.
+            if (locpackSongNames.Count == 1)
+            {
+                if (musicPackPair.Key == locpackSongNames[0].Key)
+                {
+                    if (musicPackPair.Value == locpackSongNames[0].Value)
+                    {
+                        //Don't care
+                    }
+                }
+            }
+            //If not the try to chose another location specific song.
+            else
+            {
+                packSongNames = locpackSongNames;
+                randInt = this.Random.Next(0, packSongNames.Count - 1);
+                musicPackPair = packSongNames.ElementAt(randInt);
+            }*/
+
+            while (true)
+            {
+                if (this.CurrentMusicPack != null)
+                {
+                    if (packSongNames.Count == 0) return false;
+                    if (musicPackPair.Key.Name == this.CurrentMusicPack.Name)
+                    {
+                        if (musicPackPair.Value == this.CurrentMusicPack.CurrentSongName)
+                        {
+                            if (packSongNames.Count == 1) return false;
+                            else
+                            {
+                                //Used to eliminate chosing the same song from the same pack.
+                                packSongNames.Remove(musicPackPair);
+                                randInt = this.Random.Next(0, packSongNames.Count - 1);
+                                musicPackPair = packSongNames.ElementAt(randInt);
+                            }
+                        }
+                        else
+                        {
+                            //Different song from same pack
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        //Different pack so probably different song.
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             //used to swap the music packs and stop the last playing song.
             this.SwapMusicPacks(musicPackPair.Key.Name);
-            string songName = musicPackPair.Value.ElementAt(this.Random.Next(0, musicPackPair.Value.Count));
+            string songName = musicPackPair.Value;      
             this.CurrentMusicPack.PlaySong(songName);
+            return true;
         }
 
 

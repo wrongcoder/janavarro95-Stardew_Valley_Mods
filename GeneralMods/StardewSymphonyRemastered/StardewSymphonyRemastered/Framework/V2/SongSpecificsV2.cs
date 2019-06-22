@@ -487,9 +487,12 @@ namespace StardewSymphonyRemastered.Framework.V2
         public List<string> getSongList(string key)
         {
             List<string> songs = new List<string>();
-            foreach(var v in this.songs)
+            foreach (var v in this.songs)
             {
-                if (v.Value.canBePlayed(key)) songs.Add(v.Key);
+                if (v.Value.canBePlayed(key))
+                {
+                    songs.Add(v.Key);
+                }
             }
             return songs;
         }

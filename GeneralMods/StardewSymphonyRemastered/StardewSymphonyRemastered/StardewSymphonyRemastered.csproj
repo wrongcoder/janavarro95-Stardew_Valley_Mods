@@ -242,6 +242,9 @@
     <Content Include="assets\RedBallon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="assets\SaveIcon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="assets\SeasonIcon_Fall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

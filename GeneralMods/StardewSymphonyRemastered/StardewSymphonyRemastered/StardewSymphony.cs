@@ -10,16 +10,10 @@ using StardustCore.UIUtilities;
 namespace StardewSymphonyRemastered
 {
     // TODO:
-    //
-    // Fixed Farm building glitch,
-    // Added underground mine support
-    // Added seasonal selection support
-    // added just location support
-    // added in write all config option
     // 
     // Add mod config to have silent rain option.
-    // Add in shuffle song button that just selects music but probably plays a different song. same as musicManager.selectmusic(getConditionalString);
-    // Add in a save button to save settings in the menu.
+    // Added in option to tie in wav sound volume to game sound options.
+    //Add in way to see all selected options for a song in the menu?
     // 
     // Notes:
     // All mods must add events/locations/festivals/menu information to this mod during the Entry function of their mod because once the player is loaded that's when all of the packs are initialized with all of their music.
@@ -36,6 +30,7 @@ namespace StardewSymphonyRemastered
         public static TextureManager textureManager;
 
 
+        private float oldVolume=-5f;
         /*********
         ** Public methods
         *********/
@@ -202,6 +197,23 @@ namespace StardewSymphonyRemastered
                     }
                 }
             }
+
+            //Update volume.
+            if (this.oldVolume < 0f)
+            {
+                this.oldVolume = Game1.options.musicVolumeLevel;
+            }
+            if (this.oldVolume != Game1.options.musicVolumeLevel)
+            {
+                this.oldVolume = Game1.options.musicVolumeLevel;
+                if (musicManager.CurrentMusicPack != null)
+                {
+                    if (musicManager.CurrentMusicPack.CurrentSound != null)
+                    {
+                        musicManager.CurrentMusicPack.CurrentSound.Volume = this.oldVolume;
+                    }
+                }
+            }
         }
 
         /// <summary>Load the textures needed by the mod.</summary>
@@ -211,6 +223,8 @@ namespace StardewSymphonyRemastered
             {
                 return new Texture2DExtended(this.Helper.Content.Load<Texture2D>($"assets/{name}"));
             }
+
+            textureManager.addTexture("SaveIcon", LoadTexture("SaveIcon.png"));
 
             //Generic Icons
             textureManager.addTexture("MusicNote", LoadTexture("MusicNote.png"));
