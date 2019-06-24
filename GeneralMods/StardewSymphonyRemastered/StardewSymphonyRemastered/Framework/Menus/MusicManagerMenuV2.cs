@@ -19,6 +19,15 @@ using StardustCore.UIUtilities.SpriteFonts;
 
 namespace StardewSymphonyRemastered.Framework.Menus
 {
+    /// <summary>
+    /// TODO:
+    /// Add in next page previous page buttons
+    /// Add in page (x of y) display text
+    /// Add in visual display to see what conditionals for that song have been selected.
+    ///     -Add in way to delete options from this menu
+    /// Add in search box functionality for selecting albums
+    /// Add in search box functionality for song selection.
+    /// </summary>
     public class MusicManagerMenuV2 : IClickableMenuExtended
     {
         /// <summary>The different displays for this menu.</summary>
@@ -99,9 +108,21 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// The delete button that clears all conditionals from a song.
         /// </summary>
         public Button deleteButton;
+        /// <summary>
+        /// The play button that plays the currently selected song.
+        /// </summary>
         public Button playButton;
+        /// <summary>
+        /// The play button that stops the currently selected song.
+        /// </summary>
         public Button stopButton;
+        /// <summary>
+        /// The back button to go to a previous menu page.
+        /// </summary>
         public Button backButton;
+        /// <summary>
+        /// The save button that saves the current options to the song.
+        /// </summary>
         public Button saveButton;
 
         private Vector2 seasonButtonPosition;
@@ -113,6 +134,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
         private Vector2 festivalButtonPosition;
         private Vector2 eventButtonPosition;
 
+        /// <summary>
+        /// The currently selected music pack album.
+        /// </summary>
         private MusicPackV2 CurrentMusicPack
         {
             get
@@ -124,29 +148,58 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
             }
         }
-
-
-        public bool selectedJustLocation;
-
+        /// <summary>
+        /// The current draw mode to determine what menu components to display and when.
+        /// </summary>
         public DrawMode drawMode;
+        /// <summary>
+        /// The current index for the album selection page.
+        /// </summary>
         public int currentAlbumIndex;
+        /// <summary>
+        /// The current page index for the song selection page.
+        /// </summary>
         public int currentSongPageIndex;
+        /// <summary>
+        /// The current page index for the location selection page.
+        /// </summary>
         public int locationPageIndex;
+        /// <summary>
+        /// The current page index for the festival selection page.
+        /// </summary>
         public int festivalPageIndex;
+        /// <summary>
+        /// The current page index for the event selection page.
+        /// </summary>
         public int eventPageIndex;
+        /// <summary>
+        /// The current page index for the menu selection page.
+        /// </summary>
         public int menuPageIndex;
+        /// <summary>
+        /// The current page index for the time of day page.
+        /// </summary>
         public int timePageIndex;
-
-        public List<Button> fancyButtons; //List that holds all of the buttons for the fancy album menu.
-        public int framesSinceLastUpdate; //Used to control how fast we can cycle through the menu.
-
+        /// <summary>
+        /// A list that holds all of the buttons for display on the menu.
+        /// </summary>
+        public List<Button> fancyButtons;
+        /// <summary>
+        /// Used to control how fast we can cycle through the menu so that we can use wasd cycle controls.
+        /// </summary>
+        public int framesSinceLastUpdate;
+        /// <summary>
+        /// Used to determine if the search box was selected.
+        /// </summary>
         public bool searchBoxSelected;
-
+        /// <summary>
+        /// The hover text for this menu.
+        /// </summary>
         public string hoverText;
 
 
         /// <summary>
-        /// Constructor.
+        /// Constructor for the menu.
         /// </summary>
         /// <param name="width"> The width of the menu.</param>
         /// <param name="height">The height of the menu.</param>
@@ -237,10 +290,10 @@ namespace StardewSymphonyRemastered.Framework.Menus
         }
 
         /// <summary>
-        /// What happens when the menu is clicked.
+        /// What happens when the menu is clicked with the left mouse button.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">X position for the mouse.</param>
+        /// <param name="y">Y position for the mouse.</param>
         /// <param name="playSound"></param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
@@ -248,28 +301,28 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.playButton.containsPoint(x, y))
             {
-                Game1.playSound("coin");
+                if(playSound)Game1.playSound("coin");
                 this.playSong();
                 return;
             }
 
             if (this.stopButton.containsPoint(x, y) && this.currentSelectedSong!=null && this.currentMusicPackAlbum != null)
             {
-                Game1.playSound("coin");
+                if (playSound) Game1.playSound("coin");
                 this.stopSong();
                 return;
             }
 
             if (this.addButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
             {
-                Game1.playSound("coin");
+                if (playSound) Game1.playSound("coin");
                 this.addSong();
                 return;
             }
 
             if (this.deleteButton.containsPoint(x, y) && this.drawMode== DrawMode.DifferentSelectionTypesModePage)
             {
-                Game1.playSound("coin");
+                if (playSound) Game1.playSound("coin");
                 this.clearAllOptions();
                 return;
             }
@@ -280,7 +333,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedSeason.containsPoint(x, y))
                 {
                     this.currentlySelectedSeason = null;
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                 }
             }
             //Delete weather
@@ -289,7 +342,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedWeather.containsPoint(x, y))
                 {
                     this.currentlySelectedWeather = null;
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                 }
             }
             //Delete time
@@ -298,7 +351,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedTime.containsPoint(x, y))
                 {
                     this.currentlySelectedTime = null;
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                 }
             }
             //Delete location
@@ -307,7 +360,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedLocation.containsPoint(x, y))
                 {
                     this.currentlySelectedLocation = null;
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                 }
             }
             //Delete day
@@ -316,7 +369,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedDay.containsPoint(x, y))
                 {
                     this.currentlySelectedDay = null;
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                 }
             }
             //Delete festival
@@ -325,7 +378,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.currentlySelectedFestival.containsPoint(x, y))
                 {
                     this.currentlySelectedFestival = null;
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                 }
             }
             //Delete event
@@ -333,7 +386,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 if (this.currentlySelectedEvent.containsPoint(x, y))
                 {
-                    Game1.playSound("coin");
+                    this.currentlySelectedEvent = null;
+                    if (playSound) Game1.playSound("coin");
                 }
             }
             //Delete menu
@@ -346,17 +400,16 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
             }
 
-
             if (this.drawMode == DrawMode.DifferentSelectionTypesModePage && this.saveButton.containsPoint(x, y))
             {
                 this.CurrentMusicPack.SaveSettings();
-                Game1.playSound("coin");
+                if(playSound)Game1.playSound("coin");
                 return;
             }
 
             if (this.backButton.containsPoint(x, y))
             {
-                Game1.playSound("coin");
+                if (playSound) Game1.playSound("coin");
                 this.goBack();
                 return;
             }
@@ -369,7 +422,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     if (button.containsPoint(x, y) && button.buttonFunctionality.leftClick != null)
                     {
-                        Game1.playSound("coin");
+                        if (playSound) Game1.playSound("coin");
                         button.onLeftClick();
                         this.currentAlbumIndex += count - 3;
                         while (this.currentAlbumIndex < 0)
@@ -412,7 +465,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 {
                     if (component.containsPoint(x, y))
                     {
-                        Game1.playSound("coin");
+                        if (playSound) Game1.playSound("coin");
                         this.selectSong(component);
                         songSelected = true;
                     }
@@ -457,11 +510,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                             case "LocationButton":
                                 //this.currentlySelectedOption = button.clone(position);
                                 this.drawMode = DrawMode.LocationSelection;
-                                this.selectedJustLocation = true;
                                 buttonSelected = true;
                                 break;
-
-
                             case "WeatherButton":
                                 // this.currentlySelectedOption = button.clone(position);
                                 this.drawMode = DrawMode.WeatherSelection;
@@ -484,7 +534,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (buttonSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -527,7 +577,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (buttonSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -569,7 +619,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -611,7 +661,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -653,7 +703,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -685,7 +735,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (buttonSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -732,7 +782,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (buttonSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -776,7 +826,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (songSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
                 return;
@@ -799,13 +849,10 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
                 if (buttonSelected)
                 {
-                    Game1.playSound("coin");
+                    if (playSound) Game1.playSound("coin");
                     this.updateFancyButtons();
                 }
             }
-
-
-
         }
 
         /// <summary>
@@ -884,7 +931,10 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.addButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
             {
-                this.hoverText = "Add conditionals to song." + Environment.NewLine + Environment.NewLine + "This button adds a new set of conditionals" + Environment.NewLine + "for when this song should play." + Environment.NewLine + "Every time a conditional is added it is" + Environment.NewLine + "then checked every time this mod tries to select music." + Environment.NewLine + "Multiple conditionals can exist for the same song.";
+                string retText = this.doesSongContainConditional(); //return text
+                this.hoverText = string.IsNullOrEmpty(retText) ? "": retText + Environment.NewLine;
+
+                this.hoverText += "Add conditionals to song." + Environment.NewLine + Environment.NewLine + "This button adds a new set of conditionals" + Environment.NewLine + "for when this song should play." + Environment.NewLine + "Every time a conditional is added it is" + Environment.NewLine + "then checked every time this mod tries to select music." + Environment.NewLine + "Multiple conditionals can exist for the same song.";
                 hoverTextOver = true;
             }
             if (this.saveButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
@@ -923,6 +973,20 @@ namespace StardewSymphonyRemastered.Framework.Menus
             }
         }
 
+        /// <summary>
+        /// Checks if the conditional key has already been added in for the current music pack.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        private string doesSongContainConditional()
+        {
+            string key = this.generateSongTriggerKeyFromSelection();
+            if (this.CurrentMusicPack.SongInformation.songs[this.currentSelectedSong.name].songConditionals.ContainsKey(this.generateSongTriggerKeyFromSelection()))
+            {
+                return "Conditional key already added."+Environment.NewLine+"(That means clicking this will do nothing)";
+            }
+            else return "";
+        }
 
         /// <summary>
         /// Update all of the buttons for the menu.
