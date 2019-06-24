@@ -23,10 +23,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
     /// TODO:
     /// Add in next page previous page buttons
     /// Add in page (x of y) display text
+    ///  -good for songs. Now do it for all pages
     /// Add in visual display to see what conditionals for that song have been selected.
     ///     -Add in way to delete options from this menu
     /// Add in search box functionality for selecting albums
     /// Add in search box functionality for song selection.
+    /// -Add in confirmation for go back if current selected conditional is un-added (unsaved)
     /// </summary>
     public class MusicManagerMenuV2 : IClickableMenuExtended
     {
@@ -1892,7 +1894,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
             return key;
         }
 
-
+        /// <summary>
+        /// Clears all selected conditionals options.
+        /// </summary>
         private void clearAllOptions()
         {
             //Check selections for draw mode and then remove if necessary
@@ -1927,6 +1931,10 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 this.updateFancyButtons();
             }
         }
+        /// <summary>
+        /// Selects the music pack album and sets it up.
+        /// </summary>
+        /// <param name="b"></param>
         public void selectAlbum(Button b)
         {
             if (b.label == "Null")
@@ -2005,6 +2013,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 foreach (var str in this.texturedStrings)
                     str.draw(b);
+
+                b.DrawString(Game1.smallFont, "Page: " + (this.currentSongPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + 1), new Vector2(drawList[0].getVector2().X, drawList[0].getVector2().Y - 50), Color.White);
             }
 
             if (this.drawMode == DrawMode.DifferentSelectionTypesModePage || this.drawMode == DrawMode.SeasonSelection || this.drawMode == DrawMode.WeatherSelection || this.drawMode == DrawMode.DaySelection)
