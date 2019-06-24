@@ -198,7 +198,8 @@ namespace StardewSymphonyRemastered
                 }
             }
 
-            //Update volume.
+            //Update volume.0.
+            
             if (this.oldVolume < 0f)
             {
                 this.oldVolume = Game1.options.musicVolumeLevel;
