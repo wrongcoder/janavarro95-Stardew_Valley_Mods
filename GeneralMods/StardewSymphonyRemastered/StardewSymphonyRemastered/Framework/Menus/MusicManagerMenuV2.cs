@@ -21,9 +21,6 @@ namespace StardewSymphonyRemastered.Framework.Menus
 {
     /// <summary>
     /// TODO:
-    /// Add in next page previous page buttons
-    /// Add in page (x of y) display text
-    ///  -good for songs. Now do it for all pages
     /// Add in visual display to see what conditionals for that song have been selected.
     ///     -Add in way to delete options from this menu
     /// Add in search box functionality for selecting albums
@@ -37,25 +34,16 @@ namespace StardewSymphonyRemastered.Framework.Menus
         ///Add in delete funtionality
         public enum DrawMode
         {
-            AlbumSelection,
             AlbumFancySelection,
             SongSelectionMode,
-
             DifferentSelectionTypesModePage, //Used for locations, events, festivals,  menus (house, exclamation mark, star, and list/book icons respectively)
             WeatherSelection,
             FestivalSelection,
             EventSelection,
             MenuSelection,
-
             TimeSelection,
             LocationSelection,
             DaySelection,
-            NothingElseToDisplay,
-
-            SelectedEvent,
-            SelectedFestival,
-            SelectedMenu,
-
             SeasonSelection,
         }
         /// <summary>
@@ -126,6 +114,9 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// The save button that saves the current options to the song.
         /// </summary>
         public Button saveButton;
+
+        public Button lastPageButton;
+        public Button nextPageButton;
 
         private Vector2 seasonButtonPosition;
         private Vector2 timeButtonPosition;
@@ -281,6 +272,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
             Vector2 savePos = new Vector2(this.width * .1f + 256 + 32, this.height * .05f + 64); //Put it to the right of the music disk
             this.saveButton = new Button("SaveIcon", new Rectangle((int)savePos.X, (int)savePos.Y, 64, 64), StardewSymphony.textureManager.getTexture("SaveIcon"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
 
+
+            Vector2 leftPos = this.getFixedPositionFromMenu(new Vector2(736, 64)); //Put it to the right of the music disk
+            this.lastPageButton = new Button("LastPage", new Rectangle((int)leftPos.X, (int)leftPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("LastPage"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
+            Vector2 rightPos = this.getFixedPositionFromMenu(new Vector2(972, 64)); //Put it to the right of the music disk
+            this.nextPageButton = new Button("NextPage", new Rectangle((int)rightPos.X, (int)rightPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("NextPage"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
+
+
             this.seasonButtonPosition = new Vector2(this.width * .1f + 64, this.height * .05f + (64 * 5));
             this.weatherButtonPosition = new Vector2(this.width * .1f + (64 * 2), this.height * .05f + (64 * 5));
             this.timeButtonPosition = new Vector2(this.width * .1f + (64 * 3), this.height * .05f + (64 * 5));
@@ -303,12 +301,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
             if (this.currentSelectedSong != null && this.currentMusicPackAlbum != null && this.playButton.containsPoint(x, y))
             {
-                if(playSound)Game1.playSound("coin");
+                if (playSound) Game1.playSound("coin");
                 this.playSong();
                 return;
             }
 
-            if (this.stopButton.containsPoint(x, y) && this.currentSelectedSong!=null && this.currentMusicPackAlbum != null)
+            if (this.stopButton.containsPoint(x, y) && this.currentSelectedSong != null && this.currentMusicPackAlbum != null)
             {
                 if (playSound) Game1.playSound("coin");
                 this.stopSong();
@@ -322,11 +320,20 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 return;
             }
 
-            if (this.deleteButton.containsPoint(x, y) && this.drawMode== DrawMode.DifferentSelectionTypesModePage)
+            if (this.deleteButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
             {
                 if (playSound) Game1.playSound("coin");
                 this.clearAllOptions();
                 return;
+            }
+
+            if (this.nextPageButton.containsPoint(x, y))
+            {
+                this.nextPage();
+            }
+            if (this.lastPageButton.containsPoint(x, y))
+            {
+                this.previousPage();
             }
 
             //Delete season
@@ -405,7 +412,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.drawMode == DrawMode.DifferentSelectionTypesModePage && this.saveButton.containsPoint(x, y))
             {
                 this.CurrentMusicPack.SaveSettings();
-                if(playSound)Game1.playSound("coin");
+                if (playSound) Game1.playSound("coin");
                 return;
             }
 
@@ -858,6 +865,138 @@ namespace StardewSymphonyRemastered.Framework.Menus
         }
 
         /// <summary>
+        /// Goes to the next page depending on the current menu page being viewed.
+        /// </summary>
+        private void nextPage()
+        {
+            if (this.drawMode == DrawMode.AlbumFancySelection)
+            {
+                this.currentAlbumIndex++;
+                if (this.currentAlbumIndex == this.musicAlbumButtons.Count) this.currentAlbumIndex = 0;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.EventSelection)
+            {
+                if ((this.eventPageIndex + 1) * 6 >= this.fancyButtons.Count) return;
+                this.eventPageIndex++;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.FestivalSelection)
+            {
+                if ((this.festivalPageIndex + 1) * 6 >= this.fancyButtons.Count) return;
+                this.festivalPageIndex++;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.LocationSelection)
+            {
+                if ((this.locationPageIndex + 1) * 6 >= this.fancyButtons.Count) return;
+                this.locationPageIndex++;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.MenuSelection)
+            {
+                if ((this.menuPageIndex + 1) * 6 >= this.fancyButtons.Count) return;
+                this.menuPageIndex++;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.SongSelectionMode)
+            {
+                if ((this.currentSongPageIndex + 1) * 6 >= this.fancyButtons.Count) return;
+                this.currentSongPageIndex++;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.TimeSelection)
+            {
+                if ((this.timePageIndex + 1) * 6 >= this.fancyButtons.Count) return;
+                this.timePageIndex++;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+        }
+
+        /// <summary>
+        /// Goes to the previous page depending on the current menu page being viewed.
+        /// </summary>
+        private void previousPage()
+        {
+            if (this.drawMode == DrawMode.AlbumFancySelection)
+            {
+                this.currentAlbumIndex--;
+                if (this.currentAlbumIndex < 0) this.currentAlbumIndex = this.musicAlbumButtons.Count - 1;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.EventSelection)
+            {
+                if (this.eventPageIndex == 0) return;
+                if (this.eventPageIndex > 0)
+                    this.eventPageIndex--;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.FestivalSelection)
+            {
+                if (this.festivalPageIndex == 0) return;
+                if (this.festivalPageIndex > 0)
+                    this.festivalPageIndex--;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.LocationSelection)
+            {
+                if (this.locationPageIndex == 0) return;
+                if (this.locationPageIndex > 0)
+                    this.locationPageIndex--;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.MenuSelection)
+            {
+                if (this.menuPageIndex == 0) return;
+                if (this.menuPageIndex > 0)
+                    this.menuPageIndex--;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.SongSelectionMode)
+            {
+                if (this.currentSongPageIndex == 0) return;
+                if (this.currentSongPageIndex > 0)
+                    this.currentSongPageIndex--;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.TimeSelection)
+            {
+                if (this.timePageIndex == 0) return;
+                if (this.timePageIndex > 0)
+                    this.timePageIndex--;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+        }
+
+        /// <summary>
         /// What happens when hovering over a part of the menu.
         /// </summary>
         /// <param name="x"></param>
@@ -934,7 +1073,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             if (this.addButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
             {
                 string retText = this.doesSongContainConditional(); //return text
-                this.hoverText = string.IsNullOrEmpty(retText) ? "": retText + Environment.NewLine;
+                this.hoverText = string.IsNullOrEmpty(retText) ? "" : retText + Environment.NewLine;
 
                 this.hoverText += "Add conditionals to song." + Environment.NewLine + Environment.NewLine + "This button adds a new set of conditionals" + Environment.NewLine + "for when this song should play." + Environment.NewLine + "Every time a conditional is added it is" + Environment.NewLine + "then checked every time this mod tries to select music." + Environment.NewLine + "Multiple conditionals can exist for the same song.";
                 hoverTextOver = true;
@@ -951,7 +1090,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 hoverTextOver = true;
             }
 
-            if(this.playButton.containsPoint(x,y) && this.drawMode != DrawMode.SongSelectionMode && this.drawMode != DrawMode.AlbumFancySelection)
+            if (this.playButton.containsPoint(x, y) && this.drawMode != DrawMode.SongSelectionMode && this.drawMode != DrawMode.AlbumFancySelection)
             {
                 this.hoverText = "Play song";
                 hoverTextOver = true;
@@ -985,7 +1124,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             string key = this.generateSongTriggerKeyFromSelection();
             if (this.CurrentMusicPack.SongInformation.songs[this.currentSelectedSong.name].songConditionals.ContainsKey(this.generateSongTriggerKeyFromSelection()))
             {
-                return "Conditional key already added."+Environment.NewLine+"(That means clicking this will do nothing)";
+                return "Conditional key already added." + Environment.NewLine + "(That means clicking this will do nothing)";
             }
             else return "";
         }
@@ -1438,7 +1577,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     }
                     float scale = 1.00f / (texture.getTexture().Width / 64f);
                     Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
-                    this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 6) * 100), 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
+                    this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 }
 
                 for (int i = 2; i < 26; i++)
@@ -1486,7 +1625,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     }
                     float scale = 1.00f / (texture.getTexture().Width / 64f);
                     Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
-                    this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 6) * 100), 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
+                    this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 }
 
             }
@@ -1620,23 +1759,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
                     var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                    {
-                        this.currentAlbumIndex--;
-                        if (this.currentAlbumIndex < 0) this.currentAlbumIndex = this.musicAlbumButtons.Count - 1;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
-
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                    {
-                        this.currentAlbumIndex++;
-                        if (this.currentAlbumIndex == this.musicAlbumButtons.Count) this.currentAlbumIndex = 0;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
                 }
                 else
                 {
@@ -1649,22 +1773,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
                     var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                    {
-                        if (this.currentSongPageIndex > 0)
-                            this.currentSongPageIndex--;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
-
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                    {
-                        this.currentSongPageIndex++;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
                 }
                 else
                     this.framesSinceLastUpdate++;
@@ -1675,22 +1785,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
                     var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                    {
-                        if (this.locationPageIndex > 0)
-                            this.locationPageIndex--;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
-
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                    {
-                        this.locationPageIndex++;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
                 }
                 else
                     this.framesSinceLastUpdate++;
@@ -1701,22 +1797,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
                     var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                    {
-                        if (this.festivalPageIndex > 0)
-                            this.festivalPageIndex--;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
-
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                    {
-                        this.festivalPageIndex++;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
                 }
                 else
                     this.framesSinceLastUpdate++;
@@ -1727,22 +1809,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
                     var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                    {
-                        if (this.eventPageIndex > 0)
-                            this.eventPageIndex--;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
-
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                    {
-                        this.eventPageIndex++;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
                 }
                 else
                     this.framesSinceLastUpdate++;
@@ -1753,22 +1821,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
                     var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                    {
-                        if (this.menuPageIndex > 0)
-                            this.menuPageIndex--;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
-
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                    {
-                        this.menuPageIndex++;
-                        this.updateFancyButtons();
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
                 }
                 else
                     this.framesSinceLastUpdate++;
@@ -1779,24 +1833,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
                     var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A))
-                    {
-                        if (this.timePageIndex > 0)
-                            this.timePageIndex--;
-                        this.updateFancyButtons();
-
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
-
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D))
-                    {
-                        this.timePageIndex++;
-                        this.updateFancyButtons();
-
-                        this.framesSinceLastUpdate = 0;
-                        Game1.playSound("shwip");
-                    }
+                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
+                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
                 }
                 else
                     this.framesSinceLastUpdate++;
@@ -1964,13 +2002,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
         {
             Vector4 placement = new Vector4(this.width * .1f, this.height * .05f - 96, 4 * 100 + 50, this.height + 32);
             Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f - 96, 5 * 100, this.height + 32);
-
-            if (this.drawMode == DrawMode.AlbumSelection)
-            {
-                this.drawDialogueBoxBackground();
-                foreach (var button in this.musicAlbumButtons)
-                    button.draw(b);
-            }
+            Vector2 pagePlacement = new Vector2(800, 64);
 
             if (this.drawMode == DrawMode.AlbumFancySelection)
             {
@@ -2014,7 +2046,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 foreach (var str in this.texturedStrings)
                     str.draw(b);
 
-                b.DrawString(Game1.smallFont, "Page: " + (this.currentSongPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + 1), new Vector2(drawList[0].getVector2().X, drawList[0].getVector2().Y - 50), Color.White);
+                b.DrawString(Game1.smallFont, "Page: " + (this.currentSongPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + 1), this.getFixedPositionFromMenu(pagePlacement), Color.White);
             }
 
             if (this.drawMode == DrawMode.DifferentSelectionTypesModePage || this.drawMode == DrawMode.SeasonSelection || this.drawMode == DrawMode.WeatherSelection || this.drawMode == DrawMode.DaySelection)
@@ -2066,6 +2098,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 foreach (var str in this.texturedStrings)
                     str.draw(b);
+
+                b.DrawString(Game1.smallFont, "Page: " + (this.fancyButtons.Count == 0 ? 0 : (this.eventPageIndex + 1)) + " of " + ((this.fancyButtons.Count / amountToShow) + ((this.fancyButtons.Count % amountToShow == 0 ? 0 : 1))), this.getFixedPositionFromMenu(pagePlacement), Color.White);
             }
 
             if (this.drawMode == DrawMode.MenuSelection)
@@ -2101,6 +2135,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 foreach (var str in this.texturedStrings)
                     str.draw(b);
+
+                b.DrawString(Game1.smallFont, "Page: " + (this.menuPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + ((this.fancyButtons.Count % amountToShow == 0 ? 0 : 1))), this.getFixedPositionFromMenu(pagePlacement), Color.White);
             }
 
             if (this.drawMode == DrawMode.FestivalSelection)
@@ -2136,6 +2172,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 foreach (var str in this.texturedStrings)
                     str.draw(b);
+
+                b.DrawString(Game1.smallFont, "Page: " + (this.festivalPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + ((this.fancyButtons.Count % amountToShow == 0 ? 0 : 1))), this.getFixedPositionFromMenu(pagePlacement), Color.White);
             }
 
             if (this.drawMode == DrawMode.TimeSelection)
@@ -2171,6 +2209,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 foreach (var str in this.texturedStrings)
                     str.draw(b);
+
+                b.DrawString(Game1.smallFont, "Page: " + (this.timePageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + ((this.fancyButtons.Count % amountToShow == 0 ? 0 : 1))), this.getFixedPositionFromMenu(pagePlacement), Color.White);
             }
 
             if (this.drawMode == DrawMode.LocationSelection)
@@ -2205,6 +2245,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 foreach (var str in this.texturedStrings)
                     str.draw(b);
+
+                b.DrawString(Game1.smallFont, "Page: " + (this.locationPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + ((this.fancyButtons.Count % amountToShow == 0 ? 0 : 1))), this.getFixedPositionFromMenu(pagePlacement), Color.White);
             }
 
             //draw other menu buttons
@@ -2252,6 +2294,21 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     this.addButton.draw(b);
                     this.saveButton.draw(b);
                     this.deleteButton.draw(b);
+                }
+
+                if (this.drawMode == DrawMode.AlbumFancySelection || this.drawMode == DrawMode.EventSelection || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.MenuSelection || this.drawMode == DrawMode.SongSelectionMode || this.drawMode == DrawMode.TimeSelection)
+                {
+                    this.lastPageButton.draw(b);
+                    this.nextPageButton.draw(b);
+                }
+            }
+            else
+            {
+                if (this.drawMode == DrawMode.SongSelectionMode)
+                {
+                    this.backButton.draw(b);
+                    this.lastPageButton.draw(b);
+                    this.nextPageButton.draw(b);
                 }
             }
 

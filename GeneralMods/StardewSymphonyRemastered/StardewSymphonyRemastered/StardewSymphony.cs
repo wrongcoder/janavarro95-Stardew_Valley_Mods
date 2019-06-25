@@ -226,6 +226,8 @@ namespace StardewSymphonyRemastered
             }
 
             textureManager.addTexture("SaveIcon", LoadTexture("SaveIcon.png"));
+            textureManager.addTexture("LastPage", LoadTexture("lastPageButton.png"));
+            textureManager.addTexture("NextPage", LoadTexture("nextPageButton.png"));
 
             //Generic Icons
             textureManager.addTexture("MusicNote", LoadTexture("MusicNote.png"));
