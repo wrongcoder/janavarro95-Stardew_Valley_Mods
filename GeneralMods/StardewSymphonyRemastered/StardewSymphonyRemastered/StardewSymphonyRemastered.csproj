@@ -245,6 +245,9 @@
     <Content Include="assets\PlayButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="assets\QuestionMark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="assets\RedBallon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

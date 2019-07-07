@@ -45,6 +45,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             LocationSelection,
             DaySelection,
             SeasonSelection,
+            ConditionalViewMode
         }
         /// <summary>
         /// All the buttons that get displayed for the music pack albums.
@@ -114,9 +115,11 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// The save button that saves the current options to the song.
         /// </summary>
         public Button saveButton;
-
+        
         public Button lastPageButton;
         public Button nextPageButton;
+
+        private Button conditionalViewButton;
 
         private Vector2 seasonButtonPosition;
         private Vector2 timeButtonPosition;
@@ -190,6 +193,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// </summary>
         public string hoverText;
 
+        public int conditionalViewPageIndex;
+
 
         /// <summary>
         /// Constructor for the menu.
@@ -246,6 +251,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
             this.festivalPageIndex = 0;
             this.eventPageIndex = 0;
             this.timePageIndex = 0;
+            this.conditionalViewPageIndex = 0;
             this.drawMode = DrawMode.AlbumFancySelection;
 
             this.updateFancyButtons();
@@ -272,6 +278,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
             Vector2 savePos = new Vector2(this.width * .1f + 256 + 32, this.height * .05f + 64); //Put it to the right of the music disk
             this.saveButton = new Button("SaveIcon", new Rectangle((int)savePos.X, (int)savePos.Y, 64, 64), StardewSymphony.textureManager.getTexture("SaveIcon"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
 
+            Vector2 conditionalPos = new Vector2(this.width * .1f + 320 + 32, this.height * .05f + 64); //Put it to the right of the music disk
+            this.conditionalViewButton = new Button("ConditionalView", new Rectangle((int)conditionalPos.X, (int)conditionalPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("QuestionMark"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
 
             Vector2 leftPos = this.getFixedPositionFromMenu(new Vector2(736, 64)); //Put it to the right of the music disk
             this.lastPageButton = new Button("LastPage", new Rectangle((int)leftPos.X, (int)leftPos.Y, 64, 64), StardewSymphony.textureManager.getTexture("LastPage"), "", new Rectangle(0, 0, 32, 32), 2f, new Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new ButtonFunctionality(null, null, null));
@@ -313,6 +321,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 return;
             }
 
+            if (this.drawMode == DrawMode.DifferentSelectionTypesModePage && this.saveButton.containsPoint(x, y))
+            {
+                if (playSound) Game1.playSound("coin");
+                this.CurrentMusicPack.SaveSettings();
+            }
+
             if (this.addButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
             {
                 if (playSound) Game1.playSound("coin");
@@ -324,6 +338,14 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 if (playSound) Game1.playSound("coin");
                 this.clearAllOptions();
+                return;
+            }
+
+            if (this.conditionalViewButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
+            {
+                if (playSound) Game1.playSound("coin");
+                this.drawMode = DrawMode.ConditionalViewMode;
+                this.updateFancyButtons();
                 return;
             }
 
@@ -407,13 +429,6 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     this.currentlySelectedMenu = null;
                     Game1.playSound("coin");
                 }
-            }
-
-            if (this.drawMode == DrawMode.DifferentSelectionTypesModePage && this.saveButton.containsPoint(x, y))
-            {
-                this.CurrentMusicPack.SaveSettings();
-                if (playSound) Game1.playSound("coin");
-                return;
             }
 
             if (this.backButton.containsPoint(x, y))
@@ -862,6 +877,44 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     this.updateFancyButtons();
                 }
             }
+
+            if(this.drawMode== DrawMode.ConditionalViewMode)
+            {
+                int amountToShow = 6;
+                this.updateFancyButtons();
+
+                int amount;
+                if (0 + ((this.conditionalViewPageIndex + 1) * amountToShow) >= this.fancyButtons.Count)
+                {
+                    amount = (0 + ((this.conditionalViewPageIndex + 1) * (amountToShow)) - this.fancyButtons.Count);
+                    amount = amountToShow - amount;
+                    if (amount < 0) amount = 0;
+                }
+                else if (this.fancyButtons.Count < amountToShow)
+                    amount = this.fancyButtons.Count;
+                else
+                    amount = amountToShow;
+
+                if (amount == 0 && this.conditionalViewPageIndex > 1)
+                    this.conditionalViewPageIndex--;
+
+                var drawList = this.fancyButtons.GetRange(0 + (this.conditionalViewPageIndex * (amountToShow)), amount);
+
+                bool songSelected = false;
+                //Get a list of components to draw. And if I click one select the song.
+                foreach (var component in drawList)
+                {
+                    if (component.containsPoint(x, y))
+                    {
+                        if (playSound) Game1.playSound("coin");
+                        this.CurrentMusicPack.SongInformation.songs[this.currentSelectedSong.name].songConditionals.Remove(component.name);
+                        songSelected = true;
+                    }
+                }
+                if (songSelected)
+                    this.updateFancyButtons();
+                return;
+            }
         }
 
         /// <summary>
@@ -921,6 +974,15 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 if ((this.timePageIndex + 1) * 6 >= this.fancyButtons.Count) return;
                 this.timePageIndex++;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+
+            if(this.drawMode== DrawMode.ConditionalViewMode)
+            {
+                if ((this.conditionalViewPageIndex + 1) * 6 >= this.fancyButtons.Count) return;
+                this.conditionalViewPageIndex++;
                 this.updateFancyButtons();
                 this.framesSinceLastUpdate = 0;
                 Game1.playSound("shwip");
@@ -990,6 +1052,15 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 if (this.timePageIndex == 0) return;
                 if (this.timePageIndex > 0)
                     this.timePageIndex--;
+                this.updateFancyButtons();
+                this.framesSinceLastUpdate = 0;
+                Game1.playSound("shwip");
+            }
+            if (this.drawMode == DrawMode.ConditionalViewMode)
+            {
+                if (this.conditionalViewPageIndex == 0) return;
+                if (this.conditionalViewPageIndex > 0)
+                    this.conditionalViewPageIndex--;
                 this.updateFancyButtons();
                 this.framesSinceLastUpdate = 0;
                 Game1.playSound("shwip");
@@ -1090,6 +1161,12 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 hoverTextOver = true;
             }
 
+            if (this.conditionalViewButton.containsPoint(x, y) && this.drawMode == DrawMode.DifferentSelectionTypesModePage)
+            {
+                this.hoverText = "View all conditions for this song."+Environment.NewLine+"View all the possible conditions for when this song should play.";
+                hoverTextOver = true;
+            }
+
             if (this.playButton.containsPoint(x, y) && this.drawMode != DrawMode.SongSelectionMode && this.drawMode != DrawMode.AlbumFancySelection)
             {
                 this.hoverText = "Play song";
@@ -1105,6 +1182,51 @@ namespace StardewSymphonyRemastered.Framework.Menus
             {
                 this.hoverText = "Go back";
                 hoverTextOver = true;
+            }
+
+            //Display song conditional as hover text
+            if(this.drawMode== DrawMode.ConditionalViewMode)
+            {
+
+                int amountToShow = 6;
+                this.updateFancyButtons();
+
+                int amount;
+                if (0 + ((this.conditionalViewPageIndex + 1) * amountToShow) >= this.fancyButtons.Count)
+                {
+                    amount = (0 + ((this.conditionalViewPageIndex + 1) * (amountToShow)) - this.fancyButtons.Count);
+                    amount = amountToShow - amount;
+                    if (amount < 0) amount = 0;
+                }
+                else if (this.fancyButtons.Count < amountToShow)
+                    amount = this.fancyButtons.Count;
+                else
+                    amount = amountToShow;
+
+                if (amount == 0 && this.conditionalViewPageIndex > 1)
+                    this.conditionalViewPageIndex--;
+
+                var drawList = this.fancyButtons.GetRange(0 + (this.conditionalViewPageIndex * (amountToShow)), amount);
+
+                bool songSelected = false;
+                //Get a list of components to draw. And if I click one select the song.
+                foreach (Button b in drawList)
+                {
+                    if (b.containsPoint(x, y))
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        builder.Append("Click to DELETE conditional:");
+                        string[] splits = b.name.Split(SongConditionals.seperator);
+                        foreach (string s in splits)
+                        {
+                            builder.Append(s);
+                            builder.Append(Environment.NewLine);
+                        }                    
+                        builder.Append(Environment.NewLine);
+                        this.hoverText =builder.ToString();
+                        hoverTextOver = true;
+                    }
+                }
             }
 
 
@@ -1463,7 +1585,6 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 }
             }
 
-
             if (this.drawMode == DrawMode.WeatherSelection)
             {
                 this.fancyButtons.Clear();
@@ -1545,7 +1666,6 @@ namespace StardewSymphonyRemastered.Framework.Menus
 
                 }
             }
-
 
             if (this.drawMode == DrawMode.TimeSelection)
             {
@@ -1744,6 +1864,23 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     this.fancyButtons.Add(new Button(name, new Rectangle((int)placement2.X + 50, (int)placement2.Y + ((i % 7) * 100), 64, 64), texture, display, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
                 }
             }
+
+            if(this.drawMode== DrawMode.ConditionalViewMode)
+            {
+                this.fancyButtons.Clear();
+                //Vector4 placement = new Vector4((Game1.viewport.Width / 3), (Game1.viewport.Height / 4) + 128, this.width, this.height / 2);
+                Vector4 placement2 = new Vector4(this.width * .2f + 400, this.height * .05f, 5 * 100, this.height * .9f);
+                Dictionary<string,SongConditionals> conditionals= this.CurrentMusicPack.SongInformation.songs[this.currentSelectedSong.name].songConditionals;
+                for (int i = 0; i < conditionals.Count; i++)
+                {
+                    //Allow 8 songs to be displayed per page.
+                    Texture2DExtended texture = StardewSymphony.textureManager.getTexture("MusicNote");
+                    float scale = 1.00f / (texture.getTexture().Width / 64f);
+                    Rectangle srcRect = new Rectangle(0, 0, texture.getTexture().Width, texture.getTexture().Height);
+                    string keyName = conditionals.ElementAt(i).Key;
+                    this.fancyButtons.Add(new Button(keyName, new Rectangle((int)placement2.X + 25, (int)placement2.Y + ((i % 6) * 100) + 100, 64, 64), texture, keyName, srcRect, scale, new Animation(srcRect), Color.White, Color.White, new ButtonFunctionality(null, null, null)));
+                }
+            }
         }
 
         /// <summary>
@@ -1753,82 +1890,8 @@ namespace StardewSymphonyRemastered.Framework.Menus
         public override void update(GameTime time)
         {
             int updateNumber = 20;
-            //Used for updating the album select screen.
-            if (this.drawMode == DrawMode.AlbumFancySelection)
-            {
-                if (this.framesSinceLastUpdate == updateNumber)
-                {
-                    var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
-                }
-                else
-                {
-                    this.framesSinceLastUpdate++;
-                }
-            }
-            //Used for updating the song selection screen.
-            if (this.drawMode == DrawMode.SongSelectionMode)
-            {
-                if (this.framesSinceLastUpdate == updateNumber)
-                {
-                    var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
-                }
-                else
-                    this.framesSinceLastUpdate++;
-            }
 
-            if (this.drawMode == DrawMode.LocationSelection)
-            {
-                if (this.framesSinceLastUpdate == updateNumber)
-                {
-                    var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
-                }
-                else
-                    this.framesSinceLastUpdate++;
-            }
-
-            if (this.drawMode == DrawMode.FestivalSelection)
-            {
-                if (this.framesSinceLastUpdate == updateNumber)
-                {
-                    var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
-                }
-                else
-                    this.framesSinceLastUpdate++;
-            }
-
-            if (this.drawMode == DrawMode.EventSelection)
-            {
-                if (this.framesSinceLastUpdate == updateNumber)
-                {
-                    var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
-                }
-                else
-                    this.framesSinceLastUpdate++;
-            }
-
-            if (this.drawMode == DrawMode.MenuSelection)
-            {
-                if (this.framesSinceLastUpdate == updateNumber)
-                {
-                    var state = Keyboard.GetState();
-                    if (state.IsKeyDown(Keys.Left) || state.IsKeyDown(Keys.A)) this.previousPage();
-                    if (state.IsKeyDown(Keys.Right) || state.IsKeyDown(Keys.D)) this.nextPage();
-                }
-                else
-                    this.framesSinceLastUpdate++;
-            }
-
-            if (this.drawMode == DrawMode.TimeSelection)
+            if (this.drawMode == DrawMode.AlbumFancySelection || this.drawMode == DrawMode.SongSelectionMode || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.TimeSelection || this.drawMode == DrawMode.ConditionalViewMode || this.drawMode == DrawMode.MenuSelection || this.drawMode == DrawMode.EventSelection || this.drawMode== DrawMode.ConditionalViewMode)
             {
                 if (this.framesSinceLastUpdate == updateNumber)
                 {
@@ -1952,7 +2015,7 @@ namespace StardewSymphonyRemastered.Framework.Menus
         /// </summary>
         public void goBack()
         {
-            if (this.drawMode == DrawMode.DaySelection || this.drawMode == DrawMode.EventSelection || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.MenuSelection || this.drawMode == DrawMode.SeasonSelection || this.drawMode == DrawMode.TimeSelection || this.drawMode == DrawMode.WeatherSelection)
+            if (this.drawMode == DrawMode.DaySelection || this.drawMode == DrawMode.EventSelection || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.MenuSelection || this.drawMode == DrawMode.SeasonSelection || this.drawMode == DrawMode.TimeSelection || this.drawMode == DrawMode.WeatherSelection || this.drawMode== DrawMode.ConditionalViewMode)
             {
                 this.drawMode = DrawMode.DifferentSelectionTypesModePage;
                 this.updateFancyButtons();
@@ -1960,12 +2023,13 @@ namespace StardewSymphonyRemastered.Framework.Menus
             else if (this.drawMode == DrawMode.DifferentSelectionTypesModePage)
             {
                 this.drawMode = DrawMode.SongSelectionMode;
+                this.currentSelectedSong = null;
                 this.updateFancyButtons();
             }
             else if (this.drawMode == DrawMode.SongSelectionMode)
             {
                 this.drawMode = DrawMode.AlbumFancySelection;
-                this.currentSelectedSong = null;
+                this.currentMusicPackAlbum = null;
                 this.updateFancyButtons();
             }
         }
@@ -2249,6 +2313,42 @@ namespace StardewSymphonyRemastered.Framework.Menus
                 b.DrawString(Game1.smallFont, "Page: " + (this.locationPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + ((this.fancyButtons.Count % amountToShow == 0 ? 0 : 1))), this.getFixedPositionFromMenu(pagePlacement), Color.White);
             }
 
+            if(this.drawMode == DrawMode.ConditionalViewMode)
+            {
+                this.drawDialogueBoxBackground((int)placement.X, (int)placement.Y, (int)placement.Z, (int)placement.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
+                this.drawDialogueBoxBackground((int)placement2.X, (int)placement2.Y, (int)placement2.Z, (int)placement2.W, new Color(new Vector4(this.dialogueBoxBackgroundColor.ToVector3(), 255)));
+
+                int amountToShow = 6;
+                this.currentMusicPackAlbum.draw(b);
+                this.currentSelectedSong.draw(b);
+
+                //Deals with logic regarding different pages.
+                int amount;
+                if (0 + ((this.conditionalViewPageIndex + 1) * amountToShow) >= this.fancyButtons.Count)
+                {
+                    amount = (0 + ((this.conditionalViewPageIndex + 1) * (amountToShow)) - this.fancyButtons.Count);
+                    amount = amountToShow - amount;
+                    if (amount < 0) amount = 0;
+                }
+                else if (this.fancyButtons.Count < amountToShow)
+                    amount = this.fancyButtons.Count;
+                else
+                    amount = amountToShow;
+
+                if (amount == 0 && this.conditionalViewPageIndex > 1)
+                    this.conditionalViewPageIndex--;
+
+                var drawList = this.fancyButtons.GetRange(0 + (this.conditionalViewPageIndex * (amountToShow)), amount);
+
+                foreach (var button in drawList)
+                    button.draw(b);
+
+                foreach (var str in this.texturedStrings)
+                    str.draw(b);
+
+                b.DrawString(Game1.smallFont, "Page: " + (this.conditionalViewPageIndex + 1) + " of " + ((this.fancyButtons.Count / amountToShow) + ((this.fancyButtons.Count % amountToShow == 0 ? 0 : 1))), this.getFixedPositionFromMenu(pagePlacement), Color.White);
+            }
+
             //draw other menu buttons
             this.drawSelectedButtons(b);
             this.drawHoverText(b);
@@ -2289,14 +2389,20 @@ namespace StardewSymphonyRemastered.Framework.Menus
                     if (this.currentlySelectedMenu != null) this.currentlySelectedMenu.draw(b);
                 }
 
+                if(this.drawMode== DrawMode.ConditionalViewMode)
+                {
+                    this.backButton.draw(b);
+                }
+
                 if (this.drawMode == DrawMode.DifferentSelectionTypesModePage)
                 {
                     this.addButton.draw(b);
                     this.saveButton.draw(b);
                     this.deleteButton.draw(b);
+                    this.conditionalViewButton.draw(b);
                 }
 
-                if (this.drawMode == DrawMode.AlbumFancySelection || this.drawMode == DrawMode.EventSelection || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.MenuSelection || this.drawMode == DrawMode.SongSelectionMode || this.drawMode == DrawMode.TimeSelection)
+                if (this.drawMode == DrawMode.AlbumFancySelection || this.drawMode == DrawMode.EventSelection || this.drawMode == DrawMode.FestivalSelection || this.drawMode == DrawMode.LocationSelection || this.drawMode == DrawMode.MenuSelection || this.drawMode == DrawMode.SongSelectionMode || this.drawMode == DrawMode.TimeSelection || this.drawMode== DrawMode.ConditionalViewMode)
                 {
                     this.lastPageButton.draw(b);
                     this.nextPageButton.draw(b);

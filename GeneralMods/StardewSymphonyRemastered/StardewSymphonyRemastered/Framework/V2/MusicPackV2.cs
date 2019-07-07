@@ -105,6 +105,16 @@ namespace StardewSymphonyRemastered.Framework.V2
         {
             if (StardewSymphony.Config.EnableDebugLog)
                 StardewSymphony.ModMonitor.Log($"Saving music for {this.Name}...");
+
+            //Clear out directory so that changes can be reflected.
+            DirectoryInfo dataFolder = new DirectoryInfo(Path.Combine(this.ContentPack.DirectoryPath, this.DataFolderName));
+            StardewSymphony.ModMonitor.Log(dataFolder.FullName);
+            foreach (FileInfo file in dataFolder.GetFiles())
+            {
+                StardewSymphony.ModMonitor.Log("Delete the file!");
+                file.Delete();
+            }
+
             foreach (var list in this.SongInformation.songs)
             {
                 if (StardewSymphony.Config.EnableDebugLog)
