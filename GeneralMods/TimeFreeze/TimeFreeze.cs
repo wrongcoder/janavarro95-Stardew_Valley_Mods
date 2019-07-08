@@ -122,6 +122,8 @@ namespace Omegasis.TimeFreeze
         /// <param name="location">The location to check.</param>
         private bool ShouldFreezeTime(Farmer player, GameLocation location)
         {
+            if (this.Config.LocationsToIgnoreTimeFreeze.Contains(location.Name)) return false;
+
             if (this.Config.PassTimeWhileInsideMine)
             {
                 if (location.Name == "Mine" || location.Name.StartsWith("UndergroundMine"))
@@ -133,6 +135,13 @@ namespace Omegasis.TimeFreeze
                 if (location.Name == "SkullCave" || location.Name.StartsWith("SkullCave"))
                     return false;
             }
+            else
+            {
+                if (location.Name == "SkullCave" || location.Name.StartsWith("SkullCave"))
+                    return true;
+            }
+
+            if (this.Config.PassTimeWhileInNightMarketSubmarine && location is Submarine) return false; //Pass time in the night market submarine.
 
             if (location.IsOutdoors)
                 return false;

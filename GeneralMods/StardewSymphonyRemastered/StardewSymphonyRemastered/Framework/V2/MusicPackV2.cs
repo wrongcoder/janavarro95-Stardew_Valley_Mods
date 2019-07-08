@@ -111,7 +111,6 @@ namespace StardewSymphonyRemastered.Framework.V2
             StardewSymphony.ModMonitor.Log(dataFolder.FullName);
             foreach (FileInfo file in dataFolder.GetFiles())
             {
-                StardewSymphony.ModMonitor.Log("Delete the file!");
                 file.Delete();
             }
 

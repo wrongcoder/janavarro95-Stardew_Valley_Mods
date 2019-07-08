@@ -87,6 +87,7 @@
     <Compile Include="Framework\MultiplayerSupport.cs" />
     <Compile Include="Framework\PlayerData.cs" />
     <Compile Include="Framework\TranslationInfo.cs" />
+    <Compile Include="Framework\VillagerInfo.cs" />
     <Compile Include="HappyBirthday.cs" />
     <Compile Include="Framework\Messages.cs" />
     <Compile Include="Framework\ObjectUtility.cs" />

@@ -1,8 +1,12 @@
+using System.Collections.Generic;
+
 namespace Omegasis.TimeFreeze.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig
     {
+        public List<string> LocationsToIgnoreTimeFreeze { get; set; } = new List<string>();
+
         /// <summary>Whether time should be unfrozen while the player is swimming.</summary>
         public bool PassTimeWhileSwimming { get; set; } = true;
 
@@ -14,6 +18,8 @@ namespace Omegasis.TimeFreeze.Framework
 
         /// <summary>Whether time passes normally inside the skull cavern.</summary>
         public bool PassTimeWhileInsideSkullCave { get; set; } = true;
+
+        public bool PassTimeWhileInNightMarketSubmarine { get; set; } = true;
 
         /// <summary>Checks if just one player meets the conditions to freeze time, and then freeze time.</summary>
         public bool freezeIfEvenOnePlayerMeetsTimeFreezeConditions { get; set; } = false;
