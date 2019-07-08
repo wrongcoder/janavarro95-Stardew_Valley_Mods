@@ -94,7 +94,10 @@ namespace Omegasis.HappyBirthday
                 if (File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, villagerGifts)))
                     this.defaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(villagerGifts);
                 else
+                {
                     HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(villagerGifts, this.defaultBirthdayGifts);
+                    this.defaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(villagerGifts);
+                }
             }
             else
             {
@@ -109,6 +112,9 @@ namespace Omegasis.HappyBirthday
                 {
                     HappyBirthday.ModMonitor.Log("No birthday gift information found. Loading from internal birthday list and generating villagerGifts.json");
                     HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(villagerGifts, this.defaultBirthdayGifts);
+                    HappyBirthday.Config.useLegacyBirthdayFiles = false;
+                    this.defaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(villagerGifts);
+                    HappyBirthday.ModHelper.WriteConfig<ModConfig>(HappyBirthday.Config);
                 }
             }
         }
