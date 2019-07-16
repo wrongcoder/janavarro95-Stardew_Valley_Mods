@@ -18,6 +18,7 @@ using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using StardustCore.UIUtilities;
 
 namespace Revitalize
 {
@@ -26,7 +27,12 @@ namespace Revitalize
     //  -Chair tops cut off objects
     // -load content MUST be enabled for the table to be placed?????? WTF
     // TODO:
-    //
+    /*
+     *
+     *Menus:
+     * -Simple Item Grab Menu (to transfer items from one inventory to another)
+     *      -Need to make this.
+     * 
     // -Add in object pool class to handle the multitudes of objects I'll be making. (WIP)
     // -Make this mod able to load content packs for easier future modding
     //
@@ -43,6 +49,7 @@ namespace Revitalize
     //      -More crafting tables
     //  -Machines
     //      !=Energy
+    //            -solar
     //      -Furnace
     //      -Seed Maker
     //      -Stone Quarry
@@ -52,8 +59,18 @@ namespace Revitalize
     //      -Auto Preserves
     //      -Auto Keg
     //      -Auto Cask
+    //      -Calcinator (oil+stone)
     //  -Materials
     //      -Tin/Bronze/Alluminum/Silver?Platinum/Etc
+            -titanium
+            -Alloys!
+                -Brass
+                -Electrum
+        -Liquids
+            -oil
+            -water
+            -coal
+            -juice???
     //  -Crafting Menu
     //  -Item Grab Menu (Extendable)
     //   -Yes/No Dialogue Box
@@ -69,7 +86,8 @@ namespace Revitalize
     //      -Connected chests much like Project EE2 from MC
     //
     //
-    //  -Food? 
+    //  -Food?
+            -multi flavored sodas
     //  -Bigger chests
     //
     //  Festivals
@@ -108,7 +126,7 @@ namespace Revitalize
     //  -boss fights
     //
     //  More dungeons??
-
+    */
 
     public class ModCore : Mod
     {
@@ -119,9 +137,6 @@ namespace Revitalize
         public static Dictionary<string, CustomObject> customObjects;
 
         public static Dictionary<string, MultiTiledObject>ObjectGroups;
-
-        
-
 
         public static PlayerInfo playerInfo;
 
@@ -144,8 +159,8 @@ namespace Revitalize
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             playerInfo = new PlayerInfo();
 
-            Framework.Graphics.TextureManager.AddTextureManager(Manifest,"Furniture");
-            TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures(Path.Combine("Content", "Graphics", "Furniture"));
+            TextureManager.AddTextureManager(Manifest,"Furniture");
+            TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures(ModHelper,this.ModManifest,Path.Combine("Content", "Graphics", "Furniture"));
 
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
 
@@ -177,15 +192,16 @@ namespace Revitalize
         /// </summary>
         private void loadContent()
         {
-            
-            MultiTiledComponent obj = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.Red, true, null, null));
-            MultiTiledComponent obj2 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest2", "SomeFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.Red, false, null, null));
-            MultiTiledComponent obj3 = new MultiTiledComponent(new BasicItemInformation("CoreObjectTest3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.TEST1", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledComponent), null, new AnimationManager(TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
+          
+            MultiTiledComponent obj = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest,"Furniture","Oak Chair"),typeof(MultiTiledComponent),Color.White), new BasicItemInformation("CoreObjectTest", "Omegasis.TEST1", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, false, null, null));
+            MultiTiledComponent obj2 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest2", "Omegasis.TEST2", "Some fun!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.White, false, null, null));
+            MultiTiledComponent obj3 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest3", "Omegasis.TEST3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest,"Furniture","Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
             obj3.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj3);
             
-            MultiTiledObject bigObject = new MultiTiledObject(new BasicItemInformation("MultiTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 100, Vector2.Zero, true, true, "Omegasis.BigTiledTest", "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048", TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(MultiTiledObject), null, new AnimationManager(), Color.White, false, null, null));
+            MultiTiledObject bigObject = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledObject), Color.White), new BasicItemInformation("MultiTest", "Omegasis.BigTiledTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(), Color.White, false, null, null));
+
             bigObject.addComponent(new Vector2(0, 0), obj);
             bigObject.addComponent(new Vector2(1, 0), obj2);
             bigObject.addComponent(new Vector2(2, 0), obj3);
@@ -198,8 +214,10 @@ namespace Revitalize
             customObjects.Add("Omegasis.BigTiledTest", bigObject);
             
             
-            Framework.Objects.Furniture.RugTileComponent rug1 = new Framework.Objects.Furniture.RugTileComponent(new BasicItemInformation("BasicRugTile", "A basic rug", "Rug", Color.Brown, -300, 0, false, 100, new Vector2(0, 0), true, true, "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", generatePlaceholderString(), TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair").texture, Color.White, 0,true, typeof(Framework.Objects.Furniture.RugTileComponent), null, new AnimationManager(TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, null, null));
-            Framework.Objects.Furniture.RugMultiTiledObject rug = new Framework.Objects.Furniture.RugMultiTiledObject(new BasicItemInformation("BasicRugTile", "A basic rug", "Rug", Color.Brown, -300, 0, false, 100, new Vector2(0, 0), true, true, "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", generatePlaceholderString(), TextureManager.TextureManagers[Manifest.UniqueID]["Furniture"].getTexture("Oak Chair").texture, Color.White, 0, true, typeof(Framework.Objects.Furniture.RugMultiTiledObject), null, new AnimationManager(), Color.White, true, null, null));
+            Framework.Objects.Furniture.RugTileComponent rug1 = new RugTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugTileComponent), Color.White), new BasicItemInformation("Rug Tile", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A rug tile", "Rug", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, null, null));
+
+            Framework.Objects.Furniture.RugMultiTiledObject rug=new RugMultiTiledObject( PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"),typeof(RugMultiTiledObject),Color.White,false),new BasicItemInformation("Simple Rug Test", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug","A simple rug for testing","Rugs",Color.Brown,-300,0,false,500,Vector2.Zero,true,true,TextureManager.GetTexture(Manifest,"Furniture","Oak Chair"),new AnimationManager(),Color.White,true,null,null));
+
             rug.addComponent(new Vector2(0, 0), rug1);
 
             customObjects.Add("Omegasis.Revitalize.Furniture.Rugs.RugTest", rug);

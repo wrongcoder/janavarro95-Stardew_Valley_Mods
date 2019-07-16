@@ -64,8 +64,8 @@ namespace Revitalize.Framework.Objects
         }
 
         /// <summary>Construct an instance.</summary>
-        public CustomObject(BasicItemInformation info)
-            : base(info, Vector2.Zero)
+        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info)
+            : base(PyTKData, Vector2.Zero)
         {
             this.info = info;
             this.initializeBasics();
@@ -74,8 +74,8 @@ namespace Revitalize.Framework.Objects
         }
 
         /// <summary>Construct an instance.</summary>
-        public CustomObject(BasicItemInformation info, Vector2 TileLocation)
-            : base(info, TileLocation)
+        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation)
+            : base(PyTKData, TileLocation)
         {
             this.info = info;
             this.initializeBasics();
@@ -94,7 +94,7 @@ namespace Revitalize.Framework.Objects
             this.setOutdoors.Value = true;
             this.setIndoors.Value = true;
             this.isLamp.Value = false;
-            this.fragility.Value = 0;
+            this.Fragility = 0;
 
             this.updateDrawPosition(0, 0);
 
@@ -148,8 +148,15 @@ namespace Revitalize.Framework.Objects
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            BasicItemInformation data = (BasicItemInformation)CustomObjectData.collection[additionalSaveData["id"]];
-            return new CustomObject(data, (replacement as Chest).TileLocation);
+            CustomObjectData data = CustomObjectData.collection[additionalSaveData["id"]];
+            BasicItemInformation info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
+            return new CustomObject(data,info,(replacement as Chest).TileLocation);
+        }
+        public override Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string, string> serializedInfo = new Dictionary<string, string>();
+            serializedInfo.Add("ItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
+            return serializedInfo;
         }
 
         /// <summary>What happens when the player right clicks the object.</summary>
@@ -295,7 +302,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Gets a clone of the game object.</summary>
         public override Item getOne()
         {
-            return new CustomObject((BasicItemInformation)this.data);
+            return new CustomObject(this.data,this.info);
         }
 
         /// <summary>What happens when the object is drawn at a tile location.</summary>
@@ -434,6 +441,10 @@ namespace Revitalize.Framework.Objects
             base.sync(syncData);
             this.info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(syncData["BasicItemInfo"]);
         }
+
+
+
+       
 
         public string getDisplayNameFromStringsFile(string objectID)
         {

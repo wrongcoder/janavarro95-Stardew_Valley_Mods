@@ -18,13 +18,13 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public List<long> playersSittingHere = new List<long>();
 
-        public Bench(BasicItemInformation info, Vector2 TilePosition) : base(info, TilePosition)
+        public Bench(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TilePosition) : base(PyTKData,info, TilePosition)
         {
 
         }
 
 
-        public Bench(BasicItemInformation info,Vector2 TilePosition, Dictionary<Vector2,MultiTiledComponent> Objects) : base(info, TilePosition, Objects)
+        public Bench(CustomObjectData PyTKData, BasicItemInformation info,Vector2 TilePosition, Dictionary<Vector2,MultiTiledComponent> Objects) : base(PyTKData,info, TilePosition, Objects)
         {
 
         }
@@ -62,7 +62,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
             }
 
-            return new Bench(this.info, this.TileLocation, objs);
+            return new Bench(this.data,this.info, this.TileLocation, objs);
         }
 
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Objects.InformationFiles.Furniture;
 
@@ -18,11 +19,11 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public FurnitureTileComponent(BasicItemInformation itemInfo):base(itemInfo)
+        public FurnitureTileComponent(CustomObjectData PyTKData,BasicItemInformation itemInfo):base(PyTKData,itemInfo)
         {
         }
 
-        public FurnitureTileComponent(BasicItemInformation itemInfo,Vector2 TileLocation) : base(itemInfo,TileLocation)
+        public FurnitureTileComponent(CustomObjectData PyTKData, BasicItemInformation itemInfo,Vector2 TileLocation) : base(PyTKData,itemInfo,TileLocation)
         {
 
         }

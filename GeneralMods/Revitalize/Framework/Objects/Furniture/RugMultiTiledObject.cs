@@ -16,17 +16,17 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public RugMultiTiledObject(BasicItemInformation Info) : base(Info)
+        public RugMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData,Info)
         {
 
         }
 
-        public RugMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
+        public RugMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition) : base(PyTKData,Info, TilePosition)
         {
 
         }
 
-        public RugMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects)
+        public RugMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(PyTKData,Info, TilePosition, Objects)
         {
 
 
@@ -49,7 +49,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
 
-            return new RugMultiTiledObject(this.info, this.TileLocation, objs);
+            return new RugMultiTiledObject(this.data,this.info, this.TileLocation, objs);
         }
 
 

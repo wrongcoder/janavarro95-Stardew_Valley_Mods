@@ -39,6 +39,9 @@
     <Reference Include="PyTK">
       <HintPath>$(GamePath)\Mods\PyTK\PyTK.dll</HintPath>
     </Reference>
+    <Reference Include="StardustCore">
+      <HintPath>$(GamePath)\Mods\StardustCore\StardustCore.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -60,11 +63,10 @@
     <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
     <Compile Include="Framework\Graphics\Animations\Animation.cs" />
     <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
-    <Compile Include="Framework\Graphics\Texture2DExtended.cs" />
-    <Compile Include="Framework\Graphics\TextureManager.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
+    <Compile Include="Framework\Menus\SimpleItemGrabMenu.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
     <Compile Include="Framework\Objects\Furniture\Bench.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Framework\Player\PlayerInfo.cs" />
     <Compile Include="Framework\Utilities\BoundingBoxInfo.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
+    <Compile Include="Framework\Utilities\PyTKHelper.cs" />
     <Compile Include="Framework\Utilities\Serialization\ContractResolvers\NetFieldContract.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\ItemCoverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\NetFieldConverter.cs" />
@@ -104,6 +107,16 @@
   <ItemGroup>
     <None Include="manifest.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Content\Graphics\Furniture\Chairs\Oak Chair.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Furniture\Lamps\Oak Lamp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Furniture\Tables\Oak Table.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

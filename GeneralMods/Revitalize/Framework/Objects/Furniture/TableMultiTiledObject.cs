@@ -17,17 +17,17 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public TableMultiTiledObject(BasicItemInformation Info) : base(Info)
+        public TableMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData,Info)
         {
 
         }
 
-        public TableMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
+        public TableMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition) : base(PyTKData,Info, TilePosition)
         {
 
         }
 
-        public TableMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects)
+        public TableMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(PyTKData,Info, TilePosition, Objects)
         {
 
 
@@ -48,7 +48,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
 
-            return new TableMultiTiledObject(this.info, this.TileLocation,objs);
+            return new TableMultiTiledObject(this.data,this.info, this.TileLocation,objs);
         }
 
 

@@ -42,24 +42,24 @@ namespace Revitalize.Framework.Objects
 
         }
 
-        public MultiTiledObject(BasicItemInformation info)
-            : base(info)
+        public MultiTiledObject(CustomObjectData PyTKData,BasicItemInformation info)
+            : base(PyTKData,info)
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
 
         }
 
-        public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation)
-            : base(info, TileLocation)
+        public MultiTiledObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation)
+            : base(PyTKData,info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
 
         }
 
-        public MultiTiledObject(BasicItemInformation info, Vector2 TileLocation, Dictionary<Vector2, MultiTiledComponent> ObjectsList)
-            : base(info, TileLocation)
+        public MultiTiledObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Dictionary<Vector2, MultiTiledComponent> ObjectsList)
+            : base(PyTKData,info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
@@ -268,7 +268,7 @@ namespace Revitalize.Framework.Objects
             {
                 objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
             }
-            return new MultiTiledObject(this.info, this.TileLocation, objs);
+            return new MultiTiledObject(this.data,this.info, this.TileLocation, objs);
         }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)

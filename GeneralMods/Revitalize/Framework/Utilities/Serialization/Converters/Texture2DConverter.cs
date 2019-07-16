@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Revitalize.Framework.Graphics;
 using StardewValley;
+using StardustCore.UIUtilities;
 
 namespace Revitalize.Framework.Utilities.Serialization.Converters
 {
@@ -30,7 +31,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             if (names.Length == 0) return null;
 
             if (!TextureManager.TextureManagers.ContainsKey(names[0])) return null;
-            return textureName == null ? null : Revitalize.Framework.Graphics.TextureManager.TextureManagers[names[0]][names[1]].getTexture(names[2]).texture;
+            return textureName == null ? null : TextureManager.TextureManagers[names[0]][names[1]].getTexture(names[2]).texture;
         }
 
         public override bool CanConvert(Type objectType)

@@ -19,15 +19,13 @@ namespace Revitalize.Framework.Factories.Objects.Furniture
 
         }
 
-        public TableFactoryInfo(TableTileComponent table)
+        public TableFactoryInfo(TableTileComponent table):base(table)
         {
-            this.info= table.info;
             this.tableInfo = table.furnitureInfo;
         }
 
-        public TableFactoryInfo(TableMultiTiledObject table)
+        public TableFactoryInfo(TableMultiTiledObject table):base(table)
         {
-            this.info = table.info;
             this.tableInfo = null;
         }
 

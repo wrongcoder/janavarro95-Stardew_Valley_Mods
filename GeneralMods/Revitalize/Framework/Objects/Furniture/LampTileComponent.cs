@@ -37,12 +37,12 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public LampTileComponent(BasicItemInformation Info) : base(Info)
+        public LampTileComponent(CustomObjectData PyTKData,BasicItemInformation Info) : base(PyTKData,Info)
         {
           
         }
 
-        public LampTileComponent(BasicItemInformation Info, Vector2 TileLocation) : base(Info, TileLocation)
+        public LampTileComponent(CustomObjectData PyTKData,BasicItemInformation Info, Vector2 TileLocation) : base(PyTKData,Info, TileLocation)
         {
             
         }
@@ -124,7 +124,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            LampTileComponent component = new LampTileComponent(this.info);
+            LampTileComponent component = new LampTileComponent(this.data,this.info);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;

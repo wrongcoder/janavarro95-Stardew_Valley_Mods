@@ -51,11 +51,9 @@ namespace StardewSymphonyRemastered
 
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
 
-            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-
 
             musicManager = new MusicManagerV2();
-            textureManager = new TextureManager();
+            textureManager = new TextureManager("StardewSymphony");
             this.LoadTextures();
 
             menuChangedMusic = false;
@@ -93,16 +91,6 @@ namespace StardewSymphonyRemastered
         {
             if (e.IsLocalPlayer)
                 musicManager.selectMusic(SongSpecificsV2.getCurrentConditionalString(), true);
-        }
-
-        /// <summary>Raised after the game is launched, right before the first update tick. This happens once per game session (unrelated to loading saves). All mods are loaded and initialised at this point, so this is a good time to set up mod integrations.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
-        {
-            // Ran once all of the entry methods are ran. This will ensure that all custom music from other mods has been properly loaded in.
-
-
         }
 
         /// <summary>Raised after the player loads a save slot and the world is initialised.</summary>
@@ -222,7 +210,7 @@ namespace StardewSymphonyRemastered
         {
             Texture2DExtended LoadTexture(string name)
             {
-                return new Texture2DExtended(this.Helper.Content.Load<Texture2D>($"assets/{name}"));
+                return new Texture2DExtended(this.Helper, this.ModManifest, $"assets/{name}");
             }
 
             textureManager.addTexture("SaveIcon", LoadTexture("SaveIcon.png"));

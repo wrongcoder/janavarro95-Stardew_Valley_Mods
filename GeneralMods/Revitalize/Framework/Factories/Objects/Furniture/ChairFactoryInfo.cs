@@ -18,16 +18,14 @@ namespace Revitalize.Framework.Factories.Objects.Furniture
 
         }
 
-        public ChairFactoryInfo(ChairMultiTiledObject chair)
+        public ChairFactoryInfo(ChairMultiTiledObject chair): base(chair)
         {
             this.chairInfo = null;
-            this.info = chair.info;
         }
 
-        public ChairFactoryInfo(ChairTileComponent chair)
+        public ChairFactoryInfo(ChairTileComponent chair):base(chair)
         {
             this.chairInfo = chair.furnitureInfo;
-            this.info = chair.info;
         }
 
     }

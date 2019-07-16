@@ -18,12 +18,12 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public RugTileComponent(BasicItemInformation Info) : base(Info)
+        public RugTileComponent(CustomObjectData PyTKData,BasicItemInformation Info) : base(PyTKData,Info)
         {
             this.info.ignoreBoundingBox = true;
         }
 
-        public RugTileComponent(BasicItemInformation Info, Vector2 TileLocation) : base(Info, TileLocation)
+        public RugTileComponent(CustomObjectData PyTKData,BasicItemInformation Info, Vector2 TileLocation) : base(PyTKData,Info, TileLocation)
         {
             this.info.ignoreBoundingBox = true;
         }
@@ -44,7 +44,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            RugTileComponent component = new RugTileComponent(this.info);
+            RugTileComponent component = new RugTileComponent(this.data,this.info);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;

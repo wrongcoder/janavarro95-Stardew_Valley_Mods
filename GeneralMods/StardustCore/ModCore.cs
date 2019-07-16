@@ -32,13 +32,18 @@ namespace StardustCore
             SpriteFonts.initialize();
 
             TextureManagers = new Dictionary<string, TextureManager>();
-            TextureManager = new TextureManager();
-            TextureManager.addTexture("Test1", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
-            TextureManager.addTexture("Test2", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")));
-            TextureManager.addTexture("Test3", new Texture2DExtended(ModCore.ModHelper, Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")));
+            TextureManager = new TextureManager("StardustCore");
+            TextureManager.addTexture("Test1", new Texture2DExtended(ModCore.ModHelper,Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
+            TextureManager.addTexture("Test2", new Texture2DExtended(ModCore.ModHelper,Manifest, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")));
+            TextureManager.addTexture("Test3", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")));
             TextureManagers.Add(this.ModManifest.UniqueID, TextureManager);
 
             this.config = ModHelper.ReadConfig<ModConfig>();
+        }
+
+        public static void log(string message)
+        {
+            ModMonitor.Log(message);
         }
     }
 }

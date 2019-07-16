@@ -22,17 +22,17 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info) : base(Info)
+        public ChairMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData,Info)
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
+        public ChairMultiTiledObject(CustomObjectData PyTKData,BasicItemInformation Info, Vector2 TilePosition) : base(PyTKData,Info, TilePosition)
         {
 
         }
 
-        public ChairMultiTiledObject(BasicItemInformation Info,Vector2 TilePosition,Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects) {
+        public ChairMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info,Vector2 TilePosition,Dictionary<Vector2, MultiTiledComponent> Objects) : base(PyTKData,Info, TilePosition, Objects) {
 
 
         }
@@ -63,7 +63,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
 
-            return new ChairMultiTiledObject(this.info, this.TileLocation, objs);
+            return new ChairMultiTiledObject(this.data,this.info, this.TileLocation, objs);
         }
 
 

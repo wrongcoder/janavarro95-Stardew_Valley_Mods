@@ -108,11 +108,6 @@ namespace StardewSymphonyRemastered.Framework.V2
 
             //Clear out directory so that changes can be reflected.
             DirectoryInfo dataFolder = new DirectoryInfo(Path.Combine(this.ContentPack.DirectoryPath, this.DataFolderName));
-            StardewSymphony.ModMonitor.Log(dataFolder.FullName);
-            foreach (FileInfo file in dataFolder.GetFiles())
-            {
-                file.Delete();
-            }
 
             foreach (var list in this.SongInformation.songs)
             {
@@ -155,8 +150,7 @@ namespace StardewSymphonyRemastered.Framework.V2
         {
             try
             {
-                Texture2D texture = this.ContentPack.LoadAsset<Texture2D>("icon.png");
-                return new Texture2DExtended(texture);
+                return new Texture2DExtended(this.ContentPack,"icon.png");
             }
             catch (Exception err)
             {

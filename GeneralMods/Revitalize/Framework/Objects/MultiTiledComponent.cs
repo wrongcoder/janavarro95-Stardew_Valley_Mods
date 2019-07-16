@@ -18,13 +18,13 @@ namespace Revitalize.Framework.Objects
 
         public MultiTiledComponent() { }
 
-        public MultiTiledComponent(BasicItemInformation info) : base(info) { }
+        public MultiTiledComponent(CustomObjectData PyTKData,BasicItemInformation info) : base(PyTKData,info) { }
 
-        public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation,MultiTiledObject obj=null) : base(info, TileLocation) {
+        public MultiTiledComponent(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation,MultiTiledObject obj=null) : base(PyTKData,info, TileLocation) {
             this.containerObject = obj;
         }
 
-        public MultiTiledComponent(BasicItemInformation info, Vector2 TileLocation,Vector2 offsetKey ,MultiTiledObject obj = null) : base(info, TileLocation) {
+        public MultiTiledComponent(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation,Vector2 offsetKey ,MultiTiledObject obj = null) : base(PyTKData,info, TileLocation) {
             this.offsetKey = offsetKey;
             this.containerObject = obj;
         }
@@ -113,7 +113,7 @@ namespace Revitalize.Framework.Objects
 
         public override Item getOne()
         {
-            MultiTiledComponent component = new MultiTiledComponent(this.info, this.TileLocation,this.offsetKey,this.containerObject);
+            MultiTiledComponent component = new MultiTiledComponent(this.data,this.info, this.TileLocation,this.offsetKey,this.containerObject);
             return component;
         }
 

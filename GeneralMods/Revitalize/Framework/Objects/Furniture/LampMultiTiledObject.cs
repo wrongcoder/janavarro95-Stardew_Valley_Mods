@@ -17,17 +17,17 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public LampMultiTiledObject(BasicItemInformation Info) : base(Info)
+        public LampMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData,Info)
         {
 
         }
 
-        public LampMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition) : base(Info, TilePosition)
+        public LampMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition) : base(PyTKData,Info, TilePosition)
         {
 
         }
 
-        public LampMultiTiledObject(BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(Info, TilePosition, Objects)
+        public LampMultiTiledObject(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(PyTKData,Info, TilePosition, Objects)
         {
 
 
@@ -47,7 +47,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
 
-            return new LampMultiTiledObject(this.info, this.TileLocation, objs);
+            return new LampMultiTiledObject(this.data,this.info, this.TileLocation, objs);
         }
 
 

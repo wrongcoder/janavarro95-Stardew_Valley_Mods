@@ -35,12 +35,12 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public ChairTileComponent(BasicItemInformation Info,ChairInformation FurnitureInfo) : base(Info)
+        public ChairTileComponent(CustomObjectData PyTKData,BasicItemInformation Info,ChairInformation FurnitureInfo) : base(PyTKData,Info)
         {
             this.furnitureInfo = FurnitureInfo;
         }
 
-        public ChairTileComponent(BasicItemInformation Info,Vector2 TileLocation, ChairInformation FurnitureInfo) : base(Info, TileLocation)
+        public ChairTileComponent(CustomObjectData PyTKData,BasicItemInformation Info,Vector2 TileLocation, ChairInformation FurnitureInfo) : base(PyTKData,Info, TileLocation)
         {
             this.furnitureInfo = FurnitureInfo;
         }
@@ -88,7 +88,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            ChairTileComponent component = new ChairTileComponent(this.info, (ChairInformation)this.furnitureInfo);
+            ChairTileComponent component = new ChairTileComponent(this.data,this.info, (ChairInformation)this.furnitureInfo);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;
