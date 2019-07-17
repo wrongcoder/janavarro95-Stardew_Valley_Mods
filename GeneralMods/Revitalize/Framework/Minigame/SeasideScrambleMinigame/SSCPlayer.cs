@@ -11,6 +11,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
     public class SSCPlayer
     {
         //TODO: Hint when left animations are played make sure to FLIP THE SPRITE;
+        //Make game camera class!!!
         public AnimationManager characterSpriteController;
         public bool flipSprite;
         public SSCEnums.FacingDirection facingDirection;
@@ -50,7 +51,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public void draw(Microsoft.Xna.Framework.Graphics.SpriteBatch b)
         {
-            this.characterSpriteController.draw(b, this.position, Color.White, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
+            this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport,this.position), Color.White, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
         }
 
         public void update(GameTime Time)
@@ -128,7 +129,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 this.facingDirection = direction;
                 this.position += new Vector2(1, 0);
             }
+            ModCore.log(this.position);
         }
+
+       
         
 
     }

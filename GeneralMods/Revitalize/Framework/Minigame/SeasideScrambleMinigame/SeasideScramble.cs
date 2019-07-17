@@ -21,16 +21,24 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public Dictionary<string, SeasideScrambleMap> SeasideScrambleMaps;
         public bool quitGame;
-
+        public Vector2 topLeftScreenCoordinate;
        
 
         public SSCTextureUtilities textureUtils;
 
         public SSCPlayer player;
 
+        //public xTile.Dimensions.Rectangle viewport;
+
+        public SSCCamera camera;
+
         public SeasideScramble()
         {
             self = this;
+            this.camera = new SSCCamera();
+            //this.viewport = new xTile.Dimensions.Rectangle(StardewValley.Game1.viewport);
+            this.topLeftScreenCoordinate= new Vector2((float)(this.camera.viewport.Width / 2 - 384), (float)(this.camera.viewport.Height / 2 - 384));
+
 
             this.textureUtils = new SSCTextureUtilities();
             TextureManager playerManager = new TextureManager("SSCPlayer");
@@ -66,7 +74,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// </summary>
         public void changeScreenSize()
         {
-           
+            Viewport viewport = StardewValley.Game1.graphics.GraphicsDevice.Viewport;
+            double num1 = (double)(viewport.Width / 2 - 384);
+            viewport = StardewValley.Game1.graphics.GraphicsDevice.Viewport;
+            double num2 = (double)(viewport.Height / 2 - 384);
+            this.topLeftScreenCoordinate = new Vector2((float)num1, (float)num2);
+            this.camera.viewport = new xTile.Dimensions.Rectangle(StardewValley.Game1.viewport);
             //throw new NotImplementedException();
         }
 
@@ -256,6 +269,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             if (this.player != null)
             {
                 this.player.update(time);
+                this.camera.centerOnPosition(this.player.position);
             }
             
             return false;
@@ -269,6 +283,16 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
             //throw new NotImplementedException();
             ModCore.log("Exit the game!");
+        }
+
+        public static Vector2 GlobalToLocal(xTile.Dimensions.Rectangle viewport, Vector2 globalPosition)
+        {
+            return new Vector2(globalPosition.X - (float)viewport.X, globalPosition.Y - (float)viewport.Y);
+        }
+
+        public static Vector2 GlobalToLocal(Vector2 globalPosition)
+        {
+            return new Vector2(globalPosition.X - (float)SeasideScramble.self.camera.viewport.X, globalPosition.Y - (float)SeasideScramble.self.camera.viewport.Y);
         }
     }
 }

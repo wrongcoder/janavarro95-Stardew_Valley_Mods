@@ -67,6 +67,7 @@
     <Compile Include="Framework\Menus\SimpleItemGrabMenu.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScramble.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCCamera.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnums.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCPlayer.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />

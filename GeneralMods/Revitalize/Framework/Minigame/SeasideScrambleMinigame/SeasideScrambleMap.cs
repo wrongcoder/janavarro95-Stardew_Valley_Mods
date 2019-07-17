@@ -54,7 +54,7 @@ AlwaysFront:	Objects that are always drawn on top of other layers as well as the
 
             for (int i = 0; i < this.map.Layers.Count; i++)
             {
-                this.map.Layers[i].Draw(Game1.mapDisplayDevice, Game1.viewport, Location.Origin, false, 4);
+                this.map.Layers[i].Draw(Game1.mapDisplayDevice, SeasideScramble.self.camera.viewport, Location.Origin, false, 4);
             }
             Game1.mapDisplayDevice.EndScene();
             b.End();
