@@ -69,6 +69,7 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCCamera.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnums.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\TitleScreen.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCPlayer.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
@@ -128,6 +129,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Player\Junimo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Maps\Backgrounds\TitleScreenBackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Maps\Intro.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Maps\SSC_Beach.png">

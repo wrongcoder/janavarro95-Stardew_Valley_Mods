@@ -22,7 +22,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public Dictionary<string, SeasideScrambleMap> SeasideScrambleMaps;
         public bool quitGame;
         public Vector2 topLeftScreenCoordinate;
-       
+
 
         public SSCTextureUtilities textureUtils;
 
@@ -32,18 +32,22 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public SSCCamera camera;
 
+        public IClickableMenuExtended activeMenu;
+        public bool isMenuUp
+        {
+            get
+            {
+                return this.activeMenu != null;
+            }
+        }
+
         public SeasideScramble()
         {
             self = this;
             this.camera = new SSCCamera();
             //this.viewport = new xTile.Dimensions.Rectangle(StardewValley.Game1.viewport);
-            this.topLeftScreenCoordinate= new Vector2((float)(this.camera.viewport.Width / 2 - 384), (float)(this.camera.viewport.Height / 2 - 384));
+            this.topLeftScreenCoordinate = new Vector2((float)(this.camera.viewport.Width / 2 - 384), (float)(this.camera.viewport.Height / 2 - 384));
 
-
-            this.textureUtils = new SSCTextureUtilities();
-            TextureManager playerManager = new TextureManager("SSCPlayer");
-            playerManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Player"));
-            this.textureUtils.addTextureManager(playerManager);
 
             this.LoadTextures();
 
@@ -52,17 +56,26 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.quitGame = false;
 
             this.player = new SSCPlayer();
+            this.player.setColor(Color.Red);
+
+            this.activeMenu = new SSCMenus.TitleScreen(this.camera.viewport);
         }
 
         private void LoadTextures()
         {
-            
+            this.textureUtils = new SSCTextureUtilities();
+            TextureManager playerManager = new TextureManager("SSCPlayer");
+            playerManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Player"));
+            TextureManager mapTextureManager = new TextureManager("SSCMaps");
+            mapTextureManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Maps", "Backgrounds"));
+            this.textureUtils.addTextureManager(playerManager);
+            this.textureUtils.addTextureManager(mapTextureManager);
         }
 
         private void LoadMaps()
         {
             this.SeasideScrambleMaps = new Dictionary<string, SeasideScrambleMap>();
-            this.SeasideScrambleMaps.Add("TestRoom",new SeasideScrambleMap(SeasideScrambleMap.LoadMap("TestRoom.tbin").Value));
+            this.SeasideScrambleMaps.Add("TestRoom", new SeasideScrambleMap(SeasideScrambleMap.LoadMap("TestRoom.tbin").Value));
         }
         private void loadStartingMap()
         {
@@ -99,7 +112,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <param name="b"></param>
         public void draw(SpriteBatch b)
         {
-            if (this.currentMap!=null){
+            if (this.currentMap != null)
+            {
                 this.currentMap.draw(b);
             }
             b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
@@ -107,6 +121,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 this.player.draw(b);
             }
+
+            if (this.activeMenu != null)
+            {
+                this.activeMenu.draw(b);
+            }
+
             b.End();
         }
 
@@ -156,72 +176,23 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void receiveKeyPress(Keys k)
         {
             //throw new NotImplementedException();
-            this.checkForMovementInput(k);
-        }
-
-        /// <summary>
-        /// Checks for player movement.
-        /// </summary>
-        /// <param name="K"></param>
-        private void checkForMovementInput(Keys K)
-        {
-            Microsoft.Xna.Framework.Input.GamePadState state = this.getGamepadState(PlayerIndex.One);
-            if(K== Keys.A)
-            {
-                ModCore.log("A pressed for Seaside Scramble!");
-                this.player.movePlayer(SSCEnums.FacingDirection.Left);
-            }
-            if (K == Keys.W)
-            {
-                ModCore.log("W pressed for Seaside Scramble!");
-                this.player.movePlayer(SSCEnums.FacingDirection.Up);
-            }
-            if(K== Keys.S)
-            {
-                ModCore.log("S pressed for Seaside Scramble!");
-                this.player.movePlayer(SSCEnums.FacingDirection.Down);
-            }
-            if(K== Keys.D)
-            {
-                ModCore.log("D pressed for Seaside Scramble!");
-                this.player.movePlayer(SSCEnums.FacingDirection.Right);
-            }
-            
-
-            if(K== Keys.Escape)
+            if (k == Keys.Escape)
             {
                 this.quitGame = true;
             }
+            this.player.receiveKeyPress(k);
         }
+
+
 
         private GamePadState getGamepadState(PlayerIndex index)
         {
-           return Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
+            return Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
         }
 
         public void receiveKeyRelease(Keys K)
         {
-            //throw new NotImplementedException();
-            if (K == Keys.A)
-            {
-                ModCore.log("A released for Seaside Scramble!");
-                this.player.isMoving = false;
-            }
-            if (K == Keys.W)
-            {
-                ModCore.log("W pressed for Seaside Scramble!");
-                this.player.isMoving = false;
-            }
-            if (K == Keys.S)
-            {
-                ModCore.log("S pressed for Seaside Scramble!");
-                this.player.isMoving = false;
-            }
-            if (K == Keys.D)
-            {
-                ModCore.log("D pressed for Seaside Scramble!");
-                this.player.isMoving = false;
-            }
+            this.player.receiveKeyRelease(K);
         }
 
         public void receiveLeftClick(int x, int y, bool playSound = true)
@@ -271,11 +242,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 this.player.update(time);
                 this.camera.centerOnPosition(this.player.position);
             }
-            
+            if (this.activeMenu != null)
+            {
+                this.activeMenu.update(time);
+            }
+
             return false;
             //throw new NotImplementedException();
         }
-        
+
         /// <summary>
         /// Called when the minigame is quit upon.
         /// </summary>

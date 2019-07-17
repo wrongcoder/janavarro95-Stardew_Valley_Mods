@@ -27,6 +27,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.viewport.Location = new xTile.Dimensions.Location((int)position.X - (int)(SeasideScramble.self.camera.viewport.Width / 2), (int)position.Y - (int)(SeasideScramble.self.camera.viewport.Height / 2));
         }
 
+        public Rectangle getXNARect()
+        {
+            return new Rectangle(this.viewport.X, this.viewport.Y, this.viewport.Width, this.viewport.Height);
+        }
+
         public void update(GameTime time)
         {
 

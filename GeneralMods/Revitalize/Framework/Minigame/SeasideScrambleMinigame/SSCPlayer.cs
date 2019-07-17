@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using StardustCore.Animations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
     public class SSCPlayer
@@ -17,6 +18,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public SSCEnums.FacingDirection facingDirection;
         public Microsoft.Xna.Framework.Vector2 position;
         public bool isMoving;
+        public Color playerColor;
 
         public const int junimoWalkingAnimationSpeed = 10;
 
@@ -91,6 +93,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             },"Idle_F",0,true);
         }
 
+        public void setColor(Color color)
+        {
+            this.playerColor = color;
+        }
+
         public void playAnimation(string name)
         {
             this.characterSpriteController.setAnimation(name);
@@ -98,7 +105,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public void draw(Microsoft.Xna.Framework.Graphics.SpriteBatch b)
         {
-            this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport,this.position), Color.White, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
+            this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport,this.position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
         }
 
         public void update(GameTime Time)
@@ -179,8 +186,70 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             ModCore.log(this.position);
         }
 
-       
-        
+        public void receiveKeyPress(Microsoft.Xna.Framework.Input.Keys k)
+        {
+            this.checkForMovementInput(k);
+        }
+        public void receiveKeyRelease(Keys K)
+        {
+            //throw new NotImplementedException();
+            if (K == Keys.A)
+            {
+                ModCore.log("A released for Seaside Scramble!");
+                this.isMoving = false;
+            }
+            if (K == Keys.W)
+            {
+                ModCore.log("W pressed for Seaside Scramble!");
+                this.isMoving = false;
+            }
+            if (K == Keys.S)
+            {
+                ModCore.log("S pressed for Seaside Scramble!");
+                this.isMoving = false;
+            }
+            if (K == Keys.D)
+            {
+                ModCore.log("D pressed for Seaside Scramble!");
+                this.isMoving = false;
+            }
+        }
+
+        /// <summary>
+        /// Checks for player movement.
+        /// </summary>
+        /// <param name="K"></param>
+        private void checkForMovementInput(Keys K)
+        {
+            if (SeasideScramble.self.isMenuUp) return;
+            //Microsoft.Xna.Framework.Input.GamePadState state = this.getGamepadState(PlayerIndex.One);
+            if (K == Keys.A)
+            {
+                ModCore.log("A pressed for player");
+                this.movePlayer(SSCEnums.FacingDirection.Left);
+            }
+            if (K == Keys.W)
+            {
+                ModCore.log("W pressed for player!");
+                this.movePlayer(SSCEnums.FacingDirection.Up);
+            }
+            if (K == Keys.S)
+            {
+                ModCore.log("S pressed for player!");
+                this.movePlayer(SSCEnums.FacingDirection.Down);
+            }
+            if (K == Keys.D)
+            {
+                ModCore.log("D pressed for player!");
+                this.movePlayer(SSCEnums.FacingDirection.Right);
+            }
+
+
+
+        }
+
+
+
 
     }
 }
