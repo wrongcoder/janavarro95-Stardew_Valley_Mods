@@ -137,6 +137,41 @@ namespace StardustCore.Animations
             }
         }
 
+        /// <summary>Gets the animation from the dictionary of all animations available.</summary>
+        /// <param name="AnimationName"></param>
+        /// <param name="StartingFrame"></param>
+        public bool playAnimation(string AnimationName,bool overrideSameAnimation=false,int StartingFrame = 0)
+        {
+            if (this.animations.TryGetValue(AnimationName, out List<Animation> dummyList))
+            {
+                if (overrideSameAnimation == false)
+                {
+                    if (this.currentAnimationName == AnimationName) return true;
+                }
+                if (dummyList.Count != 0 || StartingFrame >= dummyList.Count)
+                {
+                    this.currentAnimationList = dummyList;
+                    this.currentAnimation = this.currentAnimationList[StartingFrame];
+                    this.currentAnimationName = AnimationName;
+                    this.currentAnimation.startAnimation();
+                    return true;
+                }
+                else
+                {
+                    if (dummyList.Count == 0)
+                        ModCore.ModMonitor.Log("Error: Current animation " + AnimationName + " has no animation frames associated with it.");
+                    if (dummyList.Count > dummyList.Count)
+                        ModCore.ModMonitor.Log("Error: Animation frame " + StartingFrame + " is outside the range of provided animations. Which has a maximum count of " + dummyList.Count);
+                    return false;
+                }
+            }
+            else
+            {
+                ModCore.ModMonitor.Log("Error setting animation: " + AnimationName + " animation does not exist in list of available animations. Did you make sure to add it in?");
+                return false;
+            }
+        }
+
         /// <summary>Sets the animation manager to an on state, meaning that this animation will update on the draw frame.</summary>
         public void enableAnimation()
         {

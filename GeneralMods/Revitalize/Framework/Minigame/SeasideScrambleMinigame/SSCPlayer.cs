@@ -18,6 +18,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public Microsoft.Xna.Framework.Vector2 position;
         public bool isMoving;
 
+        public const int junimoWalkingAnimationSpeed = 10;
+
         public SSCPlayer()
         {
             this.facingDirection = SSCEnums.FacingDirection.Down;
@@ -38,6 +40,51 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 {
                     new Animation(0,16*3,16,16)
                 } },
+                 {"Walking_F",new List<Animation>()
+                {
+                    new Animation(16*0,16*0,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*1,16*0,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*2,16*0,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*3,16*0,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*4,16*0,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*5,16*0,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*6,16*0,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*7,16*0,16,16,junimoWalkingAnimationSpeed),
+                } },
+                {"Walking_R",new List<Animation>()
+                {
+                    new Animation(16*0,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*1,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*2,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*3,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*4,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*5,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*6,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*7,16*2,16,16,junimoWalkingAnimationSpeed),
+                } },
+                {"Walking_L",new List<Animation>()
+                {
+                    new Animation(16*0,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*1,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*2,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*3,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*4,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*5,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*6,16*2,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*7,16*2,16,16,junimoWalkingAnimationSpeed),
+                } },
+                {"Walking_B",new List<Animation>()
+                {
+                    new Animation(16*0,16*4,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*1,16*4,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*2,16*4,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*3,16*4,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*4,16*4,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*5,16*4,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*6,16*4,16,16,junimoWalkingAnimationSpeed),
+                    new Animation(16*7,16*4,16,16,junimoWalkingAnimationSpeed),
+                } },
+
 
 
 
@@ -60,21 +107,21 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 if(this.facingDirection== SSCEnums.FacingDirection.Down)
                 {
-                    this.characterSpriteController.setAnimation("Idle_F");
+                    this.characterSpriteController.playAnimation("Idle_F");
                 }
                 if (this.facingDirection == SSCEnums.FacingDirection.Right)
                 {
-                    this.characterSpriteController.setAnimation("Idle_R");
+                    this.characterSpriteController.playAnimation("Idle_R");
                 }
                 if (this.facingDirection == SSCEnums.FacingDirection.Left)
                 {
-                    this.characterSpriteController.setAnimation("Idle_L");
+                    this.characterSpriteController.playAnimation("Idle_L");
                     this.flipSprite = true;
                     return;
                 }
                 if (this.facingDirection == SSCEnums.FacingDirection.Up)
                 {
-                    this.characterSpriteController.setAnimation("Idle_B");
+                    this.characterSpriteController.playAnimation("Idle_B");
                 }
                 this.flipSprite = false;
             }
@@ -82,21 +129,21 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 if (this.facingDirection == SSCEnums.FacingDirection.Down)
                 {
-                    this.characterSpriteController.setAnimation("Idle_F");
+                    this.characterSpriteController.playAnimation("Walking_F");
                 }
                 if (this.facingDirection == SSCEnums.FacingDirection.Right)
                 {
-                    this.characterSpriteController.setAnimation("Idle_R");
+                    this.characterSpriteController.playAnimation("Walking_R");
                 }
                 if (this.facingDirection == SSCEnums.FacingDirection.Left)
                 {
-                    this.characterSpriteController.setAnimation("Idle_L");
+                    this.characterSpriteController.playAnimation("Walking_L");
                     this.flipSprite = true;
                     return;
                 }
                 if (this.facingDirection == SSCEnums.FacingDirection.Up)
                 {
-                    this.characterSpriteController.setAnimation("Idle_B");
+                    this.characterSpriteController.playAnimation("Walking_B");
                 }
                 this.flipSprite = false;
             }
