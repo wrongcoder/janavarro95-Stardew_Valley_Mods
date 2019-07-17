@@ -61,12 +61,15 @@
     <Compile Include="Framework\Factories\Objects\Furniture\ChairFactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\FactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
-    <Compile Include="Framework\Graphics\Animations\Animation.cs" />
-    <Compile Include="Framework\Graphics\Animations\AnimationManager.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Menus\SimpleItemGrabMenu.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScramble.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnums.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCPlayer.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
     <Compile Include="Framework\Objects\Furniture\Bench.cs" />
@@ -105,6 +108,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Minigames\SeasideScramble\Maps\TestRoom.tbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Minigames\SeasideScramble\Maps\TestRoom2.tbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +125,24 @@
     </Content>
     <Content Include="Content\Graphics\Furniture\Tables\Oak Table.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\Player\Junimo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Maps\SSC_Beach.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Maps\SSC_DesertTiles.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Maps\SSC_Festivals.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Maps\SSC_OutdoorsTileSheet.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Maps\SSC_Town.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

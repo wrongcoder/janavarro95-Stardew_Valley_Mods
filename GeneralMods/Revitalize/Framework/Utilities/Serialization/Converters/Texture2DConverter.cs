@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
-using Revitalize.Framework.Graphics;
 using StardewValley;
 using StardustCore.UIUtilities;
 

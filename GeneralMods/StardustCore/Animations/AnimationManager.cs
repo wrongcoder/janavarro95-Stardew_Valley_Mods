@@ -14,15 +14,18 @@ namespace StardustCore.Animations
         public string currentAnimationName;
         public int currentAnimationListIndex;
         public List<Animation> currentAnimationList = new List<Animation>();
-        private Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
+        public Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
         public Animation defaultDrawFrame;
         public Animation currentAnimation;
         public bool enabled;
 
         public string animationDataString;
 
-        /// <summary>Empty constructor.</summary>
+        public bool IsNull => this.defaultDrawFrame == null && this.objectTexture == null;
+
+        /// <summary>Construct an instance.</summary>
         public AnimationManager() { }
+
 
         /// <summary>Constructor for Animation Manager class.</summary>
         /// <param name="ObjectTexture">The texture that will be used for the animation. This is typically the same as the object this class is attached to.</param>
@@ -48,11 +51,8 @@ namespace StardustCore.Animations
 
             this.animationDataString = animationString;
             this.animations = parseAnimationsFromXNB(animationString);
-            bool f = this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList);
-            if (f)
-            {
+            if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
                 this.setAnimation(startingAnimationKey, startingAnimationFrame);
-            }
             else
             {
                 this.currentAnimation = this.defaultDrawFrame;
@@ -108,9 +108,11 @@ namespace StardustCore.Animations
         }
 
         /// <summary>Gets the animation from the dictionary of all animations available.</summary>
+        /// <param name="AnimationName"></param>
+        /// <param name="StartingFrame"></param>
         public bool setAnimation(string AnimationName, int StartingFrame = 0)
         {
-            if (this.animations.TryGetValue(AnimationName, out var dummyList))
+            if (this.animations.TryGetValue(AnimationName, out List<Animation> dummyList))
             {
                 if (dummyList.Count != 0 || StartingFrame >= dummyList.Count)
                 {
@@ -121,8 +123,10 @@ namespace StardustCore.Animations
                 }
                 else
                 {
-                    if (dummyList.Count == 0) ModCore.ModMonitor.Log("Error: Current animation " + AnimationName + " has no animation frames associated with it.");
-                    //if (dummyList.Count > dummyList.Count) ModCore.ModMonitor.Log("Error: Animation frame " + StartingFrame + " is outside the range of provided animations. Which has a maximum count of " + dummyList.Count);
+                    if (dummyList.Count == 0)
+                        ModCore.ModMonitor.Log("Error: Current animation " + AnimationName + " has no animation frames associated with it.");
+                    if (dummyList.Count > dummyList.Count)
+                        ModCore.ModMonitor.Log("Error: Animation frame " + StartingFrame + " is outside the range of provided animations. Which has a maximum count of " + dummyList.Count);
                     return false;
                 }
             }
@@ -155,16 +159,21 @@ namespace StardustCore.Animations
                 string[] animationArray = v.Split(' ');
                 if (parsedDic.ContainsKey(animationArray[0]))
                 {
-                    List<Animation> aniList = parseAnimationFromString(v);
-                    foreach (var ani in aniList)
-                        parsedDic[animationArray[0]].Add(ani);
+                    List<Animation> animations = parseAnimationFromString(v);
+                    foreach (var animation in animations)
+                    {
+                        parsedDic[animationArray[0]].Add(animation);
+                    }
                 }
                 else
                 {
                     parsedDic.Add(animationArray[0], new List<Animation>());
-                    List<Animation> aniList = parseAnimationFromString(v);
+                    List<Animation> aniList = new List<Animation>();
+                    aniList = parseAnimationFromString(v);
                     foreach (var ani in aniList)
+                    {
                         parsedDic[animationArray[0]].Add(ani);
+                    }
                 }
             }
             return parsedDic;
@@ -187,7 +196,6 @@ namespace StardustCore.Animations
             }
             return ok;
         }
-
         /// <summary>Used to handle general drawing functionality using the animation manager.</summary>
         /// <param name="spriteBatch">We need a spritebatch to draw.</param>
         /// <param name="texture">The texture to draw.</param>
@@ -203,6 +211,29 @@ namespace StardustCore.Animations
         {
             //Log.AsyncC("Animation Manager is working!");
             spriteBatch.Draw(texture, Position, sourceRectangle, drawColor, rotation, origin, scale, spriteEffects, LayerDepth);
+            try
+            {
+                this.tickAnimation();
+                // Log.AsyncC("Tick animation");
+            }
+            catch (Exception err)
+            {
+                ModCore.ModMonitor.Log(err.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Used to draw the current animation to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="Position"></param>
+        /// <param name="drawColor"></param>
+        /// <param name="scale"></param>
+        /// <param name="flipped"></param>
+        /// <param name="depth"></param>
+        public void draw(SpriteBatch b,Vector2 Position,Color drawColor,float scale,SpriteEffects flipped,float depth)
+        {
+            b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, 0f, Vector2.Zero, scale, flipped, depth);
             try
             {
                 this.tickAnimation();

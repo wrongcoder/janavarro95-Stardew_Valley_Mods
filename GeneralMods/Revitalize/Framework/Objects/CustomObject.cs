@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
-using Revitalize.Framework.Graphics.Animations;
+using StardustCore.Animations;
 using StardewValley;
 using StardewValley.Objects;
 

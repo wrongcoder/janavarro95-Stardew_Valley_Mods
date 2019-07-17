@@ -8,8 +8,6 @@ using Revitalize.Framework;
 using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Environment;
 using Revitalize.Framework.Factories.Objects;
-using Revitalize.Framework.Graphics;
-using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Furniture;
@@ -19,6 +17,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardustCore.UIUtilities;
+using StardustCore.Animations;
 
 namespace Revitalize
 {
@@ -157,6 +156,7 @@ namespace Revitalize
             ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
+            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             playerInfo = new PlayerInfo();
 
             TextureManager.AddTextureManager(Manifest,"Furniture");
@@ -181,6 +181,14 @@ namespace Revitalize
             
 
 
+        }
+
+        private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
+        {
+            if(e.Button== SButton.U)
+            {
+                Game1.currentMinigame = new Revitalize.Framework.Minigame.SeasideScrambleMinigame.SeasideScramble();
+            }
         }
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)

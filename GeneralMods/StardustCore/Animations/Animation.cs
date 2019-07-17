@@ -26,6 +26,18 @@ namespace StardustCore.Animations
             this.frameDuration = -1;
         }
 
+        public Animation(int xPos, int yPos, int width, int height)
+        {
+            this.sourceRectangle = new Rectangle(xPos, yPos, width, height);
+            this.frameCountUntilNextAnimation = -1;
+            this.frameDuration = -1;
+        }
+        public Animation(int xPos, int yPos, int width, int height,int existsForXFrames)
+        {
+            this.sourceRectangle = new Rectangle(xPos, yPos, width, height);
+            this.frameDuration = existsForXFrames;
+        }
+
         /// <summary>Constructor that causes the animation frame count to be set to -1; This forces it to never change.</summary>
         /// <param name="SourceRectangle">The draw source for this animation.</param>
         public Animation(Rectangle SourceRectangle)

@@ -6,8 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Factories.Objects.Furniture;
-using Revitalize.Framework.Graphics;
-using Revitalize.Framework.Graphics.Animations;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Furniture;
@@ -15,6 +13,7 @@ using Revitalize.Framework.Objects.InformationFiles.Furniture;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardustCore.UIUtilities;
+using StardustCore.Animations;
 
 namespace Revitalize.Framework.Factories.Objects
 {
@@ -24,6 +23,7 @@ namespace Revitalize.Framework.Factories.Objects
     //Create portable beds???
     public class FurnitureFactory
     {
+        
         public static string ChairFolder = Path.Combine("Data", "Furniture", "Chairs");
         public static string TablesFolder = Path.Combine("Data", "Furniture", "Tables");
         public static string LampsFolder = Path.Combine("Data", "Furniture", "Lamps");

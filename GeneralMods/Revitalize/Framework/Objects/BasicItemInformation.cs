@@ -2,7 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
-using Revitalize.Framework.Graphics.Animations;
+using StardustCore.Animations;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities;
 using StardewValley;
