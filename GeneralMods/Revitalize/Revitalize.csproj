@@ -133,6 +133,12 @@
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Player\Junimo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\AButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\MouseClick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Minigames\SeasideScramble\Maps\Backgrounds\TitleScreenBackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

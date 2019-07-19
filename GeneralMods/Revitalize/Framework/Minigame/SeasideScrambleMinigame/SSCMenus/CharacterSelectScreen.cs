@@ -7,10 +7,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
+using StardustCore.Animations;
 using StardustCore.UIUtilities;
+using StardustCore.UIUtilities.MenuComponents;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 {
+    /// <summary>
+    /// TODO: Finish adding in a button prompts and click prompt and draw them to the screen.
+    /// </summary>
     public class CharacterSelectScreen: IClickableMenuExtended
     {
         StardustCore.UIUtilities.Texture2DExtended background;
@@ -26,6 +31,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
         public Dictionary<SSCEnums.PlayerID, int> inputDelays;
         public int maxInputDelay = 20;
+
+        public Dictionary<string, StardustCore.Animations.AnimatedSprite> animatedSprites;
 
         public CharacterSelectScreen(int x, int y, int width, int height) : base(x, y, width, height, false)
         {
@@ -65,6 +72,23 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                 { SSCEnums.PlayerID.Four,0},
             };
             SeasideScramble.self.camera.snapToPosition(new Vector2(0, 0));
+
+            this.animatedSprites = new Dictionary<string, StardustCore.Animations.AnimatedSprite>();
+
+            this.animatedSprites.Add("P1 A Button" ,new StardustCore.Animations.AnimatedSprite("P1AButton",new Vector2(100,100),new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)),Color.White));
+
+            /*
+            this.animatedSprites.Add(new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "MouseClick"), new Animation(0, 0, 31, 32), new Dictionary<string, List<Animation>>()
+            {
+                {"Click1",new List<Animation>(){
+                    new Animation(0,0,31,32,60),
+                    new Animation(31,0,31,32,60)
+
+                } }
+
+
+            }, "Click1"));
+            */
         }
 
         public CharacterSelectScreen(xTile.Dimensions.Rectangle viewport) : this(0, 0, viewport.Width, viewport.Height)
