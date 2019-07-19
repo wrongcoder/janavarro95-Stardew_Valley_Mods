@@ -119,7 +119,17 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <param name="b"></param>
         public void draw(Microsoft.Xna.Framework.Graphics.SpriteBatch b)
         {
-            this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport,this.position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
+            this.draw(b,this.position);
+        }
+
+        /// <summary>
+        /// Draws the character to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="position"></param>
+        public void draw(SpriteBatch b, Vector2 position)
+        {
+            this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
         }
 
         /// <summary>

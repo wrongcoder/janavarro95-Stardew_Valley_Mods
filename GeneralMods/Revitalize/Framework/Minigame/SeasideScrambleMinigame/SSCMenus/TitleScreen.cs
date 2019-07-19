@@ -18,7 +18,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         public TitleScreen(int x, int y, int width, int height):base(x,y,width,height,false)
         {
             this.background = SeasideScramble.self.textureUtils.getExtendedTexture("SSCMaps", "TitleScreenBackground");
-            this.menuText = new StardustCore.UIUtilities.MenuComponents.BlinkingText("Sea Side Scramble: Lite Edition" + System.Environment.NewLine + "Click to start.",1000);
+            this.menuText = new StardustCore.UIUtilities.MenuComponents.BlinkingText("Sea Side Scramble: Lite Edition" + System.Environment.NewLine + "Click or press A to start.",1000);
         }
 
         public TitleScreen(xTile.Dimensions.Rectangle viewport) : this(0, 0, viewport.Width, viewport.Height)
@@ -50,7 +50,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             if (SeasideScramble.self.menuManager.isThisActiveMenu(this) == false) return;
-            this.closeMenu = true;
+            SeasideScramble.self.menuManager.addNewMenu(new CharacterSelectScreen(SeasideScramble.self.camera.viewport));
         }
 
         /// <summary>
@@ -83,8 +83,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         /// <param name="b"></param>
         public override void draw(SpriteBatch b)
         {
-
-            b.GraphicsDevice.Clear(Color.Black);
+            if (SeasideScramble.self.menuManager.isThisActiveMenu(this) == false) return;
             this.drawTitleBackground(b);
             this.drawTitleText(b);
             this.drawMouse(b);
@@ -109,6 +108,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             Vector2 offset=StardewValley.Game1.dialogueFont.MeasureString(this.menuText.displayText);
             this.menuText.draw(b, StardewValley.Game1.dialogueFont, new Vector2((this.width / 2) - (offset.X / 2), this.height / 2), Color.White);
            
+        }
+
+        public override void exitMenu(bool playSound = true)
+        {
+            base.exitMenu(playSound);
         }
 
     }

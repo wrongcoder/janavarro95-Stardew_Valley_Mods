@@ -11,6 +11,10 @@ using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
 using StardustCore.UIUtilities;
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
+    /// <summary>
+    /// TODO: Finish character select screen. Ensure that camera snapping doesn't happen until game starts.
+    /// Also add interface for game entity for camera to consistently have a focus target.
+    /// </summary>
     public class SeasideScramble : StardewValley.Minigames.IMinigame
     {
 
@@ -46,9 +50,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.quitGame = false;
 
             this.players = new Dictionary<SSCEnums.PlayerID, SSCPlayer>();
-            this.players.Add(SSCEnums.PlayerID.One, new SSCPlayer(SSCEnums.PlayerID.One));
-
-            this.getPlayer(SSCEnums.PlayerID.One).setColor(Color.PaleVioletRed);
+            //this.players.Add(SSCEnums.PlayerID.One, new SSCPlayer(SSCEnums.PlayerID.One));
+            //this.getPlayer(SSCEnums.PlayerID.One).setColor(Color.PaleVioletRed);
 
 
             this.menuManager = new SSCMenus.SSCMenuManager();
@@ -297,11 +300,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 this.currentMap.update(time);
             }
-            foreach(SSCPlayer player in this.players.Values)
-            {
-                if(player.playerID== SSCEnums.PlayerID.One) this.camera.centerOnPosition(player.position);
-                player.update(time);
-            }
+
 
             if (this.menuManager.activeMenu != null)
             {
@@ -309,6 +308,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 if (this.menuManager.activeMenu.readyToClose())
                 {
                     this.menuManager.closeActiveMenu();
+                }
+            }
+            else
+            {
+                foreach (SSCPlayer player in this.players.Values)
+                {
+                    if (player.playerID == SSCEnums.PlayerID.One) this.camera.centerOnPosition(player.position);
+                    player.update(time);
                 }
             }
 
