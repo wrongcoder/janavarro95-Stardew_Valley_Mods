@@ -18,10 +18,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
         public Dictionary<SSCEnums.PlayerID, int> playerColorIndex;
 
-        public Vector2 p1DisplayLocation;
-        public Vector2 p2DisplayLocation;
-        public Vector2 p3DisplayLocation;
-        public Vector2 p4DisplayLocation;
+        public Dictionary<SSCEnums.PlayerID, Vector2> playerDisplayLocations;
 
         public List<Color> possibleColors;
 
@@ -32,14 +29,16 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
         public CharacterSelectScreen(int x, int y, int width, int height) : base(x, y, width, height, false)
         {
-
             this.background = SeasideScramble.self.textureUtils.getExtendedTexture("SSCMaps", "TitleScreenBackground");
             this.menuTitle = "Character Selection";
 
-            this.p1DisplayLocation = new Vector2(this.width *.2f, this.height / 2);
-            this.p2DisplayLocation = new Vector2(this.width *.4f, this.height / 2);
-            this.p3DisplayLocation = new Vector2(this.width *.6f, this.height / 2);
-            this.p4DisplayLocation = new Vector2(this.width *.8f, this.height / 2);
+            this.playerDisplayLocations = new Dictionary<SSCEnums.PlayerID, Vector2>()
+            {
+                {SSCEnums.PlayerID.One,new Vector2(SeasideScramble.self.camera.viewport.Width*.2f, SeasideScramble.self.camera.viewport.Height*.5f)},
+                {SSCEnums.PlayerID.Two,new Vector2(SeasideScramble.self.camera.viewport.Width*.4f, SeasideScramble.self.camera.viewport.Height*.5f)},
+                {SSCEnums.PlayerID.Three,new Vector2(SeasideScramble.self.camera.viewport.Width*.6f, SeasideScramble.self.camera.viewport.Height*.5f)},
+                {SSCEnums.PlayerID.Four,new Vector2(SeasideScramble.self.camera.viewport.Width*.8f, SeasideScramble.self.camera.viewport.Height*.5f)},
+            };
 
             this.possibleColors = new List<Color>()
             {
@@ -65,22 +64,30 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                 { SSCEnums.PlayerID.Three,0},
                 { SSCEnums.PlayerID.Four,0},
             };
+            SeasideScramble.self.camera.snapToPosition(new Vector2(0, 0));
         }
 
         public CharacterSelectScreen(xTile.Dimensions.Rectangle viewport) : this(0, 0, viewport.Width, viewport.Height)
         {
-
+            
+            
         }
 
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
-            this.xPositionOnScreen = newBounds.X;
-            this.yPositionOnScreen = newBounds.Y;
+            this.xPositionOnScreen = 0;
+            this.yPositionOnScreen = 0;
             this.width = newBounds.Width;
             this.height = newBounds.Height;
             //base.gameWindowSizeChanged(oldBounds, newBounds);
 
             //this.p1DisplayLocation = new Vector2(this.width/10,this.height/2);
+            SeasideScramble.self.camera.snapToPosition(new Vector2(0, 0));
+
+            this.playerDisplayLocations[SSCEnums.PlayerID.One] = new Vector2(SeasideScramble.self.camera.viewport.Width * .2f, SeasideScramble.self.camera.viewport.Height * .5f);
+            this.playerDisplayLocations[SSCEnums.PlayerID.Two] = new Vector2(SeasideScramble.self.camera.viewport.Width * .4f, SeasideScramble.self.camera.viewport.Height * .5f);
+            this.playerDisplayLocations[SSCEnums.PlayerID.Three] = new Vector2(SeasideScramble.self.camera.viewport.Width * .6f, SeasideScramble.self.camera.viewport.Height * .5f);
+            this.playerDisplayLocations[SSCEnums.PlayerID.Four] = new Vector2(SeasideScramble.self.camera.viewport.Width * .8f, SeasideScramble.self.camera.viewport.Height * .5f);
         }
 
         public override void update(GameTime time)
@@ -116,6 +123,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             if (this.inputDelays[SSCEnums.PlayerID.Two] < 0) this.inputDelays[SSCEnums.PlayerID.Two] = 0;
             if (this.inputDelays[SSCEnums.PlayerID.Three] < 0) this.inputDelays[SSCEnums.PlayerID.Three] = 0;
             if (this.inputDelays[SSCEnums.PlayerID.Four] < 0) this.inputDelays[SSCEnums.PlayerID.Four] = 0;
+
+
+            SeasideScramble.self.camera.snapToPosition(new Vector2(0, 0));
+            ModCore.log("P1 loc" + this.playerDisplayLocations[SSCEnums.PlayerID.One]);
+            ModCore.log("Viewport loc" + SeasideScramble.self.camera.Position);
 
         }
 
@@ -268,10 +280,18 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             Vector2 menuTitlePos = Game1.dialogueFont.MeasureString(this.menuTitle);
             b.DrawString(Game1.dialogueFont, this.menuTitle, new Vector2((this.width / 2) - (menuTitlePos.X / 2), this.height / 10),Color.White);
 
-            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One) != null)
+            foreach(KeyValuePair<SSCEnums.PlayerID,Vector2> pair in this.playerDisplayLocations)
             {
-                SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One).draw(b,this.p1DisplayLocation);
+                //Draw player 1
+                this.drawDialogueBoxBackground((int)pair.Value.X - 50, (int)pair.Value.Y - 100, 200, 200, Color.Brown);
+                if (SeasideScramble.self.getPlayer(pair.Key) != null)
+                {
+                    SeasideScramble.self.getPlayer(pair.Key).draw(b, pair.Value);
+                }
             }
+            
+
+
         }
 
         public override void exitMenu(bool playSound = true)
