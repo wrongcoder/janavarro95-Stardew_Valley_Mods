@@ -34,6 +34,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
         public Dictionary<string, StardustCore.Animations.AnimatedSprite> animatedSprites;
 
+        public Dictionary<string, Button> buttons;
+
         public CharacterSelectScreen(int x, int y, int width, int height) : base(x, y, width, height, false)
         {
             this.background = SeasideScramble.self.textureUtils.getExtendedTexture("SSCMaps", "TitleScreenBackground");
@@ -75,20 +77,36 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
             this.animatedSprites = new Dictionary<string, StardustCore.Animations.AnimatedSprite>();
 
-            this.animatedSprites.Add("P1 A Button" ,new StardustCore.Animations.AnimatedSprite("P1AButton",new Vector2(100,100),new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)),Color.White));
+            this.animatedSprites.Add("P1AButton" ,new StardustCore.Animations.AnimatedSprite("P1AButton", this.playerDisplayLocations[SSCEnums.PlayerID.One]+new Vector2(0,100),new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)),Color.White));
+            this.animatedSprites.Add("P2AButton", new StardustCore.Animations.AnimatedSprite("P2AButton", this.playerDisplayLocations[SSCEnums.PlayerID.Two] + new Vector2(0, 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)), Color.White));
+            this.animatedSprites.Add("P3AButton", new StardustCore.Animations.AnimatedSprite("P3AButton", this.playerDisplayLocations[SSCEnums.PlayerID.Three] + new Vector2(0, 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)), Color.White));
+            this.animatedSprites.Add("P4AButton", new StardustCore.Animations.AnimatedSprite("P4AButton", this.playerDisplayLocations[SSCEnums.PlayerID.Four] + new Vector2(0, 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)), Color.White));
 
-            /*
-            this.animatedSprites.Add(new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "MouseClick"), new Animation(0, 0, 31, 32), new Dictionary<string, List<Animation>>()
+            this.animatedSprites.Add("P1Click",new StardustCore.Animations.AnimatedSprite("P1Click", this.playerDisplayLocations[SSCEnums.PlayerID.One] + new Vector2(0, 150), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "MouseClick"), new Animation(0, 0, 31, 32), new Dictionary<string, List<Animation>>()
             {
                 {"Click1",new List<Animation>(){
                     new Animation(0,0,31,32,60),
                     new Animation(31,0,31,32,60)
 
                 } }
+            }, "Click1"),Color.White));
 
+            this.animatedSprites.Add("P1Color", new StardustCore.Animations.AnimatedSprite("P1Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.One].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y+250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
+            this.animatedSprites.Add("P2Color", new StardustCore.Animations.AnimatedSprite("P2Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Two].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
+            this.animatedSprites.Add("P3Color", new StardustCore.Animations.AnimatedSprite("P3Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Three].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
+            this.animatedSprites.Add("P4Color", new StardustCore.Animations.AnimatedSprite("P4Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Four].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
 
-            }, "Click1"));
-            */
+            this.buttons = new Dictionary<string, Button>();
+            this.buttons.Add("P1PrevButton", new Button("P1PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X-64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"),new Rectangle(0,0,32,32),2f));
+            this.buttons.Add("P1NextButton", new Button("P1NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X+64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P2PrevButton", new Button("P2PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].X - 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P2NextButton", new Button("P2NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].X + 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P3PrevButton", new Button("P3PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Three].X - 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Three].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P3NextButton", new Button("P3NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Three].X + 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Three].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P4PrevButton", new Button("P4PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Four].X - 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Four].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P4NextButton", new Button("P4NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Four].X + 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Four].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            //this.animatedSprites.Add("P1PrevColor", new StardustCore.Animations.AnimatedSprite("P1PrevColor", this.playerDisplayLocations[SSCEnums.PlayerID.One] + new Vector2(0, 200), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Animation(0, 0, 32, 32)), Color.White));
+            //this.animatedSprites.Add("P1NextColor", new StardustCore.Animations.AnimatedSprite("P1NextColor", this.playerDisplayLocations[SSCEnums.PlayerID.One] + new Vector2(64, 200), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Animation(0, 0, 32, 32)), Color.White));
         }
 
         public CharacterSelectScreen(xTile.Dimensions.Rectangle viewport) : this(0, 0, viewport.Width, viewport.Height)
@@ -112,6 +130,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             this.playerDisplayLocations[SSCEnums.PlayerID.Two] = new Vector2(SeasideScramble.self.camera.viewport.Width * .4f, SeasideScramble.self.camera.viewport.Height * .5f);
             this.playerDisplayLocations[SSCEnums.PlayerID.Three] = new Vector2(SeasideScramble.self.camera.viewport.Width * .6f, SeasideScramble.self.camera.viewport.Height * .5f);
             this.playerDisplayLocations[SSCEnums.PlayerID.Four] = new Vector2(SeasideScramble.self.camera.viewport.Width * .8f, SeasideScramble.self.camera.viewport.Height * .5f);
+
+
+
         }
 
         public override void update(GameTime time)
@@ -150,8 +171,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
 
             SeasideScramble.self.camera.snapToPosition(new Vector2(0, 0));
-            ModCore.log("P1 loc" + this.playerDisplayLocations[SSCEnums.PlayerID.One]);
-            ModCore.log("Viewport loc" + SeasideScramble.self.camera.Position);
 
         }
 
@@ -181,6 +200,22 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         {
             if (SeasideScramble.self.getPlayer(player) == null) return;
             SeasideScramble.self.getPlayer(player).setColor(this.possibleColors[this.playerColorIndex[player]]);
+            if(player== SSCEnums.PlayerID.One)
+            {
+                this.animatedSprites["P1Color"].color = this.possibleColors[this.playerColorIndex[player]];
+            }
+            if (player == SSCEnums.PlayerID.Two)
+            {
+                this.animatedSprites["P2Color"].color = this.possibleColors[this.playerColorIndex[player]];
+            }
+            if (player == SSCEnums.PlayerID.Three)
+            {
+                this.animatedSprites["P3Color"].color = this.possibleColors[this.playerColorIndex[player]];
+            }
+            if (player == SSCEnums.PlayerID.Four)
+            {
+                this.animatedSprites["P4Color"].color = this.possibleColors[this.playerColorIndex[player]];
+            }
         }
 
         /// <summary>
@@ -255,6 +290,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             this.initializeCharacter(SSCEnums.PlayerID.One);
+
+            if (this.buttons["P1NextButton"].containsPoint(x, y))
+            {
+                this.iteratePlayerColorIndex(SSCEnums.PlayerID.One, 1);
+            }
+            if (this.buttons["P1PrevButton"].containsPoint(x, y))
+            {
+                this.iteratePlayerColorIndex(SSCEnums.PlayerID.One, -1);
+            }
         }
 
         public override void receiveKeyPress(Keys key)
@@ -313,8 +357,44 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                     SeasideScramble.self.getPlayer(pair.Key).draw(b, pair.Value);
                 }
             }
-            
 
+            this.animatedSprites["P1Click"].draw(b, 4f, 0f);
+            this.animatedSprites["P1AButton"].draw(b, 2f, 0f);
+            this.animatedSprites["P2AButton"].draw(b, 2f, 0f);
+            this.animatedSprites["P3AButton"].draw(b, 2f, 0f);
+            this.animatedSprites["P4AButton"].draw(b, 2f, 0f);
+
+            /*
+            foreach(Button button in this.buttons.Values)
+            {
+                button.draw(b,Color.White);
+            }
+            */
+
+            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One) != null)
+            {
+                this.buttons["P1NextButton"].draw(b, Color.White);
+                this.buttons["P1PrevButton"].draw(b, Color.White);
+                this.animatedSprites["P1Color"].draw(b,2f,0f);
+            }
+            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two) != null)
+            {
+                this.buttons["P2NextButton"].draw(b, Color.White);
+                this.buttons["P2PrevButton"].draw(b, Color.White);
+                this.animatedSprites["P2Color"].draw(b,2f,0f);
+            }
+            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three) != null)
+            {
+                this.buttons["P3NextButton"].draw(b, Color.White);
+                this.buttons["P3PrevButton"].draw(b, Color.White);
+                this.animatedSprites["P3Color"].draw(b,2f,0f);
+            }
+            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four) != null)
+            {
+                this.buttons["P4NextButton"].draw(b, Color.White);
+                this.buttons["P4PrevButton"].draw(b, Color.White);
+                this.animatedSprites["P4Color"].draw(b,2f,0f);
+            }
 
         }
 
