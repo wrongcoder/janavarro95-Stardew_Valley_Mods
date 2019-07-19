@@ -11,19 +11,24 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
     public class SSCPlayer
     {
-        //TODO: Hint when left animations are played make sure to FLIP THE SPRITE;
-        //Make game camera class!!!
+        //TODO: Add gamepad input
+        //TODO: Add movement speed variable
+        //TODO: Add in health
+        //TODO: Add in player HUD
         public AnimationManager characterSpriteController;
         public bool flipSprite;
         public SSCEnums.FacingDirection facingDirection;
         public Microsoft.Xna.Framework.Vector2 position;
         public bool isMoving;
+        private bool movedThisFrame;
         public Color playerColor;
+        public SSCEnums.PlayerID playerID;
 
         public const int junimoWalkingAnimationSpeed = 10;
 
-        public SSCPlayer()
+        public SSCPlayer(SSCEnums.PlayerID PlayerID)
         {
+            this.playerID = PlayerID;
             this.facingDirection = SSCEnums.FacingDirection.Down;
             this.characterSpriteController = new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCPlayer", "Junimo"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>{
                 {"Idle_F",new List<Animation>()
@@ -87,29 +92,43 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     new Animation(16*7,16*4,16,16,junimoWalkingAnimationSpeed),
                 } },
 
-
-
-
             },"Idle_F",0,true);
         }
 
+        /// <summary>
+        /// Sets the color for the player.
+        /// </summary>
+        /// <param name="color"></param>
         public void setColor(Color color)
         {
             this.playerColor = color;
         }
 
+        /// <summary>
+        /// Plays an animation for the character.
+        /// </summary>
+        /// <param name="name"></param>
         public void playAnimation(string name)
         {
             this.characterSpriteController.setAnimation(name);
         }
 
+        /// <summary>
+        /// Draws the character to the screen.
+        /// </summary>
+        /// <param name="b"></param>
         public void draw(Microsoft.Xna.Framework.Graphics.SpriteBatch b)
         {
             this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport,this.position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
         }
 
+        /// <summary>
+        /// Called every frame to do update logic.
+        /// </summary>
+        /// <param name="Time"></param>
         public void update(GameTime Time)
         {
+            this.movedThisFrame = false;
             if (this.isMoving == false)
             {
                 if(this.facingDirection== SSCEnums.FacingDirection.Down)
@@ -156,6 +175,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
         }
 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //           Movement logic         //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        #region
+
         /// <summary>
         /// Checks for moving the player.
         /// </summary>
@@ -163,6 +187,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void movePlayer(SSCEnums.FacingDirection direction)
         {
             this.isMoving = true;
+            this.movedThisFrame = true;
             if(direction== SSCEnums.FacingDirection.Up)
             {
                 this.facingDirection = direction;
@@ -183,15 +208,59 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 this.facingDirection = direction;
                 this.position += new Vector2(1, 0);
             }
-            ModCore.log(this.position);
+            //ModCore.log(this.position);
         }
 
+        /// <summary>
+        /// Checks when the player presses a key on the keyboard.
+        /// </summary>
+        /// <param name="k"></param>
         public void receiveKeyPress(Microsoft.Xna.Framework.Input.Keys k)
         {
-            this.checkForMovementInput(k);
+            if (this.playerID == SSCEnums.PlayerID.One)
+            {
+                this.checkForMovementInput(k);
+            }
         }
+        /// <summary>
+        /// Checks when the gamepad receives input.
+        /// </summary>
+        /// <param name="state"></param>
+        public void receiveGamepadInput(GamePadState state)
+        {
+            if (SeasideScramble.self.menuManager.isMenuUp == false)
+            {
+                //Do gamepad input here!
+                if (state.ThumbSticks.Left.X < 0)
+                {
+                    this.movePlayer(SSCEnums.FacingDirection.Left);
+                }
+                else if (state.ThumbSticks.Left.X > 0)
+                {
+                    this.movePlayer(SSCEnums.FacingDirection.Right);
+                }
+                if (state.ThumbSticks.Left.Y < 0)
+                {
+                    this.movePlayer(SSCEnums.FacingDirection.Down);
+                }
+                else if (state.ThumbSticks.Left.Y > 0)
+                {
+                    this.movePlayer(SSCEnums.FacingDirection.Up);
+                }
+                if (state.ThumbSticks.Left.X == 0 && state.ThumbSticks.Left.Y == 0 && this.movedThisFrame==false)
+                {
+                    this.isMoving = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Triggers when there isn't a key being pressed.
+        /// </summary>
+        /// <param name="K"></param>
         public void receiveKeyRelease(Keys K)
         {
+            if (this.playerID != SSCEnums.PlayerID.One) return;
             //throw new NotImplementedException();
             if (K == Keys.A)
             {
@@ -221,7 +290,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <param name="K"></param>
         private void checkForMovementInput(Keys K)
         {
-            if (SeasideScramble.self.isMenuUp) return;
+            if (this.playerID != SSCEnums.PlayerID.One) return;
+            if (SeasideScramble.self.menuManager.isMenuUp) return;
             //Microsoft.Xna.Framework.Input.GamePadState state = this.getGamepadState(PlayerIndex.One);
             if (K == Keys.A)
             {
@@ -243,12 +313,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 ModCore.log("D pressed for player!");
                 this.movePlayer(SSCEnums.FacingDirection.Right);
             }
-
-
-
         }
 
-
+        #endregion
 
 
     }

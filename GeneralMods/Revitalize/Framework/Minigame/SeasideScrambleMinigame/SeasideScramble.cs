@@ -13,33 +13,24 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
     public class SeasideScramble : StardewValley.Minigames.IMinigame
     {
+
         public static SeasideScramble self;
 
         SeasideScrambleMap currentMap;
+        public Dictionary<string, SeasideScrambleMap> SeasideScrambleMaps;
+
         public int currentNumberOfPlayers = 0;
         public const int maxPlayers = 4;
+        public Dictionary<SSCEnums.PlayerID, SSCPlayer> players;
 
-        public Dictionary<string, SeasideScrambleMap> SeasideScrambleMaps;
         public bool quitGame;
         public Vector2 topLeftScreenCoordinate;
 
-
         public SSCTextureUtilities textureUtils;
-
-        public SSCPlayer player;
-
-        //public xTile.Dimensions.Rectangle viewport;
 
         public SSCCamera camera;
 
-        public IClickableMenuExtended activeMenu;
-        public bool isMenuUp
-        {
-            get
-            {
-                return this.activeMenu != null;
-            }
-        }
+        public SSCMenus.SSCMenuManager menuManager;
 
         public SeasideScramble()
         {
@@ -48,17 +39,31 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             //this.viewport = new xTile.Dimensions.Rectangle(StardewValley.Game1.viewport);
             this.topLeftScreenCoordinate = new Vector2((float)(this.camera.viewport.Width / 2 - 384), (float)(this.camera.viewport.Height / 2 - 384));
 
-
             this.LoadTextures();
 
             this.LoadMaps();
             this.loadStartingMap();
             this.quitGame = false;
 
-            this.player = new SSCPlayer();
-            this.player.setColor(Color.Red);
+            this.players = new Dictionary<SSCEnums.PlayerID, SSCPlayer>();
+            this.players.Add(SSCEnums.PlayerID.One, new SSCPlayer(SSCEnums.PlayerID.One));
 
-            this.activeMenu = new SSCMenus.TitleScreen(this.camera.viewport);
+            this.getPlayer(SSCEnums.PlayerID.One).setColor(Color.PaleVioletRed);
+
+
+            this.menuManager = new SSCMenus.SSCMenuManager();
+
+            this.menuManager.addNewMenu(new SSCMenus.TitleScreen(this.camera.viewport));
+
+        }
+
+        public SSCPlayer getPlayer(SSCEnums.PlayerID id)
+        {
+            if (this.players.ContainsKey(id))
+            {
+                return this.players[id];
+            }
+            else return null;
         }
 
         private void LoadTextures()
@@ -117,16 +122,18 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 this.currentMap.draw(b);
             }
             b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
-            if (this.player != null)
-            {
-                this.player.draw(b);
+
+            foreach(SSCPlayer p in this.players.Values) {
+                p.draw(b);
             }
 
-            if (this.activeMenu != null)
+            /*
+            if (this.menuManager.activeMenu != null)
             {
-                this.activeMenu.draw(b);
+                this.menuManager.activeMenu.draw(b);
             }
-
+            */
+            this.menuManager.drawAll(b);
             b.End();
         }
 
@@ -156,7 +163,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <returns></returns>
         public bool overrideFreeMouseMovement()
         {
-            return false;
+            return true;
             //throw new NotImplementedException();
         }
 
@@ -180,29 +187,63 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 this.quitGame = true;
             }
-            this.player.receiveKeyPress(k);
+
+            foreach(SSCPlayer player in this.players.Values)
+            {
+                player.receiveKeyPress(k);
+            }
+
         }
 
-
-
-        private GamePadState getGamepadState(PlayerIndex index)
+        /// <summary>
+        /// Gets a gamepad state.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public GamePadState getGamepadState(PlayerIndex index)
         {
             return Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
         }
 
+        /// <summary>
+        /// Called when the minigame registeres a key on the keyboard being released.
+        /// </summary>
+        /// <param name="K"></param>
         public void receiveKeyRelease(Keys K)
         {
-            this.player.receiveKeyRelease(K);
+            foreach (SSCPlayer player in this.players.Values)
+            {
+                player.receiveKeyRelease(K);
+            }
         }
 
+        /// <summary>
+        /// Called when the minigame receives a left click.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
         public void receiveLeftClick(int x, int y, bool playSound = true)
         {
+            if (this.menuManager.activeMenu != null)
+            {
+                this.menuManager.activeMenu.receiveLeftClick(x, y, playSound);
+            }
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Called when the minigame receives a right click.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
         public void receiveRightClick(int x, int y, bool playSound = true)
         {
-            //throw new NotImplementedException();
+            if (this.menuManager.activeMenu != null)
+            {
+                this.menuManager.activeMenu.receiveRightClick(x, y, playSound);
+            }
         }
 
         public void releaseLeftClick(int x, int y)
@@ -215,6 +256,19 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             //throw new NotImplementedException();
         }
 
+
+        private void receiveGamepadInput(GamePadState state,SSCEnums.PlayerID ID)
+        {
+            if (state == null) return;
+            else
+            {
+                if (this.players.ContainsKey(ID))
+                {
+                    this.players[ID].receiveGamepadInput(state);
+                }
+            }
+        }
+
         /// <summary>
         /// Called every update frame.
         /// </summary>
@@ -222,12 +276,18 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <returns></returns>
         public bool tick(GameTime time)
         {
-            KeyboardState state = Keyboard.GetState();
+            KeyboardState kState = Keyboard.GetState();
 
-            foreach (Keys k in state.GetPressedKeys())
+            foreach (Keys k in kState.GetPressedKeys())
             {
                 this.receiveKeyPress(k);
             }
+            for (int i = 0; i < 4; i++)
+            {
+                GamePadState state = this.getGamepadState((PlayerIndex)i);
+                this.receiveGamepadInput(state,(SSCEnums.PlayerID)i);
+            }
+
 
             if (this.quitGame)
             {
@@ -237,14 +297,19 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 this.currentMap.update(time);
             }
-            if (this.player != null)
+            foreach(SSCPlayer player in this.players.Values)
             {
-                this.player.update(time);
-                this.camera.centerOnPosition(this.player.position);
+                if(player.playerID== SSCEnums.PlayerID.One) this.camera.centerOnPosition(player.position);
+                player.update(time);
             }
-            if (this.activeMenu != null)
+
+            if (this.menuManager.activeMenu != null)
             {
-                this.activeMenu.update(time);
+                this.menuManager.activeMenu.update(time);
+                if (this.menuManager.activeMenu.readyToClose())
+                {
+                    this.menuManager.closeActiveMenu();
+                }
             }
 
             return false;

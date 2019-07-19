@@ -12,6 +12,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
     {
         StardustCore.UIUtilities.Texture2DExtended background;
         StardustCore.UIUtilities.MenuComponents.BlinkingText menuText;
+
+        public bool closeMenu;
+
         public TitleScreen(int x, int y, int width, int height):base(x,y,width,height,false)
         {
             this.background = SeasideScramble.self.textureUtils.getExtendedTexture("SSCMaps", "TitleScreenBackground");
@@ -23,6 +26,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
         }
 
+        /// <summary>
+        /// What happens when the game's window size changes.
+        /// </summary>
+        /// <param name="oldBounds"></param>
+        /// <param name="newBounds"></param>
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
             this.xPositionOnScreen = newBounds.X;
@@ -33,37 +41,69 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         }
 
 
-
+        /// <summary>
+        /// What happens when the menu receives a left click.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            //Start the game!
+            if (SeasideScramble.self.menuManager.isThisActiveMenu(this) == false) return;
+            this.closeMenu = true;
         }
 
+        /// <summary>
+        /// Checks if the menu is ready to close.
+        /// </summary>
+        /// <returns></returns>
         public override bool readyToClose()
         {
+            if (this.closeMenu == true)
+            {
+                return true;
+            }
             //When menu is closed!
             return false;
         }
 
+        /// <summary>
+        /// Updates the menu.
+        /// </summary>
+        /// <param name="time"></param>
         public override void update(GameTime time)
         {
+            if (SeasideScramble.self.menuManager.isThisActiveMenu(this) == false) return;
             this.menuText.update(time);   
         }
 
+        /// <summary>
+        /// Draws the menu to the screen.
+        /// </summary>
+        /// <param name="b"></param>
         public override void draw(SpriteBatch b)
         {
+
             b.GraphicsDevice.Clear(Color.Black);
             this.drawTitleBackground(b);
             this.drawTitleText(b);
             this.drawMouse(b);
         }
 
+        /// <summary>
+        /// Draws the background for the title screen.
+        /// </summary>
+        /// <param name="b"></param>
         public void drawTitleBackground(SpriteBatch b)
         {
             b.Draw(this.background.texture,new Vector2(this.xPositionOnScreen,this.yPositionOnScreen),SeasideScramble.self.camera.getXNARect() ,Color.White);
             //this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, Color.Black);
         }
 
+        /// <summary>
+        /// Draws the text for the title screen.
+        /// </summary>
+        /// <param name="b"></param>
         public void drawTitleText(SpriteBatch b)
         {
             Vector2 offset=StardewValley.Game1.dialogueFont.MeasureString(this.menuText.displayText);

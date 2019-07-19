@@ -16,5 +16,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             Right
         }
 
+        public enum PlayerID
+        {
+            One,
+            Two,
+            Three,
+            Four
+        }
+
     }
 }

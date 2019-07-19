@@ -512,5 +512,11 @@ namespace StardustCore.UIUtilities
         {
             return new Vector2(this.xPositionOnScreen + relx, this.yPositionOnScreen + rely);
         }
+
+        public virtual void exitMenu(bool playSound=true)
+        {
+            //Do extra stuff here.
+            this.exitThisMenu(playSound);
+        }
     }
 }
