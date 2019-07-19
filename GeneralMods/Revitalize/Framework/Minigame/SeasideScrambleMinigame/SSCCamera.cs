@@ -12,6 +12,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public xTile.Dimensions.Rectangle viewport;
 
+        public Vector2 Position
+        {
+            get
+            {
+                return new Vector2(this.viewport.X, this.viewport.Y);
+            }
+        }
+
         public SSCCamera()
         {
             this.viewport = new xTile.Dimensions.Rectangle(StardewValley.Game1.viewport);

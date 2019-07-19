@@ -23,7 +23,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         SeasideScrambleMap currentMap;
         public Dictionary<string, SeasideScrambleMap> SeasideScrambleMaps;
 
-        public int currentNumberOfPlayers = 0;
+        public int currentNumberOfPlayers
+        {
+            get
+            {
+                return this.players.Count;
+            }
+        }
         public const int maxPlayers = 4;
         public Dictionary<SSCEnums.PlayerID, SSCPlayer> players;
 
@@ -194,6 +200,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             foreach(SSCPlayer player in this.players.Values)
             {
                 player.receiveKeyPress(k);
+            }
+
+            if (this.menuManager.isMenuUp)
+            {
+                this.menuManager.activeMenu.receiveKeyPress(k);
             }
 
         }
