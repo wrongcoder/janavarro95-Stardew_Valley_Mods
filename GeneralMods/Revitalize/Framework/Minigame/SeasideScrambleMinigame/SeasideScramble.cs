@@ -13,6 +13,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
     /// <summary>
     /// TODO: Finish character select screen. Ensure that camera snapping doesn't happen until game starts.
+    ///     -Make boxes per character
+    ///     -Make prompt to click for p1, press a for p2,3,4
+    ///     -Make Sound effects happen
+    ///     -make prompt for color selection
+    ///         -a,d for keyboard
+    ///         -dpad for p2-4
     /// Also add interface for game entity for camera to consistently have a focus target.
     /// </summary>
     public class SeasideScramble : StardewValley.Minigames.IMinigame
