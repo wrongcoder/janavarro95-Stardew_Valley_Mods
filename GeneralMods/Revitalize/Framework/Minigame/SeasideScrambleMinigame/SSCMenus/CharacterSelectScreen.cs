@@ -101,46 +101,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             this.animatedSprites.Add("P4Color", new StardustCore.Animations.AnimatedSprite("P4Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Four].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
 
 
-            this.animatedSprites.Add("P1Mouse", new StardustCore.Animations.AnimatedSprite("P1Mouse", new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Cursors"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>()
-            {
-                {"Default",new List<Animation>()
-                {
-                    new Animation(0,0,16,16)
-
-                } }
-
-            }, "Default"), Color.White));
-            this.animatedSprites["P1Mouse"].position = new Vector2(Game1.getMouseX(), Game1.getMouseY());
-
-
-            this.animatedSprites.Add("P2Mouse", new StardustCore.Animations.AnimatedSprite("P2Mouse", this.playerDisplayLocations[SSCEnums.PlayerID.Two], new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Cursors"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>()
-            {
-                {"Default",new List<Animation>()
-                {
-                    new Animation(0,0,16,16)
-
-                } }
-
-            }, "Default"), Color.White));
-            this.animatedSprites.Add("P3Mouse", new StardustCore.Animations.AnimatedSprite("P3Mouse", this.playerDisplayLocations[SSCEnums.PlayerID.Three], new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Cursors"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>()
-            {
-                {"Default",new List<Animation>()
-                {
-                    new Animation(0,0,16,16)
-
-                } }
-
-            }, "Default"), Color.White));
-            this.animatedSprites.Add("P4Mouse", new StardustCore.Animations.AnimatedSprite("P4Mouse", this.playerDisplayLocations[SSCEnums.PlayerID.Four], new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Cursors"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>()
-            {
-                {"Default",new List<Animation>()
-                {
-                    new Animation(0,0,16,16)
-
-                } }
-
-            }, "Default"), Color.White));
-
             this.buttons = new Dictionary<string, Button>();
             this.buttons.Add("P1PrevButton", new Button("P1PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X - 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Rectangle(0, 0, 32, 32), 2f));
             this.buttons.Add("P1NextButton", new Button("P1NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X + 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
@@ -161,16 +121,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         {
 
 
-        }
-
-        /// <summary>
-        /// Gets the delta change in mouse movement.
-        /// </summary>
-        /// <returns></returns>
-        private Vector2 getMouseDelta()
-        {
-            Vector2 ret= -1*(this.oldMousePos - new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y));
-            return ret;
         }
 
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
@@ -199,30 +149,65 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
             if (p1.IsButtonDown(Buttons.A))
             {
-                this.initializeCharacter(SSCEnums.PlayerID.One);
+                if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One) == null)
+                {
+                    this.initializeCharacter(SSCEnums.PlayerID.One);
+                }
+                else
+                {
+                    this.receiveGamepadLeftClick(SSCEnums.PlayerID.One, SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One).mouseCursor.position);
+                }
             }
             if (p2.IsButtonDown(Buttons.A))
             {
-                this.initializeCharacter(SSCEnums.PlayerID.Two);
+                if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two) == null)
+                {
+                    this.initializeCharacter(SSCEnums.PlayerID.Two);
+                    SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two).mouseCursor.position = this.playerDisplayLocations[SSCEnums.PlayerID.Two];
+                }
+                else
+                {
+                    this.receiveGamepadLeftClick(SSCEnums.PlayerID.Two, SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two).mouseCursor.position);
+                }
             }
             if (p3.IsButtonDown(Buttons.A))
             {
-                this.initializeCharacter(SSCEnums.PlayerID.Three);
+                if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three) == null)
+                {
+                    this.initializeCharacter(SSCEnums.PlayerID.Three);
+                    SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three).mouseCursor.position = this.playerDisplayLocations[SSCEnums.PlayerID.Three];
+                }
+                else
+                {
+                    this.receiveGamepadLeftClick(SSCEnums.PlayerID.Three, SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three).mouseCursor.position);
+                }
             }
             if (p4.IsButtonDown(Buttons.A))
             {
-                this.initializeCharacter(SSCEnums.PlayerID.Four);
+                if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four) == null)
+                {
+                    this.initializeCharacter(SSCEnums.PlayerID.Four);
+                    SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four).mouseCursor.position = this.playerDisplayLocations[SSCEnums.PlayerID.Four];
+                }
+                else
+                {
+                    this.receiveGamepadLeftClick(SSCEnums.PlayerID.Four, SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four).mouseCursor.position);
+                }
             }
+            if (p1.IsButtonDown(Buttons.Start))
+            {
+                if (SeasideScramble.self.currentNumberOfPlayers > 0)
+                {
+                    this.setUpForGameplay();
+                    SeasideScramble.self.menuManager.closeAllMenus();
+                }
+            }
+
             //P1 is handled automatically since SDV maps keyboard to controller.
             this.checkForControllerColorSwap(p2, SSCEnums.PlayerID.Two);
             this.checkForControllerColorSwap(p3, SSCEnums.PlayerID.Three);
             this.checkForControllerColorSwap(p4, SSCEnums.PlayerID.Four);
 
-            this.updateControllerMouseMovement(time, SSCEnums.PlayerID.One, p1);
-            this.animatedSprites["P1Mouse"].position += this.getMouseDelta(); //Get the delta change in mouse.
-            this.updateControllerMouseMovement(time, SSCEnums.PlayerID.Two, p2);
-            this.updateControllerMouseMovement(time, SSCEnums.PlayerID.Three, p3);
-            this.updateControllerMouseMovement(time, SSCEnums.PlayerID.Four, p4);
 
             this.inputDelays[SSCEnums.PlayerID.One]--;
             this.inputDelays[SSCEnums.PlayerID.Two]--;
@@ -237,70 +222,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
             SeasideScramble.self.camera.snapToPosition(new Vector2(0, 0));
 
-
-            
-            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One) != null)
-            {
-                this.animatedSprites["P1Mouse"].color = SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One).playerColor;
-            }
-            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two) != null)
-            {
-                this.animatedSprites["P2Mouse"].color = SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two).playerColor;
-            }
-            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three) != null)
-            {
-                this.animatedSprites["P3Mouse"].color = SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three).playerColor;
-            }
-            if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four) != null)
-            {
-                this.animatedSprites["P4Mouse"].color = SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four).playerColor;
-            }
             this.oldMousePos = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
-        }
-
-        private void updateControllerMouseMovement(GameTime time, SSCEnums.PlayerID player,GamePadState state)
-        {
-            if(player== SSCEnums.PlayerID.One)
-            {
-                this.animatedSprites["P1Mouse"].position += new Vector2(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y*-1)* controllerMouseSensitivity;
-                if (SeasideScramble.self.camera.positionInsideViewport(this.animatedSprites["P1Mouse"].position) == false)
-                {
-                    if (SeasideScramble.self.camera.positionInsideViewport(Game1.getMousePosition()) == true)
-                    {
-                        this.animatedSprites["P1Mouse"].position = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
-                    }
-                    else
-                    {
-                        this.animatedSprites["P2Mouse"].position = this.playerDisplayLocations[player];
-                    }
-                }
-            }
-            if (player == SSCEnums.PlayerID.Two)
-            {
-                this.animatedSprites["P2Mouse"].position += new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y * -1)* controllerMouseSensitivity;
-                if (SeasideScramble.self.camera.positionInsideViewport(this.animatedSprites["P2Mouse"].position) == false)
-                {
-                    this.animatedSprites["P2Mouse"].position = this.playerDisplayLocations[player];
-                }
-            }
-            if (player == SSCEnums.PlayerID.Three)
-            {
-                this.animatedSprites["P3Mouse"].position += new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y * -1) * controllerMouseSensitivity;
-                if (SeasideScramble.self.camera.positionInsideViewport(this.animatedSprites["P3Mouse"].position) == false)
-                {
-                    this.animatedSprites["P3Mouse"].position = this.playerDisplayLocations[player];
-                }
-            }
-            if (player == SSCEnums.PlayerID.Four)
-            {
-                this.animatedSprites["P4Mouse"].position += new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y * -1) * controllerMouseSensitivity;
-                if (SeasideScramble.self.camera.positionInsideViewport(this.animatedSprites["P4Mouse"].position) == false)
-                {
-                    this.animatedSprites["P4Mouse"].position = this.playerDisplayLocations[player];
-                }
-            }
-
-            
         }
 
         /// <summary>
@@ -448,7 +370,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         {
             if (SeasideScramble.self.getGamepadState(PlayerIndex.One).IsButtonDown(Buttons.A))
             {
-                ModCore.log("Button a pressed. Intercepting left click.");
+                //ModCore.log("Button a pressed. Intercepting left click.");
                 return;
             }
             ModCore.log("Left clicked for Character selects screen!");
@@ -510,6 +432,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                     this.iteratePlayerColorIndex(player, -1);
                 }
             }
+        }
+
+        public void receiveGamepadLeftClick(SSCEnums.PlayerID player, Vector2 position, bool playSound = true)
+        {
+            this.receiveGamepadLeftClick(player, (int)position.X, (int)position.Y, playSound);
         }
 
         public override void receiveKeyPress(Keys key)
@@ -632,19 +559,19 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One) != null)
             {
-                this.drawPlayerMouse(b, SSCEnums.PlayerID.One);
+                SeasideScramble.self.getPlayer( SSCEnums.PlayerID.One).drawMouse(b);
             }
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two) != null)
             {
-                this.drawPlayerMouse(b, SSCEnums.PlayerID.Two);
+                SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two).drawMouse(b);
             }
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three) != null)
             {
-                this.drawPlayerMouse(b, SSCEnums.PlayerID.Three);
+                SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three).drawMouse(b);
             }
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four) != null)
             {
-                this.drawPlayerMouse(b, SSCEnums.PlayerID.Four);
+                SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four).drawMouse(b);
             }
         }
 
@@ -655,33 +582,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         public override void exitMenu(bool playSound = true)
         {
             base.exitMenu(playSound);
-        }
-
-        public void drawPlayerMouse(SpriteBatch b, SSCEnums.PlayerID player)
-        {
-            /*
-            if (Game1.options.hardwareCursor)
-                return;
-            b.Draw(Game1.mouseCursors, new Vector2((float)Game1.getMouseX(), (float)Game1.getMouseY()), new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, !Game1.options.snappyMenus || !Game1.options.gamepadControls ? 0 : 44, 16, 16)), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, (float)(4.0 + (double)Game1.dialogueButtonScale / 150.0), SpriteEffects.None, 1f);
-            */
-            if(player== SSCEnums.PlayerID.One)
-            {
-                this.animatedSprites["P1Mouse"].draw(b,4f,0f);
-            }
-            if (player == SSCEnums.PlayerID.Two)
-            {
-                this.animatedSprites["P2Mouse"].draw(b, 4f, 0f);
-            }
-            if (player == SSCEnums.PlayerID.Three)
-            {
-                this.animatedSprites["P3Mouse"].draw(b, 4f, 0f);
-            }
-            if (player == SSCEnums.PlayerID.Four)
-            {
-                this.animatedSprites["P4Mouse"].draw(b, 4f, 0f);
-            }
-
-
         }
 
     }

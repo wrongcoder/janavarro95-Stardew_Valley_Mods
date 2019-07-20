@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
+using StardewValley;
 using StardustCore.UIUtilities;
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
@@ -48,6 +49,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public SSCMenus.SSCMenuManager menuManager;
 
+        public Vector2 oldMousePosition;
+
         public SeasideScramble()
         {
             self = this;
@@ -69,7 +72,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.menuManager = new SSCMenus.SSCMenuManager();
 
             this.menuManager.addNewMenu(new SSCMenus.TitleScreen(this.camera.viewport));
-
+            this.oldMousePosition = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
         }
 
         public SSCPlayer getPlayer(SSCEnums.PlayerID id)
@@ -146,6 +149,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             foreach(SSCPlayer p in this.players.Values) {
                 p.draw(b);
+                if(p.playerID== SSCEnums.PlayerID.One)
+                {
+                    p.drawMouse(b);
+                }
             }
 
             /*
@@ -255,6 +262,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 this.menuManager.activeMenu.receiveLeftClick(x, y, playSound);
             }
+            foreach(SSCPlayer player in this.players.Values)
+            {
+                player.receiveLeftClick(x, y);
+            }
             //throw new NotImplementedException();
         }
 
@@ -332,6 +343,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 {
                     this.menuManager.closeActiveMenu();
                 }
+                foreach (SSCPlayer player in this.players.Values)
+                {
+                    player.update(time);
+                }
             }
             else
             {
@@ -341,9 +356,19 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     player.update(time);
                 }
             }
-
+            this.oldMousePosition = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
             return false;
             //throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Returns the delta for mouse movement.
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 getMouseDelta()
+        {
+            Vector2 ret = -1 * (this.oldMousePosition - new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y));
+            return ret;
         }
 
         /// <summary>

@@ -7,6 +7,9 @@ using StardustCore.Animations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewValley;
+using Revitalize.Framework.Utilities;
+
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
     public class SSCPlayer
@@ -15,6 +18,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         //TODO: Add movement speed variable
         //TODO: Add in health
         //TODO: Add in player HUD
+        //TODO: Add in player cursor
         public AnimationManager characterSpriteController;
         public bool flipSprite;
         public SSCEnums.FacingDirection facingDirection;
@@ -25,6 +29,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public SSCEnums.PlayerID playerID;
 
         public const int junimoWalkingAnimationSpeed = 10;
+
+        public StardustCore.Animations.AnimatedSprite mouseCursor;
+        public Vector2 mouseSensitivity;
+
+        public bool showMouseCursor;
+        public int maxMouseSleepTime = 300;
+        
 
         public SSCPlayer(SSCEnums.PlayerID PlayerID)
         {
@@ -92,7 +103,29 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     new Animation(16*7,16*4,16,16,junimoWalkingAnimationSpeed),
                 } },
 
-            },"Idle_F",0,true);
+            }, "Idle_F", 0, true);
+
+
+            this.mouseCursor = new StardustCore.Animations.AnimatedSprite("P1Mouse", new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Cursors"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>()
+                {
+                    new Animation(0,0,16,16)
+
+                } }
+
+            }, "Default"), Color.White);
+            if (this.playerID == SSCEnums.PlayerID.One)
+            {
+                this.mouseCursor.position = new Vector2(Game1.getMouseX(), Game1.getMouseY());
+            }
+            else
+            {
+                this.mouseCursor.position = this.position;
+            }
+            this.mouseSensitivity = new Vector2(3f, 3f);
+
+            
         }
 
         /// <summary>
@@ -102,6 +135,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void setColor(Color color)
         {
             this.playerColor = color;
+            this.mouseCursor.color = color;
         }
 
         /// <summary>
@@ -119,7 +153,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <param name="b"></param>
         public void draw(Microsoft.Xna.Framework.Graphics.SpriteBatch b)
         {
-            this.draw(b,this.position);
+            this.draw(b, this.position);
         }
 
         /// <summary>
@@ -131,7 +165,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
             this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
         }
+        public void drawMouse(SpriteBatch b)
+        {
+            this.mouseCursor.draw(b, 4f, 0f);
+        }
 
+        #region
         /// <summary>
         /// Called every frame to do update logic.
         /// </summary>
@@ -141,7 +180,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.movedThisFrame = false;
             if (this.isMoving == false)
             {
-                if(this.facingDirection== SSCEnums.FacingDirection.Down)
+                if (this.facingDirection == SSCEnums.FacingDirection.Down)
                 {
                     this.characterSpriteController.playAnimation("Idle_F");
                 }
@@ -183,55 +222,29 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 }
                 this.flipSprite = false;
             }
-        }
 
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-        //           Movement logic         //
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-        #region
-
-        /// <summary>
-        /// Checks for moving the player.
-        /// </summary>
-        /// <param name="direction"></param>
-        public void movePlayer(SSCEnums.FacingDirection direction)
-        {
-            this.isMoving = true;
-            this.movedThisFrame = true;
-            if(direction== SSCEnums.FacingDirection.Up)
-            {
-                this.facingDirection = direction;
-                this.position += new Vector2(0, -1);
-            }
-            if (direction == SSCEnums.FacingDirection.Down)
-            {
-                this.facingDirection = direction;
-                this.position += new Vector2(0, 1);
-            }
-            if (direction == SSCEnums.FacingDirection.Left)
-            {
-                this.facingDirection = direction;
-                this.position += new Vector2(-1, 0);
-            }
-            if (direction == SSCEnums.FacingDirection.Right)
-            {
-                this.facingDirection = direction;
-                this.position += new Vector2(1, 0);
-            }
-            //ModCore.log(this.position);
-        }
-
-        /// <summary>
-        /// Checks when the player presses a key on the keyboard.
-        /// </summary>
-        /// <param name="k"></param>
-        public void receiveKeyPress(Microsoft.Xna.Framework.Input.Keys k)
-        {
             if (this.playerID == SSCEnums.PlayerID.One)
             {
-                this.checkForMovementInput(k);
+                if (SeasideScramble.self.getMouseDelta().X != 0 || SeasideScramble.self.getMouseDelta().Y != 0)
+                {
+                    this.mouseCursor.position = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
+                    this.showMouseCursor = true;
+                }
             }
+            ModCore.log("Mouse dir:"+this.getMouseDirection());
         }
+
+
+        public void setMousePosition(Vector2 position)
+        {
+            this.mouseCursor.position = position;
+        }
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //           Input logic            //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+
         /// <summary>
         /// Checks when the gamepad receives input.
         /// </summary>
@@ -257,10 +270,74 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 {
                     this.movePlayer(SSCEnums.FacingDirection.Up);
                 }
-                if (state.ThumbSticks.Left.X == 0 && state.ThumbSticks.Left.Y == 0 && this.movedThisFrame==false)
+                if (state.ThumbSticks.Left.X == 0 && state.ThumbSticks.Left.Y == 0 && this.movedThisFrame == false)
                 {
                     this.isMoving = false;
                 }
+
+                if (state.ThumbSticks.Right.X != 0 || state.ThumbSticks.Right.Y != 0)
+                {
+                    this.shoot(state.ThumbSticks.Right);
+                    //this.moveMouseCursor(state.ThumbSticks.Right);
+                }
+            }
+            else
+            {
+                if (state.ThumbSticks.Right.X != 0 || state.ThumbSticks.Right.Y != 0)
+                {
+                    this.moveMouseCursor(new Vector2(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y*-1));
+                    this.showMouseCursor = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Move the mouse cursor.
+        /// </summary>
+        /// <param name="direction"></param>
+        private void moveMouseCursor(Vector2 direction)
+        {
+            if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(direction.X * this.mouseSensitivity.X, direction.Y * this.mouseSensitivity.Y)))
+            {
+                this.mouseCursor.position += new Vector2(direction.X*this.mouseSensitivity.X,direction.Y*this.mouseSensitivity.Y);
+            }
+            else if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(direction.X*this.mouseSensitivity.X, 0)))
+            {
+                this.mouseCursor.position += new Vector2(direction.X * this.mouseSensitivity.X, 0);
+            }
+            else if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(0, direction.Y*this.mouseSensitivity.Y)))
+            {
+                this.mouseCursor.position += new Vector2(0, direction.Y*this.mouseSensitivity.Y);
+            }
+        }
+
+        /// <summary>
+        /// Gets a normalized direction vector for the player.
+        /// </summary>
+        /// <returns></returns>
+        private Vector2 getMouseDirection()
+        {
+            Vector2 dir = this.getRelativeMouseFromPlayer();
+            dir = dir.UnitVector();
+            return dir;
+        }
+
+        private Vector2 getRelativeMouseFromPlayer()
+        {
+            Vector2 pos = this.mouseCursor.position - SeasideScramble.GlobalToLocal(this.position);
+            return pos;
+        }
+        
+
+        /// <summary>
+        /// Checks when the player presses a key on the keyboard.
+        /// </summary>
+        /// <param name="k"></param>
+        public void receiveKeyPress(Microsoft.Xna.Framework.Input.Keys k)
+        {
+            if (this.playerID == SSCEnums.PlayerID.One)
+            {
+                this.checkForMovementInput(k);
             }
         }
 
@@ -274,24 +351,73 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             //throw new NotImplementedException();
             if (K == Keys.A)
             {
-                ModCore.log("A released for Seaside Scramble!");
                 this.isMoving = false;
             }
             if (K == Keys.W)
             {
-                ModCore.log("W pressed for Seaside Scramble!");
                 this.isMoving = false;
             }
             if (K == Keys.S)
             {
-                ModCore.log("S pressed for Seaside Scramble!");
                 this.isMoving = false;
             }
             if (K == Keys.D)
             {
-                ModCore.log("D pressed for Seaside Scramble!");
                 this.isMoving = false;
             }
+        }
+
+        public void receiveLeftClick(int x, int y)
+        {
+            if (SeasideScramble.self.getGamepadState(PlayerIndex.One).IsButtonDown(Buttons.A))
+            {
+                //Do stuf besides shooting.
+                return;
+            }
+            Vector2 clickPos = new Vector2(x, y);
+
+            Vector2 direction = this.getMouseDirection();
+
+            ModCore.log("Player click: " + direction);
+            this.shoot(direction);
+        }
+
+        #endregion
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //           Movement logic         //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        #region
+
+        /// <summary>
+        /// Checks for moving the player.
+        /// </summary>
+        /// <param name="direction"></param>
+        public void movePlayer(SSCEnums.FacingDirection direction)
+        {
+            this.isMoving = true;
+            this.movedThisFrame = true;
+            if (direction == SSCEnums.FacingDirection.Up)
+            {
+                this.facingDirection = direction;
+                this.position += new Vector2(0, -1);
+            }
+            if (direction == SSCEnums.FacingDirection.Down)
+            {
+                this.facingDirection = direction;
+                this.position += new Vector2(0, 1);
+            }
+            if (direction == SSCEnums.FacingDirection.Left)
+            {
+                this.facingDirection = direction;
+                this.position += new Vector2(-1, 0);
+            }
+            if (direction == SSCEnums.FacingDirection.Right)
+            {
+                this.facingDirection = direction;
+                this.position += new Vector2(1, 0);
+            }
+            //ModCore.log(this.position);
         }
 
         /// <summary>
@@ -305,28 +431,28 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             //Microsoft.Xna.Framework.Input.GamePadState state = this.getGamepadState(PlayerIndex.One);
             if (K == Keys.A)
             {
-                ModCore.log("A pressed for player");
                 this.movePlayer(SSCEnums.FacingDirection.Left);
             }
             if (K == Keys.W)
             {
-                ModCore.log("W pressed for player!");
                 this.movePlayer(SSCEnums.FacingDirection.Up);
             }
             if (K == Keys.S)
             {
-                ModCore.log("S pressed for player!");
                 this.movePlayer(SSCEnums.FacingDirection.Down);
             }
             if (K == Keys.D)
             {
-                ModCore.log("D pressed for player!");
                 this.movePlayer(SSCEnums.FacingDirection.Right);
             }
         }
 
         #endregion
 
+        private void shoot(Vector2 direction)
+        {
+            ModCore.log("Shoot: " + direction);
+        }
 
     }
 }
