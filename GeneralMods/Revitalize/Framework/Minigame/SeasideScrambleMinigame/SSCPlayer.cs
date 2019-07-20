@@ -231,10 +231,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     this.showMouseCursor = true;
                 }
             }
-            ModCore.log("Mouse dir:"+this.getMouseDirection());
         }
 
-
+        /// <summary>
+        /// Sets the mouse's position.
+        /// </summary>
+        /// <param name="position"></param>
         public void setMousePosition(Vector2 position)
         {
             this.mouseCursor.position = position;
@@ -322,6 +324,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             return dir;
         }
 
+        /// <summary>
+        /// Gets the mouse's relative position away from the player.
+        /// </summary>
+        /// <returns></returns>
         private Vector2 getRelativeMouseFromPlayer()
         {
             Vector2 pos = this.mouseCursor.position - SeasideScramble.GlobalToLocal(this.position);
@@ -367,18 +373,19 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
         }
 
+        /// <summary>
+        /// What happens when the player left clicks.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void receiveLeftClick(int x, int y)
         {
             if (SeasideScramble.self.getGamepadState(PlayerIndex.One).IsButtonDown(Buttons.A))
             {
-                //Do stuf besides shooting.
+                //Do stuff besides shooting.
                 return;
             }
-            Vector2 clickPos = new Vector2(x, y);
-
             Vector2 direction = this.getMouseDirection();
-
-            ModCore.log("Player click: " + direction);
             this.shoot(direction);
         }
 
