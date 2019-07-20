@@ -54,5 +54,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
             return this.getXNARect().Contains((int)position.X, (int)position.Y);
         }
+
+        public bool positionInsideViewport(Point position)
+        {
+            return this.getXNARect().Contains((int)position.X, (int)position.Y);
+        }
     }
 }

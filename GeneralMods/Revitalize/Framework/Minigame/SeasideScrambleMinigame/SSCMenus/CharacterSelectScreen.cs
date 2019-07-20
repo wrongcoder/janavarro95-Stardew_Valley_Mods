@@ -265,7 +265,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                 this.animatedSprites["P1Mouse"].position += new Vector2(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y*-1)* controllerMouseSensitivity;
                 if (SeasideScramble.self.camera.positionInsideViewport(this.animatedSprites["P1Mouse"].position) == false)
                 {
-                    this.animatedSprites["P1Mouse"].position = this.playerDisplayLocations[player];
+                    if (SeasideScramble.self.camera.positionInsideViewport(Game1.getMousePosition()) == true)
+                    {
+                        this.animatedSprites["P1Mouse"].position = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
+                    }
+                    else
+                    {
+                        this.animatedSprites["P2Mouse"].position = this.playerDisplayLocations[player];
+                    }
                 }
             }
             if (player == SSCEnums.PlayerID.Two)
@@ -617,6 +624,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             Vector2 p4Loc = Game1.dialogueFont.MeasureString("Player 4");
             b.DrawString(Game1.dialogueFont, "Player 4", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Four].X - (p4Loc.X / 4), this.playerDisplayLocations[SSCEnums.PlayerID.Four].Y - 64), Color.White);
 
+            if (SeasideScramble.self.currentNumberOfPlayers >= 1)
+            {
+                Vector2 finish = Game1.dialogueFont.MeasureString("Press start or enter to start the game.");
+                b.DrawString(Game1.dialogueFont, "Press start or enter to start the game.", new Vector2((this.width / 2) - (menuTitlePos.X / 2), this.height *.25f), Color.White);
+            }
 
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One) != null)
             {
