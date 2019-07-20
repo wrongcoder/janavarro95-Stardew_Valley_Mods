@@ -228,7 +228,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <returns></returns>
         public GamePadState getGamepadState(PlayerIndex index)
         {
-            return Microsoft.Xna.Framework.Input.GamePad.GetState(PlayerIndex.One);
+            return Microsoft.Xna.Framework.Input.GamePad.GetState(index);
         }
 
         /// <summary>

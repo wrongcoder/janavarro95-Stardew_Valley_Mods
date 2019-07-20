@@ -16,7 +16,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
     /// <summary>
     /// TODO: Finish adding in a button prompts and click prompt and draw them to the screen.
     /// </summary>
-    public class CharacterSelectScreen: IClickableMenuExtended
+    public class CharacterSelectScreen : IClickableMenuExtended
     {
         StardustCore.UIUtilities.Texture2DExtended background;
         string menuTitle;
@@ -77,28 +77,28 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
             this.animatedSprites = new Dictionary<string, StardustCore.Animations.AnimatedSprite>();
 
-            this.animatedSprites.Add("P1AButton" ,new StardustCore.Animations.AnimatedSprite("P1AButton", this.playerDisplayLocations[SSCEnums.PlayerID.One]+new Vector2(0,100),new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)),Color.White));
+            this.animatedSprites.Add("P1AButton", new StardustCore.Animations.AnimatedSprite("P1AButton", this.playerDisplayLocations[SSCEnums.PlayerID.One] + new Vector2(0, 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)), Color.White));
             this.animatedSprites.Add("P2AButton", new StardustCore.Animations.AnimatedSprite("P2AButton", this.playerDisplayLocations[SSCEnums.PlayerID.Two] + new Vector2(0, 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)), Color.White));
             this.animatedSprites.Add("P3AButton", new StardustCore.Animations.AnimatedSprite("P3AButton", this.playerDisplayLocations[SSCEnums.PlayerID.Three] + new Vector2(0, 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)), Color.White));
             this.animatedSprites.Add("P4AButton", new StardustCore.Animations.AnimatedSprite("P4AButton", this.playerDisplayLocations[SSCEnums.PlayerID.Four] + new Vector2(0, 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "AButton"), new Animation(0, 0, 28, 27)), Color.White));
 
-            this.animatedSprites.Add("P1Click",new StardustCore.Animations.AnimatedSprite("P1Click", this.playerDisplayLocations[SSCEnums.PlayerID.One] + new Vector2(0, 150), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "MouseClick"), new Animation(0, 0, 31, 32), new Dictionary<string, List<Animation>>()
+            this.animatedSprites.Add("P1Click", new StardustCore.Animations.AnimatedSprite("P1Click", this.playerDisplayLocations[SSCEnums.PlayerID.One] + new Vector2(0, 150), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "MouseClick"), new Animation(0, 0, 31, 32), new Dictionary<string, List<Animation>>()
             {
                 {"Click1",new List<Animation>(){
                     new Animation(0,0,31,32,60),
                     new Animation(31,0,31,32,60)
 
                 } }
-            }, "Click1"),Color.White));
+            }, "Click1"), Color.White));
 
-            this.animatedSprites.Add("P1Color", new StardustCore.Animations.AnimatedSprite("P1Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.One].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y+250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
+            this.animatedSprites.Add("P1Color", new StardustCore.Animations.AnimatedSprite("P1Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.One].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
             this.animatedSprites.Add("P2Color", new StardustCore.Animations.AnimatedSprite("P2Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Two].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
             this.animatedSprites.Add("P3Color", new StardustCore.Animations.AnimatedSprite("P3Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Three].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
             this.animatedSprites.Add("P4Color", new StardustCore.Animations.AnimatedSprite("P4Color", new Vector2(this.playerDisplayLocations[SSCEnums.PlayerID.Four].X, this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "BlankTexture"), new Animation(0, 0, 32, 32)), Color.White));
 
             this.buttons = new Dictionary<string, Button>();
-            this.buttons.Add("P1PrevButton", new Button("P1PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X-64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"),new Rectangle(0,0,32,32),2f));
-            this.buttons.Add("P1NextButton", new Button("P1NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X+64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P1PrevButton", new Button("P1PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X - 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Rectangle(0, 0, 32, 32), 2f));
+            this.buttons.Add("P1NextButton", new Button("P1NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.One].X + 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.One].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
             this.buttons.Add("P2PrevButton", new Button("P2PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].X - 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Rectangle(0, 0, 32, 32), 2f));
             this.buttons.Add("P2NextButton", new Button("P2NextButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].X + 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Two].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Rectangle(0, 0, 32, 32), 2f));
             this.buttons.Add("P3PrevButton", new Button("P3PrevButton", new Rectangle((int)this.playerDisplayLocations[SSCEnums.PlayerID.Three].X - 64, (int)this.playerDisplayLocations[SSCEnums.PlayerID.Three].Y + 250, 64, 64), SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "lastPageButton"), new Rectangle(0, 0, 32, 32), 2f));
@@ -111,8 +111,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
         public CharacterSelectScreen(xTile.Dimensions.Rectangle viewport) : this(0, 0, viewport.Width, viewport.Height)
         {
-            
-            
+
+
         }
 
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
@@ -158,6 +158,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             {
                 this.initializeCharacter(SSCEnums.PlayerID.Four);
             }
+            //P1 is handled automatically since SDV maps keyboard to controller.
+            this.checkForControllerColorSwap(p2, SSCEnums.PlayerID.Two);
+            this.checkForControllerColorSwap(p3, SSCEnums.PlayerID.Three);
+            this.checkForControllerColorSwap(p4, SSCEnums.PlayerID.Four);
 
             this.inputDelays[SSCEnums.PlayerID.One]--;
             this.inputDelays[SSCEnums.PlayerID.Two]--;
@@ -175,6 +179,31 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         }
 
         /// <summary>
+        /// Looks for controller input for swaping character colors.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="player"></param>
+        private void checkForControllerColorSwap(GamePadState state, SSCEnums.PlayerID player)
+        {
+            if (state.IsButtonDown(Buttons.DPadRight))
+            {
+                this.iteratePlayerColorIndex(player, 1);
+            }
+            else if (state.IsButtonDown(Buttons.DPadLeft))
+            {
+                this.iteratePlayerColorIndex(player, -1);
+            }
+            if (state.ThumbSticks.Left.X < 0)
+            {
+                this.iteratePlayerColorIndex(player, -1);
+            }
+            else if (state.ThumbSticks.Left.X > 0)
+            {
+                this.iteratePlayerColorIndex(player, 1);
+            }
+        }
+
+        /// <summary>
         /// Initializes a given character.
         /// </summary>
         /// <param name="player"></param>
@@ -188,7 +217,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             {
                 SeasideScramble.self.players.Add(player, new SSCPlayer(player));
                 this.iteratePlayerColorIndex(player, 1);
-            }            
+            }
             this.setPlayerColor(player);
         }
 
@@ -199,8 +228,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         private void setPlayerColor(SSCEnums.PlayerID player)
         {
             if (SeasideScramble.self.getPlayer(player) == null) return;
+
+            ModCore.log("Player: " + player);
+            ModCore.log("Index: " + this.playerColorIndex[player]);
+
             SeasideScramble.self.getPlayer(player).setColor(this.possibleColors[this.playerColorIndex[player]]);
-            if(player== SSCEnums.PlayerID.One)
+            if (player == SSCEnums.PlayerID.One)
             {
                 this.animatedSprites["P1Color"].color = this.possibleColors[this.playerColorIndex[player]];
             }
@@ -223,28 +256,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         /// </summary>
         /// <param name="player"></param>
         /// <param name="amount"></param>
-        private void iteratePlayerColorIndex(SSCEnums.PlayerID player,int amount)
+        private void iteratePlayerColorIndex(SSCEnums.PlayerID player, int amount)
         {
-            if(player== SSCEnums.PlayerID.One)
+
+            if (this.inputDelays[player] != 0) return;
+            this.inputDelays[player] = this.maxInputDelay;
+            while (this.doesAnyOtherPlayerHaveThisColor(player) == true)
             {
-                if (this.inputDelays[player] != 0) return;
-                this.inputDelays[player] = this.maxInputDelay;
-                while (this.doesAnyOtherPlayerHaveThisColor(player) == true)
-                {
-                    if (this.playerColorIndex[player] >= this.possibleColors.Count)
-                    {
-                        this.playerColorIndex[player] = 0;
-                    }
-                    else if (this.playerColorIndex[player] < 0)
-                    {
-                        this.playerColorIndex[player] = this.possibleColors.Count-1;
-                    }
-                    else
-                    {
-                        this.playerColorIndex[player]+=amount;
-                    }
-                }
-                this.playerColorIndex[player] += amount;
                 if (this.playerColorIndex[player] >= this.possibleColors.Count)
                 {
                     this.playerColorIndex[player] = 0;
@@ -253,8 +271,22 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                 {
                     this.playerColorIndex[player] = this.possibleColors.Count - 1;
                 }
-
+                else
+                {
+                    this.playerColorIndex[player] += amount;
+                }
             }
+            this.playerColorIndex[player] += amount;
+            if (this.playerColorIndex[player] >= this.possibleColors.Count)
+            {
+                this.playerColorIndex[player] = 0;
+            }
+            else if (this.playerColorIndex[player] < 0)
+            {
+                this.playerColorIndex[player] = this.possibleColors.Count - 1;
+            }
+
+
             this.setPlayerColor(player);
         }
 
@@ -277,7 +309,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         /// <returns></returns>
         private bool doesAnyOtherPlayerHaveThisColor(SSCEnums.PlayerID self)
         {
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 SSCEnums.PlayerID other = (SSCEnums.PlayerID)i;
                 if (other == self) continue;
@@ -289,6 +321,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
+            if (SeasideScramble.self.getGamepadState(PlayerIndex.One).IsButtonDown(Buttons.A))
+            {
+                ModCore.log("Button a pressed. Intercepting left click.");
+                return;
+            }
+            ModCore.log("Left clicked for Character selects screen!");
             this.initializeCharacter(SSCEnums.PlayerID.One);
 
             if (this.buttons["P1NextButton"].containsPoint(x, y))
@@ -301,31 +339,39 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             }
         }
 
+
         public override void receiveKeyPress(Keys key)
         {
-            if(key== Keys.Enter || key== Keys.Space)
-            {    
+            if (key == Keys.Enter || key == Keys.Space)
+            {
                 if (SeasideScramble.self.currentNumberOfPlayers > 0)
                 {
                     this.setUpForGameplay();
                     SeasideScramble.self.menuManager.closeAllMenus();
                 }
             }
-            if(key== Keys.A)
+            if (key == Keys.A)
             {
                 this.iteratePlayerColorIndex(SSCEnums.PlayerID.One, -1);
             }
-            if(key== Keys.D)
+            if (key == Keys.D)
             {
                 this.iteratePlayerColorIndex(SSCEnums.PlayerID.One, 1);
             }
         }
 
+        /// <summary>
+        /// Things to to before the game closes.
+        /// </summary>
         private void setUpForGameplay()
         {
 
         }
 
+        /// <summary>
+        /// Checks if the menu is ready to close.
+        /// </summary>
+        /// <returns></returns>
         public override bool readyToClose()
         {
             if (this.closeMenu == true)
@@ -343,12 +389,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         public override void draw(SpriteBatch b)
         {
             //Draw background texture.
-            b.Draw(this.background.texture, new Vector2(0,0), SeasideScramble.self.camera.getXNARect(), Color.White);
+            b.Draw(this.background.texture, new Vector2(0, 0), SeasideScramble.self.camera.getXNARect(), Color.White);
 
             Vector2 menuTitlePos = Game1.dialogueFont.MeasureString(this.menuTitle);
-            b.DrawString(Game1.dialogueFont, this.menuTitle, new Vector2((this.width / 2) - (menuTitlePos.X / 2), this.height / 10),Color.White);
+            b.DrawString(Game1.dialogueFont, this.menuTitle, new Vector2((this.width / 2) - (menuTitlePos.X / 2), this.height / 10), Color.White);
 
-            foreach(KeyValuePair<SSCEnums.PlayerID,Vector2> pair in this.playerDisplayLocations)
+            foreach (KeyValuePair<SSCEnums.PlayerID, Vector2> pair in this.playerDisplayLocations)
             {
                 //Draw player 1
                 this.drawDialogueBoxBackground((int)pair.Value.X - 50, (int)pair.Value.Y - 100, 200, 200, Color.Brown);
@@ -375,29 +421,33 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             {
                 this.buttons["P1NextButton"].draw(b, Color.White);
                 this.buttons["P1PrevButton"].draw(b, Color.White);
-                this.animatedSprites["P1Color"].draw(b,2f,0f);
+                this.animatedSprites["P1Color"].draw(b, 2f, 0f);
             }
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two) != null)
             {
                 this.buttons["P2NextButton"].draw(b, Color.White);
                 this.buttons["P2PrevButton"].draw(b, Color.White);
-                this.animatedSprites["P2Color"].draw(b,2f,0f);
+                this.animatedSprites["P2Color"].draw(b, 2f, 0f);
             }
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Three) != null)
             {
                 this.buttons["P3NextButton"].draw(b, Color.White);
                 this.buttons["P3PrevButton"].draw(b, Color.White);
-                this.animatedSprites["P3Color"].draw(b,2f,0f);
+                this.animatedSprites["P3Color"].draw(b, 2f, 0f);
             }
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Four) != null)
             {
                 this.buttons["P4NextButton"].draw(b, Color.White);
                 this.buttons["P4PrevButton"].draw(b, Color.White);
-                this.animatedSprites["P4Color"].draw(b,2f,0f);
+                this.animatedSprites["P4Color"].draw(b, 2f, 0f);
             }
 
         }
 
+        /// <summary>
+        /// Exit the menu.
+        /// </summary>
+        /// <param name="playSound"></param>
         public override void exitMenu(bool playSound = true)
         {
             base.exitMenu(playSound);
