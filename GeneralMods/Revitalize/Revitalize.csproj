@@ -139,6 +139,9 @@
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\BlankTexture.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\Cursors.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\lastPageButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

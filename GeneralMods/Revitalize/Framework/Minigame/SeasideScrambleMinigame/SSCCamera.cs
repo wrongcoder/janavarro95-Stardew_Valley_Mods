@@ -44,5 +44,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
 
         }
+
+        /// <summary>
+        /// Checks to see if the given position is inside the viewport.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public bool positionInsideViewport(Vector2 position)
+        {
+            return this.getXNARect().Contains((int)position.X, (int)position.Y);
+        }
     }
 }
