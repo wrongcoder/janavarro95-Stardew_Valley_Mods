@@ -69,8 +69,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         public void spawnDefaultProjectile(object Owner,Vector2 Position,Vector2 Direction,float Speed,Rectangle HitBox,Color Color,float Scale,int LifeSpan=300)
         {
 
-            SSCProjectile basic = new SSCProjectile(Owner, new StardustCore.Animations.AnimatedSprite("DefaultProjectile", Position, new StardustCore.Animations.AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Basic"), new StardustCore.Animations.Animation(0, 0, 4, 4)), Color), HitBox, Position, Direction, Speed, LifeSpan, Scale);
+            SSCProjectile basic = new SSCProjectile(Owner, new StardustCore.Animations.AnimatedSprite("DefaultProjectile", Position, new StardustCore.Animations.AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Basic"), new StardustCore.Animations.Animation(0, 0, 4, 4)), Color), HitBox, Position, Direction, Speed, LifeSpan, Scale,1);
             this.addProjectile(basic);
+        }
+        public SSCProjectile getDefaultProjectile(object Owner, Vector2 Position, Vector2 Direction, float Speed, Rectangle HitBox, Color Color, float Scale, int LifeSpan = 300)
+        {
+
+            SSCProjectile basic = new SSCProjectile(Owner, new StardustCore.Animations.AnimatedSprite("DefaultProjectile", Position, new StardustCore.Animations.AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Basic"), new StardustCore.Animations.Animation(0, 0, 4, 4)), Color), HitBox, Position, Direction, Speed, LifeSpan, Scale, 1);
+            return basic;
         }
 
         #endregion

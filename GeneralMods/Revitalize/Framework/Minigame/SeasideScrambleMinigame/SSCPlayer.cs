@@ -36,6 +36,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public bool showMouseCursor;
         public int maxMouseSleepTime = 300;
+
+        public SSCGuns.SSCGun gun;
         
 
         public SSCPlayer(SSCEnums.PlayerID PlayerID)
@@ -126,7 +128,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
             this.mouseSensitivity = new Vector2(3f, 3f);
 
-            
+            this.gun=new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun",this.position,new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns","BasicGun"),new Animation(0,0,16,16)),Color.White), SeasideScramble.self.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300),10,1000,3000);
         }
 
         /// <summary>
@@ -165,6 +167,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void draw(SpriteBatch b, Vector2 position)
         {
             this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
+            this.gun.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position),2f);
         }
         public void drawMouse(SpriteBatch b)
         {
@@ -232,6 +235,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     this.showMouseCursor = true;
                 }
             }
+
+            this.gun.update(Time);
         }
 
         /// <summary>
@@ -280,7 +285,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
                 if (state.ThumbSticks.Right.X != 0 || state.ThumbSticks.Right.Y != 0)
                 {
-                    this.shoot(state.ThumbSticks.Right);
+                    this.shoot(new Vector2(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y*-1));
                     //this.moveMouseCursor(state.ThumbSticks.Right);
                 }
             }
@@ -461,7 +466,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
             if (SeasideScramble.self.menuManager.isMenuUp) return;
             //ModCore.log("Shoot: " + direction);
-            SeasideScramble.self.projectiles.spawnDefaultProjectile(this, this.position, direction, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300);
+            //SeasideScramble.self.projectiles.spawnDefaultProjectile(this, this.position, direction, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300);
+
+            this.gun.tryToShoot(this.position, direction);
+            
         }
 
     }

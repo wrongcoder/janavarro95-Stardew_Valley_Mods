@@ -16,6 +16,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         public float speed;
         public float scale;
         public Rectangle hitBox;
+        public int damage;
         public Vector2 position
         {
             get
@@ -59,7 +60,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         {
 
         }
-        public SSCProjectile(object Owner,AnimatedSprite Sprite,Rectangle HitBox ,Vector2 Position,Vector2 Direction, float Speed, int LifeSpan ,float Scale)
+        public SSCProjectile(object Owner,AnimatedSprite Sprite,Rectangle HitBox ,Vector2 Position,Vector2 Direction, float Speed, int LifeSpan ,float Scale,int damage)
         {
             this.sprite = Sprite;
             this.hitBox = HitBox;
@@ -70,6 +71,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             this.maxLifeSpan = LifeSpan;
             this.currentLifeSpan = LifeSpan;
             this.owner = Owner;
+            this.damage = damage;
         }
 
         /// <summary>
@@ -88,6 +90,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         public virtual void updateMovement()
         {
             this.position += this.Velocity;
+            this.hitBox.X += (int)this.Velocity.X;
+            this.hitBox.Y += (int)this.Velocity.Y;
         }
 
         /// <summary>
@@ -170,5 +174,16 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             return this.owner != null;
         }
 
+        /// <summary>
+        /// Spawns a clone at the given position with the given direction.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="direction"></param>
+        public virtual void spawnClone(Vector2 position,Vector2 direction)
+        {
+            //AnimatedSprite newSprite = new AnimatedSprite(this.sprite.name, position, new AnimationManager(this.sprite.animation.objectTexture.Copy(), this.sprite.animation.defaultDrawFrame), this.color);
+            SSCProjectile basic = new SSCProjectile(this.owner, new AnimatedSprite("DefaultProjectile", position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Basic"), new Animation(0, 0, 4, 4)), this.color), new Rectangle(this.hitBox.X,this.hitBox.Y,this.hitBox.Width,this.hitBox.Height), position, direction, this.speed, this.maxLifeSpan, this.scale,this.damage);
+            SeasideScramble.self.projectiles.addProjectile(basic);
+        }
     }
 }

@@ -99,11 +99,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             UIManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "UI"));
             TextureManager projectileManager = new TextureManager("Projectiles");
             projectileManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Projectiles"));
+            TextureManager gunManager = new TextureManager("Guns");
+            gunManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Guns"));
 
             this.textureUtils.addTextureManager(playerManager);
             this.textureUtils.addTextureManager(mapTextureManager);
             this.textureUtils.addTextureManager(UIManager);
             this.textureUtils.addTextureManager(projectileManager);
+            this.textureUtils.addTextureManager(gunManager);
         }
 
         private void LoadMaps()
