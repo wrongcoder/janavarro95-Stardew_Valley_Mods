@@ -83,7 +83,26 @@ namespace StardustCore.Animations
             this.animation.draw(b, this.position, this.color, scale, SpriteEffects.None, depth);
         }
 
+        /// <summary>
+        /// Draws the sprite to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="position"></param>
+        /// <param name="scale"></param>
+        /// <param name="depth"></param>
         public virtual void draw(SpriteBatch b,Vector2 position ,float scale, float depth)
+        {
+            this.animation.draw(b, position, this.color, scale, SpriteEffects.None, depth);
+        }
+
+        /// <summary>
+        /// Draws the sprite to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="position"></param>
+        /// <param name="scale"></param>
+        /// <param name="depth"></param>
+        public virtual void draw(SpriteBatch b, Vector2 position, Vector2 scale, float depth)
         {
             this.animation.draw(b, position, this.color, scale, SpriteEffects.None, depth);
         }

@@ -258,6 +258,34 @@ namespace StardustCore.Animations
         }
 
         /// <summary>
+        /// Draws the texture to the screen.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="texture"></param>
+        /// <param name="Position"></param>
+        /// <param name="sourceRectangle"></param>
+        /// <param name="drawColor"></param>
+        /// <param name="rotation"></param>
+        /// <param name="origin"></param>
+        /// <param name="scale"></param>
+        /// <param name="spriteEffects"></param>
+        /// <param name="LayerDepth"></param>
+        public void draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 Position, Rectangle? sourceRectangle, Color drawColor, float rotation, Vector2 origin, Vector2 scale, SpriteEffects spriteEffects, float LayerDepth)
+        {
+            //Log.AsyncC("Animation Manager is working!");
+            spriteBatch.Draw(texture, Position, sourceRectangle, drawColor, rotation, origin, scale, spriteEffects, LayerDepth);
+            try
+            {
+                this.tickAnimation();
+                // Log.AsyncC("Tick animation");
+            }
+            catch (Exception err)
+            {
+                ModCore.ModMonitor.Log(err.ToString());
+            }
+        }
+
+        /// <summary>
         /// Used to draw the current animation to the screen.
         /// </summary>
         /// <param name="b"></param>
@@ -267,6 +295,29 @@ namespace StardustCore.Animations
         /// <param name="flipped"></param>
         /// <param name="depth"></param>
         public void draw(SpriteBatch b,Vector2 Position,Color drawColor,float scale,SpriteEffects flipped,float depth)
+        {
+            b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, 0f, Vector2.Zero, scale, flipped, depth);
+            try
+            {
+                this.tickAnimation();
+                // Log.AsyncC("Tick animation");
+            }
+            catch (Exception err)
+            {
+                ModCore.ModMonitor.Log(err.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Draws the animated texture to the screen.
+        /// </summary>
+        /// <param name="b">The Sprite Batch used to draw.</param>
+        /// <param name="Position">The position to draw the sprite to.</param>
+        /// <param name="drawColor">The color to draw the sprite to.</param>
+        /// <param name="scale">The scale for the sprite as a Vector2. (Width,Height)</param>
+        /// <param name="flipped">If the sprite is flipped.</param>
+        /// <param name="depth">The depth of the sprite.</param>
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, 0f, Vector2.Zero, scale, flipped, depth);
             try

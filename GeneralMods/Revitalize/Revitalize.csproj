@@ -69,8 +69,11 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCCamera.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnums.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFontCharacterSheet.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFont.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCGuns\SSCGun.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\CharacterSelectScreen.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\HUD\CharacterHUD.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\SSCMenuManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\TitleScreen.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCPlayer.cs" />
@@ -143,13 +146,49 @@
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Projectiles\Basic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\5.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\6.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\7.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\8.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\9.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\AButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\BlankTexture.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\Clock.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\Cursors.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\DialogBox.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\lastPageButton.png">

@@ -464,7 +464,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         /// </summary>
         private void setUpForGameplay()
         {
-
+            foreach(SSCPlayer p in SeasideScramble.self.players.Values)
+            {
+                p.HUD.displayHUD();
+            }
         }
 
         /// <summary>

@@ -156,7 +156,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                 {
                     if (this.owner == other)
                     {
-                        ModCore.log("Can't get hit by own projectile.");
+                        //ModCore.log("Can't get hit by own projectile.");
                         return;
                     }
                 }

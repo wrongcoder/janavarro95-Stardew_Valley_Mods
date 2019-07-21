@@ -51,6 +51,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public SSCProjectiles.SSCProjectileManager projectiles;
 
+        public SSCFonts.SSCFont gameFont;
+
         public SeasideScramble()
         {
             self = this;
@@ -75,6 +77,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             this.menuManager.addNewMenu(new SSCMenus.TitleScreen(this.camera.viewport));
             this.oldMousePosition = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
+
+            this.gameFont = new SSCFonts.SSCFont(new SSCFonts.SSCFontCharacterSheet());
         }
 
         public SSCPlayer getPlayer(SSCEnums.PlayerID id)
@@ -174,6 +178,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.menuManager.drawAll(b);
 
             this.projectiles.draw(b);
+
+            foreach (SSCPlayer p in this.players.Values)
+            {
+                p.drawHUD(b);
+            }
 
             b.End();
         }
