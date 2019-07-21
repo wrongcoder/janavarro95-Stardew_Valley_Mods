@@ -90,8 +90,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         public virtual void updateMovement()
         {
             this.position += this.Velocity;
-            this.hitBox.X += (int)this.Velocity.X;
-            this.hitBox.Y += (int)this.Velocity.Y;
+            this.hitBox.X = (int)this.position.X;
+            this.hitBox.Y = (int)this.position.Y;
         }
 
         /// <summary>

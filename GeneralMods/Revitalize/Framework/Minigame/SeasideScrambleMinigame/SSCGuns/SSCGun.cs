@@ -134,7 +134,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCGuns
             if (this.isReloading)
             {
                 this.timeRemainingUntilReload -= time.ElapsedGameTime.TotalMilliseconds;
-                ModCore.log("Reloding: " + this.timeRemainingUntilReload);
+                //ModCore.log("Reloding: " + this.timeRemainingUntilReload);
                 if (this.timeRemainingUntilReload <= 0)
                 {
                     this.reload();         

@@ -17,9 +17,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         //TODO: Add movement speed variable
         //TODO: Add in health
         //TODO: Add in player HUD
-        //TODO: Make guns
-        //TODO: Make projectiles
-        //TODO: Add in hit boxes
         public AnimationManager characterSpriteController;
         public bool flipSprite;
         public SSCEnums.FacingDirection facingDirection;
@@ -38,7 +35,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public int maxMouseSleepTime = 300;
 
         public SSCGuns.SSCGun gun;
-        
+
+        public Rectangle hitBox;
 
         public SSCPlayer(SSCEnums.PlayerID PlayerID)
         {
@@ -129,6 +127,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.mouseSensitivity = new Vector2(3f, 3f);
 
             this.gun=new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun",this.position,new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns","BasicGun"),new Animation(0,0,16,16)),Color.White), SeasideScramble.self.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300),10,1000,3000);
+
+            this.hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, 64, 64);
         }
 
         /// <summary>
@@ -285,7 +285,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
                 if (state.ThumbSticks.Right.X != 0 || state.ThumbSticks.Right.Y != 0)
                 {
-                    this.shoot(new Vector2(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y*-1));
+                    Vector2 direction = new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y * -1);
+                    Vector2 unit = direction.UnitVector();
+                    this.shoot(unit);
                     //this.moveMouseCursor(state.ThumbSticks.Right);
                 }
             }
@@ -430,6 +432,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 this.facingDirection = direction;
                 this.position += new Vector2(1, 0);
             }
+            this.hitBox.X = (int)this.position.X;
+            this.hitBox.Y = (int)this.position.Y;
             //ModCore.log(this.position);
         }
 

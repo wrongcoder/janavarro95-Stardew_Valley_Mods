@@ -45,7 +45,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                 //Do collision checking.
                 foreach(SSCPlayer player in SeasideScramble.self.players.Values)
                 {
-                    if (p.collidesWith(player.position))
+                    if (p.collidesWith(player.hitBox))
                     {
                         p.onCollision(player);
                     }
