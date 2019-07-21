@@ -13,9 +13,7 @@ using StardustCore.UIUtilities;
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
     /// <summary>
-    /// TODO: Finish character select screen. Ensure that camera snapping doesn't happen until game starts.
-    ///     -Make boxes per character
-    ///     -Make prompt to click for p1, press a for p2,3,4
+    /// TODO: Finish character select screen.
     ///     -Make Sound effects happen
     ///     -make prompt for color selection
     ///         -a,d for keyboard
@@ -51,6 +49,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public Vector2 oldMousePosition;
 
+        public SSCProjectiles.SSCProjectileManager projectiles;
+
         public SeasideScramble()
         {
             self = this;
@@ -59,6 +59,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.topLeftScreenCoordinate = new Vector2((float)(this.camera.viewport.Width / 2 - 384), (float)(this.camera.viewport.Height / 2 - 384));
 
             this.LoadTextures();
+
+            this.projectiles = new SSCProjectiles.SSCProjectileManager();
 
             this.LoadMaps();
             this.loadStartingMap();
@@ -95,10 +97,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             TextureManager UIManager = new TextureManager("SSCUI");
             UIManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "UI"));
+            TextureManager projectileManager = new TextureManager("Projectiles");
+            projectileManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Projectiles"));
 
             this.textureUtils.addTextureManager(playerManager);
             this.textureUtils.addTextureManager(mapTextureManager);
             this.textureUtils.addTextureManager(UIManager);
+            this.textureUtils.addTextureManager(projectileManager);
         }
 
         private void LoadMaps()
@@ -141,10 +146,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <param name="b"></param>
         public void draw(SpriteBatch b)
         {
+            
             if (this.currentMap != null)
             {
                 this.currentMap.draw(b);
             }
+            
             b.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, (DepthStencilState)null, (RasterizerState)null);
 
             foreach(SSCPlayer p in this.players.Values) {
@@ -162,6 +169,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
             */
             this.menuManager.drawAll(b);
+
+            this.projectiles.draw(b);
+
             b.End();
         }
 
@@ -356,6 +366,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     player.update(time);
                 }
             }
+
+            this.projectiles.update(time);
+
             this.oldMousePosition = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
             return false;
             //throw new NotImplementedException();
@@ -380,11 +393,22 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             ModCore.log("Exit the game!");
         }
 
+        /// <summary>
+        /// Translates the position passed in into the relative position on the viewport.
+        /// </summary>
+        /// <param name="viewport"></param>
+        /// <param name="globalPosition"></param>
+        /// <returns></returns>
         public static Vector2 GlobalToLocal(xTile.Dimensions.Rectangle viewport, Vector2 globalPosition)
         {
             return new Vector2(globalPosition.X - (float)viewport.X, globalPosition.Y - (float)viewport.Y);
         }
 
+        /// <summary>
+        /// Translates the position passed in into the relative position on the viewport.
+        /// </summary>
+        /// <param name="globalPosition"></param>
+        /// <returns></returns>
         public static Vector2 GlobalToLocal(Vector2 globalPosition)
         {
             return new Vector2(globalPosition.X - (float)SeasideScramble.self.camera.viewport.X, globalPosition.Y - (float)SeasideScramble.self.camera.viewport.Y);

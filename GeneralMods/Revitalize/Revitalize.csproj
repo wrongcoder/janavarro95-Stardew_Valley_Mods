@@ -73,6 +73,8 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\SSCMenuManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\TitleScreen.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCPlayer.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCProjectiles\SSCProjectile.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCProjectiles\SSCProjectileManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
@@ -134,6 +136,9 @@
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Player\Junimo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\Projectiles\Basic.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\AButton.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -173,6 +178,9 @@
     <Content Include="Content\Minigames\SeasideScramble\Maps\SSC_Town.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Framework\Minigame\SeasideScrambleMinigame\SSCGuns\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

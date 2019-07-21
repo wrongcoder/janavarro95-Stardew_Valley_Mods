@@ -14,11 +14,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
     public class SSCPlayer
     {
-        //TODO: Add gamepad input
         //TODO: Add movement speed variable
         //TODO: Add in health
         //TODO: Add in player HUD
-        //TODO: Add in player cursor
+        //TODO: Make guns
+        //TODO: Make projectiles
+        //TODO: Add in hit boxes
         public AnimationManager characterSpriteController;
         public bool flipSprite;
         public SSCEnums.FacingDirection facingDirection;
@@ -458,7 +459,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         private void shoot(Vector2 direction)
         {
-            ModCore.log("Shoot: " + direction);
+            if (SeasideScramble.self.menuManager.isMenuUp) return;
+            //ModCore.log("Shoot: " + direction);
+            SeasideScramble.self.projectiles.spawnDefaultProjectile(this, this.position, direction, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300);
         }
 
     }

@@ -83,6 +83,11 @@ namespace StardustCore.Animations
             this.animation.draw(b, this.position, this.color, scale, SpriteEffects.None, depth);
         }
 
+        public virtual void draw(SpriteBatch b,Vector2 position ,float scale, float depth)
+        {
+            this.animation.draw(b, position, this.color, scale, SpriteEffects.None, depth);
+        }
+
 
     }
 }
