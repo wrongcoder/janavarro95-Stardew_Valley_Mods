@@ -40,6 +40,17 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public SSCMenus.HUD.CharacterHUD HUD;
 
+        public int currentHealth;
+        public int maxHealth;
+
+        public bool isDead
+        {
+            get
+            {
+                return this.currentHealth <= 0;
+            }
+        }
+
         public SSCPlayer(SSCEnums.PlayerID PlayerID)
         {
             this.playerID = PlayerID;
@@ -131,7 +142,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.gun=new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun",this.position,new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns","BasicGun"),new Animation(0,0,16,16)),Color.White), SeasideScramble.self.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300),10,1000,3000);
 
             this.hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, 64, 64);
-            this.HUD = new SSCMenus.HUD.CharacterHUD(100, 100, 200, 200, this.playerID);
+            this.HUD = new SSCMenus.HUD.CharacterHUD(100, 20, 100, 100, this.playerID);
+
+            this.maxHealth = 100;
+            this.currentHealth = 100;
         }
 
         /// <summary>
@@ -181,7 +195,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.HUD.draw(b);
         }
 
-        #region
         /// <summary>
         /// Called every frame to do update logic.
         /// </summary>
@@ -242,6 +255,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     this.showMouseCursor = true;
                 }
             }
+            if (this.currentHealth < 0) this.currentHealth = 0;
 
             this.gun.update(Time);
             this.HUD.update(Time);
@@ -260,6 +274,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         //           Input logic            //
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
+        #region
 
         /// <summary>
         /// Checks when the gamepad receives input.
@@ -482,6 +497,24 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             this.gun.tryToShoot(this.position, direction);
             
+        }
+
+        public void takeDamage(int amount)
+        {
+            this.currentHealth -= amount;
+            if (this.currentHealth < 0) {
+                this.currentHealth = 0;
+            }
+        }
+
+        public void heal(int amount)
+        {
+            this.takeDamage(amount * -1);
+        }
+
+        public void healToFull()
+        {
+            this.currentHealth = this.maxHealth;
         }
 
     }

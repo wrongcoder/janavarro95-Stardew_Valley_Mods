@@ -163,10 +163,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             foreach(SSCPlayer p in this.players.Values) {
                 p.draw(b);
-                if(p.playerID== SSCEnums.PlayerID.One)
-                {
-                    p.drawMouse(b);
-                }
+
             }
 
             /*
@@ -175,14 +172,20 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 this.menuManager.activeMenu.draw(b);
             }
             */
+            foreach (SSCPlayer p in this.players.Values)
+            {
+                p.drawHUD(b);
+                if (p.playerID == SSCEnums.PlayerID.One)
+                {
+                    p.drawMouse(b);
+                }
+            }
+
             this.menuManager.drawAll(b);
 
             this.projectiles.draw(b);
 
-            foreach (SSCPlayer p in this.players.Values)
-            {
-                p.drawHUD(b);
-            }
+
 
             b.End();
         }

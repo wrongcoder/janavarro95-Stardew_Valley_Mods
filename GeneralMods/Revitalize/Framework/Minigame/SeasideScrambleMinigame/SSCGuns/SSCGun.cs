@@ -119,6 +119,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCGuns
             this.remainingAmmo = this.maxAmmo;
             this.firingDelay = FiringRate;
             this.reloadSpeed = ReloadSpeed;
+            this.timeRemainingUntilReload = this.reloadSpeed;
             this.consumesXAmmoPerShot = ConsumesXAmmo;
         }
 

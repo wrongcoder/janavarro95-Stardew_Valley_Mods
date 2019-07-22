@@ -20,7 +20,8 @@ namespace StardustCore.UIUtilities.SpriteFonts.CharacterSheets
 
         public virtual TexturedCharacter getTexturedCharacter(char c)
         {
-            return new TexturedCharacter();
+            var original = this.CharacterAtlus[c];
+            return TexturedCharacter.Copy(original);
         }
 
         public virtual GenericCharacterSheets create(string Path)

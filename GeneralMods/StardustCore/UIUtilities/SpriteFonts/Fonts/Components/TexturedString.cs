@@ -74,6 +74,8 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
             this.scale = other.scale;
             this.position = other.position;
             this.label = other.label;
+            this.displayText = other.displayText;
+            
         }
 
         /// <summary>Adds a textured character to a textured string.</summary>

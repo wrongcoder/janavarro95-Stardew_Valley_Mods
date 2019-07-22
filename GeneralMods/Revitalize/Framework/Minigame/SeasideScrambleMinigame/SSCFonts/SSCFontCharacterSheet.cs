@@ -26,10 +26,5 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCFonts
             this.CharacterAtlus.Add('9', new TexturedCharacter('9', SeasideScramble.self.textureUtils.getTexture("SSCUI", "9"), Color.White));
         }
 
-        public override TexturedCharacter getTexturedCharacter(char c)
-        {
-            return this.CharacterAtlus[c];
-        }
-
     }
 }
