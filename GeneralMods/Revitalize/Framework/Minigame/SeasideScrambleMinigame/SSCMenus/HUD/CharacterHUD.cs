@@ -20,6 +20,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
 
         public AnimatedSprite heart;
         public TexturedString playerHealth;
+        public bool showFullHeart;
         public int remainingHealthLerpFrames;
         public int framesToUpdate = 5;
 
@@ -28,6 +29,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
 
         public AnimatedSprite clock;
         public TexturedString reloadTime;
+
+        
 
         public SSCPlayer Player
         {
@@ -48,10 +51,19 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             this.playerID = Player;
             this.showHUD = false;
 
-            this.heart = new AnimatedSprite("Heart", new Vector2(x + 32, y + 10), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Heart"), new Animation(0, 0, 7, 6)), Color.White);
+            this.heart = new AnimatedSprite("Heart", new Vector2(x + 32, y + 10), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Heart"), new Animation(0, 0, 7, 6), new Dictionary<string, List<Animation>>() {
+
+                {"Full",new List<Animation>(){
+                    new Animation(0,0,7,6)
+                }},
+                {"Empty",new List<Animation>(){
+                    new Animation(7,0,7,6)
+                }}
+            }, "Full"), Color.White);
+            this.heart.animation.playAnimation("Full");
             this.playerHealth = SeasideScramble.self.gameFont.ParseString("100", new Vector2(100, this.yPositionOnScreen + 10), Color.White, true, 2f);
             this.playerHealth.setPosition(new Vector2(this.xPositionOnScreen + 100, this.yPositionOnScreen + 10));
-
+            this.showFullHeart = true;
 
             this.gun = new AnimatedSprite("Gun", new Vector2(x + 32, y + 50), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns", "BasicGun"), new Animation(0, 0, 16, 16)), Color.White);
             this.playerAmmo = SeasideScramble.self.gameFont.ParseString("100", new Vector2(100, this.yPositionOnScreen + 50), Color.White, true, 2f);
@@ -75,9 +87,17 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
                 }
                 else
                 {
-                    this.playerAmmo.setText(this.Player.gun.remainingAmmo.ToString().PadLeft(3,'0'), SeasideScramble.self.gameFont, Color.White);
+                    this.playerAmmo.setText(this.Player.gun.remainingAmmo.ToString().PadLeft(3, '0'), SeasideScramble.self.gameFont, Color.White);
                 }
-                this.reloadTime.setText(((int)this.Player.gun.timeRemainingUntilReload).ToString().PadLeft(4,'0'),SeasideScramble.self.gameFont,Color.White);
+                this.reloadTime.setText(((int)this.Player.gun.timeRemainingUntilReload).ToString().PadLeft(4, '0'), SeasideScramble.self.gameFont, Color.White);
+            }
+            if (this.showFullHeart)
+            {
+                this.heart.animation.playAnimation("Full");
+            }
+            else
+            {
+                this.heart.animation.playAnimation("Empty");
             }
         }
 
@@ -91,6 +111,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
                 this.remainingHealthLerpFrames = this.framesToUpdate;
                 if (Convert.ToInt32(this.playerHealth.getText()) != this.Player.currentHealth)
                 {
+                    this.showFullHeart = !this.showFullHeart;
                     int health = Convert.ToInt32(this.playerHealth.getText());
                     health = health - 1;
                     string healthStr = health.ToString();
@@ -116,7 +137,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             this.background.draw(b, this.background.position, new Vector2(8f, 4f), 0f);
             this.playerHealth.draw(b, new Rectangle(0, 0, 16, 16), 0f);
             this.heart.draw(b, 8f, 0f);
-            if (this.Player.gun.isReloading==false)
+            if (this.Player.gun.isReloading == false)
             {
                 this.gun.draw(b, 4f, 0f);
                 this.playerAmmo.draw(b, new Rectangle(0, 0, 16, 16), 0f);
@@ -137,7 +158,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             this.showHUD = true;
             this.gun.animation = this.Player.gun.sprite.animation;
 
-            //SeasideScramble.self.getPlayer(this.playerID).takeDamage(100);
+            SeasideScramble.self.getPlayer(this.playerID).takeDamage(100);
         }
 
         /// <summary>
