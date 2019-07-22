@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCStatusEffects;
 using StardewValley;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
@@ -467,6 +468,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             foreach(SSCPlayer p in SeasideScramble.self.players.Values)
             {
                 p.HUD.displayHUD();
+                p.statusEffects.addStatusEffect(SE_Burn.SpawnBurnEffect(new Vector2(p.HUD.xPositionOnScreen,p.HUD.yPositionOnScreen),10*1000,1000,1.00d,1));
             }
         }
 

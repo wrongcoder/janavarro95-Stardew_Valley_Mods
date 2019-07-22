@@ -118,6 +118,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
                     healthStr = healthStr.PadLeft(3, '0');
                     this.playerHealth.setText(healthStr, SeasideScramble.self.gameFont, Color.White);
                 }
+                else
+                {
+                    this.showFullHeart = true;
+                }
             }
             else
             {
@@ -157,8 +161,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             this.playerHealth.setText(SeasideScramble.self.getPlayer(this.playerID).currentHealth.ToString(), SeasideScramble.self.gameFont, Color.White);
             this.showHUD = true;
             this.gun.animation = this.Player.gun.sprite.animation;
-
-            SeasideScramble.self.getPlayer(this.playerID).takeDamage(100);
         }
 
         /// <summary>

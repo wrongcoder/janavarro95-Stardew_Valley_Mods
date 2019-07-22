@@ -65,6 +65,7 @@
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Menus\SimpleItemGrabMenu.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISSCLivingEntity.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScramble.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCCamera.cs" />
@@ -79,6 +80,9 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCPlayer.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCProjectiles\SSCProjectile.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCProjectiles\SSCProjectileManager.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\SE_Burn.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffect.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffectManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
@@ -201,6 +205,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\nextPageButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\UI\StatusEffects\Burn.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Maps\Backgrounds\TitleScreenBackground.png">

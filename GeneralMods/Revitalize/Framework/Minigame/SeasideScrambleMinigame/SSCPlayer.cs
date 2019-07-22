@@ -9,10 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using Revitalize.Framework.Utilities;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame.Interfaces;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
-    public class SSCPlayer
+    public class SSCPlayer:ISSCLivingEntity
     {
         //TODO: Add movement speed variable
         //TODO: Add in health
@@ -42,6 +43,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public int currentHealth;
         public int maxHealth;
+        public float movementSpeed;
+
+        public SSCStatusEffects.StatusEffectManager statusEffects;
 
         public bool isDead
         {
@@ -50,6 +54,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 return this.currentHealth <= 0;
             }
         }
+
+        public float MovementSpeed { get => this.movementSpeed; set => this.movementSpeed=value; }
+        public int CurrentHealth { get => this.currentHealth; set => this.currentHealth=value; }
+        public int MaxHealth { get => this.maxHealth; set => this.maxHealth=value; }
+        public Rectangle HitBox { get => this.hitBox; set => this.hitBox=value; }
 
         public SSCPlayer(SSCEnums.PlayerID PlayerID)
         {
@@ -162,6 +171,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             this.maxHealth = 100;
             this.currentHealth = 100;
+
+            this.statusEffects = new SSCStatusEffects.StatusEffectManager(this);
         }
 
         /// <summary>
@@ -209,6 +220,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void drawHUD(SpriteBatch b)
         {
             this.HUD.draw(b);
+            this.statusEffects.draw(b,4f);
         }
 
         /// <summary>
@@ -275,6 +287,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             this.gun.update(Time);
             this.HUD.update(Time);
+            this.statusEffects.update(Time);
         }
 
         /// <summary>
