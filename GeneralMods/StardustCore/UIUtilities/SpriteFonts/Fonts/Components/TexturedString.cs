@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardustCore.UIUtilities.SpriteFonts.Fonts;
 
 namespace StardustCore.UIUtilities.SpriteFonts.Components
 {
@@ -10,11 +11,17 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
         public Vector2 position;
         public string label;
         public float scale;
+        public string displayText;
 
         public TexturedString(string Label, Vector2 Position, List<TexturedCharacter> Characters, bool useRightPadding = true,float Scale=1f)
         {
             this.label = Label;
             this.characters = Characters;
+            foreach(TexturedCharacter c in Characters)
+            {
+                this.displayText += c.character;
+            }
+
             this.position = Position;
             this.scale = Scale;
             this.setCharacterPositions(useRightPadding);
@@ -48,6 +55,25 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
         {
             this.position = pos;
             this.setCharacterPositions();
+        }
+        public string getText()
+        {
+            return this.displayText;
+        }
+
+        /// <summary>
+        /// Sets the new text for this string. Basically this just creates a new string and copies the fields over.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="font"></param>
+        /// <param name="color"></param>
+        public void setText(string text, GenericFont font,Color color)
+        {
+            TexturedString other= font.ParseString(text, this.position, color, true, this.scale);
+            this.characters = other.characters;
+            this.scale = other.scale;
+            this.position = other.position;
+            this.label = other.label;
         }
 
         /// <summary>Adds a textured character to a textured string.</summary>
@@ -85,6 +111,7 @@ namespace StardustCore.UIUtilities.SpriteFonts.Components
             TexturedString newString = new TexturedString("", new Vector2(0, 0), characterList);
             return newString;
         }
+
 
         /// <summary>Removes the characters from the textured word.</summary>
         public void removeCharactersFromEnd(int index, int howMany)

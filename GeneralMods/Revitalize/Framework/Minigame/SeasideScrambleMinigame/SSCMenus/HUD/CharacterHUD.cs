@@ -41,6 +41,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             if (SeasideScramble.self.getPlayer(this.playerID) != null)
             {
                 this.background.color = SeasideScramble.self.getPlayer(this.playerID).playerColor;
+                if (this.str.getText() != "345")
+                {
+                    this.str.setText("345", SeasideScramble.self.gameFont, Color.White);
+                }
             }
         }
 
