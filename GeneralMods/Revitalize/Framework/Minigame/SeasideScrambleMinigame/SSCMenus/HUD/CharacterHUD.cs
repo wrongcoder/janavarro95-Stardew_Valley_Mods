@@ -26,6 +26,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
         public AnimatedSprite gun;
         public TexturedString playerAmmo;
 
+        public AnimatedSprite clock;
+        public TexturedString reloadTime;
+
         public SSCPlayer Player
         {
             get
@@ -53,6 +56,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             this.gun = new AnimatedSprite("Gun", new Vector2(x + 32, y + 50), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns", "BasicGun"), new Animation(0, 0, 16, 16)), Color.White);
             this.playerAmmo = SeasideScramble.self.gameFont.ParseString("100", new Vector2(100, this.yPositionOnScreen + 50), Color.White, true, 2f);
             this.playerAmmo.setPosition(new Vector2(this.xPositionOnScreen + 100, this.yPositionOnScreen + 50));
+
+            this.clock = new AnimatedSprite("Clock", new Vector2(x + 32, y + 50), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Clock"), new Animation(0, 0, 11, 10)), Color.White);
+            this.reloadTime = SeasideScramble.self.gameFont.ParseString("100", new Vector2(100, this.yPositionOnScreen + 50), Color.White, true, 2f);
+            this.reloadTime.setPosition(new Vector2(this.xPositionOnScreen + 100, this.yPositionOnScreen + 50));
         }
 
         public override void update(GameTime time)
@@ -70,6 +77,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
                 {
                     this.playerAmmo.setText(this.Player.gun.remainingAmmo.ToString().PadLeft(3,'0'), SeasideScramble.self.gameFont, Color.White);
                 }
+                this.reloadTime.setText(((int)this.Player.gun.timeRemainingUntilReload).ToString().PadLeft(4,'0'),SeasideScramble.self.gameFont,Color.White);
             }
         }
 
@@ -107,9 +115,17 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             //b.Draw(this.background.texture, new Vector2(100, 100), SeasideScramble.self.camera.getXNARect(), SeasideScramble.self.players[this.playerID].playerColor, 0f, Vector2.Zero, new Vector2(4f, 2f), SpriteEffects.None, 0f);
             this.background.draw(b, this.background.position, new Vector2(8f, 4f), 0f);
             this.playerHealth.draw(b, new Rectangle(0, 0, 16, 16), 0f);
-            this.playerAmmo.draw(b, new Rectangle(0, 0, 16, 16), 0f);
             this.heart.draw(b, 8f, 0f);
-            this.gun.draw(b, 4f, 0f);
+            if (this.Player.gun.isReloading==false)
+            {
+                this.gun.draw(b, 4f, 0f);
+                this.playerAmmo.draw(b, new Rectangle(0, 0, 16, 16), 0f);
+            }
+            else
+            {
+                this.clock.draw(b, 6f, 0f);
+                this.reloadTime.draw(b, new Rectangle(0, 0, 16, 16), 0f);
+            }
         }
 
         /// <summary>
@@ -119,8 +135,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
         {
             this.playerHealth.setText(SeasideScramble.self.getPlayer(this.playerID).currentHealth.ToString(), SeasideScramble.self.gameFont, Color.White);
             this.showHUD = true;
+            this.gun.animation = this.Player.gun.sprite.animation;
 
-            SeasideScramble.self.getPlayer(this.playerID).takeDamage(100);
+            //SeasideScramble.self.getPlayer(this.playerID).takeDamage(100);
         }
 
         /// <summary>
