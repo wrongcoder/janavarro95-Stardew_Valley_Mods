@@ -11,8 +11,7 @@ using StardewValley;
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCStatusEffects
 {
     /// <summary>
-    /// TODO: Maybe figure out a way to add immunity/resistences/weaknesses later???
-    /// Add in a reference to the owner of this and have the manager apply effects to entities.
+    /// TODO: Have it so that this determines where to draw the status effects.
     /// </summary>
     public class StatusEffectManager
     {
@@ -55,7 +54,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCStatusEffects
         /// <param name="effect"></param>
         public void addStatusEffect(StatusEffect effect, bool ignoreEffectChance = false)
         {
-
+            if (effect == null) return;
             if (ignoreEffectChance == false)
             {
                 double rng = this.random.NextDouble();

@@ -48,6 +48,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                     if (p.collidesWith(player.hitBox))
                     {
                         p.onCollision(player);
+                        player.onCollision(p);
+                    }
+                }
+                foreach(SSCEnemies.SSCEnemy enemy in SeasideScramble.self.enemies.enemies)
+                {
+                    if (p.collidesWith(enemy.HitBox))
+                    {
+                        p.onCollision(enemy); //What happens to the projectile.
+                        enemy.onCollision(p); //What happens to the entity.
                     }
                 }
             }

@@ -65,10 +65,14 @@
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Menus\SimpleItemGrabMenu.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ICollider.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISSCLivingEntity.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScramble.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCCamera.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\EnemyManager.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\SSCEnemy.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\SSCE_Target.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnums.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFontCharacterSheet.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFont.cs" />
@@ -140,6 +144,9 @@
     </Content>
     <Content Include="Content\Graphics\Furniture\Tables\Oak Table.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Minigames\SeasideScramble\Graphics\Enemies\Target.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Guns\BasicGun.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

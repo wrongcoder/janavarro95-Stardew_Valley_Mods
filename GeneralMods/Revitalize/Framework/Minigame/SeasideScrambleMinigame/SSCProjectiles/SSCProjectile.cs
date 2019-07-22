@@ -56,11 +56,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             }
         }
 
+        public SSCStatusEffects.StatusEffect effect;
+
         public SSCProjectile()
         {
 
         }
-        public SSCProjectile(object Owner,AnimatedSprite Sprite,Rectangle HitBox ,Vector2 Position,Vector2 Direction, float Speed, int LifeSpan ,float Scale,int damage)
+        public SSCProjectile(object Owner,AnimatedSprite Sprite,Rectangle HitBox ,Vector2 Position,Vector2 Direction, float Speed, int LifeSpan ,float Scale,int damage,SSCStatusEffects.StatusEffect Effect=null)
         {
             this.sprite = Sprite;
             this.hitBox = HitBox;
@@ -72,6 +74,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             this.currentLifeSpan = LifeSpan;
             this.owner = Owner;
             this.damage = damage;
+            this.effect = Effect;
         }
 
         /// <summary>
@@ -142,14 +145,18 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             return this.hitBox.Intersects(rec);
         }
 
+        /// <summary>
+        /// What happens to this projectile when it collides with something.
+        /// </summary>
         public virtual void collisionLogic()
         {
-            //Do something I guess.
+            //Do something I guess like play an animation.
             this.die();
         }
 
         public virtual void onCollision(object other)
         {
+            //Move this if to the player class.????
             if(other is SSCPlayer)
             {
                 if (this.hasOwner())
@@ -159,10 +166,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                         //ModCore.log("Can't get hit by own projectile.");
                         return;
                     }
+                    /*if projectile.owner is player and friendly fire is off do nothing.
+                    *
+                    *
+                    */
                 }
                 ModCore.log("Big oof. Player hit by projectile.");
-                this.collisionLogic();
             }
+            this.collisionLogic();
         }
 
         /// <summary>

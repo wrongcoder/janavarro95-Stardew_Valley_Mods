@@ -468,8 +468,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             foreach(SSCPlayer p in SeasideScramble.self.players.Values)
             {
                 p.HUD.displayHUD();
-                p.statusEffects.addStatusEffect(SE_Burn.SpawnBurnEffect(new Vector2(p.HUD.xPositionOnScreen,p.HUD.yPositionOnScreen),10*1000,1000,1.00d,1));
+                //p.statusEffects.addStatusEffect(SE_Burn.SpawnBurnEffect(new Vector2(p.HUD.xPositionOnScreen,p.HUD.yPositionOnScreen),10*1000,1000,1.00d,1));
             }
+
+            SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(100, 100), Color.Blue);
+            SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(200, 100), Color.Red);
+            SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(300, 100), Color.Green);
         }
 
         /// <summary>

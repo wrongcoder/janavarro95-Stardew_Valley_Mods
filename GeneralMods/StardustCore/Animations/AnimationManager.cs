@@ -18,6 +18,7 @@ namespace StardustCore.Animations
         public Animation defaultDrawFrame;
         public Animation currentAnimation;
         public bool enabled;
+        public bool loopAnimation;
 
         public string animationDataString;
 
@@ -95,12 +96,20 @@ namespace StardustCore.Animations
             }
         }
 
-        /// <summary>Get the next animation in the list of animations.</summary>
+        /// <summary>Get the next animation frame in the list of animations.</summary>
         public void getNextAnimation()
         {
             this.currentAnimationListIndex++;
             if (this.currentAnimationListIndex == this.currentAnimationList.Count) //If the animation frame I'm tryting to get is 1 outside my list length, reset the list.
-                this.currentAnimationListIndex = 0;
+                if (this.loopAnimation)
+                {
+                    this.currentAnimationListIndex = 0;
+                }
+                else
+                {
+                    this.playDefaultAnimation();
+                    return;
+                }
 
             //Get the next animation from the list and reset it's counter to the starting frame value.
             this.currentAnimation = this.currentAnimationList[this.currentAnimationListIndex];
@@ -137,9 +146,13 @@ namespace StardustCore.Animations
             }
         }
 
-        /// <summary>Gets the animation from the dictionary of all animations available.</summary>
+        /// <summary>
+        /// Plays the animation for the animation manager.
+        /// </summary>
         /// <param name="AnimationName"></param>
+        /// <param name="overrideSameAnimation"></param>
         /// <param name="StartingFrame"></param>
+        /// <returns></returns>
         public bool playAnimation(string AnimationName,bool overrideSameAnimation=false,int StartingFrame = 0)
         {
             if (this.animations.TryGetValue(AnimationName, out List<Animation> dummyList))
@@ -154,6 +167,7 @@ namespace StardustCore.Animations
                     this.currentAnimation = this.currentAnimationList[StartingFrame];
                     this.currentAnimationName = AnimationName;
                     this.currentAnimation.startAnimation();
+                    this.loopAnimation = true;
                     return true;
                 }
                 else
@@ -170,6 +184,56 @@ namespace StardustCore.Animations
                 ModCore.ModMonitor.Log("Error setting animation: " + AnimationName + " animation does not exist in list of available animations. Did you make sure to add it in?");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Plays the animation for the animation manager only once.
+        /// </summary>
+        /// <param name="AnimationName"></param>
+        /// <param name="overrideSameAnimation"></param>
+        /// <param name="StartingFrame"></param>
+        /// <returns></returns>
+        public bool playAnimationOnce(string AnimationName, bool overrideSameAnimation = false, int StartingFrame = 0)
+        {
+            if (this.animations.TryGetValue(AnimationName, out List<Animation> dummyList))
+            {
+                if (overrideSameAnimation == false)
+                {
+                    if (this.currentAnimationName == AnimationName) return true;
+                }
+                if (dummyList.Count != 0 || StartingFrame >= dummyList.Count)
+                {
+                    this.currentAnimationList = dummyList;
+                    this.currentAnimation = this.currentAnimationList[StartingFrame];
+                    this.currentAnimationName = AnimationName;
+                    this.currentAnimation.startAnimation();
+                    this.loopAnimation = false;
+                    return true;
+                }
+                else
+                {
+                    if (dummyList.Count == 0)
+                        ModCore.ModMonitor.Log("Error: Current animation " + AnimationName + " has no animation frames associated with it.");
+                    if (dummyList.Count > dummyList.Count)
+                        ModCore.ModMonitor.Log("Error: Animation frame " + StartingFrame + " is outside the range of provided animations. Which has a maximum count of " + dummyList.Count);
+                    return false;
+                }
+            }
+            else
+            {
+                ModCore.ModMonitor.Log("Error setting animation: " + AnimationName + " animation does not exist in list of available animations. Did you make sure to add it in?");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Plays the default animation.
+        /// </summary>
+        public void playDefaultAnimation()
+        {
+            this.currentAnimation = this.defaultDrawFrame;
+            this.currentAnimationName = "";
+            this.currentAnimationListIndex = 0;
         }
 
         /// <summary>Sets the animation manager to an on state, meaning that this animation will update on the draw frame.</summary>

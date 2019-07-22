@@ -13,11 +13,8 @@ using Revitalize.Framework.Minigame.SeasideScrambleMinigame.Interfaces;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
-    public class SSCPlayer:ISSCLivingEntity
+    public class SSCPlayer : ISSCLivingEntity
     {
-        //TODO: Add movement speed variable
-        //TODO: Add in health
-        //TODO: Add in player HUD
         public AnimationManager characterSpriteController;
         public bool flipSprite;
         public SSCEnums.FacingDirection facingDirection;
@@ -55,10 +52,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
         }
 
-        public float MovementSpeed { get => this.movementSpeed; set => this.movementSpeed=value; }
-        public int CurrentHealth { get => this.currentHealth; set => this.currentHealth=value; }
-        public int MaxHealth { get => this.maxHealth; set => this.maxHealth=value; }
-        public Rectangle HitBox { get => this.hitBox; set => this.hitBox=value; }
+        public float MovementSpeed { get => this.movementSpeed; set => this.movementSpeed = value; }
+        public int CurrentHealth { get => this.currentHealth; set => this.currentHealth = value; }
+        public int MaxHealth { get => this.maxHealth; set => this.maxHealth = value; }
+        public Rectangle HitBox { get => this.hitBox; set => this.hitBox = value; }
 
         public SSCPlayer(SSCEnums.PlayerID PlayerID)
         {
@@ -148,7 +145,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
             this.mouseSensitivity = new Vector2(3f, 3f);
 
-            this.gun=new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun",this.position,new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns","BasicGun"),new Animation(0,0,16,16)),Color.White), SeasideScramble.self.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300),10,1000,3000);
+            this.gun = new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun", this.position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns", "BasicGun"), new Animation(0, 0, 16, 16)), Color.White), SeasideScramble.self.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300), 10, 1000, 3000);
 
             this.hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, 64, 64);
 
@@ -211,7 +208,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void draw(SpriteBatch b, Vector2 position)
         {
             this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
-            this.gun.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position),2f);
+            this.gun.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), 2f);
         }
         public void drawMouse(SpriteBatch b)
         {
@@ -220,7 +217,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void drawHUD(SpriteBatch b)
         {
             this.HUD.draw(b);
-            this.statusEffects.draw(b,4f);
+            this.statusEffects.draw(b, 4f);
         }
 
         /// <summary>
@@ -347,7 +344,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             {
                 if (state.ThumbSticks.Right.X != 0 || state.ThumbSticks.Right.Y != 0)
                 {
-                    this.moveMouseCursor(new Vector2(state.ThumbSticks.Right.X,state.ThumbSticks.Right.Y*-1));
+                    this.moveMouseCursor(new Vector2(state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y * -1));
                     this.showMouseCursor = true;
                 }
             }
@@ -361,15 +358,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
             if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(direction.X * this.mouseSensitivity.X, direction.Y * this.mouseSensitivity.Y)))
             {
-                this.mouseCursor.position += new Vector2(direction.X*this.mouseSensitivity.X,direction.Y*this.mouseSensitivity.Y);
+                this.mouseCursor.position += new Vector2(direction.X * this.mouseSensitivity.X, direction.Y * this.mouseSensitivity.Y);
             }
-            else if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(direction.X*this.mouseSensitivity.X, 0)))
+            else if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(direction.X * this.mouseSensitivity.X, 0)))
             {
                 this.mouseCursor.position += new Vector2(direction.X * this.mouseSensitivity.X, 0);
             }
-            else if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(0, direction.Y*this.mouseSensitivity.Y)))
+            else if (SeasideScramble.self.camera.positionInsideViewport(this.mouseCursor.position + new Vector2(0, direction.Y * this.mouseSensitivity.Y)))
             {
-                this.mouseCursor.position += new Vector2(0, direction.Y*this.mouseSensitivity.Y);
+                this.mouseCursor.position += new Vector2(0, direction.Y * this.mouseSensitivity.Y);
             }
         }
 
@@ -393,7 +390,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             Vector2 pos = this.mouseCursor.position - SeasideScramble.GlobalToLocal(this.position);
             return pos;
         }
-        
+
 
         /// <summary>
         /// Checks when the player presses a key on the keyboard.
@@ -525,13 +522,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             //SeasideScramble.self.projectiles.spawnDefaultProjectile(this, this.position, direction, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300);
 
             this.gun.tryToShoot(this.position, direction);
-            
+
         }
 
         public void takeDamage(int amount)
         {
             this.currentHealth -= amount;
-            if (this.currentHealth < 0) {
+            if (this.currentHealth < 0)
+            {
                 this.currentHealth = 0;
             }
         }
@@ -544,6 +542,34 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void healToFull()
         {
             this.currentHealth = this.maxHealth;
+        }
+
+        public void onCollision(SSCProjectiles.SSCProjectile projectile)
+        {
+
+            if (projectile is SSCProjectiles.SSCProjectile)
+            {
+
+                if (projectile.hasOwner())
+                {
+                    if (projectile.owner == this)
+                    {
+                        //ModCore.log("Can't get hit by own projectile.");
+                        return;
+                    }
+                    /*if projectile.owner is player and friendly fire is off do nothing.
+                     *
+                     *
+                     */
+                }
+                ModCore.log("Big oof. Player hit by projectile.");
+                this.CurrentHealth -= projectile.damage;
+                this.statusEffects.addStatusEffect(projectile.effect);
+            }
+        }
+        public void onCollision(SSCEnemies.SSCEnemy enemy)
+        {
+
         }
 
     }

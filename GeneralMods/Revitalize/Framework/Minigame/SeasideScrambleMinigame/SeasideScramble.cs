@@ -50,6 +50,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public Vector2 oldMousePosition;
 
         public SSCProjectiles.SSCProjectileManager projectiles;
+        public SSCEnemies.EnemyManager enemies;
 
         public SSCFonts.SSCFont gameFont;
 
@@ -79,6 +80,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.oldMousePosition = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
 
             this.gameFont = new SSCFonts.SSCFont(new SSCFonts.SSCFontCharacterSheet());
+            this.enemies = new SSCEnemies.EnemyManager();
         }
 
         public SSCPlayer getPlayer(SSCEnums.PlayerID id)
@@ -97,20 +99,21 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             playerManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Player"));
             TextureManager mapTextureManager = new TextureManager("SSCMaps");
             mapTextureManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Maps", "Backgrounds"));
-
-
             TextureManager UIManager = new TextureManager("SSCUI");
             UIManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "UI"));
             TextureManager projectileManager = new TextureManager("Projectiles");
             projectileManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Projectiles"));
             TextureManager gunManager = new TextureManager("Guns");
             gunManager.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Guns"));
+            TextureManager enemies = new TextureManager("Enemies");
+            enemies.searchForTextures(ModCore.ModHelper, ModCore.Manifest, Path.Combine("Content", "Minigames", "SeasideScramble", "Graphics", "Enemies"));
 
             this.textureUtils.addTextureManager(playerManager);
             this.textureUtils.addTextureManager(mapTextureManager);
             this.textureUtils.addTextureManager(UIManager);
             this.textureUtils.addTextureManager(projectileManager);
             this.textureUtils.addTextureManager(gunManager);
+            this.textureUtils.addTextureManager(enemies);
         }
 
         private void LoadMaps()
@@ -180,6 +183,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     p.drawMouse(b);
                 }
             }
+            this.enemies.draw(b);
 
             this.menuManager.drawAll(b);
 
@@ -349,6 +353,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 GamePadState state = this.getGamepadState((PlayerIndex)i);
                 this.receiveGamepadInput(state,(SSCEnums.PlayerID)i);
             }
+            
 
 
             if (this.quitGame)
@@ -372,6 +377,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 {
                     player.update(time);
                 }
+                this.enemies.update(time);
             }
             else
             {
