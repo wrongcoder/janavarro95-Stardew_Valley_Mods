@@ -37,9 +37,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
 
         public override void update(GameTime time)
         {
-            base.update(time);
-
-            if(this.sprite.animation.currentAnimationName=="None" && this.targetHit)
+            if(this.sprite.animation.IsAnimationPlaying==false && this.targetHit)
             {
                 this.shouldDie = true;
             }

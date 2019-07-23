@@ -472,8 +472,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             }
 
             SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(100, 100), Color.Blue);
-            SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(200, 100), Color.Red);
-            SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(300, 100), Color.Green);
+           // SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(200, 100), Color.Red);
+            //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(300, 100), Color.Green);
         }
 
         /// <summary>

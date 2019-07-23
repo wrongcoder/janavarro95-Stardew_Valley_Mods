@@ -211,7 +211,7 @@ namespace StardustCore.UIUtilities
         {
             Texture2DExtended textureExtended = new Texture2DExtended(ModCore.ModHelper, ModCore.Manifest, Path.Combine(relativePath, Path.GetFileName(file)));
 
-            ModCore.log("Found texture: " + textureExtended.Name);
+            //ModCore.log("Found texture: " + textureExtended.Name);
             
             textureExtended.texture.Name = ModCore.Manifest.UniqueID + "_" + this.name + "_" + textureExtended.Name;
 
@@ -222,7 +222,7 @@ namespace StardustCore.UIUtilities
         {
             Texture2DExtended textureExtended = new Texture2DExtended(Helper, Manifest, Path.Combine(relativePath, Path.GetFileName(file)));
 
-            ModCore.log("Found texture: " + textureExtended.Name);
+            //ModCore.log("Found texture: " + textureExtended.Name);
 
             textureExtended.texture.Name = Manifest.UniqueID + "_" + this.name + "_" + textureExtended.Name;
 
@@ -234,7 +234,7 @@ namespace StardustCore.UIUtilities
             Texture2DExtended textureExtended = new Texture2DExtended(ContentPack, Path.Combine(relativePath, Path.GetFileName(file)));
 
             textureExtended.texture.Name = ContentPack.Manifest.UniqueID + "_" + this.name + "_" + textureExtended.Name;
-            ModCore.log("Found texture: " + textureExtended.Name);
+            //ModCore.log("Found texture: " + textureExtended.Name);
 
             //this.addTexture(textureExtended.Name, textureExtended);
         }

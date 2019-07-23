@@ -24,6 +24,17 @@ namespace StardustCore.Animations
 
         public bool IsNull => this.defaultDrawFrame == null && this.objectTexture == null;
 
+        /// <summary>
+        /// Checks to see if there is an animation playing.
+        /// </summary>
+        public bool IsAnimationPlaying
+        {
+            get
+            {
+                return !(this.defaultDrawFrame == this.currentAnimation);
+            }
+        }
+
         /// <summary>Construct an instance.</summary>
         public AnimationManager() { }
 

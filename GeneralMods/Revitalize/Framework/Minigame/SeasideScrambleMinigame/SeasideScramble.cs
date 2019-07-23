@@ -377,7 +377,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 {
                     player.update(time);
                 }
-                this.enemies.update(time);
             }
             else
             {
@@ -385,6 +384,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 {
                     if (player.playerID == SSCEnums.PlayerID.One) this.camera.centerOnPosition(player.position);
                     player.update(time);
+                    this.enemies.update(time);
                 }
             }
 
