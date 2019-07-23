@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMaps;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.SpriteFonts.Components;
@@ -30,6 +31,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
         public AnimatedSprite clock;
         public TexturedString reloadTime;
 
+        public AnimatedSprite targetsHit;
+        public TexturedString targetsScoreText;
         
 
         public SSCPlayer Player
@@ -72,6 +75,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             this.clock = new AnimatedSprite("Clock", new Vector2(x + 32, y + 50), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "Clock"), new Animation(0, 0, 11, 10)), Color.White);
             this.reloadTime = SeasideScramble.self.gameFont.ParseString("100", new Vector2(100, this.yPositionOnScreen + 50), Color.White, true, 2f);
             this.reloadTime.setPosition(new Vector2(this.xPositionOnScreen + 100, this.yPositionOnScreen + 50));
+
+            this.targetsHit = new AnimatedSprite("Target", new Vector2(x + 32, y + 100), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Enemies", "Target"), new Animation(0, 0, 16, 16)), Color.White);
+            this.targetsScoreText = SeasideScramble.self.gameFont.ParseString("000", new Vector2(100, this.yPositionOnScreen + 110), Color.White, true, 2f);
+            this.targetsScoreText.setPosition(new Vector2(this.xPositionOnScreen + 100, this.yPositionOnScreen + 110));
         }
 
         public override void update(GameTime time)
@@ -90,6 +97,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
                     this.playerAmmo.setText(this.Player.gun.remainingAmmo.ToString().PadLeft(3, '0'), SeasideScramble.self.gameFont, Color.White);
                 }
                 this.reloadTime.setText(((int)this.Player.gun.timeRemainingUntilReload).ToString().PadLeft(4, '0'), SeasideScramble.self.gameFont, Color.White);
+
+                if(SeasideScramble.self.currentMap is ShootingGallery)
+                {
+                    this.targetsScoreText.setText((SeasideScramble.self.currentMap as ShootingGallery).score[this.playerID].ToString(), SeasideScramble.self.gameFont, this.background.color);
+                }
+
             }
             if (this.showFullHeart)
             {
@@ -150,6 +163,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             {
                 this.clock.draw(b, 6f, 0f);
                 this.reloadTime.draw(b, new Rectangle(0, 0, 16, 16), 0f);
+            }
+            if(SeasideScramble.self.currentMap is ShootingGallery)
+            {
+                this.targetsHit.draw(b,4f,0f);
+                this.targetsScoreText.draw(b, new Rectangle(0, 0, 16, 16), 0f);
             }
         }
 

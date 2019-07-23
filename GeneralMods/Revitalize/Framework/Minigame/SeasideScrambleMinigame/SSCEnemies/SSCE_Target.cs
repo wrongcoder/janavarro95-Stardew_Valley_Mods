@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMaps;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles;
 using Revitalize.Framework.Utilities;
+using StardewValley;
 using StardustCore.Animations;
+using AnimatedSprite = StardustCore.Animations.AnimatedSprite;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
 {
@@ -30,7 +33,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
 
         }
 
-        public SSCE_Target(AnimatedSprite Sprite, int MoveSpeed, int MaxHealth, Vector2 HitBoxDimensions,float Scale,Vector2 Direction,float Speed):base(Sprite,MoveSpeed,MaxHealth,HitBoxDimensions,Scale)
+        public SSCE_Target(StardustCore.Animations.AnimatedSprite Sprite, int MoveSpeed, int MaxHealth, Vector2 HitBoxDimensions,float Scale,Vector2 Direction,float Speed):base(Sprite,MoveSpeed,MaxHealth,HitBoxDimensions,Scale)
         {
             this.direction = Direction;
             this.speed = Speed;
@@ -39,6 +42,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
         public override void die()
         {
             this.playDeathAnimation();
+            Game1.soundBank.PlayCue("breakingGlass");
         }
 
         public void playDeathAnimation()
@@ -71,10 +75,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
         /// <param name="other"></param>
         public override void onCollision(SSCProjectile other)
         {
+            if (this.targetHit) return;
             if (other is SSCProjectiles.SSCProjectile)
             {
                 this.CurrentHealth -= other.damage;
                 this.die();
+                if (SeasideScramble.self.currentMap is ShootingGallery)
+                {
+                    (SeasideScramble.self.currentMap as ShootingGallery).addScore((other.owner as SSCPlayer).playerID, 1);
+                }
             }
         }
 
@@ -99,9 +108,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
                 } },
                 {"Die",new List<Animation>()
                 {
-                    new Animation(0,0,16,16,20),
-                    new Animation(16,0,16,16,20),
-                    new Animation(32,0,16,16,20)
+                    new Animation(0,0,16,16,10),
+                    new Animation(16,0,16,16,10),
+                    new Animation(32,0,16,16,10)
                 }
                 }
 

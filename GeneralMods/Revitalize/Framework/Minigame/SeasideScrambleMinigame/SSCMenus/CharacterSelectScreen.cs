@@ -202,6 +202,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                 {
                     this.setUpForGameplay();
                     SeasideScramble.self.menuManager.closeAllMenus();
+                    SeasideScramble.self.menuManager.addNewMenu(new Loby(0, 0, SeasideScramble.self.camera.viewport.Width, SeasideScramble.self.camera.viewport.Height));
                 }
             }
 
@@ -449,6 +450,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                 {
                     this.setUpForGameplay();
                     SeasideScramble.self.menuManager.closeAllMenus();
+                    SeasideScramble.self.menuManager.addNewMenu(new Loby(0, 0, SeasideScramble.self.camera.viewport.Width, SeasideScramble.self.camera.viewport.Height));
                 }
             }
             if (key == Keys.A)
@@ -466,19 +468,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         /// </summary>
         private void setUpForGameplay()
         {
-            foreach (SSCPlayer p in SeasideScramble.self.players.Values)
-            {
-                p.HUD.displayHUD();
-                //p.statusEffects.addStatusEffect(SE_Burn.SpawnBurnEffect(new Vector2(p.HUD.xPositionOnScreen,p.HUD.yPositionOnScreen),10*1000,1000,1.00d,1));
-            }
 
-            SeasideScramble.self.entities.addSpawner(new Target_Spawner(new Vector2(SeasideScrambleMap.TileSize*-1, SeasideScrambleMap.TileSize * 4), new Vector2(1, 0), Color.White, true, 1000, 5000, true, 0.25f, 3f, true));
-            SeasideScramble.self.entities.addSpawner(new Target_Spawner(new Vector2(SeasideScrambleMap.TileSize * 17, SeasideScrambleMap.TileSize * 5), new Vector2(-1, 0), Color.White, true, 1000, 5000, true, 0.25f, 3f, true));
-
-            SeasideScramble.self.currentMap.spawnPlayersAtPositions();
-            //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(100, 100), Color.Blue);
-            //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(200, 100), Color.Red);
-            //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(300, 100), Color.Green);
         }
 
         /// <summary>

@@ -209,6 +209,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCGuns
             if (this.canShoot())
             {
                 this.shoot(Position, Direction);
+                StardewValley.Game1.playSound("coin");
+                //StardewValley.Game1.playSound("Cowboy_gunshot");
             }
         }
 
@@ -236,7 +238,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCGuns
         {
             this.remainingAmmo = this.maxAmmo;
             this.timeRemainingUntilReload = this.reloadSpeed;
-            if(this.remainingAmmo== this.maxAmmo)
+            //StardewValley.Game1.soundBank.PlayCue("dwop");
+            StardewValley.Game1.playSound("cowboy_gunload");
+            if (this.remainingAmmo== this.maxAmmo)
             {
                 this.isReloading = false;
             }
