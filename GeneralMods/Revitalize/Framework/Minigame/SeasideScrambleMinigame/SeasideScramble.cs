@@ -24,7 +24,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
     /// -Fix positioning of status effects on player HUD
     /// -Add effect on player for a more visual representation of status effects.
     ///
-    /// -Make shooting gallary map.
+    /// -Make shooting gallary game mode
+    /// -Make shooting gallery map wider.
+    /// -Add in score system for shooting gallery mode.
+    /// 
     /// -Make More guns
     /// </summary>
     public class SeasideScramble : StardewValley.Minigames.IMinigame
@@ -135,10 +138,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
             this.SeasideScrambleMaps = new Dictionary<string, SeasideScrambleMap>();
             this.SeasideScrambleMaps.Add("TestRoom", new SeasideScrambleMap(SeasideScrambleMap.LoadMap("TestRoom.tbin").Value));
+            this.SeasideScrambleMaps.Add("ShootingGallery", new SSCMaps.ShootingGallery(SeasideScrambleMap.LoadMap("ShootingGallery.tbin").Value));
         }
         private void loadStartingMap()
         {
-            this.currentMap = this.SeasideScrambleMaps["TestRoom"];
+            this.currentMap = this.SeasideScrambleMaps["ShootingGallery"];
         }
 
         /// <summary>

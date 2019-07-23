@@ -69,7 +69,8 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISpawner.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISSCLivingEntity.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScramble.cs" />
-    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEntities\Generic\SignPost.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMaps\SeasideScrambleMap.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCCamera.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\EnemyManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\KillZone.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFontCharacterSheet.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFont.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCGuns\SSCGun.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMaps\ShootingGallery.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\CharacterSelectScreen.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\HUD\CharacterHUD.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCMenus\SSCMenuManager.cs" />
@@ -131,6 +133,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Minigames\SeasideScramble\Maps\ShootingGallery.tbin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\Minigames\SeasideScramble\Maps\TestRoom.tbin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

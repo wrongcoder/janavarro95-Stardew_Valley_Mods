@@ -464,26 +464,54 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             if (direction == SSCEnums.FacingDirection.Up)
             {
                 this.facingDirection = direction;
-                this.position += new Vector2(0, -1);
+                if (this.canMoveHere(direction,new Vector2(0, -1))){
+                    this.position += new Vector2(0, -1);
+                }
             }
             if (direction == SSCEnums.FacingDirection.Down)
             {
                 this.facingDirection = direction;
-                this.position += new Vector2(0, 1);
+                if (this.canMoveHere(direction,new Vector2(0, 1)))
+                {
+                    this.position += new Vector2(0, 1);
+                }
             }
             if (direction == SSCEnums.FacingDirection.Left)
             {
                 this.facingDirection = direction;
-                this.position += new Vector2(-1, 0);
+                if (this.canMoveHere(direction,new Vector2(-1, 0)))
+                {
+                    this.position += new Vector2(-1, 0);
+                }
             }
             if (direction == SSCEnums.FacingDirection.Right)
             {
                 this.facingDirection = direction;
-                this.position += new Vector2(1, 0);
+                if (this.canMoveHere(direction,new Vector2(1, 0)))
+                {
+                    this.position += new Vector2(1, 0);
+                }
             }
             this.hitBox.X = (int)this.position.X;
             this.hitBox.Y = (int)this.position.Y;
             //ModCore.log(this.position);
+        }
+
+        public bool canMoveHere(SSCEnums.FacingDirection Direction,Vector2 offset)
+        {
+            Vector2 combo = this.position + offset;
+            if(Direction== SSCEnums.FacingDirection.Right)
+            {
+                combo.X += this.hitBox.Width;
+            }
+            if(Direction== SSCEnums.FacingDirection.Down)
+            {
+                combo.Y += this.hitBox.Height;
+            }
+
+            if (SeasideScramble.self.currentMap.insideMap(combo) == false) return false;
+            if (SeasideScramble.self.currentMap.isObstacleAt(combo)) return false;
+            return true;
         }
 
         /// <summary>

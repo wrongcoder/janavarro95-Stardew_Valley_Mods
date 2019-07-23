@@ -116,7 +116,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             //this.animatedSprites.Add("P1NextColor", new StardustCore.Animations.AnimatedSprite("P1NextColor", this.playerDisplayLocations[SSCEnums.PlayerID.One] + new Vector2(64, 200), new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("SSCUI", "nextPageButton"), new Animation(0, 0, 32, 32)), Color.White));
 
 
-            this.oldMousePos =new Vector2( Game1.getMousePosition().X,Game1.getMousePosition().Y);
+            this.oldMousePos = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
         }
 
         public CharacterSelectScreen(xTile.Dimensions.Rectangle viewport) : this(0, 0, viewport.Width, viewport.Height)
@@ -388,7 +388,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             }
         }
 
-        public void receiveGamepadLeftClick(SSCEnums.PlayerID player,int x, int y, bool playSound = true)
+        public void receiveGamepadLeftClick(SSCEnums.PlayerID player, int x, int y, bool playSound = true)
         {
             if (player == SSCEnums.PlayerID.One)
             {
@@ -466,13 +466,16 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
         /// </summary>
         private void setUpForGameplay()
         {
-            foreach(SSCPlayer p in SeasideScramble.self.players.Values)
+            foreach (SSCPlayer p in SeasideScramble.self.players.Values)
             {
                 p.HUD.displayHUD();
                 //p.statusEffects.addStatusEffect(SE_Burn.SpawnBurnEffect(new Vector2(p.HUD.xPositionOnScreen,p.HUD.yPositionOnScreen),10*1000,1000,1.00d,1));
             }
 
-            SeasideScramble.self.entities.addSpawner(new Target_Spawner(new Vector2(-64, 0), new Vector2(1, 0), Color.White, true, 1000, 5000, true, 0.25f, 3f,true));
+            SeasideScramble.self.entities.addSpawner(new Target_Spawner(new Vector2(SeasideScrambleMap.TileSize*-1, SeasideScrambleMap.TileSize * 4), new Vector2(1, 0), Color.White, true, 1000, 5000, true, 0.25f, 3f, true));
+            SeasideScramble.self.entities.addSpawner(new Target_Spawner(new Vector2(SeasideScrambleMap.TileSize * 17, SeasideScrambleMap.TileSize * 5), new Vector2(-1, 0), Color.White, true, 1000, 5000, true, 0.25f, 3f, true));
+
+            SeasideScramble.self.currentMap.spawnPlayersAtPositions();
             //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(100, 100), Color.Blue);
             //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(200, 100), Color.Red);
             //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(300, 100), Color.Green);
@@ -565,12 +568,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
             if (SeasideScramble.self.currentNumberOfPlayers >= 1)
             {
                 Vector2 finish = Game1.dialogueFont.MeasureString("Press start or enter to start the game.");
-                b.DrawString(Game1.dialogueFont, "Press start or enter to start the game.", new Vector2((this.width / 2) - (menuTitlePos.X / 2), this.height *.25f), Color.White);
+                b.DrawString(Game1.dialogueFont, "Press start or enter to start the game.", new Vector2((this.width / 2) - (menuTitlePos.X / 2), this.height * .25f), Color.White);
             }
 
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One) != null)
             {
-                SeasideScramble.self.getPlayer( SSCEnums.PlayerID.One).drawMouse(b);
+                SeasideScramble.self.getPlayer(SSCEnums.PlayerID.One).drawMouse(b);
             }
             if (SeasideScramble.self.getPlayer(SSCEnums.PlayerID.Two) != null)
             {

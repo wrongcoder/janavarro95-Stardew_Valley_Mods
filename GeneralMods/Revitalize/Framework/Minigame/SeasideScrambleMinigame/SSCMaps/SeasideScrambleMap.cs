@@ -12,6 +12,8 @@ using xTile;
 using xTile.Dimensions;
 using xTile.Display;
 using xTile.Layers;
+using xTile.ObjectModel;
+using xTile.Tiles;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
@@ -31,6 +33,8 @@ AlwaysFront:	Objects that are always drawn on top of other layers as well as the
     {
         public xTile.Map map;
 
+        public const int TileSize = 64;
+
         public SeasideScrambleMap()
         {
 
@@ -42,9 +46,27 @@ AlwaysFront:	Objects that are always drawn on top of other layers as well as the
             //this.map.LoadTileSheets(Game1.mapDisplayDevice);
         }
 
+        public Microsoft.Xna.Framework.Rectangle MapBounds
+        {
+            get
+            {
+                Vector2 size = this.getPixelSize();
+                return new Microsoft.Xna.Framework.Rectangle(0,0,(int)size.X,(int)size.Y);
+            }
+        }
+
+        public Vector2 Center
+        {
+            get
+            {
+                Microsoft.Xna.Framework.Rectangle bounds = this.MapBounds;
+                return new Vector2(bounds.Width / 2, bounds.Height / 2);
+            }
+        }
+
         public virtual void update(GameTime time)
         {
-            this.map.Update(time.TotalGameTime.Ticks);
+            this.map.Update(time.ElapsedGameTime.Milliseconds);
         }
 
         public virtual void draw(SpriteBatch b)
@@ -58,6 +80,32 @@ AlwaysFront:	Objects that are always drawn on top of other layers as well as the
             }
             Game1.mapDisplayDevice.EndScene();
             b.End();
+        }
+
+        public virtual void drawBackLayer()
+        {
+
+        }
+        public virtual void drawBuildingsLayer()
+        {
+
+        }
+        public virtual void drawPathsLayer()
+        {
+
+        }
+        public virtual void drawFrontLayer()
+        {
+
+        }
+        public virtual void drawAlwaysFrontLayer()
+        {
+
+        }
+
+        public virtual void spawnPlayersAtPositions()
+        {
+
         }
 
         /// <summary>
@@ -95,6 +143,31 @@ AlwaysFront:	Objects that are always drawn on top of other layers as well as the
             return new Vector2(layer.TileSize.Width * layer.LayerWidth * mapZoomScale, layer.TileSize.Height * layer.LayerWidth * mapZoomScale);
         }
 
+        /// <summary>
+        /// Checks to see if a given position is inside the map.
+        /// </summary>
+        /// <param name="Position"></param>
+        /// <returns>A boolean representing if the point is inside the map.</returns>
+        public bool insideMap(Vector2 Position)
+        {
+            return this.MapBounds.Contains((int)Position.X, (int)Position.Y);
+        }
+
+        public bool isObstacleAt(Vector2 position)
+        {
+            int tileSize = 1;//16 * 4;
+            int x = (int)position.X / tileSize;
+            int y = (int)position.Y / tileSize;
+
+            PropertyValue propertyValue = (PropertyValue)null;
+            Tile t=this.map.GetLayer("Front").PickTile(new Location(x, y), SeasideScramble.self.camera.viewport.Size);
+            t?.TileIndexProperties.TryGetValue("Obstacle", out propertyValue);
+            if (propertyValue == null) return false;
+            else
+            {
+                return true;
+            }
+        }
 
         public void debugInfo()
         {
