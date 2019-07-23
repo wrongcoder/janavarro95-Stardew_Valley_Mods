@@ -19,13 +19,22 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
     ///         -a,d for keyboard
     ///         -dpad for p2-4
     /// Also add interface for game entity for camera to consistently have a focus target.
+    /// -Make moving target enemies
+    ///     -Make a sound effect play when they break
+    /// -Fix positioning of status effects on player HUD
+    /// -Add effect on player for a more visual representation of status effects.
+    ///
+    /// -Make shooting gallary map.
+    /// -Make More guns
     /// </summary>
     public class SeasideScramble : StardewValley.Minigames.IMinigame
     {
-
+        /// <summary>
+        /// A static reference to the game.
+        /// </summary>
         public static SeasideScramble self;
 
-        SeasideScrambleMap currentMap;
+        public SeasideScrambleMap currentMap;
         public Dictionary<string, SeasideScrambleMap> SeasideScrambleMaps;
 
         public int currentNumberOfPlayers
@@ -49,10 +58,17 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public Vector2 oldMousePosition;
 
-        public SSCProjectiles.SSCProjectileManager projectiles;
-        public SSCEnemies.EnemyManager enemies;
+        public SSCEntities.SSCEntityManager entities;
 
         public SSCFonts.SSCFont gameFont;
+
+        public Random random
+        {
+            get
+            {
+                return Game1.random;
+            }
+        }
 
         public SeasideScramble()
         {
@@ -63,7 +79,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
             this.LoadTextures();
 
-            this.projectiles = new SSCProjectiles.SSCProjectileManager();
+            this.entities = new SSCEntities.SSCEntityManager();
 
             this.LoadMaps();
             this.loadStartingMap();
@@ -80,7 +96,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.oldMousePosition = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
 
             this.gameFont = new SSCFonts.SSCFont(new SSCFonts.SSCFontCharacterSheet());
-            this.enemies = new SSCEnemies.EnemyManager();
         }
 
         public SSCPlayer getPlayer(SSCEnums.PlayerID id)
@@ -183,13 +198,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     p.drawMouse(b);
                 }
             }
-            this.enemies.draw(b);
+            this.entities.draw(b);
 
             this.menuManager.drawAll(b);
-
-            this.projectiles.draw(b);
-
-
 
             b.End();
         }
@@ -384,11 +395,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 {
                     if (player.playerID == SSCEnums.PlayerID.One) this.camera.centerOnPosition(player.position);
                     player.update(time);
-                    this.enemies.update(time);
                 }
+                this.entities.update(time);
             }
 
-            this.projectiles.update(time);
+            
 
             this.oldMousePosition = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
             return false;

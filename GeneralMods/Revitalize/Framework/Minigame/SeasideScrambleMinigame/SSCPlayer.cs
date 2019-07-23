@@ -145,7 +145,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
             this.mouseSensitivity = new Vector2(3f, 3f);
 
-            this.gun = new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun", this.position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns", "BasicGun"), new Animation(0, 0, 16, 16)), Color.White), SeasideScramble.self.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300), 10, 1000, 3000);
+            this.gun = new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun", this.position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns", "BasicGun"), new Animation(0, 0, 16, 16)), Color.White), SeasideScramble.self.entities.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300), 10, 1000, 3000);
 
             this.hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, 64, 64);
 

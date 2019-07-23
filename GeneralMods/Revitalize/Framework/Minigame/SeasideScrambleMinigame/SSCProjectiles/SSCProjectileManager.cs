@@ -51,13 +51,20 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                         player.onCollision(p);
                     }
                 }
-                foreach(SSCEnemies.SSCEnemy enemy in SeasideScramble.self.enemies.enemies)
+                foreach(SSCEnemies.SSCEnemy enemy in SeasideScramble.self.entities.enemies.enemies)
                 {
                     if (p.collidesWith(enemy.HitBox))
                     {
                         p.onCollision(enemy); //What happens to the projectile.
                         enemy.onCollision(p); //What happens to the entity.
                     }
+                }
+
+                //Quietly clean up stray projectiles just incase their timer hasn't ticked out yet.
+                Vector2 mapSize = SeasideScramble.self.currentMap.getPixelSize();
+                if (p.position.X > mapSize.X * 2 || p.position.X < -mapSize.X || p.position.Y > mapSize.Y * 2 || p.position.Y < -mapSize.Y)
+                {
+                    this.deleteProjectile(p);
                 }
             }
         }

@@ -21,7 +21,9 @@ namespace Revitalize.Framework.Utilities
         /// <returns></returns>
         public static Vector2 UnitVector(this Vector2 vec)
         {
+            if (vec == Vector2.Zero) return Vector2.Zero;
             double mag = Magnitude(vec);
+            if (mag == 0) return Vector2.Zero;
             return new Vector2((float)(vec.X / mag),(float)(vec.Y / mag));
 
         }

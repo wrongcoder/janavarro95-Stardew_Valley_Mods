@@ -118,8 +118,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         {
             //Make projectile manager that handles deleting this projectile.
             //Make projectile manager have a pool of projectiles????
-            ModCore.log("Projectile has died.");
-            SeasideScramble.self.projectiles.deleteProjectile(this);
+            SeasideScramble.self.entities.projectiles.deleteProjectile(this);
         }
 
         /// <summary>
@@ -194,7 +193,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         {
             //AnimatedSprite newSprite = new AnimatedSprite(this.sprite.name, position, new AnimationManager(this.sprite.animation.objectTexture.Copy(), this.sprite.animation.defaultDrawFrame), this.color);
             SSCProjectile basic = new SSCProjectile(this.owner, new AnimatedSprite("DefaultProjectile", position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Basic"), new Animation(0, 0, 4, 4)), this.color), new Rectangle(this.hitBox.X,this.hitBox.Y,this.hitBox.Width,this.hitBox.Height), position, direction, this.speed, this.maxLifeSpan, this.scale,this.damage);
-            SeasideScramble.self.projectiles.addProjectile(basic);
+            SeasideScramble.self.entities.projectiles.addProjectile(basic);
         }
     }
 }

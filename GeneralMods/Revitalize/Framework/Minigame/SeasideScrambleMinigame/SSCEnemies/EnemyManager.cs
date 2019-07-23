@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame.Interfaces;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
 {
@@ -13,6 +14,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
         public List<SSCEnemy> enemies;
         private List<SSCEnemy> garbageCollection;
 
+        private List<ISpawner> spawnerGarbageCollection;
+        public List<ISpawner> spawners;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -20,6 +24,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
         {
             this.enemies = new List<SSCEnemy>();
             this.garbageCollection = new List<SSCEnemy>();
+
+            this.spawners = new List<ISpawner>();
+            this.spawnerGarbageCollection = new List<ISpawner>();
         }
 
         /// <summary>
@@ -39,12 +46,31 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
             this.garbageCollection.Add(enemy);
         }
 
+        public void addSpawner(ISpawner spawner)
+        {
+            this.spawners.Add(spawner);
+        }
+        public void removeSpawner(ISpawner spawner)
+        {
+            this.spawnerGarbageCollection.Add(spawner);
+        }
+
         /// <summary>
         /// Update all enemies.
         /// </summary>
         /// <param name="time"></param>
         public void update(GameTime time)
         {
+
+            foreach(ISpawner spawner in this.spawnerGarbageCollection)
+            {
+                this.spawners.Remove(spawner);
+            }
+            foreach(ISpawner spawner in this.spawners)
+            {
+                spawner.update(time);
+            }
+
             foreach(SSCEnemy enemy in this.garbageCollection)
             {
                 this.enemies.Remove(enemy);
@@ -53,7 +79,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
             {
                 enemy.update(time);
                 if (enemy.shouldDie) this.removeEnemy(enemy);
+                //Delete enemies that are too far off screen.
+                Vector2 mapSize = SeasideScramble.self.currentMap.getPixelSize();
+                if (enemy.Position.X>mapSize.X*2 || enemy.Position.X<-mapSize.X || enemy.Position.Y>mapSize.Y*2|| enemy.Position.Y < -mapSize.Y)
+                {
+                    enemy.shouldDie = true; //Silently remove the enemy from the map.
+                    this.removeEnemy(enemy);
+                }
             }
+            
         }
 
         /// <summary>
@@ -65,6 +99,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
             foreach (SSCEnemy enemy in this.enemies)
             {
                 enemy.draw(b);
+            }
+            foreach(ISpawner spawner in this.spawners)
+            {
+                spawner.draw(b);
             }
         }
 

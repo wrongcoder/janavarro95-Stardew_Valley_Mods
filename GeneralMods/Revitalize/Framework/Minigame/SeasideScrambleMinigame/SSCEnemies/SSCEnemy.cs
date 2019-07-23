@@ -29,6 +29,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
             {
                 return this.sprite.position;
             }
+            set
+            {
+                this.sprite.position = value;
+                Rectangle hit = this.HitBox;
+                hit.X = (int)this.Position.X;
+                hit.Y = (int)this.Position.Y;
+                this.HitBox = hit;
+            }
         }
 
         public SSCEnemy()
@@ -67,6 +75,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
         }
 
         public virtual void onCollision(SSCProjectiles.SSCProjectile other)
+        {
+
+        }
+
+        public virtual void updateMovement()
         {
 
         }

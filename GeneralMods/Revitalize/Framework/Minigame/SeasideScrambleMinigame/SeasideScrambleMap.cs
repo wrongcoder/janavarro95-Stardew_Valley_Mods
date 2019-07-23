@@ -84,5 +84,25 @@ AlwaysFront:	Objects that are always drawn on top of other layers as well as the
             return new KeyValuePair<string, Map>(mapAssetKey, map);
         }
 
+        public virtual Vector2 getPixelSize()
+        {
+            Layer layer = this.map.GetLayer("Back");
+            return new Vector2(layer.TileSize.Width * (layer.LayerWidth/4f) * 4f, layer.TileSize.Height * (layer.LayerHeight/4f) * 4f);
+        }
+        public virtual Vector2 getPixelSize(float mapZoomScale)
+        {
+            Layer layer = this.map.GetLayer("Back");
+            return new Vector2(layer.TileSize.Width * layer.LayerWidth * mapZoomScale, layer.TileSize.Height * layer.LayerWidth * mapZoomScale);
+        }
+
+
+        public void debugInfo()
+        {
+            Layer layer = this.map.GetLayer("Back");
+            ModCore.log("layer Tile Size: " + new Vector2(layer.TileSize.Width,layer.TileSize.Height));
+            ModCore.log("Layer Width/Height: " + new Vector2(layer.LayerWidth, layer.LayerHeight));
+            ModCore.log("Size multiplier: 4");
+        }
+
     }
 }

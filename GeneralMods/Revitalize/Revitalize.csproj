@@ -66,13 +66,17 @@
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Menus\SimpleItemGrabMenu.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ICollider.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISpawner.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISSCLivingEntity.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScramble.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SeasideScrambleMap.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCCamera.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\EnemyManager.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\KillZone.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\Spawners\Target_Spawner.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\SSCEnemy.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnemies\SSCE_Target.cs" />
+    <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEntities\SSCEntityManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCEnums.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFontCharacterSheet.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCFonts\SSCFont.cs" />

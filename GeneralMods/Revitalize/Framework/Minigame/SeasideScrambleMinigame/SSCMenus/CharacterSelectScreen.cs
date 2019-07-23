@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies.Spawners;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCStatusEffects;
 using StardewValley;
 using StardustCore.Animations;
@@ -471,8 +472,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
                 //p.statusEffects.addStatusEffect(SE_Burn.SpawnBurnEffect(new Vector2(p.HUD.xPositionOnScreen,p.HUD.yPositionOnScreen),10*1000,1000,1.00d,1));
             }
 
-            SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(100, 100), Color.Blue);
-           // SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(200, 100), Color.Red);
+            SeasideScramble.self.entities.addSpawner(new Target_Spawner(new Vector2(-64, 0), new Vector2(1, 0), Color.White, true, 1000, 5000, true, 0.25f, 3f,true));
+            //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(100, 100), Color.Blue);
+            //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(200, 100), Color.Red);
             //SSCEnemies.SSCE_Target.Spawn_SSCE_Target(new Vector2(300, 100), Color.Green);
         }
 

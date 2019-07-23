@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles;
+using Revitalize.Framework.Utilities;
 using StardustCore.Animations;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
@@ -14,14 +15,25 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
 
         private bool targetHit;
 
+        public Vector2 direction;
+        public float speed;
+        public Vector2 Velocity
+        {
+            get
+            {
+                return this.direction * this.speed;
+            }
+        }
+
         public SSCE_Target():base()
         {
 
         }
 
-        public SSCE_Target(AnimatedSprite Sprite, int MoveSpeed, int MaxHealth, Vector2 HitBoxDimensions,float Scale):base(Sprite,MoveSpeed,MaxHealth,HitBoxDimensions,Scale)
+        public SSCE_Target(AnimatedSprite Sprite, int MoveSpeed, int MaxHealth, Vector2 HitBoxDimensions,float Scale,Vector2 Direction,float Speed):base(Sprite,MoveSpeed,MaxHealth,HitBoxDimensions,Scale)
         {
-
+            this.direction = Direction;
+            this.speed = Speed;
         }
 
         public override void die()
@@ -35,14 +47,28 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
             this.targetHit = true;
         }
 
+        /// <summary>
+        /// Updates the state of the enemy.
+        /// </summary>
+        /// <param name="time"></param>
         public override void update(GameTime time)
         {
             if(this.sprite.animation.IsAnimationPlaying==false && this.targetHit)
             {
                 this.shouldDie = true;
             }
+            this.updateMovement();
         }
 
+        public override void updateMovement()
+        {
+            this.Position += this.Velocity;
+        }
+
+        /// <summary>
+        /// What happens when the target collides with a projectile.
+        /// </summary>
+        /// <param name="other"></param>
         public override void onCollision(SSCProjectile other)
         {
             if (other is SSCProjectiles.SSCProjectile)
@@ -54,6 +80,18 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
 
 
         public static void Spawn_SSCE_Target(Vector2 Position,Color Color)
+        {
+            Spawn_SSCE_Target(Position, Color, Vector2.Zero, 0f);
+        }
+
+        /// <summary>
+        /// Spawn a target enemy with the given paramaters.
+        /// </summary>
+        /// <param name="Position"></param>
+        /// <param name="Color"></param>
+        /// <param name="Direction"></param>
+        /// <param name="Speed"></param>
+        public static void Spawn_SSCE_Target(Vector2 Position, Color Color,Vector2 Direction, float Speed)
         {
             SSCE_Target target = new SSCE_Target(new AnimatedSprite("TargetPractice", Position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Enemies", "Target"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>() {
                 { "None",new List<Animation>(){
@@ -67,8 +105,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies
                 }
                 }
 
-            },"None"), Color), 0, 1, new Vector2(16,16),4f);
-            SeasideScramble.self.enemies.addEnemy(target);
+            }, "None"), Color), 0, 1, new Vector2(16, 16), 4f, Direction.UnitVector(), Speed);
+            SeasideScramble.self.entities.addEnemy(target);
         }
     }
 }
