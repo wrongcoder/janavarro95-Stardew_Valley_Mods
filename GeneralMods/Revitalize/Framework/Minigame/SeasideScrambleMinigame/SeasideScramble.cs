@@ -65,6 +65,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public SSCFonts.SSCFont gameFont;
 
+        /// <summary>
+        /// The current game mode.
+        /// </summary>
+        public SSCEnums.SSCGameMode gameMode;
+        public bool friendlyFireEnabled;
+
+        /// <summary>
+        /// RNG.
+        /// </summary>
         public Random random
         {
             get
@@ -73,6 +82,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
         }
 
+        /// <summary>
+        /// Constuctor.
+        /// </summary>
         public SeasideScramble()
         {
             self = this;
@@ -110,6 +122,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             else return null;
         }
 
+        /// <summary>
+        /// Loads in all of the necessary textures for Seaside Scramble.
+        /// </summary>
         private void LoadTextures()
         {
             this.textureUtils = new SSCTextureUtilities();
@@ -134,12 +149,18 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.textureUtils.addTextureManager(enemies);
         }
 
+        /// <summary>
+        /// Loads in all of the maps for Seaside Scramble.
+        /// </summary>
         private void LoadMaps()
         {
             this.SeasideScrambleMaps = new Dictionary<string, SeasideScrambleMap>();
             this.SeasideScrambleMaps.Add("TestRoom", new SeasideScrambleMap(SeasideScrambleMap.LoadMap("TestRoom.tbin").Value));
             this.SeasideScrambleMaps.Add("ShootingGallery", new SSCMaps.ShootingGallery(SeasideScrambleMap.LoadMap("ShootingGallery.tbin").Value));
         }
+        /// <summary>
+        /// Loads in a default map for Seaside Scramble.
+        /// </summary>
         private void loadStartingMap()
         {
             this.currentMap = this.SeasideScrambleMaps["ShootingGallery"];
@@ -209,15 +230,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             b.End();
         }
 
-        /// <summary>
-        /// What happens when the left click is held.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void leftClickHeld(int x, int y)
-        {
-            //throw new NotImplementedException();
-        }
+
 
         /// <summary>
         /// The id of the minigame???
@@ -226,6 +239,48 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public string minigameId()
         {
             return "Seaside Scramble Stardew Lite Edition";
+            //throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Sets the game mode for the game.
+        /// </summary>
+        /// <param name="Mode"></param>
+        public void setMode(SSCEnums.SSCGameMode Mode)
+        {
+            if (Mode == SSCEnums.SSCGameMode.None)
+            {
+                this.friendlyFireEnabled = false;
+            }
+            if(Mode== SSCEnums.SSCGameMode.ShootingGallery)
+            {
+                this.friendlyFireEnabled = false;
+            }
+
+            if(Mode== SSCEnums.SSCGameMode.PVP)
+            {
+                this.friendlyFireEnabled = true;
+            }
+            if(Mode== SSCEnums.SSCGameMode.Story)
+            {
+                this.friendlyFireEnabled = false;
+            }
+
+            this.gameMode = Mode;
+        }
+
+        //~~~~~~~~~~~~~~~~~//
+        //   Input Logic   //
+        //~~~~~~~~~~~~~~~~~//
+        #region
+
+        /// <summary>
+        /// What happens when the left click is held.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void leftClickHeld(int x, int y)
+        {
             //throw new NotImplementedException();
         }
 
@@ -327,17 +382,31 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
         }
 
+        /// <summary>
+        /// What happens when left click is released.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void releaseLeftClick(int x, int y)
         {
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// What happens when right click is released.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void releaseRightClick(int x, int y)
         {
             //throw new NotImplementedException();
         }
 
-
+        /// <summary>
+        /// Receive input from a specific gamepad.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="ID"></param>
         private void receiveGamepadInput(GamePadState state,SSCEnums.PlayerID ID)
         {
             if (state == null) return;
@@ -349,6 +418,20 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 }
             }
         }
+
+        /// <summary>
+        /// Returns the delta for mouse movement.
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 getMouseDelta()
+        {
+            Vector2 ret = -1 * (this.oldMousePosition - new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y));
+            return ret;
+        }
+
+        #endregion
+
+
 
         /// <summary>
         /// Called every update frame.
@@ -411,16 +494,6 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         }
 
         /// <summary>
-        /// Returns the delta for mouse movement.
-        /// </summary>
-        /// <returns></returns>
-        public Vector2 getMouseDelta()
-        {
-            Vector2 ret = -1 * (this.oldMousePosition - new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y));
-            return ret;
-        }
-
-        /// <summary>
         /// Called when the minigame is quit upon.
         /// </summary>
         public void unload()
@@ -428,6 +501,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             //throw new NotImplementedException();
             ModCore.log("Exit the game!");
         }
+
+
+        //~~~~~~~~~~~~~~~~~~~~//
+        //  Static Functions  //
+        //~~~~~~~~~~~~~~~~~~~~//
+
+        #region
 
         /// <summary>
         /// Translates the position passed in into the relative position on the viewport.
@@ -449,5 +529,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         {
             return new Vector2(globalPosition.X - (float)SeasideScramble.self.camera.viewport.X, globalPosition.Y - (float)SeasideScramble.self.camera.viewport.Y);
         }
+
+        #endregion
     }
 }

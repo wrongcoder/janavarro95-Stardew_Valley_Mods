@@ -11,12 +11,33 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
 {
     public class SSCProjectile
     {
+        /// <summary>
+        /// The sprite for the projectile/
+        /// </summary>
         public AnimatedSprite sprite;
+        /// <summary>
+        /// The direction the projectile travels.
+        /// </summary>
         public Vector2 direction;
+        /// <summary>
+        /// The speed for the projectile.
+        /// </summary>
         public float speed;
+        /// <summary>
+        /// The scale of the projectile.
+        /// </summary>
         public float scale;
+        /// <summary>
+        /// The hitbox for the projectile.
+        /// </summary>
         public Rectangle hitBox;
+        /// <summary>
+        /// The damage the projectile does upon contact.
+        /// </summary>
         public int damage;
+        /// <summary>
+        /// The position of the projectile. Also resets the bounding box x,y location.
+        /// </summary>
         public Vector2 position
         {
             get
@@ -28,6 +49,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                 this.sprite.position = value;
             }
         }
+        /// <summary>
+        /// The color of the projectile.
+        /// </summary>
         public Color color
         {
             get
@@ -40,7 +64,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             }
         }
 
+        /// <summary>
+        /// The max amount of frames this projectile lives for.
+        /// </summary>
         public int maxLifeSpan;
+        /// <summary>
+        /// The current lifespan for the projectile.
+        /// </summary>
         public int currentLifeSpan;
 
         /// <summary>
@@ -48,6 +78,9 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         /// </summary>
         public object owner;
 
+        /// <summary>
+        /// The velocity of the projectile.
+        /// </summary>
         public Vector2 Velocity
         {
             get
@@ -55,9 +88,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                 return this.direction * this.speed;
             }
         }
-
+        /// <summary>
+        /// The status effect the projectile inflicts upon contact.
+        /// </summary>
         public SSCStatusEffects.StatusEffect effect;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SSCProjectile()
         {
 
@@ -153,9 +191,12 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             this.die();
         }
 
+        /// <summary>
+        /// What happens when the projectile collides with something.
+        /// </summary>
+        /// <param name="other"></param>
         public virtual void onCollision(object other)
         {
-            //Move this if to the player class.????
             if(other is SSCPlayer)
             {
                 if (this.hasOwner())
@@ -165,12 +206,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                         //ModCore.log("Can't get hit by own projectile.");
                         return;
                     }
-                    /*if projectile.owner is player and friendly fire is off do nothing.
-                    *
-                    *
-                    */
+
+                    //if projectile.owner is player and friendly fire is off do nothing.
+                    else if (SeasideScramble.self.friendlyFireEnabled == false && this.owner!=other)
+                    {
+                        return;
+                    }
                 }
-                ModCore.log("Big oof. Player hit by projectile.");
             }
             this.collisionLogic();
         }

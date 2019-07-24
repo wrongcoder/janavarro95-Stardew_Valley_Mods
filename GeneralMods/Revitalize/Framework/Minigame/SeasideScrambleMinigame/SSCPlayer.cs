@@ -13,37 +13,104 @@ using Revitalize.Framework.Minigame.SeasideScrambleMinigame.Interfaces;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 {
+    /// <summary>
+    /// Deals with handling a player.
+    /// </summary>
     public class SSCPlayer : ISSCLivingEntity
     {
+
+        /// <summary>
+        /// The character animator.
+        /// </summary>
         public AnimationManager characterSpriteController;
+        /// <summary>
+        /// Should the sprite be flipped?
+        /// </summary>
         public bool flipSprite;
+        /// <summary>
+        /// The facing direction for the player.
+        /// </summary>
         public SSCEnums.FacingDirection facingDirection;
+        /// <summary>
+        /// The position for the player.
+        /// </summary>
         public Microsoft.Xna.Framework.Vector2 position;
+        /// <summary>
+        /// Is the player moving?
+        /// </summary>
         public bool isMoving;
+        /// <summary>
+        /// Did the player move this frame?
+        /// </summary>
         private bool movedThisFrame;
+        /// <summary>
+        /// The draw color for the player.
+        /// </summary>
         public Color playerColor;
+        /// <summary>
+        /// The player's id.
+        /// </summary>
         public SSCEnums.PlayerID playerID;
 
+        /// <summary>
+        /// The frame speed for the junimo walking.
+        /// </summary>
         public const int junimoWalkingAnimationSpeed = 10;
 
+        /// <summary>
+        /// The mouse cursor.
+        /// </summary>
         public StardustCore.Animations.AnimatedSprite mouseCursor;
+        /// <summary>
+        /// The sensitivity for the mouse.
+        /// </summary>
         public Vector2 mouseSensitivity;
 
+        /// <summary>
+        /// Should the mouse cursor be shown?
+        /// </summary>
         public bool showMouseCursor;
+        /// <summary>
+        /// The delay to show the mouse but I dont think I use this.
+        /// </summary>
         public int maxMouseSleepTime = 300;
 
+        /// <summary>
+        /// The current gun the player is holding. UPDATE THIS TO WEILD MULTIPLE GUNS!!!
+        /// </summary>
         public SSCGuns.SSCGun gun;
 
+        /// <summary>
+        /// The hitbox for the player.
+        /// </summary>
         public Rectangle hitBox;
 
+        /// <summary>
+        /// The HUD for the player.
+        /// </summary>
         public SSCMenus.HUD.CharacterHUD HUD;
 
+        /// <summary>
+        /// The current health for the player.
+        /// </summary>
         public int currentHealth;
+        /// <summary>
+        /// The max health for the player.
+        /// </summary>
         public int maxHealth;
+        /// <summary>
+        /// The movement speed for the player.
+        /// </summary>
         public float movementSpeed;
 
+        /// <summary>
+        /// The status effects on the player.
+        /// </summary>
         public SSCStatusEffects.StatusEffectManager statusEffects;
 
+        /// <summary>
+        /// Is the player dead?
+        /// </summary>
         public bool isDead
         {
             get
@@ -57,6 +124,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public int MaxHealth { get => this.maxHealth; set => this.maxHealth = value; }
         public Rectangle HitBox { get => this.hitBox; set => this.hitBox = value; }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="PlayerID">Which player is this? One, two, etc...</param>
         public SSCPlayer(SSCEnums.PlayerID PlayerID)
         {
             this.playerID = PlayerID;
@@ -226,6 +297,20 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <param name="Time"></param>
         public void update(GameTime Time)
         {
+            if (this.playerID == SSCEnums.PlayerID.One)
+            {
+                if (SeasideScramble.self.getMouseDelta().X != 0 || SeasideScramble.self.getMouseDelta().Y != 0)
+                {
+                    this.mouseCursor.position = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
+                    this.showMouseCursor = true;
+                }
+            }
+            if (this.currentHealth < 0) this.currentHealth = 0;
+
+            this.gun.update(Time);
+            this.HUD.update(Time);
+            this.statusEffects.update(Time);
+
             this.movedThisFrame = false;
             if (this.isMoving == false)
             {
@@ -272,19 +357,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                 this.flipSprite = false;
             }
 
-            if (this.playerID == SSCEnums.PlayerID.One)
-            {
-                if (SeasideScramble.self.getMouseDelta().X != 0 || SeasideScramble.self.getMouseDelta().Y != 0)
-                {
-                    this.mouseCursor.position = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
-                    this.showMouseCursor = true;
-                }
-            }
-            if (this.currentHealth < 0) this.currentHealth = 0;
 
-            this.gun.update(Time);
-            this.HUD.update(Time);
-            this.statusEffects.update(Time);
         }
 
         /// <summary>
@@ -543,6 +616,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         #endregion
 
+        /// <summary>
+        /// Shoots a bullet in the given direction using projectile information stored in the gun.
+        /// </summary>
+        /// <param name="direction"></param>
         private void shoot(Vector2 direction)
         {
             if (SeasideScramble.self.menuManager.isMenuUp) return;
@@ -553,6 +630,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         }
 
+        /// <summary>
+        /// Have this player take damage.
+        /// </summary>
+        /// <param name="amount"></param>
         public void takeDamage(int amount)
         {
             this.currentHealth -= amount;
@@ -562,16 +643,28 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
         }
 
+        /// <summary>
+        /// Heal the player a certain amount of HP/
+        /// </summary>
+        /// <param name="amount"></param>
         public void heal(int amount)
         {
             this.takeDamage(amount * -1);
+            if (this.currentHealth > this.maxHealth) this.currentHealth = this.maxHealth;
         }
 
+        /// <summary>
+        /// Heal the player to full HP.
+        /// </summary>
         public void healToFull()
         {
             this.currentHealth = this.maxHealth;
         }
 
+        /// <summary>
+        /// What happens when the player collides with a projectile.
+        /// </summary>
+        /// <param name="projectile"></param>
         public void onCollision(SSCProjectiles.SSCProjectile projectile)
         {
 
@@ -585,13 +678,14 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                         //ModCore.log("Can't get hit by own projectile.");
                         return;
                     }
-                    /*if projectile.owner is player and friendly fire is off do nothing.
-                     *
-                     *
-                     */
+                    //if projectile.owner is player and friendly fire is off do nothing.
+                    if(projectile.owner is SSCPlayer && SeasideScramble.self.friendlyFireEnabled==false)
+                    {
+                        return;
+                    }
                 }
                 ModCore.log("Big oof. Player hit by projectile.");
-                this.CurrentHealth -= projectile.damage;
+                this.takeDamage(projectile.damage);
                 this.statusEffects.addStatusEffect(projectile.effect);
             }
         }

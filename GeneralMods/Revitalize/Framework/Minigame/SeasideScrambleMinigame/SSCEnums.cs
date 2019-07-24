@@ -24,5 +24,13 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             Four
         }
 
+        public enum SSCGameMode
+        {
+            None,
+            ShootingGallery,
+            PVP,
+            Story
+        }
+
     }
 }
