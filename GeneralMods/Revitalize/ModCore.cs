@@ -18,6 +18,7 @@ using StardewValley;
 using StardewValley.Objects;
 using StardustCore.UIUtilities;
 using StardustCore.Animations;
+using StardewValley.Menus;
 
 namespace Revitalize
 {
@@ -161,6 +162,8 @@ namespace Revitalize
 
             TextureManager.AddTextureManager(Manifest,"Furniture");
             TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures(ModHelper,this.ModManifest,Path.Combine("Content", "Graphics", "Furniture"));
+            TextureManager.AddTextureManager(Manifest, "InventoryMenu");
+            TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus","InventoryMenu"));
 
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
 
@@ -188,6 +191,11 @@ namespace Revitalize
             if(e.Button== SButton.U)
             {
                 Game1.currentMinigame = new Revitalize.Framework.Minigame.SeasideScrambleMinigame.SeasideScramble();
+            }
+            else if(e.Button== SButton.Y)
+            {
+                //Game1.activeClickableMenu = new ItemGrabMenu(Game1.player.Items,false,true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems),);
+                Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryMenu(100, 100, 500, 500, false, Game1.player.Items, 9);
             }
         }
 
@@ -247,6 +255,9 @@ namespace Revitalize
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Tables"));
         }
 
+        /// <summary>
+        /// Initialize all modular components for this mod.
+        /// </summary>
         private void initailizeComponents()
         {
             DarkerNight.InitializeConfig();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardustCore.UIUtilities.SpriteFonts.Components;
 using xTile;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMaps
@@ -15,6 +16,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMaps
         public Dictionary<SSCEnums.PlayerID, int> score;
 
         public static int highScore;
+
+        public TexturedString timeRemaining;
 
         public ShootingGallery():base()
         {
@@ -50,6 +53,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMaps
         public void addScore(SSCEnums.PlayerID player, int amount)
         {
             this.score[player] += amount;
+        }
+
+        public void startTimer(int amount)
+        {
+
         }
     }
 }

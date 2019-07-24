@@ -92,6 +92,7 @@
     <Compile Include="Menus\ModualGameMenu.cs" />
     <Compile Include="ModConfig.cs" />
     <Compile Include="UIUtilities\IClickableMenuExtended.cs" />
+    <Compile Include="UIUtilities\MenuComponents\ItemDisplayButton.cs" />
     <Compile Include="UIUtilities\LayeredTexture.cs" />
     <Compile Include="Animations\AnimatedSprite.cs" />
     <Compile Include="UIUtilities\MenuComponents\BlinkingText.cs" />

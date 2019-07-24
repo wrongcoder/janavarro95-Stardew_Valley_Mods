@@ -64,6 +64,7 @@
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
+    <Compile Include="Framework\Menus\InventoryMenu.cs" />
     <Compile Include="Framework\Menus\SimpleItemGrabMenu.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ICollider.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISpawner.cs" />
@@ -154,6 +155,9 @@
     </Content>
     <Content Include="Content\Graphics\Furniture\Tables\Oak Table.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\InventoryMenu\ItemBackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Enemies\Target.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
