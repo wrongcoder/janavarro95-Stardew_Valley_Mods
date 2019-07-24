@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardustCore.UIUtilities.MenuComponents.ComponentsV1;
 
 namespace StardustCore.UIUtilities
 {
@@ -16,7 +17,7 @@ namespace StardustCore.UIUtilities
         /// <summary>
         /// All buttons belonging to this menu.
         /// </summary>
-        public List<MenuComponents.Button> buttons;
+        public List<Button> buttons;
         /// <summary>
         /// The background color of this menu.
         /// </summary>

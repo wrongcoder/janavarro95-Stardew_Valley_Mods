@@ -159,6 +159,12 @@
     <Content Include="Content\Graphics\Menus\InventoryMenu\ItemBackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Menus\InventoryMenu\NextPageButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\InventoryMenu\PreviousPageButton.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Enemies\Target.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

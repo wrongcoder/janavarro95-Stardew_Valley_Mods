@@ -5,7 +5,7 @@ using StardewValley;
 using StardewValley.Menus;
 using StardustCore.UIUtilities.MenuComponents.Delegates.Functionality;
 
-namespace StardustCore.UIUtilities.MenuComponents
+namespace StardustCore.UIUtilities.MenuComponents.ComponentsV1
 {
     /// <summary>An enum describing the types of slider bars that can exist.</summary>
     public enum SliderStyle

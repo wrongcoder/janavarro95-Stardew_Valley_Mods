@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace StardustCore.UIUtilities.MenuComponents
+namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
 {
     /// <summary>
     /// A simple menu component for displaying SDV Items as well as being able to click them.

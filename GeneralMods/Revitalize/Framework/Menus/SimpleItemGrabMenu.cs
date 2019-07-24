@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 using StardustCore.UIUtilities;
+using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Menus
 {
@@ -15,7 +16,7 @@ namespace Revitalize.Framework.Menus
     {
         public List<Item> stroageInventory;
         public List<Item> receivingInventory;
-        public List<StardustCore.UIUtilities.MenuComponents.ItemDisplayButton> storageDisplay;
+        public List<ItemDisplayButton> storageDisplay;
         public StardewValley.Menus.ItemGrabMenu playerInventory;
 
         public int amountToDisplay = 9;
@@ -28,7 +29,7 @@ namespace Revitalize.Framework.Menus
         {
             this.stroageInventory = StorageInventory;
             this.receivingInventory = ReceivingInventory;
-            this.storageDisplay = new List<StardustCore.UIUtilities.MenuComponents.ItemDisplayButton>();
+            this.storageDisplay = new List<ItemDisplayButton>();
             if (this.receivingInventory == null)
             {
                 this.receivingInventory = (List<Item>)Game1.player.Items;

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCEnemies.Spawners;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents;
+using StardustCore.UIUtilities.MenuComponents.ComponentsV1;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 {

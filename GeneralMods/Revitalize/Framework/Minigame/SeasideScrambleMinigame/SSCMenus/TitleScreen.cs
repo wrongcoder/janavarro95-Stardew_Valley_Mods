@@ -5,20 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardustCore.UIUtilities.MenuComponents.ComponentsV2;
 
 namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus
 {
     public class TitleScreen: StardustCore.UIUtilities.IClickableMenuExtended
     {
         StardustCore.UIUtilities.Texture2DExtended background;
-        StardustCore.UIUtilities.MenuComponents.BlinkingText menuText;
+        BlinkingText menuText;
 
         public bool closeMenu;
 
         public TitleScreen(int x, int y, int width, int height):base(x,y,width,height,false)
         {
             this.background = SeasideScramble.self.textureUtils.getExtendedTexture("SSCMaps", "TitleScreenBackground");
-            this.menuText = new StardustCore.UIUtilities.MenuComponents.BlinkingText("Sea Side Scramble: Lite Edition" + System.Environment.NewLine + "Click or press A to start.",1000);
+            this.menuText = new BlinkingText("Sea Side Scramble: Lite Edition" + System.Environment.NewLine + "Click or press A to start.",1000);
         }
 
         public TitleScreen(xTile.Dimensions.Rectangle viewport) : this(0, 0, viewport.Width, viewport.Height)

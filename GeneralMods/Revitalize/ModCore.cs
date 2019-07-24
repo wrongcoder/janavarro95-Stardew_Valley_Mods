@@ -195,7 +195,7 @@ namespace Revitalize
             else if(e.Button== SButton.Y)
             {
                 //Game1.activeClickableMenu = new ItemGrabMenu(Game1.player.Items,false,true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems),);
-                Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryMenu(100, 100, 500, 500, false, Game1.player.Items, 9);
+                Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryMenu(100, 100, 500, 500,3,4,false, Game1.player.Items,15);
             }
         }
 
