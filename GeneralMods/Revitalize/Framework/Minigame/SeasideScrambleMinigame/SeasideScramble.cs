@@ -62,6 +62,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public Vector2 oldMousePosition;
 
         public SSCEntities.SSCEntityManager entities;
+        public SSCGuns.SSCGunManager guns;
 
         public SSCFonts.SSCFont gameFont;
 
@@ -111,6 +112,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             this.oldMousePosition = new Vector2(Game1.getMousePosition().X, Game1.getMousePosition().Y);
 
             this.gameFont = new SSCFonts.SSCFont(new SSCFonts.SSCFontCharacterSheet());
+            this.guns = new SSCGuns.SSCGunManager();
         }
 
         public SSCPlayer getPlayer(SSCEnums.PlayerID id)
@@ -254,7 +256,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
             if(Mode== SSCEnums.SSCGameMode.ShootingGallery)
             {
-                this.friendlyFireEnabled = false;
+                this.friendlyFireEnabled = true;
             }
 
             if(Mode== SSCEnums.SSCGameMode.PVP)

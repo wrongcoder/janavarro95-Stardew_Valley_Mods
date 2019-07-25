@@ -47,6 +47,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             set
             {
                 this.sprite.position = value;
+                this.hitBox.X =(int) this.sprite.position.X;
+                this.hitBox.Y = (int)this.sprite.position.Y;
             }
         }
         /// <summary>
@@ -142,6 +144,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         {
             if (this.currentLifeSpan <= 0)
             {
+                //ModCore.log("Lifespan is over!");
                 this.die();
             }
             else
@@ -201,6 +204,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             {
                 if (this.hasOwner())
                 {
+                    //ModCore.log("Has an owner!");
                     if (this.owner == other)
                     {
                         //ModCore.log("Can't get hit by own projectile.");
@@ -214,6 +218,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
                     }
                 }
             }
+            //ModCore.log("COllision!!!!");
             this.collisionLogic();
         }
 
@@ -234,7 +239,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         public virtual void spawnClone(Vector2 position,Vector2 direction)
         {
             //AnimatedSprite newSprite = new AnimatedSprite(this.sprite.name, position, new AnimationManager(this.sprite.animation.objectTexture.Copy(), this.sprite.animation.defaultDrawFrame), this.color);
-            SSCProjectile basic = new SSCProjectile(this.owner, new AnimatedSprite("DefaultProjectile", position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Basic"), new Animation(0, 0, 4, 4)), this.color), new Rectangle(this.hitBox.X,this.hitBox.Y,this.hitBox.Width,this.hitBox.Height), position, direction, this.speed, this.maxLifeSpan, this.scale,this.damage);
+            SSCProjectile basic = new SSCProjectile(this.owner, new AnimatedSprite("DefaultProjectile", position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Basic"), new Animation(0, 0, 4, 4)), this.color), new Rectangle(this.hitBox.X,this.hitBox.Y,this.hitBox.Width,this.hitBox.Height), position, direction, this.speed, this.maxLifeSpan, this.scale,this.damage,this.effect);
             SeasideScramble.self.entities.projectiles.addProjectile(basic);
         }
     }

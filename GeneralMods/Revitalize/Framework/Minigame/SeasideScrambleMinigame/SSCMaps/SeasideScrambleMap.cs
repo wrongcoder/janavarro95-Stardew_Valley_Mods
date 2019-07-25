@@ -20,7 +20,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
     /// <summary>
     /// TODO:
     /// Force maps to all have the same layers as SDV maps so we can draw different things on a map.
-    /// 
+    /// Add player respawn timer in to shooting gallery mode.
+    /// Reduce player Max HP to 10?
     /// </summary>
     /*
      * Back:	Terrain, water, and basic features (like permanent paths).

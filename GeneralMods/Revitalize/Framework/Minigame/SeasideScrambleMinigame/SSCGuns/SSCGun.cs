@@ -23,7 +23,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCGuns
         /// <summary>
         /// The projectile this gun uses.
         /// </summary>
-        private SSCProjectile _projectile;
+        public SSCProjectile _projectile;
         /// <summary>
         /// The sprite for the gun.
         /// </summary>
@@ -99,6 +99,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCGuns
             {
                 this.sprite.position = value;
             }
+        }
+
+        public SSCGun()
+        {
+
         }
 
         /// <summary>
@@ -250,6 +255,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCGuns
         public virtual bool canShoot()
         {
             return this.hasAmmo && this.remainingFiringDelay <= 0 && this.isReloading == false; //Could remove the isReloding condition and do guns like revolvers.
+        }
+
+        public virtual SSCGun getCopy()
+        {
+            return new SSCGun(new AnimatedSprite(this.sprite.name, this.Position, new AnimationManager(this.sprite.animation.objectTexture, this.sprite.animation.defaultDrawFrame, this.sprite.animation.animations, this.sprite.animation.currentAnimationName), this.sprite.color), this._projectile, this.maxAmmo, this.firingDelay, this.reloadSpeed, this.consumesXAmmoPerShot);
         }
     }
 }
