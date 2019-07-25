@@ -95,6 +95,8 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         /// </summary>
         public SSCStatusEffects.StatusEffect effect;
 
+        public bool pierces;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -191,7 +193,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
         public virtual void collisionLogic()
         {
             //Do something I guess like play an animation.
-            this.die();
+            if (this.pierces == false)
+            {
+                this.die();
+            }
         }
 
         /// <summary>

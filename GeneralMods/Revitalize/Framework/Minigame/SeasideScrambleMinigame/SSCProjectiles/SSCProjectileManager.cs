@@ -97,6 +97,19 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCProjectiles
             return basic;
         }
 
+        public void spawnIcicleProjectile(object Owner, Vector2 Position, Vector2 Direction, float Speed, Rectangle HitBox, Color Color, float Scale,int Damage ,int LifeSpan = 300)
+        {
+
+            SSC_IcicleProjectile basic = new SSC_IcicleProjectile(Owner, new StardustCore.Animations.AnimatedSprite("Icicle", Position, new StardustCore.Animations.AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Icicle"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color), HitBox, Position, Direction, Speed, LifeSpan, Scale, Damage);
+            this.addProjectile(basic);
+        }
+        public SSC_IcicleProjectile getIcicleProjectile(object Owner, Vector2 Position, Vector2 Direction, float Speed, Rectangle HitBox, Color Color, float Scale,int Damage ,int LifeSpan = 300)
+        {
+
+            SSC_IcicleProjectile basic = new SSC_IcicleProjectile(Owner, new StardustCore.Animations.AnimatedSprite("Icicle", Position, new StardustCore.Animations.AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Projectiles", "Icicle"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color), HitBox, Position, Direction, Speed, LifeSpan, Scale, Damage);
+            return basic;
+        }
+
         public void spawnFireProjectile(object Owner, Vector2 Position, Vector2 Direction, float Speed, Rectangle HitBox, Color Color, float Scale,int Damage,SSCStatusEffects.SE_Burn BurnEffect ,int LifeSpan = 300)
         {
 

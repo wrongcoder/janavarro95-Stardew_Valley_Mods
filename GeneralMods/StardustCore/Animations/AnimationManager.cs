@@ -383,6 +383,20 @@ namespace StardustCore.Animations
             }
         }
 
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale,float Rotation ,SpriteEffects flipped, float depth)
+        {
+            b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
+            try
+            {
+                this.tickAnimation();
+                // Log.AsyncC("Tick animation");
+            }
+            catch (Exception err)
+            {
+                ModCore.ModMonitor.Log(err.ToString());
+            }
+        }
+
         /// <summary>
         /// Draws the animated texture to the screen.
         /// </summary>
@@ -395,6 +409,20 @@ namespace StardustCore.Animations
         public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, 0f, Vector2.Zero, scale, flipped, depth);
+            try
+            {
+                this.tickAnimation();
+                // Log.AsyncC("Tick animation");
+            }
+            catch (Exception err)
+            {
+                ModCore.ModMonitor.Log(err.ToString());
+            }
+        }
+
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, float Rotation,SpriteEffects flipped, float depth)
+        {
+            b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
             try
             {
                 this.tickAnimation();

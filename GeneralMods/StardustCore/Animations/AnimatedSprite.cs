@@ -95,6 +95,11 @@ namespace StardustCore.Animations
             this.animation.draw(b, position, this.color, scale, SpriteEffects.None, depth);
         }
 
+        public virtual void draw(SpriteBatch b, Vector2 position, float scale,float rotation ,float depth)
+        {
+            this.animation.draw(b, position, this.color, scale, rotation,SpriteEffects.None, depth);
+        }
+
         /// <summary>
         /// Draws the sprite to the screen.
         /// </summary>
