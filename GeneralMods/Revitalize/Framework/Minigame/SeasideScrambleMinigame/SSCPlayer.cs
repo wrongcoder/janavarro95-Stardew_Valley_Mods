@@ -78,7 +78,31 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         /// <summary>
         /// The current gun the player is holding. UPDATE THIS TO WEILD MULTIPLE GUNS!!!
         /// </summary>
-        public SSCGuns.SSCGun gun;
+        public SSCGuns.SSCGun activeGun
+        {
+            get
+            {
+                return this.guns[this.currentGunIndex];
+            }
+            set
+            {
+                if (value == null) return;
+                this.guns.Add(value);
+                this.currentGunIndex = this.guns.Count - 1;
+            }
+        }
+
+        public List<SSCGuns.SSCGun> guns;
+        public int currentGunIndex;
+
+        /// <summary>
+        /// How long it takes for the player to swap guns.
+        /// </summary>
+        public int swapSpeed = 20;
+        /// <summary>
+        /// How many frames remain until the player is allowed to swap guns/
+        /// </summary>
+        public int timeUntilPlayerCanSwapGun;
 
         /// <summary>
         /// The hitbox for the player.
@@ -216,8 +240,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
             this.mouseSensitivity = new Vector2(3f, 3f);
 
+
+            this.currentGunIndex = 0;
+            this.guns = new List<SSCGuns.SSCGun>();
+
             this.getNewGun(SeasideScramble.self.guns.getGun("Icicle")); //new SSCGuns.SSCGun(new StardustCore.Animations.AnimatedSprite("MyFirstGun", this.position, new AnimationManager(SeasideScramble.self.textureUtils.getExtendedTexture("Guns", "BasicGun"), new Animation(0, 0, 16, 16)), Color.White), SeasideScramble.self.entities.projectiles.getDefaultProjectile(this, this.position, Vector2.Zero, 4f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300), 10, 1000, 3000);
-            
+            this.getNewGun(SeasideScramble.self.guns.getGun("HeatWave"));
+            this.getNewGun(SeasideScramble.self.guns.getGun("Default"));
+
+            this.timeUntilPlayerCanSwapGun = 0;
 
             this.hitBox = new Rectangle((int)this.position.X, (int)this.position.Y, 64, 64);
 
@@ -282,7 +313,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public void draw(SpriteBatch b, Vector2 position)
         {
             this.characterSpriteController.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), this.playerColor, 4f, this.flipSprite == true ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.position.Y) / 10000f));
-            this.gun.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), 2f);
+            this.activeGun.draw(b, SeasideScramble.GlobalToLocal(SeasideScramble.self.camera.viewport, position), 2f);
         }
         public void drawMouse(SpriteBatch b)
         {
@@ -310,8 +341,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             }
             if (this.currentHealth < 0) this.currentHealth = 0;
 
-            this.gun.update(Time);
+            this.activeGun.update(Time);
             this.updateGunPosition();
+            this.timeUntilPlayerCanSwapGun--;
+            if (this.timeUntilPlayerCanSwapGun < 0) this.timeUntilPlayerCanSwapGun = 0;
+
             this.HUD.update(Time);
             this.statusEffects.update(Time);
 
@@ -416,6 +450,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
                     this.shoot(unit);
                     //this.moveMouseCursor(state.ThumbSticks.Right);
                 }
+                if (state.IsButtonDown(Buttons.RightShoulder))
+                {
+                    this.swapGun(1);
+                }
+                if (state.IsButtonDown(Buttons.LeftShoulder))
+                {
+                    this.swapGun(-1);
+                }
+
             }
             else
             {
@@ -478,7 +521,10 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             if (this.playerID == SSCEnums.PlayerID.One)
             {
                 this.checkForMovementInput(k);
+                if (k == Keys.Q) this.swapGun(-1);
+                if(k== Keys.E) this.swapGun(1);
             }
+            
         }
 
         /// <summary>
@@ -630,7 +676,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             //ModCore.log("Shoot: " + direction);
             //SeasideScramble.self.projectiles.spawnDefaultProjectile(this, this.position, direction, 1f, new Rectangle(0, 0, 16, 16), Color.White, 4f, 300);
 
-            this.gun.tryToShoot(this.position, direction);
+            this.activeGun.tryToShoot(this.position, direction);
 
         }
 
@@ -700,16 +746,47 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
 
         public void getNewGun(SSCGuns.SSCGun gun)
         {
-            this.gun = gun;
+            this.activeGun = gun;
             //this.gun.Projectile.position = this.position;
-            this.gun.Position = this.position;
-            this.gun.Projectile.owner = this;
+            this.activeGun.Position = this.position;
+            this.activeGun.Projectile.owner = this;
         }
 
         public void updateGunPosition()
         {
-            this.gun.Projectile.position = this.position;
-            this.gun.Position = this.position;
+            this.activeGun.Projectile.position = this.position;
+            this.activeGun.Position = this.position;
+        }
+
+        /// <summary>
+        /// Swaps the player's gun they are holding.
+        /// </summary>
+        /// <param name="delta"></param>
+        public void swapGun(int delta)
+        {
+            if (this.timeUntilPlayerCanSwapGun > 0) return;
+            if (delta < 0)
+            {
+                if (this.currentGunIndex <= 0)
+                {
+                    this.currentGunIndex = this.guns.Count - 1;
+                    Game1.soundBank.PlayCue("shwip");
+                    this.timeUntilPlayerCanSwapGun = this.swapSpeed;
+                }
+                else
+                {
+                    this.currentGunIndex--;
+                    Game1.soundBank.PlayCue("shwip");
+                    this.timeUntilPlayerCanSwapGun = this.swapSpeed;
+                }
+            }
+            else
+            {
+                this.currentGunIndex++;
+                if (this.currentGunIndex >= this.guns.Count) this.currentGunIndex = 0;
+                Game1.soundBank.PlayCue("shwip");
+                this.timeUntilPlayerCanSwapGun = this.swapSpeed;
+            }
         }
 
     }

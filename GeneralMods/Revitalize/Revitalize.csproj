@@ -57,6 +57,7 @@
     <Compile Include="Framework\Enums\Enums.cs" />
     <Compile Include="Framework\Environment\DarkerNight.cs" />
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
+    <Compile Include="Framework\Factories\Objects\Extras\ArcadeFactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\FurnitureFactory.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\ChairFactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\FactoryInfo.cs" />
@@ -101,6 +102,8 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffect.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffectManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
+    <Compile Include="Framework\Objects\Extras\ArcadeCabinetOBJ.cs" />
+    <Compile Include="Framework\Objects\Extras\ArcadeCabinetTile.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
     <Compile Include="Framework\Objects\Furniture\Bench.cs" />
@@ -114,6 +117,7 @@
     <Compile Include="Framework\Objects\Furniture\RugTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\TableMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\TableTileComponent.cs" />
+    <Compile Include="Framework\Objects\InformationFiles\Furniture\ArcadeCabinetInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
@@ -153,6 +157,9 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Graphics\Furniture\Arcade\SeasideScrambleArcade.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Furniture\Chairs\Oak Chair.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -277,6 +284,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Framework\Objects\InformationFiles\Extras\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

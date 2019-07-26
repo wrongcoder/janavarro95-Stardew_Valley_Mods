@@ -19,6 +19,8 @@ using StardewValley.Objects;
 using StardustCore.UIUtilities;
 using StardustCore.Animations;
 using StardewValley.Menus;
+using Revitalize.Framework.Objects.Extras;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
 
 namespace Revitalize
 {
@@ -164,7 +166,6 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures(ModHelper,this.ModManifest,Path.Combine("Content", "Graphics", "Furniture"));
             TextureManager.AddTextureManager(Manifest, "InventoryMenu");
             TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus","InventoryMenu"));
-
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
 
             //Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager(this.Helper.DirectoryPath, Path.Combine("Content", "Graphics", "Furniture")));
@@ -241,6 +242,37 @@ namespace Revitalize
             
             
             FurnitureFactory.LoadFurnitureFiles();
+
+            SeasideScramble sscGame = new SeasideScramble();
+            ArcadeCabinetTile ssc1 = new ArcadeCabinetTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetTile), Color.White), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new Animation(new Rectangle(0, 0, 16, 16)), new Dictionary<string, List<Animation>>()
+            {
+                {"Animated",new List<Animation>()
+                {
+                    new Animation(0,0,16,16,60),
+                    new Animation(16,0,16,16,60)
+                }
+                }
+
+            },"Animated"), Color.White, false, null, null),new Framework.Objects.InformationFiles.Furniture.ArcadeCabinetInformation(sscGame,false));
+            ArcadeCabinetTile ssc2 = new ArcadeCabinetTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetTile), Color.White), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new Animation(new Rectangle(0, 16, 16, 16)), new Dictionary<string, List<Animation>>()
+            {
+                {"Animated",new List<Animation>()
+                {
+                    new Animation(0,16,16,16,60),
+                    new Animation(16,16,16,16,60)
+                }
+                }
+
+            }, "Animated"), Color.White, false, null, null), new Framework.Objects.InformationFiles.Furniture.ArcadeCabinetInformation(sscGame, false));
+
+            ArcadeCabinetOBJ sscCabinet = new ArcadeCabinetOBJ(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetOBJ), Color.White, true), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(), Color.White, true, null, null));
+            sscCabinet.addComponent(new Vector2(0,0),ssc1);
+            sscCabinet.addComponent(new Vector2(0, 1), ssc2);
+
+
+            customObjects.Add("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", sscCabinet);
+
+            ModCore.log("Added in SSC!");
         }
 
         private void createDirectories()
@@ -285,11 +317,13 @@ namespace Revitalize
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
-            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
+           // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
+
+            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble"));
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
             Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);

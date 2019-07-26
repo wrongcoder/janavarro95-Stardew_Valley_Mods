@@ -64,6 +64,20 @@ namespace Revitalize.Framework.Utilities
 
         }
 
+        public static float getRadiansFromVector(Vector2 vec)
+        {
+            Vector2 zero = new Vector2(1, 0);
+            vec = vec.UnitVector();
+            float dot = Vector2.Dot(zero, vec);
+            float len1 = vec.Length();
+            float len2 = zero.Length();
+            float lenTotal = len1 * len2;
+            float cosAngle = dot / lenTotal;
+
+            float angle = (float)((Math.Acos(cosAngle)));
+            return angle;
+        }
+
         /// <summary>
         /// Gets a rotation amount for xna based off the unit circle.
         /// </summary>
@@ -71,7 +85,7 @@ namespace Revitalize.Framework.Utilities
         /// <returns></returns>
         public static float getRotationFromVector(Vector2 vec)
         {
-            return getRotationFromDegrees((int)Math.Round(getAngleFromVector(vec)));
+            return getRadiansFromVector(vec);
         }
 
     }

@@ -88,15 +88,15 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             {
                 this.background.color = SeasideScramble.self.getPlayer(this.playerID).playerColor;
                 this.healthDisplayLerp();
-                if (this.Player.gun.remainingAmmo == SSCGuns.SSCGun.infiniteAmmo)
+                if (this.Player.activeGun.remainingAmmo == SSCGuns.SSCGun.infiniteAmmo)
                 {
                     this.playerAmmo.setText("999", SeasideScramble.self.gameFont, Color.White);
                 }
                 else
                 {
-                    this.playerAmmo.setText(this.Player.gun.remainingAmmo.ToString().PadLeft(3, '0'), SeasideScramble.self.gameFont, Color.White);
+                    this.playerAmmo.setText(this.Player.activeGun.remainingAmmo.ToString().PadLeft(3, '0'), SeasideScramble.self.gameFont, Color.White);
                 }
-                this.reloadTime.setText(((int)this.Player.gun.timeRemainingUntilReload).ToString().PadLeft(4, '0'), SeasideScramble.self.gameFont, Color.White);
+                this.reloadTime.setText(((int)this.Player.activeGun.timeRemainingUntilReload).ToString().PadLeft(4, '0'), SeasideScramble.self.gameFont, Color.White);
 
                 if(SeasideScramble.self.currentMap is ShootingGallery)
                 {
@@ -154,7 +154,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
             this.background.draw(b, this.background.position, new Vector2(8f, 4f), 0f);
             this.playerHealth.draw(b, new Rectangle(0, 0, 16, 16), 0f);
             this.heart.draw(b, 8f, 0f);
-            if (this.Player.gun.isReloading == false)
+            if (this.Player.activeGun.isReloading == false)
             {
                 this.gun.draw(b, 4f, 0f);
                 this.playerAmmo.draw(b, new Rectangle(0, 0, 16, 16), 0f);
@@ -178,7 +178,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame.SSCMenus.HUD
         {
             this.playerHealth.setText(SeasideScramble.self.getPlayer(this.playerID).currentHealth.ToString(), SeasideScramble.self.gameFont, Color.White);
             this.showHUD = true;
-            this.gun.animation = this.Player.gun.sprite.animation;
+            this.gun.animation = this.Player.activeGun.sprite.animation;
         }
 
         /// <summary>
