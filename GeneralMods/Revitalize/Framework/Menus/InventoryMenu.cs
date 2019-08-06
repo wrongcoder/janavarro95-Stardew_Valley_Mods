@@ -57,11 +57,18 @@ namespace Revitalize.Framework.Menus
 
         public AnimatedButton nextPage;
         public AnimatedButton previousPage;
+        public Color backgroundColor;
 
-        public InventoryMenu(int xPos, int yPos, int width, int height, int Rows, int Collumns, bool showCloseButton, IList<Item> Inventory, int maxCapacity) : base(xPos, yPos, width, height, showCloseButton)
+        public string hoverText;
+        public string hoverTitle;
+        public Item displayItem;
+
+
+        public InventoryMenu(int xPos, int yPos, int width, int height, int Rows, int Collumns, bool showCloseButton, IList<Item> Inventory, int maxCapacity,Color BackgroundColor) : base(xPos, yPos, width, height, showCloseButton)
         {
             //Amount to display is the lower cap per page.
             //
+            this.backgroundColor = BackgroundColor == null ? Color.White : BackgroundColor;
 
             this.items = Inventory;
             this.pages = new Dictionary<int, InventoryMenuPage>();
@@ -76,12 +83,18 @@ namespace Revitalize.Framework.Menus
             this.searchBox.Width = 256;
             this.searchBox.Height = 192;
             Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.searchBox;
+            this.searchBox.Selected = false;
 
             this.nextPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Next Page", new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y),new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"),new Animation(0,0,32,32)),Color.White),new Rectangle(0, 0, 32, 32), 2f);
             this.previousPage= new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Previous Page", new Vector2(64 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
 
         }
 
+        /// <summary>
+        /// What happens when the game's viewport is changed.
+        /// </summary>
+        /// <param name="oldBounds"></param>
+        /// <param name="newBounds"></param>
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
             base.gameWindowSizeChanged(oldBounds, newBounds);
@@ -89,10 +102,17 @@ namespace Revitalize.Framework.Menus
             this.searchBox.X = this.xPositionOnScreen;
             this.searchBox.Y = this.yPositionOnScreen;
             this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
-            this.nextPage.Position = new Vector2(128 + (this.searchBox.X + this.searchBox.Width));
-            this.previousPage.Position= new Vector2(64 + (this.searchBox.X + this.searchBox.Width));
+            this.nextPage.Position = new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y);
+            this.previousPage.Position= new Vector2(64 + (this.searchBox.X + this.searchBox.Width),this.searchBox.Y);
         }
 
+        /// <summary>
+        /// Populates the menu with all of the items on display.
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="collums"></param>
+        /// <param name="xPosition"></param>
+        /// <param name="yPosition"></param>
         public void populateClickableItems(int rows, int collums, int xPosition, int yPosition)
         {
             this.pages.Clear();
@@ -158,7 +178,28 @@ namespace Revitalize.Framework.Menus
 
         public override void performHoverAction(int x, int y)
         {
-
+            bool hovered = false;
+            foreach (ItemDisplayButton button in this.pages[this.pageIndex].storageDisplay)
+            {
+                if (button.Contains(x, y))
+                {
+                    if (button.item == null)
+                    {
+                        continue;
+                    }
+                    else if (button.item != null)
+                    {
+                        this.displayItem = button.item;
+                        this.hoverTitle = this.displayItem.DisplayName;
+                        this.hoverText = this.displayItem.getDescription();
+                        hovered = true;
+                    }
+                }
+            }
+            if (hovered == false)
+            {
+                this.displayItem = null;
+            }
         }
 
         /// <summary>
@@ -293,19 +334,33 @@ namespace Revitalize.Framework.Menus
                 return i;
             }
 
+        /// <summary>
+        /// What happens when this menu is right clicked.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
 
         }
 
+        /// <summary>
+        /// What happens when the menu is updated.
+        /// </summary>
+        /// <param name="time"></param>
         public override void update(GameTime time)
         {
 
         }
 
+        /// <summary>
+        /// Draws the menu to the screen.
+        /// </summary>
+        /// <param name="b"></param>
         public override void draw(SpriteBatch b)
         {
-            this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, Color.Blue);
+            this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
 
             foreach (ItemDisplayButton button in this.pages[this.pageIndex].storageDisplay)
             {
@@ -327,9 +382,16 @@ namespace Revitalize.Framework.Menus
             b.DrawString(Game1.dialogueFont, ("Page: " + (this.pageIndex + 1) + " / " + this.pages.Count).ToString(), new Vector2(this.xPositionOnScreen, this.yPositionOnScreen + this.height), Color.White);
 
             this.drawMouse(b);
+
+            if (this.displayItem != null) IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, this.displayItem, false, -1, 0, -1, -1, (CraftingRecipe)null, -1);
             //base.draw(b);
         }
 
+        /// <summary>
+        /// Draws the item as a transparent icon if the item is not part of the seach patern.
+        /// </summary>
+        /// <param name="I"></param>
+        /// <returns></returns>
         private float getItemDrawAlpha(Item I)
         {
             if (I == null) return 1f;
