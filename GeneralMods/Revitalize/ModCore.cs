@@ -189,14 +189,21 @@ namespace Revitalize
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
         {
+            /*
             if(e.Button== SButton.U)
             {
                 Game1.currentMinigame = new Revitalize.Framework.Minigame.SeasideScrambleMinigame.SeasideScramble();
             }
-            else if(e.Button== SButton.Y)
+            */
+            if(e.Button== SButton.Y)
             {
                 //Game1.activeClickableMenu = new ItemGrabMenu(Game1.player.Items,false,true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems),);
-                Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryMenu(100, 100, 500, 500,3,4,false, Game1.player.Items,15,Color.SandyBrown);
+                List<Item> newItems = new List<Item>()
+                {
+                    new StardewValley.Object(184,10)
+                };
+
+                Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryTransferMenu(100, 100, 500, 500,newItems,36);
             }
         }
 

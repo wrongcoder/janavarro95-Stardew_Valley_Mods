@@ -15,12 +15,42 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
     public class ItemDisplayButton
     {
 
+        /// <summary>
+        /// The position for the button.
+        /// </summary>
         private Vector2 position;
+        /// <summary>
+        /// The item owned by the button.
+        /// </summary>
         public StardewValley.Item item;
-        public Rectangle boundingBox;
+
+        private Rectangle defaultBounds;
+
+        /// <summary>
+        /// The hit box for detecting interaction.
+        /// </summary>
+        public Rectangle boundingBox
+        {
+            get
+            {
+                return new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)(this.defaultBounds.Width * this.scale), (int)(this.defaultBounds.Height * this.scale));
+            }
+        }
+        /// <summary>
+        /// The scale of the button.
+        /// </summary>
         public float scale;
+        /// <summary>
+        /// Should the stack number be drawn?
+        /// </summary>
         public bool drawStackNumber;
+        /// <summary>
+        /// The color for the item.
+        /// </summary>
         public Color drawColor;
+        /// <summary>
+        /// The background sprite for the item.
+        /// </summary>
         public StardustCore.Animations.AnimatedSprite background;
 
         /// <summary>
@@ -35,8 +65,8 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             set
             {
                 this.position = value;
-                this.boundingBox.X =(int)this.position.X;
-                this.boundingBox.Y =(int)this.position.Y;
+                this.defaultBounds.X =(int)this.position.X;
+                this.defaultBounds.Y =(int)this.position.Y;
             }
         }
 
@@ -57,7 +87,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         public ItemDisplayButton(Item I,StardustCore.Animations.AnimatedSprite Background,Vector2 Position, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor)
         {
             this.item = I;
-            this.boundingBox = BoundingBox;
+            this.defaultBounds = BoundingBox;
             this.Position = Position;
             this.scale = Scale;
             this.drawStackNumber = DrawStackNumber;
@@ -74,10 +104,11 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// A simple draw function.
         /// </summary>
         /// <param name="b"></param>
-        public void draw(SpriteBatch b)
+        public void draw(SpriteBatch b,float Alpha=1f)
         {
-            this.background.draw(b);
-            if(this.item!=null)this.item.drawInMenu(b, this.position, this.scale);
+            //this.background.draw(b);
+            //if(this.item!=null)this.item.drawInMenu(b, this.position, this.scale);
+            this.draw(b, 1f, Alpha, false);
         }
 
         /// <summary>
@@ -89,7 +120,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="DrawShadow"></param>
         public void draw(SpriteBatch b,float Depth, float Alpha,bool DrawShadow)
         {
-            this.background.draw(b, this.scale, Depth);
+            this.background.draw(b, this.scale, Depth,Alpha);
             if(this.item!=null)this.item.drawInMenu(b, this.position, 1f,Alpha,Depth,this.drawStackNumber,this.drawColor,DrawShadow);
         }
 

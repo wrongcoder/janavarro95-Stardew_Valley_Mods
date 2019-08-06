@@ -10,9 +10,17 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
 {
     public class AnimatedButton
     {
+        /// <summary>
+        /// The sprite that handles all of the visuals for the button.
+        /// </summary>
         public Animations.AnimatedSprite sprite;
-
+        /// <summary>
+        /// The default bounds for the button.
+        /// </summary>
         private Rectangle defaultBounds;
+        /// <summary>
+        /// The actual bounds for the button which takes scale into acount.
+        /// </summary>
         public Rectangle bounds
         {
             get
@@ -20,10 +28,22 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
                 return new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)(this.defaultBounds.Width * this.scale), (int)(this.defaultBounds.Height * this.scale));
             }
         }
+        /// <summary>
+        /// The scale for the button.
+        /// </summary>
         public float scale;
 
+        /// <summary>
+        /// The label for the button.
+        /// </summary>
         public string label;
+        /// <summary>
+        /// The name of the button.
+        /// </summary>
         public string name;
+        /// <summary>
+        /// The hovertext for the button.
+        /// </summary>
         public string hoverText;
 
         /// <summary>
@@ -43,6 +63,12 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             }
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="Sprite">The sprite for the button.</param>
+        /// <param name="DefaultBounds">The default hitbox for the button.</param>
+        /// <param name="Scale">The scale for the button's sprite and it's hitbox</param>
         public AnimatedButton(Animations.AnimatedSprite Sprite, Rectangle DefaultBounds, float Scale)
         {
 
@@ -54,34 +80,71 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             this.hoverText = "";
         }
 
+        /// <summary>
+        /// Update the button's logic.
+        /// </summary>
+        /// <param name="time"></param>
         public void update(GameTime time)
         {
 
         }
 
-        public void draw(SpriteBatch b)
+        /// <summary>
+        /// Draw the button to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        public void draw(SpriteBatch b,float Alpha=1f)
         {
-            this.sprite.draw(b);
+            this.sprite.draw(b,Alpha);
         }
 
-        public void draw(SpriteBatch b, float Depth)
+        /// <summary>
+        /// Draw the button to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="Depth"></param>
+        public void draw(SpriteBatch b, float Depth,float Alpha=1f)
         {
-            this.sprite.draw(b, this.scale, Depth);
+            this.sprite.draw(b, this.scale, Depth,Alpha);
         }
 
+        /// <summary>
+        /// Checks to see if the bounding box for this button contains the given x,y cordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool containsPoint(int x, int y)
         {
             return this.bounds.Contains(x, y);
         }
 
+        /// <summary>
+        /// Checks to see if this button has been left clicked.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool receiveLeftClick(int x, int y)
         {
             return this.containsPoint(x, y);
         }
+        /// <summary>
+        /// Checks to see if this button has been right clicked.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool receiveRightClick(int x, int y)
         {
             return this.containsPoint(x, y);
         }
+        /// <summary>
+        /// Checks to see if this button has been hover overed.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public bool receiveHover(int x, int y)
         {
             return this.containsPoint(x, y);

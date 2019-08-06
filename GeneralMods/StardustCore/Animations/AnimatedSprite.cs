@@ -67,9 +67,9 @@ namespace StardustCore.Animations
         /// Draws the sprite to the screen.
         /// </summary>
         /// <param name="b"></param>
-        public virtual void draw(SpriteBatch b)
+        public virtual void draw(SpriteBatch b,float Alpha=1f)
         {
-            this.draw(b, 1f, 0f);
+            this.draw(b, 1f, 0f,Alpha);
         }
 
         /// <summary>
@@ -78,26 +78,10 @@ namespace StardustCore.Animations
         /// <param name="b"></param>
         /// <param name="scale"></param>
         /// <param name="depth"></param>
-        public virtual void draw(SpriteBatch b, float scale, float depth)
+        /// <param name="alpha"></param>
+        public virtual void draw(SpriteBatch b, float scale, float depth,float alpha=1f)
         {
-            this.animation.draw(b, this.position, this.color, scale, SpriteEffects.None, depth);
-        }
-
-        /// <summary>
-        /// Draws the sprite to the screen.
-        /// </summary>
-        /// <param name="b"></param>
-        /// <param name="position"></param>
-        /// <param name="scale"></param>
-        /// <param name="depth"></param>
-        public virtual void draw(SpriteBatch b,Vector2 position ,float scale, float depth)
-        {
-            this.animation.draw(b, position, this.color, scale, SpriteEffects.None, depth);
-        }
-
-        public virtual void draw(SpriteBatch b, Vector2 position, float scale,float rotation ,float depth)
-        {
-            this.animation.draw(b, position, this.color, scale, rotation,SpriteEffects.None, depth);
+            this.animation.draw(b, this.position, new Color(this.color.R, this.color.G, this.color.B, alpha), scale, SpriteEffects.None, depth);
         }
 
         /// <summary>
@@ -107,9 +91,37 @@ namespace StardustCore.Animations
         /// <param name="position"></param>
         /// <param name="scale"></param>
         /// <param name="depth"></param>
-        public virtual void draw(SpriteBatch b, Vector2 position, Vector2 scale, float depth)
+        ///         /// <param name="alpha"></param>
+        public virtual void draw(SpriteBatch b,Vector2 position ,float scale, float depth,float alpha=1f)
         {
-            this.animation.draw(b, position, this.color, scale, SpriteEffects.None, depth);
+            this.animation.draw(b, position, new Color(this.color.R, this.color.G, this.color.B, alpha), scale, SpriteEffects.None, depth);
+        }
+
+        /// <summary>
+        /// Draws the sprite to the screen.
+        /// </summary>
+        /// <param name="b">The spritebatch which to draw the sprite.</param>
+        /// <param name="position">The position on screen.</param>
+        /// <param name="scale">The scale of the sprite.</param>
+        /// <param name="rotation">The rotation of the sprite.</param>
+        /// <param name="depth">The depth of the sprite.</param>
+        /// <param name="alpha">The alpha for the sprite.</param>
+        public virtual void draw(SpriteBatch b, Vector2 position, float scale,float rotation ,float depth,float alpha=1f)
+        {
+            this.animation.draw(b, position, new Color(this.color.R,this.color.G,this.color.B,alpha), scale, rotation,SpriteEffects.None, depth);
+        }
+
+        /// <summary>
+        /// Draws the sprite to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="position"></param>
+        /// <param name="scale"></param>
+        /// <param name="depth"></param>
+        /// <param name="alpha"></param>
+        public virtual void draw(SpriteBatch b, Vector2 position, Vector2 scale, float depth,float alpha=1f)
+        {
+            this.animation.draw(b, position, new Color(this.color.R, this.color.G, this.color.B, alpha), scale, SpriteEffects.None, depth);
         }
 
 

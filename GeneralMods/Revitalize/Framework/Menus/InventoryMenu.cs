@@ -63,6 +63,16 @@ namespace Revitalize.Framework.Menus
         public string hoverTitle;
         public Item displayItem;
 
+        /// <summary>
+        /// Checks if the given inventory is full or not.
+        /// </summary>
+        public bool isFull
+        {
+            get
+            {
+                return this.items.Count >= this.capacity && this.items.Where(i=>i==null).Count()==0;
+            }
+        }
 
         public InventoryMenu(int xPos, int yPos, int width, int height, int Rows, int Collumns, bool showCloseButton, IList<Item> Inventory, int maxCapacity,Color BackgroundColor) : base(xPos, yPos, width, height, showCloseButton)
         {
@@ -106,6 +116,11 @@ namespace Revitalize.Framework.Menus
             this.previousPage.Position= new Vector2(64 + (this.searchBox.X + this.searchBox.Width),this.searchBox.Y);
         }
 
+        public void populateClickableItems()
+        {
+            this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
+        }
+
         /// <summary>
         /// Populates the menu with all of the items on display.
         /// </summary>
@@ -116,17 +131,15 @@ namespace Revitalize.Framework.Menus
         public void populateClickableItems(int rows, int collums, int xPosition, int yPosition)
         {
             this.pages.Clear();
-
-
             int size = this.capacity;
-            ModCore.log("Hello World! SIZE IS: " + size);
+            //ModCore.log("Hello World! SIZE IS: " + size);
 
             int maxPages = ((size) / (this.rows * this.collumns)) + 1;
             for (int i = 0; i < maxPages; i++)
             {
                 int amount = Math.Min(rows * collums, size);
                 this.pages.Add(i, new InventoryMenuPage(i, new List<ItemDisplayButton>(), amount));
-                ModCore.log("Added in a new page with size: " + size);
+                //ModCore.log("Added in a new page with size: " + size);
                 size -= amount;
                 for (int y = 0; y < collums; y++)
                 {
@@ -135,33 +148,28 @@ namespace Revitalize.Framework.Menus
                         int index = ((y * rows) + x) + (rows * collums * i);
                         if (index >= this.pages[i].amountToDisplay + (rows * collums * i))
                         {
-                            ModCore.log("Break page creation.");
-                            ModCore.log("Index is: " + index);
-                            ModCore.log("Max display is: " + this.pages[i].amountToDisplay);
+                            //ModCore.log("Break page creation.");
+                            //ModCore.log("Index is: " + index);
+                            //ModCore.log("Max display is: " + this.pages[i].amountToDisplay);
                             break;
                         }
 
                         if (index > this.items.Count)
                         {
-                            ModCore.log("Index greater than items!");
                             Vector2 pos2 = new Vector2(x * 64 + xPosition, y * 64 + yPosition);
-                            ItemDisplayButton b2 = new ItemDisplayButton(null, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos2, new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos2, new Rectangle(0, 0, 32 * 2, 32 * 2), 2f, true, Color.White);
+                            ItemDisplayButton b2 = new ItemDisplayButton(null, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos2, new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos2, new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
                             this.pages[i].storageDisplay.Add(b2);
                             continue;
                         }
 
-                        ModCore.log("Add in a new display item");
                         Item item = this.getItemFromList(index);
                         Vector2 pos = new Vector2(x * 64 + xPosition, y * 64 + yPosition);
-                        ItemDisplayButton b = new ItemDisplayButton(item, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos, new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos, new Rectangle(0, 0, 32 * 2, 32 * 2), 2f, true, Color.White);
+                        ItemDisplayButton b = new ItemDisplayButton(item, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos, new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos, new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
                         this.pages[i].storageDisplay.Add(b);
                     }
                 }
 
             }
-
-
-
         }
 
         /// <summary>
@@ -176,6 +184,11 @@ namespace Revitalize.Framework.Menus
             else return this.items.ElementAt(index);
         }
 
+        /// <summary>
+        /// What happens when this menu is hover overed.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public override void performHoverAction(int x, int y)
         {
             bool hovered = false;
@@ -231,7 +244,7 @@ namespace Revitalize.Framework.Menus
                         this.activeItem = button.item;
                         if (this.activeItem != null)
                         {
-                            ModCore.log("Got item: " + this.activeItem.DisplayName);
+                            //ModCore.log("Got item: " + this.activeItem.DisplayName);
                         }
                         return;
                     }
@@ -239,7 +252,7 @@ namespace Revitalize.Framework.Menus
                     {
                         if (button.item == null)
                         {
-                            ModCore.log("Placed item: " + this.activeItem.DisplayName);
+                            //ModCore.log("Placed item: " + this.activeItem.DisplayName);
                             swap = this.activeItem;
                             this.activeItem = null;
                             break;
@@ -247,7 +260,7 @@ namespace Revitalize.Framework.Menus
                         else
                         {
                             swap = button.item;
-                            ModCore.log("Swap item: " + swap.DisplayName);
+                            //ModCore.log("Swap item: " + swap.DisplayName);
                             break;
                         }
                     }
@@ -279,7 +292,7 @@ namespace Revitalize.Framework.Menus
 
             if (this.nextPage.containsPoint(x, y))
             {
-                ModCore.log("Left click next page");
+                //ModCore.log("Left click next page");
                 if (this.pageIndex + 1 < this.pages.Count)
                 {
                     this.pageIndex++;
@@ -288,7 +301,7 @@ namespace Revitalize.Framework.Menus
             }
             if (this.previousPage.containsPoint(x, y))
             {
-                ModCore.log("Left click previous page");
+                //ModCore.log("Left click previous page");
                 if (this.pageIndex > 0)
                 {
                     this.pageIndex--;
@@ -306,7 +319,7 @@ namespace Revitalize.Framework.Menus
             {
                 if (I == null)
                 {
-                    ModCore.log("Odd item is null");
+                    //ModCore.log("Odd item is null");
                     return;
                 }
                 if (insertIndex + 1 > this.items.Count)
@@ -376,15 +389,20 @@ namespace Revitalize.Framework.Menus
 
             this.searchBox.Draw(b, true);
 
-            this.nextPage.draw(b,0.25f);
-            this.previousPage.draw(b,0.25f);
+            this.nextPage.draw(b,0.25f,1f);
+            this.previousPage.draw(b,0.25f,1f);
 
             b.DrawString(Game1.dialogueFont, ("Page: " + (this.pageIndex + 1) + " / " + this.pages.Count).ToString(), new Vector2(this.xPositionOnScreen, this.yPositionOnScreen + this.height), Color.White);
 
             this.drawMouse(b);
 
-            if (this.displayItem != null) IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, this.displayItem, false, -1, 0, -1, -1, (CraftingRecipe)null, -1);
+            this.drawToolTip(b);
             //base.draw(b);
+        }
+
+        public void drawToolTip(SpriteBatch b)
+        {
+            if (this.displayItem != null) IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, this.displayItem, false, -1, 0, -1, -1, (CraftingRecipe)null, -1);
         }
 
         /// <summary>
@@ -393,10 +411,10 @@ namespace Revitalize.Framework.Menus
         /// <param name="I"></param>
         /// <returns></returns>
         private float getItemDrawAlpha(Item I)
-        {
-            if (I == null) return 1f;
+        {        
             if (string.IsNullOrEmpty(this.searchBox.Text) == false)
             {
+                if (I == null) return 0.25f;
                 return I.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()) ? 1f : 0.25f;
             }
             else
