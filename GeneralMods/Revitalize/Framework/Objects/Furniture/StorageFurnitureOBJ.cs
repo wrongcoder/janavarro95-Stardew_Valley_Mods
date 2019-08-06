@@ -8,26 +8,26 @@ using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
 using StardewValley;
 
-namespace Revitalize.Framework.Objects.Extras
+namespace Revitalize.Framework.Objects.Furniture
 {
-    public class ArcadeCabinetOBJ:MultiTiledObject
+    public class StorageFurnitureOBJ:MultiTiledObject
     {
-        public ArcadeCabinetOBJ() : base()
+        public StorageFurnitureOBJ() : base()
         {
 
         }
 
-        public ArcadeCabinetOBJ(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData, Info)
+        public StorageFurnitureOBJ(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData, Info)
         {
 
         }
 
-        public ArcadeCabinetOBJ(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition) : base(PyTKData, Info, TilePosition)
+        public StorageFurnitureOBJ(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition) : base(PyTKData, Info, TilePosition)
         {
 
         }
 
-        public ArcadeCabinetOBJ(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(PyTKData, Info, TilePosition, Objects)
+        public StorageFurnitureOBJ(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(PyTKData, Info, TilePosition, Objects)
         {
 
 
@@ -47,13 +47,13 @@ namespace Revitalize.Framework.Objects.Extras
             }
 
 
-            return new ArcadeCabinetOBJ(this.data, this.info, this.TileLocation, objs);
+            return new StorageFurnitureOBJ(this.data, this.info, this.TileLocation, objs);
         }
 
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            ArcadeCabinetOBJ obj = (ArcadeCabinetOBJ)Revitalize.ModCore.Serializer.DeserializeGUID<ArcadeCabinetOBJ>(additionalSaveData["GUID"]);
+            StorageFurnitureOBJ obj = (StorageFurnitureOBJ)Revitalize.ModCore.Serializer.DeserializeGUID<StorageFurnitureOBJ>(additionalSaveData["GUID"]);
             if (obj == null)
             {
                 return null;
@@ -70,7 +70,7 @@ namespace Revitalize.Framework.Objects.Extras
             {
                 obj.childrenGuids.Remove(pair.Key);
                 //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
-                ArcadeCabinetTile component = Revitalize.ModCore.Serializer.DeserializeGUID<ArcadeCabinetTile>(pair.Value.ToString());
+                StorageFurnitureTile component = Revitalize.ModCore.Serializer.DeserializeGUID<StorageFurnitureTile>(pair.Value.ToString());
                 component.InitNetFields();
 
                 obj.addComponent(pair.Key, component);
@@ -136,7 +136,7 @@ namespace Revitalize.Framework.Objects.Extras
             {
                 foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
                 {
-                    (pair.Value as ArcadeCabinetTile).removeFromLocation((pair.Value as ArcadeCabinetTile).location, pair.Key);
+                    (pair.Value as StorageFurnitureTile).removeFromLocation((pair.Value as StorageFurnitureTile).location, pair.Key);
                 }
                 this.location = null;
             }

@@ -331,6 +331,7 @@ namespace Revitalize
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
             Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble"));
+            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Storage.OakCabinet"));
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
             Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);

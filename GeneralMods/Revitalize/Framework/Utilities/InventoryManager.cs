@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using StardewValley;
 
 namespace Revitalize.Framework.Utilities
@@ -19,7 +20,7 @@ namespace Revitalize.Framework.Utilities
         public List<Item> items;
 
         /// <summary>Checks if the inventory is full or not.</summary>
-        public bool IsFull => this.ItemCount >= this.capacity;
+        public bool IsFull => this.ItemCount >= this.capacity && this.items.Where(i=>i==null).Count()==0;
 
         /// <summary>Checks to see if this core object actually has a valid inventory.</summary>
         public bool HasInventory => this.capacity > 0;

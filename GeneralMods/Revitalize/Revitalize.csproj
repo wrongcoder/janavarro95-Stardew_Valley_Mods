@@ -115,6 +115,8 @@
     <Compile Include="Framework\Objects\Furniture\LampTileComponent.cs" />
     <Compile Include="Framework\Objects\Furniture\RugMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\RugTileComponent.cs" />
+    <Compile Include="Framework\Objects\Furniture\StorageFurnitureOBJ.cs" />
+    <Compile Include="Framework\Objects\Furniture\StorageFurnitureTile.cs" />
     <Compile Include="Framework\Objects\Furniture\TableMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\TableTileComponent.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ArcadeCabinetInformation.cs" />
@@ -164,6 +166,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Furniture\Lamps\Oak Lamp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Furniture\Storage\Oak Cabinet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Furniture\Tables\Oak Table.png">

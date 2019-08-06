@@ -78,12 +78,14 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             
             type = asm.GetType(t);
 
+            //Check if the type exists in the SDV assembly. If not then try to load it from revitalize.
             if (type == null)
             {
                 asm = typeof(Revitalize.ModCore).Assembly;
                 type = asm.GetType(t);
             }
 
+            //If the type doesn't exist from revitalize look through ALL loded assemblies and try to load it.
             if (type == null)
             {
                 foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -96,7 +98,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
             if (type == null)
             {
-                throw new Exception("Unsupported type found when Deserializing Unsure what to do so we can;t deserialize this thing!: " + t);
+                throw new Exception("Unsupported type found when Deserializing Unsure what to do so we can't deserialize this thing!: " + t);
             }
 
             //Cache the newly found type.
