@@ -31,9 +31,6 @@ namespace Revitalize
     // TODO:
     /*
      *
-     *Menus:
-     * -Simple Item Grab Menu (to transfer items from one inventory to another)
-     *      -Need to make this.
      * 
     // -Add in object pool class to handle the multitudes of objects I'll be making. (WIP)
     // -Make this mod able to load content packs for easier future modding
@@ -46,12 +43,22 @@ namespace Revitalize
     //      -lamps (done)
     //      -chairs (done)
     //      -benches (done but needs factory info/sprite)
-    //      -dressers/other storage containers
+    //      -dressers/other storage containers (Done!)
     //      -fun interactables
+    //          -Arcade machines
     //      -More crafting tables
     //  -Machines
     //      !=Energy
-    //            -solar
+    //            Generators:
+                  -solar
+                  -burnable
+                  -watermill
+                  -windmill
+                  -crank
+                  Storage:
+                  -Batery Pack
+                  -
+
     //      -Furnace
     //      -Seed Maker
     //      -Stone Quarry
@@ -68,16 +75,28 @@ namespace Revitalize
             -Alloys!
                 -Brass
                 -Electrum
+            -Mythrill
+            -Steel
+            -Star Metal
+            -Star Steel
+            -Cobalt
         -Liquids
             -oil
             -water
             -coal
             -juice???
+            -lava?
+
+
+        Menus:
     //  -Crafting Menu
-    //  -Item Grab Menu (Extendable)
+    //  -Item Grab Menu (Extendable) (Done!)
     //   -Yes/No Dialogue Box
     //   -Multi Choice dialogue box
+
+
     //  -Gift Boxes
+
     //  Magic!
     //      -Alchemy Bags
     //      -Transmutation
@@ -88,17 +107,20 @@ namespace Revitalize
     //      -Connected chests much like Project EE2 from MC
     //
     //
-    //  -Food?
+    //  -Food
             -multi flavored sodas
+
     //  -Bigger chests
     //
     //  Festivals
-    //      -Firework festival?
+    //      -Firework festival
+    //      -Horse Racing Festival
+            -Valentines day (Maybe make this just one holiday)
+                -Spring. Male to female gifts.
+                -Winter. Female to male gifts. 
     //  Stargazing???
     //      -Moon Phases+DarkerNight
     //  Bigger/Better Museum?
-    //  More Crops?
-    //  More Food?
     // 
     //  Equippables!
     //      -accessories that provide buffs/regen/friendship
@@ -114,20 +136,33 @@ namespace Revitalize
     //  Readable Books?
     //  
     //  Custom NPCs for shops???
-    //  
-    //  Frisbee Minigame?
-    //  
-    //  HorseRace Minigame/Betting?
+    //
+    //  Minigames:
+    //      Frisbee Minigame?
+    //      HorseRace Minigame/Betting?
     //  
     //  Locations:
     //      -Small Island Home?
-    //      
+    //      -New town inspired by FOMT;Mineral Town/The Valley HM DS
+    //
     //  More crops
+    //      -RF Crops
+    //      -HM Crops
     //
     //  More monsters
     //  -boss fights
     //
     //  More dungeons??
+
+    //  More NPCS?
+
+        Accessories
+        (recover hp/stamina,max hp,more friendship ,run faster, take less damage, etc)
+            -NEckalces
+            -Broaches
+            -Earings
+            -Pendants
+
     */
 
     public class ModCore : Mod
@@ -138,13 +173,13 @@ namespace Revitalize
 
         public static Dictionary<string, CustomObject> customObjects;
 
-        public static Dictionary<string, MultiTiledObject>ObjectGroups;
+        public static Dictionary<string, MultiTiledObject> ObjectGroups;
 
         public static PlayerInfo playerInfo;
 
         public static Serializer Serializer;
 
-        public static Dictionary<GameLocation,MultiTiledObject> ObjectsToDraw;
+        public static Dictionary<GameLocation, MultiTiledObject> ObjectsToDraw;
 
         public override void Entry(IModHelper helper)
         {
@@ -162,10 +197,10 @@ namespace Revitalize
             ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             playerInfo = new PlayerInfo();
 
-            TextureManager.AddTextureManager(Manifest,"Furniture");
-            TextureManager.GetTextureManager(Manifest,"Furniture").searchForTextures(ModHelper,this.ModManifest,Path.Combine("Content", "Graphics", "Furniture"));
+            TextureManager.AddTextureManager(Manifest, "Furniture");
+            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture"));
             TextureManager.AddTextureManager(Manifest, "InventoryMenu");
-            TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus","InventoryMenu"));
+            TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
 
             //Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager(this.Helper.DirectoryPath, Path.Combine("Content", "Graphics", "Furniture")));
@@ -182,7 +217,6 @@ namespace Revitalize
 
             Serializer = new Serializer();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
-            
 
 
         }
@@ -195,7 +229,7 @@ namespace Revitalize
                 Game1.currentMinigame = new Revitalize.Framework.Minigame.SeasideScrambleMinigame.SeasideScramble();
             }
             */
-            if(e.Button== SButton.Y)
+            if (e.Button == SButton.Y)
             {
                 //Game1.activeClickableMenu = new ItemGrabMenu(Game1.player.Items,false,true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems),);
                 List<Item> newItems = new List<Item>()
@@ -203,7 +237,7 @@ namespace Revitalize
                     new StardewValley.Object(184,10)
                 };
 
-                Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryTransferMenu(100, 100, 500, 500,newItems,36);
+                Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryTransferMenu(100, 100, 500, 500, newItems, 36);
             }
         }
 
@@ -216,38 +250,38 @@ namespace Revitalize
         /// </summary>
         private void loadContent()
         {
-          
-            MultiTiledComponent obj = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest,"Furniture","Oak Chair"),typeof(MultiTiledComponent),Color.White), new BasicItemInformation("CoreObjectTest", "Omegasis.TEST1", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, false, null, null));
+
+            MultiTiledComponent obj = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest", "Omegasis.TEST1", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, false, null, null));
             MultiTiledComponent obj2 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest2", "Omegasis.TEST2", "Some fun!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.White, false, null, null));
-            MultiTiledComponent obj3 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest3", "Omegasis.TEST3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest,"Furniture","Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
+            MultiTiledComponent obj3 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest3", "Omegasis.TEST3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
             obj3.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj3);
-            
+
             MultiTiledObject bigObject = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledObject), Color.White), new BasicItemInformation("MultiTest", "Omegasis.BigTiledTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(), Color.White, false, null, null));
 
             bigObject.addComponent(new Vector2(0, 0), obj);
             bigObject.addComponent(new Vector2(1, 0), obj2);
             bigObject.addComponent(new Vector2(2, 0), obj3);
-            
+
             Recipe pie = new Recipe(new Dictionary<Item, int>()
             {
                 [bigObject] = 1
             }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1), new StatCost(100, 50, 0, 0));
 
             customObjects.Add("Omegasis.BigTiledTest", bigObject);
-            
-            
+
+
             Framework.Objects.Furniture.RugTileComponent rug1 = new RugTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugTileComponent), Color.White), new BasicItemInformation("Rug Tile", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A rug tile", "Rug", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, null, null));
 
-            Framework.Objects.Furniture.RugMultiTiledObject rug=new RugMultiTiledObject( PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"),typeof(RugMultiTiledObject),Color.White,false),new BasicItemInformation("Simple Rug Test", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug","A simple rug for testing","Rugs",Color.Brown,-300,0,false,500,Vector2.Zero,true,true,TextureManager.GetTexture(Manifest,"Furniture","Oak Chair"),new AnimationManager(),Color.White,true,null,null));
+            Framework.Objects.Furniture.RugMultiTiledObject rug = new RugMultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugMultiTiledObject), Color.White, false), new BasicItemInformation("Simple Rug Test", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A simple rug for testing", "Rugs", Color.Brown, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(), Color.White, true, null, null));
 
             rug.addComponent(new Vector2(0, 0), rug1);
 
             customObjects.Add("Omegasis.Revitalize.Furniture.Rugs.RugTest", rug);
 
-            
-            
+
+
             FurnitureFactory.LoadFurnitureFiles();
 
             SeasideScramble sscGame = new SeasideScramble();
@@ -260,7 +294,7 @@ namespace Revitalize
                 }
                 }
 
-            },"Animated"), Color.White, false, null, null),new Framework.Objects.InformationFiles.Furniture.ArcadeCabinetInformation(sscGame,false));
+            }, "Animated"), Color.White, false, null, null), new Framework.Objects.InformationFiles.Furniture.ArcadeCabinetInformation(sscGame, false));
             ArcadeCabinetTile ssc2 = new ArcadeCabinetTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetTile), Color.White), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new Animation(new Rectangle(0, 16, 16, 16)), new Dictionary<string, List<Animation>>()
             {
                 {"Animated",new List<Animation>()
@@ -273,7 +307,7 @@ namespace Revitalize
             }, "Animated"), Color.White, false, null, null), new Framework.Objects.InformationFiles.Furniture.ArcadeCabinetInformation(sscGame, false));
 
             ArcadeCabinetOBJ sscCabinet = new ArcadeCabinetOBJ(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetOBJ), Color.White, true), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(), Color.White, true, null, null));
-            sscCabinet.addComponent(new Vector2(0,0),ssc1);
+            sscCabinet.addComponent(new Vector2(0, 0), ssc1);
             sscCabinet.addComponent(new Vector2(0, 1), ssc2);
 
 
@@ -287,9 +321,9 @@ namespace Revitalize
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
 
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath,"Content" ,"Graphics"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics"));
             //Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture","Chairs"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Chairs"));
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Lamps"));
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Tables"));
         }
@@ -319,12 +353,12 @@ namespace Revitalize
 
 
             Serializer.afterLoad();
-            
+
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
-           // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
+            // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
@@ -345,7 +379,7 @@ namespace Revitalize
         {
             if (customObjects.ContainsKey(objName))
             {
-                CustomObject i =(CustomObject)customObjects[objName].getOne();
+                CustomObject i = (CustomObject)customObjects[objName].getOne();
                 return i;
             }
             else
@@ -353,7 +387,7 @@ namespace Revitalize
                 throw new Exception("Object Key name not found: " + objName);
             }
         }
-        
+
 
         public static void log(object message)
         {
