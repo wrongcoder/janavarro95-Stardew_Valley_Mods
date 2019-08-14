@@ -6,12 +6,25 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
+using Revitalize.Framework.Objects.InformationFiles;
 using StardewValley;
 
 namespace Revitalize.Framework.Objects.Resources.OreVeins
 {
     public class OreVeinObj:MultiTiledObject
     {
+        public ResourceInformaton resourceInfo
+        {
+            get
+            {
+                foreach(OreVeinTile ore in this.objects.Values)
+                {
+                    return ore.resourceInfo;
+                }
+                return null;
+            }
+        }
+
         public OreVeinObj() : base()
         {
 

@@ -128,6 +128,7 @@
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
     <Compile Include="Framework\Objects\ObjectManager.cs" />
+    <Compile Include="Framework\Objects\InformationFiles\OreResourceInformation.cs" />
     <Compile Include="Framework\Objects\ResourceManager.cs" />
     <Compile Include="Framework\Objects\Resources\OreVeins\OreVeinObj.cs" />
     <Compile Include="Framework\Objects\Resources\OreVeins\OreVeinTile.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Framework\Player\Managers\SittingInfo.cs" />
     <Compile Include="Framework\Player\PlayerInfo.cs" />
     <Compile Include="Framework\Utilities\BoundingBoxInfo.cs" />
+    <Compile Include="Framework\Utilities\IntRange.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
     <Compile Include="Framework\Utilities\LocationUtilities.cs" />
     <Compile Include="Framework\Utilities\PyTKHelper.cs" />

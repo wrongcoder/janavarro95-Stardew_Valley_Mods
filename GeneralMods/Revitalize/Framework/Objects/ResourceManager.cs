@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Objects.Resources.OreVeins;
 using Revitalize.Framework.Utilities;
 using StardewValley;
@@ -43,8 +44,11 @@ namespace Revitalize.Framework.Objects
 
 
             OreVeinObj testOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
-            testOre.addComponent(new Vector2(0, 0), new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null), new InformationFiles.ResourceInformaton(new StardewValley.Object(211, 1), 1, 10)));
-            this.ores.Add("Test",testOre);
+            testOre.addComponent(new Vector2(0, 0), new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null), new InformationFiles.OreResourceInformation(new StardewValley.Object(211, 1), 1, 10,1,20,false,false,new List<IntRange>()
+            {
+                new IntRange(1,9)
+            },null,true,true,0,0)));
+            this.ores.Add("Omegasis.Revitalize.Resources.Ore.Test", testOre);
         }
 
         /// <summary>
@@ -65,7 +69,6 @@ namespace Revitalize.Framework.Objects
                     {
                         //ModCore.log("Location is: " + Location.Name);
                         spawn.placementAction(Location, (int)TilePosition.X*Game1.tileSize, (int)TilePosition.Y*Game1.tileSize,Game1.player);
-                        ModCore.log("This works!");
                     }
                     else
                     {
@@ -101,7 +104,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public bool canResourceBeSpawnedHere(MultiTiledObject OBJ,GameLocation Location, Vector2 TilePosition)
         {
-            return OBJ.canBePlacedHere(Location, TilePosition);
+            return OBJ.canBePlacedHere(Location, TilePosition) && Location.isTileLocationTotallyClearAndPlaceable(TilePosition);
         }
 
 
@@ -113,18 +116,43 @@ namespace Revitalize.Framework.Objects
         public void spawnOreInMine()
         {
             int floorLevel = LocationUtilities.CurrentMineLevel();
+
+            List<OreVeinObj> spawnableOreVeins = new List<OreVeinObj>();
+            //Get a list of all of the ores that can spawn on this mine level.
+            foreach(KeyValuePair<string,OreVeinObj> pair in this.ores)
+            {
+                if (pair.Value.resourceInfo.canSpawnAtLocation() && (pair.Value.resourceInfo as OreResourceInformation).canSpawnOnCurrentMineLevel())
+                {
+                    spawnableOreVeins.Add(pair.Value);
+                }
+            }
+
+            foreach(OreVeinObj ore in spawnableOreVeins)
+            {
+                int amount = ore.resourceInfo.getNumberOfNodesToSpawn();
+                List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVeinObj)ore.getOne());
+                for (int i = 0; i < amount; i++)
+                {
+                    int position = Game1.random.Next(openTiles.Count);
+                    this.spawnOreVein(ore.info.id, openTiles[position]);
+                }
+                ModCore.log("Spawned :" + amount + " pancake test ores!");
+            }
+
+            /*
             if(floorLevel>=1 && floorLevel <= 9)
             {
                 int amount = Game1.random.Next(1, 10); //Change this to be a frequency table or something.
-                List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVeinObj)this.ores["Test"].getOne());
+                List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVeinObj)this.ores["Omegasis.Revitalize.Resources.Ore.Test"].getOne());
 
                 for(int i = 0; i <= amount; i++)
                 {
                     int position = Game1.random.Next(openTiles.Count);
-                    this.spawnOreVein("Test", openTiles[position]);
+                    this.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", openTiles[position]);
                 }
-                ModCore.log("Spawned :" + amount + " pancake test ores!");
+               
             }
+            */
         }
 
         public void OnPlayerLocationChanged(object o,EventArgs playerWarped)

@@ -386,7 +386,7 @@ namespace Revitalize
             */
             //Game1.player.addItemToInventory(ObjectManager.resources.ores["Test"].getOne());
 
-            ObjectManager.resources.spawnOreVein("Test", new Vector2(8, 7));
+            ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
         }
 
         /*

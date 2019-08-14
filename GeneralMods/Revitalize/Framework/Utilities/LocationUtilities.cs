@@ -60,7 +60,7 @@ namespace Revitalize.Framework.Utilities
         public static Vector2 GetLocationTileDimensions(GameLocation location)
         {
             Vector2 dimensions = new Vector2(location.Map.GetLayer("Back").LayerWidth, location.Map.GetLayer("Back").LayerHeight);
-            ModCore.log("Dimensions of map is: " + dimensions);
+            //ModCore.log("Dimensions of map is: " + dimensions);
             return dimensions;
         }
 

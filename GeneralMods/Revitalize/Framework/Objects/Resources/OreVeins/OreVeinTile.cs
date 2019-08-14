@@ -127,7 +127,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// </summary>
         public void destoryVein()
         {
-            int amount = Game1.random.Next(this.resourceInfo.minDropAmount, this.resourceInfo.maxDropAmount);
+            int amount = Game1.random.Next(this.resourceInfo.minResourcePerDrop, this.resourceInfo.maxResourcePerDrop);
             Item newItem = this.resourceInfo.droppedItem.getOne();
             for(int i = 0; i < amount; i++)
             {
@@ -137,6 +137,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             {
                 this.location.playSound("stoneCrack");
                 this.location.removeObject(this.TileLocation, false);
+                this.containerObject.removeComponent(this.offsetKey);
             }
         }
 
