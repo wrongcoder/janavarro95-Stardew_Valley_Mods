@@ -12,7 +12,9 @@ namespace Revitalize.Framework.Objects.InformationFiles
     {
 
 
-
+        /// <summary>
+        /// The floors of the mine that this resource should spawn in.
+        /// </summary>
         public List<IntRange> floorsToSpawnOn;
         /// <summary>
         /// The list of floors to exclude spawning on in the mine.
@@ -20,21 +22,32 @@ namespace Revitalize.Framework.Objects.InformationFiles
         public List<IntRange> floorsToExclude;
 
         /// <summary>
-        /// 
+        /// Should this resource spawn in the mine in the mountains?
         /// </summary>
-        public List<string> minesToSpawnIn;
-
         public bool spawnInRegularMine;
+        /// <summary>
+        /// Should this resource spawn in Skull Cavern?
+        /// </summary>
         public bool spawnInSkullCavern;
+        /// <summary>
+        /// Should this resource spawn on farms. Notably the hiltop farm?
+        /// </summary>
         public bool spawnsOnFarm;
+        /// <summary>
+        /// Should this resource spawn in the quarry?
+        /// </summary>
         public bool spawnsInQuarry;
 
+
+        /// <summary>
+        /// Empty Constructor.
+        /// </summary>
         public OreResourceInformation() : base()
         {
 
         }
 
-        public OreResourceInformation(Item I, int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes,bool SpawnsOnFarm, bool SpawnsInQuarry,List<IntRange> FloorsToSpawnOn, List<IntRange> FloorsToExclude,bool SpawnInRegularMine,bool SpawnInSkullCave,float SpawnLuckFactor=0f,float DropLuckFactor=0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,SpawnLuckFactor,DropLuckFactor)
+        public OreResourceInformation(Item I,bool SpawnsOnFarm, bool SpawnsInQuarry, bool SpawnInRegularMine, bool SpawnInSkullCave,List<IntRange> FloorsToSpawnOn,List<IntRange>FloorsToExclude ,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, double ChanceToSpawn = 1f, double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,ChanceToSpawn,ChanceToDrop,SpawnChanceLuckFactor,SpawnAmountLuckFactor,DropChanceLuckFactor,DropAmountLuckFactor)
         {
             this.spawnsOnFarm = SpawnsOnFarm;
             this.spawnsInQuarry = SpawnsInQuarry;
@@ -44,16 +57,30 @@ namespace Revitalize.Framework.Objects.InformationFiles
             this.spawnInSkullCavern = SpawnInSkullCave;
         }
 
+        /// <summary>
+        /// Gets the number of drops that should spawn for this ore.
+        /// </summary>
+        /// <param name="limitToMax"></param>
+        /// <returns></returns>
         public override int getNumberOfDropsToSpawn(bool limitToMax = true)
         {
             return base.getNumberOfDropsToSpawn(limitToMax);
         }
 
+        /// <summary>
+        /// Gets the number of nodes that should spawn for this ore.
+        /// </summary>
+        /// <param name="limitToMax"></param>
+        /// <returns></returns>
         public override int getNumberOfNodesToSpawn(bool limitToMax = true)
         {
             return base.getNumberOfNodesToSpawn(limitToMax);
         }
 
+        /// <summary>
+        /// Can this ore spawn at the given location?
+        /// </summary>
+        /// <returns></returns>
         public override bool canSpawnAtLocation()
         {
             if (this.spawnsOnFarm && Game1.player.currentLocation is StardewValley.Farm)

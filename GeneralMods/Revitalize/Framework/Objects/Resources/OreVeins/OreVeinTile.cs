@@ -19,23 +19,26 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// Deals with information tied to the resource itself.
         /// </summary>
         public ResourceInformaton resourceInfo;
+        public List<ResourceInformaton> extraDrops;
 
         public OreVeinTile() : base()
         {
 
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info,ResourceInformaton Resource) : base(PyTKData, Info)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info,ResourceInformaton Resource,List<ResourceInformaton> ExtraDrops) : base(PyTKData, Info)
         {
             this.health = 3;
             this.resourceInfo = Resource;
+            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation,ResourceInformaton Resource) : base(PyTKData, Info, TileLocation)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation,ResourceInformaton Resource, List<ResourceInformaton> ExtraDrops) : base(PyTKData, Info, TileLocation)
         {
 
             this.health = 3;
             this.resourceInfo = Resource;
+            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
         }
 
 
@@ -127,12 +130,26 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// </summary>
         public void destoryVein()
         {
-            int amount = Game1.random.Next(this.resourceInfo.minResourcePerDrop, this.resourceInfo.maxResourcePerDrop);
+            int amount = this.resourceInfo.getNumberOfDropsToSpawn();
             Item newItem = this.resourceInfo.droppedItem.getOne();
             for(int i = 0; i < amount; i++)
             {
                 Game1.createItemDebris(newItem.getOne(), this.TileLocation*Game1.tileSize, Game1.random.Next(0, 3), this.location);
             }
+
+            if (this.extraDrops != null)
+            {
+                foreach (ResourceInformaton extra in this.extraDrops)
+                {
+                    Item extraItem = extra.droppedItem.getOne();
+                    int extraAmount = extra.getNumberOfDropsToSpawn();
+                    for (int i = 0; i < amount; i++)
+                    {
+                        Game1.createItemDebris(extraItem.getOne(), this.TileLocation * Game1.tileSize, Game1.random.Next(0, 3), this.location);
+                    }
+                }
+            }
+
             if (this.location != null)
             {
                 this.location.playSound("stoneCrack");
@@ -171,7 +188,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         public override Item getOne()
         {
-            OreVeinTile component = new OreVeinTile(this.data, this.info,this.resourceInfo);
+            OreVeinTile component = new OreVeinTile(this.data, this.info,this.resourceInfo,this.extraDrops);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;
