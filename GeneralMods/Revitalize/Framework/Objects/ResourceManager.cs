@@ -63,7 +63,8 @@ namespace Revitalize.Framework.Objects
                     bool spawnable = this.canResourceBeSpawnedHere(spawn, Location, TilePosition);
                     if (spawnable)
                     {
-                        spawn.placementAction(Location, (int)TilePosition.X, (int)TilePosition.Y);
+                        //ModCore.log("Location is: " + Location.Name);
+                        spawn.placementAction(Location, (int)TilePosition.X*Game1.tileSize, (int)TilePosition.Y*Game1.tileSize,Game1.player);
                         ModCore.log("This works!");
                     }
                     else
@@ -98,7 +99,7 @@ namespace Revitalize.Framework.Objects
         /// <param name="Location"></param>
         /// <param name="TilePosition"></param>
         /// <returns></returns>
-        public bool canResourceBeSpawnedHere(StardewValley.Object OBJ,GameLocation Location, Vector2 TilePosition)
+        public bool canResourceBeSpawnedHere(MultiTiledObject OBJ,GameLocation Location, Vector2 TilePosition)
         {
             return OBJ.canBePlacedHere(Location, TilePosition);
         }

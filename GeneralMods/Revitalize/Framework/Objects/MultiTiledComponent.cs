@@ -87,6 +87,7 @@ namespace Revitalize.Framework.Objects
 
             if (this.location == null) this.location = Game1.player.currentLocation;
             this.TileLocation = new Vector2((int)(x / Game1.tileSize), (int)(y / Game1.tileSize));
+            //ModCore.log("TileLocation: " + this.TileLocation);
             /*
             return base.placementAction(location, x, y, who);
             */

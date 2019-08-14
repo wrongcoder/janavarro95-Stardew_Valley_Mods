@@ -81,12 +81,12 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
             if(t is StardewValley.Tools.Pickaxe)
             {
-                ModCore.log("Hit the ore vein with a pickaxe!");
+                //ModCore.log("Hit the ore vein with a pickaxe!");
                 this.damage((t as StardewValley.Tools.Pickaxe).UpgradeLevel+1);
                 if (this.location != null)
                 {
                     this.location.playSound("hammer");
-                    ModCore.log("Ore has this much health left: "+this.health);
+                    //ModCore.log("Ore has this much health left: "+this.health);
                 }
                 return false;
             }
@@ -105,6 +105,10 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             //return base.onExplosion(who, location);
         }
 
+        /// <summary>
+        /// Applies damage to the ore vein.
+        /// </summary>
+        /// <param name="amount"></param>
         public void damage(int amount)
         {
             if (amount <= 0) return;
@@ -118,6 +122,9 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             }
         }
 
+        /// <summary>
+        /// Destroys this tile for the ore vein.
+        /// </summary>
         public void destoryVein()
         {
             int amount = Game1.random.Next(this.resourceInfo.minDropAmount, this.resourceInfo.maxDropAmount);
