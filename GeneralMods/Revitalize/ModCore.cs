@@ -198,11 +198,7 @@ namespace Revitalize
             this.createDirectories();
             this.initailizeComponents();
 
-            ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
-            ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
-            ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
-            ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
-            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+
             playerInfo = new PlayerInfo();
 
             TextureManager.AddTextureManager(Manifest, "Furniture");
@@ -229,7 +225,12 @@ namespace Revitalize
             Serializer = new Serializer();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
 
-
+            ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
+            ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
+            ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
+            ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
+            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+            ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)

@@ -104,5 +104,34 @@ namespace Revitalize.Framework.Objects
             return OBJ.canBePlacedHere(Location, TilePosition);
         }
 
+
+        //~~~~~~~~~~~~~~~~~~~~~~~//
+        //  Mine ore spawn code  //
+        //~~~~~~~~~~~~~~~~~~~~~~~//
+
+        #region
+        public void spawnOreInMine()
+        {
+            int floorLevel = LocationUtilities.CurrentMineLevel();
+            if(floorLevel>=1 && floorLevel <= 9)
+            {
+                int amount = Game1.random.Next(1, 10); //Change this to be a frequency table or something.
+                List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVeinObj)this.ores["Test"].getOne());
+
+                for(int i = 0; i <= amount; i++)
+                {
+                    int position = Game1.random.Next(openTiles.Count);
+                    this.spawnOreVein("Test", openTiles[position]);
+                }
+                ModCore.log("Spawned :" + amount + " pancake test ores!");
+            }
+        }
+
+        public void OnPlayerLocationChanged(object o,EventArgs playerWarped)
+        {
+            this.spawnOreInMine();
+        }
+
+        #endregion
     }
 }

@@ -131,7 +131,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             Item newItem = this.resourceInfo.droppedItem.getOne();
             for(int i = 0; i < amount; i++)
             {
-                Game1.createItemDebris(newItem, this.TileLocation*Game1.tileSize, Game1.random.Next(0, 3), this.location);
+                Game1.createItemDebris(newItem.getOne(), this.TileLocation*Game1.tileSize, Game1.random.Next(0, 3), this.location);
             }
             if (this.location != null)
             {
