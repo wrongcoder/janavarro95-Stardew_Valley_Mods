@@ -9,6 +9,9 @@ using StardewValley;
 
 namespace Revitalize.Framework.Objects
 {
+    /// <summary>
+    /// Deals with handling all objects for the mod.
+    /// </summary>
     public class ObjectManager
     {
         /// <summary>
@@ -38,6 +41,15 @@ namespace Revitalize.Framework.Objects
         /// All of the rugs held by this object pool.
         /// </summary>
         public Dictionary<string, RugMultiTiledObject> rugs;
+        public Dictionary<string, StorageFurnitureOBJ> furnitureStorage;
+
+        public Dictionary<string, MultiTiledObject> generic;
+        /// <summary>
+        /// Misc. items for this mod.
+        /// </summary>
+        public Dictionary<string, MultiTiledObject> miscellaneous;
+
+        public ResourceManager resources;
 
         /// <summary>
         /// Constructor.
@@ -66,6 +78,12 @@ namespace Revitalize.Framework.Objects
             this.tables = new Dictionary<string, TableMultiTiledObject>();
             this.lamps = new Dictionary<string, LampMultiTiledObject>();
             this.rugs = new Dictionary<string, RugMultiTiledObject>();
+            this.furnitureStorage = new Dictionary<string, StorageFurnitureOBJ>();
+
+            this.generic = new Dictionary<string, MultiTiledObject>();
+            this.miscellaneous = new Dictionary<string, MultiTiledObject>();
+
+            this.resources = new ResourceManager();
         }
 
         /// <summary>
@@ -85,6 +103,7 @@ namespace Revitalize.Framework.Objects
             return objs[rand].getOne();
         }
 
+        
         /// <summary>
         /// Gets an object from the dictionary that is passed in.
         /// </summary>
@@ -96,6 +115,86 @@ namespace Revitalize.Framework.Objects
             if (dictionary.ContainsKey(objectName))
             {
                 return dictionary[objectName].getOne();
+            }
+            else
+            {
+                throw new Exception("Object pool doesn't contain said object.");
+            }
+        }
+        
+
+        public Item getObject(string objectName, Dictionary<string, MultiTiledObject> dictionary)
+        {
+            if (dictionary.ContainsKey(objectName))
+            {
+                return dictionary[objectName].getOne();
+            }
+            else
+            {
+                throw new Exception("Object pool doesn't contain said object.");
+            }
+        }
+
+        /// <summary>
+        /// Gets a chair from the object manager.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ChairMultiTiledObject getChair(string name)
+        {
+            if (this.chairs.ContainsKey(name))
+            {
+                return (ChairMultiTiledObject)this.chairs[name].getOne();
+            }
+            else
+            {
+                throw new Exception("Object pool doesn't contain said object.");
+            }
+        }
+        /// <summary>
+        /// Gets a table from the object manager.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public TableMultiTiledObject getTable(string name)
+        {
+            if (this.tables.ContainsKey(name))
+            {
+                return (TableMultiTiledObject)this.tables[name].getOne();
+            }
+            else
+            {
+                throw new Exception("Object pool doesn't contain said object.");
+            }
+        }
+
+        /// <summary>
+        /// Gets a lamp from the object manager.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public LampMultiTiledObject getLamp(string name)
+        {
+            if (this.lamps.ContainsKey(name))
+            {
+                return (LampMultiTiledObject)this.lamps[name].getOne();
+            }
+            else
+            {
+                throw new Exception("Object pool doesn't contain said object.");
+            }
+        }
+
+        /// <summary>
+        /// Gets storage furniture from the object manager.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public StorageFurnitureOBJ getStorageFuriture(string name)
+        {
+            if (this.furnitureStorage.ContainsKey(name))
+            {
+                return (StorageFurnitureOBJ)this.furnitureStorage[name].getOne();
             }
             else
             {

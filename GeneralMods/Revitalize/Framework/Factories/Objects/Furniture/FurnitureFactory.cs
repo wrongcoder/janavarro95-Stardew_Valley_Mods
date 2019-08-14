@@ -23,12 +23,26 @@ namespace Revitalize.Framework.Factories.Objects
     //Create portable beds???
     public class FurnitureFactory
     {
-        
+        /// <summary>
+        /// The path to the chairs data on disk.
+        /// </summary>
         public static string ChairFolder = Path.Combine("Data", "Furniture", "Chairs");
+        /// <summary>
+        /// The path to the tables data on disk.
+        /// </summary>
         public static string TablesFolder = Path.Combine("Data", "Furniture", "Tables");
+        /// <summary>
+        /// The path to the lamps data on disk.
+        /// </summary>
         public static string LampsFolder = Path.Combine("Data", "Furniture", "Lamps");
+        /// <summary>
+        /// The path to the storage data on disk.
+        /// </summary>
         public static string StorageFolder = Path.Combine("Data", "Furniture", "Storage");
 
+        /// <summary>
+        /// Loads all furniture files.
+        /// </summary>
         public static void LoadFurnitureFiles()
         {
             LoadChairFiles();
@@ -37,24 +51,36 @@ namespace Revitalize.Framework.Factories.Objects
             LoadFurnitureStorageFiles();
         }
 
+        /// <summary>
+        /// Loads all chair files.
+        /// </summary>
         private static void LoadChairFiles()
         {
             SerializeChairs();
             DeserializeChairs();
         }
 
+        /// <summary>
+        /// Loads all table files.
+        /// </summary>
         private static void LoadTableFiles()
         {
             SerializeTableFiles();
             DeserializeTableFiles();
         }
 
+        /// <summary>
+        /// Loads all lamp files.
+        /// </summary>
         private static void LoadLampFiles()
         {
             SerializeLamps();
             DeserializeLamps();
         }
 
+        /// <summary>
+        /// Loads all furniture storage files.
+        /// </summary>
         private static void LoadFurnitureStorageFiles()
         {
             SerializeFurnitureStorageFiles();
@@ -93,6 +119,9 @@ namespace Revitalize.Framework.Factories.Objects
             //ModCore.customObjects.Add(lamp.info.id, lamp);
         }
 
+        /// <summary>
+        /// Deserializes all lamp files for the mod.
+        /// </summary>
         private static void DeserializeLamps()
         {
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", LampsFolder))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", LampsFolder));
@@ -144,7 +173,7 @@ namespace Revitalize.Framework.Factories.Objects
                 }
                 foreach (var v in objs)
                 {
-                    ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                    ModCore.ObjectManager.lamps.Add(v.Value.info.id, v.Value);
                 }
             }
 
@@ -255,6 +284,9 @@ namespace Revitalize.Framework.Factories.Objects
             ModCore.Serializer.SerializeContentFile("OakChair_0_0", bottom, Path.Combine(ChairFolder, "OakChair"));
             ModCore.Serializer.SerializeContentFile("OakChair", obj, Path.Combine(ChairFolder, "OakChair"));
         }
+        /// <summary>
+        /// Deserializes all chair files for the mod.
+        /// </summary>
         private static void DeserializeChairs()
         {
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", ChairFolder))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", ChairFolder));
@@ -292,11 +324,14 @@ namespace Revitalize.Framework.Factories.Objects
                 }
                 foreach (var v in chairObjects)
                 {
-                    ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                    ModCore.ObjectManager.chairs.Add(v.Value.info.id, v.Value);
                 }
             }
         }
 
+        /// <summary>
+        /// Creates an example table file for the mod.
+        /// </summary>
         private static void SerializeTableFiles()
         {
             TableTileComponent upperLeft = new TableTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Tables.OakTable", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Table"), typeof(TableTileComponent), Color.White), new BasicItemInformation("Oak Table", "Omegasis.Revitalize.Furniture.Tables.OakTable", "A simple wooden table to place objects on.", "Tables", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Table"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Table"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), new TableInformation(true));
@@ -329,6 +364,9 @@ namespace Revitalize.Framework.Factories.Objects
 
         }
 
+        /// <summary>
+        /// Deserailzes all table files for the mod.
+        /// </summary>
         private static void DeserializeTableFiles()
         {
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", TablesFolder))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", TablesFolder));
@@ -367,21 +405,23 @@ namespace Revitalize.Framework.Factories.Objects
                 }
                 foreach (var v in chairObjects)
                 {
-                    ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                    ModCore.ObjectManager.tables.Add(v.Value.info.id, v.Value);
                 }
             }
         }
 
-
+        /// <summary>
+        /// Creates an example storage file for the mod.
+        /// </summary>
         private static void SerializeFurnitureStorageFiles()
         {
-            StorageFurnitureTile upperLeft = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(TableTileComponent), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
-            StorageFurnitureTile upperRight = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(TableTileComponent), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(16, 0, 16, 16)), Color.White, false, null, null));
-            StorageFurnitureTile bottomLeft = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(TableTileComponent), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(0, 16, 16, 16)), Color.White, false, null, null));
-            StorageFurnitureTile bottomRight = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(TableTileComponent), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(16, 16, 16, 16)), Color.White, false, null, null));
+            StorageFurnitureTile upperLeft = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(StorageFurnitureTile), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            StorageFurnitureTile upperRight = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(StorageFurnitureTile), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(16, 0, 16, 16)), Color.White, false, null, null));
+            StorageFurnitureTile bottomLeft = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(StorageFurnitureTile), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(0, 16, 16, 16)), Color.White, false, null, null));
+            StorageFurnitureTile bottomRight = new StorageFurnitureTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(StorageFurnitureTile), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(16, 16, 16, 16)), Color.White, false, null, null));
 
 
-            StorageFurnitureOBJ obj = new StorageFurnitureOBJ(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(TableTileComponent), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(16, 16, 16, 16)), Color.White, false, new InventoryManager(9), null));
+            StorageFurnitureOBJ obj = new StorageFurnitureOBJ(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Storage.OakCabinet", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), typeof(StorageFurnitureTile), Color.White), new BasicItemInformation("Oak Cabinet", "Omegasis.Revitalize.Furniture.Storage.OakCabinet", "A beautiful oak cabinet to place objects inside of.", "Storage", Color.Brown, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Cabinet"), new Animation(16, 16, 16, 16)), Color.White, false, new InventoryManager(9), null));
 
             FactoryInfo uL = new FactoryInfo(upperLeft);
             FactoryInfo uR = new FactoryInfo(upperRight);
@@ -406,6 +446,9 @@ namespace Revitalize.Framework.Factories.Objects
 
         }
 
+        /// <summary>
+        /// Deserializes the furniure files for the mod.
+        /// </summary>
         private static void DeserializeFurnitureStorageFiles()
         {
             if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", StorageFolder))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", StorageFolder));
@@ -444,26 +487,49 @@ namespace Revitalize.Framework.Factories.Objects
                 }
                 foreach (var v in chairObjects)
                 {
-                    ModCore.customObjects.Add(v.Value.info.id, v.Value);
+                    ModCore.ObjectManager.furnitureStorage.Add(v.Value.info.id, v.Value);
                 }
             }
         }
 
-
+        /// <summary>
+        /// Gets a chair from the object manager.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static ChairMultiTiledObject GetChair(string name)
         {
-            return (ChairMultiTiledObject)ModCore.GetObjectFromPool(name);
+            return (ChairMultiTiledObject)ModCore.ObjectManager.getChair(name);
         }
+        /// <summary>
+        /// Gets a table from the object manager.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static TableMultiTiledObject GetTable(string name)
         {
-            return (TableMultiTiledObject)ModCore.GetObjectFromPool(name);
+            return (TableMultiTiledObject)ModCore.ObjectManager.getTable(name);
         }
+
+        /// <summary>
+        /// Gets a lamp from the object manager.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static LampMultiTiledObject GetLamp(string name)
         {
-            return (LampMultiTiledObject)ModCore.GetObjectFromPool(name);
+            return (LampMultiTiledObject)ModCore.ObjectManager.getLamp(name);
         }
 
-
+        /// <summary>
+        /// Gets a furniture storage file for the mod.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static StorageFurnitureOBJ GetFurnitureStorage(string name)
+        {
+            return (StorageFurnitureOBJ)ModCore.ObjectManager.getStorageFuriture(name);
+        }
 
     }
 }

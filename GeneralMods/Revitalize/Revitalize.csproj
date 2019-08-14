@@ -124,9 +124,13 @@
     <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ObjectGUIDInfo.cs" />
+    <Compile Include="Framework\Objects\InformationFiles\ResourceInformaton.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
     <Compile Include="Framework\Objects\ObjectManager.cs" />
+    <Compile Include="Framework\Objects\ResourceManager.cs" />
+    <Compile Include="Framework\Objects\Resources\OreVeins\OreVeinObj.cs" />
+    <Compile Include="Framework\Objects\Resources\OreVeins\OreVeinTile.cs" />
     <Compile Include="Framework\Player\Managers\MagicManager.cs" />
     <Compile Include="Framework\Player\Managers\SittingInfo.cs" />
     <Compile Include="Framework\Player\PlayerInfo.cs" />
@@ -147,6 +151,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Graphics\Objects\Resources\Ore\TestTemplate.aseprite" />
     <None Include="Content\Minigames\SeasideScramble\Maps\ShootingGallery.tbin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -159,21 +164,6 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Graphics\Furniture\Arcade\SeasideScrambleArcade.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\Furniture\Chairs\Oak Chair.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\Furniture\Lamps\Oak Lamp.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\Furniture\Storage\Oak Cabinet.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Graphics\Furniture\Tables\Oak Table.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\Graphics\Menus\InventoryMenu\ItemBackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -190,6 +180,24 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Menus\InventoryMenu\TrashButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Arcade\SeasideScrambleArcade.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Chairs\Oak Chair.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Lamps\Oak Lamp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Storage\Oak Cabinet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Tables\Oak Table.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Resources\Ore\Test.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Minigames\SeasideScramble\Graphics\Enemies\Target.png">

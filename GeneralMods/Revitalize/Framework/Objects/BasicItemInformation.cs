@@ -18,7 +18,6 @@ namespace Revitalize.Framework.Objects
         public string categoryName;
         public Color categoryColor;
         public int price;
-        public Vector2 TileLocation;
         public int edibility;
         public int fragility;
         public bool canBeSetIndoors;
@@ -46,7 +45,6 @@ namespace Revitalize.Framework.Objects
             this.categoryName = "";
             this.categoryColor = new Color(0, 0, 0);
             this.price = 0;
-            this.TileLocation = Vector2.Zero;
             this.edibility = -300;
             this.canBeSetIndoors = false;
             this.canBeSetOutdoors = false;
@@ -70,7 +68,6 @@ namespace Revitalize.Framework.Objects
             this.categoryName = categoryName;
             this.categoryColor = categoryColor;
             this.price = price;
-            this.TileLocation = TileLocation;
             this.edibility = edibility;
 
             this.canBeSetOutdoors = canBeSetOutdoors;

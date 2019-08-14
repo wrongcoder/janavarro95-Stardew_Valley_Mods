@@ -142,6 +142,7 @@ namespace Revitalize
     //      HorseRace Minigame/Betting?
     //  
     //  Locations:
+            -Make extra bus stop sign that travels between new towns/locations.
     //      -Small Island Home?
     //      -New town inspired by FOMT;Mineral Town/The Valley HM DS
     //
@@ -171,8 +172,15 @@ namespace Revitalize
         public static IMonitor ModMonitor;
         public static IManifest Manifest;
 
-        public static Dictionary<string, CustomObject> customObjects;
+        /// <summary>
+        /// Keeps track of custom objects. REPLACE THIS WITH RESOUCE MANAGER.
+        /// </summary>
+        //public static Dictionary<string, CustomObject> customObjects;
+        public static ObjectManager ObjectManager;
 
+        /// <summary>
+        /// Keeps track of all of the extra object groups.
+        /// </summary>
         public static Dictionary<string, MultiTiledObject> ObjectGroups;
 
         public static PlayerInfo playerInfo;
@@ -198,9 +206,11 @@ namespace Revitalize
             playerInfo = new PlayerInfo();
 
             TextureManager.AddTextureManager(Manifest, "Furniture");
-            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture"));
+            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects","Furniture"));
             TextureManager.AddTextureManager(Manifest, "InventoryMenu");
             TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
+            TextureManager.AddTextureManager(Manifest, "Resources.Ore");
+            TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
 
             //Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager(this.Helper.DirectoryPath, Path.Combine("Content", "Graphics", "Furniture")));
@@ -211,9 +221,10 @@ namespace Revitalize
 
             //TextureManager.addTexture("Furniture", "Oak Table", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Tables", "Oak Table.png")));
             //TextureManager.addTexture("Furniture", "Oak Lamp", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Lamps", "Oak Lamp.png")));
-            customObjects = new Dictionary<string, CustomObject>();
-            ObjectGroups = new Dictionary<string, MultiTiledObject>();
+            //customObjects = new Dictionary<string, CustomObject>();
 
+            ObjectGroups = new Dictionary<string, MultiTiledObject>();
+            ObjectManager = new ObjectManager();
 
             Serializer = new Serializer();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
@@ -269,7 +280,7 @@ namespace Revitalize
                 [bigObject] = 1
             }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1), new StatCost(100, 50, 0, 0));
 
-            customObjects.Add("Omegasis.BigTiledTest", bigObject);
+            ObjectManager.miscellaneous.Add("Omegasis.BigTiledTest", bigObject);
 
 
             Framework.Objects.Furniture.RugTileComponent rug1 = new RugTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugTileComponent), Color.White), new BasicItemInformation("Rug Tile", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A rug tile", "Rug", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, null, null));
@@ -278,7 +289,7 @@ namespace Revitalize
 
             rug.addComponent(new Vector2(0, 0), rug1);
 
-            customObjects.Add("Omegasis.Revitalize.Furniture.Rugs.RugTest", rug);
+            ObjectManager.miscellaneous.Add("Omegasis.Revitalize.Furniture.Rugs.RugTest", rug);
 
 
 
@@ -311,7 +322,7 @@ namespace Revitalize
             sscCabinet.addComponent(new Vector2(0, 1), ssc2);
 
 
-            customObjects.Add("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", sscCabinet);
+            ObjectManager.miscellaneous.Add("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", sscCabinet);
 
             ModCore.log("Added in SSC!");
         }
@@ -362,19 +373,22 @@ namespace Revitalize
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
-            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
+            Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
-            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble"));
-            Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Storage.OakCabinet"));
+            //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));
+            //Game1.player.addItemToInventory(ObjectManager.getStorageFuriture("Omegasis.Revitalize.Furniture.Storage.OakCabinet"));
             /*
             StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
             Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);
             axe =(StardewValley.Tools.Axe)Serializer.Deserialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"),typeof(StardewValley.Tools.Axe));
             //Game1.player.addItemToInventory(axe);
             */
+            //Game1.player.addItemToInventory(ObjectManager.resources.ores["Test"].getOne());
 
+            ObjectManager.resources.spawnOreVein("Test", new Vector2(4, 4));
         }
 
+        /*
         public static Item GetObjectFromPool(string objName)
         {
             if (customObjects.ContainsKey(objName))
@@ -387,16 +401,15 @@ namespace Revitalize
                 throw new Exception("Object Key name not found: " + objName);
             }
         }
+        */
 
-
+        /// <summary>
+        ///Logs information to the console.
+        /// </summary>
+        /// <param name="message"></param>
         public static void log(object message)
         {
             ModMonitor.Log(message.ToString());
-        }
-
-        public static string generatePlaceholderString()
-        {
-            return "2048/0/-300/Crafting -9/Play '2048 by Platonymous' at home!/true/true/0/2048";
         }
     }
 }
