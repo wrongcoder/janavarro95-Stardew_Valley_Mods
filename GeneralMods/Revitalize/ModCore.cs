@@ -231,6 +231,7 @@ namespace Revitalize
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
+            ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
