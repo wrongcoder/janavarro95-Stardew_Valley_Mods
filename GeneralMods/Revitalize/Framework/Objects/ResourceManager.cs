@@ -24,6 +24,7 @@ namespace Revitalize.Framework.Objects
         /// A list of all of the ores held by the resource manager.
         /// </summary>
         public Dictionary<string, OreVeinObj> ores;
+        public List<int> visitedFloors;
 
         /// <summary>
         /// Constructor.
@@ -32,6 +33,7 @@ namespace Revitalize.Framework.Objects
         {
             self = this;
             this.ores = new Dictionary<string, OreVeinObj>();
+            this.visitedFloors = new List<int>();
             this.loadOreVeins();
         }
 
@@ -116,7 +118,15 @@ namespace Revitalize.Framework.Objects
         public void spawnOreInMine()
         {
             int floorLevel = LocationUtilities.CurrentMineLevel();
-
+            if (this.hasVisitedFloor(floorLevel))
+            {
+                //Already has spawned ores for this visit.
+                return;
+            }
+            else
+            {
+                this.visitedFloors.Add(floorLevel);
+            }
             List<OreVeinObj> spawnableOreVeins = new List<OreVeinObj>();
             //Get a list of all of the ores that can spawn on this mine level.
             foreach(KeyValuePair<string,OreVeinObj> pair in this.ores)
@@ -129,35 +139,56 @@ namespace Revitalize.Framework.Objects
 
             foreach(OreVeinObj ore in spawnableOreVeins)
             {
-                int amount = ore.resourceInfo.getNumberOfNodesToSpawn();
-                List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVeinObj)ore.getOne());
-                for (int i = 0; i < amount; i++)
+                if (ore.resourceInfo.shouldSpawn())
                 {
-                    int position = Game1.random.Next(openTiles.Count);
-                    this.spawnOreVein(ore.info.id, openTiles[position]);
+                    int amount = ore.resourceInfo.getNumberOfNodesToSpawn();
+                    List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVeinObj)ore.getOne());
+                    amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
+                    for (int i = 0; i < amount; i++)
+                    {
+                        int position = Game1.random.Next(openTiles.Count);
+                        bool didSpawn = this.spawnOreVein(ore.info.id, openTiles[position]);
+                        if (didSpawn == false)
+                        {
+                            i--; //If the tile didn't spawn due to some odd reason ensure that the amount is spawned.
+                        }
+                        else
+                        {
+                            openTiles.Remove(openTiles[position]); //Remove that tile from the list of open tiles.
+                        }
+                    }
                 }
-                ModCore.log("Spawned :" + amount + " pancake test ores!");
+                else
+                {
+                    //Ore doesn't meet spawn chance.
+                }
+                //ModCore.log("Spawned :" + amount + " pancake test ores!");
             }
 
-            /*
-            if(floorLevel>=1 && floorLevel <= 9)
-            {
-                int amount = Game1.random.Next(1, 10); //Change this to be a frequency table or something.
-                List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVeinObj)this.ores["Omegasis.Revitalize.Resources.Ore.Test"].getOne());
-
-                for(int i = 0; i <= amount; i++)
-                {
-                    int position = Game1.random.Next(openTiles.Count);
-                    this.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", openTiles[position]);
-                }
-               
-            }
-            */
         }
 
+        /// <summary>
+        /// Checks to see if the player has visited the given floor.
+        /// </summary>
+        /// <param name="Floor"></param>
+        /// <returns></returns>
+        public bool hasVisitedFloor(int Floor)
+        {
+            return this.visitedFloors.Contains(Floor);
+        }
+
+        /// <summary>
+        /// What happens when the player warps maps.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="playerWarped"></param>
         public void OnPlayerLocationChanged(object o,EventArgs playerWarped)
         {
             this.spawnOreInMine();
+            if(LocationUtilities.IsPlayerInMine()==false && LocationUtilities.IsPlayerInSkullCave() == false && LocationUtilities.IsPlayerInMineEnterance()==false)
+            {
+                this.visitedFloors.Clear();
+            }
         }
 
         #endregion

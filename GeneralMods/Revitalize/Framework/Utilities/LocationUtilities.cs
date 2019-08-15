@@ -23,6 +23,19 @@ namespace Revitalize.Framework.Utilities
             }
             return false;
         }
+
+        /// <summary>
+        /// Checks to see if the player is in the enterance to the mine.
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsPlayerInMineEnterance()
+        {
+            if (Game1.player.currentLocation.Name.StartsWith("Mine") || Game1.player.currentLocation.Name=="Mine")
+            {
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// Checks to see if the player is in skull cave.
         /// </summary>

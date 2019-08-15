@@ -141,11 +141,18 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             {
                 foreach (ResourceInformaton extra in this.extraDrops)
                 {
-                    Item extraItem = extra.droppedItem.getOne();
-                    int extraAmount = extra.getNumberOfDropsToSpawn();
-                    for (int i = 0; i < amount; i++)
+                    if (extra.shouldDropResource())
                     {
-                        Game1.createItemDebris(extraItem.getOne(), this.TileLocation * Game1.tileSize, Game1.random.Next(0, 3), this.location);
+                        Item extraItem = extra.droppedItem.getOne();
+                        int extraAmount = extra.getNumberOfDropsToSpawn();
+                        for (int i = 0; i < amount; i++)
+                        {
+                            Game1.createItemDebris(extraItem.getOne(), this.TileLocation * Game1.tileSize, Game1.random.Next(0, 3), this.location);
+                        }
+                    }
+                    else
+                    {
+                        //Resource did not meet spawn chance.
                     }
                 }
             }
