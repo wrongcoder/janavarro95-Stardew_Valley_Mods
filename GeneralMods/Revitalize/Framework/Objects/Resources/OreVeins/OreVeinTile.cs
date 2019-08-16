@@ -67,6 +67,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         {
             base.updateWhenCurrentLocation(time, environment);
             this.setHealth(this.healthValue);
+            this.info.shakeTimer -= time.ElapsedGameTime.Milliseconds;
         }
 
         public override void DayUpdate(GameLocation location)
@@ -117,7 +118,8 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 if (this.location != null)
                 {
                     this.location.playSound("hammer");
-                    ModCore.log("Ore has this much health left: "+this.healthValue);
+                    //ModCore.log("Ore has this much health left: "+this.healthValue);
+                    this.info.shakeTimer = 200;
                 }
                 return false;
             }
@@ -277,7 +279,6 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-
             if (this.info == null)
             {
                 Revitalize.ModCore.log("info is null");
@@ -292,7 +293,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 if (this.animationManager.getExtendedTexture() == null)
                     ModCore.ModMonitor.Log("Tex Extended is null???");
 
-                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.info.shakeTimerOffset(), (y * Game1.tileSize)+this.info.shakeTimerOffset())), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
                 // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
             }
 
@@ -311,7 +312,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 {
                     addedDepth += 1.0f;
                 }
-                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.info.shakeTimerOffset(), (y * Game1.tileSize)+this.info.shakeTimerOffset())), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
                 try
                 {
                     this.animationManager.tickAnimation();

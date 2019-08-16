@@ -38,6 +38,8 @@ namespace Revitalize.Framework.Objects
 
         public Enums.Direction facingDirection;
 
+        public int shakeTimer;
+
         public BasicItemInformation()
         {
             this.name = "";
@@ -57,6 +59,7 @@ namespace Revitalize.Framework.Objects
 
             this.facingDirection = Enums.Direction.Down;
             this.id = "";
+            this.shakeTimer = 0;
            
         }
 
@@ -88,7 +91,17 @@ namespace Revitalize.Framework.Objects
             this.inventory = Inventory ?? new InventoryManager();
             this.lightManager = Lights ?? new LightManager();
             this.facingDirection = Enums.Direction.Down;
+            this.shakeTimer = 0;
             
+        }
+
+        /// <summary>
+        /// Gets an x offset for shaking an object. Source code used from game.
+        /// </summary>
+        /// <returns></returns>
+        public int shakeTimerOffset()
+        {
+            return (this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0);
         }
 
         
