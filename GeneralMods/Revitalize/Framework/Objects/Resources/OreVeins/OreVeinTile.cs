@@ -20,25 +20,29 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// </summary>
         public ResourceInformaton resourceInfo;
         public List<ResourceInformaton> extraDrops;
+        public int healthValue;
+
 
         public OreVeinTile() : base()
         {
 
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info,ResourceInformaton Resource,List<ResourceInformaton> ExtraDrops) : base(PyTKData, Info)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info,ResourceInformaton Resource,List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info)
         {
-            this.health = 3;
+            this.healthValue = Health;
             this.resourceInfo = Resource;
             this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
+            this.setHealth(this.healthValue);
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation,ResourceInformaton Resource, List<ResourceInformaton> ExtraDrops) : base(PyTKData, Info, TileLocation)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation,ResourceInformaton Resource, List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
         {
 
-            this.health = 3;
+            this.healthValue = Health;
             this.resourceInfo = Resource;
             this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
+            this.setHealth(this.healthValue);
         }
 
 
@@ -51,6 +55,24 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         public override bool performDropDownAction(Farmer who)
         {
             return base.performDropDownAction(who);
+        }
+
+        public override void actionOnPlayerEntry()
+        {
+            base.actionOnPlayerEntry();
+            this.setHealth(this.healthValue);
+        }
+
+        public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
+        {
+            base.updateWhenCurrentLocation(time, environment);
+            this.setHealth(this.healthValue);
+        }
+
+        public override void DayUpdate(GameLocation location)
+        {
+            base.DayUpdate(location);
+            this.setHealth(this.healthValue);
         }
 
         //Checks for any sort of interaction IF and only IF there is a held object on this tile.
@@ -79,6 +101,12 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             //return false;
         }
 
+        /// <summary>
+        /// What happens when the player hits this with a tool.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public override bool performToolAction(Tool t, GameLocation location)
         {
 
@@ -89,7 +117,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 if (this.location != null)
                 {
                     this.location.playSound("hammer");
-                    //ModCore.log("Ore has this much health left: "+this.health);
+                    ModCore.log("Ore has this much health left: "+this.healthValue);
                 }
                 return false;
             }
@@ -101,6 +129,12 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             //return base.performToolAction(t, location);
         }
 
+        /// <summary>
+        /// What happens when an explosion occurs for this object.
+        /// </summary>
+        /// <param name="who"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public override bool onExplosion(Farmer who, GameLocation location)
         {
             this.destoryVein();
@@ -117,8 +151,8 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             if (amount <= 0) return;
             else
             {
-                this.health -= amount;
-                if (this.health <= 0)
+                this.healthValue -= amount;
+                if (this.healthValue <= 0)
                 {
                     this.destoryVein();
                 }
@@ -192,10 +226,9 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             return base.shiftRightClicked(who);
         }
 
-
         public override Item getOne()
         {
-            OreVeinTile component = new OreVeinTile(this.data, this.info,this.resourceInfo,this.extraDrops);
+            OreVeinTile component = new OreVeinTile(this.data, this.info,this.resourceInfo,this.extraDrops,this.healthValue);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;
@@ -204,9 +237,6 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
             //instead of using this.offsetkey.x use get additional save data function and store offset key there
-
-            
-
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
             OreVeinTile self = Revitalize.ModCore.Serializer.DeserializeGUID<OreVeinTile>(additionalSaveData["GUID"]);
             if (self == null)

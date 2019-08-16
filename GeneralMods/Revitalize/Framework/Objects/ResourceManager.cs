@@ -24,6 +24,9 @@ namespace Revitalize.Framework.Objects
         /// A list of all of the ores held by the resource manager.
         /// </summary>
         public Dictionary<string, OreVeinObj> ores;
+        /// <summary>
+        /// A list of all visited floors on the current visit to the mines.
+        /// </summary>
         public List<int> visitedFloors;
 
         /// <summary>
@@ -46,14 +49,42 @@ namespace Revitalize.Framework.Objects
 
 
             OreVeinObj testOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
-            /*
-            testOre.addComponent(new Vector2(0, 0), new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null), new InformationFiles.OreResourceInformation(new StardewValley.Object(211, 1), false, true, true, false, new List<IntRange>()
+            testOre.addComponent(new Vector2(0, 0), new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
+                new InformationFiles.OreResourceInformation(new StardewValley.Object(211, 1), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(1,9)
-            }, new List<IntRange>(), 1, 5, 1, 10, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>()));
+            }, new List<IntRange>(), (i => i == 1), (i => i % 10 == 0), 1, 5, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
+            {
+                new IntRange(0,0)
+            }, new List<IntRange>()
+            {
+                new IntRange(0,9999)
+            }, (i => i == -1), (i => i == -1), 1d, 1.0d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(),4));
+
             this.ores.Add("Omegasis.Revitalize.Resources.Ore.Test", testOre);
-            */
+
+
         }
+
+        /// <summary>
+        /// Checks to see if a resource can be spawned here.
+        /// </summary>
+        /// <param name="OBJ"></param>
+        /// <param name="Location"></param>
+        /// <param name="TilePosition"></param>
+        /// <returns></returns>
+        public bool canResourceBeSpawnedHere(MultiTiledObject OBJ, GameLocation Location, Vector2 TilePosition)
+        {
+            return OBJ.canBePlacedHere(Location, TilePosition) && Location.isTileLocationTotallyClearAndPlaceable(TilePosition);
+        }
+
+
+        //~~~~~~~~~~~~~~~~~~~~~~~//
+        //  World Ore Spawn Code //
+        //~~~~~~~~~~~~~~~~~~~~~~~//
+
+        #region
+
 
         /// <summary>
         /// Spawns an ore vein at the given location if possible.
@@ -100,23 +131,8 @@ namespace Revitalize.Framework.Objects
         }
 
         /// <summary>
-        /// Checks to see if a resource can be spawned here.
+        /// Spawns ore in the mine depending on a lot of given variables such as floor level and spawn chance.
         /// </summary>
-        /// <param name="OBJ"></param>
-        /// <param name="Location"></param>
-        /// <param name="TilePosition"></param>
-        /// <returns></returns>
-        public bool canResourceBeSpawnedHere(MultiTiledObject OBJ, GameLocation Location, Vector2 TilePosition)
-        {
-            return OBJ.canBePlacedHere(Location, TilePosition) && Location.isTileLocationTotallyClearAndPlaceable(TilePosition);
-        }
-
-
-        //~~~~~~~~~~~~~~~~~~~~~~~//
-        //  Mine ore spawn code  //
-        //~~~~~~~~~~~~~~~~~~~~~~~//
-
-        #region
         public void spawnOreInMine()
         {
             int floorLevel = LocationUtilities.CurrentMineLevel();
@@ -211,16 +227,15 @@ namespace Revitalize.Framework.Objects
             }
             foreach (OreVeinObj ore in spawnableOreVeins)
             {
-                if (ore.resourceInfo.shouldSpawn())
+                if ((ore.resourceInfo as OreResourceInformation).shouldSpawnInQuarry())
                 {
-                    int amount = ore.resourceInfo.getNumberOfNodesToSpawn();
+                    int amount = (ore.resourceInfo as OreResourceInformation).getNumberOfNodesToSpawnQuarry();
                     List<Vector2> openTiles = this.getOpenQuarryTiles(ore);
-                    //ModCore.log("Number of open tiles is: " + openTiles.Count);
                     amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
                     for (int i = 0; i < amount; i++)
                     {
                         int position = Game1.random.Next(openTiles.Count);
-                        bool didSpawn = this.spawnOreVein(ore.info.id,Game1.getLocationFromName("Mountain"),openTiles[position]);
+                        bool didSpawn = this.spawnOreVein(ore.info.id, Game1.getLocationFromName("Mountain"), openTiles[position]);
                         if (didSpawn == false)
                         {
                             i--; //If the tile didn't spawn due to some odd reason ensure that the amount is spawned.
@@ -238,7 +253,65 @@ namespace Revitalize.Framework.Objects
                 {
                     //Ore doesn't meet spawn chance.
                 }
-                //ModCore.log("Spawned :" + amount + " pancake test ores!");
+            }
+
+        }
+
+        /// <summary>
+        /// Spawns ore in the mountain farm every day.
+        /// </summary>
+        public void mountainFarmDayUpdate()
+        {
+            if (LocationUtilities.Farm_IsFarmHiltopFarm() == false)
+            {
+                ModCore.log("Farm is not hiltop farm!");
+                return;
+            }
+            GameLocation farm = Game1.getFarm();
+
+            List<OreVeinObj> spawnableOreVeins = new List<OreVeinObj>();
+            //Get a list of all of the ores that can spawn on this mine level.
+            foreach (KeyValuePair<string, OreVeinObj> pair in this.ores)
+            {
+                if ((pair.Value.resourceInfo as OreResourceInformation).spawnsOnFarm)
+                {
+                    spawnableOreVeins.Add(pair.Value);
+                    ModCore.log("Found an ore that spawns on the farm!");
+                }
+            }
+            foreach (OreVeinObj ore in spawnableOreVeins)
+            {
+                if ((ore.resourceInfo as OreResourceInformation).shouldSpawnOnFarm())
+                {
+                    int amount = (ore.resourceInfo as OreResourceInformation).getNumberOfNodesToSpawnFarm();
+                    List<Vector2> openTiles = this.getFarmQuarryOpenTiles(ore);
+                    if (openTiles.Count == 0)
+                    {
+                        ModCore.log("No open farm tiles!");
+                    }
+                    amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
+                    for (int i = 0; i < amount; i++)
+                    {
+                        int position = Game1.random.Next(openTiles.Count);
+                        bool didSpawn = this.spawnOreVein(ore.info.id, farm, openTiles[position]);
+                        if (didSpawn == false)
+                        {
+                            i--; //If the tile didn't spawn due to some odd reason ensure that the amount is spawned.
+                            openTiles.Remove(openTiles[position]);
+                            //amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
+                            ModCore.log("Did not spawn ore in the farm quarry!");
+                        }
+                        else
+                        {
+                            ModCore.log("Spawned ore in the farm quarry!");
+                            openTiles.Remove(openTiles[position]); //Remove that tile from the list of open tiles.
+                        }
+                    }
+                }
+                else
+                {
+                    //Ore doesn't meet spawn chance.
+                }
             }
 
         }
@@ -251,13 +324,41 @@ namespace Revitalize.Framework.Objects
         {
             List<Vector2> tiles = new List<Vector2>();
             Microsoft.Xna.Framework.Rectangle r = new Microsoft.Xna.Framework.Rectangle(106, 13, 21, 21);
-            for(int i = r.X; i <= r.X + r.Width; i++)
+            for (int i = r.X; i <= r.X + r.Width; i++)
             {
-                for(int j=r.Y;j<= r.Y + r.Height; j++)
+                for (int j = r.Y; j <= r.Y + r.Height; j++)
                 {
-                    if (this.isTileOpenForQuarryStone(i, j) && this.canResourceBeSpawnedHere(obj,Game1.getLocationFromName("Mountain"),new Vector2(i,j)))
+                    if (this.isTileOpenForQuarryStone(i, j) && this.canResourceBeSpawnedHere(obj, Game1.getLocationFromName("Mountain"), new Vector2(i, j)))
                     {
                         tiles.Add(new Vector2(i, j));
+                    }
+                }
+            }
+            if (tiles.Count == 0)
+            {
+                //ModCore.log("Quarry is full! Can't spawn more resources!");
+            }
+            return tiles;
+        }
+
+        /// <summary>
+        /// Gets all of the open tiles in the farm quarry.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private List<Vector2> getFarmQuarryOpenTiles(MultiTiledObject obj)
+        {
+            List<Vector2> tiles = new List<Vector2>();
+            Microsoft.Xna.Framework.Rectangle r = new Microsoft.Xna.Framework.Rectangle(5, 37, 22, 8);
+            GameLocation farm = Game1.getFarm();
+            for (int i = r.X; i <= r.X + r.Width; i++)
+            {
+                for (int j = r.Y; j <= r.Y + r.Height; j++)
+                {
+                    Vector2 pos = new Vector2(i, j);
+                    if (farm.doesTileHavePropertyNoNull((int)pos.X, (int)pos.Y, "Type", "Back").Equals("Dirt") && this.canResourceBeSpawnedHere(obj, farm, new Vector2(i, j)))
+                    {
+                        tiles.Add(pos);
                     }
                 }
             }
@@ -271,7 +372,11 @@ namespace Revitalize.Framework.Objects
         #endregion
 
 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //          SMAPI Events       //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
+        #region
         /// <summary>
         /// What happens when the player warps maps.
         /// </summary>
@@ -286,11 +391,17 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        /// <summary>
+        /// Triggers at the start of every new day to populate the world full of ores.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="NewDay"></param>
         public void DailyResourceSpawn(object o, EventArgs NewDay)
         {
+            this.mountainFarmDayUpdate();
             this.quarryDayUpdate();
         }
-
+        #endregion
 
     }
 }

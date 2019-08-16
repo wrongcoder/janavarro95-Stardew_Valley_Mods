@@ -211,6 +211,15 @@ namespace Revitalize.Framework.Objects
             if (ObjectPools == null) ObjectPools = new Dictionary<string, ObjectManager>();
             ObjectPools.Add(Manifest.UniqueID, new ObjectManager(Manifest));
         }
+
+
+        /// <summary>
+        /// Cleans up all stored information.
+        /// </summary>
+        public void returnToTitleCleanUp()
+        {
+
+        }
         
 
     }

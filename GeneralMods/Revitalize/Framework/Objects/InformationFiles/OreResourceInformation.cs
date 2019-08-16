@@ -275,17 +275,43 @@ namespace Revitalize.Framework.Objects.InformationFiles
             return amount;
         }
 
-        /*
+
+        /// <summary>
+        /// Checks to see if this resource can spawn in the quarry based off of RNG.
+        /// </summary>
+        /// <returns></returns>
         public virtual bool shouldSpawnInQuarry()
         {
-
+            double chance = Game1.random.NextDouble();
+            chance = (chance - (this.spawnChanceLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)));
+            if (this.quarrySpawnChance >= chance) return true;
+            else return false;
         }
 
-        public virtual bool shouldSpawnInFarm()
+        /// <summary>
+        /// Checks to see if this resource should spawn on the farm based of of rng.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool shouldSpawnOnFarm()
         {
-
+            double chance = Game1.random.NextDouble();
+            chance = (chance - (this.spawnChanceLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)));
+            if (this.farmSpawnChance >= chance) return true;
+            else return false;
         }
-        */
+
+        /// <summary>
+        /// Checks to see if this resource should spawn in the skull cavern based of of rng.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool shouldSpawnInSkullCave()
+        {
+            double chance = Game1.random.NextDouble();
+            chance = (chance - (this.spawnChanceLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)));
+            if (this.skullCaveSpawnChance >= chance) return true;
+            else return false;
+        }
+
 
         /// <summary>
         /// Can this ore spawn at the given location?

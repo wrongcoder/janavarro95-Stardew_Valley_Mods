@@ -9,8 +9,24 @@ using StardewValley;
 
 namespace Revitalize.Framework.Utilities
 {
+    /// <summary>
+    /// Deals with helping with locational logic.
+    /// </summary>
     public class LocationUtilities
     {
+
+        /// <summary>
+        /// The int value used by SDV to determine if a farm is a hilltop farm.
+        /// </summary>
+        public static int Farm_HilltopFarmNumber
+        {
+            get
+            {
+                return 3;
+            }
+        }
+
+
         /// <summary>
         /// Checks to see if the player is in the regular mine.
         /// </summary>
@@ -99,6 +115,15 @@ namespace Revitalize.Framework.Utilities
                 }
             }
             return openTiles;
+        }
+
+        /// <summary>
+        /// Checks to see if the farm for the game is the hilltop farm.
+        /// </summary>
+        /// <returns></returns>
+        public static bool Farm_IsFarmHiltopFarm()
+        {
+            return Game1.whichFarm == Farm_HilltopFarmNumber;
         }
     }
 }

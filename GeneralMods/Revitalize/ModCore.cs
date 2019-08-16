@@ -220,7 +220,7 @@ namespace Revitalize
             //customObjects = new Dictionary<string, CustomObject>();
 
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
-            ObjectManager = new ObjectManager();
+            ObjectManager = new ObjectManager(Manifest);
 
             Serializer = new Serializer();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
@@ -257,6 +257,7 @@ namespace Revitalize
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
             Serializer.returnToTitle();
+            ObjectManager = new ObjectManager(Manifest);
         }
         /// <summary>
         /// Must be enabled for the tabled to be placed????
