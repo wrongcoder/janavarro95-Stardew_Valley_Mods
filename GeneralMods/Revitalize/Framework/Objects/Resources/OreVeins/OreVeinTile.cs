@@ -196,6 +196,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             if (this.location != null)
             {
                 this.location.playSound("stoneCrack");
+                Game1.createRadialDebris(this.location, 14, (int)this.TileLocation.X, (int)this.TileLocation.Y, Game1.random.Next(4, 10), false, -1, false, -1);
                 this.location.removeObject(this.TileLocation, false);
                 this.containerObject.removeComponent(this.offsetKey);
             }
