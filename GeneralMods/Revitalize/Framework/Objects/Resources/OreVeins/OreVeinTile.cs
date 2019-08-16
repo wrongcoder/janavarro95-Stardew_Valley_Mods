@@ -18,7 +18,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// <summary>
         /// Deals with information tied to the resource itself.
         /// </summary>
-        public ResourceInformaton resourceInfo;
+        public OreResourceInformation resourceInfo;
         public List<ResourceInformaton> extraDrops;
         public int healthValue;
 
@@ -28,7 +28,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info,ResourceInformaton Resource,List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, OreResourceInformation Resource,List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info)
         {
             this.healthValue = Health;
             this.resourceInfo = Resource;
@@ -36,7 +36,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             this.setHealth(this.healthValue);
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation,ResourceInformaton Resource, List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
         {
 
             this.healthValue = Health;

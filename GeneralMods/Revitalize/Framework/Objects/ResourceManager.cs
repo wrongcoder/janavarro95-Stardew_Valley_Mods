@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Revitalize.Framework.Factories.Objects.Resources;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Objects.Resources.OreVeins;
 using Revitalize.Framework.Utilities;
@@ -15,6 +17,9 @@ namespace Revitalize.Framework.Objects
 {
     public class ResourceManager
     {
+
+        private string oreResourceDataPath= Path.Combine("Data", "Objects", "Resources","Ore");
+
         /// <summary>
         /// A static reference to the resource manager for quicker access.
         /// </summary>
@@ -24,6 +29,8 @@ namespace Revitalize.Framework.Objects
         /// A list of all of the ores held by the resource manager.
         /// </summary>
         public Dictionary<string, OreVeinObj> ores;
+        public Dictionary<string, OreResourceInformation> oreResourceInformationTable;
+
         /// <summary>
         /// A list of all visited floors on the current visit to the mines.
         /// </summary>
@@ -36,7 +43,10 @@ namespace Revitalize.Framework.Objects
         {
             self = this;
             this.ores = new Dictionary<string, OreVeinObj>();
+            this.oreResourceInformationTable = new Dictionary<string, OreResourceInformation>();
             this.visitedFloors = new List<int>();
+
+            this.serializeOre();
             this.loadOreVeins();
         }
 
@@ -47,7 +57,7 @@ namespace Revitalize.Framework.Objects
         {
             //The pancake ore.
 
-
+            /*
             OreVeinObj testOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
             testOre.addComponent(new Vector2(0, 0), new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, Vector2.Zero, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
                 new InformationFiles.OreResourceInformation(new StardewValley.Object(211, 1), true, true, true, false, new List<IntRange>()
@@ -62,7 +72,74 @@ namespace Revitalize.Framework.Objects
             }, (i => i == -1), (i => i == -1), 1d, 1.0d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(),4));
 
             this.ores.Add("Omegasis.Revitalize.Resources.Ore.Test", testOre);
+            */
 
+            if (!Directory.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", this.oreResourceDataPath))) Directory.CreateDirectory(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", this.oreResourceDataPath));
+            List<string> directories = Directory.GetDirectories(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", this.oreResourceDataPath)).ToList();
+            directories.Add(Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", this.oreResourceDataPath));
+            foreach (string directory in directories)
+            {
+                string[] files = Directory.GetFiles(directory);
+
+                Dictionary<string, OreVeinObj> objs = new Dictionary<string, OreVeinObj>();
+
+                //Deserialize container.
+                foreach (string file in files)
+                {
+                    if ((Path.GetFileName(file)).Contains("_") == true) continue;
+                    else
+                    {
+                        OreFactoryInfo factoryInfo = ModCore.Serializer.DeserializeContentFile<OreFactoryInfo>(file);
+                        objs.Add(Path.GetFileNameWithoutExtension(file), new OreVeinObj(factoryInfo.PyTkData, factoryInfo.info));
+                    }
+                }
+                //Deseralize components
+                foreach (string file in files)
+                {
+                    if ((Path.GetFileName(file)).Contains("_") == false) continue;
+                    else
+                    {
+
+                        string[] splits = Path.GetFileNameWithoutExtension(file).Split('_');
+                        string name = splits[0];
+                        Vector2 offset = new Vector2(Convert.ToInt32(splits[1]), Convert.ToInt32(splits[2]));
+                        OreFactoryInfo info = ModCore.Serializer.DeserializeContentFile<OreFactoryInfo>(file);
+
+                        OreVeinTile orePiece = new OreVeinTile(info.PyTkData, info.info,info.OreSpawnInfo,info.ExtraDrops,info.Health);
+                        objs[name].addComponent(offset, orePiece);
+                    }
+                }
+                foreach (var v in objs)
+                {
+                    this.ores.Add(v.Value.info.id, v.Value);
+                    //ModCore.ObjectManager.lamps.Add(v.Value.info.id, v.Value);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Serializes an example ore to eb
+        /// </summary>
+        private void serializeOre() {
+            OreVeinObj testOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            OreVeinTile testOre_0_0= new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
+                new InformationFiles.OreResourceInformation(new StardewValley.Object(211, 1), true, true, true, false, new List<IntRange>()
+            {
+                new IntRange(1,9)
+            }, new List<IntRange>(), (i => i == 1), (i => i % 10 == 0), 1, 5, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
+            {
+                new IntRange(0,0)
+            }, new List<IntRange>()
+            {
+                new IntRange(0,9999)
+            }, null,null, 1d, 1.0d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 4);
+
+            OreFactoryInfo testOre_0_0_file = new OreFactoryInfo(testOre_0_0);
+            OreFactoryInfo testOre_file = new OreFactoryInfo(testOre);
+
+            ModCore.Serializer.SerializeContentFile("TestOre_0_0", testOre_0_0_file, this.oreResourceDataPath);
+            ModCore.Serializer.SerializeContentFile("TestOre", testOre_file, this.oreResourceDataPath);
 
         }
 

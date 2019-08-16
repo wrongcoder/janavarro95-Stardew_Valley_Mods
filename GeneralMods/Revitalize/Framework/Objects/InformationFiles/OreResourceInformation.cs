@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 
@@ -20,7 +21,9 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <summary>
         /// A function that compares whether or not the resource can be spawned on this floor. Used in conjecture with floorsToSpawnOn
         /// </summary>
+        [JsonIgnore]
         public Func<int, bool> canSpawnOnThisFloor;
+        [JsonIgnore]
         public Func<int, bool> excludeSpawnOnThisFloor;
 
         /// <summary>
@@ -40,7 +43,10 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <summary>
         /// A function that compares whether or not the resource can be spawned on this floor in skull cave. Used in conjecture with floorsToSpawnOn
         /// </summary>
+        ///
+        [JsonIgnore]
         public Func<int, bool> canSpawnOnThisFloorSkullCave;
+        [JsonIgnore]
         public Func<int, bool> excludeSpawnOnThisFloorSkullCave;
 
         /// <summary>

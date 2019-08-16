@@ -23,7 +23,8 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 Converters = new List<JsonConverter>()
                 {
                     new Framework.Utilities.Serialization.Converters.RectangleConverter(),
-                    new Framework.Utilities.Serialization.Converters.Texture2DConverter()
+                    new Framework.Utilities.Serialization.Converters.Texture2DConverter(),
+                    new Vector2Converter()
                 },
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -39,8 +40,30 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             writer.WriteStartObject();
             writer.WritePropertyName("Type");
             serializer.Serialize(writer, value.GetType().FullName.ToString());
+
+            List<PropertyInfo> properties=value.GetType().GetProperties().ToList();
+            List<FieldInfo> fields=value.GetType().GetFields().ToList();
+
             writer.WritePropertyName("Item");
-            serializer.Serialize(writer, convertedString);
+            writer.WriteStartObject();
+
+            for(int i = 0; i < properties.Count; i++) {
+                PropertyInfo p = properties[i];
+                writer.WritePropertyName(p.Name);
+                serializer.Serialize(writer, p.GetValue(value)!=null? p.GetValue(value).ToString():null);
+            }
+            
+
+            foreach (FieldInfo f in fields)
+            {
+                writer.WritePropertyName(f.Name);
+                serializer.Serialize(writer, f.GetValue(value) != null ? f.GetValue(value).ToString() : null);
+            }
+            writer.WriteEndObject();
+
+            //writer.WritePropertyName("Item");
+
+            //serializer.Serialize(writer, convertedString);
 
             writer.WriteEndObject();
         }

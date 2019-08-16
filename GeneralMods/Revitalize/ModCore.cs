@@ -197,6 +197,7 @@ namespace Revitalize
 
             this.createDirectories();
             this.initailizeComponents();
+            Serializer = new Serializer();
 
 
             playerInfo = new PlayerInfo();
@@ -222,7 +223,7 @@ namespace Revitalize
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
             ObjectManager = new ObjectManager(Manifest);
 
-            Serializer = new Serializer();
+            
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
 
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
@@ -265,14 +266,14 @@ namespace Revitalize
         private void loadContent()
         {
 
-            MultiTiledComponent obj = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest", "Omegasis.TEST1", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, false, null, null));
-            MultiTiledComponent obj2 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest2", "Omegasis.TEST2", "Some fun!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.White, false, null, null));
-            MultiTiledComponent obj3 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest3", "Omegasis.TEST3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
+            MultiTiledComponent obj = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest", "Omegasis.TEST1", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, false, null, null));
+            MultiTiledComponent obj2 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest2", "Omegasis.TEST2", "Some fun!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.White, false, null, null));
+            MultiTiledComponent obj3 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest3", "Omegasis.TEST3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 100, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
             obj3.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj3);
 
-            MultiTiledObject bigObject = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledObject), Color.White), new BasicItemInformation("MultiTest", "Omegasis.BigTiledTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(), Color.White, false, null, null));
+            MultiTiledObject bigObject = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledObject), Color.White), new BasicItemInformation("MultiTest", "Omegasis.BigTiledTest", "A really big object", "Omegasis.Revitalize.MultiTiledObject", Color.Blue, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(), Color.White, false, null, null));
 
             bigObject.addComponent(new Vector2(0, 0), obj);
             bigObject.addComponent(new Vector2(1, 0), obj2);
@@ -286,9 +287,9 @@ namespace Revitalize
             ObjectManager.miscellaneous.Add("Omegasis.BigTiledTest", bigObject);
 
 
-            Framework.Objects.Furniture.RugTileComponent rug1 = new RugTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugTileComponent), Color.White), new BasicItemInformation("Rug Tile", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A rug tile", "Rug", Color.Brown, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, null, null));
+            Framework.Objects.Furniture.RugTileComponent rug1 = new RugTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugTileComponent), Color.White), new BasicItemInformation("Rug Tile", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A rug tile", "Rug", Color.Brown, -300, 0, false, 100, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, true, null, null));
 
-            Framework.Objects.Furniture.RugMultiTiledObject rug = new RugMultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugMultiTiledObject), Color.White, false), new BasicItemInformation("Simple Rug Test", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A simple rug for testing", "Rugs", Color.Brown, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(), Color.White, true, null, null));
+            Framework.Objects.Furniture.RugMultiTiledObject rug = new RugMultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(RugMultiTiledObject), Color.White, false), new BasicItemInformation("Simple Rug Test", "Omegasis.Revitalize.Furniture.Basic.Rugs.TestRug", "A simple rug for testing", "Rugs", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(), Color.White, true, null, null));
 
             rug.addComponent(new Vector2(0, 0), rug1);
 
@@ -299,7 +300,7 @@ namespace Revitalize
             FurnitureFactory.LoadFurnitureFiles();
 
             SeasideScramble sscGame = new SeasideScramble();
-            ArcadeCabinetTile ssc1 = new ArcadeCabinetTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetTile), Color.White), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new Animation(new Rectangle(0, 0, 16, 16)), new Dictionary<string, List<Animation>>()
+            ArcadeCabinetTile ssc1 = new ArcadeCabinetTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetTile), Color.White), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 100, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new Animation(new Rectangle(0, 0, 16, 16)), new Dictionary<string, List<Animation>>()
             {
                 {"Animated",new List<Animation>()
                 {
@@ -309,7 +310,7 @@ namespace Revitalize
                 }
 
             }, "Animated"), Color.White, false, null, null), new Framework.Objects.InformationFiles.Furniture.ArcadeCabinetInformation(sscGame, false));
-            ArcadeCabinetTile ssc2 = new ArcadeCabinetTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetTile), Color.White), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 100, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new Animation(new Rectangle(0, 16, 16, 16)), new Dictionary<string, List<Animation>>()
+            ArcadeCabinetTile ssc2 = new ArcadeCabinetTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetTile), Color.White), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 100, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new Animation(new Rectangle(0, 16, 16, 16)), new Dictionary<string, List<Animation>>()
             {
                 {"Animated",new List<Animation>()
                 {
@@ -320,7 +321,7 @@ namespace Revitalize
 
             }, "Animated"), Color.White, false, null, null), new Framework.Objects.InformationFiles.Furniture.ArcadeCabinetInformation(sscGame, false));
 
-            ArcadeCabinetOBJ sscCabinet = new ArcadeCabinetOBJ(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetOBJ), Color.White, true), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 500, Vector2.Zero, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(), Color.White, true, null, null));
+            ArcadeCabinetOBJ sscCabinet = new ArcadeCabinetOBJ(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), typeof(ArcadeCabinetOBJ), Color.White, true), new BasicItemInformation("Seaside Scramble Arcade Game", "Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", "A arcade to play Seaside Scramble!", "Arcades", Color.LimeGreen, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Furniture", "SeasideScrambleArcade"), new AnimationManager(), Color.White, true, null, null));
             sscCabinet.addComponent(new Vector2(0, 0), ssc1);
             sscCabinet.addComponent(new Vector2(0, 1), ssc2);
 

@@ -62,6 +62,7 @@
     <Compile Include="Framework\Factories\Objects\Furniture\ChairFactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\FactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
+    <Compile Include="Framework\Factories\Objects\Resources\OreFactoryInfo.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />

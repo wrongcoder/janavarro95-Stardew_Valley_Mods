@@ -182,7 +182,8 @@ namespace Revitalize.Framework.Utilities
             using (StreamReader sw = new StreamReader(p))
             using (JsonReader reader = new JsonTextReader(sw))
             {
-                var obj = this.serializer.Deserialize<T>(reader);
+             
+                    var obj = this.serializer.Deserialize<T>(reader);
                 return obj;
             }
         }
@@ -315,6 +316,12 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Serializes a content file if it doesn't already exist. If it does exist this does nothing as to not override the content file.
+        /// </summary>
+        /// <param name="fileName">The name to name the file. So a file named MyFile would be a MyFile.json</param>
+        /// <param name="obj">The actual to serialize.</param>
+        /// <param name="extensionFolder">The sub folder path inside of the Content folder for this mod.</param>
         public void SerializeContentFile(string fileName, object obj,string extensionFolder)
         {
             string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "Content", extensionFolder,fileName+ ".json");
