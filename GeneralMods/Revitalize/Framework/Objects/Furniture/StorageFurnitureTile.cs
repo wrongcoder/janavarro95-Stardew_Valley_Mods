@@ -107,7 +107,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            StorageFurnitureTile component = new StorageFurnitureTile(this.data, this.info);
+            StorageFurnitureTile component = new StorageFurnitureTile(this.data, this.info.Copy());
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;

@@ -97,7 +97,7 @@ namespace Revitalize.Framework.Factories.Objects
             LampTileComponent lampMiddle = new LampTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Lamps.OakLamp", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), typeof(LampTileComponent), Color.White), new BasicItemInformation("Oak Lamp", "Omegasis.Revitalize.Furniture.Lamps.OakLamp", "A basic wooden light.", "Lamps", Color.Brown, -300, 0, true, 100, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), new Animation(new Rectangle(0, 16, 16, 16))), Color.White, true, new InventoryManager(), new LightManager()));
             LampTileComponent lampBottom = new LampTileComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Lamps.OakLamp", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), typeof(LampTileComponent), Color.White), new BasicItemInformation("Oak Lamp", "Omegasis.Revitalize.Furniture.Lamps.OakLamp", "A basic wooden light.", "Lamps", Color.Brown, -300, 0, true, 100 , true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), new Animation(new Rectangle(0, 32, 16, 16))), Color.White, false, new InventoryManager(), new LightManager()));
 
-            lampMiddle.lights.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), lampMiddle);
+            lampMiddle.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), lampMiddle);
 
             LampMultiTiledObject lamp = new LampMultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Lamps.OakLamp", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), typeof(LampMultiTiledObject), Color.White), new BasicItemInformation("Oak Lamp", "Omegasis.Revitalize.Furniture.Lamps.OakLamp", "A basic wooden light", "Lamps", Color.Brown, -300, 0, true, 300, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Oak Lamp"), new AnimationManager(), Color.White, false, new InventoryManager(), new LightManager()));
 
@@ -157,13 +157,13 @@ namespace Revitalize.Framework.Factories.Objects
 
                         LampTileComponent lampPiece = new LampTileComponent(info.PyTkData,info.info);
                         //Recreate the lights info.
-                        if (lampPiece.lights != null)
+                        if (lampPiece.lightManager != null)
                         {
                             //ModCore.log("Info for file"+Path.GetFileNameWithoutExtension(file)+" has this many lights: " + info.info.lightManager.fakeLights.Count);
-                            lampPiece.lights.lights.Clear();
+                            lampPiece.lightManager.lights.Clear();
                             foreach (KeyValuePair<Vector2, FakeLightSource> light in info.info.lightManager.fakeLights)
                             {
-                                lampPiece.lights.addLight(new Vector2(Game1.tileSize), new LightSource(light.Value.id, new Vector2(0, 0), light.Value.radius, light.Value.color.Invert()), lampPiece);
+                                lampPiece.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(light.Value.id, new Vector2(0, 0), light.Value.radius, light.Value.color.Invert()), lampPiece);
                             }
                         }
 

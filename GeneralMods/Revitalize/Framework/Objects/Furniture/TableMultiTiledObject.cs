@@ -48,7 +48,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
 
-            return new TableMultiTiledObject(this.data,this.info, this.TileLocation,objs);
+            return new TableMultiTiledObject(this.data,this.info.Copy(), this.TileLocation,objs);
         }
 
 

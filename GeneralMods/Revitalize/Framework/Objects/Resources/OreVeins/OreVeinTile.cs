@@ -231,7 +231,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         public override Item getOne()
         {
-            OreVeinTile component = new OreVeinTile(this.data, this.info,this.resourceInfo,this.extraDrops,this.healthValue);
+            OreVeinTile component = new OreVeinTile(this.data, this.info.Copy(),this.resourceInfo,this.extraDrops,this.healthValue);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;

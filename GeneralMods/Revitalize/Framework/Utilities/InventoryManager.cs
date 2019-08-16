@@ -129,5 +129,14 @@ namespace Revitalize.Framework.Utilities
         {
             this.MaxCapacity = amount;
         }
+
+        /// <summary>
+        /// Returns a new inventory manager without the items but with the capacity limits.
+        /// </summary>
+        /// <returns></returns>
+        public InventoryManager Copy()
+        {
+            return new InventoryManager(this.capacity, this.MaxCapacity);
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
             }
 
-            return new Bench(this.data,this.info, this.TileLocation, objs);
+            return new Bench(this.data,this.info.Copy(), this.TileLocation, objs);
         }
 
 

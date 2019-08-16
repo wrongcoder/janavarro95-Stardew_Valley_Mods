@@ -114,7 +114,7 @@ namespace Revitalize.Framework.Objects
 
         public override Item getOne()
         {
-            MultiTiledComponent component = new MultiTiledComponent(this.data,this.info, this.TileLocation,this.offsetKey,this.containerObject);
+            MultiTiledComponent component = new MultiTiledComponent(this.data,this.info.Copy(), this.TileLocation,this.offsetKey,this.containerObject);
             return component;
         }
 

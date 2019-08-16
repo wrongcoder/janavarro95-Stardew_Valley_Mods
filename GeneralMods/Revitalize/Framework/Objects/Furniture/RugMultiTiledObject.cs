@@ -49,7 +49,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
 
-            return new RugMultiTiledObject(this.data,this.info, this.TileLocation, objs);
+            return new RugMultiTiledObject(this.data,this.info.Copy(), this.TileLocation, objs);
         }
 
 

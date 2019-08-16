@@ -10,9 +10,20 @@ using StardewValley;
 
 namespace Revitalize.Framework.Utilities.Serialization
 {
+    /// <summary>
+    /// Utilities for dealing with the XNA/Monogames spritebatch class.
+    /// </summary>
     public class SpriteBatchUtilities
     {
 
+        /// <summary>
+        /// Used to draw SDV items to the screen.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="obj"></param>
+        /// <param name="itemToDraw"></param>
+        /// <param name="alpha"></param>
+        /// <param name="addedDepth"></param>
         public static void Draw(SpriteBatch spriteBatch, CustomObject obj, StardewValley.Item itemToDraw,float alpha,float addedDepth)
         {
             if (itemToDraw.GetType()==typeof(StardewValley.Object))

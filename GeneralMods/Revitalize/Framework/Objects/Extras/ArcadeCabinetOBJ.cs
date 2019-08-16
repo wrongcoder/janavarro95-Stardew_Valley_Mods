@@ -47,7 +47,7 @@ namespace Revitalize.Framework.Objects.Extras
             }
 
 
-            return new ArcadeCabinetOBJ(this.data, this.info, this.TileLocation, objs);
+            return new ArcadeCabinetOBJ(this.data, this.info.Copy(), this.TileLocation, objs);
         }
 
 

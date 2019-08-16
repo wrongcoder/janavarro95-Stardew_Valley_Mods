@@ -268,7 +268,7 @@ namespace Revitalize.Framework.Objects
             {
                 objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
             }
-            return new MultiTiledObject(this.data,this.info, this.TileLocation, objs);
+            return new MultiTiledObject(this.data,this.info.Copy(), this.TileLocation, objs);
         }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)

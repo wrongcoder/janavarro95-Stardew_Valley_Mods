@@ -123,7 +123,7 @@ namespace Revitalize.Framework.Objects.Extras
 
         public override Item getOne()
         {
-            ArcadeCabinetTile component = new ArcadeCabinetTile(this.data, this.info, this.arcadeInfo);
+            ArcadeCabinetTile component = new ArcadeCabinetTile(this.data, this.info.Copy(), this.arcadeInfo);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;

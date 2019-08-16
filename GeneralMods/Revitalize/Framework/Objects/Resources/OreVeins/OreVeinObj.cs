@@ -60,7 +60,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             }
 
 
-            return new OreVeinObj(this.data, this.info, this.TileLocation, objs);
+            return new OreVeinObj(this.data, this.info.Copy(), this.TileLocation, objs);
         }
 
 

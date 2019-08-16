@@ -23,7 +23,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
         }
 
-        public LightManager lights
+        public LightManager lightManager
         {
             get
             {
@@ -124,7 +124,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            LampTileComponent component = new LampTileComponent(this.data,this.info);
+            LampTileComponent component = new LampTileComponent(this.data,this.info.Copy());
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;

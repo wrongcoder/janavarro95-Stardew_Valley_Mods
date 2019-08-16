@@ -180,7 +180,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            TableTileComponent component = new TableTileComponent(this.data,this.info, (TableInformation)this.furnitureInfo);
+            TableTileComponent component = new TableTileComponent(this.data,this.info.Copy(), (TableInformation)this.furnitureInfo);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;

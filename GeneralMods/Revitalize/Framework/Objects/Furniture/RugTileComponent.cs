@@ -44,7 +44,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            RugTileComponent component = new RugTileComponent(this.data,this.info);
+            RugTileComponent component = new RugTileComponent(this.data,this.info.Copy());
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;
