@@ -13,13 +13,35 @@ namespace Revitalize.Framework.Objects.InformationFiles
 
 
         /// <summary>
-        /// The floors of the mine that this resource should spawn in.
+        /// The floors of the mine that this resource should spawn in in the regular mine.
         /// </summary>
         public List<IntRange> floorsToSpawnOn;
+
         /// <summary>
-        /// The list of floors to exclude spawning on in the mine.
+        /// A function that compares whether or not the resource can be spawned on this floor. Used in conjecture with floorsToSpawnOn
+        /// </summary>
+        public Func<int, bool> canSpawnOnThisFloor;
+        public Func<int, bool> excludeSpawnOnThisFloor;
+
+        /// <summary>
+        /// The list of floors to exclude spawning on in the regular mine.
         /// </summary>
         public List<IntRange> floorsToExclude;
+
+        /// <summary>
+        /// The floors this resource should spawn on in skull cave.
+        /// </summary>
+        public List<IntRange> floorsToSpawnOnSkullCave;
+        /// <summary>
+        /// The floors this resource should not spawn on in skull cave.
+        /// </summary>
+        public List<IntRange> floorsToExcludeSkullCave;
+
+        /// <summary>
+        /// A function that compares whether or not the resource can be spawned on this floor in skull cave. Used in conjecture with floorsToSpawnOn
+        /// </summary>
+        public Func<int, bool> canSpawnOnThisFloorSkullCave;
+        public Func<int, bool> excludeSpawnOnThisFloorSkullCave;
 
         /// <summary>
         /// Should this resource spawn in the mine in the mountains?
@@ -38,6 +60,30 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// </summary>
         public bool spawnsInQuarry;
 
+        /// <summary>
+        /// The range of the number of nodes to spawn on the farm.
+        /// </summary>
+        public IntRange farmSpawnAmount;
+        /// <summary>
+        /// The range of the number of nodes to spawn in the quarry.
+        /// </summary>
+        public IntRange quarrySpawnAmount;
+        /// <summary>
+        /// The range of the number of nodes to spawn in skull cave.
+        /// </summary>
+        public IntRange skullCaveSpawnAmount;
+        /// <summary>
+        /// The chance that this resource spawns on the farm.
+        /// </summary>
+        public double farmSpawnChance;
+        /// <summary>
+        /// The chance that this resource spawns in the quarry.
+        /// </summary>
+        public double quarrySpawnChance;
+        /// <summary>
+        /// The chance that this resource spawns in skull cave.
+        /// </summary>
+        public double skullCaveSpawnChance;
 
         /// <summary>
         /// Empty Constructor.
@@ -47,14 +93,108 @@ namespace Revitalize.Framework.Objects.InformationFiles
 
         }
 
-        public OreResourceInformation(Item I,bool SpawnsOnFarm, bool SpawnsInQuarry, bool SpawnInRegularMine, bool SpawnInSkullCave,List<IntRange> FloorsToSpawnOn,List<IntRange>FloorsToExclude ,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, double ChanceToSpawn = 1f, double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,ChanceToSpawn,ChanceToDrop,SpawnChanceLuckFactor,SpawnAmountLuckFactor,DropChanceLuckFactor,DropAmountLuckFactor)
+        /// <summary>
+        /// Constructor for a resource that spawns only in the regular mine.
+        /// </summary>
+        /// <param name="I"></param>
+        /// <param name="FloorsToSpawnOn"></param>
+        /// <param name="FloorsToExclude"></param>
+        /// <param name="MinDropAmount"></param>
+        /// <param name="MaxDropAmount"></param>
+        /// <param name="MinNumberOfNodes"></param>
+        /// <param name="MaxNumberOfNodes"></param>
+        /// <param name="ChanceToSpawn"></param>
+        /// <param name="ChanceToDrop"></param>
+        /// <param name="SpawnChanceLuckFactor"></param>
+        /// <param name="SpawnAmountLuckFactor"></param>
+        /// <param name="DropChanceLuckFactor"></param>
+        /// <param name="DropAmountLuckFactor"></param>
+        public OreResourceInformation(Item I, List<IntRange> FloorsToSpawnOn, List<IntRange> FloorsToExclude,Func<int,bool> CanSpawnOnGivenFloor,Func<int,bool> FloorsToExcludeFun,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, double ChanceToSpawn = 1f, double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes, ChanceToSpawn, ChanceToDrop, SpawnChanceLuckFactor, SpawnAmountLuckFactor, DropChanceLuckFactor, DropAmountLuckFactor)
         {
+            this.spawnsOnFarm = false;
+            this.spawnsInQuarry = false;
+            this.floorsToSpawnOn = FloorsToSpawnOn;
+            this.floorsToExclude = FloorsToExclude != null ? FloorsToExclude : new List<IntRange>();
+            this.spawnInRegularMine = true;
+            this.spawnInSkullCavern = false;
+
+            this.farmSpawnAmount = new IntRange();
+            this.quarrySpawnAmount = new IntRange();
+            this.farmSpawnChance = 0f;
+            this.quarrySpawnChance = 0f;
+
+            if (CanSpawnOnGivenFloor != null)
+            {
+                this.canSpawnOnThisFloor = CanSpawnOnGivenFloor;
+            }
+            else
+            {
+                this.canSpawnOnThisFloor = null;
+            }
+
+            this.excludeSpawnOnThisFloor = FloorsToExcludeFun;
+
+            this.canSpawnOnThisFloorSkullCave = null;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="I"></param>
+        /// <param name="SpawnsOnFarm"></param>
+        /// <param name="SpawnsInQuarry"></param>
+        /// <param name="SpawnInRegularMine"></param>
+        /// <param name="SpawnInSkullCave"></param>
+        /// <param name="FloorsToSpawnOn"></param>
+        /// <param name="FloorsToExclude"></param>
+        /// <param name="MinDropAmount"></param>
+        /// <param name="MaxDropAmount"></param>
+        /// <param name="MinNumberOfNodes"></param>
+        /// <param name="MaxNumberOfNodes"></param>
+        /// <param name="FarmSpawnAmount"></param>
+        /// <param name="QuarrySpawnAmount"></param>
+        /// <param name="SkullCaveSpawnAmount"></param>
+        /// <param name="FloorsToSpawnOnSkullCave"></param>
+        /// <param name="FloorsToExludeSkullCave"></param>
+        /// <param name="ChanceToSpawn"></param>
+        /// <param name="FarmSpawnChance"></param>
+        /// <param name="QuarrySpawnChance"></param>
+        /// <param name="SkullCaveSpawnChance"></param>
+        /// <param name="ChanceToDrop"></param>
+        /// <param name="SpawnChanceLuckFactor"></param>
+        /// <param name="SpawnAmountLuckFactor"></param>
+        /// <param name="DropChanceLuckFactor"></param>
+        /// <param name="DropAmountLuckFactor"></param>
+        public OreResourceInformation(Item I,bool SpawnsOnFarm, bool SpawnsInQuarry, bool SpawnInRegularMine, bool SpawnInSkullCave,List<IntRange> FloorsToSpawnOn,List<IntRange>FloorsToExclude,Func<int,bool> CanSpawnOnGivenFloor,Func<int,bool> FloorsToExludeFun,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, IntRange FarmSpawnAmount,IntRange QuarrySpawnAmount,IntRange SkullCaveSpawnAmount,List<IntRange> FloorsToSpawnOnSkullCave,List<IntRange>FloorsToExludeSkullCave,Func<int,bool> CanSpawnOnGivenFloorSkullCave,Func<int,bool>FloorsToExludeFunSkullCave,double ChanceToSpawn = 1f,double FarmSpawnChance=1f,double QuarrySpawnChance=1f,double SkullCaveSpawnChance=1f,double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,ChanceToSpawn,ChanceToDrop,SpawnChanceLuckFactor,SpawnAmountLuckFactor,DropChanceLuckFactor,DropAmountLuckFactor)
+        {
+            // Deals with setting where this ore can spawn.
             this.spawnsOnFarm = SpawnsOnFarm;
             this.spawnsInQuarry = SpawnsInQuarry;
-            this.floorsToSpawnOn = FloorsToSpawnOn;
-            this.floorsToExclude = FloorsToExclude!=null? FloorsToExclude: new List<IntRange>();
             this.spawnInRegularMine = SpawnInRegularMine;
             this.spawnInSkullCavern = SpawnInSkullCave;
+
+            //Deals with inclusion/Exclusion for floors in regular mine.
+            this.floorsToSpawnOn = this.spawnInRegularMine?FloorsToSpawnOn:new List<IntRange>();
+            this.floorsToExclude = FloorsToExclude != null ? FloorsToExclude : new List<IntRange>();
+
+            ///Checks if a given resource shouds spawn and if not sets defaulted 0 values.
+            this.farmSpawnAmount = this.spawnsOnFarm? FarmSpawnAmount:new IntRange(0,0);
+            this.quarrySpawnAmount =this.spawnsInQuarry? QuarrySpawnAmount:new IntRange(0,0);
+            this.skullCaveSpawnAmount = this.spawnInSkullCavern ? SkullCaveSpawnAmount : new IntRange(0, 0);
+            this.farmSpawnChance = this.spawnsOnFarm?FarmSpawnChance:0f;
+            this.quarrySpawnChance = this.spawnsInQuarry?QuarrySpawnChance:0f;
+            this.skullCaveSpawnChance = this.spawnInSkullCavern ? SkullCaveSpawnChance : 0f;
+
+            //Deals with inclusion/Exclusion for floors in skull cave.
+            this.floorsToExcludeSkullCave = FloorsToExludeSkullCave!=null? FloorsToExludeSkullCave: new List<IntRange>();
+            this.floorsToSpawnOnSkullCave = FloorsToSpawnOnSkullCave!=null? FloorsToSpawnOnSkullCave: new List<IntRange>();
+
+            this.canSpawnOnThisFloorSkullCave = this.spawnInSkullCavern ? CanSpawnOnGivenFloorSkullCave : null;
+            this.excludeSpawnOnThisFloorSkullCave = FloorsToExludeFunSkullCave;
+            this.excludeSpawnOnThisFloor = FloorsToExludeFun;
+
+
         }
 
         /// <summary>
@@ -76,6 +216,76 @@ namespace Revitalize.Framework.Objects.InformationFiles
         {
             return base.getNumberOfNodesToSpawn(limitToMax);
         }
+
+        /// <summary>
+        /// Gets the number of nodes to spawn in the farm.
+        /// </summary>
+        /// <param name="limitToMax"></param>
+        /// <returns></returns>
+        public virtual int getNumberOfNodesToSpawnFarm(bool limitToMax = true)
+        {
+            if (this.spawnsOnFarm == false || this.farmSpawnAmount == null) return 0;
+            int amount = this.farmSpawnAmount.getRandomInclusive();
+            if (limitToMax)
+            {
+                amount = (int)Math.Min(amount + (this.spawnAmountLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)), this.maxNumberOfNodesSpawned);
+            }
+            else
+            {
+                amount = (int)(amount + (this.spawnAmountLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)));
+            }
+            return amount;
+        }
+        /// <summary>
+        /// Gets the number of nodes to spawn in the quarry.
+        /// </summary>
+        /// <param name="limitToMax"></param>
+        /// <returns></returns>
+        public virtual int getNumberOfNodesToSpawnQuarry(bool limitToMax = true)
+        {
+            if (this.spawnsInQuarry == false || this.quarrySpawnAmount == null) return 0;
+            int amount = this.quarrySpawnAmount.getRandomInclusive();
+            if (limitToMax)
+            {
+                amount = (int)Math.Min(amount + (this.spawnAmountLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)), this.maxNumberOfNodesSpawned);
+            }
+            else
+            {
+                amount = (int)(amount + (this.spawnAmountLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)));
+            }
+            return amount;
+        }
+        /// <summary>
+        /// Gets the number of nodes to spawn in skull cave.
+        /// </summary>
+        /// <param name="limitToMax"></param>
+        /// <returns></returns>
+        public virtual int getNumberOfNodesToSpawnSkullCavern(bool limitToMax = true)
+        {
+            if (this.spawnInSkullCavern == false || this.skullCaveSpawnAmount == null) return 0;
+            int amount = this.quarrySpawnAmount.getRandomInclusive();
+            if (limitToMax)
+            {
+                amount = (int)Math.Min(amount + (this.spawnAmountLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)), this.maxNumberOfNodesSpawned);
+            }
+            else
+            {
+                amount = (int)(amount + (this.spawnAmountLuckFactor * (Game1.player.LuckLevel + Game1.player.addedLuckLevel.Value)));
+            }
+            return amount;
+        }
+
+        /*
+        public virtual bool shouldSpawnInQuarry()
+        {
+
+        }
+
+        public virtual bool shouldSpawnInFarm()
+        {
+
+        }
+        */
 
         /// <summary>
         /// Can this ore spawn at the given location?
@@ -137,11 +347,31 @@ namespace Revitalize.Framework.Objects.InformationFiles
             int level=LocationUtilities.CurrentMineLevel();
             foreach(IntRange range in this.floorsToSpawnOn)
             {
-                if (range.ContainsInclusive(level))
+                bool compareFun = false;
+                if (this.canSpawnOnThisFloor == null)
+                {
+                    compareFun = false;
+                }
+                else
+                {
+                    compareFun = this.canSpawnOnThisFloor(level);
+                }
+
+                if (range.ContainsInclusive(level) || compareFun==true)
                 {
                     foreach(IntRange exclude in this.floorsToExclude)
                     {
-                        if (exclude.ContainsInclusive(level)) return false;
+                        bool excludeFun = false;
+                        if (this.excludeSpawnOnThisFloor == null)
+                        {
+                            excludeFun = false;
+                        }
+                        else
+                        {
+                            excludeFun = this.excludeSpawnOnThisFloor(level);
+                        }
+                        //Make this include exlude fun for regular mine. See above in this function.
+                        if (exclude.ContainsInclusive(level) || excludeFun) return false;
                     }
                     return true;
                 }

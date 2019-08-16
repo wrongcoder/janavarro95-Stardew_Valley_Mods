@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Revitalize.Framework.Utilities
 {
@@ -84,6 +85,26 @@ namespace Revitalize.Framework.Utilities
         {
             if (value > this.min && value < this.max) return true;
             else return false;
+        }
+
+        /// <summary>
+        /// Returns an int value within the range of min and max inclusive.
+        /// </summary>
+        /// <returns></returns>
+        public int getRandomInclusive()
+        {
+            int number = Game1.random.Next(this.min, this.max + 1);
+            return number;
+        }
+
+        /// <summary>
+        /// Returns an int value within the range of min and max exclusive.
+        /// </summary>
+        /// <returns></returns>
+        public int getRandomExclusive()
+        {
+            int number = Game1.random.Next(this.min, this.max);
+            return number;
         }
     }
 }
