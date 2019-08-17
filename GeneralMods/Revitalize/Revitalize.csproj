@@ -125,6 +125,7 @@
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ObjectGUIDInfo.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ResourceInformaton.cs" />
+    <Compile Include="Framework\Objects\Items\Resources\Ore.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
     <Compile Include="Framework\Objects\ObjectManager.cs" />
@@ -167,6 +168,9 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Graphics\Items\Resources\Ore\TinOre.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Menus\InventoryMenu\ItemBackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

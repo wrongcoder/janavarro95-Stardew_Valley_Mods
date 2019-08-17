@@ -21,6 +21,7 @@ using StardustCore.Animations;
 using StardewValley.Menus;
 using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
+using Revitalize.Framework.Objects.Items.Resources;
 
 namespace Revitalize
 {
@@ -208,6 +209,8 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
             TextureManager.AddTextureManager(Manifest, "Resources.Ore");
             TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
+            TextureManager.AddTextureManager(Manifest, "Items.Resources.Ore");
+            TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
             //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
 
             //Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager(this.Helper.DirectoryPath, Path.Combine("Content", "Graphics", "Furniture")));
@@ -377,7 +380,7 @@ namespace Revitalize
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
-            Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
+            //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
             //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));
             //Game1.player.addItemToInventory(ObjectManager.getStorageFuriture("Omegasis.Revitalize.Furniture.Storage.OakCabinet"));
@@ -388,6 +391,9 @@ namespace Revitalize
             //Game1.player.addItemToInventory(axe);
             */
             //Game1.player.addItemToInventory(ObjectManager.resources.ores["Test"].getOne());
+
+            
+            Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin",19));
 
             ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
         }

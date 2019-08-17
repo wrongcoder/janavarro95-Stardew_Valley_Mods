@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Factories.Objects.Resources;
 using Revitalize.Framework.Objects.InformationFiles;
+using Revitalize.Framework.Objects.Items.Resources;
 using Revitalize.Framework.Objects.Resources.OreVeins;
 using Revitalize.Framework.Utilities;
 using StardewValley;
@@ -28,8 +29,9 @@ namespace Revitalize.Framework.Objects
         /// <summary>
         /// A list of all of the ores held by the resource manager.
         /// </summary>
-        public Dictionary<string, OreVeinObj> ores;
+        public Dictionary<string, OreVeinObj> oreVeins;
         public Dictionary<string, OreResourceInformation> oreResourceInformationTable;
+        public Dictionary<string, Ore> ores;
 
         /// <summary>
         /// A list of all visited floors on the current visit to the mines.
@@ -42,12 +44,14 @@ namespace Revitalize.Framework.Objects
         public ResourceManager()
         {
             self = this;
-            this.ores = new Dictionary<string, OreVeinObj>();
+            this.oreVeins = new Dictionary<string, OreVeinObj>();
             this.oreResourceInformationTable = new Dictionary<string, OreResourceInformation>();
+            this.ores = new Dictionary<string, Ore>();
             this.visitedFloors = new List<int>();
 
-            this.serializeOre();
+            this.serializeOreVeins();
             this.loadOreVeins();
+            this.loadInOreItems();
         }
 
         /// <summary>
@@ -111,7 +115,7 @@ namespace Revitalize.Framework.Objects
                 }
                 foreach (var v in objs)
                 {
-                    this.ores.Add(v.Value.info.id, v.Value);
+                    this.oreVeins.Add(v.Value.info.id, v.Value);
                     //ModCore.ObjectManager.lamps.Add(v.Value.info.id, v.Value);
                 }
             }
@@ -121,7 +125,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>
         /// Serializes an example ore to eb
         /// </summary>
-        private void serializeOre() {
+        private void serializeOreVeins() {
             OreVeinObj testOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
             OreVeinTile testOre_0_0= new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Test", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Test Ore Vein", "Omegasis.Revitalize.Resources.Ore.Test", "A ore vein that is used for testing purposes.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Test"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Test"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
                 new InformationFiles.OreResourceInformation(new StardewValley.Object(211, 1), true, true, true, false, new List<IntRange>()
@@ -138,9 +142,35 @@ namespace Revitalize.Framework.Objects
             OreFactoryInfo testOre_0_0_file = new OreFactoryInfo(testOre_0_0);
             OreFactoryInfo testOre_file = new OreFactoryInfo(testOre);
 
-            ModCore.Serializer.SerializeContentFile("TestOre_0_0", testOre_0_0_file, this.oreResourceDataPath);
-            ModCore.Serializer.SerializeContentFile("TestOre", testOre_file, this.oreResourceDataPath);
+            ModCore.Serializer.SerializeContentFile("TestOre_0_0", testOre_0_0_file,Path.Combine(this.oreResourceDataPath,"TestOre"));
+            ModCore.Serializer.SerializeContentFile("TestOre", testOre_file, Path.Combine(this.oreResourceDataPath, "TestOre"));
 
+        }
+
+        private void loadInOreItems()
+        {
+            Ore tinOre = new Ore(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Items.Resources.Ore.TinOre", TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinOre"), typeof(Ore), Color.White, true), new BasicItemInformation("Tin Ore", "Omegasis.Revitalize.Items.Resources.Ore.TinOre", "Tin ore that can be smelted into tin ingots for further use.", "Ore", Color.Silver, -300, 0, false, 85, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinOre"), new AnimationManager(), Color.White, true, null, null), 1);
+            this.ores.Add("Tin", tinOre);
+        }
+
+        /// <summary>
+        /// Gets an ore from the list of stored ores in this mod.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="Stack"></param>
+        /// <returns></returns>
+        public Ore getOre(string name,int Stack=1)
+        {
+            if (this.ores.ContainsKey(name))
+            {
+                Ore o = (Ore)this.ores[name].getOne();
+                o.Stack = Stack;
+                return o;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -169,10 +199,10 @@ namespace Revitalize.Framework.Objects
         /// <param name="name"></param>
         public bool spawnOreVein(string name, GameLocation Location, Vector2 TilePosition)
         {
-            if (this.ores.ContainsKey(name))
+            if (this.oreVeins.ContainsKey(name))
             {
                 OreVeinObj spawn;
-                this.ores.TryGetValue(name, out spawn);
+                this.oreVeins.TryGetValue(name, out spawn);
                 if (spawn != null)
                 {
                     spawn = (OreVeinObj)spawn.getOne();
@@ -224,7 +254,7 @@ namespace Revitalize.Framework.Objects
             }
             List<OreVeinObj> spawnableOreVeins = new List<OreVeinObj>();
             //Get a list of all of the ores that can spawn on this mine level.
-            foreach (KeyValuePair<string, OreVeinObj> pair in this.ores)
+            foreach (KeyValuePair<string, OreVeinObj> pair in this.oreVeins)
             {
                 if (pair.Value.resourceInfo.canSpawnAtLocation() && (pair.Value.resourceInfo as OreResourceInformation).canSpawnOnCurrentMineLevel())
                 {
@@ -294,7 +324,7 @@ namespace Revitalize.Framework.Objects
         {
             List<OreVeinObj> spawnableOreVeins = new List<OreVeinObj>();
             //Get a list of all of the ores that can spawn on this mine level.
-            foreach (KeyValuePair<string, OreVeinObj> pair in this.ores)
+            foreach (KeyValuePair<string, OreVeinObj> pair in this.oreVeins)
             {
                 if ((pair.Value.resourceInfo as OreResourceInformation).spawnsInQuarry)
                 {
@@ -348,7 +378,7 @@ namespace Revitalize.Framework.Objects
 
             List<OreVeinObj> spawnableOreVeins = new List<OreVeinObj>();
             //Get a list of all of the ores that can spawn on this mine level.
-            foreach (KeyValuePair<string, OreVeinObj> pair in this.ores)
+            foreach (KeyValuePair<string, OreVeinObj> pair in this.oreVeins)
             {
                 if ((pair.Value.resourceInfo as OreResourceInformation).spawnsOnFarm)
                 {
