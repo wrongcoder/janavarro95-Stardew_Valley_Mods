@@ -22,10 +22,12 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public StorageFurnitureTile(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData, Info)
         {
+            this.Price = Info.price;
         }
 
         public StorageFurnitureTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation) : base(PyTKData, Info, TileLocation)
         {
+            this.Price = Info.price;
 
         }
 

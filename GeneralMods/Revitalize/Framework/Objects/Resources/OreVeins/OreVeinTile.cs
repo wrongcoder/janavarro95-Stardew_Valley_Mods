@@ -34,6 +34,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             this.resourceInfo = Resource;
             this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
             this.setHealth(this.healthValue);
+            this.Price = Info.price;
         }
 
         public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
@@ -43,6 +44,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             this.resourceInfo = Resource;
             this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
             this.setHealth(this.healthValue);
+            this.Price = Info.price;
         }
 
 

@@ -27,23 +27,22 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         public OreVeinObj() : base()
         {
-
         }
 
         public OreVeinObj(CustomObjectData PyTKData, BasicItemInformation Info) : base(PyTKData, Info)
         {
-
+            this.Price = Info.price;
         }
 
         public OreVeinObj(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition) : base(PyTKData, Info, TilePosition)
         {
-
+            this.Price = Info.price;
         }
 
         public OreVeinObj(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TilePosition, Dictionary<Vector2, MultiTiledComponent> Objects) : base(PyTKData, Info, TilePosition, Objects)
         {
 
-
+            this.Price = Info.price;
         }
 
         public override void rotate()

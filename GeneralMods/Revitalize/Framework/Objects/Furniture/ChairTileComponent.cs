@@ -38,11 +38,13 @@ namespace Revitalize.Framework.Objects.Furniture
         public ChairTileComponent(CustomObjectData PyTKData,BasicItemInformation Info,ChairInformation FurnitureInfo) : base(PyTKData,Info)
         {
             this.furnitureInfo = FurnitureInfo;
+            this.Price = Info.price;
         }
 
         public ChairTileComponent(CustomObjectData PyTKData,BasicItemInformation Info,Vector2 TileLocation, ChairInformation FurnitureInfo) : base(PyTKData,Info, TileLocation)
         {
             this.furnitureInfo = FurnitureInfo;
+            this.Price = Info.price;
         }
 
         

@@ -20,13 +20,13 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public Bench(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TilePosition) : base(PyTKData,info, TilePosition)
         {
-
+            this.Price = info.price;
         }
 
 
         public Bench(CustomObjectData PyTKData, BasicItemInformation info,Vector2 TilePosition, Dictionary<Vector2,MultiTiledComponent> Objects) : base(PyTKData,info, TilePosition, Objects)
         {
-
+            this.Price = info.price;
         }
 
         /// <summary>

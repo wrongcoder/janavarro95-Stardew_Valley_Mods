@@ -27,11 +27,13 @@ namespace Revitalize.Framework.Objects.Extras
         public ArcadeCabinetTile(CustomObjectData PyTKData, BasicItemInformation Info, ArcadeCabinetInformation ArcadeInfo) : base(PyTKData, Info)
         {
             this.arcadeInfo = ArcadeInfo;
+            this.Price = Info.price;
         }
 
         public ArcadeCabinetTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, ArcadeCabinetInformation ArcadeInfo) : base(PyTKData, Info, TileLocation)
         {
             this.arcadeInfo = ArcadeInfo;
+            this.Price = Info.price;
         }
 
 

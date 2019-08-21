@@ -22,6 +22,7 @@ using StardewValley.Menus;
 using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
 using Revitalize.Framework.Objects.Items.Resources;
+using Revitalize.Framework.Hacks;
 
 namespace Revitalize
 {
@@ -236,6 +237,9 @@ namespace Revitalize
             ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
+
+            //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
+            //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -394,6 +398,9 @@ namespace Revitalize
 
             
             Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin",19));
+            Ore tin = ObjectManager.resources.getOre("Tin", 19);
+
+            ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 
             ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
         }

@@ -19,13 +19,14 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public FurnitureTileComponent(CustomObjectData PyTKData,BasicItemInformation itemInfo):base(PyTKData,itemInfo)
+        public FurnitureTileComponent(CustomObjectData PyTKData,BasicItemInformation Info):base(PyTKData,Info)
         {
+            this.Price = Info.price;
         }
 
-        public FurnitureTileComponent(CustomObjectData PyTKData, BasicItemInformation itemInfo,Vector2 TileLocation) : base(PyTKData,itemInfo,TileLocation)
+        public FurnitureTileComponent(CustomObjectData PyTKData, BasicItemInformation Info,Vector2 TileLocation) : base(PyTKData,Info,TileLocation)
         {
-
+            this.Price = Info.price;
         }
 
     }

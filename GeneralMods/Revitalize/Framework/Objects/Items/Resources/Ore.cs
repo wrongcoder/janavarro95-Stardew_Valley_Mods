@@ -17,11 +17,13 @@ namespace Revitalize.Framework.Objects.Items.Resources
 
         public Ore(CustomObjectData PyTKData, BasicItemInformation info,int Stack=1) : base(PyTKData, info) {
             this.Stack = Stack;
+            this.Price = info.price;
         }
 
         public Ore(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation,int Stack=1) : base(PyTKData, info, TileLocation)
         {
             this.Stack = Stack;
+            this.Price = info.price;
         }
 
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
@@ -173,6 +175,15 @@ namespace Revitalize.Framework.Objects.Items.Resources
             return b.ToString();
         }
 
+        public override int sellToStorePrice()
+        {
+            return this.Price;
+        }
+
+        public override int salePrice()
+        {
+            return this.Price*2;
+        }
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {

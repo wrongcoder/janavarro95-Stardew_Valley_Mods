@@ -21,11 +21,13 @@ namespace Revitalize.Framework.Objects.Furniture
         public RugTileComponent(CustomObjectData PyTKData,BasicItemInformation Info) : base(PyTKData,Info)
         {
             this.info.ignoreBoundingBox = true;
+            this.Price = Info.price;
         }
 
         public RugTileComponent(CustomObjectData PyTKData,BasicItemInformation Info, Vector2 TileLocation) : base(PyTKData,Info, TileLocation)
         {
             this.info.ignoreBoundingBox = true;
+            this.Price = Info.price;
         }
 
 
