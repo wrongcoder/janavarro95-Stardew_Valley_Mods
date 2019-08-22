@@ -241,40 +241,40 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            //instead of using this.offsetkey.x use get additional save data function and store offset key there
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
+            string GUID = additionalSaveData["GUID"];
             OreVeinTile self = Revitalize.ModCore.Serializer.DeserializeGUID<OreVeinTile>(additionalSaveData["GUID"]);
-            if (self == null)
+            if (ModCore.IsNullOrDefault<OreVeinTile>(self)) return null;
+            try
             {
-                return null;
+                if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
+                {
+                    OreVeinObj obj = (OreVeinObj)Revitalize.ModCore.Serializer.DeserializeGUID<OreVeinObj>(additionalSaveData["ParentGUID"]);
+                    self.containerObject = obj;
+                    self.containerObject.removeComponent(offsetKey);
+                    self.containerObject.addComponent(offsetKey, self);
+                    Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], obj);
+                }
+                else
+                {
+                    self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
+                    self.containerObject.removeComponent(offsetKey);
+                    self.containerObject.addComponent(offsetKey, self);
+                }
+            }
+            catch (Exception err)
+            {
+                ModCore.log(err);
             }
 
-            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
-            {
-                //Get new container
-                OreVeinObj obj = (OreVeinObj)Revitalize.ModCore.Serializer.DeserializeGUID<OreVeinObj>(additionalSaveData["ParentGUID"]);
-                self.containerObject = obj;
-                obj.addComponent(offsetKey, self);
-                //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
-                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], obj);
-            }
-            else
-            {
-                self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
-                Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].addComponent(offsetKey, self);
-                //Revitalize.ModCore.log("READD AN OBJECT!!!!");
-            }
-
-            return (ICustomObject)self;
-            
-            //throw new Exception("Why am I trying to recreate an ore vein?");
+            return self;
         }
 
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string, string> saveData = base.getAdditionalSaveData();
             Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
-
+            this.containerObject.getAdditionalSaveData();
             return saveData;
 
         }

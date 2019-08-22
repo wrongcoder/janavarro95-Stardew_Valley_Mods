@@ -95,6 +95,14 @@ namespace Revitalize.Framework.Objects
                 
             this.performDropDownAction(who);
             location.objects.Add(this.TileLocation, this);
+
+            
+            if(this.getBoundingBox(this.TileLocation).Width==0&& this.getBoundingBox(this.TileLocation).Height == 0)
+            {
+                this.boundingBox.Value = new Rectangle(this.boundingBox.X, this.boundingBox.Y, Game1.tileSize, Game1.tileSize);
+            }
+            ModCore.log(this.getBoundingBox(this.TileLocation));
+
             return true;
 
         }
@@ -181,7 +189,7 @@ namespace Revitalize.Framework.Objects
             saveData.Add("ParentGUID", this.containerObject.guid.ToString());
             saveData.Add("GUID", this.guid.ToString());
             Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(),this);
-
+            this.containerObject.getAdditionalSaveData();
             return saveData;
 
         }

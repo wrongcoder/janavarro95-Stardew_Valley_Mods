@@ -10,14 +10,28 @@ using StardewValley.Menus;
 
 namespace Revitalize.Framework.Hacks
 {
+    /// <summary>
+    /// Deals with hijacking menus for custom logic.
+    /// </summary>
     public class MenuHacks
     {
+        /// <summary>
+        /// Checks to see if the mod has had it's custom object processed at the end of the day.
+        /// </summary>
         public static bool EndOfDay_HasProcessedModdedItems;
+        /// <summary>
+        /// Checks to see if the end of day menus are up and running.
+        /// </summary>
+        /// <returns></returns>
         public static bool EndOfDay_IsShowingEndOfNightMenus()
         {
             return Game1.showingEndOfNightStuff;
         }
 
+        /// <summary>
+        /// Checks to see if the current end of day menu is the shippping menu.
+        /// </summary>
+        /// <returns></returns>
         public static bool EndOfDay_IsEndOfDayMenuShippingMenu()
         {
             if (EndOfDay_IsShowingEndOfNightMenus())
@@ -36,6 +50,10 @@ namespace Revitalize.Framework.Hacks
             else return false;
         }
 
+        /// <summary>
+        /// Gets the shipping menu from the end of day menus.
+        /// </summary>
+        /// <returns></returns>
         public static ShippingMenu EndOfDay_GetShippingMenu()
         {
             if (EndOfDay_IsEndOfDayMenuShippingMenu())
@@ -49,6 +67,9 @@ namespace Revitalize.Framework.Hacks
             return null;
         }
 
+        /// <summary>
+        /// Hijacks the shipping menu to process modded items.
+        /// </summary>
         public static void EndOfDay_HackShipping()
         {
             if (EndOfDay_GetShippingMenu() != null)
@@ -101,7 +122,12 @@ namespace Revitalize.Framework.Hacks
             }
         }
 
-        public static void EndOfDay_OnMenuChanged(object o, StardewModdingAPI.Events.RenderedEventArgs sender)
+        /// <summary>
+        /// Triggers 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="sender"></param>
+        public static void EndOfDay_RenderCheck(object o, StardewModdingAPI.Events.RenderedEventArgs sender)
         {
             if (EndOfDay_IsShowingEndOfNightMenus() && EndOfDay_HasProcessedModdedItems==false)
             {

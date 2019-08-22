@@ -191,38 +191,52 @@ namespace Revitalize.Framework.Objects.Furniture
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
             //instead of using this.offsetkey.x use get additional save data function and store offset key there
-
+            //ModCore.log("Recreate a table tile component!");
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
+            //ModCore.log("Got the offset key!");
+            string GUID = additionalSaveData["GUID"];
+            //ModCore.log("This tile has a parent guid of: " + additionalSaveData["ParentGUID"]);
             TableTileComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<TableTileComponent>(additionalSaveData["GUID"]);
-            if (self == null)
+            
+            if (ModCore.IsNullOrDefault<TableTileComponent>(self))
             {
+                //ModCore.log("SELF IS NULL");
                 return null;
             }
-
-            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
+            try
             {
-                //Get new container
-                TableMultiTiledObject obj = (TableMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<TableMultiTiledObject>(additionalSaveData["ParentGUID"]);
-                self.containerObject = obj;
-                obj.addComponent(offsetKey, self);
-                //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
-                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], obj);
+                if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
+                {
+                    //ModCore.log("Load in the parent!");
+                    //Get new container
+                    TableMultiTiledObject obj = (TableMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<TableMultiTiledObject>(additionalSaveData["ParentGUID"]);
+                    self.containerObject = obj;
+                    self.containerObject.removeComponent(offsetKey);
+                    self.containerObject.addComponent(offsetKey, self);
+                    Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], obj);
+                }
+                else
+                {
+                    //ModCore.log("Parent already exists!");
+                    self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
+                    self.containerObject.removeComponent(offsetKey);
+                    self.containerObject.addComponent(offsetKey, self);
+                    //Revitalize.ModCore.log("READD AN OBJECT!!!!");
+                }
             }
-            else
+            catch(Exception err)
             {
-                self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
-                Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].addComponent(offsetKey, self);
-                //Revitalize.ModCore.log("READD AN OBJECT!!!!");
+                ModCore.log(err);
             }
 
-            return (ICustomObject)self;
+            return self;
         }
 
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string, string> saveData = base.getAdditionalSaveData();
             Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
-
+            this.containerObject.getAdditionalSaveData();
             return saveData;
 
         }

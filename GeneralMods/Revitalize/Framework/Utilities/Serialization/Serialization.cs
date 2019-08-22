@@ -44,10 +44,11 @@ namespace Revitalize.Framework.Utilities
             this.addConverter(new Framework.Utilities.Serialization.Converters.RectangleConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.Texture2DConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.ItemCoverter());
+            //this.addConverter(new Framework.Utilities.Serialization.Converters.CustomObjectDataConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
 
-            this.gatherAllFilesForCleanup();
+            //this.gatherAllFilesForCleanup();
 
             this.settings = new JsonSerializerSettings();
             foreach(JsonConverter converter in this.serializer.Converters)
@@ -91,6 +92,27 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        private void deleteFilesBeforeSave()
+        {
+            if (!Directory.Exists(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"))) Directory.CreateDirectory(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"));
+            this.filesToDelete.Clear();
+            string[] directories = Directory.GetDirectories(Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData"));
+            foreach (string playerData in directories)
+            {
+                string objectPath = Path.Combine(playerData, "SavedObjectInformation");
+                string[] objectFiles = Directory.GetFiles(objectPath);
+                foreach (string file in objectFiles)
+                {
+                    string playerName = new DirectoryInfo(objectPath).Parent.Name;
+                    if (playerName != this.getUniqueCharacterString()) return;
+                    else
+                    {
+                        File.Delete(file);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Called after load to deal with internal file cleanUp
         /// </summary>
@@ -102,7 +124,7 @@ namespace Revitalize.Framework.Utilities
 
         public void returnToTitle()
         {
-            this.gatherAllFilesForCleanup();
+            //this.gatherAllFilesForCleanup();
         }
 
         private void removeNullObjects()
@@ -257,15 +279,15 @@ namespace Revitalize.Framework.Utilities
         public T DeserializeGUID<T>(string fileName)
         {
             string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
-            this.removeFileFromDeletion((Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID),path);
+            //this.removeFileFromDeletion((Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID),path);
             if (File.Exists(path))
             {
-
+                //ModCore.log("Deseralizing file:" + path);
                 return this.Deserialize<T>(path);
             }
             else
             {
-                return default(T);
+                throw new Exception("Can't deserialize file. Default returned. " + path);
             }
         }
 
@@ -330,6 +352,20 @@ namespace Revitalize.Framework.Utilities
             this.Serialize(path, obj);
         }
 
+        public void DayEnding_CleanUpFilesForDeletion(object o, StardewModdingAPI.Events.DayEndingEventArgs sender)
+        {
+            //ModCore.log("Day ending now delete files!");
+            this.deleteFilesBeforeSave();
+        }
+
+        /// <summary>
+        /// Gets the unique character path string.
+        /// </summary>
+        /// <returns></returns>
+        public string getUniqueCharacterString()
+        {
+            return Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID;
+        }
 
         /// <summary>
         /// https://stackoverflow.com/questions/2742276/how-do-i-check-if-a-type-is-a-subtype-or-the-type-of-an-object

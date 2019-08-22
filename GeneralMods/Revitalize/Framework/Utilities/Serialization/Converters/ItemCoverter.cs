@@ -11,7 +11,7 @@ using StardewValley;
 
 namespace Revitalize.Framework.Utilities.Serialization.Converters
 {
-    public class ItemCoverter:Newtonsoft.Json.JsonConverter
+    public class ItemCoverter : Newtonsoft.Json.JsonConverter
     {
         public static Dictionary<string, Type> AllTypes = new Dictionary<string, Type>();
 
@@ -24,7 +24,6 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 {
                     new Framework.Utilities.Serialization.Converters.RectangleConverter(),
                     new Framework.Utilities.Serialization.Converters.Texture2DConverter(),
-                    new Vector2Converter()
                 },
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -40,30 +39,8 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             writer.WriteStartObject();
             writer.WritePropertyName("Type");
             serializer.Serialize(writer, value.GetType().FullName.ToString());
-
-            List<PropertyInfo> properties=value.GetType().GetProperties().ToList();
-            List<FieldInfo> fields=value.GetType().GetFields().ToList();
-
             writer.WritePropertyName("Item");
-            writer.WriteStartObject();
-
-            for(int i = 0; i < properties.Count; i++) {
-                PropertyInfo p = properties[i];
-                writer.WritePropertyName(p.Name);
-                serializer.Serialize(writer, p.GetValue(value)!=null? p.GetValue(value).ToString():null);
-            }
-            
-
-            foreach (FieldInfo f in fields)
-            {
-                writer.WritePropertyName(f.Name);
-                serializer.Serialize(writer, f.GetValue(value) != null ? f.GetValue(value).ToString() : null);
-            }
-            writer.WriteEndObject();
-
-            //writer.WritePropertyName("Item");
-
-            //serializer.Serialize(writer, convertedString);
+            serializer.Serialize(writer, convertedString);
 
             writer.WriteEndObject();
         }
@@ -98,20 +75,18 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
             Assembly asm = typeof(StardewValley.Object).Assembly;
             Type type = null;
-            
+
             type = asm.GetType(t);
 
-            //Check if the type exists in the SDV assembly. If not then try to load it from revitalize.
             if (type == null)
             {
                 asm = typeof(Revitalize.ModCore).Assembly;
                 type = asm.GetType(t);
             }
 
-            //If the type doesn't exist from revitalize look through ALL loded assemblies and try to load it.
             if (type == null)
             {
-                foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     asm = assembly;
                     type = asm.GetType(t);
@@ -121,13 +96,13 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
             if (type == null)
             {
-                throw new Exception("Unsupported type found when Deserializing Unsure what to do so we can't deserialize this thing!: " + t);
+                throw new Exception("Unsupported type found when Deserializing Unsure what to do so we can;t deserialize this thing!: " + t);
             }
 
             //Cache the newly found type.
             AllTypes.Add(t, type);
 
-            return JsonConvert.DeserializeObject(jo["Item"].ToString(),type, this.settings);
+            return JsonConvert.DeserializeObject(jo["Item"].ToString(), type, this.settings);
             /*
             if (t== typeof(StardewValley.Tools.Axe).FullName.ToString())
             {
@@ -141,17 +116,13 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 Revitalize.ModCore.log("DESERIALIZE Multi Tile Object!!!");
                 return JsonConvert.DeserializeObject<Revitalize.Framework.Objects.MultiTiledObject>(jo["Item"].ToString(), this.settings);
                 // return jo["Item"].Value<Revitalize.Framework.Objects.MultiTiledObject>();
-
             }
             else if (t == typeof(Revitalize.Framework.Objects.MultiTiledComponent).FullName.ToString())
             {
-
                 Revitalize.ModCore.log("DESERIALIZE Multi Tile Component!!!");
                 return JsonConvert.DeserializeObject<Revitalize.Framework.Objects.MultiTiledComponent>(jo["Item"].ToString(), this.settings);
                 // return jo["Item"].Value<Revitalize.Framework.Objects.MultiTiledObject>();
-
             }
-
             else
             {
                
@@ -167,7 +138,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
         public override bool CanConvert(Type objectType)
         {
-            return this.IsSameOrSubclass(typeof(StardewValley.Item),objectType);
+            return this.IsSameOrSubclass(typeof(StardewValley.Item), objectType);
         }
 
         /// <summary>

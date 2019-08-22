@@ -64,6 +64,7 @@
     <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Resources\OreFactoryInfo.cs" />
     <Compile Include="Framework\Hacks\MenuHacks.cs" />
+    <Compile Include="Framework\Hacks\ObjectInteractionHacks.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Framework\Utilities\PyTKHelper.cs" />
     <Compile Include="Framework\Utilities\RotationUtilities.cs" />
     <Compile Include="Framework\Utilities\Serialization\ContractResolvers\NetFieldContract.cs" />
+    <Compile Include="Framework\Utilities\Serialization\Converters\CustomObjectDataConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\ItemCoverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\NetFieldConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\RectangleConverter.cs" />

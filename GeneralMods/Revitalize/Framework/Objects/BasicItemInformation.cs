@@ -23,6 +23,7 @@ namespace Revitalize.Framework.Objects
         public bool canBeSetIndoors;
         public bool canBeSetOutdoors;
         public bool isLamp;
+        public string locationName;
 
 
         public AnimationManager animationManager;

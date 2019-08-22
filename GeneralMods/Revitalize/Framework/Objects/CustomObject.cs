@@ -29,7 +29,29 @@ namespace Revitalize.Framework.Objects
 
 
         public BasicItemInformation info;
-        public GameLocation location;
+        private GameLocation _location;
+        [JsonIgnore]
+        public GameLocation location
+        {
+            get
+            {
+                if (this._location == null)
+                {
+                    this._location = Game1.getLocationFromName(this.info.locationName);
+                    return this._location;
+                }
+                return this._location;
+            }
+            set
+            {
+                this._location = value;
+                if (this._location == null) this.info.locationName = "";
+                else
+                {
+                    this.info.locationName = this._location.Name;
+                }
+            }
+        }
 
 
         public Guid guid;
@@ -443,7 +465,18 @@ namespace Revitalize.Framework.Objects
         }
 
 
+        public virtual void replaceAfterLoad()
+        {
+            if (string.IsNullOrEmpty(this.info.locationName) == false)
+            {
+                ModCore.log("Replace an object!");
+                this.location.removeObject(this.TileLocation, false);
+                this.placementAction(this.location, (int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize);
 
+                ModCore.log("Do I ingnore BB? " + this.info.ignoreBoundingBox);
+                ModCore.log("This is my BB: " + this.boundingBox.Value);
+            }
+        }
        
 
         public string getDisplayNameFromStringsFile(string objectID)

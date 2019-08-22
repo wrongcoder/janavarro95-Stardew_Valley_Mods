@@ -31,10 +31,11 @@ namespace Revitalize
     //  -Chair tops cut off objects
     // -load content MUST be enabled for the table to be placed?????? WTF
     // TODO:
-    /*
+    /*  Add in crafting menu.
+     *  Add in crafting table.
+     *  Find way to hack vanilla furnace for more recipes.
      *
      * 
-    // -Add in object pool class to handle the multitudes of objects I'll be making. (WIP)
     // -Make this mod able to load content packs for easier future modding
     //
     //  -Multiple Lights On Object
@@ -49,6 +50,8 @@ namespace Revitalize
     //      -fun interactables
     //          -Arcade machines
     //      -More crafting tables
+    //      -Baths (see chairs but swimming)
+    //
     //  -Machines
     //      !=Energy
     //            Generators:
@@ -56,7 +59,7 @@ namespace Revitalize
                   -burnable
                   -watermill
                   -windmill
-                  -crank
+                  -crank (costs stamina)
                   Storage:
                   -Batery Pack
                   -
@@ -66,6 +69,8 @@ namespace Revitalize
     //      -Stone Quarry
     //      -Mayo Maker
     //      -Cheese Maker
+            -Yogurt Maker
+                   -Fruit yogurts (artisan good)
     //      -Auto fisher
     //      -Auto Preserves
     //      -Auto Keg
@@ -237,7 +242,9 @@ namespace Revitalize
             ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
+            ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
 
+            ModHelper.Events.GameLoop.DayEnding += Serializer.DayEnding_CleanUpFilesForDeletion;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
         }
@@ -335,7 +342,7 @@ namespace Revitalize
 
             ObjectManager.miscellaneous.Add("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", sscCabinet);
 
-            ModCore.log("Added in SSC!");
+            //ModCore.log("Added in SSC!");
         }
 
         private void createDirectories()
@@ -380,10 +387,19 @@ namespace Revitalize
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
+
+            foreach(var v in ObjectGroups)
+            {
+                foreach(var obj in v.Value.objects.Values)
+                {
+                    (obj as CustomObject).replaceAfterLoad();
+                }
+            }
+
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
-            //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+            Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-            //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
             //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));
@@ -398,11 +414,12 @@ namespace Revitalize
 
             
             Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin",19));
-            Ore tin = ObjectManager.resources.getOre("Tin", 19);
+            //Ore tin = ObjectManager.resources.getOre("Tin", 19);
 
-            ModCore.log("Tin sells for: " + tin.sellToStorePrice());
+            
+            //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 
-            ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
+            //ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
         }
 
         /*
@@ -426,7 +443,35 @@ namespace Revitalize
         /// <param name="message"></param>
         public static void log(object message)
         {
-            ModMonitor.Log(message.ToString());
+            ModMonitor.Log(message.ToString()+" "+getFileDebugInfo());
+        }
+
+        public static string getFileDebugInfo()
+        {
+            string currentFile = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileName();
+            int currentLine = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileLineNumber();
+            return currentFile + " line:" + currentLine;
+        }
+
+        public static bool IsNullOrDefault<T>(T argument)
+        {
+            // deal with normal scenarios
+            if (argument == null) return true;
+            if (object.Equals(argument, default(T))) return true;
+
+            // deal with non-null nullables
+            Type methodType = typeof(T);
+            if (Nullable.GetUnderlyingType(methodType) != null) return false;
+
+            // deal with boxed value types
+            Type argumentType = argument.GetType();
+            if (argumentType.IsValueType && argumentType != methodType)
+            {
+                object obj = Activator.CreateInstance(argument.GetType());
+                return obj.Equals(argument);
+            }
+
+            return false;
         }
     }
 }

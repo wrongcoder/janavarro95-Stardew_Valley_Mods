@@ -5,11 +5,23 @@ using StardewValley;
 
 namespace Revitalize.Framework.Crafting
 {
+    /// <summary>
+    /// A crafting recipe.
+    /// </summary>
     public class Recipe
     {
+        /// <summary>
+        /// The ingredients necessary to craft this recipe.
+        /// </summary>
         public Dictionary<Item, int> ingredients;
+        /// <summary>
+        /// The items produced by this recipe.
+        /// </summary>
         public Dictionary<Item, int> outputs;
 
+        /// <summary>
+        /// The item that is displayed for the crafting recipe.
+        /// </summary>
         private Item displayItem;
 
         public Item DisplayItem
@@ -18,9 +30,18 @@ namespace Revitalize.Framework.Crafting
             set => this.displayItem = value;
         }
 
+        /// <summary>
+        /// The description for the crafting recipe.
+        /// </summary>
         public string outputDescription;
+        /// <summary>
+        /// The name for the crafting recipe.
+        /// </summary>
         public string outputName;
 
+        /// <summary>
+        /// The stats that this recipe costs. Magic, HP, stamina, gold, etc.
+        /// </summary>
         public StatCost statCost;
 
         public Recipe() { }
@@ -91,6 +112,10 @@ namespace Revitalize.Framework.Crafting
                 && self.GetType() == other.GetType();
         }
 
+        /// <summary>
+        /// Consumes all of the ingredients for the recipe.
+        /// </summary>
+        /// <param name="from"></param>
         public void consume(ref List<Item> from)
         {
             if (this.InventoryContainsAllIngredient(from)==false)
@@ -119,6 +144,12 @@ namespace Revitalize.Framework.Crafting
             from = manager.items;
         }
 
+        /// <summary>
+        /// Produces outputs for the crafting recipe.
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="dropToGround"></param>
+        /// <param name="isPlayerInventory"></param>
         public void produce(ref List<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
         {
             var manager = isPlayerInventory
@@ -135,7 +166,15 @@ namespace Revitalize.Framework.Crafting
             to = manager.items;
         }
 
-        public void craft(ref List<Item> from, ref List<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
+
+        /// <summary>
+        /// Consumes all ingredients in given inventory and adds in outputs to the other given inventory.
+        /// </summary>
+        /// <param name="from">The inventory to take ingredients from.</param>
+        /// <param name="to">The inventory to put outputs into.</param>
+        /// <param name="dropToGround">Should this item be dropped to the ground when crafted?</param>
+        /// <param name="isPlayerInventory">Checks to see if the invventory is the player's</param>
+        private void craft(ref List<Item> from, ref List<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
         {
             InventoryManager manager = new InventoryManager(to);
             if (manager.ItemCount + this.outputs.Count >= manager.capacity)
@@ -148,6 +187,9 @@ namespace Revitalize.Framework.Crafting
             this.produce(ref to, dropToGround, isPlayerInventory);
         }
 
+        /// <summary>
+        /// Actually crafts the recipe.
+        /// </summary>
         public void craft()
         {
             List<Item> playerItems = Game1.player.Items.ToList();

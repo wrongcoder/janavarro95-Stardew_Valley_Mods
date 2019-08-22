@@ -81,7 +81,11 @@ namespace Revitalize.Framework.Objects
             }
 
             this.objects.Add(key, obj);
-            this.childrenGuids.Add(key, new Guid());
+            if (this.childrenGuids.ContainsKey(key)==false)
+            {
+                this.childrenGuids.Add(key, obj.guid);
+            }
+
 
             if (key.X > this.width) this.width = (int)key.X;
             if (key.Y > this.height) this.height = (int)key.Y;
@@ -92,11 +96,8 @@ namespace Revitalize.Framework.Objects
 
         public bool removeComponent(Vector2 key)
         {
-
-
             if (!this.objects.ContainsKey(key))
                 return false;
-
             this.objects.Remove(key);
             return true;
         }
