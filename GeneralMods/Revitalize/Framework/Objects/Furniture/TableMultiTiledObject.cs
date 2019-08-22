@@ -93,6 +93,32 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
+        public override void recreate()
+        {
+            Dictionary<Vector2, Guid> guids = new Dictionary<Vector2, Guid>();
+
+            foreach (KeyValuePair<Vector2, Guid> pair in this.childrenGuids)
+            {
+                guids.Add(pair.Key, pair.Value);
+            }
+
+            foreach (KeyValuePair<Vector2, Guid> pair in guids)
+            {
+                this.childrenGuids.Remove(pair.Key);
+                TableTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<TableTileComponent>(pair.Value.ToString());
+                component.InitNetFields();
+                this.removeComponent(pair.Key);
+                this.addComponent(pair.Key, component);
+
+
+            }
+            this.InitNetFields();
+
+            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(this.guid.ToString()))
+            {
+                Revitalize.ModCore.ObjectGroups.Add(this.guid.ToString(), this);
+            }
+        }
 
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {

@@ -290,10 +290,9 @@ namespace Revitalize.Framework.Objects
             foreach (KeyValuePair<Vector2, Guid> pair in guids)
             {
                 obj.childrenGuids.Remove(pair.Key);
-                //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
                 MultiTiledComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>(pair.Value.ToString());
                 component.InitNetFields();
-
+                obj.removeComponent(pair.Key);
                 obj.addComponent(pair.Key, component);
 
 
@@ -313,14 +312,40 @@ namespace Revitalize.Framework.Objects
 
         }
 
+        /// <summary>
+        /// Recreate the data from data already stored on the object.
+        /// </summary>
+        public virtual void recreate()
+        {
+            Dictionary<Vector2, Guid> guids = new Dictionary<Vector2, Guid>();
+
+            foreach (KeyValuePair<Vector2, Guid> pair in this.childrenGuids)
+            {
+                guids.Add(pair.Key, pair.Value);
+            }
+
+            foreach (KeyValuePair<Vector2, Guid> pair in guids)
+            {
+                this.childrenGuids.Remove(pair.Key);
+                MultiTiledComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>(pair.Value.ToString());
+                component.InitNetFields();
+                this.removeComponent(pair.Key);
+                this.addComponent(pair.Key, component);
+
+
+            }
+            this.InitNetFields();
+
+            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(this.guid.ToString()))
+            {
+                Revitalize.ModCore.ObjectGroups.Add(this.guid.ToString(), this);
+            }
+        }
+
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string, string> saveData = base.getAdditionalSaveData();
-
-            Revitalize.ModCore.log("Serialize: " + this.guid.ToString());
-
             saveData.Add("GUID", this.guid.ToString());
-
             Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
             return saveData;
         }
