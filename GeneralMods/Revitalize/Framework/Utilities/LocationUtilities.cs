@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Objects;
 using StardewValley;
+using StardewValley.Buildings;
 
 namespace Revitalize.Framework.Utilities
 {
@@ -46,7 +47,7 @@ namespace Revitalize.Framework.Utilities
         /// <returns></returns>
         public static bool IsPlayerInMineEnterance()
         {
-            if (Game1.player.currentLocation.Name.StartsWith("Mine") || Game1.player.currentLocation.Name=="Mine")
+            if (Game1.player.currentLocation.Name.StartsWith("Mine") || Game1.player.currentLocation.Name == "Mine")
             {
                 return true;
             }
@@ -99,13 +100,13 @@ namespace Revitalize.Framework.Utilities
         /// <param name="Location"></param>
         /// <param name="TestObject"></param>
         /// <returns></returns>
-        public static List<Vector2> GetOpenObjectTiles(GameLocation Location,MultiTiledObject TestObject)
+        public static List<Vector2> GetOpenObjectTiles(GameLocation Location, MultiTiledObject TestObject)
         {
             Vector2 dimensions = GetLocationTileDimensions(Location);
             List<Vector2> openTiles = new List<Vector2>();
-            for(int i = 0; i < dimensions.X; i++)
+            for (int i = 0; i < dimensions.X; i++)
             {
-                for(int j = 0; j < dimensions.Y; j++)
+                for (int j = 0; j < dimensions.Y; j++)
                 {
                     Vector2 tile = new Vector2(i, j);
                     if (TestObject.canBePlacedHere(Location, tile))
@@ -124,6 +125,20 @@ namespace Revitalize.Framework.Utilities
         public static bool Farm_IsFarmHiltopFarm()
         {
             return Game1.whichFarm == Farm_HilltopFarmNumber;
+        }
+
+        public static List<GameLocation> GetAllLocations()
+        {
+            List<GameLocation> locations = new List<GameLocation>();
+            foreach (GameLocation location in locations)
+            {
+                locations.Add(location);
+            }
+            foreach(Building b in Game1.getFarm().buildings)
+            {
+                locations.Add(b.indoors.Value);
+            }
+            return locations;
         }
     }
 }

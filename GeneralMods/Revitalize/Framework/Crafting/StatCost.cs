@@ -47,7 +47,7 @@ namespace Revitalize.Framework.Crafting
         /// </summary>
         public void payCost()
         {
-            if (canSafelyAffordCost())
+            if (this.canSafelyAffordCost())
             {
                 Game1.player.stamina -= this.stamina;
                 Game1.player.health -= this.health;

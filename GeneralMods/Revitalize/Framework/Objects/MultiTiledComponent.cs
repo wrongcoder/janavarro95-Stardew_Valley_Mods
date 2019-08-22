@@ -101,7 +101,7 @@ namespace Revitalize.Framework.Objects
             {
                 this.boundingBox.Value = new Rectangle(this.boundingBox.X, this.boundingBox.Y, Game1.tileSize, Game1.tileSize);
             }
-            ModCore.log(this.getBoundingBox(this.TileLocation));
+            //ModCore.log(this.getBoundingBox(this.TileLocation));
 
             return true;
 

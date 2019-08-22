@@ -17,7 +17,7 @@ namespace Revitalize.Framework.Utilities
         public int ItemCount => this.items.Count;
 
         /// <summary>The actual contents of the inventory.</summary>
-        public List<Item> items;
+        public IList<Item> items;
 
         /// <summary>Checks if the inventory is full or not.</summary>
         public bool IsFull => this.ItemCount >= this.capacity && this.items.Where(i=>i==null).Count()==0;
@@ -34,6 +34,13 @@ namespace Revitalize.Framework.Utilities
 
         /// <summary>Construct an instance.</summary>
         public InventoryManager(List<Item> items)
+        {
+            this.capacity = int.MaxValue;
+            this.setMaxLimit(int.MaxValue);
+            this.items = items;
+        }
+
+        public InventoryManager(IList<Item> items)
         {
             this.capacity = int.MaxValue;
             this.setMaxLimit(int.MaxValue);

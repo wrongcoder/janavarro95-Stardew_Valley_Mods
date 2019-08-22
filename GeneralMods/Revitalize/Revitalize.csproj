@@ -53,7 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\Crafting\Recipe.cs" />
+    <Compile Include="Framework\Crafting\RecipeBook.cs" />
     <Compile Include="Framework\Crafting\StatCost.cs" />
+    <Compile Include="Framework\Crafting\VanillaRecipeBook.cs" />
+    <Compile Include="Framework\Crafting\VanillaRecipe.cs" />
     <Compile Include="Framework\Enums\Enums.cs" />
     <Compile Include="Framework\Environment\DarkerNight.cs" />
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
@@ -142,6 +145,7 @@
     <Compile Include="Framework\Utilities\IntRange.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
     <Compile Include="Framework\Utilities\LocationUtilities.cs" />
+    <Compile Include="Framework\Utilities\ObjectUtilities.cs" />
     <Compile Include="Framework\Utilities\PyTKHelper.cs" />
     <Compile Include="Framework\Utilities\RotationUtilities.cs" />
     <Compile Include="Framework\Utilities\Serialization\ContractResolvers\NetFieldContract.cs" />

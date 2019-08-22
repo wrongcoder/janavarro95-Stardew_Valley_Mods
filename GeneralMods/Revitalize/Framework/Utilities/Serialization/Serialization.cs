@@ -15,11 +15,12 @@ namespace Revitalize.Framework.Utilities
 {
     /// <summary>
     /// Handles serialization of all objects in existence.
-    ///
-    /// TODO: Make JConvert that has same settings to implement a toJSon string obj
     /// </summary>
     public class Serializer
     {
+        /// <summary>
+        /// The actual json serializer.
+        /// </summary>
         private JsonSerializer serializer;
 
         /// <summary>
@@ -27,8 +28,14 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         private Dictionary<string, List<string>> filesToDelete = new Dictionary<string, List<string>>();
 
-        public List<Item> itemsToRemove = new List<Item>();
+        /// <summary>
+        /// The items to remove for deletion.
+        /// </summary>
+        private List<Item> itemsToRemove = new List<Item>();
 
+        /// <summary>
+        /// The settings used by the seralizer
+        /// </summary>
         private JsonSerializerSettings settings;
 
         /// <summary>
@@ -53,7 +60,7 @@ namespace Revitalize.Framework.Utilities
             //this.gatherAllFilesForCleanup();
 
             this.settings = new JsonSerializerSettings();
-            foreach(JsonConverter converter in this.serializer.Converters)
+            foreach (JsonConverter converter in this.serializer.Converters)
             {
                 this.settings.Converters.Add(converter);
             }
@@ -78,7 +85,8 @@ namespace Revitalize.Framework.Utilities
                 foreach (string file in objectFiles)
                 {
                     string playerName = new DirectoryInfo(objectPath).Parent.Name;
-                    if (this.filesToDelete.ContainsKey(playerName)){
+                    if (this.filesToDelete.ContainsKey(playerName))
+                    {
                         this.filesToDelete[playerName].Add(file);
                         //Revitalize.ModCore.log("Added File: " + file);
                     }
@@ -89,7 +97,7 @@ namespace Revitalize.Framework.Utilities
                         this.filesToDelete[playerName].Add(file);
                         //Revitalize.ModCore.log("Added File: " + file);
                     }
-                    
+
                 }
             }
         }
@@ -125,9 +133,12 @@ namespace Revitalize.Framework.Utilities
             this.restoreModObjects();
         }
 
+        /// <summary>
+        /// Restore mod objects to inventories and world after load.
+        /// </summary>
         public void restoreModObjects()
         {
-
+            //Replace all items in the world.
             foreach (var v in ModCore.ObjectGroups)
             {
                 foreach (var obj in v.Value.objects.Values)
@@ -135,8 +146,8 @@ namespace Revitalize.Framework.Utilities
                     (obj as CustomObject).replaceAfterLoad();
                 }
             }
-
-            foreach (GameLocation loc in Game1.locations)
+            //Replace all held items or items in inventories.
+            foreach (GameLocation loc in LocationUtilities.GetAllLocations())
             {
                 foreach (StardewValley.Object c in loc.Objects.Values)
                 {
@@ -149,25 +160,11 @@ namespace Revitalize.Framework.Utilities
                             if (o == null) continue;
                             if (o is Chest && o.Name != "Chest")
                             {
-                                ModCore.log("Found a custom object in a chest!");
-                                string jsonString = o.Name;
-                                string guidName = jsonString.Split(new string[] { "GUID=" }, StringSplitOptions.None)[1];
-                                ModCore.log(jsonString);
-                                string type = jsonString.Split('|')[2];
-                                Item I = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
-
-                                if (I is MultiTiledObject)
-                                {
-                                    (I as MultiTiledObject).recreate();
-                                }
-
+                                Item I = this.GetItemFromChestName(o.Name);
                                 toAdd.Add(I);
                                 toRemove.Add(o);
-                                //Item i = Serializer.DeserializeFromJSONString<Item>(jsonString);
-                                //ModCore.log("Deserialized item is: "+i.Name);
                             }
                         }
-
                         foreach (Item i in toRemove)
                         {
                             (c as Chest).items.Remove(i);
@@ -177,13 +174,48 @@ namespace Revitalize.Framework.Utilities
                             (c as Chest).items.Add(I);
                         }
                     }
-                    else if (c is StorageFurnitureTile)
+                    else if (c is CustomObject)
                     {
-                        foreach (Item o in (c as StorageFurnitureTile).info.inventory.items)
+                        if ((c as CustomObject).info.inventory == null) continue;
+                        List<Item> toRemove = new List<Item>();
+                        List<Item> toAdd = new List<Item>();
+                        foreach (Item o in (c as CustomObject).info.inventory.items)
                         {
+                            if (o == null) continue;
                             if (o is Chest && o.Name != "Chest")
                             {
-                                ModCore.log("Found a custom object in a chest!");
+                                Item I = this.GetItemFromChestName(o.Name);
+                                toAdd.Add(I);
+                                toRemove.Add(o);
+                            }
+                        }
+                        foreach (Item i in toRemove)
+                        {
+                            (c as Chest).items.Remove(i);
+                        }
+                        foreach (Item I in toAdd)
+                        {
+                            (c as Chest).items.Add(I);
+                        }
+                        if (c.heldObject.Value != null)
+                        {
+                            if (c.heldObject.Value is Chest && c.heldObject.Value.Name != "Chest")
+                            {
+                                ModCore.log("Found a custom object as a held object!");
+                                Item I = this.GetItemFromChestName(c.heldObject.Value.Name);
+                                c.heldObject.Value = (StardewValley.Object)I;
+                            }
+                        }
+                    }
+                    else if (c is StardewValley.Object)
+                    {
+                        if (c.heldObject.Value != null)
+                        {
+                            if (c.heldObject.Value is Chest && c.heldObject.Value.Name != "Chest")
+                            {
+                                ModCore.log("Found a custom object as a held object!");
+                                Item I = this.GetItemFromChestName(c.heldObject.Value.Name);
+                                c.heldObject.Value = (StardewValley.Object)I;
                             }
                         }
                     }
@@ -198,22 +230,9 @@ namespace Revitalize.Framework.Utilities
                 {
                     if (I is Chest && I.Name != "Chest")
                     {
-                        ModCore.log("Found a custom object in a chest!");
-                        string jsonString = I.Name;
-                        string guidName = jsonString.Split(new string[] { "GUID=" }, StringSplitOptions.None)[1];
-                        ModCore.log(jsonString);
-                        string type = jsonString.Split('|')[2];
-                        Item ret = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
-
-                        if (ret is MultiTiledObject)
-                        {
-                            (ret as MultiTiledObject).recreate();
-                        }
-
+                        Item ret = this.GetItemFromChestName(I.Name);
                         toAdd2.Add(ret);
                         toRemove2.Add(I);
-                        //Item i = Serializer.DeserializeFromJSONString<Item>(jsonString);
-                        //ModCore.log("Deserialized item is: "+i.Name);
                     }
 
                 }
@@ -228,24 +247,49 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+
+        /// <summary>
+        /// Gets an Item recreated from PYTK's chest replacement objects.
+        /// </summary>
+        /// <param name="JsonName"></param>
+        /// <returns></returns>
+        public Item GetItemFromChestName(string JsonName)
+        {
+            //ModCore.log("Found a custom object in a chest!");
+            string jsonString = JsonName;
+            string guidName = jsonString.Split(new string[] { "GUID=" }, StringSplitOptions.None)[1];
+            //ModCore.log(jsonString);
+            string type = jsonString.Split('|')[2];
+            Item I = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
+
+            if (I is MultiTiledObject)
+            {
+                (I as MultiTiledObject).recreate();
+            }
+            return I;
+        }
+
         public void returnToTitle()
         {
             //this.gatherAllFilesForCleanup();
         }
 
+
+
+        [Obsolete]
         private void removeNullObjects()
         {
             List<Item> removalList = new List<Item>();
-            foreach(Item I in Game1.player.Items)
+            foreach (Item I in Game1.player.Items)
             {
                 if (I == null) continue;
                 if (I.DisplayName.Contains("Revitalize.Framework") && (I is Chest))
                 {
                     removalList.Add(I);
                 }
-                
+
             }
-            foreach(Item I in removalList)
+            foreach (Item I in removalList)
             {
                 Game1.player.Items.Remove(I);
             }
@@ -275,7 +319,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         private void deleteAllUnusedFiles()
         {
-            foreach(KeyValuePair<string,List<string>> pair in this.filesToDelete)
+            foreach (KeyValuePair<string, List<string>> pair in this.filesToDelete)
             {
                 foreach (string file in pair.Value)
                 {
@@ -310,8 +354,8 @@ namespace Revitalize.Framework.Utilities
             using (StreamReader sw = new StreamReader(p))
             using (JsonReader reader = new JsonTextReader(sw))
             {
-             
-                    var obj = this.serializer.Deserialize<T>(reader);
+
+                var obj = this.serializer.Deserialize<T>(reader);
                 return obj;
             }
         }
@@ -322,7 +366,7 @@ namespace Revitalize.Framework.Utilities
         /// <typeparam name="T">The type of object to deserialize into.</typeparam>
         /// <param name="p">The path to the file.</param>
         /// <returns>An object of specified type T.</returns>
-        public object Deserialize(string p,Type T)
+        public object Deserialize(string p, Type T)
         {
             string json = "";
             foreach (string line in File.ReadLines(p))
@@ -332,7 +376,7 @@ namespace Revitalize.Framework.Utilities
             using (StreamReader sw = new StreamReader(p))
             using (JsonReader reader = new JsonTextReader(sw))
             {
-                object obj = this.serializer.Deserialize(reader,T);
+                object obj = this.serializer.Deserialize(reader, T);
                 return obj;
             }
         }
@@ -356,7 +400,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="obj"></param>
-        public void SerializeGUID(string fileName,object obj)
+        public void SerializeGUID(string fileName, object obj)
         {
             string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -369,9 +413,9 @@ namespace Revitalize.Framework.Utilities
         /// <typeparam name="T">The type of data structure to deserialze to.</typeparam>
         /// <param name="fileName">The name of the file to deserialize from.</param>
         /// <returns>A data structure object deserialize from a json string in a file.</returns>
-        public object DeserializeGUID(string fileName,Type T)
+        public object DeserializeGUID(string fileName, Type T)
         {
-            string path=Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
+            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "SaveData", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID, "SavedObjectInformation", fileName + ".json");
             this.removeFileFromDeletion((Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID), path);
             return this.Deserialize(path, T);
         }
@@ -415,7 +459,7 @@ namespace Revitalize.Framework.Utilities
         /// <returns></returns>
         public T DeserializeFromJSONString<T>(string info)
         {
-            return JsonConvert.DeserializeObject<T>(info,this.settings);
+            return JsonConvert.DeserializeObject<T>(info, this.settings);
         }
 
         /// <summary>
@@ -430,7 +474,12 @@ namespace Revitalize.Framework.Utilities
         }
 
 
-
+        /// <summary>
+        /// Deserailizes a content file for the mod.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pathToFile"></param>
+        /// <returns></returns>
         public T DeserializeContentFile<T>(string pathToFile)
         {
             if (File.Exists(pathToFile))
@@ -450,14 +499,19 @@ namespace Revitalize.Framework.Utilities
         /// <param name="fileName">The name to name the file. So a file named MyFile would be a MyFile.json</param>
         /// <param name="obj">The actual to serialize.</param>
         /// <param name="extensionFolder">The sub folder path inside of the Content folder for this mod.</param>
-        public void SerializeContentFile(string fileName, object obj,string extensionFolder)
+        public void SerializeContentFile(string fileName, object obj, string extensionFolder)
         {
-            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "Content", extensionFolder,fileName+ ".json");
+            string path = Path.Combine(Revitalize.ModCore.ModHelper.DirectoryPath, "Content", extensionFolder, fileName + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             if (File.Exists(path)) return;
             this.Serialize(path, obj);
         }
 
+        /// <summary>
+        /// Deletes all .json saved objects before saving.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="sender"></param>
         public void DayEnding_CleanUpFilesForDeletion(object o, StardewModdingAPI.Events.DayEndingEventArgs sender)
         {
             //ModCore.log("Day ending now delete files!");

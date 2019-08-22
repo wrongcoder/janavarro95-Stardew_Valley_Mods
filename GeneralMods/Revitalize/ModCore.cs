@@ -195,6 +195,7 @@ namespace Revitalize
         public static Serializer Serializer;
 
         public static Dictionary<GameLocation, MultiTiledObject> ObjectsToDraw;
+        public static VanillaRecipeBook VanillaRecipeBook;
 
         public override void Entry(IModHelper helper)
         {
@@ -247,6 +248,7 @@ namespace Revitalize
             ModHelper.Events.GameLoop.DayEnding += Serializer.DayEnding_CleanUpFilesForDeletion;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
+            VanillaRecipeBook = new VanillaRecipeBook();
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -379,7 +381,7 @@ namespace Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             this.loadContent();
-
+            
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");

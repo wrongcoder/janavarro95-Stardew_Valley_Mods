@@ -153,7 +153,7 @@ namespace Revitalize.Framework.Objects
 
             if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || !keyboardState.IsKeyDown(Keys.RightShift)))
             {
-                ModCore.log("Right clicked!");
+                //ModCore.log("Right clicked!");
                 return this.rightClicked(who);
             }
 
@@ -203,14 +203,14 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the player shift-right clicks this object.</summary>
         public virtual bool shiftRightClicked(Farmer who)
         {
-            ModCore.log("Shift right clicked!");
+            //ModCore.log("Shift right clicked!");
             return true;
         }
 
         /// <summary>What happens when the player left clicks the object.</summary>
         public override bool clicked(Farmer who)
         {
-            ModCore.log("Clicky click!");
+            //ModCore.log("Clicky click!");
 
             ModCore.log(System.Environment.StackTrace);
 
@@ -459,7 +459,7 @@ namespace Revitalize.Framework.Objects
         /// <param name="syncData"></param>
         public override void sync(Dictionary<string, string> syncData)
         {
-            Revitalize.ModCore.log("SYNC OBJECT DATA!");
+            //Revitalize.ModCore.log("SYNC OBJECT DATA!");
             base.sync(syncData);
             this.info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(syncData["BasicItemInfo"]);
         }
@@ -469,12 +469,12 @@ namespace Revitalize.Framework.Objects
         {
             if (string.IsNullOrEmpty(this.info.locationName) == false)
             {
-                ModCore.log("Replace an object!");
+                //ModCore.log("Replace an object!");
                 this.location.removeObject(this.TileLocation, false);
                 this.placementAction(this.location, (int)this.TileLocation.X * Game1.tileSize, (int)this.TileLocation.Y * Game1.tileSize);
 
-                ModCore.log("Do I ingnore BB? " + this.info.ignoreBoundingBox);
-                ModCore.log("This is my BB: " + this.boundingBox.Value);
+                //ModCore.log("Do I ingnore BB? " + this.info.ignoreBoundingBox);
+                //ModCore.log("This is my BB: " + this.boundingBox.Value);
             }
         }
        

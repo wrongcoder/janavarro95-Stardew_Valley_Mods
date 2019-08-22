@@ -49,7 +49,7 @@ namespace Revitalize.Framework.Crafting
         /// <summary>Constructor for single item output.</summary>
         /// <param name="inputs">All the ingredients required to make the output.</param>
         /// <param name="output">The item given as output with how many</param>
-        public Recipe(Dictionary<Item, int> inputs, KeyValuePair<Item, int> output, StatCost StatCost=null)
+        public Recipe(Dictionary<Item, int> inputs, KeyValuePair<Item, int> output, StatCost StatCost = null)
         {
             this.ingredients = inputs;
             this.DisplayItem = output.Key;
@@ -62,7 +62,7 @@ namespace Revitalize.Framework.Crafting
             this.statCost = StatCost ?? new StatCost();
         }
 
-        public Recipe(Dictionary<Item, int> inputs, Dictionary<Item, int> outputs, string OutputName, string OutputDescription, Item DisplayItem = null,StatCost StatCost=null)
+        public Recipe(Dictionary<Item, int> inputs, Dictionary<Item, int> outputs, string OutputName, string OutputDescription, Item DisplayItem = null, StatCost StatCost = null)
         {
             this.ingredients = inputs;
             this.outputs = outputs;
@@ -85,7 +85,7 @@ namespace Revitalize.Framework.Crafting
         }
 
         /// <summary>Checks if an inventory contains all items.</summary>
-        public bool InventoryContainsAllIngredient(List<Item> items)
+        public bool InventoryContainsAllIngredient(IList<Item> items)
         {
             foreach (KeyValuePair<Item, int> pair in this.ingredients)
                 if (!this.InventoryContainsIngredient(items, pair)) return false;
@@ -93,11 +93,11 @@ namespace Revitalize.Framework.Crafting
         }
 
         /// <summary>Checks if an inventory contains an ingredient.</summary>
-        public bool InventoryContainsIngredient(List<Item> items, KeyValuePair<Item, int> pair)
+        public bool InventoryContainsIngredient(IList<Item> items, KeyValuePair<Item, int> pair)
         {
             foreach (Item i in items)
             {
-                if (i != null && this.ItemEqualsOther(i, pair.Key) && pair.Value == i.Stack)
+                if (i != null && this.ItemEqualsOther(i, pair.Key) && pair.Value <= i.Stack)
                     return true;
             }
             return false;
@@ -116,9 +116,9 @@ namespace Revitalize.Framework.Crafting
         /// Consumes all of the ingredients for the recipe.
         /// </summary>
         /// <param name="from"></param>
-        public void consume(ref List<Item> from)
+        public void consume(ref IList<Item> from)
         {
-            if (this.InventoryContainsAllIngredient(from)==false)
+            if (this.InventoryContainsAllIngredient(from) == false)
                 return;
 
             InventoryManager manager = new InventoryManager(from);
@@ -150,7 +150,7 @@ namespace Revitalize.Framework.Crafting
         /// <param name="to"></param>
         /// <param name="dropToGround"></param>
         /// <param name="isPlayerInventory"></param>
-        public void produce(ref List<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
+        public void produce(ref IList<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
         {
             var manager = isPlayerInventory
                 ? new InventoryManager(new List<Item>())
@@ -174,7 +174,7 @@ namespace Revitalize.Framework.Crafting
         /// <param name="to">The inventory to put outputs into.</param>
         /// <param name="dropToGround">Should this item be dropped to the ground when crafted?</param>
         /// <param name="isPlayerInventory">Checks to see if the invventory is the player's</param>
-        private void craft(ref List<Item> from, ref List<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
+        private void craft(ref IList<Item> from, ref IList<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
         {
             InventoryManager manager = new InventoryManager(to);
             if (manager.ItemCount + this.outputs.Count >= manager.capacity)
@@ -192,8 +192,8 @@ namespace Revitalize.Framework.Crafting
         /// </summary>
         public void craft()
         {
-            List<Item> playerItems = Game1.player.Items.ToList();
-            List<Item> outPutItems = new List<Item>();
+            IList<Item> playerItems = Game1.player.Items;
+            IList<Item> outPutItems = new List<Item>();
             this.craft(ref playerItems, ref outPutItems, true, true);
 
             Game1.player.Items = playerItems; //Set the items to be post consumption.
