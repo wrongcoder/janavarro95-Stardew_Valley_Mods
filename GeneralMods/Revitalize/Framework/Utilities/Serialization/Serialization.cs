@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Revitalize.Framework.Objects;
+using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
 using StardewValley;
 using StardewValley.Objects;
@@ -119,7 +121,111 @@ namespace Revitalize.Framework.Utilities
         public void afterLoad()
         {
             this.deleteAllUnusedFiles();
-            this.removeNullObjects();
+            //this.removeNullObjects();
+            this.restoreModObjects();
+        }
+
+        public void restoreModObjects()
+        {
+
+            foreach (var v in ModCore.ObjectGroups)
+            {
+                foreach (var obj in v.Value.objects.Values)
+                {
+                    (obj as CustomObject).replaceAfterLoad();
+                }
+            }
+
+            foreach (GameLocation loc in Game1.locations)
+            {
+                foreach (StardewValley.Object c in loc.Objects.Values)
+                {
+                    if (c is Chest)
+                    {
+                        List<Item> toRemove = new List<Item>();
+                        List<Item> toAdd = new List<Item>();
+                        foreach (Item o in (c as Chest).items)
+                        {
+                            if (o == null) continue;
+                            if (o is Chest && o.Name != "Chest")
+                            {
+                                ModCore.log("Found a custom object in a chest!");
+                                string jsonString = o.Name;
+                                string guidName = jsonString.Split(new string[] { "GUID=" }, StringSplitOptions.None)[1];
+                                ModCore.log(jsonString);
+                                string type = jsonString.Split('|')[2];
+                                Item I = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
+
+                                if (I is MultiTiledObject)
+                                {
+                                    (I as MultiTiledObject).recreate();
+                                }
+
+                                toAdd.Add(I);
+                                toRemove.Add(o);
+                                //Item i = Serializer.DeserializeFromJSONString<Item>(jsonString);
+                                //ModCore.log("Deserialized item is: "+i.Name);
+                            }
+                        }
+
+                        foreach (Item i in toRemove)
+                        {
+                            (c as Chest).items.Remove(i);
+                        }
+                        foreach (Item I in toAdd)
+                        {
+                            (c as Chest).items.Add(I);
+                        }
+                    }
+                    else if (c is StorageFurnitureTile)
+                    {
+                        foreach (Item o in (c as StorageFurnitureTile).info.inventory.items)
+                        {
+                            if (o is Chest && o.Name != "Chest")
+                            {
+                                ModCore.log("Found a custom object in a chest!");
+                            }
+                        }
+                    }
+                }
+            }
+            List<Item> toAdd2 = new List<Item>();
+            List<Item> toRemove2 = new List<Item>();
+            foreach (Item I in Game1.player.Items)
+            {
+                if (I == null) continue;
+                else
+                {
+                    if (I is Chest && I.Name != "Chest")
+                    {
+                        ModCore.log("Found a custom object in a chest!");
+                        string jsonString = I.Name;
+                        string guidName = jsonString.Split(new string[] { "GUID=" }, StringSplitOptions.None)[1];
+                        ModCore.log(jsonString);
+                        string type = jsonString.Split('|')[2];
+                        Item ret = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
+
+                        if (ret is MultiTiledObject)
+                        {
+                            (ret as MultiTiledObject).recreate();
+                        }
+
+                        toAdd2.Add(ret);
+                        toRemove2.Add(I);
+                        //Item i = Serializer.DeserializeFromJSONString<Item>(jsonString);
+                        //ModCore.log("Deserialized item is: "+i.Name);
+                    }
+
+                }
+            }
+            foreach (Item i in toRemove2)
+            {
+                Game1.player.Items.Remove(i);
+            }
+            foreach (Item I in toAdd2)
+            {
+                Game1.player.addItemToInventory(I);
+            }
         }
 
         public void returnToTitle()

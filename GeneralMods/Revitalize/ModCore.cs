@@ -210,7 +210,7 @@ namespace Revitalize
             playerInfo = new PlayerInfo();
 
             TextureManager.AddTextureManager(Manifest, "Furniture");
-            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects","Furniture"));
+            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Furniture"));
             TextureManager.AddTextureManager(Manifest, "InventoryMenu");
             TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
             TextureManager.AddTextureManager(Manifest, "Resources.Ore");
@@ -232,7 +232,7 @@ namespace Revitalize
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
             ObjectManager = new ObjectManager(Manifest);
 
-            
+
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
 
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
@@ -380,74 +380,12 @@ namespace Revitalize
         {
             this.loadContent();
 
-
-            Serializer.afterLoad();
-
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
+            Serializer.afterLoad();
 
-            foreach(var v in ObjectGroups)
-            {
-                foreach(var obj in v.Value.objects.Values)
-                {
-                    (obj as CustomObject).replaceAfterLoad();
-                }
-            }
-
-            foreach(GameLocation loc in Game1.locations)
-            {
-                foreach(StardewValley.Object c in loc.Objects.Values)
-                {
-                    if (c is Chest)
-                    {
-                        List<Item> toRemove=new List<Item>();
-                        List<Item> toAdd=new List<Item>();
-                        foreach (Item o in (c as Chest).items)
-                        {
-                            if (o is Chest && o.Name != "Chest")
-                            {
-                                ModCore.log("Found a custom object in a chest!");
-                                string jsonString = o.Name;
-                                string guidName = jsonString.Split(new string[] { "GUID=" },StringSplitOptions.None)[1];
-                                ModCore.log(jsonString);
-                                string type = jsonString.Split('|')[2];
-                                Item I=(Item)Serializer.DeserializeGUID(guidName, Type.GetType(type));
-
-                                if(I is MultiTiledObject)
-                                {
-                                    (I as MultiTiledObject).recreate();
-                                }
-
-                                toAdd.Add(I);
-                                toRemove.Add(o);
-                                //Item i = Serializer.DeserializeFromJSONString<Item>(jsonString);
-                                //ModCore.log("Deserialized item is: "+i.Name);
-                            }
-                        }
-
-                        foreach(Item i in toRemove)
-                        {
-                            (c as Chest).items.Remove(i);
-                        }
-                        foreach(Item I in toAdd)
-                        {
-                            (c as Chest).items.Add(I);
-                        }
-                    }
-                    else if(c is StorageFurnitureTile)
-                    {
-                        foreach (Item o in (c as StorageFurnitureTile).info.inventory.items)
-                        {
-                            if (o is Chest&& o.Name != "Chest")
-                            {
-                                ModCore.log("Found a custom object in a chest!");
-                            }
-                        }
-                    }
-                }
-            }
 
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
             Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
@@ -465,11 +403,11 @@ namespace Revitalize
             */
             //Game1.player.addItemToInventory(ObjectManager.resources.ores["Test"].getOne());
 
-            
-            Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin",19));
+
+            Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
             //Ore tin = ObjectManager.resources.getOre("Tin", 19);
 
-            
+
             //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 
             //ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
@@ -496,7 +434,7 @@ namespace Revitalize
         /// <param name="message"></param>
         public static void log(object message)
         {
-            ModMonitor.Log(message.ToString()+" "+getFileDebugInfo());
+            ModMonitor.Log(message.ToString() + " " + getFileDebugInfo());
         }
 
         public static string getFileDebugInfo()
