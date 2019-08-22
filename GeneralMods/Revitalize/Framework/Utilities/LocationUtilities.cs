@@ -130,7 +130,7 @@ namespace Revitalize.Framework.Utilities
         public static List<GameLocation> GetAllLocations()
         {
             List<GameLocation> locations = new List<GameLocation>();
-            foreach (GameLocation location in locations)
+            foreach (GameLocation location in Game1.locations)
             {
                 locations.Add(location);
             }

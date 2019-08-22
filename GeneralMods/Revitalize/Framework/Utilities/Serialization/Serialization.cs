@@ -161,6 +161,7 @@ namespace Revitalize.Framework.Utilities
                             if (o is Chest && o.Name != "Chest")
                             {
                                 Item I = this.GetItemFromChestName(o.Name);
+                                ModCore.log("Found a custom item in a chest!");
                                 toAdd.Add(I);
                                 toRemove.Add(o);
                             }
