@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.1</Version>
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0" />
   </ItemGroup>
@@ -151,6 +151,7 @@
     <Compile Include="Framework\Utilities\RotationUtilities.cs" />
     <Compile Include="Framework\Utilities\Serialization\ContractResolvers\NetFieldContract.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\CustomObjectDataConverter.cs" />
+    <Compile Include="Framework\Utilities\Serialization\Converters\INetSerializableConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\ItemCoverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\NetFieldConverter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Converters\RectangleConverter.cs" />

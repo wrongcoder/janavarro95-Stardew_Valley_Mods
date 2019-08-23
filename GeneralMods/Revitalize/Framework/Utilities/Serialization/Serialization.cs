@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
+using Revitalize.Framework.Utilities.Serialization.Converters;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -18,6 +19,8 @@ namespace Revitalize.Framework.Utilities
     /// </summary>
     public class Serializer
     {
+
+
         /// <summary>
         /// The actual json serializer.
         /// </summary>
@@ -48,11 +51,12 @@ namespace Revitalize.Framework.Utilities
             this.serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             this.serializer.NullValueHandling = NullValueHandling.Include;
 
-            this.serializer.ContractResolver = new NetFieldContract();
+            //this.serializer.ContractResolver = new NetFieldContract();
 
             this.addConverter(new Framework.Utilities.Serialization.Converters.RectangleConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.Texture2DConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.ItemCoverter());
+            this.addConverter(new Serialization.Converters.INetSerializableConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.CustomObjectDataConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
@@ -67,7 +71,7 @@ namespace Revitalize.Framework.Utilities
             this.settings.Formatting = Formatting.Indented;
             this.settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             this.settings.NullValueHandling = NullValueHandling.Include;
-            this.settings.ContractResolver = new NetFieldContract();
+            //this.settings.ContractResolver = new NetFieldContract();
         }
 
         /// <summary>

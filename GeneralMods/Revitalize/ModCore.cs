@@ -23,6 +23,7 @@ using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
 using Revitalize.Framework.Objects.Items.Resources;
 using Revitalize.Framework.Hacks;
+using Netcode;
 
 namespace Revitalize
 {
@@ -379,11 +380,12 @@ namespace Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             this.loadContent();
-            
+            /*
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
+            */
             Serializer.afterLoad();
             ShopHacks.AddOreToClintsShop();
 

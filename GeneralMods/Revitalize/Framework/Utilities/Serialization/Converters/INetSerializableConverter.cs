@@ -4,20 +4,20 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Netcode;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
-using StardewValley;
 
 namespace Revitalize.Framework.Utilities.Serialization.Converters
 {
-    public class ItemCoverter : Newtonsoft.Json.JsonConverter
+    public class INetSerializableConverter : Newtonsoft.Json.JsonConverter
     {
         public static Dictionary<string, Type> AllTypes = new Dictionary<string, Type>();
 
         JsonSerializerSettings settings;
-        public ItemCoverter()
+        public INetSerializableConverter()
         {
             this.settings = new JsonSerializerSettings()
             {
@@ -25,7 +25,6 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 {
                     new Framework.Utilities.Serialization.Converters.RectangleConverter(),
                     new Framework.Utilities.Serialization.Converters.Texture2DConverter(),
-                    new INetSerializableConverter()
                 },
                 ContractResolver = new NetFieldContract(),
                 Formatting = Formatting.Indented,
@@ -33,13 +32,14 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 NullValueHandling = NullValueHandling.Include
             };
 
-            //this.settings.Converters.Add(this);
+            this.settings.Converters.Add(this);
         }
 
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            string convertedString = JsonConvert.SerializeObject((Item)value, this.settings);
+            string convertedString = JsonConvert.SerializeObject((INetSerializable)value, this.settings);
+            DefaultContractResolver resolver = serializer.ContractResolver as DefaultContractResolver;
             writer.WriteStartObject();
             writer.WritePropertyName("Type");
             serializer.Serialize(writer, value.GetType().FullName.ToString());
@@ -61,22 +61,19 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
         {
             if (reader.TokenType == JsonToken.Null)
             {
-
-                throw new JsonSerializationException("Cant convert to item!");
                 return null;
             }
-
             JObject jo = null;
 
             try
             {
                 jo = JObject.Load(reader);
             }
-            catch (Exception err)
+            catch(Exception err)
             {
                 if (reader.Value == null) return null;
-                JArray arr = JArray.Parse(reader.Value.ToString());
-                jo = JObject.Parse(arr[0].ToString());
+                JArray arr= JArray.Parse(reader.Value.ToString());
+                jo=JObject.Parse(arr[0].ToString());
             }
 
             string t = jo["Type"].Value<string>();
@@ -153,7 +150,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
         public override bool CanConvert(Type objectType)
         {
-            return this.IsSameOrSubclass(typeof(StardewValley.Item), objectType);
+            return this.IsSameOrSubclass(typeof(INetSerializable), objectType);
         }
 
         /// <summary>
