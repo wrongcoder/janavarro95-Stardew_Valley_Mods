@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Revitalize.Framework.Utilities;
 using StardewValley;
 
 namespace Revitalize.Framework.Crafting
@@ -35,9 +36,41 @@ namespace Revitalize.Framework.Crafting
             {
                 {ModCore.ObjectManager.resources.getOre("Tin"),5 },
                 {new StardewValley.Object(382,1),1}
-            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("TinIngot"), 1), 50, new StatCost(), false);
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("TinIngot"), 1), TimeUtilities.GetMinutesFromTime(0,0,50), new StatCost(), false);
 
             this.recipesByObjectName["Furnace"].Add("Tin Ore", furnace_tinOre);
+
+            VanillaRecipe furnace_bauxiteOre = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {ModCore.ObjectManager.resources.getOre("Bauxite"),5 },
+                {new StardewValley.Object(382,1),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("AluminumIngot"), 1), TimeUtilities.GetMinutesFromTime(0,1,30), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Bauxite Ore", furnace_bauxiteOre);
+
+            VanillaRecipe furnace_leadOre = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {ModCore.ObjectManager.resources.getOre("Lead"),5 },
+                {new StardewValley.Object(382,1),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("LeadIngot"), 1), TimeUtilities.GetMinutesFromTime(0,2,0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Lead Ore", furnace_leadOre);
+
+            VanillaRecipe furnace_silverOre = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {ModCore.ObjectManager.resources.getOre("Silver"),5 },
+                {new StardewValley.Object(382,1),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("SilverIngot"), 1), TimeUtilities.GetMinutesFromTime(0,3,0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Silver Ore", furnace_silverOre);
+
+            VanillaRecipe furnace_titaniumOre = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {ModCore.ObjectManager.resources.getOre("Titanium"),5 },
+                {new StardewValley.Object(382,1),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("TitaniumIngot"), 1), TimeUtilities.GetMinutesFromTime(0,4,0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Titanium Ore", furnace_titaniumOre);
         }
 
         /// <summary>
@@ -100,7 +133,6 @@ namespace Revitalize.Framework.Crafting
         {
             if (this.DoesARecipeExistForHeldObjectName(Machine))
             {
-                ModCore.log("Recipe exists!");
                 VanillaRecipe rec = this.GetVanillaRecipeFromHeldObjectName(Machine);
                 bool crafted=rec.craft(Machine);
                 if(crafted)this.playCraftingSound(Machine);
@@ -108,7 +140,7 @@ namespace Revitalize.Framework.Crafting
             }
             else
             {
-                ModCore.log("No recipe!");
+                //ModCore.log("No recipe!");
                 return false;
             }
         }

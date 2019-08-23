@@ -68,6 +68,7 @@
     <Compile Include="Framework\Factories\Objects\Resources\OreFactoryInfo.cs" />
     <Compile Include="Framework\Hacks\MenuHacks.cs" />
     <Compile Include="Framework\Hacks\ObjectInteractionHacks.cs" />
+    <Compile Include="Framework\Hacks\ShopHacks.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Framework\Utilities\Serialization\Converters\Vector2Converter.cs" />
     <Compile Include="Framework\Utilities\Serialization\Serialization.cs" />
     <Compile Include="Framework\Utilities\Serialization\SpriteBatchUtilities.cs" />
+    <Compile Include="Framework\Utilities\TimeUtilities.cs" />
     <Compile Include="Framework\Utilities\Vector2Utilities.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

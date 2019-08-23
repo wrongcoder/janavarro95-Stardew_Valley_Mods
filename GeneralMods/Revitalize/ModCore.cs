@@ -384,6 +384,7 @@ namespace Revitalize
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
             Serializer.afterLoad();
+            ShopHacks.AddOreToClintsShop();
 
 
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));

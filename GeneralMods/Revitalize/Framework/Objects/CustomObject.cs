@@ -55,7 +55,7 @@ namespace Revitalize.Framework.Objects
 
 
         public Guid guid;
-      
+
         /// <summary>The animation manager.</summary>
         public AnimationManager animationManager => this.info.animationManager;
 
@@ -71,22 +71,23 @@ namespace Revitalize.Framework.Objects
             }
             set
             {
-                this.info =(BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(value, typeof(BasicItemInformation));
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(value, typeof(BasicItemInformation));
             }
         }
 
-        
 
-        protected Netcode.NetString netItemInfo; 
+
+        protected Netcode.NetString netItemInfo;
 
         /// <summary>Empty constructor.</summary>
-        public CustomObject() {
+        public CustomObject()
+        {
             this.guid = Guid.NewGuid();
             this.InitNetFields();
         }
 
         /// <summary>Construct an instance.</summary>
-        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info,int Stack=1)
+        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info, int Stack = 1)
             : base(PyTKData, Vector2.Zero)
         {
             this.info = info;
@@ -97,7 +98,7 @@ namespace Revitalize.Framework.Objects
         }
 
         /// <summary>Construct an instance.</summary>
-        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation,int Stack=1)
+        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, int Stack = 1)
             : base(PyTKData, TileLocation)
         {
             this.info = info;
@@ -133,7 +134,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool isPassable()
         {
-            return this.info.ignoreBoundingBox || Revitalize.ModCore.playerInfo.sittingInfo.SittingObject==this;
+            return this.info.ignoreBoundingBox || Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this;
         }
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
@@ -147,7 +148,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Checks for interaction with the object.</summary>
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
-            
+
 
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
@@ -173,7 +174,7 @@ namespace Revitalize.Framework.Objects
         {
             CustomObjectData data = CustomObjectData.collection[additionalSaveData["id"]];
             BasicItemInformation info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
-            return new CustomObject(data,info,(replacement as Chest).TileLocation);
+            return new CustomObject(data, info, (replacement as Chest).TileLocation);
         }
         public override Dictionary<string, string> getAdditionalSaveData()
         {
@@ -212,8 +213,6 @@ namespace Revitalize.Framework.Objects
         public override bool clicked(Farmer who)
         {
             //ModCore.log("Clicky click!");
-
-            ModCore.log(System.Environment.StackTrace);
 
             return this.removeAndAddToPlayersInventory();
             //return base.clicked(who);
@@ -276,6 +275,8 @@ namespace Revitalize.Framework.Objects
         /// <summary>Places an object down.</summary>
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
+            if (this.info.canBeSetIndoors == false && location.IsOutdoors == false) return false;
+            if (this.info.canBeSetOutdoors == false && location.IsOutdoors) return false;
             this.updateDrawPosition(x, y);
             this.location = location;
             return base.placementAction(location, x, y, who);
@@ -283,7 +284,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {
-            if (this.info.ignoreBoundingBox && l.isObjectAtTile((int)tile.X,(int)tile.Y)==false) return true;
+            if (this.info.ignoreBoundingBox && l.isObjectAtTile((int)tile.X, (int)tile.Y) == false) return true;
             return base.canBePlacedHere(l, tile);
         }
 
@@ -306,8 +307,8 @@ namespace Revitalize.Framework.Objects
 
 
         public string generateRotationalAnimationKey()
-        {          
-            return (this.info.animationManager.currentAnimationName.Split('_')[0]) +"_"+ (int)this.info.facingDirection;
+        {
+            return (this.info.animationManager.currentAnimationName.Split('_')[0]) + "_" + (int)this.info.facingDirection;
         }
 
         public string generateDefaultRotationalAnimationKey()
@@ -325,7 +326,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Gets a clone of the game object.</summary>
         public override Item getOne()
         {
-            return new CustomObject(this.data,this.info);
+            return new CustomObject(this.data, this.info);
         }
 
         /// <summary>What happens when the object is drawn at a tile location.</summary>
@@ -353,7 +354,7 @@ namespace Revitalize.Framework.Objects
                     int addedDepth = 0;
                     if (this.info.ignoreBoundingBox) addedDepth++;
                     if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this) addedDepth++;
-                    this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)( (this.TileLocation.Y+addedDepth) * Game1.tileSize) / 10000f));
+                    this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((this.TileLocation.Y + addedDepth) * Game1.tileSize) / 10000f));
                     try
                     {
                         this.animationManager.tickAnimation();
@@ -372,6 +373,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Draw the game object at a non-tile spot. Aka like debris.</summary>
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1f)
         {
+            /*
             if (Game1.eventUp && Game1.CurrentEvent.isTileWalkedOn(xNonTile / 64, yNonTile / 64))
                 return;
             if ((int)(this.ParentSheetIndex) != 590 && (int)(this.Fragility) != 2)
@@ -389,6 +391,37 @@ namespace Revitalize.Framework.Objects
             double num4 = (double)layerDepth;
 
             spriteBatch1.Draw(this.displayTexture, local, this.animationManager.defaultDrawFrame.sourceRectangle, this.info.drawColor * alpha, (float)num1, origin, (float)4f, (SpriteEffects)num3, (float)num4);
+            */
+            //The actual planter box being drawn.
+            if (this.animationManager == null)
+            {
+                if (this.animationManager.getExtendedTexture() == null)
+                    ModCore.ModMonitor.Log("Tex Extended is null???");
+
+                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
+                // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
+            }
+
+            else
+            {
+                //Log.AsyncC("Animation Manager is working!");
+                int addedDepth = 0;
+                if (this.info.ignoreBoundingBox) addedDepth++;
+                if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this) addedDepth++;
+                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
+                try
+                {
+                    this.animationManager.tickAnimation();
+                    // Log.AsyncC("Tick animation");
+                }
+                catch (Exception err)
+                {
+                    ModCore.ModMonitor.Log(err.ToString());
+                }
+            }
+
+            // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
+
         }
 
         /// <summary>What happens when the object is drawn in a menu.</summary>
@@ -407,7 +440,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn when held by a player.</summary>
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
-            
+
             if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
             if (f.ActiveObject.bigCraftable.Value)
@@ -433,9 +466,14 @@ namespace Revitalize.Framework.Objects
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
+        public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
+        {
+            //Do nothing because this shouldn't be placeable anywhere.
+        }
+
         public void InitNetFields()
         {
-            if (Game1.IsMultiplayer == false &&(Game1.IsClient==false || Game1.IsClient==false)) return;
+            if (Game1.IsMultiplayer == false && (Game1.IsClient == false || Game1.IsClient == false)) return;
             this.initNetFields();
             this.syncObject = new PySync(this);
             this.NetFields.AddField(this.syncObject);
@@ -449,7 +487,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public override Dictionary<string, string> getSyncData()
         {
-            Dictionary<string,string> syncData= base.getSyncData();
+            Dictionary<string, string> syncData = base.getSyncData();
             syncData.Add("BasicItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
             return syncData;
         }
@@ -478,7 +516,7 @@ namespace Revitalize.Framework.Objects
                 //ModCore.log("This is my BB: " + this.boundingBox.Value);
             }
         }
-       
+
 
         public string getDisplayNameFromStringsFile(string objectID)
         {
