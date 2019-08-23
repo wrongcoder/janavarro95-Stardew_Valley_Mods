@@ -8,6 +8,8 @@ using PyTK.CustomElementHandler;
 using StardustCore.Animations;
 using StardewValley;
 using StardewValley.Objects;
+using Netcode;
+using StardewModdingAPI;
 
 namespace Revitalize.Framework.Objects
 {
@@ -522,6 +524,14 @@ namespace Revitalize.Framework.Objects
         {
             //Load in a file that has all object names referenced here or something.
             return this.info.name;
+        }
+
+
+        public virtual void setNetFieldParent(INetSerializable Parent)
+        {
+            this.NetFields.Parent = Parent;
+            IReflectedProperty<INetRoot> p=ModCore.ModHelper.Reflection.GetProperty<INetRoot>(this.NetFields, "Root", true);
+            p.SetValue(Parent.Root);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Netcode;
 using Newtonsoft.Json;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Furniture;
@@ -165,6 +166,10 @@ namespace Revitalize.Framework.Utilities
                             if (o is Chest && o.Name != "Chest")
                             {
                                 Item I = this.GetItemFromChestName(o.Name);
+                                if (I.NetFields != null)
+                                {
+                                    (I as CustomObject).setNetFieldParent(o.NetFields);
+                                }
                                 ModCore.log("Found a custom item in a chest!");
                                 toAdd.Add(I);
                                 toRemove.Add(o);
@@ -190,6 +195,10 @@ namespace Revitalize.Framework.Utilities
                             if (o is Chest && o.Name != "Chest")
                             {
                                 Item I = this.GetItemFromChestName(o.Name);
+                                if (I.NetFields != null)
+                                {
+                                    (I as CustomObject).setNetFieldParent(o.NetFields);
+                                }
                                 toAdd.Add(I);
                                 toRemove.Add(o);
                             }
@@ -208,6 +217,10 @@ namespace Revitalize.Framework.Utilities
                             {
                                 ModCore.log("Found a custom object as a held object!");
                                 Item I = this.GetItemFromChestName(c.heldObject.Value.Name);
+                                if (I.NetFields != null)
+                                {
+                                    (I as CustomObject).setNetFieldParent(c.NetFields);
+                                }
                                 c.heldObject.Value = (StardewValley.Object)I;
                             }
                         }
@@ -220,6 +233,10 @@ namespace Revitalize.Framework.Utilities
                             {
                                 ModCore.log("Found a custom object as a held object!");
                                 Item I = this.GetItemFromChestName(c.heldObject.Value.Name);
+                                if (I.NetFields != null)
+                                {
+                                    (I as CustomObject).setNetFieldParent(c.NetFields);
+                                }
                                 c.heldObject.Value = (StardewValley.Object)I;
                             }
                         }
@@ -236,6 +253,10 @@ namespace Revitalize.Framework.Utilities
                     if (I is Chest && I.Name != "Chest")
                     {
                         Item ret = this.GetItemFromChestName(I.Name);
+                        if (I.NetFields != null)
+                        {
+                            (ret as CustomObject).setNetFieldParent(I.NetFields);
+                        }
                         toAdd2.Add(ret);
                         toRemove2.Add(I);
                     }
