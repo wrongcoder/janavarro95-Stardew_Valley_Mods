@@ -180,9 +180,8 @@ namespace Revitalize
         public static IManifest Manifest;
 
         /// <summary>
-        /// Keeps track of custom objects. REPLACE THIS WITH RESOUCE MANAGER.
+        /// Keeps track of custom objects.
         /// </summary>
-        //public static Dictionary<string, CustomObject> customObjects;
         public static ObjectManager ObjectManager;
 
         /// <summary>
@@ -206,36 +205,18 @@ namespace Revitalize
             this.createDirectories();
             this.initailizeComponents();
             Serializer = new Serializer();
-
-
             playerInfo = new PlayerInfo();
 
-            TextureManager.AddTextureManager(Manifest, "Furniture");
-            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Furniture"));
-            TextureManager.AddTextureManager(Manifest, "InventoryMenu");
-            TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
-            TextureManager.AddTextureManager(Manifest, "Resources.Ore");
-            TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
-            TextureManager.AddTextureManager(Manifest, "Items.Resources.Ore");
-            TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
-            //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
+            //Loads in textures to be used by the mod.
+            this.loadInTextures();
 
-            //Framework.Graphics.TextureManager.TextureManagers.Add("Furniture", new TextureManager(this.Helper.DirectoryPath, Path.Combine("Content", "Graphics", "Furniture")));
-            //Rename graphic files tohave spaces and comment out below lines
-
-            //TextureManager.addTexture("Furniture","Oak Chair", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content","Graphics","Furniture", "Chairs", "Oak Chair.png")));
-            //
-
-            //TextureManager.addTexture("Furniture", "Oak Table", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Tables", "Oak Table.png")));
-            //TextureManager.addTexture("Furniture", "Oak Lamp", new Texture2DExtended(this.Helper, this.ModManifest, Path.Combine("Content", "Graphics", "Furniture", "Lamps", "Oak Lamp.png")));
-            //customObjects = new Dictionary<string, CustomObject>();
-
+            //Loads in objects to be use by the mod.
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
             ObjectManager = new ObjectManager(Manifest);
-
-
+            ObjectManager.loadInItems();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
 
+            //Adds in event handling for the mod.
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
             ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
@@ -244,11 +225,27 @@ namespace Revitalize
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
-
             ModHelper.Events.GameLoop.DayEnding += Serializer.DayEnding_CleanUpFilesForDeletion;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
+
+            //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
+        }
+
+        /// <summary>
+        /// Loads in textures to be used by the mod.
+        /// </summary>
+        private void loadInTextures()
+        {
+            TextureManager.AddTextureManager(Manifest, "Furniture");
+            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Furniture"));
+            TextureManager.AddTextureManager(Manifest, "InventoryMenu");
+            TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
+            TextureManager.AddTextureManager(Manifest, "Resources.Ore");
+            TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
+            TextureManager.AddTextureManager(Manifest, "Items.Resources.Ore");
+            TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)

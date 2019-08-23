@@ -51,6 +51,8 @@ namespace Revitalize.Framework.Objects
 
         public ResourceManager resources;
 
+        public Dictionary<string, CustomObject> ItemsByName;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -84,6 +86,15 @@ namespace Revitalize.Framework.Objects
             this.miscellaneous = new Dictionary<string, MultiTiledObject>();
 
             this.resources = new ResourceManager();
+            this.ItemsByName = new Dictionary<string, CustomObject>();
+        }
+
+        /// <summary>
+        /// Loads in the items for the object and resource managers.
+        /// </summary>
+        public void loadInItems()
+        {
+            this.resources.loadInItems();
         }
 
         /// <summary>
@@ -199,6 +210,43 @@ namespace Revitalize.Framework.Objects
             else
             {
                 throw new Exception("Object pool doesn't contain said object.");
+            }
+        }
+
+        /// <summary>
+        /// Adds in an item to be tracked by the mod's object manager.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="I"></param>
+        public void AddItem(string key, CustomObject I)
+        {
+            if (this.ItemsByName.ContainsKey(key))
+            {
+                throw new Exception("Item with the same key has already been added into the mod!");
+            }
+            else
+            {
+                this.ItemsByName.Add(key, I);
+            }
+        }
+
+        /// <summary>
+        /// Gets an item from the list of modded items.
+        /// </summary>
+        /// <param name="Key"></param>
+        /// <param name="Stack"></param>
+        /// <returns></returns>
+        public CustomObject GetItem(string Key,int Stack=1)
+        {
+            if (this.ItemsByName.ContainsKey(Key))
+            {
+                Item I= this.ItemsByName[Key].getOne();
+                I.Stack = Stack;
+                return (CustomObject)I;
+            }
+            else
+            {
+                return null;
             }
         }
 

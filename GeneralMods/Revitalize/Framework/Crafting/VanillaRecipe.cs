@@ -175,7 +175,7 @@ namespace Revitalize.Framework.Crafting
         /// Checks to see if the player can craft this object and if so go ahead and craft it.
         /// </summary>
         /// <param name="o"></param>
-        public void craft(StardewValley.Object o)
+        public bool craft(StardewValley.Object o)
         {
             if (this.PlayerCanCraft())
             {
@@ -183,7 +183,9 @@ namespace Revitalize.Framework.Crafting
                 List<Item> outPutItems = new List<Item>();
                 ModCore.log("Can craft recipe.");
                 this.craft(ref playerItems, ref o);
+                return true;
             }
+            return false;
         }
     }
 }

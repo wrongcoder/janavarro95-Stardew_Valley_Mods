@@ -33,8 +33,9 @@ namespace Revitalize.Framework.Crafting
 
             VanillaRecipe furnace_tinOre = new VanillaRecipe(new Dictionary<Item, int>()
             {
-                {ModCore.ObjectManager.resources.getOre("Tin"),1 }
-            }, new KeyValuePair<Item, int>(new StardewValley.Object(211,1), 3), 30, new StatCost(), false);
+                {ModCore.ObjectManager.resources.getOre("Tin"),5 },
+                {new StardewValley.Object(382,1),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("TinIngot"), 1), 50, new StatCost(), false);
 
             this.recipesByObjectName["Furnace"].Add("Tin Ore", furnace_tinOre);
         }
@@ -95,18 +96,20 @@ namespace Revitalize.Framework.Crafting
             }
         }
 
-        public void TryToCraftRecipe(StardewValley.Object Machine)
+        public bool TryToCraftRecipe(StardewValley.Object Machine)
         {
             if (this.DoesARecipeExistForHeldObjectName(Machine))
             {
                 ModCore.log("Recipe exists!");
                 VanillaRecipe rec = this.GetVanillaRecipeFromHeldObjectName(Machine);
-                rec.craft(Machine);
-                this.playCraftingSound(Machine);
+                bool crafted=rec.craft(Machine);
+                if(crafted)this.playCraftingSound(Machine);
+                return crafted;
             }
             else
             {
                 ModCore.log("No recipe!");
+                return false;
             }
         }
 

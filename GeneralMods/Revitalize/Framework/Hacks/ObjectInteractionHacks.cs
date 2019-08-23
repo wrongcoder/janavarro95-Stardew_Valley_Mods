@@ -47,8 +47,8 @@ namespace Revitalize.Framework.Hacks
                 if (ObjectUtilities.IsObjectFurnace(obj) && ObjectUtilities.IsObjectHoldingItem(obj)==false)
                 {
                     ModCore.log("Found a furnace!");
-                    VanillaRecipeBook.VanillaRecipes.TryToCraftRecipe(obj);
-
+                    bool crafted=VanillaRecipeBook.VanillaRecipes.TryToCraftRecipe(obj);
+                    if (crafted == false) return;
                     obj.initializeLightSource((Vector2)(obj.TileLocation), false);
                     obj.showNextIndex.Value = true;
                     /*
