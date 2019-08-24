@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Netcode;
 using Newtonsoft.Json;
 using Revitalize.Framework.Objects;
-using Revitalize.Framework.Objects.Furniture;
+//using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
 using Revitalize.Framework.Utilities.Serialization.Converters;
 using StardewValley;
@@ -135,9 +135,10 @@ namespace Revitalize.Framework.Utilities
         {
             this.deleteAllUnusedFiles();
             //this.removeNullObjects();
-            this.restoreModObjects();
+            //this.restoreModObjects();
         }
 
+        /*
         /// <summary>
         /// Restore mod objects to inventories and world after load.
         /// </summary>
@@ -166,10 +167,6 @@ namespace Revitalize.Framework.Utilities
                             if (o is Chest && o.Name != "Chest")
                             {
                                 Item I = this.GetItemFromChestName(o.Name);
-                                if (I.NetFields != null)
-                                {
-                                    (I as CustomObject).setNetFieldParent(o.NetFields);
-                                }
                                 ModCore.log("Found a custom item in a chest!");
                                 toAdd.Add(I);
                                 toRemove.Add(o);
@@ -195,10 +192,6 @@ namespace Revitalize.Framework.Utilities
                             if (o is Chest && o.Name != "Chest")
                             {
                                 Item I = this.GetItemFromChestName(o.Name);
-                                if (I.NetFields != null)
-                                {
-                                    (I as CustomObject).setNetFieldParent(o.NetFields);
-                                }
                                 toAdd.Add(I);
                                 toRemove.Add(o);
                             }
@@ -217,10 +210,6 @@ namespace Revitalize.Framework.Utilities
                             {
                                 ModCore.log("Found a custom object as a held object!");
                                 Item I = this.GetItemFromChestName(c.heldObject.Value.Name);
-                                if (I.NetFields != null)
-                                {
-                                    (I as CustomObject).setNetFieldParent(c.NetFields);
-                                }
                                 c.heldObject.Value = (StardewValley.Object)I;
                             }
                         }
@@ -233,10 +222,6 @@ namespace Revitalize.Framework.Utilities
                             {
                                 ModCore.log("Found a custom object as a held object!");
                                 Item I = this.GetItemFromChestName(c.heldObject.Value.Name);
-                                if (I.NetFields != null)
-                                {
-                                    (I as CustomObject).setNetFieldParent(c.NetFields);
-                                }
                                 c.heldObject.Value = (StardewValley.Object)I;
                             }
                         }
@@ -253,10 +238,6 @@ namespace Revitalize.Framework.Utilities
                     if (I is Chest && I.Name != "Chest")
                     {
                         Item ret = this.GetItemFromChestName(I.Name);
-                        if (I.NetFields != null)
-                        {
-                            (ret as CustomObject).setNetFieldParent(I.NetFields);
-                        }
                         toAdd2.Add(ret);
                         toRemove2.Add(I);
                     }
@@ -272,7 +253,7 @@ namespace Revitalize.Framework.Utilities
                 Game1.player.addItemToInventory(I);
             }
         }
-
+        */
 
         /// <summary>
         /// Gets an Item recreated from PYTK's chest replacement objects.
@@ -288,10 +269,7 @@ namespace Revitalize.Framework.Utilities
             string type = jsonString.Split('|')[2];
             Item I = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
 
-            if (I is MultiTiledObject)
-            {
-                (I as MultiTiledObject).recreate();
-            }
+            //(I as CustomObject).InitNetFields();
             return I;
         }
 

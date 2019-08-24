@@ -71,13 +71,13 @@ namespace Revitalize.Framework.Objects.Furniture
                 obj.childrenGuids.Remove(pair.Key);
                 //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
                 LampTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<LampTileComponent>(pair.Value.ToString());
-                component.InitNetFields();
+                //component.InitNetFields();
                 
                 obj.addComponent(pair.Key, component);
 
 
             }
-            obj.InitNetFields();
+            //obj.InitNetFields();
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
             {
@@ -105,13 +105,13 @@ namespace Revitalize.Framework.Objects.Furniture
             {
                 this.childrenGuids.Remove(pair.Key);
                 LampTileComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<LampTileComponent>(pair.Value.ToString());
-                component.InitNetFields();
+                //component.InitNetFields();
                 this.removeComponent(pair.Key);
                 this.addComponent(pair.Key, component);
 
 
             }
-            this.InitNetFields();
+            //this.InitNetFields();
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(this.guid.ToString()))
             {

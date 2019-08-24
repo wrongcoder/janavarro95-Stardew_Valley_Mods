@@ -8,6 +8,11 @@
   "MinimumApiVersion": "2.10.1",
   "UpdateKeys": [],
   "Dependencies": [
-    { "UniqueID": "Omegasis.StardustCore" }
+    {
+      "UniqueID": "Omegasis.StardustCore"
+    },
+    {
+      "UniqueID": "Platonymous.Toolkit"
+    }
   ]
 }

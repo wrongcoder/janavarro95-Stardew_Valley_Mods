@@ -71,13 +71,12 @@ namespace Revitalize.Framework.Objects.Extras
                 obj.childrenGuids.Remove(pair.Key);
                 //Revitalize.ModCore.log("DESERIALIZE: " + pair.Value.ToString());
                 ArcadeCabinetTile component = Revitalize.ModCore.Serializer.DeserializeGUID<ArcadeCabinetTile>(pair.Value.ToString());
-                component.InitNetFields();
+
 
                 obj.addComponent(pair.Key, component);
 
 
             }
-            obj.InitNetFields();
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
             {
@@ -105,13 +104,11 @@ namespace Revitalize.Framework.Objects.Extras
             {
                 this.childrenGuids.Remove(pair.Key);
                 ArcadeCabinetTile component = Revitalize.ModCore.Serializer.DeserializeGUID<ArcadeCabinetTile>(pair.Value.ToString());
-                component.InitNetFields();
                 this.removeComponent(pair.Key);
                 this.addComponent(pair.Key, component);
 
 
             }
-            this.InitNetFields();
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(this.guid.ToString()))
             {

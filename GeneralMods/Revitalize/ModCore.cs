@@ -5,12 +5,12 @@ using Microsoft.Xna.Framework;
 using PyTK.Extensions;
 using PyTK.Types;
 using Revitalize.Framework;
-using Revitalize.Framework.Crafting;
+//using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Environment;
-using Revitalize.Framework.Factories.Objects;
+//using Revitalize.Framework.Factories.Objects;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Objects;
-using Revitalize.Framework.Objects.Furniture;
+//using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Player;
 using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
@@ -19,11 +19,12 @@ using StardewValley.Objects;
 using StardustCore.UIUtilities;
 using StardustCore.Animations;
 using StardewValley.Menus;
-using Revitalize.Framework.Objects.Extras;
+//using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
-using Revitalize.Framework.Objects.Items.Resources;
+//using Revitalize.Framework.Objects.Items.Resources;
 using Revitalize.Framework.Hacks;
 using Netcode;
+//using Revitalize.Framework.Objects.Items;
 
 namespace Revitalize
 {
@@ -183,20 +184,23 @@ namespace Revitalize
         /// <summary>
         /// Keeps track of custom objects.
         /// </summary>
-        public static ObjectManager ObjectManager;
+        //public static ObjectManager ObjectManager;
 
         /// <summary>
         /// Keeps track of all of the extra object groups.
         /// </summary>
-        public static Dictionary<string, MultiTiledObject> ObjectGroups;
+        //public static Dictionary<string, MultiTiledObject> ObjectGroups;
 
         public static PlayerInfo playerInfo;
 
         public static Serializer Serializer;
 
-        public static Dictionary<GameLocation, MultiTiledObject> ObjectsToDraw;
-        public static VanillaRecipeBook VanillaRecipeBook;
+        //public static Dictionary<GameLocation, MultiTiledObject> ObjectsToDraw;
+        //public static VanillaRecipeBook VanillaRecipeBook;
 
+        public static Dictionary<Guid, CustomObject> CustomObjects;
+
+        
         public override void Entry(IModHelper helper)
         {
             ModHelper = helper;
@@ -205,6 +209,7 @@ namespace Revitalize
 
             this.createDirectories();
             this.initailizeComponents();
+            CustomObjects = new Dictionary<Guid, CustomObject>();
             Serializer = new Serializer();
             playerInfo = new PlayerInfo();
 
@@ -212,10 +217,10 @@ namespace Revitalize
             this.loadInTextures();
 
             //Loads in objects to be use by the mod.
-            ObjectGroups = new Dictionary<string, MultiTiledObject>();
-            ObjectManager = new ObjectManager(Manifest);
-            ObjectManager.loadInItems();
-            ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
+            //ObjectGroups = new Dictionary<string, MultiTiledObject>();
+            //ObjectManager = new ObjectManager(Manifest);
+            //ObjectManager.loadInItems();
+            //ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
 
             //Adds in event handling for the mod.
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
@@ -223,17 +228,23 @@ namespace Revitalize
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
-            ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
-            ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
-            ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
+            //ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
+            //ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
+            //ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
             ModHelper.Events.GameLoop.DayEnding += Serializer.DayEnding_CleanUpFilesForDeletion;
-            ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
+            //ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
+            //ModHelper.Events.Multiplayer.PeerContextReceived += MultiplayerUtilities.OnPlayerConnect;
+            //ModHelper.Events.Multiplayer.PeerDisconnected += MultiplayerUtilities.OnPlayerDisconnect;
+            //ModHelper.Events.GameLoop.UpdateTicked += MultiplayerUtilities.GameLoop_OneSecondUpdateTicked;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
+            //ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.ModMessageReceived;
 
+            //MultiplayerUtilities.onlineFarmers = 1;
             //Adds in recipes to the mod.
-            VanillaRecipeBook = new VanillaRecipeBook();
+            //VanillaRecipeBook = new VanillaRecipeBook();
         }
+
 
         /// <summary>
         /// Loads in textures to be used by the mod.
@@ -273,17 +284,17 @@ namespace Revitalize
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
             Serializer.returnToTitle();
-            ObjectManager = new ObjectManager(Manifest);
+            //ObjectManager = new ObjectManager(Manifest);
         }
         /// <summary>
         /// Must be enabled for the tabled to be placed????
         /// </summary>
         private void loadContent()
         {
-
-            MultiTiledComponent obj = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest", "Omegasis.TEST1", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, false, null, null));
-            MultiTiledComponent obj2 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest2", "Omegasis.TEST2", "Some fun!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.White, false, null, null));
-            MultiTiledComponent obj3 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest3", "Omegasis.TEST3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 100, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
+            /*
+            //MultiTiledComponent obj = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest", "Omegasis.TEST1", "YAY FUN!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 0, 16, 16))), Color.White, false, null, null));
+            //MultiTiledComponent obj2 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest2", "Omegasis.TEST2", "Some fun!", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 300, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 16, 16, 16))), Color.White, false, null, null));
+            //MultiTiledComponent obj3 = new MultiTiledComponent(PyTKHelper.CreateOBJData("Omegasis.Revitalize.MultiTiledComponent.Test", TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), typeof(MultiTiledComponent), Color.White), new BasicItemInformation("CoreObjectTest3", "Omegasis.TEST3", "NoFun", "Omegasis.Revitalize.MultiTiledComponent.Test", Color.White, -300, 0, false, 100, true, true, TextureManager.GetTexture(Manifest, "Furniture", "Oak Chair"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Furniture", "Oak Chair"), new Animation(new Rectangle(0, 32, 16, 16))), Color.Red, false, null, null));
 
 
             obj3.info.lightManager.addLight(new Vector2(Game1.tileSize), new LightSource(4, new Vector2(0, 0), 2.5f, Color.Orange.Invert()), obj3);
@@ -344,6 +355,7 @@ namespace Revitalize
             ObjectManager.miscellaneous.Add("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", sscCabinet);
 
             //ModCore.log("Added in SSC!");
+            */
         }
 
         private void createDirectories()
@@ -379,6 +391,7 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
+            MultiplayerUtilities.HasLoadedIn = true;
             this.loadContent();
             /*
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
@@ -388,12 +401,16 @@ namespace Revitalize
             */
             Serializer.afterLoad();
             ShopHacks.AddOreToClintsShop();
+            
+            MultiplayerUtilities.needToRestore = true;
 
+            
 
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
-            Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+            //Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-            Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            //Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            MultiplayerUtilities.onlineFarmers = Game1.getOnlineFarmers().Count;
             //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
             //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));
@@ -406,14 +423,16 @@ namespace Revitalize
             */
             //Game1.player.addItemToInventory(ObjectManager.resources.ores["Test"].getOne());
 
-
-            Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
+            //Game1.player.addItemToInventory(ObjectManager.GetItem("TinIngot"));
+            //Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
             //Ore tin = ObjectManager.resources.getOre("Tin", 19);
 
-
+            //Game1.player.addItemToInventory(new MyTool());
             //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 
             //ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
+            CustomObject tinIngot = new CustomObject(new BasicItemInformation("Tin Ingot", "Omegasis.Revitalize.Items.Resources.Ore.TinIngot", "A tin ingot that can be used for crafting purposes.", "Metal", Color.Silver, -300, 0, false, 75, false, false,false,TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinIngot"), new AnimationManager(), Color.White, true, null, null), 1);
+            Game1.player.addItemToInventory(tinIngot);
         }
 
         /*

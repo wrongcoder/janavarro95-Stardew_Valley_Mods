@@ -255,9 +255,23 @@ namespace Revitalize.Framework.Objects.Furniture
             if (this.info == null)
             {
                 Revitalize.ModCore.log("info is null");
+                this.info = this.netInfo.Value;
                 if (this.syncObject == null) Revitalize.ModCore.log("DEAD SYNC");
             }
-            if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
+            if (this.animationManager == null)
+            {
+                Revitalize.ModCore.log("Animation Manager Null");
+                if (this.info == null)
+                {
+                    ModCore.log("And info is still null!");
+                    return;
+                }
+                else
+                {
+                    this.info.animationManager = this.netInfo.Value.animationManager;
+                    return;
+                }
+            }
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
 
             //The actual planter box being drawn.

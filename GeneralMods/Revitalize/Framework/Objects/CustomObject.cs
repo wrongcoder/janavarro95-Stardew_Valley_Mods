@@ -10,6 +10,7 @@ using StardewValley;
 using StardewValley.Objects;
 using Netcode;
 using StardewModdingAPI;
+using Revitalize.Framework.Utilities;
 
 namespace Revitalize.Framework.Objects
 {
@@ -19,7 +20,7 @@ namespace Revitalize.Framework.Objects
     //     -Inventories
 
     /// <summary>A custom object template.</summary>
-    public class CustomObject : PySObject
+    public class CustomObject : StardewValley.Object,ISaveElement
     {
         public string id
         {
@@ -85,12 +86,12 @@ namespace Revitalize.Framework.Objects
         public CustomObject()
         {
             this.guid = Guid.NewGuid();
-            this.InitNetFields();
+            //this.InitNetFields();
         }
 
         /// <summary>Construct an instance.</summary>
-        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info, int Stack = 1)
-            : base(PyTKData, Vector2.Zero)
+        public CustomObject(BasicItemInformation info, int Stack = 1)
+            : base()
         {
             this.info = info;
             this.initializeBasics();
@@ -100,8 +101,8 @@ namespace Revitalize.Framework.Objects
         }
 
         /// <summary>Construct an instance.</summary>
-        public CustomObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, int Stack = 1)
-            : base(PyTKData, TileLocation)
+        public CustomObject(BasicItemInformation info, Vector2 TileLocation, int Stack = 1)
+            : base()
         {
             this.info = info;
             this.initializeBasics();
@@ -117,17 +118,21 @@ namespace Revitalize.Framework.Objects
             this.Edibility = this.info.edibility;
             this.Category = -9; //For crafting.
             this.displayName = this.info.name;
-            this.setOutdoors.Value = true;
-            this.setIndoors.Value = true;
+            this.setOutdoors.Value = this.info.canBeSetOutdoors;
+            this.setIndoors.Value = this.info.canBeSetIndoors;
             this.isLamp.Value = false;
             this.Fragility = 0;
 
             this.updateDrawPosition(0, 0);
 
-            this.bigCraftable.Value = false;
+            this.bigCraftable.Value = this.info.bigCraftable;
+            this.Price = this.info.price;
 
+            ModCore.CustomObjects.Add(this.guid, this);
+
+            this.NetFields.AddField(new NetGuid(this.guid));
             //this.initNetFields();
-            this.InitNetFields();
+            //this.InitNetFields();
             //if (this.info.ignoreBoundingBox)
             //    this.boundingBox.Value = new Rectangle(int.MinValue, int.MinValue, 0, 0);
         }
@@ -136,7 +141,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool isPassable()
         {
-            return this.info.ignoreBoundingBox || Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this;
+            return this.info.ignoreBoundingBox; //|| Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this;
         }
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
@@ -150,8 +155,6 @@ namespace Revitalize.Framework.Objects
         /// <summary>Checks for interaction with the object.</summary>
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
-
-
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
 
@@ -172,18 +175,33 @@ namespace Revitalize.Framework.Objects
             return this.clicked(who);
         }
 
+        /*
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
             CustomObjectData data = CustomObjectData.collection[additionalSaveData["id"]];
             BasicItemInformation info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
-            return new CustomObject(data, info, (replacement as Chest).TileLocation);
+            return new CustomObject(data, info);
         }
+        */
+        /*
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string, string> serializedInfo = new Dictionary<string, string>();
+            serializedInfo.Add("id", this.ItemInfo);
             serializedInfo.Add("ItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
             return serializedInfo;
         }
+        */
+        /*
+        public override void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            string id = additionalSaveData["id"];
+            this.ItemInfo = id;
+            this.info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
+            base.rebuild(additionalSaveData, replacement);
+            ModCore.log("Rebuilt custom object.");
+        }
+        */
 
         /// <summary>What happens when the player right clicks the object.</summary>
         public virtual bool rightClicked(Farmer who)
@@ -328,12 +346,19 @@ namespace Revitalize.Framework.Objects
         /// <summary>Gets a clone of the game object.</summary>
         public override Item getOne()
         {
-            return new CustomObject(this.data, this.info);
+            return new CustomObject(this.info);
         }
 
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
+            if (this.info == null)
+            {
+                ModCore.log("Info is null:");
+                ModCore.log("Need request for guid: " + this.guid);
+                MultiplayerUtilities.SendRequestForSpecificGUID(this.guid);
+                return;
+            }
             if (x <= -1)
             {
                 spriteBatch.Draw(this.info.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.info.drawPosition), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
@@ -355,7 +380,6 @@ namespace Revitalize.Framework.Objects
                     //Log.AsyncC("Animation Manager is working!");
                     int addedDepth = 0;
                     if (this.info.ignoreBoundingBox) addedDepth++;
-                    if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this) addedDepth++;
                     this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((this.TileLocation.Y + addedDepth) * Game1.tileSize) / 10000f));
                     try
                     {
@@ -375,25 +399,14 @@ namespace Revitalize.Framework.Objects
         /// <summary>Draw the game object at a non-tile spot. Aka like debris.</summary>
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1f)
         {
-            /*
-            if (Game1.eventUp && Game1.CurrentEvent.isTileWalkedOn(xNonTile / 64, yNonTile / 64))
-                return;
-            if ((int)(this.ParentSheetIndex) != 590 && (int)(this.Fragility) != 2)
-                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile + 32), (float)(yNonTile + 51 + 4))), new Microsoft.Xna.Framework.Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0.0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, layerDepth - 1E-06f);
-            SpriteBatch spriteBatch1 = spriteBatch;
-            Texture2D objectSpriteSheet = Game1.objectSpriteSheet;
-            Vector2 local = Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile + 32 + (this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0)), (float)(yNonTile + 32 + (this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0))));
-            Microsoft.Xna.Framework.Rectangle? sourceRectangle = new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(this.ParentSheetIndex));
-            Color color = Color.White * alpha;
-            double num1 = 0.0;
-            Vector2 origin = new Vector2(8f, 8f);
-            Vector2 scale = this.scale;
-            double num2 = (double)this.scale.Y > 1.0 ? (double)this.getScale().Y : 4.0;
-            int num3 = (bool)(this.flipped) ? 1 : 0;
-            double num4 = (double)layerDepth;
 
-            spriteBatch1.Draw(this.displayTexture, local, this.animationManager.defaultDrawFrame.sourceRectangle, this.info.drawColor * alpha, (float)num1, origin, (float)4f, (SpriteEffects)num3, (float)num4);
-            */
+            if(this.info == null)
+            {
+                ModCore.log("Info is null:");
+                ModCore.log("Need request for guid: " + this.guid);
+                MultiplayerUtilities.SendRequestForSpecificGUID(this.guid);
+                return;
+            }
             //The actual planter box being drawn.
             if (this.animationManager == null)
             {
@@ -409,7 +422,6 @@ namespace Revitalize.Framework.Objects
                 //Log.AsyncC("Animation Manager is working!");
                 int addedDepth = 0;
                 if (this.info.ignoreBoundingBox) addedDepth++;
-                if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this) addedDepth++;
                 this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
                 try
                 {
@@ -429,6 +441,13 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn in a menu.</summary>
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {
+            if (this.info == null)
+            {
+                ModCore.log("Info is null:");
+                ModCore.log("Need request for guid: " + this.guid);
+                MultiplayerUtilities.SendRequestForSpecificGUID(this.guid);
+                return;
+            }
             if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
                 Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
             if (drawStackNumber && this.Quality > 0)
@@ -442,7 +461,37 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn when held by a player.</summary>
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
+            if (this.info == null)
+            {
+                ModCore.log("Info is null:");
+                ModCore.log("Need request for guid: " + this.guid);
 
+                MultiplayerUtilities.SendRequestForSpecificGUID(this.guid);
+
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[this.guid].info != null)
+                    {
+                        this.info = ModCore.CustomObjects[this.guid].info;
+                    }
+                }
+                else
+                {
+                    foreach(var v in ModCore.CustomObjects)
+                    {
+                        if (v.Value == this)
+                        {
+                            this.info = v.Value.info;
+                        }
+                    }
+                }
+
+                return;
+            }
+            else
+            {
+                ModCore.log("Drawing custom object: " + this.guid);
+            }
             if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
             if (f.ActiveObject.bigCraftable.Value)
@@ -472,38 +521,36 @@ namespace Revitalize.Framework.Objects
         {
             //Do nothing because this shouldn't be placeable anywhere.
         }
-
-        public void InitNetFields()
+        /*
+        public virtual bool InitNetFields()
         {
-            if (Game1.IsMultiplayer == false && (Game1.IsClient == false || Game1.IsClient == false)) return;
-            this.initNetFields();
+            if (Game1.IsMultiplayer == false)
+            {
+                //ModCore.log("Not multiplayer!");
+                return false;
+            }
+            if (MultiplayerUtilities.HasLoadedIn == false)
+            {
+                return false;
+            }
+
+            ModCore.log("Initialize net fields!");
+            //this.initNetFields();
             this.syncObject = new PySync(this);
-            this.NetFields.AddField(this.syncObject);
-            this.netItemInfo = new Netcode.NetString(this.ItemInfo);
-            this.NetFields.AddField(this.netItemInfo);
+            ///this.NetFields.AddField(this.syncObject);
+            //this.netItemInfo = new Netcode.NetString(this.ItemInfo);
+            //this.NetFields.AddField(this.netItemInfo);
+            //this.netInfo = new NetBasicItemInformation(this.info);
+            //this.NetFields.AddField(this.netInfo);
+            return true;
         }
+        */
 
-        /// <summary>
-        /// Gets all of the data necessary for syncing.
-        /// </summary>
-        /// <returns></returns>
-        public override Dictionary<string, string> getSyncData()
-        {
-            Dictionary<string, string> syncData = base.getSyncData();
-            syncData.Add("BasicItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
-            return syncData;
-        }
 
         /// <summary>
         /// Syncs all of the info to all players.
         /// </summary>
         /// <param name="syncData"></param>
-        public override void sync(Dictionary<string, string> syncData)
-        {
-            //Revitalize.ModCore.log("SYNC OBJECT DATA!");
-            base.sync(syncData);
-            this.info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(syncData["BasicItemInfo"]);
-        }
 
 
         public virtual void replaceAfterLoad()
@@ -516,6 +563,7 @@ namespace Revitalize.Framework.Objects
 
                 //ModCore.log("Do I ingnore BB? " + this.info.ignoreBoundingBox);
                 //ModCore.log("This is my BB: " + this.boundingBox.Value);
+                //this.InitNetFields();
             }
         }
 
@@ -526,12 +574,25 @@ namespace Revitalize.Framework.Objects
             return this.info.name;
         }
 
-
-        public virtual void setNetFieldParent(INetSerializable Parent)
+        public object getReplacement()
         {
-            this.NetFields.Parent = Parent;
-            IReflectedProperty<INetRoot> p=ModCore.ModHelper.Reflection.GetProperty<INetRoot>(this.NetFields, "Root", true);
-            p.SetValue(Parent.Root);
+            return new StardewValley.Object(this.TileLocation, 14, false);
+        }
+
+        public Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string, string> saveData = new Dictionary<string, string>();
+            saveData.Add("Greeting", "Hello");
+            saveData.Add("ItemInfo", ModCore.Serializer.ToJSONString(this.info));
+            return saveData;
+        }
+
+        public void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            this.DisplayName = additionalSaveData["Greeting"];
+            this.info =ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
+            this.initializeBasics();
+            ModCore.log("Rebuilt custom object and it's info from save!");
         }
     }
 }

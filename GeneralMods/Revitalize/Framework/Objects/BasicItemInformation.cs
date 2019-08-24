@@ -41,6 +41,8 @@ namespace Revitalize.Framework.Objects
 
         public int shakeTimer;
 
+        public bool bigCraftable;
+
         public BasicItemInformation()
         {
             this.name = "";
@@ -64,7 +66,7 @@ namespace Revitalize.Framework.Objects
            
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors,bool BigCraftable,Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights)
         {
             this.name = name;
             this.id = id;
@@ -93,6 +95,7 @@ namespace Revitalize.Framework.Objects
             this.lightManager = Lights ?? new LightManager();
             this.facingDirection = Enums.Direction.Down;
             this.shakeTimer = 0;
+            this.bigCraftable = BigCraftable;
             
         }
 
@@ -111,7 +114,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.drawColor, this.ignoreBoundingBox, this.inventory.Copy(), this.lightManager.Copy());
+            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors,this.bigCraftable ,this.animationManager.getTexture(), this.animationManager, this.drawColor, this.ignoreBoundingBox, this.inventory.Copy(), this.lightManager.Copy());
         }
         
     }
