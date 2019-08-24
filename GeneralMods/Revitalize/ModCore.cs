@@ -232,10 +232,13 @@ namespace Revitalize
             //ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
             //ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
             ModHelper.Events.GameLoop.DayEnding += Serializer.DayEnding_CleanUpFilesForDeletion;
+<<<<<<< HEAD
             //ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
             //ModHelper.Events.Multiplayer.PeerContextReceived += MultiplayerUtilities.OnPlayerConnect;
             //ModHelper.Events.Multiplayer.PeerDisconnected += MultiplayerUtilities.OnPlayerDisconnect;
             //ModHelper.Events.GameLoop.UpdateTicked += MultiplayerUtilities.GameLoop_OneSecondUpdateTicked;
+=======
+>>>>>>> parent of f3f4f4d... Fixed vanilla machines not rendering CustomObject(s) when finished producing.
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             //ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.ModMessageReceived;
