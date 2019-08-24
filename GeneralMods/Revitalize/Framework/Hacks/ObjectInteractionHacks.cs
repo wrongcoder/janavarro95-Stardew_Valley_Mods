@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-<<<<<<< HEAD
-//using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Objects;
-=======
+
 using Revitalize.Framework.Crafting;
->>>>>>> parent of f3f4f4d... Fixed vanilla machines not rendering CustomObject(s) when finished producing.
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using SObject = StardewValley.Object;
