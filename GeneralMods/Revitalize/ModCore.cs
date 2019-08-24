@@ -236,6 +236,7 @@ namespace Revitalize
             //ModHelper.Events.Multiplayer.PeerContextReceived += MultiplayerUtilities.OnPlayerConnect;
             //ModHelper.Events.Multiplayer.PeerDisconnected += MultiplayerUtilities.OnPlayerDisconnect;
             //ModHelper.Events.GameLoop.UpdateTicked += MultiplayerUtilities.GameLoop_OneSecondUpdateTicked;
+
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             //ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.ModMessageReceived;

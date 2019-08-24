@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize.Framework.Objects;
-
 using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Utilities;
 using StardewValley;
