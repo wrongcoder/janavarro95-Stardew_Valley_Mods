@@ -163,7 +163,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 y *= -1;
             }
             */
-            this.updateInfoIfNull();
+
             if (this.info == null)
             {
                 Revitalize.ModCore.log("info is null");
@@ -215,7 +215,6 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
-            this.updateInfoIfNull();
             if (objectPosition.X < 0) objectPosition.X *= -1;
             if (objectPosition.Y < 0) objectPosition.Y *= -1;
             base.drawWhenHeld(spriteBatch, objectPosition, f);

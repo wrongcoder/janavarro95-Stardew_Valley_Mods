@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
 using StardewValley;
 
 namespace Revitalize.Framework.Utilities.Serialization.Converters
@@ -25,21 +24,18 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 {
                     new Framework.Utilities.Serialization.Converters.RectangleConverter(),
                     new Framework.Utilities.Serialization.Converters.Texture2DConverter(),
-                    new INetSerializableConverter()
                 },
-                ContractResolver = new NetFieldContract(),
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 NullValueHandling = NullValueHandling.Include
             };
-
-            //this.settings.Converters.Add(this);
         }
 
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             string convertedString = JsonConvert.SerializeObject((Item)value, this.settings);
+            DefaultContractResolver resolver = serializer.ContractResolver as DefaultContractResolver;
             writer.WriteStartObject();
             writer.WritePropertyName("Type");
             serializer.Serialize(writer, value.GetType().FullName.ToString());
@@ -66,18 +62,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 return null;
             }
 
-            JObject jo = null;
-
-            try
-            {
-                jo = JObject.Load(reader);
-            }
-            catch (Exception err)
-            {
-                if (reader.Value == null) return null;
-                JArray arr = JArray.Parse(reader.Value.ToString());
-                jo = JObject.Parse(arr[0].ToString());
-            }
+            JObject jo = JObject.Load(reader);
 
             string t = jo["Type"].Value<string>();
 

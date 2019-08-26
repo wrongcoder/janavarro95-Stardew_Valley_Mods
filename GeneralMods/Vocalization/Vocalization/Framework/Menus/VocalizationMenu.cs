@@ -91,6 +91,7 @@ namespace Vocalization.Framework.Menus
             this.drawOnlyDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, new Color(255, 255, 255, 255), 0.4f);
             this.sliderButton.draw(b, Color.White, Vector2.Zero, 0.5f);
             this.languages.draw(b, Color.White, Vector2.Zero, 0.5f);
+            this.drawMouse(b);
         }
 
         /// <summary>Save the menu information upon menu being closed.</summary>

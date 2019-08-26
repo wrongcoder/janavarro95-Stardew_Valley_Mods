@@ -4,12 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Netcode;
 using Newtonsoft.Json;
 using Revitalize.Framework.Objects;
-//using Revitalize.Framework.Objects.Furniture;
+using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
-using Revitalize.Framework.Utilities.Serialization.Converters;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -20,8 +18,6 @@ namespace Revitalize.Framework.Utilities
     /// </summary>
     public class Serializer
     {
-
-
         /// <summary>
         /// The actual json serializer.
         /// </summary>
@@ -52,12 +48,11 @@ namespace Revitalize.Framework.Utilities
             this.serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             this.serializer.NullValueHandling = NullValueHandling.Include;
 
-            //this.serializer.ContractResolver = new NetFieldContract();
+            this.serializer.ContractResolver = new NetFieldContract();
 
             this.addConverter(new Framework.Utilities.Serialization.Converters.RectangleConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.Texture2DConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.ItemCoverter());
-            this.addConverter(new Serialization.Converters.INetSerializableConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.CustomObjectDataConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
@@ -72,7 +67,7 @@ namespace Revitalize.Framework.Utilities
             this.settings.Formatting = Formatting.Indented;
             this.settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             this.settings.NullValueHandling = NullValueHandling.Include;
-            //this.settings.ContractResolver = new NetFieldContract();
+            this.settings.ContractResolver = new NetFieldContract();
         }
 
         /// <summary>
@@ -135,10 +130,9 @@ namespace Revitalize.Framework.Utilities
         {
             this.deleteAllUnusedFiles();
             //this.removeNullObjects();
-            //this.restoreModObjects();
+            this.restoreModObjects();
         }
 
-        /*
         /// <summary>
         /// Restore mod objects to inventories and world after load.
         /// </summary>
@@ -253,7 +247,7 @@ namespace Revitalize.Framework.Utilities
                 Game1.player.addItemToInventory(I);
             }
         }
-        */
+
 
         /// <summary>
         /// Gets an Item recreated from PYTK's chest replacement objects.
@@ -269,7 +263,10 @@ namespace Revitalize.Framework.Utilities
             string type = jsonString.Split('|')[2];
             Item I = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
 
-            //(I as CustomObject).InitNetFields();
+            if (I is MultiTiledObject)
+            {
+                (I as MultiTiledObject).recreate();
+            }
             return I;
         }
 

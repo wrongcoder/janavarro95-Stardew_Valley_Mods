@@ -220,6 +220,7 @@ namespace Vocalization
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Display.MenuChanged += this.MenuEvents_MenuChanged;
+            helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             ModMonitor = this.Monitor;
             ModHelper = this.Helper;
             Manifest = this.ModManifest;
@@ -239,6 +240,20 @@ namespace Vocalization
             config.verifyValidMode(); //Make sure the current mode is valid.
             soundManager.volume = (float)config.voiceVolume; //Set the volume for voices.
 
+            //Game1.waveBank = new Microsoft.Xna.Framework.Audio.WaveBank(Game1.audioEngine, Path.Combine(this.Helper.DirectoryPath, "WavBanks", "Wave Bank (Code 3).xwb"));
+
+            if (config.muteDialogueTyping)
+            {
+                Game1.options.dialogueTyping = false;
+            }
+        }
+
+        private void Input_ButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            if(e.Button.ToString()== config.menuHotkey)
+            {
+                Game1.activeClickableMenu = new VocalizationMenu(100, 64, 600, 300, true);
+            }
         }
 
         /// <summary>Raised after a game menu is opened, closed, or replaced.</summary>

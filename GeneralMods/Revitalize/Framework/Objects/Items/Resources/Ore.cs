@@ -177,19 +177,16 @@ namespace Revitalize.Framework.Objects.Items.Resources
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            this.updateInfoIfNull();
             if (this.info.ignoreBoundingBox == true)
             {
                 x *= -1;
                 y *= -1;
             }
 
-            
             if (this.info == null)
             {
                 Revitalize.ModCore.log("info is null");
                 if (this.syncObject == null) Revitalize.ModCore.log("DEAD SYNC");
-                return;
             }
             if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
@@ -226,7 +223,6 @@ namespace Revitalize.Framework.Objects.Items.Resources
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {
-            this.updateInfoIfNull();
             if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
                 Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
             if (drawStackNumber && this.Quality > 0)

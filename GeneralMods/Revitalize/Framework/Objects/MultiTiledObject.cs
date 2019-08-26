@@ -4,12 +4,9 @@ using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Netcode;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
-using Revitalize.Framework.Networking.Fields;
 using StardewValley;
-using StardewValley.Network;
 using StardewValley.Objects;
 
 namespace Revitalize.Framework.Objects
@@ -294,11 +291,13 @@ namespace Revitalize.Framework.Objects
             {
                 obj.childrenGuids.Remove(pair.Key);
                 MultiTiledComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>(pair.Value.ToString());
+                component.InitNetFields();
                 obj.removeComponent(pair.Key);
                 obj.addComponent(pair.Key, component);
 
 
             }
+            obj.InitNetFields();
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["GUID"]))
             {
@@ -329,11 +328,13 @@ namespace Revitalize.Framework.Objects
             {
                 this.childrenGuids.Remove(pair.Key);
                 MultiTiledComponent component = Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledComponent>(pair.Value.ToString());
+                component.InitNetFields();
                 this.removeComponent(pair.Key);
                 this.addComponent(pair.Key, component);
 
 
             }
+            this.InitNetFields();
 
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(this.guid.ToString()))
             {
@@ -370,7 +371,6 @@ namespace Revitalize.Framework.Objects
         {
             return 1;
         }
-
 
     }
 }
