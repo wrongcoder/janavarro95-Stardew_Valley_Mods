@@ -260,6 +260,7 @@ namespace Revitalize
                 Game1.currentMinigame = new Revitalize.Framework.Minigame.SeasideScrambleMinigame.SeasideScramble();
             }
             */
+            /*
             if (e.Button == SButton.Y)
             {
                 //Game1.activeClickableMenu = new ItemGrabMenu(Game1.player.Items,false,true, new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems),);
@@ -270,6 +271,7 @@ namespace Revitalize
 
                 Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryTransferMenu(100, 100, 500, 500, newItems, 36);
             }
+            */
         }
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
@@ -382,19 +384,21 @@ namespace Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             this.loadContent();
-            
+
+            /*
             if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
             {
                 throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
             }
+            */
             Serializer.afterLoad();
             ShopHacks.AddOreToClintsShop();
 
 
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
-            Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+            //Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-            Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            //Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
             //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));
@@ -408,9 +412,9 @@ namespace Revitalize
             //Game1.player.addItemToInventory(ObjectManager.resources.ores["Test"].getOne());
 
 
-            Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
+            //Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
             //Ore tin = ObjectManager.resources.getOre("Tin", 19);
-
+            Game1.player.addItemToInventory(ObjectManager.GetItem("TinIngot", 1));
 
             //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 

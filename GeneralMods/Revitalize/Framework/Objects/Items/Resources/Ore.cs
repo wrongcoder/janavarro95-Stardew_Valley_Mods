@@ -107,10 +107,6 @@ namespace Revitalize.Framework.Objects.Items.Resources
             return component;
         }
 
-        public override object getReplacement()
-        {
-            return base.getReplacement();
-        }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {

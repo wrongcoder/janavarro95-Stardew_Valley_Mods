@@ -19,6 +19,89 @@ namespace Revitalize.Framework.Objects
     /// <summary>A custom object template.</summary>
     public class CustomObject : PySObject
     {
+
+        public string text
+        {
+            get
+            {
+                if (this.netName.Value.Split('>') is string[] split && split.Length > 1)
+                    return split[1]; //This is custom data. If the net name has a much larger name split the value and return the result.
+                else
+                    return ""; //Otherwise return nothing.
+            }
+            set
+            {
+                if (this.netName == null) return;
+                if (this.netName.Value == null) return;
+                {
+                    this.netName.Value = this.netName.Value.Split('>')[0] + ">" + value; //When setting the custom dataappend it to the end of the name.
+                }
+            }
+        }
+
+
+        public override string Name
+        {
+
+            get
+            {
+                if (this.info != null)
+                {
+                    return this.netName.Value.Split('>')[0];
+                    //return this.info.name;
+                }
+                if (this.netName == null)
+                {
+                    return this.name;
+                }
+                else
+                {
+                    return this.netName.Value.Split('>')[0]; //Return the value before the name because that is the true value.
+                }
+            }
+
+            set
+            {
+                if (this.netName == null)
+                {
+                    return;
+                }
+                if (this.netName.Value == null)
+                {
+                    return;
+                }
+                if (this.netName.Value.Split('>') is string[] split && split.Length > 1)
+                {
+                    this.netName.Value = value + ">" + split[1]; //When setting the name if appended data is added on set the new value and add that appended data back.
+                }
+                else
+                {
+                    this.netName.Value = value; //Otherwise just set the net name.
+                }
+            }
+        }
+
+        public override string DisplayName
+        {
+            get
+            {
+                if (this.info != null)
+                {
+                    return this.info.name;
+                }
+                return this.netName.Value.Split('>')[0];
+            }
+
+            set
+            {
+                if (this.netName.Value.Split('>') is string[] split && split.Length > 1)
+                    this.netName.Value = value + ">" + split[1];
+                else
+                    this.netName.Value = value;
+            }
+        }
+
+
         public string id
         {
             get
@@ -75,10 +158,6 @@ namespace Revitalize.Framework.Objects
             }
         }
 
-
-
-        protected Netcode.NetString netItemInfo;
-
         /// <summary>Empty constructor.</summary>
         public CustomObject()
         {
@@ -124,8 +203,12 @@ namespace Revitalize.Framework.Objects
 
             this.bigCraftable.Value = false;
 
+            this.syncObject = new PySync(this);
+            this.syncObject.init();
             //this.initNetFields();
             this.InitNetFields();
+            this.updateInfo();
+            this.Price = info.price;
             //if (this.info.ignoreBoundingBox)
             //    this.boundingBox.Value = new Rectangle(int.MinValue, int.MinValue, 0, 0);
         }
@@ -143,6 +226,16 @@ namespace Revitalize.Framework.Objects
             return this.info.ignoreBoundingBox
                 ? new Rectangle(int.MinValue, int.MinValue, 0, 0)
                 : base.getBoundingBox(tileLocation);
+        }
+
+        public override int sellToStorePrice()
+        {
+            return this.Price;
+        }
+
+        public override int salePrice()
+        {
+            return this.Price * 2;
         }
 
         /// <summary>Checks for interaction with the object.</summary>
@@ -170,18 +263,6 @@ namespace Revitalize.Framework.Objects
             return this.clicked(who);
         }
 
-        public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
-        {
-            CustomObjectData data = CustomObjectData.collection[additionalSaveData["id"]];
-            BasicItemInformation info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
-            return new CustomObject(data, info, (replacement as Chest).TileLocation);
-        }
-        public override Dictionary<string, string> getAdditionalSaveData()
-        {
-            Dictionary<string, string> serializedInfo = new Dictionary<string, string>();
-            serializedInfo.Add("ItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
-            return serializedInfo;
-        }
 
         /// <summary>What happens when the player right clicks the object.</summary>
         public virtual bool rightClicked(Farmer who)
@@ -332,6 +413,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
+            this.updateInfo();
             if (x <= -1)
             {
                 spriteBatch.Draw(this.info.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.info.drawPosition), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
@@ -373,6 +455,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Draw the game object at a non-tile spot. Aka like debris.</summary>
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1f)
         {
+            this.updateInfo();
             /*
             if (Game1.eventUp && Game1.CurrentEvent.isTileWalkedOn(xNonTile / 64, yNonTile / 64))
                 return;
@@ -395,6 +478,7 @@ namespace Revitalize.Framework.Objects
             //The actual planter box being drawn.
             if (this.animationManager == null)
             {
+                this.syncObject.MarkDirty();
                 if (this.animationManager.getExtendedTexture() == null)
                     ModCore.ModMonitor.Log("Tex Extended is null???");
 
@@ -427,6 +511,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn in a menu.</summary>
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {
+            this.updateInfo();
             if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
                 Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
             if (drawStackNumber && this.Quality > 0)
@@ -440,8 +525,11 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn when held by a player.</summary>
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, StardewValley.Farmer f)
         {
-
-            if (this.animationManager == null) Revitalize.ModCore.log("Animation Manager Null");
+            this.updateInfo();
+            if (this.animationManager == null)
+            {
+                Revitalize.ModCore.log("Animation Manager Null");
+            }
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
             if (f.ActiveObject.bigCraftable.Value)
             {
@@ -473,35 +561,8 @@ namespace Revitalize.Framework.Objects
 
         public void InitNetFields()
         {
-            if (Game1.IsMultiplayer == false && (Game1.IsClient == false || Game1.IsClient == false)) return;
-            this.initNetFields();
-            this.syncObject = new PySync(this);
-            this.NetFields.AddField(this.syncObject);
-            this.netItemInfo = new Netcode.NetString(this.ItemInfo);
-            this.NetFields.AddField(this.netItemInfo);
         }
 
-        /// <summary>
-        /// Gets all of the data necessary for syncing.
-        /// </summary>
-        /// <returns></returns>
-        public override Dictionary<string, string> getSyncData()
-        {
-            Dictionary<string, string> syncData = base.getSyncData();
-            syncData.Add("BasicItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
-            return syncData;
-        }
-
-        /// <summary>
-        /// Syncs all of the info to all players.
-        /// </summary>
-        /// <param name="syncData"></param>
-        public override void sync(Dictionary<string, string> syncData)
-        {
-            //Revitalize.ModCore.log("SYNC OBJECT DATA!");
-            base.sync(syncData);
-            this.info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(syncData["BasicItemInfo"]);
-        }
 
 
         public virtual void replaceAfterLoad()
@@ -523,5 +584,82 @@ namespace Revitalize.Framework.Objects
             //Load in a file that has all object names referenced here or something.
             return this.info.name;
         }
+
+        public void updateInfo()
+        {
+            if (this.info == null)
+            {
+                this.ItemInfo = this.text;
+                ModCore.log("Updated item info!");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(this.ItemInfo))
+            {
+                this.ItemInfo = this.text;
+            }
+            else
+            {
+                this.text = this.ItemInfo;
+            }
+        }
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //     PyTk Functions      //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~//
+        #region
+
+        /// <summary>
+        /// Rebuilds the data from saves.
+        /// </summary>
+        /// <param name="additionalSaveData"></param>
+        /// <param name="replacement"></param>
+        public override void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            CustomObjectData data = CustomObjectData.collection[additionalSaveData["id"]];
+            BasicItemInformation info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
+
+        }
+
+        /// <summary>
+        /// Prepares the data for saves.
+        /// </summary>
+        /// <returns></returns>
+        public override Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string, string> serializedInfo = new Dictionary<string, string>();
+            serializedInfo.Add("id", this.ItemInfo);
+            serializedInfo.Add("ItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
+            return serializedInfo;
+        }
+
+        /// <summary>
+        /// Gets all of the data necessary for syncing.
+        /// </summary>
+        /// <returns></returns>
+        public override Dictionary<string, string> getSyncData()
+        {
+            Dictionary<string, string> syncData = new Dictionary<string, string>();
+            //syncData.Add("ID", this.ItemInfo);
+            //syncData.Add("BasicItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
+            syncData.Add("Greeting:", "Hello from: " + Game1.player.Name);
+            ModCore.log("Send off SYNC DATA!");
+            return syncData;
+        }
+
+        /// <summary>
+        /// Syncs all of the info to all players.
+        /// </summary>
+        /// <param name="syncData"></param>
+        public override void sync(Dictionary<string, string> syncData)
+        {
+            //Revitalize.ModCore.log("SYNC OBJECT DATA!");
+
+            //this.info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(syncData["BasicItemInfo"]);
+            //this.ItemInfo = syncData["ID"];
+            string greeting = syncData["Greeting"];
+            ModCore.log(greeting);
+        }
+        #endregion
     }
 }
