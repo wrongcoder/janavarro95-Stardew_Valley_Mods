@@ -50,6 +50,11 @@ namespace Revitalize.Framework.Objects.Furniture
             this.Price = Info.price;
         }
 
+        public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
+        {
+            base.updateWhenCurrentLocation(time, environment);
+        }
+
         /// <summary>
         /// Forcefully clears the held object without much fuss.
         /// </summary>
@@ -112,8 +117,12 @@ namespace Revitalize.Framework.Objects.Furniture
             
         }
 
-        
 
+        public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
+        {
+            this.updateInfo();
+            return base.placementAction(location, x, y, who);
+        }
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
             return false; //this.pickUpItem()==PickUpState.DoNothing;
@@ -235,7 +244,10 @@ namespace Revitalize.Framework.Objects.Furniture
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string, string> saveData = base.getAdditionalSaveData();
-            Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
+            if (this.containerObject.childrenGuids.ContainsKey(this.offsetKey))
+            {
+                Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
+            }
             this.containerObject.getAdditionalSaveData();
             return saveData;
 
@@ -251,7 +263,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 y *= -1;
             }
             */
-
+            this.updateInfo();
             if (this.info == null)
             {
                 Revitalize.ModCore.log("info is null");
@@ -302,5 +314,22 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
+        public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
+        {
+            this.updateInfo();
+            base.draw(spriteBatch, xNonTile, yNonTile, layerDepth, alpha);
+        }
+
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
+        {
+            this.updateInfo();
+            base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
+        }
+
+        public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
+        {
+            this.updateInfo();
+            base.drawWhenHeld(spriteBatch, objectPosition, f);
+        }
     }
 }

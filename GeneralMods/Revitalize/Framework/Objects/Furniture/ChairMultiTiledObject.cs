@@ -143,6 +143,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 if (!this.isPlaceable())

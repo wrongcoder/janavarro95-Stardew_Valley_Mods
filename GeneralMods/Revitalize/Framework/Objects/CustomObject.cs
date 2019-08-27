@@ -121,15 +121,21 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
+                //ModCore.log("Location Name is: " + this.info.locationName);
                 if (this._location == null)
                 {
                     this._location = Game1.getLocationFromName(this.info.locationName);
                     return this._location;
                 }
+                else
+                {
+                    return Game1.getLocationFromName(this.info.locationName);
+                }
                 return this._location;
             }
             set
             {
+
                 this._location = value;
                 if (this._location == null) this.info.locationName = "";
                 else
@@ -168,10 +174,12 @@ namespace Revitalize.Framework.Objects
                 this.guid = Guid.Parse(guidString);
                 if (ModCore.CustomObjects.ContainsKey(this.guid))
                 {
+                    //ModCore.log("Update item with guid: " + this.guid);
                     ModCore.CustomObjects[this.guid] = this;
                 }
                 else
                 {
+                    //ModCore.log("Add in new guid: " + this.guid);
                     ModCore.CustomObjects.Add(this.guid,this);
                 }
 
@@ -179,7 +187,7 @@ namespace Revitalize.Framework.Objects
                 {
                     if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
                     {
-                        ModCore.CustomObjects.Remove(oldGuid);
+                        //ModCore.CustomObjects.Remove(oldGuid);
                     }
                 }
             }

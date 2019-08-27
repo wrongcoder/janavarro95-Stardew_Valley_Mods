@@ -24,6 +24,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 {
                     new Framework.Utilities.Serialization.Converters.RectangleConverter(),
                     new Framework.Utilities.Serialization.Converters.Texture2DConverter(),
+                    //new NetFieldConverter()
                 },
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -35,7 +36,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             string convertedString = JsonConvert.SerializeObject((Item)value, this.settings);
-            DefaultContractResolver resolver = serializer.ContractResolver as DefaultContractResolver;
+            DefaultContractResolver resolver = serializer.ContractResolver as ContractResolvers.NetFieldContract;
             writer.WriteStartObject();
             writer.WritePropertyName("Type");
             serializer.Serialize(writer, value.GetType().FullName.ToString());

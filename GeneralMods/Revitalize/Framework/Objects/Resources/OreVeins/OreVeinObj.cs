@@ -167,7 +167,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             }
         }
 
-        public override void pickUp()
+        public override void pickUp(Farmer who)
         {
             return; //Don't pick up ore veins!
             bool canPickUp = this.removeAndAddToPlayersInventory();

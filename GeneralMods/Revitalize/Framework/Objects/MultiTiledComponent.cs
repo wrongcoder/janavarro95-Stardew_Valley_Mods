@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
+using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -12,6 +13,76 @@ namespace Revitalize.Framework.Objects
 {
     public class MultiTiledComponent : CustomObject,ISaveElement
     {
+
+        public override string ItemInfo
+        {
+            get
+            {
+                string info = Revitalize.ModCore.Serializer.ToJSONString(this.info);
+                string guidStr = this.guid.ToString();
+                string offsetKey = this.offsetKey != null ? ModCore.Serializer.ToJSONString(this.offsetKey) : "";
+                string container=this.containerObject!=null? this.containerObject.guid.ToString():"";
+                return  info+ "<" +guidStr+"<"+offsetKey+"<"+container;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+                string offsetVec = data[2];
+                string containerObject = data[3];
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+
+                if (string.IsNullOrEmpty(offsetVec)) return;
+                if (string.IsNullOrEmpty(containerObject)) return;
+                this.offsetKey = ModCore.Serializer.DeserializeFromJSONString<Vector2>(offsetVec);
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    //ModCore.log("Update item with guid: " + this.guid);
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    //ModCore.log("Add in new guid: " + this.guid);
+                    ModCore.CustomObjects.Add(this.guid, this);
+                }
+
+                if (this.containerObject == null)
+                {
+                    //ModCore.log(containerObject);
+                    Guid containerGuid = Guid.Parse(containerObject);
+                    if (ModCore.CustomObjects.ContainsKey(containerGuid))
+                    {
+                        this.containerObject = (MultiTiledObject)ModCore.CustomObjects[containerGuid];
+                        this.containerObject.removeComponent(this.offsetKey);
+                        this.containerObject.addComponent(this.offsetKey, this);
+                        //ModCore.log("Set container object from existing object!");
+                    }
+                    else
+                    {
+                        //ModCore.log("Container hasn't been synced???");
+                        MultiplayerUtilities.RequestGuidObject(containerGuid);
+                        MultiplayerUtilities.RequestGuidObject_Tile(this.guid);
+                    }
+                }
+                else
+                {
+                    this.containerObject.updateInfo();
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        //ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
+            }
+        }
+
         public MultiTiledObject containerObject;
 
         public Vector2 offsetKey;
@@ -29,6 +100,10 @@ namespace Revitalize.Framework.Objects
             this.containerObject = obj;
         }
 
+        public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
+        {
+            base.updateWhenCurrentLocation(time, environment);
+        }
         public override bool isPassable()
         {
             return this.info.ignoreBoundingBox || Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this.containerObject;
@@ -43,7 +118,7 @@ namespace Revitalize.Framework.Objects
         public override bool clicked(Farmer who)
         {
             //ModCore.log("Clicked a multiTiledComponent!");
-            this.containerObject.pickUp();
+            this.containerObject.pickUp(who);
             return true;
             //return base.clicked(who);
         }
@@ -82,6 +157,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>Places an object down.</summary>
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
+            this.updateInfo();
             this.updateDrawPosition(x, y);
             this.location = location;
 
@@ -110,6 +186,7 @@ namespace Revitalize.Framework.Objects
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {
+            this.updateInfo();
             if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
                 Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
             if (drawStackNumber && this.Quality > 0)
@@ -188,7 +265,12 @@ namespace Revitalize.Framework.Objects
 
             saveData.Add("ParentGUID", this.containerObject.guid.ToString());
             saveData.Add("GUID", this.guid.ToString());
-            Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(),this);
+
+
+            if (this.containerObject.childrenGuids.ContainsKey(this.offsetKey))
+            {
+                Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
+            }
             this.containerObject.getAdditionalSaveData();
             return saveData;
 
@@ -210,6 +292,7 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
+            this.updateInfo();
             if (this.info.ignoreBoundingBox == true)
             {
                 x *= -1;
@@ -265,7 +348,23 @@ namespace Revitalize.Framework.Objects
             
         }
 
+        public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
+        {
+            base.drawWhenHeld(spriteBatch, objectPosition, f);
+        }
 
+        public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
+        {
+            base.draw(spriteBatch, xNonTile, yNonTile, layerDepth, alpha);
+        }
 
+        public override void updateInfo()
+        {
+            if (this.containerObject != null)
+            {
+                this.containerObject.updateInfo();
+            }
+            base.updateInfo();
+        }
     }
 }

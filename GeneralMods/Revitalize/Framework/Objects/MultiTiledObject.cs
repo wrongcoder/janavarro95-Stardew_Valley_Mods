@@ -14,6 +14,44 @@ namespace Revitalize.Framework.Objects
     public class MultiTiledObject : CustomObject
     {
         [JsonIgnore]
+        public override string ItemInfo
+        {
+            get
+            {
+                string infoStr = Revitalize.ModCore.Serializer.ToJSONString(this.info);
+                string guidStr = this.guid.ToString();
+                return  infoStr+ "<" + guidStr;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    ModCore.CustomObjects.Add(this.guid, this);
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        //ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
+            }
+        }
+
+        [JsonIgnore]
         public Dictionary<Vector2, StardewValley.Object> objects;
 
         public Dictionary<Vector2, Guid> childrenGuids;
@@ -104,6 +142,7 @@ namespace Revitalize.Framework.Objects
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 (pair.Value as MultiTiledComponent).draw(spriteBatch, x + ((int)pair.Key.X), y + ((int)pair.Key.Y), alpha);
@@ -112,6 +151,7 @@ namespace Revitalize.Framework.Objects
 
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 pair.Value.draw(spriteBatch, xNonTile + (int)pair.Key.X * Game1.tileSize, yNonTile + (int)pair.Key.Y * Game1.tileSize, layerDepth, alpha);
@@ -122,6 +162,7 @@ namespace Revitalize.Framework.Objects
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
                 pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
@@ -129,6 +170,7 @@ namespace Revitalize.Framework.Objects
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
                 pair.Value.drawWhenHeld(spriteBatch, objectPosition + (pair.Key * Game1.tileSize), f);
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
@@ -137,6 +179,7 @@ namespace Revitalize.Framework.Objects
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 if (!this.isPlaceable())
@@ -172,7 +215,7 @@ namespace Revitalize.Framework.Objects
 
 
 
-        public virtual void pickUp()
+        public virtual void pickUp(Farmer who)
         {
             bool canPickUp = this.removeAndAddToPlayersInventory();
             if (canPickUp)
@@ -187,7 +230,7 @@ namespace Revitalize.Framework.Objects
                             ModCore.log("Got a light???");
                         }
                     }
-                    (pair.Value as MultiTiledComponent).removeFromLocation((pair.Value as MultiTiledComponent).location, pair.Key);
+                    (pair.Value as MultiTiledComponent).removeFromLocation(who.currentLocation, pair.Key);
 
                 }
                 this.location = null;
@@ -209,6 +252,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 /*
@@ -242,7 +286,7 @@ namespace Revitalize.Framework.Objects
         {
             bool cleanUp = this.clicked(who);
             if (cleanUp)
-                this.pickUp();
+                this.pickUp(who);
             return cleanUp;
         }
 
@@ -370,6 +414,30 @@ namespace Revitalize.Framework.Objects
         public override int maximumStackSize()
         {
             return 1;
+        }
+
+        public override void updateInfo()
+        {
+            if (this.info == null)
+            {
+                this.ItemInfo = this.text;
+                ModCore.log("Updated item info for container!");
+                return;
+            }
+
+            this.ItemInfo = this.text;
+            this.text = this.ItemInfo;
+
+            if (this.objects == null)
+            {
+                return;
+            }
+            /*
+            foreach(CustomObject c in this.objects.Values)
+            {
+                c.updateInfo();
+            }
+            */
         }
 
     }

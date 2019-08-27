@@ -231,6 +231,7 @@ namespace Revitalize
             ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
+            ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
             CustomObjects = new Dictionary<Guid, CustomObject>();
 
             //Adds in recipes to the mod.
@@ -398,7 +399,7 @@ namespace Revitalize
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
             //Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-            //Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
             //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));

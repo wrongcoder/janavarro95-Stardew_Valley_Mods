@@ -155,7 +155,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
         }
 
-        public override void pickUp()
+        public override void pickUp(Farmer who)
         {
 
             bool canPickUp = this.removeAndAddToPlayersInventory();
@@ -164,7 +164,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
                 {
                     (pair.Value as TableTileComponent).clearHeldObject();
-                    (pair.Value as TableTileComponent).removeFromLocation((pair.Value as TableTileComponent).location, pair.Key);
+                    (pair.Value as TableTileComponent).removeFromLocation(who.currentLocation, pair.Key);
                 }
                 this.location = null;
             }
