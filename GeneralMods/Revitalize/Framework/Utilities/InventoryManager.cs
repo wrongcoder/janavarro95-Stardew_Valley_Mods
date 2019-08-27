@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using StardewValley;
 
 namespace Revitalize.Framework.Utilities
@@ -25,6 +26,8 @@ namespace Revitalize.Framework.Utilities
         /// <summary>Checks to see if this core object actually has a valid inventory.</summary>
         public bool HasInventory => this.capacity > 0;
 
+        [JsonIgnore]
+        public bool requiresUpdate;
         public InventoryManager()
         {
             this.capacity = 0;
@@ -77,9 +80,11 @@ namespace Revitalize.Framework.Utilities
                     if (self != null && self.canStackWith(item))
                     {
                         self.addToStack(item.Stack);
+                        this.requiresUpdate = true;
                         return true;
                     }
                 }
+                this.requiresUpdate = true;
                 this.items.Add(item);
                 return true;
             }
@@ -108,6 +113,7 @@ namespace Revitalize.Framework.Utilities
             if (item.Stack == 1)
                 return item;
 
+            this.requiresUpdate = true;
             item.Stack = item.Stack - 1;
             return item.getOne();
         }
@@ -115,6 +121,7 @@ namespace Revitalize.Framework.Utilities
         /// <summary>Empty the inventory.</summary>
         public void clear()
         {
+            this.requiresUpdate = true;
             this.items.Clear();
         }
 
@@ -128,13 +135,17 @@ namespace Revitalize.Framework.Utilities
         public void resizeCapacity(int Amount)
         {
             if (this.capacity + Amount < this.MaxCapacity)
+            {
                 this.capacity += Amount;
+                this.requiresUpdate = true;
+            }
         }
 
         /// <summary>Sets the upper limity of the capacity size for the inventory.</summary>
         public void setMaxLimit(int amount)
         {
             this.MaxCapacity = amount;
+            this.requiresUpdate = true;
         }
 
         /// <summary>

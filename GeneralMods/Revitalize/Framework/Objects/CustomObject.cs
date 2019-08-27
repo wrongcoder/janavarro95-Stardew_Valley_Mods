@@ -629,8 +629,38 @@ namespace Revitalize.Framework.Objects
                 return;
             }
 
+            if (this.requiresUpdate())
+            {
+                this.ItemInfo = this.text;
+                this.text = this.ItemInfo;
+                this.info.cleanAfterUpdate();
+            }
+        }
+
+        public virtual void forceUpdate()
+        {
+            if (this.info == null)
+            {
+                this.ItemInfo = this.text;
+                ModCore.log("Updated item info!");
+                return;
+            }
             this.ItemInfo = this.text;
             this.text = this.ItemInfo;
+            this.info.cleanAfterUpdate();
+            this.info.forceUpdate();
+        }
+
+        public virtual bool requiresUpdate()
+        {
+            if (this.info.requiresSyncUpdate())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~//

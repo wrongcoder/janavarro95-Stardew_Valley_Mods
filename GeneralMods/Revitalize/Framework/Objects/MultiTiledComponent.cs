@@ -271,6 +271,8 @@ namespace Revitalize.Framework.Objects
             {
                 Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
             }
+
+
             this.containerObject.getAdditionalSaveData();
             return saveData;
 
@@ -360,11 +362,23 @@ namespace Revitalize.Framework.Objects
 
         public override void updateInfo()
         {
-            if (this.containerObject != null)
+            if (this.info == null || this.containerObject==null)
             {
-                this.containerObject.updateInfo();
+                this.ItemInfo = this.text;
+                ModCore.log("Updated item info!");
+                return;
             }
-            base.updateInfo();
+
+            if (this.requiresUpdate())
+            {
+                this.ItemInfo = this.text;
+                this.text = this.ItemInfo;
+                this.info.cleanAfterUpdate();
+            }
+        }
+        public override bool requiresUpdate()
+        {
+            return base.requiresUpdate();
         }
     }
 }

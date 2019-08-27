@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StardewValley;
 using StardustCore.UIUtilities;
 
@@ -22,6 +23,8 @@ namespace StardustCore.Animations
 
         public string animationDataString;
 
+        [JsonIgnore]
+        public bool requiresUpdate;
         public bool IsNull => this.defaultDrawFrame == null && this.objectTexture == null;
 
         /// <summary>
@@ -99,6 +102,7 @@ namespace StardustCore.Animations
                 if (this.currentAnimation.frameCountUntilNextAnimation == 0)
                     this.getNextAnimation();
                 this.currentAnimation.tickAnimationFrame();
+                this.requiresUpdate = true;
             }
             catch (Exception err)
             {
@@ -108,7 +112,7 @@ namespace StardustCore.Animations
         }
 
         /// <summary>Get the next animation frame in the list of animations.</summary>
-        public void getNextAnimation()
+        private void getNextAnimation()
         {
             this.currentAnimationListIndex++;
             if (this.currentAnimationListIndex == this.currentAnimationList.Count) //If the animation frame I'm tryting to get is 1 outside my list length, reset the list.
@@ -118,6 +122,7 @@ namespace StardustCore.Animations
                 }
                 else
                 {
+                    this.requiresUpdate = true;
                     this.playDefaultAnimation();
                     return;
                 }
@@ -125,6 +130,7 @@ namespace StardustCore.Animations
             //Get the next animation from the list and reset it's counter to the starting frame value.
             this.currentAnimation = this.currentAnimationList[this.currentAnimationListIndex];
             this.currentAnimation.startAnimation();
+            this.requiresUpdate = true;
         }
 
         /// <summary>Gets the animation from the dictionary of all animations available.</summary>
@@ -139,6 +145,7 @@ namespace StardustCore.Animations
                     this.currentAnimationList = dummyList;
                     this.currentAnimation = this.currentAnimationList[StartingFrame];
                     this.currentAnimationName = AnimationName;
+                    this.requiresUpdate = true;
                     return true;
                 }
                 else
@@ -179,6 +186,7 @@ namespace StardustCore.Animations
                     this.currentAnimationName = AnimationName;
                     this.currentAnimation.startAnimation();
                     this.loopAnimation = true;
+                    this.requiresUpdate = true;
                     return true;
                 }
                 else
@@ -219,6 +227,7 @@ namespace StardustCore.Animations
                     this.currentAnimationName = AnimationName;
                     this.currentAnimation.startAnimation();
                     this.loopAnimation = false;
+                    this.requiresUpdate = true;
                     return true;
                 }
                 else
@@ -245,6 +254,7 @@ namespace StardustCore.Animations
             this.currentAnimation = this.defaultDrawFrame;
             this.currentAnimationName = "";
             this.currentAnimationListIndex = 0;
+            this.requiresUpdate = true;
         }
 
         /// <summary>Sets the animation manager to an on state, meaning that this animation will update on the draw frame.</summary>

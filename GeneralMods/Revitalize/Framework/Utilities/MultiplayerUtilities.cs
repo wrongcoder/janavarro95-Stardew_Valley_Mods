@@ -28,14 +28,16 @@ namespace Revitalize.Framework.Utilities
             {
                 ModCore.log("Receieve GUID Request");
                 string objStr = e.ReadAs <string>();
-                var v=ModCore.Serializer.DeserializeFromJSONString<Item>(objStr);
+                CustomObject v=(CustomObject)ModCore.Serializer.DeserializeFromJSONString<Item>(objStr);
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
                 {
-                    ModCore.CustomObjects.Add((v as CustomObject).guid, (v as CustomObject));
+                    ModCore.CustomObjects.Add((v as CustomObject).guid, v);
+                    //v.forceUpdate();
                 }
                 else
                 {
-                    ModCore.CustomObjects[(v as CustomObject).guid] = (v as CustomObject);
+                    ModCore.CustomObjects[(v as CustomObject).guid] = v;
+                    //v.forceUpdate();
                 }
             }
 
@@ -49,14 +51,16 @@ namespace Revitalize.Framework.Utilities
             {
                 ModCore.log("Receieve GUID Request FOR TILE");
                 string objStr = e.ReadAs<string>();
-                var v = ModCore.Serializer.DeserializeFromJSONString<Item>(objStr);
+                CustomObject v =(CustomObject)ModCore.Serializer.DeserializeFromJSONString<Item>(objStr);
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
                 {
-                    ModCore.CustomObjects.Add((v as CustomObject).guid, (v as CustomObject));
+                    ModCore.CustomObjects.Add((v as CustomObject).guid, v);
+                    //v.forceUpdate();
                 }
                 else
                 {
-                    ModCore.CustomObjects[(v as CustomObject).guid] = (v as CustomObject);
+                    ModCore.CustomObjects[(v as CustomObject).guid] = v;
+                    //v.forceUpdate();
                 }
             }
         }
@@ -66,6 +70,7 @@ namespace Revitalize.Framework.Utilities
             if (ModCore.CustomObjects.ContainsKey(request))
             {
                 ModCore.log("Send guid request!");
+                //ModCore.CustomObjects[request].forceUpdate();
                 ModCore.ModHelper.Multiplayer.SendMessage<string>(ModCore.Serializer.ToJSONString(ModCore.CustomObjects[request]), ReceieveGUIDMessage, new string[] { Revitalize.ModCore.Manifest.UniqueID.ToString() });
             }
             else
@@ -79,6 +84,8 @@ namespace Revitalize.Framework.Utilities
             if (ModCore.CustomObjects.ContainsKey(request))
             {
                 ModCore.log("Send guid tile request!");
+                //(ModCore.CustomObjects[request] as MultiTiledComponent).forceUpdate();
+                //(ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.forceUpdate();
                 ModCore.ModHelper.Multiplayer.SendMessage<string>(ModCore.Serializer.ToJSONString( (ModCore.CustomObjects[request] as MultiTiledComponent).containerObject), ReceieveGUIDMessage_Tile , new string[] { Revitalize.ModCore.Manifest.UniqueID.ToString() });
             }
             else

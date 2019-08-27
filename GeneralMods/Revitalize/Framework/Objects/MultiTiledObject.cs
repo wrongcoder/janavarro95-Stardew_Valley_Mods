@@ -425,19 +425,12 @@ namespace Revitalize.Framework.Objects
                 return;
             }
 
-            this.ItemInfo = this.text;
-            this.text = this.ItemInfo;
-
-            if (this.objects == null)
+            if (this.requiresUpdate())
             {
-                return;
+                this.ItemInfo = this.text;
+                this.text = this.ItemInfo;
+                this.info.cleanAfterUpdate();
             }
-            /*
-            foreach(CustomObject c in this.objects.Values)
-            {
-                c.updateInfo();
-            }
-            */
         }
 
     }
