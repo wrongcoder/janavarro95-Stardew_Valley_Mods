@@ -94,6 +94,9 @@ namespace Revitalize.Framework.Objects
 
             set
             {
+                if (this.netName == null) return;
+                if (this.netName.Value == null) return;
+
                 if (this.netName.Value.Split('>') is string[] split && split.Length > 1)
                     this.netName.Value = value + ">" + split[1];
                 else
@@ -146,16 +149,39 @@ namespace Revitalize.Framework.Objects
         [JsonIgnore]
         public Texture2D displayTexture => this.animationManager.getTexture();
 
-        public string ItemInfo
+        [JsonIgnore]
+        public virtual string ItemInfo
         {
             get
             {
-                return Revitalize.ModCore.Serializer.ToJSONString(this.info);
+                return Revitalize.ModCore.Serializer.ToJSONString(this.info)+"<"+this.guid;
             }
             set
             {
                 if (string.IsNullOrEmpty(value)) return;
-                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(value, typeof(BasicItemInformation));
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    ModCore.CustomObjects.Add(this.guid,this);
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
             }
         }
 
@@ -171,8 +197,9 @@ namespace Revitalize.Framework.Objects
             : base(PyTKData, Vector2.Zero)
         {
             this.info = info;
-            this.initializeBasics();
             this.guid = Guid.NewGuid();
+            this.initializeBasics();
+            
             this.Stack = Stack;
 
         }
@@ -182,8 +209,9 @@ namespace Revitalize.Framework.Objects
             : base(PyTKData, TileLocation)
         {
             this.info = info;
-            this.initializeBasics();
             this.guid = Guid.NewGuid();
+            this.initializeBasics();
+            
             this.Stack = Stack;
         }
 
@@ -204,8 +232,6 @@ namespace Revitalize.Framework.Objects
 
             this.bigCraftable.Value = false;
 
-            this.syncObject = new PySync(this);
-            this.syncObject.init();
             //this.initNetFields();
             this.InitNetFields();
             this.updateInfo();
@@ -586,7 +612,7 @@ namespace Revitalize.Framework.Objects
             return this.info.name;
         }
 
-        public void updateInfo()
+        public virtual void updateInfo()
         {
             if (this.info == null)
             {
@@ -598,6 +624,7 @@ namespace Revitalize.Framework.Objects
             this.ItemInfo = this.text;
             this.text = this.ItemInfo;
 
+            ModCore.log("this guid is: " + this.guid);
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~//
