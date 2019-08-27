@@ -623,8 +623,6 @@ namespace Revitalize.Framework.Objects
 
             this.ItemInfo = this.text;
             this.text = this.ItemInfo;
-
-            ModCore.log("this guid is: " + this.guid);
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~//
