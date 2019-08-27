@@ -20,7 +20,7 @@ namespace Revitalize.Framework.Objects
     public class CustomObject : PySObject
     {
 
-        public string text
+        public virtual string text
         {
             get
             {
@@ -154,6 +154,7 @@ namespace Revitalize.Framework.Objects
             }
             set
             {
+                if (string.IsNullOrEmpty(value)) return;
                 this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(value, typeof(BasicItemInformation));
             }
         }
@@ -208,7 +209,7 @@ namespace Revitalize.Framework.Objects
             //this.initNetFields();
             this.InitNetFields();
             this.updateInfo();
-            this.Price = info.price;
+            this.Price = this.info.price;
             //if (this.info.ignoreBoundingBox)
             //    this.boundingBox.Value = new Rectangle(int.MinValue, int.MinValue, 0, 0);
         }
@@ -594,14 +595,9 @@ namespace Revitalize.Framework.Objects
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.ItemInfo))
-            {
-                this.ItemInfo = this.text;
-            }
-            else
-            {
-                this.text = this.ItemInfo;
-            }
+            this.ItemInfo = this.text;
+            this.text = this.ItemInfo;
+
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~//
