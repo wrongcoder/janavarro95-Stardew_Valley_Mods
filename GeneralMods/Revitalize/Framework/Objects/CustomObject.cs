@@ -109,6 +109,13 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
+                
+                if (this.info == null)
+                {
+                    ModCore.log("Info was null when getting data.");
+                    this.updateInfo();
+                }
+                
                 return this.info.id;
             }
         }
@@ -675,8 +682,8 @@ namespace Revitalize.Framework.Objects
         /// <param name="replacement"></param>
         public override void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            CustomObjectData data = CustomObjectData.collection[additionalSaveData["id"]];
-            BasicItemInformation info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
+            //CustomObjectData data = CustomObjectData.collection[additionalSaveData["id"]];
+            //BasicItemInformation info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
 
         }
 
@@ -689,6 +696,7 @@ namespace Revitalize.Framework.Objects
             Dictionary<string, string> serializedInfo = new Dictionary<string, string>();
             serializedInfo.Add("id", this.ItemInfo);
             serializedInfo.Add("ItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
+            Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
             return serializedInfo;
         }
 

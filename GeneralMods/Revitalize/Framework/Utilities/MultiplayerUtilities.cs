@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Revitalize.Framework.Objects;
 using StardewValley;
 
@@ -14,6 +15,7 @@ namespace Revitalize.Framework.Utilities
         public static string RequestGUIDMessage_Tile = "Revitalize.RequestGUIDObject_Tile";
         public static string ReceieveGUIDMessage = "Revitalize.ReceieveGUIDObject";
         public static string ReceieveGUIDMessage_Tile = "Revitalize.ReceieveGUIDObject_Tile";
+        public static string RequestALLModObjects = "Revitalize.EndOfDayRequestAllObjects";
         public static void GetModMessage(object o, StardewModdingAPI.Events.ModMessageReceivedEventArgs e)
         {
             ModCore.log("Get a mod message: "+e.Type);
@@ -32,12 +34,12 @@ namespace Revitalize.Framework.Utilities
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
                 {
                     ModCore.CustomObjects.Add((v as CustomObject).guid, v);
-                    //v.forceUpdate();
+                    v.updateInfo();
                 }
                 else
                 {
                     ModCore.CustomObjects[(v as CustomObject).guid] = v;
-                    //v.forceUpdate();
+                    v.updateInfo();
                 }
             }
 
@@ -55,12 +57,22 @@ namespace Revitalize.Framework.Utilities
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
                 {
                     ModCore.CustomObjects.Add((v as CustomObject).guid, v);
-                    //v.forceUpdate();
+                    v.updateInfo();
                 }
                 else
                 {
                     ModCore.CustomObjects[(v as CustomObject).guid] = v;
-                    //v.forceUpdate();
+                    v.updateInfo();
+                }
+            }
+
+            if (e.Type.Equals(RequestALLModObjects))
+            {
+                List < KeyValuePair<Guid, CustomObject> > list = ModCore.CustomObjects.ToList();
+                foreach(var v in list)
+                {
+                    (v.Value).updateInfo();
+                    SendGuidObject(v.Key);
                 }
             }
         }
@@ -86,6 +98,7 @@ namespace Revitalize.Framework.Utilities
                 ModCore.log("Send guid tile request!");
                 //(ModCore.CustomObjects[request] as MultiTiledComponent).forceUpdate();
                 //(ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.forceUpdate();
+                (ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.updateInfo();
                 ModCore.ModHelper.Multiplayer.SendMessage<string>(ModCore.Serializer.ToJSONString( (ModCore.CustomObjects[request] as MultiTiledComponent).containerObject), ReceieveGUIDMessage_Tile , new string[] { Revitalize.ModCore.Manifest.UniqueID.ToString() });
             }
             else
@@ -102,6 +115,11 @@ namespace Revitalize.Framework.Utilities
         public static void RequestGuidObject_Tile(Guid request)
         {
             ModCore.ModHelper.Multiplayer.SendMessage<string>(request.ToString(), RequestGUIDMessage_Tile, new string[] { ModCore.Manifest.UniqueID.ToString() });
+        }
+
+        public static void RequestALLGuidObjects()
+        {
+            ModCore.ModHelper.Multiplayer.SendMessage<string>(RequestALLModObjects, RequestALLModObjects,new string[] { ModCore.Manifest.UniqueID.ToString() });
         }
 
     }

@@ -232,10 +232,27 @@ namespace Revitalize
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
+            ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
+            ModHelper.Events.GameLoop.Saving += this.GameLoop_Saving;
             CustomObjects = new Dictionary<Guid, CustomObject>();
 
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
+        }
+
+        private void GameLoop_Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
+        {
+            /*
+            foreach(var v in CustomObjects)
+            {
+                v.Value.updateInfo();
+            }
+            */
+        }
+
+        private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
+        {
+            MultiplayerUtilities.RequestALLGuidObjects();
         }
 
         /// <summary>
