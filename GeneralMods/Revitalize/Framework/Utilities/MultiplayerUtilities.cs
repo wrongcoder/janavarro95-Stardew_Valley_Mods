@@ -34,11 +34,13 @@ namespace Revitalize.Framework.Utilities
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
                 {
                     ModCore.CustomObjects.Add((v as CustomObject).guid, v);
+                    v.info.forceUpdate();
                     v.updateInfo();
                 }
                 else
                 {
                     ModCore.CustomObjects[(v as CustomObject).guid] = v;
+                    v.info.forceUpdate();
                     v.updateInfo();
                 }
             }
@@ -57,11 +59,13 @@ namespace Revitalize.Framework.Utilities
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
                 {
                     ModCore.CustomObjects.Add((v as CustomObject).guid, v);
+                    v.info.forceUpdate();
                     v.updateInfo();
                 }
                 else
                 {
                     ModCore.CustomObjects[(v as CustomObject).guid] = v;
+                    v.info.forceUpdate();
                     v.updateInfo();
                 }
             }
@@ -81,13 +85,16 @@ namespace Revitalize.Framework.Utilities
         {
             if (ModCore.CustomObjects.ContainsKey(request))
             {
-                //ModCore.log("Send guid request!");
+                //ModCore.log("Send guid request: "+request.ToString());
                 //ModCore.CustomObjects[request].forceUpdate();
+                ModCore.CustomObjects[request].info.forceUpdate();
+                ModCore.CustomObjects[request].updateInfo();
+
                 ModCore.ModHelper.Multiplayer.SendMessage<string>(ModCore.Serializer.ToJSONString(ModCore.CustomObjects[request]), ReceieveGUIDMessage, new string[] { Revitalize.ModCore.Manifest.UniqueID.ToString() });
             }
             else
             {
-                //ModCore.log("This mod doesn't have the guid object");
+                ModCore.log("This mod doesn't have the guid object");
             }
         }
 
@@ -98,7 +105,14 @@ namespace Revitalize.Framework.Utilities
                 //ModCore.log("Send guid tile request!");
                 //(ModCore.CustomObjects[request] as MultiTiledComponent).forceUpdate();
                 //(ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.forceUpdate();
-                (ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.updateInfo();
+                try
+                {
+                    (ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.updateInfo();
+                }
+                catch(Exception err)
+                {
+
+                }
                 ModCore.ModHelper.Multiplayer.SendMessage<string>(ModCore.Serializer.ToJSONString( (ModCore.CustomObjects[request] as MultiTiledComponent).containerObject), ReceieveGUIDMessage_Tile , new string[] { Revitalize.ModCore.Manifest.UniqueID.ToString() });
             }
             else

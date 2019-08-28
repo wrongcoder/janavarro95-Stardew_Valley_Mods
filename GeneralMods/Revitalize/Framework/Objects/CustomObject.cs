@@ -155,8 +155,16 @@ namespace Revitalize.Framework.Objects
 
         public Guid guid;
 
+        [JsonIgnore]
         /// <summary>The animation manager.</summary>
-        public AnimationManager animationManager => this.info.animationManager;
+        public AnimationManager animationManager
+        {
+            get
+            {
+                this.updateInfo();
+                return this.info.animationManager;
+            }
+        }
 
         /// <summary>The display texture for this object.</summary>
         [JsonIgnore]
@@ -167,7 +175,7 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
-                return Revitalize.ModCore.Serializer.ToJSONString(this.info)+"<"+this.guid;
+                return Revitalize.ModCore.Serializer.ToJSONString(this.info)+"<"+this.guid+"<"+ModCore.Serializer.ToJSONString(this.data);
             }
             set
             {
@@ -175,8 +183,10 @@ namespace Revitalize.Framework.Objects
                 string[] data = value.Split('<');
                 string infoString = data[0];
                 string guidString = data[1];
+                string pytkData = data[2];
 
                 this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+                this.data = ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pytkData);
                 Guid oldGuid = this.guid;
                 this.guid = Guid.Parse(guidString);
                 if (ModCore.CustomObjects.ContainsKey(this.guid))

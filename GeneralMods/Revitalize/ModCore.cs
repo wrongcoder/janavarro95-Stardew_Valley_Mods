@@ -208,6 +208,7 @@ namespace Revitalize
             this.initailizeComponents();
             Serializer = new Serializer();
             playerInfo = new PlayerInfo();
+            CustomObjects = new Dictionary<Guid, CustomObject>();
 
             //Loads in textures to be used by the mod.
             this.loadInTextures();
@@ -234,7 +235,7 @@ namespace Revitalize
             ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
             ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
             ModHelper.Events.GameLoop.Saving += this.GameLoop_Saving;
-            CustomObjects = new Dictionary<Guid, CustomObject>();
+            
 
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
@@ -433,6 +434,7 @@ namespace Revitalize
             //Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
             //Ore tin = ObjectManager.resources.getOre("Tin", 19);
             Game1.player.addItemToInventory(ObjectManager.GetItem("TinIngot", 1));
+            Game1.player.addItemToInventory(new StardewValley.Object(388, 100));
 
             //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 

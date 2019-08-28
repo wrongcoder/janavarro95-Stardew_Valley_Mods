@@ -20,9 +20,10 @@ namespace Revitalize.Framework.Objects
             {
                 string info = Revitalize.ModCore.Serializer.ToJSONString(this.info);
                 string guidStr = this.guid.ToString();
+                string pyTkData = ModCore.Serializer.ToJSONString(this.data);
                 string offsetKey = this.offsetKey != null ? ModCore.Serializer.ToJSONString(this.offsetKey) : "";
                 string container=this.containerObject!=null? this.containerObject.guid.ToString():"";
-                return  info+ "<" +guidStr+"<"+offsetKey+"<"+container;
+                return  info+ "<" +guidStr+"<"+pyTkData+"<"+offsetKey+"<"+container;
             }
             set
             {
@@ -30,10 +31,11 @@ namespace Revitalize.Framework.Objects
                 string[] data = value.Split('<');
                 string infoString = data[0];
                 string guidString = data[1];
-                string offsetVec = data[2];
-                string containerObject = data[3];
+                string pyTKData = data[2];
+                string offsetVec = data[3];
+                string containerObject = data[4];
                 this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
-
+                this.data = Revitalize.ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pyTKData);
                 if (string.IsNullOrEmpty(offsetVec)) return;
                 if (string.IsNullOrEmpty(containerObject)) return;
                 this.offsetKey = ModCore.Serializer.DeserializeFromJSONString<Vector2>(offsetVec);
@@ -350,16 +352,6 @@ namespace Revitalize.Framework.Objects
             
         }
 
-        public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
-        {
-            base.drawWhenHeld(spriteBatch, objectPosition, f);
-        }
-
-        public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
-        {
-            base.draw(spriteBatch, xNonTile, yNonTile, layerDepth, alpha);
-        }
-
         public override void updateInfo()
         {
             if (this.info == null || this.containerObject==null)
@@ -375,10 +367,6 @@ namespace Revitalize.Framework.Objects
                 this.text = this.ItemInfo;
                 this.info.cleanAfterUpdate();
             }
-        }
-        public override bool requiresUpdate()
-        {
-            return base.requiresUpdate();
         }
     }
 }

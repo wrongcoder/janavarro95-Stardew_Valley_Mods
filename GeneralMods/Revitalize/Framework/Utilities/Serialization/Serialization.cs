@@ -144,13 +144,20 @@ namespace Revitalize.Framework.Utilities
         public void restoreModObjects()
         {
             //Replace all items in the world.
+            List<CustomObject> objsToRestore = new List<CustomObject>();
             foreach (var v in ModCore.ObjectGroups)
             {
                 foreach (var obj in v.Value.objects.Values)
                 {
-                    (obj as CustomObject).replaceAfterLoad();
+                    //(obj as CustomObject).replaceAfterLoad();
+                    objsToRestore.Add(obj as CustomObject);
                 }
             }
+            foreach(CustomObject o in objsToRestore)
+            {
+                (o as CustomObject).replaceAfterLoad();
+            }
+
             //Replace all held items or items in inventories.
             foreach (GameLocation loc in LocationUtilities.GetAllLocations())
             {
