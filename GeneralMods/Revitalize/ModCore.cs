@@ -103,6 +103,15 @@ namespace Revitalize
             -juice???
             -lava?
 
+        -Dyes!
+            -Dye custom objects certain colors!
+            -Rainbow Dye -(set a custom object to any color)
+            -red, green, blue, yellow, pink, etc
+            -Make dye from flowers/coal/algee (black), etc
+        Dye Machine
+            -takes custom object and dye
+            -dyes the object
+            -can use water to wash off dye.
 
         Menus:
     //  -Crafting Menu
