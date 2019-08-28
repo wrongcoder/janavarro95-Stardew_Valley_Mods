@@ -18,17 +18,17 @@ namespace Revitalize.Framework.Utilities
         public static string RequestALLModObjects = "Revitalize.EndOfDayRequestAllObjects";
         public static void GetModMessage(object o, StardewModdingAPI.Events.ModMessageReceivedEventArgs e)
         {
-            ModCore.log("Get a mod message: "+e.Type);
+            //ModCore.log("Get a mod message: "+e.Type);
             if (e.Type.Equals(RequestGUIDMessage))
             {
-                ModCore.log("Send GUID Request");
+                //ModCore.log("Send GUID Request");
                 Guid request = Guid.Parse(e.ReadAs<string>());
                 SendGuidObject(request);
             }
 
             if (e.Type.Equals(ReceieveGUIDMessage))
             {
-                ModCore.log("Receieve GUID Request");
+                //ModCore.log("Receieve GUID Request");
                 string objStr = e.ReadAs <string>();
                 CustomObject v=(CustomObject)ModCore.Serializer.DeserializeFromJSONString<Item>(objStr);
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
@@ -45,13 +45,13 @@ namespace Revitalize.Framework.Utilities
 
             if(e.Type.Equals(RequestGUIDMessage_Tile))
             {
-                ModCore.log("Send GUID Request FOR TILE");
+                //odCore.log("Send GUID Request FOR TILE");
                 Guid request = Guid.Parse(e.ReadAs<string>());
                 SendGuidObject_Tile(request);
             }
             if(e.Type.Equals(ReceieveGUIDMessage_Tile))
             {
-                ModCore.log("Receieve GUID Request FOR TILE");
+                //ModCore.log("Receieve GUID Request FOR TILE");
                 string objStr = e.ReadAs<string>();
                 CustomObject v =(CustomObject)ModCore.Serializer.DeserializeFromJSONString<Item>(objStr);
                 if (ModCore.CustomObjects.ContainsKey((v as CustomObject).guid) == false)
@@ -81,13 +81,13 @@ namespace Revitalize.Framework.Utilities
         {
             if (ModCore.CustomObjects.ContainsKey(request))
             {
-                ModCore.log("Send guid request!");
+                //ModCore.log("Send guid request!");
                 //ModCore.CustomObjects[request].forceUpdate();
                 ModCore.ModHelper.Multiplayer.SendMessage<string>(ModCore.Serializer.ToJSONString(ModCore.CustomObjects[request]), ReceieveGUIDMessage, new string[] { Revitalize.ModCore.Manifest.UniqueID.ToString() });
             }
             else
             {
-                ModCore.log("This mod doesn't have the guid object");
+                //ModCore.log("This mod doesn't have the guid object");
             }
         }
 
@@ -95,7 +95,7 @@ namespace Revitalize.Framework.Utilities
         {
             if (ModCore.CustomObjects.ContainsKey(request))
             {
-                ModCore.log("Send guid tile request!");
+                //ModCore.log("Send guid tile request!");
                 //(ModCore.CustomObjects[request] as MultiTiledComponent).forceUpdate();
                 //(ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.forceUpdate();
                 (ModCore.CustomObjects[request] as MultiTiledComponent).containerObject.updateInfo();
@@ -103,7 +103,7 @@ namespace Revitalize.Framework.Utilities
             }
             else
             {
-                ModCore.log("This mod doesn't have the guid tile");
+                //ModCore.log("This mod doesn't have the guid tile");
             }
         }
 

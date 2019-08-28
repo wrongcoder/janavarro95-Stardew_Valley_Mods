@@ -263,14 +263,14 @@ namespace Revitalize.Framework.Utilities
         {
             //ModCore.log("Found a custom object in a chest!");
             string jsonString = JsonName;
-            ModCore.log(JsonName);
+            //ModCore.log(JsonName);
             string dataSplit= jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[1];
             string backUpGUID = dataSplit.Split('|')[0];
             string[] guidArr = jsonString.Split(new string[] { "|" }, StringSplitOptions.None);
 
             foreach(string s in guidArr)
             {
-                ModCore.log(s);
+                //ModCore.log(s);
             }
 
             string guidName = guidArr[guidArr.Length - 1];
@@ -285,7 +285,7 @@ namespace Revitalize.Framework.Utilities
                 Guid d = Guid.Parse(backUpGUID);
                 guidName = backUpGUID;
             }
-            ModCore.log("THE GUID IS:"+ guidName);
+            //ModCore.log("THE GUID IS:"+ guidName);
             
             //ModCore.log(jsonString);
             string type = jsonString.Split('|')[2];

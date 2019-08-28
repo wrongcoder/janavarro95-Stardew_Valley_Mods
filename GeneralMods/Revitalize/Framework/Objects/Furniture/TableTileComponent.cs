@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles.Furniture;
 using Revitalize.Framework.Utilities.Serialization;
@@ -18,6 +19,7 @@ namespace Revitalize.Framework.Objects.Furniture
         public TableInformation furnitureInfo;
 
 
+        [JsonIgnore]
         public bool CanPlaceItemsHere
         {
             get

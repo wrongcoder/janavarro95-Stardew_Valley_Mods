@@ -112,7 +112,7 @@ namespace Revitalize.Framework.Objects
                 
                 if (this.info == null)
                 {
-                    ModCore.log("Info was null when getting data.");
+                    //ModCore.log("Info was null when getting data.");
                     this.updateInfo();
                 }
                 

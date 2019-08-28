@@ -127,7 +127,6 @@
     <Compile Include="Framework\Objects\Furniture\TableTileComponent.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ArcadeCabinetInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
-    <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ObjectGUIDInfo.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ResourceInformaton.cs" />

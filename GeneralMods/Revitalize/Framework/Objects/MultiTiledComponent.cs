@@ -365,7 +365,7 @@ namespace Revitalize.Framework.Objects
             if (this.info == null || this.containerObject==null)
             {
                 this.ItemInfo = this.text;
-                ModCore.log("Updated item info!");
+                //ModCore.log("Updated item info!");
                 return;
             }
 
