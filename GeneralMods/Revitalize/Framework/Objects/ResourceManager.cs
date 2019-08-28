@@ -289,6 +289,30 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        public OreResourceInformation getOreResourceInfo(string id)
+        {
+            if (this.oreVeins.ContainsKey(id))
+            {
+                return (OreResourceInformation)this.oreVeins[id].resourceInfo;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<ResourceInformaton> getExtraDropInformationFromOres(string id)
+        {
+            if (this.oreVeins.ContainsKey(id))
+            {
+                return (this.oreVeins[id].objects[Vector2.Zero] as OreVeinTile).extraDrops;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Checks to see if a resource can be spawned here.
         /// </summary>

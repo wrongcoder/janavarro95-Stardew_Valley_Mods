@@ -363,9 +363,10 @@ namespace Revitalize.Framework.Objects
 
             if (this.requiresUpdate())
             {
-                this.ItemInfo = this.text;
+                //this.ItemInfo = this.text;
                 this.text = this.ItemInfo;
                 this.info.cleanAfterUpdate();
+                MultiplayerUtilities.RequestUpdateSync(this.guid);
             }
         }
     }

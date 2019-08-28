@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles;
 using StardewValley;
@@ -13,6 +14,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 {
     public class OreVeinObj:MultiTiledObject
     {
+        [JsonIgnore]
         public ResourceInformaton resourceInfo
         {
             get

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles.Furniture;
+using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -20,6 +21,86 @@ namespace Revitalize.Framework.Objects.Furniture
     {
         public ChairInformation furnitureInfo;
 
+
+
+        public override string ItemInfo
+        {
+            get
+            {
+                string info = Revitalize.ModCore.Serializer.ToJSONString(this.info);
+                string guidStr = this.guid.ToString();
+                string pyTkData = ModCore.Serializer.ToJSONString(this.data);
+                string offsetKey = this.offsetKey != null ? ModCore.Serializer.ToJSONString(this.offsetKey) : "";
+                string container = this.containerObject != null ? this.containerObject.guid.ToString() : "";
+                string furnitureInfo = ModCore.Serializer.ToJSONString(this.furnitureInfo);
+                return info + "<" + guidStr + "<" + pyTkData + "<" + offsetKey + "<" + container + "<" + furnitureInfo;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+                string pyTKData = data[2];
+                string offsetVec = data[3];
+                string containerObject = data[4];
+                string furnitureInfo = data[5];
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+                this.data = Revitalize.ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pyTKData);
+                if (string.IsNullOrEmpty(offsetVec)) return;
+                if (string.IsNullOrEmpty(containerObject)) return;
+                this.offsetKey = ModCore.Serializer.DeserializeFromJSONString<Vector2>(offsetVec);
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    //ModCore.log("Update item with guid: " + this.guid);
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    //ModCore.log("Add in new guid: " + this.guid);
+                    ModCore.CustomObjects.Add(this.guid, this);
+                }
+
+                if (this.containerObject == null)
+                {
+                    //ModCore.log(containerObject);
+                    Guid containerGuid = Guid.Parse(containerObject);
+                    if (ModCore.CustomObjects.ContainsKey(containerGuid))
+                    {
+                        this.containerObject = (MultiTiledObject)ModCore.CustomObjects[containerGuid];
+                        this.containerObject.removeComponent(this.offsetKey);
+                        this.containerObject.addComponent(this.offsetKey, this);
+                        //ModCore.log("Set container object from existing object!");
+                    }
+                    else
+                    {
+                        //ModCore.log("Container hasn't been synced???");
+                        MultiplayerUtilities.RequestGuidObject(containerGuid);
+                        MultiplayerUtilities.RequestGuidObject_Tile(this.guid);
+                    }
+                }
+                else
+                {
+                    this.containerObject.updateInfo();
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        //ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(furnitureInfo) == false)
+                {
+                    this.furnitureInfo = ModCore.Serializer.DeserializeFromJSONString<ChairInformation>(furnitureInfo);
+                }
+
+            }
+        }
         /// <summary>
         /// Checks if the player can sit "on" this component.
         /// </summary>

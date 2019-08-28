@@ -128,7 +128,6 @@
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ArcadeCabinetInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
-    <Compile Include="Framework\Objects\InformationFiles\ObjectGUIDInfo.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ResourceInformaton.cs" />
     <Compile Include="Framework\Objects\Items\Resources\Ore.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />

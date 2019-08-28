@@ -8,6 +8,7 @@ using PyTK.CustomElementHandler;
 using StardustCore.Animations;
 using StardewValley;
 using StardewValley.Objects;
+using Revitalize.Framework.Utilities;
 
 namespace Revitalize.Framework.Objects
 {
@@ -109,13 +110,13 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
-                
+
                 if (this.info == null)
                 {
                     //ModCore.log("Info was null when getting data.");
                     this.updateInfo();
                 }
-                
+
                 return this.info.id;
             }
         }
@@ -175,7 +176,7 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
-                return Revitalize.ModCore.Serializer.ToJSONString(this.info)+"<"+this.guid+"<"+ModCore.Serializer.ToJSONString(this.data);
+                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid + "<" + ModCore.Serializer.ToJSONString(this.data);
             }
             set
             {
@@ -197,7 +198,7 @@ namespace Revitalize.Framework.Objects
                 else
                 {
                     //ModCore.log("Add in new guid: " + this.guid);
-                    ModCore.CustomObjects.Add(this.guid,this);
+                    ModCore.CustomObjects.Add(this.guid, this);
                 }
 
                 if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
@@ -224,7 +225,7 @@ namespace Revitalize.Framework.Objects
             this.info = info;
             this.guid = Guid.NewGuid();
             this.initializeBasics();
-            
+
             this.Stack = Stack;
 
         }
@@ -236,7 +237,7 @@ namespace Revitalize.Framework.Objects
             this.info = info;
             this.guid = Guid.NewGuid();
             this.initializeBasics();
-            
+
             this.Stack = Stack;
         }
 
@@ -648,24 +649,15 @@ namespace Revitalize.Framework.Objects
 
             if (this.requiresUpdate())
             {
-                this.ItemInfo = this.text;
                 this.text = this.ItemInfo;
                 this.info.cleanAfterUpdate();
+                MultiplayerUtilities.RequestUpdateSync(this.guid);
             }
         }
 
-        public virtual void forceUpdate()
+        public virtual void getUpdate()
         {
-            if (this.info == null)
-            {
-                this.ItemInfo = this.text;
-                ModCore.log("Updated item info!");
-                return;
-            }
             this.ItemInfo = this.text;
-            this.text = this.ItemInfo;
-            this.info.cleanAfterUpdate();
-            this.info.forceUpdate();
         }
 
         public virtual bool requiresUpdate()

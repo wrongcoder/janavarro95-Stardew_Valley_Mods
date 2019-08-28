@@ -9,6 +9,9 @@ using StardewValley;
 
 namespace Revitalize.Framework.Utilities
 {
+    /// <summary>
+    /// Deals with syncing objects in multiplayer.
+    /// </summary>
     public static class MultiplayerUtilities
     {
         public static string RequestGUIDMessage = "Revitalize.RequestGUIDObject";
@@ -16,6 +19,13 @@ namespace Revitalize.Framework.Utilities
         public static string ReceieveGUIDMessage = "Revitalize.ReceieveGUIDObject";
         public static string ReceieveGUIDMessage_Tile = "Revitalize.ReceieveGUIDObject_Tile";
         public static string RequestALLModObjects = "Revitalize.EndOfDayRequestAllObjects";
+        public static string RequestObjectUpdateSync = "Revitalize.RequestObjectUpdateSync";
+
+        /// <summary>
+        /// Handles receiving mod messages.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="e"></param>
         public static void GetModMessage(object o, StardewModdingAPI.Events.ModMessageReceivedEventArgs e)
         {
             //ModCore.log("Get a mod message: "+e.Type);
@@ -79,8 +89,22 @@ namespace Revitalize.Framework.Utilities
                     SendGuidObject(v.Key);
                 }
             }
+
+            if (e.Type.Equals(RequestObjectUpdateSync))
+            {
+                string guidString = e.ReadAs<string>();
+                Guid guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(guid))
+                {
+                    ModCore.CustomObjects[guid].getUpdate();
+                }
+            }
         }
 
+        /// <summary>
+        /// Sends a custom object to be synced.
+        /// </summary>
+        /// <param name="request"></param>
         public static void SendGuidObject(Guid request)
         {
             if (ModCore.CustomObjects.ContainsKey(request))
@@ -98,6 +122,10 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Sends the container object from the tile component object's guid.
+        /// </summary>
+        /// <param name="request"></param>
         public static void SendGuidObject_Tile(Guid request)
         {
             if (ModCore.CustomObjects.ContainsKey(request))
@@ -121,19 +149,39 @@ namespace Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Requests the object from the given guid.
+        /// </summary>
+        /// <param name="request"></param>
         public static void RequestGuidObject(Guid request)
         {
             ModCore.ModHelper.Multiplayer.SendMessage<string>(request.ToString(),RequestGUIDMessage, new string[] { ModCore.Manifest.UniqueID.ToString() });
         }
 
+        /// <summary>
+        /// Requests a container object from  tile component object's guid.
+        /// </summary>
+        /// <param name="request"></param>
         public static void RequestGuidObject_Tile(Guid request)
         {
             ModCore.ModHelper.Multiplayer.SendMessage<string>(request.ToString(), RequestGUIDMessage_Tile, new string[] { ModCore.Manifest.UniqueID.ToString() });
         }
 
+        /// <summary>
+        /// Send a request to all other revitalize mods to get all of the synced guid objects that isn't held by this mod.
+        /// </summary>
         public static void RequestALLGuidObjects()
         {
             ModCore.ModHelper.Multiplayer.SendMessage<string>(RequestALLModObjects, RequestALLModObjects,new string[] { ModCore.Manifest.UniqueID.ToString() });
+        }
+
+        /// <summary>
+        /// Sends a request to all other revitalize mods to update the given guid object.
+        /// </summary>
+        /// <param name="request"></param>
+        public static void RequestUpdateSync(Guid request)
+        {
+            ModCore.ModHelper.Multiplayer.SendMessage<string>(request.ToString(), RequestObjectUpdateSync, new string[] { ModCore.Manifest.UniqueID.ToString() });
         }
 
     }

@@ -25,6 +25,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
         }
 
+        [JsonIgnore]
         public LightManager lightManager
         {
             get
