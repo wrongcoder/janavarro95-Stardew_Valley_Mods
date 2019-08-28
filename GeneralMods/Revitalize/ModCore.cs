@@ -62,7 +62,16 @@ namespace Revitalize
                   -crank (costs stamina)
                   Storage:
                   -Batery Pack
-                  -
+             -Mini-greenhouse
+                   -takes fertilizer which can do things like help crops grow or increase prodcuction yield/quality.
+                   -takes crop/extended crop seeds
+                   -takes sprinklers
+                   -has grid (1x1, 2x2, 3x3, 4x4, 5x5) system for growing crops/placing sprinkers
+                   -sprinkers auto water crops
+                   -can auto harvest
+                   -hover over crop to see it's info
+                   -can be upgraded to grow crops from specific seasons with season stones (spring,summer, fall winter) (configurable if they are required)
+                   -Add in season stone recipe
 
     //      -Furnace
     //      -Seed Maker
