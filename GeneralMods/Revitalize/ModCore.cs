@@ -112,6 +112,8 @@ namespace Revitalize
             -takes custom object and dye
             -dyes the object
             -can use water to wash off dye.
+            -maybe dye stardew valley items???
+            -Dyed Wool (Artisan good)
 
         Menus:
     //  -Crafting Menu
