@@ -23,6 +23,7 @@ using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
 using Revitalize.Framework.Objects.Items.Resources;
 using Revitalize.Framework.Hacks;
+using Revitalize.Framework.Configs;
 
 namespace Revitalize
 {
@@ -107,7 +108,9 @@ namespace Revitalize
             -Dye custom objects certain colors!
             -Rainbow Dye -(set a custom object to any color)
             -red, green, blue, yellow, pink, etc
-            -Make dye from flowers/coal/algee (black), etc
+            -Make dye from flowers/coal/algee/minerals/gems (black), etc
+                -soapstone (washes off dye)
+                -Lunarite (white)
         Dye Machine
             -takes custom object and dye
             -dyes the object
@@ -131,7 +134,7 @@ namespace Revitalize
     //      -Spell books
     //      -Potions!
     //      -Magic Meter
-    //      -Connected chests much like Project EE2 from MC
+    //      -Connected chests (3 digit color code) much like Project EE2 from MC
     //
     //
     //  -Food
@@ -218,11 +221,13 @@ namespace Revitalize
 
         public static Dictionary<Guid, CustomObject> CustomObjects;
 
+        public static ConfigManager Configs;
         public override void Entry(IModHelper helper)
         {
             ModHelper = helper;
             ModMonitor = this.Monitor;
             Manifest = this.ModManifest;
+            Configs = new ConfigManager();
 
             this.createDirectories();
             this.initailizeComponents();
@@ -255,10 +260,19 @@ namespace Revitalize
             ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
             ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
             ModHelper.Events.GameLoop.Saving += this.GameLoop_Saving;
-            
+
 
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
+
+            /*
+            foreach(var v in Game1.objectInformation)
+            {
+                string name = v.Value.Split('/')[0];
+                ModCore.log(name + "="+v.Key+","+Environment.NewLine,false);
+            }
+            */
+
         }
 
         private void GameLoop_Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
@@ -273,7 +287,7 @@ namespace Revitalize
 
         private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
         {
-            MultiplayerUtilities.RequestALLGuidObjects();
+            //MultiplayerUtilities.RequestALLGuidObjects();
         }
 
         /// <summary>
@@ -437,7 +451,7 @@ namespace Revitalize
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
             //Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-            Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
+            //Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
             //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));
@@ -453,9 +467,21 @@ namespace Revitalize
 
             //Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
             //Ore tin = ObjectManager.resources.getOre("Tin", 19);
-            Game1.player.addItemToInventory(ObjectManager.GetItem("TinIngot", 1));
-            Game1.player.addItemToInventory(new StardewValley.Object(388, 100));
-
+            //Game1.player.addItemToInventory(ObjectManager.GetItem("TinIngot", 1));
+            //Game1.player.addItemToInventory(new StardewValley.Object(388, 100));
+            Game1.player.addItemsByMenuIfNecessary(new List<Item>()
+            {
+                new StardewValley.Object(Vector2.Zero, (int)Enums.SDVBigCraftable.Furnace),
+                new StardewValley.Object((int)Enums.SDVObject.Coal,10),
+                new StardewValley.Object((int)Enums.SDVObject.PrismaticShard,5),
+                new StardewValley.Object((int)Enums.SDVObject.Emerald,1),
+                new StardewValley.Object((int)Enums.SDVObject.Aquamarine,1),
+                new StardewValley.Object((int)Enums.SDVObject.Ruby,1),
+                new StardewValley.Object((int)Enums.SDVObject.Amethyst,1),
+                new StardewValley.Object((int)Enums.SDVObject.Topaz,1),
+                new StardewValley.Object((int)Enums.SDVObject.Jade,1),
+                new StardewValley.Object((int)Enums.SDVObject.Diamond,1),
+            });
             //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 
             //ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
@@ -480,9 +506,16 @@ namespace Revitalize
         ///Logs information to the console.
         /// </summary>
         /// <param name="message"></param>
-        public static void log(object message)
+        public static void log(object message, bool StackTrace = true)
         {
-            ModMonitor.Log(message.ToString() + " " + getFileDebugInfo());
+            if (StackTrace)
+            {
+                ModMonitor.Log(message.ToString() + " " + getFileDebugInfo());
+            }
+            else
+            {
+                ModMonitor.Log(message.ToString());
+            }
         }
 
         public static string getFileDebugInfo()

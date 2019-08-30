@@ -52,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Configs\ConfigManager.cs" />
+    <Compile Include="Framework\Configs\VanillaMachineRecipeConfig.cs" />
     <Compile Include="Framework\Crafting\Recipe.cs" />
     <Compile Include="Framework\Crafting\RecipeBook.cs" />
     <Compile Include="Framework\Crafting\StatCost.cs" />
@@ -197,6 +199,9 @@
     <Content Include="Content\Graphics\Items\Resources\Ore\LeadOre.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\PrismaticNugget.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\SilverIngot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -255,6 +260,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Resources\Ore\Lead.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Resources\Ore\Prismatic.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Resources\Ore\Silver.png">

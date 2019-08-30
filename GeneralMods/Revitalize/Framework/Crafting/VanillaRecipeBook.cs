@@ -35,7 +35,7 @@ namespace Revitalize.Framework.Crafting
             VanillaRecipe furnace_tinOre = new VanillaRecipe(new Dictionary<Item, int>()
             {
                 {ModCore.ObjectManager.resources.getOre("Tin"),5 },
-                {new StardewValley.Object(382,1),1}
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
             }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("TinIngot"), 1), TimeUtilities.GetMinutesFromTime(0,0,50), new StatCost(), false);
 
             this.recipesByObjectName["Furnace"].Add("Tin Ore", furnace_tinOre);
@@ -43,7 +43,7 @@ namespace Revitalize.Framework.Crafting
             VanillaRecipe furnace_bauxiteOre = new VanillaRecipe(new Dictionary<Item, int>()
             {
                 {ModCore.ObjectManager.resources.getOre("Bauxite"),5 },
-                {new StardewValley.Object(382,1),1}
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
             }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("AluminumIngot"), 1), TimeUtilities.GetMinutesFromTime(0,1,30), new StatCost(), false);
 
             this.recipesByObjectName["Furnace"].Add("Bauxite Ore", furnace_bauxiteOre);
@@ -51,7 +51,7 @@ namespace Revitalize.Framework.Crafting
             VanillaRecipe furnace_leadOre = new VanillaRecipe(new Dictionary<Item, int>()
             {
                 {ModCore.ObjectManager.resources.getOre("Lead"),5 },
-                {new StardewValley.Object(382,1),1}
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
             }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("LeadIngot"), 1), TimeUtilities.GetMinutesFromTime(0,2,0), new StatCost(), false);
 
             this.recipesByObjectName["Furnace"].Add("Lead Ore", furnace_leadOre);
@@ -59,7 +59,7 @@ namespace Revitalize.Framework.Crafting
             VanillaRecipe furnace_silverOre = new VanillaRecipe(new Dictionary<Item, int>()
             {
                 {ModCore.ObjectManager.resources.getOre("Silver"),5 },
-                {new StardewValley.Object(382,1),1}
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
             }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("SilverIngot"), 1), TimeUtilities.GetMinutesFromTime(0,3,0), new StatCost(), false);
 
             this.recipesByObjectName["Furnace"].Add("Silver Ore", furnace_silverOre);
@@ -67,10 +67,64 @@ namespace Revitalize.Framework.Crafting
             VanillaRecipe furnace_titaniumOre = new VanillaRecipe(new Dictionary<Item, int>()
             {
                 {ModCore.ObjectManager.resources.getOre("Titanium"),5 },
-                {new StardewValley.Object(382,1),1}
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
             }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("TitaniumIngot"), 1), TimeUtilities.GetMinutesFromTime(0,4,0), new StatCost(), false);
 
             this.recipesByObjectName["Furnace"].Add("Titanium Ore", furnace_titaniumOre);
+
+            VanillaRecipe furnace_prismaticNugget = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {ModCore.ObjectManager.resources.getOre("PrismaticNugget"),7 },
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
+            }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard,1), 1), TimeUtilities.GetMinutesFromTime(0, 7, 0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Prismatic Nugget", furnace_prismaticNugget);
+
+            if (ModCore.Configs.vanillaMachineConfig.ExpensiveGemstoneToPrismaticFurnaceRecipe)
+            {
+                VanillaRecipe furnace_gemsToPrismaticNugget = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {new StardewValley.Object((int)Enums.SDVObject.Emerald,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Aquamarine,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Ruby,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Amethyst,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Topaz,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Jade,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Diamond,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.resources.getOre("PrismaticNugget"), 1), TimeUtilities.GetMinutesFromTime(7, 0, 0), new StatCost(), false);
+
+                this.recipesByObjectName["Furnace"].Add("Emerald", furnace_gemsToPrismaticNugget);
+                this.recipesByObjectName["Furnace"].Add("Aquamarine", furnace_gemsToPrismaticNugget);
+                this.recipesByObjectName["Furnace"].Add("Ruby", furnace_gemsToPrismaticNugget);
+                this.recipesByObjectName["Furnace"].Add("Amethyst", furnace_gemsToPrismaticNugget);
+                this.recipesByObjectName["Furnace"].Add("Topaz", furnace_gemsToPrismaticNugget);
+                this.recipesByObjectName["Furnace"].Add("Jade", furnace_gemsToPrismaticNugget);
+                this.recipesByObjectName["Furnace"].Add("Diamond", furnace_gemsToPrismaticNugget);
+            }
+            else
+            {
+                VanillaRecipe furnace_gemsToPrismaticShard = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {new StardewValley.Object((int)Enums.SDVObject.Emerald,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Aquamarine,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Ruby,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Amethyst,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Topaz,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Jade,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Diamond,1),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1}
+            }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard,1), 1), TimeUtilities.GetMinutesFromTime(7, 0, 0), new StatCost(), false);
+
+                this.recipesByObjectName["Furnace"].Add("Emerald", furnace_gemsToPrismaticShard);
+                this.recipesByObjectName["Furnace"].Add("Aquamarine", furnace_gemsToPrismaticShard);
+                this.recipesByObjectName["Furnace"].Add("Ruby", furnace_gemsToPrismaticShard);
+                this.recipesByObjectName["Furnace"].Add("Amethyst", furnace_gemsToPrismaticShard);
+                this.recipesByObjectName["Furnace"].Add("Topaz", furnace_gemsToPrismaticShard);
+                this.recipesByObjectName["Furnace"].Add("Jade", furnace_gemsToPrismaticShard);
+                this.recipesByObjectName["Furnace"].Add("Diamond", furnace_gemsToPrismaticShard);
+            }
+
         }
 
         /// <summary>

@@ -130,7 +130,7 @@ namespace Revitalize.Framework.Objects
         /// Serializes an example ore to eb
         /// </summary>
         private void serializeOreVeins() {
-            OreVeinObj tinOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Tin", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Tin"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Tin Ore Vein", "Omegasis.Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            OreVeinObj tinOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Tin", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Tin"), typeof(OreVeinObj), Color.White), new BasicItemInformation("Tin Ore Vein", "Omegasis.Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
             OreVeinTile tinOre_0_0= new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Tin", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Tin"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Tin Ore Vein", "Omegasis.Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
                 new InformationFiles.OreResourceInformation(this.getOre("Tin"), true, true, true, false, new List<IntRange>()
             {
@@ -150,7 +150,7 @@ namespace Revitalize.Framework.Objects
             ModCore.Serializer.SerializeContentFile("TinOre", tinOre_file, Path.Combine(this.oreResourceDataPath, "TinOre"));
 
             
-            OreVeinObj bauxiteOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Bauxite", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Bauxite Ore Vein", "Omegasis.Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            OreVeinObj bauxiteOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Bauxite", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), typeof(OreVeinObj), Color.White), new BasicItemInformation("Bauxite Ore Vein", "Omegasis.Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
             OreVeinTile bauxiteOre_0_0 = new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Bauxite", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Bauxite Ore Vein", "Omegasis.Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
                 new InformationFiles.OreResourceInformation(this.getOre("Bauxite"), true, true, true, false, new List<IntRange>()
             {
@@ -161,7 +161,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .70d, 0.16d, 0.20d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 4);
+            }, null, null, .70d, 0.16d, 0.20d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 5);
 
             OreFactoryInfo bauxiteOre_0_0_file = new OreFactoryInfo(bauxiteOre_0_0);
             OreFactoryInfo bauxiteOre_file = new OreFactoryInfo(bauxiteOre);
@@ -170,7 +170,7 @@ namespace Revitalize.Framework.Objects
             ModCore.Serializer.SerializeContentFile("BauxiteOre", bauxiteOre_file, Path.Combine(this.oreResourceDataPath, "BauxiteOre"));
 
             
-            OreVeinObj silverOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Silver", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Silver"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Silver Ore Vein", "Omegasis.Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            OreVeinObj silverOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Silver", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Silver"), typeof(OreVeinObj), Color.White), new BasicItemInformation("Silver Ore Vein", "Omegasis.Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
             OreVeinTile silverOre_0_0 = new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Silver", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Silver"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Silver Ore Vein", "Omegasis.Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
                 new InformationFiles.OreResourceInformation(this.getOre("Silver"), true, true, true, false, new List<IntRange>()
             {
@@ -181,7 +181,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .50d, 0.10d, 0.14d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 4);
+            }, null, null, .50d, 0.10d, 0.14d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 6);
 
             OreFactoryInfo silverOre_0_0_file = new OreFactoryInfo(silverOre_0_0);
             OreFactoryInfo silverOre_file = new OreFactoryInfo(silverOre);
@@ -189,7 +189,7 @@ namespace Revitalize.Framework.Objects
             ModCore.Serializer.SerializeContentFile("SilverOre_0_0", silverOre_0_0_file, Path.Combine(this.oreResourceDataPath, "SilverOre"));
             ModCore.Serializer.SerializeContentFile("SilverOre", silverOre_file, Path.Combine(this.oreResourceDataPath, "SilverOre"));
             
-            OreVeinObj leadOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Lead", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Lead"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Lead Ore Vein", "Omegasis.Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            OreVeinObj leadOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Lead", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Lead"), typeof(OreVeinObj), Color.White), new BasicItemInformation("Lead Ore Vein", "Omegasis.Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
             OreVeinTile leadOre_0_0 = new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Lead", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Lead"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Lead Ore Vein", "Omegasis.Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
                 new InformationFiles.OreResourceInformation(this.getOre("Lead"), true, true, true, false, new List<IntRange>()
             {
@@ -201,7 +201,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .60d, 0.13d, 0.17d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 4);
+            }, null, null, .60d, 0.13d, 0.17d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 7);
 
             OreFactoryInfo leadOre_0_0_file = new OreFactoryInfo(leadOre_0_0);
             OreFactoryInfo leadOre_file = new OreFactoryInfo(leadOre);
@@ -210,7 +210,7 @@ namespace Revitalize.Framework.Objects
             ModCore.Serializer.SerializeContentFile("LeadOre", leadOre_file, Path.Combine(this.oreResourceDataPath, "LeadOre"));
 
             
-            OreVeinObj titaniumOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Titanium", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Titanium Ore Vein", "Omegasis.Revitalize.Resources.Ore.Titanium", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            OreVeinObj titaniumOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Titanium", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), typeof(OreVeinObj), Color.White), new BasicItemInformation("Titanium Ore Vein", "Omegasis.Revitalize.Resources.Ore.Titanium", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
             OreVeinTile titaniumOre_0_0 = new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Titanium", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Titanium Ore Vein", "Omegasis.Revitalize.Resources.Ore.Titanium", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
                 new InformationFiles.OreResourceInformation(this.getOre("Titanium"), true, true, true, false, new List<IntRange>()
             {
@@ -222,15 +222,35 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .40d, 0.05d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 4);
+            }, null, null, .40d, 0.05d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 8);
 
             OreFactoryInfo titaniumOre_0_0_file = new OreFactoryInfo(titaniumOre_0_0);
             OreFactoryInfo titaniumOre_file = new OreFactoryInfo(titaniumOre);
 
             ModCore.Serializer.SerializeContentFile("TitaniumOre_0_0", titaniumOre_0_0_file, Path.Combine(this.oreResourceDataPath, "TitaniumOre"));
             ModCore.Serializer.SerializeContentFile("TitaniumOre", titaniumOre_file, Path.Combine(this.oreResourceDataPath, "TitaniumOre"));
-            
-         }
+
+
+            OreVeinObj prismaticOre = new OreVeinObj(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Prismatic", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), typeof(OreVeinObj), Color.White), new BasicItemInformation("Prismatic Ore Vein", "Omegasis.Revitalize.Resources.Ore.Prismatic", "A ore vein that contains rare prismatic nuggets!", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), new Animation(0, 0, 16, 16)), Color.White, false, null, null));
+            OreVeinTile prismaticOre_0_0 = new OreVeinTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Resources.Ore.Prismatic", TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), typeof(OreVeinTile), Color.White), new BasicItemInformation("Prismatic Ore Vein", "Omegasis.Revitalize.Resources.Ore.Prismatic", "A ore vein that is full of prismatic ore.", "Revitalize.Ore", Color.Black, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), new Animation(0, 0, 16, 16)), Color.White, false, null, null),
+                new InformationFiles.OreResourceInformation(this.getOre("PrismaticNugget"), true, true, true, false, new List<IntRange>()
+            {
+                new IntRange(110,120)
+            }, new List<IntRange>(), null, (i => i % 10 == 0), 7, 7, 1, 1, new IntRange(1, 1), new IntRange(1, 1), new IntRange(1, 5), new List<IntRange>()
+            {
+                new IntRange(1,9999)
+            }, new List<IntRange>()
+            {
+            }, null, null, .03d, 1d, 0.01d, 0.10, 1d, 1, 1, 1,1), new List<ResourceInformaton>(), 10);
+
+            OreFactoryInfo prismaticOre_0_0_file = new OreFactoryInfo(prismaticOre_0_0);
+            OreFactoryInfo prismaticOre_file = new OreFactoryInfo(prismaticOre);
+
+            ModCore.Serializer.SerializeContentFile("PrismaticOre_0_0", prismaticOre_0_0_file, Path.Combine(this.oreResourceDataPath, "PrismaticOre"));
+            ModCore.Serializer.SerializeContentFile("PrismaticOre", prismaticOre_file, Path.Combine(this.oreResourceDataPath, "PrismaticOre"));
+
+
+        }
 
         /// <summary>
         /// Loads in all of the ore items into the game.
@@ -252,6 +272,9 @@ namespace Revitalize.Framework.Objects
 
             Ore titaniumOre = new Ore(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Items.Resources.Ore.TitaniumOre", TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TitaniumOre"), typeof(Ore), Color.White, true), new BasicItemInformation("Titanium Ore", "Omegasis.Revitalize.Items.Resources.Ore.TitaniumOre", "Titanium ore that can be smelted into titanium ingots for further use.", "Ore", Color.Silver, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TitaniumOre"), new AnimationManager(), Color.White, true, null, null), 1);
             this.ores.Add("Titanium", titaniumOre);
+
+            Ore prismaticOre = new Ore(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Items.Resources.Ore.PrismaticNugget", TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "PrismaticNugget"), typeof(Ore), Color.White, true), new BasicItemInformation("Prismatic Nugget", "Omegasis.Revitalize.Items.Resources.Ore.PrismaticNugget", "Rare prismatic ore that can be smelted into a prismatic shard when seven are gathered.", "Ore", Color.Silver, -300, 0, false, 200, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "PrismaticNugget"), new AnimationManager(), Color.White, true, null, null), 1);
+            this.ores.Add("PrismaticNugget", prismaticOre);
 
             CustomObject tinIngot = new CustomObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Items.Resources.Ore.TinIngot", TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinIngot"), typeof(CustomObject), Color.White, true), new BasicItemInformation("Tin Ingot", "Omegasis.Revitalize.Items.Resources.Ore.TinIngot", "A tin ingot that can be used for crafting purposes.", "Metal", Color.Silver, -300, 0, false,75, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinIngot"), new AnimationManager(), Color.White, true, null, null), 1);
             ModCore.ObjectManager.AddItem("TinIngot", tinIngot);
@@ -511,7 +534,7 @@ namespace Revitalize.Framework.Objects
         {
             if (LocationUtilities.Farm_IsFarmHiltopFarm() == false)
             {
-                ModCore.log("Farm is not hiltop farm!");
+                //ModCore.log("Farm is not hiltop farm!");
                 return;
             }
             GameLocation farm = Game1.getFarm();
@@ -523,7 +546,7 @@ namespace Revitalize.Framework.Objects
                 if ((pair.Value.resourceInfo as OreResourceInformation).spawnsOnFarm)
                 {
                     spawnableOreVeins.Add(pair.Value);
-                    ModCore.log("Found an ore that spawns on the farm!");
+                    //ModCore.log("Found an ore that spawns on the farm!");
                 }
             }
             foreach (OreVeinObj ore in spawnableOreVeins)
@@ -534,7 +557,7 @@ namespace Revitalize.Framework.Objects
                     List<Vector2> openTiles = this.getFarmQuarryOpenTiles(ore);
                     if (openTiles.Count == 0)
                     {
-                        ModCore.log("No open farm tiles!");
+                        //ModCore.log("No open farm tiles!");
                     }
                     amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
                     for (int i = 0; i < amount; i++)
@@ -546,11 +569,11 @@ namespace Revitalize.Framework.Objects
                             i--; //If the tile didn't spawn due to some odd reason ensure that the amount is spawned.
                             openTiles.Remove(openTiles[position]);
                             //amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
-                            ModCore.log("Did not spawn ore in the farm quarry!");
+                            //ModCore.log("Did not spawn ore in the farm quarry!");
                         }
                         else
                         {
-                            ModCore.log("Spawned ore in the farm quarry!");
+                            //ModCore.log("Spawned ore in the farm quarry!");
                             openTiles.Remove(openTiles[position]); //Remove that tile from the list of open tiles.
                         }
                     }
