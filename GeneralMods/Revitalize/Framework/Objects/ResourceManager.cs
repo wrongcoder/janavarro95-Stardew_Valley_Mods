@@ -236,12 +236,12 @@ namespace Revitalize.Framework.Objects
                 new InformationFiles.OreResourceInformation(this.getOre("PrismaticNugget"), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(110,120)
-            }, new List<IntRange>(), null, (i => i % 10 == 0), 7, 7, 1, 1, new IntRange(1, 1), new IntRange(1, 1), new IntRange(1, 5), new List<IntRange>()
+            }, new List<IntRange>(), null, (i => i % 10 == 0), 1, 3, 1, 1, new IntRange(1, 1), new IntRange(1, 1), new IntRange(1, 5), new List<IntRange>()
             {
                 new IntRange(1,9999)
             }, new List<IntRange>()
             {
-            }, null, null, .03d, 1d, 0.01d, 0.10, 1d, 1, 1, 1,1), new List<ResourceInformaton>(), 10);
+            }, null, null, .05d, 0.01d, 0.01d, 0.10, 1d, 1, 1, 1,1), new List<ResourceInformaton>(), 10);
 
             OreFactoryInfo prismaticOre_0_0_file = new OreFactoryInfo(prismaticOre_0_0);
             OreFactoryInfo prismaticOre_file = new OreFactoryInfo(prismaticOre);
