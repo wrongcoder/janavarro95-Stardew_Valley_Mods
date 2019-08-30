@@ -30,6 +30,8 @@ namespace Vocalization
         public bool TVDialogueEnabled = true;
         public bool LetterDialogueEnabled = true;
 
+        public bool Developer_ScrapeOnlyEnglishDialogue=true;
+
         /// <summary>Validates</summary>
         public void verifyValidMode()
         {
