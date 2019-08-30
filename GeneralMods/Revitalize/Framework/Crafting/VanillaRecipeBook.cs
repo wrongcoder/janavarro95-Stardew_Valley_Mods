@@ -125,6 +125,41 @@ namespace Revitalize.Framework.Crafting
                 this.recipesByObjectName["Furnace"].Add("Diamond", furnace_gemsToPrismaticShard);
             }
 
+            VanillaRecipe furnace_steelIngot = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {new StardewValley.Object((int)Enums.SDVObject.IronBar,1),1 },
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,5),5}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("SteelIngot"), 1), TimeUtilities.GetMinutesFromTime(0, 12, 0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Iron Bar", furnace_steelIngot);
+
+            VanillaRecipe furnace_brassIngot = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1 },
+                {ModCore.ObjectManager.GetItem("AluminumIngot"),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,5),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("BrassIngot"), 1), TimeUtilities.GetMinutesFromTime(0, 6, 0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Aluminum Ingot", furnace_brassIngot);
+
+            VanillaRecipe furnace_bronzeIngot = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1 },
+                {ModCore.ObjectManager.GetItem("TinIngot"),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,5),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("BronzeIngot"), 1), TimeUtilities.GetMinutesFromTime(0, 8, 0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Tin Ingot", furnace_bronzeIngot);
+
+            VanillaRecipe furnace_electrumIngot = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {new StardewValley.Object((int)Enums.SDVObject.GoldBar,1),1 },
+                {ModCore.ObjectManager.GetItem("SilverIngot"),1},
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,5),1}
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.GetItem("ElectrumIngot"), 1), TimeUtilities.GetMinutesFromTime(0, 12, 0), new StatCost(), false);
+
+            this.recipesByObjectName["Furnace"].Add("Silver Ingot", furnace_electrumIngot);
+
         }
 
         /// <summary>

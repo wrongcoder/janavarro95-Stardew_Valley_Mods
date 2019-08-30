@@ -481,6 +481,7 @@ namespace Revitalize
                 new StardewValley.Object((int)Enums.SDVObject.Topaz,1),
                 new StardewValley.Object((int)Enums.SDVObject.Jade,1),
                 new StardewValley.Object((int)Enums.SDVObject.Diamond,1),
+                new StardewValley.Object((int)Enums.SDVObject.IronBar,1),
             });
             //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 
