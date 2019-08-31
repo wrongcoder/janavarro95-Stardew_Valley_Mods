@@ -446,6 +446,7 @@ namespace Revitalize
             */
             Serializer.afterLoad();
             ShopHacks.AddOreToClintsShop();
+            ObjectInteractionHacks.AfterLoad_RestoreTrackedMachines();
 
 
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));

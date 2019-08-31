@@ -16,9 +16,12 @@ namespace Revitalize.Framework.Configs
         /// </summary>
         public VanillaMachineRecipeConfig vanillaMachineConfig;
 
+        public Shops_BlacksmithConfig shops_blacksmithConfig;
+
         public ConfigManager()
         {
             this.vanillaMachineConfig = VanillaMachineRecipeConfig.InitializeConfig();
+            this.shops_blacksmithConfig = Shops_BlacksmithConfig.InitializeConfig();
         }
     }
 }

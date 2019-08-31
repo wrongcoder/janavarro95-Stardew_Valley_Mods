@@ -15,11 +15,18 @@ namespace Revitalize.Framework.Configs
         /// </summary>
         public bool ExpensiveGemstoneToPrismaticFurnaceRecipe;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public VanillaMachineRecipeConfig()
         {
             this.ExpensiveGemstoneToPrismaticFurnaceRecipe = false;
         }
 
+        /// <summary>
+        /// Initializes the config for vanilla machine recipes.
+        /// </summary>
+        /// <returns></returns>
         public static VanillaMachineRecipeConfig InitializeConfig()
         {
             if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "VanillaMachineRecipeConfig.json")))
