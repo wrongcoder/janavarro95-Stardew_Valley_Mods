@@ -470,6 +470,7 @@ namespace Revitalize
             //Ore tin = ObjectManager.resources.getOre("Tin", 19);
             //Game1.player.addItemToInventory(ObjectManager.GetItem("TinIngot", 1));
             //Game1.player.addItemToInventory(new StardewValley.Object(388, 100));
+            /*
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                 new StardewValley.Object(Vector2.Zero, (int)Enums.SDVBigCraftable.Furnace),
@@ -484,6 +485,7 @@ namespace Revitalize
                 new StardewValley.Object((int)Enums.SDVObject.Diamond,1),
                 new StardewValley.Object((int)Enums.SDVObject.IronBar,1),
             });
+            */
             //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
 
             //ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
