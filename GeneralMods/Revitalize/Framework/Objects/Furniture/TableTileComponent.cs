@@ -20,6 +20,7 @@ namespace Revitalize.Framework.Objects.Furniture
         public TableInformation furnitureInfo;
 
 
+        [JsonIgnore]
         public override string ItemInfo
         {
             get

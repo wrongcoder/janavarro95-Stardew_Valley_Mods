@@ -17,11 +17,13 @@ namespace Revitalize.Framework.Configs
         public VanillaMachineRecipeConfig vanillaMachineConfig;
 
         public Shops_BlacksmithConfig shops_blacksmithConfig;
+        public FurnitureConfig furnitureConfig;
 
         public ConfigManager()
         {
             this.vanillaMachineConfig = VanillaMachineRecipeConfig.InitializeConfig();
             this.shops_blacksmithConfig = Shops_BlacksmithConfig.InitializeConfig();
+            this.furnitureConfig = FurnitureConfig.InitializeConfig();
         }
     }
 }

@@ -299,13 +299,13 @@ namespace Revitalize.Framework.Objects
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
 
-            if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || !keyboardState.IsKeyDown(Keys.RightShift)))
+            if (mState.RightButton == ButtonState.Pressed && keyboardState.IsKeyDown(Keys.LeftShift)==false && keyboardState.IsKeyDown(Keys.RightShift)==false)
             {
                 //ModCore.log("Right clicked!");
                 return this.rightClicked(who);
             }
 
-            if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift)))
+            if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift)==true || keyboardState.IsKeyDown(Keys.RightShift)==true))
                 return this.shiftRightClicked(who);
 
             return base.checkForAction(who, justCheckingForActivity);

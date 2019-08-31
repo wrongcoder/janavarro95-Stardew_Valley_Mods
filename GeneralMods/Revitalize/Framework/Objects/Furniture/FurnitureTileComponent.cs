@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Objects.InformationFiles.Furniture;
@@ -13,6 +14,8 @@ namespace Revitalize.Framework.Objects.Furniture
     public class FurnitureTileComponent:MultiTiledComponent
     {
 
+        [JsonIgnore]
+        public int framesUntilNextRotation = 0;
 
         public FurnitureTileComponent():base()
         {

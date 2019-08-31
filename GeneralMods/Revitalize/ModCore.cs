@@ -450,7 +450,7 @@ namespace Revitalize
 
 
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
-            //Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+            Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             //Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));

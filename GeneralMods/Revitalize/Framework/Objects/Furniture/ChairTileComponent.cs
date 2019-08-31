@@ -21,8 +21,7 @@ namespace Revitalize.Framework.Objects.Furniture
     {
         public ChairInformation furnitureInfo;
 
-
-
+        [JsonIgnore]
         public override string ItemInfo
         {
             get
@@ -139,10 +138,17 @@ namespace Revitalize.Framework.Objects.Furniture
         /// <returns></returns>
         public override bool rightClicked(Farmer who)
         {
-            this.containerObject.rotate(); //Ensure that all of the chair pieces rotate at the same time.
-
-            this.checkForSpecialUpSittingAnimation();
-            return true;
+            if (this.framesUntilNextRotation <= 0)
+            {
+                this.containerObject.rotate(); //Ensure that all of the chair pieces rotate at the same time.
+                this.checkForSpecialUpSittingAnimation();
+                this.framesUntilNextRotation = ModCore.Configs.furnitureConfig.furnitureFrameRotationDelay;
+                return true;
+            }
+            else
+            {
+                return true;
+            }
             //return base.rightClicked(who);
         }
 
@@ -263,6 +269,10 @@ namespace Revitalize.Framework.Objects.Furniture
 
                 spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
                 // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
+                if (this.framesUntilNextRotation > 0)
+                this.framesUntilNextRotation--;
+                if (this.framesUntilNextRotation < 0) this.framesUntilNextRotation = 0;
+                
             }
 
             else
@@ -281,6 +291,9 @@ namespace Revitalize.Framework.Objects.Furniture
                     addedDepth += 1.0f;
                 }
                 this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+                if (this.framesUntilNextRotation > 0)
+                    this.framesUntilNextRotation--;
+                if (this.framesUntilNextRotation < 0) this.framesUntilNextRotation = 0;
                 try
                 {
                     this.animationManager.tickAnimation();

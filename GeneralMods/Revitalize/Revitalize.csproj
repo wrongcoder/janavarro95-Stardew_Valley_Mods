@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\Configs\ConfigManager.cs" />
+    <Compile Include="Framework\Configs\FurnitureConfig.cs" />
     <Compile Include="Framework\Configs\Shops_BlacksmithConfig.cs" />
     <Compile Include="Framework\Configs\VanillaMachineRecipeConfig.cs" />
     <Compile Include="Framework\Crafting\Recipe.cs" />
