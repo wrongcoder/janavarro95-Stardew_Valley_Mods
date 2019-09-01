@@ -24,17 +24,18 @@ using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
 using Revitalize.Framework.Objects.Items.Resources;
 using Revitalize.Framework.Hacks;
 using Revitalize.Framework.Configs;
+using StardewValley.Locations;
+using System.Linq;
 
 namespace Revitalize
 {
 
     //Bugs:
     //  -Chair tops cut off objects
-    // -load content MUST be enabled for the table to be placed?????? WTF
+    // -load content MUST be enabled for the table to be placed??????
     // TODO:
     /*  Add in crafting menu.
      *  Add in crafting table.
-     *  Find way to hack vanilla furnace for more recipes.
      *
      * 
     // -Make this mod able to load content packs for easier future modding
@@ -85,15 +86,17 @@ namespace Revitalize
     //      -Auto Preserves
     //      -Auto Keg
     //      -Auto Cask
-    //      -Calcinator (oil+stone)
+    //      -Calcinator (oil+stone: produces titanum?)
     //  -Materials
-    //      -Tin/Bronze/Alluminum/Silver?Platinum/Etc
+    //      -Tin/Bronze/Alluminum/Silver?Platinum/Etc (all but platinum: may add in at a later date)
             -titanium
             -Alloys!
-                -Brass
-                -Electrum
+                -Brass (done)
+                -Electrum (done)
+                -Steel (done)
+                -Bronze (done)
             -Mythrill
-            -Steel
+            
             -Star Metal
             -Star Steel
             -Cobalt
@@ -189,7 +192,7 @@ namespace Revitalize
 
         Accessories
         (recover hp/stamina,max hp,more friendship ,run faster, take less damage, etc)
-            -NEckalces
+            -Neckalces
             -Broaches
             -Earings
             -Pendants
@@ -261,33 +264,79 @@ namespace Revitalize
             ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
             ModHelper.Events.GameLoop.Saving += this.GameLoop_Saving;
 
-
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
 
-            /*
-            foreach(var v in Game1.objectInformation)
-            {
-                string name = v.Value.Split('/')[0];
-                ModCore.log(name + "="+v.Key+","+Environment.NewLine,false);
-            }
-            */
+            ModHelper.Events.Display.MenuChanged += this.Display_MenuChanged;
 
+        }
+
+        private void Display_MenuChanged(object sender, StardewModdingAPI.Events.MenuChangedEventArgs e)
+        {
+            if (e.NewMenu != null)
+            {
+                ModCore.log(e.NewMenu.GetType());
+
+                if (e.NewMenu.GetType() == typeof(StardewValley.Menus.ItemGrabMenu))
+                {
+                    if (Game1.player.currentLocation is Cabin)
+                    {
+                        ModCore.log("Let's get processing!");
+                        List<KeyValuePair<int,Item>> addition = new List<KeyValuePair<int,Item>>();
+                        for (int i = 0; i < (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory.Count; i++)
+                        {
+                            Item I = (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[i];
+                            if (I is Chest && I.Name != "Chest")
+                            {
+                                ModCore.log("Found a custom object!");
+                                Item cObj= ModCore.Serializer.DeserializeFromFarmhandInventory(I.Name);
+                                if (cObj == null)
+                                {
+                                    ModCore.log("NULL OBJ");
+                                }
+                                else
+                                {
+                                    ModCore.log("Not null!");
+                                }
+                                if (cObj == null) continue;
+                                addition.Add(new KeyValuePair<int, Item>(i,cObj));
+                            }
+                        }
+
+                        /*
+                        for(int I=0; I< (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory.Count; I++)
+                        {
+                            if((Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[I] == null)
+                            {
+                                if (addition.Count > 0) {
+                                    (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[I] = addition[0].Value;
+                                    addition.RemoveAt(0);
+                                }
+                            }
+                        }
+                        */
+
+                        foreach(KeyValuePair<int,Item> pair in addition)
+                        {
+                            (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[pair.Key] = pair.Value;
+                        }
+
+                        (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu = new InventoryMenu((Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.xPositionOnScreen, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.yPositionOnScreen, true, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.highlightMethod, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.capacity, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.rows, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.horizontalGap, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.verticalGap, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.drawSlots);
+                        (Game1.activeClickableMenu as ItemGrabMenu).populateClickableComponentList();
+                        (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.populateClickableComponentList();
+                    }
+                }
+            }
         }
 
         private void GameLoop_Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
         {
-            /*
-            foreach(var v in CustomObjects)
-            {
-                v.Value.updateInfo();
-            }
-            */
+
+
         }
 
         private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
         {
-            //MultiplayerUtilities.RequestALLGuidObjects();
         }
 
         /// <summary>
@@ -437,13 +486,6 @@ namespace Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             this.loadContent();
-
-            /*
-            if (Game1.IsServer || Game1.IsMultiplayer || Game1.IsClient)
-            {
-                throw new Exception("Can't run Revitalize in multiplayer due to lack of current support!");
-            }
-            */
             Serializer.afterLoad();
             ShopHacks.AddOreToClintsShop();
             ObjectInteractionHacks.AfterLoad_RestoreTrackedMachines();
@@ -463,32 +505,7 @@ namespace Revitalize
             axe =(StardewValley.Tools.Axe)Serializer.Deserialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"),typeof(StardewValley.Tools.Axe));
             //Game1.player.addItemToInventory(axe);
             */
-            //Game1.player.addItemToInventory(ObjectManager.resources.ores["Test"].getOne());
 
-
-            //Game1.player.addItemToInventory(ObjectManager.resources.getOre("Tin", 19));
-            //Ore tin = ObjectManager.resources.getOre("Tin", 19);
-            //Game1.player.addItemToInventory(ObjectManager.GetItem("TinIngot", 1));
-            //Game1.player.addItemToInventory(new StardewValley.Object(388, 100));
-            /*
-            Game1.player.addItemsByMenuIfNecessary(new List<Item>()
-            {
-                new StardewValley.Object(Vector2.Zero, (int)Enums.SDVBigCraftable.Furnace),
-                new StardewValley.Object((int)Enums.SDVObject.Coal,10),
-                new StardewValley.Object((int)Enums.SDVObject.PrismaticShard,5),
-                new StardewValley.Object((int)Enums.SDVObject.Emerald,1),
-                new StardewValley.Object((int)Enums.SDVObject.Aquamarine,1),
-                new StardewValley.Object((int)Enums.SDVObject.Ruby,1),
-                new StardewValley.Object((int)Enums.SDVObject.Amethyst,1),
-                new StardewValley.Object((int)Enums.SDVObject.Topaz,1),
-                new StardewValley.Object((int)Enums.SDVObject.Jade,1),
-                new StardewValley.Object((int)Enums.SDVObject.Diamond,1),
-                new StardewValley.Object((int)Enums.SDVObject.IronBar,1),
-            });
-            */
-            //ModCore.log("Tin sells for: " + tin.sellToStorePrice());
-
-            //ObjectManager.resources.spawnOreVein("Omegasis.Revitalize.Resources.Ore.Test", new Vector2(8, 7));
         }
 
         /*

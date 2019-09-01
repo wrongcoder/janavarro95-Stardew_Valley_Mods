@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
@@ -303,6 +304,39 @@ namespace Revitalize.Framework.Utilities
                 (I as MultiTiledObject).recreate();
             }
             return I;
+        }
+
+        public Item DeserializeFromFarmhandInventory(string JsonName)
+        {
+            //ModCore.log("Found a custom object in a chest!");
+            string jsonString = JsonName;
+            //ModCore.log(JsonName);
+            string dataSplit = jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[2];
+            string backUpGUID = dataSplit.Split('|')[0];
+            string[] guidArr = jsonString.Split(new string[] { "|" }, StringSplitOptions.None);
+
+            string infoStr = jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[0];
+            string guidStr= jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[1];
+
+            CustomObjectData pyTkData = ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(dataSplit);
+            Type t = Type.GetType(pyTkData.type);
+            string id = pyTkData.id;
+            //Need Item info
+
+            string guidName = backUpGUID;
+            string infoSplit = infoStr.Split('|')[3];
+            infoSplit = infoSplit.Substring(3);
+            BasicItemInformation info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(infoSplit);
+
+            CustomObject clone = (CustomObject)ModCore.ObjectManager.getItemByIDAndType(id, t);
+            if (clone != null)
+            {
+                clone.info = info;
+                ModCore.log("Guid is????:"+guidStr);
+                clone.guid = Guid.Parse(guidStr);
+                return clone;
+            }
+            return null;
         }
 
         public void returnToTitle()

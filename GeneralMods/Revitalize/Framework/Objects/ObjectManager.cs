@@ -87,6 +87,8 @@ namespace Revitalize.Framework.Objects
 
             this.resources = new ResourceManager();
             this.ItemsByName = new Dictionary<string, CustomObject>();
+
+            ChairMultiTiledObject s = new ChairMultiTiledObject();
         }
 
         /// <summary>
@@ -268,7 +270,104 @@ namespace Revitalize.Framework.Objects
         {
 
         }
-        
+
+        /// <summary>
+        /// Scans all mod items to try to find a match.
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="T"></param>
+        /// <returns></returns>
+        public Item getItemByIDAndType(string ID,Type T)
+        {
+
+            foreach(var v in this.chairs)
+            {
+                if(v.Value.GetType()==T && v.Value.info.id == ID)
+                {
+                   Item I= v.Value.getOne();
+                    return I;
+                }
+            }
+
+            foreach(var v in this.furnitureStorage)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+
+            foreach(var v in this.generic)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+
+            foreach(var v in this.ItemsByName)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+            foreach(var v in this.lamps)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+            foreach(var v in this.miscellaneous)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+            foreach(var v in this.rugs)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+            foreach(var v in this.tables)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+
+            foreach(var v in this.resources.ores)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+
+            }
+            foreach(var v in this.resources.oreVeins)
+            {
+                if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+
+            return null;
+        }
 
     }
 }

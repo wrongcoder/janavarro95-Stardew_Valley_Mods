@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Utilities;
@@ -40,6 +41,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         }
 
 
+        [JsonIgnore]
         public override string ItemInfo
         {
             get
