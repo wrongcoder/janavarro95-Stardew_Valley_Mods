@@ -267,66 +267,8 @@ namespace Revitalize
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
 
-            ModHelper.Events.Display.MenuChanged += this.Display_MenuChanged;
+            ModHelper.Events.Display.MenuChanged += MenuHacks.RecreateFarmhandInventory;
 
-        }
-
-        private void Display_MenuChanged(object sender, StardewModdingAPI.Events.MenuChangedEventArgs e)
-        {
-            if (e.NewMenu != null)
-            {
-                ModCore.log(e.NewMenu.GetType());
-
-                if (e.NewMenu.GetType() == typeof(StardewValley.Menus.ItemGrabMenu))
-                {
-                    if (Game1.player.currentLocation is Cabin)
-                    {
-                        ModCore.log("Let's get processing!");
-                        List<KeyValuePair<int,Item>> addition = new List<KeyValuePair<int,Item>>();
-                        for (int i = 0; i < (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory.Count; i++)
-                        {
-                            Item I = (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[i];
-                            if (I is Chest && I.Name != "Chest")
-                            {
-                                ModCore.log("Found a custom object!");
-                                Item cObj= ModCore.Serializer.DeserializeFromFarmhandInventory(I.Name);
-                                if (cObj == null)
-                                {
-                                    ModCore.log("NULL OBJ");
-                                }
-                                else
-                                {
-                                    ModCore.log("Not null!");
-                                }
-                                if (cObj == null) continue;
-                                addition.Add(new KeyValuePair<int, Item>(i,cObj));
-                            }
-                        }
-
-                        /*
-                        for(int I=0; I< (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory.Count; I++)
-                        {
-                            if((Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[I] == null)
-                            {
-                                if (addition.Count > 0) {
-                                    (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[I] = addition[0].Value;
-                                    addition.RemoveAt(0);
-                                }
-                            }
-                        }
-                        */
-
-                        foreach(KeyValuePair<int,Item> pair in addition)
-                        {
-                            (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory[pair.Key] = pair.Value;
-                        }
-
-                        (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu = new InventoryMenu((Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.xPositionOnScreen, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.yPositionOnScreen, true, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.actualInventory, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.highlightMethod, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.capacity, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.rows, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.horizontalGap, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.verticalGap, (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.drawSlots);
-                        (Game1.activeClickableMenu as ItemGrabMenu).populateClickableComponentList();
-                        (Game1.activeClickableMenu as ItemGrabMenu).ItemsToGrabMenu.populateClickableComponentList();
-                    }
-                }
-            }
         }
 
         private void GameLoop_Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
