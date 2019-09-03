@@ -199,6 +199,8 @@ namespace Revitalize
             -Earings
             -Pendants
 
+
+        make chat notification when people are sleeping
     */
 
     public class ModCore : Mod
@@ -326,7 +328,7 @@ namespace Revitalize
             if (e.Button == SButton.U)
             {
 
-                CraftingMenuV1 menu= new Framework.Menus.CraftingMenuV1(100, 0, 400, 800, Color.White, Game1.player.Items);
+                CraftingMenuV1 menu= new Framework.Menus.CraftingMenuV1(100, 100, 400, 700, Color.White, Game1.player.Items);
                 menu.addInCraftingPageTab("Default",new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
 
                 menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()

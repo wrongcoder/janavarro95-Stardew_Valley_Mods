@@ -32,6 +32,8 @@ namespace Revitalize.Framework.Menus
 
         public AnimatedButton craftingButton;
 
+        public bool isPlayerInventory;
+
         public Item actualItem
         {
             get
@@ -45,12 +47,13 @@ namespace Revitalize.Framework.Menus
 
         }
 
-        public CraftingInformationPage(int x, int y, int width, int height,Color BackgroundColor,CraftingRecipeButton ItemToDisplay,ref IList<Item> Inventory) : base(x, y, width, height, false)
+        public CraftingInformationPage(int x, int y, int width, int height,Color BackgroundColor,CraftingRecipeButton ItemToDisplay,ref IList<Item> Inventory,bool IsPlayerInventory) : base(x, y, width, height, false)
         {
             this.backgroundColor = BackgroundColor;
             this.infoButton = ItemToDisplay;
             this.itemDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width / 2) - 32, this.yPositionOnScreen + (128));
             this.inventory = Inventory;
+            this.isPlayerInventory = IsPlayerInventory;
 
             this.requiredItems = new Dictionary<ItemDisplayButton, int>();
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
@@ -69,6 +72,11 @@ namespace Revitalize.Framework.Menus
                 {
                     Game1.soundBank.PlayCue("coin");
                     this.infoButton.craftItem();
+
+                    if (this.isPlayerInventory)
+                    {
+                        this.inventory = Game1.player.Items;
+                    }
                 }
             }
         }
@@ -78,7 +86,7 @@ namespace Revitalize.Framework.Menus
             this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
             this.infoButton.draw(b,this.itemDisplayLocation);
 
-            b.DrawString(Game1.dialogueFont, this.actualItem.DisplayName, this.itemDisplayLocation + this.getHeightOffsetFromItem()-this.getItemNameOffset(), this.getNameColor());
+            b.DrawString(Game1.dialogueFont, this.actualItem.DisplayName,new Vector2(this.xPositionOnScreen+ (this.width/2),this.itemDisplayLocation.Y)+ this.getHeightOffsetFromItem()-this.getItemNameOffset(), this.getNameColor());
 
             b.DrawString(Game1.smallFont, Game1.parseText(this.actualItem.getDescription(), Game1.smallFont, this.width),new Vector2(this.xPositionOnScreen+64,this.getItemDescriptionOffset().Y), Color.Black);
 
@@ -150,7 +158,7 @@ namespace Revitalize.Framework.Menus
         private Vector2 getItemNameOffset()
         {
             Vector2 length = Game1.dialogueFont.MeasureString(this.actualItem.DisplayName);
-            length.X = length.X / 4;
+            length.X = length.X / 2;
             length.Y = 0;
             return length;
         }
