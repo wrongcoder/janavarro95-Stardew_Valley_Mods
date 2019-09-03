@@ -5,35 +5,61 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Revitalize.Framework.Menus.MenuComponents;
 using StardewValley;
+using StardewValley.Menus;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Menus
 {
+    /// <summary>
+    /// A simple menu for displaying craftable objects.
+    /// </summary>
     public class CraftingMenuV1 : IClickableMenuExtended
     {
 
         /// <summary>
         /// All the different pages for crafting.
-        ///
-        /// Sort recipes by recipe name.
-        /// Add in search box
         /// </summary>
         public Dictionary<string, AnimatedButton> CraftingTabs;
 
+        /// <summary>
+        /// All of the actual buttons to display for crafting.
+        /// </summary>
         public Dictionary<string, List<CraftingRecipeButton>> craftingItemsToDisplay;
+        /// <summary>
+        /// The inventory to tke items from.
+        /// </summary>
         public IList<Item> fromInventory;
+        /// <summary>
+        /// The inventory to put items into.
+        /// </summary>
         public IList<Item> toInventory;
 
+        /// <summary>
+        /// The current page index for the current tab.
+        /// </summary>
         public int currentPageIndex;
+        /// <summary>
+        /// The name of the current tab.
+        /// </summary>
         public string currentTab;
 
+        /// <summary>
+        /// The background color for the menu.
+        /// </summary>
         public Color backgroundColor;
 
+        /// <summary>
+        /// The x offset for the menu so that tabs can be interacted with properly.
+        /// </summary>
         public int xOffset = 72;
 
+        /// <summary>
+        /// Teh hover text to display.
+        /// </summary>
         public string hoverText;
 
         /// <summary>
@@ -41,20 +67,47 @@ namespace Revitalize.Framework.Menus
         /// </summary>
         public int amountOfRecipesToShow = 9;
 
+        /// <summary>
+        /// Is this menu the player's?
+        /// </summary>
         public bool playerInventory;
 
+        /// <summary>
+        /// The crafting info menu that displays when a recipe is clicked.
+        /// </summary>
         public CraftingInformationPage craftingInfo;
 
+        /// <summary>
+        /// The previous page button.
+        /// </summary>
         public AnimatedButton leftButton;
+        /// <summary>
+        /// The next page button.
+        /// </summary>
         public AnimatedButton rightButton;
+        /// <summary>
+        /// The search box used for looking for specific items.
+        /// </summary>
+        public StardewValley.Menus.TextBox searchBox;
 
-
+        /// <summary>
+        /// The maximum amount of pages to display.
+        /// </summary>
         private int maxPages
         {
             get
             {
                 if (string.IsNullOrEmpty(this.currentTab)) return 0;
-                return (int)(Math.Ceiling((double)(this.craftingItemsToDisplay[this.currentTab].Count / this.amountOfRecipesToShow)));
+                List<CraftingRecipeButton> searchSelection;
+                if (string.IsNullOrEmpty(this.searchBox.Text) == false)
+                {
+                    searchSelection = this.craftingItemsToDisplay[this.currentTab].FindAll(i => i.displayItem.item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()));
+                }
+                else
+                {
+                    searchSelection = this.craftingItemsToDisplay[this.currentTab];
+                }
+                return (int)(Math.Ceiling((double)(searchSelection.Count / this.amountOfRecipesToShow)));
             }
         }
 
@@ -125,6 +178,11 @@ namespace Revitalize.Framework.Menus
             this.initializeButtons();
         }
 
+        /// <summary>
+        /// Fix the display of menu elements when the menu is resized.
+        /// </summary>
+        /// <param name="oldBounds"></param>
+        /// <param name="newBounds"></param>
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
             base.gameWindowSizeChanged(oldBounds, newBounds);
@@ -135,29 +193,61 @@ namespace Revitalize.Framework.Menus
             }
         }
 
+        /// <summary>
+        /// Initialize the buttons for the menu.
+        /// </summary>
         private void initializeButtons()
         {
             this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
             this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
-        }
 
+            this.searchBox = new TextBox((Texture2D)null, (Texture2D)null, Game1.dialogueFont, Game1.textColor);
+            this.searchBox.X = this.xPositionOnScreen + this.width + 96;
+            this.searchBox.Y = this.yPositionOnScreen;
+            this.searchBox.Width = 256;
+            this.searchBox.Height = 192;
+            Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.searchBox;
+            this.searchBox.Selected = false;
+        }
+        /// <summary>
+        /// What happens when the menu receives a key press.
+        /// </summary>
+        /// <param name="key"></param>
+        public override void receiveKeyPress(Keys key)
+        {
+            if (this.searchBox.Selected && key != Keys.Escape)
+            {
+                return;
+            }
+            else
+            {
+                base.receiveKeyPress(key);
+            }
+        }
+        /// <summary>
+        /// Sorts all of the recipes for the menu.
+        /// </summary>
         public void sortRecipes()
         {
-            foreach(KeyValuePair<string,List<CraftingRecipeButton>> pair in this.craftingItemsToDisplay)
+            foreach (KeyValuePair<string, List<CraftingRecipeButton>> pair in this.craftingItemsToDisplay)
             {
                 List<CraftingRecipeButton> copy = pair.Value.ToList();
                 pair.Value.Clear();
 
-                copy=copy.OrderBy(x => x.displayItem.item.DisplayName).ToList();
-                foreach(CraftingRecipeButton b in copy)
+                copy = copy.OrderBy(x => x.displayItem.item.DisplayName).ToList();
+                foreach (CraftingRecipeButton b in copy)
                 {
                     this.addInCraftingRecipe(b, pair.Key);
                 }
             }
-            
-            
-        }
 
+
+        }
+        /// <summary>
+        /// Adds in a new tab for the crafting recipe menu.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="Button"></param>
         public void addInCraftingPageTab(string name, AnimatedButton Button)
         {
             int count = this.CraftingTabs.Count;
@@ -176,6 +266,11 @@ namespace Revitalize.Framework.Menus
 
         }
 
+        /// <summary>
+        /// Adds in a crafting recipe to the crafting menu.
+        /// </summary>
+        /// <param name="Button"></param>
+        /// <param name="WhichTab"></param>
         public void addInCraftingRecipe(CraftingRecipeButton Button, string WhichTab)
         {
             if (this.craftingItemsToDisplay.ContainsKey(WhichTab))
@@ -191,6 +286,11 @@ namespace Revitalize.Framework.Menus
             }
         }
 
+        /// <summary>
+        /// What happens when you hover over a menu element.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public override void performHoverAction(int x, int y)
         {
             bool hovered = false;
@@ -223,6 +323,12 @@ namespace Revitalize.Framework.Menus
             }
         }
 
+        /// <summary>
+        /// What happens when the meu receives a left click.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="playSound"></param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             if (this.leftButton.containsPoint(x, y))
@@ -241,6 +347,17 @@ namespace Revitalize.Framework.Menus
                     this.currentPageIndex++;
                     Game1.playSound("shwip");
                 }
+            }
+
+            Rectangle r = new Rectangle(this.searchBox.X, this.searchBox.Y, this.searchBox.Width, this.searchBox.Height / 2);
+            if (r.Contains(x, y))
+            {
+                this.searchBox.Update();
+                this.searchBox.SelectMe();
+            }
+            else
+            {
+                this.searchBox.Selected = false;
             }
 
             foreach (KeyValuePair<string, AnimatedButton> pair in this.CraftingTabs)
@@ -290,15 +407,23 @@ namespace Revitalize.Framework.Menus
         }
 
 
+        /// <summary>
+        /// Draws the menu to the screen.
+        /// </summary>
+        /// <param name="b"></param>
         public override void draw(SpriteBatch b)
         {
             this.drawDialogueBoxBackground(this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
 
+            if (this.currentPageIndex > this.maxPages) this.currentPageIndex = 0;
+
             this.leftButton.draw(b);
             //Draw page numbers here.
             //b.DrawString(Game1.smallFont,"Page: "+this.currentPageIndex.ToString()/)
-            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + (this.maxPages+1)).ToString(), new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen), Color.White);
+            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + (this.maxPages + 1)).ToString(), new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen), Color.White);
             this.rightButton.draw(b);
+
+            this.searchBox.Draw(b, true);
 
             //this.drawDialogueBoxBackground();
             foreach (KeyValuePair<string, AnimatedButton> pair in this.CraftingTabs)
@@ -345,18 +470,47 @@ namespace Revitalize.Framework.Menus
             this.drawMouse(b);
         }
 
-        public override void update(GameTime time)
+        /// <summary>
+        /// Gets all of the crafting buttons to display.
+        /// </summary>
+        /// <returns></returns>
+        private List<CraftingRecipeButton> getRecipeButtonsToDisplay()
         {
-            base.update(time);
+            List<CraftingRecipeButton> searchSelection;
+            if (string.IsNullOrEmpty(this.searchBox.Text) == false)
+            {
+                searchSelection = this.craftingItemsToDisplay[this.currentTab].FindAll(i => i.displayItem.item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()));
+            }
+            else
+            {
+                searchSelection = this.craftingItemsToDisplay[this.currentTab];
+            }
+            searchSelection = this.searchSort(searchSelection);
+
+            int amount = searchSelection.Count / this.amountOfRecipesToShow;
+            int min = this.currentPageIndex == amount ? searchSelection.Count % this.amountOfRecipesToShow : this.amountOfRecipesToShow;
+            List<CraftingRecipeButton> buttonsToDraw = searchSelection.GetRange(this.currentPageIndex * this.amountOfRecipesToShow, min);
+            return buttonsToDraw;
         }
 
-        public List<CraftingRecipeButton> getRecipeButtonsToDisplay()
+        /// <summary>
+        /// Repositions crafting buttons based on the current sort context.
+        /// </summary>
+        /// <param name="Unsorted"></param>
+        /// <returns></returns>
+        private List<CraftingRecipeButton> searchSort(List<CraftingRecipeButton> Unsorted)
         {
+            List<CraftingRecipeButton> copy = Unsorted.ToList();
+            //copy = copy.OrderBy(x => x.displayItem.item.DisplayName).ToList(); //Sort the recipes again. Probably unnecessary.
 
-            int amount = this.craftingItemsToDisplay[this.currentTab].Count / this.amountOfRecipesToShow;
-            int min = this.currentPageIndex == amount ? this.craftingItemsToDisplay[this.currentTab].Count % this.amountOfRecipesToShow : this.amountOfRecipesToShow;
-            List<CraftingRecipeButton> buttonsToDraw = this.craftingItemsToDisplay[this.currentTab].GetRange(this.currentPageIndex * this.amountOfRecipesToShow, min);
-            return buttonsToDraw;
+            //Do sorting;
+
+            for (int i = 0; i < Unsorted.Count; i++)
+            {
+                int count = i % this.amountOfRecipesToShow;
+                copy[i].displayItem.Position = new Vector2(this.xPositionOnScreen + (128), (this.yPositionOnScreen + 64) + (64 * (count + 1)));
+            }
+            return copy;
         }
 
     }
