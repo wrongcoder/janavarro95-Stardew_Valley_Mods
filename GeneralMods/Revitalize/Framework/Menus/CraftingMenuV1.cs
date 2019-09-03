@@ -17,6 +17,9 @@ namespace Revitalize.Framework.Menus
 
         /// <summary>
         /// All the different pages for crafting.
+        ///
+        /// Sort recipes by recipe name.
+        /// Add in search box
         /// </summary>
         public Dictionary<string, AnimatedButton> CraftingTabs;
 
@@ -136,6 +139,23 @@ namespace Revitalize.Framework.Menus
         {
             this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
             this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+        }
+
+        public void sortRecipes()
+        {
+            foreach(KeyValuePair<string,List<CraftingRecipeButton>> pair in this.craftingItemsToDisplay)
+            {
+                List<CraftingRecipeButton> copy = pair.Value.ToList();
+                pair.Value.Clear();
+
+                copy=copy.OrderBy(x => x.displayItem.item.DisplayName).ToList();
+                foreach(CraftingRecipeButton b in copy)
+                {
+                    this.addInCraftingRecipe(b, pair.Key);
+                }
+            }
+            
+            
         }
 
         public void addInCraftingPageTab(string name, AnimatedButton Button)
