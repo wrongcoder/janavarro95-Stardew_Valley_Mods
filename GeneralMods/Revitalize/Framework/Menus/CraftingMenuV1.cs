@@ -188,6 +188,7 @@ namespace Revitalize.Framework.Menus
 
             if (this.craftingInfo != null)
             {
+                this.craftingInfo.receiveLeftClick(x, y);
                 if (this.craftingInfo.doesMenuContainPoint(x, y)) return;
             }
             this.craftingInfo = null;

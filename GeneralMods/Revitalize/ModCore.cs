@@ -298,6 +298,8 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
             TextureManager.AddTextureManager(Manifest, "Menus");
             TextureManager.GetTextureManager(Manifest, "Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
+            TextureManager.AddTextureManager(Manifest, "CraftingMenu");
+            TextureManager.GetTextureManager(Manifest, "CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -331,8 +333,7 @@ namespace Revitalize
                 {
                     //Inputs here
                     {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
-                    {new StardewValley.Object((int)Enums.SDVObject.PrismaticShard,1),3 },
-                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.Coal, 1), 1)), null, new Vector2(), new Rectangle(0,0,16,16), 4f, true, Color.White),"Default");
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0,0,16,16), 4f, true, Color.White),"Default");
                 menu.currentTab = "Default";
 
                 if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = menu;
@@ -468,7 +469,7 @@ namespace Revitalize
             axe =(StardewValley.Tools.Axe)Serializer.Deserialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"),typeof(StardewValley.Tools.Axe));
             //Game1.player.addItemToInventory(axe);
             */
-
+            Game1.player.addItemToInventory(new StardewValley.Object((int)Enums.SDVObject.Coal, 1));
         }
 
         /*

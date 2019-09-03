@@ -230,6 +230,9 @@
     <Content Include="Content\Graphics\Items\Resources\Ore\TitaniumOre.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Menus\CraftingMenu\CraftButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Menus\InventoryMenu\ItemBackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -394,7 +397,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\Graphics\Menus\CraftingMenu\" />
     <Folder Include="Framework\Objects\InformationFiles\Extras\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

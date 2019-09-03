@@ -15,7 +15,7 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 namespace Revitalize.Framework.Menus
 {
     /// <summary>
-    /// Need to display description, required items, and a craft button. Also need to make the menu longer.
+    /// Need to display a craft button.
     /// Also need to make the crafting menu scroll better.
     /// </summary>
     public class CraftingInformationPage:IClickableMenuExtended
@@ -29,6 +29,8 @@ namespace Revitalize.Framework.Menus
         public IList<Item> inventory;
 
         private Dictionary<ItemDisplayButton,int> requiredItems;
+
+        public AnimatedButton craftingButton;
 
         public Item actualItem
         {
@@ -56,6 +58,19 @@ namespace Revitalize.Framework.Menus
                 ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).Key, null, new Vector2(this.xPositionOnScreen + 64, this.getIngredientHeightOffset().Y), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).Value);
             }
+            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
+        }
+
+        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        {
+            if (this.craftingButton.containsPoint(x, y))
+            {
+                if (this.canCraftRecipe())
+                {
+                    Game1.soundBank.PlayCue("coin");
+                    this.infoButton.craftItem();
+                }
+            }
         }
 
         public override void draw(SpriteBatch b)
@@ -73,6 +88,8 @@ namespace Revitalize.Framework.Menus
                 b.DrawString(Game1.smallFont, button.Key.item.DisplayName+ " x "+button.Value.ToString(), button.Key.Position + new Vector2(64, 16), this.getNameColor(button.Key.item, button.Value));
             }
 
+            this.craftingButton.draw(b, this.getCraftableColor().A);
+
             this.drawMouse(b);
         }
 
@@ -85,6 +102,16 @@ namespace Revitalize.Framework.Menus
         public bool canCraftRecipe()
         {
             return this.infoButton.recipe.CanCraft(this.inventory);
+        }
+
+        /// <summary>
+        /// Gets the color for the crafting button.
+        /// </summary>
+        /// <returns></returns>
+        private Color getCraftableColor()
+        {
+            if (this.canCraftRecipe()) return Color.White;
+            else return new Color(1f, 1f, 1f, 0.25f);
         }
 
         public Color getNameColor()
@@ -142,6 +169,11 @@ namespace Revitalize.Framework.Menus
             string parsedDescription = Game1.parseText(this.actualItem.getDescription(), Game1.smallFont, this.width);
             Vector2 offset=Game1.smallFont.MeasureString(parsedDescription);
             return this.getItemDescriptionOffset()+offset+ new Vector2(0,64*(this.requiredItems.Count));
+        }
+
+        private float getCraftingButtonHeight()
+        {
+            return this.yPositionOnScreen + this.height - 64*2;
         }
 
     }
