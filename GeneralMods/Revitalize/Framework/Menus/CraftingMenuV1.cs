@@ -174,7 +174,7 @@ namespace Revitalize.Framework.Menus
                     if (button.containsPoint(x, y))
                     {
                         //button.craftItem(this.fromInventory, this.toInventory);
-                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width+this.xOffset, this.yPositionOnScreen, 400, 400, this.backgroundColor, button,ref this.fromInventory);
+                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width+this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button,ref this.fromInventory);
                         Game1.soundBank.PlayCue("coin");
                         if (this.playerInventory)
                         {
@@ -197,7 +197,7 @@ namespace Revitalize.Framework.Menus
         public override void draw(SpriteBatch b)
         {
             this.drawDialogueBoxBackground(this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
-
+            //this.drawDialogueBoxBackground();
             foreach (KeyValuePair<string, AnimatedButton> pair in this.CraftingTabs)
             {
                 pair.Value.draw(b);

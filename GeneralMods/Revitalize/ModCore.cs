@@ -324,13 +324,14 @@ namespace Revitalize
             if (e.Button == SButton.U)
             {
 
-                CraftingMenuV1 menu= new Framework.Menus.CraftingMenuV1(100, 100, 400, 600, Color.White, Game1.player.Items);
+                CraftingMenuV1 menu= new Framework.Menus.CraftingMenuV1(100, 0, 400, 800, Color.White, Game1.player.Items);
                 menu.addInCraftingPageTab("Default",new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
 
                 menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
                 {
                     //Inputs here
-                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 }
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                    {new StardewValley.Object((int)Enums.SDVObject.PrismaticShard,1),3 },
                 }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.Coal, 1), 1)), null, new Vector2(), new Rectangle(0,0,16,16), 4f, true, Color.White),"Default");
                 menu.currentTab = "Default";
 
