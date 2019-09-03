@@ -9,7 +9,7 @@ using StardewValley;
 namespace Revitalize.Framework.Crafting
 {
     /// <summary>
-    /// A vanilla recipe to be used with staandard stardew valley machines such as the furnace.
+    /// A vanilla recipe to be used with standard stardew valley machines such as the furnace.
     /// </summary>
     public class VanillaRecipe
     {

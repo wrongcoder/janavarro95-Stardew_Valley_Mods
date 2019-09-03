@@ -264,7 +264,7 @@ namespace Vocalization
         {
             if (e.Button.ToString() == config.menuHotkey)
             {
-                Game1.activeClickableMenu = new VocalizationMenu(100, 64, 600, 300, true);
+               if(Game1.activeClickableMenu==null) Game1.activeClickableMenu = new VocalizationMenu(100, 64, 600, 300, true);
             }
         }
 

@@ -15,6 +15,9 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Menus
 {
+    /// <summary>
+    /// Deals with displaying the internal contents of an inventory. Used mainly as a component for another menu that extends this functionality.
+    /// </summary>
     public class InventoryMenuPage
     {
 

@@ -174,7 +174,7 @@ namespace Revitalize.Framework.Crafting
         /// <param name="to">The inventory to put outputs into.</param>
         /// <param name="dropToGround">Should this item be dropped to the ground when crafted?</param>
         /// <param name="isPlayerInventory">Checks to see if the invventory is the player's</param>
-        private void craft(ref IList<Item> from, ref IList<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
+        public void craft(ref IList<Item> from, ref IList<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
         {
             InventoryManager manager = new InventoryManager(to);
             if (manager.ItemCount + this.outputs.Count >= manager.capacity)
@@ -207,7 +207,7 @@ namespace Revitalize.Framework.Crafting
             return this.PlayerContainsAllIngredients() && this.statCost.canSafelyAffordCost();
         }
 
-        public bool CanCraft(List<Item> items)
+        public bool CanCraft(IList<Item> items)
         {
             return this.InventoryContainsAllIngredient(items);
         }

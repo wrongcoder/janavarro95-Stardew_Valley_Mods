@@ -28,5 +28,21 @@ namespace Revitalize.Framework.Utilities
             else return false;
         }
 
+        public static bool IsSameOrSubclass(Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase)
+                   || potentialDescendant == potentialBase;
+        }
+
+        public static bool IsSameType(Type potentialBase, Type potentialDescendant)
+        {
+            return  potentialDescendant == potentialBase;
+        }
+
+        public static bool IsSubclass(Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase);
+        }
+
     }
 }

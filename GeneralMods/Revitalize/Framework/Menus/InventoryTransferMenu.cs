@@ -13,6 +13,9 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Menus
 {
+    /// <summary>
+    /// Used with transfering items between two inventories.
+    /// </summary>
     public class InventoryTransferMenu : IClickableMenuExtended
     {
         public InventoryMenu playerInventory;

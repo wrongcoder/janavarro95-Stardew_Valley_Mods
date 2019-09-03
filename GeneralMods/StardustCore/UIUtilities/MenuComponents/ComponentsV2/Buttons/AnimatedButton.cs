@@ -95,7 +95,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="b"></param>
         public void draw(SpriteBatch b,float Alpha=1f)
         {
-            this.sprite.draw(b,Alpha);
+            this.sprite.draw(b,this.scale,Alpha);
         }
 
         /// <summary>

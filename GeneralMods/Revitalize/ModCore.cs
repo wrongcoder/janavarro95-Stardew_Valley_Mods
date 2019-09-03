@@ -26,6 +26,8 @@ using Revitalize.Framework.Hacks;
 using Revitalize.Framework.Configs;
 using StardewValley.Locations;
 using System.Linq;
+using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
+using Revitalize.Framework.Menus;
 
 namespace Revitalize
 {
@@ -294,6 +296,8 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
             TextureManager.AddTextureManager(Manifest, "Items.Resources.Ore");
             TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
+            TextureManager.AddTextureManager(Manifest, "Menus");
+            TextureManager.GetTextureManager(Manifest, "Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -316,6 +320,22 @@ namespace Revitalize
                 Game1.activeClickableMenu = new Revitalize.Framework.Menus.InventoryTransferMenu(100, 100, 500, 500, newItems, 36);
             }
             */
+
+            if (e.Button == SButton.U)
+            {
+
+                CraftingMenuV1 menu= new Framework.Menus.CraftingMenuV1(100, 100, 400, 600, Color.White, Game1.player.Items);
+                menu.addInCraftingPageTab("Default",new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
+
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 }
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.Coal, 1), 1)), null, new Vector2(), new Rectangle(0,0,16,16), 4f, true, Color.White),"Default");
+                menu.currentTab = "Default";
+
+                if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = menu;
+            }
         }
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)

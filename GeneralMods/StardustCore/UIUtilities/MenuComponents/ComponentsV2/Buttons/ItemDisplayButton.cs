@@ -111,6 +111,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             this.draw(b, 1f, Alpha, false);
         }
 
+
         /// <summary>
         /// The full draw function for drawing this component to the screen.
         /// </summary>
@@ -120,8 +121,41 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="DrawShadow"></param>
         public void draw(SpriteBatch b,float Depth, float Alpha,bool DrawShadow)
         {
-            this.background.draw(b, this.scale, Depth,Alpha);
+            if(this.background!=null)this.background.draw(b, this.scale, Depth,Alpha);
             if(this.item!=null)this.item.drawInMenu(b, this.position, 1f,Alpha,Depth,this.drawStackNumber,this.drawColor,DrawShadow);
+        }
+
+        /// <summary>
+        /// Draws the component at the given position.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="Position"></param>
+        /// <param name="Depth"></param>
+        /// <param name="Alpha"></param>
+        /// <param name="DrawShadow"></param>
+        public void draw(SpriteBatch b,Vector2 Position ,float Depth, float Alpha, bool DrawShadow)
+        {
+            if (this.background != null) this.background.draw(b,Position,this.scale, Depth, Alpha);
+            if (this.item != null) this.item.drawInMenu(b, Position, 1f, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
+        }
+
+        public void draw(SpriteBatch b,float ItemScale ,float Depth, float Alpha, bool DrawShadow)
+        {
+            this.background.draw(b, this.scale, Depth, Alpha);
+            if (this.item != null) this.item.drawInMenu(b, this.position, ItemScale, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
+        }
+
+        /// <summary>
+        /// Draws just the item to the screen.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <param name="Scale">The scale for the item.</param>
+        /// <param name="Depth">The spritebatch depth to draw the item.</param>
+        /// <param name="Alpha">The alpha for the item.</param>
+        /// <param name="DrawShadow">Should the shadow be drawn for the item?</param>
+        public void drawJustItem(SpriteBatch b,float Scale,float Depth, float Alpha, bool DrawShadow)
+        {
+            if (this.item != null) this.item.drawInMenu(b, this.position, Scale, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
         }
 
         public bool receiveLeftClick(int x, int y)
