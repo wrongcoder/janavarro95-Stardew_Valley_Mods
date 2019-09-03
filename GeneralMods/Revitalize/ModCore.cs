@@ -336,6 +336,53 @@ namespace Revitalize
                     //Inputs here
                     {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
                 }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0,0,16,16), 4f, true, Color.White),"Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+                menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new Dictionary<Item, int>()
+                {
+                    //Inputs here
+                    {new StardewValley.Object((int)Enums.SDVObject.Coal,1),1 },
+                }, new KeyValuePair<Item, int>(new StardewValley.Object((int)Enums.SDVObject.PrismaticShard, 1), 1)), null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), "Default");
+
+
                 menu.currentTab = "Default";
 
                 if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = menu;

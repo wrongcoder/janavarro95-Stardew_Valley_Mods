@@ -36,7 +36,7 @@ namespace Revitalize.Framework.Menus
         /// <summary>
         /// How many crafting recipes to display at a time.
         /// </summary>
-        public int amountOfRecipesToShow = 6;
+        public int amountOfRecipesToShow = 9;
 
         public bool playerInventory;
 
@@ -51,7 +51,7 @@ namespace Revitalize.Framework.Menus
             get
             {
                 if (string.IsNullOrEmpty(this.currentTab)) return 0;
-                return (this.craftingItemsToDisplay[this.currentTab].Count / this.amountOfRecipesToShow) + 1;
+                return (int)(Math.Ceiling((double)(this.craftingItemsToDisplay[this.currentTab].Count / this.amountOfRecipesToShow)));
             }
         }
 
@@ -134,8 +134,8 @@ namespace Revitalize.Framework.Menus
 
         private void initializeButtons()
         {
-            this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White),new Rectangle(0,0,32,32),2f);
-            this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen+this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
         }
 
         public void addInCraftingPageTab(string name, AnimatedButton Button)
@@ -160,8 +160,8 @@ namespace Revitalize.Framework.Menus
         {
             if (this.craftingItemsToDisplay.ContainsKey(WhichTab))
             {
-                int count = this.craftingItemsToDisplay.Count;
-                Vector2 newPos = new Vector2(this.xPositionOnScreen + (64) * (count + 1), this.yPositionOnScreen + (16 * 4) * (count + 1));
+                int count = this.craftingItemsToDisplay[WhichTab].Count % this.amountOfRecipesToShow;
+                Vector2 newPos = new Vector2(this.xPositionOnScreen + (128), (this.yPositionOnScreen + 64) + (64 * (count + 1)));
                 Button.displayItem.Position = newPos;
                 this.craftingItemsToDisplay[WhichTab].Add(Button);
             }
@@ -171,14 +171,8 @@ namespace Revitalize.Framework.Menus
             }
         }
 
-        public override void receiveScrollWheelAction(int direction)
-        {
-
-        }
-
         public override void performHoverAction(int x, int y)
         {
-
             bool hovered = false;
             foreach (KeyValuePair<string, AnimatedButton> pair in this.CraftingTabs)
             {
@@ -203,13 +197,10 @@ namespace Revitalize.Framework.Menus
                     }
                 }
             }
-
-
             if (hovered == false)
             {
                 this.hoverText = "";
             }
-
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
@@ -220,13 +211,15 @@ namespace Revitalize.Framework.Menus
                 else
                 {
                     this.currentPageIndex--;
+                    Game1.playSound("shwip");
                 }
             }
             if (this.rightButton.containsPoint(x, y))
             {
-                if (this.currentPageIndex+1 < this.maxPages)
+                if (this.currentPageIndex < this.maxPages)
                 {
                     this.currentPageIndex++;
+                    Game1.playSound("shwip");
                 }
             }
 
@@ -250,7 +243,13 @@ namespace Revitalize.Framework.Menus
                     if (button.containsPoint(x, y))
                     {
                         //button.craftItem(this.fromInventory, this.toInventory);
-                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width+this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button,ref this.fromInventory,this.playerInventory);
+
+                        if (this.playerInventory)
+                        {
+                            this.fromInventory = Game1.player.Items;
+                        }
+
+                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width + this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button, ref this.fromInventory, this.playerInventory);
                         Game1.soundBank.PlayCue("coin");
                         if (this.playerInventory)
                         {
@@ -278,7 +277,7 @@ namespace Revitalize.Framework.Menus
             this.leftButton.draw(b);
             //Draw page numbers here.
             //b.DrawString(Game1.smallFont,"Page: "+this.currentPageIndex.ToString()/)
-            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + this.maxPages).ToString(), new Vector2(this.xPositionOnScreen+128, this.yPositionOnScreen), Color.White);
+            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + (this.maxPages+1)).ToString(), new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen), Color.White);
             this.rightButton.draw(b);
 
             //this.drawDialogueBoxBackground();
@@ -333,7 +332,10 @@ namespace Revitalize.Framework.Menus
 
         public List<CraftingRecipeButton> getRecipeButtonsToDisplay()
         {
-            List<CraftingRecipeButton> buttonsToDraw = this.craftingItemsToDisplay[this.currentTab].GetRange(this.currentPageIndex* this.amountOfRecipesToShow, Math.Min(this.craftingItemsToDisplay[this.currentTab].Count, this.amountOfRecipesToShow));
+
+            int amount = this.craftingItemsToDisplay[this.currentTab].Count / this.amountOfRecipesToShow;
+            int min = this.currentPageIndex == amount ? this.craftingItemsToDisplay[this.currentTab].Count % this.amountOfRecipesToShow : this.amountOfRecipesToShow;
+            List<CraftingRecipeButton> buttonsToDraw = this.craftingItemsToDisplay[this.currentTab].GetRange(this.currentPageIndex * this.amountOfRecipesToShow, min);
             return buttonsToDraw;
         }
 
