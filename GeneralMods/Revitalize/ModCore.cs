@@ -28,6 +28,7 @@ using StardewValley.Locations;
 using System.Linq;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Revitalize.Framework.Menus;
+using Revitalize.Framework.Objects.CraftingTables;
 
 namespace Revitalize
 {
@@ -253,36 +254,30 @@ namespace Revitalize
 
             //Adds in event handling for the mod.
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
+            ModHelper.Events.GameLoop.SaveLoaded += CraftingRecipeBook.AfterLoad_LoadRecipeBooks;
+            ModHelper.Events.GameLoop.Saving += CraftingRecipeBook.BeforeSave_SaveRecipeBooks;
+
             ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
-            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+            
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
+            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
+
             ModHelper.Events.GameLoop.DayEnding += Serializer.DayEnding_CleanUpFilesForDeletion;
             ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
-            ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
-            ModHelper.Events.GameLoop.Saving += this.GameLoop_Saving;
 
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
+            CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
 
             ModHelper.Events.Display.MenuChanged += MenuHacks.RecreateFarmhandInventory;
 
-        }
-
-        private void GameLoop_Saving(object sender, StardewModdingAPI.Events.SavingEventArgs e)
-        {
-
-
-        }
-
-        private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
-        {
         }
 
         /// <summary>
@@ -302,6 +297,9 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
             TextureManager.AddTextureManager(Manifest, "CraftingMenu");
             TextureManager.GetTextureManager(Manifest, "CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
+
+            TextureManager.AddTextureManager(Manifest, "Objects.Crafting");
+            TextureManager.GetTextureManager(Manifest, "Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -327,7 +325,7 @@ namespace Revitalize
 
             if (e.Button == SButton.U)
             {
-
+                /*
                 CraftingMenuV1 menu= new Framework.Menus.CraftingMenuV1(100, 100, 400, 700, Color.White, Game1.player.Items);
                 menu.addInCraftingPageTab("Default",new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
 
@@ -387,6 +385,7 @@ namespace Revitalize
                 menu.sortRecipes();
 
                 if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = menu;
+                */
             }
         }
 
@@ -414,10 +413,12 @@ namespace Revitalize
             bigObject.addComponent(new Vector2(1, 0), obj2);
             bigObject.addComponent(new Vector2(2, 0), obj3);
 
+            /*
             Recipe pie = new Recipe(new Dictionary<Item, int>()
             {
                 [bigObject] = 1
             }, new KeyValuePair<Item, int>(new Furniture(3, Vector2.Zero), 1), new StatCost(100, 50, 0, 0));
+            */
 
             ObjectManager.miscellaneous.Add("Omegasis.BigTiledTest", bigObject);
 
@@ -464,6 +465,19 @@ namespace Revitalize
             ObjectManager.miscellaneous.Add("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble", sscCabinet);
 
             //ModCore.log("Added in SSC!");
+
+
+            MultiTiledObject WorkbenchObj = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(), Color.White, false, null, null));
+            CraftingTableTile workbenchTile_0_0 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Objects.Crafting", "Workbench"), new Animation(0, 0, 16, 16)), Color.White, false, null, null), "Workbench");
+            CraftingTableTile workbenchTile_1_0 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Objects.Crafting", "Workbench"), new Animation(16, 0, 16, 16)), Color.White, false, null, null), "Workbench");
+            CraftingTableTile workbenchTile_0_1 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Objects.Crafting", "Workbench"), new Animation(0, 16, 16, 16)), Color.White, false, null, null), "Workbench");
+            CraftingTableTile workbenchTile_1_1 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Objects.Crafting", "Workbench"), new Animation(16, 16, 16, 16)), Color.White, false, null, null), "Workbench");
+            WorkbenchObj.addComponent(new Vector2(0,0),workbenchTile_0_0);
+            WorkbenchObj.addComponent(new Vector2(1, 0), workbenchTile_1_0);
+            WorkbenchObj.addComponent(new Vector2(0, 1), workbenchTile_0_1);
+            WorkbenchObj.addComponent(new Vector2(1, 1), workbenchTile_1_1);
+
+            ObjectManager.AddItem("Workbench", WorkbenchObj);
         }
 
         private void createDirectories()
@@ -506,7 +520,9 @@ namespace Revitalize
 
 
             // Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.BigTiledTest"));
-            Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+            //Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
+
+            Game1.player.addItemToInventoryBool(ObjectManager.GetItem("Workbench"));
             //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
             //Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
             //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));

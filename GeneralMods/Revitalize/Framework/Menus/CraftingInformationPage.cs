@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Menus.MenuComponents;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Utilities;
@@ -58,8 +59,8 @@ namespace Revitalize.Framework.Menus
             this.requiredItems = new Dictionary<ItemDisplayButton, int>();
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
             {
-                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).Key, null, new Vector2(this.xPositionOnScreen + 64, this.getIngredientHeightOffset().Y), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
-                this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).Value);
+                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64, this.getIngredientHeightOffset().Y), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
+                this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
             this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
         }
@@ -130,7 +131,8 @@ namespace Revitalize.Framework.Menus
 
         public Color getNameColor(Item I, int amount)
         {
-            KeyValuePair<Item, int> Pair = new KeyValuePair<Item, int>(I, amount);
+            CraftingRecipeComponent Pair = new CraftingRecipeComponent(I, amount);
+               
             if (this.infoButton.recipe.InventoryContainsIngredient(this.inventory, Pair))
             {
                 return Color.Black;

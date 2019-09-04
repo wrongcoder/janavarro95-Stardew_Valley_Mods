@@ -56,10 +56,13 @@
     <Compile Include="Framework\Configs\FurnitureConfig.cs" />
     <Compile Include="Framework\Configs\Shops_BlacksmithConfig.cs" />
     <Compile Include="Framework\Configs\VanillaMachineRecipeConfig.cs" />
+    <Compile Include="Framework\Crafting\CraftingRecipeBook.cs" />
+    <Compile Include="Framework\Crafting\CraftingRecipeComponent.cs" />
     <Compile Include="Framework\Crafting\MachineCraftingRecipe.cs" />
     <Compile Include="Framework\Crafting\Recipe.cs" />
     <Compile Include="Framework\Crafting\RecipeBook.cs" />
     <Compile Include="Framework\Crafting\StatCost.cs" />
+    <Compile Include="Framework\Crafting\UnlockableCraftingRecipe.cs" />
     <Compile Include="Framework\Crafting\VanillaRecipeBook.cs" />
     <Compile Include="Framework\Crafting\VanillaRecipe.cs" />
     <Compile Include="Framework\Enums\Enums.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffect.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffectManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
+    <Compile Include="Framework\Objects\CraftingTables\CraftingTableTile.cs" />
     <Compile Include="Framework\Objects\Extras\ArcadeCabinetOBJ.cs" />
     <Compile Include="Framework\Objects\Extras\ArcadeCabinetTile.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Framework\Utilities\LocationUtilities.cs" />
     <Compile Include="Framework\Utilities\MultiplayerUtilities.cs" />
     <Compile Include="Framework\Utilities\ObjectUtilities.cs" />
+    <Compile Include="Framework\Utilities\PlayerUtilities.cs" />
     <Compile Include="Framework\Utilities\PyTKHelper.cs" />
     <Compile Include="Framework\Utilities\RotationUtilities.cs" />
     <Compile Include="Framework\Utilities\Serialization\ContractResolvers\NetFieldContract.cs" />
@@ -255,6 +260,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Menus\Misc\MenuTabHorizontal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Crafting\Anvil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Crafting\Workbench.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Furniture\Arcade\SeasideScrambleArcade.png">

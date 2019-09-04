@@ -13,11 +13,11 @@ namespace Revitalize.Framework.Crafting
         /// <summary>
         /// The ingredients necessary to craft this recipe.
         /// </summary>
-        public Dictionary<Item, int> ingredients;
+        public List<CraftingRecipeComponent> ingredients;
         /// <summary>
         /// The items produced by this recipe.
         /// </summary>
-        public Dictionary<Item, int> outputs;
+        public List<CraftingRecipeComponent> outputs;
 
         /// <summary>
         /// The item that is displayed for the crafting recipe.
@@ -26,7 +26,7 @@ namespace Revitalize.Framework.Crafting
 
         public Item DisplayItem
         {
-            get => this.displayItem ?? this.outputs.ElementAt(0).Key;
+            get => this.displayItem ?? this.outputs.ElementAt(0).item;
             set => this.displayItem = value;
         }
 
@@ -49,20 +49,20 @@ namespace Revitalize.Framework.Crafting
         /// <summary>Constructor for single item output.</summary>
         /// <param name="inputs">All the ingredients required to make the output.</param>
         /// <param name="output">The item given as output with how many</param>
-        public Recipe(Dictionary<Item, int> inputs, KeyValuePair<Item, int> output, StatCost StatCost = null)
+        public Recipe(List<CraftingRecipeComponent> inputs, CraftingRecipeComponent output, StatCost StatCost = null)
         {
             this.ingredients = inputs;
-            this.DisplayItem = output.Key;
-            this.outputDescription = output.Key.getDescription();
-            this.outputName = output.Key.DisplayName;
-            this.outputs = new Dictionary<Item, int>
+            this.DisplayItem = output.item;
+            this.outputDescription = output.item.getDescription();
+            this.outputName = output.item.DisplayName;
+            this.outputs = new List<CraftingRecipeComponent>()
             {
-                [output.Key] = output.Value
+                output
             };
             this.statCost = StatCost ?? new StatCost();
         }
 
-        public Recipe(Dictionary<Item, int> inputs, Dictionary<Item, int> outputs, string OutputName, string OutputDescription, Item DisplayItem = null, StatCost StatCost = null)
+        public Recipe(List<CraftingRecipeComponent> inputs, List<CraftingRecipeComponent> outputs, string OutputName, string OutputDescription, Item DisplayItem = null, StatCost StatCost = null)
         {
             this.ingredients = inputs;
             this.outputs = outputs;
@@ -79,7 +79,7 @@ namespace Revitalize.Framework.Crafting
         }
 
         /// <summary>Checks if a player contains a recipe ingredient.</summary>
-        public bool PlayerContainsIngredient(KeyValuePair<Item, int> pair)
+        public bool PlayerContainsIngredient(CraftingRecipeComponent pair)
         {
             return this.InventoryContainsIngredient(Game1.player.Items.ToList(), pair);
         }
@@ -87,17 +87,17 @@ namespace Revitalize.Framework.Crafting
         /// <summary>Checks if an inventory contains all items.</summary>
         public bool InventoryContainsAllIngredient(IList<Item> items)
         {
-            foreach (KeyValuePair<Item, int> pair in this.ingredients)
+            foreach (CraftingRecipeComponent pair in this.ingredients)
                 if (!this.InventoryContainsIngredient(items, pair)) return false;
             return true;
         }
 
         /// <summary>Checks if an inventory contains an ingredient.</summary>
-        public bool InventoryContainsIngredient(IList<Item> items, KeyValuePair<Item, int> pair)
+        public bool InventoryContainsIngredient(IList<Item> items, CraftingRecipeComponent pair)
         {
             foreach (Item i in items)
             {
-                if (i != null && this.ItemEqualsOther(i, pair.Key) && pair.Value <= i.Stack)
+                if (i != null && this.ItemEqualsOther(i, pair.item) && pair.requiredAmount <= i.Stack)
                     return true;
             }
             return false;
@@ -123,17 +123,17 @@ namespace Revitalize.Framework.Crafting
 
             InventoryManager manager = new InventoryManager(from);
             List<Item> removalList = new List<Item>();
-            foreach (KeyValuePair<Item, int> pair in this.ingredients)
+            foreach (CraftingRecipeComponent pair in this.ingredients)
             {
                 foreach (Item item in manager.items)
                 {
                     if (item == null) continue;
-                    if (this.ItemEqualsOther(item, pair.Key))
+                    if (this.ItemEqualsOther(item, pair.item))
                     {
-                        if (item.Stack == pair.Value)
+                        if (item.Stack == pair.requiredAmount)
                             removalList.Add(item); //remove the item
                         else
-                            item.Stack -= pair.Value; //or reduce the stack size.
+                            item.Stack -= pair.requiredAmount; //or reduce the stack size.
                     }
                 }
             }
@@ -155,10 +155,10 @@ namespace Revitalize.Framework.Crafting
             var manager = isPlayerInventory
                 ? new InventoryManager(new List<Item>())
                 : new InventoryManager(to);
-            foreach (KeyValuePair<Item, int> pair in this.outputs)
+            foreach (CraftingRecipeComponent pair in this.outputs)
             {
-                Item item = pair.Key.getOne();
-                item.addToStack(pair.Value - 1);
+                Item item = pair.item.getOne();
+                item.addToStack(pair.requiredAmount - 1);
                 bool added = manager.addItem(item);
                 if (!added && dropToGround)
                     Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.getDirection());

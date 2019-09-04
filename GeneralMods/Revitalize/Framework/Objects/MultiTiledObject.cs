@@ -471,7 +471,7 @@ namespace Revitalize.Framework.Objects
             if (this.info == null)
             {
                 this.ItemInfo = this.text;
-                ModCore.log("Updated item info for container!");
+                //ModCore.log("Updated item info for container!");
                 return;
             }
             if (this.objects != null)
@@ -531,12 +531,12 @@ namespace Revitalize.Framework.Objects
             }
             if (this.objects == null || this.childrenGuids == null)
             {
-                ModCore.log("Either objects or children guids are null");
+                //ModCore.log("Either objects or children guids are null");
                 return;
             }
             
 
-            ModCore.log("Recreate children components");
+            //ModCore.log("Recreate children components");
             if (this.objects.Count < this.childrenGuids.Count)
             {
                 foreach (KeyValuePair<Vector2, Guid> pair in this.childrenGuids)
@@ -555,8 +555,8 @@ namespace Revitalize.Framework.Objects
             }
             else
             {
-                ModCore.log("Count is exactly the same!");
-                ModCore.log("Count is: " + this.objects.Count+" : and " + this.childrenGuids.Count);
+                //ModCore.log("Count is exactly the same!");
+                //ModCore.log("Count is: " + this.objects.Count+" : and " + this.childrenGuids.Count);
             }
         }
 
