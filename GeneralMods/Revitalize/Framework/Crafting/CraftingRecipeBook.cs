@@ -209,11 +209,11 @@ namespace Revitalize.Framework.Crafting
 
             CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook("Workbench");
             WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f),true);
-            WorkbenchRecipes.addCraftingRecipe("Nothing", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            WorkbenchRecipes.addCraftingRecipe("Anvil", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
                 {
                     //Inputs here
-                   new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,1),1),
-                }, new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.FairyRose, 1), 1)), true));
+                   new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"),20)
+                }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Anvil"), 1)), true));
 
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
@@ -233,6 +233,36 @@ namespace Revitalize.Framework.Crafting
             {
                 CraftingRecipesByGroup.Add("Workbench", WorkbenchRecipes);
             }
+
+
+            CraftingRecipeBook AnvilRecipes = new CraftingRecipeBook("Anvil");
+            AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+            /*
+            WorkbenchRecipes.addCraftingRecipe("Nothing", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+                {
+                    //Inputs here
+                   new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,1),1),
+                }, new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.FairyRose, 1), 1)), true));
+            */
+            if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
+            {
+                foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AnvilRecipes.craftingRecipes)
+                {
+                    if (CraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
+                    {
+
+                    }
+                    else
+                    {
+                        CraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
+                    }
+                }
+            }
+            else
+            {
+                CraftingRecipesByGroup.Add("Anvil", AnvilRecipes);
+            }
+
         }
 
         #endregion
