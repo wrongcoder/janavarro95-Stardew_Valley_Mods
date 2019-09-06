@@ -29,6 +29,8 @@ using System.Linq;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Revitalize.Framework.Menus;
 using Revitalize.Framework.Objects.CraftingTables;
+using Revitalize.Framework.Objects.Items.Tools;
+using StardewValley.Tools;
 
 namespace Revitalize
 {
@@ -228,6 +230,7 @@ namespace Revitalize
         public static VanillaRecipeBook VanillaRecipeBook;
 
         public static Dictionary<Guid, CustomObject> CustomObjects;
+        public static Dictionary<Guid, Item> CustomItems;
 
         public static ConfigManager Configs;
         public override void Entry(IModHelper helper)
@@ -242,6 +245,7 @@ namespace Revitalize
             Serializer = new Serializer();
             playerInfo = new PlayerInfo();
             CustomObjects = new Dictionary<Guid, CustomObject>();
+            CustomItems = new Dictionary<Guid, Item>();
 
             //Loads in textures to be used by the mod.
             this.loadInTextures();
@@ -271,6 +275,7 @@ namespace Revitalize
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
+            ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
 
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
@@ -279,6 +284,8 @@ namespace Revitalize
             ModHelper.Events.Display.MenuChanged += MenuHacks.RecreateFarmhandInventory;
 
         }
+
+
 
         /// <summary>
         /// Loads in textures to be used by the mod.
@@ -293,6 +300,9 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
             TextureManager.AddTextureManager(Manifest, "Items.Resources.Ore");
             TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
+            TextureManager.AddTextureManager(Manifest, "Tools");
+            TextureManager.GetTextureManager(Manifest, "Tools").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Tools"));
+
             TextureManager.AddTextureManager(Manifest, "Menus");
             TextureManager.GetTextureManager(Manifest, "Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
             TextureManager.AddTextureManager(Manifest, "CraftingMenu");
@@ -300,6 +310,8 @@ namespace Revitalize
 
             TextureManager.AddTextureManager(Manifest, "Objects.Crafting");
             TextureManager.GetTextureManager(Manifest, "Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
+
+            
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -548,6 +560,13 @@ namespace Revitalize
             */
             Game1.player.addItemToInventory(new StardewValley.Object((int)Enums.SDVObject.Coal, 1));
             Game1.player.addItemByMenuIfNecessary(ModCore.ObjectManager.GetItem("SteelIngot", 20));
+            PickaxeExtended pick = new PickaxeExtended(new BasicItemInformation("My First Pickaxe", "Omegasis.Revitalize.Items.Tools.MyFirstPickaxe", "A testing pickaxe. Does it work?", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(Manifest, "Tools", "Pickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Tools", "Pickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),2,TextureManager.GetExtendedTexture(Manifest,"Tools","TestingPickaxeWorking"));
+            Game1.player.addItemsByMenuIfNecessary(new List<Item>()
+            {
+                pick,
+                new StardewValley.Object((int)Enums.SDVObject.Wood,100)
+
+            });
         }
 
         /*

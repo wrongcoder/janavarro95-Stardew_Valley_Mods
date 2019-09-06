@@ -701,34 +701,6 @@ namespace Revitalize.Framework.Objects
             Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
             return serializedInfo;
         }
-
-        /// <summary>
-        /// Gets all of the data necessary for syncing.
-        /// </summary>
-        /// <returns></returns>
-        public override Dictionary<string, string> getSyncData()
-        {
-            Dictionary<string, string> syncData = new Dictionary<string, string>();
-            //syncData.Add("ID", this.ItemInfo);
-            //syncData.Add("BasicItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
-            syncData.Add("Greeting:", "Hello from: " + Game1.player.Name);
-            ModCore.log("Send off SYNC DATA!");
-            return syncData;
-        }
-
-        /// <summary>
-        /// Syncs all of the info to all players.
-        /// </summary>
-        /// <param name="syncData"></param>
-        public override void sync(Dictionary<string, string> syncData)
-        {
-            //Revitalize.ModCore.log("SYNC OBJECT DATA!");
-
-            //this.info = Revitalize.ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(syncData["BasicItemInfo"]);
-            //this.ItemInfo = syncData["ID"];
-            string greeting = syncData["Greeting"];
-            ModCore.log(greeting);
-        }
         #endregion
     }
 }

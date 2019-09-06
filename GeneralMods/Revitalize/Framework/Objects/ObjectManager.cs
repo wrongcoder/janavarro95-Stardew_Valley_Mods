@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Revitalize.Framework.Objects.Furniture;
+using Revitalize.Framework.Objects.Interfaces;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -53,6 +54,8 @@ namespace Revitalize.Framework.Objects
 
         public Dictionary<string, CustomObject> ItemsByName;
 
+        public Dictionary<string, StardewValley.Tool> Tools;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -88,7 +91,7 @@ namespace Revitalize.Framework.Objects
             this.resources = new ResourceManager();
             this.ItemsByName = new Dictionary<string, CustomObject>();
 
-            ChairMultiTiledObject s = new ChairMultiTiledObject();
+            this.Tools = new Dictionary<string, Tool>();
         }
 
         /// <summary>
@@ -253,6 +256,17 @@ namespace Revitalize.Framework.Objects
         }
 
         /// <summary>
+        /// Gets a tool from the list of managed tools.
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        public Item GetTool(string Name)
+        {
+            if (this.Tools.ContainsKey("Name")) return this.Tools[Name].getOne();
+            else return null;
+        }
+
+        /// <summary>
         /// Adds a new object manager to the master pool of managers.
         /// </summary>
         /// <param name="Manifest"></param>
@@ -360,6 +374,14 @@ namespace Revitalize.Framework.Objects
             foreach(var v in this.resources.oreVeins)
             {
                 if (v.Value.GetType() == T && v.Value.info.id == ID)
+                {
+                    Item I = v.Value.getOne();
+                    return I;
+                }
+            }
+            foreach(var v in this.Tools)
+            {
+                if (v.Value.GetType() == T && (v.Value as IItemInfo).Info.id == ID)
                 {
                     Item I = v.Value.getOne();
                     return I;

@@ -229,13 +229,13 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 if (this.location != null)
                 {
                     this.location.playSound("hammer");
-                    ModCore.log("Ore has this much health left and location is not null: "+this.healthValue);
+                    //ModCore.log("Ore has this much health left and location is not null: "+this.healthValue);
                     this.info.shakeTimer = 200;
                 }
                 else
                 {
                     Game1.player.currentLocation.playSound("hammer");
-                    ModCore.log("Ore has this much health left and location is null!: "+this.healthValue);
+                    //ModCore.log("Ore has this much health left and location is null!: "+this.healthValue);
                     this.info.shakeTimer = 200;
                 }
                 return false;

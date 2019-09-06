@@ -8,7 +8,9 @@ using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Tools;
 using SObject = StardewValley.Object;
 namespace Revitalize.Framework.Hacks
 {
@@ -152,5 +154,25 @@ namespace Revitalize.Framework.Hacks
                    || potentialDescendant == potentialBase;
         }
 
+
+
+        /// <summary>
+        /// Resets tool colors when left click is used for normal tools.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void ResetNormalToolsColorOnLeftClick(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
+        {
+            if (e.Button == SButton.MouseLeft)
+            {
+                if (Game1.player.CurrentTool != null)
+                {
+                    if (ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Pickaxe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Axe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Hoe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(WateringCan)))
+                    {
+                        ColorChanger.ResetToolColorSwaps();
+                    }
+                }
+            }
+        }
     }
 }

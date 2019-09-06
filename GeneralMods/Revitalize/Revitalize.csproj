@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -74,6 +75,7 @@
     <Compile Include="Framework\Factories\Objects\FactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Resources\OreFactoryInfo.cs" />
+    <Compile Include="Framework\Hacks\ColorChanger.cs" />
     <Compile Include="Framework\Hacks\MenuHacks.cs" />
     <Compile Include="Framework\Hacks\ObjectInteractionHacks.cs" />
     <Compile Include="Framework\Hacks\ShopHacks.cs" />
@@ -141,7 +143,9 @@
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ResourceInformaton.cs" />
+    <Compile Include="Framework\Objects\Interfaces\IItemInfo.cs" />
     <Compile Include="Framework\Objects\Items\Resources\Ore.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\PickaxeExtended.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
@@ -233,6 +237,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\TitaniumOre.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\DefaultPickaxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\Pickaxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TestingPickaxeWorking.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Menus\CraftingMenu\CraftButton.png">
