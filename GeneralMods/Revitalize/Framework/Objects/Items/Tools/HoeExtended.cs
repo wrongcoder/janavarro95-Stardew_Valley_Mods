@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
-using Revitalize.Framework.Hacks;
 using Revitalize.Framework.Objects.Interfaces;
 using Revitalize.Framework.Utilities;
 using StardewValley;
@@ -16,7 +15,7 @@ using StardustCore.UIUtilities;
 
 namespace Revitalize.Framework.Objects.Items.Tools
 {
-    public class PickaxeExtended:StardewValley.Tools.Pickaxe, ISaveElement,IItemInfo
+    public class HoeExtended: StardewValley.Tools.Hoe, ISaveElement, IItemInfo
     {
         public BasicItemInformation info;
         public Texture2DExtended workingTexture;
@@ -127,7 +126,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         {
             get
             {
-                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid+"<"+ Revitalize.ModCore.Serializer.ToJSONString(this.workingTexture);
+                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid + "<" + Revitalize.ModCore.Serializer.ToJSONString(this.workingTexture);
             }
             set
             {
@@ -155,12 +154,12 @@ namespace Revitalize.Framework.Objects.Items.Tools
             }
         }
 
-        public PickaxeExtended()
+        public HoeExtended()
         {
 
         }
 
-        public PickaxeExtended(BasicItemInformation ItemInfo,int UpgradeLevel, Texture2DExtended WorkingTexture)
+        public HoeExtended(BasicItemInformation ItemInfo, int UpgradeLevel, Texture2DExtended WorkingTexture)
         {
             this.info = ItemInfo;
             this.upgradeLevel.Value = UpgradeLevel;
@@ -191,7 +190,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color color, bool drawShadow)
         {
             this.updateInfo();
-            this.info.animationManager.draw(spriteBatch, location, color*transparency, 4f * scaleSize, SpriteEffects.None, layerDepth);
+            this.info.animationManager.draw(spriteBatch, location, color * transparency, 4f * scaleSize, SpriteEffects.None, layerDepth);
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, color, drawShadow);
         }
 
@@ -207,7 +206,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         public override bool beginUsing(GameLocation location, int x, int y, Farmer who)
         {
             this.updateInfo();
-            Revitalize.Framework.Hacks.ColorChanger.SwapPickaxeTextures(this.workingTexture.texture);
+            Revitalize.Framework.Hacks.ColorChanger.SwapHoeTextures(this.workingTexture.texture);
             return base.beginUsing(location, x, y, who);
         }
         public override void endUsing(GameLocation location, Farmer who)
@@ -224,7 +223,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override void actionWhenStopBeingHeld(Farmer who)
         {
-            Revitalize.Framework.Hacks.ColorChanger.ResetPickaxeTexture();
+            Revitalize.Framework.Hacks.ColorChanger.ResetHoeTexture();
             base.actionWhenStopBeingHeld(who);
         }
 
@@ -245,18 +244,18 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override Item getOne()
         {
-            return new PickaxeExtended(this.info.Copy(), this.UpgradeLevel,this.workingTexture.Copy());
+            return new HoeExtended(this.info.Copy(), this.UpgradeLevel, this.workingTexture.Copy());
         }
 
         public object getReplacement()
         {
-            return new StardewValley.Tools.Pickaxe { UpgradeLevel = this.UpgradeLevel };
+            return new StardewValley.Tools.Hoe { UpgradeLevel = this.UpgradeLevel };
         }
 
         public void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
         {
             this.info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
-            this.upgradeLevel.Value = (replacement as Pickaxe).UpgradeLevel;
+            this.upgradeLevel.Value = (replacement as Hoe).UpgradeLevel;
         }
 
 
@@ -265,7 +264,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         /// </summary>
         public virtual void updateInfo()
         {
-            if (this.info == null || this.workingTexture==null)
+            if (this.info == null || this.workingTexture == null)
             {
                 this.ItemInfo = this.text;
                 return;

@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
-using Revitalize.Framework.Hacks;
 using Revitalize.Framework.Objects.Interfaces;
 using Revitalize.Framework.Utilities;
 using StardewValley;
@@ -16,7 +15,7 @@ using StardustCore.UIUtilities;
 
 namespace Revitalize.Framework.Objects.Items.Tools
 {
-    public class PickaxeExtended:StardewValley.Tools.Pickaxe, ISaveElement,IItemInfo
+    public class WateringCanExtended:StardewValley.Tools.WateringCan, ISaveElement, IItemInfo
     {
         public BasicItemInformation info;
         public Texture2DExtended workingTexture;
@@ -127,7 +126,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         {
             get
             {
-                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid+"<"+ Revitalize.ModCore.Serializer.ToJSONString(this.workingTexture);
+                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid + "<" + Revitalize.ModCore.Serializer.ToJSONString(this.workingTexture);
             }
             set
             {
@@ -155,17 +154,18 @@ namespace Revitalize.Framework.Objects.Items.Tools
             }
         }
 
-        public PickaxeExtended()
+        public WateringCanExtended()
         {
 
         }
 
-        public PickaxeExtended(BasicItemInformation ItemInfo,int UpgradeLevel, Texture2DExtended WorkingTexture)
+        public WateringCanExtended(BasicItemInformation ItemInfo, int UpgradeLevel, Texture2DExtended WorkingTexture,int WaterCapacity)
         {
             this.info = ItemInfo;
             this.upgradeLevel.Value = UpgradeLevel;
             this.guid = Guid.NewGuid();
             this.workingTexture = WorkingTexture;
+            this.waterCanMax = WaterCapacity;
             this.updateInfo();
         }
 
@@ -191,7 +191,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color color, bool drawShadow)
         {
             this.updateInfo();
-            this.info.animationManager.draw(spriteBatch, location, color*transparency, 4f * scaleSize, SpriteEffects.None, layerDepth);
+            this.info.animationManager.draw(spriteBatch, location, color * transparency, 4f * scaleSize, SpriteEffects.None, layerDepth);
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, color, drawShadow);
         }
 
@@ -207,7 +207,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         public override bool beginUsing(GameLocation location, int x, int y, Farmer who)
         {
             this.updateInfo();
-            Revitalize.Framework.Hacks.ColorChanger.SwapPickaxeTextures(this.workingTexture.texture);
+            Revitalize.Framework.Hacks.ColorChanger.SwapWateringCanTextures(this.workingTexture.texture);
             return base.beginUsing(location, x, y, who);
         }
         public override void endUsing(GameLocation location, Farmer who)
@@ -224,7 +224,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override void actionWhenStopBeingHeld(Farmer who)
         {
-            Revitalize.Framework.Hacks.ColorChanger.ResetPickaxeTexture();
+            Revitalize.Framework.Hacks.ColorChanger.ResetWateringCanTexture();
             base.actionWhenStopBeingHeld(who);
         }
 
@@ -245,18 +245,18 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override Item getOne()
         {
-            return new PickaxeExtended(this.info.Copy(), this.UpgradeLevel,this.workingTexture.Copy());
+            return new WateringCanExtended(this.info.Copy(), this.UpgradeLevel, this.workingTexture.Copy(),this.waterCanMax);
         }
 
         public object getReplacement()
         {
-            return new StardewValley.Tools.Pickaxe { UpgradeLevel = this.UpgradeLevel };
+            return new StardewValley.Tools.WateringCan { UpgradeLevel = this.UpgradeLevel, waterCanMax=this.waterCanMax };
         }
 
         public void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
         {
             this.info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
-            this.upgradeLevel.Value = (replacement as Pickaxe).UpgradeLevel;
+            this.upgradeLevel.Value = (replacement as WateringCan).UpgradeLevel;
         }
 
 
@@ -265,7 +265,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         /// </summary>
         public virtual void updateInfo()
         {
-            if (this.info == null || this.workingTexture==null)
+            if (this.info == null || this.workingTexture == null)
             {
                 this.ItemInfo = this.text;
                 return;
