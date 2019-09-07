@@ -303,7 +303,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public Item GetTool(string Name)
         {
-            if (this.Tools.ContainsKey("Name")) return this.Tools[Name].getOne();
+            if (this.Tools.ContainsKey(Name)) return this.Tools[Name].getOne();
             else return null;
         }
 

@@ -207,6 +207,10 @@ namespace Revitalize.Framework.Crafting
         private static void InitializeRecipeBooks()
         {
 
+            //~~~~~~~~~~~~~~~~~~~//
+            // Workbench Recipes //
+            //~~~~~~~~~~~~~~~~~~~//
+            #region
             CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook("Workbench");
             WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f),true);
             WorkbenchRecipes.addCraftingRecipe("Anvil", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
@@ -214,6 +218,27 @@ namespace Revitalize.Framework.Crafting
                     //Inputs here
                    new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"),20)
                 }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Anvil"), 1)), true));
+
+
+            WorkbenchRecipes.addCraftingRecipe("Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,10),10)
+            },new CraftingRecipeComponent(new StardewValley.Tools.Pickaxe() {UpgradeLevel=0},1)),true));
+            WorkbenchRecipes.addCraftingRecipe("Axe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,10),10)
+            }, new CraftingRecipeComponent(new StardewValley.Tools.Axe() { UpgradeLevel = 0 }, 1)), true));
+            WorkbenchRecipes.addCraftingRecipe("Hoe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,10),10)
+            }, new CraftingRecipeComponent(new StardewValley.Tools.Hoe() { UpgradeLevel = 0 }, 1)), true));
+            WorkbenchRecipes.addCraftingRecipe("Watering Can", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
+            }, new CraftingRecipeComponent(new StardewValley.Tools.WateringCan() { UpgradeLevel = 0 }, 1)), true));
 
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
@@ -233,17 +258,101 @@ namespace Revitalize.Framework.Crafting
             {
                 CraftingRecipesByGroup.Add("Workbench", WorkbenchRecipes);
             }
+            #endregion
 
+            //~~~~~~~~~~~~~~~~~~//
+            //   Anvil Recipes  //
+            //~~~~~~~~~~~~~~~~~~//
 
             CraftingRecipeBook AnvilRecipes = new CraftingRecipeBook("Anvil");
             AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
-            /*
-            WorkbenchRecipes.addCraftingRecipe("Nothing", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-                {
-                    //Inputs here
-                   new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,1),1),
-                }, new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.FairyRose, 1), 1)), true));
-            */
+
+            //~~~~~~~~~~~~~~~~~~~~~~~//
+            //Alternate Vanilla Tools//
+            //~~~~~~~~~~~~~~~~~~~~~~~//
+            #region
+            //Watering Cans
+            AnvilRecipes.addCraftingRecipe("Bronze Watering Can", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BronzeIngot",15),15),
+                new CraftingRecipeComponent(new StardewValley.Tools.WateringCan(){ UpgradeLevel=0},1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzeWateringCan"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Hardened Watering Can", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot",10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("LeadIngot",5),5),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzeWateringCan"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedWateringCan"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Titanium Watering Can", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("TitaniumIngot",15),15),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedWateringCan"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("TitaniumWateringCan"), 1)), true));
+
+            //Pickaxes
+            AnvilRecipes.addCraftingRecipe("Bronze Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BronzeIngot",15),15),
+                new CraftingRecipeComponent(new StardewValley.Tools.Pickaxe(){ UpgradeLevel=0},1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzePickaxe"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Hardened Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot",10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("LeadIngot",5),5),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzePickaxe"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedPickaxe"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Titanium Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("TitaniumIngot",15),15),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedPickaxe"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("TitaniumPickaxe"), 1)), true));
+
+            //Axes
+            AnvilRecipes.addCraftingRecipe("Bronze Axe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BronzeIngot",15),15),
+                new CraftingRecipeComponent(new StardewValley.Tools.Axe(){ UpgradeLevel=0},1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzeAxe"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Hardened Axe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot",10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("LeadIngot",5),5),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzeAxe"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedAxe"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Titanium Axe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("TitaniumIngot",15),15),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedAxe"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("TitaniumAxe"), 1)), true));
+
+            ///Plows
+            AnvilRecipes.addCraftingRecipe("Bronze Hoe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BronzeIngot",15),15),
+                new CraftingRecipeComponent(new StardewValley.Tools.Hoe(){ UpgradeLevel=0},1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzeHoe"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Hardened Hoe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot",10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("LeadIngot",5),5),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("BronzeHoe"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedHoe"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Titanium Hoe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("TitaniumIngot",15),15),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedHoe"),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("TitaniumHoe"), 1)), true));
+
+            #endregion
+
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AnvilRecipes.craftingRecipes)

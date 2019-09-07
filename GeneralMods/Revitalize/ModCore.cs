@@ -547,13 +547,11 @@ namespace Revitalize
 
             Game1.player.addItemToInventoryBool(ObjectManager.GetItem("Workbench"));
 
-            Game1.player.addItemToInventory(new StardewValley.Object((int)Enums.SDVObject.Coal, 1));
-            Game1.player.addItemByMenuIfNecessary(ModCore.ObjectManager.GetItem("SteelIngot", 20));
-            PickaxeExtended pick = new PickaxeExtended(new BasicItemInformation("My First Pickaxe", "Omegasis.Revitalize.Items.Tools.MyFirstPickaxe", "A testing pickaxe. Does it work?", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(Manifest, "Tools", "Pickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Tools", "Pickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),2,TextureManager.GetExtendedTexture(Manifest,"Tools","TestingPickaxeWorking"));
+            //PickaxeExtended pick = new PickaxeExtended(new BasicItemInformation("My First Pickaxe", "Omegasis.Revitalize.Items.Tools.MyFirstPickaxe", "A testing pickaxe. Does it work?", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(Manifest, "Tools", "Pickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Tools", "Pickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),2,TextureManager.GetExtendedTexture(Manifest,"Tools","TestingPickaxeWorking"));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-                pick,
-                new StardewValley.Object((int)Enums.SDVObject.Wood,100)
+                new StardewValley.Object((int)Enums.SDVObject.Wood,100),
+                ModCore.ObjectManager.GetItem("SteelIngot", 20)
 
             });
         }
