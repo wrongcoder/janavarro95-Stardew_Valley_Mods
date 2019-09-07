@@ -546,18 +546,7 @@ namespace Revitalize
             //Game1.player.addItemToInventory(ObjectManager.getChair("Omegasis.Revitalize.Furniture.Chairs.OakChair"));
 
             Game1.player.addItemToInventoryBool(ObjectManager.GetItem("Workbench"));
-            //Game1.player.addItemToInventory(GetObjectFromPool("Omegasis.Revitalize.Furniture.Rugs.RugTest"));
-            //Game1.player.addItemToInventory(ObjectManager.getTable("Omegasis.Revitalize.Furniture.Tables.OakTable"));
-            //Game1.player.addItemToInventory(ObjectManager.getLamp("Omegasis.Revitalize.Furniture.Lamps.OakLamp"));
 
-            //Game1.player.addItemToInventory(ObjectManager.getObject("Omegasis.Revitalize.Furniture.Arcade.SeasideScramble",ObjectManager.miscellaneous));
-            //Game1.player.addItemToInventory(ObjectManager.getStorageFuriture("Omegasis.Revitalize.Furniture.Storage.OakCabinet"));
-            /*
-            StardewValley.Tools.Axe axe = new StardewValley.Tools.Axe();
-            Serializer.Serialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"), axe);
-            axe =(StardewValley.Tools.Axe)Serializer.Deserialize(Path.Combine(this.Helper.DirectoryPath, "AXE.json"),typeof(StardewValley.Tools.Axe));
-            //Game1.player.addItemToInventory(axe);
-            */
             Game1.player.addItemToInventory(new StardewValley.Object((int)Enums.SDVObject.Coal, 1));
             Game1.player.addItemByMenuIfNecessary(ModCore.ObjectManager.GetItem("SteelIngot", 20));
             PickaxeExtended pick = new PickaxeExtended(new BasicItemInformation("My First Pickaxe", "Omegasis.Revitalize.Items.Tools.MyFirstPickaxe", "A testing pickaxe. Does it work?", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(Manifest, "Tools", "Pickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Tools", "Pickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),2,TextureManager.GetExtendedTexture(Manifest,"Tools","TestingPickaxeWorking"));

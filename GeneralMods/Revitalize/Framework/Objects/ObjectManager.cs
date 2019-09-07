@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Objects.Interfaces;
+using Revitalize.Framework.Objects.Items.Tools;
 using StardewModdingAPI;
 using StardewValley;
+using StardustCore.Animations;
+using StardustCore.UIUtilities;
 
 namespace Revitalize.Framework.Objects
 {
@@ -100,6 +104,43 @@ namespace Revitalize.Framework.Objects
         public void loadInItems()
         {
             this.resources.loadInItems();
+
+            this.loadInTools();
+        }
+
+        private void loadInTools()
+        {
+            PickaxeExtended bronzePick = new PickaxeExtended(new BasicItemInformation("Bronze Pickaxe", "Omegasis.Revitalize.Items.Tools.BronzePickaxe", "A sturdy pickaxe made from bronze.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "BronzePickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzePickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 2, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzePickaxeWorking"));
+            PickaxeExtended steelPick = new PickaxeExtended(new BasicItemInformation("Hardened Pickaxe", "Omegasis.Revitalize.Items.Tools.HardenedPickaxe", "A sturdy pickaxe made from hardened alloy.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "HardenedPickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedPickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 3, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedPickaxeWorking"));
+            PickaxeExtended titaniumPick = new PickaxeExtended(new BasicItemInformation("Titanium Pickaxe", "Omegasis.Revitalize.Items.Tools.TitaniumPickaxe", "A sturdy pickaxe made from titanium.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "TitaniumPickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumPickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 4, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumPickaxeWorking"));
+
+            AxeExtended bronzeAxe= new AxeExtended(new BasicItemInformation("Bronze Axe", "Omegasis.Revitalize.Items.Tools.BronzeAxe", "A sturdy axe made from bronze.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "BronzeAxe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzeAxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 2, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzeAxeWorking"));
+            AxeExtended steelAxe = new AxeExtended(new BasicItemInformation("Hardened Axe", "Omegasis.Revitalize.Items.Tools.HardenedAxe", "A sturdy axe made from hardened alloy.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "HardenedAxe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedAxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),3,TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedAxeWorking"));
+            AxeExtended titaniumAxe = new AxeExtended(new BasicItemInformation("Titanium Axe", "Omegasis.Revitalize.Items.Tools.TitaniumAxe", "A sturdy axe made from Titanium.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "TitaniumAxe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumAxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 4, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumAxeWorking"));
+
+            HoeExtended bronzeHoe = new HoeExtended(new BasicItemInformation("Bronze Hoe", "Omegasis.Revitalize.Items.Tools.BronzeHoe", "A sturdy hoe made from bronze.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "BronzeHoe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzeHoe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 2, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzeHoeWorking"));
+            HoeExtended steelHoe = new HoeExtended(new BasicItemInformation("Hardened Hoe", "Omegasis.Revitalize.Items.Tools.HardenedHoe", "A sturdy hoe made from hardened alloy.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "HardenedHoe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedHoe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 3, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedHoeWorking"));
+            HoeExtended titaniumHoe = new HoeExtended(new BasicItemInformation("Titanium Hoe", "Omegasis.Revitalize.Items.Tools.TitaniumHoe", "A sturdy hoe made from titanium.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "TitaniumHoe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumHoe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 4, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumHoeWorking"));
+
+            WateringCanExtended bronzeCan = new WateringCanExtended(new BasicItemInformation("Bronze Watering Can", "Omegasis.Revitalize.Items.Tools.BronzeWateringCan", "A sturdy watering can made from bronze.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "BronzeWateringCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzeWateringCan"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 1, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "BronzeWateringCanWorking"),70);
+            WateringCanExtended steelCan = new WateringCanExtended(new BasicItemInformation("Hardened Watering Can", "Omegasis.Revitalize.Items.Tools.HardenedWateringCan", "A sturdy watering can made from hardened alloy.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "HardenedWateringCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedWateringCan"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 2, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedWateringCanWorking"), 100);
+            WateringCanExtended titaniumCan = new WateringCanExtended(new BasicItemInformation("Titanium Watering Can", "Omegasis.Revitalize.Items.Tools.TitaniumWateringCan", "A sturdy watering can made from titanium.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "TitaniumWateringCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumWateringCan"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 3, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumWateringCanWorking"), 125);
+
+            this.Tools.Add("BronzePickaxe", bronzePick);
+            this.Tools.Add("HardenedPickaxe", steelPick);
+            this.Tools.Add("TitaniumPickaxe", titaniumPick);
+
+            this.Tools.Add("BronzeAxe", bronzeAxe);
+            this.Tools.Add("HardenedAxe", steelAxe);
+            this.Tools.Add("TitaniumAxe", titaniumAxe);
+
+            this.Tools.Add("BronzeHoe", bronzeHoe);
+            this.Tools.Add("HardenedHoe", steelHoe);
+            this.Tools.Add("TitaniumHoe", titaniumHoe);
+
+            this.Tools.Add("BronzeWateringCan", bronzeCan);
+            this.Tools.Add("HardenedWateringCan", steelCan);
+            this.Tools.Add("TitaniumWateringCan", titaniumCan);
         }
 
         /// <summary>
