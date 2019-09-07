@@ -145,7 +145,10 @@
     <Compile Include="Framework\Objects\InformationFiles\ResourceInformaton.cs" />
     <Compile Include="Framework\Objects\Interfaces\IItemInfo.cs" />
     <Compile Include="Framework\Objects\Items\Resources\Ore.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\AxeExtended.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\HoeExtended.cs" />
     <Compile Include="Framework\Objects\Items\Tools\PickaxeExtended.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\WateringCanExtended.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
@@ -239,9 +242,12 @@
     <Content Include="Content\Graphics\Items\Resources\Ore\TitaniumOre.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Items\Tools\DefaultAxeWorking.png" />
+    <Content Include="Content\Graphics\Items\Tools\DefaultHoeWorking.png" />
     <Content Include="Content\Graphics\Items\Tools\DefaultPickaxeWorking.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Items\Tools\DefaultWateringCanWorking.png" />
     <Content Include="Content\Graphics\Items\Tools\Pickaxe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
