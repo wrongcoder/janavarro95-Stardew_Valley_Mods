@@ -351,7 +351,13 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("HardenedHoe"),1)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("TitaniumHoe"), 1)), true));
 
+
             #endregion
+
+            AnvilRecipes.addCraftingRecipe("Trash Can", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,5),5)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("TrashCan"), 1)),true));
 
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {

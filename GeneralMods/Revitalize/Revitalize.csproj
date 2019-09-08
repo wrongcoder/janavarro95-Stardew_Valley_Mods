@@ -66,6 +66,7 @@
     <Compile Include="Framework\Crafting\UnlockableCraftingRecipe.cs" />
     <Compile Include="Framework\Crafting\VanillaRecipeBook.cs" />
     <Compile Include="Framework\Crafting\VanillaRecipe.cs" />
+    <Compile Include="Framework\Energy\IEnergyInterface.cs" />
     <Compile Include="Framework\Enums\Enums.cs" />
     <Compile Include="Framework\Environment\DarkerNight.cs" />
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
@@ -123,10 +124,12 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffectManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
     <Compile Include="Framework\Objects\CraftingTables\CraftingTableTile.cs" />
+    <Compile Include="Framework\Energy\EnergyManager.cs" />
     <Compile Include="Framework\Objects\Extras\ArcadeCabinetOBJ.cs" />
     <Compile Include="Framework\Objects\Extras\ArcadeCabinetTile.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
+    <Compile Include="Framework\Objects\Extras\TrashCanTile.cs" />
     <Compile Include="Framework\Objects\Furniture\Bench.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairTileComponent.cs" />
@@ -372,6 +375,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Furniture\Lamps\Oak Lamp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Misc\TrashCan.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Furniture\Storage\Oak Cabinet.png">

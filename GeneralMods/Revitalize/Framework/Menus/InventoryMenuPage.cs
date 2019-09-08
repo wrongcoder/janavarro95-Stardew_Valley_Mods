@@ -39,8 +39,7 @@ namespace Revitalize.Framework.Menus
     }
 
     /// <summary>
-    /// //TODO: Combine two of these to make an item grab menu.
-    /// TODO: Display Item information on hover.
+    /// An inventory menu that displays the contents of an inventory but doesn't do much else.
     /// </summary>
     public class InventoryMenu : IClickableMenuExtended
     {

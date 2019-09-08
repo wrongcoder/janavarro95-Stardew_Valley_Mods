@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Revitalize.Framework.Objects.CraftingTables;
+using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Objects.Interfaces;
 using Revitalize.Framework.Objects.Items.Tools;
+using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardustCore.Animations;
@@ -104,8 +107,46 @@ namespace Revitalize.Framework.Objects
         public void loadInItems()
         {
             this.resources.loadInItems();
-
+            this.loadInCraftingTables();
+            this.loadInMachines();
             this.loadInTools();
+        }
+
+        private void loadInCraftingTables()
+        {
+            MultiTiledObject WorkbenchObj = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(), Color.White, false, null, null));
+            CraftingTableTile workbenchTile_0_0 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new Animation(0, 0, 16, 16)), Color.White, false, null, null), "Workbench");
+            CraftingTableTile workbenchTile_1_0 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new Animation(16, 0, 16, 16)), Color.White, false, null, null), "Workbench");
+            CraftingTableTile workbenchTile_0_1 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new Animation(0, 16, 16, 16)), Color.White, false, null, null), "Workbench");
+            CraftingTableTile workbenchTile_1_1 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Workbench", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Workbench", "Omegasis.Revitalize.Objects.Crafting.Workbench", "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Workbench"), new Animation(16, 16, 16, 16)), Color.White, false, null, null), "Workbench");
+            WorkbenchObj.addComponent(new Vector2(0, 0), workbenchTile_0_0);
+            WorkbenchObj.addComponent(new Vector2(1, 0), workbenchTile_1_0);
+            WorkbenchObj.addComponent(new Vector2(0, 1), workbenchTile_0_1);
+            WorkbenchObj.addComponent(new Vector2(1, 1), workbenchTile_1_1);
+
+            MultiTiledObject AnvilObj = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Anvil", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Anvil", "Omegasis.Revitalize.Objects.Crafting.Anvil", "An anvil that can be used for crafting different machines and other metalic objects.", "Crafting", Color.Brown, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new AnimationManager(), Color.White, false, null, null));
+            CraftingTableTile anvilTile_0_0 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Anvil", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Anvil", "Omegasis.Revitalize.Objects.Crafting.Anvil", "An anvil that can be used for crafting different machines and other metalic objects.", "Crafting", Color.Brown, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new Animation(0, 0, 16, 16)), Color.White, false, null, null), "Anvil");
+            CraftingTableTile anvilTile_1_0 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Anvil", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Anvil", "Omegasis.Revitalize.Objects.Crafting.Anvil", "An anvil that can be used for crafting different machines and other metalic objects.", "Crafting", Color.Brown, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new Animation(16, 0, 16, 16)), Color.White, false, null, null), "Anvil");
+            CraftingTableTile anvilTile_0_1 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Anvil", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Anvil", "Omegasis.Revitalize.Objects.Crafting.Anvil", "An anvil that can be used for crafting different machines and other metalic objects.", "Crafting", Color.Brown, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new Animation(0, 16, 16, 16)), Color.White, false, null, null), "Anvil");
+            CraftingTableTile anvilTile_1_1 = new CraftingTableTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Crafting.Anvil", TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), typeof(CraftingTableTile), Color.White, true), new BasicItemInformation("Anvil", "Omegasis.Revitalize.Objects.Crafting.Anvil", "An anvil that can be used for crafting different machines and other metalic objects.", "Crafting", Color.Brown, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Objects.Crafting", "Anvil"), new Animation(16, 16, 16, 16)), Color.White, false, null, null), "Anvil");
+            AnvilObj.addComponent(new Vector2(0, 0), anvilTile_0_0);
+            AnvilObj.addComponent(new Vector2(1, 0), anvilTile_1_0);
+            AnvilObj.addComponent(new Vector2(0, 1), anvilTile_0_1);
+            AnvilObj.addComponent(new Vector2(1, 1), anvilTile_1_1);
+
+            this.AddItem("Workbench", WorkbenchObj);
+            this.AddItem("Anvil", AnvilObj);
+        }
+
+        private void loadInMachines()
+        {
+            MultiTiledObject trashCan = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Misc.TrashCan", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Trash Can", "Omegasis.Revitalize.Furniture.Misc.TrashCan", "A trash can where you can throw away unnecessary objects. It empties out at the beginning of each new day.", "Machine", Color.SteelBlue, -300, 0, false, 650, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), new AnimationManager(), Color.White, true, new InventoryManager(36), null, null));
+            TrashCanTile trash1 = new TrashCanTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Misc.TrashCan", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), typeof(TrashCanTile), Color.White, true), new BasicItemInformation("Trash Can", "Omegasis.Revitalize.Furniture.Misc.TrashCan", "A trash can where you can throw away unnecessary objects. It empties out at the beginning of each new day.", "Machine", Color.SteelBlue, -300, 0, false, 650, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "TrashCan"), new Animation(0, 0, 16, 16)), Color.White, true, new InventoryManager(36), null, null));
+            TrashCanTile trash2 = new TrashCanTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Misc.TrashCan", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), typeof(TrashCanTile), Color.White, true), new BasicItemInformation("Trash Can", "Omegasis.Revitalize.Furniture.Misc.TrashCan", "A trash can where you can throw away unnecessary objects. It empties out at the beginning of each new day.", "Machine", Color.SteelBlue, -300, 0, false, 650, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "TrashCan"), new Animation(0, 16, 16, 16)), Color.White, false, new InventoryManager(36), null, null));
+            trashCan.addComponent(new Vector2(0, 0), trash1);
+            trashCan.addComponent(new Vector2(0, 1), trash2);
+
+            this.AddItem("TrashCan", trashCan);
         }
 
         private void loadInTools()

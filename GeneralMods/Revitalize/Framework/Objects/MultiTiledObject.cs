@@ -213,7 +213,7 @@ namespace Revitalize.Framework.Objects
         {
             this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
+                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16)+new Vector2(32,32), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
         }
 

@@ -23,6 +23,17 @@ namespace Revitalize.Framework
         }
 
         /// <summary>
+        /// The types of interaction for energy that exists.
+        /// </summary>
+        public enum EnergyInteractionType
+        {
+            None,
+            Produces,
+            Consumes,
+            Transfers
+        }
+
+        /// <summary>
         /// References Stardew Valley Object id's for easier coding.
         /// </summary>
         public enum SDVObject

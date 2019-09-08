@@ -9,6 +9,7 @@ using StardustCore.Animations;
 using StardewValley;
 using StardewValley.Objects;
 using Revitalize.Framework.Utilities;
+using Revitalize.Framework.Energy;
 
 namespace Revitalize.Framework.Objects
 {
@@ -18,7 +19,7 @@ namespace Revitalize.Framework.Objects
     //     -Inventories
 
     /// <summary>A custom object template.</summary>
-    public class CustomObject : PySObject
+    public class CustomObject : PySObject,IEnergyInterface
     {
 
         public virtual string text
@@ -164,6 +165,29 @@ namespace Revitalize.Framework.Objects
             {
                 this.updateInfo();
                 return this.info.animationManager;
+            }
+        }
+
+        /// <summary>
+        /// Accesses the energy manager for all objects.
+        /// </summary>
+        public EnergyManager EnergyManager
+        {
+            get
+            {
+                if (this.info == null)
+                {
+                    this.updateInfo();
+                    return this.info.EnergyManager;
+                }
+                else
+                {
+                    return this.info.EnergyManager;
+                }
+            }
+            set
+            {
+                this.info.EnergyManager = value;
             }
         }
 
@@ -355,6 +379,11 @@ namespace Revitalize.Framework.Objects
         /// <summary>What happens when a player uses a tool on this object.</summary>
         public override bool performToolAction(Tool t, GameLocation location)
         {
+            if (t == null)
+            {
+                return true;
+            }
+
             if (t.GetType() == typeof(StardewValley.Tools.Axe) || t.GetType() == typeof(StardewValley.Tools.Pickaxe))
             {
                 Game1.createItemDebris(this, Game1.player.getStandingPosition(), Game1.player.getDirection());
@@ -702,5 +731,113 @@ namespace Revitalize.Framework.Objects
             return serializedInfo;
         }
         #endregion
+
+        public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
+        {
+            if (this.location == null)
+            {
+                this.location = environment;
+            }
+            base.updateWhenCurrentLocation(time, environment);
+        }
+
+        /// <summary>
+        /// Gets a list of neighboring tiled objects that produce or transfer energy. This should be used for machines/objects that consume or transfer energy
+        /// </summary>
+        /// <returns></returns>
+        public List<CustomObject> GetNeighboringEnergyTransferProducers()
+        {
+            Vector2 tileLocation = this.TileLocation;
+            List<CustomObject> customObjects = new List<CustomObject>();
+            if (this.location != null)
+            {
+                for(int i = -1; i <= 1; i++)
+                {
+                    for(int j = -1; j <= 1; j++)
+                    {
+                        if (i == j || i== (-j)) continue;
+
+                        Vector2 neighborTile = tileLocation + new Vector2(i, j);
+                        if (this.location.isObjectAtTile((int)neighborTile.X, (int)neighborTile.Y))
+                        {
+                            StardewValley.Object obj=this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
+                            if (obj is CustomObject)
+                            {
+                                if((obj as CustomObject).EnergyManager.energyInteractionType== Enums.EnergyInteractionType.Produces || (obj as CustomObject).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Transfers)
+                                {
+                                    customObjects.Add((CustomObject)obj);
+                                }
+                            }
+                            else continue;
+                        }
+                    }
+                }
+            }
+
+
+            return customObjects;
+
+        }
+
+        /// <summary>
+        /// Gets a list of neighboring tiled objects that consume or transfer energy. This should be used for machines/objects that produce or transfer energy
+        /// </summary>
+        /// <returns></returns>
+        public List<CustomObject> GetNeighboringEnergyTransferConsumers()
+        {
+            Vector2 tileLocation = this.TileLocation;
+            List<CustomObject> customObjects = new List<CustomObject>();
+            if (this.location != null)
+            {
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == j || i == (-j)) continue;
+
+                        Vector2 neighborTile = tileLocation + new Vector2(i, j);
+                        if (this.location.isObjectAtTile((int)neighborTile.X, (int)neighborTile.Y))
+                        {
+                            StardewValley.Object obj = this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
+                            if (obj is CustomObject)
+                            {
+                                if ((obj as CustomObject).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes || (obj as CustomObject).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Transfers)
+                                {
+                                    customObjects.Add((CustomObject)obj);
+                                }
+                            }
+                            else continue;
+                        }
+                    }
+                }
+            }
+
+
+            return customObjects;
+        }
+
+        /// <summary>
+        /// Gets the appropriate energy neighbors to move energy around from/to.
+        /// </summary>
+        /// <returns></returns>
+        public List<CustomObject> getAppropriateEnergyNeighbors()
+        {
+            if (this.EnergyManager.consumesEnergy)
+            {
+                return this.GetNeighboringEnergyTransferProducers();
+            }
+            else if(this.EnergyManager.producesEnergy)
+            {
+                return this.GetNeighboringEnergyTransferConsumers();
+            }
+            else if (this.EnergyManager.transfersEnergy)
+            {
+                List<CustomObject> objs = new List<CustomObject>();
+                objs.AddRange(this.GetNeighboringEnergyTransferConsumers());
+                objs.AddRange(this.GetNeighboringEnergyTransferProducers());
+                return objs;
+            }
+            return new List<CustomObject>();
+        }
     }
 }

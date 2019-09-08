@@ -304,6 +304,20 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        private Energy.EnergyManager _energyManager;
+        public Energy.EnergyManager EnergyManager
+        {
+            get
+            {
+                return this._energyManager;
+            }
+            set
+            {
+                this._energyManager = value;
+                this.requiresUpdate = true;
+            }
+        }
+
         [JsonIgnore]
         public bool requiresUpdate;
         public BasicItemInformation()
@@ -326,9 +340,10 @@ namespace Revitalize.Framework.Objects
             this.facingDirection = Enums.Direction.Down;
             this.id = "";
             this.shakeTimer = 0;
+            this.EnergyManager = new Energy.EnergyManager();
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null)
         {
             this.name = name;
             this.id = id;
@@ -357,7 +372,8 @@ namespace Revitalize.Framework.Objects
             this.lightManager = Lights ?? new LightManager();
             this.facingDirection = Enums.Direction.Down;
             this.shakeTimer = 0;
-            
+
+            this.EnergyManager = EnergyManager ?? new Energy.EnergyManager();
         }
 
         /// <summary>
@@ -375,12 +391,12 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.drawColor, this.ignoreBoundingBox, this.inventory.Copy(), this.lightManager.Copy());
+            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.drawColor, this.ignoreBoundingBox, this._inventory.Copy(), this._lightManager.Copy(),this._energyManager.Copy());
         }
 
         public bool requiresSyncUpdate()
         {
-            return this.requiresUpdate || this.animationManagerRequiresUpdate() || this.inventoryManagerRequiresUpdate() || this.lightManagerRequiresUpdate();
+            return this.requiresUpdate || this.animationManagerRequiresUpdate() || this.inventoryManagerRequiresUpdate() || this.lightManagerRequiresUpdate() || this.energyManagerRequiresUpdate();
         }
 
         public void forceUpdate()
@@ -403,12 +419,19 @@ namespace Revitalize.Framework.Objects
             else return this._lightManager.requiresUpdate;
         }
 
+        private bool energyManagerRequiresUpdate()
+        {
+            if (this._energyManager == null) return false;
+            else return this._energyManager.requiresUpdate;
+        }
+
         public void cleanAfterUpdate()
         {
             this.requiresUpdate = false;
             this._inventory.requiresUpdate = false;
             this._animationManager.requiresUpdate = false;
             this._lightManager.requiresUpdate = false;
+            this._energyManager.requiresUpdate = false;
         }
         
     }
