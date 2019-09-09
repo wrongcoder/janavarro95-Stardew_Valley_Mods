@@ -371,5 +371,211 @@ namespace Revitalize.Framework.Objects
                 MultiplayerUtilities.RequestUpdateSync(this.guid);
             }
         }
+
+
+
+
+        /// <summary>
+        /// Gets a list of neighboring tiled objects that produce or transfer energy. This should be used for machines/objects that consume or transfer energy
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<MultiTiledComponent> GetNeighboringOutputEnergySources()
+        {
+            Vector2 tileLocation = this.TileLocation;
+            List<MultiTiledComponent> customObjects = new List<MultiTiledComponent>();
+            if (this.location != null)
+            {
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == j || i == (-j)) continue;
+
+                        Vector2 neighborTile = tileLocation + new Vector2(i, j);
+                        if (this.location.isObjectAtTile((int)neighborTile.X, (int)neighborTile.Y))
+                        {
+                            StardewValley.Object obj = this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
+                            if (obj is MultiTiledComponent)
+                            {
+                                if ((obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Produces || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                                {
+                                    customObjects.Add((MultiTiledComponent)obj);
+                                }
+                            }
+                            else continue;
+                        }
+                    }
+                }
+            }
+
+
+            return customObjects;
+
+        }
+
+        /// <summary>
+        /// Gets a list of neighboring tiled objects that consume or transfer energy. This should be used for machines/objects that produce or transfer energy
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<MultiTiledComponent> GetNeighboringInputEnergySources()
+        {
+            Vector2 tileLocation = this.TileLocation;
+            List<MultiTiledComponent> customObjects = new List<MultiTiledComponent>();
+            if (this.location != null)
+            {
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == j || i == (-j)) continue;
+
+                        Vector2 neighborTile = tileLocation + new Vector2(i, j);
+                        if (this.location.isObjectAtTile((int)neighborTile.X, (int)neighborTile.Y))
+                        {
+                            StardewValley.Object obj = this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
+                            if (obj is MultiTiledComponent)
+                            {
+                                if ((obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                                {
+                                    customObjects.Add((MultiTiledComponent)obj);
+                                }
+                            }
+                            else continue;
+                        }
+                    }
+                }
+            }
+
+
+            return customObjects;
+        }
+
+        /// <summary>
+        /// Gets the appropriate energy neighbors to move energy around from/to.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<MultiTiledComponent> getAppropriateEnergyNeighbors()
+        {
+            if (this.EnergyManager.consumesEnergy)
+            {
+                return this.GetNeighboringOutputEnergySources();
+            }
+            else if (this.EnergyManager.producesEnergy)
+            {
+                return this.GetNeighboringInputEnergySources();
+            }
+            else if (this.EnergyManager.transfersEnergy)
+            {
+                List<MultiTiledComponent> objs = new List<MultiTiledComponent>();
+                objs.AddRange(this.GetNeighboringInputEnergySources());
+                objs.AddRange(this.GetNeighboringOutputEnergySources());
+                return objs;
+            }
+            return new List<MultiTiledComponent>();
+        }
+
+        /// <summary>
+        /// Gets all of the energy nodes in a network that are either producers or is storage.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<MultiTiledObject> EnergyGraphSearchSources()
+        {
+            List<MultiTiledObject> energySources = new List<MultiTiledObject>();
+            List<MultiTiledComponent> searchedComponents = new List<MultiTiledComponent>();
+            List<MultiTiledComponent> entitiesToSearch = new List<MultiTiledComponent>();
+            entitiesToSearch.AddRange(this.getAppropriateEnergyNeighbors());
+            searchedComponents.Add(this);
+            while (entitiesToSearch.Count > 0)
+            {
+                MultiTiledComponent searchComponent = entitiesToSearch[0];
+                entitiesToSearch.Remove(searchComponent);
+                if (searchedComponents.Contains(searchComponent))
+                {
+                    continue;
+                }
+                else
+                {
+                    searchedComponents.Add(searchComponent);
+                    entitiesToSearch.AddRange(searchComponent.getAppropriateEnergyNeighbors());
+
+                    if (searchComponent.containerObject.info.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Produces || searchComponent.containerObject.info.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                    {
+                        energySources.Add(searchComponent.containerObject);
+                    }
+                }
+
+            }
+            return energySources;
+        }
+
+        /// <summary>
+        /// Gets all of the energy nodes in a network that are either consumers or storage. This should ALWAYS be ran after EnergyGraphSearchSources
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<MultiTiledObject> EnergyGraphSearchConsumers()
+        {
+            List<MultiTiledObject> energySources = new List<MultiTiledObject>();
+            List<MultiTiledComponent> searchedComponents = new List<MultiTiledComponent>();
+            List<MultiTiledComponent> entitiesToSearch = new List<MultiTiledComponent>();
+            entitiesToSearch.AddRange(this.getAppropriateEnergyNeighbors());
+            searchedComponents.Add(this);
+            while (entitiesToSearch.Count > 0)
+            {
+                MultiTiledComponent searchComponent = entitiesToSearch[0];
+                entitiesToSearch.Remove(searchComponent);
+                if (searchedComponents.Contains(searchComponent))
+                {
+                    continue;
+                }
+                else
+                {
+                    searchedComponents.Add(searchComponent);
+                    entitiesToSearch.AddRange(searchComponent.getAppropriateEnergyNeighbors());
+
+                    if (searchComponent.containerObject.info.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes || searchComponent.containerObject.info.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                    {
+                        energySources.Add(searchComponent.containerObject);
+                    }
+                }
+
+            }
+            return energySources;
+        }
+
+        /// <summary>
+        /// Gets all nodes in a connected energy network and tries to drain the necessary amount of energy from the network.
+        /// </summary>
+        public void drainEnergyFromNetwork()
+        {
+            //Machines that consume should ALWAYS try to drain energy from a network first.
+            //Then producers should always try to store energy to a network.
+            //Storage should never try to push or pull energy from a network as consumers will pull from storage and producers will push to storage.
+            //Transfer nodes are used just to connect the network.
+            List<MultiTiledObject> energySources = this.EnergyGraphSearchSources();
+
+            int index = 0;
+
+            for(int i = 0; i < energySources.Count; i++)
+            {
+                this.EnergyManager.transferEnergyFromAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
+                if (this.EnergyManager.hasMaxEnergy) break;
+            }
+        }
+
+        /// <summary>
+        /// Gets all of the nodes in a connected energy network and tries to store the necessary amount of energy from the network.
+        /// </summary>
+        public void storeEnergyToNetwork()
+        {
+            List<MultiTiledObject> energySources = this.EnergyGraphSearchConsumers();
+
+            int index = 0;
+
+            for (int i = 0; i < energySources.Count; i++)
+            {
+                this.EnergyManager.transferEnergyToAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
+                if (this.EnergyManager.hasEnergy) break;
+            }
+        }
     }
 }

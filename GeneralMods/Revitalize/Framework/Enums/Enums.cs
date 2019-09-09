@@ -30,7 +30,8 @@ namespace Revitalize.Framework
             None,
             Produces,
             Consumes,
-            Transfers
+            Transfers,
+            Storage
         }
 
         /// <summary>
