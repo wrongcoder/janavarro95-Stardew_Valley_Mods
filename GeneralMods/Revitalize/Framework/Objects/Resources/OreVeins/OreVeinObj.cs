@@ -15,7 +15,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
     public class OreVeinObj:MultiTiledObject
     {
         [JsonIgnore]
-        public ResourceInformaton resourceInfo
+        public ResourceInformation resourceInfo
         {
             get
             {

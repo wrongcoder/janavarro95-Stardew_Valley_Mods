@@ -4,7 +4,9 @@ using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
+using Revitalize.Framework.Energy;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardewValley.Objects;
@@ -14,6 +16,7 @@ namespace Revitalize.Framework.Objects
     public class MultiTiledComponent : CustomObject,ISaveElement
     {
 
+        [JsonIgnore]
         public override string ItemInfo
         {
             get
@@ -88,6 +91,53 @@ namespace Revitalize.Framework.Objects
         public MultiTiledObject containerObject;
 
         public Vector2 offsetKey;
+
+        [JsonIgnore]
+        public override EnergyManager EnergyManager
+        {
+            get
+            {
+                if (this.info == null || this.containerObject==null)
+                {
+                    this.updateInfo();
+                    if (this.containerObject == null) return null;
+                    return this.containerObject.info.EnergyManager;
+                }
+                else
+                {
+                    return this.containerObject.info.EnergyManager;
+                }
+            }
+            set
+            {
+                this.containerObject.info.EnergyManager = value;
+            }
+        }
+
+        /// <summary>
+        /// The inventory for the object.
+        /// </summary>
+        [JsonIgnore]
+        public virtual InventoryManager InventoryManager
+        {
+            get
+            {
+                if (this.info == null || this.containerObject == null)
+                {
+                    this.updateInfo();
+                    if (this.containerObject == null) return null;
+                    return this.containerObject.info.inventory;
+                }
+                else
+                {
+                    return this.containerObject.info.inventory;
+                }
+            }
+            set
+            {
+                this.containerObject.info.inventory = value;
+            }
+        }
 
         public MultiTiledComponent() { }
 
@@ -556,6 +606,17 @@ namespace Revitalize.Framework.Objects
             int index = 0;
 
             for(int i = 0; i < energySources.Count; i++)
+            {
+                this.EnergyManager.transferEnergyFromAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
+                if (this.EnergyManager.hasMaxEnergy) break;
+            }
+        }
+
+        public void drainEnergyFromNetwork(List<MultiTiledObject> energySources)
+        {
+            int index = 0;
+
+            for (int i = 0; i < energySources.Count; i++)
             {
                 this.EnergyManager.transferEnergyFromAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
                 if (this.EnergyManager.hasMaxEnergy) break;

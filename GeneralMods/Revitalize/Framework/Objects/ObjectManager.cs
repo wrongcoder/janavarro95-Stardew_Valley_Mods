@@ -9,6 +9,7 @@ using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Objects.Interfaces;
 using Revitalize.Framework.Objects.Items.Tools;
+using Revitalize.Framework.Objects.Machines;
 using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
@@ -147,6 +148,38 @@ namespace Revitalize.Framework.Objects
             trashCan.addComponent(new Vector2(0, 1), trash2);
 
             this.AddItem("TrashCan", trashCan);
+
+
+
+            MultiTiledObject sandBox = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(), Color.White, true, new InventoryManager(36), null, null));
+            Machine sandBox_0_0 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"),new Animation(0,0,16,16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
+            {
+                new InformationFiles.ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Clay,1),1,1,1,1,1,1,0,0,0,0)
+
+            }, 0, 10, true);
+            Machine sandBox_1_0 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"), new Animation(16, 0, 16, 16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
+            {
+                new InformationFiles.ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Clay,1),1,1,1,1,1,1,0,0,0,0)
+
+            }, 0, 10, false);
+            Machine sandBox_0_1 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"), new Animation(0, 16, 16, 16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
+            {
+                new InformationFiles.ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Clay,1),1,1,1,1,1,1,0,0,0,0)
+
+            }, 0, 10, false);
+            Machine sandBox_1_1 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"), new Animation(16, 16, 16, 16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
+            {
+                new InformationFiles.ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Clay,1),1,1,1,1,1,1,0,0,0,0)
+
+            }, 0, 10, false);
+
+            sandBox.addComponent(new Vector2(0,0),sandBox_0_0);
+            sandBox.addComponent(new Vector2(1, 0), sandBox_1_0);
+            sandBox.addComponent(new Vector2(0, 1), sandBox_0_1);
+            sandBox.addComponent(new Vector2(1, 1), sandBox_1_1);
+
+            this.AddItem("SandBox", sandBox);
+
         }
 
         private void loadInTools()

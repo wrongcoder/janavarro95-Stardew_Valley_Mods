@@ -168,10 +168,11 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        [JsonIgnore]
         /// <summary>
         /// Accesses the energy manager for all objects.
         /// </summary>
-        public EnergyManager EnergyManager
+        public virtual EnergyManager EnergyManager
         {
             get
             {

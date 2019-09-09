@@ -19,11 +19,17 @@ namespace Revitalize.Framework.Configs
         public Shops_BlacksmithConfig shops_blacksmithConfig;
         public FurnitureConfig furnitureConfig;
 
+        /// <summary>
+        /// The config file to be used for machines.
+        /// </summary>
+        public GlobalMachineConfig machinesConfig;
+
         public ConfigManager()
         {
             this.vanillaMachineConfig = VanillaMachineRecipeConfig.InitializeConfig();
             this.shops_blacksmithConfig = Shops_BlacksmithConfig.InitializeConfig();
             this.furnitureConfig = FurnitureConfig.InitializeConfig();
+            this.machinesConfig = GlobalMachineConfig.InitializeConfig();
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// Deals with information tied to the resource itself.
         /// </summary>
         public OreResourceInformation resourceInfo;
-        public List<ResourceInformaton> extraDrops;
+        public List<ResourceInformation> extraDrops;
 
         private int _healthValue;
         public int healthValue
@@ -70,7 +70,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
                 //Instead of serializing this info it's static pretty much always so just pull the info from the resource manager.
                 OreResourceInformation oreResource = ModCore.ObjectManager.resources.getOreResourceInfo(this.info.id);
-                List<ResourceInformaton> extraDrops = ModCore.ObjectManager.resources.getExtraDropInformationFromOres(this.info.id);
+                List<ResourceInformation> extraDrops = ModCore.ObjectManager.resources.getExtraDropInformationFromOres(this.info.id);
                 if (this.resourceInfo == null)
                 {
                     this.resourceInfo = oreResource;
@@ -137,21 +137,21 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, OreResourceInformation Resource,List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, OreResourceInformation Resource,List<ResourceInformation> ExtraDrops,int Health) : base(PyTKData, Info)
         {
             this.healthValue = Health;
             this.resourceInfo = Resource;
-            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
+            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
             this.setHealth(this.healthValue);
             this.Price = Info.price;
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
         {
 
             this.healthValue = Health;
             this.resourceInfo = Resource;
-            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
+            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
             this.setHealth(this.healthValue);
             this.Price = Info.price;
         }
@@ -292,7 +292,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
             if (this.extraDrops != null)
             {
-                foreach (ResourceInformaton extra in this.extraDrops)
+                foreach (ResourceInformation extra in this.extraDrops)
                 {
                     if (extra.shouldDropResource())
                     {

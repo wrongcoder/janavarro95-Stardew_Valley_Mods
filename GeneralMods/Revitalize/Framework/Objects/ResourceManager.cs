@@ -141,7 +141,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null,null, 0.80d, 0.20d, 0.25d, 1d, 1d, 1, 1, 1, 1), new List<ResourceInformaton>(), 4);
+            }, null,null, 0.80d, 0.20d, 0.25d, 1d, 1d, 1, 1, 1, 1), new List<ResourceInformation>(), 4);
 
             OreFactoryInfo tinOre_0_0_file = new OreFactoryInfo(tinOre_0_0);
             OreFactoryInfo tinOre_file = new OreFactoryInfo(tinOre);
@@ -161,7 +161,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .70d, 0.16d, 0.20d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 5);
+            }, null, null, .70d, 0.16d, 0.20d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 5);
 
             OreFactoryInfo bauxiteOre_0_0_file = new OreFactoryInfo(bauxiteOre_0_0);
             OreFactoryInfo bauxiteOre_file = new OreFactoryInfo(bauxiteOre);
@@ -181,7 +181,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .50d, 0.10d, 0.14d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 6);
+            }, null, null, .50d, 0.10d, 0.14d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 6);
 
             OreFactoryInfo silverOre_0_0_file = new OreFactoryInfo(silverOre_0_0);
             OreFactoryInfo silverOre_file = new OreFactoryInfo(silverOre);
@@ -201,7 +201,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .60d, 0.13d, 0.17d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 7);
+            }, null, null, .60d, 0.13d, 0.17d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 7);
 
             OreFactoryInfo leadOre_0_0_file = new OreFactoryInfo(leadOre_0_0);
             OreFactoryInfo leadOre_file = new OreFactoryInfo(leadOre);
@@ -222,7 +222,7 @@ namespace Revitalize.Framework.Objects
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .40d, 0.05d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformaton>(), 8);
+            }, null, null, .40d, 0.05d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 8);
 
             OreFactoryInfo titaniumOre_0_0_file = new OreFactoryInfo(titaniumOre_0_0);
             OreFactoryInfo titaniumOre_file = new OreFactoryInfo(titaniumOre);
@@ -241,7 +241,7 @@ namespace Revitalize.Framework.Objects
                 new IntRange(1,9999)
             }, new List<IntRange>()
             {
-            }, null, null, .05d, 0.01d, 0.01d, 0.10, 1d, 1, 1, 1,1), new List<ResourceInformaton>(), 10);
+            }, null, null, .05d, 0.01d, 0.01d, 0.10, 1d, 1, 1, 1,1), new List<ResourceInformation>(), 10);
 
             OreFactoryInfo prismaticOre_0_0_file = new OreFactoryInfo(prismaticOre_0_0);
             OreFactoryInfo prismaticOre_file = new OreFactoryInfo(prismaticOre);
@@ -336,7 +336,7 @@ namespace Revitalize.Framework.Objects
             }
         }
 
-        public List<ResourceInformaton> getExtraDropInformationFromOres(string id)
+        public List<ResourceInformation> getExtraDropInformationFromOres(string id)
         {
             if (this.oreVeins.ContainsKey(id))
             {
