@@ -201,6 +201,9 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Graphics\Items\Resources\Misc\Sand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\AluminumIngot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

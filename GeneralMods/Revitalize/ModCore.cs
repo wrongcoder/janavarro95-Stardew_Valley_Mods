@@ -300,6 +300,8 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
             TextureManager.AddTextureManager(Manifest, "Resources.Ore");
             TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
+            TextureManager.AddTextureManager(Manifest, "Items.Resources.Misc");
+            TextureManager.GetTextureManager(Manifest, "Items.Resources.Misc").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Misc"));
             TextureManager.AddTextureManager(Manifest, "Items.Resources.Ore");
             TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
             TextureManager.AddTextureManager(Manifest, "Tools");

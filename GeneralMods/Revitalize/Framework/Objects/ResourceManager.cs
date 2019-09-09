@@ -30,6 +30,7 @@ namespace Revitalize.Framework.Objects
         public Dictionary<string, OreVeinObj> oreVeins;
         public Dictionary<string, OreResourceInformation> oreResourceInformationTable;
         public Dictionary<string, Ore> ores;
+        public Dictionary<string, CustomObject> resources;
 
         /// <summary>
         /// A list of all visited floors on the current visit to the mines.
@@ -46,6 +47,7 @@ namespace Revitalize.Framework.Objects
             this.oreResourceInformationTable = new Dictionary<string, OreResourceInformation>();
             this.ores = new Dictionary<string, Ore>();
             this.visitedFloors = new List<int>();
+            this.resources = new Dictionary<string, CustomObject>();
 
         }
 
@@ -54,6 +56,7 @@ namespace Revitalize.Framework.Objects
         public void loadInItems()
         {
             this.loadInOreItems();
+            this.loadInResourceItems();
             this.serializeOreVeins();
             this.loadOreVeins();
         }
@@ -304,6 +307,12 @@ namespace Revitalize.Framework.Objects
             ModCore.ObjectManager.AddItem("SteelIngot", steelIngot);
         }
 
+        private void loadInResourceItems()
+        {
+            CustomObject sand=new CustomObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Items.Resources.Misc.Sand", TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Sand"), typeof(CustomObject), Color.White, true), new BasicItemInformation("Sand", "Omegasis.Revitalize.Items.Resources.Misc.Sand", "Sand which is made from tiny rocks and can be used for smelting. Also unfun to have inside of swimwear.", "Resource", Color.Brown, -300, 0, false, 2, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Sand"), new AnimationManager(), Color.White, true, null, null));
+            this.resources.Add("Sand", sand);
+        }
+
         /// <summary>
         /// Gets an ore from the list of stored ores in this mod.
         /// </summary>
@@ -317,6 +326,29 @@ namespace Revitalize.Framework.Objects
                 Ore o = (Ore)this.ores[name].getOne();
                 o.Stack = Stack;
                 return o;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get a resource from the resource maanger.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="Stack"></param>
+        /// <returns></returns>
+        public CustomObject getResource(string name, int Stack=1)
+        {
+            Ore o = this.getOre(name, Stack);
+            if (o != null) return o;
+
+            if (this.resources.ContainsKey(name))
+            {
+                CustomObject obj = (CustomObject)this.resources[name].getOne();
+                obj.Stack = Stack;
+                return obj;
             }
             else
             {
