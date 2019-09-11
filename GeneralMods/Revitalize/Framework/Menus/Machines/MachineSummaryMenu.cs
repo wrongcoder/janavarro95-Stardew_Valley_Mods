@@ -12,7 +12,7 @@ using StardewValley;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
-namespace Revitalize.Framework.Menus
+namespace Revitalize.Framework.Menus.Machines
 {
     public class MachineSummaryMenu : IClickableMenuExtended
     {
@@ -35,7 +35,6 @@ namespace Revitalize.Framework.Menus
         private AnimatedButton battergyEnergyGuage;
         private Vector2 energyPosition;
         private Texture2D energyTexture;
-        private Rectangle energyMeterBounds;
         private Vector2 itemDisplayOffset;
 
         private EnergyManager energy
@@ -63,7 +62,7 @@ namespace Revitalize.Framework.Menus
             this.batteryBackground =new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryFrame", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryFrame"), new StardustCore.Animations.Animation(0, 0, 32, 64)),Color.White),new Rectangle(0,0,32,64),4f);
             this.battergyEnergyGuage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryEnergyGuage", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryEnergyGuage"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
 
-            this.itemDisplayOffset=this.getDimensionOffsetFromItem();
+            this.itemDisplayOffset = ObjectUtilities.GetDimensionOffsetFromItem(this.objectSource);
         }
 
         public override void performHoverAction(int x, int y)
@@ -112,11 +111,14 @@ namespace Revitalize.Framework.Menus
 
            
         }
+        /// <summary>
+        /// Swaps the color for the energy bar meter depending on how much energy is left.
+        /// </summary>
 
         private void colorSwap()
         {
             Color col = new Color();
-            ModCore.log("Energy is: " + this.energy.energyPercentRemaining);
+            //ModCore.log("Energy is: " + this.energy.energyPercentRemaining);
             if (this.energy.energyPercentRemaining > .75d)
             {
                 col = Color.Green;
@@ -143,21 +145,6 @@ namespace Revitalize.Framework.Menus
                 col
             };
             this.energyTexture.SetData<Color>(color);
-        }
-
-
-        private Vector2 getDimensionOffsetFromItem()
-        {
-            if (ObjectUtilities.IsSameType(typeof(StardewValley.Object), this.objectSource.GetType()))
-            {
-                return new Vector2(64f, 64f);
-            }
-            if (ObjectUtilities.IsSameType(typeof(Revitalize.Framework.Objects.MultiTiledObject), this.objectSource.GetType()))
-            {
-                return new Vector2(64f * (this.objectSource as MultiTiledObject).Width, 64f * (this.objectSource as MultiTiledObject).Height);
-            }
-
-            return new Vector2(64f, 64f);
         }
     }
 }

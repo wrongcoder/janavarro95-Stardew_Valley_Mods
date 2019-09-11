@@ -31,6 +31,7 @@ using Revitalize.Framework.Menus;
 using Revitalize.Framework.Objects.CraftingTables;
 using Revitalize.Framework.Objects.Items.Tools;
 using StardewValley.Tools;
+using Revitalize.Framework.Menus.Machines;
 
 namespace Revitalize
 {
@@ -332,10 +333,17 @@ namespace Revitalize
             */
             if (e.Button == SButton.U)
             {
-                CustomObject test = ObjectManager.GetItem("SandBox");
+                MultiTiledObject test =(MultiTiledObject) ObjectManager.GetItem("SandBox");
                 test.EnergyManager.maxEnergy = 100;
                 test.EnergyManager.produceEnergy(100);
-                if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = new MachineSummaryMenu((Game1.viewport.Width/2)-400, 0, 800, 600,Color.White,test);
+                MachineSummaryMenu m= new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width/2)-400, 48, 800, 600,Color.White,test);
+                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, test.info.inventory.items, 36);
+                MachineMenu machineMenu = new MachineMenu((Game1.viewport.Width / 2) - 400, 0, 800, 600);
+
+                machineMenu.addInMenuTab("Summary",new AnimatedButton(new StardustCore.Animations.AnimatedSprite("SummaryTab",new Vector2(),new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest,"Menus","MenuTab"),new Animation(0,0,24,24)),Color.White),new Rectangle(0,0,24,24),2f),m,true);
+                machineMenu.addInMenuTab("Inventory", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Inventory Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), transferMenu, true);
+
+                if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = machineMenu;
             }
             /*
             if (e.Button == SButton.Y)

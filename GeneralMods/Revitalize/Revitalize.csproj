@@ -86,7 +86,8 @@
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Menus\CraftingInformationPage.cs" />
     <Compile Include="Framework\Menus\CraftingMenuV1.cs" />
-    <Compile Include="Framework\Menus\MachineSummaryMenu.cs" />
+    <Compile Include="Framework\Menus\Machines\MachineMenu.cs" />
+    <Compile Include="Framework\Menus\Machines\MachineSummaryMenu.cs" />
     <Compile Include="Framework\Menus\InventoryMenuPage.cs" />
     <Compile Include="Framework\Menus\InventoryTransferMenu.cs" />
     <Compile Include="Framework\Menus\MenuComponents\CraftingRecipeButton.cs" />

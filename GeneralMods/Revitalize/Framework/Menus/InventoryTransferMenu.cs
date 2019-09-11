@@ -209,7 +209,22 @@ namespace Revitalize.Framework.Menus
             }
             if (To.isFull == false)
             {
-                To.items.Add(From.activeItem);
+                //
+                bool addedItem = false;
+                for(int i = 0; i < To.items.Count; i++)
+                {
+                    if (To.items[i] == null)
+                    {
+                        To.items[i] = From.activeItem;
+                        addedItem = true;
+                        break;
+                    }
+                }
+                if (addedItem == false)
+                {
+                    To.items.Add(From.activeItem);
+                }
+
                 From.items.Remove(From.activeItem);
                 From.activeItem = null;
                 From.populateClickableItems();
