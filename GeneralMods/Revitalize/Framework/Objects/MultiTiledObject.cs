@@ -262,7 +262,13 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        public override void drawFullyInMenu(SpriteBatch spriteBatch, Vector2 objectPosition, float Depth)
+        {
+            this.updateInfo();
 
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+                (pair.Value as CustomObject).drawFullyInMenu(spriteBatch, objectPosition + (pair.Key * Game1.tileSize),Depth);
+        }
 
         public virtual void pickUp(Farmer who)
         {

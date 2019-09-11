@@ -94,6 +94,29 @@ namespace Revitalize.Framework.Energy
             }
         }
 
+        /// <summary>
+        /// Returns the energy remaining as a percent value.
+        /// </summary>
+        public double energyPercentRemaining
+        {
+            get
+            {
+                return (double)this.remainingEnergy / (double)this.maxEnergy;
+            }
+        }
+
+        public string energyDisplayString
+        {
+            get
+            {
+                StringBuilder b = new StringBuilder();
+                b.Append(this.remainingEnergy);
+                b.Append("/");
+                b.Append(this.maxEnergy);
+                return b.ToString();
+            }
+        }
+
         public EnergyManager()
         {
 

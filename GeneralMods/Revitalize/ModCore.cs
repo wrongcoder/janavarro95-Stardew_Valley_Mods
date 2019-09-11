@@ -309,6 +309,10 @@ namespace Revitalize
 
             TextureManager.AddTextureManager(Manifest, "Menus");
             TextureManager.GetTextureManager(Manifest, "Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
+
+            TextureManager.AddTextureManager(Manifest, "Menus.EnergyMenu");
+            TextureManager.GetTextureManager(Manifest, "Menus.EnergyMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "EnergyMenu"));
+
             TextureManager.AddTextureManager(Manifest, "CraftingMenu");
             TextureManager.GetTextureManager(Manifest, "CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
 
@@ -326,6 +330,13 @@ namespace Revitalize
                 Game1.currentMinigame = new Revitalize.Framework.Minigame.SeasideScrambleMinigame.SeasideScramble();
             }
             */
+            if (e.Button == SButton.U)
+            {
+                CustomObject test = ObjectManager.GetItem("SandBox");
+                test.EnergyManager.maxEnergy = 100;
+                test.EnergyManager.produceEnergy(100);
+                if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = new MachineSummaryMenu((Game1.viewport.Width/2)-400, 0, 800, 600,Color.White,test);
+            }
             /*
             if (e.Button == SButton.Y)
             {

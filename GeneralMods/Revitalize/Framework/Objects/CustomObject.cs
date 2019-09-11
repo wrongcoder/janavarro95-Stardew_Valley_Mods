@@ -539,25 +539,6 @@ namespace Revitalize.Framework.Objects
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1f)
         {
             this.updateInfo();
-            /*
-            if (Game1.eventUp && Game1.CurrentEvent.isTileWalkedOn(xNonTile / 64, yNonTile / 64))
-                return;
-            if ((int)(this.ParentSheetIndex) != 590 && (int)(this.Fragility) != 2)
-                spriteBatch.Draw(Game1.shadowTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile + 32), (float)(yNonTile + 51 + 4))), new Microsoft.Xna.Framework.Rectangle?(Game1.shadowTexture.Bounds), Color.White * alpha, 0.0f, new Vector2((float)Game1.shadowTexture.Bounds.Center.X, (float)Game1.shadowTexture.Bounds.Center.Y), 4f, SpriteEffects.None, layerDepth - 1E-06f);
-            SpriteBatch spriteBatch1 = spriteBatch;
-            Texture2D objectSpriteSheet = Game1.objectSpriteSheet;
-            Vector2 local = Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile + 32 + (this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0)), (float)(yNonTile + 32 + (this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0))));
-            Microsoft.Xna.Framework.Rectangle? sourceRectangle = new Microsoft.Xna.Framework.Rectangle?(GameLocation.getSourceRectForObject(this.ParentSheetIndex));
-            Color color = Color.White * alpha;
-            double num1 = 0.0;
-            Vector2 origin = new Vector2(8f, 8f);
-            Vector2 scale = this.scale;
-            double num2 = (double)this.scale.Y > 1.0 ? (double)this.getScale().Y : 4.0;
-            int num3 = (bool)(this.flipped) ? 1 : 0;
-            double num4 = (double)layerDepth;
-
-            spriteBatch1.Draw(this.displayTexture, local, this.animationManager.defaultDrawFrame.sourceRectangle, this.info.drawColor * alpha, (float)num1, origin, (float)4f, (SpriteEffects)num3, (float)num4);
-            */
             //The actual planter box being drawn.
             if (this.animationManager == null)
             {
@@ -590,6 +571,9 @@ namespace Revitalize.Framework.Objects
             // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
 
         }
+
+
+
 
         /// <summary>What happens when the object is drawn in a menu.</summary>
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
@@ -636,6 +620,21 @@ namespace Revitalize.Framework.Objects
             }
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
+
+        /// <summary>What happens when the object is drawn when held by a player.</summary>
+        public virtual void drawFullyInMenu(SpriteBatch spriteBatch, Vector2 objectPosition,float Depth)
+        {
+            this.updateInfo();
+            if (this.animationManager == null)
+            {
+                Revitalize.ModCore.log("Animation Manager Null");
+            }
+            if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
+
+            spriteBatch.Draw(this.displayTexture, objectPosition, this.animationManager.currentAnimation.sourceRectangle, this.info.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None,Depth);
+            //base.drawWhenHeld(spriteBatch, objectPosition, f);
+        }
+
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
         {

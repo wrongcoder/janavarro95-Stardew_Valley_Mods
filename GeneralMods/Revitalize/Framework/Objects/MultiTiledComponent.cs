@@ -404,6 +404,19 @@ namespace Revitalize.Framework.Objects
             
         }
 
+        public override void drawFullyInMenu(SpriteBatch spriteBatch, Vector2 objectPosition, float Depth)
+        {
+            this.updateInfo();
+            if (this.animationManager == null)
+            {
+                Revitalize.ModCore.log("Animation Manager Null");
+            }
+            if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
+
+            spriteBatch.Draw(this.displayTexture, objectPosition, this.animationManager.currentAnimation.sourceRectangle, this.info.drawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Depth);
+            //base.drawWhenHeld(spriteBatch, objectPosition, f);
+        }
+
         public override void updateInfo()
         {
             if (this.info == null || this.containerObject==null)
