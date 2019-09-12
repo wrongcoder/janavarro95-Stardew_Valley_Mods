@@ -154,24 +154,24 @@ namespace Revitalize.Framework.Objects
             MultiTiledObject sandBox = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(), Color.White, true, new InventoryManager(36), null, null));
             Machine sandBox_0_0 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"),new Animation(0,0,16,16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
             {
-                new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
+                //new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
 
-            }, 0, TimeUtilities.GetMinutesFromTime(0, 1, 0), true);
+            }, 0, TimeUtilities.GetMinutesFromTime(0, 1, 0), true,"Workbench");
             Machine sandBox_1_0 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"), new Animation(16, 0, 16, 16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
             {
-                new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
+                //new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
 
-            }, 0, TimeUtilities.GetMinutesFromTime(0, 1, 0), false);
+            }, 0, TimeUtilities.GetMinutesFromTime(0, 1, 0), false, "Workbench");
             Machine sandBox_0_1 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"), new Animation(0, 16, 16, 16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
             {
-                new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
+                //new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
 
-            }, 0, TimeUtilities.GetMinutesFromTime(0,1,0), false);
+            }, 0, TimeUtilities.GetMinutesFromTime(0,1,0), false, "Workbench");
             Machine sandBox_1_1 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Sandbox", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), typeof(Machine), Color.White, true), new BasicItemInformation("Sandbox", "Omegasis.Revitalize.Objects.Machines.Sandbox", "A sandbox which slowly produces sand. Unfortunately you can't sit in this one.", "Machine", Color.SteelBlue, -300, 0, false, 750, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Sandbox"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Sandbox"), new Animation(16, 16, 16, 16)), Color.White, false, new InventoryManager(36), null, null), new List<InformationFiles.ResourceInformation>()
             {
-                new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
+                //new InformationFiles.ResourceInformation(this.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
 
-            }, 0, TimeUtilities.GetMinutesFromTime(0, 1, 0), false);
+            }, 0, TimeUtilities.GetMinutesFromTime(0, 1, 0), false, "Workbench");
 
             sandBox.addComponent(new Vector2(0,0),sandBox_0_0);
             sandBox.addComponent(new Vector2(1, 0), sandBox_1_0);

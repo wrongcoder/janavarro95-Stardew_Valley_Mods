@@ -20,11 +20,25 @@ namespace Revitalize.Framework.Utilities
         /// <summary>The actual contents of the inventory.</summary>
         public IList<Item> items;
 
+        /// <summary>
+        /// Items that are to be buffered into the inventory manager if possible.
+        /// </summary>
+        public IList<Item> bufferItems;
+
         /// <summary>Checks if the inventory is full or not.</summary>
         public bool IsFull => this.ItemCount >= this.capacity && this.items.Where(i=>i==null).Count()==0;
 
         /// <summary>Checks to see if this core object actually has a valid inventory.</summary>
         public bool HasInventory => this.capacity > 0;
+
+        [JsonIgnore]
+        public bool hasItemsInBuffer
+        {
+            get
+            {
+                return this.bufferItems.Count > 0;
+            }
+        }
 
         [JsonIgnore]
         public bool requiresUpdate;
@@ -33,6 +47,7 @@ namespace Revitalize.Framework.Utilities
             this.capacity = 0;
             this.setMaxLimit(0);
             this.items = new List<Item>();
+            this.bufferItems = new List<Item>();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -41,6 +56,7 @@ namespace Revitalize.Framework.Utilities
             this.capacity = int.MaxValue;
             this.setMaxLimit(int.MaxValue);
             this.items = items;
+            this.bufferItems = new List<Item>();
         }
 
         public InventoryManager(IList<Item> items)
@@ -48,6 +64,7 @@ namespace Revitalize.Framework.Utilities
             this.capacity = int.MaxValue;
             this.setMaxLimit(int.MaxValue);
             this.items = items;
+            this.bufferItems = new List<Item>();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -56,6 +73,7 @@ namespace Revitalize.Framework.Utilities
             this.capacity = capacity;
             this.MaxCapacity = int.MaxValue;
             this.items = new List<Item>();
+            this.bufferItems = new List<Item>();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -64,6 +82,7 @@ namespace Revitalize.Framework.Utilities
             this.capacity = capacity;
             this.setMaxLimit(MaxCapacity);
             this.items = new List<Item>();
+            this.bufferItems = new List<Item>();
         }
 
         /// <summary>Add the item to the inventory.</summary>
@@ -75,15 +94,23 @@ namespace Revitalize.Framework.Utilities
             }
             else
             {
-                foreach (Item self in this.items)
+                for(int i = 0; i < this.items.Count; i++)
                 {
+                    Item self = this.items[i];
                     if (self != null && self.canStackWith(item))
                     {
                         self.addToStack(item.Stack);
                         this.requiresUpdate = true;
                         return true;
                     }
+                    if (self == null)
+                    {
+                        self = item;
+                        this.requiresUpdate=true;
+                        return true;
+                    }
                 }
+
                 this.requiresUpdate = true;
                 this.items.Add(item);
                 return true;
@@ -155,6 +182,15 @@ namespace Revitalize.Framework.Utilities
         public InventoryManager Copy()
         {
             return new InventoryManager(this.capacity, this.MaxCapacity);
+        }
+
+        public void dumpBufferToItems()
+        {
+            foreach(Item I in this.bufferItems)
+            {
+                this.addItem(I);
+            }
+            this.bufferItems.Clear();
         }
     }
 }

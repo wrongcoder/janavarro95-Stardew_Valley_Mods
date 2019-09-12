@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Revitalize.Framework.Menus.MenuComponents;
+using Revitalize.Framework.Objects.Machines;
 using StardewValley;
 using StardewValley.Menus;
 using StardustCore.UIUtilities;
@@ -90,6 +91,8 @@ namespace Revitalize.Framework.Menus
         /// </summary>
         public StardewValley.Menus.TextBox searchBox;
 
+        private Machine machine;
+
         /// <summary>
         /// The maximum amount of pages to display.
         /// </summary>
@@ -167,7 +170,7 @@ namespace Revitalize.Framework.Menus
         /// <param name="BackgroundColor"></param>
         /// <param name="FromInventory"></param>
         /// <param name="ToInventory"></param>
-        public CraftingMenuV1(int X, int Y, int Width, int Height, Color BackgroundColor, ref IList<Item> FromInventory, ref IList<Item> ToInventory) : base(X, Y, Width, Height, false)
+        public CraftingMenuV1(int X, int Y, int Width, int Height, Color BackgroundColor, ref IList<Item> FromInventory, ref IList<Item> ToInventory,Machine Machine) : base(X, Y, Width, Height, false)
         {
             this.backgroundColor = BackgroundColor;
             this.CraftingTabs = new Dictionary<string, AnimatedButton>();
@@ -176,6 +179,8 @@ namespace Revitalize.Framework.Menus
             this.fromInventory = FromInventory;
             this.toInventory = ToInventory;
             this.initializeButtons();
+            this.machine = Machine;
+            this.playerInventory = false;
         }
 
         /// <summary>
@@ -386,17 +391,19 @@ namespace Revitalize.Framework.Menus
                             this.fromInventory = Game1.player.Items;
                         }
 
-                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width + this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button, ref this.fromInventory, this.playerInventory);
+                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width + this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button, ref this.fromInventory,ref this.toInventory,this.playerInventory,this.machine);
                         Game1.soundBank.PlayCue("coin");
                         if (this.playerInventory)
                         {
                             Game1.player.Items = this.toInventory;
                             return;
                         }
-
+                        //ModCore.log("Button has been clicked!");
+                        return;
                     }
                 }
             }
+            //ModCore.log("Menu has been clicked");
 
             if (this.craftingInfo != null)
             {
@@ -420,7 +427,7 @@ namespace Revitalize.Framework.Menus
             this.leftButton.draw(b);
             //Draw page numbers here.
             //b.DrawString(Game1.smallFont,"Page: "+this.currentPageIndex.ToString()/)
-            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + (this.maxPages + 1)).ToString(), new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen), Color.White);
+            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + (this.maxPages + 1)).ToString(), new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen+32), Color.White);
             this.rightButton.draw(b);
 
             this.searchBox.Draw(b, true);

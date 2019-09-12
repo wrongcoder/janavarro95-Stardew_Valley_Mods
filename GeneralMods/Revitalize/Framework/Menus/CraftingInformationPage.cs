@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Menus.MenuComponents;
 using Revitalize.Framework.Objects;
+using Revitalize.Framework.Objects.Machines;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardustCore.UIUtilities;
@@ -28,12 +29,17 @@ namespace Revitalize.Framework.Menus
         public Vector2 itemDisplayLocation;
 
         public IList<Item> inventory;
+        public IList<Item> outputInventory;
 
         private Dictionary<ItemDisplayButton,int> requiredItems;
 
         public AnimatedButton craftingButton;
 
         public bool isPlayerInventory;
+
+        private Machine machine;
+
+        string hoverText;
 
         public Item actualItem
         {
@@ -63,6 +69,31 @@ namespace Revitalize.Framework.Menus
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
             this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
+            this.outputInventory = this.inventory;
+        }
+
+        public CraftingInformationPage(int x, int y, int width, int height, Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory,ref IList<Item> OutputInventory ,bool IsPlayerInventory, Machine Machine) : base(x, y, width, height, false)
+        {
+            this.backgroundColor = BackgroundColor;
+            this.infoButton = ItemToDisplay;
+            this.itemDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width / 2) - 32, this.yPositionOnScreen + (128));
+            this.inventory = Inventory;
+            this.isPlayerInventory = IsPlayerInventory;
+
+            this.requiredItems = new Dictionary<ItemDisplayButton, int>();
+            for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
+            {
+                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64, this.getIngredientHeightOffset().Y), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
+                this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
+            }
+            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
+
+            if (OutputInventory == null)
+            {
+                this.outputInventory = this.inventory;
+            }
+            this.outputInventory = OutputInventory;
+            this.machine = Machine;
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
@@ -72,13 +103,60 @@ namespace Revitalize.Framework.Menus
                 if (this.canCraftRecipe())
                 {
                     Game1.soundBank.PlayCue("coin");
-                    this.infoButton.craftItem();
+
+                    this.infoButton.craftItem(this.inventory, this.outputInventory);
+                    if (this.machine != null)
+                    {
+                        if (this.infoButton.recipe.timeToCraft == 0)
+                        {
+                            this.machine.InventoryManager.dumpBufferToItems();
+                        }
+                        else
+                        {
+                            this.machine.MinutesUntilReady = this.infoButton.recipe.timeToCraft;
+                        }
+                    }
 
                     if (this.isPlayerInventory)
                     {
                         this.inventory = Game1.player.Items;
                     }
                 }
+            }
+        }
+
+        public override void performHoverAction(int x, int y)
+        {
+            bool hovered = false;
+            if (this.craftingButton.containsPoint(x, y))
+            {
+                if (this.infoButton.recipe.CanCraft(this.inventory) == false)
+                {
+                    this.hoverText = "Not enough items.";
+                    hovered = true;
+                }
+                if (this.machine != null)
+                {
+                    if (this.machine.MinutesUntilReady > 0)
+                    {
+                        this.hoverText = "Crafting in progress...";
+                        hovered = true;
+                    }
+                    if (this.machine.MinutesUntilReady == 0 && this.machine.InventoryManager.hasItemsInBuffer)
+                    {
+                        this.hoverText = "Items in buffer. Please make room in the inventory for: " + System.Environment.NewLine + this.machine.InventoryManager + " items.";
+                        hovered = true;
+                    }
+                    if (this.machine.InventoryManager.IsFull)
+                    {
+                        this.hoverText = "Inventory is full!";
+                        hovered = true;
+                    }
+                }
+            }
+            if (hovered == false)
+            {
+                this.hoverText = "";
             }
         }
 
@@ -110,7 +188,16 @@ namespace Revitalize.Framework.Menus
 
         public bool canCraftRecipe()
         {
-            return this.infoButton.recipe.CanCraft(this.inventory);
+            bool canCraft = true;
+            if (this.infoButton.recipe.CanCraft(this.inventory) == false) canCraft = false;
+
+            if (this.machine != null)
+            {
+                if (this.machine.InventoryManager.hasItemsInBuffer) canCraft = false;
+                if (this.machine.InventoryManager.IsFull) canCraft = false;
+            }
+
+            return canCraft;
         }
 
         /// <summary>

@@ -62,7 +62,6 @@
     <Compile Include="Framework\Crafting\CraftingRecipeComponent.cs" />
     <Compile Include="Framework\Crafting\MachineCraftingRecipe.cs" />
     <Compile Include="Framework\Crafting\Recipe.cs" />
-    <Compile Include="Framework\Crafting\RecipeBook.cs" />
     <Compile Include="Framework\Crafting\StatCost.cs" />
     <Compile Include="Framework\Crafting\UnlockableCraftingRecipe.cs" />
     <Compile Include="Framework\Crafting\VanillaRecipeBook.cs" />

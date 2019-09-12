@@ -254,7 +254,6 @@ namespace Revitalize
             //Loads in objects to be use by the mod.
             ObjectGroups = new Dictionary<string, MultiTiledObject>();
             ObjectManager = new ObjectManager(Manifest);
-            ObjectManager.loadInItems();
             ObjectsToDraw = new Dictionary<GameLocation, MultiTiledObject>();
 
             //Adds in event handling for the mod.
@@ -278,9 +277,7 @@ namespace Revitalize
             ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
 
-            //Adds in recipes to the mod.
-            VanillaRecipeBook = new VanillaRecipeBook();
-            CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
+
 
             ModHelper.Events.Display.MenuChanged += MenuHacks.RecreateFarmhandInventory;
 
@@ -339,9 +336,12 @@ namespace Revitalize
                 MachineSummaryMenu m= new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width/2)-400, 48, 800, 600,Color.White,test);
                 InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, test.info.inventory.items, 36);
                 MachineMenu machineMenu = new MachineMenu((Game1.viewport.Width / 2) - 400, 0, 800, 600);
+                CraftingMenuV1 craftingMenu= new Framework.Menus.CraftingMenuV1(100, 100, 400, 700, Color.White, Game1.player.Items);
 
                 machineMenu.addInMenuTab("Summary",new AnimatedButton(new StardustCore.Animations.AnimatedSprite("SummaryTab",new Vector2(),new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest,"Menus","MenuTab"),new Animation(0,0,24,24)),Color.White),new Rectangle(0,0,24,24),2f),m,true);
                 machineMenu.addInMenuTab("Inventory", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Inventory Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), transferMenu, true);
+                machineMenu.addInMenuTab("Crafting", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Crafting Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), craftingMenu, true);
+
 
                 if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = machineMenu;
             }
@@ -537,6 +537,11 @@ namespace Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             this.loadContent();
+            ObjectManager.loadInItems();
+            //Adds in recipes to the mod.
+            VanillaRecipeBook = new VanillaRecipeBook();
+            CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
+
             Serializer.afterLoad();
             ShopHacks.AddInCustomItemsToShops();
             ObjectInteractionHacks.AfterLoad_RestoreTrackedMachines();
@@ -555,7 +560,8 @@ namespace Revitalize
                 new StardewValley.Object((int)Enums.SDVObject.Wood,100),
                 ModCore.ObjectManager.GetItem("SteelIngot", 20),
                 ModCore.ObjectManager.GetItem("TrashCan",1),
-                ModCore.ObjectManager.GetItem("SandBox",1)
+                ModCore.ObjectManager.GetItem("SandBox",1),
+                ModCore.ObjectManager.GetItem("Anvil",1)
 
             });
         }

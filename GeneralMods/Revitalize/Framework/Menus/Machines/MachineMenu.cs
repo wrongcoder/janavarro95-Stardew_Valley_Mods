@@ -19,6 +19,7 @@ namespace Revitalize.Framework.Menus.Machines
         public string currentTab;
         public string hoverText;
 
+
         public IClickableMenuExtended CurrentMenu
         {
             get

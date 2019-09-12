@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Menus;
+using Revitalize.Framework.Objects.Machines;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardustCore.Animations;
@@ -140,6 +141,60 @@ namespace Revitalize.Framework.Crafting
         public void openCraftingMenu()
         {
             CraftingMenuV1 menu = new Framework.Menus.CraftingMenuV1(100, 100, 400, 700, Color.White, Game1.player.Items);
+            //menu.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
+
+            foreach (KeyValuePair<string, AnimatedButton> pair in this.craftingMenuTabs)
+            {
+                menu.addInCraftingPageTab(pair.Key, pair.Value);
+            }
+
+            foreach (KeyValuePair<string, UnlockableCraftingRecipe> pair in this.craftingRecipes)
+            {
+                if (pair.Value.hasUnlocked)
+                {
+                    menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
+                    ModCore.log("Add in a crafting recipe to the menu!");
+                }
+                else
+                {
+                    ModCore.log("Recipe is locked!");
+                }
+            }
+            menu.currentTab = this.defaultTab;
+            menu.sortRecipes();
+            if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = menu;
+        }
+
+        public CraftingMenuV1 getCraftingMenuForMachine(int x, int y, int width, int height,ref IList<Item> Items,ref IList<Item> Output,Machine Machine)
+        {
+            CraftingMenuV1 menu = new Framework.Menus.CraftingMenuV1(x, y, width, height, Color.White, ref Items,ref Output,Machine);
+            //menu.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
+
+            foreach (KeyValuePair<string, AnimatedButton> pair in this.craftingMenuTabs)
+            {
+                menu.addInCraftingPageTab(pair.Key, pair.Value);
+            }
+
+            foreach (KeyValuePair<string, UnlockableCraftingRecipe> pair in this.craftingRecipes)
+            {
+                if (pair.Value.hasUnlocked)
+                {
+                    menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
+                    ModCore.log("Add in a crafting recipe to the menu!");
+                }
+                else
+                {
+                    ModCore.log("Recipe is locked!");
+                }
+            }
+            menu.currentTab = this.defaultTab;
+            menu.sortRecipes();
+            return menu;
+        }
+
+        public void openCraftingMenu(int x, int y, int width, int height, ref IList<Item> items)
+        {
+            CraftingMenuV1 menu = new Framework.Menus.CraftingMenuV1(x, y, width, height, Color.White, items);
             //menu.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
 
             foreach (KeyValuePair<string, AnimatedButton> pair in this.craftingMenuTabs)

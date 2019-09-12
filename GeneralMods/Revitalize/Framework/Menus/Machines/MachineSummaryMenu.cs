@@ -14,6 +14,12 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Menus.Machines
 {
+    /// <summary>
+    /// TODO:
+    /// Add in minutes remaining display
+    /// Add in remaining inventory space display.
+    /// Make crafting menu require the object passed in to count down before crafting the recipe.
+    /// </summary>
     public class MachineSummaryMenu : IClickableMenuExtended
     {
 
@@ -45,12 +51,24 @@ namespace Revitalize.Framework.Menus.Machines
             }
         }
 
+
+        /// <summary>
+        /// Should this menu draw the battery for the energy guage?
+        /// </summary>
+        private bool shouldDrawBattery
+        {
+            get
+            {
+                return this.energy.maxEnergy != 0 || ModCore.Configs.machinesConfig.doMachinesConsumeEnergy==false;
+            }
+        }
+
         public MachineSummaryMenu()
         {
 
         }
 
-        public MachineSummaryMenu(int x, int y, int width, int height, Color BackgroundColor, CustomObject SourceObject):base(x,y,width,height,false)
+        public MachineSummaryMenu(int x, int y, int width, int height, Color BackgroundColor, CustomObject SourceObject) : base(x, y, width, height, false)
         {
 
             this.objectSource = SourceObject;
@@ -58,8 +76,8 @@ namespace Revitalize.Framework.Menus.Machines
             this.energyTexture = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
             this.colorSwap();
 
-            this.energyPosition = new Vector2(this.xPositionOnScreen + this.width - 128, this.yPositionOnScreen + this.height - 72*4);
-            this.batteryBackground =new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryFrame", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryFrame"), new StardustCore.Animations.Animation(0, 0, 32, 64)),Color.White),new Rectangle(0,0,32,64),4f);
+            this.energyPosition = new Vector2(this.xPositionOnScreen + this.width - 128, this.yPositionOnScreen + this.height - 72 * 4);
+            this.batteryBackground = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryFrame", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryFrame"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
             this.battergyEnergyGuage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryEnergyGuage", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryEnergyGuage"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
 
             this.itemDisplayOffset = ObjectUtilities.GetDimensionOffsetFromItem(this.objectSource);
@@ -68,9 +86,9 @@ namespace Revitalize.Framework.Menus.Machines
         public override void performHoverAction(int x, int y)
         {
             bool hovered = false;
-            if (this.batteryBackground.containsPoint(x, y))
+            if (this.batteryBackground.containsPoint(x, y) && this.shouldDrawBattery)
             {
-                this.hoverText ="Energy: "+this.energy.energyDisplayString;
+                this.hoverText = "Energy: " + this.energy.energyDisplayString;
                 hovered = true;
             }
 
@@ -90,16 +108,21 @@ namespace Revitalize.Framework.Menus.Machines
         {
             this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
 
-            this.batteryBackground.draw(b, 1f, 1f);
-            this.colorSwap();
-            b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X+(int)(11*this.batteryBackground.scale), (int)this.energyPosition.Y+(int)(18*this.batteryBackground.scale), (int)(9*this.batteryBackground.scale), (int)(46*this.batteryBackground.scale)), new Rectangle(0, 0, 1, 1), Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
-            this.battergyEnergyGuage.draw(b, 1f, 1f);
+            //Draw the energy on the screen.
+
+            if (this.shouldDrawBattery)
+            {
+                this.batteryBackground.draw(b, 1f, 1f);
+                this.colorSwap();
+                b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X + (int)(11 * this.batteryBackground.scale), (int)this.energyPosition.Y + (int)(18 * this.batteryBackground.scale), (int)(9 * this.batteryBackground.scale), (int)(46 * this.batteryBackground.scale)), new Rectangle(0, 0, 1, 1), Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
+                this.battergyEnergyGuage.draw(b, 1f, 1f);
+            }
 
 
-            this.objectSource.drawFullyInMenu(b,new Vector2((int)(this.xPositionOnScreen+ (this.width / 2) - (this.itemDisplayOffset.X / 2)),(int)(this.yPositionOnScreen+128f)),.24f);
+            this.objectSource.drawFullyInMenu(b, new Vector2((int)(this.xPositionOnScreen + (this.width / 2) - (this.itemDisplayOffset.X / 2)), (int)(this.yPositionOnScreen + 128f)), .24f);
             Vector2 nameOffset = Game1.dialogueFont.MeasureString(this.objectSource.DisplayName);
 
-            b.DrawString(Game1.dialogueFont, this.objectSource.DisplayName, new Vector2(this.xPositionOnScreen + (this.width / 2)-nameOffset.X/2, (this.yPositionOnScreen + 150f)) + new Vector2(0,ObjectUtilities.GetHeightOffsetFromItem(this.objectSource)), Color.Black);
+            b.DrawString(Game1.dialogueFont, this.objectSource.DisplayName, new Vector2(this.xPositionOnScreen + (this.width / 2) - nameOffset.X / 2, (this.yPositionOnScreen + 150f)) + new Vector2(0, ObjectUtilities.GetHeightOffsetFromItem(this.objectSource)), Color.Black);
 
             if (string.IsNullOrEmpty(this.hoverText) == false)
             {
@@ -109,7 +132,7 @@ namespace Revitalize.Framework.Menus.Machines
 
             this.drawMouse(b);
 
-           
+
         }
         /// <summary>
         /// Swaps the color for the energy bar meter depending on how much energy is left.
@@ -127,7 +150,7 @@ namespace Revitalize.Framework.Menus.Machines
             {
                 col = Color.GreenYellow;
             }
-            else if(this.energy.energyPercentRemaining>.25d && this.energy.energyPercentRemaining <= .5d)
+            else if (this.energy.energyPercentRemaining > .25d && this.energy.energyPercentRemaining <= .5d)
             {
                 col = Color.Yellow;
             }

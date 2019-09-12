@@ -44,12 +44,17 @@ namespace Revitalize.Framework.Crafting
         /// </summary>
         public StatCost statCost;
 
+        /// <summary>
+        /// The number of in-game minutes it takes to craft this item.
+        /// </summary>
+        public int timeToCraft;
+
         public Recipe() { }
 
         /// <summary>Constructor for single item output.</summary>
         /// <param name="inputs">All the ingredients required to make the output.</param>
         /// <param name="output">The item given as output with how many</param>
-        public Recipe(List<CraftingRecipeComponent> inputs, CraftingRecipeComponent output, StatCost StatCost = null)
+        public Recipe(List<CraftingRecipeComponent> inputs, CraftingRecipeComponent output, StatCost StatCost = null,int TimeToCraft=0)
         {
             this.ingredients = inputs;
             this.DisplayItem = output.item;
@@ -60,9 +65,10 @@ namespace Revitalize.Framework.Crafting
                 output
             };
             this.statCost = StatCost ?? new StatCost();
+            this.timeToCraft = TimeToCraft;
         }
 
-        public Recipe(List<CraftingRecipeComponent> inputs, List<CraftingRecipeComponent> outputs, string OutputName, string OutputDescription, Item DisplayItem = null, StatCost StatCost = null)
+        public Recipe(List<CraftingRecipeComponent> inputs, List<CraftingRecipeComponent> outputs, string OutputName, string OutputDescription, Item DisplayItem = null, StatCost StatCost = null,int TimeToCraft=0)
         {
             this.ingredients = inputs;
             this.outputs = outputs;
@@ -70,6 +76,7 @@ namespace Revitalize.Framework.Crafting
             this.outputDescription = OutputDescription;
             this.DisplayItem = DisplayItem;
             this.statCost = StatCost ?? new StatCost();
+            this.timeToCraft = TimeToCraft;
         }
 
         /// <summary>Checks if a player contains all recipe ingredients.</summary>
