@@ -356,13 +356,13 @@ namespace Revitalize.Framework.Objects
         /// <param name="Key"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public CustomObject GetItem(string Key,int Stack=1)
+        public Item GetItem(string Key,int Stack=1)
         {
             if (this.ItemsByName.ContainsKey(Key))
             {
                 Item I= this.ItemsByName[Key].getOne();
                 I.Stack = Stack;
-                return (CustomObject)I;
+                return I;
             }
             else
             {

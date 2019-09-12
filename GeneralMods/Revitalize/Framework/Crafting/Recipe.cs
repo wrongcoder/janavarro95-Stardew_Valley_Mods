@@ -19,15 +19,10 @@ namespace Revitalize.Framework.Crafting
         /// </summary>
         public List<CraftingRecipeComponent> outputs;
 
-        /// <summary>
-        /// The item that is displayed for the crafting recipe.
-        /// </summary>
-        private Item displayItem;
 
         public Item DisplayItem
         {
-            get => this.displayItem ?? this.outputs.ElementAt(0).item;
-            set => this.displayItem = value;
+            get => this.outputs.ElementAt(0).item;
         }
 
         /// <summary>
@@ -57,7 +52,6 @@ namespace Revitalize.Framework.Crafting
         public Recipe(List<CraftingRecipeComponent> inputs, CraftingRecipeComponent output, StatCost StatCost = null,int TimeToCraft=0)
         {
             this.ingredients = inputs;
-            this.DisplayItem = output.item;
             this.outputDescription = output.item.getDescription();
             this.outputName = output.item.DisplayName;
             this.outputs = new List<CraftingRecipeComponent>()
@@ -74,7 +68,6 @@ namespace Revitalize.Framework.Crafting
             this.outputs = outputs;
             this.outputName = OutputName;
             this.outputDescription = OutputDescription;
-            this.DisplayItem = DisplayItem;
             this.statCost = StatCost ?? new StatCost();
             this.timeToCraft = TimeToCraft;
         }

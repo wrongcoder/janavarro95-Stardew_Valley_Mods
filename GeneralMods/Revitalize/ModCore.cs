@@ -330,20 +330,16 @@ namespace Revitalize
             */
             if (e.Button == SButton.U)
             {
-                MultiTiledObject test =(MultiTiledObject) ObjectManager.GetItem("SandBox");
-                test.EnergyManager.maxEnergy = 100;
-                test.EnergyManager.produceEnergy(100);
-                MachineSummaryMenu m= new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width/2)-400, 48, 800, 600,Color.White,test);
-                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, test.info.inventory.items, 36);
-                MachineMenu machineMenu = new MachineMenu((Game1.viewport.Width / 2) - 400, 0, 800, 600);
-                CraftingMenuV1 craftingMenu= new Framework.Menus.CraftingMenuV1(100, 100, 400, 700, Color.White, Game1.player.Items);
-
-                machineMenu.addInMenuTab("Summary",new AnimatedButton(new StardustCore.Animations.AnimatedSprite("SummaryTab",new Vector2(),new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest,"Menus","MenuTab"),new Animation(0,0,24,24)),Color.White),new Rectangle(0,0,24,24),2f),m,true);
-                machineMenu.addInMenuTab("Inventory", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Inventory Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), transferMenu, true);
-                machineMenu.addInMenuTab("Crafting", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Crafting Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), craftingMenu, true);
-
-
-                if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = machineMenu;
+                CraftingMenuV1 craft = new CraftingMenuV1(100, 100, 600, 800, Color.White, Game1.player.Items);
+                craft.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
+                craft.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new List<CraftingRecipeComponent>()
+                {
+                    //Inputs here
+                   new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"),20)
+                }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Anvil"), 1)),null,new Vector2(),new Rectangle(0,0,32,32),1f,false,Color.White),"Default");
+                craft.currentTab = "Default";
+                craft.sortRecipes();
+                Game1.activeClickableMenu = craft;
             }
             /*
             if (e.Button == SButton.Y)

@@ -213,7 +213,10 @@ namespace Revitalize.Framework.Objects
         {
             this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16)+new Vector2(32,32), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
+            {
+                //ModCore.log(location + (pair.Key * 16) + new Vector2(32, 32));
+                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
+            }
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
         }
 
@@ -366,7 +369,7 @@ namespace Revitalize.Framework.Objects
             Dictionary<Vector2, MultiTiledComponent> objs = new Dictionary<Vector2, MultiTiledComponent>();
             foreach (var pair in this.objects)
             {
-                objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
+                objs.Add(pair.Key, (MultiTiledComponent)pair.Value.getOne());
             }
             return new MultiTiledObject(this.data, this.info.Copy(), this.TileLocation, objs);
         }

@@ -108,7 +108,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         {
             //this.background.draw(b);
             //if(this.item!=null)this.item.drawInMenu(b, this.position, this.scale);
-            this.draw(b, 1f, Alpha, false);
+            this.draw(b, 0f, Alpha, false);
         }
 
 
@@ -122,11 +122,10 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         public void draw(SpriteBatch b,float Depth, float Alpha,bool DrawShadow)
         {
             if(this.background!=null)this.background.draw(b, this.scale, Depth,Alpha);
-            if (this.item == null)
+            if (this.item != null)
             {
-                ModCore.log("ITEM IS NULL!!!!");
+                this.item.drawInMenu(b, this.position, 1f, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
             }
-            if(this.item!=null)this.item.drawInMenu(b, this.position, 1f,Alpha,Depth,this.drawStackNumber,this.drawColor,DrawShadow);
         }
 
         /// <summary>
@@ -140,10 +139,9 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         public void draw(SpriteBatch b,Vector2 Position ,float Depth, float Alpha, bool DrawShadow)
         {
             if (this.background != null) this.background.draw(b,Position,this.scale, Depth, Alpha);
-            if (this.item != null) this.item.drawInMenu(b, Position, 1f, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
-            if (this.item == null)
+            if (this.item != null)
             {
-                ModCore.log("ITEM IS NULL!!!!");
+                this.item.drawInMenu(b, Position, 1f, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
             }
         }
 
@@ -151,10 +149,6 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         {
             this.background.draw(b, this.scale, Depth, Alpha);
             if (this.item != null) this.item.drawInMenu(b, this.position, ItemScale, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
-            if (this.item == null)
-            {
-                ModCore.log("ITEM IS NULL!!!!");
-            }
         }
 
         /// <summary>
@@ -167,10 +161,6 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="DrawShadow">Should the shadow be drawn for the item?</param>
         public void drawJustItem(SpriteBatch b,float Scale,float Depth, float Alpha, bool DrawShadow)
         {
-            if (this.item == null)
-            {
-                ModCore.log("ITEM IS NULL!!!!");
-            }
             if (this.item != null) this.item.drawInMenu(b, this.position, Scale, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
         }
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Menus;
+using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Machines;
 using Revitalize.Framework.Utilities;
 using StardewValley;
@@ -257,6 +258,43 @@ namespace Revitalize.Framework.Crafting
             }
 
             InitializeRecipeBooks();
+
+            
+            for(int bookIndex=0;bookIndex<CraftingRecipesByGroup.Count;bookIndex++)
+            {
+
+                KeyValuePair<string, CraftingRecipeBook> pair = CraftingRecipesByGroup.ElementAt(bookIndex);
+                for(int recipeIndex=0;recipeIndex<pair.Value.craftingRecipes.Count;recipeIndex++)
+                {
+                    KeyValuePair<string, UnlockableCraftingRecipe> recipe = pair.Value.craftingRecipes.ElementAt(recipeIndex);
+                    for (int i = 0; i < recipe.Value.recipe.ingredients.Count; i++)
+                    {
+                        if (recipe.Value.recipe.ingredients[i].item is MultiTiledObject)
+                        {
+                            ModCore.log("Found a multi tiled object as an output!");
+                            //ModCore.log("Found a multi tiled object!");
+                            Type t = recipe.Value.recipe.ingredients[i].item.GetType();
+                            string id = (recipe.Value.recipe.ingredients[i].item as MultiTiledObject).info.id;
+                            recipe.Value.recipe.ingredients[i].item = ModCore.ObjectManager.getItemByIDAndType(id, t);
+                        }
+                    }
+                    for (int i = 0; i < recipe.Value.recipe.outputs.Count; i++)
+                    {
+                        if (recipe.Value.recipe.outputs[i].item is MultiTiledObject)
+                        {
+                            ModCore.log("Found a multi tiled object as an output!");
+                            //ModCore.log("Found a multi tiled object!");
+                            Type t = recipe.Value.recipe.outputs[i].item.GetType();
+                            string id = (recipe.Value.recipe.outputs[i].item as MultiTiledObject).info.id;
+                            recipe.Value.recipe.outputs[i].item = ModCore.ObjectManager.getItemByIDAndType(id, t);
+
+                            ModCore.log("Components are: "+(recipe.Value.recipe.outputs[i].item as MultiTiledObject).objects.Count);
+                        }
+                    }
+                }
+            }
+
+            
         }
 
         private static void InitializeRecipeBooks()
