@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Revitalize.Framework.Crafting;
+using Revitalize.Framework.Menus.Machines;
 using Revitalize.Framework.Menus.MenuComponents;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Machines;
@@ -121,6 +122,8 @@ namespace Revitalize.Framework.Menus
                     {
                         this.inventory = Game1.player.Items;
                     }
+
+                    if (Game1.activeClickableMenu is MachineMenu) (Game1.activeClickableMenu as MachineMenu).updateInventoryMenuIfPossible();
                 }
             }
         }

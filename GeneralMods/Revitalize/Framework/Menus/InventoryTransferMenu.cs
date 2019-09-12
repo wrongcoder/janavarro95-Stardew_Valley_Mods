@@ -457,5 +457,12 @@ namespace Revitalize.Framework.Menus
         {
             if (this.displayTrashedItem && this.trashedItem.item!=null) IClickableMenu.drawToolTip(b, this.trashedItem.item.getDescription(), this.trashedItem.item.DisplayName, this.trashedItem.item, false, -1, 0, -1, -1, (CraftingRecipe)null, -1);
         }
+
+
+        public void updateInventory()
+        {
+            this.playerInventory.populateClickableItems();
+            this.otherInventory.populateClickableItems();
+        }
     }
 }

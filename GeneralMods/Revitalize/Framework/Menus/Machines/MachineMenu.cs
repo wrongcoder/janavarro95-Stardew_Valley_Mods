@@ -12,6 +12,9 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Menus.Machines
 {
+    /// <summary>
+    /// Need to 
+    /// </summary>
     public class MachineMenu : IClickableMenuExtended
     {
 
@@ -147,6 +150,14 @@ namespace Revitalize.Framework.Menus.Machines
             }
 
             this.drawMouse(b);
+        }
+
+        public void updateInventoryMenuIfPossible()
+        {
+            if (this.menuPages.ContainsKey("Inventory"))
+            {
+                (this.menuPages["Inventory"].Value as InventoryTransferMenu).updateInventory();
+            }
         }
     }
 }
