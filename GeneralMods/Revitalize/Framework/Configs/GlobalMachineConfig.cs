@@ -13,9 +13,14 @@ namespace Revitalize.Framework.Configs
         public bool doMachinesConsumeEnergy;
 
 
+        public double solarPanelNonSunnyDayEnergyMultiplier;
+        public double solarPanelNightEnergyGenerationMultiplier;
+
         public GlobalMachineConfig()
         {
             this.doMachinesConsumeEnergy = true;
+            this.solarPanelNonSunnyDayEnergyMultiplier = 0.0d;
+            this.solarPanelNightEnergyGenerationMultiplier = .125d;
         }
 
         public static GlobalMachineConfig InitializeConfig()

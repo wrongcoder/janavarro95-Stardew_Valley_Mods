@@ -122,14 +122,15 @@ namespace Revitalize.Framework.Energy
 
         }
 
-        public EnergyManager(int Capacity) : this(0, Capacity)
+        public EnergyManager(int Capacity,Enums.EnergyInteractionType EnergyType) : this(0, Capacity,EnergyType)
         {
         }
 
-        public EnergyManager(int CurrentEnergy, int MaxEnergy)
+        public EnergyManager(int CurrentEnergy, int MaxEnergy, Enums.EnergyInteractionType EnergyType)
         {
             this.remainingEnergy = CurrentEnergy;
             this.maxEnergy = MaxEnergy;
+            this.energyInteractionType = EnergyType;
         }
 
 
@@ -196,7 +197,7 @@ namespace Revitalize.Framework.Energy
 
         public EnergyManager Copy()
         {
-            return new EnergyManager(this.maxEnergy);
+            return new EnergyManager(this.maxEnergy,this.energyInteractionType);
         }
 
     }

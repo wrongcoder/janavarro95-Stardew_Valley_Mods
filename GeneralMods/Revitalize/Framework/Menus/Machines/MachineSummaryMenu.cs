@@ -114,7 +114,7 @@ namespace Revitalize.Framework.Menus.Machines
             {
                 this.batteryBackground.draw(b, 1f, 1f);
                 this.colorSwap();
-                b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X + (int)(11 * this.batteryBackground.scale), (int)this.energyPosition.Y + (int)(18 * this.batteryBackground.scale), (int)(9 * this.batteryBackground.scale), (int)(46 * this.batteryBackground.scale)), new Rectangle(0, 0, 1, 1), Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0.2f);
+                b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X + (int)(11 * this.batteryBackground.scale), (int)this.energyPosition.Y + (int)(18 * this.batteryBackground.scale)+ (int)(46 * this.batteryBackground.scale), (int)((9 * this.batteryBackground.scale)), (int)(46 * this.batteryBackground.scale * this.energy.energyPercentRemaining)), new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0f,1f), SpriteEffects.None, 0.2f);
                 this.battergyEnergyGuage.draw(b, 1f, 1f);
             }
 

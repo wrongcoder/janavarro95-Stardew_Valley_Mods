@@ -281,6 +281,10 @@ namespace Revitalize
 
             ModHelper.Events.Display.MenuChanged += MenuHacks.RecreateFarmhandInventory;
 
+            ObjectManager.loadInItems();
+            //Adds in recipes to the mod.
+            VanillaRecipeBook = new VanillaRecipeBook();
+            CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
         }
 
 
@@ -532,11 +536,8 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
-            this.loadContent();
-            ObjectManager.loadInItems();
-            //Adds in recipes to the mod.
-            VanillaRecipeBook = new VanillaRecipeBook();
-            CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
+            //this.loadContent();
+
 
             Serializer.afterLoad();
             ShopHacks.AddInCustomItemsToShops();
@@ -557,7 +558,9 @@ namespace Revitalize
                 ModCore.ObjectManager.GetItem("SteelIngot", 20),
                 ModCore.ObjectManager.GetItem("TrashCan",1),
                 ModCore.ObjectManager.GetItem("SandBox",1),
-                ModCore.ObjectManager.GetItem("Anvil",1)
+                ModCore.ObjectManager.GetItem("Anvil",1),
+                ModCore.ObjectManager.GetItem("SolarPanelTier1",1),
+                ModCore.ObjectManager.GetItem("SolarArrayTier1",1)
 
             });
         }
