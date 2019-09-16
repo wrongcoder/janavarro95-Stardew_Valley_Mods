@@ -7,6 +7,9 @@ using StardewValley;
 
 namespace Revitalize.Framework.Utilities
 {
+    /// <summary>
+    /// Deals with usefull utilities to help determine the weather and the effects it has.
+    /// </summary>
     public class WeatherUtilities
     {
 

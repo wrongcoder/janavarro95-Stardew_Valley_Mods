@@ -43,6 +43,10 @@ namespace Revitalize.Framework.Menus.Machines
         private Texture2D energyTexture;
         private Vector2 itemDisplayOffset;
 
+
+        private AnimatedButton clockSprite;
+        private Vector2 timeDisplayLocation;
+
         private EnergyManager energy
         {
             get
@@ -74,13 +78,17 @@ namespace Revitalize.Framework.Menus.Machines
             this.objectSource = SourceObject;
             this.backgroundColor = BackgroundColor;
             this.energyTexture = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
-            this.colorSwap();
+            this.energyMeterColorSwap();
+
+            this.timeDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width * .1f), this.yPositionOnScreen + (this.height * .25f));
 
             this.energyPosition = new Vector2(this.xPositionOnScreen + this.width - 128, this.yPositionOnScreen + this.height - 72 * 4);
             this.batteryBackground = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryFrame", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryFrame"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
             this.battergyEnergyGuage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryEnergyGuage", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryEnergyGuage"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
 
             this.itemDisplayOffset = ObjectUtilities.GetDimensionOffsetFromItem(this.objectSource);
+
+            this.clockSprite= new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Time Remaining",this.timeDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "Clock"), new StardustCore.Animations.Animation(0, 0, 18, 18)), Color.White), new Rectangle(0, 0, 18, 18), 2f);
         }
 
         public override void performHoverAction(int x, int y)
@@ -91,11 +99,18 @@ namespace Revitalize.Framework.Menus.Machines
                 this.hoverText = "Energy: " + this.energy.energyDisplayString;
                 hovered = true;
             }
+            if (this.clockSprite.containsPoint(x, y))
+            {
+                this.hoverText = "Time Remaining: " + System.Environment.NewLine + TimeUtilities.GetVerboseTimeString(this.objectSource.MinutesUntilReady);
+                hovered = true;
+            }
 
             if (hovered == false)
             {
                 this.hoverText = "";
             }
+
+
 
         }
 
@@ -113,10 +128,14 @@ namespace Revitalize.Framework.Menus.Machines
             if (this.shouldDrawBattery)
             {
                 this.batteryBackground.draw(b, 1f, 1f);
-                this.colorSwap();
+                this.energyMeterColorSwap();
                 b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X + (int)(11 * this.batteryBackground.scale), (int)this.energyPosition.Y + (int)(18 * this.batteryBackground.scale)+ (int)(46 * this.batteryBackground.scale), (int)((9 * this.batteryBackground.scale)), (int)(46 * this.batteryBackground.scale * this.energy.energyPercentRemaining)), new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0f,1f), SpriteEffects.None, 0.2f);
                 this.battergyEnergyGuage.draw(b, 1f, 1f);
             }
+
+            this.clockSprite.draw(b);
+            b.DrawString(Game1.smallFont,TimeUtilities.GetTimeString(this.objectSource.MinutesUntilReady), this.timeDisplayLocation+new Vector2(0,36f), Color.Black);
+
 
 
             this.objectSource.drawFullyInMenu(b, new Vector2((int)(this.xPositionOnScreen + (this.width / 2) - (this.itemDisplayOffset.X / 2)), (int)(this.yPositionOnScreen + 128f)), .24f);
@@ -138,7 +157,7 @@ namespace Revitalize.Framework.Menus.Machines
         /// Swaps the color for the energy bar meter depending on how much energy is left.
         /// </summary>
 
-        private void colorSwap()
+        private void energyMeterColorSwap()
         {
             Color col = new Color();
             //ModCore.log("Energy is: " + this.energy.energyPercentRemaining);
@@ -169,5 +188,7 @@ namespace Revitalize.Framework.Menus.Machines
             };
             this.energyTexture.SetData<Color>(color);
         }
+
+        
     }
 }
