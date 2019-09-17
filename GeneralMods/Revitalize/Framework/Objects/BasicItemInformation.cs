@@ -318,6 +318,20 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        private bool _alwaysDrawAbovePlayer;
+        public bool AlwaysDrawAbovePlayer
+        {
+            get
+            {
+                return this._alwaysDrawAbovePlayer;
+            }
+            set
+            {
+                this._alwaysDrawAbovePlayer = value;
+                this.requiresUpdate = true;
+            }
+        }
+
         [JsonIgnore]
         public bool requiresUpdate;
         public BasicItemInformation()
@@ -341,9 +355,10 @@ namespace Revitalize.Framework.Objects
             this.id = "";
             this.shakeTimer = 0;
             this.EnergyManager = new Energy.EnergyManager();
+            this._alwaysDrawAbovePlayer = false;
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false)
         {
             this.name = name;
             this.id = id;
@@ -374,6 +389,7 @@ namespace Revitalize.Framework.Objects
             this.shakeTimer = 0;
 
             this.EnergyManager = EnergyManager ?? new Energy.EnergyManager();
+            this.AlwaysDrawAbovePlayer = AlwaysDrawAbovePlayer;
         }
 
         /// <summary>
@@ -391,7 +407,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.drawColor, this.ignoreBoundingBox, this._inventory.Copy(), this._lightManager.Copy(),this._energyManager.Copy());
+            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.drawColor, this.ignoreBoundingBox, this._inventory.Copy(), this._lightManager.Copy(),this._energyManager.Copy(),this.AlwaysDrawAbovePlayer);
         }
 
         public bool requiresSyncUpdate()

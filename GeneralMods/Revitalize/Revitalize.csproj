@@ -402,6 +402,9 @@
     <Content Include="Content\Graphics\Objects\Furniture\Lamps\Oak Lamp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Misc\Lighthouse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Objects\Furniture\Misc\TrashCan.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

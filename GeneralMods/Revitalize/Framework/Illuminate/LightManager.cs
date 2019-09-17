@@ -252,6 +252,10 @@ namespace Revitalize.Framework.Illuminate
             return copy;
         }
 
+        public static LightSource CreateLightSource(float Radius, Color ActualColor,int Texture=4)
+        {
+            return new LightSource(Texture, new Vector2(0, 0), Radius, ActualColor.Invert());
+        }
         
     }
 }
