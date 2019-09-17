@@ -160,6 +160,13 @@ namespace Revitalize.Framework.Crafting
 
             this.recipesByObjectName["Furnace"].Add("Silver Ingot", furnace_electrumIngot);
 
+            VanillaRecipe furnace_glass = new VanillaRecipe(new Dictionary<Item, int>()
+            {
+                {new StardewValley.Object((int)Enums.SDVObject.Coal,5),1},
+                {ModCore.ObjectManager.resources.getResource("Sand"),5}
+
+            }, new KeyValuePair<Item, int>(ModCore.ObjectManager.resources.getResource("Glass"),1), TimeUtilities.GetMinutesFromTime(0, 1, 0), new StatCost(), false);
+            this.recipesByObjectName["Furnace"].Add("Sand", furnace_glass);
         }
 
         /// <summary>

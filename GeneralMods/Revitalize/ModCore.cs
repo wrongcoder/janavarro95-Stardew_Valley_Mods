@@ -554,13 +554,14 @@ namespace Revitalize
             //PickaxeExtended pick = new PickaxeExtended(new BasicItemInformation("My First Pickaxe", "Omegasis.Revitalize.Items.Tools.MyFirstPickaxe", "A testing pickaxe. Does it work?", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(Manifest, "Tools", "Pickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Tools", "Pickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),2,TextureManager.GetExtendedTexture(Manifest,"Tools","TestingPickaxeWorking"));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-                new StardewValley.Object((int)Enums.SDVObject.Wood,100),
+                new StardewValley.Object((int)Enums.SDVObject.Coal,100),
                 ModCore.ObjectManager.GetItem("SteelIngot", 20),
                 ModCore.ObjectManager.GetItem("TrashCan",1),
-                ModCore.ObjectManager.GetItem("SandBox",1),
+                ModCore.ObjectManager.resources.getResource("Sand",5),
                 ModCore.ObjectManager.GetItem("Anvil",1),
                 ModCore.ObjectManager.GetItem("SolarPanelTier1",1),
-                ModCore.ObjectManager.GetItem("SolarArrayTier1",1)
+                ModCore.ObjectManager.GetItem("SolarArrayTier1",1),
+                new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false)
 
             });
         }

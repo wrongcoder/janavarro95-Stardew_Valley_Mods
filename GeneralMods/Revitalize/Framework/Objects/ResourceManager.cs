@@ -311,6 +311,9 @@ namespace Revitalize.Framework.Objects
         {
             CustomObject sand=new CustomObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Items.Resources.Misc.Sand", TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Sand"), typeof(CustomObject), Color.White, true), new BasicItemInformation("Sand", "Omegasis.Revitalize.Items.Resources.Misc.Sand", "Sand which is made from tiny rocks and can be used for smelting. Also unfun to have inside of swimwear.", "Resource", Color.Brown, -300, 0, false, 2, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Sand"), new AnimationManager(), Color.White, true, null, null));
             this.resources.Add("Sand", sand);
+
+            CustomObject glass_normal = new CustomObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Items.Resources.Misc.Glass", TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Glass"), typeof(CustomObject), Color.White, true), new BasicItemInformation("Glass", "Omegasis.Revitalize.Items.Resources.Misc.Glass", "Glass smelted from sand. Used in decorations and glass objects.", "Resource", Color.Brown, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Glass"), new AnimationManager(), Color.White, true, null, null));
+            this.resources.Add("Glass", glass_normal);
         }
 
         /// <summary>
