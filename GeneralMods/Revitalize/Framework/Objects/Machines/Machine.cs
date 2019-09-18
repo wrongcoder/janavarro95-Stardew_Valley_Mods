@@ -294,7 +294,7 @@ namespace Revitalize.Framework.Objects.Machines
 
             if (this.InventoryManager.capacity > 0)
             {
-                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, this.InventoryManager.items, 36);
+                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, this.InventoryManager.items, this.InventoryManager.capacity,this.InventoryManager.displayRows,this.InventoryManager.displayColumns);
                 machineMenu.addInMenuTab("Inventory", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Inventory Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), transferMenu, false);
             }
 

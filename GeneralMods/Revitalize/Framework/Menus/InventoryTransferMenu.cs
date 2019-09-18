@@ -36,11 +36,11 @@ namespace Revitalize.Framework.Menus
         }
         private CurrentMode currentMode;
 
-        public InventoryTransferMenu(int x, int y, int width, int height, IList<Item> OtherItems, int OtherCapacity) : base(x, y, width, height, true)
+        public InventoryTransferMenu(int x, int y, int width, int height, IList<Item> OtherItems, int OtherCapacity,int OtherRows=6,int OtherCollumns=6) : base(x, y, width, height, true)
         {
             this.playerInventory = new InventoryMenu(x, y, width, height, 6, 6, true, Game1.player.Items, Game1.player.MaxItems, Color.SandyBrown);
             this.otherItems = OtherItems;
-            this.otherInventory = new InventoryMenu(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 128, y, width, height, 6, 6, true, this.otherItems, OtherCapacity, Color.SandyBrown);
+            this.otherInventory = new InventoryMenu(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 128, y, width, height, OtherRows, OtherCollumns, true, this.otherItems, OtherCapacity, Color.SandyBrown);
             this.isPlayerInventory = true;
             this.currentMode = CurrentMode.TransferItems;
             this.transferButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Transfer Button", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + (this.playerInventory.height * .3f)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemTransferButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);

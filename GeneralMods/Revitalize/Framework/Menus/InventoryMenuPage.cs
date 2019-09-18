@@ -72,11 +72,11 @@ namespace Revitalize.Framework.Menus
         {
             get
             {
-                return this.items.Count >= this.capacity && this.items.Where(i=>i==null).Count()==0;
+                return this.items.Count >= this.capacity && this.items.Where(i => i == null).Count() == 0;
             }
         }
 
-        public InventoryMenu(int xPos, int yPos, int width, int height, int Rows, int Collumns, bool showCloseButton, IList<Item> Inventory, int maxCapacity,Color BackgroundColor) : base(xPos, yPos, width, height, showCloseButton)
+        public InventoryMenu(int xPos, int yPos, int width, int height, int Rows, int Collumns, bool showCloseButton, IList<Item> Inventory, int maxCapacity, Color BackgroundColor) : base(xPos, yPos, width, height, showCloseButton)
         {
             //Amount to display is the lower cap per page.
             //
@@ -97,8 +97,8 @@ namespace Revitalize.Framework.Menus
             Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.searchBox;
             this.searchBox.Selected = false;
 
-            this.nextPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Next Page", new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y),new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"),new Animation(0,0,32,32)),Color.White),new Rectangle(0, 0, 32, 32), 2f);
-            this.previousPage= new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Previous Page", new Vector2(64 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.nextPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Next Page", new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.previousPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Previous Page", new Vector2(64 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
 
         }
 
@@ -115,7 +115,7 @@ namespace Revitalize.Framework.Menus
             this.searchBox.Y = this.yPositionOnScreen;
             this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
             this.nextPage.Position = new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y);
-            this.previousPage.Position= new Vector2(64 + (this.searchBox.X + this.searchBox.Width),this.searchBox.Y);
+            this.previousPage.Position = new Vector2(64 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y);
         }
 
         public void populateClickableItems()
@@ -241,6 +241,7 @@ namespace Revitalize.Framework.Menus
             {
                 if (button.receiveLeftClick(x, y))
                 {
+                    if (index > this.capacity) continue;
                     if (this.activeItem == null)
                     {
                         this.activeItem = button.item;
@@ -312,42 +313,42 @@ namespace Revitalize.Framework.Menus
             }
         }
 
-            /// <summary>
-            /// Swaps the item's position in the menu.
-            /// </summary>
-            /// <param name="insertIndex"></param>
-            /// <param name="I"></param>
-            public void swapItemPosition(int insertIndex, Item I)
+        /// <summary>
+        /// Swaps the item's position in the menu.
+        /// </summary>
+        /// <param name="insertIndex"></param>
+        /// <param name="I"></param>
+        public void swapItemPosition(int insertIndex, Item I)
+        {
+            if (I == null)
             {
-                if (I == null)
-                {
-                    //ModCore.log("Odd item is null");
-                    return;
-                }
-                if (insertIndex + 1 > this.items.Count)
-                {
-                    this.items.Remove(I);
-                    this.items.Add(I);
-                    this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
-                    return;
-                }
-                this.items.Insert(insertIndex + 1, I);
+                //ModCore.log("Odd item is null");
+                return;
+            }
+            if (insertIndex + 1 > this.items.Count)
+            {
                 this.items.Remove(I);
+                this.items.Add(I);
                 this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
+                return;
             }
+            this.items.Insert(insertIndex + 1, I);
+            this.items.Remove(I);
+            this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
+        }
 
-            /// <summary>
-            /// Takes the active item from this menu.
-            /// </summary>
-            /// <returns></returns>
-            public Item takeActiveItem()
-            {
-                this.items.Remove(this.activeItem);
-                this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
-                Item i = this.activeItem;
-                this.activeItem = null;
-                return i;
-            }
+        /// <summary>
+        /// Takes the active item from this menu.
+        /// </summary>
+        /// <returns></returns>
+        public Item takeActiveItem()
+        {
+            this.items.Remove(this.activeItem);
+            this.populateClickableItems(this.rows, this.collumns, this.xPositionOnScreen + this.xOffset, this.yPositionOnScreen + this.yOffset);
+            Item i = this.activeItem;
+            this.activeItem = null;
+            return i;
+        }
 
         /// <summary>
         /// What happens when this menu is right clicked.
@@ -377,22 +378,19 @@ namespace Revitalize.Framework.Menus
         {
             this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
 
+            int index = -1;
             foreach (ItemDisplayButton button in this.pages[this.pageIndex].storageDisplay)
             {
-                if (string.IsNullOrEmpty(this.searchBox.Text) == false)
-                {
-                    button.draw(b, 0.25f, this.getItemDrawAlpha(button.item), true);
-                }
-                else
-                {
-                    button.draw(b, 0.25f, 1f, true);
-                }
+                index++;
+                float alpha = this.getItemDrawAlpha(button.item, index + this.pageIndex * this.rows*this.collumns);
+                button.draw(b, 0.25f, alpha, true);
+
             }
 
             this.searchBox.Draw(b, true);
 
-            this.nextPage.draw(b,0.25f,1f);
-            this.previousPage.draw(b,0.25f,1f);
+            this.nextPage.draw(b, 0.25f, 1f);
+            this.previousPage.draw(b, 0.25f, 1f);
 
             b.DrawString(Game1.dialogueFont, ("Page: " + (this.pageIndex + 1) + " / " + this.pages.Count).ToString(), new Vector2(this.xPositionOnScreen, this.yPositionOnScreen + this.height), Color.White);
 
@@ -412,8 +410,9 @@ namespace Revitalize.Framework.Menus
         /// </summary>
         /// <param name="I"></param>
         /// <returns></returns>
-        private float getItemDrawAlpha(Item I)
-        {        
+        private float getItemDrawAlpha(Item I, int index)
+        {
+            if (index >= this.capacity) return 0.0f;
             if (string.IsNullOrEmpty(this.searchBox.Text) == false)
             {
                 if (I == null) return 0.25f;
