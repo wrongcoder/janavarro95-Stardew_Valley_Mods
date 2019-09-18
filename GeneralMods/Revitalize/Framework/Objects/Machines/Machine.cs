@@ -289,7 +289,7 @@ namespace Revitalize.Framework.Objects.Machines
         {
             MachineMenu machineMenu = new MachineMenu((Game1.viewport.Width / 2) - 400, 0, 800, 600);
 
-            MachineSummaryMenu m = new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width / 2) - 400, 48, 800, 600, Color.White, this.containerObject);
+            MachineSummaryMenu m = new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width / 2) - 400, 48, 800, 600, Color.White, this.containerObject,this.energyRequiredPer10Minutes);
             machineMenu.addInMenuTab("Summary", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("SummaryTab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), m, true);
 
             if (this.InventoryManager.capacity > 0)

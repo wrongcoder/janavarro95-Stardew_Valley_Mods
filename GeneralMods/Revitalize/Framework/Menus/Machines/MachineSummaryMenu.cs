@@ -46,6 +46,10 @@ namespace Revitalize.Framework.Menus.Machines
 
         private AnimatedButton clockSprite;
         private Vector2 timeDisplayLocation;
+        private AnimatedButton energyRequiredButton;
+        private Vector2 energyRequiredDisplayLocation;
+
+        private int requiredEnergyPer10Min;
 
         private EnergyManager energy
         {
@@ -72,7 +76,7 @@ namespace Revitalize.Framework.Menus.Machines
 
         }
 
-        public MachineSummaryMenu(int x, int y, int width, int height, Color BackgroundColor, CustomObject SourceObject) : base(x, y, width, height, false)
+        public MachineSummaryMenu(int x, int y, int width, int height, Color BackgroundColor, CustomObject SourceObject,int RequiredEnergyPer10Min) : base(x, y, width, height, false)
         {
 
             this.objectSource = SourceObject;
@@ -81,14 +85,17 @@ namespace Revitalize.Framework.Menus.Machines
             this.energyMeterColorSwap();
 
             this.timeDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width * .1f), this.yPositionOnScreen + (this.height * .25f));
+            this.energyRequiredDisplayLocation = this.timeDisplayLocation + new Vector2(0, 64);
 
             this.energyPosition = new Vector2(this.xPositionOnScreen + this.width - 128, this.yPositionOnScreen + this.height - 72 * 4);
             this.batteryBackground = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryFrame", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryFrame"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
             this.battergyEnergyGuage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryEnergyGuage", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryEnergyGuage"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
 
             this.itemDisplayOffset = ObjectUtilities.GetDimensionOffsetFromItem(this.objectSource);
-
             this.clockSprite= new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Time Remaining",this.timeDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "Clock"), new StardustCore.Animations.Animation(0, 0, 18, 18)), Color.White), new Rectangle(0, 0, 18, 18), 2f);
+            this.energyRequiredButton=new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Energy Required", this.energyRequiredDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "LightningBolt"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+
+            this.requiredEnergyPer10Min = RequiredEnergyPer10Min;
         }
 
         public override void performHoverAction(int x, int y)
@@ -104,16 +111,32 @@ namespace Revitalize.Framework.Menus.Machines
                 this.hoverText = "Time Remaining: " + System.Environment.NewLine + TimeUtilities.GetVerboseTimeString(this.objectSource.MinutesUntilReady);
                 hovered = true;
             }
+            if (this.energyRequiredButton.containsPoint(x, y))
+            {
+                this.hoverText = this.getProperEnergyDescriptionString(this.requiredEnergyPer10Min);
+                hovered = true;
+            }
 
             if (hovered == false)
             {
                 this.hoverText = "";
             }
-
-
-
         }
 
+        protected virtual string getProperEnergyDescriptionString(int EnergyAmount)
+        {
+            if (this.energy.consumesEnergy)
+            {
+                return "Energy required per 10 minutes to run: " + System.Environment.NewLine + EnergyAmount;
+
+            }
+            else if (this.energy.producesEnergy)
+            {
+
+                return "Produces " + EnergyAmount + " per 10 minutes.";
+            }
+            else return "";
+        }
 
         /// <summary>
         /// Draws the menu to the screen.
@@ -123,6 +146,10 @@ namespace Revitalize.Framework.Menus.Machines
         {
             this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
 
+            this.clockSprite.draw(b);
+            b.DrawString(Game1.smallFont, TimeUtilities.GetTimeString(this.objectSource.MinutesUntilReady), this.timeDisplayLocation + new Vector2(0, 36f), Color.Black);
+
+
             //Draw the energy on the screen.
 
             if (this.shouldDrawBattery)
@@ -131,12 +158,13 @@ namespace Revitalize.Framework.Menus.Machines
                 this.energyMeterColorSwap();
                 b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X + (int)(11 * this.batteryBackground.scale), (int)this.energyPosition.Y + (int)(18 * this.batteryBackground.scale)+ (int)(46 * this.batteryBackground.scale), (int)((9 * this.batteryBackground.scale)), (int)(46 * this.batteryBackground.scale * this.energy.energyPercentRemaining)), new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0f,1f), SpriteEffects.None, 0.2f);
                 this.battergyEnergyGuage.draw(b, 1f, 1f);
+
+                this.energyRequiredButton.draw(b);
+                b.DrawString(Game1.smallFont, this.requiredEnergyPer10Min+" E/10m", this.energyRequiredDisplayLocation + new Vector2(0, 36f), Color.Black);
             }
 
-            this.clockSprite.draw(b);
-            b.DrawString(Game1.smallFont,TimeUtilities.GetTimeString(this.objectSource.MinutesUntilReady), this.timeDisplayLocation+new Vector2(0,36f), Color.Black);
 
-
+            
 
             this.objectSource.drawFullyInMenu(b, new Vector2((int)(this.xPositionOnScreen + (this.width / 2) - (this.itemDisplayOffset.X / 2)), (int)(this.yPositionOnScreen + 128f)), .24f);
             Vector2 nameOffset = Game1.dialogueFont.MeasureString(this.objectSource.DisplayName);
