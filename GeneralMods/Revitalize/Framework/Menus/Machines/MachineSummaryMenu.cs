@@ -48,6 +48,8 @@ namespace Revitalize.Framework.Menus.Machines
         private Vector2 timeDisplayLocation;
         private AnimatedButton energyRequiredButton;
         private Vector2 energyRequiredDisplayLocation;
+        private AnimatedButton storageButton;
+        private Vector2 storageRemainingDisplayLocation;
 
         private int requiredEnergyPer10Min;
 
@@ -86,6 +88,7 @@ namespace Revitalize.Framework.Menus.Machines
 
             this.timeDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width * .1f), this.yPositionOnScreen + (this.height * .25f));
             this.energyRequiredDisplayLocation = this.timeDisplayLocation + new Vector2(0, 64);
+            this.storageRemainingDisplayLocation = this.energyRequiredDisplayLocation + new Vector2(0, 64);
 
             this.energyPosition = new Vector2(this.xPositionOnScreen + this.width - 128, this.yPositionOnScreen + this.height - 72 * 4);
             this.batteryBackground = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryFrame", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryFrame"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
@@ -94,6 +97,7 @@ namespace Revitalize.Framework.Menus.Machines
             this.itemDisplayOffset = ObjectUtilities.GetDimensionOffsetFromItem(this.objectSource);
             this.clockSprite= new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Time Remaining",this.timeDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "Clock"), new StardustCore.Animations.Animation(0, 0, 18, 18)), Color.White), new Rectangle(0, 0, 18, 18), 2f);
             this.energyRequiredButton=new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Energy Required", this.energyRequiredDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "LightningBolt"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+            this.storageButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Storage Remaining", this.storageRemainingDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "Chest"), new StardustCore.Animations.Animation(0, 0, 16, 32)), Color.White), new Rectangle(0, 0, 16, 32), 1f);
 
             this.requiredEnergyPer10Min = RequiredEnergyPer10Min;
         }
@@ -163,6 +167,11 @@ namespace Revitalize.Framework.Menus.Machines
                 b.DrawString(Game1.smallFont, this.requiredEnergyPer10Min+" E/10m", this.energyRequiredDisplayLocation + new Vector2(0, 36f), Color.Black);
             }
 
+            if (this.objectSource.info.inventory.HasInventory)
+            {
+                this.storageButton.draw(b);
+                b.DrawString(Game1.smallFont, "Storage remaining: "+ (this.objectSource.info.inventory.capacity-this.objectSource.info.inventory.ItemCount)+"/"+this.objectSource.info.inventory.capacity, this.storageRemainingDisplayLocation + new Vector2(0, 32f), Color.Black);
+            }
 
             
 

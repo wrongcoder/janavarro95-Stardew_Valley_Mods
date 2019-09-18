@@ -15,7 +15,7 @@ namespace Revitalize.Framework.Utilities
         public int MaxCapacity { get; private set; }
 
         /// <summary>How many items are currently stored in the inventory.</summary>
-        public int ItemCount => this.items.Count;
+        public int ItemCount => this.items.Where(i => i != null).Count();
 
         /// <summary>The actual contents of the inventory.</summary>
         public IList<Item> items;

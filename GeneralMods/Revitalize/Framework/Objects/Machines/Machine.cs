@@ -234,7 +234,7 @@ namespace Revitalize.Framework.Objects.Machines
                         remaining -= 10;
                         this.containerObject.MinutesUntilReady -= 10;
 
-                        if (this.containerObject.MinutesUntilReady <= 0)
+                        if (this.containerObject.MinutesUntilReady <= 0 && this.InventoryManager.IsFull==false)
                         {
                             this.produceItem();
                             this.containerObject.MinutesUntilReady = this.timeToProduce;
