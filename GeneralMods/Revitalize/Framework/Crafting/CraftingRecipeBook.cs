@@ -333,6 +333,12 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
             }, new CraftingRecipeComponent(new StardewValley.Tools.WateringCan() { UpgradeLevel = 0 }, 1)), true));
 
+            WorkbenchRecipes.addCraftingRecipe("Copper Wire", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("CopperWire"),2),null,0),true));
+
+
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
                 foreach(KeyValuePair<string, UnlockableCraftingRecipe> recipe in WorkbenchRecipes.craftingRecipes)

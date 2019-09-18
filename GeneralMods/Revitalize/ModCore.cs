@@ -562,7 +562,9 @@ namespace Revitalize
                 ModCore.ObjectManager.GetItem("SolarPanelTier1",1),
                 ModCore.ObjectManager.GetItem("SolarArrayTier1",1),
                 new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
-                ModCore.ObjectManager.GetItem("Lighthouse",1)
+                ModCore.ObjectManager.GetItem("Lighthouse",1),
+                ModCore.ObjectManager.GetItem("CopperWire"),
+                ModCore.ObjectManager.GetItem("BatteryBin",1)
 
             });
         }

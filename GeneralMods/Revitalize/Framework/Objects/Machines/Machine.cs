@@ -137,9 +137,22 @@ namespace Revitalize.Framework.Objects.Machines
         {
             get
             {
-                if (ModCore.Configs.machinesConfig.doMachinesConsumeEnergy == false) return false;
-                if (this.energyRequiredPer10Minutes == 0) return false;
-                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes) return true;
+                if (ModCore.Configs.machinesConfig.doMachinesConsumeEnergy == false)
+                {
+                    ModCore.log("Machine config disables energy consumption.");
+                    return false;
+                }
+                if (this.energyRequiredPer10Minutes == 0)
+                {
+                    ModCore.log("Machine rquires 0 energy to run.");
+                    return false;
+                }
+                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes)
+                {
+                    ModCore.log("Machine does consume energy.");
+                    return true;
+                }
+                ModCore.log("Unknown energy configuration.");
                 return false;
             }
         }
@@ -171,6 +184,7 @@ namespace Revitalize.Framework.Objects.Machines
             this.offsetKey = offsetKey;
             this.containerObject = obj;
             this.producedResources = ProducedResources?? new List<ResourceInformation>();
+            this.energyRequiredPer10Minutes = EnergyRequiredPer10Minutes;
             this.timeToProduce = TimeToProduce;
             this.updatesContainerObjectForProduction = UpdatesContainer;
             this.MinutesUntilReady = TimeToProduce;
@@ -194,23 +208,28 @@ namespace Revitalize.Framework.Objects.Machines
                 List<MultiTiledObject> energySources = new List<MultiTiledObject>();
                 if (this.ConsumesEnergy)
                 {
-                   energySources = this.EnergyGraphSearchSources(); //Only grab the network once.
+                    ModCore.log("This machine drains energy: " + this.info.name);
+                    energySources = this.EnergyGraphSearchSources(); //Only grab the network once.
                 }
 
                 if (this.ProducesItems)
                 {
-                    //ModCore.log("This produces items!");
+                    ModCore.log("This machine produces items: "+this.info.name);
                     while (remaining > 0)
                     {
 
                         if (this.ConsumesEnergy)
                         {
-                            this.drainEnergyFromNetwork(energySources); //Continually drain from the network.
+                            this.drainEnergyFromNetwork(energySources); //Continually drain from the network.                        
                             if (this.EnergyManager.remainingEnergy < this.energyRequiredPer10Minutes) return false;
+                            else
+                            {
+                                this.EnergyManager.consumeEnergy(this.energyRequiredPer10Minutes); //Consume the required amount of energy necessary.
+                            }
                         }
                         else
                         {
-                            //ModCore.log("Does not produce energy!");
+                            //ModCore.log("Does not produce energy or consume energy so do whatever!");
                         }
                         remaining -= 10;
                         this.containerObject.MinutesUntilReady -= 10;

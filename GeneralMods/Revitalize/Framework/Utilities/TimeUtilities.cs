@@ -35,15 +35,15 @@ namespace Revitalize.Framework.Utilities
             private void parse(int Minutes)
             {
                 this.years = Minutes / 60 / 24 / 7 / 4 / 4;
-                Minutes -= (Minutes / 60 / 24 / 7 / 4 / 4);
+                Minutes -= (this.years * 60 * 24 * 7 * 4 * 4);
                 this.seasons = Minutes / 60 / 24 / 7 / 4;
-                Minutes -= (Minutes / 60 / 24 / 7 / 4);
+                Minutes -= (this.seasons * 60 * 24 * 7 * 4);
                 this.weeks = Minutes / 60 / 24 / 7;
-                Minutes -= (Minutes / 60 / 24 / 7);
+                Minutes -= (this.weeks * 60 * 24 * 7);
                 this.days = Minutes / 60 / 24;
-                Minutes -= (Minutes / 60 / 24);
+                Minutes -= (this.days * 60 * 24);
                 this.hours = Minutes / 60;
-                this.minutes -= (Minutes / 60);
+                Minutes -= (this.hours * 60);
                 this.minutes = Minutes;
             }
 

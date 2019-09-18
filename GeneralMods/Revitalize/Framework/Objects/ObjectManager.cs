@@ -168,6 +168,10 @@ namespace Revitalize.Framework.Objects
 
         private void loadInMachines()
         {
+            this.loadInWires();
+
+
+
             MultiTiledObject trashCan = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Misc.TrashCan", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Trash Can", "Omegasis.Revitalize.Furniture.Misc.TrashCan", "A trash can where you can throw away unnecessary objects. It empties out at the beginning of each new day.", "Machine", Color.SteelBlue, -300, 0, false, 650, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), new AnimationManager(), Color.White, true, new InventoryManager(36), null, null));
             TrashCanTile trash1 = new TrashCanTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Misc.TrashCan", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), typeof(TrashCanTile), Color.White, true), new BasicItemInformation("Trash Can", "Omegasis.Revitalize.Furniture.Misc.TrashCan", "A trash can where you can throw away unnecessary objects. It empties out at the beginning of each new day.", "Machine", Color.SteelBlue, -300, 0, false, 650, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "TrashCan"), new Animation(0, 0, 16, 16)), Color.White, true, new InventoryManager(36), null, null));
             TrashCanTile trash2 = new TrashCanTile(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Furniture.Misc.TrashCan", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), typeof(TrashCanTile), Color.White, true), new BasicItemInformation("Trash Can", "Omegasis.Revitalize.Furniture.Misc.TrashCan", "A trash can where you can throw away unnecessary objects. It empties out at the beginning of each new day.", "Machine", Color.SteelBlue, -300, 0, false, 650, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "TrashCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "TrashCan"), new Animation(0, 16, 16, 16)), Color.White, false, new InventoryManager(36), null, null));
@@ -225,6 +229,26 @@ namespace Revitalize.Framework.Objects
             solarArray1Container.addComponent(new Vector2(0, 1), solarA3V1);
             solarArray1Container.addComponent(new Vector2(1, 1), solarA4V1);
             this.AddItem("SolarArrayTier1", solarArray1Container);
+
+
+            ///Consumes energy. Produces batteries.
+            MultiTiledObject batteryBin = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.BatteryBin", TextureManager.GetTexture(ModCore.Manifest, "Machines", "BatteryBin"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Battery Bin", "Omegasis.Revitalize.Objects.Machines.BatteryBin", "Consumes energy over time to produce battery packs.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "BatteryBin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "BatteryBin"), new Animation(0, 0, 16, 16)), Color.White, false, new InventoryManager(1), null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Consumes)));
+            Machine batteryBin_0_0 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.BatteryBin", TextureManager.GetTexture(ModCore.Manifest, "Machines", "BatteryBin"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Battery Bin", "Omegasis.Revitalize.Objects.Machines.BatteryBin", "Consumes energy over time to produce battery packs.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "BatteryBin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "BatteryBin"), new Animation(0, 0, 16, 16)), Color.White, false, new InventoryManager(1), null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Consumes)), new List<InformationFiles.ResourceInformation>()
+            {
+                new InformationFiles.ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1,1,1,1,1,1,0,0,0,0)
+
+            }, 1, TimeUtilities.GetMinutesFromTime(0, 1, 0), true, "");
+            batteryBin.addComponent(new Vector2(0, 0), batteryBin_0_0);
+            this.AddItem("BatteryBin", batteryBin);
+
+        }
+
+        private void loadInWires()
+        {
+            MultiTiledObject copperWire = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Wires.CopperWire", TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), typeof(Wire), Color.White, true), new BasicItemInformation("Copper Wire", "Omegasis.Revitalize.Objects.Machines.Wire.CopperWire", "Wire made from copper bars. Transfers energy between sources.", "Machine", Color.SteelBlue, -300, 0, false, 15, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "CopperWire"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, new Energy.EnergyManager(100, Enums.EnergyInteractionType.Transfers), false));
+            Wire copperWire_0_0 = new Wire(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Wires.CopperWire", TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), typeof(Wire), Color.White, true), new BasicItemInformation("Copper Wire", "Omegasis.Revitalize.Objects.Machines.Wire.CopperWire", "Wire made from copper bars. Transfers energy between sources.", "Machine", Color.SteelBlue, -300, 0, false, 15, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "CopperWire"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, new Energy.EnergyManager(100, Enums.EnergyInteractionType.Transfers), false));
+            copperWire.addComponent(new Vector2(0, 0), copperWire_0_0);
+            this.AddItem("CopperWire", copperWire);
         }
 
         private void loadInTools()
