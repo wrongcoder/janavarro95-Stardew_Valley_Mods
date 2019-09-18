@@ -124,6 +124,9 @@ namespace Revitalize.Framework.Objects.Machines
         public string craftingRecipeBook;
 
         [JsonIgnore]
+        protected AnimationManager machineStatusBubbleBox;
+
+        [JsonIgnore]
         public bool ProducesItems
         {
             get
@@ -166,6 +169,8 @@ namespace Revitalize.Framework.Objects.Machines
             this.updatesContainerObjectForProduction = UpdatesContainer;
             this.MinutesUntilReady = TimeToProduce;
             this.craftingRecipeBook = CraftingBook;
+            this.createStatusBubble();
+
         }
 
         public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources=null,int EnergyRequiredPer10Minutes=0,int TimeToProduce=0,bool UpdatesContainer=false, string CraftingBook = "", MultiTiledObject obj=null) : base(PyTKData, info, TileLocation)
@@ -177,6 +182,7 @@ namespace Revitalize.Framework.Objects.Machines
             this.updatesContainerObjectForProduction = UpdatesContainer;
             this.MinutesUntilReady = TimeToProduce;
             this.craftingRecipeBook = CraftingBook;
+            this.createStatusBubble();
         }
 
         public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Vector2 offsetKey,List<ResourceInformation> ProducedResources=null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce=0,bool UpdatesContainer=false, string CraftingBook = "", MultiTiledObject obj = null) : base(PyTKData, info, TileLocation)
@@ -189,6 +195,17 @@ namespace Revitalize.Framework.Objects.Machines
             this.updatesContainerObjectForProduction = UpdatesContainer;
             this.MinutesUntilReady = TimeToProduce;
             this.craftingRecipeBook = CraftingBook;
+            this.createStatusBubble();
+        }
+
+        protected virtual void createStatusBubble()
+        {
+            this.machineStatusBubbleBox = new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "HUD", "MachineStatusBubble"), new Animation(0, 0, 20, 24), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>(){new Animation(0,0,20,24)}},
+                {"Empty",new List<Animation>(){new Animation(20,0,20,24)}},
+                {"InventoryFull",new List<Animation>(){new Animation(40,0,20,24)}}
+            }, "Default", 0);
         }
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
@@ -386,6 +403,8 @@ namespace Revitalize.Framework.Objects.Machines
                     addedDepth += 1.0f;
                 }
                 this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+                this.drawStatusBubble(spriteBatch, x, y, alpha);
+
                 try
                 {
                     this.animationManager.tickAnimation();
@@ -422,6 +441,22 @@ namespace Revitalize.Framework.Objects.Machines
                 this.EnergyManager.produceEnergy(this.energyRequiredPer10Minutes);
             }
 
+        }
+
+        protected virtual void drawStatusBubble(SpriteBatch b,int x, int y,float Alpha)
+        {
+            if (this.updatesContainerObjectForProduction == false) return;
+            if (this.InventoryManager.IsFull && this.ProducesItems && ModCore.Configs.machinesConfig.showMachineNotificationBubble_InventoryFull)
+            {
+                y--;
+                float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
+                this.machineStatusBubbleBox.playAnimation("InventoryFull");
+                this.machineStatusBubbleBox.draw(b, this.machineStatusBubbleBox.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize+num)), new Rectangle?(this.machineStatusBubbleBox.currentAnimation.sourceRectangle), Color.White*ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y+2) * Game1.tileSize) / 10000f) + .00001f);
+            }
+            else
+            {
+
+            }
         }
 
 

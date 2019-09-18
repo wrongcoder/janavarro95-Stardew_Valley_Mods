@@ -318,6 +318,9 @@ namespace Revitalize
             TextureManager.AddTextureManager(Manifest, "CraftingMenu");
             TextureManager.GetTextureManager(Manifest, "CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
 
+            TextureManager.AddTextureManager(Manifest, "HUD");
+            TextureManager.GetTextureManager(Manifest,"HUD").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "HUD"));
+
             TextureManager.AddTextureManager(Manifest, "Objects.Crafting");
             TextureManager.GetTextureManager(Manifest, "Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
 

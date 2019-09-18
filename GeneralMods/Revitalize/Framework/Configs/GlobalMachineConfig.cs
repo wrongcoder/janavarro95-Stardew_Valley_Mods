@@ -15,12 +15,16 @@ namespace Revitalize.Framework.Configs
 
         public double solarPanelNonSunnyDayEnergyMultiplier;
         public double solarPanelNightEnergyGenerationMultiplier;
+        public bool showMachineNotificationBubble_InventoryFull;
+        public float machineNotificationBubbleAlpha;
 
         public GlobalMachineConfig()
         {
             this.doMachinesConsumeEnergy = true;
             this.solarPanelNonSunnyDayEnergyMultiplier = 0.0d;
             this.solarPanelNightEnergyGenerationMultiplier = .125d;
+            this.showMachineNotificationBubble_InventoryFull = true;
+            this.machineNotificationBubbleAlpha = 0.75f;
         }
 
         public static GlobalMachineConfig InitializeConfig()
