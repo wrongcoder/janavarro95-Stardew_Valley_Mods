@@ -568,7 +568,8 @@ namespace Revitalize
                 ModCore.ObjectManager.GetItem("Lighthouse",1),
                 ModCore.ObjectManager.GetItem("CopperWire",10),
                 batteryBin,
-                ModCore.ObjectManager.GetItem("Capacitor",1)
+                ModCore.ObjectManager.GetItem("Capacitor",1),
+                ModCore.ObjectManager.GetItem("ChargingStation",1)
 
             });
         }
