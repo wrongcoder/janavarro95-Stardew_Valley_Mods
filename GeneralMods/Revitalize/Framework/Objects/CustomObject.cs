@@ -90,7 +90,7 @@ namespace Revitalize.Framework.Objects
             {
                 if (this.info != null)
                 {
-                    return this.info.name;
+                    return this.getDisplayNameFromStringsFile(this.info.id);
                 }
                 return this.netName.Value.Split('>')[0];
             }
@@ -666,7 +666,7 @@ namespace Revitalize.Framework.Objects
         {
             if (ModCore.Configs.objectsConfig.showDyedColorName)
             {
-                return this.info.getDyedColorName() + this.info.name;
+                return this.info.getDyedColorName() +" "+ this.info.name;
             }
             //Load in a file that has all object names referenced here or something.
             return this.info.name;

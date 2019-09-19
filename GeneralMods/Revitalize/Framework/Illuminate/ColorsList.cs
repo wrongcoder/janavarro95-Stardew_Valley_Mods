@@ -11,7 +11,7 @@ namespace Revitalize.Framework.Illuminate
     {
         public static NamedColor AliceBlue = new NamedColor("Alice Blue", new Color(15, 7, 0, 255).Invert());
 
-        public static NamedColor AntiqueWhite = new NamedColor("Antique White", 5, 20, 40, 255);
+        public static NamedColor AntiqueWhite = new NamedColor("Antique White",  5, 20, 40, 255);
 
         public static NamedColor Aqua = new NamedColor("Aqua", 255, 0, 0, 255);
 
