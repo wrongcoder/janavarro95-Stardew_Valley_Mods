@@ -1173,5 +1173,12 @@ namespace Revitalize.Framework
             StatueOfPerfection=160,
             SolidGoldLewis=164
         }
+
+        public enum DyeBlendMode
+        {
+            Multiplier,
+            Blend,
+            Average
+        }
     }
 }

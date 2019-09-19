@@ -8,6 +8,7 @@ using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardustCore.UIUtilities;
 using Newtonsoft.Json;
+using Revitalize.Framework.Managers;
 
 namespace Revitalize.Framework.Objects
 {
@@ -228,7 +229,9 @@ namespace Revitalize.Framework.Objects
                     {
                         if (this._dyedColor.color.A != 0)
                         {
-                            return new Color(this._drawColor.R * this._dyedColor.color.R, this._drawColor.G * this._dyedColor.color.G, this._drawColor.B * this._dyedColor.color.B, 255);
+                            return this._colorManager.getBlendedColor(this._drawColor, this._dyedColor.color);
+                            //return new Color( (this._drawColor.R + this._dyedColor.color.R)/2, (this._drawColor.G + this._dyedColor.color.G)/2, (this._drawColor.B + this._dyedColor.color.B)/2, 255);
+                            //return new Color(this._drawColor.R * this._dyedColor.color.R, this._drawColor.G * this._dyedColor.color.G, this._drawColor.B * this._dyedColor.color.B, 255);
                         }
                     }
                 }
@@ -357,6 +360,21 @@ namespace Revitalize.Framework.Objects
 
         }
 
+        public ColorManager _colorManager;
+
+        public ColorManager ColorManager
+        {
+            get
+            {
+                return this._colorManager;
+            }
+            set
+            {
+                this._colorManager = value;
+                this.requiresUpdate = true;
+            }
+        }
+
         [JsonIgnore]
         public bool requiresUpdate;
         public BasicItemInformation()
@@ -383,7 +401,7 @@ namespace Revitalize.Framework.Objects
             this._alwaysDrawAbovePlayer = false;
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null, ColorManager ColorManager=null)
         {
             this.name = name;
             this.id = id;
@@ -416,7 +434,8 @@ namespace Revitalize.Framework.Objects
             this.EnergyManager = EnergyManager ?? new Energy.EnergyManager();
             this.AlwaysDrawAbovePlayer = AlwaysDrawAbovePlayer;
 
-
+            this.DyedColor = DyedColor ?? new NamedColor("", new Color(0, 0, 0, 0));
+            this.ColorManager = ColorManager ?? new ColorManager(Enums.DyeBlendMode.Blend, 0.5f);
         }
 
         /// <summary>
@@ -434,7 +453,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.DrawColor, this.ignoreBoundingBox, this._inventory.Copy(), this._lightManager.Copy(),this._energyManager.Copy(),this.AlwaysDrawAbovePlayer,this.DyedColor);
+            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.DrawColor, this.ignoreBoundingBox, this._inventory.Copy(), this._lightManager.Copy(),this._energyManager.Copy(),this.AlwaysDrawAbovePlayer,this.DyedColor,this.ColorManager);
         }
 
         public bool requiresSyncUpdate()

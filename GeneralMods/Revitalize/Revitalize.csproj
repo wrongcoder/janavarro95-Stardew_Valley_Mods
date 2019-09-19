@@ -86,6 +86,7 @@
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Illuminate\NamedColor.cs" />
+    <Compile Include="Framework\Managers\ColorManager.cs" />
     <Compile Include="Framework\Menus\CraftingInformationPage.cs" />
     <Compile Include="Framework\Menus\CraftingMenuV1.cs" />
     <Compile Include="Framework\Menus\Machines\MachineMenu.cs" />

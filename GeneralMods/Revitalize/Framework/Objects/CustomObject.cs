@@ -720,6 +720,16 @@ namespace Revitalize.Framework.Objects
             this.info.DyedColor = new NamedColor("", new Color(0, 0, 0, 0));
         }
 
+        public override bool canStackWith(Item other)
+        {
+            CustomObject o = (CustomObject)other;
+
+            if (this.info.DyedColor != o.info.DyedColor) return false;
+            if (this.info.EnergyManager.remainingEnergy != o.info.EnergyManager.remainingEnergy) return false;
+
+            return base.canStackWith(other);
+        }
+
         //~~~~~~~~~~~~~~~~~~~~~~~~~//
         //     PyTk Functions      //
         //~~~~~~~~~~~~~~~~~~~~~~~~~//
