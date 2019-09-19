@@ -19,7 +19,7 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Objects.Machines
 {
-    public class Machine:MultiTiledComponent
+    public class Machine : MultiTiledComponent
     {
 
         [JsonIgnore]
@@ -37,7 +37,7 @@ namespace Revitalize.Framework.Objects.Machines
                 string timeToProduce = this.timeToProduce.ToString();
                 string updatesContainer = this.updatesContainerObjectForProduction.ToString();
 
-                return info + "<" + guidStr + "<" + pyTkData + "<" + offsetKey + "<" + container+"<"+resources+"<"+energyRequired+"<"+timeToProduce+"<"+updatesContainer+"<"+this.craftingRecipeBook;
+                return info + "<" + guidStr + "<" + pyTkData + "<" + offsetKey + "<" + container + "<" + resources + "<" + energyRequired + "<" + timeToProduce + "<" + updatesContainer + "<" + this.craftingRecipeBook;
             }
             set
             {
@@ -142,28 +142,34 @@ namespace Revitalize.Framework.Objects.Machines
             {
                 if (ModCore.Configs.machinesConfig.doMachinesConsumeEnergy == false)
                 {
-                    ModCore.log("Machine config disables energy consumption.");
+                    //ModCore.log("Machine config disables energy consumption.");
                     return false;
                 }
                 if (this.energyRequiredPer10Minutes == 0)
                 {
-                    ModCore.log("Machine rquires 0 energy to run.");
+                    //ModCore.log("Machine rquires 0 energy to run.");
                     return false;
                 }
                 if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes)
                 {
-                    ModCore.log("Machine does consume energy.");
+                    //ModCore.log("Machine does consume energy.");
                     return true;
                 }
-                ModCore.log("Unknown energy configuration.");
+                if(this.EnergyManager.energyInteractionType== Enums.EnergyInteractionType.Storage)
+                {
+
+                    return true;
+                }
+                //ModCore.log("Unknown energy configuration.");
                 return false;
             }
         }
 
         public Machine() { }
 
-        public Machine(CustomObjectData PyTKData, BasicItemInformation info,List<ResourceInformation> ProducedResources=null, int EnergyRequiredPer10Minutes = 0,int TimeToProduce=0,bool UpdatesContainer=false, string CraftingBook = "") : base(PyTKData, info) {
-            this.producedResources = ProducedResources?? new List<ResourceInformation>();
+        public Machine(CustomObjectData PyTKData, BasicItemInformation info, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "") : base(PyTKData, info)
+        {
+            this.producedResources = ProducedResources ?? new List<ResourceInformation>();
             this.energyRequiredPer10Minutes = EnergyRequiredPer10Minutes;
             this.timeToProduce = TimeToProduce;
             this.updatesContainerObjectForProduction = UpdatesContainer;
@@ -173,7 +179,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         }
 
-        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources=null,int EnergyRequiredPer10Minutes=0,int TimeToProduce=0,bool UpdatesContainer=false, string CraftingBook = "", MultiTiledObject obj=null) : base(PyTKData, info, TileLocation)
+        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "", MultiTiledObject obj = null) : base(PyTKData, info, TileLocation)
         {
             this.containerObject = obj;
             this.producedResources = ProducedResources ?? new List<ResourceInformation>();
@@ -185,11 +191,11 @@ namespace Revitalize.Framework.Objects.Machines
             this.createStatusBubble();
         }
 
-        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Vector2 offsetKey,List<ResourceInformation> ProducedResources=null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce=0,bool UpdatesContainer=false, string CraftingBook = "", MultiTiledObject obj = null) : base(PyTKData, info, TileLocation)
+        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Vector2 offsetKey, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "", MultiTiledObject obj = null) : base(PyTKData, info, TileLocation)
         {
             this.offsetKey = offsetKey;
             this.containerObject = obj;
-            this.producedResources = ProducedResources?? new List<ResourceInformation>();
+            this.producedResources = ProducedResources ?? new List<ResourceInformation>();
             this.energyRequiredPer10Minutes = EnergyRequiredPer10Minutes;
             this.timeToProduce = TimeToProduce;
             this.updatesContainerObjectForProduction = UpdatesContainer;
@@ -223,15 +229,15 @@ namespace Revitalize.Framework.Objects.Machines
                 int remaining = minutes;
                 //ModCore.log("Minutes elapsed: " + remaining);
                 List<MultiTiledObject> energySources = new List<MultiTiledObject>();
-                if (this.ConsumesEnergy)
+                if (this.ConsumesEnergy || this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
                 {
-                    ModCore.log("This machine drains energy: " + this.info.name);
+                    //ModCore.log("This machine drains energy: " + this.info.name);
                     energySources = this.EnergyGraphSearchSources(); //Only grab the network once.
                 }
 
                 if (this.ProducesItems)
                 {
-                    ModCore.log("This machine produces items: "+this.info.name);
+                    ModCore.log("This machine produces items: " + this.info.name);
                     while (remaining > 0)
                     {
 
@@ -251,7 +257,7 @@ namespace Revitalize.Framework.Objects.Machines
                         remaining -= 10;
                         this.containerObject.MinutesUntilReady -= 10;
 
-                        if (this.containerObject.MinutesUntilReady <= 0 && this.InventoryManager.IsFull==false)
+                        if (this.containerObject.MinutesUntilReady <= 0 && this.InventoryManager.IsFull == false)
                         {
                             this.produceItem();
                             this.containerObject.MinutesUntilReady = this.timeToProduce;
@@ -264,13 +270,14 @@ namespace Revitalize.Framework.Objects.Machines
                     {
                         remaining -= 10;
                         this.produceEnergy();
+                        this.storeEnergyToNetwork();
                     }
                 }
-                if (this.MinutesUntilReady>0)
+                if (this.MinutesUntilReady > 0)
                 {
                     this.MinutesUntilReady = Math.Max(0, this.MinutesUntilReady - minutes);
 
-                    if(this.InventoryManager.hasItemsInBuffer && this.MinutesUntilReady == 0)
+                    if (this.InventoryManager.hasItemsInBuffer && this.MinutesUntilReady == 0)
                     {
                         this.InventoryManager.dumpBufferToItems();
                     }
@@ -306,18 +313,18 @@ namespace Revitalize.Framework.Objects.Machines
         {
             MachineMenu machineMenu = new MachineMenu((Game1.viewport.Width / 2) - 400, 0, 800, 600);
 
-            MachineSummaryMenu m = new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width / 2) - 400, 48, 800, 600, Color.White, this.containerObject,this.energyRequiredPer10Minutes);
+            MachineSummaryMenu m = new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width / 2) - 400, 48, 800, 600, Color.White, this.containerObject, this.energyRequiredPer10Minutes);
             machineMenu.addInMenuTab("Summary", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("SummaryTab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), m, true);
 
             if (this.InventoryManager.capacity > 0)
             {
-                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, this.InventoryManager.items, this.InventoryManager.capacity,this.InventoryManager.displayRows,this.InventoryManager.displayColumns);
+                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, this.InventoryManager.items, this.InventoryManager.capacity, this.InventoryManager.displayRows, this.InventoryManager.displayColumns);
                 machineMenu.addInMenuTab("Inventory", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Inventory Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), transferMenu, false);
             }
 
-            if (string.IsNullOrEmpty(this.craftingRecipeBook)==false)
+            if (string.IsNullOrEmpty(this.craftingRecipeBook) == false)
             {
-                CraftingMenuV1 craftingMenu = CraftingRecipeBook.CraftingRecipesByGroup[this.craftingRecipeBook].getCraftingMenuForMachine(100, 100, 400, 700, ref this.InventoryManager.items,ref this.InventoryManager.items,this);
+                CraftingMenuV1 craftingMenu = CraftingRecipeBook.CraftingRecipesByGroup[this.craftingRecipeBook].getCraftingMenuForMachine(100, 100, 400, 700, ref this.InventoryManager.items, ref this.InventoryManager.items, this);
                 machineMenu.addInMenuTab("Crafting", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Crafting Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), craftingMenu, false);
             }
 
@@ -326,7 +333,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override Item getOne()
         {
-            Machine component = new Machine(this.data, this.info.Copy(), this.TileLocation, this.offsetKey, this.producedResources,this.energyRequiredPer10Minutes,this.timeToProduce,this.updatesContainerObjectForProduction,this.craftingRecipeBook,this.containerObject);
+            Machine component = new Machine(this.data, this.info.Copy(), this.TileLocation, this.offsetKey, this.producedResources, this.energyRequiredPer10Minutes, this.timeToProduce, this.updatesContainerObjectForProduction, this.craftingRecipeBook, this.containerObject);
             return component;
         }
 
@@ -422,14 +429,14 @@ namespace Revitalize.Framework.Objects.Machines
 
         public virtual void produceItem()
         {
-            foreach(ResourceInformation r in this.producedResources)
+            foreach (ResourceInformation r in this.producedResources)
             {
                 if (r.shouldDropResource())
                 {
                     Item i = r.getItemDrops();
                     this.InventoryManager.addItem(i);
                     //ModCore.log("Produced an item!");
-                }  
+                }
             }
 
         }
@@ -443,7 +450,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         }
 
-        protected virtual void drawStatusBubble(SpriteBatch b,int x, int y,float Alpha)
+        protected virtual void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
             if (this.updatesContainerObjectForProduction == false) return;
             if (this.InventoryManager.IsFull && this.ProducesItems && ModCore.Configs.machinesConfig.showMachineNotificationBubble_InventoryFull)
@@ -451,7 +458,7 @@ namespace Revitalize.Framework.Objects.Machines
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
                 this.machineStatusBubbleBox.playAnimation("InventoryFull");
-                this.machineStatusBubbleBox.draw(b, this.machineStatusBubbleBox.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize+num)), new Rectangle?(this.machineStatusBubbleBox.currentAnimation.sourceRectangle), Color.White*ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y+2) * Game1.tileSize) / 10000f) + .00001f);
+                this.machineStatusBubbleBox.draw(b, this.machineStatusBubbleBox.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.currentAnimation.sourceRectangle), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
             }
             else
             {

@@ -17,5 +17,18 @@ namespace Revitalize.Framework.Utilities
         {
             return Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID;
         }
+
+
+        public static bool CanPlayerInventoryReceiveThisItem(Item I)
+        {
+            for(int i = 0; i < Game1.player.Items.Count; i++)
+            {
+                if (I == Game1.player.Items[i]) return true;
+                if (I == null) return true;
+                if (I.canStackWith(Game1.player.Items[i])) return true;
+            }
+            return false;
+
+        }
     }
 }

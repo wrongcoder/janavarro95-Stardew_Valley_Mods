@@ -162,6 +162,7 @@
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SolarPanel.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
     <Compile Include="Framework\Objects\Machines\Wire.cs" />
+    <Compile Include="Framework\Objects\Machines\WireMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
     <Compile Include="Framework\Objects\ObjectManager.cs" />
@@ -427,6 +428,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\BatteryBin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Capacitor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\Sandbox.png">

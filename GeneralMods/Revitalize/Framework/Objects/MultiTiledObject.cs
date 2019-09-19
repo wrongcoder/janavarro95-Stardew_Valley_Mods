@@ -295,11 +295,13 @@ namespace Revitalize.Framework.Objects
                 this.location = null;
             }
             else
-                Game1.showRedMessage("NOOOOOOOO");
+                Game1.showRedMessage("Can't pickup item for some reason.");
         }
 
         public override bool removeAndAddToPlayersInventory()
         {
+            bool f = Game1.player.addItemToInventoryBool(this, false);
+            return f;
             if (Game1.player.isInventoryFull())
             {
                 Game1.showRedMessage("Inventory full.");

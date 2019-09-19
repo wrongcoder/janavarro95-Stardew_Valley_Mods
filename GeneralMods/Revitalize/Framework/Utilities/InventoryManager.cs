@@ -186,6 +186,15 @@ namespace Revitalize.Framework.Utilities
             this.requiresUpdate = true;
         }
 
+        public bool canReceieveThisItem(Item I)
+        {
+            if (this.IsFull) return false;
+            else
+            {
+                return true;
+            }
+        }
+
         /// <summary>
         /// Returns a new inventory manager without the items but with the capacity limits.
         /// </summary>

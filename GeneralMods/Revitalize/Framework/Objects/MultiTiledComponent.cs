@@ -648,7 +648,19 @@ namespace Revitalize.Framework.Objects
             for (int i = 0; i < energySources.Count; i++)
             {
                 this.EnergyManager.transferEnergyToAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
-                if (this.EnergyManager.hasEnergy) break;
+                if (this.EnergyManager.hasEnergy==false) break;
+            }
+        }
+
+        public void storeEnergyToNetwork(List<MultiTiledObject> energySources)
+        {
+
+            int index = 0;
+
+            for (int i = 0; i < energySources.Count; i++)
+            {
+                this.EnergyManager.transferEnergyToAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
+                if (this.EnergyManager.hasEnergy==false) break;
             }
         }
     }
