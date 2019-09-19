@@ -5,22 +5,68 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
+using Revitalize.Framework.Illuminate;
 using StardewValley;
 
 namespace Revitalize.Framework.Objects.Items.Resources
 {
-    public class Ore:CustomObject,ISaveElement
+    public class Dye: CustomObject, ISaveElement
     {
 
-        public Ore() { }
+        public NamedColor dyeColor;
+        [JsonIgnore]
+        public virtual string ItemInfo
+        {
+            get
+            {
+                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid + "<" + ModCore.Serializer.ToJSONString(this.data)+"<"+ModCore.Serializer.ToJSONString(this.dyeColor);
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+                string pytkData = data[2];
+                string dyeColorStr = data[3];
 
-        public Ore(CustomObjectData PyTKData, BasicItemInformation info,int Stack=1) : base(PyTKData, info) {
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+                this.data = ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pytkData);
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    //ModCore.log("Update item with guid: " + this.guid);
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    //ModCore.log("Add in new guid: " + this.guid);
+                    ModCore.CustomObjects.Add(this.guid, this);
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        //ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
+                this.dyeColor = ModCore.Serializer.DeserializeFromJSONString<NamedColor>(dyeColorStr);
+            }
+        }
+
+        public Dye() { }
+
+        public Dye(CustomObjectData PyTKData, BasicItemInformation info,NamedColor Color ,int Stack = 1) : base(PyTKData, info)
+        {
             this.Stack = Stack;
             this.Price = info.price;
         }
 
-        public Ore(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation,int Stack=1) : base(PyTKData, info, TileLocation)
+        public Dye(CustomObjectData PyTKData, BasicItemInformation info,NamedColor Color ,Vector2 TileLocation, int Stack = 1) : base(PyTKData, info, TileLocation)
         {
             this.Stack = Stack;
             this.Price = info.price;
@@ -168,7 +214,7 @@ namespace Revitalize.Framework.Objects.Items.Resources
 
         public override int salePrice()
         {
-            return this.Price*2;
+            return this.Price * 2;
         }
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
@@ -193,7 +239,7 @@ namespace Revitalize.Framework.Objects.Items.Resources
                 if (this.animationManager.getExtendedTexture() == null)
                     ModCore.ModMonitor.Log("Tex Extended is null???");
 
-                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.dyeColor.color * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
                 // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
             }
 
@@ -201,7 +247,7 @@ namespace Revitalize.Framework.Objects.Items.Resources
             {
                 //Log.AsyncC("Animation Manager is working!");
                 float addedDepth = 0;
-                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.dyeColor.color * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
                 try
                 {
                     this.animationManager.tickAnimation();
@@ -228,6 +274,5 @@ namespace Revitalize.Framework.Objects.Items.Resources
             }
             spriteBatch.Draw(this.displayTexture, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * transparency, 0f, new Vector2((float)(this.animationManager.currentAnimation.sourceRectangle.Width / 2), (float)(this.animationManager.currentAnimation.sourceRectangle.Height)), scaleSize * 4f, SpriteEffects.None, layerDepth);
         }
-
     }
 }

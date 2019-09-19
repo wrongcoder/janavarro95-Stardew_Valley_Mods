@@ -56,6 +56,7 @@
     <Compile Include="Framework\Configs\ConfigManager.cs" />
     <Compile Include="Framework\Configs\FurnitureConfig.cs" />
     <Compile Include="Framework\Configs\GlobalMachineConfig.cs" />
+    <Compile Include="Framework\Configs\ObjectsConfig.cs" />
     <Compile Include="Framework\Configs\Shops_BlacksmithConfig.cs" />
     <Compile Include="Framework\Configs\VanillaMachineRecipeConfig.cs" />
     <Compile Include="Framework\Crafting\CraftingRecipeBook.cs" />
@@ -81,8 +82,10 @@
     <Compile Include="Framework\Hacks\ObjectInteractionHacks.cs" />
     <Compile Include="Framework\Hacks\ShopHacks.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
+    <Compile Include="Framework\Illuminate\ColorsList.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
+    <Compile Include="Framework\Illuminate\NamedColor.cs" />
     <Compile Include="Framework\Menus\CraftingInformationPage.cs" />
     <Compile Include="Framework\Menus\CraftingMenuV1.cs" />
     <Compile Include="Framework\Menus\Machines\MachineMenu.cs" />
@@ -149,6 +152,7 @@
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\ResourceInformation.cs" />
     <Compile Include="Framework\Objects\Interfaces\IItemInfo.cs" />
+    <Compile Include="Framework\Objects\Items\Resources\Dye.cs" />
     <Compile Include="Framework\Objects\Items\Resources\Ore.cs" />
     <Compile Include="Framework\Objects\Items\Tools\AxeExtended.cs" />
     <Compile Include="Framework\Objects\Items\Tools\HoeExtended.cs" />

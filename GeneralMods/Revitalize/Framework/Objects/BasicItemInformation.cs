@@ -218,10 +218,20 @@ namespace Revitalize.Framework.Objects
 
 
         private Color _drawColor;
-        public Color drawColor
+        public Color DrawColor
         {
             get
             {
+                if (this._dyedColor != null)
+                {
+                    if (this._dyedColor.color != null)
+                    {
+                        if (this._dyedColor.color.A != 0)
+                        {
+                            return new Color(this._drawColor.R * this._dyedColor.color.R, this._drawColor.G * this._dyedColor.color.G, this._drawColor.B * this._dyedColor.color.B, 255);
+                        }
+                    }
+                }
                 return this._drawColor;
             }
             set
@@ -332,6 +342,21 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        private NamedColor _dyedColor;
+        public NamedColor DyedColor {
+
+            get
+            {
+                return this._dyedColor;
+            }
+            set
+            {
+                this._dyedColor = value;
+                this.requiresUpdate = true;
+            }
+
+        }
+
         [JsonIgnore]
         public bool requiresUpdate;
         public BasicItemInformation()
@@ -347,7 +372,7 @@ namespace Revitalize.Framework.Objects
 
             this.animationManager = new AnimationManager();
             this.drawPosition = Vector2.Zero;
-            this.drawColor = Color.White;
+            this.DrawColor = Color.White;
             this.inventory = new InventoryManager();
             this.lightManager = new LightManager();
 
@@ -358,7 +383,7 @@ namespace Revitalize.Framework.Objects
             this._alwaysDrawAbovePlayer = false;
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null)
         {
             this.name = name;
             this.id = id;
@@ -381,7 +406,7 @@ namespace Revitalize.Framework.Objects
             }
 
             this.drawPosition = Vector2.Zero;
-            this.drawColor = drawColor;
+            this.DrawColor = drawColor;
             this.ignoreBoundingBox = ignoreBoundingBox;
             this.inventory = Inventory ?? new InventoryManager();
             this.lightManager = Lights ?? new LightManager();
@@ -390,6 +415,8 @@ namespace Revitalize.Framework.Objects
 
             this.EnergyManager = EnergyManager ?? new Energy.EnergyManager();
             this.AlwaysDrawAbovePlayer = AlwaysDrawAbovePlayer;
+
+
         }
 
         /// <summary>
@@ -407,7 +434,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.drawColor, this.ignoreBoundingBox, this._inventory.Copy(), this._lightManager.Copy(),this._energyManager.Copy(),this.AlwaysDrawAbovePlayer);
+            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.DrawColor, this.ignoreBoundingBox, this._inventory.Copy(), this._lightManager.Copy(),this._energyManager.Copy(),this.AlwaysDrawAbovePlayer);
         }
 
         public bool requiresSyncUpdate()
@@ -449,6 +476,32 @@ namespace Revitalize.Framework.Objects
             this._lightManager.requiresUpdate = false;
             this._energyManager.requiresUpdate = false;
         }
+
+        /// <summary>
+        /// Gets the name attached to the dyed color.
+        /// </summary>
+        /// <returns></returns>
+        public string getDyedColorName()
+        {
+            if (this.DyedColor == null)
+            {
+                return "";
+            }
+            if (this.DyedColor.color == null)
+            {
+                return "";
+            }
+            if (this.DyedColor.color.A == 0)
+            {
+                return "";
+            }
+            else
+            {
+                return this._dyedColor.name;
+            }
+        }
+
+
         
     }
 }

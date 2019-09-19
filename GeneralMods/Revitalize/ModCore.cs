@@ -32,6 +32,7 @@ using Revitalize.Framework.Objects.CraftingTables;
 using Revitalize.Framework.Objects.Items.Tools;
 using StardewValley.Tools;
 using Revitalize.Framework.Menus.Machines;
+using Revitalize.Framework.Objects.Machines;
 
 namespace Revitalize
 {
@@ -40,10 +41,7 @@ namespace Revitalize
     //  -Chair tops cut off objects
     // -load content MUST be enabled for the table to be placed??????
     // TODO:
-    /*  Add in crafting menu.
-     *  Add in crafting table.
-     *
-     * 
+    /*
     // -Make this mod able to load content packs for easier future modding
     //
     //  -Multiple Lights On Object
@@ -57,7 +55,7 @@ namespace Revitalize
     //      -dressers/other storage containers (Done!)
     //      -fun interactables
     //          -Arcade machines
-    //      -More crafting tables
+    //      -More crafting tables (done)
     //      -Baths (see chairs but swimming)
     //
     //  -Machines
@@ -95,7 +93,7 @@ namespace Revitalize
     //      -Calcinator (oil+stone: produces titanum?)
     //  -Materials
     //      -Tin/Bronze/Alluminum/Silver?Platinum/Etc (all but platinum: may add in at a later date)
-            -titanium
+            -titanium (d0ne)
             -Alloys!
                 -Brass (done)
                 -Electrum (done)
@@ -552,7 +550,9 @@ namespace Revitalize
 
             Game1.player.addItemToInventoryBool(ObjectManager.GetItem("Workbench"));
 
-            
+
+            MultiTiledObject batteryBin =(MultiTiledObject) ModCore.ObjectManager.GetItem("BatteryBin", 1);
+            batteryBin.dyeColor(Framework.Illuminate.ColorsList.Lime);
 
             //PickaxeExtended pick = new PickaxeExtended(new BasicItemInformation("My First Pickaxe", "Omegasis.Revitalize.Items.Tools.MyFirstPickaxe", "A testing pickaxe. Does it work?", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(Manifest, "Tools", "Pickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Tools", "Pickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),2,TextureManager.GetExtendedTexture(Manifest,"Tools","TestingPickaxeWorking"));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
@@ -567,7 +567,7 @@ namespace Revitalize
                 new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
                 ModCore.ObjectManager.GetItem("Lighthouse",1),
                 ModCore.ObjectManager.GetItem("CopperWire"),
-                ModCore.ObjectManager.GetItem("BatteryBin",1)
+                batteryBin
 
             });
         }

@@ -9,9 +9,7 @@ namespace Revitalize.Framework.Configs
 {
     public class GlobalMachineConfig
     {
-
         public bool doMachinesConsumeEnergy;
-
 
         public double solarPanelNonSunnyDayEnergyMultiplier;
         public double solarPanelNightEnergyGenerationMultiplier;

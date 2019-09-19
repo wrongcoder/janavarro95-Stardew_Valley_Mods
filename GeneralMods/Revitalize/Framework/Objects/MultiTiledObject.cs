@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
+using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardewValley.Objects;
@@ -569,5 +570,27 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DyeColor"></param>
+        public override void dyeColor(NamedColor DyeColor)
+        {
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            {
+                (pair.Value as CustomObject).dyeColor(DyeColor);       
+            }
+            this.info.DyedColor = DyeColor;
+        }
+
+        public override void eraseDye()
+        {
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            {
+                (pair.Value as CustomObject).eraseDye();
+            }
+            this.info.DyedColor = new NamedColor("", new Color(0, 0, 0, 0));
+        }
     }
 }
