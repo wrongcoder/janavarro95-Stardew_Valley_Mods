@@ -722,6 +722,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool canStackWith(Item other)
         {
+            if (other is CustomObject == false) return false;
             CustomObject o = (CustomObject)other;
 
             if (this.info.DyedColor != o.info.DyedColor) return false;

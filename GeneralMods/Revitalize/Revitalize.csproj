@@ -161,6 +161,7 @@
     <Compile Include="Framework\Objects\Items\Tools\WateringCanExtended.cs" />
     <Compile Include="Framework\Objects\Machines\ChargingStation.cs" />
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SolarPanel.cs" />
+    <Compile Include="Framework\Objects\Machines\Grinder.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
     <Compile Include="Framework\Objects\Machines\Wire.cs" />
     <Compile Include="Framework\Objects\Machines\WireMultiTiledObject.cs" />
@@ -462,6 +463,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\ChargingStation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Grinder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\Sandbox.png">

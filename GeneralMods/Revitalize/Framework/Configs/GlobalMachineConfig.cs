@@ -16,6 +16,9 @@ namespace Revitalize.Framework.Configs
         public bool showMachineNotificationBubble_InventoryFull;
         public float machineNotificationBubbleAlpha;
 
+        public int grinderEnergyConsumption;
+        public int grinderTimeToGrind;
+
         public GlobalMachineConfig()
         {
             this.doMachinesConsumeEnergy = true;
@@ -23,6 +26,8 @@ namespace Revitalize.Framework.Configs
             this.solarPanelNightEnergyGenerationMultiplier = .125d;
             this.showMachineNotificationBubble_InventoryFull = true;
             this.machineNotificationBubbleAlpha = 0.75f;
+            this.grinderEnergyConsumption = 20;
+            this.grinderTimeToGrind = 30;
         }
 
         public static GlobalMachineConfig InitializeConfig()
