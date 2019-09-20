@@ -570,7 +570,6 @@ namespace Revitalize
                 batteryBin,
                 ModCore.ObjectManager.GetItem("Capacitor",1),
                 ModCore.ObjectManager.GetItem("ChargingStation",1)
-
             });
         }
 
