@@ -88,7 +88,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override void endUsing(GameLocation location, Farmer who)
         {
-            if (this.hadEnoughEnergy == false)
+            if (this.EnergyManager.hasEnoughEnergy(this.getEnergyConsumptionRate()) == false)
             {
                 Game1.toolAnimationDone(who);
                 who.canReleaseTool = false;
@@ -162,6 +162,16 @@ namespace Revitalize.Framework.Objects.Items.Tools
             //who.Stamina -= (float)(2 * (power + 1)) - (float)who.MiningLevel * 0.1f;
             //Drain energy here;
             this.EnergyManager.consumeEnergy(this.getEnergyConsumptionRate());
+            //Double check to prevent animation from happening with even no power
+            if (this.EnergyManager.hasEnoughEnergy(this.getEnergyConsumptionRate()) == true)
+            {
+                this.hadEnoughEnergy = true;
+            }
+            else
+            {
+                this.hadEnoughEnergy = false;
+            }
+
 
             Utility.clampToTile(new Vector2((float)x, (float)y));
             int num1 = x / 64;
