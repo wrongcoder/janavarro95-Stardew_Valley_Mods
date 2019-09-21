@@ -240,7 +240,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override string getDescription()
         {
-            return this.info.name;
+            return this.info.description;
         }
 
         public override Item getOne()

@@ -155,7 +155,7 @@ namespace Revitalize.Framework.Objects.Machines
                     //ModCore.log("Machine does consume energy.");
                     return true;
                 }
-                if(this.EnergyManager.energyInteractionType== Enums.EnergyInteractionType.Storage)
+                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
                 {
 
                     return true;
@@ -288,6 +288,11 @@ namespace Revitalize.Framework.Objects.Machines
             }
             else
             {
+
+                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Produces)
+                {
+                    this.storeEnergyToNetwork();
+                }
 
                 return false;
             }

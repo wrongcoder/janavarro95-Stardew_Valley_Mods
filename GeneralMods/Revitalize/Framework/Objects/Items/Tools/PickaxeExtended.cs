@@ -240,7 +240,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override string getDescription()
         {
-            return this.info.name;
+            return this.info.description;
         }
 
         public override Item getOne()
@@ -248,12 +248,12 @@ namespace Revitalize.Framework.Objects.Items.Tools
             return new PickaxeExtended(this.info.Copy(), this.UpgradeLevel,this.workingTexture.Copy());
         }
 
-        public object getReplacement()
+        public virtual object getReplacement()
         {
             return new StardewValley.Tools.Pickaxe { UpgradeLevel = this.UpgradeLevel };
         }
 
-        public void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        public virtual void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
         {
             this.info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
             this.upgradeLevel.Value = (replacement as Pickaxe).UpgradeLevel;

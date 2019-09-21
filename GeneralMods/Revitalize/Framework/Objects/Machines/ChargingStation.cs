@@ -82,7 +82,7 @@ namespace Revitalize.Framework.Objects.Machines
                 foreach(Item I in this.InventoryManager.items)
                 {
                     if (I is null) continue;
-                    if (I is CustomObject == false) continue;
+                    if (I is IEnergyInterface==false) continue;
                     IEnergyInterface o = (IEnergyInterface)I;
                     if (o.EnergyManager.canReceieveEnergy)
                     {

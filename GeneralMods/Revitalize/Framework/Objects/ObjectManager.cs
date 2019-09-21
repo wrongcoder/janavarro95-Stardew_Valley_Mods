@@ -296,6 +296,9 @@ namespace Revitalize.Framework.Objects
             WateringCanExtended steelCan = new WateringCanExtended(new BasicItemInformation("Hardened Watering Can", "Omegasis.Revitalize.Items.Tools.HardenedWateringCan", "A sturdy watering can made from hardened alloy.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "HardenedWateringCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedWateringCan"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 2, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "HardenedWateringCanWorking"), 100);
             WateringCanExtended titaniumCan = new WateringCanExtended(new BasicItemInformation("Titanium Watering Can", "Omegasis.Revitalize.Items.Tools.TitaniumWateringCan", "A sturdy watering can made from titanium.", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "TitaniumWateringCan"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumWateringCan"), new Animation(0, 0, 16, 16)), Color.White, true, null, null), 3, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "TitaniumWateringCanWorking"), 125);
 
+            MiningDrill miningDrillV1 = new MiningDrill(new BasicItemInformation("Simple Mining Drill", "Omegasis.Revitalize.Items.Tools.MiningDrillV1", "A drill used in mining. Consumes energy instead of stamina.", "Tool", Color.SlateGray, 0, 0, false, 1000, false, false, TextureManager.GetTexture(ModCore.Manifest, "Tools", "MiningDrill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "MiningDrill"), new Animation(0, 0, 16, 16)), Color.White, true, null, null,new Energy.EnergyManager(200, Enums.EnergyInteractionType.Consumes)), 2, TextureManager.GetExtendedTexture(ModCore.Manifest, "Tools", "MiningDrillWorking"));
+
+
             this.Tools.Add("BronzePickaxe", bronzePick);
             this.Tools.Add("HardenedPickaxe", steelPick);
             this.Tools.Add("TitaniumPickaxe", titaniumPick);
@@ -311,6 +314,8 @@ namespace Revitalize.Framework.Objects
             this.Tools.Add("BronzeWateringCan", bronzeCan);
             this.Tools.Add("HardenedWateringCan", steelCan);
             this.Tools.Add("TitaniumWateringCan", titaniumCan);
+
+            this.Tools.Add("MiningDrillV1", miningDrillV1);
         }
 
         /// <summary>

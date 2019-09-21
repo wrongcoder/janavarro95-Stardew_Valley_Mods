@@ -21,6 +21,8 @@ namespace Revitalize.Framework.Utilities
         public static string RequestALLModObjects = "Revitalize.EndOfDayRequestAllObjects";
         public static string RequestObjectUpdateSync = "Revitalize.RequestObjectUpdateSync";
 
+        public static Multiplayer GameMultiplayer;
+
         /// <summary>
         /// Handles receiving mod messages.
         /// </summary>
@@ -182,6 +184,24 @@ namespace Revitalize.Framework.Utilities
         public static void RequestUpdateSync(Guid request)
         {
             ModCore.ModHelper.Multiplayer.SendMessage<string>(request.ToString(), RequestObjectUpdateSync, new string[] { ModCore.Manifest.UniqueID.ToString() });
+        }
+
+        public static StardewValley.Multiplayer GetMultiplayer()
+        {
+            if (GameMultiplayer == null)
+            {
+                Multiplayer multiplayer = ModCore.ModHelper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer", true).GetValue();
+                if (multiplayer == null) return null;
+                else
+                {
+                    GameMultiplayer = multiplayer;
+                    return GameMultiplayer;
+                }
+            }
+            else
+            {
+                return GameMultiplayer;
+            }
         }
 
     }
