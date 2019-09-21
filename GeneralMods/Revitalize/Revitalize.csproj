@@ -156,6 +156,7 @@
     <Compile Include="Framework\Objects\Items\Resources\Dye.cs" />
     <Compile Include="Framework\Objects\Items\Resources\Ore.cs" />
     <Compile Include="Framework\Objects\Items\Tools\AxeExtended.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\Chainsaw.cs" />
     <Compile Include="Framework\Objects\Items\Tools\HoeExtended.cs" />
     <Compile Include="Framework\Objects\Items\Tools\MiningDrill.cs" />
     <Compile Include="Framework\Objects\Items\Tools\PickaxeExtended.cs" />
@@ -318,6 +319,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Tools\BronzeWateringCanWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\Chainsaw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\ChainsawWorking.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Tools\DefaultAxeWorking.png">

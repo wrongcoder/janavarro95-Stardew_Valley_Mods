@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using Newtonsoft.Json;
 using Revitalize.Framework.Energy;
 using Revitalize.Framework.Utilities;
 using StardewValley;
@@ -20,8 +21,8 @@ namespace Revitalize.Framework.Objects.Items.Tools
         private int boulderTileY;
         private int hitsToBoulder;
         private Texture2D energyTexture;
-        private bool hadEnoughEnergy;
 
+        [JsonIgnore]
         public EnergyManager EnergyManager
         {
             get => this.info.EnergyManager;
@@ -149,11 +150,9 @@ namespace Revitalize.Framework.Objects.Items.Tools
             //base.DoFunction(location, x, y, power, who);
             if (this.EnergyManager.hasEnoughEnergy(this.getEnergyConsumptionRate()) == true)
             {
-                this.hadEnoughEnergy = true;
             }
             else
             {
-                this.hadEnoughEnergy = false;
                 Game1.showRedMessage("Out of energy!");
                 return;
             }
@@ -163,14 +162,6 @@ namespace Revitalize.Framework.Objects.Items.Tools
             //Drain energy here;
             this.EnergyManager.consumeEnergy(this.getEnergyConsumptionRate());
             //Double check to prevent animation from happening with even no power
-            if (this.EnergyManager.hasEnoughEnergy(this.getEnergyConsumptionRate()) == true)
-            {
-                this.hadEnoughEnergy = true;
-            }
-            else
-            {
-                this.hadEnoughEnergy = false;
-            }
 
 
             Utility.clampToTile(new Vector2((float)x, (float)y));

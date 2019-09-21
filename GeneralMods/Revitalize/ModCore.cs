@@ -572,7 +572,8 @@ namespace Revitalize
                 ModCore.ObjectManager.GetItem("ChargingStation",1),
                 ModCore.ObjectManager.GetItem("Grinder",1),
                 new StardewValley.Object((int)Enums.SDVObject.CopperOre,10),
-                ModCore.ObjectManager.GetTool("MiningDrillV1")
+                ModCore.ObjectManager.GetTool("MiningDrillV1"),
+                ModCore.ObjectManager.GetTool("ChainsawV1")
             });
         }
 

@@ -247,12 +247,12 @@ namespace Revitalize.Framework.Objects.Items.Tools
             return new AxeExtended(this.info.Copy(), this.UpgradeLevel, this.workingTexture.Copy());
         }
 
-        public object getReplacement()
+        public virtual object getReplacement()
         {
             return new StardewValley.Tools.Axe { UpgradeLevel = this.UpgradeLevel };
         }
 
-        public void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        public virtual void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
         {
             this.info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
             this.upgradeLevel.Value = (replacement as Axe).UpgradeLevel;
