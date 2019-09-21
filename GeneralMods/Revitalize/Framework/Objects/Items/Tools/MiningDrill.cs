@@ -90,24 +90,6 @@ namespace Revitalize.Framework.Objects.Items.Tools
         {
             if (this.hadEnoughEnergy == false)
             {
-                /*
-                int num2 = (double)who.Stamina <= 0.0 ? 2 : 1;
-                switch (who.FacingDirection)
-                {
-                    case 0:
-                        ((FarmerSprite)who.Sprite).animateOnce(176, 60f * (float)num2, 8);
-                        break;
-                    case 1:
-                        ((FarmerSprite)who.Sprite).animateOnce(168, 60f * (float)num2, 8);
-                        break;
-                    case 2:
-                        ((FarmerSprite)who.Sprite).animateOnce(160, 60f * (float)num2, 8);
-                        break;
-                    case 3:
-                        ((FarmerSprite)who.Sprite).animateOnce(184, 60f * (float)num2, 8);
-                        break;
-                }
-                */
                 Game1.toolAnimationDone(who);
                 who.canReleaseTool = false;
                 who.UsingTool = false;
@@ -165,7 +147,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         public override void DoFunction(GameLocation location, int x, int y, int power, Farmer who)
         {
             //base.DoFunction(location, x, y, power, who);
-            if (this.EnergyManager.hasEnoughEnergy(2 * (this.upgradeLevel.Value + 1)) == true)
+            if (this.EnergyManager.hasEnoughEnergy(this.getEnergyConsumptionRate()) == true)
             {
                 this.hadEnoughEnergy = true;
             }
@@ -179,7 +161,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
             power = who.toolPower;
             //who.Stamina -= (float)(2 * (power + 1)) - (float)who.MiningLevel * 0.1f;
             //Drain energy here;
-            this.EnergyManager.consumeEnergy(2 * (this.upgradeLevel.Value + 1));
+            this.EnergyManager.consumeEnergy(this.getEnergyConsumptionRate());
 
             Utility.clampToTile(new Vector2((float)x, (float)y));
             int num1 = x / 64;
@@ -400,5 +382,9 @@ namespace Revitalize.Framework.Objects.Items.Tools
         }
 
 
+        private int getEnergyConsumptionRate()
+        {
+            return this.UpgradeLevel + 1;
+        }
     }
 }
