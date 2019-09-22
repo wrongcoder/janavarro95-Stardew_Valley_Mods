@@ -117,6 +117,11 @@ namespace Revitalize.Framework.Objects.Machines
             //return base.minutesElapsed(minutes, environment);
         }
 
+        public override void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            base.rebuild(additionalSaveData, replacement);
+        }
+
         public override bool rightClicked(Farmer who)
         {
             if (this.location == null)
@@ -130,38 +135,51 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override Item getOne()
         {
-            Grinder component = new Grinder(this.data, this.info.Copy(), this.TileLocation, this.offsetKey, this.producedResources, ModCore.Configs.machinesConfig.grinderEnergyConsumption, this.timeToProduce, this.updatesContainerObjectForProduction, this.craftingRecipeBook, this.containerObject);
+            Grinder component = new Grinder(this.data, this.info.Copy(), this.TileLocation, this.offsetKey, this.producedResources, ModCore.Configs.machinesConfig.grinderEnergyConsumption, this.timeToProduce, this.updatesContainerObjectForProduction, this.craftingRecipeBook);
+            component.containerObject = this.containerObject;
+            component.offsetKey = this.offsetKey;
+            return component;
             return component;
         }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
         {
-            //instead of using this.offsetkey.x use get additional save data function and store offset key there
-
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
+            string GUID = additionalSaveData["GUID"];
             Grinder self = Revitalize.ModCore.Serializer.DeserializeGUID<Grinder>(additionalSaveData["GUID"]);
-            if (self == null)
+            if (ModCore.IsNullOrDefault<Machine>(self)) return null;
+            try
             {
-                return null;
+                if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
+                {
+                    MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["ParentGUID"]);
+                    self.containerObject = obj;
+                    self.containerObject.removeComponent(offsetKey);
+                    self.containerObject.addComponent(offsetKey, self);
+                    Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], obj);
+                }
+                else
+                {
+                    self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
+                    self.containerObject.removeComponent(offsetKey);
+                    self.containerObject.addComponent(offsetKey, self);
+                }
+            }
+            catch (Exception err)
+            {
+                ModCore.log(err);
             }
 
-            if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
-            {
-                //Get new container
-                MultiTiledObject obj = (MultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<MultiTiledObject>(additionalSaveData["ParentGUID"]);
-                self.containerObject = obj;
-                obj.addComponent(offsetKey, self);
-                //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
-                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], (MultiTiledObject)obj);
-            }
-            else
-            {
-                self.containerObject = Revitalize.ModCore.ObjectGroups[additionalSaveData["ParentGUID"]];
-                Revitalize.ModCore.ObjectGroups[additionalSaveData["GUID"]].addComponent(offsetKey, self);
-                //Revitalize.ModCore.log("READD AN OBJECT!!!!");
-            }
+            return self;
+        }
 
-            return (ICustomObject)self;
+        public override Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string, string> saveData = base.getAdditionalSaveData();
+            Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
+            this.containerObject.getAdditionalSaveData();
+            return saveData;
+
         }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)

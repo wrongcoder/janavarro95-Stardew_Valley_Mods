@@ -741,7 +741,7 @@ namespace Revitalize.Framework.Objects
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
         {
-            this.updateInfo();
+            //this.updateInfo();
             if (this.location == null)
             {
                 this.location = environment;
