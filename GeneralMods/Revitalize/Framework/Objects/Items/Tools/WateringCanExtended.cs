@@ -10,12 +10,13 @@ using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.Interfaces;
 using Revitalize.Framework.Utilities;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.Tools;
 using StardustCore.UIUtilities;
 
 namespace Revitalize.Framework.Objects.Items.Tools
 {
-    public class WateringCanExtended:StardewValley.Tools.WateringCan, ISaveElement, IItemInfo
+    public class WateringCanExtended:StardewValley.Tools.WateringCan, ISaveElement, IItemInfo, ICustomObject
     {
         public BasicItemInformation info;
         public Texture2DExtended workingTexture;
@@ -195,15 +196,6 @@ namespace Revitalize.Framework.Objects.Items.Tools
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, color, drawShadow);
         }
 
-        public Dictionary<string, string> getAdditionalSaveData()
-        {
-            Dictionary<string, string> serializedInfo = new Dictionary<string, string>();
-            serializedInfo.Add("id", this.ItemInfo);
-            serializedInfo.Add("ItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
-            Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
-            return serializedInfo;
-        }
-
         public override bool beginUsing(GameLocation location, int x, int y, Farmer who)
         {
             this.updateInfo();
@@ -248,18 +240,6 @@ namespace Revitalize.Framework.Objects.Items.Tools
             return new WateringCanExtended(this.info.Copy(), this.UpgradeLevel, this.workingTexture.Copy(),this.waterCanMax);
         }
 
-        public object getReplacement()
-        {
-            return new StardewValley.Tools.WateringCan { UpgradeLevel = this.UpgradeLevel, waterCanMax=this.waterCanMax };
-        }
-
-        public void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
-        {
-            this.info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
-            this.upgradeLevel.Value = (replacement as WateringCan).UpgradeLevel;
-        }
-
-
         /// <summary>
         /// Updates the info on the item.
         /// </summary>
@@ -301,6 +281,43 @@ namespace Revitalize.Framework.Objects.Items.Tools
             {
                 return false;
             }
+        }
+
+        public virtual ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            WateringCanExtended p = Revitalize.ModCore.Serializer.DeserializeGUID<WateringCanExtended>(additionalSaveData["GUID"]);
+            return p;
+        }
+        public Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string, string> serializedInfo = new Dictionary<string, string>();
+            serializedInfo.Add("id", this.ItemInfo);
+            serializedInfo.Add("ItemInfo", Revitalize.ModCore.Serializer.ToJSONString(this.info));
+            serializedInfo.Add("GUID", this.guid.ToString());
+            serializedInfo.Add("Level", this.UpgradeLevel.ToString());
+            Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
+            return serializedInfo;
+        }
+
+        public virtual object getReplacement()
+        {
+            Chest c = new Chest(true);
+            c.playerChoiceColor.Value = Color.Magenta;
+            c.TileLocation = new Vector2(0, 0);
+            return c;
+        }
+
+        public virtual void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            //ModCore.log("REBULD THE PICKAXE!!!!!!!");
+            this.info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
+            this.UpgradeLevel = Convert.ToInt32(additionalSaveData["Level"]);
+            //this.upgradeLevel.Value = (replacement as Pickaxe).UpgradeLevel;
+
+        }
+        public override bool canBeTrashed()
+        {
+            return base.canBeTrashed();
         }
     }
 }

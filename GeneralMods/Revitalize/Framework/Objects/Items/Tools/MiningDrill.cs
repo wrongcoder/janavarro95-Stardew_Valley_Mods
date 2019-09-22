@@ -7,9 +7,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Newtonsoft.Json;
+using PyTK.CustomElementHandler;
 using Revitalize.Framework.Energy;
 using Revitalize.Framework.Utilities;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.Tools;
 using StardustCore.UIUtilities;
 
@@ -362,13 +364,25 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override object getReplacement()
         {
-            return new StardewValley.Tools.Pickaxe { UpgradeLevel = this.UpgradeLevel };
+            Chest c = new Chest(true);
+            c.playerChoiceColor.Value = Color.Magenta;
+            c.TileLocation = new Vector2(0, 0);
+            return c;
         }
 
         public override void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
         {
+            //ModCore.log("REBULD THE PICKAXE!!!!!!!");
             this.info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(additionalSaveData["ItemInfo"]);
-            this.upgradeLevel.Value = (replacement as Pickaxe).UpgradeLevel;
+            this.UpgradeLevel = Convert.ToInt32(additionalSaveData["Level"]);
+            //this.upgradeLevel.Value = (replacement as Pickaxe).UpgradeLevel;
+
+        }
+
+        public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            MiningDrill p = Revitalize.ModCore.Serializer.DeserializeGUID<MiningDrill>(additionalSaveData["GUID"]);
+            return p;
         }
 
 
@@ -385,6 +399,11 @@ namespace Revitalize.Framework.Objects.Items.Tools
         public void SetEnergyManager(ref EnergyManager Manager)
         {
             this.info.EnergyManager = Manager;
+        }
+
+        public override bool canBeTrashed()
+        {
+            return base.canBeTrashed();
         }
     }
 }
