@@ -27,6 +27,8 @@ namespace StardustCore.Animations
         public bool requiresUpdate;
         public bool IsNull => this.defaultDrawFrame == null && this.objectTexture == null;
 
+        public bool hasRecievedUpdateTick;
+
         /// <summary>
         /// Checks to see if there is an animation playing.
         /// </summary>
@@ -107,12 +109,23 @@ namespace StardustCore.Animations
                     this.getNextAnimationFrame();
                 this.currentAnimation.tickAnimationFrame();
                 //this.requiresUpdate = true;
+                this.hasRecievedUpdateTick = true;
             }
             catch (Exception err)
             {
                 ModCore.ModMonitor.Log("An internal error occured when trying to tick the animation.");
                 ModCore.ModMonitor.Log(err.ToString(), StardewModdingAPI.LogLevel.Error);
             }
+        }
+
+        public void prepareForNextUpdateTick()
+        {
+            this.hasRecievedUpdateTick = false;
+        }
+
+        public bool canTickAnimation()
+        {
+            return this.hasRecievedUpdateTick == false;
         }
 
         /// <summary>Get the next animation frame in the list of animations.</summary>

@@ -122,7 +122,7 @@ namespace Revitalize.Framework.Energy
 
         }
 
-        public EnergyManager(int Capacity,Enums.EnergyInteractionType EnergyType) : this(0, Capacity,EnergyType)
+        public EnergyManager(int Capacity, Enums.EnergyInteractionType EnergyType) : this(0, Capacity, EnergyType)
         {
         }
 
@@ -149,27 +149,21 @@ namespace Revitalize.Framework.Energy
         {
             int amountBeforeConsumption = this.remainingEnergy;
             this.remainingEnergy = Math.Max(0, this.remainingEnergy - amount);
-            if (this.remainingEnergy != amountBeforeConsumption)
-            {
-                this.requiresUpdate = true;
-            }
+            this.requiresUpdate = true;
         }
 
         public void produceEnergy(int amount)
         {
             int amountBeforeProduction = this.remainingEnergy;
             this.remainingEnergy = Math.Min(this.maxEnergy, this.remainingEnergy + amount);
-            if (this.remainingEnergy != amountBeforeProduction)
-            {
-                this.requiresUpdate = true;
-            }
+            this.requiresUpdate = true;
         }
 
-        public void transferEnergyFromAnother(EnergyManager other,int amount)
+        public void transferEnergyFromAnother(EnergyManager other, int amount)
         {
             if (this.canReceieveEnergy)
             {
-                int actualAmount = Math.Min(amount,other.remainingEnergy);
+                int actualAmount = Math.Min(amount, other.remainingEnergy);
                 int selfCapacity = this.capacityRemaining;
                 this.produceEnergy(Math.Min(actualAmount, selfCapacity));
                 other.consumeEnergy(Math.Min(actualAmount, selfCapacity));
@@ -197,7 +191,7 @@ namespace Revitalize.Framework.Energy
 
         public EnergyManager Copy()
         {
-            return new EnergyManager(this.maxEnergy,this.energyInteractionType);
+            return new EnergyManager(this.maxEnergy, this.energyInteractionType);
         }
 
     }

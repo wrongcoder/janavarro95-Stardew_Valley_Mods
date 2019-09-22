@@ -13,6 +13,7 @@ using Revitalize.Framework.Menus.Machines;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Utilities;
 using StardewValley;
+using StardewValley.Objects;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
@@ -32,12 +33,29 @@ namespace Revitalize.Framework.Objects.Machines
                 string pyTkData = ModCore.Serializer.ToJSONString(this.data);
                 string offsetKey = this.offsetKey != null ? ModCore.Serializer.ToJSONString(this.offsetKey) : "";
                 string container = this.containerObject != null ? this.containerObject.guid.ToString() : "";
-                string resources = ModCore.Serializer.ToJSONString(this.producedResources);
                 string energyRequired = this.energyRequiredPer10Minutes.ToString();
                 string timeToProduce = this.timeToProduce.ToString();
                 string updatesContainer = this.updatesContainerObjectForProduction.ToString();
-
-                return info + "<" + guidStr + "<" + pyTkData + "<" + offsetKey + "<" + container + "<" + resources + "<" + energyRequired + "<" + timeToProduce + "<" + updatesContainer + "<" + this.craftingRecipeBook;
+                StringBuilder b = new StringBuilder();
+                b.Append(info);
+                b.Append("<");
+                b.Append(guidStr);
+                b.Append("<");
+                b.Append(pyTkData);
+                b.Append("<");
+                b.Append(offsetKey);
+                b.Append("<");
+                b.Append(container);
+                b.Append("<");
+                b.Append(energyRequired);
+                b.Append("<");
+                b.Append(timeToProduce);
+                b.Append("<");
+                b.Append(updatesContainer);
+                b.Append("<");
+                b.Append(this.craftingRecipeBook);
+                //ModCore.log("Setting info: " + b.ToString());
+                return b.ToString();
             }
             set
             {
@@ -48,16 +66,16 @@ namespace Revitalize.Framework.Objects.Machines
                 string pyTKData = data[2];
                 string offsetVec = data[3];
                 string containerObject = data[4];
-                string resourcesString = data[5];
-                string energyRequired = data[6];
-                string time = data[7];
-                string updates = data[8];
-                this.craftingRecipeBook = data[9];
+                string energyRequired = data[5];
+                string time = data[6];
+                string updates = data[7];
+                this.craftingRecipeBook = data[8];
                 this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
                 this.data = Revitalize.ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pyTKData);
                 this.energyRequiredPer10Minutes = Convert.ToInt32(energyRequired);
                 this.timeToProduce = Convert.ToInt32(time);
                 this.updatesContainerObjectForProduction = Convert.ToBoolean(updates);
+
                 if (string.IsNullOrEmpty(offsetVec)) return;
                 if (string.IsNullOrEmpty(containerObject)) return;
                 this.offsetKey = ModCore.Serializer.DeserializeFromJSONString<Vector2>(offsetVec);
@@ -104,19 +122,26 @@ namespace Revitalize.Framework.Objects.Machines
                         //ModCore.CustomObjects.Remove(oldGuid);
                     }
                 }
-
-                if (string.IsNullOrEmpty(resourcesString) == false)
-                {
-                    this.producedResources = ModCore.Serializer.DeserializeFromJSONString<List<ResourceInformation>>(resourcesString);
-                }
-                else
-                {
-                    if (this.producedResources == null) this.producedResources = new List<ResourceInformation>();
-                }
             }
         }
 
-        public List<ResourceInformation> producedResources;
+        [JsonIgnore]
+        public List<ResourceInformation> producedResources
+        {
+            get
+            {
+                return MachineUtilities.GetResourcesProducedByThisMachine(this.info.id);
+            }
+            set
+            {
+                if (MachineUtilities.ResourcesForMachines == null) MachineUtilities.InitializeResourceList();
+                if (MachineUtilities.ResourcesForMachines.ContainsKey(this.info.id)) return;
+                MachineUtilities.ResourcesForMachines.Add(this.info.id, value);
+
+
+                Chest c = new Chest();
+            }
+        }
         public int energyRequiredPer10Minutes;
         public int timeToProduce;
         public bool updatesContainerObjectForProduction;
@@ -140,6 +165,7 @@ namespace Revitalize.Framework.Objects.Machines
         {
             get
             {
+                this.updateInfo();
                 if (ModCore.Configs.machinesConfig.doMachinesConsumeEnergy == false)
                 {
                     //ModCore.log("Machine config disables energy consumption.");
@@ -150,12 +176,12 @@ namespace Revitalize.Framework.Objects.Machines
                     //ModCore.log("Machine rquires 0 energy to run.");
                     return false;
                 }
-                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes)
+                if (this.GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Consumes)
                 {
                     //ModCore.log("Machine does consume energy.");
                     return true;
                 }
-                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                if (this.GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Storage)
                 {
 
                     return true;
@@ -216,20 +242,17 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
         {
-
-
             base.updateWhenCurrentLocation(time, environment);
+
+            this.animationManager.prepareForNextUpdateTick();
         }
 
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
-            if (this.info == null)
-            {
-                this.updateInfo();
-            }
 
-            ModCore.log(this.info.animationManager.currentAnimationName);
+            this.updateInfo();
+            //ModCore.log(this.info.animationManager.currentAnimationName);
 
             if (this.updatesContainerObjectForProduction)
             {
@@ -238,7 +261,7 @@ namespace Revitalize.Framework.Objects.Machines
                 int remaining = minutes;
                 //ModCore.log("Minutes elapsed: " + remaining);
                 List<MultiTiledObject> energySources = new List<MultiTiledObject>();
-                if (this.ConsumesEnergy || this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                if (this.ConsumesEnergy || this.GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Storage)
                 {
                     //ModCore.log("This machine drains energy: " + this.info.name);
                     energySources = this.EnergyGraphSearchSources(); //Only grab the network once.
@@ -246,17 +269,16 @@ namespace Revitalize.Framework.Objects.Machines
 
                 if (this.ProducesItems)
                 {
-                    ModCore.log("This machine produces items: " + this.info.name);
                     while (remaining > 0)
                     {
 
                         if (this.ConsumesEnergy)
                         {
                             this.drainEnergyFromNetwork(energySources); //Continually drain from the network.                        
-                            if (this.EnergyManager.remainingEnergy < this.energyRequiredPer10Minutes) return false;
+                            if (this.GetEnergyManager().remainingEnergy < this.energyRequiredPer10Minutes) return false;
                             else
                             {
-                                this.EnergyManager.consumeEnergy(this.energyRequiredPer10Minutes); //Consume the required amount of energy necessary.
+                                this.GetEnergyManager().consumeEnergy(this.energyRequiredPer10Minutes); //Consume the required amount of energy necessary.
                             }
                         }
                         else
@@ -266,14 +288,14 @@ namespace Revitalize.Framework.Objects.Machines
                         remaining -= 10;
                         this.containerObject.MinutesUntilReady -= 10;
 
-                        if (this.containerObject.MinutesUntilReady <= 0 && this.InventoryManager.IsFull == false)
+                        if (this.containerObject.MinutesUntilReady <= 0 && this.GetInventoryManager().IsFull == false)
                         {
                             this.produceItem();
                             this.containerObject.MinutesUntilReady = this.timeToProduce;
                         }
                     }
                 }
-                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Produces)
+                if (this.GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Produces)
                 {
                     while (remaining > 0)
                     {
@@ -286,9 +308,9 @@ namespace Revitalize.Framework.Objects.Machines
                 {
                     this.MinutesUntilReady = Math.Max(0, this.MinutesUntilReady - minutes);
 
-                    if (this.InventoryManager.hasItemsInBuffer && this.MinutesUntilReady == 0)
+                    if (this.GetInventoryManager().hasItemsInBuffer && this.MinutesUntilReady == 0)
                     {
-                        this.InventoryManager.dumpBufferToItems();
+                        this.GetInventoryManager().dumpBufferToItems();
                     }
 
                 }
@@ -298,7 +320,7 @@ namespace Revitalize.Framework.Objects.Machines
             else
             {
 
-                if (this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Produces)
+                if (this.GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Produces)
                 {
                     this.storeEnergyToNetwork();
                 }
@@ -330,15 +352,15 @@ namespace Revitalize.Framework.Objects.Machines
             MachineSummaryMenu m = new Framework.Menus.Machines.MachineSummaryMenu((Game1.viewport.Width / 2) - 400, 48, 800, 600, Color.White, this.containerObject, this.energyRequiredPer10Minutes);
             machineMenu.addInMenuTab("Summary", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("SummaryTab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), m, true);
 
-            if (this.InventoryManager.capacity > 0)
+            if (this.GetInventoryManager().capacity > 0)
             {
-                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, this.InventoryManager.items, this.InventoryManager.capacity, this.InventoryManager.displayRows, this.InventoryManager.displayColumns);
+                InventoryTransferMenu transferMenu = new InventoryTransferMenu(100, 150, 500, 600, this.GetInventoryManager().items, this.GetInventoryManager().capacity, this.GetInventoryManager().displayRows, this.GetInventoryManager().displayColumns);
                 machineMenu.addInMenuTab("Inventory", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Inventory Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), transferMenu, false);
             }
 
             if (string.IsNullOrEmpty(this.craftingRecipeBook) == false)
             {
-                CraftingMenuV1 craftingMenu = CraftingRecipeBook.CraftingRecipesByGroup[this.craftingRecipeBook].getCraftingMenuForMachine(100, 100, 400, 700, ref this.InventoryManager.items, ref this.InventoryManager.items, this);
+                CraftingMenuV1 craftingMenu = CraftingRecipeBook.CraftingRecipesByGroup[this.craftingRecipeBook].getCraftingMenuForMachine(100, 100, 400, 700, ref this.GetInventoryManager().items, ref this.GetInventoryManager().items, this);
                 machineMenu.addInMenuTab("Crafting", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Crafting Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), craftingMenu, false);
             }
 
@@ -384,11 +406,6 @@ namespace Revitalize.Framework.Objects.Machines
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             this.updateInfo();
-            if (this.info.ignoreBoundingBox == true)
-            {
-                x *= -1;
-                y *= -1;
-            }
 
             if (this.info == null)
             {
@@ -428,7 +445,10 @@ namespace Revitalize.Framework.Objects.Machines
 
                 try
                 {
-                    this.animationManager.tickAnimation();
+                    if (this.animationManager.canTickAnimation())
+                    {
+                        this.animationManager.tickAnimation();
+                    }
                     // Log.AsyncC("Tick animation");
                 }
                 catch (Exception err)
@@ -448,7 +468,7 @@ namespace Revitalize.Framework.Objects.Machines
                 if (r.shouldDropResource())
                 {
                     Item i = r.getItemDrops();
-                    this.InventoryManager.addItem(i);
+                    this.GetInventoryManager().addItem(i);
                     //ModCore.log("Produced an item!");
                 }
             }
@@ -457,9 +477,9 @@ namespace Revitalize.Framework.Objects.Machines
 
         public virtual void produceEnergy()
         {
-            if (this.EnergyManager.canReceieveEnergy)
+            if (this.GetEnergyManager().canReceieveEnergy)
             {
-                this.EnergyManager.produceEnergy(this.energyRequiredPer10Minutes);
+                this.GetEnergyManager().produceEnergy(this.energyRequiredPer10Minutes);
             }
 
         }
@@ -467,7 +487,10 @@ namespace Revitalize.Framework.Objects.Machines
         protected virtual void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
             if (this.updatesContainerObjectForProduction == false) return;
-            if (this.InventoryManager.IsFull && this.ProducesItems && ModCore.Configs.machinesConfig.showMachineNotificationBubble_InventoryFull)
+            if (this.machineStatusBubbleBox == null) this.createStatusBubble();
+            this.updateInfo();
+            if (this.GetInventoryManager() == null) return;
+            if (this.GetInventoryManager().IsFull && this.ProducesItems && ModCore.Configs.machinesConfig.showMachineNotificationBubble_InventoryFull)
             {
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
@@ -477,6 +500,26 @@ namespace Revitalize.Framework.Objects.Machines
             else
             {
 
+            }
+        }
+
+        public override void updateInfo()
+        {
+            if (this.info == null || this.containerObject == null)
+            {
+                this.ItemInfo = this.text;
+                //ModCore.log("Updated item info!");
+                return;
+            }
+
+            if (this.requiresUpdate())
+            {
+                //this.ItemInfo = this.text;
+                this.text = this.ItemInfo;
+                this.info.cleanAfterUpdate();
+                this.containerObject.updateInfo();
+                //ModCore.log("Force an update for machine: " + this.info.name);
+                MultiplayerUtilities.RequestUpdateSync(this.guid);
             }
         }
 

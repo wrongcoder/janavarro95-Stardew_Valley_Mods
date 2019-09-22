@@ -335,7 +335,7 @@ namespace Revitalize
             */
             if (e.Button == SButton.U)
             {
-                CraftingMenuV1 craft = new CraftingMenuV1(100, 100, 600, 800, Color.White, Game1.player.Items);
+                CraftingMenuV1 craft = new CraftingMenuV1(100, 100, 600, 800, Color.White, Game1.player.Items.ToList());
                 craft.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f));
                 craft.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(new Recipe(new List<CraftingRecipeComponent>()
                 {

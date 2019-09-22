@@ -33,6 +33,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
+            this.updateInfo();
             return false;
         }
 

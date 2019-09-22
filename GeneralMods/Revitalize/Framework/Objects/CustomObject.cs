@@ -20,9 +20,9 @@ namespace Revitalize.Framework.Objects
     //     -Inventories
 
     /// <summary>A custom object template.</summary>
-    public class CustomObject : PySObject,IEnergyInterface
+    public class CustomObject : PySObject, IEnergyInterface
     {
-
+        [JsonIgnore]
         public virtual string text
         {
             get
@@ -42,7 +42,7 @@ namespace Revitalize.Framework.Objects
             }
         }
 
-
+        [JsonIgnore]
         public override string Name
         {
 
@@ -83,7 +83,7 @@ namespace Revitalize.Framework.Objects
                 }
             }
         }
-
+        [JsonIgnore]
         public override string DisplayName
         {
             get
@@ -107,7 +107,7 @@ namespace Revitalize.Framework.Objects
             }
         }
 
-
+        [JsonIgnore]
         public string id
         {
             get
@@ -131,11 +131,7 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
-                if (this.info == null)
-                {
-                    this.updateInfo();
-                }
-
+                this.updateInfo();
                 //ModCore.log("Location Name is: " + this.info.locationName);
                 if (this._location == null)
                 {
@@ -171,30 +167,6 @@ namespace Revitalize.Framework.Objects
             {
                 this.updateInfo();
                 return this.info.animationManager;
-            }
-        }
-
-        [JsonIgnore]
-        /// <summary>
-        /// Accesses the energy manager for all objects.
-        /// </summary>
-        public virtual EnergyManager EnergyManager
-        {
-            get
-            {
-                if (this.info == null)
-                {
-                    this.updateInfo();
-                    return this.info.EnergyManager;
-                }
-                else
-                {
-                    return this.info.EnergyManager;
-                }
-            }
-            set
-            {
-                this.info.EnergyManager = value;
             }
         }
 
@@ -330,13 +302,13 @@ namespace Revitalize.Framework.Objects
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
 
-            if (mState.RightButton == ButtonState.Pressed && keyboardState.IsKeyDown(Keys.LeftShift)==false && keyboardState.IsKeyDown(Keys.RightShift)==false)
+            if (mState.RightButton == ButtonState.Pressed && keyboardState.IsKeyDown(Keys.LeftShift) == false && keyboardState.IsKeyDown(Keys.RightShift) == false)
             {
                 //ModCore.log("Right clicked!");
                 return this.rightClicked(who);
             }
 
-            if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift)==true || keyboardState.IsKeyDown(Keys.RightShift)==true))
+            if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) == true || keyboardState.IsKeyDown(Keys.RightShift) == true))
                 return this.shiftRightClicked(who);
 
             return base.checkForAction(who, justCheckingForActivity);
@@ -628,7 +600,7 @@ namespace Revitalize.Framework.Objects
         }
 
         /// <summary>What happens when the object is drawn when held by a player.</summary>
-        public virtual void drawFullyInMenu(SpriteBatch spriteBatch, Vector2 objectPosition,float Depth)
+        public virtual void drawFullyInMenu(SpriteBatch spriteBatch, Vector2 objectPosition, float Depth)
         {
             this.updateInfo();
             if (this.animationManager == null)
@@ -637,7 +609,7 @@ namespace Revitalize.Framework.Objects
             }
             if (this.displayTexture == null) Revitalize.ModCore.log("Display texture is null");
 
-            spriteBatch.Draw(this.displayTexture, objectPosition, this.animationManager.currentAnimation.sourceRectangle, this.info.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None,Depth);
+            spriteBatch.Draw(this.displayTexture, objectPosition, this.animationManager.currentAnimation.sourceRectangle, this.info.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Depth);
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
@@ -671,7 +643,7 @@ namespace Revitalize.Framework.Objects
         {
             if (ModCore.Configs.objectsConfig.showDyedColorName)
             {
-                return this.info.getDyedColorName() +" "+ this.info.name;
+                return this.info.getDyedColorName() + " " + this.info.name;
             }
             //Load in a file that has all object names referenced here or something.
             return this.info.name;
@@ -769,16 +741,42 @@ namespace Revitalize.Framework.Objects
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
         {
-            if (this.info == null)
-            {
-                this.updateInfo();
-            }
-
+            this.updateInfo();
             if (this.location == null)
             {
                 this.location = environment;
             }
             base.updateWhenCurrentLocation(time, environment);
+        }
+
+        public virtual ref EnergyManager GetEnergyManager()
+        {
+            if (this.info == null)
+            {
+                this.updateInfo();
+            }
+
+            return ref this.info.EnergyManager;
+        }
+
+        public virtual void SetEnergyManager(ref EnergyManager Manager)
+        {
+            this.info.EnergyManager = Manager;
+        }
+
+        public virtual ref InventoryManager GetInventoryManager()
+        {
+            if (this.info == null)
+            {
+                this.updateInfo();
+                return ref this.info.inventory;
+            }
+            return ref this.info.inventory;
+        }
+
+        public virtual void SetInventoryManager(InventoryManager Manager)
+        {
+            this.info.inventory = Manager;
         }
     }
 }

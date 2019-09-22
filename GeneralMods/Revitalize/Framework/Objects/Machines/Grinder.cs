@@ -64,10 +64,10 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
+            this.updateInfo();
             if (this.updatesContainerObjectForProduction)
             {
                 if (this.energyRequiredPer10Minutes != ModCore.Configs.machinesConfig.grinderEnergyConsumption) this.energyRequiredPer10Minutes = ModCore.Configs.machinesConfig.grinderEnergyConsumption;
-                ModCore.log("Update container object for production!");
 
                 //this.MinutesUntilReady -= minutes;
                 int remaining = minutes;
@@ -85,10 +85,10 @@ namespace Revitalize.Framework.Objects.Machines
                     if (this.ConsumesEnergy)
                     {
                         this.drainEnergyFromNetwork(energySources); //Continually drain from the network.                        
-                        if (this.EnergyManager.remainingEnergy < ModCore.Configs.machinesConfig.grinderEnergyConsumption) return false;
+                        if (this.GetEnergyManager().remainingEnergy < ModCore.Configs.machinesConfig.grinderEnergyConsumption) return false;
                         else
                         {
-                            this.EnergyManager.consumeEnergy(ModCore.Configs.machinesConfig.grinderEnergyConsumption); //Consume the required amount of energy necessary.
+                            this.GetEnergyManager().consumeEnergy(ModCore.Configs.machinesConfig.grinderEnergyConsumption); //Consume the required amount of energy necessary.
                         }
                     }
                     else
@@ -98,7 +98,7 @@ namespace Revitalize.Framework.Objects.Machines
                     remaining -= 10;
                     this.containerObject.MinutesUntilReady -= 10;
 
-                    if (this.containerObject.MinutesUntilReady <= 0 && this.InventoryManager.IsFull == false)
+                    if (this.containerObject.MinutesUntilReady <= 0 && this.GetInventoryManager().IsFull == false)
                     {
                         this.produceItem();
                         this.consumeItemForGrinding();
@@ -206,7 +206,10 @@ namespace Revitalize.Framework.Objects.Machines
 
                 try
                 {
-                    this.animationManager.tickAnimation();
+                    if (this.animationManager.canTickAnimation())
+                    {
+                        this.animationManager.tickAnimation();
+                    }
                     // Log.AsyncC("Tick animation");
                 }
                 catch (Exception err)
@@ -220,9 +223,9 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override void produceItem()
         {
-            if (this.InventoryManager.hasItemsInBuffer)
+            if (this.GetInventoryManager().hasItemsInBuffer)
             {
-                this.InventoryManager.dumpBufferToItems();
+                this.GetInventoryManager().dumpBufferToItems();
             }
         }
 
@@ -230,31 +233,31 @@ namespace Revitalize.Framework.Objects.Machines
         {
 
             Item itemToRemove = null;
-            foreach(Item I in this.InventoryManager.items)
+            foreach(Item I in this.GetInventoryManager().items)
             {
                 if(I.canStackWith(new StardewValley.Object((int)Enums.SDVObject.CopperOre, 1))){
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("CopperSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("CopperSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
                 }
                 if (I.canStackWith(new StardewValley.Object((int)Enums.SDVObject.IronOre, 1)))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("IronSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("IronSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
                 }
                 if (I.canStackWith(new StardewValley.Object((int)Enums.SDVObject.GoldOre, 1)))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("GoldSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("GoldSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
                 }
                 if (I.canStackWith(new StardewValley.Object((int)Enums.SDVObject.IridiumOre, 1)))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("IridiumSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("IridiumSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
@@ -262,35 +265,35 @@ namespace Revitalize.Framework.Objects.Machines
 
                 if (I.canStackWith(ModCore.ObjectManager.resources.getOre("BauxiteOre")))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("BauxiteSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("BauxiteSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
                 }
                 if (I.canStackWith(ModCore.ObjectManager.resources.getOre("LeadOre")))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("LeadSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("LeadSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
                 }
                 if (I.canStackWith(ModCore.ObjectManager.resources.getOre("SilverOre")))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("SilverSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("SilverSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
                 }
                 if (I.canStackWith(ModCore.ObjectManager.resources.getOre("TinOre")))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("TinSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("TinSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
                 }
                 if (I.canStackWith(ModCore.ObjectManager.resources.getOre("TitaniumOre")))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("TitaniumSand", 2));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("TitaniumSand", 2));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
@@ -298,7 +301,7 @@ namespace Revitalize.Framework.Objects.Machines
 
                 if (I.canStackWith(new StardewValley.Object((int)Enums.SDVObject.Stone, 1)))
                 {
-                    this.InventoryManager.bufferItems.Add(ModCore.ObjectManager.resources.getResource("Sand", 1));
+                    this.GetInventoryManager().bufferItems.Add(ModCore.ObjectManager.resources.getResource("Sand", 1));
                     itemToRemove = I;
                     this.containerObject.MinutesUntilReady = ModCore.Configs.machinesConfig.grinderTimeToGrind;
                     break;
@@ -313,7 +316,7 @@ namespace Revitalize.Framework.Objects.Machines
             }
             else if (itemToRemove.Stack == 1)
             {
-                this.InventoryManager.items.Remove(itemToRemove);
+                this.GetInventoryManager().items.Remove(itemToRemove);
             }
             return true;
 

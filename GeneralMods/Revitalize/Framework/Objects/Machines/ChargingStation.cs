@@ -66,6 +66,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
+            this.updateInfo();
             if (this.updatesContainerObjectForProduction)
             {
                 //ModCore.log("Update container object for production!");
@@ -73,22 +74,22 @@ namespace Revitalize.Framework.Objects.Machines
                 int remaining = minutes;
                 //ModCore.log("Minutes elapsed: " + remaining);
                 List<MultiTiledObject> energySources = new List<MultiTiledObject>();
-                if (this.ConsumesEnergy || this.EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                if (this.ConsumesEnergy || this.GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Storage)
                 {
                     //ModCore.log("This machine drains energy: " + this.info.name);
                     energySources = this.EnergyGraphSearchSources(); //Only grab the network once.
                 }
                 this.drainEnergyFromNetwork(energySources);
-                foreach(Item I in this.InventoryManager.items)
+                foreach(Item I in this.GetInventoryManager().items)
                 {
                     if (I is null) continue;
                     if (I is IEnergyInterface==false) continue;
                     IEnergyInterface o = (IEnergyInterface)I;
-                    if (o.EnergyManager.canReceieveEnergy)
+                    if (o.GetEnergyManager().canReceieveEnergy)
                     {
-                        this.EnergyManager.transferEnergyToAnother(o.EnergyManager, Math.Min(this.EnergyManager.remainingEnergy, o.EnergyManager.capacityRemaining));
+                        this.GetEnergyManager().transferEnergyToAnother(o.GetEnergyManager(), Math.Min(this.GetEnergyManager().remainingEnergy, o.GetEnergyManager().capacityRemaining));
                     }
-                    if (this.EnergyManager.hasEnergy == false) break;
+                    if (this.GetEnergyManager().hasEnergy == false) break;
                 }
 
                 return false;

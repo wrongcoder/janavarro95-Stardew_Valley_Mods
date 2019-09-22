@@ -92,52 +92,6 @@ namespace Revitalize.Framework.Objects
 
         public Vector2 offsetKey;
 
-        [JsonIgnore]
-        public override EnergyManager EnergyManager
-        {
-            get
-            {
-                if (this.info == null || this.containerObject==null)
-                {
-                    this.updateInfo();
-                    if (this.containerObject == null) return null;
-                    return this.containerObject.info.EnergyManager;
-                }
-                else
-                {
-                    return this.containerObject.info.EnergyManager;
-                }
-            }
-            set
-            {
-                this.containerObject.info.EnergyManager = value;
-            }
-        }
-
-        /// <summary>
-        /// The inventory for the object.
-        /// </summary>
-        [JsonIgnore]
-        public virtual InventoryManager InventoryManager
-        {
-            get
-            {
-                if (this.info == null || this.containerObject == null)
-                {
-                    this.updateInfo();
-                    if (this.containerObject == null) return null;
-                    return this.containerObject.info.inventory;
-                }
-                else
-                {
-                    return this.containerObject.info.inventory;
-                }
-            }
-            set
-            {
-                this.containerObject.info.inventory = value;
-            }
-        }
 
         public MultiTiledComponent() { }
 
@@ -422,6 +376,7 @@ namespace Revitalize.Framework.Objects
             if (this.info == null || this.containerObject==null)
             {
                 this.ItemInfo = this.text;
+                
                 //ModCore.log("Updated item info!");
                 return;
             }
@@ -460,7 +415,7 @@ namespace Revitalize.Framework.Objects
                             StardewValley.Object obj = this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
                             if (obj is MultiTiledComponent)
                             {
-                                if ((obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Produces || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                                if ((obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Produces || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Storage)
                                 {
                                     customObjects.Add((MultiTiledComponent)obj);
                                 }
@@ -498,7 +453,7 @@ namespace Revitalize.Framework.Objects
                             StardewValley.Object obj = this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
                             if (obj is MultiTiledComponent)
                             {
-                                if ((obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Consumes || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).EnergyManager.energyInteractionType == Enums.EnergyInteractionType.Storage)
+                                if ((obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Consumes || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Storage)
                                 {
                                     customObjects.Add((MultiTiledComponent)obj);
                                 }
@@ -519,15 +474,15 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         protected virtual List<MultiTiledComponent> getAppropriateEnergyNeighbors()
         {
-            if (this.EnergyManager.consumesEnergy)
+            if (this.GetEnergyManager().consumesEnergy)
             {
                 return this.GetNeighboringOutputEnergySources();
             }
-            else if (this.EnergyManager.producesEnergy)
+            else if (this.GetEnergyManager().producesEnergy)
             {
                 return this.GetNeighboringInputEnergySources();
             }
-            else if (this.EnergyManager.transfersEnergy)
+            else if (this.GetEnergyManager().transfersEnergy)
             {
                 List<MultiTiledComponent> objs = new List<MultiTiledComponent>();
                 objs.AddRange(this.GetNeighboringInputEnergySources());
@@ -620,8 +575,8 @@ namespace Revitalize.Framework.Objects
 
             for(int i = 0; i < energySources.Count; i++)
             {
-                this.EnergyManager.transferEnergyFromAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
-                if (this.EnergyManager.hasMaxEnergy) break;
+                this.GetEnergyManager().transferEnergyFromAnother(energySources[i].GetEnergyManager(), this.GetEnergyManager().capacityRemaining);
+                if (this.GetEnergyManager().hasMaxEnergy) break;
             }
         }
 
@@ -631,8 +586,8 @@ namespace Revitalize.Framework.Objects
 
             for (int i = 0; i < energySources.Count; i++)
             {
-                this.EnergyManager.transferEnergyFromAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
-                if (this.EnergyManager.hasMaxEnergy) break;
+                this.GetEnergyManager().transferEnergyFromAnother(energySources[i].GetEnergyManager(), this.GetEnergyManager().capacityRemaining);
+                if (this.GetEnergyManager().hasMaxEnergy) break;
             }
         }
 
@@ -647,8 +602,8 @@ namespace Revitalize.Framework.Objects
 
             for (int i = 0; i < energySources.Count; i++)
             {
-                this.EnergyManager.transferEnergyToAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
-                if (this.EnergyManager.hasEnergy==false) break;
+                this.GetEnergyManager().transferEnergyToAnother(energySources[i].GetEnergyManager(), this.GetEnergyManager().capacityRemaining);
+                if (this.GetEnergyManager().hasEnergy==false) break;
             }
         }
 
@@ -659,8 +614,57 @@ namespace Revitalize.Framework.Objects
 
             for (int i = 0; i < energySources.Count; i++)
             {
-                this.EnergyManager.transferEnergyToAnother(energySources[i].EnergyManager, this.EnergyManager.capacityRemaining);
-                if (this.EnergyManager.hasEnergy==false) break;
+                this.GetEnergyManager().transferEnergyToAnother(energySources[i].GetEnergyManager(), this.GetEnergyManager().capacityRemaining);
+                if (this.GetEnergyManager().hasEnergy==false) break;
+            }
+        }
+
+        public override ref EnergyManager GetEnergyManager()
+        {
+            if (this.info == null || this.containerObject == null)
+            {
+                this.updateInfo();
+                if (this.containerObject == null) return ref this.info.EnergyManager;
+                return ref this.containerObject.info.EnergyManager;
+            }
+            return ref this.containerObject.info.EnergyManager;
+        }
+
+        public override void SetEnergyManager(ref EnergyManager Manager)
+        {
+            this.info.EnergyManager = Manager;
+        }
+
+        public override ref InventoryManager GetInventoryManager()
+        {
+            if (this.info == null || this.containerObject == null)
+            {
+                this.updateInfo();
+                if (this.containerObject == null)
+                {
+                    return ref this.info.inventory;
+                }
+                return ref this.containerObject.info.inventory;
+            }
+            return ref this.containerObject.info.inventory;
+        }
+
+        public override void SetInventoryManager(InventoryManager Manager)
+        {
+            this.info.inventory = Manager;
+            this.containerObject.info.inventory = Manager;
+        }
+
+
+        public override bool requiresUpdate()
+        {
+            if (this.info.requiresSyncUpdate() || this.containerObject.info.requiresSyncUpdate())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

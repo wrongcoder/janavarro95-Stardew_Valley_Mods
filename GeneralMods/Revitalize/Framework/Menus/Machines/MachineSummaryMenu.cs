@@ -57,7 +57,7 @@ namespace Revitalize.Framework.Menus.Machines
         {
             get
             {
-                return this.objectSource.EnergyManager;
+                return this.objectSource.GetEnergyManager();
             }
         }
 

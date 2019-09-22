@@ -80,7 +80,7 @@ namespace Revitalize.Framework.Objects.Machines.EnergyGeneration
 
         public override void produceEnergy()
         {
-            if (this.EnergyManager.canReceieveEnergy)
+            if (this.GetEnergyManager().canReceieveEnergy)
             {
                 int energy= this.energyRequiredPer10Minutes;
                 if (WeatherUtilities.IsWetWeather())
@@ -96,7 +96,7 @@ namespace Revitalize.Framework.Objects.Machines.EnergyGeneration
                 {
                     if (this.location.IsOutdoors == false) return;
                 }
-                this.EnergyManager.produceEnergy(energy);
+                this.GetEnergyManager().produceEnergy(energy);
             }
 
         }
@@ -104,11 +104,6 @@ namespace Revitalize.Framework.Objects.Machines.EnergyGeneration
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             this.updateInfo();
-            if (this.info.ignoreBoundingBox == true)
-            {
-                x *= -1;
-                y *= -1;
-            }
 
             if (this.info == null)
             {

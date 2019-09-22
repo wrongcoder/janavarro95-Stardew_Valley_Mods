@@ -22,17 +22,6 @@ namespace Revitalize.Framework.Objects.Items.Tools
         private int hitsToBoulder;
         private Texture2D energyTexture;
 
-        [JsonIgnore]
-        public EnergyManager EnergyManager
-        {
-            get => this.info.EnergyManager;
-            set
-            {
-                this.info.EnergyManager = value;
-                this.info.requiresUpdate = true;
-            }
-        }
-
         public MiningDrill()
         {
 
@@ -75,7 +64,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
             {
                 this.initializeEnergyTexture();
             }
-            spriteBatch.Draw(this.energyTexture, new Rectangle((int)location.X + 8, (int)location.Y + Game1.tileSize / 2, (int)((Game1.tileSize - 16) * this.EnergyManager.energyPercentRemaining), (int)16), new Rectangle(0, 0, 1, 1), EnergyUtilities.GetEnergyRemainingColor(this.EnergyManager), 0f, Vector2.Zero, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(this.energyTexture, new Rectangle((int)location.X + 8, (int)location.Y + Game1.tileSize / 2, (int)((Game1.tileSize - 16) * this.GetEnergyManager().energyPercentRemaining), (int)16), new Rectangle(0, 0, 1, 1), EnergyUtilities.GetEnergyRemainingColor(this.GetEnergyManager()), 0f, Vector2.Zero, SpriteEffects.None, layerDepth);
         }
 
         public override bool beginUsing(GameLocation location, int x, int y, Farmer who)
@@ -89,7 +78,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         public override void endUsing(GameLocation location, Farmer who)
         {
-            if (this.EnergyManager.hasEnoughEnergy(this.getEnergyConsumptionRate()) == false)
+            if (this.GetEnergyManager().hasEnoughEnergy(this.getEnergyConsumptionRate()) == false)
             {
                 Game1.toolAnimationDone(who);
                 who.canReleaseTool = false;
@@ -148,7 +137,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         public override void DoFunction(GameLocation location, int x, int y, int power, Farmer who)
         {
             //base.DoFunction(location, x, y, power, who);
-            if (this.EnergyManager.hasEnoughEnergy(this.getEnergyConsumptionRate()) == true)
+            if (this.GetEnergyManager().hasEnoughEnergy(this.getEnergyConsumptionRate()) == true)
             {
             }
             else
@@ -160,7 +149,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
             power = who.toolPower;
             //who.Stamina -= (float)(2 * (power + 1)) - (float)who.MiningLevel * 0.1f;
             //Drain energy here;
-            this.EnergyManager.consumeEnergy(this.getEnergyConsumptionRate());
+            this.GetEnergyManager().consumeEnergy(this.getEnergyConsumptionRate());
             //Double check to prevent animation from happening with even no power
 
 
@@ -358,9 +347,9 @@ namespace Revitalize.Framework.Objects.Items.Tools
         {
             StringBuilder b = new StringBuilder();
             b.Append("Energy: ");
-            b.Append(this.EnergyManager.remainingEnergy);
+            b.Append(this.GetEnergyManager().remainingEnergy);
             b.Append("/");
-            b.Append(this.EnergyManager.maxEnergy);
+            b.Append(this.GetEnergyManager().maxEnergy);
             b.Append(System.Environment.NewLine);
             b.Append(this.info.description);
             return b.ToString();
@@ -386,6 +375,16 @@ namespace Revitalize.Framework.Objects.Items.Tools
         private int getEnergyConsumptionRate()
         {
             return this.UpgradeLevel + 1;
+        }
+
+        public ref EnergyManager GetEnergyManager()
+        {
+            return ref this.info.EnergyManager;
+        }
+
+        public void SetEnergyManager(ref EnergyManager Manager)
+        {
+            this.info.EnergyManager = Manager;
         }
     }
 }

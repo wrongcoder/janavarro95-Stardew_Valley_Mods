@@ -249,5 +249,15 @@ namespace Revitalize.Framework.Objects.Items.Tools
         {
             return this.UpgradeLevel + 1;
         }
+
+        public ref EnergyManager GetEnergyManager()
+        {
+            return ref this.info.EnergyManager;
+        }
+
+        public void SetEnergyManager(ref EnergyManager Manager)
+        {
+            this.info.EnergyManager = Manager;
+        }
     }
 }
