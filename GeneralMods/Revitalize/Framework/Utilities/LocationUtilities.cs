@@ -140,5 +140,12 @@ namespace Revitalize.Framework.Utilities
             }
             return locations;
         }
+
+        public static bool IsThereWaterAtThisTile(GameLocation location, int X, int Y)
+        {
+            if ( location.doesTileHaveProperty((int)X, (int)Y, "Water", "Back") == null)
+                return false;
+            return true;
+        }
     }
 }

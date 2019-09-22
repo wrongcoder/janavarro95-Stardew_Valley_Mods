@@ -183,6 +183,7 @@
     <Compile Include="Framework\Utilities\EnergyUtilities.cs" />
     <Compile Include="Framework\Utilities\IntRange.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
+    <Compile Include="Framework\Utilities\LiquidManager.cs" />
     <Compile Include="Framework\Utilities\LocationUtilities.cs" />
     <Compile Include="Framework\Utilities\MachineUtilities.cs" />
     <Compile Include="Framework\Utilities\MultiplayerUtilities.cs" />

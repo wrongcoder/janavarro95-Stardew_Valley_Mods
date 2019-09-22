@@ -35,6 +35,15 @@ namespace Revitalize.Framework
             Storage
         }
 
+        public enum LiquidInteractionType
+        {
+            None,
+            Produces,
+            Consumes,
+            Transfers,
+            Storage
+        }
+
         /// <summary>
         /// References Stardew Valley Object id's for easier coding.
         /// </summary>
