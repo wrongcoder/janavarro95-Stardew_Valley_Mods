@@ -88,6 +88,7 @@
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Illuminate\NamedColor.cs" />
     <Compile Include="Framework\Managers\ColorManager.cs" />
+    <Compile Include="Framework\Managers\LiquidManagerV2.cs" />
     <Compile Include="Framework\Menus\CraftingInformationPage.cs" />
     <Compile Include="Framework\Menus\CraftingMenuV1.cs" />
     <Compile Include="Framework\Menus\Machines\MachineMenu.cs" />
@@ -183,7 +184,6 @@
     <Compile Include="Framework\Utilities\EnergyUtilities.cs" />
     <Compile Include="Framework\Utilities\IntRange.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
-    <Compile Include="Framework\Utilities\LiquidManager.cs" />
     <Compile Include="Framework\Utilities\LocationUtilities.cs" />
     <Compile Include="Framework\Utilities\MachineUtilities.cs" />
     <Compile Include="Framework\Utilities\MultiplayerUtilities.cs" />
