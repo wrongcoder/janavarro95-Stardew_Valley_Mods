@@ -306,9 +306,9 @@ namespace Revitalize.Framework.Objects.Machines
                         this.storeEnergyToNetwork();
                     }
                 }
-                if (this.MinutesUntilReady > 0)
+                if (this.containerObject.MinutesUntilReady > 0)
                 {
-                    this.MinutesUntilReady = Math.Max(0, this.MinutesUntilReady - minutes);
+                    this.containerObject.MinutesUntilReady = Math.Max(0, this.MinutesUntilReady - minutes);
 
                     if (this.GetInventoryManager().hasItemsInBuffer && this.MinutesUntilReady == 0)
                     {
@@ -362,7 +362,7 @@ namespace Revitalize.Framework.Objects.Machines
 
             if (string.IsNullOrEmpty(this.craftingRecipeBook) == false)
             {
-                CraftingMenuV1 craftingMenu = CraftingRecipeBook.CraftingRecipesByGroup[this.craftingRecipeBook].getCraftingMenuForMachine(100, 100, 400, 700, ref this.GetInventoryManager().items, ref this.GetInventoryManager().items, this);
+                CraftingMenuV1 craftingMenu = CraftingRecipeBook.CraftingRecipesByGroup[this.craftingRecipeBook].getCraftingMenuForMachine(100, 100, 400, 700, ref this.GetInventoryManager().items, ref this.GetInventoryManager().bufferItems, this);
                 machineMenu.addInMenuTab("Crafting", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Crafting Tab", new Vector2(), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTab"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), craftingMenu, false);
             }
 

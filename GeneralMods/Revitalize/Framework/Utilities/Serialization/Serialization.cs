@@ -145,7 +145,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         public void restoreModObjects()
         {
-            ModCore.log("Restore all mod objects!");
+            //ModCore.log("Restore all mod objects!");
             //Replace all items in the world.
             List<CustomObject> objsToRestore = new List<CustomObject>();
             foreach (var v in ModCore.ObjectGroups)
@@ -164,7 +164,7 @@ namespace Revitalize.Framework.Utilities
             //Replace all held items or items in inventories.
             foreach (GameLocation loc in LocationUtilities.GetAllLocations())
             {
-                ModCore.log("Looking at location: " + loc);
+                //ModCore.log("Looking at location: " + loc);
                 foreach (StardewValley.Object c in loc.Objects.Values)
                 {
                     if (c is Chest)

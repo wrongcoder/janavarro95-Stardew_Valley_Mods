@@ -114,7 +114,7 @@ namespace Revitalize.Framework.Menus
                         }
                         else
                         {
-                            this.machine.MinutesUntilReady = this.infoButton.recipe.timeToCraft;
+                            this.machine.containerObject.MinutesUntilReady = this.infoButton.recipe.timeToCraft;
                         }
                     }
 

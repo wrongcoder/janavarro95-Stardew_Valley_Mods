@@ -296,6 +296,41 @@ namespace Revitalize.Framework.Objects
             miningDrillMachine_0_1.animationManager.playAnimation("Mining");
             this.AddItem("MiningDrillMachineV1",miningDrillMachine);
 
+            MultiTiledObject alloyFurnace = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.AlloyFurnace", TextureManager.GetTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Alloy Furnace", "Omegasis.Revitalize.Objects.Machines.AlloyFurnace", "Smelts bars into ingots. Works twice as fast as a traditional furnace.", "Machine", Color.SteelBlue, -300, 0, false, 250, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), new Animation(0, 0, 16, 16)), Color.White, false, new InventoryManager(6, 3, 6), null,null));
+            AlloyFurnace alloyFurnace_0_0 = new AlloyFurnace(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.AlloyFurnace", TextureManager.GetTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), typeof(AlloyFurnace), Color.White, true), new BasicItemInformation("Alloy Furnace", "Omegasis.Revitalize.Objects.Machines.AlloyFurnace", "Smelts bars into ingots. Works twice as fast as a traditional furnace.", "Machine", Color.SteelBlue, -300, 0, false, 250, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>()
+                    {
+                        new Animation(0,0,16,16)
+                    }
+                },
+                {"Working",new List<Animation>()
+                    {
+                    new Animation(0,32,16,16,30),
+                    new Animation(16,32,16,16,30)
+                    }
+                }
+
+            },"Default"), Color.White, true, new InventoryManager(6, 3, 6), null, null), null, 0, 0, true, "AlloyFurnace");
+            AlloyFurnace alloyFurnace_0_1 = new AlloyFurnace(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.AlloyFurnace", TextureManager.GetTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), typeof(Machine), Color.White, true), new BasicItemInformation("Alloy Furnace", "Omegasis.Revitalize.Objects.Machines.AlloyFurnace", "Smelts bars into ingots. Works twice as fast as a traditional furnace.", "Machine", Color.SteelBlue, -300, 0, false, 250, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "AlloyFurnace"), new Animation(0, 16, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>()
+                    {
+                        new Animation(0,16,16,16)
+                    }
+                },
+                {"Working",new List<Animation>()
+                    {
+                    new Animation(0,48,16,16,30),
+                    new Animation(16,48,16,16,30)
+                    }
+                }
+
+            }, "Default"), Color.White, false, new InventoryManager(6, 3, 6), null, null), null, 0, 0, false, "AlloyFurnace");
+            alloyFurnace.addComponent(new Vector2(0, 0), alloyFurnace_0_0);
+            alloyFurnace.addComponent(new Vector2(0, 1), alloyFurnace_0_1);
+            this.AddItem("AlloyFurnace", alloyFurnace);
+
         }
 
         private void loadInWires()

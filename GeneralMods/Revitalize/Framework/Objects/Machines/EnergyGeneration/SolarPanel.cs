@@ -78,6 +78,22 @@ namespace Revitalize.Framework.Objects.Machines.EnergyGeneration
             return (ICustomObject)self;
         }
 
+        public override void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            base.rebuild(additionalSaveData, replacement);
+        }
+
+        public override Dictionary<string, string> getAdditionalSaveData()
+        {
+            Dictionary<string, string> saveData = base.getAdditionalSaveData();
+            Revitalize.ModCore.Serializer.SerializeGUID(this.containerObject.childrenGuids[this.offsetKey].ToString(), this);
+            this.containerObject.getAdditionalSaveData();
+            return saveData;
+
+        }
+
+
+
         public override void produceEnergy()
         {
             if (this.GetEnergyManager().canReceieveEnergy)

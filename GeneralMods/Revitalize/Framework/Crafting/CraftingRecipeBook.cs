@@ -477,6 +477,54 @@ namespace Revitalize.Framework.Crafting
                 CraftingRecipesByGroup.Add("Anvil", AnvilRecipes);
             }
 
+            //~~~~~~~~~~~~~~~~~~~~~~~//
+            // Alloy Furnace Recipes //
+            //~~~~~~~~~~~~~~~~~~~~~~~//
+            CraftingRecipeBook AlloyFurnaceRecipes = new CraftingRecipeBook("AlloyFurnace");
+            AlloyFurnaceRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+
+
+            AlloyFurnaceRecipes.addCraftingRecipe("BrassIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("AluminumIngot"),1),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
+            },new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BrassIngot"), 1),null, TimeUtilities.GetMinutesFromTime(0, 3, 0)), true));
+
+            AlloyFurnaceRecipes.addCraftingRecipe("BronzeIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("TinIngot"),1),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BronzeIngot"), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+
+            AlloyFurnaceRecipes.addCraftingRecipe("SteelIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,1),1),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"), 1), null, TimeUtilities.GetMinutesFromTime(0, 6, 0)), true));
+
+            AlloyFurnaceRecipes.addCraftingRecipe("ElectrumIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.GoldBar,1),1),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SilverIngot"),1),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ElectrumIngot"), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+
+            if (CraftingRecipesByGroup.ContainsKey(AlloyFurnaceRecipes.craftingGroup))
+            {
+                foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AlloyFurnaceRecipes.craftingRecipes)
+                {
+                    if (CraftingRecipesByGroup[AlloyFurnaceRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
+                    {
+
+                    }
+                    else
+                    {
+                        CraftingRecipesByGroup[AlloyFurnaceRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
+                    }
+                }
+            }
+            else
+            {
+                CraftingRecipesByGroup.Add("AlloyFurnace", AlloyFurnaceRecipes);
+            }
         }
 
         #endregion

@@ -162,6 +162,7 @@
     <Compile Include="Framework\Objects\Items\Tools\MiningDrill.cs" />
     <Compile Include="Framework\Objects\Items\Tools\PickaxeExtended.cs" />
     <Compile Include="Framework\Objects\Items\Tools\WateringCanExtended.cs" />
+    <Compile Include="Framework\Objects\Machines\AlloyFurnace.cs" />
     <Compile Include="Framework\Objects\Machines\ChargingStation.cs" />
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SolarPanel.cs" />
     <Compile Include="Framework\Objects\Machines\Grinder.cs" />

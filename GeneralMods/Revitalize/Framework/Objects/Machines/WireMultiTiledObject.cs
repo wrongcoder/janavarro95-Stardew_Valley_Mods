@@ -97,6 +97,10 @@ namespace Revitalize.Framework.Objects.Machines
             return saveData;
         }
 
+        public override void rebuild(Dictionary<string, string> additionalSaveData, object replacement)
+        {
+            base.rebuild(additionalSaveData, replacement);
+        }
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
         {
