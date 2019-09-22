@@ -23,6 +23,8 @@ namespace Revitalize.Framework.Hacks
         private static void AddItemsToRobinsShop()
         {
             PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.GetItem("Workbench", 1), 500), "Robin");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(new StardewValley.Object((int)Enums.SDVObject.Clay,1),50), "Robin");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getResource("Sand", 1), 25), "Robin");
         }
         /// <summary>
         /// Adds in ore to clint's shop.
