@@ -268,6 +268,34 @@ namespace Revitalize.Framework.Objects
             grinder.addComponent(new Vector2(1, 1), grinder_1_1);
             this.AddItem("Grinder", grinder);
 
+            MultiTiledObject miningDrillMachine = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.MiningDrillV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Mining Drill", "Omegasis.Revitalize.Objects.Machines.MiningDrill", "Digs up rocks and ores. Requires energy to run.", "Machine", Color.SteelBlue, -300, 0, false, 4000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), new Animation(0, 0, 16, 16)), Color.White, false, new InventoryManager(18, 3, 6), null, new Energy.EnergyManager(1000, Enums.EnergyInteractionType.Consumes)));
+            Machine miningDrillMachine_0_0 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.MiningDrillV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Mining Drill", "Omegasis.Revitalize.Objects.Machines.MiningDrill", "Digs up rocks and ores. Requires energy to run.", "Machine", Color.SteelBlue, -300, 0, false, 4000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>() {
+                {"Default",new List<Animation>(){new Animation(0,0,16,16) } },
+                { "Mining",new List<Animation>(){
+                    new Animation(0,0,16,16,30),
+                    new Animation(16,0,16,16,30),
+                    new Animation(32,0,16,16,30),
+                    new Animation(48,0,16,16,30),
+                } }
+            }, "Mining"), Color.White, false, new InventoryManager(18, 3, 6), null, new Energy.EnergyManager(1000, Enums.EnergyInteractionType.Consumes)), ModCore.ObjectManager.resources.miningDrillResources.Values.ToList(), ModCore.Configs.machinesConfig.miningDrillEnergyConsumption, ModCore.Configs.machinesConfig.miningDrillTimeToMine, true, "");
+
+            Machine miningDrillMachine_0_1 = new Machine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.MiningDrillV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Mining Drill", "Omegasis.Revitalize.Objects.Machines.MiningDrill", "Digs up rocks and ores. Requires energy to run.", "Machine", Color.SteelBlue, -300, 0, false, 4000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "MiningDrillMachine"), new Animation(0, 16, 16, 16),new Dictionary<string, List<Animation>>() {
+                {"Default",new List<Animation>(){new Animation(0,16,16,16) } },
+                { "Mining",new List<Animation>(){
+                    new Animation(0,16,16,16,30),
+                    new Animation(16,16,16,16,30),
+                    new Animation(32,16,16,16,30),
+                    new Animation(48,16,16,16,30),
+                } }
+            }, "Mining"), Color.White, false, new InventoryManager(18, 3, 6), null, new Energy.EnergyManager(1000, Enums.EnergyInteractionType.Consumes)), ModCore.ObjectManager.resources.miningDrillResources.Values.ToList(), ModCore.Configs.machinesConfig.miningDrillEnergyConsumption, ModCore.Configs.machinesConfig.miningDrillTimeToMine, false, "");
+            miningDrillMachine.addComponent(new Vector2(0, 0), miningDrillMachine_0_0);
+            miningDrillMachine.addComponent(new Vector2(0, 1), miningDrillMachine_0_1);
+            miningDrillMachine_0_0.animationManager.setAnimation("Mining");
+            miningDrillMachine_0_0.animationManager.playAnimation("Mining");
+            miningDrillMachine_0_1.animationManager.setAnimation("Mining");
+            miningDrillMachine_0_1.animationManager.playAnimation("Mining");
+            this.AddItem("MiningDrillMachineV1",miningDrillMachine);
+
         }
 
         private void loadInWires()

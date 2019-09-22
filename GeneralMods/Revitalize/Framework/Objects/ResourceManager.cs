@@ -32,6 +32,8 @@ namespace Revitalize.Framework.Objects
         public Dictionary<string, Ore> ores;
         public Dictionary<string, CustomObject> resources;
 
+        public Dictionary<string, ResourceInformation> miningDrillResources;
+
         /// <summary>
         /// A list of all visited floors on the current visit to the mines.
         /// </summary>
@@ -48,7 +50,7 @@ namespace Revitalize.Framework.Objects
             this.ores = new Dictionary<string, Ore>();
             this.visitedFloors = new List<int>();
             this.resources = new Dictionary<string, CustomObject>();
-
+            this.miningDrillResources = new Dictionary<string, ResourceInformation>();
         }
 
 
@@ -59,6 +61,28 @@ namespace Revitalize.Framework.Objects
             this.loadInResourceItems();
             this.serializeOreVeins();
             this.loadOreVeins();
+            this.loadInMiningDrillLootTable();
+        }
+
+        private void loadInMiningDrillLootTable()
+        {
+            this.miningDrillResources.Add("Bauxite", new ResourceInformation(this.getResource("Bauxite"), ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.min, ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.bauxiteMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Tin", new ResourceInformation(this.getResource("Tin"), ModCore.Configs.miningDrillConfig.amountOfTinToMine.min, ModCore.Configs.miningDrillConfig.amountOfTinToMine.max, 1, 1,1,ModCore.Configs.miningDrillConfig.tinMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Lead", new ResourceInformation(this.getResource("Lead"), ModCore.Configs.miningDrillConfig.amountOfLeadToMine.min, ModCore.Configs.miningDrillConfig.amountOfLeadToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.leadMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Silver", new ResourceInformation(this.getResource("Silver"), ModCore.Configs.miningDrillConfig.amountOfSilverToMine.min, ModCore.Configs.miningDrillConfig.amountOfSilverToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.silverMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Titanium", new ResourceInformation(this.getResource("Titanium"), ModCore.Configs.miningDrillConfig.amountOfTitaniumToMine.min, ModCore.Configs.miningDrillConfig.amountOfTitaniumToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.titaniumMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Prismatic", new ResourceInformation(this.getResource("PrismaticNugget"), ModCore.Configs.miningDrillConfig.amountOfPrismaticNuggetsToMine.min, ModCore.Configs.miningDrillConfig.amountOfPrismaticNuggetsToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.prismaticNuggetMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Copper", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.CopperOre, 1), ModCore.Configs.miningDrillConfig.amountOfCopperToMine.min, ModCore.Configs.miningDrillConfig.amountOfCopperToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.copperMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Iron", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.IronOre, 1), ModCore.Configs.miningDrillConfig.amountOfIronToMine.min, ModCore.Configs.miningDrillConfig.amountOfIronToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.ironMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Gold", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.GoldOre, 1), ModCore.Configs.miningDrillConfig.amountOfGoldToMine.min, ModCore.Configs.miningDrillConfig.amountOfGoldToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.goldMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Iridium", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.IridiumOre,1), ModCore.Configs.miningDrillConfig.amountOfIridiumToMine.min, ModCore.Configs.miningDrillConfig.amountOfIridiumToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.iridiumMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Stone", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Stone, 1), ModCore.Configs.miningDrillConfig.amountOfStoneToMine.min, ModCore.Configs.miningDrillConfig.amountOfStoneToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.stoneMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Clay", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Clay, 1), ModCore.Configs.miningDrillConfig.amountOfClayToMine.min, ModCore.Configs.miningDrillConfig.amountOfClayToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.clayMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Sand", new ResourceInformation(this.getResource("Sand"), ModCore.Configs.miningDrillConfig.amountOfSandToMine.min, ModCore.Configs.miningDrillConfig.amountOfSandToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.sandMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Geode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Geode,1), ModCore.Configs.miningDrillConfig.amountOfGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfGeodesToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.geodeMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("FrozenGeode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.FrozenGeode, 1), ModCore.Configs.miningDrillConfig.amountOfFrozenGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfFrozenGeodesToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.frozenGeodeMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("MagmaGeode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.MagmaGeode, 1), ModCore.Configs.miningDrillConfig.amountOfMagmaGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfMagmaGeodesToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.magmaGeodeMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("OmniGeode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.OmniGeode, 1), ModCore.Configs.miningDrillConfig.amountOfOmniGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfOmniGeodesToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.omniGeodeMineChance, 0, 0, 0, 0));
         }
 
         /// <summary>

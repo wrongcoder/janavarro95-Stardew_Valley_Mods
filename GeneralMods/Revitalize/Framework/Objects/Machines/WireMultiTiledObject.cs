@@ -92,8 +92,8 @@ namespace Revitalize.Framework.Objects.Machines
         public override Dictionary<string, string> getAdditionalSaveData()
         {
             Dictionary<string, string> saveData = base.getAdditionalSaveData();
-            saveData.Add("GUID", this.guid.ToString());
-            Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
+            //saveData.Add("GUID", this.guid.ToString());
+            //Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
             return saveData;
         }
 

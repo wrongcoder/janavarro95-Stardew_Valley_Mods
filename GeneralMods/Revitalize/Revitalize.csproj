@@ -56,6 +56,7 @@
     <Compile Include="Framework\Configs\ConfigManager.cs" />
     <Compile Include="Framework\Configs\FurnitureConfig.cs" />
     <Compile Include="Framework\Configs\GlobalMachineConfig.cs" />
+    <Compile Include="Framework\Configs\MiningDrillConfig.cs" />
     <Compile Include="Framework\Configs\ObjectsConfig.cs" />
     <Compile Include="Framework\Configs\Shops_BlacksmithConfig.cs" />
     <Compile Include="Framework\Configs\VanillaMachineRecipeConfig.cs" />
@@ -481,6 +482,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\Grinder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\MiningDrillMachine.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\Sandbox.png">

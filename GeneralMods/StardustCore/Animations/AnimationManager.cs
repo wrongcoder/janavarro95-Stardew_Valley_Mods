@@ -84,7 +84,11 @@ namespace StardustCore.Animations
 
             this.animations = animationString;
             if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
+            {
                 this.setAnimation(startingAnimationKey, startingAnimationFrame);
+                this.playAnimation(startingAnimationKey, true, startingAnimationFrame);
+            }
+
             else
             {
                 this.currentAnimation = this.defaultDrawFrame;
@@ -100,9 +104,9 @@ namespace StardustCore.Animations
                 if (this.currentAnimation.frameDuration == -1 || !this.enabled || this.currentAnimation == this.defaultDrawFrame)
                     return; //This is if this is a default animation or the animation stops here.
                 if (this.currentAnimation.frameCountUntilNextAnimation == 0)
-                    this.getNextAnimation();
+                    this.getNextAnimationFrame();
                 this.currentAnimation.tickAnimationFrame();
-                this.requiresUpdate = true;
+                //this.requiresUpdate = true;
             }
             catch (Exception err)
             {
@@ -112,25 +116,30 @@ namespace StardustCore.Animations
         }
 
         /// <summary>Get the next animation frame in the list of animations.</summary>
-        private void getNextAnimation()
+        private void getNextAnimationFrame()
         {
             this.currentAnimationListIndex++;
-            if (this.currentAnimationListIndex == this.currentAnimationList.Count) //If the animation frame I'm tryting to get is 1 outside my list length, reset the list.
+            if (this.currentAnimationListIndex == this.currentAnimationList.Count)
+            { //If the animation frame I'm tryting to get is 1 outside my list length, reset the list.
                 if (this.loopAnimation)
                 {
                     this.currentAnimationListIndex = 0;
+                    this.currentAnimation = this.currentAnimationList[this.currentAnimationListIndex];
+                    this.currentAnimation.startAnimation();
+                    return;
                 }
                 else
                 {
-                    this.requiresUpdate = true;
+                    //this.requiresUpdate = true;
                     this.playDefaultAnimation();
                     return;
                 }
+            }
 
             //Get the next animation from the list and reset it's counter to the starting frame value.
             this.currentAnimation = this.currentAnimationList[this.currentAnimationListIndex];
             this.currentAnimation.startAnimation();
-            this.requiresUpdate = true;
+            //this.requiresUpdate = true;
         }
 
         /// <summary>Gets the animation from the dictionary of all animations available.</summary>
@@ -171,7 +180,7 @@ namespace StardustCore.Animations
         /// <param name="overrideSameAnimation"></param>
         /// <param name="StartingFrame"></param>
         /// <returns></returns>
-        public bool playAnimation(string AnimationName,bool overrideSameAnimation=false,int StartingFrame = 0)
+        public bool playAnimation(string AnimationName, bool overrideSameAnimation = false, int StartingFrame = 0)
         {
             if (this.animations.TryGetValue(AnimationName, out List<Animation> dummyList))
             {
@@ -379,7 +388,7 @@ namespace StardustCore.Animations
         /// <param name="scale"></param>
         /// <param name="flipped"></param>
         /// <param name="depth"></param>
-        public void draw(SpriteBatch b,Vector2 Position,Color drawColor,float scale,SpriteEffects flipped,float depth)
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, 0f, Vector2.Zero, scale, flipped, depth);
             try
@@ -393,7 +402,7 @@ namespace StardustCore.Animations
             }
         }
 
-        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale,float Rotation ,SpriteEffects flipped, float depth)
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale, float Rotation, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
             try
@@ -430,7 +439,7 @@ namespace StardustCore.Animations
             }
         }
 
-        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, float Rotation,SpriteEffects flipped, float depth)
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, float Rotation, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
             try

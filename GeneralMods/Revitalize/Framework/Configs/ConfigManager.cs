@@ -25,6 +25,8 @@ namespace Revitalize.Framework.Configs
         /// </summary>
         public GlobalMachineConfig machinesConfig;
 
+        public MiningDrillConfig miningDrillConfig;
+
         public ConfigManager()
         {
             this.vanillaMachineConfig = VanillaMachineRecipeConfig.InitializeConfig();
@@ -32,6 +34,7 @@ namespace Revitalize.Framework.Configs
             this.furnitureConfig = FurnitureConfig.InitializeConfig();
             this.machinesConfig = GlobalMachineConfig.InitializeConfig();
             this.objectsConfig = ObjectsConfig.InitializeConfig();
+            this.miningDrillConfig = MiningDrillConfig.InitializeConfig();
         }
     }
 }

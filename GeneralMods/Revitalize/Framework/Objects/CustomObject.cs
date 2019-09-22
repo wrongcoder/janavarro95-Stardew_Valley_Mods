@@ -131,6 +131,11 @@ namespace Revitalize.Framework.Objects
         {
             get
             {
+                if (this.info == null)
+                {
+                    this.updateInfo();
+                }
+
                 //ModCore.log("Location Name is: " + this.info.locationName);
                 if (this._location == null)
                 {
@@ -764,6 +769,11 @@ namespace Revitalize.Framework.Objects
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
         {
+            if (this.info == null)
+            {
+                this.updateInfo();
+            }
+
             if (this.location == null)
             {
                 this.location = environment;

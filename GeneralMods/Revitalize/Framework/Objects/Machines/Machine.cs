@@ -216,12 +216,21 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
         {
+
+
             base.updateWhenCurrentLocation(time, environment);
         }
 
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
+            if (this.info == null)
+            {
+                this.updateInfo();
+            }
+
+            ModCore.log(this.info.animationManager.currentAnimationName);
+
             if (this.updatesContainerObjectForProduction)
             {
                 //ModCore.log("Update container object for production!");

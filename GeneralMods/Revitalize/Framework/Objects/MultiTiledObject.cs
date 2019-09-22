@@ -451,7 +451,7 @@ namespace Revitalize.Framework.Objects
         {
             Dictionary<string, string> saveData = base.getAdditionalSaveData();
             saveData.Add("GUID", this.guid.ToString());
-            Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
+            //Revitalize.ModCore.Serializer.SerializeGUID(this.guid.ToString(), this);
             return saveData;
         }
 

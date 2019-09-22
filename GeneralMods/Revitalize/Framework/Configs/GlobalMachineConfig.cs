@@ -19,6 +19,9 @@ namespace Revitalize.Framework.Configs
         public int grinderEnergyConsumption;
         public int grinderTimeToGrind;
 
+        public int miningDrillEnergyConsumption;
+        public int miningDrillTimeToMine;
+
         public GlobalMachineConfig()
         {
             this.doMachinesConsumeEnergy = true;
@@ -28,6 +31,8 @@ namespace Revitalize.Framework.Configs
             this.machineNotificationBubbleAlpha = 0.75f;
             this.grinderEnergyConsumption = 20;
             this.grinderTimeToGrind = 30;
+            this.miningDrillEnergyConsumption = 50;
+            this.miningDrillTimeToMine = 60;
         }
 
         public static GlobalMachineConfig InitializeConfig()
