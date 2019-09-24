@@ -352,7 +352,7 @@ namespace Revitalize.Framework.Objects
 
         }
 
-        public ColorManager _colorManager;
+        private ColorManager _colorManager;
 
         public ColorManager ColorManager
         {
@@ -366,6 +366,9 @@ namespace Revitalize.Framework.Objects
                 this.requiresUpdate = true;
             }
         }
+
+        public LiquidManagerV2 fluidManager;
+
 
         [JsonIgnore]
         public bool requiresUpdate;
@@ -392,9 +395,10 @@ namespace Revitalize.Framework.Objects
             this.EnergyManager = new Energy.EnergyManager();
             this._alwaysDrawAbovePlayer = false;
             this.ColorManager = new ColorManager(Enums.DyeBlendMode.Blend, 0.5f);
+            this.fluidManager = new LiquidManagerV2();
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null, ColorManager ColorManager=null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null, ColorManager ColorManager=null,LiquidManagerV2 LiquidManager=null)
         {
             this.name = name;
             this.id = id;
@@ -429,6 +433,7 @@ namespace Revitalize.Framework.Objects
 
             this.DyedColor = DyedColor ?? new NamedColor("", new Color(0, 0, 0, 0));
             this.ColorManager = ColorManager ?? new ColorManager(Enums.DyeBlendMode.Blend, 0.5f);
+            this.fluidManager = LiquidManager ?? new LiquidManagerV2();
         }
 
         /// <summary>
