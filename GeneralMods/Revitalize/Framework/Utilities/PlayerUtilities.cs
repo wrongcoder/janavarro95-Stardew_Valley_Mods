@@ -24,7 +24,7 @@ namespace Revitalize.Framework.Utilities
             for(int i = 0; i < Game1.player.Items.Count; i++)
             {
                 if (I == Game1.player.Items[i]) return true;
-                if (I == null) return true;
+                if (Game1.player.Items[i] == null) return true;
                 if (I.canStackWith(Game1.player.Items[i])) return true;
             }
             return false;

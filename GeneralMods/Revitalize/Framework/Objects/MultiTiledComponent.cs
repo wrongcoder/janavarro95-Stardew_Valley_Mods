@@ -122,10 +122,24 @@ namespace Revitalize.Framework.Objects
             return base.checkForAction(who, justCheckingForActivity);
         }
 
+        public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+        {
+            return base.canBePlacedHere(l, tile);
+        }
+
+        
+
         public override bool clicked(Farmer who)
         {
             //ModCore.log("Clicked a multiTiledComponent!");
-            this.containerObject.pickUp(who);
+            if (ModCore.playerInfo.justPlacedACustomObject == true) return false;
+            if (PlayerUtilities.CanPlayerInventoryReceiveThisItem(this.containerObject)) {
+                this.containerObject.pickUp(who);
+            }
+            else
+            {
+                return false;
+            }
             return true;
             //return base.clicked(who);
         }
@@ -179,6 +193,7 @@ namespace Revitalize.Framework.Objects
             this.performDropDownAction(who);
             location.objects.Add(this.TileLocation, this);
 
+            
             
             if(this.getBoundingBox(this.TileLocation).Width==0&& this.getBoundingBox(this.TileLocation).Height == 0)
             {

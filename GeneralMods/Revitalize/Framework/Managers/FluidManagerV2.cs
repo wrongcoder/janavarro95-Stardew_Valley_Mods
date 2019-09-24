@@ -79,7 +79,7 @@ namespace Revitalize.Framework.Managers
         /// <summary>
         /// The remaining capacity on the tank.
         /// </summary>
-        
+
         public int remainingCapacity
         {
             get
@@ -109,6 +109,21 @@ namespace Revitalize.Framework.Managers
                 return this.amount == 0;
             }
         }
+
+        public string getFluidDisplayString()
+        {
+            StringBuilder b = new StringBuilder();
+            if (this.fluid != null)
+            {
+                b.Append(this.fluid.name);
+                b.Append(": ");
+            }
+            b.Append(this.amount);
+            b.Append("/");
+            b.Append(this.capacity);
+            return b.ToString();
+        }
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -165,11 +180,9 @@ namespace Revitalize.Framework.Managers
             if (this.CanRecieveThisFluid(L))
             {
                 if (this.fluid == null) this.fluid = L.Copy();
-                else
-                {
-                    int intakeAmount=Math.Min(this.remainingCapacity, Amount);
-                    this.amount = this.amount + intakeAmount;
-                }
+                int intakeAmount = Math.Min(this.remainingCapacity, Amount);
+                this.amount = this.amount + intakeAmount;
+
             }
             else return;
         }
@@ -288,7 +301,7 @@ namespace Revitalize.Framework.Managers
         /// <param name="Capacity"></param>
         /// <param name="OnlyOutput"></param>
         /// <param name="AllowDoubleInput">Can both input tanks store the same Fluid?</param>
-        public FluidManagerV2(int Capacity, bool OnlyOutput, Enums.FluidInteractionType LiquidInteractionType, bool AllowDoubleInput=false)
+        public FluidManagerV2(int Capacity, bool OnlyOutput, Enums.FluidInteractionType LiquidInteractionType, bool AllowDoubleInput = false)
         {
             if (OnlyOutput)
             {
@@ -333,13 +346,13 @@ namespace Revitalize.Framework.Managers
             int remainingAmount = Amount;
             if (this.allowDoubleInput)
             {
-                if (this.inputTank1.CanRecieveThisFluid(L) && remainingAmount>0)
+                if (this.inputTank1.CanRecieveThisFluid(L) && remainingAmount > 0)
                 {
                     int allowedAmount = this.inputTank1.remainingCapacity;
                     this.inputTank1.intakeFluid(L, remainingAmount);
                     remainingAmount -= allowedAmount;
                 }
-                if (this.inputTank2.CanRecieveThisFluid(L)&& remainingAmount>0)
+                if (this.inputTank2.CanRecieveThisFluid(L) && remainingAmount > 0)
                 {
                     int allowedAmount = this.inputTank2.remainingCapacity;
                     this.inputTank2.intakeFluid(L, remainingAmount);
@@ -350,7 +363,7 @@ namespace Revitalize.Framework.Managers
             else
             {
 
-                if (this.inputTank1.CanRecieveThisFluid(L) && remainingAmount > 0 && this.inputTank2.DoesTankContainThisFluid(L)==false)
+                if (this.inputTank1.CanRecieveThisFluid(L) && remainingAmount > 0 && this.inputTank2.DoesTankContainThisFluid(L) == false)
                 {
                     int allowedAmount = this.inputTank1.remainingCapacity;
                     this.inputTank1.intakeFluid(L, remainingAmount);
@@ -381,15 +394,15 @@ namespace Revitalize.Framework.Managers
 
             int requiredAmount = Amount;
             int tank1Amount = this.inputTank1.GetAmountOfFluidInThisTank(L);
-            int tank2Amount= this.inputTank2.GetAmountOfFluidInThisTank(L);
-            if (tank1Amount > 0 && requiredAmount>0)
+            int tank2Amount = this.inputTank2.GetAmountOfFluidInThisTank(L);
+            if (tank1Amount > 0 && requiredAmount > 0)
             {
                 this.inputTank1.consumeFluid(requiredAmount);
                 requiredAmount -= tank1Amount;
                 this.requiresUpdate = true;
 
             }
-            if(tank2Amount>0 && requiredAmount > 0)
+            if (tank2Amount > 0 && requiredAmount > 0)
             {
                 this.inputTank2.consumeFluid(requiredAmount);
                 requiredAmount -= tank2Amount;
@@ -434,7 +447,7 @@ namespace Revitalize.Framework.Managers
             }
             else
             {
-                if(this.inputTank1.CanRecieveThisFluid(L) && this.inputTank2.DoesTankContainThisFluid(L) == false)
+                if (this.inputTank1.CanRecieveThisFluid(L) && this.inputTank2.DoesTankContainThisFluid(L) == false)
                 {
                     return this.inputTank1.GetAmountOfFluidThisTankCanReceieve(L);
                 }
@@ -473,7 +486,7 @@ namespace Revitalize.Framework.Managers
                 }
             }
             return false;
-           
+
         }
 
         /// <summary>
@@ -486,7 +499,7 @@ namespace Revitalize.Framework.Managers
             if (Other.canRecieveThisFluid(this.outputTank.fluid))
             {
                 int actualAmount = Math.Min(this.outputTank.amount, Other.getMaxAmountOfFluidIntakePossible(this.outputTank.fluid));
-                Other.intakeFluid(this.outputTank.fluid,actualAmount);
+                Other.intakeFluid(this.outputTank.fluid, actualAmount);
                 this.drainOutputTank(actualAmount);
             }
         }
@@ -504,7 +517,7 @@ namespace Revitalize.Framework.Managers
 
         public FluidManagerV2 Copy()
         {
-            return new FluidManagerV2(this.outputTank.capacity, this.onlyOutput,this.fluidInteractionType,this.allowDoubleInput);
+            return new FluidManagerV2(this.outputTank.capacity, this.onlyOutput, this.fluidInteractionType, this.allowDoubleInput);
         }
     }
 }

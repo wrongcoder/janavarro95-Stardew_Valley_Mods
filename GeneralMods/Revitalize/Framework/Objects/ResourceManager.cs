@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Factories.Objects.Resources;
+using Revitalize.Framework.Managers;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Objects.Items.Resources;
 using Revitalize.Framework.Objects.Resources.OreVeins;
@@ -33,6 +34,7 @@ namespace Revitalize.Framework.Objects
         public Dictionary<string, CustomObject> resources;
 
         public Dictionary<string, ResourceInformation> miningDrillResources;
+        public Dictionary<string, Fluid> fluids;
 
         /// <summary>
         /// A list of all visited floors on the current visit to the mines.
@@ -51,6 +53,7 @@ namespace Revitalize.Framework.Objects
             this.visitedFloors = new List<int>();
             this.resources = new Dictionary<string, CustomObject>();
             this.miningDrillResources = new Dictionary<string, ResourceInformation>();
+            this.fluids = new Dictionary<string, Fluid>();
         }
 
 
@@ -62,8 +65,13 @@ namespace Revitalize.Framework.Objects
             this.serializeOreVeins();
             this.loadOreVeins();
             this.loadInMiningDrillLootTable();
+            this.loadInFluidDictionary();
         }
 
+        private void loadInFluidDictionary()
+        {
+            this.fluids.Add("Water", new Fluid("Water", Color.Blue));
+        }
         private void loadInMiningDrillLootTable()
         {
             this.miningDrillResources.Add("Bauxite", new ResourceInformation(this.getResource("Bauxite"), ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.min, ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.max, 1, 1, 1,ModCore.Configs.miningDrillConfig.bauxiteMineChance, 0, 0, 0, 0));
@@ -373,6 +381,23 @@ namespace Revitalize.Framework.Objects
                 Ore o = (Ore)this.ores[name].getOne();
                 o.Stack = Stack;
                 return o;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets a fluid from the fluid dictionary.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Fluid getFluid(string name)
+        {
+            if (this.fluids.ContainsKey(name))
+            {
+                return this.fluids[name].Copy();
             }
             else
             {

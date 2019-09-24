@@ -257,8 +257,8 @@ namespace Revitalize.Framework.Objects
                 //Revitalize.ModCore.log(new Vector2(x + ((int)pair.Key.X), y + ((int)pair.Key.Y)));
                 if ((pair.Value as MultiTiledComponent).info.ignoreBoundingBox)
                 {
-                    x *= -1;
-                    y *= -1;
+                    //x *= -1;
+                    //y *= -1;
                 }
                 (pair.Value as MultiTiledComponent).draw(spriteBatch, x / Game1.tileSize, y / Game1.tileSize, 0.5f);
                 //break;
@@ -283,10 +283,10 @@ namespace Revitalize.Framework.Objects
                 {
                     if ((pair.Value as MultiTiledComponent).info.lightManager != null)
                     {
-                        ModCore.log("Let there be light.");
+                        //ModCore.log("Let there be light.");
                         if ((pair.Value as MultiTiledComponent).info.lightManager.lightsOn == true)
                         {
-                            ModCore.log("Got a light???");
+                            //ModCore.log("Got a light???");
                         }
                     }
                     (pair.Value as MultiTiledComponent).removeFromLocation(who.currentLocation, pair.Key);

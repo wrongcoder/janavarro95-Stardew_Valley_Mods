@@ -275,7 +275,7 @@ namespace Revitalize
             ModHelper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.GetModMessage;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
 
-
+            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed1;
 
             ModHelper.Events.Display.MenuChanged += MenuHacks.RecreateFarmhandInventory;
 
@@ -283,6 +283,28 @@ namespace Revitalize
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
             CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
+        }
+
+        private void Input_ButtonPressed1(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
+        {
+            if(e.Button== SButton.MouseLeft)
+            {
+                if (Game1.player != null)
+                {
+                    if (Game1.activeClickableMenu != null || Game1.eventUp || Game1.currentMinigame != null) return;
+                    if(Game1.player.ActiveObject is CustomObject)
+                    {
+                        if((Game1.player.ActiveObject as CustomObject).canBePlacedHere(Game1.player.currentLocation, Game1.currentCursorTile))
+                        {
+                            CustomObject o =(CustomObject) Game1.player.ActiveObject;
+                            o.placementAction(Game1.currentLocation,(int) Game1.currentCursorTile.X*Game1.tileSize,(int)Game1.currentCursorTile.Y*Game1.tileSize, Game1.player);
+                            //o.performObjectDropInAction(Game1.player.ActiveObject, true, Game1.player);
+                            Game1.player.reduceActiveItemByOne();
+                            playerInfo.justPlacedACustomObject = true;
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -526,6 +548,7 @@ namespace Revitalize
 
         private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
         {
+            if (playerInfo.justPlacedACustomObject == true) playerInfo.justPlacedACustomObject = false;
             DarkerNight.SetDarkerColor();
             playerInfo.update();
         }
@@ -577,6 +600,7 @@ namespace Revitalize
                 ModCore.ObjectManager.GetItem("MiningDrillMachineV1"),
                 ModCore.ObjectManager.GetItem("AlloyFurnace"),
                 new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
+                ModCore.ObjectManager.GetItem("WaterPumpV1")
             });
         }
 

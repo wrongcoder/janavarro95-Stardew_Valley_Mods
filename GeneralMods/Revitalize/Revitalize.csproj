@@ -88,7 +88,7 @@
     <Compile Include="Framework\Illuminate\LightManager.cs" />
     <Compile Include="Framework\Illuminate\NamedColor.cs" />
     <Compile Include="Framework\Managers\ColorManager.cs" />
-    <Compile Include="Framework\Managers\LiquidManagerV2.cs" />
+    <Compile Include="Framework\Managers\FluidManagerV2.cs" />
     <Compile Include="Framework\Menus\CraftingInformationPage.cs" />
     <Compile Include="Framework\Menus\CraftingMenuV1.cs" />
     <Compile Include="Framework\Menus\Machines\MachineMenu.cs" />
@@ -168,6 +168,7 @@
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SolarPanel.cs" />
     <Compile Include="Framework\Objects\Machines\Grinder.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
+    <Compile Include="Framework\Objects\Machines\WaterPump.cs" />
     <Compile Include="Framework\Objects\Machines\Wire.cs" />
     <Compile Include="Framework\Objects\Machines\WireMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
@@ -415,6 +416,12 @@
     <Content Include="Content\Graphics\Menus\EnergyMenu\BatteryFrame.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\DropletColored.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\DropletOutline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Menus\EnergyMenu\LightningBolt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -475,6 +482,9 @@
     <Content Include="Content\Graphics\Objects\Furniture\Tables\Oak Table.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Objects\Machines\AlloyFurnace.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Objects\Machines\BatteryBin.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -497,6 +507,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\SolarPanelTier1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\WaterPump.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\Wires\CopperWire.png">

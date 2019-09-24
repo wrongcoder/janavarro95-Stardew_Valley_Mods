@@ -51,6 +51,12 @@ namespace Revitalize.Framework.Menus.Machines
         private AnimatedButton storageButton;
         private Vector2 storageRemainingDisplayLocation;
 
+
+        private AnimatedButton inputFluidTank1Button;
+        private AnimatedButton inputFluidTank2Button;
+        private AnimatedButton outputFluidTankButton;
+        private Vector2 fluidDisplayLocation;
+
         private int requiredEnergyPer10Min;
 
         private EnergyManager energy
@@ -89,6 +95,7 @@ namespace Revitalize.Framework.Menus.Machines
             this.timeDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width * .1f), this.yPositionOnScreen + (this.height * .25f));
             this.energyRequiredDisplayLocation = this.timeDisplayLocation + new Vector2(0, 64);
             this.storageRemainingDisplayLocation = this.energyRequiredDisplayLocation + new Vector2(0, 64);
+            this.fluidDisplayLocation = this.storageRemainingDisplayLocation + new Vector2(0, 64);
 
             this.energyPosition = new Vector2(this.xPositionOnScreen + this.width - 128, this.yPositionOnScreen + this.height - 72 * 4);
             this.batteryBackground = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("BatteryFrame", this.energyPosition, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "BatteryFrame"), new StardustCore.Animations.Animation(0, 0, 32, 64)), Color.White), new Rectangle(0, 0, 32, 64), 4f);
@@ -98,6 +105,12 @@ namespace Revitalize.Framework.Menus.Machines
             this.clockSprite= new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Time Remaining",this.timeDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "Clock"), new StardustCore.Animations.Animation(0, 0, 18, 18)), Color.White), new Rectangle(0, 0, 18, 18), 2f);
             this.energyRequiredButton=new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Energy Required", this.energyRequiredDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", "LightningBolt"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
             this.storageButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Storage Remaining", this.storageRemainingDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "Chest"), new StardustCore.Animations.Animation(0, 0, 16, 32)), Color.White), new Rectangle(0, 0, 16, 32), 1f);
+
+
+            this.inputFluidTank1Button = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Input 1 fluid:", this.fluidDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu",this.objectSource.info.fluidManager.inputTank1.fluid!=null? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.inputTank1.fluid!=null ? this.objectSource.info.fluidManager.inputTank1.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
+            this.inputFluidTank2Button = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Input 2 fluid:", this.fluidDisplayLocation+new Vector2(0,64), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", this.objectSource.info.fluidManager.inputTank2.fluid!=null ? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.inputTank2.fluid!=null ? this.objectSource.info.fluidManager.inputTank2.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
+            ModCore.log(this.objectSource.info.fluidManager.outputTank.fluid != null ? "Color of fluid:" + this.objectSource.info.fluidManager.outputTank.fluid.color.ToString() : "Color is null!");
+            this.outputFluidTankButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Output fluid:", this.fluidDisplayLocation+new Vector2(0,128), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", this.objectSource.info.fluidManager.outputTank.fluid!=null ? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.outputTank.fluid!=null ? this.objectSource.info.fluidManager.outputTank.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
 
             this.requiredEnergyPer10Min = RequiredEnergyPer10Min;
         }
@@ -160,20 +173,38 @@ namespace Revitalize.Framework.Menus.Machines
             {
                 this.batteryBackground.draw(b, 1f, 1f);
                 this.energyMeterColorSwap();
-                b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X + (int)(11 * this.batteryBackground.scale), (int)this.energyPosition.Y + (int)(18 * this.batteryBackground.scale)+ (int)(46 * this.batteryBackground.scale), (int)((9 * this.batteryBackground.scale)), (int)(46 * this.batteryBackground.scale * this.energy.energyPercentRemaining)), new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0f,1f), SpriteEffects.None, 0.2f);
+                b.Draw(this.energyTexture, new Rectangle((int)this.energyPosition.X + (int)(11 * this.batteryBackground.scale), (int)this.energyPosition.Y + (int)(18 * this.batteryBackground.scale) + (int)(46 * this.batteryBackground.scale), (int)((9 * this.batteryBackground.scale)), (int)(46 * this.batteryBackground.scale * this.energy.energyPercentRemaining)), new Rectangle(0, 0, 1, 1), Color.White, 0f, new Vector2(0f, 1f), SpriteEffects.None, 0.2f);
                 this.battergyEnergyGuage.draw(b, 1f, 1f);
 
                 this.energyRequiredButton.draw(b);
-                b.DrawString(Game1.smallFont, this.requiredEnergyPer10Min+" E/10m", this.energyRequiredDisplayLocation + new Vector2(0, 36f), Color.Black);
+                b.DrawString(Game1.smallFont, this.requiredEnergyPer10Min + " E/10m", this.energyRequiredDisplayLocation + new Vector2(0, 36f), Color.Black);
             }
 
             if (this.objectSource.info.inventory.HasInventory)
             {
                 this.storageButton.draw(b);
-                b.DrawString(Game1.smallFont, "Storage remaining: "+ (this.objectSource.info.inventory.capacity-this.objectSource.info.inventory.ItemCount)+"/"+this.objectSource.info.inventory.capacity, this.storageRemainingDisplayLocation + new Vector2(0, 32f), Color.Black);
+                b.DrawString(Game1.smallFont, "Storage remaining: " + (this.objectSource.info.inventory.capacity - this.objectSource.info.inventory.ItemCount) + "/" + this.objectSource.info.inventory.capacity, this.storageRemainingDisplayLocation + new Vector2(0, 32f), Color.Black);
             }
 
-            
+            if (this.objectSource.info.fluidManager.InteractsWithFluids)
+            {
+                if (this.objectSource.info.fluidManager.inputTank1.capacity > 0)
+                {
+                    this.inputFluidTank1Button.draw(b);
+                    b.DrawString(Game1.smallFont, this.objectSource.info.fluidManager.inputTank1.getFluidDisplayString(), this.fluidDisplayLocation + new Vector2(32, 0f), Color.Black);
+                }
+                if (this.objectSource.info.fluidManager.inputTank2.capacity > 0)
+                {
+                    this.inputFluidTank2Button.draw(b);
+                    b.DrawString(Game1.smallFont, this.objectSource.info.fluidManager.inputTank2.getFluidDisplayString(), this.fluidDisplayLocation + new Vector2(32, 64f), Color.Black);
+                }
+                if (this.objectSource.info.fluidManager.outputTank.capacity > 0)
+                {
+                    //ModCore.log("Color:" + this.objectSource.GetFluidManager().outputTank.fluid.color);
+                    this.outputFluidTankButton.draw(b);
+                    b.DrawString(Game1.smallFont, this.objectSource.info.fluidManager.outputTank.getFluidDisplayString(), this.fluidDisplayLocation + new Vector2(32, 128f), Color.Black);
+                }
+            }
 
             this.objectSource.drawFullyInMenu(b, new Vector2((int)(this.xPositionOnScreen + (this.width / 2) - (this.itemDisplayOffset.X / 2)), (int)(this.yPositionOnScreen + 128f)), .24f);
             Vector2 nameOffset = Game1.dialogueFont.MeasureString(this.objectSource.DisplayName);
