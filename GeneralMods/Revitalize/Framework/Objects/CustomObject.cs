@@ -11,6 +11,7 @@ using StardewValley.Objects;
 using Revitalize.Framework.Utilities;
 using Revitalize.Framework.Energy;
 using Revitalize.Framework.Illuminate;
+using Revitalize.Framework.Managers;
 
 namespace Revitalize.Framework.Objects
 {
@@ -777,6 +778,16 @@ namespace Revitalize.Framework.Objects
         public virtual void SetInventoryManager(InventoryManager Manager)
         {
             this.info.inventory = Manager;
+        }
+
+        public virtual ref FluidManagerV2 GetFluidManager()
+        {
+            return ref this.info.fluidManager;
+        }
+
+        public virtual void SetFluidManager(FluidManagerV2 FluidManager)
+        {
+            this.info.fluidManager = FluidManager;
         }
     }
 }

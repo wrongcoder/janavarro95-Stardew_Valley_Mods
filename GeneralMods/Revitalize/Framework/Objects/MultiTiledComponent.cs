@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Energy;
+using Revitalize.Framework.Managers;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardewValley.Objects;
@@ -655,6 +656,160 @@ namespace Revitalize.Framework.Objects
             this.containerObject.info.inventory = Manager;
         }
 
+
+        public override ref FluidManagerV2 GetFluidManager()
+        {
+            if (this.info == null || this.containerObject == null)
+            {
+                this.updateInfo();
+                if (this.containerObject == null) return ref this.info.fluidManager;
+                return ref this.containerObject.info.fluidManager;
+            }
+            return ref this.containerObject.info.fluidManager;
+        }
+
+        public override void SetFluidManager(FluidManagerV2 FluidManager)
+        {
+            this.info.fluidManager = FluidManager;
+        }
+
+
+        /// <summary>
+        /// Gets corresponding neighbor objects that can interact with fluid.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<MultiTiledComponent> GetNeighboringFluidManagers()
+        {
+            Vector2 tileLocation = this.TileLocation;
+            List<MultiTiledComponent> customObjects = new List<MultiTiledComponent>();
+            if (this.location != null)
+            {
+                for (int i = -1; i <= 1; i++)
+                {
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        if (i == j || i == (-j)) continue;
+
+                        Vector2 neighborTile = tileLocation + new Vector2(i, j);
+                        if (this.location.isObjectAtTile((int)neighborTile.X, (int)neighborTile.Y))
+                        {
+                            StardewValley.Object obj = this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
+                            if (obj is MultiTiledComponent)
+                            {
+                                if ((obj as MultiTiledComponent).GetFluidManager().InteractsWithFluids)
+                                {
+                                    customObjects.Add((MultiTiledComponent)obj);
+                                }
+                            }
+                            else continue;
+                        }
+                    }
+                }
+            }
+            return customObjects;
+        }
+
+        /// <summary>
+        /// Searches a network of fluid managers to see if any of these fluid managers have an output tank with the corresponding fluid.
+        /// </summary>
+        /// <param name="L"></param>
+        /// <returns></returns>
+        protected virtual List<MultiTiledObject> FluidGraphSearchForFluidFromOutputTanks(Fluid L)
+        {
+            List<MultiTiledObject> fluidSources = new List<MultiTiledObject>();
+            List<MultiTiledComponent> searchedComponents = new List<MultiTiledComponent>();
+            List<MultiTiledComponent> entitiesToSearch = new List<MultiTiledComponent>();
+            entitiesToSearch.AddRange(this.GetNeighboringFluidManagers());
+            searchedComponents.Add(this);
+            while (entitiesToSearch.Count > 0)
+            {
+                MultiTiledComponent searchComponent = entitiesToSearch[0];
+                entitiesToSearch.Remove(searchComponent);
+                if (searchedComponents.Contains(searchComponent))
+                {
+                    continue;
+                }
+                else
+                {
+                    searchedComponents.Add(searchComponent);
+                    entitiesToSearch.AddRange(searchComponent.GetNeighboringFluidManagers());
+
+                    if (searchComponent.containerObject.info.fluidManager.doesThisOutputTankContainThisFluid(L))
+                    {
+                        fluidSources.Add(searchComponent.containerObject);
+                    }
+                }
+
+            }
+            return fluidSources;
+        }
+
+        protected virtual List<MultiTiledObject> FluidGraphSearchInputTanksThatCanAcceptThisFluid(Fluid L)
+        {
+            List<MultiTiledObject> fluidSources = new List<MultiTiledObject>();
+            List<MultiTiledComponent> searchedComponents = new List<MultiTiledComponent>();
+            List<MultiTiledComponent> entitiesToSearch = new List<MultiTiledComponent>();
+            entitiesToSearch.AddRange(this.GetNeighboringFluidManagers());
+            searchedComponents.Add(this);
+            while (entitiesToSearch.Count > 0)
+            {
+                MultiTiledComponent searchComponent = entitiesToSearch[0];
+                entitiesToSearch.Remove(searchComponent);
+                if (searchedComponents.Contains(searchComponent))
+                {
+                    continue;
+                }
+                else
+                {
+                    searchedComponents.Add(searchComponent);
+                    entitiesToSearch.AddRange(searchComponent.GetNeighboringFluidManagers());
+
+                    if (searchComponent.containerObject.info.fluidManager.canRecieveThisFluid(L))
+                    {
+                        fluidSources.Add(searchComponent.containerObject);
+                    }
+                }
+
+            }
+            return fluidSources;
+        }
+
+        /// <summary>
+        /// Searches for output tanks that have the corresponding fluid and tries to drain from them.
+        /// </summary>
+        /// <param name="L"></param>
+        public void pullFluidFromNetworkOutputs(Fluid L)
+        {
+            List<MultiTiledObject> energySources = this.FluidGraphSearchForFluidFromOutputTanks(L);
+
+            int index = 0;
+
+            for (int i = 0; i < energySources.Count; i++)
+            {
+                FluidManagerV2 other = energySources[i].GetFluidManager();
+                other.outputFluidToOtherSources(this.GetFluidManager());
+                if (this.GetFluidManager().canRecieveThisFluid(L)==false) break; //Since we already check for valid tanks this will basically check again to see if the tanks are full.
+            }
+        }
+
+        /// <summary>
+        /// Searches for output tanks that have the corresponding fluid and tries to drain from them.
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="FluidSources"></param>
+        public void pullFluidFromNetworkOutputs(List<MultiTiledObject> FluidSources,Fluid L)
+        {
+            List<MultiTiledObject> energySources = FluidSources;
+
+            int index = 0;
+
+            for (int i = 0; i < energySources.Count; i++)
+            {
+                FluidManagerV2 other = energySources[i].GetFluidManager();
+                other.outputFluidToOtherSources(this.GetFluidManager());
+                if (this.GetFluidManager().canRecieveThisFluid(L) == false) break; //Since we already check for valid tanks this will basically check again to see if the tanks are full.
+            }
+        }
 
         public override bool requiresUpdate()
         {

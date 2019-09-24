@@ -367,7 +367,7 @@ namespace Revitalize.Framework.Objects
             }
         }
 
-        public LiquidManagerV2 fluidManager;
+        public FluidManagerV2 fluidManager;
 
 
         [JsonIgnore]
@@ -395,10 +395,10 @@ namespace Revitalize.Framework.Objects
             this.EnergyManager = new Energy.EnergyManager();
             this._alwaysDrawAbovePlayer = false;
             this.ColorManager = new ColorManager(Enums.DyeBlendMode.Blend, 0.5f);
-            this.fluidManager = new LiquidManagerV2();
+            this.fluidManager = new FluidManagerV2();
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null, ColorManager ColorManager=null,LiquidManagerV2 LiquidManager=null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int edibility, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, InventoryManager Inventory, LightManager Lights,Energy.EnergyManager EnergyManager=null,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null, ColorManager ColorManager=null,FluidManagerV2 FluidManager=null)
         {
             this.name = name;
             this.id = id;
@@ -433,7 +433,7 @@ namespace Revitalize.Framework.Objects
 
             this.DyedColor = DyedColor ?? new NamedColor("", new Color(0, 0, 0, 0));
             this.ColorManager = ColorManager ?? new ColorManager(Enums.DyeBlendMode.Blend, 0.5f);
-            this.fluidManager = LiquidManager ?? new LiquidManagerV2();
+            this.fluidManager = FluidManager ?? new FluidManagerV2();
         }
 
         /// <summary>
@@ -451,12 +451,12 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.DrawColor, this.ignoreBoundingBox, this.inventory.Copy(), this._lightManager.Copy(),this.EnergyManager.Copy(),this.AlwaysDrawAbovePlayer,this.DyedColor,this.ColorManager);
+            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.DrawColor, this.ignoreBoundingBox, this.inventory.Copy(), this._lightManager.Copy(),this.EnergyManager.Copy(),this.AlwaysDrawAbovePlayer,this.DyedColor,this.ColorManager,this.fluidManager.Copy());
         }
 
         public bool requiresSyncUpdate()
         {
-            return this.requiresUpdate || this.animationManagerRequiresUpdate() || this.inventoryManagerRequiresUpdate() || this.lightManagerRequiresUpdate() || this.energyManagerRequiresUpdate() || this.colorManagerRequiresUpdate();
+            return this.requiresUpdate || this.animationManagerRequiresUpdate() || this.inventoryManagerRequiresUpdate() || this.lightManagerRequiresUpdate() || this.energyManagerRequiresUpdate() || this.colorManagerRequiresUpdate() || this.fluidManagerRequiresUpdate();
         }
 
         public void forceUpdate()
@@ -500,6 +500,12 @@ namespace Revitalize.Framework.Objects
         {
             if (this._colorManager == null) return false;
             else return this._colorManager.requiresUpdate;
+        }
+
+        private bool fluidManagerRequiresUpdate()
+        {
+            if (this.fluidManager == null) return false;
+            else return this.fluidManager.requiresUpdate;
         }
 
         public void cleanAfterUpdate()

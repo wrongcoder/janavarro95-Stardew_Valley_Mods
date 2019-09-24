@@ -250,19 +250,36 @@ namespace Revitalize.Framework.Managers
         public MachineFluidTank inputTank2;
         public MachineFluidTank outputTank;
 
-        public bool needsUpdate;
+        public bool requiresUpdate;
 
         /// <summary>
         /// Does this machine allow the same fluid in both tanks?
         /// </summary>
         public bool allowDoubleInput;
 
+        public bool onlyOutput;
+        /// <summary>
+        /// The capacity for the fluid tanks.
+        /// </summary>
+        public int tankCapacity;
+
+        public Enums.FluidInteractionType fluidInteractionType;
+
+        public bool InteractsWithFluids
+        {
+            get
+            {
+                return this.fluidInteractionType != Enums.FluidInteractionType.None;
+            }
+        }
+
         public FluidManagerV2()
         {
             this.inputTank1 = new MachineFluidTank(0);
             this.inputTank2 = new MachineFluidTank(0);
             this.outputTank = new MachineFluidTank(0);
-            this.needsUpdate = false;
+            this.requiresUpdate = false;
+            this.fluidInteractionType = Enums.FluidInteractionType.None;
         }
 
         /// <summary>
@@ -271,7 +288,7 @@ namespace Revitalize.Framework.Managers
         /// <param name="Capacity"></param>
         /// <param name="OnlyOutput"></param>
         /// <param name="AllowDoubleInput">Can both input tanks store the same Fluid?</param>
-        public FluidManagerV2(int Capacity, bool OnlyOutput, bool AllowDoubleInput=false)
+        public FluidManagerV2(int Capacity, bool OnlyOutput, Enums.FluidInteractionType LiquidInteractionType, bool AllowDoubleInput=false)
         {
             if (OnlyOutput)
             {
@@ -286,8 +303,10 @@ namespace Revitalize.Framework.Managers
                 this.inputTank1 = new MachineFluidTank(Capacity);
                 this.inputTank2 = new MachineFluidTank(Capacity);
             }
+            this.onlyOutput = OnlyOutput;
             this.allowDoubleInput = AllowDoubleInput;
-            this.needsUpdate = false;
+            this.requiresUpdate = false;
+            this.fluidInteractionType = LiquidInteractionType;
         }
 
         /// <summary>
@@ -300,7 +319,7 @@ namespace Revitalize.Framework.Managers
             if (this.outputTank.CanRecieveThisFluid(L))
             {
                 this.outputTank.intakeFluid(L, Amount);
-                this.needsUpdate = true;
+                this.requiresUpdate = true;
             }
         }
 
@@ -326,7 +345,7 @@ namespace Revitalize.Framework.Managers
                     this.inputTank2.intakeFluid(L, remainingAmount);
                     remainingAmount -= allowedAmount;
                 }
-                this.needsUpdate = true;
+                this.requiresUpdate = true;
             }
             else
             {
@@ -336,7 +355,7 @@ namespace Revitalize.Framework.Managers
                     int allowedAmount = this.inputTank1.remainingCapacity;
                     this.inputTank1.intakeFluid(L, remainingAmount);
                     remainingAmount -= allowedAmount;
-                    this.needsUpdate = true;
+                    this.requiresUpdate = true;
                     return;
                 }
                 if (this.inputTank2.CanRecieveThisFluid(L) && remainingAmount > 0 && this.inputTank1.DoesTankContainThisFluid(L) == false)
@@ -344,7 +363,7 @@ namespace Revitalize.Framework.Managers
                     int allowedAmount = this.inputTank2.remainingCapacity;
                     this.inputTank2.intakeFluid(L, remainingAmount);
                     remainingAmount -= allowedAmount;
-                    this.needsUpdate = true;
+                    this.requiresUpdate = true;
                     return;
                 }
             }
@@ -367,14 +386,14 @@ namespace Revitalize.Framework.Managers
             {
                 this.inputTank1.consumeFluid(requiredAmount);
                 requiredAmount -= tank1Amount;
-                this.needsUpdate = true;
+                this.requiresUpdate = true;
 
             }
             if(tank2Amount>0 && requiredAmount > 0)
             {
                 this.inputTank2.consumeFluid(requiredAmount);
                 requiredAmount -= tank2Amount;
-                this.needsUpdate = true;
+                this.requiresUpdate = true;
             }
             //Consumes Fluid from both tanks if double input is enabled. Otherwise it only drains from the appropriate tank.
         }
@@ -383,7 +402,7 @@ namespace Revitalize.Framework.Managers
         {
             this.outputTank.consumeFluid(Amount);
             if (this.outputTank.IsEmpty) this.outputTank.fluid = null;
-            this.needsUpdate = true;
+            this.requiresUpdate = true;
         }
 
         /// <summary>
@@ -470,6 +489,22 @@ namespace Revitalize.Framework.Managers
                 Other.intakeFluid(this.outputTank.fluid,actualAmount);
                 this.drainOutputTank(actualAmount);
             }
+        }
+
+        /// <summary>
+        /// Checks to see if this output tank has the corresponding fluid and if the amount is greater than 0.
+        /// </summary>
+        /// <param name="F"></param>
+        /// <returns></returns>
+        public bool doesThisOutputTankContainThisFluid(Fluid F)
+        {
+            if (this.outputTank.GetAmountOfFluidInThisTank(F) > 0) return true;
+            else return false;
+        }
+
+        public FluidManagerV2 Copy()
+        {
+            return new FluidManagerV2(this.outputTank.capacity, this.onlyOutput,this.fluidInteractionType,this.allowDoubleInput);
         }
     }
 }

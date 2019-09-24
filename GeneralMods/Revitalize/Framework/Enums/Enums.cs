@@ -35,11 +35,10 @@ namespace Revitalize.Framework
             Storage
         }
 
-        public enum LiquidInteractionType
+        public enum FluidInteractionType
         {
             None,
-            Produces,
-            Consumes,
+            Machine,
             Transfers,
             Storage
         }
