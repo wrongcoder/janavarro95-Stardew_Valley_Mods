@@ -350,6 +350,12 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 25)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SandBox"), 1), null, 0), true));
 
+            WorkbenchRecipes.addCraftingRecipe("Battery Bin", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ElectrumIngot"),10)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BatteryBin"), 1), null, 0), true));
+
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
                 foreach(KeyValuePair<string, UnlockableCraftingRecipe> recipe in WorkbenchRecipes.craftingRecipes)
@@ -493,6 +499,15 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Glass"),4),
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarPanelTier1"), 4)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarArrayTier1"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("LightHouse", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,5),45),
+                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Glass"),5),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,10), 10)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Lighthouse"), 1)), true));
+
+
 
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
