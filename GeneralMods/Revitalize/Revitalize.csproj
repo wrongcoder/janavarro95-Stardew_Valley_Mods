@@ -166,6 +166,7 @@
     <Compile Include="Framework\Objects\Machines\AlloyFurnace.cs" />
     <Compile Include="Framework\Objects\Machines\ChargingStation.cs" />
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SolarPanel.cs" />
+    <Compile Include="Framework\Objects\Machines\EnergyGeneration\SteamBoiler.cs" />
     <Compile Include="Framework\Objects\Machines\Grinder.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
     <Compile Include="Framework\Objects\Machines\WaterPump.cs" />
@@ -507,6 +508,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\SolarPanelTier1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\SteamBoiler.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\WaterPump.png">

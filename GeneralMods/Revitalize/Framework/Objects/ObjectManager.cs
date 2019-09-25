@@ -333,11 +333,87 @@ namespace Revitalize.Framework.Objects
 
 
             MultiTiledObject waterPumpV1 = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WaterPump", TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Water Pump", "Omegasis.Revitalize.Objects.Machines.WaterPump", "Pumps up water from a water source.", "Machine", Color.SteelBlue, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "WaterPump"), new Animation(0, 0, 16, 16)), Color.White, false, null, null, null, false, null, null, new Managers.FluidManagerV2(5000, true, Enums.FluidInteractionType.Machine, false)));
-            WaterPump waterPumpV1_0_0 = new WaterPump(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WaterPump", TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Water Pump", "Omegasis.Revitalize.Objects.Machines.WaterPump", "Pumps up water from a water source.", "Machine", Color.SteelBlue, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "WaterPump"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, null, false, null, null, new Managers.FluidManagerV2(5000, true, Enums.FluidInteractionType.Machine, false)), null, 0, 0, false, "");
-            WaterPump waterPumpV1_0_1= new WaterPump(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WaterPump", TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Water Pump", "Omegasis.Revitalize.Objects.Machines.WaterPump", "Pumps up water from a water source.", "Machine", Color.SteelBlue, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "WaterPump"), new Animation(0, 16, 16, 16)), Color.White, false, null, null, null, false, null, null, new Managers.FluidManagerV2(5000, true, Enums.FluidInteractionType.Machine, false)), null, 0, 0, true, "");
+            WaterPump waterPumpV1_0_0 = new WaterPump(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WaterPump", TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), typeof(WaterPump), Color.White, true), new BasicItemInformation("Water Pump", "Omegasis.Revitalize.Objects.Machines.WaterPump", "Pumps up water from a water source.", "Machine", Color.SteelBlue, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "WaterPump"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, null, false, null, null, new Managers.FluidManagerV2(5000, true, Enums.FluidInteractionType.Machine, false)), null, 0, 0, false, "");
+            WaterPump waterPumpV1_0_1= new WaterPump(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WaterPump", TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), typeof(WaterPump), Color.White, true), new BasicItemInformation("Water Pump", "Omegasis.Revitalize.Objects.Machines.WaterPump", "Pumps up water from a water source.", "Machine", Color.SteelBlue, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "WaterPump"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "WaterPump"), new Animation(0, 16, 16, 16)), Color.White, false, null, null, null, false, null, null, new Managers.FluidManagerV2(5000, true, Enums.FluidInteractionType.Machine, false)), null, 0, 0, true, "");
             waterPumpV1.addComponent(new Vector2(0, 0), waterPumpV1_0_0);
             waterPumpV1.addComponent(new Vector2(0, 1), waterPumpV1_0_1);
             this.AddItem("WaterPumpV1", waterPumpV1);
+
+            MultiTiledObject steamBoilerV1= new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamBoiler", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Steam Boiler", "Omegasis.Revitalize.Objects.Machines.SteamBoiler", "Burns coal and wood. Consumes water to produce steam which can be used in a steam generator.", "Machine", Color.SteelBlue, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new Animation(0, 0, 16, 16)), Color.White, false, new InventoryManager(9,3,3), null, null, false, null, null, new Managers.FluidManagerV2(4000, false, Enums.FluidInteractionType.Machine, false)));
+            SteamBoiler steamBoilerV1_0_0 = new SteamBoiler(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamBoiler", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), typeof(SteamBoiler), Color.White, true), new BasicItemInformation("Steam Boiler", "Omegasis.Revitalize.Objects.Machines.SteamBoiler", "Burns coal and wood. Consumes water to produce steam which can be used in a steam generator.", "Machine", Color.SteelBlue, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new Animation(0, 0, 16, 16),new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>(){
+                    new Animation(0,0,16,16)
+                } },
+                {"Working",new List<Animation>(){
+                    new Animation(32,0,16,16)
+                } },
+
+            },"Default"), Color.White, true, new InventoryManager(9, 3, 3), null, null, false, null, null, new Managers.FluidManagerV2(4000, false, Enums.FluidInteractionType.Machine, false)), null, 0, 0, true, "");
+
+            SteamBoiler steamBoilerV1_1_0 = new SteamBoiler(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamBoiler", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), typeof(SteamBoiler), Color.White, true), new BasicItemInformation("Steam Boiler", "Omegasis.Revitalize.Objects.Machines.SteamBoiler", "Burns coal and wood. Consumes water to produce steam which can be used in a steam generator.", "Machine", Color.SteelBlue, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new Animation(16, 0, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>(){
+                    new Animation(16,0,16,16)
+                } },
+                {"Working",new List<Animation>(){
+                    new Animation(48,0,16,16)
+                } },
+
+            }, "Default"), Color.White, true, new InventoryManager(9, 3, 3), null, null, false, null, null, new Managers.FluidManagerV2(4000, false, Enums.FluidInteractionType.Machine, false)), null, 0, 0, false, "");
+
+            SteamBoiler steamBoilerV1_0_1 = new SteamBoiler(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamBoiler", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), typeof(SteamBoiler), Color.White, true), new BasicItemInformation("Steam Boiler", "Omegasis.Revitalize.Objects.Machines.SteamBoiler", "Burns coal and wood. Consumes water to produce steam which can be used in a steam generator.", "Machine", Color.SteelBlue, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new Animation(0, 16, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>(){
+                    new Animation(0,16,16,16)
+                } },
+                {"Working",new List<Animation>(){
+                    new Animation(32,16,16,16)
+                } },
+
+            }, "Default"), Color.White, false, new InventoryManager(9, 3, 3), null, null, false, null, null, new Managers.FluidManagerV2(4000, false, Enums.FluidInteractionType.Machine, false)), null, 0, 0, false, "");
+
+            SteamBoiler steamBoilerV1_1_1 = new SteamBoiler(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamBoiler", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), typeof(SteamBoiler), Color.White, true), new BasicItemInformation("Steam Boiler", "Omegasis.Revitalize.Objects.Machines.SteamBoiler", "Burns coal and wood. Consumes water to produce steam which can be used in a steam generator.", "Machine", Color.SteelBlue, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new Animation(16, 16, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>(){
+                    new Animation(16,16,16,16)
+                } },
+                {"Working",new List<Animation>(){
+                    new Animation(48,16,16,16)
+                } },
+
+            }, "Default"), Color.White, false, new InventoryManager(9, 3, 3), null, null, false, null, null, new Managers.FluidManagerV2(4000, false, Enums.FluidInteractionType.Machine, false)), null, 0, 0, false, "");
+
+            SteamBoiler steamBoilerV1_0_2 = new SteamBoiler(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamBoiler", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), typeof(SteamBoiler), Color.White, true), new BasicItemInformation("Steam Boiler", "Omegasis.Revitalize.Objects.Machines.SteamBoiler", "Burns coal and wood. Consumes water to produce steam which can be used in a steam generator.", "Machine", Color.SteelBlue, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new Animation(0, 32, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>(){
+                    new Animation(0,32,16,16)
+                } },
+                {"Working",new List<Animation>(){
+                    new Animation(32,32,16,16)
+                } },
+
+            }, "Default"), Color.White, false, new InventoryManager(9, 3, 3), null, null, false, null, null, new Managers.FluidManagerV2(4000, false, Enums.FluidInteractionType.Machine, false)), null, 0, 0, false, "");
+
+            SteamBoiler steamBoilerV1_1_2 = new SteamBoiler(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamBoiler", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), typeof(SteamBoiler), Color.White, true), new BasicItemInformation("Steam Boiler", "Omegasis.Revitalize.Objects.Machines.SteamBoiler", "Burns coal and wood. Consumes water to produce steam which can be used in a steam generator.", "Machine", Color.SteelBlue, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamBoiler"), new Animation(16, 32, 16, 16), new Dictionary<string, List<Animation>>()
+            {
+                {"Default",new List<Animation>(){
+                    new Animation(16,32,16,16)
+                } },
+                {"Working",new List<Animation>(){
+                    new Animation(48,32,16,16)
+                } },
+
+            }, "Default"), Color.White, false, new InventoryManager(9, 3, 3), null, null, false, null, null, new Managers.FluidManagerV2(4000, false, Enums.FluidInteractionType.Machine, false)), null, 0, 0, false, "");
+
+            steamBoilerV1.addComponent(new Vector2(0, 0), steamBoilerV1_0_0);
+            steamBoilerV1.addComponent(new Vector2(1, 0), steamBoilerV1_1_0);
+            steamBoilerV1.addComponent(new Vector2(0, 1), steamBoilerV1_0_1);
+            steamBoilerV1.addComponent(new Vector2(1, 1), steamBoilerV1_1_1);
+            steamBoilerV1.addComponent(new Vector2(0, 2), steamBoilerV1_0_2);
+            steamBoilerV1.addComponent(new Vector2(1, 2), steamBoilerV1_1_2);
+
+            this.AddItem("SteamBoilerV1", steamBoilerV1);
         }
 
         private void loadInWires()

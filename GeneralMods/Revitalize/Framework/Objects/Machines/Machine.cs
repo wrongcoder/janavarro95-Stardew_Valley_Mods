@@ -127,7 +127,6 @@ namespace Revitalize.Framework.Objects.Machines
             }
         }
 
-        [JsonIgnore]
         public List<ResourceInformation> producedResources
         {
             get
@@ -139,9 +138,6 @@ namespace Revitalize.Framework.Objects.Machines
                 if (MachineUtilities.ResourcesForMachines == null) MachineUtilities.InitializeResourceList();
                 if (MachineUtilities.ResourcesForMachines.ContainsKey(this.info.id)) return;
                 MachineUtilities.ResourcesForMachines.Add(this.info.id, value);
-
-
-                Chest c = new Chest();
             }
         }
         public int energyRequiredPer10Minutes;

@@ -478,7 +478,7 @@ namespace Revitalize.Framework.Managers
             {
                 if (this.inputTank1.CanRecieveThisFluid(L) && this.inputTank2.DoesTankContainThisFluid(L) == false)
                 {
-                    return false;
+                    return true;
                 }
                 if (this.inputTank2.CanRecieveThisFluid(L) && this.inputTank1.DoesTankContainThisFluid(L) == false)
                 {

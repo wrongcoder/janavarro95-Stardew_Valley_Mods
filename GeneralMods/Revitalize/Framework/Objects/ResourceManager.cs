@@ -37,6 +37,11 @@ namespace Revitalize.Framework.Objects
         public Dictionary<string, Fluid> fluids;
 
         /// <summary>
+        /// A dictionary containing the names of all objects that can be burned with their burn times for a value.
+        /// </summary>
+        public Dictionary<string, int> burnableObjects; 
+
+        /// <summary>
         /// A list of all visited floors on the current visit to the mines.
         /// </summary>
         public List<int> visitedFloors;
@@ -54,6 +59,7 @@ namespace Revitalize.Framework.Objects
             this.resources = new Dictionary<string, CustomObject>();
             this.miningDrillResources = new Dictionary<string, ResourceInformation>();
             this.fluids = new Dictionary<string, Fluid>();
+            this.burnableObjects = new Dictionary<string, int>();
         }
 
 
@@ -66,11 +72,19 @@ namespace Revitalize.Framework.Objects
             this.loadOreVeins();
             this.loadInMiningDrillLootTable();
             this.loadInFluidDictionary();
+            this.loadInBurnableObjects();
         }
 
         private void loadInFluidDictionary()
         {
             this.fluids.Add("Water", new Fluid("Water", Color.Blue));
+            this.fluids.Add("Steam", new Fluid("Steam", Color.White));
+        }
+
+        private void loadInBurnableObjects()
+        {
+            this.burnableObjects.Add("Coal", TimeUtilities.GetMinutesFromTime(0, 1, 0));
+            this.burnableObjects.Add("Wood", TimeUtilities.GetMinutesFromTime(0, 0, 10));
         }
         private void loadInMiningDrillLootTable()
         {

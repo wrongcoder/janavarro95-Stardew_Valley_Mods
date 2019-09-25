@@ -711,9 +711,15 @@ namespace Revitalize.Framework.Objects
                             StardewValley.Object obj = this.location.getObjectAtTile((int)neighborTile.X, (int)neighborTile.Y);
                             if (obj is MultiTiledComponent)
                             {
+                                
                                 if ((obj as MultiTiledComponent).GetFluidManager().InteractsWithFluids)
                                 {
                                     customObjects.Add((MultiTiledComponent)obj);
+                                    //ModCore.log("Found a neighboring fluid manager");
+                                }
+                                else
+                                {
+                                    ModCore.log("Found a neighboring object but it isn't a valid fluid manager.");
                                 }
                             }
                             else continue;
@@ -752,6 +758,7 @@ namespace Revitalize.Framework.Objects
                     if (searchComponent.containerObject.info.fluidManager.doesThisOutputTankContainThisFluid(L))
                     {
                         fluidSources.Add(searchComponent.containerObject);
+                        //ModCore.log("Found a tank that contains this fluid!");
                     }
                 }
 
