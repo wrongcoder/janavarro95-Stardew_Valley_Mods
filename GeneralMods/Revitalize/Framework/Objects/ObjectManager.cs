@@ -168,7 +168,7 @@ namespace Revitalize.Framework.Objects
 
         private void loadInMachines()
         {
-            this.loadInWires();
+            this.loadInConnectionComponents();
 
 
 
@@ -416,12 +416,17 @@ namespace Revitalize.Framework.Objects
             this.AddItem("SteamBoilerV1", steamBoilerV1);
         }
 
-        private void loadInWires()
+        private void loadInConnectionComponents()
         {
             WireMultiTiledObject copperWire = new WireMultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Wires.CopperWire", TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), typeof(Wire), Color.White, true), new BasicItemInformation("Copper Wire", "Omegasis.Revitalize.Objects.Machines.Wire.CopperWire", "Wire made from copper bars. Transfers energy between sources.", "Machine", Color.SteelBlue, -300, 0, false, 15, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "CopperWire"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, new Energy.EnergyManager(100, Enums.EnergyInteractionType.Transfers), false));
             Wire copperWire_0_0 = new Wire(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Wires.CopperWire", TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), typeof(Wire), Color.White, true), new BasicItemInformation("Copper Wire", "Omegasis.Revitalize.Objects.Machines.Wire.CopperWire", "Wire made from copper bars. Transfers energy between sources.", "Machine", Color.SteelBlue, -300, 0, false, 15, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "CopperWire"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "CopperWire"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, new Energy.EnergyManager(100, Enums.EnergyInteractionType.Transfers),false));
             copperWire.addComponent(new Vector2(0, 0), copperWire_0_0);
             this.AddItem("CopperWire", copperWire);
+
+            PipeMultiTiledObject ironPipe = new PipeMultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Wires.IronPipe", TextureManager.GetTexture(ModCore.Manifest, "Machines", "IronPipe"), typeof(Pipe), Color.White, true), new BasicItemInformation("Iron Pipe", "Omegasis.Revitalize.Objects.Machines.Wire.Pipe", "Pipes made from iron. Transfers fluids between machines.", "Machine", Color.SteelBlue, -300, 0, false, 25, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "IronPipe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "IronPipe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, null, false,null,null,new Managers.FluidManagerV2(0,false, Enums.FluidInteractionType.Transfers,false)));
+            Pipe ironPipe_0_0 = new Pipe(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.Wires.IronPipe", TextureManager.GetTexture(ModCore.Manifest, "Machines", "IronPipe"), typeof(Pipe), Color.White, true), new BasicItemInformation("Iron Pipe", "Omegasis.Revitalize.Objects.Machines.Wire.Pipe", "Pipes made from iron. Transfers fluids between machines.", "Machine", Color.SteelBlue, -300, 0, false, 25, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "IronPipe"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "IronPipe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null, null, false, null, null, new Managers.FluidManagerV2(0, false, Enums.FluidInteractionType.Transfers, false)));
+            ironPipe.addComponent(new Vector2(0, 0), ironPipe_0_0);
+            this.AddItem("IronPipe", ironPipe);
         }
 
         private void loadInTools()

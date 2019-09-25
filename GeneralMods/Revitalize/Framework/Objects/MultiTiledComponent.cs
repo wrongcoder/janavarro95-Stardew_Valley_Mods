@@ -433,6 +433,7 @@ namespace Revitalize.Framework.Objects
                             {
                                 if ((obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Produces || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Storage)
                                 {
+                                    if ((obj as MultiTiledComponent).containerObject == this.containerObject) continue;
                                     customObjects.Add((MultiTiledComponent)obj);
                                 }
                             }
@@ -471,6 +472,7 @@ namespace Revitalize.Framework.Objects
                             {
                                 if ((obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Consumes || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Transfers || (obj as MultiTiledComponent).GetEnergyManager().energyInteractionType == Enums.EnergyInteractionType.Storage)
                                 {
+                                    if ((obj as MultiTiledComponent).containerObject == this.containerObject) continue;
                                     customObjects.Add((MultiTiledComponent)obj);
                                 }
                             }
@@ -714,12 +716,13 @@ namespace Revitalize.Framework.Objects
                                 
                                 if ((obj as MultiTiledComponent).GetFluidManager().InteractsWithFluids)
                                 {
+                                    if ((obj as MultiTiledComponent).containerObject == this.containerObject) continue;
                                     customObjects.Add((MultiTiledComponent)obj);
                                     //ModCore.log("Found a neighboring fluid manager");
                                 }
                                 else
                                 {
-                                    ModCore.log("Found a neighboring object but it isn't a valid fluid manager.");
+                                    //ModCore.log("Found a neighboring object but it isn't a valid fluid manager.");
                                 }
                             }
                             else continue;

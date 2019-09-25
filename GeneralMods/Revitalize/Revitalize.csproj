@@ -169,6 +169,8 @@
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SteamBoiler.cs" />
     <Compile Include="Framework\Objects\Machines\Grinder.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
+    <Compile Include="Framework\Objects\Machines\Pipe.cs" />
+    <Compile Include="Framework\Objects\Machines\PipeMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Machines\WaterPump.cs" />
     <Compile Include="Framework\Objects\Machines\Wire.cs" />
     <Compile Include="Framework\Objects\Machines\WireMultiTiledObject.cs" />
@@ -499,6 +501,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\MiningDrillMachine.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Pipes\IronPipe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\Sandbox.png">

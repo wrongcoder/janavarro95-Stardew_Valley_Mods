@@ -5,28 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
-using Revitalize.Framework.Objects.InformationFiles;
-using Revitalize.Framework.Utilities;
 using StardewValley;
 
 namespace Revitalize.Framework.Objects.Machines
 {
-    public class Wire: Machine
+    public class Pipe:Machine
     {
+        public Pipe() { }
 
-        public Wire() { }
-
-        public Wire(CustomObjectData PyTKData, BasicItemInformation info) : base(PyTKData, info,null,0,0,true,"")
+        public Pipe(CustomObjectData PyTKData, BasicItemInformation info) : base(PyTKData, info, null, 0, 0, true, "")
         {
         }
 
-        public Wire(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, MultiTiledObject obj = null) : base(PyTKData, info, TileLocation,null,0,0,true,"",obj)
+        public Pipe(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, MultiTiledObject obj = null) : base(PyTKData, info, TileLocation, null, 0, 0, true, "", obj)
         {
         }
 
-        public Wire(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Vector2 offsetKey, MultiTiledObject obj = null) : base(PyTKData, info, TileLocation,offsetKey,null,0,0,true,"",obj)
+        public Pipe(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Vector2 offsetKey, MultiTiledObject obj = null) : base(PyTKData, info, TileLocation, offsetKey, null, 0, 0, true, "", obj)
         {
         }
 
@@ -53,7 +49,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override Item getOne()
         {
-            Wire component = new Wire(this.data, this.info.Copy(), this.TileLocation, this.offsetKey,this.containerObject);
+            Pipe component = new Pipe(this.data, this.info.Copy(), this.TileLocation, this.offsetKey, this.containerObject);
             return component;
         }
 
@@ -62,7 +58,7 @@ namespace Revitalize.Framework.Objects.Machines
             //instead of using this.offsetkey.x use get additional save data function and store offset key there
 
             Vector2 offsetKey = new Vector2(Convert.ToInt32(additionalSaveData["offsetKeyX"]), Convert.ToInt32(additionalSaveData["offsetKeyY"]));
-            Wire self = Revitalize.ModCore.Serializer.DeserializeGUID<Wire>(additionalSaveData["GUID"]);
+            Pipe self = Revitalize.ModCore.Serializer.DeserializeGUID<Pipe>(additionalSaveData["GUID"]);
             if (self == null)
             {
                 return null;
@@ -71,11 +67,11 @@ namespace Revitalize.Framework.Objects.Machines
             if (!Revitalize.ModCore.ObjectGroups.ContainsKey(additionalSaveData["ParentGUID"]))
             {
                 //Get new container
-                WireMultiTiledObject obj = (WireMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<WireMultiTiledObject>(additionalSaveData["ParentGUID"]);
+                PipeMultiTiledObject obj = (PipeMultiTiledObject)Revitalize.ModCore.Serializer.DeserializeGUID<PipeMultiTiledObject>(additionalSaveData["ParentGUID"]);
                 self.containerObject = obj;
                 obj.addComponent(offsetKey, self);
                 //Revitalize.ModCore.log("ADD IN AN OBJECT!!!!");
-                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], (WireMultiTiledObject)obj);
+                Revitalize.ModCore.ObjectGroups.Add(additionalSaveData["ParentGUID"], (MultiTiledObject)obj);
             }
             else
             {
@@ -151,11 +147,14 @@ namespace Revitalize.Framework.Objects.Machines
 
         }
 
-        private void determineWireOrientation()
+        public override bool canBePlacedInWater()
         {
-            //TODO: Make this so that the correct wire orientation is used if I want to get fancy with wires and their graphics.
+            return true;
         }
 
-
+        private void determinePipeOrientation()
+        {
+            //TODO: Make this so that the correct wire orientation is used if I want to get fancy with pipes and their graphics.
+        }
     }
 }

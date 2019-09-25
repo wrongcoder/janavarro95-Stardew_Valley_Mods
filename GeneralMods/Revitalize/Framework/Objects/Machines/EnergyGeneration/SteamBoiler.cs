@@ -241,7 +241,7 @@ namespace Revitalize.Framework.Objects.Machines.EnergyGeneration
             {
                 this.GetFluidManager().consumeFluid(ModCore.ObjectManager.resources.getFluid("Water"), 200);
                 this.GetFluidManager().produceFluid(ModCore.ObjectManager.resources.getFluid("Steam"), 100);
-                this.MinutesUntilReady -= 10;
+                this.containerObject.MinutesUntilReady -= 10;
             }
         }
 
