@@ -154,7 +154,7 @@ namespace Revitalize.Framework.Crafting
                 if (pair.Value.hasUnlocked)
                 {
                     menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
-                    ModCore.log("Add in a crafting recipe to the menu!");
+                    //ModCore.log("Add in a crafting recipe to the menu!");
                 }
                 else
                 {
@@ -181,7 +181,7 @@ namespace Revitalize.Framework.Crafting
                 if (pair.Value.hasUnlocked)
                 {
                     menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
-                    ModCore.log("Add in a crafting recipe to the menu!");
+                    //ModCore.log("Add in a crafting recipe to the menu!");
                 }
                 else
                 {
@@ -208,7 +208,7 @@ namespace Revitalize.Framework.Crafting
                 if (pair.Value.hasUnlocked)
                 {
                     menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
-                    ModCore.log("Add in a crafting recipe to the menu!");
+                    //ModCore.log("Add in a crafting recipe to the menu!");
                 }
                 else
                 {
@@ -271,7 +271,7 @@ namespace Revitalize.Framework.Crafting
                     {
                         if (recipe.Value.recipe.ingredients[i].item is MultiTiledObject)
                         {
-                            ModCore.log("Found a multi tiled object as an output!");
+                            //ModCore.log("Found a multi tiled object as an output!");
                             //ModCore.log("Found a multi tiled object!");
                             Type t = recipe.Value.recipe.ingredients[i].item.GetType();
                             string id = (recipe.Value.recipe.ingredients[i].item as MultiTiledObject).info.id;
@@ -282,13 +282,13 @@ namespace Revitalize.Framework.Crafting
                     {
                         if (recipe.Value.recipe.outputs[i].item is MultiTiledObject)
                         {
-                            ModCore.log("Found a multi tiled object as an output!");
+                            //ModCore.log("Found a multi tiled object as an output!");
                             //ModCore.log("Found a multi tiled object!");
                             Type t = recipe.Value.recipe.outputs[i].item.GetType();
                             string id = (recipe.Value.recipe.outputs[i].item as MultiTiledObject).info.id;
                             recipe.Value.recipe.outputs[i].item = ModCore.ObjectManager.getItemByIDAndType(id, t);
 
-                            ModCore.log("Components are: "+(recipe.Value.recipe.outputs[i].item as MultiTiledObject).objects.Count);
+                            //ModCore.log("Components are: "+(recipe.Value.recipe.outputs[i].item as MultiTiledObject).objects.Count);
                         }
                     }
                 }
@@ -338,6 +338,11 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("CopperWire"),2),null,0),true));
 
+            WorkbenchRecipes.addCraftingRecipe("Alloy Furnace", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Clay,20),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 10)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("AlloyFurnace"), 1), null, 0), true));
 
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
@@ -457,6 +462,11 @@ namespace Revitalize.Framework.Crafting
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,5),5)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("TrashCan"), 1)),true));
+
+            AnvilRecipes.addCraftingRecipe("Iron Pipe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,2),2)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("IronPipe"), 1)), true));
 
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
