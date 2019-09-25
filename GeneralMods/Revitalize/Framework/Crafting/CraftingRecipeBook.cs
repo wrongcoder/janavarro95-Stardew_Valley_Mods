@@ -528,7 +528,21 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"),30),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,10), 10),
                 new CraftingRecipeComponent(new StardewValley.Objects.Chest(true),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Grinder"), 1)), true));;
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Grinder"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Mining Drill V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot",10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BrassIngot",10),10),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("MiningDrillV1"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Chainsaw V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot",10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BronzeIngot",10),10),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("ChainsawV1"), 1)), true));
 
 
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
