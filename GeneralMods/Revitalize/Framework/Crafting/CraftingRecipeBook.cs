@@ -509,7 +509,7 @@ namespace Revitalize.Framework.Crafting
             ///Alt solar array crafting recipe.
             AnvilRecipes.addCraftingRecipe("Solar Array Alt. Recipe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,5),45),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,5),5),
                 new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Glass"),4),
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarPanelTier1"), 4)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarArrayTier1"), 1)), true));
@@ -544,6 +544,17 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetTool("ChainsawV1"), 1)), true));
 
+            AnvilRecipes.addCraftingRecipe("Water Pump V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,15),15)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("WaterPumpV1"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Steam Boiler V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,25),25),
+                new CraftingRecipeComponent(new StardewValley.Objects.Chest(true),1)
+
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteamBoilerV1"), 1)), true));
 
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
