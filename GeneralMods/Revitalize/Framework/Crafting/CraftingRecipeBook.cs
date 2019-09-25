@@ -356,6 +356,20 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ElectrumIngot"),10)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BatteryBin"), 1), null, 0), true));
 
+            WorkbenchRecipes.addCraftingRecipe("Capacitor", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,50),50),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,10),10)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Capacitor"), 1), null, 0), true));
+
+            WorkbenchRecipes.addCraftingRecipe("Charging Station", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("CopperWire"), 20),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Capacitor"), 1)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ChargingStation"), 1), null, 0), true));
+
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
                 foreach(KeyValuePair<string, UnlockableCraftingRecipe> recipe in WorkbenchRecipes.craftingRecipes)
