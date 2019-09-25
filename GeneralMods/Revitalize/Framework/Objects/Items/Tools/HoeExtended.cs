@@ -318,7 +318,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
         }
         public override bool canBeTrashed()
         {
-            return base.canBeTrashed();
+            return true;
         }
     }
 }

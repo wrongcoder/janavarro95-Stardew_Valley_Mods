@@ -326,5 +326,10 @@ namespace Revitalize.Framework.Objects.Items.Tools
             //this.upgradeLevel.Value = (replacement as Pickaxe).UpgradeLevel;
 
         }
+
+        public override bool canBeTrashed()
+        {
+            return true;
+        }
     }
 }
