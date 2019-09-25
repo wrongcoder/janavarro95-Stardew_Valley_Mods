@@ -344,6 +344,12 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 10)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("AlloyFurnace"), 1), null, 0), true));
 
+            WorkbenchRecipes.addCraftingRecipe("Sand Box", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
+                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 25)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SandBox"), 1), null, 0), true));
+
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
                 foreach(KeyValuePair<string, UnlockableCraftingRecipe> recipe in WorkbenchRecipes.craftingRecipes)
