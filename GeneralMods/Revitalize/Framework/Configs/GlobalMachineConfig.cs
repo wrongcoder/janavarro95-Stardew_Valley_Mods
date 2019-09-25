@@ -22,6 +22,9 @@ namespace Revitalize.Framework.Configs
         public int miningDrillEnergyConsumption;
         public int miningDrillTimeToMine;
 
+        public int steamBoilerV1_requiredWaterPerOperation;
+        public int steamBoilerV1_producedSteamPerOperation;
+
         public GlobalMachineConfig()
         {
             this.doMachinesConsumeEnergy = true;
@@ -33,6 +36,8 @@ namespace Revitalize.Framework.Configs
             this.grinderTimeToGrind = 30;
             this.miningDrillEnergyConsumption = 50;
             this.miningDrillTimeToMine = 60;
+            this.steamBoilerV1_requiredWaterPerOperation = 200;
+            this.steamBoilerV1_producedSteamPerOperation = 100;
         }
 
         public static GlobalMachineConfig InitializeConfig()

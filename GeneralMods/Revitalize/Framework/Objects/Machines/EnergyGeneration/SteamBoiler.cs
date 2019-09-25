@@ -237,10 +237,10 @@ namespace Revitalize.Framework.Objects.Machines.EnergyGeneration
 
         public virtual void processFluidLogic()
         {
-            if (this.GetFluidManager().doTheInputTanksHaveEnoughFluid(ModCore.ObjectManager.resources.getFluid("Water"), 200))
+            if (this.GetFluidManager().doTheInputTanksHaveEnoughFluid(ModCore.ObjectManager.resources.getFluid("Water"), ModCore.Configs.machinesConfig.steamBoilerV1_requiredWaterPerOperation))
             {
-                this.GetFluidManager().consumeFluid(ModCore.ObjectManager.resources.getFluid("Water"), 200);
-                this.GetFluidManager().produceFluid(ModCore.ObjectManager.resources.getFluid("Steam"), 100);
+                this.GetFluidManager().consumeFluid(ModCore.ObjectManager.resources.getFluid("Water"), ModCore.Configs.machinesConfig.steamBoilerV1_requiredWaterPerOperation);
+                this.GetFluidManager().produceFluid(ModCore.ObjectManager.resources.getFluid("Steam"), ModCore.Configs.machinesConfig.steamBoilerV1_producedSteamPerOperation);
                 this.containerObject.MinutesUntilReady -= 10;
             }
         }
