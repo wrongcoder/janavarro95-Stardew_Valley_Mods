@@ -474,6 +474,26 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,2),2)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("IronPipe"), 1)), true));
 
+            AnvilRecipes.addCraftingRecipe("Solar Panel", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,10),10),
+                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Glass"),4),
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarPanelTier1"), 1)), true));
+
+            AnvilRecipes.addCraftingRecipe("Solar Array", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,45),45),
+                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Glass"),20),
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarArrayTier1"), 1)), true));
+
+            ///Alt solar array crafting recipe.
+            AnvilRecipes.addCraftingRecipe("Solar Array Alt. Recipe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            {
+                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,5),45),
+                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Glass"),4),
+                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarPanelTier1"), 4)
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SolarArrayTier1"), 1)), true));
+
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AnvilRecipes.craftingRecipes)
