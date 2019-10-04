@@ -444,6 +444,7 @@ namespace Revitalize.Framework.Managers
                 int amount = 0;
                 amount += this.inputTank1.GetAmountOfFluidThisTankCanReceieve(L);
                 amount += this.inputTank2.GetAmountOfFluidThisTankCanReceieve(L);
+                return amount;
             }
             else
             {
@@ -457,6 +458,30 @@ namespace Revitalize.Framework.Managers
                 }
             }
             return 0;
+        }
+
+        public int getAmountOfFluidInInputTanks(Fluid L)
+        {
+            if (this.allowDoubleInput)
+            {
+                int amount = 0;
+                amount += this.inputTank1.GetAmountOfFluidInThisTank(L);
+                amount += this.inputTank2.GetAmountOfFluidInThisTank(L);
+                return amount;
+            }
+            else
+            {
+                if (this.inputTank1.CanRecieveThisFluid(L) && this.inputTank2.DoesTankContainThisFluid(L) == false)
+                {
+                    return this.inputTank1.GetAmountOfFluidInThisTank(L);
+                }
+                if (this.inputTank1.CanRecieveThisFluid(L) && this.inputTank2.DoesTankContainThisFluid(L) == false)
+                {
+                    return this.inputTank2.GetAmountOfFluidInThisTank(L);
+                }
+            }
+            return 0;
+
         }
 
         /// <summary>

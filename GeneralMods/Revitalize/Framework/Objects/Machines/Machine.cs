@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Crafting;
+using Revitalize.Framework.Managers;
 using Revitalize.Framework.Menus;
 using Revitalize.Framework.Menus.Machines;
 using Revitalize.Framework.Objects.InformationFiles;
@@ -38,6 +39,8 @@ namespace Revitalize.Framework.Objects.Machines
                 string energyRequired = this.energyRequiredPer10Minutes.ToString();
                 string timeToProduce = this.timeToProduce.ToString();
                 string updatesContainer = this.updatesContainerObjectForProduction.ToString();
+                string fluidString = this.requiredFluidForOperation != null ? ModCore.Serializer.ToJSONString(this.amountOfFluidRequiredForOperation) : "";
+                string fluidAmountString = this.amountOfFluidRequiredForOperation.ToString();
                 StringBuilder b = new StringBuilder();
                 b.Append(info);
                 b.Append("<");
@@ -56,6 +59,10 @@ namespace Revitalize.Framework.Objects.Machines
                 b.Append(updatesContainer);
                 b.Append("<");
                 b.Append(this.craftingRecipeBook);
+                b.Append("<");
+                b.Append(fluidString);
+                b.Append("<");
+                b.Append(fluidAmountString);
                 //ModCore.log("Setting info: " + b.ToString());
                 return b.ToString();
             }
@@ -72,12 +79,18 @@ namespace Revitalize.Framework.Objects.Machines
                 string time = data[6];
                 string updates = data[7];
                 this.craftingRecipeBook = data[8];
+                string fluid = data[9];
+                string fluidAmount = data[10];
                 this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
                 this.data = Revitalize.ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pyTKData);
                 this.energyRequiredPer10Minutes = Convert.ToInt32(energyRequired);
                 this.timeToProduce = Convert.ToInt32(time);
                 this.updatesContainerObjectForProduction = Convert.ToBoolean(updates);
-
+                if (string.IsNullOrEmpty(fluid) == false)
+                {
+                    this.requiredFluidForOperation = ModCore.Serializer.DeserializeFromJSONString<Fluid>(fluid);
+                }
+                this.amountOfFluidRequiredForOperation= Convert.ToInt32(fluidAmount);
                 if (string.IsNullOrEmpty(offsetVec)) return;
                 if (string.IsNullOrEmpty(containerObject)) return;
                 this.offsetKey = ModCore.Serializer.DeserializeFromJSONString<Vector2>(offsetVec);
@@ -158,6 +171,9 @@ namespace Revitalize.Framework.Objects.Machines
             }
         }
 
+        public Fluid requiredFluidForOperation;
+        public int amountOfFluidRequiredForOperation;
+
         [JsonIgnore]
         public bool ConsumesEnergy
         {
@@ -191,7 +207,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         public Machine() { }
 
-        public Machine(CustomObjectData PyTKData, BasicItemInformation info, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "") : base(PyTKData, info)
+        public Machine(CustomObjectData PyTKData, BasicItemInformation info, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "", Fluid FluidRequiredForOperation = null, int FluidAmountRequiredPerOperation =0) : base(PyTKData, info)
         {
             this.producedResources = ProducedResources ?? new List<ResourceInformation>();
             this.energyRequiredPer10Minutes = EnergyRequiredPer10Minutes;
@@ -200,10 +216,11 @@ namespace Revitalize.Framework.Objects.Machines
             this.MinutesUntilReady = TimeToProduce;
             this.craftingRecipeBook = CraftingBook;
             this.createStatusBubble();
-
+            this.requiredFluidForOperation = FluidRequiredForOperation;
+            this.amountOfFluidRequiredForOperation = FluidAmountRequiredPerOperation;
         }
 
-        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "", MultiTiledObject obj = null) : base(PyTKData, info, TileLocation)
+        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "", MultiTiledObject obj = null, Fluid FluidRequiredForOperation = null, int FluidAmountRequiredPerOperation =0) : base(PyTKData, info, TileLocation)
         {
             this.containerObject = obj;
             this.producedResources = ProducedResources ?? new List<ResourceInformation>();
@@ -213,9 +230,11 @@ namespace Revitalize.Framework.Objects.Machines
             this.MinutesUntilReady = TimeToProduce;
             this.craftingRecipeBook = CraftingBook;
             this.createStatusBubble();
+            this.requiredFluidForOperation = FluidRequiredForOperation;
+            this.amountOfFluidRequiredForOperation = FluidAmountRequiredPerOperation;
         }
 
-        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Vector2 offsetKey, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "", MultiTiledObject obj = null) : base(PyTKData, info, TileLocation)
+        public Machine(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Vector2 offsetKey, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, bool UpdatesContainer = false, string CraftingBook = "", MultiTiledObject obj = null, Fluid FluidRequiredForOperation = null, int FluidAmountRequiredPerOperation =0) : base(PyTKData, info, TileLocation)
         {
             this.offsetKey = offsetKey;
             this.containerObject = obj;
@@ -226,6 +245,8 @@ namespace Revitalize.Framework.Objects.Machines
             this.MinutesUntilReady = TimeToProduce;
             this.craftingRecipeBook = CraftingBook;
             this.createStatusBubble();
+            this.requiredFluidForOperation = FluidRequiredForOperation;
+            this.amountOfFluidRequiredForOperation = FluidAmountRequiredPerOperation;
         }
 
         protected virtual void createStatusBubble()
@@ -367,7 +388,7 @@ namespace Revitalize.Framework.Objects.Machines
 
         public override Item getOne()
         {
-            Machine component = new Machine(this.data, this.info.Copy(), this.producedResources, this.energyRequiredPer10Minutes, this.timeToProduce, this.updatesContainerObjectForProduction, this.craftingRecipeBook);
+            Machine component = new Machine(this.data, this.info.Copy(), this.producedResources, this.energyRequiredPer10Minutes, this.timeToProduce, this.updatesContainerObjectForProduction, this.craftingRecipeBook,this.requiredFluidForOperation,this.amountOfFluidRequiredForOperation);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;
@@ -487,6 +508,16 @@ namespace Revitalize.Framework.Objects.Machines
             if (this.GetEnergyManager().canReceieveEnergy)
             {
                 this.GetEnergyManager().produceEnergy(this.energyRequiredPer10Minutes);
+            }
+
+        }
+
+        public virtual void produceEnergy(double ratio)
+        {
+
+            if (this.GetEnergyManager().canReceieveEnergy)
+            {
+                this.GetEnergyManager().produceEnergy((int)(this.energyRequiredPer10Minutes * ratio));
             }
 
         }

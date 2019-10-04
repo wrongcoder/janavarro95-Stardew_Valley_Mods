@@ -602,7 +602,8 @@ namespace Revitalize
                 new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
                 ModCore.ObjectManager.GetItem("WaterPumpV1"),
                 ModCore.ObjectManager.GetItem("SteamBoilerV1"),
-                ModCore.ObjectManager.GetItem("IronPipe",10)
+                ModCore.ObjectManager.GetItem("IronPipe",100),
+                ModCore.ObjectManager.GetItem("SteamEngineV1")
             });
         }
 

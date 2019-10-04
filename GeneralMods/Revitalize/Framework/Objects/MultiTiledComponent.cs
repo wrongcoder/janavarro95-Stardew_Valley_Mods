@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -741,22 +742,44 @@ namespace Revitalize.Framework.Objects
         protected virtual List<MultiTiledObject> FluidGraphSearchForFluidFromOutputTanks(Fluid L)
         {
             List<MultiTiledObject> fluidSources = new List<MultiTiledObject>();
-            List<MultiTiledComponent> searchedComponents = new List<MultiTiledComponent>();
-            List<MultiTiledComponent> entitiesToSearch = new List<MultiTiledComponent>();
-            entitiesToSearch.AddRange(this.GetNeighboringFluidManagers());
-            searchedComponents.Add(this);
+            HashSet<Guid> searchedComponents = new HashSet<Guid>();
+            Queue<MultiTiledComponent> entitiesToSearch = new Queue<MultiTiledComponent>();
+            HashSet<Guid> searchedObjects = new HashSet<Guid>();
+            foreach(MultiTiledComponent tile in this.GetNeighboringFluidManagers())
+            {
+                entitiesToSearch.Enqueue(tile);
+            }
+            //entitiesToSearch.AddRange(this.GetNeighboringFluidManagers());
+            searchedComponents.Add(this.guid);
             while (entitiesToSearch.Count > 0)
             {
-                MultiTiledComponent searchComponent = entitiesToSearch[0];
-                entitiesToSearch.Remove(searchComponent);
-                if (searchedComponents.Contains(searchComponent))
+                MultiTiledComponent searchComponent = entitiesToSearch.Dequeue();
+                //entitiesToSearch.Remove(searchComponent);
+                if (searchedComponents.Contains(searchComponent.guid))
                 {
                     continue;
                 }
+                /*
+                else if (searchedObjects.Contains(searchComponent.containerObject))
+                {
+                    continue;
+                }
+                */
                 else
                 {
-                    searchedComponents.Add(searchComponent);
-                    entitiesToSearch.AddRange(searchComponent.GetNeighboringFluidManagers());
+                    searchedComponents.Add(searchComponent.guid);
+                    searchedObjects.Add(searchComponent.containerObject.guid);
+
+                    List<MultiTiledComponent> neighbors = searchComponent.GetNeighboringFluidManagers();
+
+                    foreach(MultiTiledComponent tile in neighbors)
+                    {
+                        if (searchedObjects.Contains(tile.containerObject.guid) || searchedComponents.Contains(tile.guid)) continue;
+                        else
+                        {
+                            entitiesToSearch.Enqueue(tile);
+                        }
+                    }
 
                     if (searchComponent.containerObject.info.fluidManager.doesThisOutputTankContainThisFluid(L))
                     {

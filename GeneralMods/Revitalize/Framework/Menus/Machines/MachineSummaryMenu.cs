@@ -75,7 +75,7 @@ namespace Revitalize.Framework.Menus.Machines
         {
             get
             {
-                return this.energy.maxEnergy != 0 || ModCore.Configs.machinesConfig.doMachinesConsumeEnergy==false;
+                return this.energy.maxEnergy != 0 && ModCore.Configs.machinesConfig.doMachinesConsumeEnergy==true;
             }
         }
 
