@@ -644,6 +644,7 @@ namespace Revitalize.Framework.Objects
         {
             if (ModCore.Configs.objectsConfig.showDyedColorName)
             {
+                if (string.IsNullOrEmpty(this.info.getDyedColorName())) return this.info.name;
                 return this.info.getDyedColorName() + " " + this.info.name;
             }
             //Load in a file that has all object names referenced here or something.
