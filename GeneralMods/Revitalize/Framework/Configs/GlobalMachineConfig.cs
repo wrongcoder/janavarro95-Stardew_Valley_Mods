@@ -27,6 +27,10 @@ namespace Revitalize.Framework.Configs
 
         public int steamEngineV1_requiredSteamPerOperation;
         public int steamEngineV1_powerGeneratedPerOperation;
+
+        public double windmill_windyDayPowerMultiplier;
+        public int windmillV1_basePowerProduction;
+        public int windmillV2_basePowerProduction;
         public GlobalMachineConfig()
         {
             this.doMachinesConsumeEnergy = true;
@@ -43,6 +47,9 @@ namespace Revitalize.Framework.Configs
 
             this.steamEngineV1_requiredSteamPerOperation = 200;
             this.steamEngineV1_powerGeneratedPerOperation = 10;
+            this.windmill_windyDayPowerMultiplier = 1.5d;
+            this.windmillV1_basePowerProduction = 4;
+            this.windmillV2_basePowerProduction = 12;
         }
 
         public static GlobalMachineConfig InitializeConfig()

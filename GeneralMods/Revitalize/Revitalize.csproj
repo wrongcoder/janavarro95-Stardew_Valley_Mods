@@ -168,6 +168,7 @@
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SolarPanel.cs" />
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SteamBoiler.cs" />
     <Compile Include="Framework\Objects\Machines\EnergyGeneration\SteamEngine.cs" />
+    <Compile Include="Framework\Objects\Machines\EnergyGeneration\Windmill.cs" />
     <Compile Include="Framework\Objects\Machines\Grinder.cs" />
     <Compile Include="Framework\Objects\Machines\Machine.cs" />
     <Compile Include="Framework\Objects\Machines\Pipe.cs" />
@@ -498,6 +499,9 @@
     <Content Include="Content\Graphics\Objects\Machines\ChargingStation.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Objects\Machines\ClothWindmill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Objects\Machines\Grinder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -523,6 +527,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\WaterPump.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Windmill.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Machines\Wires\CopperWire.png">

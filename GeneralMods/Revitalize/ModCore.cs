@@ -588,14 +588,11 @@ namespace Revitalize
                 ModCore.ObjectManager.GetItem("SolarPanelTier1",1),
                 ModCore.ObjectManager.GetItem("SolarArrayTier1",1),
                 new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
-                ModCore.ObjectManager.GetItem("Lighthouse",1),
                 ModCore.ObjectManager.GetItem("CopperWire",10),
                 batteryBin,
                 ModCore.ObjectManager.GetItem("Capacitor",1),
                 ModCore.ObjectManager.GetItem("ChargingStation",1),
-                ModCore.ObjectManager.GetItem("Grinder",1),
                 new StardewValley.Object((int)Enums.SDVObject.CopperOre,10),
-                ModCore.ObjectManager.GetTool("MiningDrillV1"),
                 ModCore.ObjectManager.GetTool("ChainsawV1"),
                 ModCore.ObjectManager.GetItem("MiningDrillMachineV1"),
                 ModCore.ObjectManager.GetItem("AlloyFurnace"),
@@ -603,7 +600,9 @@ namespace Revitalize
                 ModCore.ObjectManager.GetItem("WaterPumpV1"),
                 ModCore.ObjectManager.GetItem("SteamBoilerV1"),
                 ModCore.ObjectManager.GetItem("IronPipe",100),
-                ModCore.ObjectManager.GetItem("SteamEngineV1")
+                ModCore.ObjectManager.GetItem("SteamEngineV1"),
+                ModCore.ObjectManager.GetItem("WindmillV1"),
+                ModCore.ObjectManager.GetItem("WindmillV2")
             });
         }
 

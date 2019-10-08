@@ -107,11 +107,19 @@ namespace Revitalize.Framework.Menus.Machines
             this.storageButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Storage Remaining", this.storageRemainingDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "Chest"), new StardustCore.Animations.Animation(0, 0, 16, 32)), Color.White), new Rectangle(0, 0, 16, 32), 1f);
 
 
-            this.inputFluidTank1Button = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Input 1 fluid:", this.fluidDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu",this.objectSource.info.fluidManager.inputTank1.fluid!=null? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.inputTank1.fluid!=null ? this.objectSource.info.fluidManager.inputTank1.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
-            this.inputFluidTank2Button = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Input 2 fluid:", this.fluidDisplayLocation+new Vector2(0,64), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", this.objectSource.info.fluidManager.inputTank2.fluid!=null ? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.inputTank2.fluid!=null ? this.objectSource.info.fluidManager.inputTank2.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
-            ModCore.log(this.objectSource.info.fluidManager.outputTank.fluid != null ? "Color of fluid:" + this.objectSource.info.fluidManager.outputTank.fluid.color.ToString() : "Color is null!");
-            this.outputFluidTankButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Output fluid:", this.fluidDisplayLocation+new Vector2(0,128), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", this.objectSource.info.fluidManager.outputTank.fluid!=null ? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.outputTank.fluid!=null ? this.objectSource.info.fluidManager.outputTank.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
-
+            if (this.objectSource.GetFluidManager().inputTank1.capacity > 0)
+            {
+                this.inputFluidTank1Button = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Input 1 fluid:", this.fluidDisplayLocation, new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", this.objectSource.info.fluidManager.inputTank1.fluid != null ? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.inputTank1.fluid != null ? this.objectSource.info.fluidManager.inputTank1.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
+            }
+            if (this.objectSource.GetFluidManager().inputTank2.capacity > 0)
+            {
+                this.inputFluidTank2Button = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Input 2 fluid:", this.fluidDisplayLocation + new Vector2(0, 64), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", this.objectSource.info.fluidManager.inputTank2.fluid != null ? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.inputTank2.fluid != null ? this.objectSource.info.fluidManager.inputTank2.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
+            }
+            //ModCore.log(this.objectSource.info.fluidManager.outputTank.fluid != null ? "Color of fluid:" + this.objectSource.info.fluidManager.outputTank.fluid.color.ToString() : "Color is null!");
+            if (this.objectSource.GetFluidManager().outputTank.capacity > 0)
+            {
+                this.outputFluidTankButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Output fluid:", this.fluidDisplayLocation + new Vector2(0, 128), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus.EnergyMenu", this.objectSource.info.fluidManager.outputTank.fluid != null ? "DropletColored" : "DropletOutline"), new StardustCore.Animations.Animation(0, 0, 16, 16)), this.objectSource.info.fluidManager.outputTank.fluid != null ? this.objectSource.info.fluidManager.outputTank.fluid.color : Color.White), new Rectangle(0, 0, 16, 16), 2f);
+            }
             this.requiredEnergyPer10Min = RequiredEnergyPer10Min;
         }
 
@@ -162,11 +170,11 @@ namespace Revitalize.Framework.Menus.Machines
                         hovered = true;
                     }
                 }
+            }
 
-                if (hovered == false)
-                {
-                    this.hoverText = "";
-                }
+            if (hovered == false)
+            {
+                this.hoverText = "";
             }
         }
 
@@ -180,7 +188,7 @@ namespace Revitalize.Framework.Menus.Machines
             else if (this.energy.producesEnergy)
             {
 
-                return "Produces " + EnergyAmount + " per 10 minutes.";
+                return "Produces " + EnergyAmount + " energy per 10 minutes.";
             }
             else return "";
         }

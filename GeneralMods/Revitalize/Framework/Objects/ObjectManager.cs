@@ -416,11 +416,71 @@ namespace Revitalize.Framework.Objects
             this.AddItem("SteamBoilerV1", steamBoilerV1);
 
             MultiTiledObject steamEngineV1 = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamEngineV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Steam Engine", "Omegasis.Revitalize.Objects.Machines.SteamEngine", "Consumes steam in order to produce power.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamEngine"), new Animation(0, 0, 16, 16)), Color.White, false, null, null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, new Managers.FluidManagerV2(2000, false, Enums.FluidInteractionType.Machine, false,true,1)));
-            SteamEngine steamEngineV1_0_0 = new SteamEngine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamEngineV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Steam Engine", "Omegasis.Revitalize.Objects.Machines.SteamEngine", "Consumes steam in order to produce power.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamEngine"), new Animation(0, 0, 16, 16)), Color.White, false, new InventoryManager(9, 3, 3), null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, new Managers.FluidManagerV2(2000, false, Enums.FluidInteractionType.Machine, false, true, 1)), null, ModCore.Configs.machinesConfig.steamEngineV1_powerGeneratedPerOperation, 0, true, "", ModCore.ObjectManager.resources.getFluid("Steam"), ModCore.Configs.machinesConfig.steamEngineV1_requiredSteamPerOperation);
-            SteamEngine steamEngineV1_1_0 = new SteamEngine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamEngineV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Steam Engine", "Omegasis.Revitalize.Objects.Machines.SteamEngine", "Consumes steam in order to produce power.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamEngine"), new Animation(16, 0, 16, 16)), Color.White, false, new InventoryManager(9, 3, 3), null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, new Managers.FluidManagerV2(2000, false, Enums.FluidInteractionType.Machine, false, true, 1)), null, ModCore.Configs.machinesConfig.steamEngineV1_powerGeneratedPerOperation, 0, true, "", ModCore.ObjectManager.resources.getFluid("Steam"), ModCore.Configs.machinesConfig.steamEngineV1_requiredSteamPerOperation);
+            SteamEngine steamEngineV1_0_0 = new SteamEngine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamEngineV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), typeof(SteamEngine), Color.White, true), new BasicItemInformation("Steam Engine", "Omegasis.Revitalize.Objects.Machines.SteamEngine", "Consumes steam in order to produce power.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamEngine"), new Animation(0, 0, 16, 16)), Color.White, false, new InventoryManager(9, 3, 3), null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, new Managers.FluidManagerV2(2000, false, Enums.FluidInteractionType.Machine, false, true, 1)), null, ModCore.Configs.machinesConfig.steamEngineV1_powerGeneratedPerOperation, 0, true, "", ModCore.ObjectManager.resources.getFluid("Steam"), ModCore.Configs.machinesConfig.steamEngineV1_requiredSteamPerOperation);
+            SteamEngine steamEngineV1_1_0 = new SteamEngine(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.SteamEngineV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), typeof(SteamEngine), Color.White, true), new BasicItemInformation("Steam Engine", "Omegasis.Revitalize.Objects.Machines.SteamEngine", "Consumes steam in order to produce power.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "SteamEngine"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "SteamEngine"), new Animation(16, 0, 16, 16)), Color.White, false, new InventoryManager(9, 3, 3), null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, new Managers.FluidManagerV2(2000, false, Enums.FluidInteractionType.Machine, false, true, 1)), null, ModCore.Configs.machinesConfig.steamEngineV1_powerGeneratedPerOperation, 0, true, "", ModCore.ObjectManager.resources.getFluid("Steam"), ModCore.Configs.machinesConfig.steamEngineV1_requiredSteamPerOperation);
             steamEngineV1.addComponent(new Vector2(0, 0), steamEngineV1_0_0);
             steamEngineV1.addComponent(new Vector2(1, 0), steamEngineV1_1_0);
             this.AddItem("SteamEngineV1", steamEngineV1);
+
+
+            MultiTiledObject windMillV1 = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WindmillV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Windmill"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Windmill", "Omegasis.Revitalize.Objects.Machines.WindmillV1", "Generates power from the wind.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Windmill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Windmill"), new Animation(0, 0, 16, 16)), Color.White, false, null, null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, null));
+            Windmill windMillV1_0_0 = new Windmill(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WindmillV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Windmill"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Windmill", "Omegasis.Revitalize.Objects.Machines.WindmillV1", "Generates power from the wind.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Windmill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Windmill"), new Animation(0, 0, 16, 16),new Dictionary<string, List<Animation>>() {
+
+                {"Default",new List<Animation>()
+                {
+                    new Animation(0,0,16,16)
+                } },
+                {"Working",new List<Animation>()
+                {
+                    new Animation(0,0,16,16,20),
+                    new Animation(16,0,16,16,20)
+                } }
+            },"Working"), Color.White, false, null, null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, null), null, ModCore.Configs.machinesConfig.windmillV1_basePowerProduction, 0, true, "", null, 0);
+            Windmill windMillV1_0_1 = new Windmill(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WindmillV1", TextureManager.GetTexture(ModCore.Manifest, "Machines", "Windmill"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Windmill", "Omegasis.Revitalize.Objects.Machines.WindmillV1", "Generates power from the wind.", "Machine", Color.SteelBlue, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "Windmill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "Windmill"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>() {
+
+                {"Default",new List<Animation>()
+                {
+                    new Animation(0,16,16,16)
+                } },
+                {"Working",new List<Animation>()
+                {
+                    new Animation(0,16,16,16,20),
+                    new Animation(16,16,16,16,20)
+                } }
+            },"Working"), Color.White, false, null, null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, null), null, ModCore.Configs.machinesConfig.windmillV1_basePowerProduction, 0, false, "", null, 0);
+            windMillV1.addComponent(new Vector2(0, 0), windMillV1_0_0);
+            windMillV1.addComponent(new Vector2(0, 1), windMillV1_0_1);
+            this.AddItem("WindmillV1", windMillV1);
+
+
+            MultiTiledObject windMillV2 = new MultiTiledObject(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WindmillV2", TextureManager.GetTexture(ModCore.Manifest, "Machines", "ClothWindmill"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("Improved Windmill", "Omegasis.Revitalize.Objects.Machines.WindmillV2", "Generates power from the wind.", "Machine", Color.SteelBlue, -300, 0, false, 700, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "ClothWindmill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "ClothWindmill"), new Animation(0, 0, 16, 16)), Color.White, false, null, null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, null));
+            Windmill windMillV2_0_0 = new Windmill(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WindmillV2", TextureManager.GetTexture(ModCore.Manifest, "Machines", "ClothWindmill"), typeof(Windmill), Color.White, true), new BasicItemInformation("Improved Windmill", "Omegasis.Revitalize.Objects.Machines.WindmillV2", "Generates power from the wind.", "Machine", Color.SteelBlue, -300, 0, false, 700, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "ClothWindmill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "ClothWindmill"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>() {
+
+                {"Default",new List<Animation>()
+                {
+                    new Animation(0,0,16,16)
+                } },
+                {"Working",new List<Animation>()
+                {
+                    new Animation(0,0,16,16,20),
+                    new Animation(16,0,16,16,20)
+                } }
+            },"Working"), Color.White, false, null, null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, null), null, ModCore.Configs.machinesConfig.windmillV2_basePowerProduction, 0, true, "", null, 0);
+            Windmill windMillV2_0_1 = new Windmill(PyTKHelper.CreateOBJData("Omegasis.Revitalize.Objects.Machines.WindmillV2", TextureManager.GetTexture(ModCore.Manifest, "Machines", "ClothWindmill"), typeof(Windmill), Color.White, true), new BasicItemInformation("Improved Windmill", "Omegasis.Revitalize.Objects.Machines.WindmillV2", "Generates power from the wind.", "Machine", Color.SteelBlue, -300, 0, false, 700, true, true, TextureManager.GetTexture(ModCore.Manifest, "Machines", "ClothWindmill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Machines", "ClothWindmill"), new Animation(0, 0, 16, 16), new Dictionary<string, List<Animation>>() {
+
+                {"Default",new List<Animation>()
+                {
+                    new Animation(0,16,16,16)
+                } },
+                {"Working",new List<Animation>()
+                {
+                    new Animation(0,16,16,16,20),
+                    new Animation(16,16,16,16,20)
+                } }
+            },"Working"), Color.White, false, null, null, new Energy.EnergyManager(500, Enums.EnergyInteractionType.Produces), false, null, null, null), null, ModCore.Configs.machinesConfig.windmillV2_basePowerProduction, 0, false, "", null, 0);
+            windMillV2.addComponent(new Vector2(0, 0), windMillV2_0_0);
+            windMillV2.addComponent(new Vector2(0, 1), windMillV2_0_1);
+            this.AddItem("WindmillV2", windMillV2);
         }
 
         private void loadInConnectionComponents()

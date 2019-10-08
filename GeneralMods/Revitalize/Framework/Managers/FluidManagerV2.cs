@@ -337,7 +337,12 @@ namespace Revitalize.Framework.Managers
             else
             {
                 this.outputTank = new MachineFluidTank(Capacity);
-                if (NumberOfInputTanks == 1)
+                if (NumberOfInputTanks == 0)
+                {
+                    this.inputTank1 = new MachineFluidTank(0);
+                    this.inputTank2 = new MachineFluidTank(0);
+                }
+                else if (NumberOfInputTanks == 1)
                 {
                     this.inputTank1 = new MachineFluidTank(Capacity);
                     this.inputTank2 = new MachineFluidTank(0);

@@ -67,5 +67,10 @@ namespace Revitalize.Framework.Utilities
             return IsItRaining() || IsItSnowing() || IsStorm();
         }
 
+        public static bool IsWeatherGoodForWindmills()
+        {
+            return IsWindyDay() || IsStorm();
+        }
+
     }
 }
