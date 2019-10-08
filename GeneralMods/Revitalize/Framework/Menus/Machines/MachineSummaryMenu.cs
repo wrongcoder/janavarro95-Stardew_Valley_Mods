@@ -134,9 +134,39 @@ namespace Revitalize.Framework.Menus.Machines
                 hovered = true;
             }
 
-            if (hovered == false)
+            if (this.objectSource.info.fluidManager.InteractsWithFluids)
             {
-                this.hoverText = "";
+                if (this.inputFluidTank1Button.containsPoint(x, y))
+                {
+                    if (this.objectSource.info.fluidManager.inputTank1.capacity > 0)
+                    {
+                        this.hoverText = "Input Tank 1: " + this.objectSource.info.fluidManager.inputTank1.getFluidDisplayString();
+                        hovered = true;
+                    }
+                }
+
+                if (this.inputFluidTank2Button.containsPoint(x, y))
+                {
+                    if (this.objectSource.info.fluidManager.inputTank2.capacity > 0)
+                    {
+                        this.hoverText = "Input Tank 2: " + this.objectSource.info.fluidManager.inputTank2.getFluidDisplayString();
+                        hovered = true;
+                    }
+                }
+
+                if (this.outputFluidTankButton.containsPoint(x, y))
+                {
+                    if (this.objectSource.info.fluidManager.outputTank.capacity > 0)
+                    {
+                        this.hoverText = "Output Tank: " + this.objectSource.info.fluidManager.outputTank.getFluidDisplayString();
+                        hovered = true;
+                    }
+                }
+
+                if (hovered == false)
+                {
+                    this.hoverText = "";
+                }
             }
         }
 

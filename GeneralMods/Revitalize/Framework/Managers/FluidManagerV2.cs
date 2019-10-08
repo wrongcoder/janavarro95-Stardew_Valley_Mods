@@ -271,6 +271,9 @@ namespace Revitalize.Framework.Managers
         public bool allowDoubleInput;
 
         public bool onlyOutput;
+
+        private bool onlyInput;
+        private int numberOfInputTanks;
         /// <summary>
         /// The capacity for the fluid tanks.
         /// </summary>
@@ -301,7 +304,7 @@ namespace Revitalize.Framework.Managers
         /// <param name="Capacity"></param>
         /// <param name="OnlyOutput"></param>
         /// <param name="AllowDoubleInput">Can both input tanks store the same Fluid?</param>
-        public FluidManagerV2(int Capacity, bool OnlyOutput, Enums.FluidInteractionType LiquidInteractionType, bool AllowDoubleInput = false)
+        public FluidManagerV2(int Capacity, bool OnlyOutput, Enums.FluidInteractionType LiquidInteractionType, bool AllowDoubleInput = false,bool OnlyInput=false, int NumberOfInputTanks=2)
         {
             if (OnlyOutput)
             {
@@ -310,18 +313,49 @@ namespace Revitalize.Framework.Managers
                 this.inputTank2 = new MachineFluidTank(0);
 
             }
+            else if (OnlyInput)
+            {
+                if (this.allowDoubleInput)
+                {
+                    this.outputTank = new MachineFluidTank(0);
+                    this.inputTank1 = new MachineFluidTank(Capacity);
+                    this.inputTank2 = new MachineFluidTank(Capacity);
+                }
+                if (NumberOfInputTanks >= 2)
+                {
+                    this.outputTank = new MachineFluidTank(0);
+                    this.inputTank1 = new MachineFluidTank(Capacity);
+                    this.inputTank2 = new MachineFluidTank(Capacity);
+                }
+                else if (NumberOfInputTanks == 1)
+                {
+                    this.outputTank = new MachineFluidTank(0);
+                    this.inputTank1 = new MachineFluidTank(Capacity);
+                    this.inputTank2 = new MachineFluidTank(0);
+                }
+            }
             else
             {
                 this.outputTank = new MachineFluidTank(Capacity);
-                this.inputTank1 = new MachineFluidTank(Capacity);
-                this.inputTank2 = new MachineFluidTank(Capacity);
+                if (NumberOfInputTanks == 1)
+                {
+                    this.inputTank1 = new MachineFluidTank(Capacity);
+                    this.inputTank2 = new MachineFluidTank(0);
+                }
+                else if(NumberOfInputTanks >=2)
+                {
+                    this.inputTank1 = new MachineFluidTank(Capacity);
+                    this.inputTank2 = new MachineFluidTank(Capacity);
+                }
             }
             this.onlyOutput = OnlyOutput;
             this.allowDoubleInput = AllowDoubleInput;
             this.requiresUpdate = false;
             this.fluidInteractionType = LiquidInteractionType;
-        }
 
+            this.onlyInput = OnlyInput;
+            this.numberOfInputTanks = NumberOfInputTanks;
+        }
         /// <summary>
         /// Produces a given amount of Fluid and puts it into the output tank for this Fluid manager.
         /// </summary>
@@ -460,6 +494,11 @@ namespace Revitalize.Framework.Managers
             return 0;
         }
 
+        /// <summary>
+        /// Gets the amount of fluid that are in the input tanks.
+        /// </summary>
+        /// <param name="L">The type of fluid to check to the input tanks.</param>
+        /// <returns>The total amount of fluid of the same type of fluid passed in.</returns>
         public int getAmountOfFluidInInputTanks(Fluid L)
         {
             if (this.allowDoubleInput)
@@ -542,7 +581,7 @@ namespace Revitalize.Framework.Managers
 
         public FluidManagerV2 Copy()
         {
-            return new FluidManagerV2(this.outputTank.capacity, this.onlyOutput, this.fluidInteractionType, this.allowDoubleInput);
+            return new FluidManagerV2(this.outputTank.capacity, this.onlyOutput, this.fluidInteractionType, this.allowDoubleInput,this.onlyInput,this.numberOfInputTanks);
         }
     }
 }
