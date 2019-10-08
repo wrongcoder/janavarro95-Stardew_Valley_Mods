@@ -18,7 +18,6 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 namespace Revitalize.Framework.Menus
 {
     /// <summary>
-    /// Need to display a craft button.
     /// Also need to make the crafting menu scroll better.
     /// </summary>
     public class CraftingInformationPage:IClickableMenuExtended
@@ -66,7 +65,7 @@ namespace Revitalize.Framework.Menus
             this.requiredItems = new Dictionary<ItemDisplayButton, int>();
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
             {
-                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64, this.getIngredientHeightOffset().Y), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
+                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64+this.width, this.yPositionOnScreen+(i*64)+128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
             this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
@@ -84,7 +83,7 @@ namespace Revitalize.Framework.Menus
             this.requiredItems = new Dictionary<ItemDisplayButton, int>();
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
             {
-                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64, this.getIngredientHeightOffset().Y), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
+                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64+this.width, this.yPositionOnScreen+(i*64)+128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
             this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
@@ -166,6 +165,7 @@ namespace Revitalize.Framework.Menus
         public override void draw(SpriteBatch b)
         {
             this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
+            this.drawDialogueBoxBackground(this.xPositionOnScreen+this.width, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
             this.infoButton.draw(b,this.itemDisplayLocation);
 
             b.DrawString(Game1.dialogueFont, this.actualItem.DisplayName,new Vector2(this.xPositionOnScreen+ (this.width/2),this.itemDisplayLocation.Y)+ this.getHeightOffsetFromItem()-this.getItemNameOffset(), this.getNameColor());
