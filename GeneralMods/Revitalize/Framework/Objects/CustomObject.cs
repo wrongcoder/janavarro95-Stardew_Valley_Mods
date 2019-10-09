@@ -440,7 +440,8 @@ namespace Revitalize.Framework.Objects
 
             if (this.info.animationManager.animations.ContainsKey(this.generateRotationalAnimationKey()))
             {
-                this.info.animationManager.setAnimation(this.generateRotationalAnimationKey());
+                this.info.animationManager.enabled = true;
+                this.info.animationManager.playAnimation(this.generateRotationalAnimationKey());
             }
             else
             {
@@ -451,6 +452,7 @@ namespace Revitalize.Framework.Objects
 
         public string generateRotationalAnimationKey()
         {
+            if (string.IsNullOrEmpty(this.info.animationManager.currentAnimationName)) return this.generateDefaultRotationalAnimationKey();
             return (this.info.animationManager.currentAnimationName.Split('_')[0]) + "_" + (int)this.info.facingDirection;
         }
 

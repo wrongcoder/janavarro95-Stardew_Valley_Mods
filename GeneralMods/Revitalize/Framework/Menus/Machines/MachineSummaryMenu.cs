@@ -144,30 +144,40 @@ namespace Revitalize.Framework.Menus.Machines
 
             if (this.objectSource.info.fluidManager.InteractsWithFluids)
             {
-                if (this.inputFluidTank1Button.containsPoint(x, y))
+                if (this.inputFluidTank1Button != null)
                 {
-                    if (this.objectSource.info.fluidManager.inputTank1.capacity > 0)
+                    if (this.inputFluidTank1Button.containsPoint(x, y))
                     {
-                        this.hoverText = "Input Tank 1: " + this.objectSource.info.fluidManager.inputTank1.getFluidDisplayString();
-                        hovered = true;
+                        if (this.objectSource.info.fluidManager.inputTank1.capacity > 0)
+                        {
+                            this.hoverText = "Input Tank 1: " + this.objectSource.info.fluidManager.inputTank1.getFluidDisplayString();
+                            hovered = true;
+                        }
                     }
                 }
 
-                if (this.inputFluidTank2Button.containsPoint(x, y))
+                if (this.inputFluidTank2Button != null)
                 {
-                    if (this.objectSource.info.fluidManager.inputTank2.capacity > 0)
+                    if (this.inputFluidTank2Button.containsPoint(x, y))
                     {
-                        this.hoverText = "Input Tank 2: " + this.objectSource.info.fluidManager.inputTank2.getFluidDisplayString();
-                        hovered = true;
+                        if (this.objectSource.info.fluidManager.inputTank2.capacity > 0)
+                        {
+                            this.hoverText = "Input Tank 2: " + this.objectSource.info.fluidManager.inputTank2.getFluidDisplayString();
+                            hovered = true;
+                        }
                     }
+
                 }
 
-                if (this.outputFluidTankButton.containsPoint(x, y))
+                if (this.outputFluidTankButton != null)
                 {
-                    if (this.objectSource.info.fluidManager.outputTank.capacity > 0)
+                    if (this.outputFluidTankButton.containsPoint(x, y))
                     {
-                        this.hoverText = "Output Tank: " + this.objectSource.info.fluidManager.outputTank.getFluidDisplayString();
-                        hovered = true;
+                        if (this.objectSource.info.fluidManager.outputTank.capacity > 0)
+                        {
+                            this.hoverText = "Output Tank: " + this.objectSource.info.fluidManager.outputTank.getFluidDisplayString();
+                            hovered = true;
+                        }
                     }
                 }
             }
@@ -187,7 +197,6 @@ namespace Revitalize.Framework.Menus.Machines
             }
             else if (this.energy.producesEnergy)
             {
-
                 return "Produces " + EnergyAmount + " energy per 10 minutes.";
             }
             else return "";

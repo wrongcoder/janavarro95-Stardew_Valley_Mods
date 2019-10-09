@@ -29,6 +29,8 @@ namespace StardustCore.Animations
 
         public bool hasRecievedUpdateTick;
 
+        public string startingAnimationName;
+
         /// <summary>
         /// Checks to see if there is an animation playing.
         /// </summary>
@@ -57,6 +59,7 @@ namespace StardustCore.Animations
             this.currentAnimation = this.defaultDrawFrame;
             this.currentAnimationName = "";
             this.animationDataString = "";
+            this.startingAnimationName = "";
         }
 
         public AnimationManager(Texture2DExtended ObjectTexture, Animation DefaultFrame, string animationString, string startingAnimationKey, int startingAnimationFrame = 0, bool EnabledByDefault = true)
@@ -68,6 +71,7 @@ namespace StardustCore.Animations
 
             this.animationDataString = animationString;
             this.animations = parseAnimationsFromXNB(animationString);
+            this.startingAnimationName = startingAnimationKey;
             if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
                 this.setAnimation(startingAnimationKey, startingAnimationFrame);
             else
@@ -85,12 +89,29 @@ namespace StardustCore.Animations
             this.enabled = EnabledByDefault;
 
             this.animations = animationString;
-            if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
+            this.startingAnimationName = startingAnimationKey;
+            if (this.animations != null)
             {
-                this.setAnimation(startingAnimationKey, startingAnimationFrame);
-                this.playAnimation(startingAnimationKey, true, startingAnimationFrame);
-            }
+                if (string.IsNullOrEmpty(startingAnimationKey) == false)
+                {
+                    if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
+                    {
+                        this.setAnimation(startingAnimationKey, startingAnimationFrame);
+                        this.playAnimation(startingAnimationKey, true, startingAnimationFrame);
+                    }
 
+                    else
+                    {
+                        this.currentAnimation = this.defaultDrawFrame;
+                        this.currentAnimationName = "";
+                    }
+                }
+                else
+                {
+                    this.currentAnimation = this.defaultDrawFrame;
+                    this.currentAnimationName = "";
+                }
+            }
             else
             {
                 this.currentAnimation = this.defaultDrawFrame;
@@ -484,6 +505,11 @@ namespace StardustCore.Animations
         public Texture2D getTexture()
         {
             return this.objectTexture.getTexture();
+        }
+
+        public AnimationManager Copy()
+        {
+            return new AnimationManager(this.objectTexture, this.defaultDrawFrame, this.animations, this.startingAnimationName, 0, this.enabled);
         }
     }
 }

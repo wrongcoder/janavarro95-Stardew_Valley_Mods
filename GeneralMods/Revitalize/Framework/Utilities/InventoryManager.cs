@@ -64,9 +64,9 @@ namespace Revitalize.Framework.Utilities
             this.displayColumns = DisplayColumns;
         }
 
-        public InventoryManager(IList<Item> items, int DisplayRows = 6, int DisplayColumns = 6)
+        public InventoryManager(IList<Item> items, int Capacity= int.MaxValue, int DisplayRows = 6, int DisplayColumns = 6)
         {
-            this.capacity = int.MaxValue;
+            this.capacity = Capacity;
             this.setMaxLimit(int.MaxValue);
             this.items = items;
             this.bufferItems = new List<Item>();

@@ -325,6 +325,7 @@ namespace Revitalize.Framework.Factories.Objects
                 foreach (var v in chairObjects)
                 {
                     ModCore.ObjectManager.chairs.Add(v.Value.info.id, v.Value);
+                    ModCore.ObjectManager.AddItem(v.Value.info.name, v.Value);
                 }
             }
         }
@@ -406,6 +407,7 @@ namespace Revitalize.Framework.Factories.Objects
                 foreach (var v in chairObjects)
                 {
                     ModCore.ObjectManager.tables.Add(v.Value.info.id, v.Value);
+                    ModCore.ObjectManager.AddItem(v.Value.info.name, v.Value);
                 }
             }
         }
@@ -488,6 +490,7 @@ namespace Revitalize.Framework.Factories.Objects
                 foreach (var v in chairObjects)
                 {
                     ModCore.ObjectManager.furnitureStorage.Add(v.Value.info.id, v.Value);
+                    ModCore.ObjectManager.AddItem(v.Value.info.name, v.Value);
                 }
             }
         }

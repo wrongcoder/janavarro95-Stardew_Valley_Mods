@@ -451,7 +451,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager, this.DrawColor, this.ignoreBoundingBox, this.inventory.Copy(), this._lightManager.Copy(),this.EnergyManager.Copy(),this.AlwaysDrawAbovePlayer,this.DyedColor,this.ColorManager,this.fluidManager.Copy());
+            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.edibility, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.inventory.Copy(), this._lightManager.Copy(),this.EnergyManager.Copy(),this.AlwaysDrawAbovePlayer,this.DyedColor,this.ColorManager,this.fluidManager.Copy());
         }
 
         public bool requiresSyncUpdate()

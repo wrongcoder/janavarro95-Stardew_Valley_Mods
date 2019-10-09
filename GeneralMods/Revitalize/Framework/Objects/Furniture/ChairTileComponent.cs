@@ -180,8 +180,8 @@ namespace Revitalize.Framework.Objects.Furniture
         public override Item getOne()
         {
             ChairTileComponent component = new ChairTileComponent(this.data,this.info.Copy(), (ChairInformation)this.furnitureInfo);
-            component.containerObject = this.containerObject;
-            component.offsetKey = this.offsetKey;
+            //component.containerObject = this.containerObject;
+            //component.offsetKey = this.offsetKey;
             return component;
         }
 

@@ -121,8 +121,8 @@ namespace Revitalize.Framework.Objects.Machines.EnergyGeneration
         public override Item getOne()
         {
             Windmill component = new Windmill(this.data, this.info.Copy(), this.producedResources, this.energyRequiredPer10Minutes, this.timeToProduce, this.updatesContainerObjectForProduction, this.craftingRecipeBook, this.requiredFluidForOperation, this.amountOfFluidRequiredForOperation);
-            component.containerObject = this.containerObject;
-            component.offsetKey = this.offsetKey;
+            //component.containerObject = this.containerObject;
+            //component.offsetKey = this.offsetKey;
             return component;
         }
 

@@ -58,7 +58,7 @@ namespace Revitalize.Framework.Crafting
             {
                 output
             };
-            this.statCost = StatCost ?? new StatCost();
+            this.statCost = StatCost;
             this.timeToCraft = TimeToCraft;
         }
 
@@ -68,7 +68,7 @@ namespace Revitalize.Framework.Crafting
             this.outputs = outputs;
             this.outputName = OutputName;
             this.outputDescription = OutputDescription;
-            this.statCost = StatCost ?? new StatCost();
+            this.statCost = StatCost;
             this.timeToCraft = TimeToCraft;
         }
 
@@ -87,6 +87,7 @@ namespace Revitalize.Framework.Crafting
         /// <summary>Checks if an inventory contains all items.</summary>
         public bool InventoryContainsAllIngredient(IList<Item> items)
         {
+            if (this.ingredients.Count == 0) return true;
             foreach (CraftingRecipeComponent pair in this.ingredients)
                 if (!this.InventoryContainsIngredient(items, pair)) return false;
             return true;
@@ -176,7 +177,7 @@ namespace Revitalize.Framework.Crafting
         /// <param name="isPlayerInventory">Checks to see if the invventory is the player's</param>
         public void craft(ref IList<Item> from, ref IList<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
         {
-            InventoryManager manager = new InventoryManager(to);
+            InventoryManager manager = new InventoryManager(to,Game1.player.MaxItems);
             if (manager.ItemCount + this.outputs.Count >= manager.capacity)
             {
                 if (isPlayerInventory)
@@ -198,7 +199,11 @@ namespace Revitalize.Framework.Crafting
 
             Game1.player.Items = playerItems; //Set the items to be post consumption.
             foreach (Item I in outPutItems)
-                Game1.player.addItemToInventory(I); //Add all items produced.
+            {
+                Item copy = I.getOne();
+                copy.Stack = I.Stack;
+                Game1.player.addItemToInventory(copy); //Add all items produced.
+            }
             this.statCost.payCost();
         }
 
@@ -209,7 +214,14 @@ namespace Revitalize.Framework.Crafting
 
         public bool CanCraft(IList<Item> items)
         {
-            return this.InventoryContainsAllIngredient(items);
+            if (this.statCost == null)
+            {
+                return this.InventoryContainsAllIngredient(items);
+            }
+            else
+            {
+                return this.InventoryContainsAllIngredient(items) && this.statCost.canSafelyAffordCost();
+            }
         }
     }
 }

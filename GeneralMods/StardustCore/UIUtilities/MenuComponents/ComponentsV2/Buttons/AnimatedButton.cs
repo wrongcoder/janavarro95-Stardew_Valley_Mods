@@ -17,7 +17,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <summary>
         /// The default bounds for the button.
         /// </summary>
-        private Rectangle defaultBounds;
+        public Rectangle defaultBounds;
         /// <summary>
         /// The actual bounds for the button which takes scale into acount.
         /// </summary>

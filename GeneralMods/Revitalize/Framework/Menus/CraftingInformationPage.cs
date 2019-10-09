@@ -34,6 +34,7 @@ namespace Revitalize.Framework.Menus
         private Dictionary<ItemDisplayButton,int> requiredItems;
 
         public AnimatedButton craftingButton;
+        public AnimatedButton goldButton;
 
         public bool isPlayerInventory;
 
@@ -70,6 +71,14 @@ namespace Revitalize.Framework.Menus
             }
             this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
             this.outputInventory = this.inventory;
+
+            if (this.infoButton.recipe.statCost != null)
+            {
+                if (this.infoButton.recipe.statCost.gold > 0)
+                {
+                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+                }
+            }
         }
 
         public CraftingInformationPage(int x, int y, int width, int height, Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory,ref IList<Item> OutputInventory ,bool IsPlayerInventory, Machine Machine) : base(x, y, width, height, false)
@@ -92,6 +101,13 @@ namespace Revitalize.Framework.Menus
             {
                 this.outputInventory = this.inventory;
             }
+            if (this.infoButton.recipe.statCost != null)
+            {
+                if (this.infoButton.recipe.statCost.gold > 0)
+                {
+                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+                }
+            }
             this.outputInventory = OutputInventory;
             this.machine = Machine;
         }
@@ -104,7 +120,15 @@ namespace Revitalize.Framework.Menus
                 {
                     Game1.soundBank.PlayCue("coin");
 
-                    this.infoButton.craftItem(this.inventory, this.outputInventory);
+                    if (this.isPlayerInventory)
+                    {
+                        this.infoButton.craftItem();
+                    }
+                    else
+                    {
+                        this.infoButton.craftItem(this.inventory, this.outputInventory);
+
+                    }
                     if (this.machine != null)
                     {
                         if (this.infoButton.recipe.timeToCraft == 0)
@@ -177,9 +201,13 @@ namespace Revitalize.Framework.Menus
                 button.Key.draw(b);
                 b.DrawString(Game1.smallFont, button.Key.item.DisplayName+ " x "+button.Value.ToString(), button.Key.Position + new Vector2(64, 16), this.getNameColor(button.Key.item, button.Value));
             }
+            if (this.goldButton != null)
+            {
+                this.goldButton.draw(b);
+                b.DrawString(Game1.smallFont, this.infoButton.recipe.statCost.gold+" G", this.goldButton.Position +new Vector2(0,32),Color.Black);
+            }
 
             this.craftingButton.draw(b, this.getCraftableColor().A);
-
             this.drawMouse(b);
         }
 
@@ -264,11 +292,9 @@ namespace Revitalize.Framework.Menus
         /// Gets the height position for where to draw a required ingredient.
         /// </summary>
         /// <returns></returns>
-        private Vector2 getIngredientHeightOffset()
+        private Vector2 getMoneyRequiredOffset()
         {
-            string parsedDescription = Game1.parseText(this.actualItem.getDescription(), Game1.smallFont, this.width);
-            Vector2 offset=Game1.smallFont.MeasureString(parsedDescription);
-            return this.getItemDescriptionOffset()+offset+ new Vector2(0,64*(this.requiredItems.Count));
+            return new Vector2(this.xPositionOnScreen+64+this.width,this.yPositionOnScreen+128);
         }
 
         private float getCraftingButtonHeight()

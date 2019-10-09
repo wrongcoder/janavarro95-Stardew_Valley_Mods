@@ -412,6 +412,9 @@
     <Content Include="Content\Graphics\Menus\CraftingMenu\CraftButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Menus\CraftingMenu\GoldButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Menus\EnergyMenu\BatteryEnergyGuage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

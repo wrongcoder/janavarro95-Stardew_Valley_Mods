@@ -98,5 +98,10 @@ namespace Revitalize.Framework.Managers
 
             return self;
         }
+
+        public ColorManager Copy()
+        {
+            return new ColorManager(this._blendInfluence, this._colorMixMode);
+        }
     }
 }

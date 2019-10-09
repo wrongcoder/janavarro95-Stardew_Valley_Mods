@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Revitalize.Framework.Factories.Objects;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Objects.CraftingTables;
 using Revitalize.Framework.Objects.Extras;
@@ -116,6 +117,7 @@ namespace Revitalize.Framework.Objects
             this.loadInMachines();
             this.loadInTools();
             this.loadInAestheticsObjects();
+            FurnitureFactory.LoadFurnitureFiles();
         }
 
         private void loadInAestheticsObjects()

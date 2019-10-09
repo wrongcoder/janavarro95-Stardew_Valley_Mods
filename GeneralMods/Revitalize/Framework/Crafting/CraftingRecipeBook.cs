@@ -306,13 +306,13 @@ namespace Revitalize.Framework.Crafting
             #region
             CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook("Workbench");
             WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f),true);
+            WorkbenchRecipes.addInCraftingTab("Furniture", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Furniture Tab", new Vector2(100 + 48, 100 + (24 * 4)*2), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), false);
+
             WorkbenchRecipes.addCraftingRecipe("Anvil", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
                 {
                     //Inputs here
                    new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"),20)
                 }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Anvil"), 1)), true));
-
-
             WorkbenchRecipes.addCraftingRecipe("Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
@@ -332,36 +332,30 @@ namespace Revitalize.Framework.Crafting
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
             }, new CraftingRecipeComponent(new StardewValley.Tools.WateringCan() { UpgradeLevel = 0 }, 1)), true));
-
             WorkbenchRecipes.addCraftingRecipe("Copper Wire", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("CopperWire"),2),null,0),true));
-
             WorkbenchRecipes.addCraftingRecipe("Alloy Furnace", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Clay,20),10),
                 new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 10)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("AlloyFurnace"), 1), null, 0), true));
-
             WorkbenchRecipes.addCraftingRecipe("Sand Box", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
                 new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 25)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SandBox"), 1), null, 0), true));
-
             WorkbenchRecipes.addCraftingRecipe("Battery Bin", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ElectrumIngot"),10)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BatteryBin"), 1), null, 0), true));
-
             WorkbenchRecipes.addCraftingRecipe("Capacitor", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,50),50),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,10),10)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Capacitor"), 1), null, 0), true));
-
             WorkbenchRecipes.addCraftingRecipe("Charging Station", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
@@ -370,8 +364,21 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Capacitor"), 1)
             }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ChargingStation"), 1), null, 0), true));
 
+            WorkbenchRecipes.addCraftingRecipe("Oak Chair", new UnlockableCraftingRecipe("Furniture", new Recipe(new List<CraftingRecipeComponent>(),new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Oak Chair"),1),new StatCost(0,0,100,0),0), true));
+
             if (CraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
+                foreach(KeyValuePair<string,AnimatedButton> pair in WorkbenchRecipes.craftingMenuTabs)
+                {
+                    if (CraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingMenuTabs.ContainsKey(pair.Key))
+                    {
+
+                    }
+                    else
+                    {
+                        CraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingMenuTabs.Add(pair.Key, pair.Value);
+                    }
+                }
                 foreach(KeyValuePair<string, UnlockableCraftingRecipe> recipe in WorkbenchRecipes.craftingRecipes)
                 {
                     if (CraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
@@ -558,6 +565,17 @@ namespace Revitalize.Framework.Crafting
 
             if (CraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
+                foreach (KeyValuePair<string, AnimatedButton> pair in AnvilRecipes.craftingMenuTabs)
+                {
+                    if (CraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingMenuTabs.ContainsKey(pair.Key))
+                    {
+
+                    }
+                    else
+                    {
+                        CraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingMenuTabs.Add(pair.Key, pair.Value);
+                    }
+                }
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AnvilRecipes.craftingRecipes)
                 {
                     if (CraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))

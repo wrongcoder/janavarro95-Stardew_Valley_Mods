@@ -263,7 +263,8 @@ namespace Revitalize.Framework.Menus
             }
             else
             {
-                Vector2 newPos = new Vector2(100 + (48), this.yPositionOnScreen + (24 * 4) * (count + 1));
+                Vector2 newPos = new Vector2(100 + (48), (this.yPositionOnScreen+24) + ((24 * 4) * (count + 1)));
+                ModCore.log("newPos: " + newPos.ToString());
                 Button.Position = newPos;
                 this.CraftingTabs.Add(name, Button);
                 this.craftingItemsToDisplay.Add(name, new List<CraftingRecipeButton>());
