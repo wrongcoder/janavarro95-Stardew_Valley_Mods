@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles;
 using StardewValley;
@@ -13,7 +14,8 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 {
     public class OreVeinObj:MultiTiledObject
     {
-        public ResourceInformaton resourceInfo
+        [JsonIgnore]
+        public ResourceInformation resourceInfo
         {
             get
             {
@@ -167,7 +169,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             }
         }
 
-        public override void pickUp()
+        public override void pickUp(Farmer who)
         {
             return; //Don't pick up ore veins!
             bool canPickUp = this.removeAndAddToPlayersInventory();

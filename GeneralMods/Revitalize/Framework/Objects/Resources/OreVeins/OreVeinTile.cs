@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.InformationFiles;
+using Revitalize.Framework.Utilities;
 using Revitalize.Framework.Utilities.Serialization;
 using StardewValley;
 
@@ -19,8 +21,115 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         /// Deals with information tied to the resource itself.
         /// </summary>
         public OreResourceInformation resourceInfo;
-        public List<ResourceInformaton> extraDrops;
-        public int healthValue;
+        public List<ResourceInformation> extraDrops;
+
+        private int _healthValue;
+        public int healthValue
+        {
+            get
+            {
+                return this._healthValue;
+            }
+            set
+            {
+                this._healthValue = value;
+                if (this.info != null)
+                {
+                    this.info.forceUpdate();
+                }
+            }
+        }
+
+
+        [JsonIgnore]
+        public override string ItemInfo
+        {
+            get
+            {
+                string info = Revitalize.ModCore.Serializer.ToJSONString(this.info);
+                string guidStr = this.guid.ToString();
+                string pyTkData = ModCore.Serializer.ToJSONString(this.data);
+                string offsetKey = this.offsetKey != null ? ModCore.Serializer.ToJSONString(this.offsetKey) : "";
+                string container = this.containerObject != null ? this.containerObject.guid.ToString() : "";
+                string health = this.healthValue.ToString();
+                return info + "<" + guidStr + "<" + pyTkData + "<" + offsetKey + "<" + container + "<"+health;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+                string pyTKData = data[2];
+                string offsetVec = data[3];
+                string containerObject = data[4];
+                string health = data[5];
+                this.healthValue = Convert.ToInt32(health);
+
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+
+                //Instead of serializing this info it's static pretty much always so just pull the info from the resource manager.
+                OreResourceInformation oreResource = ModCore.ObjectManager.resources.getOreResourceInfo(this.info.id);
+                List<ResourceInformation> extraDrops = ModCore.ObjectManager.resources.getExtraDropInformationFromOres(this.info.id);
+                if (this.resourceInfo == null)
+                {
+                    this.resourceInfo = oreResource;
+                }
+                if (this.extraDrops == null)
+                {
+                    this.extraDrops = extraDrops;
+                }
+;
+                this.data = Revitalize.ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pyTKData);
+                if (string.IsNullOrEmpty(offsetVec)) return;
+                if (string.IsNullOrEmpty(containerObject)) return;
+                this.offsetKey = ModCore.Serializer.DeserializeFromJSONString<Vector2>(offsetVec);
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    //ModCore.log("Update item with guid: " + this.guid);
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    //ModCore.log("Add in new guid: " + this.guid);
+                    ModCore.CustomObjects.Add(this.guid, this);
+                }
+
+                if (this.containerObject == null)
+                {
+                    //ModCore.log(containerObject);
+                    Guid containerGuid = Guid.Parse(containerObject);
+                    if (ModCore.CustomObjects.ContainsKey(containerGuid))
+                    {
+                        this.containerObject = (MultiTiledObject)ModCore.CustomObjects[containerGuid];
+                        this.containerObject.removeComponent(this.offsetKey);
+                        this.containerObject.addComponent(this.offsetKey, this);
+                        //ModCore.log("Set container object from existing object!");
+                    }
+                    else
+                    {
+                        //ModCore.log("Container hasn't been synced???");
+                        MultiplayerUtilities.RequestGuidObject(containerGuid);
+                        MultiplayerUtilities.RequestGuidObject_Tile(this.guid);
+                    }
+                }
+                else
+                {
+                    this.containerObject.updateInfo();
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        //ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
+
+            }
+        }
 
 
         public OreVeinTile() : base()
@@ -28,21 +137,21 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, OreResourceInformation Resource,List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, OreResourceInformation Resource,List<ResourceInformation> ExtraDrops,int Health) : base(PyTKData, Info)
         {
             this.healthValue = Health;
             this.resourceInfo = Resource;
-            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
+            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
             this.setHealth(this.healthValue);
             this.Price = Info.price;
         }
 
-        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformaton> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
+        public OreVeinTile(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops,int Health) : base(PyTKData, Info, TileLocation)
         {
 
             this.healthValue = Health;
             this.resourceInfo = Resource;
-            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformaton>();
+            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
             this.setHealth(this.healthValue);
             this.Price = Info.price;
         }
@@ -120,7 +229,13 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 if (this.location != null)
                 {
                     this.location.playSound("hammer");
-                    //ModCore.log("Ore has this much health left: "+this.healthValue);
+                    //ModCore.log("Ore has this much health left and location is not null: "+this.healthValue);
+                    this.info.shakeTimer = 200;
+                }
+                else
+                {
+                    Game1.player.currentLocation.playSound("hammer");
+                    //ModCore.log("Ore has this much health left and location is null!: "+this.healthValue);
                     this.info.shakeTimer = 200;
                 }
                 return false;
@@ -177,7 +292,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
             if (this.extraDrops != null)
             {
-                foreach (ResourceInformaton extra in this.extraDrops)
+                foreach (ResourceInformation extra in this.extraDrops)
                 {
                     if (extra.shouldDropResource())
                     {
@@ -201,6 +316,18 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 Game1.createRadialDebris(this.location, 14, (int)this.TileLocation.X, (int)this.TileLocation.Y, Game1.random.Next(4, 10), false, -1, false, -1);
                 this.location.removeObject(this.TileLocation, false);
                 this.containerObject.removeComponent(this.offsetKey);
+                ModCore.CustomObjects.Remove(this.containerObject.guid);
+                ModCore.CustomObjects.Remove(this.guid);
+            }
+            else
+            {
+                Game1.player.currentLocation.playSound("stoneCrack");
+                Game1.createRadialDebris(Game1.player.currentLocation, 14, (int)this.TileLocation.X, (int)this.TileLocation.Y, Game1.random.Next(4, 10), false, -1, false, -1);
+                Game1.player.currentLocation.removeObject(this.TileLocation, false);
+                this.containerObject.removeComponent(this.offsetKey);
+                //Remove both tile and container from sync.
+                ModCore.CustomObjects.Remove(this.containerObject.guid);
+                ModCore.CustomObjects.Remove(this.guid);
             }
         }
 
@@ -296,7 +423,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 if (this.animationManager.getExtendedTexture() == null)
                     ModCore.ModMonitor.Log("Tex Extended is null???");
 
-                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.info.shakeTimerOffset(), (y * Game1.tileSize)+this.info.shakeTimerOffset())), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.info.shakeTimerOffset(), (y * Game1.tileSize)+this.info.shakeTimerOffset())), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
                 // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
             }
 
@@ -315,7 +442,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
                 {
                     addedDepth += 1.0f;
                 }
-                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.info.shakeTimerOffset(), (y * Game1.tileSize)+this.info.shakeTimerOffset())), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.info.shakeTimerOffset(), (y * Game1.tileSize)+this.info.shakeTimerOffset())), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
                 try
                 {
                     this.animationManager.tickAnimation();

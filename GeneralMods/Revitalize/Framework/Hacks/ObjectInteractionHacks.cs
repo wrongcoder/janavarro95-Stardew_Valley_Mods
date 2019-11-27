@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Objects;
+using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Tools;
 using SObject = StardewValley.Object;
 namespace Revitalize.Framework.Hacks
 {
@@ -76,6 +79,43 @@ namespace Revitalize.Framework.Hacks
             }
         }
 
+        /// <summary>
+        /// Restores all tracked machines after loading for proper rendering.
+        /// </summary>
+        public static void AfterLoad_RestoreTrackedMachines()
+        {
+            foreach(GameLocation loc in LocationUtilities.GetAllLocations())
+            {
+                foreach(StardewValley.Object obj in loc.Objects.Values)
+                {
+                    if( (obj.heldObject.Value is CustomObject))
+                    {
+                        //Don't want to render for tables since tables have special held object logic.
+                        if (IsSameOrSubclass(typeof(TableTileComponent), obj.GetType()) == true) continue;
+                        else
+                        {
+                            if (TrackedMachines.ContainsKey(loc))
+                            {
+                                TrackedMachines[loc].Add(obj);
+                            }
+                            else
+                            {
+                                TrackedMachines.Add(loc, new List<SObject>()
+                                {
+                                    obj
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Renders custom objects as held objects for stardew valley machines.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public static void Render_RenderCustomObjectsHeldInMachines(object sender, StardewModdingAPI.Events.RenderedWorldEventArgs e)
         {
             if (TrackedMachines.ContainsKey(Game1.player.currentLocation))
@@ -105,11 +145,34 @@ namespace Revitalize.Framework.Hacks
                     TrackedMachines[Game1.player.currentLocation].Remove(obj);
                 }
             }
-            else
-            {
-
-            }
         }
 
+
+        public static bool IsSameOrSubclass(Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase)
+                   || potentialDescendant == potentialBase;
+        }
+
+
+
+        /// <summary>
+        /// Resets tool colors when left click is used for normal tools.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void ResetNormalToolsColorOnLeftClick(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
+        {
+            if (e.Button == SButton.MouseLeft)
+            {
+                if (Game1.player.CurrentTool != null)
+                {
+                    if (ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Pickaxe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Axe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Hoe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(WateringCan)))
+                    {
+                        ColorChanger.ResetToolColorSwaps();
+                    }
+                }
+            }
+        }
     }
 }

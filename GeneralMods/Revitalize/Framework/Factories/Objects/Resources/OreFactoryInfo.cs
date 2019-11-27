@@ -24,7 +24,7 @@ namespace Revitalize.Framework.Factories.Objects.Resources
         /// <summary>
         /// Extra information that holds drop chances on extra drops.
         /// </summary>
-        public List<ResourceInformaton> ExtraDrops;
+        public List<ResourceInformation> ExtraDrops;
         /// <summary>
         /// The health of the ore vein.
         /// </summary>

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Objects.InformationFiles.Furniture;
+using Revitalize.Framework.Utilities;
 using Revitalize.Framework.Utilities.Serialization;
 using StardewValley;
 using StardewValley.Minigames;
@@ -19,6 +20,86 @@ namespace Revitalize.Framework.Objects.Extras
     {
         public ArcadeCabinetInformation arcadeInfo;
 
+
+
+        public override string ItemInfo
+        {
+            get
+            {
+                string info = Revitalize.ModCore.Serializer.ToJSONString(this.info);
+                string guidStr = this.guid.ToString();
+                string pyTkData = ModCore.Serializer.ToJSONString(this.data);
+                string offsetKey = this.offsetKey != null ? ModCore.Serializer.ToJSONString(this.offsetKey) : "";
+                string container = this.containerObject != null ? this.containerObject.guid.ToString() : "";
+                string furnitureInfo = ModCore.Serializer.ToJSONString(this.arcadeInfo);
+                return info + "<" + guidStr + "<" + pyTkData + "<" + offsetKey + "<" + container + "<" + furnitureInfo;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+                string pyTKData = data[2];
+                string offsetVec = data[3];
+                string containerObject = data[4];
+                string furnitureInfo = data[5];
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+                this.data = Revitalize.ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pyTKData);
+                if (string.IsNullOrEmpty(offsetVec)) return;
+                if (string.IsNullOrEmpty(containerObject)) return;
+                this.offsetKey = ModCore.Serializer.DeserializeFromJSONString<Vector2>(offsetVec);
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    //ModCore.log("Update item with guid: " + this.guid);
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    //ModCore.log("Add in new guid: " + this.guid);
+                    ModCore.CustomObjects.Add(this.guid, this);
+                }
+
+                if (this.containerObject == null)
+                {
+                    //ModCore.log(containerObject);
+                    Guid containerGuid = Guid.Parse(containerObject);
+                    if (ModCore.CustomObjects.ContainsKey(containerGuid))
+                    {
+                        this.containerObject = (MultiTiledObject)ModCore.CustomObjects[containerGuid];
+                        this.containerObject.removeComponent(this.offsetKey);
+                        this.containerObject.addComponent(this.offsetKey, this);
+                        //ModCore.log("Set container object from existing object!");
+                    }
+                    else
+                    {
+                        //ModCore.log("Container hasn't been synced???");
+                        MultiplayerUtilities.RequestGuidObject(containerGuid);
+                        MultiplayerUtilities.RequestGuidObject_Tile(this.guid);
+                    }
+                }
+                else
+                {
+                    this.containerObject.updateInfo();
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        //ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(furnitureInfo) == false)
+                {
+                    this.arcadeInfo = ModCore.Serializer.DeserializeFromJSONString<ArcadeCabinetInformation>(furnitureInfo);
+                }
+
+            }
+        }
         public ArcadeCabinetTile() : base()
         {
 
@@ -196,7 +277,7 @@ namespace Revitalize.Framework.Objects.Extras
                 if (this.animationManager.getExtendedTexture() == null)
                     ModCore.ModMonitor.Log("Tex Extended is null???");
 
-                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
                 // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
             }
 
@@ -215,7 +296,7 @@ namespace Revitalize.Framework.Objects.Extras
                 {
                     addedDepth += 1.0f;
                 }
-                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
                 try
                 {
                     this.animationManager.tickAnimation();

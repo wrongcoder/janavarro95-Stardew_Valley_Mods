@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities.Serialization;
@@ -15,6 +16,7 @@ namespace Revitalize.Framework.Objects.Furniture
 {
     public class LampTileComponent:FurnitureTileComponent
     {
+        [JsonIgnore]
         public bool canTurnOn
         {
             get
@@ -23,6 +25,7 @@ namespace Revitalize.Framework.Objects.Furniture
             }
         }
 
+        [JsonIgnore]
         public LightManager lightManager
         {
             get
@@ -197,7 +200,7 @@ namespace Revitalize.Framework.Objects.Furniture
                 if (this.animationManager.getExtendedTexture() == null)
                     ModCore.ModMonitor.Log("Tex Extended is null???");
 
-                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
                 // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
             }
 
@@ -216,7 +219,13 @@ namespace Revitalize.Framework.Objects.Furniture
                 {
                     addedDepth += 1.0f;
                 }
-                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.drawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+
+                int yDepth = y;
+                if (this.info.AlwaysDrawAbovePlayer)
+                {
+                    addedDepth += 5f;
+                }
+                this.animationManager.draw(spriteBatch, this.displayTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.animationManager.currentAnimation.sourceRectangle), this.info.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((yDepth + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
                 try
                 {
                     this.animationManager.tickAnimation();

@@ -24,18 +24,20 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 {
                     new Framework.Utilities.Serialization.Converters.RectangleConverter(),
                     new Framework.Utilities.Serialization.Converters.Texture2DConverter(),
+                    Serializer.NetFieldConverter
+                    //new NetFieldConverter()
                 },
                 Formatting = Formatting.Indented,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 NullValueHandling = NullValueHandling.Include
             };
+            this.settings.ContractResolver = new ContractResolvers.NetFieldContract();
         }
 
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             string convertedString = JsonConvert.SerializeObject((Item)value, this.settings);
-            DefaultContractResolver resolver = serializer.ContractResolver as DefaultContractResolver;
             writer.WriteStartObject();
             writer.WritePropertyName("Type");
             serializer.Serialize(writer, value.GetType().FullName.ToString());
@@ -62,8 +64,9 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
                 return null;
             }
 
-            JObject jo = JObject.Load(reader);
+            JObject jo = null;
 
+            jo = JObject.Load(reader);
             string t = jo["Type"].Value<string>();
 
             //See if the type has already been cached and if so return it for deserialization.

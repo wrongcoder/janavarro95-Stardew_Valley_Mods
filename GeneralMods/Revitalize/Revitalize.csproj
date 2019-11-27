@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +34,7 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>
     </PackageReference>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PyTK">
@@ -52,11 +53,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Configs\ConfigManager.cs" />
+    <Compile Include="Framework\Configs\FurnitureConfig.cs" />
+    <Compile Include="Framework\Configs\GlobalMachineConfig.cs" />
+    <Compile Include="Framework\Configs\MiningDrillConfig.cs" />
+    <Compile Include="Framework\Configs\ObjectsConfig.cs" />
+    <Compile Include="Framework\Configs\Shops_BlacksmithConfig.cs" />
+    <Compile Include="Framework\Configs\VanillaMachineRecipeConfig.cs" />
+    <Compile Include="Framework\Crafting\CraftingRecipeBook.cs" />
+    <Compile Include="Framework\Crafting\CraftingRecipeComponent.cs" />
+    <Compile Include="Framework\Crafting\MachineCraftingRecipe.cs" />
     <Compile Include="Framework\Crafting\Recipe.cs" />
-    <Compile Include="Framework\Crafting\RecipeBook.cs" />
     <Compile Include="Framework\Crafting\StatCost.cs" />
+    <Compile Include="Framework\Crafting\UnlockableCraftingRecipe.cs" />
     <Compile Include="Framework\Crafting\VanillaRecipeBook.cs" />
     <Compile Include="Framework\Crafting\VanillaRecipe.cs" />
+    <Compile Include="Framework\Energy\IEnergyInterface.cs" />
     <Compile Include="Framework\Enums\Enums.cs" />
     <Compile Include="Framework\Environment\DarkerNight.cs" />
     <Compile Include="Framework\Environment\DarkerNightConfig.cs" />
@@ -66,14 +78,24 @@
     <Compile Include="Framework\Factories\Objects\FactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Furniture\TableFactoryInfo.cs" />
     <Compile Include="Framework\Factories\Objects\Resources\OreFactoryInfo.cs" />
+    <Compile Include="Framework\Hacks\ColorChanger.cs" />
     <Compile Include="Framework\Hacks\MenuHacks.cs" />
     <Compile Include="Framework\Hacks\ObjectInteractionHacks.cs" />
     <Compile Include="Framework\Hacks\ShopHacks.cs" />
     <Compile Include="Framework\Illuminate\ColorExtensions.cs" />
+    <Compile Include="Framework\Illuminate\ColorsList.cs" />
     <Compile Include="Framework\Illuminate\FakeLightSource.cs" />
     <Compile Include="Framework\Illuminate\LightManager.cs" />
-    <Compile Include="Framework\Menus\InventoryMenu.cs" />
+    <Compile Include="Framework\Illuminate\NamedColor.cs" />
+    <Compile Include="Framework\Managers\ColorManager.cs" />
+    <Compile Include="Framework\Managers\FluidManagerV2.cs" />
+    <Compile Include="Framework\Menus\CraftingInformationPage.cs" />
+    <Compile Include="Framework\Menus\CraftingMenuV1.cs" />
+    <Compile Include="Framework\Menus\Machines\MachineMenu.cs" />
+    <Compile Include="Framework\Menus\Machines\MachineSummaryMenu.cs" />
+    <Compile Include="Framework\Menus\InventoryMenuPage.cs" />
     <Compile Include="Framework\Menus\InventoryTransferMenu.cs" />
+    <Compile Include="Framework\Menus\MenuComponents\CraftingRecipeButton.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ICollider.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISpawner.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\Interfaces\ISSCLivingEntity.cs" />
@@ -109,10 +131,13 @@
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffect.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCStatusEffects\StatusEffectManager.cs" />
     <Compile Include="Framework\Minigame\SeasideScrambleMinigame\SSCTextureUtilities.cs" />
+    <Compile Include="Framework\Objects\CraftingTables\CraftingTableTile.cs" />
+    <Compile Include="Framework\Energy\EnergyManager.cs" />
     <Compile Include="Framework\Objects\Extras\ArcadeCabinetOBJ.cs" />
     <Compile Include="Framework\Objects\Extras\ArcadeCabinetTile.cs" />
     <Compile Include="Framework\Objects\BasicItemInformation.cs" />
     <Compile Include="Framework\Objects\CustomObject.cs" />
+    <Compile Include="Framework\Objects\Extras\TrashCanTile.cs" />
     <Compile Include="Framework\Objects\Furniture\Bench.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\Furniture\ChairTileComponent.cs" />
@@ -127,11 +152,30 @@
     <Compile Include="Framework\Objects\Furniture\TableTileComponent.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ArcadeCabinetInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\ChairInformation.cs" />
-    <Compile Include="Framework\Objects\InformationFiles\Furniture\FurnitureInformation.cs" />
     <Compile Include="Framework\Objects\InformationFiles\Furniture\TableInformation.cs" />
-    <Compile Include="Framework\Objects\InformationFiles\ObjectGUIDInfo.cs" />
-    <Compile Include="Framework\Objects\InformationFiles\ResourceInformaton.cs" />
+    <Compile Include="Framework\Objects\InformationFiles\ResourceInformation.cs" />
+    <Compile Include="Framework\Objects\Interfaces\IItemInfo.cs" />
+    <Compile Include="Framework\Objects\Items\Resources\Dye.cs" />
     <Compile Include="Framework\Objects\Items\Resources\Ore.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\AxeExtended.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\Chainsaw.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\HoeExtended.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\MiningDrill.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\PickaxeExtended.cs" />
+    <Compile Include="Framework\Objects\Items\Tools\WateringCanExtended.cs" />
+    <Compile Include="Framework\Objects\Machines\AlloyFurnace.cs" />
+    <Compile Include="Framework\Objects\Machines\ChargingStation.cs" />
+    <Compile Include="Framework\Objects\Machines\EnergyGeneration\SolarPanel.cs" />
+    <Compile Include="Framework\Objects\Machines\EnergyGeneration\SteamBoiler.cs" />
+    <Compile Include="Framework\Objects\Machines\EnergyGeneration\SteamEngine.cs" />
+    <Compile Include="Framework\Objects\Machines\EnergyGeneration\Windmill.cs" />
+    <Compile Include="Framework\Objects\Machines\Grinder.cs" />
+    <Compile Include="Framework\Objects\Machines\Machine.cs" />
+    <Compile Include="Framework\Objects\Machines\Pipe.cs" />
+    <Compile Include="Framework\Objects\Machines\PipeMultiTiledObject.cs" />
+    <Compile Include="Framework\Objects\Machines\WaterPump.cs" />
+    <Compile Include="Framework\Objects\Machines\Wire.cs" />
+    <Compile Include="Framework\Objects\Machines\WireMultiTiledObject.cs" />
     <Compile Include="Framework\Objects\MultiTiledComponent.cs" />
     <Compile Include="Framework\Objects\MultiTiledObject.cs" />
     <Compile Include="Framework\Objects\ObjectManager.cs" />
@@ -143,10 +187,14 @@
     <Compile Include="Framework\Player\Managers\SittingInfo.cs" />
     <Compile Include="Framework\Player\PlayerInfo.cs" />
     <Compile Include="Framework\Utilities\BoundingBoxInfo.cs" />
+    <Compile Include="Framework\Utilities\EnergyUtilities.cs" />
     <Compile Include="Framework\Utilities\IntRange.cs" />
     <Compile Include="Framework\Utilities\InventoryManager.cs" />
     <Compile Include="Framework\Utilities\LocationUtilities.cs" />
+    <Compile Include="Framework\Utilities\MachineUtilities.cs" />
+    <Compile Include="Framework\Utilities\MultiplayerUtilities.cs" />
     <Compile Include="Framework\Utilities\ObjectUtilities.cs" />
+    <Compile Include="Framework\Utilities\PlayerUtilities.cs" />
     <Compile Include="Framework\Utilities\PyTKHelper.cs" />
     <Compile Include="Framework\Utilities\RotationUtilities.cs" />
     <Compile Include="Framework\Utilities\Serialization\ContractResolvers\NetFieldContract.cs" />
@@ -160,6 +208,7 @@
     <Compile Include="Framework\Utilities\Serialization\SpriteBatchUtilities.cs" />
     <Compile Include="Framework\Utilities\TimeUtilities.cs" />
     <Compile Include="Framework\Utilities\Vector2Utilities.cs" />
+    <Compile Include="Framework\Utilities\WeatherUtilities.cs" />
     <Compile Include="ModCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -177,10 +226,22 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Graphics\HUD\MachineStatusBubble.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Misc\Glass.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Misc\Sand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\AluminumIngot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\BauxiteOre.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\BauxiteSand.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\BrassIngot.png">
@@ -189,7 +250,19 @@
     <Content Include="Content\Graphics\Items\Resources\Ore\BronzeIngot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\CopperSand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\ElectrumIngot.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\GoldSand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\IridiumSand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\IronSand.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\LeadIngot.png">
@@ -198,10 +271,19 @@
     <Content Include="Content\Graphics\Items\Resources\Ore\LeadOre.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\LeadSand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\PrismaticNugget.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\SilverIngot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\SilverOre.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\SilverSand.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\SteelIngot.png">
@@ -213,10 +295,142 @@
     <Content Include="Content\Graphics\Items\Resources\Ore\TinOre.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\TinSand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\TitaniumIngot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Items\Resources\Ore\TitaniumOre.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Resources\Ore\TitaniumSand.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzeAxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzeAxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzeHoe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzeHoeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzePickaxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzePickaxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzeWateringCan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\BronzeWateringCanWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\Chainsaw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\ChainsawWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\DefaultAxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\DefaultHoeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\DefaultPickaxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\DefaultWateringCanWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedAxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedAxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedHoe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedHoeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedPickaxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedPickaxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedWateringCan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\HardenedWateringCanWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\MiningDrill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\MiningDrillWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\Pickaxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TestingPickaxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumAxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumAxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumHoe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumHoeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumPickaxe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumPickaxeWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumWateringCan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Items\Tools\TitaniumWateringCanWorking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\CraftingMenu\CraftButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\CraftingMenu\GoldButton.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\BatteryEnergyGuage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\BatteryEnergyMeter.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\BatteryFrame.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\DropletColored.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\DropletOutline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\EnergyMenu\LightningBolt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Menus\InventoryMenu\ItemBackground.png">
@@ -237,6 +451,24 @@
     <Content Include="Content\Graphics\Menus\InventoryMenu\TrashButton.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Menus\Misc\Chest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\Misc\Clock.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\Misc\MenuTab.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Menus\Misc\MenuTabHorizontal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Crafting\Anvil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Crafting\Workbench.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Objects\Furniture\Arcade\SeasideScrambleArcade.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -246,16 +478,73 @@
     <Content Include="Content\Graphics\Objects\Furniture\Lamps\Oak Lamp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Misc\Lighthouse.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Furniture\Misc\TrashCan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Objects\Furniture\Storage\Oak Cabinet.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Furniture\Tables\Oak Table.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Graphics\Objects\Machines\AlloyFurnace.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\BatteryBin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Capacitor.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\ChargingStation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\ClothWindmill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Grinder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\MiningDrillMachine.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Pipes\IronPipe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Sandbox.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\SolarArrayTier1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\SolarPanelTier1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\SteamBoiler.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\SteamEngine.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\WaterPump.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Windmill.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Machines\Wires\CopperWire.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Graphics\Objects\Resources\Ore\Bauxite.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Resources\Ore\Lead.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Graphics\Objects\Resources\Ore\Prismatic.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Graphics\Objects\Resources\Ore\Silver.png">

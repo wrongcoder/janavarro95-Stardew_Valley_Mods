@@ -13,16 +13,29 @@ namespace Revitalize.Framework.Hacks
     public class ShopHacks
     {
 
+        public static void AddInCustomItemsToShops()
+        {
+            AddItemsToRobinsShop();
+            AddOreToClintsShop();
+        }
+
+
+        private static void AddItemsToRobinsShop()
+        {
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.GetItem("Workbench", 1), 500), "Robin");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(new StardewValley.Object((int)Enums.SDVObject.Clay,1),50), "Robin");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getResource("Sand", 1), 25), "Robin");
+        }
         /// <summary>
         /// Adds in ore to clint's shop.
         /// </summary>
-        public static void AddOreToClintsShop()
+        private static void AddOreToClintsShop()
         {
-            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Tin",1),100), "Clint");
-            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Bauxite", 1), 150), "Clint");
-            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Lead", 1), 200), "Clint");
-            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Silver", 1), 250), "Clint");
-            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Titanium", 1), 300), "Clint");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Tin",1),ModCore.Configs.shops_blacksmithConfig.tinOreSellPrice), "Clint");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Bauxite", 1), ModCore.Configs.shops_blacksmithConfig.bauxiteOreSellPrice), "Clint");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Lead", 1), ModCore.Configs.shops_blacksmithConfig.leadOreSellPrice), "Clint");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Silver", 1), ModCore.Configs.shops_blacksmithConfig.silverOreSellPrice), "Clint");
+            PyTK.Extensions.PyEvents.addToNPCShop(new InventoryItem(ModCore.ObjectManager.resources.getOre("Titanium", 1), ModCore.Configs.shops_blacksmithConfig.titaniumOreSellPrice), "Clint");
         }
     }
 }

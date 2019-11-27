@@ -10,7 +10,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
     /// <summary>
     /// Deals with information reguarding resources.
     /// </summary>
-    public class ResourceInformaton
+    public class ResourceInformation
     {
         /// <summary>
         /// The item to drop.
@@ -60,7 +60,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <summary>
         /// Empty constructor.
         /// </summary>
-        public ResourceInformaton()
+        public ResourceInformation()
         {
 
         }
@@ -79,7 +79,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <param name="SpawnAmountLuckFactor"></param>
         /// <param name="DropChanceLuckFactor"></param>
         /// <param name="DropAmountLuckFactor"></param>
-        public ResourceInformaton(StardewValley.Object I, int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes,double ChanceToSpawn=1f,double ChanceToDrop=1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f,double DropChanceLuckFactor=0f, double DropAmountLuckFactor = 0f)
+        public ResourceInformation(StardewValley.Object I, int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes,double ChanceToSpawn=1f,double ChanceToDrop=1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f,double DropChanceLuckFactor=0f, double DropAmountLuckFactor = 0f)
         {
             this.droppedItem = I;
             this.minResourcePerDrop = MinDropAmount;
@@ -173,6 +173,17 @@ namespace Revitalize.Framework.Objects.InformationFiles
 
             if (this.chanceToDrop >= chance) return true;
             else return false;
+        }
+
+        /// <summary>
+        /// Gets an item that should be dropped from this resource with the appropriate drop amount;
+        /// </summary>
+        /// <returns></returns>
+        public Item getItemDrops()
+        {
+            Item I = this.droppedItem.getOne();
+            I.Stack = this.getNumberOfDropsToSpawn();
+            return I;
         }
     }
 }

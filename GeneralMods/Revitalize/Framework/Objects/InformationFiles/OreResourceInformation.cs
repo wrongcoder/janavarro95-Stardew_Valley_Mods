@@ -9,7 +9,7 @@ using StardewValley;
 
 namespace Revitalize.Framework.Objects.InformationFiles
 {
-    public class OreResourceInformation:ResourceInformaton
+    public class OreResourceInformation:ResourceInformation
     {
 
 

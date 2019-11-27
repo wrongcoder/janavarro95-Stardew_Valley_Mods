@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StardewValley;
 
 namespace Revitalize.Framework.Illuminate
@@ -29,6 +30,9 @@ namespace Revitalize.Framework.Illuminate
         /// </summary>
         public const int lightBigNumber= 1000000;
 
+        [JsonIgnore]
+        public bool requiresUpdate;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -55,6 +59,7 @@ namespace Revitalize.Framework.Illuminate
             this.lights.Add(IdKey, light);
             if (this.fakeLights.ContainsKey(IdKey)) return true;
             this.fakeLights.Add(IdKey, new FakeLightSource(light.Identifier, light.position.Value, light.color.Value.Invert(), light.radius.Value));
+            this.requiresUpdate = true;
             return true;
         }
 
@@ -80,6 +85,7 @@ namespace Revitalize.Framework.Illuminate
             this.lights.Add(IdKey, light);
             if (this.fakeLights.ContainsKey(IdKey)) return true;
             this.fakeLights.Add(IdKey, new FakeLightSource(light.Identifier, light.position.Value, light.color.Value.Invert(), light.radius.Value));
+            this.requiresUpdate = true;
             return true;
         }
 
@@ -121,6 +127,7 @@ namespace Revitalize.Framework.Illuminate
             Game1.currentLightSources.Add(light);
             location.sharedLights.Add((int)IdKey.X*lightBigNumber+(int)IdKey.Y,light);
             this.repositionLight(light, IdKey, gameObject);
+            this.requiresUpdate = true;
             return true;
         }
 
@@ -161,6 +168,7 @@ namespace Revitalize.Framework.Illuminate
         {
             Vector2 initialPosition = gameObject.TileLocation * Game1.tileSize;
             light.position.Value = initialPosition + offset;
+            this.requiresUpdate = true;
         }
 
         /// <summary>
@@ -244,6 +252,10 @@ namespace Revitalize.Framework.Illuminate
             return copy;
         }
 
+        public static LightSource CreateLightSource(float Radius, Color ActualColor,int Texture=4)
+        {
+            return new LightSource(Texture, new Vector2(0, 0), Radius, ActualColor.Invert());
+        }
         
     }
 }

@@ -20,6 +20,18 @@ using Vocalization.Framework.Menus;
 namespace Vocalization
 {
     /*
+     *Mode:
+     * Simple: Hello, Goodbye, etc
+     * Full: All dialogue
+     * None: Dialogue disabled
+     * Cinematic: Simple unless in a cutscene
+     * CutscenesOnly: (if game event is up play dialogue)
+     *
+     * (Code in) Have option to enable/disable shop dialogue
+     * (Code in) have option to enable/disable tv dialogue
+     * (Code in) have option to enable/disable letter dialogue
+     *
+     * 
      * Things to sanitize/load in
      * 
      * NPC Dialogue(sanitized, not loaded);
@@ -250,9 +262,9 @@ namespace Vocalization
 
         private void Input_ButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            if(e.Button.ToString()== config.menuHotkey)
+            if (e.Button.ToString() == config.menuHotkey)
             {
-                Game1.activeClickableMenu = new VocalizationMenu(100, 64, 600, 300, true);
+               if(Game1.activeClickableMenu==null) Game1.activeClickableMenu = new VocalizationMenu(100, 64, 600, 300, true);
             }
         }
 
@@ -317,7 +329,7 @@ namespace Vocalization
                 new KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>(speech, ExtraTextureDrawOrder.after)
             };
 
-            Button menuTab = new Button("", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper,this.ModManifest ,Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null)), false, components);
+            Button menuTab = new Button("", new Rectangle(0, 0, 32, 32), new Texture2DExtended(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "MenuTab.png")), "", new Rectangle(0, 0, 32, 32), 2f, new StardustCore.Animations.Animation(new Rectangle(0, 0, 32, 32)), Color.White, Color.White, new StardustCore.UIUtilities.MenuComponents.Delegates.Functionality.ButtonFunctionality(new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null), new StardustCore.UIUtilities.MenuComponents.Delegates.DelegatePairing(null, null)), false, components);
 
             //Change this to take the vocalization menu instead
             var modTabs = new List<KeyValuePair<Button, IClickableMenuExtended>>
@@ -515,6 +527,7 @@ namespace Vocalization
                         };
                         foreach (string v in tries)
                         {
+                            if (v.Equals("TV") && config.TVDialogueEnabled == false) continue;
                             //Add in support for TV Shows
                             bool f = DialogueCues.TryGetValue(v, out CharacterVoiceCue voice);
                             currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
@@ -538,6 +551,7 @@ namespace Vocalization
                 //Support for Letters
                 if (Game1.activeClickableMenu is LetterViewerMenu letterMenu)
                 {
+                    if (config.LetterDialogueEnabled == false) return;
                     //Use reflection to get original text back.
                     //mail dialogue text will probably need to be sanitized as well....
                     List<string> mailText = (List<string>)ModHelper.Reflection.GetField<List<string>>(letterMenu, "mailMessage");
@@ -553,6 +567,7 @@ namespace Vocalization
                     currentDialogue = sanitizeDialogueInGame(currentDialogue); //If contains the stuff in the else statement, change things up.
                     if (voice.dialogueCues.ContainsKey(currentDialogue))
                     {
+
                         //Not variable messages. Aka messages that don't contain words the user can change such as farm name, farmer name etc. 
                         voice.speak(currentDialogue);
                     }
@@ -566,6 +581,7 @@ namespace Vocalization
                 //Support for shops
                 if (Game1.activeClickableMenu is ShopMenu shopMenu)
                 {
+                    if (config.ShopDialogueEnabled == false) return;
                     string shopDialogue = shopMenu.potraitPersonDialogue; //Check this string to the dict of voice cues
 
                     shopDialogue = shopDialogue.Replace(Environment.NewLine, "");
@@ -625,6 +641,10 @@ namespace Vocalization
         {
             foreach (LanguageName language in config.translationInfo.LanguageNames)
             {
+                if(Vocalization.config.Developer_ScrapeOnlyEnglishDialogue && language!= LanguageName.English)
+                {
+                    continue;
+                }
                 string relativeLanguagePath = Path.Combine(RelativeVoicePath, language.ToString());
 
                 // check if mod supports language
@@ -726,7 +746,7 @@ namespace Vocalization
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -759,7 +779,7 @@ namespace Vocalization
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -789,7 +809,7 @@ namespace Vocalization
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -837,7 +857,7 @@ namespace Vocalization
                                                 {
                                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                                 }
                                                 else
                                                 {
@@ -860,7 +880,7 @@ namespace Vocalization
                                                 {
                                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                                 }
                                                 else
                                                 {
@@ -899,7 +919,7 @@ namespace Vocalization
                                                         {
                                                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                                            cue.addDialogue(ahh, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                            cue.addDialogue(ahh, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                                         }
                                                         else
                                                         {
@@ -926,7 +946,7 @@ namespace Vocalization
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                        cue.addDialogue(ahh, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(ahh, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -983,7 +1003,7 @@ namespace Vocalization
                                                     {
                                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                                     }
                                                     else
                                                     {
@@ -1007,7 +1027,7 @@ namespace Vocalization
                                                 {
                                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                                 }
                                                 else
                                                 {
@@ -1030,7 +1050,7 @@ namespace Vocalization
                                                 {
                                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                                 }
                                                 else
                                                 {
@@ -1050,7 +1070,7 @@ namespace Vocalization
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -1095,8 +1115,8 @@ namespace Vocalization
                                         {
                                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
 
-                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, replacementStrings.kid1Name), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
-                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, replacementStrings.kid2Name), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, replacementStrings.kid1Name), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
+                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, replacementStrings.kid2Name), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                         }
                                         else
                                         {
@@ -1110,7 +1130,7 @@ namespace Vocalization
                                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                         {
                                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, replacementStrings.kid1Name), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                            cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, replacementStrings.kid1Name), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
 
                                         }
                                         else
@@ -1136,7 +1156,7 @@ namespace Vocalization
                                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                                     {
                                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                                        cue.addDialogue(clean_str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                        cue.addDialogue(clean_str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
 
                                                     }
                                                     else
@@ -1163,7 +1183,7 @@ namespace Vocalization
                                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                                     {
                                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                                        cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, pair2.Key, i.ToString()), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                        cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, pair2.Key, i.ToString()), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                                     }
                                                     else
                                                     {
@@ -1188,7 +1208,7 @@ namespace Vocalization
                                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                                     {
                                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                                        cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, lvl + tool), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                        cue.addDialogue(config.translationInfo.LoadString(Path.Combine("Data", "ExtraDialogue:" + key), language, lvl + tool), new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
 
                                                     }
                                                     else
@@ -1214,7 +1234,7 @@ namespace Vocalization
                                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                                     {
                                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                                        cue.addDialogue(actual, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                        cue.addDialogue(actual, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
 
                                                     }
                                                     else
@@ -1228,7 +1248,7 @@ namespace Vocalization
                                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                                     {
                                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                                        cue.addDialogue(dia, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                        cue.addDialogue(dia, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
 
                                                     }
                                                     else
@@ -1246,7 +1266,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -1287,7 +1307,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -1329,7 +1349,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
 
                                     }
                                     else
@@ -1357,7 +1377,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -1396,7 +1416,7 @@ namespace Vocalization
                             if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                             {
                                 AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                             }
                             else
                             {
@@ -1436,7 +1456,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -1484,7 +1504,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -1521,7 +1541,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key.ToString())))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key.ToString()), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
 
                                 }
                                 else
@@ -1564,7 +1584,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -1620,7 +1640,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -1704,7 +1724,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -1742,7 +1762,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -1765,7 +1785,7 @@ namespace Vocalization
                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                     {
                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                     }
                     else
                     {
@@ -1778,7 +1798,7 @@ namespace Vocalization
                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                     {
                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                     }
                     else
                     {
@@ -1792,7 +1812,7 @@ namespace Vocalization
                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                     {
                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                     }
                     else
                     {
@@ -1808,7 +1828,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1822,7 +1842,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1835,7 +1855,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1849,7 +1869,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1865,7 +1885,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1879,7 +1899,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1893,7 +1913,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1907,7 +1927,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1921,7 +1941,7 @@ namespace Vocalization
                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                 {
                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                    cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                 }
                 else
                 {
@@ -1969,7 +1989,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key), out VoiceAudioOptions value);
-                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                     }
                                     else
                                     {
@@ -2003,7 +2023,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key), out VoiceAudioOptions value);
-                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                     }
                                     else
                                     {
@@ -2035,7 +2055,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key), out VoiceAudioOptions value);
-                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                     }
                                     else
                                     {
@@ -2076,7 +2096,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, config.translationInfo.getXNBForTranslation("Temp", language), pair.Key), out VoiceAudioOptions value);
-                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(cleanSentence, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                     }
                                     else
                                     {
@@ -2128,7 +2148,7 @@ namespace Vocalization
                                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                         {
                                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                         }
                                         else
                                         {
@@ -2173,7 +2193,7 @@ namespace Vocalization
                                             if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                             {
                                                 AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                                cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                                cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                             }
                                             else
                                             {
@@ -2208,7 +2228,7 @@ namespace Vocalization
                                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                         {
                                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                         }
                                         else
                                         {
@@ -2230,7 +2250,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -2268,7 +2288,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -2313,7 +2333,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,IsDialogueHeartEvent(pair.Key)));
                                     }
                                     else
                                     {
@@ -2359,7 +2379,7 @@ namespace Vocalization
                                     if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                     {
                                         AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                        cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                     }
                                     else
                                     {
@@ -2417,11 +2437,11 @@ namespace Vocalization
                             cleanDialogues = sanitizeDialogueFromDictionaries(dia, cue);
                             foreach (string str in cleanDialogues)
                             {
-                                ModMonitor.Log("POST SANITIZARION: "+str);
+                                ModMonitor.Log("POST SANITIZARION: " + str);
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -2501,7 +2521,7 @@ namespace Vocalization
                                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                         {
                                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                            cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents,false));
                                         }
                                         else
                                         {
@@ -2523,7 +2543,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2537,7 +2557,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2550,7 +2570,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2565,7 +2585,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2579,7 +2599,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2595,7 +2615,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2612,7 +2632,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2626,7 +2646,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2640,7 +2660,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2657,7 +2677,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2673,7 +2693,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2690,7 +2710,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2707,7 +2727,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2724,7 +2744,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2740,7 +2760,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2756,7 +2776,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2772,7 +2792,7 @@ namespace Vocalization
                         if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                         {
                             AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                            cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                         }
                         else
                         {
@@ -2790,7 +2810,7 @@ namespace Vocalization
                             if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                             {
                                 AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                                cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                             }
                             else
                             {
@@ -2803,7 +2823,7 @@ namespace Vocalization
                             if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName1, key1)))
                             {
                                 AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName1, key1), out VoiceAudioOptions value);
-                                cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                cue.addDialogue(str1, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                             }
                             else
                             {
@@ -2828,7 +2848,7 @@ namespace Vocalization
                             if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                             {
                                 AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                cue.addDialogue(str2, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                cue.addDialogue(str2, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                             }
                             else
                             {
@@ -2863,7 +2883,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, key)))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, key), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -2903,7 +2923,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, fileName, pair.Key.ToString())))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, fileName, pair.Key.ToString()), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -2923,7 +2943,7 @@ namespace Vocalization
                                 if (AudioCues.getWavFileReferences(language).ContainsKey(AudioCues.generateKey(language, cue.name, "StringsFromCSFiles", pair.Key.ToString())))
                                 {
                                     AudioCues.getWavFileReferences(language).TryGetValue(AudioCues.generateKey(language, cue.name, "StringsFromCSFiles", pair.Key.ToString()), out VoiceAudioOptions value);
-                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents));
+                                    cue.addDialogue(str, new VoiceAudioOptions(value.simple, value.full, value.heartEvents, value.simpleAndHeartEvents, false));
                                 }
                                 else
                                 {
@@ -3494,6 +3514,18 @@ namespace Vocalization
                 splicedText = splicedText.Replace("\n", "");
 
             return splicedText;
+        }
+
+        public static bool IsDialogueHeartEvent(string text)
+        {
+            string[] splits = text.Split('/');
+
+            if (splits.Length > 1)
+            {
+                char firstChar = splits[1][0];
+                if (firstChar.Equals('f')) return true;
+            }
+            return false;
         }
     }
 }

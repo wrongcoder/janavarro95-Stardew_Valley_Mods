@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using PyTK.CustomElementHandler;
+using Revitalize.Framework.Illuminate;
+using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -13,6 +15,92 @@ namespace Revitalize.Framework.Objects
 {
     public class MultiTiledObject : CustomObject
     {
+        [JsonIgnore]
+        public override string ItemInfo
+        {
+            get
+            {
+                string infoStr = Revitalize.ModCore.Serializer.ToJSONString(this.info);
+                string guidStr = this.guid.ToString();
+                string pytkData = ModCore.Serializer.ToJSONString(this.data);
+                string dictStr = ModCore.Serializer.ToJSONString(this.childrenGuids);
+                if (this.objects != null)
+                {
+                    foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+                    {
+                        if (pair.Value == null) continue;
+                        if ((pair.Value as CustomObject) == null) continue;
+                        if((pair.Value as CustomObject).guid==null) continue;
+                        if(ModCore.CustomObjects.ContainsKey( (pair.Value as CustomObject).guid))
+                        {
+                            ModCore.CustomObjects[(pair.Value as CustomObject).guid] = (CustomObject)pair.Value;
+                        }
+                        else
+                        {
+                            ModCore.CustomObjects.Add((pair.Value as CustomObject).guid, (pair.Value as CustomObject));
+                        }
+                    }
+                }
+
+                //ModCore.log("Serializing dict:" + dictStr);
+                return infoStr + "<" + guidStr + "<" + pytkData+"<"+dictStr;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) return;
+                string[] data = value.Split('<');
+                string infoString = data[0];
+                string guidString = data[1];
+                string pytkData = data[2];
+                string dictStr = data[3];
+                //ModCore.log("Getting dictStr:" + dictStr);
+
+                this.info = (BasicItemInformation)Revitalize.ModCore.Serializer.DeserializeFromJSONString(infoString, typeof(BasicItemInformation));
+                this.data = Revitalize.ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(pytkData);
+                Guid oldGuid = this.guid;
+                this.guid = Guid.Parse(guidString);
+
+                //this.childrenGuids = ModCore.Serializer.DeserializeFromJSONString<Dictionary<Vector2, Guid>>(dictStr);
+                if (ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    ModCore.CustomObjects[this.guid] = this;
+                }
+                else
+                {
+                    ModCore.CustomObjects.Add(this.guid, this);
+                }
+
+                if (ModCore.CustomObjects.ContainsKey(oldGuid) && ModCore.CustomObjects.ContainsKey(this.guid))
+                {
+                    if (ModCore.CustomObjects[oldGuid] == ModCore.CustomObjects[this.guid] && oldGuid != this.guid)
+                    {
+                        //ModCore.CustomObjects.Remove(oldGuid);
+                    }
+                }
+
+                Dictionary<Vector2, Guid> dict = ModCore.Serializer.DeserializeFromJSONString<Dictionary<Vector2, Guid>>(dictStr);
+                if (dict == null) return;
+                if (dict.Count == 0) return;
+                else
+                {
+                    //ModCore.log("Children dicts are updated!");
+                    this.childrenGuids = dict;
+                    foreach(KeyValuePair<Vector2,Guid> pair in dict)
+                    {
+                        if (ModCore.CustomObjects.ContainsKey(pair.Value))
+                        {
+                            this.removeComponent(pair.Key);
+                            this.addComponent(pair.Key, (MultiTiledComponent)ModCore.CustomObjects[pair.Value]);
+                        }
+                        else
+                        {
+                            MultiplayerUtilities.RequestGuidObject(pair.Value);
+                        }
+                    }
+                }
+            }
+        }
+
         [JsonIgnore]
         public Dictionary<Vector2, StardewValley.Object> objects;
 
@@ -42,8 +130,8 @@ namespace Revitalize.Framework.Objects
 
         }
 
-        public MultiTiledObject(CustomObjectData PyTKData,BasicItemInformation info)
-            : base(PyTKData,info)
+        public MultiTiledObject(CustomObjectData PyTKData, BasicItemInformation info)
+            : base(PyTKData, info)
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
@@ -51,7 +139,7 @@ namespace Revitalize.Framework.Objects
         }
 
         public MultiTiledObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation)
-            : base(PyTKData,info, TileLocation)
+            : base(PyTKData, info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
@@ -59,7 +147,7 @@ namespace Revitalize.Framework.Objects
         }
 
         public MultiTiledObject(CustomObjectData PyTKData, BasicItemInformation info, Vector2 TileLocation, Dictionary<Vector2, MultiTiledComponent> ObjectsList)
-            : base(PyTKData,info, TileLocation)
+            : base(PyTKData, info, TileLocation)
         {
             this.objects = new Dictionary<Vector2, StardewValley.Object>();
             this.childrenGuids = new Dictionary<Vector2, Guid>();
@@ -81,7 +169,7 @@ namespace Revitalize.Framework.Objects
             }
 
             this.objects.Add(key, obj);
-            if (this.childrenGuids.ContainsKey(key)==false)
+            if (this.childrenGuids.ContainsKey(key) == false)
             {
                 this.childrenGuids.Add(key, obj.guid);
             }
@@ -91,9 +179,9 @@ namespace Revitalize.Framework.Objects
             if (key.Y > this.height) this.height = (int)key.Y;
             (obj as MultiTiledComponent).containerObject = this;
             (obj as MultiTiledComponent).offsetKey = key;
+            this.info.forceUpdate();
             return true;
         }
-
         public bool removeComponent(Vector2 key)
         {
             if (!this.objects.ContainsKey(key))
@@ -104,6 +192,7 @@ namespace Revitalize.Framework.Objects
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 (pair.Value as MultiTiledComponent).draw(spriteBatch, x + ((int)pair.Key.X), y + ((int)pair.Key.Y), alpha);
@@ -112,6 +201,7 @@ namespace Revitalize.Framework.Objects
 
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 pair.Value.draw(spriteBatch, xNonTile + (int)pair.Key.X * Game1.tileSize, yNonTile + (int)pair.Key.Y * Game1.tileSize, layerDepth, alpha);
@@ -122,13 +212,18 @@ namespace Revitalize.Framework.Objects
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
+            {
+                //ModCore.log(location + (pair.Key * 16) + new Vector2(32, 32));
+                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
+            }
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
         }
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
                 pair.Value.drawWhenHeld(spriteBatch, objectPosition + (pair.Key * Game1.tileSize), f);
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
@@ -137,6 +232,7 @@ namespace Revitalize.Framework.Objects
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 if (!this.isPlaceable())
@@ -161,8 +257,8 @@ namespace Revitalize.Framework.Objects
                 //Revitalize.ModCore.log(new Vector2(x + ((int)pair.Key.X), y + ((int)pair.Key.Y)));
                 if ((pair.Value as MultiTiledComponent).info.ignoreBoundingBox)
                 {
-                    x *= -1;
-                    y *= -1;
+                    //x *= -1;
+                    //y *= -1;
                 }
                 (pair.Value as MultiTiledComponent).draw(spriteBatch, x / Game1.tileSize, y / Game1.tileSize, 0.5f);
                 //break;
@@ -170,9 +266,15 @@ namespace Revitalize.Framework.Objects
             }
         }
 
+        public override void drawFullyInMenu(SpriteBatch spriteBatch, Vector2 objectPosition, float Depth)
+        {
+            this.updateInfo();
 
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+                (pair.Value as CustomObject).drawFullyInMenu(spriteBatch, objectPosition + (pair.Key * Game1.tileSize),Depth);
+        }
 
-        public virtual void pickUp()
+        public virtual void pickUp(Farmer who)
         {
             bool canPickUp = this.removeAndAddToPlayersInventory();
             if (canPickUp)
@@ -181,23 +283,25 @@ namespace Revitalize.Framework.Objects
                 {
                     if ((pair.Value as MultiTiledComponent).info.lightManager != null)
                     {
-                        ModCore.log("Let there be light.");
+                        //ModCore.log("Let there be light.");
                         if ((pair.Value as MultiTiledComponent).info.lightManager.lightsOn == true)
                         {
-                            ModCore.log("Got a light???");
+                            //ModCore.log("Got a light???");
                         }
                     }
-                    (pair.Value as MultiTiledComponent).removeFromLocation((pair.Value as MultiTiledComponent).location, pair.Key);
+                    (pair.Value as MultiTiledComponent).removeFromLocation(who.currentLocation, pair.Key);
 
                 }
                 this.location = null;
             }
             else
-                Game1.showRedMessage("NOOOOOOOO");
+                Game1.showRedMessage("Can't pickup item for some reason.");
         }
 
         public override bool removeAndAddToPlayersInventory()
         {
+            bool f = Game1.player.addItemToInventoryBool(this, false);
+            return f;
             if (Game1.player.isInventoryFull())
             {
                 Game1.showRedMessage("Inventory full.");
@@ -209,6 +313,7 @@ namespace Revitalize.Framework.Objects
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
+            this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 /*
@@ -242,7 +347,7 @@ namespace Revitalize.Framework.Objects
         {
             bool cleanUp = this.clicked(who);
             if (cleanUp)
-                this.pickUp();
+                this.pickUp(who);
             return cleanUp;
         }
 
@@ -267,9 +372,9 @@ namespace Revitalize.Framework.Objects
             Dictionary<Vector2, MultiTiledComponent> objs = new Dictionary<Vector2, MultiTiledComponent>();
             foreach (var pair in this.objects)
             {
-                objs.Add(pair.Key, (MultiTiledComponent)pair.Value);
+                objs.Add(pair.Key, (MultiTiledComponent)pair.Value.getOne());
             }
-            return new MultiTiledObject(this.data,this.info.Copy(), this.TileLocation, objs);
+            return new MultiTiledObject(this.data, this.info.Copy(), this.TileLocation, objs);
         }
 
         public override ICustomObject recreate(Dictionary<string, string> additionalSaveData, object replacement)
@@ -372,5 +477,122 @@ namespace Revitalize.Framework.Objects
             return 1;
         }
 
+        public override void updateInfo()
+        {
+            //this.recreateComponents();
+            if (this.info == null)
+            {
+                this.ItemInfo = this.text;
+                //ModCore.log("Updated item info for container!");
+                return;
+            }
+            if (this.objects != null)
+            {
+                if (this.childrenGuids != null)
+                {
+                    if (this.objects.Count == 0 || this.objects.Count != this.childrenGuids.Count)
+                    {
+                        this.ItemInfo = this.text;
+                        //ModCore.log("Updated item info for container!");
+                        return;
+                    }
+                }
+                else
+                {
+                    if (this.objects.Count == 0)
+                    {
+                        this.ItemInfo = this.text;
+                        //ModCore.log("Updated item info for container!");
+                        return;
+                    }
+
+                }
+            }
+
+            if (this.requiresUpdate())
+            {
+                //this.ItemInfo = this.text;
+                this.text = this.ItemInfo;
+                this.info.cleanAfterUpdate();
+                MultiplayerUtilities.RequestUpdateSync(this.guid);
+            }
+        }
+
+        public virtual void recreateComponents()
+        {
+
+            if (ModCore.CustomObjects.ContainsKey(this.guid))
+            {
+                if ((ModCore.CustomObjects[this.guid] as MultiTiledObject).objects.Count > 0)
+                {
+                    this.objects = (ModCore.CustomObjects[this.guid] as MultiTiledObject).objects;
+                }
+                else
+                {
+
+                }
+                if((ModCore.CustomObjects[this.guid] as MultiTiledObject).childrenGuids.Count > 0)
+                {
+                    this.childrenGuids = (ModCore.CustomObjects[this.guid] as MultiTiledObject).childrenGuids;
+                }
+            }
+            else
+            {
+                MultiplayerUtilities.RequestGuidObject(this.guid);
+                MultiplayerUtilities.RequestGuidObject_Tile(this.guid);
+            }
+            if (this.objects == null || this.childrenGuids == null)
+            {
+                //ModCore.log("Either objects or children guids are null");
+                return;
+            }
+            
+
+            //ModCore.log("Recreate children components");
+            if (this.objects.Count < this.childrenGuids.Count)
+            {
+                foreach (KeyValuePair<Vector2, Guid> pair in this.childrenGuids)
+                {
+                    if (ModCore.CustomObjects.ContainsKey(pair.Value))
+                    {
+                        this.removeComponent(pair.Key);
+                        this.addComponent(pair.Key,(MultiTiledComponent)ModCore.CustomObjects[pair.Value]);
+                    }
+                    else
+                    {
+                        MultiplayerUtilities.RequestGuidObject(pair.Value);
+                        MultiplayerUtilities.RequestGuidObject_Tile(pair.Value);
+                    }
+                }
+            }
+            else
+            {
+                //ModCore.log("Count is exactly the same!");
+                //ModCore.log("Count is: " + this.objects.Count+" : and " + this.childrenGuids.Count);
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DyeColor"></param>
+        public override void dyeColor(NamedColor DyeColor)
+        {
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            {
+                (pair.Value as CustomObject).dyeColor(DyeColor);       
+            }
+            this.info.DyedColor = DyeColor;
+        }
+
+        public override void eraseDye()
+        {
+            foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
+            {
+                (pair.Value as CustomObject).eraseDye();
+            }
+            this.info.DyedColor = new NamedColor("", new Color(0, 0, 0, 0));
+        }
     }
 }

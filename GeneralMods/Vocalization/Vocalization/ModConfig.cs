@@ -26,6 +26,11 @@ namespace Vocalization
         /// <summary>The current mode for the mod.</summary>
         public string currentMode = "Full";
 
+        public bool ShopDialogueEnabled=true;
+        public bool TVDialogueEnabled = true;
+        public bool LetterDialogueEnabled = true;
+
+        public bool Developer_ScrapeOnlyEnglishDialogue=true;
 
         /// <summary>Validates</summary>
         public void verifyValidMode()

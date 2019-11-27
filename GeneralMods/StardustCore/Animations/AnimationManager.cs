@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using StardewValley;
 using StardustCore.UIUtilities;
 
@@ -22,7 +23,13 @@ namespace StardustCore.Animations
 
         public string animationDataString;
 
+        [JsonIgnore]
+        public bool requiresUpdate;
         public bool IsNull => this.defaultDrawFrame == null && this.objectTexture == null;
+
+        public bool hasRecievedUpdateTick;
+
+        public string startingAnimationName;
 
         /// <summary>
         /// Checks to see if there is an animation playing.
@@ -52,6 +59,7 @@ namespace StardustCore.Animations
             this.currentAnimation = this.defaultDrawFrame;
             this.currentAnimationName = "";
             this.animationDataString = "";
+            this.startingAnimationName = "";
         }
 
         public AnimationManager(Texture2DExtended ObjectTexture, Animation DefaultFrame, string animationString, string startingAnimationKey, int startingAnimationFrame = 0, bool EnabledByDefault = true)
@@ -63,6 +71,7 @@ namespace StardustCore.Animations
 
             this.animationDataString = animationString;
             this.animations = parseAnimationsFromXNB(animationString);
+            this.startingAnimationName = startingAnimationKey;
             if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
                 this.setAnimation(startingAnimationKey, startingAnimationFrame);
             else
@@ -80,8 +89,29 @@ namespace StardustCore.Animations
             this.enabled = EnabledByDefault;
 
             this.animations = animationString;
-            if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
-                this.setAnimation(startingAnimationKey, startingAnimationFrame);
+            this.startingAnimationName = startingAnimationKey;
+            if (this.animations != null)
+            {
+                if (string.IsNullOrEmpty(startingAnimationKey) == false)
+                {
+                    if (this.animations.TryGetValue(startingAnimationKey, out this.currentAnimationList))
+                    {
+                        this.setAnimation(startingAnimationKey, startingAnimationFrame);
+                        this.playAnimation(startingAnimationKey, true, startingAnimationFrame);
+                    }
+
+                    else
+                    {
+                        this.currentAnimation = this.defaultDrawFrame;
+                        this.currentAnimationName = "";
+                    }
+                }
+                else
+                {
+                    this.currentAnimation = this.defaultDrawFrame;
+                    this.currentAnimationName = "";
+                }
+            }
             else
             {
                 this.currentAnimation = this.defaultDrawFrame;
@@ -97,8 +127,10 @@ namespace StardustCore.Animations
                 if (this.currentAnimation.frameDuration == -1 || !this.enabled || this.currentAnimation == this.defaultDrawFrame)
                     return; //This is if this is a default animation or the animation stops here.
                 if (this.currentAnimation.frameCountUntilNextAnimation == 0)
-                    this.getNextAnimation();
+                    this.getNextAnimationFrame();
                 this.currentAnimation.tickAnimationFrame();
+                //this.requiresUpdate = true;
+                this.hasRecievedUpdateTick = true;
             }
             catch (Exception err)
             {
@@ -107,24 +139,41 @@ namespace StardustCore.Animations
             }
         }
 
+        public void prepareForNextUpdateTick()
+        {
+            this.hasRecievedUpdateTick = false;
+        }
+
+        public bool canTickAnimation()
+        {
+            return this.hasRecievedUpdateTick == false;
+        }
+
         /// <summary>Get the next animation frame in the list of animations.</summary>
-        public void getNextAnimation()
+        private void getNextAnimationFrame()
         {
             this.currentAnimationListIndex++;
-            if (this.currentAnimationListIndex == this.currentAnimationList.Count) //If the animation frame I'm tryting to get is 1 outside my list length, reset the list.
+            if (this.currentAnimationListIndex == this.currentAnimationList.Count)
+            { //If the animation frame I'm tryting to get is 1 outside my list length, reset the list.
                 if (this.loopAnimation)
                 {
                     this.currentAnimationListIndex = 0;
+                    this.currentAnimation = this.currentAnimationList[this.currentAnimationListIndex];
+                    this.currentAnimation.startAnimation();
+                    return;
                 }
                 else
                 {
+                    //this.requiresUpdate = true;
                     this.playDefaultAnimation();
                     return;
                 }
+            }
 
             //Get the next animation from the list and reset it's counter to the starting frame value.
             this.currentAnimation = this.currentAnimationList[this.currentAnimationListIndex];
             this.currentAnimation.startAnimation();
+            //this.requiresUpdate = true;
         }
 
         /// <summary>Gets the animation from the dictionary of all animations available.</summary>
@@ -139,6 +188,7 @@ namespace StardustCore.Animations
                     this.currentAnimationList = dummyList;
                     this.currentAnimation = this.currentAnimationList[StartingFrame];
                     this.currentAnimationName = AnimationName;
+                    this.requiresUpdate = true;
                     return true;
                 }
                 else
@@ -164,7 +214,7 @@ namespace StardustCore.Animations
         /// <param name="overrideSameAnimation"></param>
         /// <param name="StartingFrame"></param>
         /// <returns></returns>
-        public bool playAnimation(string AnimationName,bool overrideSameAnimation=false,int StartingFrame = 0)
+        public bool playAnimation(string AnimationName, bool overrideSameAnimation = false, int StartingFrame = 0)
         {
             if (this.animations.TryGetValue(AnimationName, out List<Animation> dummyList))
             {
@@ -179,6 +229,7 @@ namespace StardustCore.Animations
                     this.currentAnimationName = AnimationName;
                     this.currentAnimation.startAnimation();
                     this.loopAnimation = true;
+                    this.requiresUpdate = true;
                     return true;
                 }
                 else
@@ -219,6 +270,7 @@ namespace StardustCore.Animations
                     this.currentAnimationName = AnimationName;
                     this.currentAnimation.startAnimation();
                     this.loopAnimation = false;
+                    this.requiresUpdate = true;
                     return true;
                 }
                 else
@@ -245,6 +297,7 @@ namespace StardustCore.Animations
             this.currentAnimation = this.defaultDrawFrame;
             this.currentAnimationName = "";
             this.currentAnimationListIndex = 0;
+            this.requiresUpdate = true;
         }
 
         /// <summary>Sets the animation manager to an on state, meaning that this animation will update on the draw frame.</summary>
@@ -369,7 +422,7 @@ namespace StardustCore.Animations
         /// <param name="scale"></param>
         /// <param name="flipped"></param>
         /// <param name="depth"></param>
-        public void draw(SpriteBatch b,Vector2 Position,Color drawColor,float scale,SpriteEffects flipped,float depth)
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, 0f, Vector2.Zero, scale, flipped, depth);
             try
@@ -383,7 +436,7 @@ namespace StardustCore.Animations
             }
         }
 
-        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale,float Rotation ,SpriteEffects flipped, float depth)
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale, float Rotation, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
             try
@@ -420,7 +473,7 @@ namespace StardustCore.Animations
             }
         }
 
-        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, float Rotation,SpriteEffects flipped, float depth)
+        public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, float Rotation, SpriteEffects flipped, float depth)
         {
             b.Draw(this.objectTexture.texture, Position, this.currentAnimation.sourceRectangle, drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
             try
@@ -452,6 +505,11 @@ namespace StardustCore.Animations
         public Texture2D getTexture()
         {
             return this.objectTexture.getTexture();
+        }
+
+        public AnimationManager Copy()
+        {
+            return new AnimationManager(this.objectTexture, this.defaultDrawFrame, this.animations, this.startingAnimationName, 0, this.enabled);
         }
     }
 }

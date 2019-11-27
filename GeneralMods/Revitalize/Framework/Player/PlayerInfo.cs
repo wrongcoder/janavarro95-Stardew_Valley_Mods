@@ -6,6 +6,7 @@ namespace Revitalize.Framework.Player
     {
         public SittingInfo sittingInfo;
         public MagicManager magicManager;
+        public bool justPlacedACustomObject;
 
         public PlayerInfo()
         {

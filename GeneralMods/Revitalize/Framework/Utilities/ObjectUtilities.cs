@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Revitalize.Framework.Objects;
 
 namespace Revitalize.Framework.Utilities
 {
@@ -28,5 +30,59 @@ namespace Revitalize.Framework.Utilities
             else return false;
         }
 
+        public static bool IsSameOrSubclass(Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase)
+                   || potentialDescendant == potentialBase;
+        }
+
+        public static bool IsSameType(Type potentialBase, Type potentialDescendant)
+        {
+            return  potentialDescendant == potentialBase;
+        }
+
+        public static bool IsSubclass(Type potentialBase, Type potentialDescendant)
+        {
+            return potentialDescendant.IsSubclassOf(potentialBase);
+        }
+
+        /// <summary>
+        /// Gets a dimension offset depending on the size of the object passed in.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static Vector2 GetDimensionOffsetFromItem(StardewValley.Object obj)
+        {
+            if (ObjectUtilities.IsSameType(typeof(StardewValley.Object), obj.GetType()))
+            {
+                return new Vector2(64f, 64f);
+            }
+            if (ObjectUtilities.IsSameType(typeof(Revitalize.Framework.Objects.MultiTiledObject), obj.GetType()))
+            {
+                return new Vector2(64f * (obj as MultiTiledObject).Width, 64f * (obj as MultiTiledObject).Height);
+            }
+
+            return new Vector2(64f, 64f);
+        }
+
+        /// <summary>
+        /// Gets the height of an object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static float GetHeightOffsetFromItem(StardewValley.Object obj)
+        {
+            return GetDimensionOffsetFromItem(obj).Y;
+        }
+
+        /// <summary>
+        /// Gets the width of an item.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static float GetWidthOffsetFromItem(StardewValley.Object obj)
+        {
+            return GetDimensionOffsetFromItem(obj).X;
+        }
     }
 }

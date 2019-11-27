@@ -13,6 +13,9 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.Menus
 {
+    /// <summary>
+    /// Used with transfering items between two inventories.
+    /// </summary>
     public class InventoryTransferMenu : IClickableMenuExtended
     {
         public InventoryMenu playerInventory;
@@ -33,11 +36,11 @@ namespace Revitalize.Framework.Menus
         }
         private CurrentMode currentMode;
 
-        public InventoryTransferMenu(int x, int y, int width, int height, IList<Item> OtherItems, int OtherCapacity) : base(x, y, width, height, true)
+        public InventoryTransferMenu(int x, int y, int width, int height, IList<Item> OtherItems, int OtherCapacity,int OtherRows=6,int OtherCollumns=6) : base(x, y, width, height, true)
         {
             this.playerInventory = new InventoryMenu(x, y, width, height, 6, 6, true, Game1.player.Items, Game1.player.MaxItems, Color.SandyBrown);
             this.otherItems = OtherItems;
-            this.otherInventory = new InventoryMenu(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 128, y, width, height, 6, 6, true, this.otherItems, OtherCapacity, Color.SandyBrown);
+            this.otherInventory = new InventoryMenu(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 128, y, width, height, OtherRows, OtherCollumns, true, this.otherItems, OtherCapacity, Color.SandyBrown);
             this.isPlayerInventory = true;
             this.currentMode = CurrentMode.TransferItems;
             this.transferButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Transfer Button", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + (this.playerInventory.height * .3f)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemTransferButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
@@ -206,7 +209,22 @@ namespace Revitalize.Framework.Menus
             }
             if (To.isFull == false)
             {
-                To.items.Add(From.activeItem);
+                //
+                bool addedItem = false;
+                for(int i = 0; i < To.items.Count; i++)
+                {
+                    if (To.items[i] == null)
+                    {
+                        To.items[i] = From.activeItem;
+                        addedItem = true;
+                        break;
+                    }
+                }
+                if (addedItem == false)
+                {
+                    To.items.Add(From.activeItem);
+                }
+
                 From.items.Remove(From.activeItem);
                 From.activeItem = null;
                 From.populateClickableItems();
@@ -438,6 +456,13 @@ namespace Revitalize.Framework.Menus
         public void drawToolTip(SpriteBatch b)
         {
             if (this.displayTrashedItem && this.trashedItem.item!=null) IClickableMenu.drawToolTip(b, this.trashedItem.item.getDescription(), this.trashedItem.item.DisplayName, this.trashedItem.item, false, -1, 0, -1, -1, (CraftingRecipe)null, -1);
+        }
+
+
+        public void updateInventory()
+        {
+            this.playerInventory.populateClickableItems();
+            this.otherInventory.populateClickableItems();
         }
     }
 }

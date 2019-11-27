@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Objects.InformationFiles.Furniture
+namespace Revitalize.Framework.Objects.Interfaces
 {
-    public class FurnitureInformation
+    public interface IItemInfo
     {
-        public FurnitureInformation()
+        BasicItemInformation Info
         {
-
+            get;
+            set;
         }
+
     }
 }

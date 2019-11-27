@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Revitalize.Framework.Crafting
 {
-    public class RecipeBook
+    public class MachineCraftingRecipe
     {
-
     }
 }

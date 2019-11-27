@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PyTK.CustomElementHandler;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Utilities.Serialization.ContractResolvers;
+using Revitalize.Framework.Utilities.Serialization.Converters;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -38,6 +40,8 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         private JsonSerializerSettings settings;
 
+
+        public static NetFieldConverter NetFieldConverter;
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -49,10 +53,12 @@ namespace Revitalize.Framework.Utilities
             this.serializer.NullValueHandling = NullValueHandling.Include;
 
             this.serializer.ContractResolver = new NetFieldContract();
+            NetFieldConverter = new NetFieldConverter();
 
             this.addConverter(new Framework.Utilities.Serialization.Converters.RectangleConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.Texture2DConverter());
             this.addConverter(new Framework.Utilities.Serialization.Converters.ItemCoverter());
+            this.addConverter(NetFieldConverter);
             //this.addConverter(new Framework.Utilities.Serialization.Converters.CustomObjectDataConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.NetFieldConverter());
             //this.addConverter(new Framework.Utilities.Serialization.Converters.Vector2Converter());
@@ -128,6 +134,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         public void afterLoad()
         {
+            ModCore.log("WHAT");
             this.deleteAllUnusedFiles();
             //this.removeNullObjects();
             this.restoreModObjects();
@@ -138,17 +145,26 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         public void restoreModObjects()
         {
+            //ModCore.log("Restore all mod objects!");
             //Replace all items in the world.
+            List<CustomObject> objsToRestore = new List<CustomObject>();
             foreach (var v in ModCore.ObjectGroups)
             {
                 foreach (var obj in v.Value.objects.Values)
                 {
-                    (obj as CustomObject).replaceAfterLoad();
+                    //(obj as CustomObject).replaceAfterLoad();
+                    objsToRestore.Add(obj as CustomObject);
                 }
             }
+            foreach(CustomObject o in objsToRestore)
+            {
+                (o as CustomObject).replaceAfterLoad();
+            }
+
             //Replace all held items or items in inventories.
             foreach (GameLocation loc in LocationUtilities.GetAllLocations())
             {
+                //ModCore.log("Looking at location: " + loc);
                 foreach (StardewValley.Object c in loc.Objects.Values)
                 {
                     if (c is Chest)
@@ -174,6 +190,11 @@ namespace Revitalize.Framework.Utilities
                         {
                             (c as Chest).items.Add(I);
                         }
+                    }
+                    else if(c is Chest && c.Name != "Chest")
+                    {
+                        loc.objects[c.TileLocation] = (StardewValley.Object)this.GetItemFromChestName(c.Name);
+                        ModCore.log("Found a custom item that is a chest!");
                     }
                     else if (c is CustomObject)
                     {
@@ -258,7 +279,30 @@ namespace Revitalize.Framework.Utilities
         {
             //ModCore.log("Found a custom object in a chest!");
             string jsonString = JsonName;
-            string guidName = jsonString.Split(new string[] { "GUID=" }, StringSplitOptions.None)[1];
+            //ModCore.log(JsonName);
+            string dataSplit= jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[1];
+            string backUpGUID = dataSplit.Split('|')[0];
+            string[] guidArr = jsonString.Split(new string[] { "|" }, StringSplitOptions.None);
+
+            foreach(string s in guidArr)
+            {
+                //ModCore.log(s);
+            }
+
+            string guidName = guidArr[guidArr.Length - 1];
+            guidName = guidName.Substring(5);
+
+            try
+            {
+                Guid g = Guid.Parse(guidName);
+            }
+            catch (Exception err)
+            {
+                Guid d = Guid.Parse(backUpGUID);
+                guidName = backUpGUID;
+            }
+            //ModCore.log("THE GUID IS:"+ guidName);
+            
             //ModCore.log(jsonString);
             string type = jsonString.Split('|')[2];
             Item I = (Item)ModCore.Serializer.DeserializeGUID(guidName, Type.GetType(type));
@@ -268,6 +312,39 @@ namespace Revitalize.Framework.Utilities
                 (I as MultiTiledObject).recreate();
             }
             return I;
+        }
+
+        public Item DeserializeFromFarmhandInventory(string JsonName)
+        {
+            //ModCore.log("Found a custom object in a chest!");
+            string jsonString = JsonName;
+            //ModCore.log(JsonName);
+            string dataSplit = jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[2];
+            string backUpGUID = dataSplit.Split('|')[0];
+            string[] guidArr = jsonString.Split(new string[] { "|" }, StringSplitOptions.None);
+
+            string infoStr = jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[0];
+            string guidStr= jsonString.Split(new string[] { "<" }, StringSplitOptions.None)[1];
+
+            CustomObjectData pyTkData = ModCore.Serializer.DeserializeFromJSONString<CustomObjectData>(dataSplit);
+            Type t = Type.GetType(pyTkData.type);
+            string id = pyTkData.id;
+            //Need Item info
+
+            string guidName = backUpGUID;
+            string infoSplit = infoStr.Split('|')[3];
+            infoSplit = infoSplit.Substring(3);
+            BasicItemInformation info = ModCore.Serializer.DeserializeFromJSONString<BasicItemInformation>(infoSplit);
+
+            CustomObject clone = (CustomObject)ModCore.ObjectManager.getItemByIDAndType(id, t);
+            if (clone != null)
+            {
+                clone.info = info;
+                ModCore.log("Guid is????:"+guidStr);
+                clone.guid = Guid.Parse(guidStr);
+                return clone;
+            }
+            return null;
         }
 
         public void returnToTitle()
