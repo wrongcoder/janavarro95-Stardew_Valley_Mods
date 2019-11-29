@@ -227,11 +227,21 @@ namespace StardewSymphonyRemastered.Framework.V2
             foreach (var v in Game1.locations)
             {
                 locations.Add(v.Name);
+
+                if (StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.ContainsKey(v.Name)==false)
+                {
+                    StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.Add(v.Name, false);
+                }
+
                 if (StardewSymphony.Config.EnableDebugLog)
                     StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.Name);
             }
 
-            locations.Add("UndergroundMine Floors 1-39");
+            StardewSymphony.ModHelper.WriteConfig<Config>(StardewSymphony.Config);
+
+            locations.Add("UndergroundMine Floors 1-10");
+            locations.Add("UndergroundMine Floors 11-29");
+            locations.Add("UndergroundMine Floors 31-39");
             locations.Add("UndergroundMine Floors 40-69");
             locations.Add("UndergroundMine Floors 70-79");
             locations.Add("UndergroundMine Floors 80-120");

@@ -599,7 +599,7 @@ namespace StardustCore.IlluminateFramework
         {
             if (colorRandomizer == null)
             {
-                colorRandomizer = new Random(Game1.player.money + Game1.tileSize + Game1.dayOfMonth + (int)Game1.stats.stepsTaken);
+                colorRandomizer = new Random(Game1.player.Money + Game1.tileSize + Game1.dayOfMonth + (int)Game1.stats.stepsTaken);
             }
             int r = colorRandomizer.Next(0, 255);
             int g = colorRandomizer.Next(0, 255);

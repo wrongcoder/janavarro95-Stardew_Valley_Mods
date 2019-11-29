@@ -6,8 +6,11 @@ namespace StardewSymphonyRemastered
     /// <summary>A class that handles all of the config files for this mod.</summary>
     public class Config
     {
-        /// <summary>Whether to show debug logs in the SMAPI console.</summary>
-        public bool EnableDebugLog { get; set; } = false;
+
+        /// <summary>
+        /// If the current song hasn't finished playing just ignore a music swap until it finishes.
+        /// </summary>
+        public bool WaitForSongToFinishBeforeMusicSwap { get; set; } = true;
 
         /// <summary>The minimum delay between songs in milliseconds.</summary>
         public int MinimumDelayBetweenSongsInMilliseconds { get; set; } = 5000;
@@ -21,11 +24,12 @@ namespace StardewSymphonyRemastered
         /// <summary>Whether to completely disable the Stardew Valley OST.</summary>
         public bool DisableStardewMusic { get; set; } = false;
 
-        public List<string> LocationsToIgnoreWarpMusicChange { get; set; } = new List<string>();
+        /// <summary>Whether to show debug logs in the SMAPI console.</summary>
+        public bool EnableDebugLog { get; set; } = false;
 
-        public Config()
-        {
-            this.LocationsToIgnoreWarpMusicChange = new List<string>();
-        }
+        /// <summary>
+        /// Loctions that ignore the warp music change so that the music will continue to play from the previous location.
+        /// </summary>
+        public SortedDictionary<string, bool> LocationsToIgnoreWarpMusicChange { get; set; } = new SortedDictionary<string, bool>();
     }
 }

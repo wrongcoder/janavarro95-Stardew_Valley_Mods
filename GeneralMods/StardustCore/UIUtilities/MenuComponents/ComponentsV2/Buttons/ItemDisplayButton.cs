@@ -124,7 +124,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             if(this.background!=null)this.background.draw(b, this.scale, Depth,Alpha);
             if (this.item != null)
             {
-                this.item.drawInMenu(b, this.position, 1f, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
+                this.item.drawInMenu(b, this.position, 1f, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
             }
         }
 
@@ -141,14 +141,14 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             if (this.background != null) this.background.draw(b,Position,this.scale, Depth, Alpha);
             if (this.item != null)
             {
-                this.item.drawInMenu(b, Position, 1f, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
+                this.item.drawInMenu(b, Position, 1f, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
             }
         }
 
         public void draw(SpriteBatch b,float ItemScale ,float Depth, float Alpha, bool DrawShadow)
         {
             this.background.draw(b, this.scale, Depth, Alpha);
-            if (this.item != null) this.item.drawInMenu(b, this.position, ItemScale, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
+            if (this.item != null) this.item.drawInMenu(b, this.position, ItemScale, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="DrawShadow">Should the shadow be drawn for the item?</param>
         public void drawJustItem(SpriteBatch b,float Scale,float Depth, float Alpha, bool DrawShadow)
         {
-            if (this.item != null) this.item.drawInMenu(b, this.position, Scale, Alpha, Depth, this.drawStackNumber, this.drawColor, DrawShadow);
+            if (this.item != null) this.item.drawInMenu(b, this.position, Scale, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
         }
 
         public bool receiveLeftClick(int x, int y)
