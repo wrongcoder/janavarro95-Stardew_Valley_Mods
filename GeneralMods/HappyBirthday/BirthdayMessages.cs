@@ -1,6 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Newtonsoft.Json;
+using StardewModdingAPI;
+using StardewValley;
+using static StardewValley.LocalizedContentManager;
 
 namespace Omegasis.HappyBirthday
 {
@@ -26,6 +31,8 @@ namespace Omegasis.HappyBirthday
             ["Maru"] = "",
             ["Penny"] = "",
         };
+
+        public Dictionary<string, Func<string,string>> spouseEnglishGeneratedMessages = new Dictionary<string, Func<string,string>>();
 
         /// <summary>Used to contain birthday wishes should the mod not find any available.</summary>
         public Dictionary<string, string> defaultBirthdayWishes = new Dictionary<string, string>()
@@ -67,6 +74,18 @@ namespace Omegasis.HappyBirthday
 
         public BirthdayMessages()
         {
+            this.spouseEnglishGeneratedMessages.Add("Alex", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Elliott", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Harvey", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Sam", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Sebastian", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Shane", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Abigail", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Emily", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Haley", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Leah", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Maru", this.generateSpouseMessage);
+            this.spouseEnglishGeneratedMessages.Add("Penny", this.generateSpouseMessage);
             this.createBirthdayGreetings();
             this.loadTranslationStrings();
         }
@@ -142,11 +161,11 @@ namespace Omegasis.HappyBirthday
             serializer.Formatting = Formatting.Indented;
 
             //English logic.
-            string defaultPath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation);
+            string defaultPath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(HappyBirthday.Config.translationInfo.CurrentTranslation));
             if (!Directory.Exists(defaultPath)) Directory.CreateDirectory(defaultPath);
 
-            string birthdayFileDict = HappyBirthday.Config.translationInfo.getjsonForTranslation("BirthdayWishes", HappyBirthday.Config.translationInfo.currentTranslation);
-            string path = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, birthdayFileDict);
+            string birthdayFileDict = HappyBirthday.Config.translationInfo.getJSONForTranslation("BirthdayWishes", HappyBirthday.Config.translationInfo.CurrentTranslation);
+            string path = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(HappyBirthday.Config.translationInfo.CurrentTranslation), birthdayFileDict);
 
             //Handle normal birthday wishes.
             if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, path)))
@@ -159,8 +178,8 @@ namespace Omegasis.HappyBirthday
                 this.birthdayWishes = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(path);
 
             //handle spouse birthday wishes.
-            string spouseBirthdayFileDict = HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", HappyBirthday.Config.translationInfo.currentTranslation);
-            string spousePath = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.currentTranslation, spouseBirthdayFileDict);
+            string spouseBirthdayFileDict = HappyBirthday.Config.translationInfo.getJSONForTranslation("SpouseBirthdayWishes", HappyBirthday.Config.translationInfo.CurrentTranslation);
+            string spousePath = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(HappyBirthday.Config.translationInfo.CurrentTranslation), spouseBirthdayFileDict);
             if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, spousePath)))
             {
                 HappyBirthday.ModMonitor.Log("Creating Spouse Messages", StardewModdingAPI.LogLevel.Alert);
@@ -171,16 +190,16 @@ namespace Omegasis.HappyBirthday
                 this.spouseBirthdayWishes = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(spousePath);
 
             //Non-english logic for creating templates.
-            foreach (var translation in HappyBirthday.Config.translationInfo.translationCodes)
+            foreach (var translation in HappyBirthday.Config.translationInfo.TranslationCodes)
             {
-                if (translation.Key == "English")
+                if (translation.Key == Framework.TranslationInfo.LanguageName.English)
                     continue;
 
-                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", translation.Key);
+                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key));
                 if (!Directory.Exists(basePath))
                     Directory.CreateDirectory(basePath);
-                string tempBirthdayFile = Path.Combine("Content", "Dialogue", translation.Key, HappyBirthday.Config.translationInfo.getjsonForTranslation("BirthdayWishes", translation.Key));
-                string tempSpouseBirthdayFile = Path.Combine("Content", "Dialogue", translation.Key, HappyBirthday.Config.translationInfo.getjsonForTranslation("SpouseBirthdayWishes", translation.Key));
+                string tempBirthdayFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("BirthdayWishes", translation.Key));
+                string tempSpouseBirthdayFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("SpouseBirthdayWishes", translation.Key));
 
 
                 Dictionary<string, string> tempBirthdayDict = new Dictionary<string, string>();
@@ -205,7 +224,7 @@ namespace Omegasis.HappyBirthday
                     tempSpouseBirthdayDict = HappyBirthday.ModHelper.Data.ReadJsonFile<Dictionary<string, string>>(tempSpouseBirthdayFile);
 
                 //Set translated birthday info.
-                if (HappyBirthday.Config.translationInfo.currentTranslation == translation.Key)
+                if (HappyBirthday.Config.translationInfo.CurrentTranslation == translation.Key)
                 {
                     this.birthdayWishes = tempBirthdayDict;
                     this.spouseBirthdayWishes = tempSpouseBirthdayDict;
@@ -216,7 +235,7 @@ namespace Omegasis.HappyBirthday
 
         public static string GetTranslatedString(string key)
         {
-            StardewValley.LocalizedContentManager.LanguageCode code = HappyBirthday.Config.translationInfo.translationCodes[HappyBirthday.Config.translationInfo.currentTranslation];
+            StardewValley.LocalizedContentManager.LanguageCode code = HappyBirthday.Config.translationInfo.TranslationCodes[HappyBirthday.Config.translationInfo.CurrentTranslation];
             string value= HappyBirthday.Instance.messages.translatedStrings[code][key];
             if (string.IsNullOrEmpty(value))
             {
@@ -235,15 +254,15 @@ namespace Omegasis.HappyBirthday
         {
 
             //Non-english logic for creating templates.
-            foreach (var translation in HappyBirthday.Config.translationInfo.translationCodes)
+            foreach (var translation in HappyBirthday.Config.translationInfo.TranslationCodes)
             {
 
                 StardewValley.LocalizedContentManager.LanguageCode code = translation.Value;
 
-                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", translation.Key);
+                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key));
                 if (!Directory.Exists(basePath))
                     Directory.CreateDirectory(basePath);
-                string stringsFile = Path.Combine("Content", "Dialogue", translation.Key, HappyBirthday.Config.translationInfo.getjsonForTranslation("TranslatedStrings", translation.Key));
+                string stringsFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("TranslatedStrings", translation.Key));
 
 
                 if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, stringsFile)))
@@ -256,5 +275,137 @@ namespace Omegasis.HappyBirthday
             }
         }
 
+        public string getAffectionateSpouseWord()
+        {
+
+            List<string> words = new List<string>();
+            if (Game1.player.IsMale)
+            {
+                words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4507", HappyBirthday.Config.translationInfo.CurrentTranslation));
+                words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4509", HappyBirthday.Config.translationInfo.CurrentTranslation));
+                words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4511", HappyBirthday.Config.translationInfo.CurrentTranslation));
+                words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4514", HappyBirthday.Config.translationInfo.CurrentTranslation));
+                words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4515", HappyBirthday.Config.translationInfo.CurrentTranslation));
+
+
+            }
+            else
+            {
+                words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4512", HappyBirthday.Config.translationInfo.CurrentTranslation));
+                words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4513", HappyBirthday.Config.translationInfo.CurrentTranslation));
+
+            }
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4508", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4510", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4516", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4517", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4518", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4519", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4522", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            words.Add(HappyBirthday.Config.translationInfo.LoadStringFromXNBFile("StringsFromCSFiles", "NPC.cs.4523", HappyBirthday.Config.translationInfo.CurrentTranslation));
+            return words[Game1.random.Next(0, words.Count - 1)];
+        }
+
+        public string getTimeOfDayString()
+        {
+            if (Game1.timeOfDay >= 600 && Game1.timeOfDay < 1200)
+            {
+                return "morning";
+            }
+            else if (Game1.timeOfDay >= 1200 && Game1.timeOfDay < 600)
+            {
+                return "afternoon";
+            }
+            else return "evening";
+        }
+
+
+        public void generateSpouseBirthdayDialogue(string SpeakerName)
+        {
+            this.spouseEnglishGeneratedMessages[SpeakerName].Invoke(SpeakerName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SpeakerName"></param>
+        /// <returns></returns>
+        private string generateSpouseMessage(string SpeakerName)
+        {
+            StringBuilder b = new StringBuilder();
+            switch (SpeakerName)
+            {
+                case ("Alex"):
+                    b.Append("Hey ");
+                    b.Append(this.getAffectionateSpouseWord());
+                    b.Append(".");
+                    b.Append("I'm so glad that I married you. You make every day feel like winning a sports match. Happy birthday! $h");
+
+                    break;
+                case ("Elliott"):
+                    b.Append("Good ");
+                    b.Append(this.getTimeOfDayString());
+                    b.Append(this.getAffectionateSpouseWord());
+                    b.Append(".");
+                    b.Append("I was just thinking on how you have been a muse for my work. You inspire me every day I spend with you. Happy birthday! $h");
+
+                    break;
+                case ("Harvey"):
+                    b.Append("Good ");
+                    b.Append(this.getTimeOfDayString());
+                    b.Append(this.getAffectionateSpouseWord());
+                    b.Append(".");
+                    b.Append("I was just thinking on how invigorated I've felt since marrying you. When I look at you I feel as I'm positively glowing with joy. Happy birthday! $h");
+
+                    break;
+                case ("Sam"):
+                    b.Append("Good ");
+                    b.Append(this.getTimeOfDayString());
+                    b.Append(this.getAffectionateSpouseWord());
+                    b.Append(".");
+                    b.Append("You know I never saw myself settling down before I met you, but now that I have I feel like I never want to look back. Happy birthday! $h");
+
+                    break;
+                case ("Sebastian"):
+                    b.Append("I was never a big celebrater of birthdays but with you, today is special. Happy birthday");
+                    b.Append(this.getAffectionateSpouseWord());
+                    b.Append("$h");
+                    b.Append(".");
+
+                    break;
+                case ("Shane"):
+
+
+                    break;
+                case ("Abigail"):
+
+
+                    break;
+                case ("Emily"):
+
+
+                    break;
+                case ("Haley"):
+
+
+                    break;
+                case ("Leah"):
+
+
+                    break;
+                case ("Maru"):
+
+
+                    break;
+                case ("Penny"):
+
+
+                    break;
+                default:
+
+                    break;
+            }
+            return b.ToString();
+        }
     }
 }

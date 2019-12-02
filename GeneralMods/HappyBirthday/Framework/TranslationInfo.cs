@@ -1,5 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework
@@ -7,65 +8,85 @@ namespace Omegasis.HappyBirthday.Framework
     /// <summary>A class which deals with handling different translations for Vocalization should other voice teams ever wish to voice act for that language.</summary>
     public class TranslationInfo
     {
-        /// <summary>The list of all supported translations by this mod.</summary>
-        public List<string> translations;
+
+        public enum LanguageName
+        {
+            English,
+            Spanish,
+            Chinese,
+            Japanese,
+            Russian,
+            German,
+            Portuguese,
+            Italian,
+            French,
+            Korean,
+            Turkish,
+            Hungarian
+        }
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The language names supported by this mod.</summary>
+        public LanguageName[] LanguageNames { get; } = (from LanguageName language in Enum.GetValues(typeof(LanguageName)) select language).ToArray();
 
         /// <summary>The current translation mode for the mod, so that it knows what files to load at the beginning of the game.</summary>
-        public string currentTranslation;
+        public LanguageName CurrentTranslation { get; set; } = LanguageName.English;
 
         /// <summary>Holds the info for what translation has what file extension.</summary>
-        public Dictionary<string, string> translationFileInfo;
+        public Dictionary<LanguageName, string> TranslationFileExtensions { get; } = new Dictionary<LanguageName, string>();
 
-        public Dictionary<string, LocalizedContentManager.LanguageCode> translationCodes;
+        public Dictionary<LanguageName, LocalizedContentManager.LanguageCode> TranslationCodes { get; } = new Dictionary<LanguageName, LocalizedContentManager.LanguageCode>();
 
-        /// <summary>Construct an instance..</summary>
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
         public TranslationInfo()
         {
-            this.translations = new List<string>();
-
-            this.translationFileInfo = new Dictionary<string, string>();
-            this.translationCodes = new Dictionary<string, LocalizedContentManager.LanguageCode>();
-            this.translations.Add("English");
-            this.translations.Add("Spanish");
-            this.translations.Add("Chinese");
-            this.translations.Add("Japanese");
-            this.translations.Add("Russian");
-            this.translations.Add("German");
-            this.translations.Add("Brazillian Portuguese");
-
-            this.currentTranslation = "English";
-
-            this.translationFileInfo.Add("English", ".json");
-            this.translationFileInfo.Add("Spanish", ".es-ES.json");
-            this.translationFileInfo.Add("Chinese", ".zh-CN.json");
-            this.translationFileInfo.Add("Japanese", ".ja-JP.json");
-            this.translationFileInfo.Add("Russian", ".ru-RU.json");
-            this.translationFileInfo.Add("German", ".de-DE.json");
-            this.translationFileInfo.Add("Brazillian Portuguese", ".pt-BR.json");
+            this.TranslationFileExtensions.Add(LanguageName.English, ".xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Spanish, ".es-ES.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Chinese, ".zh-CN.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Japanese, ".ja-JP.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Russian, ".ru-RU.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.German, ".de-DE.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Portuguese, ".pt-BR.xnb");
+            //1.3 languages.
+            this.TranslationFileExtensions.Add(LanguageName.Italian, ".it-IT.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.French, ".fr-FR.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Hungarian, ".hu-HU.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Turkish, ".tr-TR.xnb");
+            this.TranslationFileExtensions.Add(LanguageName.Korean, ".ko-KR.xnb");
 
 
-            this.translationCodes.Add("English", LocalizedContentManager.LanguageCode.en);
-            this.translationCodes.Add("Spanish", LocalizedContentManager.LanguageCode.es);
-            this.translationCodes.Add("Chinese", LocalizedContentManager.LanguageCode.zh);
-            this.translationCodes.Add("Japanese", LocalizedContentManager.LanguageCode.ja);
-            this.translationCodes.Add("Russian", LocalizedContentManager.LanguageCode.ru);
-            this.translationCodes.Add("German", LocalizedContentManager.LanguageCode.de);
-            this.translationCodes.Add("Brazillian Portuguese", LocalizedContentManager.LanguageCode.pt);
-
+            this.TranslationCodes.Add(LanguageName.English, LocalizedContentManager.LanguageCode.en);
+            this.TranslationCodes.Add(LanguageName.Spanish, LocalizedContentManager.LanguageCode.es);
+            this.TranslationCodes.Add(LanguageName.Chinese, LocalizedContentManager.LanguageCode.zh);
+            this.TranslationCodes.Add(LanguageName.Japanese, LocalizedContentManager.LanguageCode.ja);
+            this.TranslationCodes.Add(LanguageName.Russian, LocalizedContentManager.LanguageCode.ru);
+            this.TranslationCodes.Add(LanguageName.German, LocalizedContentManager.LanguageCode.de);
+            this.TranslationCodes.Add(LanguageName.Portuguese, LocalizedContentManager.LanguageCode.pt);
+            //1.3 languages
+            this.TranslationCodes.Add(LanguageName.Italian, LocalizedContentManager.LanguageCode.it);
+            this.TranslationCodes.Add(LanguageName.French, LocalizedContentManager.LanguageCode.fr);
+            this.TranslationCodes.Add(LanguageName.Hungarian, LocalizedContentManager.LanguageCode.hu);
+            this.TranslationCodes.Add(LanguageName.Turkish, LocalizedContentManager.LanguageCode.tr);
+            this.TranslationCodes.Add(LanguageName.Korean, LocalizedContentManager.LanguageCode.ko);
         }
 
-        public string getTranslationNameFromPath(string fullPath)
+        /// <summary>Get the language name from a string.</summary>
+        /// <param name="language">The language name.</param>
+        public string getTranslationName(LanguageName language)
         {
-            return Path.GetFileName(fullPath);
+            return language.ToString();
         }
 
-        public void changeLocalizedContentManagerFromTranslation(string translation)
+        public void changeLocalizedContentManagerFromTranslation(LanguageName language)
         {
-            string tra = this.getTranslationNameFromPath(translation);
-            bool f = this.translationCodes.TryGetValue(tra, out LocalizedContentManager.LanguageCode code);
-            if (!f) LocalizedContentManager.CurrentLanguageCode = LocalizedContentManager.LanguageCode.en;
-            else LocalizedContentManager.CurrentLanguageCode = code;
-            return;
+            LocalizedContentManager.CurrentLanguageCode = !this.TranslationCodes.TryGetValue(language, out LocalizedContentManager.LanguageCode code)
+                ? LocalizedContentManager.LanguageCode.en
+                : code;
         }
 
         public void resetLocalizationCode()
@@ -74,77 +95,75 @@ namespace Omegasis.HappyBirthday.Framework
         }
 
         /// <summary>Gets the proper file extension for the current translation.</summary>
-        /// <param name="path"></param>
-        public string getFileExtentionForTranslation(string path)
+        /// <param name="language">The translation language name.</param>
+        public string getFileExtentionForTranslation(LanguageName language)
         {
-            /*
-            bool f = translationFileInfo.TryGetValue(translation, out string value);
-            if (!f) return ".json";
-            else return value;
-            */
-            string translation = Path.GetFileName(path);
             try
             {
-                return this.translationFileInfo[translation];
+                return this.TranslationFileExtensions[language];
             }
-            catch
+            catch (Exception err)
             {
-                HappyBirthday.ModMonitor.Log("WTF SOMETHING IS WRONG!", StardewModdingAPI.LogLevel.Warn);
-                //Vocalization.ModMonitor.Log(err.ToString());
-                //Vocalization.ModMonitor.Log("Attempted to get translation: " + translation);
-                return ".json";
+
+                Omegasis.HappyBirthday.HappyBirthday.ModMonitor.Log(err.ToString());
+                Omegasis.HappyBirthday.HappyBirthday.ModMonitor.Log($"Attempted to get translation: {language}");
+                return ".xnb";
             }
         }
 
-        /// <summary>Gets the proper json for Buildings (aka Blueprints) from the data folder.</summary>
-        public string getBuildingjsonForTranslation(string translation)
+        public string getFileExtentionForDirectory(LanguageName language)
+        {
+            try
+            {
+                string s=this.TranslationFileExtensions[language];
+                s = s.Replace(".xnb", "");
+                s = s.Replace(".","");
+                return s;
+            }
+            catch (Exception err)
+            {
+
+                Omegasis.HappyBirthday.HappyBirthday.ModMonitor.Log(err.ToString());
+                Omegasis.HappyBirthday.HappyBirthday.ModMonitor.Log($"Attempted to get translation: {language}");
+                return ".xnb";
+            }
+        }
+
+        /// <summary>Gets the proper XNB for Buildings (aka Blueprints) from the data folder.</summary>
+        public string getBuildingXNBForTranslation(LanguageName language)
         {
             string buildings = "Blueprints";
-            return buildings + this.getFileExtentionForTranslation(translation);
+            return buildings + this.getFileExtentionForTranslation(language);
         }
 
-        /// <summary>Gets the proper json file for the name passed in. Combines the file name with it's proper translation extension.</summary>
-        /// <param name="jsonFileName"></param>
-        /// <param name="translation"></param>
-        public string getjsonForTranslation(string jsonFileName, string translation)
+        /// <summary>Gets the proper XNB file for the name passed in. Combines the file name with it's proper translation extension.</summary>
+        public string getXNBForTranslation(string xnbFileName, LanguageName language)
         {
-            return jsonFileName + this.getFileExtentionForTranslation(translation);
+            return xnbFileName + this.getFileExtentionForTranslation(language);
         }
 
-
-
-        /// <summary>Loads an json file from StardewValley/Content</summary>
-        /// <param name="jsonFileName"></param>
-        /// <param name="key"></param>
-        /// <param name="translation"></param>
-        public string LoadjsonFile(string jsonFileName, string key, string translation)
+        public string getJSONForTranslation(string FileName,LanguageName language)
         {
-            string json = jsonFileName + this.getFileExtentionForTranslation(translation);
-            Dictionary<string, string> loadedDict = Game1.content.Load<Dictionary<string, string>>(json);
+            return this.getXNBForTranslation(FileName, language);
+        }
 
-            bool f = loadedDict.TryGetValue(key, out string loaded);
-            if (!f)
+        /// <summary>Loads an XNB file from StardewValley/Content</summary>
+        public string LoadStringFromXNBFile(string xnbFileName, string key, LanguageName language)
+        {
+            string xnb = xnbFileName + this.getFileExtentionForTranslation(language);
+            Dictionary<string, string> loadedDict = Game1.content.Load<Dictionary<string, string>>(xnb);
+
+            if (!loadedDict.TryGetValue(key, out string loaded))
             {
-                //Vocalization.ModMonitor.Log("Big issue: Key not found in file:" + json + " " + key);
+                Omegasis.HappyBirthday.HappyBirthday.ModMonitor.Log("Big issue: Key not found in file:" + xnb + " " + key);
                 return "";
             }
-            else return loaded;
+            return loaded;
         }
 
-        /// <summary>Loads a string dictionary from a json file.</summary>
-        /// <param name="jsonFileName"></param>
-        /// <param name="translation"></param>
-        public Dictionary<string, string> LoadJsonFileDictionary(string jsonFileName, string translation)
+        public virtual string LoadString(string path, LanguageName language, object sub1, object sub2, object sub3)
         {
-            string json = jsonFileName + this.getFileExtentionForTranslation(translation);
-            Dictionary<string, string> loadedDict = Game1.content.Load<Dictionary<string, string>>(json);
-
-            return loadedDict;
-        }
-
-        public virtual string LoadString(string path, string translation, object sub1, object sub2, object sub3)
-        {
-            string format = this.LoadString(path, translation);
+            string format = this.LoadString(path, language);
             try
             {
                 return string.Format(format, sub1, sub2, sub3);
@@ -154,9 +173,9 @@ namespace Omegasis.HappyBirthday.Framework
             return format;
         }
 
-        public virtual string LoadString(string path, string translation, object sub1, object sub2)
+        public virtual string LoadString(string path, LanguageName language, object sub1, object sub2)
         {
-            string format = this.LoadString(path, translation);
+            string format = this.LoadString(path, language);
             try
             {
                 return string.Format(format, sub1, sub2);
@@ -166,9 +185,9 @@ namespace Omegasis.HappyBirthday.Framework
             return format;
         }
 
-        public virtual string LoadString(string path, string translation, object sub1)
+        public virtual string LoadString(string path, LanguageName language, object sub1)
         {
-            string format = this.LoadString(path, translation);
+            string format = this.LoadString(path, language);
             try
             {
                 return string.Format(format, sub1);
@@ -178,15 +197,16 @@ namespace Omegasis.HappyBirthday.Framework
             return format;
         }
 
-        public virtual string LoadString(string path, string translation)
+        public virtual string LoadString(string path, LanguageName language)
         {
             this.parseStringPath(path, out string assetName, out string key);
-            return this.LoadjsonFile(assetName, key, translation);
+
+            return this.LoadStringFromXNBFile(assetName, key, language);
         }
 
-        public virtual string LoadString(string path, string translation, params object[] substitutions)
+        public virtual string LoadString(string path, LanguageName language, params object[] substitutions)
         {
-            string format = this.LoadString(path, translation);
+            string format = this.LoadString(path, language);
             if (substitutions.Length != 0)
             {
                 try

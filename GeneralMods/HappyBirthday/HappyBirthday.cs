@@ -301,8 +301,11 @@ namespace Omegasis.HappyBirthday
                             if (this.PlayerData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
                             {
                                 int index = this.PlayerData.BirthdayDay;
+
+                                string bdayDisplay = Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
                                 Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
-                                billboard.calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", $"{Game1.player.Name}'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+                                billboard.calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", string.Format(bdayDisplay, Game1.player.Name), text, new Rectangle(0, 0, 124, 124), 1f, false));                            
+                                //billboard.calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", $"{Game1.player.Name}'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
                             }
                         }
 
@@ -310,8 +313,10 @@ namespace Omegasis.HappyBirthday
                         {
                             if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue;
                             int index = pair.Value.BirthdayDay;
+
+                            string bdayDisplay = Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
                             Rectangle otherBirthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
-                            billboard.calendarDays.Add(new ClickableTextureComponent("", otherBirthdayRect, "", $"{Game1.getFarmer(pair.Key).Name}'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
+                            billboard.calendarDays.Add(new ClickableTextureComponent("", otherBirthdayRect, "", string.Format(bdayDisplay, Game1.getFarmer(pair.Key).Name), text, new Rectangle(0, 0, 124, 124), 1f, false));
                         }
 
                         break;
@@ -406,8 +411,22 @@ namespace Omegasis.HappyBirthday
                                     {
                                         if (this.messages.spouseBirthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
                                         {
+                                            if (string.IsNullOrEmpty(this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name])== false){
+                                                d = new Dialogue(this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name], Game1.currentSpeaker);
+                                            }
+                                            else
+                                            {
+                                                if (this.messages.birthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
+                                                {
 
-                                            d = new Dialogue(this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name], Game1.currentSpeaker);
+                                                    d = new Dialogue(this.messages.birthdayWishes[Game1.currentSpeaker.Name], Game1.currentSpeaker);
+                                                }
+                                                else
+                                                {
+                                                    d = new Dialogue("Happy Birthday @!", Game1.currentSpeaker);
+                                                }
+                                            }
+                                            
                                         }
                                         else
                                         {
@@ -418,7 +437,6 @@ namespace Omegasis.HappyBirthday
                                     {
                                         if (this.messages.birthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
                                         {
-
                                             d = new Dialogue(this.messages.birthdayWishes[Game1.currentSpeaker.Name], Game1.currentSpeaker);
                                         }
                                         else
