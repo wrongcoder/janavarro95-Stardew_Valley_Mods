@@ -385,8 +385,12 @@ namespace StardewSymphonyRemastered.Framework.V2
                     string splits = locName.Replace("UndergroundMine", "");
                     StardewSymphony.DebugLog("DEBUG VALUE:" + splits);
                     int number = Convert.ToInt32(splits);
-                    if (number >= 1 && number <= 39)
-                        return "UndergroundMine" + " Floors 1-39";
+                    if (number >= 1 && number <= 10)
+                        return "UndergroundMine" + " Floors 1-10";
+                    if (number >= 11 && number <= 29)
+                        return "UndergroundMine" + " Floors 11-29";
+                    if (number >= 31 && number <= 39)
+                        return "UndergroundMine" + " Floors 31-39";
                     if (number >= 40 && number <= 69)
                         return "UndergroundMine" + " Floors 40-69";
                     if (number >= 70 && number <= 79)
