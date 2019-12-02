@@ -173,10 +173,19 @@ namespace StardewSymphonyRemastered.Framework.V2
                     return false;
                 }
             }
-            if (warpCheck == true && StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.ContainsKey(Game1.player.currentLocation.Name))
+            if (warpCheck == true)
             {
+                if (StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.ContainsKey(Game1.player.currentLocation.Name))
+                {
+                    if (StardewSymphony.Config.LocationsToIgnoreWarpMusicChange[Game1.player.currentLocation.Name] == true)
+                    {
+                        return false;
+                    }
+                }
                 return false;
             }
+
+
             //Prevent generic song changes when running about.
 
             SongConditionals conditional = new SongConditionals(songListKey);
