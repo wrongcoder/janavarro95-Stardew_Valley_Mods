@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using StardewValley;
 
@@ -206,6 +207,31 @@ namespace Omegasis.HappyBirthday.Framework
 
         public string getTranslatedString(string Key)
         {
+
+            if (Key.Equals("Birthday"))
+            {
+                return Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
+            }
+            if (Key.Equals("Spring"))
+            {
+                string file= Path.Combine("Strings", "StringsFromCSFiles");
+                return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5680", HappyBirthday.Config.translationInfo.CurrentTranslation);
+            }
+            if (Key.Equals("Summer"))
+            {
+                string file = Path.Combine("Strings", "StringsFromCSFiles");
+                return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5681", HappyBirthday.Config.translationInfo.CurrentTranslation);
+            }
+            if (Key.Equals("Fall"))
+            {
+                string file = Path.Combine("Strings", "StringsFromCSFiles");
+                return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5682", HappyBirthday.Config.translationInfo.CurrentTranslation);
+            }
+            if (Key.Equals("Winter"))
+            {
+                string file = Path.Combine("Strings", "StringsFromCSFiles");
+                return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5683", HappyBirthday.Config.translationInfo.CurrentTranslation);
+            }
             try
             {
                 return HappyBirthday.Instance.messages.translatedStrings[this.getCurrrentLanguageCode()][Key];

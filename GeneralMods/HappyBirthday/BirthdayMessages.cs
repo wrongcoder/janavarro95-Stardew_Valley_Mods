@@ -140,12 +140,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%",
                 ["Happy Birthday: Star Message"] = "It's your birthday today! Happy birthday!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] ="Season",
-                ["Birthday"]="Birthday",
                 ["Date"]="Date"
 
             },
@@ -155,12 +150,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.ru] = new Dictionary<string, string>()
@@ -169,12 +159,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "ƒорогой @,^  — днем рождени¤, мой ребенок. «десь немного тихо в твой день рождени¤ с тех пор, как ты уехал на ферму, но тво¤ мать и ¤ знаем, что ты со своим дедушкой делаешь нас гордыми. ћы оба знаем, что жить на ферме может быть трудно, но мы верим в теб¤ на все 100%, просто  продолжай следовать своим мечтам.^  — любовью папа ^ P.S. “ут есть немного денег, которые помогут тебе на ферме. ”дачи! %item money 5000 5001%%",
                 ["Happy Birthday: Star Message"] = "Ёто твой день рождени¤! — днем рождени¤!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "Ёто твой день рождени¤! ѕоздравл¤ю с этим!",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.zh] = new Dictionary<string, string>()
@@ -183,12 +168,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "亲爱的@，^  生日快乐孩子。你生日的这天没有你，我们这儿还挺寂寞的，但我和你妈妈都知道你让我们和你爷爷感到骄傲。我们知道你一个人生活可能会很艰难，但我们百分百相信你能做到，所以继续追求你的梦想吧。^  爱你的，爸爸 ^ 附言：这是能在农场上帮到你的一些零用钱。祝你好运！ %item money 5000 5001 %%",
                 ["Happy Birthday: Star Message"] = "今天是你的生日！生日快乐！",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.pt] = new Dictionary<string, string>()
@@ -197,12 +177,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.es] = new Dictionary<string, string>()
@@ -211,12 +186,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.de] = new Dictionary<string, string>()
@@ -225,12 +195,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.th] = new Dictionary<string, string>()
@@ -239,12 +204,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.fr] = new Dictionary<string, string>()
@@ -253,12 +213,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.ko] = new Dictionary<string, string>()
@@ -267,12 +222,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.it] = new Dictionary<string, string>()
@@ -281,12 +231,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.tr] = new Dictionary<string, string>()
@@ -295,12 +240,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
             [StardewValley.LocalizedContentManager.LanguageCode.hu] = new Dictionary<string, string>()
@@ -309,12 +249,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDad"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
-                ["Spring"] = "Spring",
-                ["Summer"] = "Summer",
-                ["Fall"] = "Fall",
-                ["Winter"] = "Winter",
                 ["Season"] = "Season",
-                ["Birthday"] = "Birthday",
                 ["Date"] = "Date"
             },
         };
