@@ -90,6 +90,19 @@ namespace Omegasis.HappyBirthday.Framework
             return this.TranslationCodes[this.CurrentTranslation];
         }
 
+        public void setTranslationFromLanguageCode(LocalizedContentManager.LanguageCode code)
+        {
+            foreach (var v in this.TranslationCodes)
+            {
+                if (v.Value.Equals(code))
+                {
+                    this.CurrentTranslation = v.Key;
+                    HappyBirthday.ModHelper.WriteConfig<ModConfig>(HappyBirthday.Config);
+                    return;
+                }
+            }
+        }
+
         /// <summary>Gets the proper file extension for the current translation.</summary>
         /// <param name="language">The translation language name.</param>
         public string getFileExtentionForTranslation(LanguageName language, FileType File)
@@ -100,7 +113,7 @@ namespace Omegasis.HappyBirthday.Framework
                 {
                     return this.getFileExtensionForFileType(File);
                 }
-                return this.TranslationFileExtensions[language]+this.getFileExtensionForFileType(File);
+                return this.TranslationFileExtensions[language] + this.getFileExtensionForFileType(File);
             }
             catch (Exception err)
             {
@@ -112,7 +125,7 @@ namespace Omegasis.HappyBirthday.Framework
         }
         public string getFileExtensionForFileType(FileType Type)
         {
-            if(Type== FileType.JSON)
+            if (Type == FileType.JSON)
             {
                 return ".json";
             }
@@ -127,7 +140,7 @@ namespace Omegasis.HappyBirthday.Framework
         {
             try
             {
-                string s=this.TranslationFileExtensions[language];
+                string s = this.TranslationFileExtensions[language];
                 return s;
             }
             catch (Exception err)
@@ -146,15 +159,15 @@ namespace Omegasis.HappyBirthday.Framework
         /// <param name="FileName"></param>
         /// <param name="language"></param>
         /// <returns></returns>
-        public string getJSONForTranslation(string FileName,LanguageName language)
+        public string getJSONForTranslation(string FileName, LanguageName language)
         {
-            if(language!= LanguageName.English)
+            if (language != LanguageName.English)
             {
                 return FileName + "." + this.getFileExtentionForTranslation(language, FileType.JSON);
             }
             else
             {
-               return FileName + this.getFileExtentionForTranslation(language, FileType.JSON);
+                return FileName + this.getFileExtentionForTranslation(language, FileType.JSON);
             }
         }
 
@@ -199,7 +212,7 @@ namespace Omegasis.HappyBirthday.Framework
                 return HappyBirthday.Instance.messages.translatedStrings[Language][Key];
 
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 return "";
             }
@@ -210,13 +223,13 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (Key.Equals("Birthday"))
             {
-                string s= Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
+                string s = Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
                 s = s.Split(' ')[0];
                 return s;
             }
             if (Key.Equals("Spring") || Key.Equals("spring"))
             {
-                string file= Path.Combine("Strings", "StringsFromCSFiles");
+                string file = Path.Combine("Strings", "StringsFromCSFiles");
                 return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5680", HappyBirthday.Config.translationInfo.CurrentTranslation);
             }
             if (Key.Equals("Summer") || Key.Equals("summer"))

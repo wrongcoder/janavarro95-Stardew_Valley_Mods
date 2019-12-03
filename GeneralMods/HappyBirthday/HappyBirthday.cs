@@ -78,8 +78,6 @@ namespace Omegasis.HappyBirthday
         {
 
             Instance = this;
-
-            //helper.Content.AssetLoaders.Add(new PossibleGifts());
             Config = helper.ReadConfig<ModConfig>();
 
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
@@ -88,25 +86,23 @@ namespace Omegasis.HappyBirthday
             helper.Events.GameLoop.Saving += this.OnSaving;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
-
-
-
             helper.Events.Display.RenderedActiveMenu += this.OnRenderedActiveMenu;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
-            //MultiplayerSupport.initializeMultiplayerSupport();
+            helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
+            helper.Events.Multiplayer.PeerDisconnected += this.Multiplayer_PeerDisconnected;
+            helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
 
+            this.othersBirthdays = new Dictionary<long, PlayerData>();
+            
+        }
+
+        private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
+        {
             this.messages = new BirthdayMessages();
             this.giftManager = new GiftManager();
             this.isDailyQuestBoard = false;
-
-            ModHelper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
-
-            ModHelper.Events.Multiplayer.PeerDisconnected += this.Multiplayer_PeerDisconnected;
-
-            this.othersBirthdays = new Dictionary<long, PlayerData>();
-            
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -180,8 +176,6 @@ namespace Omegasis.HappyBirthday
             {
                 if (this.isDailyQuestBoard || billboard.calendarDays == null)
                     return;
-
-                //Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 1f, 4f, 2, Game1.player);
 
                 string hoverText = "";
                 List<string> texts = new List<string>();
@@ -745,6 +739,12 @@ namespace Omegasis.HappyBirthday
                     this.Monitor.Log($"Error migrating data from the legacy 'Player_Birthdays' folder for the current player. Technical details:\n {ex}", LogLevel.Error);
                 }
             }
+        }
+
+
+        private void hmm()
+        {
+            Game1.player.currentLocation.currentEvent = new Event();
         }
     }
 }

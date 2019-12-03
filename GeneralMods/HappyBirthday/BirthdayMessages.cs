@@ -126,6 +126,7 @@ namespace Omegasis.HappyBirthday
             this.spouseEnglishGeneratedMessages.Add("Leah", this.generateSpouseMessage);
             this.spouseEnglishGeneratedMessages.Add("Maru", this.generateSpouseMessage);
             this.spouseEnglishGeneratedMessages.Add("Penny", this.generateSpouseMessage);
+            HappyBirthday.Config.translationInfo.setTranslationFromLanguageCode(Game1.content.GetCurrentLanguage());
             this.createBirthdayGreetings();
             this.loadTranslationStrings();
         }
@@ -266,7 +267,7 @@ namespace Omegasis.HappyBirthday
             //Handle normal birthday wishes.
             if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, path)))
             {
-                HappyBirthday.ModMonitor.Log("Creating Villager Birthday Messages", StardewModdingAPI.LogLevel.Alert);
+                //HappyBirthday.ModMonitor.Log("Creating Villager Birthday Messages", StardewModdingAPI.LogLevel.Alert);
                 HappyBirthday.ModHelper.Data.WriteJsonFile<Dictionary<string, string>>(path, this.defaultBirthdayWishes);
                 this.birthdayWishes = this.defaultBirthdayWishes;
             }
