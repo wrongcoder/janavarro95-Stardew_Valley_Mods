@@ -210,24 +210,26 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (Key.Equals("Birthday"))
             {
-                return Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
+                string s= Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
+                s = s.Split(' ')[0];
+                return s;
             }
-            if (Key.Equals("Spring"))
+            if (Key.Equals("Spring") || Key.Equals("spring"))
             {
                 string file= Path.Combine("Strings", "StringsFromCSFiles");
                 return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5680", HappyBirthday.Config.translationInfo.CurrentTranslation);
             }
-            if (Key.Equals("Summer"))
+            if (Key.Equals("Summer") || Key.Equals("summer"))
             {
                 string file = Path.Combine("Strings", "StringsFromCSFiles");
                 return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5681", HappyBirthday.Config.translationInfo.CurrentTranslation);
             }
-            if (Key.Equals("Fall"))
+            if (Key.Equals("Fall") || Key.Equals("fall"))
             {
                 string file = Path.Combine("Strings", "StringsFromCSFiles");
                 return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5682", HappyBirthday.Config.translationInfo.CurrentTranslation);
             }
-            if (Key.Equals("Winter"))
+            if (Key.Equals("Winter") || Key.Equals("winter"))
             {
                 string file = Path.Combine("Strings", "StringsFromCSFiles");
                 return HappyBirthday.Config.translationInfo.LoadStringFromXNBFile(file, "Utility.cs.5683", HappyBirthday.Config.translationInfo.CurrentTranslation);

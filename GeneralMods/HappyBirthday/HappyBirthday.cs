@@ -506,8 +506,6 @@ namespace Omegasis.HappyBirthday
                 this.Monitor.Log(ex.ToString(), LogLevel.Error);
             }
             this.CheckedForBirthday = false;
-
-            Game1.player.changeFriendship(1000, Game1.getCharacterFromName("Penny", true));
         }
 
         /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
@@ -710,7 +708,7 @@ namespace Omegasis.HappyBirthday
         {
             return
                 this.PlayerData.BirthdayDay == Game1.dayOfMonth
-                && this.PlayerData.BirthdaySeason == Game1.currentSeason;
+                && this.PlayerData.BirthdaySeason .Equals(HappyBirthday.Config.translationInfo.getTranslatedString(Game1.currentSeason));
         }
 
         /// <summary>Migrate the legacy settings for the current player.</summary>
