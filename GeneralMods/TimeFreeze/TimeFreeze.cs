@@ -44,6 +44,13 @@ namespace Omegasis.TimeFreeze
                     }
                 }
             }
+
+            //Patch in the underground mine shaft.
+            if (this.Config.freezeTimeInThisLocation.ContainsKey("UndergroundMine") == false)
+            {
+                this.Config.freezeTimeInThisLocation.Add("UndergroundMine", true);
+            }
+            
             this.Helper.WriteConfig<ModConfig>(this.Config);
         }
 
@@ -130,7 +137,9 @@ namespace Omegasis.TimeFreeze
             {
                 Farmer player = Game1.player;
                 if (this.ShouldFreezeTime(player, player.currentLocation))
+                {
                     Game1.gameTimeInterval = 0;
+                }
                 //else
                 //    Game1.gameTimeInterval = this.oldInterval;
             }
@@ -141,15 +150,11 @@ namespace Omegasis.TimeFreeze
         /// <param name="location">The location to check.</param>
         private bool ShouldFreezeTime(Farmer player, GameLocation location)
         {
+            
             if (Game1.showingEndOfNightStuff) return false;
             if (this.Config.freezeTimeInThisLocation.ContainsKey(location.Name))
             {
-                if (location.Name == "Mine" || location.Name.StartsWith("UndergroundMine"))
-                {
-                    return this.Config.freezeTimeInThisLocation["Mine"];
-                }
-
-                if (location.Name == "SkullCave" || location.Name.StartsWith("SkullCave"))
+                if (location.Name.Equals("SkullCave") || location.Name.StartsWith("SkullCave"))
                 {
                     return this.Config.freezeTimeInThisLocation["SkullCave"];
                 }
@@ -162,6 +167,20 @@ namespace Omegasis.TimeFreeze
 
                 return this.Config.freezeTimeInThisLocation[location.Name];
             }
+
+            if (location.NameOrUniqueName.StartsWith("UndergroundMine"))
+            {
+                return this.Config.freezeTimeInThisLocation["UndergroundMine"];
+            }
+
+            //Skull cave check.
+            if (location.Name.Equals("SkullCave") || location.Name.StartsWith("SkullCave"))
+            {
+                return this.Config.freezeTimeInThisLocation["SkullCave"];
+            }
+
+
+            //this.Monitor.Log(Game1.player.currentLocation.NameOrUniqueName, LogLevel.Info);
 
             //If for some reason the location wasn't accounted for then just freeze time there by default.
             if (location.IsOutdoors)

@@ -89,6 +89,8 @@ namespace Omegasis.HappyBirthday
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
 
+
+
             helper.Events.Display.RenderedActiveMenu += this.OnRenderedActiveMenu;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
             //MultiplayerSupport.initializeMultiplayerSupport();
@@ -338,13 +340,36 @@ namespace Omegasis.HappyBirthday
                                     string dialogueMessage = "";
                                     if (Game1.player.getSpouse() != null)
                                     {
-                                        if (this.messages.spouseBirthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
+                                        if (Game1.player.getSpouse().Name.Equals(Game1.currentSpeaker.Name))
                                         {
-                                            dialogueMessage = this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name];
+                                            if (this.messages.spouseBirthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
+                                            {
+                                                dialogueMessage = this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name];
+                                                if (string.IsNullOrEmpty(dialogueMessage))
+                                                {
+                                                    dialogueMessage = this.messages.generateSpouseBirthdayDialogue(Game1.currentSpeaker.Name);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                dialogueMessage = this.messages.generateSpouseBirthdayDialogue(Game1.currentSpeaker.Name);
+                                                if (string.IsNullOrEmpty(dialogueMessage))
+                                                {
+                                                    dialogueMessage = "Happy Birthday @!";
+                                                }
+                                            }
                                         }
                                         else
                                         {
-                                            dialogueMessage = "Happy Birthday @!";
+                                            if (this.messages.birthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
+                                            {
+
+                                                dialogueMessage = this.messages.birthdayWishes[Game1.currentSpeaker.Name];
+                                            }
+                                            else
+                                            {
+                                                dialogueMessage = "Happy Birthday @!";
+                                            }
                                         }
                                     }
                                     else
@@ -416,15 +441,7 @@ namespace Omegasis.HappyBirthday
                                             }
                                             else
                                             {
-                                                if (this.messages.birthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
-                                                {
-
-                                                    d = new Dialogue(this.messages.birthdayWishes[Game1.currentSpeaker.Name], Game1.currentSpeaker);
-                                                }
-                                                else
-                                                {
-                                                    d = new Dialogue("Happy Birthday @!", Game1.currentSpeaker);
-                                                }
+                                                d =new Dialogue(this.messages.generateSpouseBirthdayDialogue(Game1.currentSpeaker.Name),Game1.currentSpeaker);
                                             }
                                             
                                         }
@@ -489,6 +506,8 @@ namespace Omegasis.HappyBirthday
                 this.Monitor.Log(ex.ToString(), LogLevel.Error);
             }
             this.CheckedForBirthday = false;
+
+            Game1.player.changeFriendship(1000, Game1.getCharacterFromName("Penny", true));
         }
 
         /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
@@ -526,6 +545,11 @@ namespace Omegasis.HappyBirthday
             }
             //this.SeenEvent = false;
             //this.Dialogue = new Dictionary<string, Dialogue>();
+
+            
+            //Game1.player.addItemToInventoryBool(new StardewValley.Object(388, 999));
+            //Game1.player.addItemToInventoryBool(new StardewValley.Object(390, 999));
+            //Game1.player.Money = 999999;
         }
 
         /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
@@ -587,17 +611,34 @@ namespace Omegasis.HappyBirthday
                                     //Check if npc name is spouse's name. If no spouse then add in generic dialogue.
                                     if (this.messages.spouseBirthdayWishes.ContainsKey(npc.Name) && Game1.player.isMarried())
                                     {
-                                        //this.Monitor.Log("Spouse Checks out");
-                                        //Check to see if spouse message exists.
-                                        if (!string.IsNullOrEmpty(this.messages.spouseBirthdayWishes[npc.Name]))
+                                        if (Game1.player.getSpouse().Name.Equals(npc.Name))
                                         {
-                                            spouseMessage = true;
-                                            Dialogue d = new Dialogue(this.messages.spouseBirthdayWishes[npc.Name], npc);
-                                            npc.CurrentDialogue.Push(d);
-                                            if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(this.messages.spouseBirthdayWishes[npc.Name]);
+                                            //this.Monitor.Log("Spouse Checks out");
+                                            //Check to see if spouse message exists.
+                                            if (!string.IsNullOrEmpty(this.messages.spouseBirthdayWishes[npc.Name]))
+                                            {
+                                                spouseMessage = true;
+
+                                                string message = this.messages.spouseBirthdayWishes[npc.Name];
+                                                if (string.IsNullOrEmpty(message))
+                                                {
+                                                    message = this.messages.generateSpouseBirthdayDialogue(npc.Name);
+                                                }
+                                                Dialogue d = new Dialogue(message, npc);
+                                                npc.CurrentDialogue.Push(d);
+                                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
+                                            }
+                                            else
+                                            {
+                                                string message = this.messages.generateSpouseBirthdayDialogue(npc.Name);
+                                                Dialogue d = new Dialogue(message, npc);
+                                                npc.CurrentDialogue.Push(d);
+                                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
+                                                spouseMessage = true;
+                                                this.Monitor.Log("No spouse message???", LogLevel.Warn);
+                                            }
                                         }
-                                        else
-                                            this.Monitor.Log("No spouse message???", LogLevel.Warn);
+
                                     }
                                     if (!spouseMessage)
                                     {
