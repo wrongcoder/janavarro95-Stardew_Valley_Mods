@@ -20,7 +20,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <summary>
         /// Nexus user id for Omegasis (aka me).
         /// </summary>
-        private const int nexusUserId = 32171640;
+        protected int nexusUserId = 32171640;
 
         /// <summary>
         /// Wraps SDV facing direction.
@@ -34,10 +34,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
         }
 
 
-        private StringBuilder eventData;
-        private StringBuilder eventPreconditionData;
-        public List<EventPrecondition> eventPreconditions;
-        public int eventID;
+        protected StringBuilder eventData;
+        protected StringBuilder eventPreconditionData;
+        protected List<EventPrecondition> eventPreconditions;
+        protected int eventID;
 
         public EventHelper()
         {
@@ -88,7 +88,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Adds in the data to the event data.Aka what happens during the event.
         /// </summary>
         /// <param name="Data"></param>
-        public virtual void add(string Data)
+        protected virtual void add(string Data)
         {
 
             if (this.eventData.Length > 0)
@@ -102,7 +102,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Adds in the data to the event data. Aka what happens during the event.
         /// </summary>
         /// <param name="Builder"></param>
-        public virtual void add(StringBuilder Builder)
+        protected virtual void add(StringBuilder Builder)
         {
             this.add(Builder.ToString());
         }
@@ -113,7 +113,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// </summary>
         /// <param name="Dir"></param>
         /// <returns></returns>
-        public virtual int getFacingDirectionNumber(FacingDirection Dir)
+        protected virtual int getFacingDirectionNumber(FacingDirection Dir)
         {
             return (int)Dir;
         }
@@ -122,7 +122,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Gets the even parsing seperator.
         /// </summary>
         /// <returns></returns>
-        public virtual string getSeperator()
+        protected virtual string getSeperator()
         {
             return "/";
         }
@@ -131,13 +131,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Gets the starting event numbers based off of my nexus user id.
         /// </summary>
         /// <returns></returns>
-        private string getUniqueEventStartID()
+        protected virtual string getUniqueEventStartID()
         {
-            string s = nexusUserId.ToString();
+            string s = this.nexusUserId.ToString();
             return s.Substring(0, 4);
         }
 
-        private string getEventID()
+        protected virtual string getEventID()
         {
             return this.getUniqueEventStartID() + this.eventID.ToString();
         }
@@ -147,7 +147,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// </summary>
         /// <param name="IDToCheck"></param>
         /// <returns></returns>
-        public virtual bool isIdValid(int IDToCheck)
+        protected virtual bool isIdValid(int IDToCheck)
         {
             if (IDToCheck > 2147483647 || IDToCheck < 0) return false;
             else return true;
@@ -158,18 +158,18 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// </summary>
         /// <param name="IDToCheck"></param>
         /// <returns></returns>
-        public virtual bool isIdValid(string IDToCheck)
+        protected virtual bool isIdValid(string IDToCheck)
         {
             if (Convert.ToInt32(IDToCheck) > 2147483647 || Convert.ToInt32(IDToCheck) < 0) return false;
             else return true;
         }
 
-        public virtual string getEventString()
+        protected virtual string getEventString()
         {
             return this.eventData.ToString();
         }
 
-        public virtual StardewValley.Event getEvent(Farmer PlayerActor = null)
+        protected virtual StardewValley.Event getEvent(Farmer PlayerActor = null)
         {
             return new StardewValley.Event(this.getEventString(), Convert.ToInt32(this.getEventID()), PlayerActor);
         }
@@ -177,7 +177,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <summary>
         /// Checks to see if all of the event preconditions have been met and starts the event if so.
         /// </summary>
-        public virtual void startEventAtLocationifPossible()
+        protected virtual void startEventAtLocationifPossible()
         {
             if (this.canEventOccur())
             {
@@ -193,7 +193,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             /// Checks to see if the event can occur.
             /// </summary>
             /// <returns></returns>
-        public bool canEventOccur()
+        protected virtual bool canEventOccur()
         {
             foreach(EventPrecondition eve in this.eventPreconditions)
             {
@@ -213,7 +213,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <param name="xTile"></param>
         /// <param name="yTile"></param>
         /// <param name="ID"></param>
-        public virtual void addBigProp(int xTile, int yTile, int ID)
+        protected virtual void addBigProp(int xTile, int yTile, int ID)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addBigProp ");
@@ -229,7 +229,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Starts an active dialogue event with the given ID and a length of 4 days.
         /// </summary>
         /// <param name="ID"></param>
-        public virtual void addConversationTopic(string ID)
+        protected virtual void addConversationTopic(string ID)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addBigProp ");
@@ -241,7 +241,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Adds the specified cooking recipe to the player.
         /// </summary>
         /// <param name="Recipe"></param>
-        public virtual void addCookingRecipe(string Recipe)
+        protected virtual void addCookingRecipe(string Recipe)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addCookingRecipe ");
@@ -253,7 +253,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Adds the specified crafting recipe to the player.
         /// </summary>
         /// <param name="Recipe"></param>
-        public virtual void addCraftingRecipe(string Recipe)
+        protected virtual void addCraftingRecipe(string Recipe)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addCraftingRecipe ");
@@ -264,7 +264,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <summary>
         /// Add a non-solid prop from the current festival texture. Default solid width/height is 1. Default display height is solid height.
         /// </summary>
-        public virtual void addFloorProp(int PropIndex, int XTile, int YTile, int SolidWidth, int SolidHeight, int DisplayHeight)
+        protected virtual void addFloorProp(int PropIndex, int XTile, int YTile, int SolidWidth, int SolidHeight, int DisplayHeight)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addFloorProp ");
@@ -289,7 +289,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <param name="XPosition"></param>
         /// <param name="YPosition"></param>
         /// <param name="LightRadius"></param>
-        public virtual void addLantern(int ItemID, int XPosition, int YPosition, float LightRadius)
+        protected virtual void addLantern(int ItemID, int XPosition, int YPosition, float LightRadius)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addLantern ");
@@ -307,12 +307,15 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// 	Set a letter as received.
         /// </summary>
         /// <param name="ID"></param>
-        public virtual void addMailReceived(string ID)
+        protected virtual void addMailReceived(string ID)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addMailReceived  ");
             b.Append(ID);
             this.add(b);
         }
+
+
+
     }
 }
