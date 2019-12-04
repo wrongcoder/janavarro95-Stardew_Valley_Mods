@@ -36,10 +36,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         private StringBuilder eventData;
         private StringBuilder eventPreconditionData;
-
-
         public List<EventPrecondition> eventPreconditions;
-
         public int eventID;
 
         public EventHelper()
@@ -49,18 +46,16 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(int ID, TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
+        public EventHelper(int ID,LocationPrecondition Location ,TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventData = new StringBuilder();
             this.eventPreconditionData = new StringBuilder();
+            this.eventPreconditions = new List<EventPrecondition>();
             this.eventID = ID;
+            this.add(Location);
             this.add(Time);
             this.add(NotTheseDays);
             this.add(StartData.ToString());
-
-            this.eventPreconditions = new List<EventPrecondition>();
-            this.eventPreconditions.Add(NotTheseDays);
-            this.eventPreconditions.Add(Time);
         }
 
         public EventHelper(List<EventPrecondition> Conditions, EventStartData StartData)
@@ -70,9 +65,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.eventPreconditionData = new StringBuilder();
             foreach (var v in Conditions)
             {
-                this.eventPreconditions.Add(v);
-
-
                 this.add(v);
             }
             this.add(StartData.ToString());
@@ -84,6 +76,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <param name="Data"></param>
         public virtual void add(EventPrecondition Data)
         {
+            this.eventPreconditions.Add(Data);
             if (this.eventPreconditionData.Length > 0)
             {
                 this.eventPreconditionData.Append(this.getSeperator());
@@ -181,10 +174,25 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return new StardewValley.Event(this.getEventString(), Convert.ToInt32(this.getEventID()), PlayerActor);
         }
 
+        /// <summary>
+        /// Checks to see if all of the event preconditions have been met and starts the event if so.
+        /// </summary>
+        public virtual void startEventAtLocationifPossible()
+        {
+            if (this.canEventOccur())
+            {
+                Game1.player.currentLocation.currentEvent = this.getEvent();
+            }
+        }
+
         //~~~~~~~~~~~~~~~~//
         //   Validation   //
         //~~~~~~~~~~~~~~~~//
 
+            /// <summary>
+            /// Checks to see if the event can occur.
+            /// </summary>
+            /// <returns></returns>
         public bool canEventOccur()
         {
             foreach(EventPrecondition eve in this.eventPreconditions)

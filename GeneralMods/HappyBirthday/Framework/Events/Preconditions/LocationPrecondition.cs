@@ -39,5 +39,10 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions
         {
             return Game1.player.currentLocation == this.location;
         }
+
+        public override string ToString()
+        {
+            return "Location " + this.locationName;
+        }
     }
 }
