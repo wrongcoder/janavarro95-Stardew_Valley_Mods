@@ -43,15 +43,17 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         private StringBuilder eventData;
 
+        public int eventID;
+
         public EventHelper()
         {
 
         }
 
-        public EventHelper(TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays)
+        public EventHelper(int ID,TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays)
         {
             this.eventData = new StringBuilder();
-
+            this.eventID = ID;
             this.add(Time);
             this.add(NotTheseDays);
 
@@ -140,6 +142,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return s.Substring(0, 4);
         }
 
+        private string getEventID()
+        {
+            return this.getUniqueEventStartID() + this.eventID.ToString();
+        }
+
         /// <summary>
         /// Checks to ensure I don't create a id value that is too big for nexus.
         /// </summary>
@@ -160,6 +167,16 @@ namespace Omegasis.HappyBirthday.Framework.Events
         {
             if (Convert.ToInt32(IDToCheck) > 2147483647 ||Convert.ToInt32(IDToCheck) < 0) return false;
             else return true;
+        }
+
+        public virtual string getEventString()
+        {
+            return this.eventData.ToString();
+        }
+
+        public virtual StardewValley.Event getEvent(Farmer PlayerActor=null)
+        {
+            return new StardewValley.Event(this.getEventString(), Convert.ToInt32(this.getEventID()), PlayerActor);
         }
     }
 }
