@@ -42,6 +42,17 @@ namespace Omegasis.HappyBirthday.Framework.Events
             AlwaysFront
         }
 
+        public enum FestivalItemType
+        {
+            Pan,
+            Sculpture,
+            Rod,
+            Sword,
+            Hero,
+            Joja,
+            SlimeEgg
+        }
+
 
         protected StringBuilder eventData;
         protected StringBuilder eventPreconditionData;
@@ -592,6 +603,349 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.setAmbientLight(color.R, color.G, color.B);
         }
 
+        //animalNaming
 
+        public virtual void animalNaming()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("animalNaming");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Animate a named actor, using one or more <frames> from their sprite sheet, for <frame duration> milliseconds per frame. <flip> indicates whether to flip the sprites along the Y axis; <loop> indicates whether to repeat the animation until stopAnimation is used.
+        /// </summary>
+        /// <param name="ActorName"></param>
+        /// <param name="Flip"></param>
+        /// <param name="Loop"></param>
+        /// <param name="FrameDuration">In milliseconds</param>
+        /// <param name="Frames"></param>
+        public virtual void animate(string ActorName,bool Flip, bool Loop, int FrameDuration, List<int> Frames)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("animate ");
+            b.Append(ActorName);
+            b.Append(" ");
+            b.Append(Flip);
+            b.Append(" ");
+            b.Append(Loop);
+            b.Append(" ");
+            b.Append(FrameDuration);
+            b.Append(" ");
+            for (int i = 0; i < Frames.Count; i++)
+            {
+                b.Append(Frames[i]);
+                if (i != Frames.Count - 1)
+                {
+                    b.Append(" ");
+                }
+            }
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Attach an actor to the most recent temporary sprite.
+        /// </summary>
+        /// <param name="Actor"></param>
+        public virtual void attachCharacterToTempSprite(string Actor)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("attachCharacterToTempSprite ");
+            b.Append(Actor);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Awards the festival prize to the winner for the easter egg hunt and ice fishing contest.
+        /// </summary>
+        public virtual void awardFestivalPrize()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("awardFestivalPrize");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Awards the specified item to the player. Possible item types are "pan", "sculpture", "rod", "sword", "hero", "joja", and "slimeegg".
+        /// </summary>
+        /// <param name="ItemType"></param>
+        public virtual void awardFestivalPrize(FestivalItemType ItemType)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("awardFestivalPrize ");
+
+            if(ItemType== FestivalItemType.Hero)
+            {
+                b.Append("hero");
+            }
+            else if(ItemType== FestivalItemType.Joja)
+            {
+                b.Append("joja");
+            }
+            else if(ItemType== FestivalItemType.Pan)
+            {
+                b.Append("pan");
+            }
+            else if(ItemType== FestivalItemType.Rod)
+            {
+                b.Append("rod");
+            }
+            else if (ItemType == FestivalItemType.Sculpture) {
+                b.Append("sculpture");
+            }
+            else if(ItemType== FestivalItemType.SlimeEgg)
+            {
+                b.Append("slimeegg");
+            }
+            else if(ItemType== FestivalItemType.Sword)
+            {
+                b.Append("sword");
+            }
+
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Causes the event to be seen by all players when triggered.
+        /// </summary>
+        public virtual void broadcastEvent()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("broadcastEvent");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Trigger question about adopting your pet.
+        /// </summary>
+        public virtual void petAdoptionQuestion()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("catQuestion");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Trigger the question for the farm cave type. This will work again later, however changing from bats to mushrooms will not remove the mushroom spawning objects.
+        /// </summary>
+        public virtual void farmCaveTypeQuestion()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("cave");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Change to another location and run the remaining event script there.
+        /// </summary>
+        /// <param name="location"></param>
+        public virtual void changeLocation(GameLocation location)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changeLocation ");
+            b.Append(location.NameOrUniqueName);
+            this.add(b);
+        }
+
+
+        /// <summary>
+        /// Change to another location and run the remaining event script there.
+        /// </summary>
+        /// <param name="location"></param>
+        public virtual void changeLocation(string location)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changeLocation ");
+            b.Append(location);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Change the specified tile to a particular value.
+        /// </summary>
+        /// <param name="l"></param>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="TileIndex"></param>
+        public virtual void changeMapTile(Layers l, int X, int Y, int TileIndex)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changeMapTile ");
+            b.Append(this.getLayerName(l));
+            b.Append(" ");
+            b.Append(X);
+            b.Append(" ");
+            b.Append(Y);
+            b.Append(" ");
+            b.Append(TileIndex);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Change the NPC's portrait to be from "Portraits/<actor>_<Portrait>".
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="Portrait"></param>
+        public virtual void changePortrait(string npc, string Portrait)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changePortrait ");
+            b.Append(npc);
+            b.Append(" ");
+            b.Append(Portrait);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Change the actor's sprite to be from "Characters/<actor>_<sprite>".
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="Sprite"></param>
+        public virtual void changeSprite(string npc, string Sprite)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changeSprite ");
+            b.Append(npc);
+            b.Append(" ");
+            b.Append(Sprite);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Change the location to a temporary one loaded from the map file specified by <map>. The [pan] argument indicates the tile coordinates to pan to (defaults to 0, 0).
+        /// </summary>
+        /// <param name="Map"></param>
+        public virtual void changeToTemporaryMap(string Map)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changeToTemporaryMap ");
+            b.Append(Map);
+            this.add(b);
+        }
+        /// <summary>
+        /// 	Change the location to a temporary one loaded from the map file specified by <map>. The [pan] argument indicates the tile coordinates to pan to (defaults to 0, 0).
+        /// </summary>
+        /// <param name="Map"></param>
+        /// <param name="PanPosition"></param>
+        public virtual void changeToTemporaryMap(string Map,Point PanPosition)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changeToTemporaryMap ");
+            b.Append(Map);
+            b.Append(" ");
+            b.Append(PanPosition.X);
+            b.Append(" ");
+            b.Append(PanPosition.Y);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Changes the NPC's vertical texture offset. Example: changeYSourceRectOffset Abigail 96 will offset her sprite sheet, showing her looking left instead of down. This persists for the rest of the event. This is only used in Emily's Clothing Therapy event to display the various outfits properly.
+        /// </summary>
+        /// <param name="NPC"></param>
+        /// <param name="YOffset"></param>
+        public virtual void changeYSourceRectOffset(string NPC, int YOffset)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("changeYSourceRectOffset ");
+            b.Append(NPC);
+            b.Append(" ");
+            b.Append(YOffset);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Acts as if the player had clicked the specified x/y coordinate and triggers any relevant action. It is commonly used to open doors from inside events, but it can be used for other purposes. If you use it on an NPC you will talk to them, and if the player is holding an item they will give that item as a gift. doAction activates objects in the main game world (their actual location outside of the event), so activating NPCs like this is very tricky, and their reaction varies depending on what the player is holding.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public virtual void doAction(int x, int y)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("doAction ");
+            b.Append(x);
+            b.Append(" ");
+            b.Append(y);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Make the given NPC name perform an emote, which is a little icon shown above the NPC's head. Emotes are stored in Content\TileSheets\emotes.xnb (see list of emotes).
+        /// </summary>
+        /// <param name="Actor"></param>
+        /// <param name="EmoteID"></param>
+        public virtual void emote(string Actor, int EmoteID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("emote ");
+
+            b.Append(Actor);
+            b.Append(" ");
+            b.Append(EmoteID);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Ends the current event by fading out, then resumes the game world and places the player on the square where they entered the zone. All end parameters do this by default unless otherwise stated.
+        /// </summary>
+        public virtual void end()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Same as end, and additionally clears the existing NPC dialogue for the day and replaces it with the line(s) specified at the end of the command. Example usage: end dialogue Abigail "It was fun talking to you today.$h"
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="Dialogue"></param>
+        public virtual void endDialogue(NPC npc, string Dialogue)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end dialogue ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(Dialogue);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Ends the event, sets npc dialogue, and warps the player out of the location.
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="Dialogue"></param>
+        public virtual void endDialogueWarpOut(NPC npc, string Dialogue)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end dialogueWarpOut ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(Dialogue);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Same as end, and additionally turns the specified NPC invisible (cannot be interacted with until the next day).
+        /// </summary>
+        /// <param name="npc"></param>
+
+        public virtual void endInvisible(NPC npc)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end invisible ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            this.add(b);
+        }
+
+        public virtual void endInvisibleWarpOut(NPC npc)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end invisibleWarpOut ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            this.add(b);
+        }
     }
 }
