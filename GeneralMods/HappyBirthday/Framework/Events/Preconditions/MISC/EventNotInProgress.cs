@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.MISC
 {
@@ -39,6 +40,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.MISC
             b.Append("A ");
             b.Append(this.id.ToString());
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            return Game1.player.activeDialogueEvents.ContainsKey(this.id) == false;
         }
     }
 }

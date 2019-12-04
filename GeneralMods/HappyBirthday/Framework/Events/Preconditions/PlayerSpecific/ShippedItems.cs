@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
@@ -57,6 +58,17 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 
 
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            foreach (KeyValuePair<int, int> pair in this.shippedItems) {
+                if (Game1.player.basicShipped.ContainsKey(pair.Key)){
+                    if (Game1.player.basicShipped[pair.Key] <= pair.Value) return false;
+                }
+                else return false;
+            }
+            return true;
         }
 
     }

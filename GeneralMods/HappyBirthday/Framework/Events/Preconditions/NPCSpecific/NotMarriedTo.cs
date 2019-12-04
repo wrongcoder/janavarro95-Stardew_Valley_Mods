@@ -7,7 +7,7 @@ using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.NPCSpecific
 {
-    public class NotMarriedTo:EventPrecondition
+    public class NotMarriedTo : EventPrecondition
     {
 
         public NPC npc;
@@ -38,6 +38,13 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.NPCSpecific
             b.Append("o ");
             b.Append(this.npc.Name);
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            if (Game1.player.getSpouse() == null) return true;
+            if (Game1.player.getSpouse() == this.npc) return false;
+            return true;
         }
 
     }

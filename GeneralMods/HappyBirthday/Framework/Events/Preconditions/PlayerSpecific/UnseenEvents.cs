@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
     public class UnseenEvents:EventPrecondition
     {
-        public List<string> unseenEvents;
+        public List<int> unseenEvents;
 
         public UnseenEvents()
         {
-            this.unseenEvents = new List<string>();
+            this.unseenEvents = new List<int>();
         }
 
-        public UnseenEvents(string ID)
+        public UnseenEvents(int ID)
         {
             this.unseenEvents.Add(ID);
         }
 
-        public UnseenEvents(List<string> IDS)
+        public UnseenEvents(List<int> IDS)
         {
             this.unseenEvents = IDS.ToList();
         }
@@ -48,6 +49,15 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
                 }
             }
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            foreach (int v in this.unseenEvents)
+            {
+                if (Game1.player.eventsSeen.Contains(v) == true) return false;
+            }
+            return true;
         }
     }
 }

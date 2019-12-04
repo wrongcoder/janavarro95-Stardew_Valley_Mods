@@ -698,7 +698,7 @@ namespace Omegasis.HappyBirthday
         }
 
         /// <summary>Get whether today is the player's birthday.</summary>
-        private bool IsBirthday()
+        public bool IsBirthday()
         {
             return
                 this.PlayerData.BirthdayDay == Game1.dayOfMonth

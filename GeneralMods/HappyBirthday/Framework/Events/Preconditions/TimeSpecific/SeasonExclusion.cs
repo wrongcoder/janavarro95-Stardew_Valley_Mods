@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
 {
@@ -68,10 +69,31 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
                 b.Append(words[i]);
                 if (i != words.Count - 1)
                 {
-                    b.Append(" ");
+                    b.Append("/");
                 }
             }
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            if (Game1.currentSeason == "spring")
+            {
+                if (this.spring) return false;
+            }
+            if (Game1.currentSeason == "summer")
+            {
+                if (this.summer) return false;
+            }
+            if (Game1.currentSeason == "fall")
+            {
+                if (this.fall) return false;
+            }
+            if (Game1.currentSeason == "winter")
+            {
+                if (this.winter) return false;
+            }return true;
+
         }
 
     }

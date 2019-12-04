@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
 {
@@ -82,6 +83,48 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
                 }
             }
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            int day = Game1.dayOfMonth;
+            if (day % 7 == 0)
+            {
+                //Sunday
+                if (this.sunday) return false;
+            }
+            if (day % 7 == 1)
+            {
+                //Monday
+                if (this.monday) return false;
+            }
+            if (day % 7 == 2)
+            {
+                //Tuesday
+                if (this.tuesday) return false;
+            }
+            if (day % 7 == 3)
+            {
+                //Wednesday
+                if (this.wednesday) return false;
+            }
+            if (day % 7 == 4)
+            {
+                //Thursday
+                if (this.thursday) return false;
+            }
+            if (day % 7 == 5)
+            {
+                //Friday
+                if (this.friday) return false;
+            }
+            if (day % 7 == 6)
+            {
+                //Saturday
+                if (this.saturday) return false;
+            }
+
+            return true;
         }
     }
 }

@@ -64,7 +64,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
             return "";
         }
 
-        //Experimental weather checks. May or may not be used when checking for when to use an event.
+        public override bool meetsCondition()
+        {
+            if (Game1.weatherIcon == (int)this.weather) return true;
+            else return false;
+        }
 
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
@@ -10,15 +11,17 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
     {
 
         public int id;
+        public int amount;
 
         public HasItem()
         {
 
         }
 
-        public HasItem(int ID)
+        public HasItem(int ID,int Amount=1)
         {
             this.id = ID;
+            this.amount = Amount;
         }
 
 
@@ -39,6 +42,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
             b.Append("i ");
             b.Append(this.id.ToString());
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            return Game1.player.hasItemInInventory(this.id,this.amount);
         }
     }
 }

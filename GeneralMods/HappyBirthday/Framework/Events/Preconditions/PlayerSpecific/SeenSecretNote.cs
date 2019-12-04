@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
     public class SeenSecretNote:EventPrecondition
     {
 
-        public string id;
+        public int id;
 
         public SeenSecretNote()
         {
 
         }
 
-        public SeenSecretNote(string ID)
+        public SeenSecretNote(int ID)
         {
             this.id = ID;
         }
@@ -37,6 +38,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
             b.Append("S ");
             b.Append(this.id.ToString());
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            return Game1.player.secretNotesSeen.Contains(this.id);
         }
     }
 }

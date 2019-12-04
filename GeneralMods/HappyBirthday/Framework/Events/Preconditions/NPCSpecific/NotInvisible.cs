@@ -37,5 +37,10 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.NPCSpecific
             b.Append(this.npc.Name);
             return b.ToString();
         }
+
+        public override bool meetsCondition()
+        {
+            return this.npc.IsInvisible == false;
+        }
     }
 }

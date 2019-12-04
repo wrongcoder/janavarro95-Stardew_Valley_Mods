@@ -43,5 +43,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.NPCSpecific
             b.Append(hearts.ToString());
             return b.ToString();
         }
+
+        public override bool meetsCondition()
+        {
+            int hearts = Game1.player.friendshipData[this.npc.Name].Points / 250;
+            return  hearts >= this.amount;
+        }
     }
 }

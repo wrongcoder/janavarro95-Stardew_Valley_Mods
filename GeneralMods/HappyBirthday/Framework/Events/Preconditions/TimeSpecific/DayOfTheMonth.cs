@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
 {
@@ -42,6 +43,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
             b.Append("u ");
             b.Append(this.day.ToString());
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            return Game1.dayOfMonth == this.day;
         }
     }
 }

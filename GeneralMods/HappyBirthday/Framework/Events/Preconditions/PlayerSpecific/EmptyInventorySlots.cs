@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
@@ -36,6 +37,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
             b.Append("c ");
             b.Append(this.amount.ToString());
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            return Game1.player.freeSpotsInInventory() >= this.amount;
         }
     }
 }

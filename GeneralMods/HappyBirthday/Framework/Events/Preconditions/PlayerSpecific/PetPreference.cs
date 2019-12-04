@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
@@ -54,6 +55,22 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
             b.Append("h ");
             b.Append("dog");
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            //Cat breeds
+            if (Game1.player.whichPetBreed == 0 || Game1.player.whichPetBreed == 1 || Game1.player.whichPetBreed == 2)
+            {
+                if (this.wantsDog == false) return true;
+                else return false;
+            }
+            else
+            {
+                //Dog breeds.
+                if (this.wantsDog == true) return true;
+                else return false;
+            }
         }
 
     }

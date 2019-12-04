@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
 {
@@ -44,6 +45,19 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
             b.Append("y ");
             b.Append(this.year.ToString());
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            if (this.year == 1)
+            {
+                if (Game1.year == 1) return true;
+                else return false;
+            }
+            else
+            {
+                return this.year <= Game1.year;
+            }
         }
     }
 }

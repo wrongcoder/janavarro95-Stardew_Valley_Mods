@@ -8,5 +8,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions
 {
     public class EventPrecondition
     {
+
+
+        public virtual bool meetsCondition()
+        {
+            return false;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.MISC
 {
@@ -27,6 +28,15 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.MISC
             StringBuilder b = new StringBuilder();
             b.Append("J");
             return b.ToString();
+        }
+
+        /// <summary>
+        /// TODO: Check if this is valid.
+        /// </summary>
+        /// <returns></returns>
+        public override bool meetsCondition()
+        {
+            return (Game1.MasterPlayer.hasCompletedCommunityCenter() && Game1.MasterPlayer.mailReceived.Contains("JojaMember"));
         }
     }
 }

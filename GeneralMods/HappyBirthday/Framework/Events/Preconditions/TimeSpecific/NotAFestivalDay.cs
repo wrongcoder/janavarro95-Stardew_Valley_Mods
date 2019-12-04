@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
 {
@@ -22,6 +23,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific
             StringBuilder b = new StringBuilder();
             b.Append("F");
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            return string.IsNullOrEmpty(Game1.whereIsTodaysFest) == true;
         }
     }
 }

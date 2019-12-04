@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
     public class AnsweredDialogueOptions:EventPrecondition
     {
-        public List<string> answeredOptions;
+        public List<int> answeredOptions;
 
         public AnsweredDialogueOptions()
         {
-            this.answeredOptions = new List<string>();
+            this.answeredOptions = new List<int>();
         }
 
-        public AnsweredDialogueOptions(string Options)
+        public AnsweredDialogueOptions(int Options)
         {
-            this.answeredOptions = new List<string>();
+            this.answeredOptions = new List<int>();
             this.answeredOptions.Add(Options);
         }
 
-        public AnsweredDialogueOptions(List<string> Options)
+        public AnsweredDialogueOptions(List<int> Options)
         {
             this.answeredOptions = Options.ToList();
         }
@@ -49,6 +50,15 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
                 }
             }
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            foreach(int i in this.answeredOptions)
+            {
+                if (Game1.player.DialogueQuestionsAnswered.Contains(i) == false) return false;
+            }
+            return true;
         }
     }
 }

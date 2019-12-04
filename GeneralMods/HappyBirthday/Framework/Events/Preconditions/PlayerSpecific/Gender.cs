@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
@@ -57,5 +58,9 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
             return b.ToString();
         }
 
+        public override bool meetsCondition()
+        {
+            return this.isMale == Game1.player.IsMale;
+        }
     }
 }

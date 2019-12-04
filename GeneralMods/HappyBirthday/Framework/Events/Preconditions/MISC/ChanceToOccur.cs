@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.MISC
 {
@@ -39,6 +40,13 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.MISC
             b.Append("r ");
             b.Append(this.chance.ToString());
             return b.ToString();
+        }
+
+        public override bool meetsCondition()
+        {
+            float check = (float)Game1.random.NextDouble();
+            if (this.chance >= check) return true;
+            else return false;
         }
     }
 }

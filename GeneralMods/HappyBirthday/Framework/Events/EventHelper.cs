@@ -34,84 +34,67 @@ namespace Omegasis.HappyBirthday.Framework.Events
         }
 
 
-        private bool _precondition_snowWeather;
-        private bool _precondition_debrisWeather;
-        private bool _precondition_weddingDayWeather;
-        private bool _precondition_stormyWeather;
-        private bool _precondition_festivalWeather;
-
-
         private StringBuilder eventData;
+        private StringBuilder eventPreconditionData;
+
+
+        public List<EventPrecondition> eventPreconditions;
 
         public int eventID;
 
         public EventHelper()
         {
-
+            this.eventData = new StringBuilder();
+            this.eventPreconditionData = new StringBuilder();
+            this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(int ID,TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays)
+        public EventHelper(int ID, TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventData = new StringBuilder();
+            this.eventPreconditionData = new StringBuilder();
             this.eventID = ID;
             this.add(Time);
             this.add(NotTheseDays);
+            this.add(StartData.ToString());
 
+            this.eventPreconditions = new List<EventPrecondition>();
+            this.eventPreconditions.Add(NotTheseDays);
+            this.eventPreconditions.Add(Time);
         }
 
-        public EventHelper(List<EventPrecondition> Conditions)
+        public EventHelper(List<EventPrecondition> Conditions, EventStartData StartData)
         {
             this.eventData = new StringBuilder();
-            foreach(var v in Conditions)
+            this.eventPreconditions = new List<EventPrecondition>();
+            this.eventPreconditionData = new StringBuilder();
+            foreach (var v in Conditions)
             {
-                if(v is WeatherPrecondition)
-                {
-                    WeatherPrecondition w = (v as WeatherPrecondition);
-                    if(w.weather== WeatherPrecondition.Weather.Sunny || w.weather== WeatherPrecondition.Weather.Rainy)
-                    {
-                        this.add(v);
-                    }
-                    else if(w.weather== WeatherPrecondition.Weather.Debris)
-                    {
-                        this._precondition_debrisWeather = true;
-                    }
-                    else if(w.weather== WeatherPrecondition.Weather.Festival)
-                    {
-                        this._precondition_festivalWeather = true;
-                    }
-                    else if(w.weather== WeatherPrecondition.Weather.Snow)
-                    {
-                        this._precondition_snowWeather = true;
-                    }
-                    else if(w.weather== WeatherPrecondition.Weather.Storm)
-                    {
-                        this._precondition_stormyWeather = true;
-                    }
-                    else if(w.weather== WeatherPrecondition.Weather.Wedding)
-                    {
-                        this._precondition_weddingDayWeather = true;
-                    }
-                    continue;
-                }
+                this.eventPreconditions.Add(v);
 
 
                 this.add(v);
             }
+            this.add(StartData.ToString());
         }
 
         /// <summary>
-        /// Adds in the event data to the string builder and appends seperators as necessary.
+        /// Adds in the event precondition data to the string builder and appends seperators as necessary.
         /// </summary>
         /// <param name="Data"></param>
         public virtual void add(EventPrecondition Data)
         {
-            if (this.eventData.Length > 0)
+            if (this.eventPreconditionData.Length > 0)
             {
-                this.eventData.Append(this.getSeperator());
+                this.eventPreconditionData.Append(this.getSeperator());
             }
-            this.eventData.Append(Data.ToString());
+            this.eventPreconditionData.Append(Data.ToString());
         }
 
+        /// <summary>
+        /// Adds in the data to the event data.Aka what happens during the event.
+        /// </summary>
+        /// <param name="Data"></param>
         public virtual void add(string Data)
         {
 
@@ -120,6 +103,15 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 this.eventData.Append(this.getSeperator());
             }
             this.eventData.Append(Data);
+        }
+
+        /// <summary>
+        /// Adds in the data to the event data. Aka what happens during the event.
+        /// </summary>
+        /// <param name="Builder"></param>
+        public virtual void add(StringBuilder Builder)
+        {
+            this.add(Builder.ToString());
         }
 
 
@@ -175,7 +167,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <returns></returns>
         public virtual bool isIdValid(string IDToCheck)
         {
-            if (Convert.ToInt32(IDToCheck) > 2147483647 ||Convert.ToInt32(IDToCheck) < 0) return false;
+            if (Convert.ToInt32(IDToCheck) > 2147483647 || Convert.ToInt32(IDToCheck) < 0) return false;
             else return true;
         }
 
@@ -184,16 +176,35 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return this.eventData.ToString();
         }
 
-        public virtual StardewValley.Event getEvent(Farmer PlayerActor=null)
+        public virtual StardewValley.Event getEvent(Farmer PlayerActor = null)
         {
             return new StardewValley.Event(this.getEventString(), Convert.ToInt32(this.getEventID()), PlayerActor);
         }
 
+        //~~~~~~~~~~~~~~~~//
+        //   Validation   //
+        //~~~~~~~~~~~~~~~~//
+
+        public bool canEventOccur()
+        {
+            foreach(EventPrecondition eve in this.eventPreconditions)
+            {
+                if (eve.meetsCondition() == false) return false;
+            }
+
+            return true;
+        }
 
         //~~~~~~~~~~~~~~~~//
         //      Actions   //
         //~~~~~~~~~~~~~~~~//
 
+        /// <summary>
+        /// Adds an object at the specified tile from the TileSheets\Craftables.png sprite sheet
+        /// </summary>
+        /// <param name="xTile"></param>
+        /// <param name="yTile"></param>
+        /// <param name="ID"></param>
         public virtual void addBigProp(int xTile, int yTile, int ID)
         {
             StringBuilder b = new StringBuilder();
@@ -203,9 +214,97 @@ namespace Omegasis.HappyBirthday.Framework.Events
             b.Append(yTile.ToString());
             b.Append(" ");
             b.Append(ID.ToString());
-            this.add(b.ToString());
+            this.add(b);
         }
 
+        /// <summary>
+        /// Starts an active dialogue event with the given ID and a length of 4 days.
+        /// </summary>
+        /// <param name="ID"></param>
+        public virtual void addConversationTopic(string ID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addBigProp ");
+            b.Append(ID);
+            this.add(b);
+        }
 
+        /// <summary>
+        /// Adds the specified cooking recipe to the player.
+        /// </summary>
+        /// <param name="Recipe"></param>
+        public virtual void addCookingRecipe(string Recipe)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addCookingRecipe ");
+            b.Append(Recipe);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Adds the specified crafting recipe to the player.
+        /// </summary>
+        /// <param name="Recipe"></param>
+        public virtual void addCraftingRecipe(string Recipe)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addCraftingRecipe ");
+            b.Append(Recipe);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Add a non-solid prop from the current festival texture. Default solid width/height is 1. Default display height is solid height.
+        /// </summary>
+        public virtual void addFloorProp(int PropIndex, int XTile, int YTile, int SolidWidth, int SolidHeight, int DisplayHeight)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addFloorProp ");
+            b.Append(PropIndex.ToString());
+            b.Append(" ");
+            b.Append(XTile.ToString());
+            b.Append(" ");
+            b.Append(YTile.ToString());
+            b.Append(" ");
+            b.Append(SolidWidth.ToString());
+            b.Append(" ");
+            b.Append(SolidHeight.ToString());
+            b.Append(" ");
+            b.Append(DisplayHeight.ToString());
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Adds a glowing temporary sprite at the specified tile from the Maps\springobjects.png sprite sheet. A light radius of 0 just places the sprite.
+        /// </summary>
+        /// <param name="ItemID"></param>
+        /// <param name="XPosition"></param>
+        /// <param name="YPosition"></param>
+        /// <param name="LightRadius"></param>
+        public virtual void addLantern(int ItemID, int XPosition, int YPosition, float LightRadius)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addLantern ");
+            b.Append(ItemID.ToString());
+            b.Append(" ");
+            b.Append(XPosition.ToString());
+            b.Append(" ");
+            b.Append(YPosition.ToString());
+            b.Append(" ");
+            b.Append(LightRadius.ToString());
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Set a letter as received.
+        /// </summary>
+        /// <param name="ID"></param>
+        public virtual void addMailReceived(string ID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addMailReceived  ");
+            b.Append(ID);
+            this.add(b);
+        }
     }
 }

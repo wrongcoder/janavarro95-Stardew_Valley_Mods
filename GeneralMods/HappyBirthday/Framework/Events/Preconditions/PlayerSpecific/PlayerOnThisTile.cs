@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
 {
@@ -55,6 +56,12 @@ namespace Omegasis.HappyBirthday.Framework.Events.Preconditions.PlayerSpecific
             b.Append(" ");
             b.Append(this.y.ToString());
             return b.ToString();
+        }
+
+
+        public override bool meetsCondition()
+        {
+            return (int)Game1.player.getTileLocation().X == this.x && (int)Game1.player.getTileLocation().Y == this.y;
         }
 
     }
