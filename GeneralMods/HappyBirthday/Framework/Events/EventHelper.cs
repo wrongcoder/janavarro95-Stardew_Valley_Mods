@@ -112,6 +112,16 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.eventData.Append(Data.ToString());
         }
 
+        public virtual void add(string Data)
+        {
+
+            if (this.eventData.Length > 0)
+            {
+                this.eventData.Append(this.getSeperator());
+            }
+            this.eventData.Append(Data);
+        }
+
 
         /// <summary>
         /// Converts the direction to enum.
@@ -178,5 +188,24 @@ namespace Omegasis.HappyBirthday.Framework.Events
         {
             return new StardewValley.Event(this.getEventString(), Convert.ToInt32(this.getEventID()), PlayerActor);
         }
+
+
+        //~~~~~~~~~~~~~~~~//
+        //      Actions   //
+        //~~~~~~~~~~~~~~~~//
+
+        public virtual void addBigProp(int xTile, int yTile, int ID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addBigProp ");
+            b.Append(xTile.ToString());
+            b.Append(" ");
+            b.Append(yTile.ToString());
+            b.Append(" ");
+            b.Append(ID.ToString());
+            this.add(b.ToString());
+        }
+
+
     }
 }
