@@ -22,8 +22,6 @@ namespace StardustCore.Events
 
         public Dictionary<string, Action<EventManager,string>> concurrentEventActions;
 
-        public bool eventStarted;
-
         public EventManager()
         {
             this.events = new Dictionary<string, EventHelper>();
@@ -55,7 +53,6 @@ namespace StardustCore.Events
 
         public void addConcurrentEvent(string EventData,Action<EventManager,string> Function)
         {
-
             this.concurrentEventActions.Add(EventData, Function);
         }
 
@@ -64,7 +61,14 @@ namespace StardustCore.Events
         /// </summary>
         public virtual void update()
         {
-            if (Game1.CurrentEvent == null) return;
+            if (Game1.CurrentEvent == null)
+            {
+                if (this.concurrentEventActions.Count > 0)
+                {
+                    this.concurrentEventActions.Clear();
+                }
+                return;
+            }
             string commandName = this.getGameCurrentEventCommandStringName();
             //HappyBirthday.ModMonitor.Log("Current event command name is: " + commandName, StardewModdingAPI.LogLevel.Info);
 
@@ -111,6 +115,7 @@ namespace StardustCore.Events
         {
             if (this.events.ContainsKey(EventName))
             {
+                this.concurrentEventActions.Clear(); //Clean all old parallel actions before starting a new event.
                 this.events[EventName].startEventAtLocationifPossible();
             }
         }
