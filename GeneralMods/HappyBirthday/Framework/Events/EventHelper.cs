@@ -66,7 +66,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(int ID,LocationPrecondition Location ,TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
+        public EventHelper(int ID, LocationPrecondition Location, TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventData = new StringBuilder();
             this.eventPreconditionData = new StringBuilder();
@@ -225,13 +225,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
         //   Validation   //
         //~~~~~~~~~~~~~~~~//
 
-            /// <summary>
-            /// Checks to see if the event can occur.
-            /// </summary>
-            /// <returns></returns>
+        /// <summary>
+        /// Checks to see if the event can occur.
+        /// </summary>
+        /// <returns></returns>
         protected virtual bool canEventOccur()
         {
-            foreach(EventPrecondition eve in this.eventPreconditions)
+            foreach (EventPrecondition eve in this.eventPreconditions)
             {
                 if (eve.meetsCondition() == false) return false;
             }
@@ -469,7 +469,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <param name="Direction"></param>
         /// <param name="Breather"></param>
         /// <param name="AnimalName"></param>
-        public virtual void addTemporaryActor_Animal(string character, int SpriteWidth, int SpriteHeight, int TileX, int TileY, FacingDirection Direction, bool Breather,string AnimalName)
+        public virtual void addTemporaryActor_Animal(string character, int SpriteWidth, int SpriteHeight, int TileX, int TileY, FacingDirection Direction, bool Breather, string AnimalName)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addTemporaryActor ");
@@ -563,7 +563,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             b.Append(" ");
             b.Append(Loop.ToString());
             b.Append(" ");
-            for(int i = 0; i < TilePoints.Count; i++)
+            for (int i = 0; i < TilePoints.Count; i++)
             {
                 b.Append(TilePoints[i].X);
                 b.Append(" ");
@@ -620,7 +620,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <param name="Loop"></param>
         /// <param name="FrameDuration">In milliseconds</param>
         /// <param name="Frames"></param>
-        public virtual void animate(string ActorName,bool Flip, bool Loop, int FrameDuration, List<int> Frames)
+        public virtual void animate(string ActorName, bool Flip, bool Loop, int FrameDuration, List<int> Frames)
         {
             StringBuilder b = new StringBuilder();
             b.Append("animate ");
@@ -674,30 +674,31 @@ namespace Omegasis.HappyBirthday.Framework.Events
             StringBuilder b = new StringBuilder();
             b.Append("awardFestivalPrize ");
 
-            if(ItemType== FestivalItemType.Hero)
+            if (ItemType == FestivalItemType.Hero)
             {
                 b.Append("hero");
             }
-            else if(ItemType== FestivalItemType.Joja)
+            else if (ItemType == FestivalItemType.Joja)
             {
                 b.Append("joja");
             }
-            else if(ItemType== FestivalItemType.Pan)
+            else if (ItemType == FestivalItemType.Pan)
             {
                 b.Append("pan");
             }
-            else if(ItemType== FestivalItemType.Rod)
+            else if (ItemType == FestivalItemType.Rod)
             {
                 b.Append("rod");
             }
-            else if (ItemType == FestivalItemType.Sculpture) {
+            else if (ItemType == FestivalItemType.Sculpture)
+            {
                 b.Append("sculpture");
             }
-            else if(ItemType== FestivalItemType.SlimeEgg)
+            else if (ItemType == FestivalItemType.SlimeEgg)
             {
                 b.Append("slimeegg");
             }
-            else if(ItemType== FestivalItemType.Sword)
+            else if (ItemType == FestivalItemType.Sword)
             {
                 b.Append("sword");
             }
@@ -827,7 +828,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// </summary>
         /// <param name="Map"></param>
         /// <param name="PanPosition"></param>
-        public virtual void changeToTemporaryMap(string Map,Point PanPosition)
+        public virtual void changeToTemporaryMap(string Map, Point PanPosition)
         {
             StringBuilder b = new StringBuilder();
             b.Append("changeToTemporaryMap ");
@@ -947,5 +948,302 @@ namespace Omegasis.HappyBirthday.Framework.Events
             b.Append(" ");
             this.add(b);
         }
+
+        /// <summary>
+        /// Ends both the event and the day (warping player to their bed, saving the game, selling everything in the shipping box, etc).
+        /// </summary>
+
+        public virtual void endNewDay()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end newDay");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Same as end, and additionally warps the player to the map coordinates specified in x y.
+        /// </summary>
+        /// <param name="xTile"></param>
+        /// <param name="yTile"></param>
+        public virtual void endPosition(int xTile, int yTile)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end position");
+            b.Append(xTile);
+            b.Append(" ");
+            b.Append(yTile);
+            this.add(b);
+        }
+
+        public virtual void endWarpOut()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("end warpOut");
+            this.add(b);
+        }
+
+        public virtual void playerFaceDirection(FacingDirection Dir)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("faceDirection farmer ");
+            b.Append(this.getFacingDirectionNumber(Dir).ToString());
+            b.Append(" ");
+            b.Append(true);
+            this.add(b);
+        }
+
+        public virtual void npcFaceDirection(NPC NPC, FacingDirection Dir)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("faceDirection ");
+            b.Append(NPC.Name);
+            b.Append(" ");
+            b.Append(this.getFacingDirectionNumber(Dir).ToString());
+            b.Append(" ");
+            b.Append(true);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Fades out the screen.
+        /// </summary>
+        public virtual void fadeOut()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("fade true");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Makes the farmer eat an object.
+        /// </summary>
+        /// <param name="ID"></param>
+        public virtual void farmerEatObject(int ID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("farmerEat ");
+            b.Append(ID);
+            this.add(b);
+        }
+
+        //TODO: Support event forking.
+
+        /// <summary>
+        /// Add the given number of friendship points with the named NPC. (There are 250 points per heart.)
+        /// </summary>
+        /// <param name="NPC"></param>
+        /// <param name="Amount"></param>
+        public virtual void addFriendship(NPC NPC, int Amount)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("friendship ");
+            b.Append(NPC.Name);
+            b.Append(" ");
+            b.Append(Amount);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Fade to black at a particular speed (default 0.007). If no speed is specified, the event will continue immediately; otherwise, it will continue after the fade is finished. The fade effect disappears when this command is done; to avoid that, use the viewport command to move the camera off-screen.
+        /// </summary>
+        /// <param name="speed"></param>
+        public virtual void globalFade(double speed)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("globalFade ");
+            b.Append(speed);
+            this.add(b);
+        }
+        /// <summary>
+        /// Fade to clear (unfade?) at a particular speed (default 0.007). If no speed is specified, the event will continue immediately; otherwise, it will continue after the fade is finished.
+        /// </summary>
+        /// <param name="speed"></param>
+        public virtual void globalFadeToClear(double speed)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("globalFadeToClear ");
+            b.Append(speed);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Make the screen glow once, fading into and out of the <r> <g> <b> values over the course of a second. If <hold> is true it will fade to and hold that color until stopGlowing is used.
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="Hold"></param>
+        public virtual void glow(Color color, bool Hold)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("glow ");
+            b.Append(color.R);
+            b.Append(" ");
+            b.Append(color.G);
+            b.Append(" ");
+            b.Append(color.B);
+            b.Append(" ");
+            b.Append(Hold);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Stops npc movement
+        /// </summary>
+        public virtual void stopNPCMovement()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("halt");
+            this.add(b);
+        }
+        /// <summary>
+        /// Stops npc movement.
+        /// </summary>
+        public virtual void halt()
+        {
+            this.stopNPCMovement();
+        }
+
+        /// <summary>
+        /// Make a the named NPC jump. The default intensity is 8.
+        /// </summary>
+        /// <param name="ActorName"></param>
+        /// <param name="Intensity"></param>
+        public virtual void actorJump(string ActorName, int Intensity=8)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("jump ");
+            b.Append(Intensity);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Queue a letter to be received tomorrow (see Content\Data\mail.xnb for available mail).
+        /// </summary>
+        /// <param name="LetterID"></param>
+        public virtual void addMailForTomorrow(string LetterID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("mail ");
+            b.Append(LetterID);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Show a dialogue box (no speaker). See dialogue format for the <text> format.
+        /// </summary>
+        /// <param name="Message"></param>
+        public virtual void showMessage(string Message)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("message ");
+            b.Append('"'); 
+            b.Append(Message);
+            b.Append('"');
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Make a named NPC move by the given tile offset from their current position (along one axis only), and face the given direction when they're done. To move along multiple axes, you must specify multiple move commands. By default the event pauses while a move command is occurring, but if <continue> is set to true the movement is asynchronous and will run simultaneously with other event commands.
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        /// <param name="Dir"></param>
+        /// <param name="Continue"></param>
+        public virtual void moveNPC(NPC npc, int xOffset, int yOffset, FacingDirection Dir, bool Continue)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("move ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(xOffset);
+            b.Append(" ");
+            b.Append(yOffset);
+            b.Append(" ");
+            b.Append(this.getFacingDirectionNumber(Dir));
+            b.Append(" ");
+            b.Append(Continue);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Pause the game for the given number of milliseconds.
+        /// </summary>
+        /// <param name="Milliseconds"></param>
+        public virtual void pauseGame(int Milliseconds)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("pause ");
+            b.Append(Milliseconds);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Play the specified music track ID. If the track is 'samBand', the track played will change depend on certain dialogue answers (76-79).
+        /// </summary>
+        /// <param name="id"></param>
+        public virtual void playMusic(string id)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("playMusic ");
+            b.Append(id);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Play a given sound ID from the game's sound bank.
+        /// </summary>
+        /// <param name="id"></param>
+        public virtual void playSound(string id)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("playSound ");
+            b.Append(id);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Give the player control back.
+        /// </summary>
+        public virtual void givePlayerControl()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("playSound ");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Offset the position of the named NPC by the given number of pixels. This happens instantly, with no walking animation.
+        /// </summary>
+        /// <param name="ActorName"></param>
+        /// <param name="PixelsX"></param>
+        /// <param name="PixelsY"></param>
+        public virtual void positionOffset(string ActorName,int PixelsX, int PixelsY)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("positionOffset ");
+            b.Append(PixelsX);
+            b.Append(" ");
+            b.Append(PixelsY);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Show a dialogue box with some answers and an optional question. When the player chooses an answer, the event script continues with no other effect.
+        /// </summary>
+        /// <param name="Question"></param>
+        /// <param name="Answer1"></param>
+        /// <param name="Answer2"></param>
+        public virtual void questionNoFork(string Question, string Answer1, string Answer2)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("question null ");
+            b.Append(Question);
+            b.Append("#");
+            b.Append(Answer1);
+            b.Append("#");
+            b.Append(Answer2);
+            this.add(b);
+        }
+
     }
 }
