@@ -1024,6 +1024,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.add(b);
         }
 
+        public virtual void fadeIn()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("fade");
+            this.add(b);
+        }
+
         /// <summary>
         /// Makes the farmer eat an object.
         /// </summary>
@@ -1057,10 +1064,18 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Fade to black at a particular speed (default 0.007). If no speed is specified, the event will continue immediately; otherwise, it will continue after the fade is finished. The fade effect disappears when this command is done; to avoid that, use the viewport command to move the camera off-screen.
         /// </summary>
         /// <param name="speed"></param>
-        public virtual void globalFade(double speed)
+        public virtual void globalFadeOut(double speed=0.007)
         {
             StringBuilder b = new StringBuilder();
             b.Append("globalFade ");
+            b.Append(speed);
+            this.add(b);
+        }
+
+        public virtual void globalFadeIn(double speed=0.007)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("globalFadeToClear ");
             b.Append(speed);
             this.add(b);
         }
@@ -1619,6 +1634,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
             b.Append(XPosition);
             b.Append(" ");
             b.Append(YPosition);
+            b.Append(" ");
+            b.Append("true");
             this.add(b);
         }
 
