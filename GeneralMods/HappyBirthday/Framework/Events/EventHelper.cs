@@ -11,8 +11,12 @@ using StardewValley;
 namespace Omegasis.HappyBirthday.Framework.Events
 {
     /// <summary>
+    ///TODO: Figure out forked dialogue
+    /// 
     /// Helps in creating events based in code for stardew valley.
     /// https://stardewvalleywiki.com/Modding:Event_data
+    ///
+    /// A lot of the function comments were taken from the SDV wiki.
     /// </summary>
     public class EventHelper
     {
@@ -1245,5 +1249,426 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.add(b);
         }
 
+        /// <summary>
+        /// Remove the first of an object from a player's inventory.
+        /// </summary>
+        /// <param name="ParentSheetIndex"></param>
+        public virtual void removeItem(int ParentSheetIndex) {
+
+            StringBuilder b = new StringBuilder();
+            b.Append("removeItem ");
+            b.Append(ParentSheetIndex);
+            this.add(b);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TileX"></param>
+        /// <param name="TileY"></param>
+        public virtual void removeObject(int TileX, int TileY)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("removeObject ");
+            b.Append(TileX);
+            b.Append(" ");
+            b.Append(TileY);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Remove the specified quest from the quest log.
+        /// </summary>
+        /// <param name="ID"></param>
+        public virtual void removeQuest(int ID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("removeQuest ");
+            b.Append(ID);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Remove the temporary sprite at a position.
+        /// </summary>
+        /// <param name="XTile"></param>
+        /// <param name="YTile"></param>
+        public virtual void removeSprite(int XTile, int YTile)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("removeSprite ");
+            b.Append(" ");
+            b.Append(XTile);
+            b.Append(" ");
+            b.Append(YTile);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Remove all temporary sprites.
+        /// </summary>
+        public virtual void removeTemporarySprites()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("removeTemporarySprites");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Flashes the screen white for an instant. An alpha value from 0 to 1 adjusts the brightness, and values from 1 and out flashes pure white for x seconds.
+        /// </summary>
+        /// <param name="Alpha"></param>
+        public virtual void screenFlash(float Alpha)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("screenFlash ");
+            b.Append(Alpha);
+            this.add(b);
+        }
+
+        public virtual void setPlayerRunning()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("setRunning");
+            this.add(b);
+        }
+
+        public virtual void shakeNPC(NPC npc,int Milliseconds)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("shake ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(Milliseconds);
+            this.add(b);
+        }
+
+        public virtual void shakeFarmer(int Milliseconds)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("shake ");
+            b.Append("farmer");
+            b.Append(" ");
+            b.Append(Milliseconds);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Set the named NPC's current frame in their Content\Characters\*.xnb spritesheet. Note that setting the farmer's sprite only changes parts of the sprite (some times arms, some times arms and legs and torso but not the head, etc). To rotate the whole sprite, use faceDirection farmer <0/1/2/3> first before modifying the sprite with showFrame. Frame ID starts from 0. If farmer is the one whose frame is being set, "farmer" can be eliminated, i.e. both showFrame farmer <frame ID> and showFrame <frame ID> would work.
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="FrameIndex"></param>
+        public virtual void showNPCFrame(NPC npc, int FrameIndex)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("showFrame ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(FrameIndex);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Shows the given frame for the farmer. Forces the farmer to rotate first as specified by the wiki,
+        /// </summary>
+        /// <param name="Direction"></param>
+        /// <param name="FrameIndex"></param>
+        public virtual void showFrameFarmer(FacingDirection Direction,int FrameIndex)
+        {
+            this.playerFaceDirection(Direction);
+            StringBuilder b = new StringBuilder();
+            b.Append("showFrame ");
+            b.Append(FrameIndex);
+            this.add(b);
+        }
+
+        //Skippable is enabled by default.
+
+
+        /// <summary>
+        /// Show dialogue text from a named NPC; see dialogue format.
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="Message"></param>
+        public virtual void speak(NPC npc, string Message)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("speak ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(Message);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Make the player start jittering.
+        /// </summary>
+        public virtual void playerJitter()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("startJittering");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Stop movement from advancedMove.
+        /// </summary>
+        public virtual void stopAdvancedMoves()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopAdvancedMoves");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Stop the farmer's current animation.
+        /// </summary>
+        public virtual void stopFarmerAnimation()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopAnimation farmer");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Stop the named NPC's current animation. Not applicable to the farmer.
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="EndFrame"></param>
+        public virtual void stopNPCAnimation(NPC npc, int EndFrame)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopAnimation ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(EndFrame);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Make the screen stop glowing.
+        /// </summary>
+        public virtual void stopGlowing()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopGlowing");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Make the player stop jittering.
+        /// </summary>
+        public virtual void stopJittering()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopJittering");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Stop any currently playing music.
+        /// </summary>
+        public virtual void stopMusic()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopMusic");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Make the farmer stop running.
+        /// </summary>
+        public virtual void stopRunning()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopRunning");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Make the farmer stop swimming.
+        /// </summary>
+        public virtual void stopFarmerSwimming()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopSwimming farmer");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Make the npc stop swimming.
+        /// </summary>
+        public virtual void stopNPCSwimming(NPC npc)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("stopSwimming ");
+            b.Append(npc.Name);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Make the farmer start swimming.
+        /// </summary>
+        public virtual void startFarmerSwimming()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("swimming farmer");
+            this.add(b);
+        }
+
+
+        /// <summary>
+        /// Make the npc start swimming.
+        /// </summary>
+        /// <param name="npc"></param>
+        public virtual void startNPCSwimming(NPC npc)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("swimming ");
+            b.Append(npc.Name);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Changes the current event (ie. event commands) to another event in the same location.
+        /// </summary>
+        /// <param name="ID"></param>
+        public virtual void switchEvent(int ID)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("switchEvent ");
+            b.Append(ID);
+            this.add(b);
+        }
+
+
+        /// <summary>
+        /// Create a temporary sprite with the given parameters.
+        /// </summary>
+        /// <param name="XPos"></param>
+        /// <param name="YPos"></param>
+        /// <param name="Index"></param>
+        /// <param name="AnimationLength"></param>
+        /// <param name="AnimationInterval"></param>
+        /// <param name="Looped"></param>
+        /// <param name="LoopCount"></param>
+        public virtual void temporarySprite(int XPos, int YPos, int Index, int AnimationLength, int AnimationInterval, bool Looped, int LoopCount)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("temporarySprite ");
+            b.Append(XPos);
+            b.Append(" ");
+            b.Append(YPos);
+            b.Append(" ");
+            b.Append(Index);
+            b.Append(" ");
+            b.Append(AnimationLength);
+            b.Append(" ");
+            b.Append(AnimationInterval);
+            b.Append(" ");
+            b.Append(Looped);
+            b.Append(" ");
+            b.Append(LoopCount);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// 	Show a small text bubble over the named NPC's head with the given text; see dialogue format.
+        /// </summary>
+        /// <param name="npc"></param>
+        /// <param name="Message"></param>
+        public virtual void showSpeechBubble(NPC npc, string Message)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("textAboveHead ");
+            b.Append(npc.Name);
+            b.Append(" ");
+            b.Append(Message);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Pan the the camera in the direction (and with the velocity) defined by x/y for the given duration in milliseconds. Example: "viewport move 2 -1 5000" moves the camera 2 pixels right and 1 pixel up for 5 seconds.
+        /// </summary>
+        /// <param name="XPosition"></param>
+        /// <param name="YPosition"></param>
+        /// <param name="Milliseconds"></param>
+        public virtual void panViewport(int XPosition, int YPosition, int Milliseconds)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("viewport move ");
+            b.Append(XPosition);
+            b.Append(" ");
+            b.Append(YPosition);
+            this.add(b);
+        }
+        /// <summary>
+        /// Instantly reposition the camera to center on the given X, Y tile position. TODO: explain other parameters.
+        /// </summary>
+        /// <param name="XPosition"></param>
+        /// <param name="YPosition"></param>
+        public virtual void setViewportPosition(int XPosition, int YPosition)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("viewport ");
+            b.Append(XPosition);
+            b.Append(" ");
+            b.Append(YPosition);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Wait for other players (vanilla MP).
+        /// </summary>
+        public virtual void waitForAllPlayers()
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("waitForOtherPlayers");
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Warp the named NPC to a position to the given X, Y tile coordinate. This can be used to warp characters off-screen.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public virtual void warpPlayer(int x, int y)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("warp farmer ");
+            b.Append(x);
+            b.Append(" ");
+            b.Append(y);
+            this.add(b);
+        }
+
+        /// <summary>
+        /// Warp the named NPC to a position to the given X, Y tile coordinate. This can be used to warp characters off-screen.
+        /// </summary>
+        /// <param name="ActorName"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public virtual void warpActor(string ActorName,int x, int y)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("warp ");
+            b.Append(ActorName);
+            b.Append(" ");
+            b.Append(x);
+            b.Append(" ");
+            b.Append(y);
+            this.add(b);
+        }
+
+        public virtual void warpNPC(NPC NPC, int x, int y)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("warp ");
+            b.Append(NPC.Name);
+            b.Append(" ");
+            b.Append(x);
+            b.Append(" ");
+            b.Append(y);
+            this.add(b);
+        }
     }
 }
