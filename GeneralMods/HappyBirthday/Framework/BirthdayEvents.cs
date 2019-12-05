@@ -23,7 +23,7 @@ namespace Omegasis.HappyBirthday.Framework
             EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 32, 16, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
             e.globalFadeIn();
             e.moveFarmerUp(6, EventHelper.FacingDirection.Up, false);
-            e.ViewportLerpTileOffset(new Microsoft.Xna.Framework.Point(0,-6),60*6);
+            e.ViewportLerpTileOffset(new Microsoft.Xna.Framework.Point(0,-6),60*6,true);
             e.addObjectToPlayersInventory(64, 22,true);
             e.showMessage("Community center birthday here.");
 

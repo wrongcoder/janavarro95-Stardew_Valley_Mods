@@ -22,7 +22,7 @@ namespace StardustCore.Events
         /// Adds the item from Game1.ObjectInformation to the player's inventory from the given event string.
         /// </summary>
         /// <param name="EventData"></param>
-        public static void addObjectToPlayerInventory(string EventData)
+        public static void addObjectToPlayerInventory(EventManager EventManager,string EventData)
         {
             string[] splits = EventData.Split(' ');
             string name = splits[0];
@@ -34,7 +34,7 @@ namespace StardustCore.Events
             Game1.CurrentEvent.CurrentCommand++;
         }
 
-        public static void ViewportLerp(string EventData)
+        public static void ViewportLerp(EventManager EventManager,string EventData)
         {
             string[] splits = EventData.Split(' ');
             string name = splits[0];
@@ -42,6 +42,15 @@ namespace StardustCore.Events
             int xEndPosition =Convert.ToInt32(splits[1]);
             int yEndPosition = Convert.ToInt32(splits[2]);
             int frames = Convert.ToInt32(splits[3]);
+            bool concurrent = Convert.ToBoolean(splits[4]);
+            if (concurrent)
+            {
+                if (EventManager.concurrentEventActions.ContainsKey(EventData)==false)
+                {
+                    EventManager.addConcurrentEvent(EventData, ViewportLerp);
+                    ++Game1.CurrentEvent.CurrentCommand; //I've been told ++<int> is more efficient than <int>++;
+                }
+            }
 
             if (StartedLerp==false)
             {
@@ -58,7 +67,11 @@ namespace StardustCore.Events
                 OldViewportPosition = new Point(0, 0);
                 CurrentViewportLerpAmount = 0;
                 StartedLerp = false;
-                ++Game1.CurrentEvent.CurrentCommand; //I've been told ++<int> is more efficient than <int>++;
+                if(concurrent==false)++Game1.CurrentEvent.CurrentCommand; //I've been told ++<int> is more efficient than <int>++;
+                else
+                {
+                    EventManager.finishConcurrentEvent(EventData);
+                }
                 return;
             }
             Vector2 currentLerp = Vector2.Lerp(new Vector2(OldViewportPosition.X, OldViewportPosition.Y), new Vector2(OldViewportPosition.X + xEndPosition, OldViewportPosition.Y + yEndPosition), (float)((float)CurrentViewportLerpAmount/(float)frames));

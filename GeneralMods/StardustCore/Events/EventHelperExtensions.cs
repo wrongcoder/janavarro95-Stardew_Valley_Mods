@@ -58,7 +58,7 @@ namespace StardustCore.Events
         /// <param name="EventHelper"></param>
         /// <param name="NewTilePositionOffset"></param>
         /// <param name="Speed">How many frames (aka update ticks) it takes to finish. Aka 60~=1 second</param>
-        public static void ViewportLerpTileOffset(this EventHelper EventHelper, Point NewTilePositionOffset, int Frames=60)
+        public static void ViewportLerpTileOffset(this EventHelper EventHelper, Point NewTilePositionOffset, int Frames=60,bool Concurrent=false)
         {
             StringBuilder b = new StringBuilder();
             b.Append("Omegasis.EventFramework.ViewportLerp ");
@@ -67,6 +67,8 @@ namespace StardustCore.Events
             b.Append((NewTilePositionOffset.Y * Game1.tileSize));
             b.Append(" ");
             b.Append(Frames);
+            b.Append(" ");
+            b.Append(Concurrent);
             EventHelper.add(b);
 
         }

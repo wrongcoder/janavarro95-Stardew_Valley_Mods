@@ -17,16 +17,18 @@ namespace StardustCore.Events
         /// <summary>
         /// Event logic that occurs when the specialized command appears.
         /// </summary>
-        public Dictionary<string, Action<string>> customEventLogic;
+        public Dictionary<string, Action<EventManager,string>> customEventLogic;
 
+
+        public Dictionary<string, Action<EventManager,string>> concurrentEventActions;
 
         public bool eventStarted;
 
         public EventManager()
         {
             this.events = new Dictionary<string, EventHelper>();
-            this.customEventLogic = new Dictionary<string, Action<string>>();
-
+            this.customEventLogic = new Dictionary<string, Action<EventManager,string>>();
+            this.concurrentEventActions = new Dictionary<string, Action<EventManager,string>>();
 
             this.customEventLogic.Add("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
             this.customEventLogic.Add("Omegasis.EventFramework.ViewportLerp", ExtraEventActions.ViewportLerp);
@@ -46,9 +48,15 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="CommandName"></param>
         /// <param name="Function"></param>
-        public void addCustomEventLogic(string CommandName,Action<string> Function)
+        public void addCustomEventLogic(string CommandName,Action<EventManager,string> Function)
         {
             this.customEventLogic.Add(CommandName, Function);
+        }
+
+        public void addConcurrentEvent(string EventData,Action<EventManager,string> Function)
+        {
+
+            this.concurrentEventActions.Add(EventData, Function);
         }
 
         /// <summary>
@@ -59,9 +67,23 @@ namespace StardustCore.Events
             if (Game1.CurrentEvent == null) return;
             string commandName = this.getGameCurrentEventCommandStringName();
             //HappyBirthday.ModMonitor.Log("Current event command name is: " + commandName, StardewModdingAPI.LogLevel.Info);
+
+            foreach(KeyValuePair<string,Action<EventManager,string>> pair in this.concurrentEventActions)
+            {
+                pair.Value.Invoke(this,pair.Key);
+            }
+
             if (string.IsNullOrEmpty(commandName)) return;
             if (this.customEventLogic.ContainsKey(commandName)){
-                this.customEventLogic[commandName].Invoke(this.getGameCurrentEventCommandString());
+                this.customEventLogic[commandName].Invoke(this,this.getGameCurrentEventCommandString());
+            }
+        }
+
+        public virtual void finishConcurrentEvent(string Key)
+        {
+            if (this.concurrentEventActions.ContainsKey(Key))
+            {
+                this.concurrentEventActions.Remove(Key);
             }
         }
 
