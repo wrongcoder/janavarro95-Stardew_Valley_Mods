@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.HappyBirthday.Framework.Events.Preconditions;
 using Omegasis.HappyBirthday.Framework.Events.Preconditions.TimeSpecific;
@@ -1189,6 +1187,63 @@ namespace Omegasis.HappyBirthday.Framework.Events
             b.Append(Continue);
             this.add(b);
         }
+
+        public virtual void moveNPCUp(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection,bool EventDoesntPause)
+        {
+            this.moveNPC(npc, 0, -TileAmount, FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveNPCDown(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveNPC(npc, 0, TileAmount, FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveNPCLeft(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveNPC(npc, TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveNPCRight(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveNPC(npc,-TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveFarmer(int xOffset, int yOffset, FacingDirection Dir, bool Continue)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("move ");
+            b.Append("farmer");
+            b.Append(" ");
+            b.Append(xOffset);
+            b.Append(" ");
+            b.Append(yOffset);
+            b.Append(" ");
+            b.Append(this.getFacingDirectionNumber(Dir));
+            b.Append(" ");
+            b.Append(Continue);
+            this.add(b);
+        }
+
+        public virtual void moveFarmerUp(int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveFarmer(0, -TileAmount, FinishingFacingDirection, EventDoesntPause);
+        }
+        public virtual void moveFarmerDown(int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveFarmer(0, TileAmount, FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveFarmerLeft(int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveFarmer(-TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveFarmerRight(int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveFarmer(TileAmount, 0,FinishingFacingDirection, EventDoesntPause);
+        }
+
+
 
         /// <summary>
         /// Pause the game for the given number of milliseconds.

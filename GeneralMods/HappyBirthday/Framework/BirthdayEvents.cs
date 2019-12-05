@@ -20,9 +20,9 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
             conditions.Add(new TimePrecondition(600, 2600));
-            EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 10, 10, new EventStartData.FarmerData(10, 10, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
-            e.setViewportPosition(10, 10);
+            EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 32, 22, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
             e.globalFadeIn();
+            e.moveFarmerUp(6, EventHelper.FacingDirection.Up, false);
             e.showMessage("Community center birthday here.");
             e.end();
 
