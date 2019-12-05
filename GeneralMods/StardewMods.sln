@@ -16,6 +16,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fall28SnowDay", "Fall28SnowDay\Fall28SnowDay.csproj", "{1DBB583D-4A4F-4A46-8CC5-42017C93D292}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HappyBirthday", "HappyBirthday\HappyBirthday.csproj", "{A7A4B67B-3CD7-421F-A4A7-2D656F0AB4D9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0756D36A-95C8-480D-8EA6-4584C03010C6} = {0756D36A-95C8-480D-8EA6-4584C03010C6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreRain", "MoreRain\MoreRain.csproj", "{45721A43-630A-461F-9A50-E47D3D1926D0}"
 EndProject

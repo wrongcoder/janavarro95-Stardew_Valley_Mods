@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Omegasis.HappyBirthday.Framework;
-using Omegasis.HappyBirthday.Framework.Events;
+using StardustCore.Events;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -101,7 +101,7 @@ namespace Omegasis.HappyBirthday
             this.othersBirthdays = new Dictionary<long, PlayerData>();
 
             this.eventManager = new EventManager();
-
+            this.eventManager.addCustomEventLogic("AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
         }
 
         private void Player_Warped(object sender, WarpedEventArgs e)
@@ -575,8 +575,19 @@ namespace Omegasis.HappyBirthday
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
 
-            if (!Context.IsWorldReady || Game1.eventUp || Game1.isFestival())
+            if (!Context.IsWorldReady || Game1.isFestival())
+            {
                 return;
+            }
+
+            if (Game1.eventUp)
+            {
+                if (this.eventManager != null)
+                {
+                    this.eventManager.update();
+                }
+                return;
+            }
 
             if (!this.HasChosenBirthday && Game1.activeClickableMenu == null && Game1.player.Name.ToLower() != "unnamed farmhand")
             {
