@@ -63,6 +63,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
         protected List<EventPrecondition> eventPreconditions;
         protected int eventID;
 
+        public string eventName;
+
         public EventHelper()
         {
             this.eventData = new StringBuilder();
@@ -70,8 +72,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(int ID, LocationPrecondition Location, TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
+        public EventHelper(string EventName,int ID, LocationPrecondition Location, TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
         {
+            this.eventName = EventName;
             this.eventData = new StringBuilder();
             this.eventPreconditionData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
@@ -82,8 +85,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.add(StartData.ToString());
         }
 
-        public EventHelper(List<EventPrecondition> Conditions, EventStartData StartData)
+        public EventHelper(string EventName,int ID,List<EventPrecondition> Conditions, EventStartData StartData)
         {
+            this.eventName = EventName;
+            this.eventID = ID;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
             this.eventPreconditionData = new StringBuilder();
@@ -176,9 +181,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return s.Substring(0, 4);
         }
 
-        protected virtual string getEventID()
+        public virtual int getEventID()
         {
-            return this.getUniqueEventStartID() + this.eventID.ToString();
+            return Convert.ToInt32(this.getUniqueEventStartID() + this.eventID.ToString());
         }
 
         /// <summary>
@@ -203,7 +208,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             else return true;
         }
 
-        protected virtual string getEventString()
+        public virtual string getEventString()
         {
             return this.eventData.ToString();
         }
@@ -216,7 +221,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <summary>
         /// Checks to see if all of the event preconditions have been met and starts the event if so.
         /// </summary>
-        protected virtual void startEventAtLocationifPossible()
+        public virtual void startEventAtLocationifPossible()
         {
             if (this.canEventOccur())
             {
@@ -224,6 +229,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 Game1.player.currentLocation.startEvent(this.getEvent());
             }
         }
+        
 
         //~~~~~~~~~~~~~~~~//
         //   Validation   //
@@ -233,7 +239,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// Checks to see if the event can occur.
         /// </summary>
         /// <returns></returns>
-        protected virtual bool canEventOccur()
+        public virtual bool canEventOccur()
         {
             foreach (EventPrecondition eve in this.eventPreconditions)
             {
@@ -1139,9 +1145,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("message ");
-            b.Append('"'); 
+            b.Append("\\\""); 
             b.Append(Message);
-            b.Append('"');
+            b.Append("\"");
             this.add(b);
         }
 

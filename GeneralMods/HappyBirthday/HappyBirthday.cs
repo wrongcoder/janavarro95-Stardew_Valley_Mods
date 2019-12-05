@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Omegasis.HappyBirthday.Framework;
+using Omegasis.HappyBirthday.Framework.Events;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -69,6 +70,8 @@ namespace Omegasis.HappyBirthday
 
         private NPC lastSpeaker;
 
+        private EventManager eventManager;
+
         /*********
         ** Public methods
         *********/
@@ -91,11 +94,28 @@ namespace Omegasis.HappyBirthday
             helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
             helper.Events.Multiplayer.PeerDisconnected += this.Multiplayer_PeerDisconnected;
             helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
+            helper.Events.Player.Warped += this.Player_Warped;
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
 
             this.othersBirthdays = new Dictionary<long, PlayerData>();
-            
+
+            this.eventManager = new EventManager();
+
+        }
+
+        private void Player_Warped(object sender, WarpedEventArgs e)
+        {
+            if (e.NewLocation == Game1.getLocationFromName("CommunityCenter"))
+            {
+                EventHelper eve=this.eventManager.getEvent("CommunityCenterBirthday");
+                this.Monitor.Log("Birthday event can occur: " + eve.canEventOccur(), LogLevel.Info);
+
+
+                this.Monitor.Log("Birthday event info: " + eve.getEventString(), LogLevel.Info);
+
+                eve.startEventAtLocationifPossible();
+            }
         }
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
@@ -103,6 +123,7 @@ namespace Omegasis.HappyBirthday
             this.messages = new BirthdayMessages();
             this.giftManager = new GiftManager();
             this.isDailyQuestBoard = false;
+
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -528,20 +549,15 @@ namespace Omegasis.HappyBirthday
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
 
-            ;
+            
 
             if (PlayerBirthdayData != null)
             {
                 ModMonitor.Log("Send all birthday information from " + Game1.player.Name);
                 MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
             }
-            //this.SeenEvent = false;
-            //this.Dialogue = new Dictionary<string, Dialogue>();
 
-            
-            //Game1.player.addItemToInventoryBool(new StardewValley.Object(388, 999));
-            //Game1.player.addItemToInventoryBool(new StardewValley.Object(390, 999));
-            //Game1.player.Money = 999999;
+            this.eventManager.addEvent(BirthdayEvents.CommunityCenterBirthday());
         }
 
         /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
@@ -702,7 +718,7 @@ namespace Omegasis.HappyBirthday
         {
             return
                 this.PlayerData.BirthdayDay == Game1.dayOfMonth
-                && this.PlayerData.BirthdaySeason .Equals(HappyBirthday.Config.translationInfo.getTranslatedString(Game1.currentSeason));
+                && this.PlayerData.BirthdaySeason.Equals(Game1.currentSeason);
         }
 
         /// <summary>Migrate the legacy settings for the current player.</summary>

@@ -45,7 +45,7 @@ namespace Omegasis.HappyBirthday.Framework
         public BirthdayMenu(string season, int day, Action<string, int> onChanged)
             : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize)
         {
-            this.BirthdaySeason = season;
+            this.BirthdaySeason = HappyBirthday.Config.translationInfo.getTranslatedString(season);
             this.BirthdayDay = day;
             this.OnChanged = onChanged;
             this.SetUpPositions();

@@ -80,9 +80,10 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BirthdayEvents.cs" />
     <Compile Include="BirthdayMessages.cs" />
+    <Compile Include="Framework\BirthdayEvents.cs" />
     <Compile Include="Framework\BirthdayMenu.cs" />
+    <Compile Include="Framework\Events\EventManager.cs" />
     <Compile Include="Framework\Events\EventStartData.cs" />
     <Compile Include="Framework\Events\Preconditions\LocationPrecondition.cs" />
     <Compile Include="Framework\Events\Preconditions\MISC\ChanceToOccur.cs" />

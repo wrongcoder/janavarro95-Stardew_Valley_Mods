@@ -118,7 +118,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
             }
 
             this.add(CameraTileX.ToString());
-            this.add(CameraTileY.ToString());
+            this.builder.Append(" ");
+            this.builder.Append(CameraTileY.ToString());
 
 
             StringBuilder npcData = new StringBuilder();

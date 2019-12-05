@@ -113,7 +113,7 @@ namespace Omegasis.HappyBirthday.Framework
                 {
                     return this.getFileExtensionForFileType(File);
                 }
-                return this.TranslationFileExtensions[language] + this.getFileExtensionForFileType(File);
+                return "."+this.TranslationFileExtensions[language] + this.getFileExtensionForFileType(File);
             }
             catch (Exception err)
             {
