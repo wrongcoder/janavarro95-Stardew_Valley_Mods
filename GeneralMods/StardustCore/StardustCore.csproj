@@ -86,6 +86,7 @@
     <Compile Include="Animations\AnimationManager.cs" />
     <Compile Include="Enums\Directions.cs" />
     <Compile Include="Enums\Weather.cs" />
+    <Compile Include="Events\ConcurrentEventInformation.cs" />
     <Compile Include="Events\EventExtensions.cs" />
     <Compile Include="Events\EventHelper.cs" />
     <Compile Include="Events\EventHelperExtensions.cs" />
@@ -159,6 +160,8 @@
     <Compile Include="UIUtilities\SpriteFonts\SpriteFont.cs" />
     <Compile Include="UIUtilities\Texture2DExtended.cs" />
     <Compile Include="UIUtilities\TextureManager.cs" />
+    <Compile Include="Utilities\HexDumper.cs" />
+    <Compile Include="Utilities\Serializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

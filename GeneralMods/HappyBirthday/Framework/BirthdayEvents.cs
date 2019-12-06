@@ -31,6 +31,7 @@ namespace Omegasis.HappyBirthday.Framework
             e.ViewportLerpTileOffset(new Microsoft.Xna.Framework.Point(0,-6),60*6,true);
 
             e.moveActorLeft("Juni", 1, EventHelper.FacingDirection.Down, false);
+            e.playSound("junimoMeep1");
             //e.addObjectToPlayersInventory(64, 22,true);
 
             //e.addTemporaryActor_NPC("Junimo", 16, 16, 32, 14, EventHelper.FacingDirection.Down, false);

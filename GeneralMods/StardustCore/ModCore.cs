@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using StardewModdingAPI;
+using StardewValley;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.SpriteFonts;
 
@@ -38,7 +39,18 @@ namespace StardustCore
             TextureManager.addTexture("Test3", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")));
             TextureManagers.Add(this.ModManifest.UniqueID, TextureManager);
 
+            this.Helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
+
             this.config = ModHelper.ReadConfig<ModConfig>();
+        }
+
+        private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+        {
+            string soundbankPath=Path.Combine(Game1.content.RootDirectory, "XACT", "Sound Bank.xsb");
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles"));
+            //this.Monitor.Log(Utilities.HexDumper.HexDumpString(soundbankPath), LogLevel.Info);
+            Utilities.HexDumper.StripSoundCuesToFile(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCues.json"),Utilities.HexDumper.StripSoundCuesFromHex(Utilities.HexDumper.HexDumpString(soundbankPath)));
+            //Utilities.HexDumper.HexDumpFile(soundbankPath, Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCuesRaw.json"));
         }
 
         public static void log(string message)

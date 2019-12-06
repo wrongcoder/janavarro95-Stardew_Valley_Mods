@@ -20,15 +20,13 @@ namespace StardustCore.Events
         public Dictionary<string, Action<EventManager,string>> customEventLogic;
 
 
-        public Dictionary<string, Action<EventManager,string>> concurrentEventActions;
-        private Dictionary<string, Action<EventManager, string>> _concurrentEventActionsGC;
+        public Dictionary<string, ConcurrentEventInformation> concurrentEventActions;
 
         public EventManager()
         {
             this.events = new Dictionary<string, EventHelper>();
             this.customEventLogic = new Dictionary<string, Action<EventManager,string>>();
-            this.concurrentEventActions = new Dictionary<string, Action<EventManager,string>>();
-            this._concurrentEventActionsGC = new Dictionary<string, Action<EventManager, string>>();
+            this.concurrentEventActions = new Dictionary<string, ConcurrentEventInformation>();
 
             this.customEventLogic.Add("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
             this.customEventLogic.Add("Omegasis.EventFramework.ViewportLerp", ExtraEventActions.ViewportLerp);
@@ -54,9 +52,9 @@ namespace StardustCore.Events
             this.customEventLogic.Add(CommandName, Function);
         }
 
-        public void addConcurrentEvent(string EventData,Action<EventManager,string> Function)
+        public void addConcurrentEvent(ConcurrentEventInformation EventInfo)
         {
-            this.concurrentEventActions.Add(EventData, Function);
+            this.concurrentEventActions.Add(EventInfo.id, EventInfo);
         }
 
         /// <summary>
@@ -75,15 +73,18 @@ namespace StardustCore.Events
             string commandName = this.getGameCurrentEventCommandStringName();
             //HappyBirthday.ModMonitor.Log("Current event command name is: " + commandName, StardewModdingAPI.LogLevel.Info);
 
-            foreach (KeyValuePair<string, Action<EventManager, string>> pair in this._concurrentEventActionsGC)
+            List<string> _eventGC = new List<string>();
+            foreach (KeyValuePair<string,ConcurrentEventInformation> eventInfo in this.concurrentEventActions)
             {
-                this.concurrentEventActions.Remove(pair.Key);
+                if (eventInfo.Value.finished)
+                {
+                    _eventGC.Add(eventInfo.Key);
+                }
+                eventInfo.Value.invokeIfNotFinished();
             }
-            this._concurrentEventActionsGC.Clear();
-
-            foreach (KeyValuePair<string,Action<EventManager,string>> pair in this.concurrentEventActions)
+            foreach(string garbage in _eventGC)
             {
-                pair.Value.Invoke(this,pair.Key);
+                this.concurrentEventActions.Remove(garbage);
             }
 
             if (string.IsNullOrEmpty(commandName)) return;
@@ -96,7 +97,7 @@ namespace StardustCore.Events
         {
             if (this.concurrentEventActions.ContainsKey(Key))
             {
-                this._concurrentEventActionsGC.Remove(Key);
+                this.concurrentEventActions[Key].finish();
             }
         }
 

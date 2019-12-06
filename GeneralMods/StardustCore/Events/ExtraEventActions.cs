@@ -54,9 +54,9 @@ namespace StardustCore.Events
             bool concurrent = Convert.ToBoolean(splits[4]);
             if (concurrent)
             {
-                if (EventManager.concurrentEventActions.ContainsKey(EventData)==false)
+                if (EventManager.concurrentEventActions.ContainsKey(name)==false)
                 {
-                    EventManager.addConcurrentEvent(EventData, ViewportLerp);
+                    EventManager.addConcurrentEvent(new ConcurrentEventInformation(name,EventData,EventManager,ViewportLerp));
                     ++Game1.CurrentEvent.CurrentCommand; //I've been told ++<int> is more efficient than <int>++;
                 }
             }
@@ -70,6 +70,7 @@ namespace StardustCore.Events
             ++CurrentViewportLerpAmount;
             if (CurrentViewportLerpAmount >= frames)
             {
+                CurrentViewportLerpAmount = frames;
                 Vector2 currentLerp2 = Vector2.Lerp(new Vector2(OldViewportPosition.X, OldViewportPosition.Y), new Vector2(OldViewportPosition.X+xEndPosition, OldViewportPosition.Y+yEndPosition), (float)((float)CurrentViewportLerpAmount/(float)frames));
                 Game1.viewport.Location = new xTile.Dimensions.Location((int)currentLerp2.X, (int)currentLerp2.Y);
 
@@ -79,7 +80,7 @@ namespace StardustCore.Events
                 if(concurrent==false)++Game1.CurrentEvent.CurrentCommand; //I've been told ++<int> is more efficient than <int>++;
                 else
                 {
-                    EventManager.finishConcurrentEvent(EventData);
+                    EventManager.finishConcurrentEvent(name);
                 }
                 return;
             }
