@@ -672,9 +672,9 @@ namespace StardustCore.Events
             b.Append("animate ");
             b.Append(ActorName);
             b.Append(" ");
-            b.Append(Flip);
+            b.Append(Flip.ToString().ToLowerInvariant());
             b.Append(" ");
-            b.Append(Loop);
+            b.Append(Loop.ToString().ToLowerInvariant());
             b.Append(" ");
             b.Append(FrameDuration);
             b.Append(" ");

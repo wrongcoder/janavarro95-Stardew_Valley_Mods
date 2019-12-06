@@ -114,6 +114,7 @@
     <Compile Include="Events\Preconditions\PlayerSpecific\HasItem.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\HasNotRecievedLetter.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\HasRecievedLetter.cs" />
+    <Compile Include="Events\Preconditions\PlayerSpecific\HasUnlockedCommunityCenter.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\MineBottomHit.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\NotDatingAnyone.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\PetPreference.cs" />

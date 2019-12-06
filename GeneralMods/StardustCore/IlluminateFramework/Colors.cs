@@ -608,6 +608,34 @@ namespace StardustCore.IlluminateFramework
             return new Color(r, g, b, a);
         }
 
+        /// <summary>
+        /// Gets a random junimo color from the possible junimo colors.
+        /// </summary>
+        /// <returns></returns>
+        public static Color getRandomJunimoColor()
+        {
+            List<Color> colors = new List<Color>();
+            colors.Add(Color.Red);
+            colors.Add(Color.Goldenrod);
+            colors.Add(Color.Yellow);
+            colors.Add(Color.Lime);
+            colors.Add(Color.MediumPurple);
+            colors.Add(Color.Salmon);
+            colors.Add(Color.White);
+            colors.Add(Color.LimeGreen);
+            colors.Add(Color.Orange);
+            colors.Add(Color.LightGreen);
+            colors.Add(Color.Tan);
+            colors.Add(Color.GreenYellow);
+            colors.Add(Color.LawnGreen);
+            colors.Add(Color.PaleGreen);
+            colors.Add(Color.Turquoise);
+            colors.Add(Color.Gold);
+            colors.Add(Color.BlanchedAlmond);
+            colors.Add(new Color(160, 20, 220)); //???
+            return colors[Game1.random.Next(0, colors.Count)];
+        }
+
         /// <summary>Invert the color passed in.</summary>
         public static Color invertColor(Color c, int alpha = 255)
         {

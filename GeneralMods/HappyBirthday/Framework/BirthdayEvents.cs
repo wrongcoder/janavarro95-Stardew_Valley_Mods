@@ -9,6 +9,7 @@ using StardustCore.Events.Preconditions;
 using StardustCore.Events.Preconditions.TimeSpecific;
 using StardewValley;
 using Microsoft.Xna.Framework;
+using StardustCore.Events.Preconditions.PlayerSpecific;
 
 namespace Omegasis.HappyBirthday.Framework
 {
@@ -22,20 +23,34 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
             conditions.Add(new TimePrecondition(600, 2600));
+            //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
             EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 32, 16, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
 
-            e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 14), Color.Blue);
+            e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 14), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni2", new Microsoft.Xna.Framework.Vector2(30, 15), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni3", new Microsoft.Xna.Framework.Vector2(34, 15), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
+
+
 
             e.globalFadeIn();
             e.moveFarmerUp(6, EventHelper.FacingDirection.Up, false);
-            e.ViewportLerpTileOffset(new Microsoft.Xna.Framework.Point(0,-6),60*6,true);
 
-            e.moveActorLeft("Juni", 1, EventHelper.FacingDirection.Down, false);
+            //e.moveActorLeft("Juni", 1, EventHelper.FacingDirection.Down, false);
+            e.animate("Juni", true, true, 70, new List<int>()
+            {
+                28,
+                29,
+                30,
+                31
+            });
+
+            //
+
             e.playSound("junimoMeep1");
             //e.addObjectToPlayersInventory(64, 22,true);
 
             //e.addTemporaryActor_NPC("Junimo", 16, 16, 32, 14, EventHelper.FacingDirection.Down, false);
-
+            e.ViewportLerpTileOffset(new Microsoft.Xna.Framework.Point(0, -6), 60 * 6, false);
             e.showMessage("Community center birthday here.");
             
             //Notes
