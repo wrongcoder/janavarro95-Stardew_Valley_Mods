@@ -21,12 +21,14 @@ namespace StardustCore.Events
 
 
         public Dictionary<string, Action<EventManager,string>> concurrentEventActions;
+        private Dictionary<string, Action<EventManager, string>> _concurrentEventActionsGC;
 
         public EventManager()
         {
             this.events = new Dictionary<string, EventHelper>();
             this.customEventLogic = new Dictionary<string, Action<EventManager,string>>();
             this.concurrentEventActions = new Dictionary<string, Action<EventManager,string>>();
+            this._concurrentEventActionsGC = new Dictionary<string, Action<EventManager, string>>();
 
             this.customEventLogic.Add("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
             this.customEventLogic.Add("Omegasis.EventFramework.ViewportLerp", ExtraEventActions.ViewportLerp);
@@ -72,7 +74,13 @@ namespace StardustCore.Events
             string commandName = this.getGameCurrentEventCommandStringName();
             //HappyBirthday.ModMonitor.Log("Current event command name is: " + commandName, StardewModdingAPI.LogLevel.Info);
 
-            foreach(KeyValuePair<string,Action<EventManager,string>> pair in this.concurrentEventActions)
+            foreach (KeyValuePair<string, Action<EventManager, string>> pair in this._concurrentEventActionsGC)
+            {
+                this.concurrentEventActions.Remove(pair.Key);
+            }
+            this._concurrentEventActionsGC.Clear();
+
+            foreach (KeyValuePair<string,Action<EventManager,string>> pair in this.concurrentEventActions)
             {
                 pair.Value.Invoke(this,pair.Key);
             }
@@ -87,7 +95,7 @@ namespace StardustCore.Events
         {
             if (this.concurrentEventActions.ContainsKey(Key))
             {
-                this.concurrentEventActions.Remove(Key);
+                this._concurrentEventActionsGC.Remove(Key);
             }
         }
 

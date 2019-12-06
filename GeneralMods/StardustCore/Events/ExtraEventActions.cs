@@ -34,6 +34,12 @@ namespace StardustCore.Events
             Game1.CurrentEvent.CurrentCommand++;
         }
 
+
+        /// <summary>
+        /// Lerp the camera to a specified position.
+        /// </summary>
+        /// <param name="EventManager"></param>
+        /// <param name="EventData"></param>
         public static void ViewportLerp(EventManager EventManager,string EventData)
         {
             string[] splits = EventData.Split(' ');

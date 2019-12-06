@@ -470,12 +470,36 @@ namespace StardustCore.Events
             b.Append(" ");
             b.Append(TileY.ToString());
             b.Append(" ");
-            b.Append(Direction);
+            b.Append(this.getFacingDirectionNumber(Direction));
+            b.Append(" ");
+            b.Append(Breather);
             b.Append(" ");
             b.Append("Character");
             this.add(b);
         }
 
+
+        public virtual void addTemporaryActor_NPC(string npc, int SpriteWidth, int SpriteHeight, int TileX, int TileY, FacingDirection Direction, bool Breather)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("addTemporaryActor ");
+            b.Append(npc);
+            b.Append(" ");
+            b.Append(SpriteWidth.ToString());
+            b.Append(" ");
+            b.Append(SpriteHeight.ToString());
+            b.Append(" ");
+            b.Append(TileX.ToString());
+            b.Append(" ");
+            b.Append(TileY.ToString());
+            b.Append(" ");
+            b.Append(this.getFacingDirectionNumber(Direction));
+            b.Append(" ");
+            b.Append(Breather);
+            b.Append(" ");
+            b.Append("Character");
+            this.add(b);
+        }
         /// <summary>
         /// Add a temporary actor. 'breather' is boolean. The category determines where the texture will be loaded from, default is Character. Animal name only applies to animal.
         /// </summary>
@@ -502,6 +526,8 @@ namespace StardustCore.Events
             b.Append(TileY.ToString());
             b.Append(" ");
             b.Append(Direction);
+            b.Append(" ");
+            b.Append(Breather);
             b.Append(" ");
             b.Append("Animal");
             b.Append(" ");
@@ -534,6 +560,8 @@ namespace StardustCore.Events
             b.Append(TileY.ToString());
             b.Append(" ");
             b.Append(Direction);
+            b.Append(" ");
+            b.Append(Breather);
             b.Append(" ");
             b.Append("Monster");
             this.add(b);
