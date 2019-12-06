@@ -925,12 +925,175 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("emote ");
-
             b.Append(Actor);
             b.Append(" ");
-            b.Append(EmoteID);
+            b.Append(EmoteID*4);
             this.add(b);
         }
+
+        public virtual void emoteFarmer(int EmoteID)
+        {
+            this.emote("farmer", EmoteID);
+        }
+
+        public virtual void emote_Empty(string Actor)
+        {
+            this.emote(Actor, 0);
+        }
+
+        public virtual void emote_NoWater(string Actor)
+        {
+            this.emote(Actor, 1);
+        }
+
+        public virtual void emote_QuestionMark(string Actor)
+        {
+            this.emote(Actor, 2);
+        }
+
+        public virtual void emote_Angry(string Actor)
+        {
+            this.emote(Actor, 3);
+        }
+
+        public virtual void emote_ExclamationMark(string Actor)
+        {
+            this.emote(Actor, 4);
+        }
+        public virtual void emote_Heart(string Actor)
+        {
+            this.emote(Actor, 5);
+        }
+        public virtual void emote_Sleeping(string Actor)
+        {
+            this.emote(Actor, 6);
+        }
+        public virtual void emote_Sad(string Actor)
+        {
+            this.emote(Actor, 7);
+        }
+        public virtual void emote_Happy(string Actor)
+        {
+            this.emote(Actor, 8);
+        }
+        public virtual void emote_No(string Actor)
+        {
+            this.emote(Actor, 9);
+        }
+        public virtual void emote_Pause(string Actor)
+        {
+            this.emote(Actor,10);
+        }
+        public virtual void emote_Thinking(string Actor)
+        {
+            this.emote(Actor, 10);
+        }
+        public virtual void emote_Fishing(string Actor)
+        {
+            this.emote(Actor, 11);
+        }
+
+        public virtual void emote_CommunityCenterTablet(string Actor)
+        {
+            this.emote(Actor, 12);
+        }
+
+        public virtual void emote_Gaming(string Actor)
+        {
+            this.emote(Actor, 13);
+        }
+        public virtual void emote_MusicNote(string Actor)
+        {
+            this.emote(Actor, 14);
+        }
+        public virtual void emote_Blushing(string Actor)
+        {
+            this.emote(Actor, 15);
+        }
+        public virtual void emote_Embarrased(string Actor)
+        {
+            this.emote_Blushing(Actor);
+        }
+
+        public virtual void emoteFarmer_Empty()
+        {
+            this.emoteFarmer(0);
+        }
+
+        public virtual void emoteFarmer_NoWater()
+        {
+            this.emoteFarmer(1);
+        }
+
+        public virtual void emoteFarmer_QuestionMark()
+        {
+            this.emoteFarmer(2);
+        }
+
+        public virtual void emoteFarmer_Angry()
+        {
+            this.emoteFarmer(3);
+        }
+
+        public virtual void emoteFarmer_ExclamationMark()
+        {
+            this.emoteFarmer(4);
+        }
+        public virtual void emoteFarmer_Heart()
+        {
+            this.emoteFarmer(5);
+        }
+        public virtual void emoteFarmer_Sleeping()
+        {
+            this.emoteFarmer(6);
+        }
+        public virtual void emoteFarmer_Sad()
+        {
+            this.emoteFarmer(7);
+        }
+        public virtual void emoteFarmer_Happy()
+        {
+            this.emoteFarmer(8);
+        }
+        public virtual void emoteFarmer_No()
+        {
+            this.emoteFarmer(9);
+        }
+        public virtual void emoteFarmer_Pause()
+        {
+            this.emoteFarmer(10);
+        }
+        public virtual void emoteFarmer_Thinking()
+        {
+            this.emoteFarmer_Pause();
+        }
+        public virtual void emoteFarmer_Fishing()
+        {
+            this.emoteFarmer(11);
+        }
+
+        public virtual void emoteFarmer_CommunityCenterTablet()
+        {
+            this.emoteFarmer(12);
+        }
+
+        public virtual void emoteFarmer_Gaming()
+        {
+            this.emoteFarmer(13);
+        }
+        public virtual void emoteFarmer_MusicNote()
+        {
+            this.emoteFarmer(14);
+        }
+        public virtual void emoteFarmer_Blushing()
+        {
+            this.emoteFarmer(15);
+        }
+        public virtual void emote_Embarrased()
+        {
+            this.emoteFarmer_Blushing();
+        }
+
 
         /// <summary>
         /// Ends the current event by fading out, then resumes the game world and places the player on the square where they entered the zone. All end parameters do this by default unless otherwise stated.

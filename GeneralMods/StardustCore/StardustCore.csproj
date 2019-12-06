@@ -115,6 +115,7 @@
     <Compile Include="Events\Preconditions\PlayerSpecific\HasNotRecievedLetter.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\HasRecievedLetter.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\HasUnlockedCommunityCenter.cs" />
+    <Compile Include="Events\Preconditions\PlayerSpecific\JojaMember.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\MineBottomHit.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\NotDatingAnyone.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\PetPreference.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="UIUtilities\Texture2DExtended.cs" />
     <Compile Include="UIUtilities\TextureManager.cs" />
     <Compile Include="Utilities\HexDumper.cs" />
+    <Compile Include="Utilities\PlayerExtensions.cs" />
     <Compile Include="Utilities\Serializer.cs" />
   </ItemGroup>
   <ItemGroup>

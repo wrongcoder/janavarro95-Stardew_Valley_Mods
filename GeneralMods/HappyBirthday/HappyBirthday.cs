@@ -12,6 +12,7 @@ using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Monsters;
+using StardustCore.Utilities;
 
 namespace Omegasis.HappyBirthday
 {
@@ -144,6 +145,7 @@ namespace Omegasis.HappyBirthday
 
             data["birthdayMom"] = momMail;
             data["birthdayDad"] = dadMail;
+            data["birthdayJunimos"] = "Please come to the community center. ^ Sincerly,^      -The Junimos";
         }
 
 
@@ -558,6 +560,18 @@ namespace Omegasis.HappyBirthday
             }
 
             this.eventManager.addEvent(BirthdayEvents.CommunityCenterBirthday());
+            if (Game1.player.mailReceived.Contains("birthdayMom"))
+            {
+                Game1.player.mailReceived.Remove("birthdayMom");
+            }
+            if (Game1.player.mailReceived.Contains("birthdayDad"))
+            {
+                Game1.player.mailReceived.Remove("birthdayDad");
+            }
+            if (Game1.player.mailReceived.Contains("birthdayJunimos"))
+            {
+                Game1.player.mailReceived.Remove("birthdayJunimos");
+            }
         }
 
         /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
@@ -612,6 +626,11 @@ namespace Omegasis.HappyBirthday
 
                     Game1.player.mailbox.Add("birthdayMom");
                     Game1.player.mailbox.Add("birthdayDad");
+
+                    if (Game1.player.CanReadJunimo())
+                    {
+                        Game1.player.mailbox.Add("birthdayJunimos");
+                    }
 
 
                     foreach (GameLocation location in Game1.locations)

@@ -16,13 +16,18 @@ namespace Omegasis.HappyBirthday.Framework
     public class BirthdayEvents
     {
 
+        /// <summary>
+        /// Creates the junimo birthday party event.
+        /// </summary>
+        /// <returns></returns>
         public static EventHelper CommunityCenterBirthday()
         {
-            //TODO Junimos
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
             conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new CanReadJunimo());
+            conditions.Add(new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(false));
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
             EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 32, 16, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
 
@@ -30,13 +35,11 @@ namespace Omegasis.HappyBirthday.Framework
             e.AddInJunimoActor("Juni2", new Microsoft.Xna.Framework.Vector2(30, 15), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni3", new Microsoft.Xna.Framework.Vector2(34, 15), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
 
-
-
             e.globalFadeIn();
-            e.moveFarmerUp(6, EventHelper.FacingDirection.Up, false);
+            e.moveFarmerUp(6, EventHelper.FacingDirection.Up, true);
 
             //e.moveActorLeft("Juni", 1, EventHelper.FacingDirection.Down, false);
-            e.animate("Juni", true, true, 70, new List<int>()
+            e.animate("Juni", true, true, 250, new List<int>()
             {
                 28,
                 29,
@@ -47,25 +50,15 @@ namespace Omegasis.HappyBirthday.Framework
             //
 
             e.playSound("junimoMeep1");
-            //e.addObjectToPlayersInventory(64, 22,true);
-
-            //e.addTemporaryActor_NPC("Junimo", 16, 16, 32, 14, EventHelper.FacingDirection.Down, false);
-            e.ViewportLerpTileOffset(new Microsoft.Xna.Framework.Point(0, -6), 60 * 6, false);
-            e.showMessage("Community center birthday here.");
-            
-            //Notes
-            //Add a temporary actor (or sprite) to the screen.
-            //Use the attachCharacterToTempSprite command to stitch them together?
-
-            /*
-             *
-             *
-             *                         else if (strArray[index].Equals("Junimo"))
-                        {
-
-                        }
-
-            */
+            //
+            e.emoteFarmer_ExclamationMark();
+            e.showMessage("It looks like the junimos wanted to throw you a party!"); //TODO get this from translated strings. NOT hard coded.
+            e.emoteFarmer_Heart();
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage("It looks like there was some cake left over too!");//TODO get this from translated strings. NOT hard coded.
+            e.showMessage("That was a fun party. Back to work!");//TODO get this from translated strings. NOT hard coded.
+            e.addObjectToPlayersInventory(220, 1, false);
 
             e.end();
 
