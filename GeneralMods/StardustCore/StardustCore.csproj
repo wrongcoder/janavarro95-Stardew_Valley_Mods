@@ -104,6 +104,7 @@
     <Compile Include="Events\Preconditions\NPCSpecific\NotMarriedTo.cs" />
     <Compile Include="Events\Preconditions\NPCSpecific\NPCInThisLocation.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\AnsweredDialogueOptions.cs" />
+    <Compile Include="Events\Preconditions\PlayerSpecific\CanReadJunimo.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\CommunityCenterCompleted.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\CurrentMoney.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\DaysPlayedFor.cs" />

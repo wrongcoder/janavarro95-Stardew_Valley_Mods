@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.Characters;
 
 namespace StardustCore.Events
 {
@@ -71,6 +72,32 @@ namespace StardustCore.Events
             b.Append(Concurrent);
             EventHelper.add(b);
 
+        }
+
+        /// <summary>
+        /// Creates the code to add in a junimo actor at the given location.
+        /// </summary>
+        /// <param name="EventHelper"></param>
+        /// <param name="ActorName"></param>
+        /// <param name="Position"></param>
+        /// <param name="Color"></param>
+        public static void AddInJunimoActor(this EventHelper EventHelper,string ActorName,Vector2 Position,Color Color)
+        {
+
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.EventFramework.AddInJunimoActor ");
+            b.Append(ActorName);
+            b.Append(" ");
+            b.Append(Position.X);
+            b.Append(" ");
+            b.Append(Position.Y);
+            b.Append(" ");
+            b.Append(Color.R);
+            b.Append(" ");
+            b.Append(Color.G);
+            b.Append(" ");
+            b.Append(Color.B);
+            EventHelper.add(b);
         }
 
 

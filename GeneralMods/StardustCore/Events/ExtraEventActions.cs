@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Netcode;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
 
 namespace StardustCore.Events
 {
@@ -82,6 +85,37 @@ namespace StardustCore.Events
             }
             Vector2 currentLerp = Vector2.Lerp(new Vector2(OldViewportPosition.X, OldViewportPosition.Y), new Vector2(OldViewportPosition.X + xEndPosition, OldViewportPosition.Y + yEndPosition), (float)((float)CurrentViewportLerpAmount/(float)frames));
             Game1.viewport.Location = new xTile.Dimensions.Location((int)currentLerp.X, (int)currentLerp.Y);
+        }
+
+        /// <summary>
+        /// Adds in a junimo actor at the current location. Allows for multiple.
+        /// </summary>
+        /// <param name="EventManager"></param>
+        /// <param name="EventData"></param>
+        public static void AddInJumimoActorForEvent(EventManager EventManager, string EventData)
+        {
+            string[] splits = EventData.Split(' ');
+            string name = splits[0];
+
+            string actorName = splits[1];
+            int xPos = Convert.ToInt32(splits[2]);
+            int yPos = Convert.ToInt32(splits[3]);
+            Color color = new Color(Convert.ToInt32(splits[4]), Convert.ToInt32(splits[5]), Convert.ToInt32(splits[6]));
+
+            List<NPC> actors = Game1.CurrentEvent.actors;
+            Junimo junimo = new Junimo(new Vector2(xPos * 64, yPos * 64), -1, false);
+            junimo.Name = actorName;
+            junimo.EventActor = true;
+
+            IReflectedField<NetColor> colorF=StardustCore.ModCore.ModHelper.Reflection.GetField<NetColor>(junimo, "color", true);
+            NetColor c = colorF.GetValue();
+            c.R = color.R;
+            c.G = color.G;
+            c.B = color.B;
+            colorF.SetValue(c);
+
+            actors.Add((NPC)junimo);
+            ++Game1.CurrentEvent.CurrentCommand; //I've been told ++<int> is more efficient than <int>++;
         }
     }
 }

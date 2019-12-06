@@ -1203,6 +1203,50 @@ namespace StardustCore.Events
         }
 
         /// <summary>
+        /// Move the given actor a certain amount of tiles.
+        /// </summary>
+        /// <param name="Actor"></param>
+        /// <param name="xOffset"></param>
+        /// <param name="yOffset"></param>
+        /// <param name="Dir"></param>
+        /// <param name="Continue"></param>
+        public virtual void moveActor(string Actor, int xOffset, int yOffset, FacingDirection Dir, bool Continue)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("move ");
+            b.Append(Actor);
+            b.Append(" ");
+            b.Append(xOffset);
+            b.Append(" ");
+            b.Append(yOffset);
+            b.Append(" ");
+            b.Append(this.getFacingDirectionNumber(Dir));
+            b.Append(" ");
+            b.Append(Continue);
+            this.add(b);
+        }
+
+        public virtual void moveActorUp(string Actor, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveActor(Actor, 0, -TileAmount, FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveActorDown(string Actor, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveActor(Actor, 0, TileAmount, FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveActorLeft(string Actor, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveActor(Actor, -TileAmount, 0, FinishingFacingDirection, EventDoesntPause);
+        }
+
+        public virtual void moveActorRight(string Actor, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
+        {
+            this.moveActor(Actor, TileAmount, 0, FinishingFacingDirection, EventDoesntPause);
+        }
+
+        /// <summary>
         /// Make a named NPC move by the given tile offset from their current position (along one axis only), and face the given direction when they're done. To move along multiple axes, you must specify multiple move commands. By default the event pauses while a move command is occurring, but if <continue> is set to true the movement is asynchronous and will run simultaneously with other event commands.
         /// </summary>
         /// <param name="npc"></param>
@@ -1238,12 +1282,12 @@ namespace StardustCore.Events
 
         public virtual void moveNPCLeft(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
         {
-            this.moveNPC(npc, TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+            this.moveNPC(npc, -TileAmount,0,FinishingFacingDirection, EventDoesntPause);
         }
 
         public virtual void moveNPCRight(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
         {
-            this.moveNPC(npc,-TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+            this.moveNPC(npc,TileAmount,0,FinishingFacingDirection, EventDoesntPause);
         }
 
         public virtual void moveFarmer(int xOffset, int yOffset, FacingDirection Dir, bool Continue)

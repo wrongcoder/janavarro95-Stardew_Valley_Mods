@@ -8,6 +8,7 @@ using StardustCore.Events;
 using StardustCore.Events.Preconditions;
 using StardustCore.Events.Preconditions.TimeSpecific;
 using StardewValley;
+using Microsoft.Xna.Framework;
 
 namespace Omegasis.HappyBirthday.Framework
 {
@@ -22,14 +23,20 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
             conditions.Add(new TimePrecondition(600, 2600));
             EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 32, 16, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
+
+            e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 14), Color.Blue);
+
             e.globalFadeIn();
             e.moveFarmerUp(6, EventHelper.FacingDirection.Up, false);
             e.ViewportLerpTileOffset(new Microsoft.Xna.Framework.Point(0,-6),60*6,true);
+
+            e.moveActorLeft("Juni", 1, EventHelper.FacingDirection.Down, false);
             //e.addObjectToPlayersInventory(64, 22,true);
 
-            e.addTemporaryActor_NPC("Junimo", 16, 16, 32, 14, EventHelper.FacingDirection.Down, false);
-            e.actorJump("Junimo");
+            //e.addTemporaryActor_NPC("Junimo", 16, 16, 32, 14, EventHelper.FacingDirection.Down, false);
+
             e.showMessage("Community center birthday here.");
+            
             //Notes
             //Add a temporary actor (or sprite) to the screen.
             //Use the attachCharacterToTempSprite command to stitch them together?
@@ -39,11 +46,7 @@ namespace Omegasis.HappyBirthday.Framework
              *
              *                         else if (strArray[index].Equals("Junimo"))
                         {
-                            List<NPC> actors = this.actors;
-                            Junimo junimo = new Junimo(new Vector2((float)(Convert.ToInt32(strArray[index + 1]) * 64), (float)(Convert.ToInt32(strArray[index + 2]) * 64 - 32)), Game1.currentLocation.Name.Equals("AbandonedJojaMart") ? 6 : -1, false);
-                            junimo.Name = "Junimo";
-                            junimo.EventActor = true;
-                            actors.Add((NPC)junimo);
+
                         }
 
             */
