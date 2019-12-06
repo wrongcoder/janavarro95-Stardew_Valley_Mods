@@ -551,7 +551,6 @@ namespace Omegasis.HappyBirthday
                 MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
             }
 
-            this.eventManager.addEvent(BirthdayEvents.CommunityCenterJunimoBirthday());
             if (Game1.player.mailReceived.Contains("birthdayMom"))
             {
                 Game1.player.mailReceived.Remove("birthdayMom");
@@ -563,6 +562,14 @@ namespace Omegasis.HappyBirthday
             if (Game1.player.mailReceived.Contains("birthdayJunimos"))
             {
                 Game1.player.mailReceived.Remove("birthdayJunimos");
+            }
+
+
+            EventHelper communityCenterJunimoBirthday = BirthdayEvents.CommunityCenterJunimoBirthday();
+            this.eventManager.addEvent(communityCenterJunimoBirthday);
+            if (Game1.player.eventsSeen.Contains(communityCenterJunimoBirthday.getEventID()))
+            {
+                Game1.player.eventsSeen.Remove(communityCenterJunimoBirthday.getEventID()); //Repeat the event.
             }
         }
 
