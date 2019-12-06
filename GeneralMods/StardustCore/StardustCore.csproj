@@ -104,6 +104,7 @@
     <Compile Include="Events\Preconditions\NPCSpecific\NotMarriedTo.cs" />
     <Compile Include="Events\Preconditions\NPCSpecific\NPCInThisLocation.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\AnsweredDialogueOptions.cs" />
+    <Compile Include="Events\Preconditions\PlayerSpecific\CommunityCenterCompleted.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\CurrentMoney.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\DaysPlayedFor.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\EmptyInventorySlots.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Events\Preconditions\PlayerSpecific\HasNotRecievedLetter.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\HasRecievedLetter.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\MineBottomHit.cs" />
+    <Compile Include="Events\Preconditions\PlayerSpecific\NotDatingAnyone.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\PetPreference.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\PlayerOnThisTile.cs" />
     <Compile Include="Events\Preconditions\PlayerSpecific\SeenEvents.cs" />
