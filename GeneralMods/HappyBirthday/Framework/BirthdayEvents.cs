@@ -20,7 +20,7 @@ namespace Omegasis.HappyBirthday.Framework
         /// Creates the junimo birthday party event.
         /// </summary>
         /// <returns></returns>
-        public static EventHelper CommunityCenterBirthday()
+        public static EventHelper CommunityCenterJunimoBirthday()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
@@ -28,8 +28,9 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new TimePrecondition(600, 2600));
             conditions.Add(new CanReadJunimo());
             conditions.Add(new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(false));
+            conditions.Add(new CommunityCenterCompleted(false));
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
-            EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 32, 16, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
+            EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData("playful", 32, 16, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
 
             e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 14), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni2", new Microsoft.Xna.Framework.Vector2(30, 15), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());

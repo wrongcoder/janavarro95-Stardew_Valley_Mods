@@ -125,6 +125,7 @@ namespace StardustCore.Events
         {
             if (this.events.ContainsKey(EventName))
             {
+                if (Game1.eventUp == true) return;
                 this.concurrentEventActions.Clear(); //Clean all old parallel actions before starting a new event.
                 this.events[EventName].startEventAtLocationifPossible();
             }

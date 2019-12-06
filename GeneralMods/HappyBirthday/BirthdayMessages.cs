@@ -139,6 +139,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "Dear @,^  Happy birthday sweetheart. It's been amazing watching you grow into the kind, hard working person that I've always dreamed that you would become. I hope you continue to make many more fond memories with the ones you love. ^  Love, Mom ^ P.S. Here's a little something that I made for you. %item object 221 1 %%",
                 ["Mail:birthdayDad"] = "Dear @,^  Happy birthday kiddo. It's been a little quiet around here on your birthday since you aren't around, but your mother and I know that you are making both your grandpa and us proud.  We both know that living on your own can be tough but we believe in you one hundred percent, just keep following your dreams.^  Love, Dad ^ P.S. Here's some spending money to help you out on the farm. Good luck! %item money 5000 5001 %%",
+                ["Mail:birthdayJunimos"] = "Please come to the community center. ^ Sincerly,^      -The Junimos",
                 ["Happy Birthday: Star Message"] = "It's your birthday today! Happy birthday!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
                 ["Season"] ="Season",
@@ -149,6 +150,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -158,6 +160,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "ƒорогой @,^  — днем рождени¤, мо¤ радость. Ёто были замечательные моменты, когда ты выростал в доброго, трудолюбивого человека. я надеюсь, в твоей жизни будет куча превосходных моментов. ^  — любовью, мама ^  P.S. «десь находить небольшой подарок, который ¤ сделала дл¤ теб¤.  %item object 221 1 %%",
                 ["Mail:birthdayDad"] = "ƒорогой @,^  — днем рождени¤, мой ребенок. «десь немного тихо в твой день рождени¤ с тех пор, как ты уехал на ферму, но тво¤ мать и ¤ знаем, что ты со своим дедушкой делаешь нас гордыми. ћы оба знаем, что жить на ферме может быть трудно, но мы верим в теб¤ на все 100%, просто  продолжай следовать своим мечтам.^  — любовью папа ^ P.S. “ут есть немного денег, которые помогут тебе на ферме. ”дачи! %item money 5000 5001%%",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "Ёто твой день рождени¤! — днем рождени¤!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "Ёто твой день рождени¤! ѕоздравл¤ю с этим!",
                 ["Season"] = "Season",
@@ -167,6 +170,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "亲爱的@，^  生日快乐宝贝。看着你成长成为一个善良努力的人，就如我一直梦想着你成为的样子，我感到十分欣喜。我希望你能继续跟你爱的人制造更多美好的回忆。 ^  爱你的，妈妈 ^ 附言：这是我给你做的一点小礼物。 %item object 221 1 %%",
                 ["Mail:birthdayDad"] = "亲爱的@，^  生日快乐孩子。你生日的这天没有你，我们这儿还挺寂寞的，但我和你妈妈都知道你让我们和你爷爷感到骄傲。我们知道你一个人生活可能会很艰难，但我们百分百相信你能做到，所以继续追求你的梦想吧。^  爱你的，爸爸 ^ 附言：这是能在农场上帮到你的一些零用钱。祝你好运！ %item money 5000 5001 %%",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "今天是你的生日！生日快乐！",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -176,6 +180,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -185,6 +190,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -194,6 +200,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -203,6 +210,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -212,6 +220,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -221,6 +230,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -230,6 +240,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -239,6 +250,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -248,6 +260,7 @@ namespace Omegasis.HappyBirthday
             {
                 ["Mail:birthdayMom"] = "",
                 ["Mail:birthdayDad"] = "",
+                ["Mail:birthdayJunimos"] = "",
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
@@ -296,7 +309,6 @@ namespace Omegasis.HappyBirthday
                 if (!Directory.Exists(basePath))
                 {
                     Directory.CreateDirectory(basePath);
-                    HappyBirthday.ModMonitor.Log("Create dir1: " + basePath, LogLevel.Info);
                 }
                 string tempBirthdayFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("BirthdayWishes", translation.Key));
                 string tempSpouseBirthdayFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("SpouseBirthdayWishes", translation.Key));

@@ -110,11 +110,6 @@ namespace Omegasis.HappyBirthday
             if (e.NewLocation == Game1.getLocationFromName("CommunityCenter"))
             {
                 EventHelper eve=this.eventManager.getEvent("CommunityCenterBirthday");
-                this.Monitor.Log("Birthday event can occur: " + eve.canEventOccur(), LogLevel.Info);
-
-
-                this.Monitor.Log("Birthday event info: " + eve.getEventString(), LogLevel.Info);
-
                 eve.startEventAtLocationifPossible();
             }
         }
@@ -140,12 +135,9 @@ namespace Omegasis.HappyBirthday
         {
             IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
 
-            string momMail = BirthdayMessages.GetTranslatedString("Mail:birthdayMom");
-            string dadMail = BirthdayMessages.GetTranslatedString("Mail:birthdayDad");
-
-            data["birthdayMom"] = momMail;
-            data["birthdayDad"] = dadMail;
-            data["birthdayJunimos"] = "Please come to the community center. ^ Sincerly,^      -The Junimos";
+            data["birthdayMom"] = BirthdayMessages.GetTranslatedString("Mail:birthdayMom");
+            data["birthdayDad"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDad");
+            data["birthdayJunimos"] = BirthdayMessages.GetTranslatedString("Mail:birthdayJunimos");
         }
 
 
@@ -559,7 +551,7 @@ namespace Omegasis.HappyBirthday
                 MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
             }
 
-            this.eventManager.addEvent(BirthdayEvents.CommunityCenterBirthday());
+            this.eventManager.addEvent(BirthdayEvents.CommunityCenterJunimoBirthday());
             if (Game1.player.mailReceived.Contains("birthdayMom"))
             {
                 Game1.player.mailReceived.Remove("birthdayMom");

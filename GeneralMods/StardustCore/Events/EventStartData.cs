@@ -165,7 +165,8 @@ namespace StardustCore.Events
             this.builder = new StringBuilder();
             this.add(SongToPlay);
             this.add(CameraTileX.ToString());
-            this.add(CameraTileY.ToString());
+            this.builder.Append(" ");
+            this.builder.Append(CameraTileY.ToString());
 
             StringBuilder npcData = new StringBuilder();
             if (Farmer != null)
