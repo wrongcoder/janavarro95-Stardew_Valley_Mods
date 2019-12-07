@@ -95,7 +95,7 @@ namespace Omegasis.HappyBirthday.Framework
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
             e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:JunimoBirthdayParty_1"));
-            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:JunimoBirthdayParty_2"));
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
             e.addObjectToPlayersInventory(220, 1, false);
 
             e.end();
@@ -103,11 +103,62 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
         }
 
-        /*
+        
         public static EventHelper DatingBirthday_Penny()
         {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Trailer")));
+            conditions.Add(new TimePrecondition(600, 2600));
 
+            NPC penny = Game1.getCharacterFromName("Penny");
+            NPC pam = Game1.getCharacterFromName("Pam");
+
+            //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
+            EventHelper e = new EventHelper("BirthdayDating:Penny", 19951, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(penny,12,7, EventHelper.FacingDirection.Up),
+                new EventStartData.NPCData(pam,15,4, EventHelper.FacingDirection.Down)
+            }));
+
+            e.globalFadeIn();
+
+            e.moveFarmerUp(1, EventHelper.FacingDirection.Up, false);
+
+            e.actorFaceDirection("Penny", EventHelper.FacingDirection.Down);
+            string starting = "Oh, @ you are here just in time!$h";
+            //starting = starting.Replace("@", Game1.player.Name);
+            e.speak(penny, starting);
+            e.speak(pam, "Come on in kid. The party has just begun!$h");
+            e.speak(penny, "I thought it would be nice if we threw you a small party. Granted it's not much but I hope you like it. $l");
+            e.speak(pam, "Here, pull up a seat and have a beer to celebrate!");
+            e.emote_Angry("Penny");
+            e.speak(penny, "Mom!$a");
+            e.speak(penny, "*sigh* Well make yourself at home. I'll get the cake out.");
+
+            e.moveActorLeft("Penny", 3, EventHelper.FacingDirection.Up, true);
+            e.moveFarmerRight(2, EventHelper.FacingDirection.Up, false);
+            e.moveFarmerUp(3, EventHelper.FacingDirection.Down, false);
+            e.moveActorRight("Penny", 5, EventHelper.FacingDirection.Up, true);
+            e.moveActorUp("Penny", 1, EventHelper.FacingDirection.Up, true);
+            e.speak(pam, "Alright, cheers kid! Happy birthday and here is to another great year! $h");
+            e.speak(penny, "Happy birthday @. Here is hoping we get to spend many more birthdays together. $l");
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Penny");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage("It was nice celebrating my birthday with Pam and Penny.");
+            e.showMessage("Looks like there was some leftover cake and beer too!");
+            e.addObjectToPlayersInventory(220, 1, false);
+            e.addObjectToPlayersInventory(346, 1, false);
+
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+
+            e.end();
+
+            return e;
         }
+        /*
         public static EventHelper DatingBirthday_Maru()
         {
 

@@ -112,6 +112,12 @@ namespace Omegasis.HappyBirthday
                 EventHelper eve=this.eventManager.getEvent("CommunityCenterBirthday");
                 eve.startEventAtLocationifPossible();
             }
+            if (e.NewLocation == Game1.getLocationFromName("Trailer"))
+            {
+                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Penny");
+                this.Monitor.Log(eve.getEventString(), LogLevel.Info);
+                eve.startEventAtLocationifPossible();
+            }
         }
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
@@ -138,6 +144,7 @@ namespace Omegasis.HappyBirthday
             data["birthdayMom"] = BirthdayMessages.GetTranslatedString("Mail:birthdayMom");
             data["birthdayDad"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDad");
             data["birthdayJunimos"] = BirthdayMessages.GetTranslatedString("Mail:birthdayJunimos");
+            data["birthdayDatingPenny"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingPenny");
         }
 
 
@@ -563,13 +570,23 @@ namespace Omegasis.HappyBirthday
             {
                 Game1.player.mailReceived.Remove("birthdayJunimos");
             }
+            if (Game1.player.mailReceived.Contains("birthdayDatingPenny"))
+            {
+                Game1.player.mailReceived.Remove("birthdayDatingPenny");
+            }
 
 
             EventHelper communityCenterJunimoBirthday = BirthdayEvents.CommunityCenterJunimoBirthday();
+            EventHelper birthdayDating_Penny = BirthdayEvents.DatingBirthday_Penny();
             this.eventManager.addEvent(communityCenterJunimoBirthday);
+            this.eventManager.addEvent(birthdayDating_Penny);
             if (Game1.player.eventsSeen.Contains(communityCenterJunimoBirthday.getEventID()))
             {
                 Game1.player.eventsSeen.Remove(communityCenterJunimoBirthday.getEventID()); //Repeat the event.
+            }
+            if (Game1.player.eventsSeen.Contains(birthdayDating_Penny.getEventID()))
+            {
+                Game1.player.eventsSeen.Remove(birthdayDating_Penny.getEventID()); //Repeat the event.
             }
         }
 
@@ -625,6 +642,13 @@ namespace Omegasis.HappyBirthday
 
                     Game1.player.mailbox.Add("birthdayMom");
                     Game1.player.mailbox.Add("birthdayDad");
+
+                    if (Game1.player.friendshipData.ContainsKey("Penny"))
+                    {
+                        if (Game1.player.friendshipData["Penny"].IsDating()){
+                            Game1.player.mailbox.Add("birthdayDatingPenny");
+                        }
+                    }
 
                     if (Game1.player.CanReadJunimo())
                     {

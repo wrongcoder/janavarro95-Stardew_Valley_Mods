@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using static StardustCore.Events.EventHelper;
 
 namespace StardustCore.Events
 {
@@ -40,10 +41,16 @@ namespace StardustCore.Events
                 b.Append(" ");
                 b.Append(this.yPosition.ToString());
                 b.Append(" ");
-                b.Append(((int)this.direction).ToString());
+                b.Append(this.getFacingDirectionNumber(this.direction).ToString());
                 return b.ToString();
             }
+
+            protected int getFacingDirectionNumber(FacingDirection Dir)
+            {
+                return (int)Dir;
+            }
         }
+
 
         /// <summary>
         /// Data pertaining to the farmer data for the event.
@@ -144,6 +151,7 @@ namespace StardustCore.Events
             {
                 foreach(var v in NPCS)
                 {
+                    npcData.Append(" ");
                     npcData.Append(v.ToString());
                 }
             }
@@ -177,6 +185,7 @@ namespace StardustCore.Events
             {
                 foreach (var v in NPCS)
                 {
+                    npcData.Append(" ");
                     npcData.Append(v.ToString());
                 }
             }

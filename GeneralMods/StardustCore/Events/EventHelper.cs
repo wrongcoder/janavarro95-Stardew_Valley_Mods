@@ -1771,7 +1771,9 @@ namespace StardustCore.Events
             b.Append("speak ");
             b.Append(npc.Name);
             b.Append(" ");
+            b.Append('"');
             b.Append(Message);
+            b.Append('"');
             this.add(b);
         }
 

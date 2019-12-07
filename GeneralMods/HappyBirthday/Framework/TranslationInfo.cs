@@ -163,7 +163,7 @@ namespace Omegasis.HappyBirthday.Framework
         {
             if (language != LanguageName.English)
             {
-                return FileName + "." + this.getFileExtentionForTranslation(language, FileType.JSON);
+                return FileName + this.getFileExtentionForTranslation(language, FileType.JSON);
             }
             else
             {
