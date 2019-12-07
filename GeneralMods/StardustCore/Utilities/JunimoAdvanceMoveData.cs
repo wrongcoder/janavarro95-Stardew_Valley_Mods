@@ -57,7 +57,7 @@ namespace StardustCore.Utilities
                     //junimo.Sprite.Animate(Game1.currentGameTime, 0, 8, 50f);
                     if (junimo.Sprite.CurrentAnimation==null)
                     {
-                        junimo.Sprite.Animate(Game1.currentGameTime, 16, 7, 50f);
+                        junimo.Sprite.Animate(Game1.currentGameTime, 16, 8, 50f);
                     }
                 }
                 if (nextPoint.X < this.getCurrentPoint().X)
@@ -67,7 +67,7 @@ namespace StardustCore.Utilities
                     //junimo.Sprite.Animate(Game1.currentGameTime, 0, 8, 50f);
                     if (junimo.Sprite.CurrentAnimation== null)
                     {
-                        junimo.Sprite.Animate(Game1.currentGameTime, 16, 7  , 50f);
+                        junimo.Sprite.Animate(Game1.currentGameTime, 16, 8, 50f);
                     }
                 }
                 if (nextPoint.Y < this.getCurrentPoint().Y)

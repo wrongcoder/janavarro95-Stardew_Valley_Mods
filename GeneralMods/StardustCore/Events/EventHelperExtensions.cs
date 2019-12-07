@@ -185,5 +185,15 @@ namespace StardustCore.Events
             EventHelper.add(b);
         }
 
+
+        public static void RemoveJunimoAdvanceMove(this EventHelper EventHelper, string ActorName)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.EventFramework.RemoveJunimoAdvanceMove ");
+            b.Append(ActorName);
+            b.Append(" ");
+            EventHelper.add(b);
+        }
+
     }
 }

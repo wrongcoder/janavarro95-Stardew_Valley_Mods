@@ -38,6 +38,8 @@ namespace Omegasis.HappyBirthday.Framework
             e.AddInJunimoActor("Juni4", new Microsoft.Xna.Framework.Vector2(26, 11), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni5", new Microsoft.Xna.Framework.Vector2(28, 11), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni6Tank", new Vector2(38, 10), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni7", new Vector2(27, 16), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni8", new Vector2(40, 15), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
             e.AddJunimoAdvanceMoveTiles(new StardustCore.Utilities.JunimoAdvanceMoveData("Juni6Tank", new List<Point>()
             {
                 new Point(38,10),
@@ -56,12 +58,7 @@ namespace Omegasis.HappyBirthday.Framework
             e.FlipJunimoActor("Juni5", true);
             e.junimoFaceDirection("Juni4", EventHelper.FacingDirection.Right); //Make a junimo face right.
             e.junimoFaceDirection("Juni5", EventHelper.FacingDirection.Left);
-
-            e.globalFadeIn();
-
-            e.moveFarmerUp(10, EventHelper.FacingDirection.Up, true);
-
-            //e.moveActorLeft("Juni", 1, EventHelper.FacingDirection.Down, false);
+            e.junimoFaceDirection("Juni7", EventHelper.FacingDirection.Down);
             e.animate("Juni", true, true, 250, new List<int>()
             {
                 28,
@@ -69,11 +66,29 @@ namespace Omegasis.HappyBirthday.Framework
                 30,
                 31
             });
+            e.animate("Juni7", false, true, 250, new List<int>()
+            {
+                44,45,46,47
+            });
+            e.animate("Juni8", false, true, 250, new List<int>()
+            {
+                12,13,14,15
+            });
+
+            e.globalFadeIn();
+
+            e.moveFarmerUp(10, EventHelper.FacingDirection.Up, true);
 
             e.junimoFaceDirection("Juni4", EventHelper.FacingDirection.Down);
             e.junimoFaceDirection("Juni5", EventHelper.FacingDirection.Down);
+            e.RemoveJunimoAdvanceMove("Juni6Tank");
+            e.junimoFaceDirection("Juni6Tank", EventHelper.FacingDirection.Down);
+            e.junimoFaceDirection("Juni7", EventHelper.FacingDirection.Right);
+            e.FlipJunimoActor("Juni8",true);
+            e.junimoFaceDirection("Juni8", EventHelper.FacingDirection.Left);
 
             e.playSound("junimoMeep1");
+
             e.emoteFarmer_ExclamationMark();
             e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:JunimoBirthdayParty_0")); 
             e.emoteFarmer_Heart();

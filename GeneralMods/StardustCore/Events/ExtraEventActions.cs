@@ -208,5 +208,23 @@ namespace StardustCore.Events
                 pair.Value.update();
             }
         }
+
+        /// <summary>
+        /// Removes, aka stops the junimo actor from doing their advance movement.
+        /// </summary>
+        /// <param name="EventManager"></param>
+        /// <param name="EventData"></param>
+        public static void RemoveAdvanceJunimoMovement(EventManager EventManager, string EventData)
+        {
+            string[] splits = EventData.Split(' ');
+            string name = splits[0];
+            string actorName = splits[1];
+            if (junimoLerpData.ContainsKey(actorName))
+            {
+                junimoLerpData.Remove(actorName);
+            }
+
+            ++Game1.CurrentEvent.CurrentCommand; //I've been told ++<int> is more efficient than <int>++;
+        }
     }
 }
