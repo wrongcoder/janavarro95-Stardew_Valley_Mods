@@ -163,6 +163,7 @@
     <Compile Include="UIUtilities\Texture2DExtended.cs" />
     <Compile Include="UIUtilities\TextureManager.cs" />
     <Compile Include="Utilities\HexDumper.cs" />
+    <Compile Include="Utilities\JunimoAdvanceMoveData.cs" />
     <Compile Include="Utilities\PlayerExtensions.cs" />
     <Compile Include="Utilities\Serializer.cs" />
   </ItemGroup>

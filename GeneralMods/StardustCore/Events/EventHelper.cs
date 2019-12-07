@@ -622,6 +622,30 @@ namespace StardustCore.Events
             this.add(b);
         }
 
+        public virtual void advanceMove(string Actor, bool Loop, List<Point> TilePoints)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("advancedMove ");
+            b.Append(Actor);
+            b.Append(" ");
+            b.Append(Loop.ToString());
+            b.Append(" ");
+            for (int i = 0; i < TilePoints.Count; i++)
+            {
+                b.Append(TilePoints[i].X);
+                b.Append(" ");
+                b.Append(TilePoints[i].Y);
+                if (i != TilePoints.Count - 1)
+                {
+                    b.Append(" ");
+                }
+            }
+
+            ModCore.ModMonitor.Log(b.ToString(), StardewModdingAPI.LogLevel.Info);
+
+            this.add(b);
+        }
+
         /// <summary>
         /// Modifies the ambient light level, with RGB values from 0 to 255. Note that it works by removing colors from the existing light ambience, so ambientLight 1 80 80 would reduce green and blue and leave the light with a reddish hue.
         /// </summary>
@@ -1193,24 +1217,55 @@ namespace StardustCore.Events
 
         public virtual void playerFaceDirection(FacingDirection Dir)
         {
+            this.actorFaceDirection("farmer",Dir);
+        }
+
+        public virtual void npcFaceDirection(NPC NPC, FacingDirection Dir)
+        {
+            this.actorFaceDirection(NPC.Name, Dir);
+        }
+
+        public virtual void actorFaceDirection(string Actor, FacingDirection Dir)
+        {
             StringBuilder b = new StringBuilder();
-            b.Append("faceDirection farmer ");
+            b.Append("faceDirection ");
+            b.Append(Actor);
+            b.Append(" ");
             b.Append(this.getFacingDirectionNumber(Dir).ToString());
             b.Append(" ");
             b.Append(true);
             this.add(b);
         }
 
-        public virtual void npcFaceDirection(NPC NPC, FacingDirection Dir)
+
+        /// <summary>
+        /// Special code to make junimos face a direction because it doesn't work the same as npcs.
+        /// </summary>
+        /// <param name="Actor">The name of the junimo actor.</param>
+        /// <param name="Dir">The direction for the junimo to face.</param>
+        public virtual void junimoFaceDirection(string Actor,FacingDirection Dir)
         {
-            StringBuilder b = new StringBuilder();
-            b.Append("faceDirection ");
-            b.Append(NPC.Name);
-            b.Append(" ");
-            b.Append(this.getFacingDirectionNumber(Dir).ToString());
-            b.Append(" ");
-            b.Append(true);
-            this.add(b);
+            this.actorFaceDirection(Actor, Dir);
+            int frame = 0;
+            bool flip = false;
+            if(Dir.Equals(FacingDirection.Down))
+            {
+                frame = 0;
+            }
+            else if(Dir.Equals(FacingDirection.Left))
+            {
+                frame = 16;
+                flip = true;
+            }
+            else if (Dir.Equals(FacingDirection.Right))
+            {
+                frame = 16;
+            }
+            else if(Dir.Equals(FacingDirection.Up))
+            {
+                frame = 32;
+            }
+            this.animate(Actor, flip, true, 250, new List<int>() { frame, frame });
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Characters;
+using StardustCore.Utilities;
 
 namespace StardustCore.Events
 {
@@ -81,7 +82,7 @@ namespace StardustCore.Events
         /// <param name="ActorName"></param>
         /// <param name="Position"></param>
         /// <param name="Color"></param>
-        public static void AddInJunimoActor(this EventHelper EventHelper,string ActorName,Vector2 Position,Color Color)
+        public static void AddInJunimoActor(this EventHelper EventHelper,string ActorName,Vector2 Position,Color Color,bool Flipped=false)
         {
 
             StringBuilder b = new StringBuilder();
@@ -97,9 +98,92 @@ namespace StardustCore.Events
             b.Append(Color.G);
             b.Append(" ");
             b.Append(Color.B);
+            b.Append(" ");
+            b.Append(Flipped);
             EventHelper.add(b);
         }
 
+        public static void FlipJunimoActor(this EventHelper EventHelper, string ActorName,bool Flipped = false)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.EventFramework.FlipJunimoActor ");
+            b.Append(ActorName);
+            b.Append(" ");
+            b.Append(Flipped);
+            EventHelper.add(b);
+        }
+        public static void SetUpJunimoAdvanceMove(this EventHelper EventHelper)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.EventFramework.SetUpAdvanceJunimoMovement");
+            EventHelper.add(b);
+        }
+
+        public static void FinishJunimoAdvanceMove(this EventHelper EventHelper)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.EventFramework.FinishAdvanceJunimoMovement");
+            EventHelper.add(b);
+        }
+
+        public static void AddJunimoAdvanceMove(this EventHelper EventHelper, JunimoAdvanceMoveData JunimoData)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.EventFramework.AddInJunimoAdvanceMove ");
+
+            b.Append(JunimoData.junimoActorID);
+            b.Append(" ");
+            b.Append(JunimoData.maxFrames);
+            b.Append(" ");
+            b.Append(JunimoData.tickSpeed);
+            b.Append(" ");
+            b.Append(JunimoData.loop);
+            b.Append(" ");
+            for (int i = 0; i < JunimoData.points.Count; i++)
+            {
+                b.Append(JunimoData.points[i].X);
+                b.Append("_");
+                b.Append(JunimoData.points[i].Y);
+                if (i != JunimoData.points.Count - 1)
+                {
+                    b.Append(" ");
+                }
+            }
+
+            EventHelper.add(b);
+        }
+
+        /// <summary>
+        /// Same as above but allows for smaller tile position numbers instead.
+        /// </summary>
+        /// <param name="EventHelper"></param>
+        /// <param name="JunimoData"></param>
+        public static void AddJunimoAdvanceMoveTiles(this EventHelper EventHelper, JunimoAdvanceMoveData JunimoData)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.EventFramework.AddInJunimoAdvanceMove ");
+
+            b.Append(JunimoData.junimoActorID);
+            b.Append(" ");
+            b.Append(JunimoData.maxFrames);
+            b.Append(" ");
+            b.Append(JunimoData.tickSpeed);
+            b.Append(" ");
+            b.Append(JunimoData.loop);
+            b.Append(" ");
+            for (int i = 0; i < JunimoData.points.Count; i++)
+            {
+                b.Append(JunimoData.points[i].X*Game1.tileSize);
+                b.Append("_");
+                b.Append(JunimoData.points[i].Y * Game1.tileSize);
+                if (i != JunimoData.points.Count - 1)
+                {
+                    b.Append(" ");
+                }
+            }
+
+            EventHelper.add(b);
+        }
 
     }
 }

@@ -142,8 +142,11 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayJunimos"] = "Please come to the community center. ^ Sincerly,^      -The Junimos",
                 ["Happy Birthday: Star Message"] = "It's your birthday today! Happy birthday!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
-                ["Season"] ="Season",
-                ["Date"]="Date"
+                ["Season"] = "Season",
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "It looks like the junimos wanted to throw you a party!",
+                ["Event:JunimoBirthdayParty_1"] = "It looks like there was some cake left over too!",
+                ["Event:JunimoBirthdayParty_2"] = "That was a fun party. Back to work!"
 
             },
             [StardewValley.LocalizedContentManager.LanguageCode.ja] = new Dictionary<string, string>()
@@ -154,7 +157,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.ru] = new Dictionary<string, string>()
             {
@@ -164,7 +170,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "Ёто твой день рождени¤! — днем рождени¤!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "Ёто твой день рождени¤! ѕоздравл¤ю с этим!",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.zh] = new Dictionary<string, string>()
             {
@@ -174,7 +183,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "今天是你的生日！生日快乐！",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.pt] = new Dictionary<string, string>()
             {
@@ -184,7 +196,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.es] = new Dictionary<string, string>()
             {
@@ -194,7 +209,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.de] = new Dictionary<string, string>()
             {
@@ -204,7 +222,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.th] = new Dictionary<string, string>()
             {
@@ -214,7 +235,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.fr] = new Dictionary<string, string>()
             {
@@ -224,7 +248,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.ko] = new Dictionary<string, string>()
             {
@@ -234,7 +261,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.it] = new Dictionary<string, string>()
             {
@@ -244,7 +274,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.tr] = new Dictionary<string, string>()
             {
@@ -254,7 +287,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
             [StardewValley.LocalizedContentManager.LanguageCode.hu] = new Dictionary<string, string>()
             {
@@ -264,7 +300,10 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
-                ["Date"] = "Date"
+                ["Date"] = "Date",
+                ["Event:JunimoBirthdayParty_0"] = "",
+                ["Event:JunimoBirthdayParty_1"] = "",
+                ["Event:JunimoBirthdayParty_2"] = ""
             },
         };
 
