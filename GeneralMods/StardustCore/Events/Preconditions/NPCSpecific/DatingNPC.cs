@@ -38,7 +38,13 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
 
         public override bool meetsCondition()
         {
-            return Game1.player.friendshipData[this.npc.Name].IsDating();
+            if (Game1.player.friendshipData.ContainsKey(this.npc.Name)){
+                return Game1.player.friendshipData[this.npc.Name].IsDating();
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

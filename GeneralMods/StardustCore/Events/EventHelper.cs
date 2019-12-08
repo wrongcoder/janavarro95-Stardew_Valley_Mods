@@ -140,31 +140,32 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="Dir"></param>
         /// <returns></returns>
-        protected virtual int getFacingDirectionNumber(FacingDirection Dir)
+        public virtual int getFacingDirectionNumber(FacingDirection Dir)
         {
             return (int)Dir;
         }
 
         /// <summary>
-        /// Gets the layer string from the Layer enum.
+        /// Gets the layer string from the Layer enum. Has weird values???/
         /// </summary>
         /// <param name="Layer"></param>
         /// <returns></returns>
-        protected virtual string getLayerName(Layers Layer)
+        public virtual int getLayerName(Layers Layer)
         {
-            if (Layer == Layers.AlwaysFront) return "AlwaysFront";
-            if (Layer == Layers.Back) return "Back";
-            if (Layer == Layers.Buildings) return "Buildings";
-            if (Layer == Layers.Front) return "Front";
-            if (Layer == Layers.Paths) return "Paths";
-            return "";
+            return 724;
+            //if (Layer == Layers.AlwaysFront) return "AlwaysFront";
+            //if (Layer == Layers.Back) return "Back";
+            //if (Layer == Layers.Buildings) return "Buildings";
+            //if (Layer == Layers.Front) return "Front";
+            //if (Layer == Layers.Paths) return "Paths";
+            //return "";
         }
 
         /// <summary>
         /// Gets the even parsing seperator.
         /// </summary>
         /// <returns></returns>
-        protected virtual string getSeperator()
+        public virtual string getSeperator()
         {
             return "/";
         }
@@ -173,7 +174,7 @@ namespace StardustCore.Events
         /// Gets the starting event numbers based off of my nexus user id.
         /// </summary>
         /// <returns></returns>
-        protected virtual string getUniqueEventStartID()
+        public virtual string getUniqueEventStartID()
         {
             string s = this.nexusUserId.ToString();
             return s.Substring(0, 4);
@@ -192,7 +193,7 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="IDToCheck"></param>
         /// <returns></returns>
-        protected virtual bool isIdValid(int IDToCheck)
+        public virtual bool isIdValid(int IDToCheck)
         {
             if (IDToCheck > 2147483647 || IDToCheck < 0) return false;
             else return true;
@@ -203,7 +204,7 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="IDToCheck"></param>
         /// <returns></returns>
-        protected virtual bool isIdValid(string IDToCheck)
+        public virtual bool isIdValid(string IDToCheck)
         {
             if (Convert.ToInt32(IDToCheck) > 2147483647 || Convert.ToInt32(IDToCheck) < 0) return false;
             else return true;
@@ -221,7 +222,7 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="PlayerActor"></param>
         /// <returns></returns>
-        protected virtual StardewValley.Event getEvent(Farmer PlayerActor = null)
+        public virtual StardewValley.Event getEvent(Farmer PlayerActor = null)
         {
             return new StardewValley.Event(this.getEventString(), Convert.ToInt32(this.getEventID()), PlayerActor);
         }
@@ -267,7 +268,7 @@ namespace StardustCore.Events
         /// <param name="xTile"></param>
         /// <param name="yTile"></param>
         /// <param name="ID"></param>
-        protected virtual void addBigProp(int xTile, int yTile, int ID)
+        public virtual void addBigProp(int xTile, int yTile, int ID)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addBigProp ");
@@ -283,7 +284,7 @@ namespace StardustCore.Events
         /// Starts an active dialogue event with the given ID and a length of 4 days.
         /// </summary>
         /// <param name="ID"></param>
-        protected virtual void addConversationTopic(string ID)
+        public virtual void addConversationTopic(string ID)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addBigProp ");
@@ -295,7 +296,7 @@ namespace StardustCore.Events
         /// Adds the specified cooking recipe to the player.
         /// </summary>
         /// <param name="Recipe"></param>
-        protected virtual void addCookingRecipe(string Recipe)
+        public virtual void addCookingRecipe(string Recipe)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addCookingRecipe ");
@@ -307,7 +308,7 @@ namespace StardustCore.Events
         /// Adds the specified crafting recipe to the player.
         /// </summary>
         /// <param name="Recipe"></param>
-        protected virtual void addCraftingRecipe(string Recipe)
+        public virtual void addCraftingRecipe(string Recipe)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addCraftingRecipe ");
@@ -318,7 +319,7 @@ namespace StardustCore.Events
         /// <summary>
         /// Add a non-solid prop from the current festival texture. Default solid width/height is 1. Default display height is solid height.
         /// </summary>
-        protected virtual void addFloorProp(int PropIndex, int XTile, int YTile, int SolidWidth, int SolidHeight, int DisplayHeight)
+        public virtual void addFloorProp(int PropIndex, int XTile, int YTile, int SolidWidth, int SolidHeight, int DisplayHeight)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addFloorProp ");
@@ -343,7 +344,7 @@ namespace StardustCore.Events
         /// <param name="XPosition"></param>
         /// <param name="YPosition"></param>
         /// <param name="LightRadius"></param>
-        protected virtual void addLantern(int ItemID, int XPosition, int YPosition, float LightRadius)
+        public virtual void addLantern(int ItemID, int XPosition, int YPosition, float LightRadius)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addLantern ");
@@ -361,7 +362,7 @@ namespace StardustCore.Events
         /// 	Set a letter as received.
         /// </summary>
         /// <param name="ID"></param>
-        protected virtual void addMailReceived(string ID)
+        public virtual void addMailReceived(string ID)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addMailReceived ");
@@ -376,7 +377,7 @@ namespace StardustCore.Events
         /// <param name="YTile"></param>
         /// <param name="ParentSheetIndex"></param>
         /// <param name="Layer"></param>
-        protected virtual void addObject(int XTile, int YTile, int ParentSheetIndex, string Layer)
+        public virtual void addObject(int XTile, int YTile, int ParentSheetIndex)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addObject ");
@@ -384,26 +385,7 @@ namespace StardustCore.Events
             b.Append(" ");
             b.Append(YTile.ToString());
             b.Append(" ");
-            b.Append(Layer);
-            this.add(b);
-        }
-
-        /// <summary>
-        /// Adds a temporary sprite at the specified tile from the Maps\springobjects.png sprite sheet.
-        /// </summary>
-        /// <param name="XTile"></param>
-        /// <param name="YTile"></param>
-        /// <param name="ParentSheetIndex"></param>
-        /// <param name="Layer"></param>
-        protected virtual void addObject(int XTile, int YTile, int ParentSheetIndex, Layers Layer)
-        {
-            StringBuilder b = new StringBuilder();
-            b.Append("addObject ");
-            b.Append(XTile.ToString());
-            b.Append(" ");
-            b.Append(YTile.ToString());
-            b.Append(" ");
-            b.Append(this.getLayerName(Layer));
+            b.Append(ParentSheetIndex);
             this.add(b);
         }
 
@@ -416,7 +398,7 @@ namespace StardustCore.Events
         /// <param name="SolidWidth"></param>
         /// <param name="SolidHeight"></param>
         /// <param name="DisplayHeight"></param>
-        protected virtual void addProp(int Index, int XTile, int YTile, int SolidWidth, int SolidHeight, int DisplayHeight)
+        public virtual void addProp(int Index, int XTile, int YTile, int SolidWidth, int SolidHeight, int DisplayHeight)
         {
             StringBuilder b = new StringBuilder();
             b.Append("addProp ");

@@ -30,7 +30,7 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(false));
             conditions.Add(new CommunityCenterCompleted(false));
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
-            EventHelper e = new EventHelper("CommunityCenterBirthday",19950, conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up),new List<EventStartData.NPCData>()));
+            EventHelper e = new EventHelper("CommunityCenterBirthday", 19950, conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
 
             e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 10), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni2", new Microsoft.Xna.Framework.Vector2(30, 11), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
@@ -84,13 +84,13 @@ namespace Omegasis.HappyBirthday.Framework
             e.RemoveJunimoAdvanceMove("Juni6Tank");
             e.junimoFaceDirection("Juni6Tank", EventHelper.FacingDirection.Down);
             e.junimoFaceDirection("Juni7", EventHelper.FacingDirection.Right);
-            e.FlipJunimoActor("Juni8",true);
+            e.FlipJunimoActor("Juni8", true);
             e.junimoFaceDirection("Juni8", EventHelper.FacingDirection.Left);
 
             e.playSound("junimoMeep1");
 
             e.emoteFarmer_ExclamationMark();
-            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:JunimoBirthdayParty_0")); 
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:JunimoBirthdayParty_0"));
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
@@ -103,16 +103,23 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
         }
 
-        
+
+        /// <summary>
+        /// Birthday event for when the player is dating Penny.
+        /// Status: Completed.
+        /// </summary>
+        /// <returns></returns>
         public static EventHelper DatingBirthday_Penny()
         {
+
+            NPC penny = Game1.getCharacterFromName("Penny");
+            NPC pam = Game1.getCharacterFromName("Pam");
+
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Trailer")));
             conditions.Add(new TimePrecondition(600, 2600));
-
-            NPC penny = Game1.getCharacterFromName("Penny");
-            NPC pam = Game1.getCharacterFromName("Pam");
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
             EventHelper e = new EventHelper("BirthdayDating:Penny", 19951, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
@@ -125,30 +132,29 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerUp(1, EventHelper.FacingDirection.Up, false);
 
             e.actorFaceDirection("Penny", EventHelper.FacingDirection.Down);
-            string starting = "Oh, @ you are here just in time!$h";
             //starting = starting.Replace("@", Game1.player.Name);
-            e.speak(penny, starting);
-            e.speak(pam, "Come on in kid. The party has just begun!$h");
-            e.speak(penny, "I thought it would be nice if we threw you a small party. Granted it's not much but I hope you like it. $l");
-            e.speak(pam, "Here, pull up a seat and have a beer to celebrate!");
+            e.speak(penny, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Penny:0"));
+            e.speak(pam, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Pam:0"));
+            e.speak(penny, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Penny:1"));
+            e.speak(pam, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Pam:1"));
             e.emote_Angry("Penny");
-            e.speak(penny, "Mom!$a");
-            e.speak(penny, "*sigh* Well make yourself at home. I'll get the cake out.");
+            e.speak(penny, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Penny:2")); //penny2
+            e.speak(penny, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Penny:3")); //penny3
 
             e.moveActorLeft("Penny", 3, EventHelper.FacingDirection.Up, true);
             e.moveFarmerRight(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerUp(3, EventHelper.FacingDirection.Down, false);
             e.moveActorRight("Penny", 5, EventHelper.FacingDirection.Up, true);
             e.moveActorUp("Penny", 1, EventHelper.FacingDirection.Up, true);
-            e.speak(pam, "Alright, cheers kid! Happy birthday and here is to another great year! $h");
-            e.speak(penny, "Happy birthday @. Here is hoping we get to spend many more birthdays together. $l");
+            e.speak(pam, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Pam:2")); //pam2
+            e.speak(penny, HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Penny:4"));//penny4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Penny");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage("It was nice celebrating my birthday with Pam and Penny.");
-            e.showMessage("Looks like there was some leftover cake and beer too!");
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Finish:0")); //penny party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingPennyBirthday_Finish:1"));// penny party finish 1
             e.addObjectToPlayersInventory(220, 1, false);
             e.addObjectToPlayersInventory(346, 1, false);
 
@@ -158,11 +164,74 @@ namespace Omegasis.HappyBirthday.Framework
 
             return e;
         }
-        /*
+
+        /// <summary>
+        /// Birthday event for when the player is dating Maru.
+        /// Finished.
+        /// </summary>
+        /// <returns></returns>
         public static EventHelper DatingBirthday_Maru()
         {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("ScienceHouse")));
+            conditions.Add(new TimePrecondition(600, 2600));
 
+            NPC maru = Game1.getCharacterFromName("Maru");
+            NPC sebastian = Game1.getCharacterFromName("Sebastian");
+            NPC robin = Game1.getCharacterFromName("Robin");
+            NPC demetrius = Game1.getCharacterFromName("Demetrius");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(maru));
+
+            EventHelper e = new EventHelper("BirthdayDating:Maru", 19952, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(sebastian,26,13, EventHelper.FacingDirection.Up),
+                new EventStartData.NPCData(robin,28,9, EventHelper.FacingDirection.Up),
+                new EventStartData.NPCData(demetrius,30,11, EventHelper.FacingDirection.Left)
+            }));
+            e.globalFadeIn();
+
+            e.moveFarmerRight(3, EventHelper.FacingDirection.Right, true);
+            e.npcFaceDirection(maru, EventHelper.FacingDirection.Left);
+            e.npcFaceDirection(demetrius, EventHelper.FacingDirection.Left);
+            //Seb is already facing up.
+            e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
+
+            //Dialogue goes here.
+            //Seriously improve dialogue lines. Maru is probably the NPC I know the least about.
+            e.speak(maru, GetTranslatedString("Event:DatingMaruBirthday_Maru:0")); //maru 0
+            e.speak(demetrius, GetTranslatedString("Event:DatingMaruBirthday_Demetrius:0")); //demetrius 0
+            e.speak(maru, GetTranslatedString("Event:DatingMaruBirthday_Maru:1"));//Maru 1 //Spoiler she doesn't.
+            e.speak(sebastian, GetTranslatedString("Event:DatingMaruBirthday_Sebastian:0")); //sebastian 0
+            e.speak(robin, GetTranslatedString("Event:DatingMaruBirthday_Robin:0")); //robin 0
+            e.speak(demetrius, GetTranslatedString("Event:DatingMaruBirthday_Demetrius:1")); //demetrius 1
+            e.emote_ExclamationMark("Robin");
+            e.npcFaceDirection(robin, EventHelper.FacingDirection.Up);
+            e.speak(robin, GetTranslatedString("Event:DatingMaruBirthday_Robin:1")); //robin 1
+            e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
+            e.moveActorDown("Robin", 1, EventHelper.FacingDirection.Down, false);
+            e.addObject(27, 12, 220);
+
+            e.speak(maru, GetTranslatedString("Event:DatingMaruBirthday_Maru:2")); //maru 2
+            e.emoteFarmer_Thinking();
+            e.speak(sebastian, GetTranslatedString("Event:DatingMaruBirthday_Sebastian:1")); //Sebastian 1
+            e.speak(maru, GetTranslatedString("Event:DatingMaruBirthday_Maru:3")); //maru 3
+
+            //Event finish commands.
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Maru");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingMaruBirthday_Finish:0")); //maru party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingMaruBirthday_Finish:1")); //maru party finish 0
+            e.addObjectToPlayersInventory(220, 1, false);
+
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
         }
+        /*
         public static EventHelper DatingBirthday_Leah()
         {
 
@@ -181,49 +250,119 @@ namespace Omegasis.HappyBirthday.Framework
         }
         public static EventHelper DatingBirthday_Sam()
         {
-
-        }
-        public static EventHelper DatingBirthday_Sebastian()
-        {
-
-        }
-        public static EventHelper DatingBirthday_Elliott()
-        {
-
-        }
-        public static EventHelper DatingBirthday_Shane()
-        {
-
-        }
-        public static EventHelper DatingBirthday_Harvey()
-        {
-
-        }
-
-        public static EventHelper DatingBirthday_Alex()
-        {
-
-        }
-
-        public static EventHelper Birthday_Krobus()
-        {
-
-        }
-
-
-        public static EventHelper MarriedBirthday_NoKids()
-        {
-
-        }
-
-        public static EventHelper MarriedBirthday_OneKids()
-        {
-
-        }
-        public static EventHelper MarriedBirthday_TwoKids()
-        {
-
+        
         }
         */
+        /// <summary>
+        /// Event that occurs when the player is dating Sebastian.
+        /// Status: Finished.
+        /// </summary>
+        /// <returns></returns>
+        public static EventHelper DatingBirthday_Sebastian()
+        {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("ScienceHouse")));
+            conditions.Add(new TimePrecondition(600, 2600));
+
+            NPC maru = Game1.getCharacterFromName("Maru");
+            NPC sebastian = Game1.getCharacterFromName("Sebastian");
+            NPC robin = Game1.getCharacterFromName("Robin");
+            NPC demetrius = Game1.getCharacterFromName("Demetrius");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(sebastian));
+
+            EventHelper e = new EventHelper("BirthdayDating:Sebastian", 19952, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(sebastian,26,13, EventHelper.FacingDirection.Up),
+                new EventStartData.NPCData(robin,28,9, EventHelper.FacingDirection.Up),
+                new EventStartData.NPCData(demetrius,30,11, EventHelper.FacingDirection.Left)
+            }));
+            e.globalFadeIn();
+
+            e.moveFarmerRight(3, EventHelper.FacingDirection.Right, true);
+            e.npcFaceDirection(maru, EventHelper.FacingDirection.Left);
+            e.npcFaceDirection(demetrius, EventHelper.FacingDirection.Left);
+            //Seb is already facing up.
+            e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
+
+            //Dialogue goes here.
+            //Seriously improve dialogue lines. Maru is probably the NPC I know the least about.
+            e.speak(sebastian, GetTranslatedString("Event:DatingSebastianBirthday_Sebastian:0")); //sebastian 0
+            e.speak(robin, GetTranslatedString("Event:DatingSebastianBirthday_Robin:0")); //maru 0
+            e.speak(maru, GetTranslatedString("Event:DatingSebastianBirthday_Maru:0"));//Maru 0
+            e.speak(robin, GetTranslatedString("Event:DatingSebastianBirthday_Robin:1")); //robin 0
+            e.speak(demetrius, GetTranslatedString("Event:DatingSebastianBirthday_Demetrius:0")); //demetrius 0
+            e.speak(sebastian, GetTranslatedString("Event:DatingSebastianBirthday_Sebastian:1")); //Sebastian 1
+            e.emote_ExclamationMark("Robin");
+            e.npcFaceDirection(robin, EventHelper.FacingDirection.Up);
+            e.speak(robin, GetTranslatedString("Event:DatingSebastianBirthday_Robin:2")); //robin 1
+            e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
+            e.moveActorDown("Robin", 1, EventHelper.FacingDirection.Down, false);
+            e.addObject(27, 12, 220);
+            e.speak(demetrius, GetTranslatedString("Event:DatingSebastianBirthday_Demetrius:1")); //maru 2
+            e.emoteFarmer_Thinking();
+            e.speak(maru, GetTranslatedString("Event:DatingSebastianBirthday_Maru:1")); //maru 3
+            e.speak(sebastian, GetTranslatedString("Event:DatingSebastianBirthday_Sebastian:2")); //Sebastian 1
+
+            //Event finish commands.
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Sebastian");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingSebastianBirthday_Finish:0")); //maru party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingSebastianBirthday_Finish:1")); //maru party finish 0
+            e.addObjectToPlayersInventory(220, 1, false);
+
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
         }
+
+        /*
+            public static EventHelper DatingBirthday_Elliott()
+            {
+
+            }
+            public static EventHelper DatingBirthday_Shane()
+            {
+
+            }
+            public static EventHelper DatingBirthday_Harvey()
+            {
+
+            }
+
+            public static EventHelper DatingBirthday_Alex()
+            {
+
+            }
+
+            public static EventHelper Birthday_Krobus()
+            {
+
+            }
+
+
+            public static EventHelper MarriedBirthday_NoKids()
+            {
+
+            }
+
+            public static EventHelper MarriedBirthday_OneKids()
+            {
+
+            }
+            public static EventHelper MarriedBirthday_TwoKids()
+            {
+
+            }
+            */
+
+        public static string GetTranslatedString(string Key)
+        {
+            return HappyBirthday.Config.translationInfo.getTranslatedString(Key);
+        }
+
     }
+}
