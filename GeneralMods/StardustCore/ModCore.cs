@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using StardewModdingAPI;
@@ -41,6 +42,8 @@ namespace StardustCore
 
             this.Helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
 
+            this.Helper.ConsoleCommands.Add("Omegasis.StardustCore.ModdingUtilities.AddFriendship", "Adds a certain amount of friendship to the given npc. <name , amount>", AddNPCFriendship);
+
             this.config = ModHelper.ReadConfig<ModConfig>();
         }
 
@@ -56,6 +59,21 @@ namespace StardustCore
         public static void log(string message)
         {
             ModMonitor.Log(message);
+        }
+
+
+        public static void AddNPCFriendship(string ActionName, string[] Params)
+        {
+            string npcName = Params[0];
+            int amount = Convert.ToInt32(Params[1]);
+            if (Game1.player.friendshipData.ContainsKey(npcName)){
+                Game1.player.friendshipData[npcName].Points += amount;
+            }
+            else
+            {
+                Game1.player.friendshipData.Add(npcName, new Friendship(amount));
+            }
+
         }
     }
 }

@@ -231,11 +231,55 @@ namespace Omegasis.HappyBirthday.Framework
             e.end();
             return e;
         }
-        /*
+
+        /// <summary>
+        /// Birthday event for when the player is dating Leah.
+        /// Finished.
+        /// </summary>
+        /// <returns></returns>
         public static EventHelper DatingBirthday_Leah()
         {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("LeahHouse")));
+            conditions.Add(new TimePrecondition(600, 2600));
 
+            NPC leah = Game1.getCharacterFromName("Leah");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(leah));
+
+            EventHelper e = new EventHelper("BirthdayDating:Leah", 19953, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(leah,14,11, EventHelper.FacingDirection.Left),
+            }));
+            e.addObject(11, 11, 220);
+            e.globalFadeIn();
+            e.moveFarmerUp(2, EventHelper.FacingDirection.Up, false);
+            e.moveFarmerRight(5, EventHelper.FacingDirection.Down, false);
+            e.npcFaceDirection(leah, EventHelper.FacingDirection.Up);
+            e.speak(leah, GetTranslatedString("Event:DatingLeahBirthday_Leah:0")); //0
+            e.moveFarmerDown(2, EventHelper.FacingDirection.Down, false) ;
+            e.moveFarmerRight(1, EventHelper.FacingDirection.Down, false);
+            e.moveFarmerDown(1, EventHelper.FacingDirection.Down, false);
+            e.speak(leah, GetTranslatedString("Event:DatingLeahBirthday_Leah:1")); //1
+            e.emoteFarmer_Happy();
+            e.speak(leah, GetTranslatedString("Event:DatingLeahBirthday_Leah:2"));//2
+            e.speak(leah, GetTranslatedString("Event:DatingLeahBirthday_Leah:3"));//3
+            e.speak(leah, GetTranslatedString("Event:DatingLeahBirthday_Leah:4"));//4
+
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Leah");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingLeahBirthday_Finish:0")); //maru party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingLeahBirthday_Finish:1")); //maru party finish 0
+            e.addObjectToPlayersInventory(220, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
         }
+
+        /*
         public static EventHelper DatingBirthday_Abigail()
         {
 
