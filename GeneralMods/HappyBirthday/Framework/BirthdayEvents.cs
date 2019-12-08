@@ -279,11 +279,60 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
         }
 
-        /*
+        
         public static EventHelper DatingBirthday_Abigail()
         {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("SeedShop")));
+            conditions.Add(new TimePrecondition(600, 2600));
+
+            NPC abigail = Game1.getCharacterFromName("Abigail");
+            NPC pierre = Game1.getCharacterFromName("Pierre");
+            NPC caroline = Game1.getCharacterFromName("Caroline");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(abigail));
+
+            EventHelper e = new EventHelper("BirthdayDating:Abigail", 19953, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31,11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(abigail,36,9, EventHelper.FacingDirection.Left),
+                new EventStartData.NPCData(pierre,33,6, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(caroline,35,5, EventHelper.FacingDirection.Up),
+            }));
+            e.globalFadeIn();
+
+            //Dialogue here.
+            e.moveFarmerUp(2, EventHelper.FacingDirection.Right, false);
+            e.moveFarmerRight(4, EventHelper.FacingDirection.Right, false);
+
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Abigail:0")); //abi 0
+
+            e.npcFaceDirection(caroline, EventHelper.FacingDirection.Down);
+
+            e.speak(pierre, GetTranslatedString("Event:DatingAbigailBirthday_Pierre:0")); //pie 0
+            e.speak(caroline, GetTranslatedString("Event:DatingAbigailBirthday_Caroline:0")); //car 0
+            e.addObject(35, 5, 220);
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Abigail:1")); //abi 1
+            e.speak(pierre, GetTranslatedString("Event:DatingAbigailBirthday_Pierre:1")); //pie 1
+            e.speak(caroline, GetTranslatedString("Event:DatingAbigailBirthday_Caroline:1")); //car 1
+            e.speak(caroline, GetTranslatedString("Event:DatingAbigailBirthday_Caroline:2")); //car 2
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Abigail:2")); //abi 2
+            e.emoteFarmer_Thinking();
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Abigail:3"));//abi 3
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Abigail:4"));///abi 4
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Abigail");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingAbigailBirthday_Finish:0")); //abi party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingAbigailBirthday_Finish:1")); //abi party finish 0
+            e.addObjectToPlayersInventory(220, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
 
         }
+        /*
         public static EventHelper DatingBirthday_Emily()
         {
 
@@ -382,22 +431,19 @@ namespace Omegasis.HappyBirthday.Framework
 
             }
 
-            public static EventHelper Birthday_Krobus()
+
+            public static EventHelper MarriedBirthday()
             {
 
             }
 
 
-            public static EventHelper MarriedBirthday_NoKids()
+            public static EventHelper CommunityBirthday()
             {
 
             }
-
-            public static EventHelper MarriedBirthday_OneKids()
-            {
-
-            }
-            public static EventHelper MarriedBirthday_TwoKids()
+            
+            public static EventHelper JojaBirthday()
             {
 
             }

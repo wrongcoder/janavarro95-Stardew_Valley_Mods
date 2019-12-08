@@ -144,7 +144,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingMaru"] = "Hey @. ^ My family and I decided to have a birthday party for you at our place. Could you come by our house sometime today?^Sincerly,^      -Maru",
                 ["Mail:birthdayDatingSebastian"] = "Hey @. ^ Could you come by my place later? My family and I decided to have a birthday party for you to celebrate. ^^      -Sebastian",
                 ["Mail:birthdayDatingLeah"] = "Hey @. ^ Could you come by my place later? I thought it would be nice if we had a small party for you. ^Sincerly,^      -Leah",
-
+                ["Mail:birthdayDatingAbigail"] = "Hey @. ^ My family and I decided to have a birthday party for you at our place. Could you come by our house sometime today?^Sincerly,^      -Abigail",
 
                 ["Happy Birthday: Star Message"] = "It's your birthday today! Happy birthday!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
@@ -198,6 +198,19 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingLeahBirthday_Leah:4"] = "Anyways enough of this embarrasing talk. Happy birthday @. Now shall we have some cake?$h",
                 ["Event:DatingLeahBirthday_Finish:0"] = "It was nice celebrating my birthday with Leah.",
                 ["Event:DatingLeahBirthday_Finish:1"] = "It looks like there was some leftover cake too!",
+
+                ["Event:DatingAbigailBirthday_Abigail:0"] = "Hey @! You are just in time for the party!$h",
+                ["Event:DatingAbigailBirthday_Abigail:1"] = "Wow this cake looks delicious mom!$h",
+                ["Event:DatingAbigailBirthday_Abigail:2"] = "Go ahead and make a wish @.",
+                ["Event:DatingAbigailBirthday_Abigail:3"] = "So @, what did you wish for? Hopefully for some awesome skills!",
+                ["Event:DatingAbigailBirthday_Abigail:4"] = "Anyways, happy birthday! I hope we get to have many more adventures to come. $l",
+                ["Event:DatingAbigailBirthday_Caroline:0"] = "Please, I'm sure your customers won't mind if you are gone for a few minutes. Anyways the cake is done.",
+                ["Event:DatingAbigailBirthday_Caroline:1"] = "*sigh* Honestly.",
+                ["Event:DatingAbigailBirthday_Caroline:2"] = "Well @ feel free to help yourself to as much as you like.$h",
+                ["Event:DatingAbigailBirthday_Pierre:0"] = "Make yourself at home @! I can't stay too long since I have to attend to the store but I thought a party would be a good idea!$h",
+                ["Event:DatingAbigailBirthday_Pierre:1"] = "Well of course it would be. It was made from the *highest* quality ingredients from the store! $h",
+                ["Event:DatingAbigailBirthday_Finish:0"] = "It was nice celebrating my birthday with Abigail and her family.",
+                ["Event:DatingAbigailBirthday_Finish:1"] = "It looks like there was some leftover cake too!",
 
                 ["Event:PartyOver"] = "That was a fun party. Back to work!"
 
