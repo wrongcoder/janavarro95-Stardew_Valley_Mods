@@ -146,6 +146,8 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingLeah"] = "Hey @. ^ Could you come by my place later? I thought it would be nice if we had a small party for you. ^Sincerly,^      -Leah",
                 ["Mail:birthdayDatingAbigail"] = "Hey @. ^ My family and I decided to have a birthday party for you at our place. Could you come by our house sometime today?^Sincerly,^      -Abigail",
                 ["Mail:birthdayDatingEmily"] = "Hi @. ^ I thought it would be nice to have a birthday party for you at our place. Could you come by my house sometime today?^Sincerly,^      -Emily",
+                ["Mail:birthdayDatingHaley"] = "Hey @. ^ I thought it would be nice to have a birthday party for you at our place. Could you come by my house sometime today?^Sincerly,^      -Haley",
+                ["Mail:birthdayDatingHarvey"] = "Hey @. ^ I thought it would be nice to have a birthday party for you at my place. Could you come by my room on the second floor of the clinic sometime today?^Sincerly,^      -Harvey",
 
                 ["Happy Birthday: Star Message"] = "It's your birthday today! Happy birthday!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
@@ -219,9 +221,23 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingEmilyBirthday_Emily:3"] = "Anyways I made us some chocolate cake! It's made with all natural ingredients and sweetened with cactus syrup!$h",
                 ["Event:DatingEmilyBirthday_Emily:4"] = "Make a wish @!$h",
                 ["Event:DatingEmilyBirthday_Emily:5"] = "Happy birthday @! I feel a strong fortune energy coming from the spirits for you this year. $l",
-
                 ["Event:DatingEmilyBirthday_Finish:0"] = "It was nice celebrating my birthday with Emily.",
                 ["Event:DatingEmilyBirthday_Finish:1"] = "It looks like there was some leftover cake too!",
+
+                ["Event:DatingHaleyBirthday_Haley:0"] = "Hey, @ you are just in time for the party!$h",
+                ["Event:DatingHaleyBirthday_Haley:1"] = "Well I mean it would be a party, but I thought it would be nice to have something with just the two of us. $l",
+                ["Event:DatingHaleyBirthday_Haley:2"] = "I think birthdays can be pretty fun when you do them right, but I wanted this to be special because... you are special you know?$l",
+                ["Event:DatingHaleyBirthday_Haley:3"] = "Anyways, I got us some cake to eat too! Make sure to make a wish alright?$h",
+                ["Event:DatingHaleyBirthday_Haley:4"] = "Happy Birthday @. I'm so glad we got to spend some time together. Let's take a picture to remember this moment. $l",
+                ["Event:DatingHaleyBirthday_Finish:0"] = "It was nice celebrating my birthday with Haley.",
+                ["Event:DatingHaleyBirthday_Finish:1"] = "It looks like there was some leftover cake too!",
+
+                ["Event:DatingHarveyBirthday_Harvey:0"] = "Hi there, @ you are just in time! Let me clean up a bit.$h",
+                ["Event:DatingHarveyBirthday_Harvey:1"] = "I though it would be nice to have a small celebration for you so I cooked us something special.$l",
+                ["Event:DatingHarveyBirthday_Harvey:2"] = "Don't worry about the wine. A little moderation is needed but this is a special day!$h",
+                ["Event:DatingHarveyBirthday_Harvey:3"] = "Now cheers! Happy Birthday, here is to good health and many more years to come!$l",
+                ["Event:DatingHarveyBirthday_Finish:0"] = "It was nice celebrating my birthday with Harvey.",
+                ["Event:DatingHarveyBirthday_Finish:1"] = "It looks like there was some leftover food too!",
 
                 ["Event:PartyOver"] = "That was a fun party. Back to work!"
 

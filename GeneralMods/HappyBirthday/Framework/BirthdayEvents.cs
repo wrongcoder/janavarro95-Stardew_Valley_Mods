@@ -248,7 +248,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(leah));
 
-            EventHelper e = new EventHelper("BirthdayDating:Leah", 19953, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper("BirthdayDating:Leah", 19954, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(leah,14,11, EventHelper.FacingDirection.Left),
             }));
             e.addObject(11, 11, 220);
@@ -297,7 +297,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(abigail));
 
-            EventHelper e = new EventHelper("BirthdayDating:Abigail", 19953, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper("BirthdayDating:Abigail", 19955, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,36,9, EventHelper.FacingDirection.Left),
                 new EventStartData.NPCData(pierre,33,6, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(caroline,35,5, EventHelper.FacingDirection.Up),
@@ -338,7 +338,7 @@ namespace Omegasis.HappyBirthday.Framework
         }
 
 
-        
+
         public static EventHelper DatingBirthday_Emily()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
@@ -350,7 +350,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(emily));
 
-            EventHelper e = new EventHelper("BirthdayDating:Emily", 19953, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper("BirthdayDating:Emily", 19956, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(emily,20,17, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -380,11 +380,49 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
         }
 
-        /*
+
         public static EventHelper DatingBirthday_Haley()
         {
 
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("HaleyHouse")));
+            conditions.Add(new TimePrecondition(600, 2600));
+
+            NPC haley = Game1.getCharacterFromName("Haley");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(haley));
+
+            EventHelper e = new EventHelper("BirthdayDating:Haley", 19957, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(haley,20,17, EventHelper.FacingDirection.Down),
+            }));
+            e.globalFadeIn();
+
+            //Dialogue here.
+            e.moveFarmerRight(9, EventHelper.FacingDirection.Up, false);
+
+            e.speak(haley, GetTranslatedString("Event:DatingHaleyBirthday_Haley:0"));
+            e.speak(haley, GetTranslatedString("Event:DatingHaleyBirthday_Haley:1"));
+            e.emoteFarmer_Happy();
+            e.speak(haley, GetTranslatedString("Event:DatingHaleyBirthday_Haley:2"));
+            e.speak(haley, GetTranslatedString("Event:DatingHaleyBirthday_Haley:3"));
+            e.emoteFarmer_Thinking();
+            e.speak(haley, GetTranslatedString("Event:DatingHaleyBirthday_Haley:4"));
+
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Haley");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingHaleyBirthday_Finish:0")); //abi party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingHaleyBirthday_Finish:1")); //abi party finish 0
+            e.addObjectToPlayersInventory(221, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
+
         }
+        /*
         public static EventHelper DatingBirthday_Sam()
         {
         
@@ -456,42 +494,82 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
         }
 
-        /*
-            public static EventHelper DatingBirthday_Elliott()
-            {
 
-            }
+        /*
+        public static EventHelper DatingBirthday_Elliott()
+        {
+
+        }
+        
             public static EventHelper DatingBirthday_Shane()
             {
 
             }
-            public static EventHelper DatingBirthday_Harvey()
-            {
-
-            }
-
-            public static EventHelper DatingBirthday_Alex()
-            {
-
-            }
-
-
-            public static EventHelper MarriedBirthday()
-            {
-
-            }
-
-
-            public static EventHelper CommunityBirthday()
-            {
-
-            }
-            
-            public static EventHelper JojaBirthday()
-            {
-
-            }
             */
+        public static EventHelper DatingBirthday_Harvey()
+        {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("HarveyRoom")));
+            conditions.Add(new TimePrecondition(600, 2600));
+
+            NPC harvey = Game1.getCharacterFromName("Harvey");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(harvey));
+
+            EventHelper e = new EventHelper("BirthdayDating:Harvey", 19957, conditions, new EventStartData("playful", 6, 6, new EventStartData.FarmerData(6, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(harvey,3,6, EventHelper.FacingDirection.Down),
+            }));
+            e.globalFadeIn();
+
+            //Dialogue here.
+            e.moveFarmerUp(5, EventHelper.FacingDirection.Up, false);
+            e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
+            e.npcFaceDirection(harvey, EventHelper.FacingDirection.Right);
+            e.speak(harvey, GetTranslatedString("Event:DatingHarveyBirthday_Harvey:0"));
+            e.speak(harvey, GetTranslatedString("Event:DatingHarveyBirthday_Harvey:1"));
+            e.emoteFarmer_QuestionMark();
+            e.speak(harvey, GetTranslatedString("Event:DatingHarveyBirthday_Harvey:2"));
+            e.speak(harvey, GetTranslatedString("Event:DatingHarveyBirthday_Harvey:3"));
+
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Harvey");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingHarveyBirthday_Finish:0")); //abi party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingHarveyBirthday_Finish:1")); //abi party finish 0
+            e.addObjectToPlayersInventory(237, 1, false);
+            e.addObjectToPlayersInventory(348, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
+        }
+
+        /*
+        public static EventHelper DatingBirthday_Alex()
+        {
+
+        }
+
+
+        public static EventHelper MarriedBirthday()
+        {
+
+        }
+
+
+        public static EventHelper CommunityBirthday()
+        {
+
+        }
+
+        public static EventHelper JojaBirthday()
+        {
+
+        }
+        */
+
 
         public static string GetTranslatedString(string Key)
         {
