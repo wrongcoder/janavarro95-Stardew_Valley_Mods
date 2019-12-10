@@ -257,7 +257,7 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerRight(5, EventHelper.FacingDirection.Down, false);
             e.npcFaceDirection(leah, EventHelper.FacingDirection.Up);
             e.speak(leah, GetTranslatedString("Event:DatingLeahBirthday_Leah:0")); //0
-            e.moveFarmerDown(2, EventHelper.FacingDirection.Down, false) ;
+            e.moveFarmerDown(2, EventHelper.FacingDirection.Down, false);
             e.moveFarmerRight(1, EventHelper.FacingDirection.Down, false);
             e.moveFarmerDown(1, EventHelper.FacingDirection.Down, false);
             e.speak(leah, GetTranslatedString("Event:DatingLeahBirthday_Leah:1")); //1
@@ -279,7 +279,11 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
         }
 
-        
+        /// <summary>
+        /// Birthday event for when the player is dating Abigail.
+        /// Finished.
+        /// </summary>
+        /// <returns></returns>
         public static EventHelper DatingBirthday_Abigail()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
@@ -293,7 +297,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(abigail));
 
-            EventHelper e = new EventHelper("BirthdayDating:Abigail", 19953, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31,11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper("BirthdayDating:Abigail", 19953, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,36,9, EventHelper.FacingDirection.Left),
                 new EventStartData.NPCData(pierre,33,6, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(caroline,35,5, EventHelper.FacingDirection.Up),
@@ -332,11 +336,51 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
 
         }
-        /*
+
+
+        
         public static EventHelper DatingBirthday_Emily()
         {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("HaleyHouse")));
+            conditions.Add(new TimePrecondition(600, 2600));
 
+            NPC emily = Game1.getCharacterFromName("Emily");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(emily));
+
+            EventHelper e = new EventHelper("BirthdayDating:Emily", 19953, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(emily,20,17, EventHelper.FacingDirection.Down),
+            }));
+            e.globalFadeIn();
+
+            //Dialogue here.
+            e.moveFarmerRight(9, EventHelper.FacingDirection.Up, false);
+
+            e.speak(emily, GetTranslatedString("Event:DatingEmilyBirthday_Emily:0")); //emi 0
+            e.speak(emily, GetTranslatedString("Event:DatingEmilyBirthday_Emily:1")); //emi 0
+            e.emoteFarmer_Happy();
+            e.speak(emily, GetTranslatedString("Event:DatingEmilyBirthday_Emily:2")); //emi 0
+            e.speak(emily, GetTranslatedString("Event:DatingEmilyBirthday_Emily:3")); //emi 0
+            e.speak(emily, GetTranslatedString("Event:DatingEmilyBirthday_Emily:4")); //emi 0
+            e.emoteFarmer_Thinking();
+            e.speak(emily, GetTranslatedString("Event:DatingEmilyBirthday_Emily:5")); //emi 0
+
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Emily");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingEmilyBirthday_Finish:0")); //abi party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingEmilyBirthday_Finish:1")); //abi party finish 0
+            e.addObjectToPlayersInventory(220, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
         }
+
+        /*
         public static EventHelper DatingBirthday_Haley()
         {
 

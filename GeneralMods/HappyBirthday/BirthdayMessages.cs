@@ -145,6 +145,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "Hey @. ^ Could you come by my place later? My family and I decided to have a birthday party for you to celebrate. ^^      -Sebastian",
                 ["Mail:birthdayDatingLeah"] = "Hey @. ^ Could you come by my place later? I thought it would be nice if we had a small party for you. ^Sincerly,^      -Leah",
                 ["Mail:birthdayDatingAbigail"] = "Hey @. ^ My family and I decided to have a birthday party for you at our place. Could you come by our house sometime today?^Sincerly,^      -Abigail",
+                ["Mail:birthdayDatingEmily"] = "Hi @. ^ I thought it would be nice to have a birthday party for you at our place. Could you come by my house sometime today?^Sincerly,^      -Emily",
 
                 ["Happy Birthday: Star Message"] = "It's your birthday today! Happy birthday!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
@@ -211,6 +212,16 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "Well of course it would be. It was made from the *highest* quality ingredients from the store! $h",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "It was nice celebrating my birthday with Abigail and her family.",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "It looks like there was some leftover cake too!",
+
+                ["Event:DatingEmilyBirthday_Emily:0"] = "Hi, @ you are just in time for the celebration.$h",
+                ["Event:DatingEmilyBirthday_Emily:1"] = "I thought it would be nice to have a small party in your honor.",
+                ["Event:DatingEmilyBirthday_Emily:2"] = "Somehow I feel like birthdays are an important reminder for us to live in the moment and live with the harmony of nature.",
+                ["Event:DatingEmilyBirthday_Emily:3"] = "Anyways I made us some chocolate cake! It's made with all natural ingredients and sweetened with cactus syrup!$h",
+                ["Event:DatingEmilyBirthday_Emily:4"] = "Make a wish @!$h",
+                ["Event:DatingEmilyBirthday_Emily:5"] = "Happy birthday @! I feel a strong fortune energy coming from the spirits for you this year. $l",
+
+                ["Event:DatingEmilyBirthday_Finish:0"] = "It was nice celebrating my birthday with Emily.",
+                ["Event:DatingEmilyBirthday_Finish:1"] = "It looks like there was some leftover cake too!",
 
                 ["Event:PartyOver"] = "That was a fun party. Back to work!"
 
