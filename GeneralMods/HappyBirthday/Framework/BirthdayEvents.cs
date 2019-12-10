@@ -422,12 +422,45 @@ namespace Omegasis.HappyBirthday.Framework
             return e;
 
         }
-        /*
+        
         public static EventHelper DatingBirthday_Sam()
         {
-        
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("SamHouse")));
+            conditions.Add(new TimePrecondition(600, 2600));
+
+            NPC sam = Game1.getCharacterFromName("Sam");
+
+            //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(sam));
+
+            EventHelper e = new EventHelper("BirthdayDating:Sam", 19959, conditions, new EventStartData("playful", 3, 6, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(sam,3,5, EventHelper.FacingDirection.Down),
+            }));
+            e.globalFadeIn();
+
+            //Dialogue here.
+            e.moveFarmerUp(4, EventHelper.FacingDirection.Up, false);
+            e.moveFarmerLeft(3, EventHelper.FacingDirection.Left, false);
+            e.npcFaceDirection(sam, EventHelper.FacingDirection.Right);
+
+            e.speak(sam, GetTranslatedString("Event:DatingSamBirthday_Sam:0"));
+            e.speak(sam, GetTranslatedString("Event:DatingSamBirthday_Sam:1"));
+            e.speak(sam, GetTranslatedString("Event:DatingSamBirthday_Sam:2"));
+            e.speak(sam, GetTranslatedString("Event:DatingSamBirthday_Sam:3"));
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Sam");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingSamBirthday_Finish:0")); //sam party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingSamBirthday_Finish:1")); //sam party finish 0
+            e.addObjectToPlayersInventory(206, 1, false);
+            e.addObjectToPlayersInventory(167, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
         }
-        */
+        
         /// <summary>
         /// Event that occurs when the player is dating Sebastian.
         /// Status: Finished.
@@ -505,9 +538,9 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC elliott = Game1.getCharacterFromName("Elliott");
 
-            //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(elliott));
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(elliott));
 
-            EventHelper e = new EventHelper("BirthdayDating:Elliott", 19957, conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper("BirthdayDating:Elliott", 19958, conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(elliott,3,5, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();

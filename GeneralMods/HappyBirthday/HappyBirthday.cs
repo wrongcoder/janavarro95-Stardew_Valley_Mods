@@ -152,6 +152,11 @@ namespace Omegasis.HappyBirthday
                 EventHelper eve = this.eventManager.getEvent("BirthdayDating:Elliott");
                 eve.startEventAtLocationifPossible();
             }
+            if (e.NewLocation == Game1.getLocationFromName("SamHouse"))
+            {
+                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Sam");
+                eve.startEventAtLocationifPossible();
+            }
         }
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
@@ -187,6 +192,7 @@ namespace Omegasis.HappyBirthday
             data["birthdayDatingHaley"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingHaley");
             data["birthdayDatingHarvey"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingHarvey");
             data["birthdayDatingElliott"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingElliott");
+            data["birthdayDatingSam"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingSam");
         }
 
 
@@ -648,6 +654,10 @@ namespace Omegasis.HappyBirthday
             {
                 Game1.player.mailReceived.Remove("birthdayDatingElliott");
             }
+            if (Game1.player.mailReceived.Contains("birthdayDatingSam"))
+            {
+                Game1.player.mailReceived.Remove("birthdayDatingSam");
+            }
 
 
             EventHelper communityCenterJunimoBirthday = BirthdayEvents.CommunityCenterJunimoBirthday();
@@ -660,6 +670,7 @@ namespace Omegasis.HappyBirthday
             EventHelper birthdayDating_Haley = BirthdayEvents.DatingBirthday_Haley();
             EventHelper birthdayDating_Harvey = BirthdayEvents.DatingBirthday_Harvey();
             EventHelper birthdayDating_Elliott = BirthdayEvents.DatingBirthday_Elliott();
+            EventHelper birthdayDating_Sam = BirthdayEvents.DatingBirthday_Sam();
 
             this.eventManager.addEvent(communityCenterJunimoBirthday);
             this.eventManager.addEvent(birthdayDating_Penny);
@@ -671,6 +682,7 @@ namespace Omegasis.HappyBirthday
             this.eventManager.addEvent(birthdayDating_Haley);
             this.eventManager.addEvent(birthdayDating_Harvey);
             this.eventManager.addEvent(birthdayDating_Elliott);
+            this.eventManager.addEvent(birthdayDating_Sam);
             if (Game1.player.eventsSeen.Contains(communityCenterJunimoBirthday.getEventID()))
             {
                 Game1.player.eventsSeen.Remove(communityCenterJunimoBirthday.getEventID()); //Repeat the event.
@@ -710,6 +722,10 @@ namespace Omegasis.HappyBirthday
             if (Game1.player.eventsSeen.Contains(birthdayDating_Elliott.getEventID()))
             {
                 Game1.player.eventsSeen.Remove(birthdayDating_Elliott.getEventID()); //Repeat the event.
+            }
+            if (Game1.player.eventsSeen.Contains(birthdayDating_Sam.getEventID()))
+            {
+                Game1.player.eventsSeen.Remove(birthdayDating_Sam.getEventID()); //Repeat the event.
             }
         }
 
