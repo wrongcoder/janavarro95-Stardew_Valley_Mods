@@ -495,11 +495,44 @@ namespace Omegasis.HappyBirthday.Framework
         }
 
 
-        /*
+        
         public static EventHelper DatingBirthday_Elliott()
         {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("ElliottHouse")));
+            conditions.Add(new TimePrecondition(600, 2600));
 
+            NPC elliott = Game1.getCharacterFromName("Elliott");
+
+            //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(elliott));
+
+            EventHelper e = new EventHelper("BirthdayDating:Elliott", 19957, conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(elliott,3,5, EventHelper.FacingDirection.Down),
+            }));
+            e.globalFadeIn();
+
+            //Dialogue here.
+            e.moveFarmerUp(2, EventHelper.FacingDirection.Up, false);
+            e.speak(elliott, GetTranslatedString("Event:DatingElliottBirthday_Elliott:0"));
+            e.speak(elliott, GetTranslatedString("Event:DatingElliottBirthday_Elliott:1"));
+            e.speak(elliott, GetTranslatedString("Event:DatingElliottBirthday_Elliott:2"));
+            e.speak(elliott, GetTranslatedString("Event:DatingElliottBirthday_Elliott:3"));
+            e.speak(elliott, GetTranslatedString("Event:DatingElliottBirthday_Elliott:4"));
+            e.emoteFarmer_Thinking();
+            e.speak(elliott, GetTranslatedString("Event:DatingElliottBirthday_Elliott:5"));
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Elliott");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingElliottBirthday_Finish:0")); //abi party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingElliottBirthday_Finish:1")); //abi party finish 0
+            e.addObjectToPlayersInventory(220, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
         }
+        /*
         
             public static EventHelper DatingBirthday_Shane()
             {
