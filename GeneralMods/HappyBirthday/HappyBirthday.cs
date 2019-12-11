@@ -117,6 +117,11 @@ namespace Omegasis.HappyBirthday
                 EventHelper eve = this.eventManager.getEvent("BirthdayDating:Penny");
                 eve.startEventAtLocationifPossible();
             }
+            if (e.NewLocation == Game1.getLocationFromName("Trailer_Big"))
+            {
+                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Penny_BigHome");
+                eve.startEventAtLocationifPossible();
+            }
 
             if (e.NewLocation == Game1.getLocationFromName("ScienceHouse"))
             {
@@ -157,6 +162,16 @@ namespace Omegasis.HappyBirthday
                 EventHelper eve = this.eventManager.getEvent("BirthdayDating:Sam");
                 eve.startEventAtLocationifPossible();
             }
+            if (e.NewLocation == Game1.getLocationFromName("JoshHouse"))
+            {
+                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Alex");
+                eve.startEventAtLocationifPossible();
+            }
+            if (e.NewLocation == Game1.getLocationFromName("AnimalShop"))
+            {
+                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Shane");
+                eve.startEventAtLocationifPossible();
+            }
         }
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
@@ -193,6 +208,8 @@ namespace Omegasis.HappyBirthday
             data["birthdayDatingHarvey"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingHarvey");
             data["birthdayDatingElliott"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingElliott");
             data["birthdayDatingSam"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingSam");
+            data["birthdayDatingAlex"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingAlex");
+            data["birthdayDatingShane"] = BirthdayMessages.GetTranslatedString("Mail:birthdayDatingShane");
         }
 
 
@@ -598,7 +615,10 @@ namespace Omegasis.HappyBirthday
             this.MigrateLegacyData();
             this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
 
-            
+            if (HappyBirthday.Config.autoSetTranslation)
+            {
+                HappyBirthday.Config.translationInfo.setTranslationFromLanguageCode(Game1.content.GetCurrentLanguage());
+            }
 
             if (PlayerBirthdayData != null)
             {
@@ -658,10 +678,19 @@ namespace Omegasis.HappyBirthday
             {
                 Game1.player.mailReceived.Remove("birthdayDatingSam");
             }
+            if (Game1.player.mailReceived.Contains("birthdayDatingAlex"))
+            {
+                Game1.player.mailReceived.Remove("birthdayDatingAlex");
+            }
+            if (Game1.player.mailReceived.Contains("birthdayDatingShane"))
+            {
+                Game1.player.mailReceived.Remove("birthdayDatingShane");
+            }
 
 
             EventHelper communityCenterJunimoBirthday = BirthdayEvents.CommunityCenterJunimoBirthday();
             EventHelper birthdayDating_Penny = BirthdayEvents.DatingBirthday_Penny();
+            EventHelper birthdayDating_Penny_Big = BirthdayEvents.DatingBirthday_Penny_BigHome();
             EventHelper birthdayDating_Maru = BirthdayEvents.DatingBirthday_Maru();
             EventHelper birthdayDating_Sebastian = BirthdayEvents.DatingBirthday_Sebastian();
             EventHelper birthdayDating_Leah = BirthdayEvents.DatingBirthday_Leah();
@@ -671,9 +700,12 @@ namespace Omegasis.HappyBirthday
             EventHelper birthdayDating_Harvey = BirthdayEvents.DatingBirthday_Harvey();
             EventHelper birthdayDating_Elliott = BirthdayEvents.DatingBirthday_Elliott();
             EventHelper birthdayDating_Sam = BirthdayEvents.DatingBirthday_Sam();
+            EventHelper birthdayDating_Alex = BirthdayEvents.DatingBirthday_Alex();
+            EventHelper birthdayDating_Shane = BirthdayEvents.DatingBirthday_Shane();
 
             this.eventManager.addEvent(communityCenterJunimoBirthday);
             this.eventManager.addEvent(birthdayDating_Penny);
+            this.eventManager.addEvent(birthdayDating_Penny_Big);
             this.eventManager.addEvent(birthdayDating_Maru);
             this.eventManager.addEvent(birthdayDating_Sebastian);
             this.eventManager.addEvent(birthdayDating_Leah);
@@ -683,6 +715,7 @@ namespace Omegasis.HappyBirthday
             this.eventManager.addEvent(birthdayDating_Harvey);
             this.eventManager.addEvent(birthdayDating_Elliott);
             this.eventManager.addEvent(birthdayDating_Sam);
+            this.eventManager.addEvent(birthdayDating_Shane);
             if (Game1.player.eventsSeen.Contains(communityCenterJunimoBirthday.getEventID()))
             {
                 Game1.player.eventsSeen.Remove(communityCenterJunimoBirthday.getEventID()); //Repeat the event.
@@ -726,6 +759,14 @@ namespace Omegasis.HappyBirthday
             if (Game1.player.eventsSeen.Contains(birthdayDating_Sam.getEventID()))
             {
                 Game1.player.eventsSeen.Remove(birthdayDating_Sam.getEventID()); //Repeat the event.
+            }
+            if (Game1.player.eventsSeen.Contains(birthdayDating_Alex.getEventID()))
+            {
+                Game1.player.eventsSeen.Remove(birthdayDating_Alex.getEventID()); //Repeat the event.
+            }
+            if (Game1.player.eventsSeen.Contains(birthdayDating_Shane.getEventID()))
+            {
+                Game1.player.eventsSeen.Remove(birthdayDating_Shane.getEventID()); //Repeat the event.
             }
         }
 
@@ -846,6 +887,28 @@ namespace Omegasis.HappyBirthday
                         if (Game1.player.friendshipData["Elliott"].IsDating())
                         {
                             Game1.player.mailbox.Add("birthdayDatingElliott");
+                        }
+                    }
+
+                    if (Game1.player.friendshipData.ContainsKey("Sam"))
+                    {
+                        if (Game1.player.friendshipData["Sam"].IsDating())
+                        {
+                            Game1.player.mailbox.Add("birthdayDatingSam");
+                        }
+                    }
+                    if (Game1.player.friendshipData.ContainsKey("Alex"))
+                    {
+                        if (Game1.player.friendshipData["Alex"].IsDating())
+                        {
+                            Game1.player.mailbox.Add("birthdayDatingAlex");
+                        }
+                    }
+                    if (Game1.player.friendshipData.ContainsKey("Shane"))
+                    {
+                        if (Game1.player.friendshipData["Shane"].IsDating())
+                        {
+                            Game1.player.mailbox.Add("birthdayDatingShane");
                         }
                     }
 
