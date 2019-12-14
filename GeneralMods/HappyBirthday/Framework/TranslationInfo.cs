@@ -220,11 +220,10 @@ namespace Omegasis.HappyBirthday.Framework
 
         public string getTranslatedString(string Key)
         {
-
+            if (string.IsNullOrEmpty(Key)) return "";
             if (Key.Equals("Birthday"))
             {
-                string s = Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
-                s = s.Split(' ')[0];
+                string s = Game1.content.LoadString("Strings\\UI:Profile_Birthday");
                 return s;
             }
             if (Key.Equals("Spring") || Key.Equals("spring"))

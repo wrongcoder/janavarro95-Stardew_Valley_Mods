@@ -2260,5 +2260,48 @@ namespace Omegasis.HappyBirthday
             }
             return b.ToString();
         }
+
+
+        public string getBirthdayMessage(string NPC)
+        {
+            if (Game1.player.friendshipData.ContainsKey(NPC))
+            {
+                if (Game1.player.getSpouse() != null) {
+                    if (Game1.player.getSpouse().Name.Equals(NPC))
+                    {
+                        if (string.IsNullOrEmpty(this.spouseBirthdayWishes[NPC]))
+                        {
+                            return this.generateSpouseBirthdayDialogue(NPC);
+                        }
+                        else
+                        {
+                            return this.spouseBirthdayWishes[NPC];
+                        }
+                    }
+                    else
+                    {
+                        if (this.birthdayWishes.ContainsKey(NPC))
+                        {
+                            return this.birthdayWishes[NPC];
+                        }
+                    }
+                }
+
+            }
+            else
+            {
+                if (this.birthdayWishes.ContainsKey(NPC))
+                {
+                    return this.birthdayWishes[NPC];
+                }
+                else
+                {
+                    return "Happy birthday @!";
+                }
+            }
+            return "Happy birthday @!";
+        }
     }
 }
+
+

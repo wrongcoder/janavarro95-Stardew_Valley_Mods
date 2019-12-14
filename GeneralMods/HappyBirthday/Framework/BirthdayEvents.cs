@@ -636,7 +636,7 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(shane));
 
             EventHelper e = new EventHelper("BirthdayDating:Shane", 19960, conditions, new EventStartData("playful", 26, 15, new EventStartData.FarmerData(19, 18, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
-                new EventStartData.NPCData(shane,3,19, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(shane,25,16, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
 

@@ -36,6 +36,9 @@ namespace Omegasis.SaveAnywhere.Framework
         private NewSaveGameMenu currentSaveMenu;
 
 
+        public Dictionary<string, Action> beforeCustomSavingBegins;
+        public Dictionary<string, Action> afterCustomSavingCompleted;
+        public Dictionary<string, Action> afterSaveLoaded;
 
         /*********
         ** Public methods
@@ -49,6 +52,10 @@ namespace Omegasis.SaveAnywhere.Framework
             this.Helper = helper;
             this.Reflection = reflection;
             this.OnLoaded = onLoaded;
+
+            this.beforeCustomSavingBegins = new Dictionary<string, Action>();
+            this.afterCustomSavingCompleted = new Dictionary<string, Action>();
+            this.afterSaveLoaded = new Dictionary<string, Action>();
 
         }
 
@@ -74,7 +81,12 @@ namespace Omegasis.SaveAnywhere.Framework
         {
             this.currentSaveMenu.SaveComplete -= this.CurrentSaveMenu_SaveComplete;
             this.currentSaveMenu = null;
+            SaveAnywhere.RestoreMonsters();
             //AfterSave.Invoke(this, EventArgs.Empty);
+            foreach (var v in this.afterCustomSavingCompleted)
+            {
+                v.Value.Invoke();
+            }
         }
 
         /// <summary>Clear saved data.</summary>
@@ -87,16 +99,31 @@ namespace Omegasis.SaveAnywhere.Framework
             this.RemoveLegacyDataForThisPlayer();
         }
 
+        /// <summary>
+        /// Checks to see if a custom save file exists for the player.
+        /// </summary>
+        /// <returns></returns>
+        public bool saveDataExists()
+        {
+            return File.Exists(Path.Combine(this.Helper.DirectoryPath, this.RelativeDataPath));
+        }
+
         /// <summary>Initiate a game save.</summary>
         public void BeginSaveData()
         {
+
+            foreach(var v in this.beforeCustomSavingBegins)
+            {
+                v.Value.Invoke();
+            }
+
             // save game data
             Farm farm = Game1.getFarm();
-            if (farm.shippingBin.Any())
+            if (farm.getShippingBin(Game1.player)!=null)
             {
 
-                Game1.activeClickableMenu = new NewShippingMenu(farm.shippingBin, this.Reflection);
-                farm.shippingBin.Clear();
+                Game1.activeClickableMenu = new NewShippingMenu(farm.getShippingBin(Game1.player), this.Reflection);
+                farm.getShippingBin(Game1.player).Clear();
                 farm.lastItemShipped = null;
                 this.WaitingToSave = true;
             }
@@ -134,6 +161,10 @@ namespace Omegasis.SaveAnywhere.Framework
             this.ResumeSwimming(data);
             this.SetPositions(data.Characters);
             this.OnLoaded?.Invoke();
+            foreach (var v in this.afterSaveLoaded)
+            {
+                v.Value.Invoke();
+            }
 
             // Notify other mods that load is complete
             //AfterLoad.Invoke(this, EventArgs.Empty);
@@ -197,7 +228,7 @@ namespace Omegasis.SaveAnywhere.Framework
         {
             // player
             {
-                CharacterData data = positions.FirstOrDefault(p => p.Type == CharacterType.Player && p.Name == Game1.player.Name);
+                CharacterData data = positions.FirstOrDefault(p => p.Type == CharacterType.Player && p.Name.Equals(Game1.player.Name));
                 if (data != null)
                 {
                     Game1.player.previousLocationName = Game1.player.currentLocation.Name;

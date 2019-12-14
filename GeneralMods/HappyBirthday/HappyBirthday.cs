@@ -96,6 +96,7 @@ namespace Omegasis.HappyBirthday
             helper.Events.Multiplayer.PeerDisconnected += this.Multiplayer_PeerDisconnected;
             helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
             helper.Events.Player.Warped += this.Player_Warped;
+            helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
 
@@ -103,6 +104,11 @@ namespace Omegasis.HappyBirthday
 
             this.eventManager = new EventManager();
 
+        }
+
+        private void GameLoop_ReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
+        {
+            this.eventManager = new EventManager();
         }
 
         private void Player_Warped(object sender, WarpedEventArgs e)
@@ -416,132 +422,8 @@ namespace Omegasis.HappyBirthday
                                 if ((Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.Name) < Config.minimumFriendshipLevelForBirthdayWish)) return;
                                 if (Game1.activeClickableMenu is StardewValley.Menus.DialogueBox && this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish==false && (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.Name) >= Config.minimumFriendshipLevelForBirthdayWish))
                                 {
-                                    IReflectedField < Dialogue > cDialogue= this.Helper.Reflection.GetField<Dialogue>((Game1.activeClickableMenu as DialogueBox), "characterDialogue", true);
-                                    IReflectedField<List<string>> dialogues = this.Helper.Reflection.GetField<List<string>>((Game1.activeClickableMenu as DialogueBox), "dialogues", true);
-                                    string dialogueMessage = "";
-                                    if (Game1.player.getSpouse() != null)
-                                    {
-                                        if (Game1.player.getSpouse().Name.Equals(Game1.currentSpeaker.Name))
-                                        {
-                                            if (this.messages.spouseBirthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
-                                            {
-                                                dialogueMessage = this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name];
-                                                if (string.IsNullOrEmpty(dialogueMessage))
-                                                {
-                                                    dialogueMessage = this.messages.generateSpouseBirthdayDialogue(Game1.currentSpeaker.Name);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                dialogueMessage = this.messages.generateSpouseBirthdayDialogue(Game1.currentSpeaker.Name);
-                                                if (string.IsNullOrEmpty(dialogueMessage))
-                                                {
-                                                    dialogueMessage = "Happy Birthday @!";
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (this.messages.birthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
-                                            {
-
-                                                dialogueMessage = this.messages.birthdayWishes[Game1.currentSpeaker.Name];
-                                            }
-                                            else
-                                            {
-                                                dialogueMessage = "Happy Birthday @!";
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (this.messages.birthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
-                                        {
-
-                                            dialogueMessage = this.messages.birthdayWishes[Game1.currentSpeaker.Name];
-                                        }
-                                        else
-                                        {
-                                            dialogueMessage = "Happy Birthday @!";
-                                        }
-                                    }
-                                    dialogueMessage = dialogueMessage.Replace("@", Game1.player.Name);
-
-
-                                    if (dialogues.GetValue().Contains(dialogueMessage))
-                                    {
-                                        string name = Game1.currentSpeaker.Name;
-                                        this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
-                                        /*
-                                        if (this.IsBirthday() && this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayGift==false && Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel)
-                                        {
-                                            try
-                                            {
-                                                this.giftManager.SetNextBirthdayGift(Game1.currentSpeaker.Name);
-                                                this.Monitor.Log("Setting next birthday gift.");
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                                            }
-                                        }
-                                        */
-                                        return;
-                                    }
-                                    if (cDialogue.GetValue() != null)
-                                    {
-                                        if (cDialogue.GetValue().getCurrentDialogue() == dialogueMessage)
-                                        {
-                                            string name = Game1.currentSpeaker.Name;
-                                            this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
-                                            
-                                            if (this.IsBirthday() && this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayGift == false && Game1.player.getFriendshipHeartLevelForNPC(name) >= Config.minNeutralFriendshipGiftLevel)
-                                            {
-                                                try
-                                                {
-                                                    this.giftManager.SetNextBirthdayGift(Game1.currentSpeaker.Name);
-                                                    this.Monitor.Log("Setting next birthday gift. 3");
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                                                }
-                                            }
-                                            
-                                            
-                                            return;
-                                        }
-                                    }
-                                    Dialogue d;
-                                    if (Game1.player.getSpouse() != null)
-                                    {
-                                        if (this.messages.spouseBirthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
-                                        {
-                                            if (string.IsNullOrEmpty(this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name])== false){
-                                                d = new Dialogue(this.messages.spouseBirthdayWishes[Game1.currentSpeaker.Name], Game1.currentSpeaker);
-                                            }
-                                            else
-                                            {
-                                                d =new Dialogue(this.messages.generateSpouseBirthdayDialogue(Game1.currentSpeaker.Name),Game1.currentSpeaker);
-                                            }
-                                            
-                                        }
-                                        else
-                                        {
-                                            d = new Dialogue("Happy Birthday @!", Game1.currentSpeaker);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (this.messages.birthdayWishes.ContainsKey(Game1.currentSpeaker.Name))
-                                        {
-                                            d = new Dialogue(this.messages.birthdayWishes[Game1.currentSpeaker.Name], Game1.currentSpeaker);
-                                        }
-                                        else
-                                        {
-                                            d = new Dialogue("Happy Birthday @!", Game1.currentSpeaker);
-                                        }
-                                    }
+                                    //IReflectedField < Dialogue > cDialogue= this.Helper.Reflection.GetField<Dialogue>((Game1.activeClickableMenu as DialogueBox), "characterDialogue", true);
+                                    //IReflectedField<List<string>> dialogues = this.Helper.Reflection.GetField<List<string>>((Game1.activeClickableMenu as DialogueBox), "dialogues", true);
                                     Game1.currentSpeaker.resetCurrentDialogue();
                                     Game1.currentSpeaker.resetSeasonalDialogue();
                                     this.Helper.Reflection.GetMethod(Game1.currentSpeaker, "loadCurrentDialogue", true).Invoke();
@@ -558,7 +440,8 @@ namespace Omegasis.HappyBirthday
                                             this.Monitor.Log(ex.ToString(), LogLevel.Error);
                                         }
                                     }
-                                    Game1.activeClickableMenu = new DialogueBox(d);
+
+                                    Game1.activeClickableMenu = new DialogueBox(new Dialogue(this.messages.getBirthdayMessage(Game1.currentSpeaker.Name),Game1.currentSpeaker));
                                     this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
 
                                     // Set birthday gift for the player to recieve from the npc they are currently talking with.
@@ -612,7 +495,8 @@ namespace Omegasis.HappyBirthday
             this.CheckedForBirthday = false;
 
             // load settings
-            this.MigrateLegacyData();
+            //
+            //this.MigrateLegacyData();
             this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
 
             if (HappyBirthday.Config.autoSetTranslation)
@@ -622,7 +506,7 @@ namespace Omegasis.HappyBirthday
 
             if (PlayerBirthdayData != null)
             {
-                ModMonitor.Log("Send all birthday information from " + Game1.player.Name);
+                //ModMonitor.Log("Send all birthday information from " + Game1.player.Name);
                 MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
             }
 
@@ -715,6 +599,7 @@ namespace Omegasis.HappyBirthday
             this.eventManager.addEvent(birthdayDating_Harvey);
             this.eventManager.addEvent(birthdayDating_Elliott);
             this.eventManager.addEvent(birthdayDating_Sam);
+            this.eventManager.addEvent(birthdayDating_Alex);
             this.eventManager.addEvent(birthdayDating_Shane);
             if (Game1.player.eventsSeen.Contains(communityCenterJunimoBirthday.getEventID()))
             {
@@ -815,7 +700,7 @@ namespace Omegasis.HappyBirthday
                     string starMessage = BirthdayMessages.GetTranslatedString("Happy Birthday: Star Message");
 
 
-                    ModMonitor.Log(starMessage);
+                    //ModMonitor.Log(starMessage);
                     Messages.ShowStarMessage(starMessage);
                     MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
                     
@@ -912,7 +797,6 @@ namespace Omegasis.HappyBirthday
                         }
                     }
 
-
                     if (Game1.player.CanReadJunimo())
                     {
                         Game1.player.mailbox.Add("birthdayJunimos");
@@ -925,64 +809,10 @@ namespace Omegasis.HappyBirthday
                         {
                             if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
                                 continue;
-
-                            //Add in birthday dialogues for npc.
-                            try
-                            {
-                                if (Game1.player.getFriendshipHeartLevelForNPC(npc.Name) >= Config.minimumFriendshipLevelForBirthdayWish)
-                                {
-                                    bool spouseMessage = false; //Used to determine if there is a valid spouse message for the player. If false load in the generic birthday wish.
-                                    //Check if npc name is spouse's name. If no spouse then add in generic dialogue.
-                                    if (this.messages.spouseBirthdayWishes.ContainsKey(npc.Name) && Game1.player.isMarried())
-                                    {
-                                        if (Game1.player.getSpouse().Name.Equals(npc.Name))
-                                        {
-                                            //this.Monitor.Log("Spouse Checks out");
-                                            //Check to see if spouse message exists.
-                                            if (!string.IsNullOrEmpty(this.messages.spouseBirthdayWishes[npc.Name]))
-                                            {
-                                                spouseMessage = true;
-
-                                                string message = this.messages.spouseBirthdayWishes[npc.Name];
-                                                if (string.IsNullOrEmpty(message))
-                                                {
-                                                    message = this.messages.generateSpouseBirthdayDialogue(npc.Name);
-                                                }
-                                                Dialogue d = new Dialogue(message, npc);
-                                                npc.CurrentDialogue.Push(d);
-                                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
-                                            }
-                                            else
-                                            {
-                                                string message = this.messages.generateSpouseBirthdayDialogue(npc.Name);
-                                                Dialogue d = new Dialogue(message, npc);
-                                                npc.CurrentDialogue.Push(d);
-                                                if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
-                                                spouseMessage = true;
-                                                this.Monitor.Log("No spouse message???", LogLevel.Warn);
-                                            }
-                                        }
-
-                                    }
-                                    if (!spouseMessage)
-                                    {
-                                        //Load in 
-                                        Dialogue d = new Dialogue(this.messages.birthdayWishes[npc.Name], npc);
-                                        npc.CurrentDialogue.Push(d);
-                                        if (npc.CurrentDialogue.Peek() != d) npc.setNewDialogue(this.messages.birthdayWishes[npc.Name]);
-                                    }
-                                }
-                            }
-                            catch
-                            {
-                                if (Game1.player.getFriendshipHeartLevelForNPC(npc.Name) >= Config.minimumFriendshipLevelForBirthdayWish)
-                                {
-                                    Dialogue d = new Dialogue("Happy Birthday @!", npc);
-                                    npc.CurrentDialogue.Push(d);
-                                    if (npc.CurrentDialogue.Peek() != d)
-                                        npc.setNewDialogue("Happy Birthday @!");
-                                }
-                            }
+                            string message = this.messages.getBirthdayMessage(npc.Name);
+                            Dialogue d = new Dialogue(message, npc);
+                            npc.CurrentDialogue.Push(d);
+                            if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
                         }
                     }
                 }
@@ -1034,9 +864,10 @@ namespace Omegasis.HappyBirthday
         {
             return
                 this.PlayerData.BirthdayDay == Game1.dayOfMonth
-                && this.PlayerData.BirthdaySeason.Equals(Game1.currentSeason);
+                && this.PlayerData.BirthdaySeason.ToLower().Equals(Game1.currentSeason.ToLower());
         }
 
+        /*
         /// <summary>Migrate the legacy settings for the current player.</summary>
         private void MigrateLegacyData()
         {
@@ -1072,5 +903,6 @@ namespace Omegasis.HappyBirthday
                 }
             }
         }
+        */
     }
 }
