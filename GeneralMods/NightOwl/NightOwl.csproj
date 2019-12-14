@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\NightFishing.cs" />
+    <Compile Include="Framework\NightOwlAPI.cs" />
     <Compile Include="NightOwl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

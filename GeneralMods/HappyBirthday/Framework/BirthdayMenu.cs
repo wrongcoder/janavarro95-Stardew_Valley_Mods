@@ -27,6 +27,7 @@ namespace Omegasis.HappyBirthday.Framework
 
         /// <summary>The player's current birthday season.</summary>
         private string BirthdaySeason;
+        private string seasonName;
 
         /// <summary>The player's current birthday day.</summary>
         private int BirthdayDay;
@@ -45,7 +46,8 @@ namespace Omegasis.HappyBirthday.Framework
         public BirthdayMenu(string season, int day, Action<string, int> onChanged)
             : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize)
         {
-            this.BirthdaySeason = season;
+            this.BirthdaySeason = HappyBirthday.Config.translationInfo.getTranslatedString(season);
+            this.seasonName = season;
             this.BirthdayDay = day;
             this.OnChanged = onChanged;
             this.SetUpPositions();
@@ -73,13 +75,14 @@ namespace Omegasis.HappyBirthday.Framework
             this.DayButtons.Clear();
             this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
 
-            this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8, 1, 1), "Birthday Season: " + this.BirthdaySeason));
-            this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize, Game1.tileSize * 2, Game1.tileSize), "Birthday Date: " + this.BirthdayDay));
-            this.SeasonButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(188, 438, 32, 9), Game1.pixelZoom));
-            this.SeasonButtons.Add(new ClickableTextureComponent("Summer", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(220, 438, 32, 8), Game1.pixelZoom));
-            this.SeasonButtons.Add(new ClickableTextureComponent("Fall", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(188, 447, 32, 10), Game1.pixelZoom));
-            this.SeasonButtons.Add(new ClickableTextureComponent("Winter", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, new Rectangle(220, 448, 32, 8), Game1.pixelZoom));
-
+            string bdaySeason = HappyBirthday.Config.translationInfo.getTranslatedString("Birthday") + " " + HappyBirthday.Config.translationInfo.getTranslatedString("Season");
+            string bdayDay= HappyBirthday.Config.translationInfo.getTranslatedString("Birthday") + " " + HappyBirthday.Config.translationInfo.getTranslatedString("Date");
+            this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8, 1, 1), bdaySeason+": " + this.BirthdaySeason));
+            this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize, Game1.tileSize * 2, Game1.tileSize), bdayDay+": " + this.BirthdayDay));
+            this.SeasonButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSpringButton(), Game1.pixelZoom));
+            this.SeasonButtons.Add(new ClickableTextureComponent("Summer", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSummerButton(), Game1.pixelZoom));
+            this.SeasonButtons.Add(new ClickableTextureComponent("Fall", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getFallButton(), Game1.pixelZoom));
+            this.SeasonButtons.Add(new ClickableTextureComponent("Winter", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getWinterButton(), Game1.pixelZoom));
 
             this.DayButtons.Add(new ClickableTextureComponent("1", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom));
             this.DayButtons.Add(new ClickableTextureComponent("2", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 2 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom));
@@ -128,6 +131,7 @@ namespace Omegasis.HappyBirthday.Framework
             this.DayButtons.Add(new ClickableTextureComponent("27", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + (int)(Game1.tileSize * 6.25) - Game1.tileSize / 3, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(56, 16, 8, 12), Game1.pixelZoom));
             this.DayButtons.Add(new ClickableTextureComponent("28", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + (int)(Game1.tileSize * 6.75) - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom));
             this.DayButtons.Add(new ClickableTextureComponent("28", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + (int)(Game1.tileSize * 7.25) - Game1.tileSize / 3, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(64, 16, 8, 12), Game1.pixelZoom));
+
         }
 
         /// <summary>Handle a button click.</summary>
@@ -144,9 +148,10 @@ namespace Omegasis.HappyBirthday.Framework
                 case "Summer":
                 case "Fall":
                 case "Winter":
-                    this.BirthdaySeason = name.ToLower();
-                    this.OnChanged(this.BirthdaySeason, this.BirthdayDay);
-                    Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.OnChanged);
+                    this.BirthdaySeason = HappyBirthday.Config.translationInfo.getTranslatedString(name);
+                    this.seasonName = name;
+                    this.OnChanged(this.seasonName, this.BirthdayDay);
+                    Game1.activeClickableMenu = new BirthdayMenu(this.seasonName, this.BirthdayDay, this.OnChanged);
                     break;
 
                 // OK button
@@ -158,8 +163,8 @@ namespace Omegasis.HappyBirthday.Framework
 
                 default:
                     this.BirthdayDay = Convert.ToInt32(name);
-                    this.OnChanged(this.BirthdaySeason, this.BirthdayDay);
-                    Game1.activeClickableMenu = new BirthdayMenu(this.BirthdaySeason, this.BirthdayDay, this.OnChanged);
+                    this.OnChanged(this.seasonName, this.BirthdayDay);
+                    Game1.activeClickableMenu = new BirthdayMenu(this.seasonName, this.BirthdayDay, this.OnChanged);
                     break;
             }
             Game1.playSound("coin");
@@ -172,7 +177,7 @@ namespace Omegasis.HappyBirthday.Framework
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             //If the season is not selected then the day buttons can't be clicked. Thanks to @Potato#5266 on the SDV discord for this tip.
-            if (this.BirthdaySeason == "spring" || this.BirthdaySeason == "summer" || this.BirthdaySeason == "fall" || this.BirthdaySeason == "winter")
+            if (string.IsNullOrEmpty(this.seasonName)==false)
             {
                 foreach (ClickableTextureComponent button in this.DayButtons)
                 {
@@ -197,7 +202,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (this.OkButton.containsPoint(x, y))
             {
-                if (this.BirthdaySeason == "" || this.BirthdayDay == 0) return;
+                if (this.seasonName == "" || this.BirthdayDay == 0) return;
                 this.HandleButtonClick(this.OkButton.name);
                 this.OkButton.scale -= 0.25f;
                 this.OkButton.scale = Math.Max(0.75f, this.OkButton.scale);
@@ -241,10 +246,11 @@ namespace Omegasis.HappyBirthday.Framework
         {
             // draw menu box
             Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true);
-            b.Draw(Game1.daybg, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
+            //b.Draw(Game1.daybg, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
+            //Game1.player.FarmerSprite.draw(b, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)),1f);
 
             // draw day buttons
-            if (this.BirthdaySeason == "spring" || this.BirthdaySeason == "summer" || this.BirthdaySeason == "fall" || this.BirthdaySeason == "winter")
+            if (string.IsNullOrEmpty(this.seasonName)==false)
             {
                 foreach (ClickableTextureComponent button in this.DayButtons)
                     button.draw(b);
@@ -270,7 +276,7 @@ namespace Omegasis.HappyBirthday.Framework
             }
 
             // draw OK button
-            if (this.BirthdayDay != 0 && this.BirthdaySeason != "")
+            if (this.BirthdayDay != 0 && this.seasonName != "")
                 this.OkButton.draw(b);
             else
             {
@@ -280,6 +286,32 @@ namespace Omegasis.HappyBirthday.Framework
 
             // draw cursor
             this.drawMouse(b);
+        }
+
+        public Rectangle getSpringButton()
+        {
+            //For some reason turkish and italian don't use translated words for the seasons???
+            if (HappyBirthday.Config.translationInfo.CurrentTranslation == TranslationInfo.LanguageName.Chinese)
+            {
+                return new Rectangle(188, 437, 32, 9);
+            }
+            else 
+            {
+                return new Rectangle(188, 438, 32, 9);
+            }
+        }
+
+        public Rectangle getSummerButton()
+        {
+            return new Rectangle(220, 438, 32, 8);
+        }
+        public Rectangle getFallButton()
+        {
+            return new Rectangle(188, 447, 32, 10);
+        }
+        public Rectangle getWinterButton()
+        {
+            return new Rectangle(220, 448, 32, 8);
         }
     }
 }

@@ -227,11 +227,21 @@ namespace StardewSymphonyRemastered.Framework.V2
             foreach (var v in Game1.locations)
             {
                 locations.Add(v.Name);
+
+                if (StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.ContainsKey(v.Name)==false)
+                {
+                    StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.Add(v.Name, false);
+                }
+
                 if (StardewSymphony.Config.EnableDebugLog)
                     StardewSymphony.ModMonitor.Log("Adding in song triggers for location: " + v.Name);
             }
 
-            locations.Add("UndergroundMine Floors 1-39");
+            StardewSymphony.ModHelper.WriteConfig<Config>(StardewSymphony.Config);
+
+            locations.Add("UndergroundMine Floors 1-10");
+            locations.Add("UndergroundMine Floors 11-29");
+            locations.Add("UndergroundMine Floors 31-39");
             locations.Add("UndergroundMine Floors 40-69");
             locations.Add("UndergroundMine Floors 70-79");
             locations.Add("UndergroundMine Floors 80-120");
@@ -375,8 +385,12 @@ namespace StardewSymphonyRemastered.Framework.V2
                     string splits = locName.Replace("UndergroundMine", "");
                     StardewSymphony.DebugLog("DEBUG VALUE:" + splits);
                     int number = Convert.ToInt32(splits);
-                    if (number >= 1 && number <= 39)
-                        return "UndergroundMine" + " Floors 1-39";
+                    if (number >= 1 && number <= 10)
+                        return "UndergroundMine" + " Floors 1-10";
+                    if (number >= 11 && number <= 29)
+                        return "UndergroundMine" + " Floors 11-29";
+                    if (number >= 31 && number <= 39)
+                        return "UndergroundMine" + " Floors 31-39";
                     if (number >= 40 && number <= 69)
                         return "UndergroundMine" + " Floors 40-69";
                     if (number >= 70 && number <= 79)

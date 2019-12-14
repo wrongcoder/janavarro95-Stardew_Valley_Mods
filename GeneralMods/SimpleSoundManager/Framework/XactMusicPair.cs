@@ -19,8 +19,8 @@ namespace SimpleSoundManager
             wavBankPath = Path.Combine(helper.DirectoryPath, wavBankPath);
             soundBankPath = Path.Combine(helper.DirectoryPath, soundBankPath);
 
-            this.waveBank = new WaveBank(Game1.audioEngine, wavBankPath);
-            this.soundBank = new SoundBankWrapper(new SoundBank(Game1.audioEngine, soundBankPath));
+            this.waveBank = new WaveBank(Game1.audioEngine.Engine, wavBankPath);
+            this.soundBank = new SoundBankWrapper(new SoundBank(Game1.audioEngine.Engine, soundBankPath));
         }
     }
 }

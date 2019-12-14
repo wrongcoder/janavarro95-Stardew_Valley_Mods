@@ -10,7 +10,7 @@ namespace SimpleSoundManager.Framework
         public string soundName;
         readonly WaveBank vanillaWaveBank;
         readonly ISoundBank vanillaSoundBank;
-        readonly Cue song;
+        readonly ICue song;
 
         /// <summary>Make a new Sound Manager to play and manage sounds in a modded wave bank.</summary>
         /// <param name="newWaveBank">The reference to the wave bank in the mod's asset folder.</param>

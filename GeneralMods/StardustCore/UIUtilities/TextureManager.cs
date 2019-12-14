@@ -35,14 +35,31 @@ namespace StardustCore.UIUtilities
         }
 
         /// <summary>Returns a Texture2DExtended held by the manager.</summary>
-        public Texture2DExtended getTexture(string name)
+        public Texture2DExtended getTexture(string name,bool ThrowError=true)
         {
-            foreach (var v in this.textures)
+            if (this.textures.ContainsKey(name))
             {
-                if (v.Key == name)
-                    return v.Value.Copy();
+                return this.textures[name].Copy();
             }
-            throw new Exception("Error, texture name not found!!!");
+
+            if (ThrowError)
+            {
+                throw new Exception("Error, texture name not found!!!");
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the texture exists
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool containsTexture(string name)
+        {
+            return this.textures.ContainsKey(name);
         }
 
 

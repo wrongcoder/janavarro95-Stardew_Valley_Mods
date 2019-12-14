@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -50,6 +51,8 @@ namespace StardewSymphonyRemastered
             helper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
 
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
+
+            
 
 
             musicManager = new MusicManagerV2();
@@ -170,7 +173,7 @@ namespace StardewSymphonyRemastered
                     {
                         Game1.currentSong.Stop(AudioStopOptions.Immediate); //stop the normal songs from playing over the new songs
                         Game1.currentSong.Stop(AudioStopOptions.AsAuthored);
-                        Game1.nextMusicTrack = "";  //same as above line
+                        Game1.requestedMusicTrack = "";  //same as above line
                     }
                 }
                 else
@@ -212,6 +215,8 @@ namespace StardewSymphonyRemastered
             {
                 return new Texture2DExtended(this.Helper, this.ModManifest, $"assets/{name}");
             }
+
+            textureManager.searchForTextures(this.Helper,this.ModManifest,Path.Combine("assets","Locations"));
 
             textureManager.addTexture("SaveIcon", LoadTexture("SaveIcon.png"));
             textureManager.addTexture("LastPage", LoadTexture("lastPageButton.png"));

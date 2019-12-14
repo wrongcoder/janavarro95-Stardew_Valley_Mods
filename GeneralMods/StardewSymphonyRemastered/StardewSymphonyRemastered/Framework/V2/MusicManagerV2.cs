@@ -165,10 +165,27 @@ namespace StardewSymphonyRemastered.Framework.V2
         public bool selectMusic(string songListKey, bool warpCheck = false)
         {
 
-            if (warpCheck == true && StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.Contains(Game1.player.currentLocation.Name))
+            if (this.CurrentMusicPack != null)
             {
+                if (this.CurrentMusicPack.IsPlaying() && StardewSymphony.Config.WaitForSongToFinishBeforeMusicSwap)
+                {
+                    StardewSymphony.ModMonitor.Log("Waiting for music to finish before playing another song.");
+                    return false;
+                }
+            }
+            if (warpCheck == true)
+            {
+                if (StardewSymphony.Config.LocationsToIgnoreWarpMusicChange.ContainsKey(Game1.player.currentLocation.Name))
+                {
+                    if (StardewSymphony.Config.LocationsToIgnoreWarpMusicChange[Game1.player.currentLocation.Name] == true)
+                    {
+                        return false;
+                    }
+                }
                 return false;
             }
+
+
             //Prevent generic song changes when running about.
 
             SongConditionals conditional = new SongConditionals(songListKey);
@@ -201,7 +218,7 @@ namespace StardewSymphonyRemastered.Framework.V2
                 {
                     if (song.canBePlayed(songListKey))
                     {
-                        foreach(SongConditionals con in song.songConditionals.Values)
+                        foreach (SongConditionals con in song.songConditionals.Values)
                         {
                             if (con.isLocationSpecific() == false)
                             {
@@ -297,7 +314,7 @@ namespace StardewSymphonyRemastered.Framework.V2
 
             //used to swap the music packs and stop the last playing song.
             this.SwapMusicPacks(musicPackPair.Key.Name);
-            string songName = musicPackPair.Value;      
+            string songName = musicPackPair.Value;
             this.CurrentMusicPack.PlaySong(songName);
             return true;
         }
