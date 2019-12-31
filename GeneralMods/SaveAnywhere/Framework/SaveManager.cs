@@ -33,12 +33,17 @@ namespace Omegasis.SaveAnywhere.Framework
         private bool WaitingToSave;
 
         /// <summary> Currently displayed save menu (null if no menu is displayed) </summary>
-        private NewSaveGameMenu currentSaveMenu;
+        private NewSaveGameMenuV2 currentSaveMenu;
 
 
         public Dictionary<string, Action> beforeCustomSavingBegins;
+        public event EventHandler beforeSave;
+
         public Dictionary<string, Action> afterCustomSavingCompleted;
+        public event EventHandler afterSave;
+
         public Dictionary<string, Action> afterSaveLoaded;
+        public event EventHandler afterLoad;
 
         /*********
         ** Public methods
@@ -67,7 +72,7 @@ namespace Omegasis.SaveAnywhere.Framework
             // perform passive save
             if (this.WaitingToSave && Game1.activeClickableMenu == null)
             {
-                this.currentSaveMenu = new NewSaveGameMenu();
+                this.currentSaveMenu = new NewSaveGameMenuV2();
                 this.currentSaveMenu.SaveComplete += this.CurrentSaveMenu_SaveComplete;
                 Game1.activeClickableMenu = this.currentSaveMenu;
                 this.WaitingToSave = false;
@@ -82,7 +87,11 @@ namespace Omegasis.SaveAnywhere.Framework
             this.currentSaveMenu.SaveComplete -= this.CurrentSaveMenu_SaveComplete;
             this.currentSaveMenu = null;
             SaveAnywhere.RestoreMonsters();
-            //AfterSave.Invoke(this, EventArgs.Empty);
+            if (this.afterSave != null)
+            {
+                this.afterSave.Invoke(this, EventArgs.Empty);
+            }
+            
             foreach (var v in this.afterCustomSavingCompleted)
             {
                 v.Value.Invoke();
@@ -111,25 +120,31 @@ namespace Omegasis.SaveAnywhere.Framework
         /// <summary>Initiate a game save.</summary>
         public void BeginSaveData()
         {
-
+            if (this.beforeSave != null)
+            {
+                this.beforeSave.Invoke(this, EventArgs.Empty);
+            }
             foreach(var v in this.beforeCustomSavingBegins)
             {
                 v.Value.Invoke();
             }
+
+            SaveAnywhere.Instance.cleanMonsters();
 
             // save game data
             Farm farm = Game1.getFarm();
             if (farm.getShippingBin(Game1.player)!=null)
             {
 
-                Game1.activeClickableMenu = new NewShippingMenu(farm.getShippingBin(Game1.player), this.Reflection);
-                farm.getShippingBin(Game1.player).Clear();
+                //Game1.activeClickableMenu = new NewShippingMenu(farm.getShippingBin(Game1.player), this.Reflection);
+                Game1.activeClickableMenu = new NewShippingMenuV2(farm.getShippingBin(Game1.player));
+                //farm.getShippingBin(Game1.player).Clear();
                 farm.lastItemShipped = null;
                 this.WaitingToSave = true;
             }
             else
             {
-                this.currentSaveMenu = new NewSaveGameMenu();
+                this.currentSaveMenu = new NewSaveGameMenuV2();
                 this.currentSaveMenu.SaveComplete += this.CurrentSaveMenu_SaveComplete;
                 Game1.activeClickableMenu = this.currentSaveMenu;
             }
@@ -161,6 +176,10 @@ namespace Omegasis.SaveAnywhere.Framework
             this.ResumeSwimming(data);
             this.SetPositions(data.Characters);
             this.OnLoaded?.Invoke();
+            if (this.afterLoad != null)
+            {
+                this.afterLoad.Invoke(this, EventArgs.Empty);
+            }
             foreach (var v in this.afterSaveLoaded)
             {
                 v.Value.Invoke();

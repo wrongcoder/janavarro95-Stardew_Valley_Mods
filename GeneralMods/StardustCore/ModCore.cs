@@ -52,7 +52,7 @@ namespace StardustCore
             string soundbankPath=Path.Combine(Game1.content.RootDirectory, "XACT", "Sound Bank.xsb");
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles"));
             //this.Monitor.Log(Utilities.HexDumper.HexDumpString(soundbankPath), LogLevel.Info);
-            Utilities.HexDumper.StripSoundCuesToFile(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCues.json"),Utilities.HexDumper.StripSoundCuesFromHex(Utilities.HexDumper.HexDumpString(soundbankPath)));
+            //Utilities.HexDumper.StripSoundCuesToFile(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCues.json"),Utilities.HexDumper.StripSoundCuesFromHex(Utilities.HexDumper.HexDumpString(soundbankPath)));
             //Utilities.HexDumper.HexDumpFile(soundbankPath, Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCuesRaw.json"));
         }
 

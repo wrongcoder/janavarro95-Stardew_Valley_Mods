@@ -115,69 +115,57 @@ namespace Omegasis.HappyBirthday
         {
             if (e.NewLocation == Game1.getLocationFromName("CommunityCenter"))
             {
-                EventHelper eve=this.eventManager.getEvent("CommunityCenterBirthday");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("CommunityCenterBirthday");
             }
             if (e.NewLocation == Game1.getLocationFromName("Trailer"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Penny");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Penny");
             }
             if (e.NewLocation == Game1.getLocationFromName("Trailer_Big"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Penny_BigHome");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Penny_BigHome");
             }
 
             if (e.NewLocation == Game1.getLocationFromName("ScienceHouse"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Maru");
-                eve.startEventAtLocationifPossible();
-                EventHelper eve2 = this.eventManager.getEvent("BirthdayDating:Sebastian");
-                eve2.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Maru");
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Sebastian");
             }
             if (e.NewLocation == Game1.getLocationFromName("LeahHouse"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Leah");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Leah");
             }
             if (e.NewLocation == Game1.getLocationFromName("SeedShop"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Abigail");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Abigail");
             }
             if (e.NewLocation == Game1.getLocationFromName("HaleyHouse"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Emily");
-                eve.startEventAtLocationifPossible();
-                EventHelper eve2 = this.eventManager.getEvent("BirthdayDating:Haley");
-                eve2.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Emily");
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Haley");
             }
             if (e.NewLocation == Game1.getLocationFromName("HarveyRoom"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Harvey");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Harvey");
             }
             if (e.NewLocation == Game1.getLocationFromName("ElliottHouse"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Elliott");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Elliott");
             }
             if (e.NewLocation == Game1.getLocationFromName("SamHouse"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Sam");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Sam");
             }
             if (e.NewLocation == Game1.getLocationFromName("JoshHouse"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Alex");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Alex");
             }
             if (e.NewLocation == Game1.getLocationFromName("AnimalShop"))
             {
-                EventHelper eve = this.eventManager.getEvent("BirthdayDating:Shane");
-                eve.startEventAtLocationifPossible();
+                this.eventManager.startEventAtLocationIfPossible("BirthdayDating:Shane");
+
             }
+            
         }
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
@@ -601,58 +589,6 @@ namespace Omegasis.HappyBirthday
             this.eventManager.addEvent(birthdayDating_Sam);
             this.eventManager.addEvent(birthdayDating_Alex);
             this.eventManager.addEvent(birthdayDating_Shane);
-            if (Game1.player.eventsSeen.Contains(communityCenterJunimoBirthday.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(communityCenterJunimoBirthday.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Penny.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Penny.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Maru.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Maru.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Sebastian.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Sebastian.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Leah.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Leah.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Abigail.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Abigail.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Emily.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Emily.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Haley.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Haley.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Harvey.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Harvey.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Elliott.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Elliott.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Sam.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Sam.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Alex.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Alex.getEventID()); //Repeat the event.
-            }
-            if (Game1.player.eventsSeen.Contains(birthdayDating_Shane.getEventID()))
-            {
-                Game1.player.eventsSeen.Remove(birthdayDating_Shane.getEventID()); //Repeat the event.
-            }
         }
 
         /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
@@ -682,6 +618,13 @@ namespace Omegasis.HappyBirthday
                     this.eventManager.update();
                 }
                 return;
+            }
+            else
+            {
+                if (this.eventManager != null)
+                {
+                    this.eventManager.update();
+                }
             }
 
             if (!this.HasChosenBirthday && Game1.activeClickableMenu == null && Game1.player.Name.ToLower() != "unnamed farmhand")

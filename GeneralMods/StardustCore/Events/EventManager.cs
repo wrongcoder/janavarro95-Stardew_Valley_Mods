@@ -22,11 +22,14 @@ namespace StardustCore.Events
 
         public Dictionary<string, ConcurrentEventInformation> concurrentEventActions;
 
+        public Dictionary<Farmer, HashSet<EventHelper>> seenEvents;
+
         public EventManager()
         {
             this.events = new Dictionary<string, EventHelper>();
             this.customEventLogic = new Dictionary<string, Action<EventManager,string>>();
             this.concurrentEventActions = new Dictionary<string, ConcurrentEventInformation>();
+            this.seenEvents = new Dictionary<Farmer, HashSet<EventHelper>>();
 
             this.customEventLogic.Add("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
             this.customEventLogic.Add("Omegasis.EventFramework.ViewportLerp", ExtraEventActions.ViewportLerp);
@@ -67,7 +70,7 @@ namespace StardustCore.Events
         /// </summary>
         public virtual void update()
         {
-            if (Game1.CurrentEvent == null)
+            if (Game1.eventUp == false)
             {
                 if (this.concurrentEventActions.Count > 0)
                 {
@@ -128,11 +131,51 @@ namespace StardustCore.Events
         /// <param name="EventName"></param>
         public virtual void startEventAtLocationIfPossible(string EventName)
         {
+            StardustCore.ModCore.ModMonitor.Log("Try to start event!");
+
             if (this.events.ContainsKey(EventName))
             {
-                if (Game1.eventUp == true) return;
+                if (this.seenEvents.ContainsKey(Game1.player)){
+                    if (this.seenEvents[Game1.player].Contains(this.events[EventName]))
+                    {
+                        return;
+                    }
+                }
+                if (Game1.eventUp == true)
+                {
+                    if (this.events[EventName].getEventID() == Game1.CurrentEvent.id)
+                    {
+                        this.concurrentEventActions.Clear(); //Clean all old parallel actions before starting a new event.
+                        bool started2=this.events[EventName].startEventAtLocationifPossible();
+                        if (started2)
+                        {
+                            if (this.seenEvents.ContainsKey(Game1.player))
+                            {
+                                this.seenEvents[Game1.player].Add(this.events[EventName]);
+                            }
+                            else
+                            {
+                                this.seenEvents.Add(Game1.player, new HashSet<EventHelper>() { this.events[EventName] });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
                 this.concurrentEventActions.Clear(); //Clean all old parallel actions before starting a new event.
-                this.events[EventName].startEventAtLocationifPossible();
+                bool started=this.events[EventName].startEventAtLocationifPossible();
+                if (started)
+                {
+                    if(this.seenEvents.ContainsKey(Game1.player)){
+                        this.seenEvents[Game1.player].Add(this.events[EventName]);
+                    }
+                    else
+                    {
+                        this.seenEvents.Add(Game1.player,new HashSet<EventHelper>() { this.events[EventName] });
+                    }
+                }
             }
         }
 
@@ -145,7 +188,11 @@ namespace StardustCore.Events
 
             this.events.TryGetValue(EventName, out EventHelper e);
             if (e == null) return;
-            Game1.player.eventsSeen.Remove(e.getEventID());
+            if (this.seenEvents.ContainsKey(Game1.player))
+            {
+                this.seenEvents[Game1.player].Remove(e);
+            }
+            //Game1.player.eventsSeen.Remove(e.getEventID());
         }
 
         /// <summary>
