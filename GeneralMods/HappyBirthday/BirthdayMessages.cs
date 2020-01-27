@@ -2287,6 +2287,17 @@ namespace Omegasis.HappyBirthday
                         }
                     }
                 }
+                else
+                {
+                    if (this.birthdayWishes.ContainsKey(NPC))
+                    {
+                        return this.birthdayWishes[NPC];
+                    }
+                    else
+                    {
+                        return "Happy birthday @!";
+                    }
+                }
 
             }
             else
