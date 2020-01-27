@@ -84,6 +84,8 @@
     <Compile Include="Framework\Models\PositionData.cs" />
     <Compile Include="Framework\NewSaveGameMenu.cs" />
     <Compile Include="Framework\Models\PlayerData.cs" />
+    <Compile Include="Framework\NewSaveGameMenuV2.cs" />
+    <Compile Include="Framework\NewShippingMenuV2.cs" />
     <Compile Include="Framework\NPCExtensions.cs" />
     <Compile Include="Framework\SaveAnywhereAPI.cs" />
     <Compile Include="Framework\SaveManager.cs" />

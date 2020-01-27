@@ -230,13 +230,15 @@ namespace StardustCore.Events
         /// <summary>
         /// Checks to see if all of the event preconditions have been met and starts the event if so.
         /// </summary>
-        public virtual void startEventAtLocationifPossible()
+        public virtual bool startEventAtLocationifPossible()
         {
             if (this.canEventOccur())
             {
                 //Game1.player.currentLocation.currentEvent = this.getEvent();
                 Game1.player.currentLocation.startEvent(this.getEvent());
+                return true;
             }
+            return false;
         }
         
 

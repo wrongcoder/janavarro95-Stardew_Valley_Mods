@@ -2034,6 +2034,7 @@ namespace Omegasis.HappyBirthday
         public static string GetTranslatedString(string key)
         {
             StardewValley.LocalizedContentManager.LanguageCode code = HappyBirthday.Config.translationInfo.TranslationCodes[HappyBirthday.Config.translationInfo.CurrentTranslation];
+            if (string.IsNullOrEmpty(key)) return "";
             string value = HappyBirthday.Instance.messages.translatedStrings[code][key];
             if (string.IsNullOrEmpty(value))
             {

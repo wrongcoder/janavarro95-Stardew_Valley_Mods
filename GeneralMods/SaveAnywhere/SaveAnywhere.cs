@@ -128,7 +128,7 @@ namespace Omegasis.SaveAnywhere
             }
             if (Game1.activeClickableMenu != null)
             {
-                if (Game1.activeClickableMenu.GetType() == typeof(NewSaveGameMenu))
+                if (Game1.activeClickableMenu.GetType() == typeof(NewSaveGameMenuV2))
                 {
                     this.customMenuOpen = true;
                 }
@@ -136,7 +136,7 @@ namespace Omegasis.SaveAnywhere
         }
 
         /// <summary>Saves all monsters from the game world.</summary>
-        private void cleanMonsters()
+        public void cleanMonsters()
         {
             this.monsters = new Dictionary<GameLocation, List<Monster>>();
 
@@ -230,7 +230,7 @@ namespace Omegasis.SaveAnywhere
                 if (Game1.isFestival()) return;
                 if (Game1.client == null)
                 {
-                    this.cleanMonsters();
+
                     // validate: community center Junimos can't be saved
 
                     if (Game1.player.currentLocation.getCharacters().OfType<Junimo>().Any())
