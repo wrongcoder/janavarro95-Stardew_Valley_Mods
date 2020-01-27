@@ -100,8 +100,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Gifts\BirthdayGifts.json" />
-    <None Include="Content\Gifts\SpouseBirthdayGifts.json" />
+    <None Include="ModAssets\Gifts\BirthdayGifts.json" />
+    <None Include="ModAssets\Gifts\SpouseBirthdayGifts.json" />
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>

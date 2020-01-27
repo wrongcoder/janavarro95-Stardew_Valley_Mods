@@ -87,7 +87,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.</summary>
         public void loadVillagerBirthdayGifts()
         {
-            string villagerGifts = Path.Combine("Content", "Gifts", "BirthdayGifts.json");
+            string villagerGifts = Path.Combine("ModAssets", "Gifts", "BirthdayGifts.json");
             if (!HappyBirthday.Config.useLegacyBirthdayFiles)
             {
 
@@ -122,7 +122,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>Used to load spouse birthday gifts from disk.</summary>
         public void loadSpouseBirthdayGifts()
         {
-            string spouseGifts = Path.Combine("Content", "Gifts", "SpouseBirthdayGifts.json");
+            string spouseGifts = Path.Combine("ModAssets", "Gifts", "SpouseBirthdayGifts.json");
             if (File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, spouseGifts)))
             {
                 HappyBirthday.ModMonitor.Log("Load from SpouseBirthdayGifts.json");

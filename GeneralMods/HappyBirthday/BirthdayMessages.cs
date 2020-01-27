@@ -1961,7 +1961,7 @@ namespace Omegasis.HappyBirthday
             serializer.Formatting = Formatting.Indented;
 
             string birthdayFileDict = HappyBirthday.Config.translationInfo.getJSONForTranslation("BirthdayWishes", HappyBirthday.Config.translationInfo.CurrentTranslation);
-            string path = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(Framework.TranslationInfo.LanguageName.English), birthdayFileDict);
+            string path = Path.Combine("ModAssets", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(Framework.TranslationInfo.LanguageName.English), birthdayFileDict);
 
             //Handle normal birthday wishes.
             if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, path)))
@@ -1975,7 +1975,7 @@ namespace Omegasis.HappyBirthday
 
             //handle spouse birthday wishes.
             string spouseBirthdayFileDict = HappyBirthday.Config.translationInfo.getJSONForTranslation("SpouseBirthdayWishes", HappyBirthday.Config.translationInfo.CurrentTranslation);
-            string spousePath = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(HappyBirthday.Config.translationInfo.CurrentTranslation), spouseBirthdayFileDict);
+            string spousePath = Path.Combine("ModAssets", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(HappyBirthday.Config.translationInfo.CurrentTranslation), spouseBirthdayFileDict);
             if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, spousePath)))
             {
                 HappyBirthday.ModMonitor.Log("Creating Spouse Messages", StardewModdingAPI.LogLevel.Alert);
@@ -1991,13 +1991,13 @@ namespace Omegasis.HappyBirthday
                 if (translation.Key == Framework.TranslationInfo.LanguageName.English)
                     continue;
 
-                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key));
+                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key));
                 if (!Directory.Exists(basePath))
                 {
                     Directory.CreateDirectory(basePath);
                 }
-                string tempBirthdayFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("BirthdayWishes", translation.Key));
-                string tempSpouseBirthdayFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("SpouseBirthdayWishes", translation.Key));
+                string tempBirthdayFile = Path.Combine("ModAssets", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("BirthdayWishes", translation.Key));
+                string tempSpouseBirthdayFile = Path.Combine("ModAssets", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("SpouseBirthdayWishes", translation.Key));
 
 
                 Dictionary<string, string> tempBirthdayDict = new Dictionary<string, string>();
@@ -2057,8 +2057,8 @@ namespace Omegasis.HappyBirthday
 
                 StardewValley.LocalizedContentManager.LanguageCode code = translation.Value;
 
-                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key));
-                string stringsFile = Path.Combine("Content", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("TranslatedStrings", translation.Key));
+                string basePath = Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key));
+                string stringsFile = Path.Combine("ModAssets", "Dialogue", HappyBirthday.Config.translationInfo.getFileExtentionForDirectory(translation.Key), HappyBirthday.Config.translationInfo.getJSONForTranslation("TranslatedStrings", translation.Key));
 
 
                 if (!File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, stringsFile)))

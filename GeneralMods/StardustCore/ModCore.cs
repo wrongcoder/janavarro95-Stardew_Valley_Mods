@@ -29,15 +29,15 @@ namespace StardustCore
             Manifest = this.ModManifest;
 
             IlluminateFramework.Colors.initializeColors();
-            ContentDirectory = "Content";
-            if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Content"));
+            ContentDirectory = "ModAssets";
+            if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Assets"));
             SpriteFonts.initialize();
 
             TextureManagers = new Dictionary<string, TextureManager>();
             TextureManager = new TextureManager("StardustCore");
-            TextureManager.addTexture("Test1", new Texture2DExtended(ModCore.ModHelper,Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test1.png")));
-            TextureManager.addTexture("Test2", new Texture2DExtended(ModCore.ModHelper,Manifest, Path.Combine("Content", "Graphics", "MultiTest", "Test2.png")));
-            TextureManager.addTexture("Test3", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Content", "Graphics", "MultiTest", "Test3.png")));
+            //TextureManager.addTexture("Test1", new Texture2DExtended(ModCore.ModHelper,Manifest,Path.Combine("Assets", "Graphics", "MultiTest", "Test1.png")));
+            //TextureManager.addTexture("Test2", new Texture2DExtended(ModCore.ModHelper,Manifest, Path.Combine("Assets", "Graphics", "MultiTest", "Test2.png")));
+            //TextureManager.addTexture("Test3", new Texture2DExtended(ModCore.ModHelper, Manifest,Path.Combine("Assets", "Graphics", "MultiTest", "Test3.png")));
             TextureManagers.Add(this.ModManifest.UniqueID, TextureManager);
 
             this.Helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
@@ -49,10 +49,10 @@ namespace StardustCore
 
         private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
-            string soundbankPath=Path.Combine(Game1.content.RootDirectory, "XACT", "Sound Bank.xsb");
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles"));
+            //string soundbankPath=Path.Combine(Game1.content.RootDirectory, "XACT", "Sound Bank.xsb");
+            //Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles"));
             //this.Monitor.Log(Utilities.HexDumper.HexDumpString(soundbankPath), LogLevel.Info);
-            Utilities.HexDumper.StripSoundCuesToFile(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCues.json"),Utilities.HexDumper.StripSoundCuesFromHex(Utilities.HexDumper.HexDumpString(soundbankPath)));
+            //Utilities.HexDumper.StripSoundCuesToFile(Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCues.json"),Utilities.HexDumper.StripSoundCuesFromHex(Utilities.HexDumper.HexDumpString(soundbankPath)));
             //Utilities.HexDumper.HexDumpFile(soundbankPath, Path.Combine(this.Helper.DirectoryPath, "ProcessedGameFiles", "SoundCuesRaw.json"));
         }
 
