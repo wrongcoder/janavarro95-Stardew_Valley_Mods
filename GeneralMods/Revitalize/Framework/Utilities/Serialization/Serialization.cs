@@ -424,11 +424,6 @@ namespace Revitalize.Framework.Utilities
         /// <returns>An object of specified type T.</returns>
         public T Deserialize<T>(string p)
         {
-            string json = "";
-            foreach (string line in File.ReadLines(p))
-            {
-                json += line;
-            }
             using (StreamReader sw = new StreamReader(p))
             using (JsonReader reader = new JsonTextReader(sw))
             {
@@ -446,11 +441,6 @@ namespace Revitalize.Framework.Utilities
         /// <returns>An object of specified type T.</returns>
         public object Deserialize(string p, Type T)
         {
-            string json = "";
-            foreach (string line in File.ReadLines(p))
-            {
-                json += line;
-            }
             using (StreamReader sw = new StreamReader(p))
             using (JsonReader reader = new JsonTextReader(sw))
             {

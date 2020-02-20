@@ -532,6 +532,11 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
             return new Vector2(globalPosition.X - (float)SeasideScramble.self.camera.viewport.X, globalPosition.Y - (float)SeasideScramble.self.camera.viewport.Y);
         }
 
+        public bool forceQuit()
+        {
+            this.quitGame = true;
+        }
+
         #endregion
     }
 }

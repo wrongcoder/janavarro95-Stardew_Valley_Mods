@@ -69,7 +69,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Lidgren.Network, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
@@ -171,306 +171,306 @@
     <None Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Fonts\Vanilla\0.png">
+    <Content Include="ModAssets\Fonts\Vanilla\0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\1.png">
+    <Content Include="ModAssets\Fonts\Vanilla\1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\2.png">
+    <Content Include="ModAssets\Fonts\Vanilla\2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\3.png">
+    <Content Include="ModAssets\Fonts\Vanilla\3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\4.png">
+    <Content Include="ModAssets\Fonts\Vanilla\4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\5.png">
+    <Content Include="ModAssets\Fonts\Vanilla\5.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\6.png">
+    <Content Include="ModAssets\Fonts\Vanilla\6.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\7.png">
+    <Content Include="ModAssets\Fonts\Vanilla\7.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\8.png">
+    <Content Include="ModAssets\Fonts\Vanilla\8.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\9.png">
+    <Content Include="ModAssets\Fonts\Vanilla\9.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\ampersand.png">
+    <Content Include="ModAssets\Fonts\Vanilla\ampersand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\asterisk.png">
+    <Content Include="ModAssets\Fonts\Vanilla\asterisk.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\backSlash.png">
+    <Content Include="ModAssets\Fonts\Vanilla\backSlash.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\blankBackground.png">
+    <Content Include="ModAssets\Fonts\Vanilla\blankBackground.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalA.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalA.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalB.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalB.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalC.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalC.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalD.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalD.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalE.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalE.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalF.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalF.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalG.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalG.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalH.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalH.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalI.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalI.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalJ.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalJ.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalK.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalK.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalL.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalL.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalM.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalM.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalN.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalN.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalO.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalO.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalP.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalP.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalQ.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalQ.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalR.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalR.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalS.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalT.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalT.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalU.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalU.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalV.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalV.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalW.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalW.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalX.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalX.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalY.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalY.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\capitalZ.png">
+    <Content Include="ModAssets\Fonts\Vanilla\capitalZ.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\caret.png">
+    <Content Include="ModAssets\Fonts\Vanilla\caret.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\coin.png">
+    <Content Include="ModAssets\Fonts\Vanilla\coin.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\colon.png">
+    <Content Include="ModAssets\Fonts\Vanilla\colon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\comma.png">
+    <Content Include="ModAssets\Fonts\Vanilla\comma.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\doubleQuotes.png">
+    <Content Include="ModAssets\Fonts\Vanilla\doubleQuotes.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\exclamationMark.png">
+    <Content Include="ModAssets\Fonts\Vanilla\exclamationMark.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\forwardSlash.png">
+    <Content Include="ModAssets\Fonts\Vanilla\forwardSlash.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\grave.png">
+    <Content Include="ModAssets\Fonts\Vanilla\grave.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\heart.png">
+    <Content Include="ModAssets\Fonts\Vanilla\heart.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\leftArrow.png">
+    <Content Include="ModAssets\Fonts\Vanilla\leftArrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\leftBracket.png">
+    <Content Include="ModAssets\Fonts\Vanilla\leftBracket.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\leftCurlyBracket.png">
+    <Content Include="ModAssets\Fonts\Vanilla\leftCurlyBracket.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\leftParenthesis.png">
+    <Content Include="ModAssets\Fonts\Vanilla\leftParenthesis.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseA.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseA.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseB.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseB.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseC.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseC.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseD.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseD.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseE.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseE.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseF.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseF.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseG.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseG.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseH.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseH.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseI.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseI.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseJ.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseJ.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseK.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseK.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseL.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseL.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseM.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseM.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseN.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseN.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseO.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseO.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseP.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseP.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseQ.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseQ.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseR.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseR.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseS.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseS.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseT.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseT.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseU.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseU.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseV.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseV.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseW.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseW.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseX.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseX.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseY.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseY.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\lowercaseZ.png">
+    <Content Include="ModAssets\Fonts\Vanilla\lowercaseZ.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\minus.png">
+    <Content Include="ModAssets\Fonts\Vanilla\minus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\percent.png">
+    <Content Include="ModAssets\Fonts\Vanilla\percent.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\period.png">
+    <Content Include="ModAssets\Fonts\Vanilla\period.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\plus.png">
+    <Content Include="ModAssets\Fonts\Vanilla\plus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\pound.png">
+    <Content Include="ModAssets\Fonts\Vanilla\pound.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\questionMark.png">
+    <Content Include="ModAssets\Fonts\Vanilla\questionMark.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\rightArrow.png">
+    <Content Include="ModAssets\Fonts\Vanilla\rightArrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\rightBracket.png">
+    <Content Include="ModAssets\Fonts\Vanilla\rightBracket.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\rightCurlyBracket.png">
+    <Content Include="ModAssets\Fonts\Vanilla\rightCurlyBracket.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\rightParenthesis.png">
+    <Content Include="ModAssets\Fonts\Vanilla\rightParenthesis.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\semicolon.png">
+    <Content Include="ModAssets\Fonts\Vanilla\semicolon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\singleQuote.png">
+    <Content Include="ModAssets\Fonts\Vanilla\singleQuote.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\space.png">
+    <Content Include="ModAssets\Fonts\Vanilla\space.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\star.png">
+    <Content Include="ModAssets\Fonts\Vanilla\star.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\tilde.png">
+    <Content Include="ModAssets\Fonts\Vanilla\tilde.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\underScore.png">
+    <Content Include="ModAssets\Fonts\Vanilla\underScore.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Fonts\Vanilla\verticalLine.png">
+    <Content Include="ModAssets\Fonts\Vanilla\verticalLine.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\Icons\Prismatic Star Big.png" />
-    <Content Include="Content\Graphics\Icons\Prismatic Star.png" />
-    <Content Include="Content\Graphics\MultiTest\Test1.png">
+    <Content Include="ModAssets\Graphics\Icons\Prismatic Star Big.png" />
+    <Content Include="ModAssets\Graphics\Icons\Prismatic Star.png" />
+    <Content Include="ModAssets\Graphics\MultiTest\Test1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MultiTest\Test2.png">
+    <Content Include="ModAssets\Graphics\MultiTest\Test2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\MultiTest\Test3.png">
+    <Content Include="ModAssets\Graphics\MultiTest\Test3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Graphics\Tools\CustomAxe.png">
+    <Content Include="ModAssets\Graphics\Tools\CustomAxe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
