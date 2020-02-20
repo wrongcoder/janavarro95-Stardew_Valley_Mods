@@ -315,7 +315,7 @@ namespace Omegasis.HappyBirthday
                 });
                 foreach (var v in GiftIDS.RegisteredGifts)
                 {
-                    //Haley gives flowers
+                    //Leah gives forged goods
                     if (v.Value.Category == -81)
                     {
                         NPCBirthdayGifts["Leah"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
@@ -452,6 +452,92 @@ namespace Omegasis.HappyBirthday
                 }
             }
 
+
+            if (NPCBirthdayGifts.ContainsKey("Jas") == false)
+            {
+                NPCBirthdayGifts.Add("Jas", new List<GiftInformation>());
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    //Jas gives flowers
+                    if (v.Value.Category == -80)
+                    {
+                        NPCBirthdayGifts["Jas"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Jodi") == false)
+            {
+                NPCBirthdayGifts.Add("Jodi", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.BlueberryTart,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.BlackberryCobbler,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.PumpkinPie,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.RhubarbPie,0,1,1)
+
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Kent") == false)
+            {
+                NPCBirthdayGifts.Add("Kent", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.RoastedHazelnuts,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.FiddleheadRisotto,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.PineTar,0,3,3),
+                    new GiftInformation(GiftIDS.SDVObject.BrownEgg,0,6,6)
+
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Krobus") == false)
+            {
+                NPCBirthdayGifts.Add("Krobus", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.SolarEssence,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.VoidEssence,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.VoidEgg,4,1,1),
+
+                });
+            }
+
+
+            if (NPCBirthdayGifts.ContainsKey("Lewis") == false)
+            {
+                NPCBirthdayGifts.Add("Lewis", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.GreenTea,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.PepperPoppers,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.VegetableMedley,0,1,1),
+
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Linus") == false)
+            {
+                NPCBirthdayGifts.Add("Linus", new List<GiftInformation>());
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    //Linus gives forged goods
+                    if (v.Value.Category == -81)
+                    {
+                        NPCBirthdayGifts["Linus"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Marnie") == false)
+            {
+                NPCBirthdayGifts.Add("Marnie", new List<GiftInformation>());
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    //Marnie gives milk or cheese
+                    if (v.Value.Category == -6)
+                    {
+                        NPCBirthdayGifts["Marnie"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                    if (v.Value.Category == -26)
+                    {
+                        NPCBirthdayGifts["Marnie"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
         }
 
         /// <summary>Set the next birthday gift the player will receive.</summary>
