@@ -184,10 +184,10 @@ namespace Omegasis.HappyBirthday
         /// <summary>Used to load spouse birthday gifts from disk.</summary>
         public void loadSpouseBirthdayGifts()
         {
-            string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts","Spouses"));
+            string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
             foreach (string File in files)
             {
-                NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts","Spouses",Path.GetFileNameWithoutExtension(File) + ".json")));
+                NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
             }
         }
 
@@ -214,7 +214,7 @@ namespace Omegasis.HappyBirthday
                     new GiftInformation(GiftIDS.SDVObject.DuckFeather,0,1,1),
                 });
 
-                foreach(var v in GiftIDS.RegisteredGifts)
+                foreach (var v in GiftIDS.RegisteredGifts)
                 {
                     if (v.Value.Category == -79)
                     {
@@ -345,6 +345,111 @@ namespace Omegasis.HappyBirthday
                     new GiftInformation(GiftIDS.SDVObject.MixedSeeds,0,5,5),
                     new GiftInformation(GiftIDS.SDVObject.Sunflower,0,1,1)
                 });
+            }
+
+
+            if (NPCBirthdayGifts.ContainsKey("Caroline") == false)
+            {
+                NPCBirthdayGifts.Add("Caroline", new List<GiftInformation>() {
+
+                    new GiftInformation(GiftIDS.SDVObject.GreenTea,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.TeaLeaves,0,3,3),
+                    new GiftInformation(GiftIDS.SDVObject.SummerSpangle,0,1,1)
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Clint") == false)
+            {
+                NPCBirthdayGifts.Add("Clint", new List<GiftInformation>() {
+
+                    new GiftInformation(GiftIDS.SDVObject.CopperBar,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.IronBar,0,3,3),
+                    new GiftInformation(GiftIDS.SDVObject.GoldBar,0,3,3),
+                    new GiftInformation(GiftIDS.SDVObject.IridiumBar,4,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Geode,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.FrozenGeode,0,3,3),
+                    new GiftInformation(GiftIDS.SDVObject.MagmaGeode,0,2,2),
+                    new GiftInformation(GiftIDS.SDVObject.OmniGeode,2,1,1),
+                });
+            }
+
+
+            if (NPCBirthdayGifts.ContainsKey("Demetrius") == false)
+            {
+                NPCBirthdayGifts.Add("Demetrius", new List<GiftInformation>() {
+                    new GiftInformation( GiftIDS.SDVObject.PurpleMushroom,0,2,2),
+                    new GiftInformation( GiftIDS.SDVObject.RedMushroom,0,2,2),
+
+                });
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    if (v.Value.Category == -79)
+                    {
+                        NPCBirthdayGifts["Demetrius"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Dwarf") == false)
+            {
+                NPCBirthdayGifts.Add("Dwarf", new List<GiftInformation>() {
+                    new GiftInformation( GiftIDS.SDVObject.CherryBomb,0,4,4),
+                    new GiftInformation( GiftIDS.SDVObject.Bomb,0,2,2),
+                    new GiftInformation( GiftIDS.SDVObject.MegaBomb,0,1,1)
+
+                });
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    if (v.Value.Category == -2)
+                    {
+                        if (v.Value.salePrice() <= 400)
+                        {
+                            //Add in possible minerals and gems as a 4 heart gift
+                            //Exclude prismatic shards and diamonds because that is a bit much.
+                            NPCBirthdayGifts["Dwarf"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                        }
+                    }
+                }
+            }
+
+
+            if (NPCBirthdayGifts.ContainsKey("Evelyn") == false)
+            {
+                NPCBirthdayGifts.Add("Evelyn", new List<GiftInformation>() {
+                    new GiftInformation( GiftIDS.SDVObject.Cookie,0,3,3),
+
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("George") == false)
+            {
+                NPCBirthdayGifts.Add("George", new List<GiftInformation>() {
+                    new GiftInformation( GiftIDS.SDVObject.CommonMushroom,0,1,1),
+                    new GiftInformation( GiftIDS.SDVObject.FriedMushroom,0,1,1),
+                    new GiftInformation( GiftIDS.SDVObject.PurpleMushroom,0,1,1),
+                    new GiftInformation( GiftIDS.SDVObject.Morel,0,1,1),
+                    new GiftInformation( GiftIDS.SDVObject.Truffle,0,1,1),
+                    new GiftInformation( GiftIDS.SDVObject.SnowYam,0,1,1),
+
+                });
+            }
+
+
+            if (NPCBirthdayGifts.ContainsKey("Gus") == false)
+            {
+                NPCBirthdayGifts.Add("Gus", new List<GiftInformation>());
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    if (v.Value.Category == -7)
+                    {
+                        if (v.Value.salePrice() >= 100)
+                        {
+                            //Gus will give a random food dish for the player's birthday that has some decent value to it.
+                            NPCBirthdayGifts["Gus"].Add(new GiftInformation(v.Key, 0, 1, 1));
+                        }
+
+                    }
+                }
             }
 
         }

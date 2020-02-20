@@ -911,6 +911,8 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             Apple = 613,
 
+            GreenTea=614,
+
             Bruschetta = 618,
 
             QualitySprinkler = 621,
@@ -1134,6 +1136,8 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
             CactusSeeds = 802,
 
             IridiumMilk = 803,
+
+            TeaLeaves=815
         }
 
         public static List<SDVObject> GetSDVObjects()
