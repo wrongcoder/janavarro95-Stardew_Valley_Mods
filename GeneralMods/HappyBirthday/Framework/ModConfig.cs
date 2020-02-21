@@ -16,15 +16,14 @@ namespace Omegasis.HappyBirthday.Framework
         /// <summary>Handles different translations of files.</summary>
         public TranslationInfo translationInfo;
 
-        /// <summary>Whether or not to load from the old BirthdayGifts.xnb located in StardewValley/Data or from the new BirthdayGifts.json located in the mod directory.</summary>
-        public bool useLegacyBirthdayFiles;
-
+        public bool defaultToEnglishTranslation;
+        
 
         /// <summary>Construct an instance.</summary>
         public ModConfig()
         {
             this.translationInfo = new TranslationInfo();
-            this.useLegacyBirthdayFiles = true;
+            this.defaultToEnglishTranslation = true;
         }
     }
 }

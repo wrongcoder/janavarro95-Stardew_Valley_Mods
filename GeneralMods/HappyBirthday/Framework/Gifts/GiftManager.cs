@@ -963,6 +963,22 @@ namespace Omegasis.HappyBirthday
         /// <param name="name"></param>
         public void getSpouseBirthdayGift(string name)
         {
+
+            if (string.IsNullOrEmpty(HappyBirthday.PlayerBirthdayData.favoriteBirthdayGift) == false)
+            {
+                if (GiftIDS.RegisteredGifts.ContainsKey(HappyBirthday.PlayerBirthdayData.favoriteBirthdayGift))
+                {
+                    GiftInformation info=new GiftInformation(HappyBirthday.PlayerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
+                    if (Game1.player.isInventoryFull())
+                        Game1.createItemDebris(info.getOne(), Game1.player.getStandingPosition(), Game1.player.getDirection());
+                    else
+                        this.BirthdayGiftToReceive = info.getOne();
+                }
+
+                return;
+            }
+
+
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
 

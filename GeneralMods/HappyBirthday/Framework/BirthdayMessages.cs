@@ -157,6 +157,7 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"]="You can't have your birthday on a festival day. Sorry!",
 
                 ["Event:JunimoBirthdayParty_0"] = "It looks like the junimos wanted to throw you a party!",
                 ["Event:JunimoBirthdayParty_1"] = "It looks like there was some cake left over too!",
@@ -300,6 +301,7 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -444,6 +446,7 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Farmhand Birthday Message"] = "Ёто твой день рождени¤! ѕоздравл¤ю с этим!",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -590,6 +593,7 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -727,10 +731,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -865,10 +872,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1003,10 +1013,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1141,10 +1154,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1279,10 +1295,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1417,10 +1436,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1555,10 +1577,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "Oggi è il tuo compleanno! Buon compleanno!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "È il compleanno di @! Tanti auguri a loro!",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1693,10 +1718,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1831,10 +1859,13 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -2031,22 +2062,49 @@ namespace Omegasis.HappyBirthday
             }
         }
 
+        /// <summary>
+        /// Gets a translated string from the mod's json files.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static string GetTranslatedString(string key)
         {
             StardewValley.LocalizedContentManager.LanguageCode code = HappyBirthday.Config.translationInfo.TranslationCodes[HappyBirthday.Config.translationInfo.CurrentTranslation];
             if (string.IsNullOrEmpty(key)) return "";
-            string value = HappyBirthday.Instance.messages.translatedStrings[code][key];
-            if (string.IsNullOrEmpty(value))
+            if (HappyBirthday.Instance.messages.translatedStrings[code].ContainsKey(key))
             {
-                return GetEnglishMessageString(key);
+                string value = HappyBirthday.Instance.messages.translatedStrings[code][key];
+                if (string.IsNullOrEmpty(value))
+                {
+                    return GetEnglishMessageString(key);
+                }
+                else return value;
             }
-            else return value;
+            else
+            {
+                if (HappyBirthday.Config.defaultToEnglishTranslation)
+                {
+                    return GetEnglishMessageString(key);
+                }
+                else
+                {
+                    return "";
+                }
+            }
+
         }
 
         public static string GetEnglishMessageString(string key)
         {
             StardewValley.LocalizedContentManager.LanguageCode code = StardewValley.LocalizedContentManager.LanguageCode.en;
-            return HappyBirthday.Instance.messages.translatedStrings[code][key];
+            if (HappyBirthday.Instance.messages.translatedStrings[code].ContainsKey(key))
+            {
+                return HappyBirthday.Instance.messages.translatedStrings[code][key];
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public void loadTranslationStrings()

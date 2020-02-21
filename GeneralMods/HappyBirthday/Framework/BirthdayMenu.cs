@@ -208,7 +208,14 @@ namespace Omegasis.HappyBirthday.Framework
             {
                 if (this.isFestivalDay())
                 {
-                    Game1.addHUDMessage(new HUDMessage("Can't have a birthday on a festival day, sorry!"));
+                    if (string.IsNullOrEmpty(BirthdayMessages.GetTranslatedString("BirthdayError_FestivalDay")) == false)
+                    {
+                        Game1.addHUDMessage(new HUDMessage(BirthdayMessages.GetTranslatedString("BirthdayError_FestivalDay")));
+                    }
+                    else
+                    {
+                        Game1.addHUDMessage(new HUDMessage("You can't have a birthday on this day. Sorry!"));
+                    }
                     return;
                 }
                 if (this.seasonName == "" || this.BirthdayDay == 0) return;
