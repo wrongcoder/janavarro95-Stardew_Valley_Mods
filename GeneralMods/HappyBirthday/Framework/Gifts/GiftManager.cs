@@ -97,7 +97,8 @@ namespace Omegasis.HappyBirthday
             this.loadVillagerBirthdayGifts();
             this.loadSpouseBirthdayGifts();
 
-
+            this.createNPCBirthdayGifts();
+            this.createSpouseBirthdayGifts();
         }
 
         public void registerGiftIDS()
@@ -174,6 +175,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.</summary>
         public void loadVillagerBirthdayGifts()
         {
+            Directory.CreateDirectory(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts"));
             string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts"));
             foreach (string File in files)
             {
@@ -184,6 +186,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>Used to load spouse birthday gifts from disk.</summary>
         public void loadSpouseBirthdayGifts()
         {
+            Directory.CreateDirectory(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
             string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
             foreach (string File in files)
             {
@@ -537,6 +540,287 @@ namespace Omegasis.HappyBirthday
                         NPCBirthdayGifts["Marnie"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
                     }
                 }
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Pam") == false)
+            {
+                NPCBirthdayGifts.Add("Pam", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.Mead,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.PaleAle,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Beer,0,1,1),
+
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Pierre") == false)
+            {
+                NPCBirthdayGifts.Add("Pierre", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.QualityFertilizer,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.BasicFertilizer,0,10,10),
+                });
+
+                foreach(var v in GiftIDS.RegisteredGifts)
+                {
+                    if (v.Value.Category == -74)
+                    {
+                        int seedPrice = v.Value.salePrice();
+                        if (seedPrice < 500)
+                        {
+                            int stackAmount = 0;
+                            if (seedPrice < 100)
+                            {
+                                //Get 5 generic seeds
+                                stackAmount = 5;
+                            }
+                            else
+                            {
+                                //Can get 2 rare seeds such as starfruit and well rare seeds.
+                                stackAmount = 2;
+                            }
+                            if (v.Value.ParentSheetIndex == 499)
+                            {
+                                stackAmount = 1; //Prevent ancient fruit from giving more than 1 seed.
+                            }
+
+                            NPCBirthdayGifts["Pierre"].Add(new GiftInformation(v.Key, 0, stackAmount, stackAmount));
+                        }
+                        else
+                        {
+                            //Dont add sapplings in as a gift.
+                        }
+                    }
+                }
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Robin") == false)
+            {
+                NPCBirthdayGifts.Add("Robin", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.Wood,0,50,50),
+                    new GiftInformation(GiftIDS.SDVObject.Stone,0,50,50),
+                    new GiftInformation(GiftIDS.SDVObject.Hardwood,0,20,20),
+
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Sandy") == false)
+            {
+                NPCBirthdayGifts.Add("Sandy", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.Starfruit,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Milk,0,3,3)
+
+                });
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Vincent") == false)
+            {
+                NPCBirthdayGifts.Add("Vincent", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.Snail,0,1,1),
+
+                });
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    //Linus gives forged goods
+                    if (v.Value.Category == -81)
+                    {
+                        NPCBirthdayGifts["Vincent"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Willy") == false)
+            {
+                NPCBirthdayGifts.Add("Willy", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.Bait,0,50,50),
+                });
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    //Linus gives forged goods
+                    if (v.Value.Category == -4)
+                    {
+                        if (v.Value.salePrice() <= 500 && v.Value.salePrice()>=150)
+                        {
+                            NPCBirthdayGifts["Willy"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                        }
+                    }
+                }
+            }
+
+            if (NPCBirthdayGifts.ContainsKey("Wizard") == false)
+            {
+                NPCBirthdayGifts.Add("Wizard", new List<GiftInformation>() {
+                    new GiftInformation(GiftIDS.SDVObject.SolarEssence,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.VoidEssence,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.FireQuartz,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Obsidian,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.LifeElixir,0,1,1),
+                });
+            }
+
+            foreach(var v in NPCBirthdayGifts)
+            {
+                HappyBirthday.ModHelper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(v.Key) + ".json"),v.Value);
+            }
+        }
+
+        public void createSpouseBirthdayGifts()
+        {
+            if (SpouseBirthdayGifts.ContainsKey("Alex") == false)
+            {
+                SpouseBirthdayGifts.Add("Alex", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.Egg,0,4,4),
+                    new GiftInformation(GiftIDS.SDVObject.SalmonDinner,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.CompleteBreakfast,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.PurpleMushroom,0,1,1)
+
+                });
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Elliott") == false)
+            {
+                SpouseBirthdayGifts.Add("Elliott", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.CrabCakes,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.DuckFeather,0,1,1),
+                });
+
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    if (v.Value.Category == -79)
+                    {
+                        SpouseBirthdayGifts["Elliott"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
+
+
+            if (SpouseBirthdayGifts.ContainsKey("Harvey") == false)
+            {
+                SpouseBirthdayGifts.Add("Harvey", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.MuscleRemedy,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Coffee,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.SuperMeal,0,1,1),
+                });
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Sam") == false)
+            {
+                SpouseBirthdayGifts.Add("Sam", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.Pizza,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.JojaCola,0,6,6),
+                    new GiftInformation(GiftIDS.SDVObject.CherryBomb,0,4,4),
+                });
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Sebastian") == false)
+            {
+                SpouseBirthdayGifts.Add("Sebastian", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.Quartz,0,2,2),
+                    new GiftInformation(GiftIDS.SDVObject.BlueberryTart,234,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.CherryBomb,0,4,4),
+                    new GiftInformation(GiftIDS.SDVObject.GhostCrystal,0,1,1),
+                });
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Shane") == false)
+            {
+                SpouseBirthdayGifts.Add("Shane", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.Pizza,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Egg,0,6,6),
+                    new GiftInformation(GiftIDS.SDVObject.JojaCola,0,6,6),
+                    new GiftInformation(GiftIDS.SDVObject.Beer,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Milk,0,2,2),
+                });
+            }
+
+
+            if (SpouseBirthdayGifts.ContainsKey("Abigail") == false)
+            {
+                SpouseBirthdayGifts.Add("Abigail", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.Quartz,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.FireOpal,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Malachite,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.IceCream,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.PurpleMushroom,0,1,1),
+                });
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Emily") == false)
+            {
+                SpouseBirthdayGifts.Add("Emily", new List<GiftInformation>()
+                {
+                    new GiftInformation(GiftIDS.SDVObject.Amethyst,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Ruby,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Topaz,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Aquamarine,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Cloth,0,1,1),
+                });
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Haley") == false)
+            {
+                SpouseBirthdayGifts.Add("Haley", new List<GiftInformation>());
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    //Haley gives flowers
+                    if (v.Value.Category == -80)
+                    {
+                        SpouseBirthdayGifts["Haley"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Leah") == false)
+            {
+                SpouseBirthdayGifts.Add("Leah", new List<GiftInformation>() {
+                    new GiftInformation( GiftIDS.SDVObject.Salad,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.Wood,0,30,30),
+                    new GiftInformation(GiftIDS.SDVObject.BlackberryCobbler,0,1,1)
+
+                });
+                foreach (var v in GiftIDS.RegisteredGifts)
+                {
+                    //Leah gives forged goods
+                    if (v.Value.Category == -81)
+                    {
+                        SpouseBirthdayGifts["Leah"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
+                    }
+                }
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Maru") == false)
+            {
+                SpouseBirthdayGifts.Add("Maru", new List<GiftInformation>() {
+                    new GiftInformation( GiftIDS.SDVObject.IronBar,0,3,3),
+                    new GiftInformation(GiftIDS.SDVObject.GoldBar,0,3,3),
+                    new GiftInformation(GiftIDS.SDVObject.CopperBar,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.BatteryPack,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.IridiumSprinkler,6,1,1)
+
+                });
+            }
+
+            if (SpouseBirthdayGifts.ContainsKey("Penny") == false)
+            {
+                SpouseBirthdayGifts.Add("Penny", new List<GiftInformation>() {
+
+                    new GiftInformation(GiftIDS.SDVObject.Hashbrowns,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.CrispyBass,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.VegetableMedley,0,1,1),
+                    new GiftInformation(GiftIDS.SDVObject.MixedSeeds,0,5,5),
+                    new GiftInformation(GiftIDS.SDVObject.Sunflower,0,1,1)
+                });
+            }
+
+
+            foreach (var v in SpouseBirthdayGifts)
+            {
+                HappyBirthday.ModHelper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts","Spouses" ,Path.GetFileNameWithoutExtension(v.Key) + ".json"), v.Value);
             }
         }
 

@@ -416,7 +416,7 @@ namespace Omegasis.HappyBirthday
                                     Game1.currentSpeaker.resetSeasonalDialogue();
                                     this.Helper.Reflection.GetMethod(Game1.currentSpeaker, "loadCurrentDialogue", true).Invoke();
                                     Game1.npcDialogues[Game1.currentSpeaker.Name] = Game1.currentSpeaker.CurrentDialogue;
-                                    if (this.IsBirthday() && this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayGift == false && Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.Name) >= Config.minNeutralFriendshipGiftLevel)
+                                    if (this.IsBirthday() && this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayGift == false)
                                     {
                                         try
                                         {
