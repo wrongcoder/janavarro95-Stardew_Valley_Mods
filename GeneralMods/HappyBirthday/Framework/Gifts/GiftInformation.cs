@@ -12,6 +12,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
 
         public int minRequiredHearts;
+        public int maxRequiredHearts;
         public string objectID;
         public int minAmount;
         public int maxAmount;
@@ -25,7 +26,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
         {
             this.objectID = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.SDVObject), (int)ObjectID);
             this.minRequiredHearts = RequiredHearts;
-            this.maxAmount = 20;
+            this.maxRequiredHearts = 20;
             this.minAmount = MinAmount;
             this.maxAmount = MaxAmount;
         }
@@ -34,7 +35,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
         {
             this.objectID = ObjectID;
             this.minRequiredHearts = RequiredHearts;
-            this.maxAmount = 20;
+            this.maxRequiredHearts = 20;
             this.minAmount = MinAmount;
             this.maxAmount = MaxAmount;
         }
@@ -43,7 +44,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
         {
             this.objectID = ObjectID;
             this.minRequiredHearts = RequiredHearts;
-            this.maxAmount = MaxRequiredHearts;
+            this.maxRequiredHearts = MaxRequiredHearts;
             this.minAmount = MinAmount;
             this.maxAmount = MaxAmount;
         }

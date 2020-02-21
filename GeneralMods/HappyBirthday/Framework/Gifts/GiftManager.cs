@@ -110,6 +110,7 @@ namespace Omegasis.HappyBirthday
                 HappyBirthday.ModMonitor.Log("Added gift with id: " + uniqueID);
                 GiftIDS.RegisteredGifts.Add(uniqueID, i);
             }
+            HappyBirthday.ModHelper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),GiftIDS.RegisteredGifts.Keys.ToList());
         }
 
         public void loadDefaultBirthdayGifts()
@@ -179,7 +180,15 @@ namespace Omegasis.HappyBirthday
             string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts"));
             foreach (string File in files)
             {
-                NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(File) + ".json")));
+                try
+                {
+                    NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(File) + ".json")));
+                    HappyBirthday.ModMonitor.Log("Loaded in gifts for npc: " + Path.GetFileNameWithoutExtension(File));
+                }
+                catch(Exception err)
+                {
+                    
+                }
             }
         }
 
@@ -190,7 +199,8 @@ namespace Omegasis.HappyBirthday
             string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
             foreach (string File in files)
             {
-                NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
+                SpouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
+                HappyBirthday.ModMonitor.Log("Loaded in spouse gifts for npc: " + Path.GetFileNameWithoutExtension(File));
             }
         }
 
@@ -827,7 +837,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>Set the next birthday gift the player will receive.</summary>
         /// <param name="name">The villager's name who's giving the gift.</param>
         /// <remarks>This returns gifts based on the speaker's heart level towards the player: neutral for 3-4, good for 5-6, and best for 7-10.</remarks>
-        public void SetNextBirthdayGift(string name)
+        public void setNextBirthdayGift(string name)
         {
             /*
             Item gift;
@@ -923,7 +933,7 @@ namespace Omegasis.HappyBirthday
                 List<GiftInformation> npcPossibleGifts = NPCBirthdayGifts[name];
                 foreach (GiftInformation info in npcPossibleGifts)
                 {
-                    if (info.minRequiredHearts <= heartLevel)
+                    if (info.minRequiredHearts <= heartLevel && heartLevel<=info.maxRequiredHearts)
                     {
                         possibleItems.Add(info.getOne());
                     }
@@ -962,7 +972,7 @@ namespace Omegasis.HappyBirthday
                 List<GiftInformation> npcPossibleGifts = SpouseBirthdayGifts[name];
                 foreach (GiftInformation info in npcPossibleGifts)
                 {
-                    if (info.minRequiredHearts <= heartLevel)
+                    if (info.minRequiredHearts <= heartLevel && heartLevel<=info.maxRequiredHearts)
                     {
                         possibleItems.Add(info.getOne());
                     }
@@ -999,7 +1009,7 @@ namespace Omegasis.HappyBirthday
             List<GiftInformation> npcPossibleGifts = DefaultBirthdayGifts;
             foreach (GiftInformation info in npcPossibleGifts)
             {
-                if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxAmount)
+                if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
                 {
                     possibleItems.Add(info.getOne());
                 }

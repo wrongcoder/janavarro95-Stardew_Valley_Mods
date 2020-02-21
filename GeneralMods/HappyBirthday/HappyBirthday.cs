@@ -351,7 +351,7 @@ namespace Omegasis.HappyBirthday
                         if (this.giftManager.BirthdayGiftToReceive != null && this.VillagerQueue[this.lastSpeaker.Name].hasGivenBirthdayGift == false)
                         {
                             while (this.giftManager.BirthdayGiftToReceive.Name == "Error Item" || this.giftManager.BirthdayGiftToReceive.Name == "Rock" || this.giftManager.BirthdayGiftToReceive.Name == "???")
-                                this.giftManager.SetNextBirthdayGift(this.lastSpeaker.Name);
+                                this.giftManager.setNextBirthdayGift(this.lastSpeaker.Name);
                             Game1.player.addItemByMenuIfNecessaryElseHoldUp(this.giftManager.BirthdayGiftToReceive);
                             this.giftManager.BirthdayGiftToReceive = null;
                             this.VillagerQueue[this.lastSpeaker.Name].hasGivenBirthdayGift = true;
@@ -420,8 +420,8 @@ namespace Omegasis.HappyBirthday
                                     {
                                         try
                                         {
-                                            this.giftManager.SetNextBirthdayGift(Game1.currentSpeaker.Name);
-                                            this.Monitor.Log("Setting next birthday gift. 1");
+                                            this.giftManager.setNextBirthdayGift(Game1.currentSpeaker.Name);
+                                            this.Monitor.Log("Setting next birthday gift.");
                                         }
                                         catch (Exception ex)
                                         {
@@ -476,16 +476,34 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            this.DataFilePath = Path.Combine("data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}.json");
 
-            // reset state
-            this.VillagerQueue = new Dictionary<string, VillagerInfo>();
-            this.CheckedForBirthday = false;
 
-            // load settings
-            //
-            //this.MigrateLegacyData();
-            this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
+            if (Game1.player.IsMainPlayer)
+            {
+
+                this.DataFilePath = Path.Combine("data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}.json");
+
+                // reset state
+                this.VillagerQueue = new Dictionary<string, VillagerInfo>();
+                this.CheckedForBirthday = false;
+
+                // load settings
+                //
+                //this.MigrateLegacyData();
+                this.PlayerData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
+            }
+            else
+            {
+                this.DataFilePath = Path.Combine("data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}.json");
+                // reset state
+                this.VillagerQueue = new Dictionary<string, VillagerInfo>();
+                this.CheckedForBirthday = false;
+
+                // load settings
+                //
+                //this.MigrateLegacyData();
+                this.PlayerData = StardustCore.Utilities.Serialization.Serializer.JSONSerializer.DeserializeFromJSONString<PlayerData>(this.DataFilePath) ?? new PlayerData();
+            }
 
             if (HappyBirthday.Config.autoSetTranslation)
             {
@@ -598,6 +616,11 @@ namespace Omegasis.HappyBirthday
         {
             if (this.HasChosenBirthday)
                 this.Helper.Data.WriteJsonFile(this.DataFilePath, this.PlayerData);
+
+            if(Game1.player.IsMainPlayer==false)
+            {
+                StardustCore.Utilities.Serialization.Serializer.JSONSerializer.Serialize(this.DataFilePath, this.PlayerData);
+            }
         }
 
         /// <summary>Raised after the game state is updated (≈60 times per second).</summary>

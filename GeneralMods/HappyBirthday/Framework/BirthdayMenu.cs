@@ -35,6 +35,7 @@ namespace Omegasis.HappyBirthday.Framework
         /// <summary>The callback to invoke when the birthday value changes.</summary>
         private readonly Action<string, int> OnChanged;
 
+        public bool alllFinished;
 
         /*********
         ** Public methods
@@ -50,7 +51,7 @@ namespace Omegasis.HappyBirthday.Framework
             this.seasonName = season;
             this.BirthdayDay = day;
             this.OnChanged = onChanged;
-            this.SetUpPositions();
+            this.setUpPositions();
         }
         
         /// <summary>The method called when the game window changes size.</summary>
@@ -61,7 +62,7 @@ namespace Omegasis.HappyBirthday.Framework
             base.gameWindowSizeChanged(oldBounds, newBounds);
             this.xPositionOnScreen = Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2;
             this.yPositionOnScreen = Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize;
-            this.SetUpPositions();
+            this.setUpPositions();
         }
 
 
@@ -69,7 +70,7 @@ namespace Omegasis.HappyBirthday.Framework
         ** Private methods
         *********/
         /// <summary>Regenerate the UI.</summary>
-        private void SetUpPositions()
+        private void setUpPositions()
         {
             this.Labels.Clear();
             this.DayButtons.Clear();
@@ -136,7 +137,7 @@ namespace Omegasis.HappyBirthday.Framework
 
         /// <summary>Handle a button click.</summary>
         /// <param name="name">The button name that was clicked.</param>
-        private void HandleButtonClick(string name)
+        private void handleButtonClick(string name)
         {
             if (name == null)
                 return;
@@ -157,7 +158,10 @@ namespace Omegasis.HappyBirthday.Framework
                 // OK button
                 case "OK":
                     if (this.BirthdayDay >= 1 || this.BirthdayDay <= 28)
+                    {
                         MultiplayerSupport.SendBirthdayInfoToOtherPlayers(); //Send updated info to others.
+                    }
+                    this.alllFinished = true;
                     Game1.exitActiveMenu();
                     break;
 
@@ -183,7 +187,7 @@ namespace Omegasis.HappyBirthday.Framework
                 {
                     if (button.containsPoint(x, y))
                     {
-                        this.HandleButtonClick(button.name);
+                        this.handleButtonClick(button.name);
                         button.scale -= 0.5f;
                         button.scale = Math.Max(3.5f, button.scale);
                     }
@@ -194,7 +198,7 @@ namespace Omegasis.HappyBirthday.Framework
             {
                 if (button.containsPoint(x, y))
                 {
-                    this.HandleButtonClick(button.name);
+                    this.handleButtonClick(button.name);
                     button.scale -= 0.5f;
                     button.scale = Math.Max(3.5f, button.scale);
                 }
@@ -202,8 +206,13 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (this.OkButton.containsPoint(x, y))
             {
+                if (this.isFestivalDay())
+                {
+                    Game1.addHUDMessage(new HUDMessage("Can't have a birthday on a festival day, sorry!"));
+                    return;
+                }
                 if (this.seasonName == "" || this.BirthdayDay == 0) return;
-                this.HandleButtonClick(this.OkButton.name);
+                this.handleButtonClick(this.OkButton.name);
                 this.OkButton.scale -= 0.25f;
                 this.OkButton.scale = Math.Max(0.75f, this.OkButton.scale);
             }
@@ -276,7 +285,7 @@ namespace Omegasis.HappyBirthday.Framework
             }
 
             // draw OK button
-            if (this.BirthdayDay != 0 && this.seasonName != "")
+            if (this.BirthdayDay != 0 && string.IsNullOrEmpty(this.seasonName)==false && this.isFestivalDay()==false)
                 this.OkButton.draw(b);
             else
             {
@@ -301,6 +310,32 @@ namespace Omegasis.HappyBirthday.Framework
             }
         }
 
+        public bool isFestivalDay()
+        {
+            if (this.BirthdayDay == 0 || string.IsNullOrEmpty(this.BirthdaySeason)) return false;
+            if (this.BirthdaySeason.ToLowerInvariant() == "spring")
+            {
+                if (this.BirthdayDay == 13) return true;
+                if (this.BirthdayDay == 24) return true;
+            }
+            if (this.BirthdaySeason.ToLowerInvariant() == "summer")
+            {
+                if (this.BirthdayDay == 11) return true; //The lua
+                //if (this.BirthdayDay == 28) return true; //Dance of the moonlight jellies
+            }
+            if (this.BirthdaySeason.ToLowerInvariant() == "fall")
+            {
+                if (this.BirthdayDay == 16) return true;
+                //if (this.BirthdayDay == 27) return true; Spirits eve
+            }
+            if (this.BirthdaySeason.ToLowerInvariant() == "winter")
+            {
+                if (this.BirthdayDay == 8) return true;
+                if (this.BirthdayDay == 25) return true;
+            }
+            return false;
+        }
+
         public Rectangle getSummerButton()
         {
             return new Rectangle(220, 438, 32, 8);
@@ -312,6 +347,11 @@ namespace Omegasis.HappyBirthday.Framework
         public Rectangle getWinterButton()
         {
             return new Rectangle(220, 448, 32, 8);
+        }
+
+        public override bool readyToClose()
+        {
+            return this.alllFinished;
         }
     }
 }
