@@ -82,6 +82,10 @@ namespace Omegasis.SaveBackup
             }
             else
             {
+                if (!Directory.Exists(SaveBackup.AndroidNightlyBackupsPath))
+                {
+                    Directory.CreateDirectory(SaveBackup.AndroidNightlyBackupsPath);
+                }
                 this.BackupSaves(SaveBackup.AndroidNightlyBackupsPath);
             }
         }
