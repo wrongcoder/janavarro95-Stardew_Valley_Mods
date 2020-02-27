@@ -672,13 +672,7 @@ namespace Omegasis.HappyBirthday
                 // set up birthday
                 if (this.IsBirthday())
                 {
-                    string starMessage = BirthdayMessages.GetTranslatedString("Happy Birthday: Star Message");
-
-
-                    //ModMonitor.Log(starMessage);
-                    Messages.ShowStarMessage(starMessage);
-                    MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
-                    
+                    //string starMessage = BirthdayMessages.GetTranslatedString("Happy Birthday: Star Message");
 
                     Game1.player.mailbox.Add("birthdayMom");
                     Game1.player.mailbox.Add("birthdayDad");
@@ -809,6 +803,15 @@ namespace Omegasis.HappyBirthday
                 {
                     Game1.activeClickableMenu = new FavoriteGiftMenu();
                     this.CheckedForBirthday = false;
+                    return;
+                }
+
+                if (this.IsBirthday())
+                {
+                    string starMessage = BirthdayMessages.GetTranslatedString("Happy Birthday: Star Message");
+                    //ModMonitor.Log(starMessage);
+                    Messages.ShowStarMessage(starMessage);
+                    MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
                 }
             }
 
