@@ -340,12 +340,17 @@ namespace Omegasis.HappyBirthday.Framework
         /// Finished.
         /// </summary>
         /// <returns></returns>
-        public static EventHelper DatingBirthday_Abigail()
+        public static EventHelper DatingBirthday_Abigail_Seedshop()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("SeedShop")));
             conditions.Add(new TimePrecondition(600, 2600));
+
+            if (Game1.player.hasCompletedCommunityCenter() == false)
+            {
+                conditions.Add(new StardustCore.Events.Preconditions.TimeSpecific.EventDayExclusionPrecondition(false, false, false, true, false, false, false));
+            }
 
             NPC abigail = Game1.getCharacterFromName("Abigail");
             NPC pierre = Game1.getCharacterFromName("Pierre");

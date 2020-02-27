@@ -584,7 +584,16 @@ namespace Omegasis.HappyBirthday
             EventHelper birthdayDating_Maru = BirthdayEvents.DatingBirthday_Maru();
             EventHelper birthdayDating_Sebastian = BirthdayEvents.DatingBirthday_Sebastian();
             EventHelper birthdayDating_Leah = BirthdayEvents.DatingBirthday_Leah();
-            EventHelper birthdayDating_Abigail = BirthdayEvents.DatingBirthday_Abigail();
+            if (Game1.player.hasCompletedCommunityCenter() == false)
+            {
+                EventHelper birthdayDating_Abigail = BirthdayEvents.DatingBirthday_Abigail_Seedshop();
+                this.eventManager.addEvent(birthdayDating_Abigail);
+            }
+            else
+            {
+                EventHelper birthdayDating_Abigail = BirthdayEvents.DatingBirthday_Abigail_Seedshop();
+                this.eventManager.addEvent(birthdayDating_Abigail);
+            }
             EventHelper birthdayDating_Emily = BirthdayEvents.DatingBirthday_Emily();
             EventHelper birthdayDating_Haley = BirthdayEvents.DatingBirthday_Haley();
             EventHelper birthdayDating_Harvey = BirthdayEvents.DatingBirthday_Harvey();
@@ -599,7 +608,7 @@ namespace Omegasis.HappyBirthday
             this.eventManager.addEvent(birthdayDating_Maru);
             this.eventManager.addEvent(birthdayDating_Sebastian);
             this.eventManager.addEvent(birthdayDating_Leah);
-            this.eventManager.addEvent(birthdayDating_Abigail);
+
             this.eventManager.addEvent(birthdayDating_Emily);
             this.eventManager.addEvent(birthdayDating_Haley);
             this.eventManager.addEvent(birthdayDating_Harvey);
@@ -793,6 +802,14 @@ namespace Omegasis.HappyBirthday
                     Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
                     this.CheckedForBirthday = false;
                 }
+
+                if (Game1.activeClickableMenu?.GetType() == typeof(FavoriteGiftMenu))
+                    return;
+                if (this.HasChosenBirthday && Game1.activeClickableMenu==null && this.HasChoosenFavoriteGift() == false)
+                {
+                    Game1.activeClickableMenu = new FavoriteGiftMenu();
+                    this.CheckedForBirthday = false;
+                }
             }
 
 
@@ -831,6 +848,29 @@ namespace Omegasis.HappyBirthday
             return
                 this.PlayerData.BirthdayDay == Game1.dayOfMonth
                 && this.PlayerData.BirthdaySeason.ToLower().Equals(Game1.currentSeason.ToLower());
+        }
+
+        /// <summary>
+        /// Checks to see if the player has chosen a favorite gift yet.
+        /// </summary>
+        /// <returns></returns>
+        public bool HasChoosenFavoriteGift()
+        {
+            if (this.PlayerData == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(this.PlayerData.favoriteBirthdayGift))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
 
         /*

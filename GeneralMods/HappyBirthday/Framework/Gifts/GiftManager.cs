@@ -883,6 +883,7 @@ namespace Omegasis.HappyBirthday
                     if (Game1.player.getSpouse().Name.Equals(name))
                     {
                         //Get spouse gift here
+                        this.getSpouseBirthdayGift(name);
                     }
                     else
                     {
@@ -963,6 +964,17 @@ namespace Omegasis.HappyBirthday
         /// <param name="name"></param>
         public void getSpouseBirthdayGift(string name)
         {
+
+            if (string.IsNullOrEmpty(HappyBirthday.Instance.PlayerData.favoriteBirthdayGift) == false)
+            {
+                Item I = GiftIDS.RegisteredGifts[HappyBirthday.Instance.PlayerData.favoriteBirthdayGift];
+                if (Game1.player.isInventoryFull())
+                    Game1.createItemDebris(I.getOne(), Game1.player.getStandingPosition(), Game1.player.getDirection());
+                else
+                    this.BirthdayGiftToReceive = I.getOne();
+                return;
+            }
+
 
             if (string.IsNullOrEmpty(HappyBirthday.PlayerBirthdayData.favoriteBirthdayGift) == false)
             {

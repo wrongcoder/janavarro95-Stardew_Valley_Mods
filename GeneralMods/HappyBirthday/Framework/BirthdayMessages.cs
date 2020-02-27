@@ -158,6 +158,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"]="You can't have your birthday on a festival day. Sorry!",
+                ["FavoriteGift"] = "Favorite Gift",
 
                 ["Event:JunimoBirthdayParty_0"] = "It looks like the junimos wanted to throw you a party!",
                 ["Event:JunimoBirthdayParty_1"] = "It looks like there was some cake left over too!",
@@ -302,6 +303,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -447,6 +449,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -587,13 +590,12 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
 
-
-
                 ["Happy Birthday: Star Message"] = "今天是你的生日！生日快乐！",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -737,6 +739,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -878,6 +881,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -1019,6 +1023,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -1160,6 +1165,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -1301,6 +1307,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -1442,6 +1449,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -1583,6 +1591,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -1724,6 +1733,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
@@ -1865,6 +1875,7 @@ namespace Omegasis.HappyBirthday
                 ["Season"] = "Season",
                 ["Date"] = "Date",
                 ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",

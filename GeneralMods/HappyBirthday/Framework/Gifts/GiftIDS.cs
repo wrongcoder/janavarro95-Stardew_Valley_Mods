@@ -15,7 +15,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
         public enum SDVObject
         {
-            Weeds = 0,
+            //Weeds = 0,
 
             //Stone = 2,
 
@@ -57,7 +57,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             CaveCarrot = 78,
 
-            SecretNote = 79,
+            //SecretNote = 79,
 
             Quartz = 80,
 
@@ -71,7 +71,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             CactusFruit = 90,
 
-            Sap = 92,
+            //Sap = 92,
 
             Torch = 93,
 
@@ -87,59 +87,59 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             ChippedAmphora = 100,
 
-            Arrowhead = 101,
+            //Arrowhead = 101,
 
-            LostBook = 102,
+            //LostBook = 102,
 
-            AncientDoll = 103,
+            //AncientDoll = 103,
 
-            ElvishJewelry = 104,
+            //ElvishJewelry = 104,
 
-            ChewingStick = 105,
+            //ChewingStick = 105,
 
-            OrnamentalFan = 106,
+            //OrnamentalFan = 106,
 
             DinosaurEgg = 107,
 
-            RareDisc = 108,
+            ///RareDisc = 108,
 
-            AncientSword = 109,
+            //AncientSword = 109,
 
-            RustySpoon = 110,
+            //RustySpoon = 110,
 
-            RustySpur = 111,
+            //RustySpur = 111,
 
-            RustyCog = 112,
+            //RustyCog = 112,
 
-            ChickenStatue = 113,
+            //ChickenStatue = 113,
 
             AncientSeed = 114,
 
-            PrehistoricTool = 115,
+            //PrehistoricTool = 115,
 
-            DriedStarfish = 116,
+            //DriedStarfish = 116,
 
-            Anchor = 117,
+            //Anchor = 117,
 
-            GlassShards = 118,
+            //GlassShards = 118,
 
-            BoneFlute = 119,
+            //BoneFlute = 119,
 
-            PrehistoricHandaxe = 120,
+            //PrehistoricHandaxe = 120,
 
-            DwarvishHelm = 121,
+            //DwarvishHelm = 121,
 
-            DwarfGadget = 122,
+            //DwarfGadget = 122,
 
-            AncientDrum = 123,
+            //AncientDrum = 123,
 
-            GoldenMask = 124,
+            //GoldenMask = 124,
 
-            GoldenRelic = 125,
+            //GoldenRelic = 125,
 
-            StrangeDoll1 = 126,
+            //StrangeDoll1 = 126,
 
-            StrangeDoll2 = 127,
+            //StrangeDoll2 = 127,
 
             Pufferfish = 128,
 
@@ -197,15 +197,15 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             Stonefish = 158,
 
-            Crimsonfish = 159,
+            //Crimsonfish = 159,
 
-            Angler = 160,
+            //Angler = 160,
 
-            IcePip = 161,
+            //IcePip = 161,
 
-            LavaEel = 162,
+            //LavaEel = 162,
 
-            Legend = 163,
+            //Legend = 163,
 
             Sandfish = 164,
 
@@ -215,21 +215,21 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             JojaCola = 167,
 
-            Trash = 168,
+            //Trash = 168,
 
-            Driftwood = 169,
+            //Driftwood = 169,
 
-            BrokenGlasses = 170,
+            //BrokenGlasses = 170,
 
-            BrokenCD = 171,
+            //BrokenCD = 171,
 
-            SoggyNewspaper = 172,
+            //SoggyNewspaper = 172,
 
             Egg = 176,
 
             LargeEgg = 174,
 
-            Hay = 178,
+            //Hay = 178,
 
             BrownEgg = 180,
 
@@ -387,6 +387,8 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             BokChoy = 278,
 
+            MagicRockCandy=279,
+
             Yam = 280,
 
             Chanterelle = 281,
@@ -405,7 +407,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             //Stone = 290,
 
-            Twig = 294,
+            //Twig = 294,
 
             //Twig = 295,
 
@@ -613,7 +615,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             CoffeeBean = 433,
 
-            Stardrop = 434,
+            //Stardrop = 434,
 
             GoatMilk = 436,
 
@@ -649,7 +651,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             Mead = 459,
 
-            MermaidsPendant = 460,
+            //MermaidsPendant = 460,
 
             DecorativePot = 461,
 
@@ -855,19 +857,19 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             StarShards = 578,
 
-            PrehistoricScapula = 579,
+            //PrehistoricScapula = 579,
 
-            PrehistoricTibia = 580,
+            //PrehistoricTibia = 580,
 
-            PrehistoricSkull = 581,
+            //PrehistoricSkull = 581,
 
-            SkeletalHand = 582,
+            //SkeletalHand = 582,
 
-            PrehistoricRib = 583,
+            //PrehistoricRib = 583,
 
-            PrehistoricVertebra = 584,
+            //PrehistoricVertebra = 584,
 
-            SkeletalTail = 585,
+            //SkeletalTail = 585,
 
             NautilusFossil = 586,
 
@@ -1107,9 +1109,9 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             BatteryPack = 787,
 
-            LostAxe = 788,
+            //LostAxe = 788,
 
-            LuckyPurpleShorts = 789,
+            //LuckyPurpleShorts = 789,
 
             BerryBasket = 790,
 
@@ -1131,13 +1133,15 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             Blobfish = 800,
 
-            WeddingRing = 801,
+            //WeddingRing = 801,
 
             CactusSeeds = 802,
 
-            IridiumMilk = 803,
+            DinosaurMayonnaise= 807,
 
-            TeaLeaves=815
+            //IridiumMilk = 803,
+
+            TeaLeaves =815
         }
 
         public static List<SDVObject> GetSDVObjects()
