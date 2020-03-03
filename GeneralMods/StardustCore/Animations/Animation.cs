@@ -14,7 +14,8 @@ namespace StardustCore.Animations
         public int frameDuration;
 
         /// <summary>The duration until the next frame.</summary>
-        public int frameCountUntilNextAnimation;
+        private int frameCountUntilNextAnimation;
+
 
         [XmlIgnore]
         public NetFields NetFields { get; } = new NetFields();
@@ -66,6 +67,10 @@ namespace StardustCore.Animations
         public void startAnimation()
         {
             this.frameCountUntilNextAnimation = this.frameDuration;
+        }
+        public bool finished()
+        {
+            return this.frameCountUntilNextAnimation == 0;
         }
     }
 }

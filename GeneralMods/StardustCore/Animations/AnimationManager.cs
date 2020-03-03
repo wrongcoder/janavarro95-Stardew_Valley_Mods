@@ -13,7 +13,7 @@ namespace StardustCore.Animations
     {
         public Dictionary<string, List<Animation>> animations = new SerializableDictionary<string, List<Animation>>();
         public string currentAnimationName;
-        public int currentAnimationListIndex;
+        private int currentAnimationListIndex;
         public List<Animation> currentAnimationList = new List<Animation>();
         public Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
         public Animation defaultDrawFrame;
@@ -126,7 +126,7 @@ namespace StardustCore.Animations
             {
                 if (this.currentAnimation.frameDuration == -1 || !this.enabled || this.currentAnimation == this.defaultDrawFrame)
                     return; //This is if this is a default animation or the animation stops here.
-                if (this.currentAnimation.frameCountUntilNextAnimation == 0)
+                if (this.currentAnimation.finished())
                     this.getNextAnimationFrame();
                 this.currentAnimation.tickAnimationFrame();
                 //this.requiresUpdate = true;
