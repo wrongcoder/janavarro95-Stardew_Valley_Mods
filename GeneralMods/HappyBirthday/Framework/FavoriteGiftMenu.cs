@@ -74,8 +74,8 @@ namespace Omegasis.HappyBirthday.Framework
         {
             this.Labels.Clear();
             this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
-            this._leftButton = new ClickableTextureComponent("LeftButton", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.ModHelper.Content.Load<Texture2D>(Path.Combine("ModAssets","Graphics","lastPageButton.png")), new Rectangle(0,0,32,32), 2f);
-            this._rightButton = new ClickableTextureComponent("RightButton", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize+96, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.ModHelper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "nextPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
+            this._leftButton = new ClickableTextureComponent("LeftButton", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.ModHelper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "lastPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
+            this._rightButton = new ClickableTextureComponent("RightButton", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize + 96, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.ModHelper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "nextPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
 
             string title = HappyBirthday.Config.translationInfo.getTranslatedString("FavoriteGift");
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 128, this.yPositionOnScreen + 128, 1, 1), title));
@@ -83,19 +83,19 @@ namespace Omegasis.HappyBirthday.Framework
             this.itemButtons.Clear();
 
 
-            for(int row = 0; row < this._maxRowsToDisplay; row++)
+            for (int row = 0; row < this._maxRowsToDisplay; row++)
             {
-                for(int column = 0; column < this._maxColumnsToDisplay; column++)
+                for (int column = 0; column < this._maxColumnsToDisplay; column++)
                 {
-                    int value = (this.currentPageNumber * this._maxRowsToDisplay*this._maxColumnsToDisplay) + (row * this._maxColumnsToDisplay) + (column);
+                    int value = (this.currentPageNumber * this._maxRowsToDisplay * this._maxColumnsToDisplay) + (row * this._maxColumnsToDisplay) + (column);
                     if (value >= GiftIDS.RegisteredGifts.Count) continue;
 
 
                     GiftInformation info = new GiftInformation(GiftIDS.RegisteredGifts.ElementAt(value).Key, 0, 1, 1);
                     Rectangle textureBounds = GameLocation.getSourceRectForObject(info.getOne().ParentSheetIndex);
                     float itemScale = 4f;
-                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen+64+ column * 16 * itemScale),(int)(this.yPositionOnScreen+(256) + row * 16 * itemScale), 64, 64);
-                    ClickableTextureComponent item = new ClickableTextureComponent(info.objectID, placementBounds,"", info.objectID, Game1.objectSpriteSheet, textureBounds, 4f, true);
+                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + column * 16 * itemScale), (int)(this.yPositionOnScreen + (256) + row * 16 * itemScale), 64, 64);
+                    ClickableTextureComponent item = new ClickableTextureComponent(info.objectID, placementBounds, "", info.objectID, Game1.objectSpriteSheet, textureBounds, 4f, true);
                     this.itemButtons.Add(item);
                 }
             }
@@ -113,10 +113,8 @@ namespace Omegasis.HappyBirthday.Framework
             {
                 // OK button
                 case "OK":
-                    if (HappyBirthday.Instance.PlayerData != null)
-                    {
-                        HappyBirthday.Instance.PlayerData.favoriteBirthdayGift = this.selectedGift;
-                    }
+                    HappyBirthday.Instance.PlayerData.favoriteBirthdayGift = this.selectedGift;
+                    MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
                     this.allFinished = true;
                     Game1.exitActiveMenu();
                     break;
@@ -132,14 +130,14 @@ namespace Omegasis.HappyBirthday.Framework
 
                 case "RightButton":
                     List<Item> ids = Gifts.GiftIDS.RegisteredGifts.Values.ToList();
-                    int value = ((this.currentPageNumber+1) * this._maxRowsToDisplay * this._maxColumnsToDisplay);
+                    int value = ((this.currentPageNumber + 1) * this._maxRowsToDisplay * this._maxColumnsToDisplay);
                     if (value >= ids.Count) break;
                     else
                     {
                         this.currentPageNumber++;
                         this.setUpPositions();
                     }
-                    
+
                     break;
 
                 default:
@@ -163,12 +161,12 @@ namespace Omegasis.HappyBirthday.Framework
                     button.scale -= 0.5f;
                     button.scale = Math.Max(3.5f, button.scale);
                     this.selectedGift = button.name;
-                    HappyBirthday.ModMonitor.Log(string.Format("Selected {0} as the favorited gift.",this.selectedGift));
+                    HappyBirthday.ModMonitor.Log(string.Format("Selected {0} as the favorited gift.", this.selectedGift));
 
                     Item i = GiftIDS.RegisteredGifts[this.selectedGift];
                     Rectangle textureBounds = GameLocation.getSourceRectForObject(i.ParentSheetIndex);
                     float itemScale = 4f;
-                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (16 * itemScale)+Game1.tinyFont.MeasureString(HappyBirthday.Config.translationInfo.getTranslatedString("FavoriteGift")).X), (int)(this.yPositionOnScreen + (64) + (16 * itemScale)), 64, 64);
+                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (16 * itemScale) + Game1.tinyFont.MeasureString(HappyBirthday.Config.translationInfo.getTranslatedString("FavoriteGift")).X), (int)(this.yPositionOnScreen + (64) + (16 * itemScale)), 64, 64);
                     this.favoriteGiftButton = new ClickableTextureComponent(this.selectedGift, placementBounds, "", this.selectedGift, Game1.objectSpriteSheet, textureBounds, 4f, true);
                 }
             }
@@ -248,7 +246,7 @@ namespace Omegasis.HappyBirthday.Framework
             }
 
             // draw OK button
-            if (string.IsNullOrEmpty(this.selectedGift)==false)
+            if (string.IsNullOrEmpty(this.selectedGift) == false)
                 this.OkButton.draw(b);
             else
             {

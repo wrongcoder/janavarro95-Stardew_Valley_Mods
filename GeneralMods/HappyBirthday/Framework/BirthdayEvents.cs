@@ -399,6 +399,59 @@ namespace Omegasis.HappyBirthday.Framework
         }
 
 
+        public static EventHelper DatingBirthday_Abigail_Mine()
+        {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Mine")));
+            conditions.Add(new TimePrecondition(600, 2600));
+
+            var v=new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(true);
+            if (v.meetsCondition())
+            {
+                conditions.Add(new StardustCore.Events.Preconditions.TimeSpecific.EventDayExclusionPrecondition(true, true, true, false, true, true, true));
+            }
+            else
+            {
+                if (Game1.player.hasCompletedCommunityCenter() == false)
+                {
+                    conditions.Add(new StardustCore.Events.Preconditions.TimeSpecific.EventDayExclusionPrecondition(true, true, true, false, true, true, true));
+                }
+            }
+
+            NPC abigail = Game1.getCharacterFromName("Abigail");
+
+            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(abigail));
+
+            EventHelper e = new EventHelper("BirthdayDating:Abigail_Mine", 19955, conditions, new EventStartData("playful", 18, 8, new EventStartData.FarmerData(18, 12, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(abigail,18,4, EventHelper.FacingDirection.Down),
+            }));
+            e.globalFadeIn();
+
+            //Dialogue here.
+            e.moveFarmerUp(7, EventHelper.FacingDirection.Up, false);
+
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Mine_Abigail:0")); //abi 0
+
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Mine_Abigail:1")); //abi 1
+            e.emoteFarmer_QuestionMark();
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Mine_Abigail:2")); //abi 2
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Mine_Abigail:3"));//abi 3
+            e.emoteFarmer_Thinking();
+            e.speak(abigail, GetTranslatedString("Event:DatingAbigailBirthday_Mine_Abigail:4"));///abi 4
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart("Abigail");
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingAbigailBirthday_Mine_Finish:0")); //abi party finish 0
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:DatingAbigailBirthday_Mine_Finish:1")); //abi party finish 0
+            e.addObjectToPlayersInventory(220, 1, false);
+            e.showMessage(HappyBirthday.Config.translationInfo.getTranslatedString("Event:PartyOver"));
+            e.end();
+            return e;
+
+        }
 
         public static EventHelper DatingBirthday_Emily()
         {
@@ -760,7 +813,7 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(false));
             conditions.Add(new CommunityCenterCompleted(true));
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
-            EventHelper e = new EventHelper("CommunityCenterBirthday", 19961, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+            EventHelper e = new EventHelper("CommunityCenterBirthday_All", 19961, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
             {
                 new EventStartData.NPCData(Game1.getCharacterFromName("Lewis"),32,12, EventHelper.FacingDirection.Down),
                 

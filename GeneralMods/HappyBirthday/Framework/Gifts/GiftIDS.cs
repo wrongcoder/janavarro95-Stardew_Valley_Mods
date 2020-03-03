@@ -31,7 +31,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             Parsnip = 24,
 
-            Lumber = 30,
+            //Lumber = 30,
 
             Emerald = 60,
 

@@ -157,10 +157,12 @@ namespace Omegasis.HappyBirthday.Framework
 
                 // OK button
                 case "OK":
+                    /*
                     if (this.BirthdayDay >= 1 || this.BirthdayDay <= 28)
                     {
                         MultiplayerSupport.SendBirthdayInfoToOtherPlayers(); //Send updated info to others.
                     }
+                    */
                     this.alllFinished = true;
                     Game1.exitActiveMenu();
                     break;
@@ -359,6 +361,14 @@ namespace Omegasis.HappyBirthday.Framework
         public override bool readyToClose()
         {
             return this.alllFinished;
+        }
+
+        public override void update(GameTime time)
+        {
+            if (HappyBirthday.Instance.IsBirthday())
+            {
+                this.exitThisMenu();
+            }
         }
     }
 }
