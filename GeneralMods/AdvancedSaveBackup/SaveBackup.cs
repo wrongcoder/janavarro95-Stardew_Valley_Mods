@@ -28,6 +28,16 @@ namespace Omegasis.SaveBackup
         /// <summary>The folder path containing nightly backups of the save.</summary>
         private static readonly string NightlyBackupsPath = Path.Combine(SaveBackup.AppDataPath, "Backed_Up_Saves", "Nightly_InGame_Saves");
 
+
+        /// <summary>The folder path containing the save data for Android.</summary>
+        private static readonly string AndroidDataPath = Constants.DataPath;
+
+        /// <summary>The folder path of the current save data for Android.</summary>
+        private static string AndroidCurrentSavePath => Constants.CurrentSavePath;
+
+        /// <summary>The folder path containing nightly backups of the save for Android.</summary>
+        private static string AndroidNightlyBackupsPath => Path.Combine(SaveBackup.AndroidDataPath, "Backed_Up_Saves", Constants.SaveFolderName, "Nightly_InGame_Saves");
+
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
@@ -45,7 +55,7 @@ namespace Omegasis.SaveBackup
             {
                 this.BackupSaves(this.Config.AlternatePreplaySaveBackupPath);
             }
-            else
+            else if(Constants.TargetPlatform != GamePlatform.Android)
             {
                 this.BackupSaves(SaveBackup.PrePlayBackupsPath);
             }
@@ -66,9 +76,17 @@ namespace Omegasis.SaveBackup
             {
                 this.BackupSaves(this.Config.AlternateNightlySaveBackupPath);
             }
-            else
+            else if (Constants.TargetPlatform != GamePlatform.Android)
             {
                 this.BackupSaves(SaveBackup.NightlyBackupsPath);
+            }
+            else
+            {
+                if (!Directory.Exists(SaveBackup.AndroidNightlyBackupsPath))
+                {
+                    Directory.CreateDirectory(SaveBackup.AndroidNightlyBackupsPath);
+                }
+                this.BackupSaves(SaveBackup.AndroidNightlyBackupsPath);
             }
         }
 
@@ -79,7 +97,7 @@ namespace Omegasis.SaveBackup
             if (this.Config.UseZipCompression == false)
             {
 
-                DirectoryCopy(SaveBackup.SavesPath, Path.Combine(folderPath, $"backup-{DateTime.Now:yyyyMMdd'-'HHmmss}"), true);
+                DirectoryCopy(Constants.TargetPlatform != GamePlatform.Android ? SaveBackup.SavesPath : SaveBackup.AndroidCurrentSavePath, Path.Combine(folderPath, $"backup-{DateTime.Now:yyyyMMdd'-'HHmmss}"), true);
                 new DirectoryInfo(folderPath)
                 .EnumerateDirectories()
                 .OrderByDescending(f => f.CreationTime)
@@ -93,7 +111,7 @@ namespace Omegasis.SaveBackup
                 fastZip.UseZip64 = UseZip64.Off;
                 bool recurse = true;  // Include all files by recursing through the directory structure
                 string filter = null; // Dont filter any files at all
-                fastZip.CreateZip(Path.Combine(folderPath, $"backup-{DateTime.Now:yyyyMMdd'-'HHmmss}.zip"), SaveBackup.SavesPath, recurse, filter);
+                fastZip.CreateZip(Path.Combine(folderPath, $"backup-{DateTime.Now:yyyyMMdd'-'HHmmss}.zip"), Constants.TargetPlatform != GamePlatform.Android ? SaveBackup.SavesPath : SaveBackup.AndroidCurrentSavePath, recurse, filter);
                 new DirectoryInfo(folderPath)
                 .EnumerateFiles()
                 .OrderByDescending(f => f.CreationTime)
