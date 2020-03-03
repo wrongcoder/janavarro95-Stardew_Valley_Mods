@@ -285,7 +285,7 @@ namespace Revitalize.Framework.Objects
                 : base.getBoundingBox(tileLocation);
         }
 
-        public override int sellToStorePrice()
+        public override int sellToStorePrice(long PlayerID=-1)
         {
             return this.Price;
         }
@@ -711,6 +711,7 @@ namespace Revitalize.Framework.Objects
 
             return base.canStackWith(other);
         }
+
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~//
         //     PyTk Functions      //
