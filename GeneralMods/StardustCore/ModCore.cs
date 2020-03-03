@@ -30,7 +30,7 @@ namespace StardustCore
 
             IlluminateFramework.Colors.initializeColors();
             ContentDirectory = "ModAssets";
-            if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Assets"));
+            //if (!Directory.Exists(ContentDirectory)) Directory.CreateDirectory(Path.Combine(ModHelper.DirectoryPath, "Assets"));
             SpriteFonts.initialize();
 
             TextureManagers = new Dictionary<string, TextureManager>();

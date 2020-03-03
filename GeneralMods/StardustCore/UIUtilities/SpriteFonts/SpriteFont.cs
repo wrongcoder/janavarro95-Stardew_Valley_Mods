@@ -13,8 +13,6 @@ namespace StardustCore.UIUtilities.SpriteFonts
         public static void initialize()
         {
             FontDirectory = Path.Combine(ModCore.ContentDirectory, "Fonts");
-            if (!Directory.Exists(FontDirectory))
-                Directory.CreateDirectory(FontDirectory);
             vanillaFont = new VanillaFont();
         }
     }

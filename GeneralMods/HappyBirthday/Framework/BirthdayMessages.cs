@@ -145,6 +145,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "Hey @. ^ Could you come by my place later? My family and I decided to have a birthday party for you to celebrate. ^^      -Sebastian",
                 ["Mail:birthdayDatingLeah"] = "Hey @. ^ Could you come by my place later? I thought it would be nice if we had a small party for you. ^Sincerly,^      -Leah",
                 ["Mail:birthdayDatingAbigail"] = "Hey @. ^ My family and I decided to have a birthday party for you at our place. Could you come by our house sometime today?^Sincerly,^      -Abigail",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "Hey @. ^ I thought it would be fun if we had a small party for you today. Could you come by the mines later?^ Sincerly,^      -Abigail",
                 ["Mail:birthdayDatingEmily"] = "Hi @. ^ I thought it would be nice to have a birthday party for you at our place. Could you come by my house sometime today?^Sincerly,^      -Emily",
                 ["Mail:birthdayDatingHaley"] = "Hey @. ^ I thought it would be nice to have a birthday party for you at our place. Could you come by my house sometime today?^Sincerly,^      -Haley",
                 ["Mail:birthdayDatingHarvey"] = "Hey @. ^ I thought it would be nice to have a birthday party for you at my place. Could you come by my room on the second floor of the clinic sometime today?^Sincerly,^      -Harvey",
@@ -157,6 +158,8 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Farmhand Birthday Message"] = "It's @'s birthday! Happy birthday to them!",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"]="You can't have your birthday on a festival day. Sorry!",
+                ["FavoriteGift"] = "Favorite Gift",
 
                 ["Event:JunimoBirthdayParty_0"] = "It looks like the junimos wanted to throw you a party!",
                 ["Event:JunimoBirthdayParty_1"] = "It looks like there was some cake left over too!",
@@ -218,6 +221,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "Well of course it would be. It was made from the *highest* quality ingredients from the store! $h",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "It was nice celebrating my birthday with Abigail and her family.",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "It looks like there was some leftover cake too!",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "Hey @! You are just in time for the party. Well more like adventure!$h",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "I thought it would be fun if we spent some time together in the mine for your birthday. Nothing says an exciting birthday like some adventure right?$h",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "Don't worry I wasn't saying that we go fight monsters. I just thought a change of location could be exciting. Plus my house is closed today since my dad takes the day off on Wednesdays.",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "I'm just happy that we get to spend time together like this. I even brought some cake for us to make it a proper celebration. Go ahead and make a wish!",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "Anyways, happy birthday @! I hope we get to have many more adventures to come. $l",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "It was nice celebrating my birthday with just Abigail.",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "It looks like there was some leftover cake too!",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "Hi, @ you are just in time for the celebration.$h",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "I thought it would be nice to have a small party in your honor.",
@@ -288,6 +299,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -300,6 +312,8 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -362,6 +376,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -432,6 +454,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -444,6 +467,8 @@ namespace Omegasis.HappyBirthday
                 ["Happy Birthday: Farmhand Birthday Message"] = "Ёто твой день рождени¤! ѕоздравл¤ю с этим!",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -505,6 +530,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -576,6 +609,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -584,12 +618,12 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
 
-
-
                 ["Happy Birthday: Star Message"] = "今天是你的生日！生日快乐！",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
 
 
                 ["Event:JunimoBirthdayParty_0"] = "",
@@ -651,6 +685,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -720,6 +762,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -727,10 +770,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -790,6 +837,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -858,6 +913,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -865,10 +921,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -928,6 +988,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -996,6 +1064,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -1003,10 +1072,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1066,6 +1139,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -1134,6 +1215,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -1141,10 +1223,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1204,6 +1290,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -1272,6 +1366,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -1279,10 +1374,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1342,6 +1441,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -1410,6 +1517,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -1417,10 +1525,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1480,6 +1592,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -1548,6 +1668,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -1555,10 +1676,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "Oggi è il tuo compleanno! Buon compleanno!",
                 ["Happy Birthday: Farmhand Birthday Message"] = "È il compleanno di @! Tanti auguri a loro!",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1618,6 +1743,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -1686,6 +1819,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -1693,10 +1827,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1756,6 +1894,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -1824,6 +1970,7 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSebastian"] = "",
                 ["Mail:birthdayDatingLeah"] = "",
                 ["Mail:birthdayDatingAbigail"] = "",
+                ["Mail:birthdayDatingAbigail_Wednesday"] = "",
                 ["Mail:birthdayDatingEmily"] = "",
                 ["Mail:birthdayDatingHaley"] = "",
                 ["Mail:birthdayDatingHarvey"] = "",
@@ -1831,10 +1978,14 @@ namespace Omegasis.HappyBirthday
                 ["Mail:birthdayDatingSam"] = "",
                 ["Mail:birthdayDatingAlex"] = "",
                 ["Mail:birthdayDatingShane"] = "",
+
                 ["Happy Birthday: Star Message"] = "",
                 ["Happy Birthday: Farmhand Birthday Message"] = "",
                 ["Season"] = "Season",
                 ["Date"] = "Date",
+                ["BirthdayError_FestivalDay"] = "",
+                ["FavoriteGift"] = "",
+
                 ["Event:JunimoBirthdayParty_0"] = "",
                 ["Event:JunimoBirthdayParty_1"] = "",
                 ["Event:DatingPennyBirthday_Pam:0"] = "",
@@ -1894,6 +2045,14 @@ namespace Omegasis.HappyBirthday
                 ["Event:DatingAbigailBirthday_Pierre:1"] = "",
                 ["Event:DatingAbigailBirthday_Finish:0"] = "",
                 ["Event:DatingAbigailBirthday_Finish:1"] = "",
+
+                ["Event:DatingAbigailBirthday_Mine_Abigail:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:1"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:2"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:3"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Abigail:4"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:0"] = "",
+                ["Event:DatingAbigailBirthday_Mine_Finish:1"] = "",
 
                 ["Event:DatingEmilyBirthday_Emily:0"] = "",
                 ["Event:DatingEmilyBirthday_Emily:1"] = "",
@@ -2031,22 +2190,49 @@ namespace Omegasis.HappyBirthday
             }
         }
 
+        /// <summary>
+        /// Gets a translated string from the mod's json files.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static string GetTranslatedString(string key)
         {
             StardewValley.LocalizedContentManager.LanguageCode code = HappyBirthday.Config.translationInfo.TranslationCodes[HappyBirthday.Config.translationInfo.CurrentTranslation];
             if (string.IsNullOrEmpty(key)) return "";
-            string value = HappyBirthday.Instance.messages.translatedStrings[code][key];
-            if (string.IsNullOrEmpty(value))
+            if (HappyBirthday.Instance.messages.translatedStrings[code].ContainsKey(key))
             {
-                return GetEnglishMessageString(key);
+                string value = HappyBirthday.Instance.messages.translatedStrings[code][key];
+                if (string.IsNullOrEmpty(value))
+                {
+                    return GetEnglishMessageString(key);
+                }
+                else return value;
             }
-            else return value;
+            else
+            {
+                if (HappyBirthday.Config.defaultToEnglishTranslation)
+                {
+                    return GetEnglishMessageString(key);
+                }
+                else
+                {
+                    return "";
+                }
+            }
+
         }
 
         public static string GetEnglishMessageString(string key)
         {
             StardewValley.LocalizedContentManager.LanguageCode code = StardewValley.LocalizedContentManager.LanguageCode.en;
-            return HappyBirthday.Instance.messages.translatedStrings[code][key];
+            if (HappyBirthday.Instance.messages.translatedStrings[code].ContainsKey(key))
+            {
+                return HappyBirthday.Instance.messages.translatedStrings[code][key];
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public void loadTranslationStrings()
