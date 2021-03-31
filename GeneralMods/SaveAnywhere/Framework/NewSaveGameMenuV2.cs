@@ -160,7 +160,7 @@ namespace Omegasis.SaveAnywhere.Framework
                                 this.multiplayer.sendFarmhand();
                             }
                             this.multiplayer.UpdateLate(false);
-                            Program.sdk.Update();
+                            //Program.sdk.Update();
                             this.multiplayer.UpdateEarly();
                             if (Game1.newDaySync != null)
                             {

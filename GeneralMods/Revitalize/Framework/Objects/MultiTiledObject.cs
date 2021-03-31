@@ -216,7 +216,7 @@ namespace Revitalize.Framework.Objects
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 //ModCore.log(location + (pair.Key * 16) + new Vector2(32, 32));
-                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber, c, drawShadow);
+                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber? StackDrawType.Draw : StackDrawType.HideButShowQuality, c, drawShadow);
             }
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
         }
@@ -467,7 +467,7 @@ namespace Revitalize.Framework.Objects
             }
         }
 
-        public override bool canStackWith(Item other)
+        public override bool canStackWith(ISalable other)
         {
             return false;
         }

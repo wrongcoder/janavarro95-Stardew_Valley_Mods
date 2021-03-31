@@ -65,7 +65,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
 
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color color, bool drawShadow)
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
             this.updateInfo();
             this.info.animationManager.draw(spriteBatch, location, color * transparency, 4f * scaleSize, SpriteEffects.None, layerDepth);
@@ -76,6 +76,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
             }
             spriteBatch.Draw(this.energyTexture, new Rectangle((int)location.X + 8, (int)location.Y + Game1.tileSize / 2, (int)((Game1.tileSize - 16) * this.EnergyManager.energyPercentRemaining), (int)16), new Rectangle(0, 0, 1, 1), EnergyUtilities.GetEnergyRemainingColor(this.EnergyManager), 0f, Vector2.Zero, SpriteEffects.None, layerDepth);
         }
+
         private void initializeEnergyTexture()
         {
             this.energyTexture = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
@@ -110,7 +111,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
                 who.lastClick = who.GetToolLocation(false);
             else
             {
-                who.FarmerSprite.nextOffset = 0;
+                //who.FarmerSprite.nextOffset = 0;
                 switch (who.FacingDirection)
                 {
                     case 0:
