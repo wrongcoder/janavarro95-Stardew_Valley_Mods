@@ -149,7 +149,7 @@ namespace Omegasis.BuildHealth
 
             if (this.PlayerData.CurrentLevel < this.Config.MaxLevel)
             {
-                while (this.PlayerData.CurrentExp >= this.PlayerData.ExpToNextLevel)
+                while (this.PlayerData.CurrentExp >= this.PlayerData.ExpToNextLevel && this.PlayerData.CurrentLevel<this.Config.MaxLevel)
                 {
                     this.PlayerData.CurrentLevel += 1;
                     this.PlayerData.CurrentExp = this.PlayerData.CurrentExp - this.PlayerData.ExpToNextLevel;

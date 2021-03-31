@@ -94,7 +94,7 @@ namespace Omegasis.SaveAnywhere.Framework
                     }
                     else
                     {
-                        NewSaveGameMenu.saveClientOptions();
+                        NewSaveGameMenuV2.saveClientOptions();
                         this.complete();
                     }
                 }
@@ -118,7 +118,7 @@ namespace Omegasis.SaveAnywhere.Framework
             }
         }
 
-        private static void saveClientOptions()
+        public static void saveClientOptions()
         {
             StartupPreferences startupPreferences = new StartupPreferences();
             int num1 = 0;

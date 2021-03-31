@@ -29,6 +29,24 @@ namespace StardewSymphonyRemastered.Framework
         private readonly string[] timesOfDay;
         public static char seperator = '_';
 
+        public enum SongKeyType
+        {
+            None,
+            Seasonal,
+            Weather,
+            Time,
+            Location,
+            DayOfWeek
+        }
+
+        public string[] TimesOfDay
+        {
+            get
+            {
+                return this.timesOfDay;
+            }
+        }
+
         /// <summary>Construct an instance.</summary>
         public SongSpecifics()
         {
@@ -141,7 +159,6 @@ namespace StardewSymphonyRemastered.Framework
                         if (name == menuNamespaceName)
                         {
                             key = name;
-                            StardewSymphony.menuChangedMusic = true;
                             return key;
                         }
                     }
@@ -150,11 +167,37 @@ namespace StardewSymphonyRemastered.Framework
                 }
                 else
                 {
-                    key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(true) + seperator + getLocationString() + seperator + getDayOfWeekString();
+                    key = getCurrentConditionalKey(true, true, true, true, true, true);
+                    int mode =6;
 
-                    if (StardewSymphony.musicManager.GetApplicableMusicPacks(key).Count == 0)
+                    while (StardewSymphony.musicManager.GetApplicableMusicPacks(key).Count == 0 && mode>0)
                     {
-                        key = getSeasonNameString() + seperator + getWeatherString() + seperator + getTimeOfDayString(false) + seperator + getLocationString() + seperator + getDayOfWeekString();
+                        mode--;
+                        if (mode == 5)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, true, true, false);
+                        }
+                        if (mode == 4)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, true, false, false);
+                        }
+                        if (mode == 3)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, false, false, false);
+                        }
+                        if (mode == 2)
+                        {
+                            key = getCurrentConditionalKey(true, true, false, false, false, false);
+                        }
+                        if (mode == 1)
+                        {
+                            key = getCurrentConditionalKey(true, false, false, false, false, false);
+                        }
+                        if (mode == 0)
+                        {
+                            key = getCurrentConditionalKey(true, true, true, true, true, true);
+                        }
+
                     }
                 }
             }
@@ -164,7 +207,26 @@ namespace StardewSymphonyRemastered.Framework
             return key;
         }
 
-
+        /// <summary>
+        /// Gets an appropriate key combination from for selecting music
+        /// </summary>
+        /// <param name="season"></param>
+        /// <param name="weather"></param>
+        /// <param name="time"></param>
+        /// <param name="hourly"></param>
+        /// <param name="location"></param>
+        /// <param name="dayOfWeek"></param>
+        /// <returns></returns>
+        public static string getCurrentConditionalKey(bool season = true, bool weather = true, bool time = true,bool hourly=true, bool location = true, bool dayOfWeek = true)
+        {
+            string key = "";
+            if (season == true) key += getSeasonNameString();
+            if (weather == true) key +=seperator+ getWeatherString();
+            if (time == true) key +=seperator+ getTimeOfDayString(hourly);
+            if (location == true) key +=seperator+ getLocationString();
+            if (dayOfWeek == true) key +=seperator+ getDayOfWeekString();
+            return key;
+        }
 
         /// <summary>Initialize the location lists with the names of all of the major locations in the game.</summary>
         public static void initializeLocationsList()
@@ -295,7 +357,16 @@ namespace StardewSymphonyRemastered.Framework
             else
             {
                 int hour = Game1.timeOfDay / 100;
-                string suffix = hour < 12 && hour >= 24 ? "A.M." : "P.M.";
+                string suffix = "";
+                if(hour<12 || hour >= 24)
+                {
+                    suffix = "A.M.";
+                }
+                if(hour>=12 && hour < 24)
+                {
+                    suffix = "P.M";
+                }
+
                 return hour + suffix;
             }
         }
@@ -323,7 +394,7 @@ namespace StardewSymphonyRemastered.Framework
                 }
 
                 if (locName.Contains("Cabin") || Game1.currentLocation.isFarmBuildingInterior())
-                    locName = Game1.currentLocation.uniqueName;
+                    locName = Game1.currentLocation.uniqueName.Value;
 
                 return locName;
             }
@@ -335,6 +406,57 @@ namespace StardewSymphonyRemastered.Framework
         }
 
         #endregion
+
+
+        public static SongKeyType GetKeySpecificity(string key)
+        {
+            string[] splits = key.Split(seperator);
+            if (splits.Length == 5) return SongKeyType.DayOfWeek;
+            if (splits.Length == 4) return SongKeyType.Location;
+            if (splits.Length == 3) return SongKeyType.Time;
+            if (splits.Length == 2) return SongKeyType.Weather;
+            if (splits.Length == 1) return SongKeyType.Seasonal;
+
+            return SongKeyType.None;
+        }
+
+        public static bool IsKeyLocationSpecific(string key)
+        {
+            SongKeyType type=GetKeySpecificity(key);
+            if (type == SongKeyType.Location || type == SongKeyType.DayOfWeek) return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the key used is associated with playing at certain times.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static bool IsKeyTimeSensitive(string key)
+        {
+            SongKeyType type = GetKeySpecificity(key);
+            if (type == SongKeyType.Location || type == SongKeyType.DayOfWeek || type== SongKeyType.Time) return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the key is only as specific as having a time set. (i.e not location or day specific)
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static bool IsKeyTimeSpecific(string key)
+        {
+            SongKeyType type = GetKeySpecificity(key);
+            if (type == SongKeyType.Time) return true;
+            return false;
+        }
+
+        public static bool IsKeyGeneric(string key)
+        {
+            SongKeyType type = GetKeySpecificity(key);
+            if (type == SongKeyType.Weather || type == SongKeyType.Seasonal) return true;
+            return false;
+        }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
         //                         Non-Static Methods                   //
@@ -450,21 +572,12 @@ namespace StardewSymphonyRemastered.Framework
             }
         }
 
-        /// <summary>Used to access the master list of songs this music pack contains.</summary>
-        public KeyValuePair<string, List<string>> getSongList(string key)
+        public List<string> getSongList(string key)
         {
             if (!this.listOfSongsWithTriggers.ContainsKey(key))
-                return new KeyValuePair<string, List<string>>("", null);
+                return null;
 
-            //This is just the plain song name with no extra info.
-            foreach (KeyValuePair<string, List<string>> pair in this.listOfSongsWithTriggers)
-            {
-                //StardewSymphony.ModMonitor.Log(pair.Key);
-                if (pair.Key == key)
-                    return pair;
-            }
-
-            return new KeyValuePair<string, List<string>>("", null);
+            return this.listOfSongsWithTriggers[key];
         }
 
         public List<string> getFestivalMusic()
@@ -484,7 +597,7 @@ namespace StardewSymphonyRemastered.Framework
                 StardewSymphony.ModMonitor.Log(songListKey);
 
             var songKeyPair = this.getSongList(songListKey); //Get the trigger list
-            if (songKeyPair.Value == null)
+            if (songKeyPair == null)
             {
                 if (StardewSymphony.Config.EnableDebugLog)
                     StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song to a list that is null. The name of the song list is " + songListKey);
@@ -497,7 +610,7 @@ namespace StardewSymphonyRemastered.Framework
                     StardewSymphony.ModMonitor.Log("For some reason you are trying to add a song that is null. The name of the song is " + songName);
                 return;
             }
-            songKeyPair.Value.Add(song); //add the song from master pool to the trigger list
+            songKeyPair.Add(song); //add the song from master pool to the trigger list
         }
 
         public void addSongToFestivalList(string songName)
@@ -530,8 +643,8 @@ namespace StardewSymphonyRemastered.Framework
         public void removeSongFromTriggerList(string songListKey, string songName)
         {
             var songKeyPair = this.getSongList(songListKey);
-            string song = this.getSongFromList(songKeyPair.Value, songName);
-            songKeyPair.Value.Remove(song);
+            string song = this.getSongFromList(songKeyPair, songName);
+            songKeyPair.Remove(song);
         }
 
         /// <summary>Remove a song from the event list.</summary>
