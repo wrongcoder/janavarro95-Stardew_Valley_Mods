@@ -701,7 +701,7 @@ namespace Revitalize.Framework.Objects
             this.info.DyedColor = new NamedColor("", new Color(0, 0, 0, 0));
         }
 
-        public override bool canStackWith(Item other)
+        public override bool canStackWith(ISalable other)
         {
             if (other is CustomObject == false) return false;
             CustomObject o = (CustomObject)other;

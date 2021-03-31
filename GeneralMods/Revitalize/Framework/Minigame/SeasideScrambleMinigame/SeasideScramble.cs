@@ -535,6 +535,7 @@ namespace Revitalize.Framework.Minigame.SeasideScrambleMinigame
         public bool forceQuit()
         {
             this.quitGame = true;
+            return true;
         }
 
         #endregion

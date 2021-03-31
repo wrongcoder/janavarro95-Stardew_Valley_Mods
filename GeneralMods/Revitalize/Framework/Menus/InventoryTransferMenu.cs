@@ -191,7 +191,7 @@ namespace Revitalize.Framework.Menus
                 if (I == null) continue;
                 if (From.activeItem.canStackWith(I))
                 {
-                    I.addToStack(From.activeItem.Stack);
+                    I.addToStack(From.activeItem);
                     From.items.Remove(From.activeItem);
                     From.activeItem = null;
                     From.populateClickableItems();
@@ -245,7 +245,8 @@ namespace Revitalize.Framework.Menus
                 if (I == null) continue;
                 if (From.activeItem.canStackWith(I))
                 {
-                    I.addToStack(1);
+                    //I.addToStack(I);
+                    I.Stack++;
                     From.activeItem.Stack--;
                     if (From.activeItem.Stack <= 0)
                     {
@@ -350,7 +351,7 @@ namespace Revitalize.Framework.Menus
                         if (I == null) continue;
                         if (this.trashedItem.item.canStackWith(I))
                         {
-                            I.addToStack(this.trashedItem.item.Stack);
+                            I.addToStack(this.trashedItem.item);
                             this.trashedItem.item = null;
                             return;
                         }
@@ -375,7 +376,7 @@ namespace Revitalize.Framework.Menus
                             if (I == null) continue;
                             if (this.trashedItem.item.canStackWith(I))
                             {
-                                I.addToStack(this.trashedItem.item.Stack);
+                                I.addToStack(this.trashedItem.item);
                                 this.trashedItem.item = null;
                                 return;
                             }
@@ -403,7 +404,7 @@ namespace Revitalize.Framework.Menus
                         if (I == null) continue;
                         if (this.trashedItem.item.canStackWith(I))
                         {
-                            I.addToStack(this.trashedItem.item.Stack);
+                            I.addToStack(this.trashedItem.item);
                             this.trashedItem.item = null;
                             return;
                         }

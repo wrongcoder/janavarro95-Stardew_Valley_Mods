@@ -53,11 +53,9 @@ namespace Revitalize.Framework.Objects.Items.Tools
             this.updateInfo();
             //base.drawAttachments(b, x, y);
             //this.info.animationManager.draw(b,)
-
-
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color color, bool drawShadow)
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
             this.updateInfo();
             this.info.animationManager.draw(spriteBatch, location, color * transparency, 4f * scaleSize, SpriteEffects.None, layerDepth);
@@ -96,7 +94,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
                 who.lastClick = who.GetToolLocation(false);
             else
             {
-                who.FarmerSprite.nextOffset = 0;
+                //who.FarmerSprite.nextOffset = 0;
                 switch (who.FacingDirection)
                 {
                     case 0:
@@ -233,7 +231,7 @@ namespace Revitalize.Framework.Objects.Items.Tools
                             if (random.NextDouble() < 0.01 && Game1.stats.DaysPlayed > 1U)
                                 Game1.createObjectDebris(390, num1, num2, this.getLastFarmerToUse().UniqueMultiplayerID);
                         }
-                        location.breakStone(@object.ParentSheetIndex, num1, num2, who, new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + num1 * 4000 + num2));
+                        Revitalize.ModCore.ModHelper.Reflection.GetMethod(location,"breakStone").Invoke(@object.ParentSheetIndex, num1, num2, who, new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + num1 * 4000 + num2));
                     }
                     else
                         Game1.mine.checkStoneForItems(@object.ParentSheetIndex, num1, num2, who);

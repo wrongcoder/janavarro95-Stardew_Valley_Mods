@@ -159,7 +159,7 @@ namespace Revitalize.Framework.Crafting
             foreach (CraftingRecipeComponent pair in this.outputs)
             {
                 Item item = pair.item.getOne();
-                item.addToStack(pair.requiredAmount - 1);
+                item.addToStack(pair.item);
                 bool added = manager.addItem(item);
                 if (!added && dropToGround)
                     Game1.createItemDebris(item, Game1.player.getStandingPosition(), Game1.player.getDirection());

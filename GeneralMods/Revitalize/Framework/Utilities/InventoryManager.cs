@@ -110,7 +110,7 @@ namespace Revitalize.Framework.Utilities
                     Item self = this.items[i];
                     if (self != null && self.canStackWith(item))
                     {
-                        self.addToStack(item.Stack);
+                        self.addToStack(item);
                         this.requiresUpdate = true;
                         return true;
                     }

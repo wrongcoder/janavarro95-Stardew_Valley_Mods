@@ -161,7 +161,7 @@ namespace Revitalize.Framework.Objects.Items.Resources
             return b.ToString();
         }
 
-        public override int sellToStorePrice()
+        public override int sellToStorePrice(long PlayerID = -1)
         {
             return this.Price;
         }
