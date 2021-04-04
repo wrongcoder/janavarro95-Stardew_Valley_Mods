@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using PyTK.CustomElementHandler;
@@ -10,7 +7,7 @@ using StardewValley;
 
 namespace Revitalize.Framework.Objects.Machines
 {
-    public class PipeMultiTiledObject:MultiTiledObject
+    public class PipeMultiTiledObject : MultiTiledObject
     {
         public PipeMultiTiledObject() : base()
         {
@@ -119,15 +116,15 @@ namespace Revitalize.Framework.Objects.Machines
             //base.draw(spriteBatch, xNonTile, yNonTile, layerDepth, alpha);
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
             this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 //ModCore.log(location + (pair.Key * 16) + new Vector2(32, 32));
-                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber? StackDrawType.Draw: StackDrawType.HideButShowQuality, c, drawShadow);
+                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber, color, drawShadow);
             }
-            if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
+            if (drawStackNumber.ShouldDrawFor(this) && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue))
                 Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
         }

@@ -1,38 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
-using PyTK.Extensions;
-using PyTK.Types;
 using Revitalize.Framework;
+using Revitalize.Framework.Configs;
 using Revitalize.Framework.Crafting;
 using Revitalize.Framework.Environment;
-using Revitalize.Framework.Factories.Objects;
+using Revitalize.Framework.Hacks;
 using Revitalize.Framework.Illuminate;
+using Revitalize.Framework.Menus;
+using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
 using Revitalize.Framework.Objects;
+using Revitalize.Framework.Objects.Extras;
 using Revitalize.Framework.Objects.Furniture;
 using Revitalize.Framework.Player;
 using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Objects;
-using StardustCore.UIUtilities;
 using StardustCore.Animations;
-using StardewValley.Menus;
-using Revitalize.Framework.Objects.Extras;
-using Revitalize.Framework.Minigame.SeasideScrambleMinigame;
-using Revitalize.Framework.Objects.Items.Resources;
-using Revitalize.Framework.Hacks;
-using Revitalize.Framework.Configs;
-using StardewValley.Locations;
-using System.Linq;
+using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
-using Revitalize.Framework.Menus;
-using Revitalize.Framework.Objects.CraftingTables;
-using Revitalize.Framework.Objects.Items.Tools;
-using StardewValley.Tools;
-using Revitalize.Framework.Menus.Machines;
-using Revitalize.Framework.Objects.Machines;
+using Animation = StardustCore.Animations.Animation;
 
 namespace Revitalize
 {
@@ -262,7 +251,7 @@ namespace Revitalize
             ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
-            
+
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
             ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
@@ -287,17 +276,17 @@ namespace Revitalize
 
         private void Input_ButtonPressed1(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
         {
-            if(e.Button== SButton.MouseLeft)
+            if (e.Button == SButton.MouseLeft)
             {
                 if (Game1.player != null)
                 {
                     if (Game1.activeClickableMenu != null || Game1.eventUp || Game1.currentMinigame != null) return;
-                    if(Game1.player.ActiveObject is CustomObject)
+                    if (Game1.player.ActiveObject is CustomObject)
                     {
-                        if((Game1.player.ActiveObject as CustomObject).canBePlacedHere(Game1.player.currentLocation, Game1.currentCursorTile))
+                        if ((Game1.player.ActiveObject as CustomObject).canBePlacedHere(Game1.player.currentLocation, Game1.currentCursorTile))
                         {
-                            CustomObject o =(CustomObject) Game1.player.ActiveObject;
-                            o.placementAction(Game1.currentLocation,(int) Game1.currentCursorTile.X*Game1.tileSize,(int)Game1.currentCursorTile.Y*Game1.tileSize, Game1.player);
+                            CustomObject o = (CustomObject)Game1.player.ActiveObject;
+                            o.placementAction(Game1.currentLocation, (int)Game1.currentCursorTile.X * Game1.tileSize, (int)Game1.currentCursorTile.Y * Game1.tileSize, Game1.player);
                             //o.performObjectDropInAction(Game1.player.ActiveObject, true, Game1.player);
                             Game1.player.reduceActiveItemByOne();
                             playerInfo.justPlacedACustomObject = true;
@@ -339,12 +328,10 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
 
             TextureManager.AddTextureManager(Manifest, "HUD");
-            TextureManager.GetTextureManager(Manifest,"HUD").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "HUD"));
+            TextureManager.GetTextureManager(Manifest, "HUD").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "HUD"));
 
             TextureManager.AddTextureManager(Manifest, "Objects.Crafting");
             TextureManager.GetTextureManager(Manifest, "Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
-
-            
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -363,7 +350,7 @@ namespace Revitalize
                 {
                     //Inputs here
                    new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"),20)
-                }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Anvil"), 1)),null,new Vector2(),new Rectangle(0,0,32,32),1f,false,Color.White),"Default");
+                }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Anvil"), 1)), null, new Vector2(), new Rectangle(0, 0, 32, 32), 1f, false, Color.White), "Default");
                 craft.currentTab = "Default";
                 craft.sortRecipes();
                 Game1.activeClickableMenu = craft;
@@ -571,7 +558,7 @@ namespace Revitalize
             Game1.player.addItemToInventoryBool(ObjectManager.GetItem("Workbench"));
 
 
-            MultiTiledObject batteryBin =(MultiTiledObject) ModCore.ObjectManager.GetItem("BatteryBin", 1);
+            MultiTiledObject batteryBin = (MultiTiledObject)ModCore.ObjectManager.GetItem("BatteryBin", 1);
             batteryBin.dyeColor(Framework.Illuminate.ColorsList.Lime);
 
             //PickaxeExtended pick = new PickaxeExtended(new BasicItemInformation("My First Pickaxe", "Omegasis.Revitalize.Items.Tools.MyFirstPickaxe", "A testing pickaxe. Does it work?", "Tool", Color.SlateGray, 0, 0, false, 500, false, false, TextureManager.GetTexture(Manifest, "Tools", "Pickaxe"), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Tools", "Pickaxe"), new Animation(0, 0, 16, 16)), Color.White, true, null, null),2,TextureManager.GetExtendedTexture(Manifest,"Tools","TestingPickaxeWorking"));
