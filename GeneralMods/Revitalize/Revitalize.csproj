@@ -37,9 +37,6 @@
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="LiteNetLib">
-      <HintPath>..\..\..\LiteNetLib\LiteNetLib.dll</HintPath>
-    </Reference>
     <Reference Include="PyTK">
       <HintPath>$(GamePath)\Mods\PyTK\PyTK.dll</HintPath>
     </Reference>
@@ -666,7 +663,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Framework\Networking\" />
     <Folder Include="Framework\Objects\InformationFiles\Extras\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
