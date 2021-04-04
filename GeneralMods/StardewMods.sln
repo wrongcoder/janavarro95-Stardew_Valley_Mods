@@ -28,11 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveAnywhere", "SaveAnywher
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeFreeze", "TimeFreeze\TimeFreeze.csproj", "{07410BC3-9B33-40E9-A2EF-B8EDF983F0A3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "~metadata", "~metadata", "{90EB59CA-51F6-49CF-8DCE-A8BB62C58E17}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{90EB59CA-51F6-49CF-8DCE-A8BB62C58E17}"
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
-		deploy.targets = deploy.targets
-		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+		common.targets = common.targets
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
