@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -121,13 +118,13 @@ namespace Revitalize.Framework.Objects.Furniture
 
         }
 
-        public TableTileComponent(CustomObjectData PyTKData,BasicItemInformation Info, TableInformation FurnitureInfo) : base(PyTKData,Info)
+        public TableTileComponent(CustomObjectData PyTKData, BasicItemInformation Info, TableInformation FurnitureInfo) : base(PyTKData, Info)
         {
             this.furnitureInfo = FurnitureInfo;
             this.Price = Info.price;
         }
 
-        public TableTileComponent(CustomObjectData PyTKData,BasicItemInformation Info, Vector2 TileLocation, TableInformation FurnitureInfo) : base(PyTKData,Info, TileLocation)
+        public TableTileComponent(CustomObjectData PyTKData, BasicItemInformation Info, Vector2 TileLocation, TableInformation FurnitureInfo) : base(PyTKData, Info, TileLocation)
         {
             this.furnitureInfo = FurnitureInfo;
             this.Price = Info.price;
@@ -146,7 +143,7 @@ namespace Revitalize.Framework.Objects.Furniture
             if (this.heldObject.Value != null)
             {
                 if (Game1.player.isInventoryFull() == false)
-                {                   
+                {
                     Game1.player.addItemToInventoryBool(this.heldObject.Value, false);
                     this.heldObject.Value = null;
                     return;
@@ -197,7 +194,6 @@ namespace Revitalize.Framework.Objects.Furniture
 
 
             return PickUpState.DoNothing;
-            
         }
 
 
@@ -231,7 +227,7 @@ namespace Revitalize.Framework.Objects.Furniture
             if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift)))
                 return this.shiftRightClicked(who);
 
-           
+
             //return base.checkForAction(who, justCheckingForActivity);
 
             if (justCheckingForActivity)
@@ -261,7 +257,7 @@ namespace Revitalize.Framework.Objects.Furniture
         /// <returns></returns>
         public override bool clicked(Farmer who)
         {
-            if (this.pickUpItem() ==  PickUpState.DoNothing) return false;
+            if (this.pickUpItem() == PickUpState.DoNothing) return false;
             return base.clicked(who);
         }
 
@@ -274,7 +270,7 @@ namespace Revitalize.Framework.Objects.Furniture
 
         public override Item getOne()
         {
-            TableTileComponent component = new TableTileComponent(this.data,this.info.Copy(), (TableInformation)this.furnitureInfo);
+            TableTileComponent component = new TableTileComponent(this.data, this.info.Copy(), (TableInformation)this.furnitureInfo);
             component.containerObject = this.containerObject;
             component.offsetKey = this.offsetKey;
             return component;
@@ -289,7 +285,7 @@ namespace Revitalize.Framework.Objects.Furniture
             string GUID = additionalSaveData["GUID"];
             //ModCore.log("This tile has a parent guid of: " + additionalSaveData["ParentGUID"]);
             TableTileComponent self = Revitalize.ModCore.Serializer.DeserializeGUID<TableTileComponent>(additionalSaveData["GUID"]);
-            
+
             if (ModCore.IsNullOrDefault<TableTileComponent>(self))
             {
                 //ModCore.log("SELF IS NULL");
@@ -316,7 +312,7 @@ namespace Revitalize.Framework.Objects.Furniture
                     //Revitalize.ModCore.log("READD AN OBJECT!!!!");
                 }
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 ModCore.log(err);
             }
@@ -394,7 +390,6 @@ namespace Revitalize.Framework.Objects.Furniture
             }
 
             // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
-
         }
 
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1)
@@ -403,10 +398,10 @@ namespace Revitalize.Framework.Objects.Furniture
             base.draw(spriteBatch, xNonTile, yNonTile, layerDepth, alpha);
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
             this.updateInfo();
-            base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
+            base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, color, drawShadow);
         }
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)

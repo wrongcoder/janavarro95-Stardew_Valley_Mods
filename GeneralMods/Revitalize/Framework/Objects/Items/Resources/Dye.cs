@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -12,7 +10,7 @@ using StardewValley;
 
 namespace Revitalize.Framework.Objects.Items.Resources
 {
-    public class Dye: CustomObject, ISaveElement
+    public class Dye : CustomObject, ISaveElement
     {
 
         public NamedColor dyeColor;
@@ -21,7 +19,7 @@ namespace Revitalize.Framework.Objects.Items.Resources
         {
             get
             {
-                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid + "<" + ModCore.Serializer.ToJSONString(this.data)+"<"+ModCore.Serializer.ToJSONString(this.dyeColor);
+                return Revitalize.ModCore.Serializer.ToJSONString(this.info) + "<" + this.guid + "<" + ModCore.Serializer.ToJSONString(this.data) + "<" + ModCore.Serializer.ToJSONString(this.dyeColor);
             }
             set
             {
@@ -60,13 +58,13 @@ namespace Revitalize.Framework.Objects.Items.Resources
 
         public Dye() { }
 
-        public Dye(CustomObjectData PyTKData, BasicItemInformation info,NamedColor Color ,int Stack = 1) : base(PyTKData, info)
+        public Dye(CustomObjectData PyTKData, BasicItemInformation info, NamedColor Color, int Stack = 1) : base(PyTKData, info)
         {
             this.Stack = Stack;
             this.Price = info.price;
         }
 
-        public Dye(CustomObjectData PyTKData, BasicItemInformation info,NamedColor Color ,Vector2 TileLocation, int Stack = 1) : base(PyTKData, info, TileLocation)
+        public Dye(CustomObjectData PyTKData, BasicItemInformation info, NamedColor Color, Vector2 TileLocation, int Stack = 1) : base(PyTKData, info, TileLocation)
         {
             this.Stack = Stack;
             this.Price = info.price;
@@ -262,14 +260,15 @@ namespace Revitalize.Framework.Objects.Items.Resources
             }
 
             // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
-
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
-            if (drawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
+            bool shouldDrawStackNumber = drawStackNumber.ShouldDrawFor(this);
+
+            if (shouldDrawStackNumber && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue))
                 Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
-            if (drawStackNumber && this.Quality > 0)
+            if (shouldDrawStackNumber && this.Quality > 0)
             {
                 float num = this.Quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
                 spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.Quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.Quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);

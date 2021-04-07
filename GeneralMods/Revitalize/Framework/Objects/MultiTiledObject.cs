@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -9,7 +7,6 @@ using PyTK.CustomElementHandler;
 using Revitalize.Framework.Illuminate;
 using Revitalize.Framework.Utilities;
 using StardewValley;
-using StardewValley.Objects;
 
 namespace Revitalize.Framework.Objects
 {
@@ -30,8 +27,8 @@ namespace Revitalize.Framework.Objects
                     {
                         if (pair.Value == null) continue;
                         if ((pair.Value as CustomObject) == null) continue;
-                        if((pair.Value as CustomObject).guid==null) continue;
-                        if(ModCore.CustomObjects.ContainsKey( (pair.Value as CustomObject).guid))
+                        if ((pair.Value as CustomObject).guid == null) continue;
+                        if (ModCore.CustomObjects.ContainsKey((pair.Value as CustomObject).guid))
                         {
                             ModCore.CustomObjects[(pair.Value as CustomObject).guid] = (CustomObject)pair.Value;
                         }
@@ -43,7 +40,7 @@ namespace Revitalize.Framework.Objects
                 }
 
                 //ModCore.log("Serializing dict:" + dictStr);
-                return infoStr + "<" + guidStr + "<" + pytkData+"<"+dictStr;
+                return infoStr + "<" + guidStr + "<" + pytkData + "<" + dictStr;
             }
             set
             {
@@ -85,7 +82,7 @@ namespace Revitalize.Framework.Objects
                 {
                     //ModCore.log("Children dicts are updated!");
                     this.childrenGuids = dict;
-                    foreach(KeyValuePair<Vector2,Guid> pair in dict)
+                    foreach (KeyValuePair<Vector2, Guid> pair in dict)
                     {
                         if (ModCore.CustomObjects.ContainsKey(pair.Value))
                         {
@@ -210,13 +207,13 @@ namespace Revitalize.Framework.Objects
             //base.draw(spriteBatch, xNonTile, yNonTile, layerDepth, alpha);
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, bool drawStackNumber, Color c, bool drawShadow)
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
             this.updateInfo();
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
                 //ModCore.log(location + (pair.Key * 16) + new Vector2(32, 32));
-                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber? StackDrawType.Draw : StackDrawType.HideButShowQuality, c, drawShadow);
+                pair.Value.drawInMenu(spriteBatch, location + (pair.Key * 16) + new Vector2(32, 32), 1.0f, transparency, layerDepth, drawStackNumber, color, drawShadow);
             }
             //base.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, c, drawShadow);
         }
@@ -271,7 +268,7 @@ namespace Revitalize.Framework.Objects
             this.updateInfo();
 
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
-                (pair.Value as CustomObject).drawFullyInMenu(spriteBatch, objectPosition + (pair.Key * Game1.tileSize),Depth);
+                (pair.Value as CustomObject).drawFullyInMenu(spriteBatch, objectPosition + (pair.Key * Game1.tileSize), Depth);
         }
 
         public virtual void pickUp(Farmer who)
@@ -531,7 +528,7 @@ namespace Revitalize.Framework.Objects
                 {
 
                 }
-                if((ModCore.CustomObjects[this.guid] as MultiTiledObject).childrenGuids.Count > 0)
+                if ((ModCore.CustomObjects[this.guid] as MultiTiledObject).childrenGuids.Count > 0)
                 {
                     this.childrenGuids = (ModCore.CustomObjects[this.guid] as MultiTiledObject).childrenGuids;
                 }
@@ -546,7 +543,7 @@ namespace Revitalize.Framework.Objects
                 //ModCore.log("Either objects or children guids are null");
                 return;
             }
-            
+
 
             //ModCore.log("Recreate children components");
             if (this.objects.Count < this.childrenGuids.Count)
@@ -556,7 +553,7 @@ namespace Revitalize.Framework.Objects
                     if (ModCore.CustomObjects.ContainsKey(pair.Value))
                     {
                         this.removeComponent(pair.Key);
-                        this.addComponent(pair.Key,(MultiTiledComponent)ModCore.CustomObjects[pair.Value]);
+                        this.addComponent(pair.Key, (MultiTiledComponent)ModCore.CustomObjects[pair.Value]);
                     }
                     else
                     {
@@ -581,7 +578,7 @@ namespace Revitalize.Framework.Objects
         {
             foreach (KeyValuePair<Vector2, StardewValley.Object> pair in this.objects)
             {
-                (pair.Value as CustomObject).dyeColor(DyeColor);       
+                (pair.Value as CustomObject).dyeColor(DyeColor);
             }
             this.info.DyedColor = DyeColor;
         }
