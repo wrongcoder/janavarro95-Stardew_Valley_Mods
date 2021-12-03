@@ -17,9 +17,21 @@ using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using StardustCore.Animations;
+using Revitalize.Framework.Utilities;
 
 namespace Revitalize.Framework.World.Objects
 {
+
+    /*
+     * 
+     * NOTES: Calling this.performRemoveAction(this.tileLocation, location); is NOT the same as calling GameLocation.objects.Remove(). Perform remove action cleans up the item before being removed, but has no actual deletion/removal logic from the game world itself.
+     * 
+     * 
+     * Current issue: When trying to remove furniture, it dupes the furniture and adds it to the player's inventory without removing it from the game world. How to fix this?
+     * 
+     */
+
+
     /// <summary>
     /// A base class that is to be extended by other implementations of objects.
     ///
@@ -210,13 +222,18 @@ namespace Revitalize.Framework.World.Objects
         }
 
         /// <summary>
-        /// Checks to see if the object is being interacted with.
+        /// Checks to see if the object is being interacted with. Seems to only happen when right clicked.
         /// </summary>
         /// <param name="who"></param>
         /// <param name="justCheckingForActivity"></param>
-        /// <returns></returns>
+        /// <returns>True if something meaningful has occured. False otherwise.</returns>
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
+            if (justCheckingForActivity)
+            {
+                return true;
+            }
+
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
 
@@ -231,7 +248,17 @@ namespace Revitalize.Framework.World.Objects
             if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) == true || keyboardState.IsKeyDown(Keys.RightShift) == true))
                 return this.shiftRightClicked(who);
 
-            return true;
+            if (mState.LeftButton == ButtonState.Pressed)
+            {
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+
+            //True should be retruned when something meaningful has happened.
+            //False should be returned when things like error messages have occurd.
         }
 
         public override string checkForSpecialItemHoldUpMeessage()
@@ -244,12 +271,14 @@ namespace Revitalize.Framework.World.Objects
             ModCore.log("Click the thing??");
             if (Game1.player.isInventoryFull())
             {
+                //Full inventory message.
+                Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:Crop.cs.588"));
                 return false;
             }
             else
             {
 
-                this.performRemoveAction(this.TileLocation, this.getCurrentLocation());
+                this.pickupFromGameWorld(this.TileLocation, who.currentLocation);
                 return true; //needs to be true to mark actually picking up the object? Also need to play sound?
             }
 
@@ -354,9 +383,8 @@ namespace Revitalize.Framework.World.Objects
 
         public override bool isPassable()
         {
-            return false;
             if (this.basicItemInfo.ignoreBoundingBox) return true;
-            return base.isPassable();
+            return false;
         }
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
@@ -370,10 +398,6 @@ namespace Revitalize.Framework.World.Objects
             newBounds.Width = Game1.tileSize * (int)this.basicItemInfo.boundingBoxTileDimensions.X;
             newBounds.Height = Game1.tileSize * (int)this.basicItemInfo.boundingBoxTileDimensions.Y;
 
-            if (newBounds != boundingBox)
-            {
-                this.boundingBox.Set(boundingBox);
-            }
             return newBounds;
         }
 
@@ -419,6 +443,7 @@ namespace Revitalize.Framework.World.Objects
             base.onReadyForHarvest(environment);
         }
 
+        /*
         /// <summary>
         /// When the object is droped into (???) what happens?
         /// </summary>
@@ -431,14 +456,20 @@ namespace Revitalize.Framework.World.Objects
             return false;
             
         }
+        */
 
         /// <summary>
-        /// When this object is removed what happens?
+        /// Performs cleanup that should happen related to an object's removal, but DOES NOT perform the actual removing from the game world.
         /// </summary>
         /// <param name="tileLocation"></param>
         /// <param name="environment"></param>
         public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)
         {
+
+            if (environment == null) return;
+
+            ModCore.log("Perform remove action for furniture!");
+
             this.cleanUpLights();
 
 
@@ -451,17 +482,71 @@ namespace Revitalize.Framework.World.Objects
             }
             this.RemoveLightGlow(environment);
 
-            environment.objects.Remove(this.TileLocation);
-            environment.furniture.Remove(this);
+
             this.TileLocation = Vector2.Zero;
             this.basicItemInfo.locationName = "";
             this.boundingBox.Value = this.getBoundingBox(Vector2.Zero);
 
             this.sittingFarmers.Clear();
-            this.removeAndAddToPlayersInventory();
 
+            //Add this back in??
+            //this.removeAndAddToPlayersInventory();
 
+            //base.performRemoveAction(tileLocation, environment) ;
             //base.performRemoveAction(tileLocation, environment);
+        }
+
+        
+        /// <summary>
+        /// Removes this from the game world, performs cleanup, and puts the object into the player's inventory. For similar logic, <see cref="CustomObject.AttemptRemoval(Action{Furniture})"/> for furniture removal logic as this is specific to the <see cref="StardewValley.Object"/> removal logic.
+        /// </summary>
+        /// <param name="tileLocation"></param>
+        /// <param name="environment"></param>
+        /// <returns></returns>
+        public virtual bool pickupFromGameWorld(Vector2 tileLocation, GameLocation environment)
+        {
+
+            if (Game1.player.isInventoryFull())
+            {
+                Game1.showRedMessage("Inventory full.");
+                return false;
+            }
+
+            this.removeFromGameWorld(tileLocation, environment);
+            this.performRemoveAction(tileLocation,environment);
+
+            Farmer who = Game1.player;
+            bool foundInToolbar = false;
+            for (int i = 0; i < 12; i++)
+            {
+                if (Game1.player.items[i] == null)
+                {
+                    who.items[i] = this;
+                    who.CurrentToolIndex = i;
+                    foundInToolbar = true;
+                    break;
+                }
+            }
+            if (!foundInToolbar)
+            {
+                Item item = who.addItemToInventory(this, 11);
+                who.addItemToInventory(item);
+                who.CurrentToolIndex = 11;
+            }
+
+
+            return true;
+        }
+
+        /// <summary>
+        /// Removes a game object from a <see cref="GameLocation"/>'s furniture and object lists.
+        /// </summary>
+        public virtual void removeFromGameWorld(Vector2 TileLocation, GameLocation environment)
+        {
+
+            if (environment != null) ;
+            environment.objects.Remove(TileLocation);
+            environment.furniture.Remove(this);
         }
 
         /// <summary>
@@ -475,6 +560,8 @@ namespace Revitalize.Framework.World.Objects
             if (t == null)
             {
                 ModCore.log("Null tool used! Probably just the player's hands then.");
+                this.shakeTimer = 200; //Milliseconds.
+                return false;
 
             }
             else
@@ -482,6 +569,9 @@ namespace Revitalize.Framework.World.Objects
                 ModCore.log("Player used tool: " +t.DisplayName);
             }
             return false;
+            //False is returned if we signify no meaningul tool interactions?
+            //True is returned when something significant happens
+
         }
 
         /// <summary>
@@ -494,6 +584,7 @@ namespace Revitalize.Framework.World.Objects
             ModCore.log("Perform use action");
             return base.performUseAction(location);
         }
+
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
 
@@ -505,34 +596,47 @@ namespace Revitalize.Framework.World.Objects
             {
                 return false;
             }
-            base.boundingBox.Value = new Rectangle(x / 64 * 64, y / 64 * 64, base.boundingBox.Width, base.boundingBox.Height);
 
+            CustomObject obj =(CustomObject) this.getOne();
 
-            //EXPERIMENTAL: UPDATe THIS IN THE CONSTRUCTOR
-            base.boundingBox.Value = new Rectangle(x / 64 * 64, y / 64 * 64, Game1.tileSize*1, Game1.tileSize * 2);
-
-            this.updateDrawPosition();
+            obj.boundingBox.Value = this.getBoundingBox(new Vector2((float)x / (float)64, (float)y / (float)64));
 
 
 
             Vector2 placementTile = new Vector2(x / 64, y / 64);
-            this.health = 10;
+            obj.health = 10;
             if (who != null)
             {
-                this.owner.Value = who.UniqueMultiplayerID;
+                obj.owner.Value = who.UniqueMultiplayerID;
             }
             else
             {
-                this.owner.Value = Game1.player.UniqueMultiplayerID;
+                obj.owner.Value = Game1.player.UniqueMultiplayerID;
             }
-            this.TileLocation = placementTile;
+            obj.TileLocation = placementTile;
 
 
-            location.furniture.Add(this);
-            location.objects.Add(placementTile, this);
+            location.furniture.Add(obj);
+            location.objects.Add(placementTile, obj);
             location.playSound("thudStep");
-            this.basicItemInfo.locationName = location.NameOrUniqueName;
+
+            obj.basicItemInfo.locationName = location.NameOrUniqueName;
+            obj.updateDrawPosition();
             //location.playSound("stoneStep");
+
+            /*
+            if (this.Stack > 1)
+            {
+                ModCore.log("Reduce stack by 1 for item: " + this.basicItemInfo.id);
+                this.Stack--;
+            }
+            else
+            {
+                ModCore.log("Remove item from inventory: " + this.basicItemInfo.id);
+                Game1.player.removeItemFromInventory(this);
+            }
+            */
+
             return true;
             //Base code throws and error so I have to do it this way.
         }
@@ -562,6 +666,7 @@ namespace Revitalize.Framework.World.Objects
         {
             if (this.shakeTimer > 0)
             {
+                this.basicItemInfo.shakeTimer-= time.ElapsedGameTime.Milliseconds;
                 this.shakeTimer -= time.ElapsedGameTime.Milliseconds;
                 if (this.shakeTimer <= 0)
                 {
@@ -582,19 +687,6 @@ namespace Revitalize.Framework.World.Objects
         /// <summary>What happens when the player shift-right clicks this object.</summary>
         public virtual bool shiftRightClicked(Farmer who)
         {
-            return true;
-        }
-        /// <summary>Remove the object from the world and add it to the player's inventory if possible.</summary>
-        public virtual bool removeAndAddToPlayersInventory()
-        {
-            if (Game1.player.isInventoryFull())
-            {
-                Game1.showRedMessage("Inventory full.");
-                return false;
-            }
-            this.basicItemInfo.locationName = "";
-            Game1.player.addItemToInventory(this);
-            //this.updateDrawPosition(0, 0);
             return true;
         }
 
@@ -661,7 +753,9 @@ namespace Revitalize.Framework.World.Objects
             if (this.basicItemInfo.dyedColor != o.basicItemInfo.dyedColor) return false;
             if (this.basicItemInfo.id.Equals( o.basicItemInfo.id)==false) return false;
 
-            return base.canStackWith(other);
+            if (this.maximumStackSize() > this.Stack + other.Stack) return true;
+
+            return false;
         }
 
         
@@ -746,53 +840,20 @@ namespace Revitalize.Framework.World.Objects
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-
-
             if (x <= -1)
             {
                 return;
                 //spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.TileLocation), new Rectangle?(this.AnimationManager.currentAnimation.sourceRectangle), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
             }
+
+            if (this.AnimationManager == null)
+            {
+                spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+            }
             else
             {
-                if (this.AnimationManager == null)
-                {
-                    if (this.CurrentTextureToDisplay == null)
-                    {
-                        ModCore.log("Texture null for item: " + this.basicItemInfo.id);
-                        return;
-                    }
-                }
-                //The actual planter box being drawn.
-                if (this.AnimationManager == null)
-                {
-                    if (this.AnimationManager.getExtendedTexture() == null)
-                        ModCore.ModMonitor.Log("Tex Extended is null???");
-
-                    spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
-                    // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
-                }
-
-                else
-                {
-                    //Log.AsyncC("Animation Manager is working!");
-                    int addedDepth = 0;
-                    if (this.basicItemInfo.ignoreBoundingBox) addedDepth++;
-                    if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this) addedDepth++;
-                    this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((this.TileLocation.Y + addedDepth) * Game1.tileSize) / 10000f));
-                }
-
-                try
-                {
-                    this.AnimationManager.tickAnimation();
-                    // Log.AsyncC("Tick animation");
-                }
-                catch (Exception err)
-                {
-                    ModCore.ModMonitor.Log(err.ToString());
-                }
-
-                // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
+                this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, 0);
             }
         }
 
@@ -805,47 +866,17 @@ namespace Revitalize.Framework.World.Objects
         /// <summary>Draw the game object at a non-tile spot. Aka like debris.</summary>
         public override void draw(SpriteBatch spriteBatch, int xNonTile, int yNonTile, float layerDepth, float alpha = 1f)
         {
+
             if (this.AnimationManager == null)
             {
-                if (this.CurrentTextureToDisplay == null)
-                {
-                    ModCore.log("Texture null for item: " + this.basicItemInfo.id);
-                    return;
-                }
-            }
-
-            ModCore.log("Pos is: " + new Vector2(xNonTile, yNonTile));
-
-            //The actual planter box being drawn.
-            if (this.AnimationManager == null)
-            {
-                if (this.AnimationManager.getExtendedTexture() == null)
-                    ModCore.ModMonitor.Log("Tex Extended is null???");
-
                 spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
-                // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
             }
 
             else
             {
                 //Log.AsyncC("Animation Manager is working!");
-                int addedDepth = 0;
-                if (this.basicItemInfo.ignoreBoundingBox) addedDepth++;
-                if (Revitalize.ModCore.playerInfo.sittingInfo.SittingObject == this) addedDepth++;
                 this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
-                try
-                {
-                    this.AnimationManager.tickAnimation();
-                    // Log.AsyncC("Tick animation");
-                }
-                catch (Exception err)
-                {
-                    ModCore.ModMonitor.Log(err.ToString());
-                }
             }
-
-            // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
-
         }
 
 
@@ -854,6 +885,23 @@ namespace Revitalize.Framework.World.Objects
             return this.basicItemInfo.lightManager;
         }
 
+        public override void AttemptRemoval(Action<Furniture> removal_action)
+        {
+
+            if (this.getCurrentLocation().furniture.Contains(this)) ;
+            {
+                ModCore.log("Furniture is contained inside of game location. Need to update removal logic.");
+            }
+
+            this.pickupFromGameWorld(this.TileLocation, this.getCurrentLocation());
+
+
+            Game1.player.currentLocation.localSound("coin");
+
+            //base.AttemptRemoval(removal_action);
+        }
+
+        
 
     }
 }

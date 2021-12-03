@@ -44,7 +44,7 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 
         public override void DayUpdate(GameLocation location)
         {
-
+            if (!this.getCurrentLocation().IsOutdoors) return;
             if (this.heldObject.Value != null) return;
             if (Game1.weatherIcon == Game1.weather_rain)
             {

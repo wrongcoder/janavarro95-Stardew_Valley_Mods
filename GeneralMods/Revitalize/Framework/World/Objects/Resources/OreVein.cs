@@ -11,7 +11,7 @@ using CustomObject = Revitalize.Framework.World.Objects.CustomObject;
 
 namespace Revitalize.Framework.Objects.Resources.OreVeins
 {
-    public class OreVein:CustomObject
+    public class OreVein : CustomObject
     {
         /// <summary>
         /// Deals with information tied to the resource itself.
@@ -39,7 +39,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         }
 
-        public OreVein(BasicItemInformation Info, OreResourceInformation Resource,List<ResourceInformation> ExtraDrops,int Health) : base(Info)
+        public OreVein(BasicItemInformation Info, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info)
         {
             this.healthValue = Health;
             this.resourceInfo = Resource;
@@ -48,7 +48,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             this.Price = Info.price;
         }
 
-        public OreVein(BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops,int Health) : base(Info,TileLocation)
+        public OreVein(BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info, TileLocation)
         {
 
             this.healthValue = Health;
@@ -92,9 +92,9 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         public override bool performToolAction(Tool t, GameLocation location)
         {
 
-            if(t is StardewValley.Tools.Pickaxe)
+            if (t is StardewValley.Tools.Pickaxe)
             {
-                this.damage((t as StardewValley.Tools.Pickaxe).UpgradeLevel+1);
+                this.damage((t as StardewValley.Tools.Pickaxe).UpgradeLevel + 1);
                 if (this.getCurrentLocation() != null)
                 {
                     this.getCurrentLocation().playSound("hammer");
@@ -153,9 +153,9 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
             int amount = this.resourceInfo.getNumberOfDropsToSpawn();
             Item newItem = this.resourceInfo.droppedItem.getOne();
             GameLocation loc = this.getCurrentLocation();
-            for(int i = 0; i < amount; i++)
+            for (int i = 0; i < amount; i++)
             {
-                Game1.createItemDebris(newItem.getOne(), this.TileLocation*Game1.tileSize, Game1.random.Next(0, 3), loc);
+                Game1.createItemDebris(newItem.getOne(), this.TileLocation * Game1.tileSize, Game1.random.Next(0, 3), loc);
             }
 
             if (this.extraDrops != null)
@@ -215,7 +215,7 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
 
         public override Item getOne()
         {
-            OreVein component = new OreVein(this.basicItemInfo.Copy(),this.resourceInfo,this.extraDrops,this.healthValue);
+            OreVein component = new OreVein(this.basicItemInfo.Copy(), this.resourceInfo, this.extraDrops, this.healthValue);
             return component;
         }
 
@@ -224,29 +224,14 @@ namespace Revitalize.Framework.Objects.Resources.OreVeins
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
 
-            //The actual planter box being drawn.
-            if (this.basicItemInfo.animationManager == null)
+            if (this.AnimationManager == null)
             {
-                if (this.basicItemInfo.animationManager.getExtendedTexture() == null)
-
-                spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize)+this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
             }
-
             else
             {
-                float addedDepth = 0;
-
-                this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize)+this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
-
-                try
-                {
-                    this.basicItemInfo.animationManager.tickAnimation();
-                }
-                catch (Exception err)
-                {
-                    ModCore.ModMonitor.Log(err.ToString());
-                }
-                if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, addedDepth);
+                this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, 0);
             }
         }
 

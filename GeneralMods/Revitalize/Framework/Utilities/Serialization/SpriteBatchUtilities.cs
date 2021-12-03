@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Revitalize.Framework.Objects;
+using Revitalize.Framework.World.Objects;
 using StardewValley;
 
 namespace Revitalize.Framework.Utilities.Serialization

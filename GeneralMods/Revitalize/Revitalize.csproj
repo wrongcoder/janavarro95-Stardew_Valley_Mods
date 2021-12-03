@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Framework\Menus\Machines\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\StardustCore\StardustCore.csproj" />
   </ItemGroup>
 

@@ -50,15 +50,14 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             {
                 if (this.dyedColor != null)
                 {
-                    if (this.dyedColor.color != null)
+
+                    if (this.dyedColor.color.A != 0)
                     {
-                        if (this.dyedColor.color.A != 0)
-                        {
-                            return this.colorManager.getBlendedColor(this._drawColor, this.dyedColor.color);
-                            //return new Color( (this._drawColor.R + this._dyedColor.color.R)/2, (this._drawColor.G + this._dyedColor.color.G)/2, (this._drawColor.B + this._dyedColor.color.B)/2, 255);
-                            //return new Color(this._drawColor.R * this._dyedColor.color.R, this._drawColor.G * this._dyedColor.color.G, this._drawColor.B * this._dyedColor.color.B, 255);
-                        }
+                        return this.colorManager.getBlendedColor(this._drawColor, this.dyedColor.color);
+                        //return new Color( (this._drawColor.R + this._dyedColor.color.R)/2, (this._drawColor.G + this._dyedColor.color.G)/2, (this._drawColor.B + this._dyedColor.color.B)/2, 255);
+                        //return new Color(this._drawColor.R * this._dyedColor.color.R, this._drawColor.G * this._dyedColor.color.G, this._drawColor.B * this._dyedColor.color.B, 255);
                     }
+
                 }
                 return this._drawColor;
             }
@@ -120,7 +119,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.boundingBoxTileDimensions = new Vector2(1, 1);
         }
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor,int staminaRestoredOnEating,int healthRestoredOnEating ,int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions ,InventoryManager Inventory, LightManager Lights,bool AlwaysDrawAbovePlayer=false,NamedColor DyedColor=null, ColorManager ColorManager=null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null, ColorManager ColorManager = null)
         {
             this.name = name;
             this.id = id;
@@ -173,7 +172,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id,this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating,this.healthRestoredOnEating ,this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox,this.boundingBoxTileDimensions ,this.inventory.Copy(), this.lightManager.Copy(),this.alwaysDrawAbovePlayer,this.dyedColor,this.colorManager);
+            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor, this.colorManager);
         }
 
 
@@ -198,6 +197,6 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         }
 
 
-        
+
     }
 }

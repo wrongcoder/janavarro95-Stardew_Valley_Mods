@@ -104,13 +104,6 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override bool rightClicked(Farmer who)
         {
-            /*
-            if (this.getCurrentLocation() == null)
-                this.location = Game1.player.currentLocation;
-            if (Game1.menuUp || Game1.currentMinigame != null) return false;
-
-            //ModCore.playerInfo.sittingInfo.sit(this, Vector2.Zero);
-            */
             if (Game1.menuUp || Game1.currentMinigame != null) return false;
             return false;
         }
@@ -124,42 +117,8 @@ namespace Revitalize.Framework.World.Objects.Machines
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-
-
-            if (x <= -1)
-            {
-                return;
-                //spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.TileLocation), new Rectangle?(this.AnimationManager.currentAnimation.sourceRectangle), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
-            }
-            else
-            {
-                if (this.AnimationManager == null)
-                {
-                    if (this.CurrentTextureToDisplay == null)
-                    {
-                        ModCore.log("Texture null for item: " + this.basicItemInfo.id);
-                        return;
-                    }
-                }
-                if (this.AnimationManager == null)
-                {
-                    if (this.AnimationManager.getExtendedTexture() == null)
-                        ModCore.ModMonitor.Log("Tex Extended is null???");
-
-                    spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
-                    this.drawStatusBubble(spriteBatch, x,y, alpha);
-                    // Log.AsyncG("ANIMATION IS NULL?!?!?!?!");
-                }
-
-                else
-                {
-                    //Log.AsyncC("Animation Manager is working!");
-                    this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((this.TileLocation.Y) * Game1.tileSize) / 10000f));
-                    this.drawStatusBubble(spriteBatch, x, y, alpha);
-                }
-
-                // spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((double)tileLocation.X * (double)Game1.tileSize + (((double)tileLocation.X * 11.0 + (double)tileLocation.Y * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2), (float)((double)tileLocation.Y * (double)Game1.tileSize + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) + (float)(Game1.tileSize / 2))), new Rectangle?(new Rectangle((int)((double)tileLocation.X * 51.0 + (double)tileLocation.Y * 77.0) % 3 * 16, 128 + this.whichForageCrop * 16, 16, 16)), Color.White, 0.0f, new Vector2(8f, 8f), (float)Game1.pixelZoom, SpriteEffects.None, (float)(((double)tileLocation.Y * (double)Game1.tileSize + (double)(Game1.tileSize / 2) + (((double)tileLocation.Y * 11.0 + (double)tileLocation.X * 7.0) % 10.0 - 5.0)) / 10000.0));
-            }
+            base.draw(spriteBatch,x, y, alpha);
+            this.drawStatusBubble(spriteBatch, x, y, alpha);
         }
 
         public virtual void produceItem()
@@ -186,10 +145,6 @@ namespace Revitalize.Framework.World.Objects.Machines
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
                 this.machineStatusBubbleBox.playAnimation("InventoryFull");
                 this.machineStatusBubbleBox.draw(b, this.machineStatusBubbleBox.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.getCurrentAnimationFrameRectangle()), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
-            }
-            else
-            {
-
             }
         }
 

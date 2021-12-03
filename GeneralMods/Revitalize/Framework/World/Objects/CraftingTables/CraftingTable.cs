@@ -55,22 +55,5 @@ namespace Revitalize.Framework.World.Objects.CraftingTables
             CraftingTable component = new CraftingTable(this.getItemInformation().Copy(),this.craftingBookName);
             return component;
         }
-
-        public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
-        {
-            if (x <= -1)
-            {
-                return;
-            }
-            if (this.AnimationManager == null)
-            {
-                spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
-            }
-            else
-            {
-                float addedDepth = 0;
-                this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.TileLocation.X * Game1.tileSize), this.TileLocation.Y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((this.TileLocation.Y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
-            }
-        }
     }
 }
