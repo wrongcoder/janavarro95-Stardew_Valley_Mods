@@ -27,7 +27,7 @@ namespace Revitalize.Framework.World.Objects
      * NOTES: Calling this.performRemoveAction(this.tileLocation, location); is NOT the same as calling GameLocation.objects.Remove(). Perform remove action cleans up the item before being removed, but has no actual deletion/removal logic from the game world itself.
      * 
      * 
-     * Current issue: When trying to remove furniture, it dupes the furniture and adds it to the player's inventory without removing it from the game world. How to fix this?
+     * Current issue: When right clicking the object is picked up. This is currently not intended.
      * 
      */
 
@@ -231,17 +231,15 @@ namespace Revitalize.Framework.World.Objects
         {
             if (justCheckingForActivity)
             {
+                //basically on item hover.
                 return true;
             }
 
             MouseState mState = Mouse.GetState();
             KeyboardState keyboardState = Game1.GetKeyboardState();
 
-            ModCore.log("Check for action");
-
             if (mState.RightButton == ButtonState.Pressed && keyboardState.IsKeyDown(Keys.LeftShift) == false && keyboardState.IsKeyDown(Keys.RightShift) == false)
             {
-                ModCore.log("Right clicked!");
                 return this.rightClicked(who);
             }
 
@@ -268,19 +266,19 @@ namespace Revitalize.Framework.World.Objects
 
         public override bool clicked(Farmer who)
         {
-            ModCore.log("Click the thing??");
             if (Game1.player.isInventoryFull())
             {
                 //Full inventory message.
-                Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:Crop.cs.588"));
+                Game1.showRedMessage(Game1.content.LoadString("Strings\\StringsFromCSFiles:Crop.cs.588"));
                 return false;
             }
-            else
-            {
 
+
+            if (Game1.didPlayerJustLeftClick())
+            {
                 this.pickupFromGameWorld(this.TileLocation, who.currentLocation);
-                return true; //needs to be true to mark actually picking up the object? Also need to play sound?
             }
+            return true;
 
         }
 
@@ -622,20 +620,6 @@ namespace Revitalize.Framework.World.Objects
 
             obj.basicItemInfo.locationName = location.NameOrUniqueName;
             obj.updateDrawPosition();
-            //location.playSound("stoneStep");
-
-            /*
-            if (this.Stack > 1)
-            {
-                ModCore.log("Reduce stack by 1 for item: " + this.basicItemInfo.id);
-                this.Stack--;
-            }
-            else
-            {
-                ModCore.log("Remove item from inventory: " + this.basicItemInfo.id);
-                Game1.player.removeItemFromInventory(this);
-            }
-            */
 
             return true;
             //Base code throws and error so I have to do it this way.
@@ -649,7 +633,7 @@ namespace Revitalize.Framework.World.Objects
         public override int sellToStorePrice(long specificPlayerID = -1)
         {
             return this.basicItemInfo.price;
-            return base.sellToStorePrice(specificPlayerID);
+            return base.sellToStorePrice(specificPlayerID); //logic for when it's regarding the player's professions and such.
         }
 
         public override void reloadSprite()
@@ -681,13 +665,13 @@ namespace Revitalize.Framework.World.Objects
         /// <summary>What happens when the player right clicks the object.</summary>
         public virtual bool rightClicked(Farmer who)
         {
-            return true;
+            return false;
         }
 
         /// <summary>What happens when the player shift-right clicks this object.</summary>
         public virtual bool shiftRightClicked(Farmer who)
         {
-            return true;
+            return false;
         }
 
 
