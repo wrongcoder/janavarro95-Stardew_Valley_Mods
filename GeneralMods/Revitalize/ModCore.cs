@@ -27,6 +27,7 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using xTile.Dimensions;
 using Animation = StardustCore.Animations.Animation;
 using SpaceShared.APIs;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 
 namespace Revitalize
 {
@@ -431,7 +432,7 @@ namespace Revitalize
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                 new StardewValley.Object((int)Enums.SDVObject.Coal,100),
-                ObjectManager.GetItem("SteelIngot", 20),
+                ObjectManager.GetItem(Ingots.SteelIngot, 20),
                 ObjectManager.GetItem("Anvil",1),
                 ObjectManager.GetItem("SolarPanelTier1",1),
                 ObjectManager.GetItem("SolarArrayTier1",1),

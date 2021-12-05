@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Revitalize;
 using Revitalize.Framework;
 using Revitalize.Framework.Objects.InformationFiles;
@@ -41,7 +42,7 @@ namespace Revitalize.Framework.Utilities
                 new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1,1,1,1,1,1,0,0,0,0)
             } },
             {"Revitalize.Objects.Machines.Sandbox",new List<ResourceInformation>(){
-                new ResourceInformation(ModCore.ObjectManager.resources.getResource("Sand",1),1,1,1,1,1,1,0,0,0,0)
+                new ResourceInformation(ModCore.ObjectManager.GetItem(MiscEarthenResources.Sand,1),1,1,1,1,1,1,0,0,0,0)
             } }
         };
         }

@@ -417,7 +417,7 @@ namespace Revitalize.Framework.World.Objects
 
         public override int maximumStackSize()
         {
-            return base.maximumStackSize();
+            return 999;
         }
 
         /// <summary>
