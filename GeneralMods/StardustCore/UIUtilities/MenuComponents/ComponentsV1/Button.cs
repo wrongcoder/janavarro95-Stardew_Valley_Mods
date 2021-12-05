@@ -68,7 +68,7 @@ namespace StardustCore.UIUtilities.MenuComponents.ComponentsV1
         }
 
         /// <summary>A more advanced Button constructor that deals with an animation manager.</summary>
-        public Button(string name, Rectangle bounds, Texture2DExtended texture, string displayText, Rectangle sourceRect, float scale, Animations.Animation defaultAnimation, Dictionary<string, Animations.Animation> animationsToPlay, string startingAnimationKey, Color drawColor, Color textColor, ButtonFunctionality functionality, int startingAnimationFrame = 0, bool animationEnabled = true, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture = null,bool DrawLabel=true)
+        public Button(string name, Rectangle bounds, Texture2DExtended texture, string displayText, Rectangle sourceRect, float scale, Animations.Animation defaultAnimation, SerializableDictionary<string, Animations.Animation> animationsToPlay, string startingAnimationKey, Color drawColor, Color textColor, ButtonFunctionality functionality, int startingAnimationFrame = 0, bool animationEnabled = true, List<KeyValuePair<ClickableTextureComponent, ExtraTextureDrawOrder>> extraTexture = null,bool DrawLabel=true)
             : base(bounds, texture.getTexture(), sourceRect, scale)
         {
             this.animationManager = new Animations.AnimationManager(texture, animationsToPlay, startingAnimationKey, startingAnimationKey, startingAnimationFrame, animationEnabled);

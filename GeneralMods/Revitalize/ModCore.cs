@@ -26,6 +26,7 @@ using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using xTile.Dimensions;
 using Animation = StardustCore.Animations.Animation;
+using SpaceShared.APIs;
 
 namespace Revitalize
 {
@@ -257,7 +258,10 @@ namespace Revitalize
             //Adds in recipes to the mod.
             VanillaRecipeBook = new VanillaRecipeBook();
             CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
+
+            Revitalize.Framework.Utilities.Serializer.SerializeTypesForXMLUsingSpaceCore();
         }
+        
 
         private void Input_ButtonPressed1(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
         {
@@ -322,35 +326,35 @@ namespace Revitalize
         /// </summary>
         private void loadInTextures()
         {
-            TextureManager.AddTextureManager(Manifest, "Furniture");
-            TextureManager.GetTextureManager(Manifest, "Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Furniture"));
-            TextureManager.AddTextureManager(Manifest, "Machines");
-            TextureManager.GetTextureManager(Manifest, "Machines").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Machines"));
-            TextureManager.AddTextureManager(Manifest, "InventoryMenu");
-            TextureManager.GetTextureManager(Manifest, "InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
-            TextureManager.AddTextureManager(Manifest, "Resources.Ore");
-            TextureManager.GetTextureManager(Manifest, "Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
-            TextureManager.AddTextureManager(Manifest, "Items.Resources.Misc");
-            TextureManager.GetTextureManager(Manifest, "Items.Resources.Misc").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Misc"));
-            TextureManager.AddTextureManager(Manifest, "Items.Resources.Ore");
-            TextureManager.GetTextureManager(Manifest, "Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
-            TextureManager.AddTextureManager(Manifest, "Tools");
-            TextureManager.GetTextureManager(Manifest, "Tools").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Tools"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath,Manifest, "Revitalize.Furniture");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Furniture"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Machines");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Machines").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Machines"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.InventoryMenu");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Resources.Ore");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Items.Resources.Misc");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Items.Resources.Misc").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Misc"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Items.Resources.Ore");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Tools");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Tools").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Tools"));
 
-            TextureManager.AddTextureManager(Manifest, "Menus");
-            TextureManager.GetTextureManager(Manifest, "Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Menus");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
 
-            TextureManager.AddTextureManager(Manifest, "Menus.EnergyMenu");
-            TextureManager.GetTextureManager(Manifest, "Menus.EnergyMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "EnergyMenu"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Menus.EnergyMenu");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Menus.EnergyMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "EnergyMenu"));
 
-            TextureManager.AddTextureManager(Manifest, "CraftingMenu");
-            TextureManager.GetTextureManager(Manifest, "CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.CraftingMenu");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
 
-            TextureManager.AddTextureManager(Manifest, "HUD");
-            TextureManager.GetTextureManager(Manifest, "HUD").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "HUD"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.HUD");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.HUD").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "HUD"));
 
-            TextureManager.AddTextureManager(Manifest, "Objects.Crafting");
-            TextureManager.GetTextureManager(Manifest, "Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Objects.Crafting");
+            TextureManager.GetTextureManager(Manifest, "Revitalize.Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
         }
 
         private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -358,7 +362,7 @@ namespace Revitalize
             if (e.Button == SButton.U)
             {
                 CraftingMenuV1 craft = new CraftingMenuV1(100, 100, 600, 800, Color.White, Game1.player.Items.ToList());
-                craft.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite ("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Microsoft.Xna.Framework.Rectangle(0, 0, 24, 24), 2f));
+                craft.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite ("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Microsoft.Xna.Framework.Rectangle(0, 0, 24, 24), 2f));
                 craft.addInCraftingRecipe(new CraftingRecipeButton(new Recipe(new List<CraftingRecipeComponent>()
                 {
                     //Inputs here

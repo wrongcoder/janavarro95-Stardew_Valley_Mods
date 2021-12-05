@@ -7,9 +7,11 @@ using Microsoft.Xna.Framework;
 using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.Objects;
 using StardewValley;
+using System.Xml.Serialization;
 
 namespace Revitalize.Framework.World.Objects.Items
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Ore")]
     public class Ore:CustomObject
     {
         public Ore()

@@ -1,19 +1,23 @@
 using System.IO;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace StardustCore.UIUtilities
 {
     public class Texture2DExtended
     {
         public string Name;
+
+        [XmlIgnore]
         public Texture2D texture;
         public string path;
         public string modID;
-        public ContentSource source;
-        private readonly IModHelper helper;
-        private readonly IContentPack content;
+        public string textureManagerId;
+
+
         public int Width
         {
             get
@@ -35,92 +39,79 @@ namespace StardustCore.UIUtilities
             this.Name = "";
             this.texture = null;
             this.path = "";
-            this.helper = null;
             this.modID = "";
+            this.textureManagerId = "";
         }
 
 
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
-        public Texture2DExtended(IModHelper helper, IManifest manifest, string path, ContentSource contentSource = ContentSource.ModFolder)
+        public Texture2DExtended(IManifest manifest, string path, string TextureManagerId)
         {
             this.Name = Path.GetFileNameWithoutExtension(path);
             this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path, contentSource);
-            this.helper = helper;
             this.modID = manifest.UniqueID;
-            this.source = contentSource;
+            this.textureManagerId = TextureManagerId;
+            this.loadTexture();
         }
 
-        public Texture2DExtended(IModHelper helper, string modID, string path, ContentSource contentSource = ContentSource.ModFolder)
+        public Texture2DExtended(string modID, string path, string TextureManagerId)
         {
             this.Name = Path.GetFileNameWithoutExtension(path);
             this.path = path;
-            this.texture = helper.Content.Load<Texture2D>(path, contentSource);
-            this.helper = helper;
             this.modID = modID;
-            this.source = contentSource;
+            this.textureManagerId = TextureManagerId;
+            this.loadTexture();
         }
 
-        public Texture2DExtended(IContentPack ContentPack, IManifest manifest, string path)
+        public Texture2DExtended(IContentPack content, string path, string TextureManagerId)
         {
             this.Name = Path.GetFileNameWithoutExtension(path);
             this.path = path;
-            this.texture = ContentPack.LoadAsset<Texture2D>(path);
-            this.helper = null;
-            this.modID = manifest.UniqueID;
-            this.source = ContentSource.ModFolder;
-        }
-        public Texture2DExtended(IContentPack ContentPack, string modID, string path)
-        {
-            this.Name = Path.GetFileNameWithoutExtension(path);
-            this.path = path;
-            this.texture = ContentPack.LoadAsset<Texture2D>(path);
-            this.helper = null;
-            this.modID = modID;
-            this.source = ContentSource.ModFolder;
-        }
-
-        public Texture2DExtended(IContentPack content, string path)
-        {
-            this.Name = Path.GetFileNameWithoutExtension(path);
-            this.path = path;
-            this.content = content;
-            this.texture = content.LoadAsset<Texture2D>(path);
-            this.helper = null;
             this.modID = content.Manifest.UniqueID;
+            this.textureManagerId = TextureManagerId;
+            this.loadTexture();
+
+
         }
 
         public Texture2DExtended Copy()
         {
-            if (this.helper != null)
-            {
-                return new Texture2DExtended(this.helper, this.modID, this.path);
-            }
-            else if (this.content != null)
-            {
-                return new Texture2DExtended(this.content, this.path);
-            }
-            else
-            {
-                throw new System.Exception("Trying to copy a texture that isn't from a mod or a content pack!!!");
-            }
-        }
-
-        public IModHelper getHelper()
-        {
-            return this.helper;
+            return new Texture2DExtended(this.modID, this.path,this.textureManagerId);
         }
 
         /// <summary>Returns the actual 2D texture held by this wrapper class.</summary>
-        public Texture2D getTexture()
+        public virtual Texture2D getTexture()
         {
-            return this.texture;
+            if (this.texture != null)
+            {
+                return this.texture;
+            }
+            else
+            {
+                this.loadTexture();
+                return this.texture;
+            }
         }
 
-        public void setTexure(Texture2D text)
+        /// <summary>
+        /// Sets the texture 2d for this extended texture.
+        /// </summary>
+        /// <param name="text"></param>
+        public virtual void setTexture(Texture2D text)
         {
             this.texture = text;
+        }
+
+        /// <summary>
+        /// Loads the texture if this texture is null;
+        /// </summary>
+        public virtual void loadTexture()
+        {
+            if (this.texture == null)
+            {
+                StardustCore.UIUtilities.TextureManager.GetTextureManager(this.modID, this.textureManagerId).loadTexture(this.path, this.Name, this);
+            }
         }
     }
 }

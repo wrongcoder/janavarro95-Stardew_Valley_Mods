@@ -38,7 +38,7 @@ namespace Revitalize.Framework.World.Objects
     /// Clicking to remove and click place are bound to the samething. Need to find a way to change that.
     /// Bounding boxes work, but not for clicking to remove. Why is that?
     /// </summary>
-    [XmlType("Revitalize.Framework.World.Objects.CustomObject")]
+    [XmlType("Mods_Revitalize.Framework.World.Objects.CustomObject")]
     public class CustomObject:StardewValley.Objects.Furniture, ICommonObjectInterface, ILightManagerProvider, IBasicItemInfoProvider
     {
         public bool isCurrentLocationAStructure;

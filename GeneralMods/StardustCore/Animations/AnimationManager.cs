@@ -12,7 +12,7 @@ namespace StardustCore.Animations
     public class AnimationManager
     {
 
-        public Dictionary<string, Animation> animations = new SerializableDictionary<string, Animation>();
+        public SerializableDictionary<string, Animation> animations = new SerializableDictionary<string, Animation>();
         public string currentAnimationName;
         public Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
         public bool enabled;
@@ -35,11 +35,11 @@ namespace StardustCore.Animations
         /// <param name="ObjectTexture">The texture that will be used for the animation. This is typically the same as the object this class is attached to.</param>
         /// <param name="DefaultFrame">This is used if no animations will be available to the animation manager.</param>
         /// <param name="EnabledByDefault">Whether or not animations play by default. Default value is true.</param>
-        public AnimationManager(Texture2DExtended ObjectTexture, Animation DefaultAnimation, bool EnabledByDefault = true) : this(ObjectTexture, new Dictionary<string, Animation>() { { "Default", DefaultAnimation } }, "Default", "Default")
+        public AnimationManager(Texture2DExtended ObjectTexture, Animation DefaultAnimation, bool EnabledByDefault = true) : this(ObjectTexture, new SerializableDictionary<string, Animation>() { { "Default", DefaultAnimation } }, "Default", "Default")
         {
         }
 
-        public AnimationManager(Texture2DExtended ObjectTexture, Dictionary<string, Animation> Animations, string DefaultAnimationKey, string StartingAnimationKey, int startingAnimationFrame = 0, bool EnabledByDefault = true)
+        public AnimationManager(Texture2DExtended ObjectTexture, SerializableDictionary<string, Animation> Animations, string DefaultAnimationKey, string StartingAnimationKey, int startingAnimationFrame = 0, bool EnabledByDefault = true)
         {
             this.objectTexture = ObjectTexture;
             this.enabled = EnabledByDefault;

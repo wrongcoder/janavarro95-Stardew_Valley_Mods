@@ -12,18 +12,18 @@ namespace Revitalize.Framework.Utilities
         public int capacity;
 
         /// <summary>The hard uper limit for # of items to be held in case of upgrading or resizing.</summary>
-        public int MaxCapacity { get; private set; }
+        public int MaxCapacity { get; set; }
 
         /// <summary>How many items are currently stored in the inventory.</summary>
         public int ItemCount => this.items.Where(i => i != null).Count();
 
         /// <summary>The actual contents of the inventory.</summary>
-        public IList<Item> items;
+        public List<Item> items;
 
         /// <summary>
         /// Items that are to be buffered into the inventory manager if possible.
         /// </summary>
-        public IList<Item> bufferItems;
+        public List<Item> bufferItems;
 
         /// <summary>Checks if the inventory is full or not.</summary>
         public bool IsFull => this.ItemCount >= this.capacity && this.items.Where(i=>i==null).Count()==0;
@@ -54,6 +54,12 @@ namespace Revitalize.Framework.Utilities
         }
 
         /// <summary>Construct an instance.</summary>
+        public InventoryManager(IList<Item> items, int DisplayRows = 6, int DisplayColumns = 6):this((List<Item>) items,DisplayRows,DisplayColumns)
+        {
+
+        }
+
+        /// <summary>Construct an instance.</summary>
         public InventoryManager(List<Item> items,int DisplayRows=6,int DisplayColumns=6)
         {
             this.capacity = int.MaxValue;
@@ -64,33 +70,12 @@ namespace Revitalize.Framework.Utilities
             this.displayColumns = DisplayColumns;
         }
 
-        public InventoryManager(IList<Item> items, int Capacity= int.MaxValue, int DisplayRows = 6, int DisplayColumns = 6)
-        {
-            this.capacity = Capacity;
-            this.setMaxLimit(int.MaxValue);
-            this.items = items;
-            this.bufferItems = new List<Item>();
-            this.displayRows = DisplayRows;
-            this.displayColumns = DisplayColumns;
-        }
-
         /// <summary>Construct an instance.</summary>
-        public InventoryManager(int capacity, int DisplayRows = 6, int DisplayColumns = 6)
-        {
-            this.capacity = capacity;
-            this.MaxCapacity = int.MaxValue;
-            this.items = new List<Item>();
-            this.bufferItems = new List<Item>();
-            this.displayRows = DisplayRows;
-            this.displayColumns = DisplayColumns;
-        }
-
-        /// <summary>Construct an instance.</summary>
-        public InventoryManager(int capacity, int MaxCapacity, int DisplayRows = 6, int DisplayColumns = 6)
+        public InventoryManager(List<Item> items,int capacity, int MaxCapacity, int DisplayRows = 6, int DisplayColumns = 6)
         {
             this.capacity = capacity;
             this.setMaxLimit(MaxCapacity);
-            this.items = new List<Item>();
+            this.items = items;
             this.bufferItems = new List<Item>();
             this.displayRows = DisplayRows;
             this.displayColumns = DisplayColumns;
@@ -201,7 +186,7 @@ namespace Revitalize.Framework.Utilities
         /// <returns></returns>
         public InventoryManager Copy()
         {
-            return new InventoryManager(this.capacity, this.MaxCapacity,this.displayRows,this.displayColumns);
+            return new InventoryManager(new List<Item>(),this.capacity, this.MaxCapacity,this.displayRows,this.displayColumns);
         }
 
         public void dumpBufferToItems()

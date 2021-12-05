@@ -21,6 +21,7 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
 namespace Revitalize.Framework.World.Objects.Machines
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Machine")]
     public class Machine : CustomObject, IInventoryManagerProvider
     {
 
@@ -87,7 +88,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         protected virtual void createStatusBubble()
         {
-            this.machineStatusBubbleBox = new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "HUD", "MachineStatusBubble"), new Dictionary<string, Animation>()
+            this.machineStatusBubbleBox = new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation(0,0,20,24)},
                 {"Empty",new Animation(20,0,20,24)},

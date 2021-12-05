@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Revitalize.Framework.Objects.InformationFiles;
@@ -9,8 +10,9 @@ using StardewValley;
 
 using CustomObject = Revitalize.Framework.World.Objects.CustomObject;
 
-namespace Revitalize.Framework.Objects.Resources.OreVeins
+namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Resources.OreVeins.OreVein")]
     public class OreVein : CustomObject
     {
         /// <summary>

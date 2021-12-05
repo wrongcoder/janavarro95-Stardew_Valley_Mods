@@ -9,9 +9,11 @@ using Newtonsoft.Json;
 using Revitalize.Framework;
 using Revitalize.Framework.Managers;
 using Revitalize.Framework.Illuminate;
+using System.Xml.Serialization;
 
 namespace Revitalize.Framework.World.Objects.InformationFiles
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
     public class BasicItemInformation
     {
         public string name;

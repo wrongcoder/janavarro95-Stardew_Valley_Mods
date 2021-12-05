@@ -19,14 +19,6 @@ namespace Revitalize.Framework.Objects.InformationFiles
         public List<IntRange> floorsToSpawnOn;
 
         /// <summary>
-        /// A function that compares whether or not the resource can be spawned on this floor. Used in conjecture with floorsToSpawnOn
-        /// </summary>
-        [JsonIgnore]
-        public Func<int, bool> canSpawnOnThisFloor;
-        [JsonIgnore]
-        public Func<int, bool> excludeSpawnOnThisFloor;
-
-        /// <summary>
         /// The list of floors to exclude spawning on in the regular mine.
         /// </summary>
         public List<IntRange> floorsToExclude;
@@ -39,15 +31,6 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// The floors this resource should not spawn on in skull cave.
         /// </summary>
         public List<IntRange> floorsToExcludeSkullCave;
-
-        /// <summary>
-        /// A function that compares whether or not the resource can be spawned on this floor in skull cave. Used in conjecture with floorsToSpawnOn
-        /// </summary>
-        ///
-        [JsonIgnore]
-        public Func<int, bool> canSpawnOnThisFloorSkullCave;
-        [JsonIgnore]
-        public Func<int, bool> excludeSpawnOnThisFloorSkullCave;
 
         /// <summary>
         /// Should this resource spawn in the mine in the mountains?
@@ -115,7 +98,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <param name="SpawnAmountLuckFactor"></param>
         /// <param name="DropChanceLuckFactor"></param>
         /// <param name="DropAmountLuckFactor"></param>
-        public OreResourceInformation(StardewValley.Object I, List<IntRange> FloorsToSpawnOn, List<IntRange> FloorsToExclude,Func<int,bool> CanSpawnOnGivenFloor,Func<int,bool> FloorsToExcludeFun,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, double ChanceToSpawn = 1f, double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes, ChanceToSpawn, ChanceToDrop, SpawnChanceLuckFactor, SpawnAmountLuckFactor, DropChanceLuckFactor, DropAmountLuckFactor)
+        public OreResourceInformation(StardewValley.Object I, List<IntRange> FloorsToSpawnOn, List<IntRange> FloorsToExclude,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, double ChanceToSpawn = 1f, double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes, ChanceToSpawn, ChanceToDrop, SpawnChanceLuckFactor, SpawnAmountLuckFactor, DropChanceLuckFactor, DropAmountLuckFactor)
         {
             this.spawnsOnFarm = false;
             this.spawnsInQuarry = false;
@@ -128,19 +111,6 @@ namespace Revitalize.Framework.Objects.InformationFiles
             this.quarrySpawnAmount = new IntRange();
             this.farmSpawnChance = 0f;
             this.quarrySpawnChance = 0f;
-
-            if (CanSpawnOnGivenFloor != null)
-            {
-                this.canSpawnOnThisFloor = CanSpawnOnGivenFloor;
-            }
-            else
-            {
-                this.canSpawnOnThisFloor = null;
-            }
-
-            this.excludeSpawnOnThisFloor = FloorsToExcludeFun;
-
-            this.canSpawnOnThisFloorSkullCave = null;
         }
 
 
@@ -172,7 +142,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <param name="SpawnAmountLuckFactor"></param>
         /// <param name="DropChanceLuckFactor"></param>
         /// <param name="DropAmountLuckFactor"></param>
-        public OreResourceInformation(StardewValley.Object I,bool SpawnsOnFarm, bool SpawnsInQuarry, bool SpawnInRegularMine, bool SpawnInSkullCave,List<IntRange> FloorsToSpawnOn,List<IntRange>FloorsToExclude,Func<int,bool> CanSpawnOnGivenFloor,Func<int,bool> FloorsToExludeFun,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, IntRange FarmSpawnAmount,IntRange QuarrySpawnAmount,IntRange SkullCaveSpawnAmount,List<IntRange> FloorsToSpawnOnSkullCave,List<IntRange>FloorsToExludeSkullCave,Func<int,bool> CanSpawnOnGivenFloorSkullCave,Func<int,bool>FloorsToExludeFunSkullCave,double ChanceToSpawn = 1f,double FarmSpawnChance=1f,double QuarrySpawnChance=1f,double SkullCaveSpawnChance=1f,double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,ChanceToSpawn,ChanceToDrop,SpawnChanceLuckFactor,SpawnAmountLuckFactor,DropChanceLuckFactor,DropAmountLuckFactor)
+        public OreResourceInformation(StardewValley.Object I,bool SpawnsOnFarm, bool SpawnsInQuarry, bool SpawnInRegularMine, bool SpawnInSkullCave,List<IntRange> FloorsToSpawnOn,List<IntRange>FloorsToExclude,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, IntRange FarmSpawnAmount,IntRange QuarrySpawnAmount,IntRange SkullCaveSpawnAmount,List<IntRange> FloorsToSpawnOnSkullCave,List<IntRange>FloorsToExludeSkullCave,double ChanceToSpawn = 1f,double FarmSpawnChance=1f,double QuarrySpawnChance=1f,double SkullCaveSpawnChance=1f,double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,ChanceToSpawn,ChanceToDrop,SpawnChanceLuckFactor,SpawnAmountLuckFactor,DropChanceLuckFactor,DropAmountLuckFactor)
         {
             // Deals with setting where this ore can spawn.
             this.spawnsOnFarm = SpawnsOnFarm;
@@ -195,10 +165,6 @@ namespace Revitalize.Framework.Objects.InformationFiles
             //Deals with inclusion/Exclusion for floors in skull cave.
             this.floorsToExcludeSkullCave = FloorsToExludeSkullCave!=null? FloorsToExludeSkullCave: new List<IntRange>();
             this.floorsToSpawnOnSkullCave = FloorsToSpawnOnSkullCave!=null? FloorsToSpawnOnSkullCave: new List<IntRange>();
-
-            this.canSpawnOnThisFloorSkullCave = this.spawnInSkullCavern ? CanSpawnOnGivenFloorSkullCave : null;
-            this.excludeSpawnOnThisFloorSkullCave = FloorsToExludeFunSkullCave;
-            this.excludeSpawnOnThisFloor = FloorsToExludeFun;
 
 
         }
@@ -377,37 +343,14 @@ namespace Revitalize.Framework.Objects.InformationFiles
         public bool canSpawnOnCurrentMineLevel()
         {
             int level=LocationUtilities.CurrentMineLevel();
-            foreach(IntRange range in this.floorsToSpawnOn)
-            {
-                bool compareFun = false;
-                if (this.canSpawnOnThisFloor == null)
-                {
-                    compareFun = false;
-                }
-                else
-                {
-                    compareFun = this.canSpawnOnThisFloor(level);
-                }
+            if (level == -1) return false;
+            bool compareFun = this.canSpawnOnThisFloor(level);
+            return false;
+        }
 
-                if (range.ContainsInclusive(level) || compareFun==true)
-                {
-                    foreach(IntRange exclude in this.floorsToExclude)
-                    {
-                        bool excludeFun = false;
-                        if (this.excludeSpawnOnThisFloor == null)
-                        {
-                            excludeFun = false;
-                        }
-                        else
-                        {
-                            excludeFun = this.excludeSpawnOnThisFloor(level);
-                        }
-                        //Make this include exlude fun for regular mine. See above in this function.
-                        if (exclude.ContainsInclusive(level) || excludeFun) return false;
-                    }
-                    return true;
-                }
-            }
+
+        public virtual bool canSpawnOnThisFloor(int Level)
+        {
             return false;
         }
         

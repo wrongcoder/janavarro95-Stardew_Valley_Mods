@@ -9,9 +9,11 @@ using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.Utilities;
 using StardewValley;
+using System.Xml.Serialization;
 
 namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.AdvancedSolarPanel")]
     public class AdvancedSolarPanel:Machine
     {
         public int maxDaysToGenerateBattery;

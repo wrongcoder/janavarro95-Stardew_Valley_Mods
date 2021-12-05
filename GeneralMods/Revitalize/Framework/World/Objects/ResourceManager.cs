@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Revitalize.Framework.Objects.InformationFiles;
-using Revitalize.Framework.Objects.Resources.OreVeins;
 using Revitalize.Framework.World.Objects;
 using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.World.Objects.Items;
@@ -12,6 +11,7 @@ using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
+using Revitalize.Framework.World.Objects.Resources.OreVeins;
 
 namespace Revitalize.Framework.Objects
 {
@@ -121,85 +121,85 @@ namespace Revitalize.Framework.Objects
         {
             //Tin
             List<OreVein> oreVeins = new List<OreVein>();
-            OreVein tinOre_0_0 = new OreVein(new BasicItemInformation("Tin Ore Vein", "Omegasis.Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein tinOre_0_0 = new OreVein(new BasicItemInformation("Tin Ore Vein", "Omegasis.Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(this.getOre("Tin"), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(1,20)
             }, new List<IntRange>(),
-            (i => i == 1),
-            (i => i % 10 == 0), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
+            
+            1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
             {
                 new IntRange(0,0)
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, 0.80d, 0.20d, 0.25d, 1d, 1d, 1, 1, 1, 1), new List<ResourceInformation>(), 4);
+            }, 0.80d, 0.20d, 0.25d, 1d, 1d, 1, 1, 1, 1), new List<ResourceInformation>(), 4);
 
             //Aluminum
-            OreVein bauxiteOre_0_0 = new OreVein(new BasicItemInformation("Bauxite Ore Vein", "Omegasis.Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein bauxiteOre_0_0 = new OreVein(new BasicItemInformation("Bauxite Ore Vein", "Omegasis.Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(this.getOre("Bauxite"), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(20,50)
-            }, new List<IntRange>(), null, (i => i % 10 == 0), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
+            }, new List<IntRange>(), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
             {
                 new IntRange(0,0)
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .70d, 0.16d, 0.20d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 5);
+            }, .70d, 0.16d, 0.20d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 5);
 
             //Silver
-            OreVein silverOre_0_0 = new OreVein(new BasicItemInformation("Silver Ore Vein", "Omegasis.Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein silverOre_0_0 = new OreVein(new BasicItemInformation("Silver Ore Vein", "Omegasis.Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(this.getOre("Silver"), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,100)
-            }, new List<IntRange>(), null, (i => i % 10 == 0), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
+            }, new List<IntRange>(), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
             {
                 new IntRange(0,0)
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .50d, 0.10d, 0.14d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 6);
+            }, .50d, 0.10d, 0.14d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 6);
 
             //Lead
-            OreVein leadOre_0_0 = new OreVein(new BasicItemInformation("Lead Ore Vein", "Omegasis.Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein leadOre_0_0 = new OreVein(new BasicItemInformation("Lead Ore Vein", "Omegasis.Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(this.getOre("Lead"), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,70),
                 new IntRange(90,120)
-            }, new List<IntRange>(), null, (i => i % 10 == 0), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
+            }, new List<IntRange>(), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
             {
                 new IntRange(0,0)
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .60d, 0.13d, 0.17d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 7);
+            }, .60d, 0.13d, 0.17d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 7);
 
             //Titanium
-            OreVein titaniumOre_0_0 = new OreVein(new BasicItemInformation("Titanium Ore Vein", "Revitalize.Resources.Ore.Titanium", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Titanium"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein titaniumOre_0_0 = new OreVein(new BasicItemInformation("Titanium Ore Vein", "Revitalize.Resources.Ore.Titanium", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Titanium"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Titanium"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(this.getOre("Titanium"), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,70),
                 new IntRange(90,120)
-            }, new List<IntRange>(), null, (i => i % 10 == 0), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
+            }, new List<IntRange>(), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
             {
                 new IntRange(0,0)
             }, new List<IntRange>()
             {
                 new IntRange(0,9999)
-            }, null, null, .40d, 0.05d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 8);
+            }, .40d, 0.05d, 0.10d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 8);
 
             //Prismatic nugget ore
-            OreVein prismaticOre_0_0 = new OreVein(new BasicItemInformation("Prismatic Ore Vein", "Revitalize.Resources.Ore.Prismatic", "A ore vein that is full of prismatic ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Resources.Ore", "Prismatic"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein prismaticOre_0_0 = new OreVein(new BasicItemInformation("Prismatic Ore Vein", "Revitalize.Resources.Ore.Prismatic", "A ore vein that is full of prismatic ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Prismatic"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Prismatic"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(this.getOre("PrismaticNugget"), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(110,120)
-            }, new List<IntRange>(), null, (i => i % 10 == 0), 1, 3, 1, 1, new IntRange(1, 1), new IntRange(1, 1), new IntRange(1, 5), new List<IntRange>()
+            }, new List<IntRange>(), 1, 3, 1, 1, new IntRange(1, 1), new IntRange(1, 1), new IntRange(1, 5), new List<IntRange>()
             {
                 new IntRange(1,9999)
             }, new List<IntRange>()
             {
-            }, null, null, .05d, 0.01d, 0.01d, 0.10, 1d, 1, 1, 1, 1), new List<ResourceInformation>(), 10);
+            }, .05d, 0.01d, 0.01d, 0.10, 1d, 1, 1, 1, 1), new List<ResourceInformation>(), 10);
 
 
             oreVeins.Add(tinOre_0_0);
@@ -216,61 +216,61 @@ namespace Revitalize.Framework.Objects
         /// </summary>
         private void loadInOreItems()
         {
-            Ore tinOre = new Ore(new BasicItemInformation("Tin Ore", "Revitalize.Items.Resources.Ore.TinOre", "Tin ore that can be smelted into tin ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore tinOre = new Ore(new BasicItemInformation("Tin Ore", "Revitalize.Items.Resources.Ore.TinOre", "Tin ore that can be smelted into tin ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add("Tin", tinOre);
 
-            Ore bauxiteOre = new Ore(new BasicItemInformation("Bauxite Ore", "Revitalize.Items.Resources.Ore.BauxiteOre", "Bauxite ore that can be smelted into aluminum ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "BauxiteOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore bauxiteOre = new Ore(new BasicItemInformation("Bauxite Ore", "Revitalize.Items.Resources.Ore.BauxiteOre", "Bauxite ore that can be smelted into aluminum ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BauxiteOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add("Bauxite", bauxiteOre);
             this.ores.Add("Aluminum", bauxiteOre);
 
-            Ore leadOre = new Ore(new BasicItemInformation("Lead Ore", "Revitalize.Items.Resources.Ore.LeadOre", "Lead ore that can be smelted into lead ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "LeadOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore leadOre = new Ore(new BasicItemInformation("Lead Ore", "Revitalize.Items.Resources.Ore.LeadOre", "Lead ore that can be smelted into lead ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add("Lead", leadOre);
 
-            Ore silverOre = new Ore(new BasicItemInformation("Silver Ore", "Revitalize.Items.Resources.Ore.SilverOre", "Silver ore that can be smelted into silver ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "SilverOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore silverOre = new Ore(new BasicItemInformation("Silver Ore", "Revitalize.Items.Resources.Ore.SilverOre", "Silver ore that can be smelted into silver ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add("Silver", silverOre);
 
-            Ore titaniumOre = new Ore(new BasicItemInformation("Titanium Ore", "Revitalize.Items.Resources.Ore.TitaniumOre", "Titanium ore that can be smelted into titanium ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TitaniumOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore titaniumOre = new Ore(new BasicItemInformation("Titanium Ore", "Revitalize.Items.Resources.Ore.TitaniumOre", "Titanium ore that can be smelted into titanium ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add("Titanium", titaniumOre);
 
-            Ore prismaticOre = new Ore(new BasicItemInformation("Prismatic Nugget", "Revitalize.Items.Resources.Ore.PrismaticNugget", "Rare prismatic ore that can be smelted into a prismatic shard when seven are gathered.", "Ore", Color.Silver, -300, -300, 0, false, 200, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "PrismaticNugget"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore prismaticOre = new Ore(new BasicItemInformation("Prismatic Nugget", "Revitalize.Items.Resources.Ore.PrismaticNugget", "Rare prismatic ore that can be smelted into a prismatic shard when seven are gathered.", "Ore", Color.Silver, -300, -300, 0, false, 200, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "PrismaticNugget"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add("PrismaticNugget", prismaticOre);
 
-            CustomObject tinIngot = new CustomObject(new BasicItemInformation("Tin Ingot", "Revitalize.Items.Resources.Ore.TinIngot", "A tin ingot that can be used for crafting purposes.", "Metal", Color.Silver, -300, -300, 0, false, 75, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject tinIngot = new CustomObject(new BasicItemInformation("Tin Ingot", "Revitalize.Items.Resources.Ore.TinIngot", "A tin ingot that can be used for crafting purposes.", "Metal", Color.Silver, -300, -300, 0, false, 75, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("TinIngot", tinIngot);
 
-            CustomObject aluminumIngot = new CustomObject(new BasicItemInformation("Aluminum Ingot", "Revitalize.Items.Resources.Ore.AluminumIngot", "An aluminum ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 120, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "AluminumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject aluminumIngot = new CustomObject(new BasicItemInformation("Aluminum Ingot", "Revitalize.Items.Resources.Ore.AluminumIngot", "An aluminum ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 120, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "AluminumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("AluminumIngot", aluminumIngot);
 
-            CustomObject leadIngot = new CustomObject(new BasicItemInformation("Lead Ingot", "Revitalize.Items.Resources.Ore.LeadIngot", "A lead ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 165, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "LeadIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject leadIngot = new CustomObject(new BasicItemInformation("Lead Ingot", "Revitalize.Items.Resources.Ore.LeadIngot", "A lead ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 165, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("LeadIngot", leadIngot);
 
-            CustomObject silverIngot = new CustomObject(new BasicItemInformation("Silver Ingot", "Revitalize.Items.Resources.Ore.SilverIngot", "A silver ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 220, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "SilverIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject silverIngot = new CustomObject(new BasicItemInformation("Silver Ingot", "Revitalize.Items.Resources.Ore.SilverIngot", "A silver ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 220, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("SilverIngot", silverIngot);
 
-            CustomObject titaniumIngot = new CustomObject(new BasicItemInformation("Titanium Ingot", "Revitalize.Items.Resources.Ore.TitaniumIngot", "A titanium ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 325, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TitaniumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject titaniumIngot = new CustomObject(new BasicItemInformation("Titanium Ingot", "Revitalize.Items.Resources.Ore.TitaniumIngot", "A titanium ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 325, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("TitaniumIngot", titaniumIngot);
 
-            CustomObject brassIngot = new CustomObject(new BasicItemInformation("Brass Ingot", "Revitalize.Items.Resources.Ore.BrassIngot", "A brass alloy ingot made from copper and aluminum. It can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 195, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "BrassIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject brassIngot = new CustomObject(new BasicItemInformation("Brass Ingot", "Revitalize.Items.Resources.Ore.BrassIngot", "A brass alloy ingot made from copper and aluminum. It can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 195, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BrassIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("BrassIngot", brassIngot);
 
-            CustomObject bronzeIngot = new CustomObject(new BasicItemInformation("Bronze Ingot", "Revitalize.Items.Resources.Ore.BronzeIngot", "A bronze alloy ingot made from copper and tin. It can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 150, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "BronzeIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject bronzeIngot = new CustomObject(new BasicItemInformation("Bronze Ingot", "Revitalize.Items.Resources.Ore.BronzeIngot", "A bronze alloy ingot made from copper and tin. It can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 150, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BronzeIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("BronzeIngot", bronzeIngot);
 
-            CustomObject electrumIngot = new CustomObject(new BasicItemInformation("Electrum Ingot", "Revitalize.Items.Resources.Ore.ElectrumIngot", "A electrum alloy ingot made from gold and silver. It can be used for crafting purposes for things that use electricity.", "Ore", Color.Silver, -300, -300, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "ElectrumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject electrumIngot = new CustomObject(new BasicItemInformation("Electrum Ingot", "Revitalize.Items.Resources.Ore.ElectrumIngot", "A electrum alloy ingot made from gold and silver. It can be used for crafting purposes for things that use electricity.", "Ore", Color.Silver, -300, -300, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "ElectrumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("ElectrumIngot", electrumIngot);
 
-            CustomObject steelIngot = new CustomObject(new BasicItemInformation("Steel Ingot", "Revitalize.Items.Resources.Ore.SteelIngot", "A steel ingot that was made by processing iron again with more coal. It can be used for crafting purposes especially for making new machines.", "Ore", Color.Silver, -300, -300, 0, false, 180, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "SteelIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject steelIngot = new CustomObject(new BasicItemInformation("Steel Ingot", "Revitalize.Items.Resources.Ore.SteelIngot", "A steel ingot that was made by processing iron again with more coal. It can be used for crafting purposes especially for making new machines.", "Ore", Color.Silver, -300, -300, 0, false, 180, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SteelIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem("SteelIngot", steelIngot);
 
-            CustomObject bauxiteSand = new CustomObject(new BasicItemInformation("Bauxite Sand", "Revitalize.Items.Resources.Ore.BauxiteSand", "Bauxite ore which has been crushed into sand. Smelt it to get aluminum ingots.", "Ore", Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "BauxiteSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject copperSand = new CustomObject(new BasicItemInformation("Copper Sand", "Revitalize.Items.Resources.Ore.CopperSand", "Copper ore which has been crushed into sand. Smelt it to get copper bars.", "Ore", Color.Silver, -300, -300, 0, false, 5, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "CopperSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject goldSand = new CustomObject(new BasicItemInformation("Gold Sand", "Revitalize.Items.Resources.Ore.GoldSand", "Gold ore which has been crushed into sand. Smelt it to get gold bars.", "Ore", Color.Silver, -300, -300, 0, false, 25, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "GoldSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject ironSand = new CustomObject(new BasicItemInformation("Iron Sand", "Revitalize.Items.Resources.Ore.IronSand", "Iron ore which has been crushed into sand. Smelt it to get iron bars.", "Ore", Color.Silver, -300, -300, 0, false, 10, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "IronSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject iridiumSand = new CustomObject(new BasicItemInformation("Iridium Sand", "Revitalize.Items.Resources.Ore.IridiumSand", "Iridium ore which has been crushed into sand. Smelt it to get iridium bars.", "Ore", Color.Silver, -300, -300, 0, false, 100, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "IridiumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject leadSand = new CustomObject(new BasicItemInformation("Lead Sand", "Revitalize.Items.Resources.Ore.LeadSand", "Lead ore which has been crushed into sand. Smelt it to get lead ingots.", "Ore", Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "LeadSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject silverSand = new CustomObject(new BasicItemInformation("Silver Sand", "Revitalize.Items.Resources.Ore.SilverSand", "Silver ore which has been crushed into sand. Smelt it to get silver ingots.", "Ore", Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "SilverSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject tinSand = new CustomObject(new BasicItemInformation("Tin Sand", "Revitalize.Items.Resources.Ore.TinSand", "Tin ore which has been crushed into sand. Smelt it to get tin ingots.", "Ore", Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TinSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject titaniumSand = new CustomObject(new BasicItemInformation("Copper Sand", "Revitalize.Items.Resources.Ore.TitaniumSand", "Titanium ore which has been crushed into sand. Smelt it to get titanium bars.", "Ore", Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Ore", "TitaniumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject bauxiteSand = new CustomObject(new BasicItemInformation("Bauxite Sand", "Revitalize.Items.Resources.Ore.BauxiteSand", "Bauxite ore which has been crushed into sand. Smelt it to get aluminum ingots.", "Ore", Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BauxiteSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject copperSand = new CustomObject(new BasicItemInformation("Copper Sand", "Revitalize.Items.Resources.Ore.CopperSand", "Copper ore which has been crushed into sand. Smelt it to get copper bars.", "Ore", Color.Silver, -300, -300, 0, false, 5, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "CopperSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject goldSand = new CustomObject(new BasicItemInformation("Gold Sand", "Revitalize.Items.Resources.Ore.GoldSand", "Gold ore which has been crushed into sand. Smelt it to get gold bars.", "Ore", Color.Silver, -300, -300, 0, false, 25, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "GoldSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject ironSand = new CustomObject(new BasicItemInformation("Iron Sand", "Revitalize.Items.Resources.Ore.IronSand", "Iron ore which has been crushed into sand. Smelt it to get iron bars.", "Ore", Color.Silver, -300, -300, 0, false, 10, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "IronSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject iridiumSand = new CustomObject(new BasicItemInformation("Iridium Sand", "Revitalize.Items.Resources.Ore.IridiumSand", "Iridium ore which has been crushed into sand. Smelt it to get iridium bars.", "Ore", Color.Silver, -300, -300, 0, false, 100, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "IridiumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject leadSand = new CustomObject(new BasicItemInformation("Lead Sand", "Revitalize.Items.Resources.Ore.LeadSand", "Lead ore which has been crushed into sand. Smelt it to get lead ingots.", "Ore", Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject silverSand = new CustomObject(new BasicItemInformation("Silver Sand", "Revitalize.Items.Resources.Ore.SilverSand", "Silver ore which has been crushed into sand. Smelt it to get silver ingots.", "Ore", Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject tinSand = new CustomObject(new BasicItemInformation("Tin Sand", "Revitalize.Items.Resources.Ore.TinSand", "Tin ore which has been crushed into sand. Smelt it to get tin ingots.", "Ore", Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject titaniumSand = new CustomObject(new BasicItemInformation("Copper Sand", "Revitalize.Items.Resources.Ore.TitaniumSand", "Titanium ore which has been crushed into sand. Smelt it to get titanium bars.", "Ore", Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
 
             this.resources.Add("BauxiteSand", bauxiteSand);
             this.resources.Add("CopperSand", copperSand);
@@ -285,10 +285,10 @@ namespace Revitalize.Framework.Objects
 
         private void loadInResourceItems()
         {
-            CustomObject sand = new CustomObject(new BasicItemInformation("Sand", "Revitalize.Items.Resources.Misc.Sand", "Sand which is made from tiny rocks and can be used for smelting. Also unfun to have inside of swimwear.", "Resource", Color.Brown, -300, -300, 0, false, 2, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Sand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
+            CustomObject sand = new CustomObject(new BasicItemInformation("Sand", "Revitalize.Items.Resources.Misc.Sand", "Sand which is made from tiny rocks and can be used for smelting. Also unfun to have inside of swimwear.", "Resource", Color.Brown, -300, -300, 0, false, 2, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Misc", "Sand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
             this.resources.Add("Sand", sand);
 
-            CustomObject glass_normal = new CustomObject(new BasicItemInformation("Glass", "Revitalize.Items.Resources.Misc.Glass", "Glass smelted from sand. Used in decorations and glass objects.", "Resource", Color.Brown, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Items.Resources.Misc", "Glass"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
+            CustomObject glass_normal = new CustomObject(new BasicItemInformation("Glass", "Revitalize.Items.Resources.Misc.Glass", "Glass smelted from sand. Used in decorations and glass objects.", "Resource", Color.Brown, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Misc", "Glass"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
             this.resources.Add("Glass", glass_normal);
         }
 

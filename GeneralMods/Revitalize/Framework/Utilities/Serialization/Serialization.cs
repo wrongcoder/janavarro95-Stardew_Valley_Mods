@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Revitalize;
 using Revitalize.Framework.Utilities.Serialization.Converters;
+using SpaceShared.APIs;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -205,6 +207,37 @@ namespace Revitalize.Framework.Utilities
         public bool IsSubclass(Type potentialBase, Type potentialDescendant)
         {
             return potentialDescendant.IsSubclassOf(potentialBase);
+        }
+
+        public static void SerializeTypesForXMLUsingSpaceCore()
+        {
+            var spaceCore = ModCore.ModHelper.ModRegistry.GetApi<SpaceCoreAPI>("spacechase0.SpaceCore");
+
+            foreach (Type t in typeof(ModCore).Assembly.GetTypes())
+            {
+                if (Attribute.GetCustomAttribute(t, typeof(XmlTypeAttribute)) != null)
+                {
+
+                    ModCore.log(string.Format("Registering {0} for serialization using Space Core.", t.ToString()));
+                    spaceCore.RegisterSerializerType(t);
+                }
+
+            }
+            /*
+//Register core class
+spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.CustomObject));
+
+//Register crafting tables.
+spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.CraftingTables.CraftingTable));
+
+//Register machines.
+spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Machines.Machine));
+spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Machines.EnergyGeneration.AdvancedSolarPanel));
+spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Machines.EnergyGeneration.Windmill));
+
+//Register ore veins.
+spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Resources.OreVeins.OreVein));
+            */
         }
     }
 }

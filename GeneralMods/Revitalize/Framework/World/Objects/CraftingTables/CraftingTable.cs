@@ -8,9 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.Crafting;
 using StardewValley;
+using System.Xml.Serialization;
 
 namespace Revitalize.Framework.World.Objects.CraftingTables
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.CraftingTables.CraftingTable")]
     public class CraftingTable : CustomObject
     {
         public string craftingBookName;

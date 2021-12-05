@@ -11,9 +11,11 @@ using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardustCore.Animations;
+using System.Xml.Serialization;
 
 namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.Windmill")]
     public class Windmill : Machine
     {
 

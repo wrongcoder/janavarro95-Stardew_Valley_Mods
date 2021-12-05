@@ -13,9 +13,11 @@ using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using StardustCore.UIUtilities;
+using System.Xml.Serialization;
 
 namespace Revitalize.Framework.Objects.Items.Tools
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Tools.HoeExtended")]
     public class HoeExtended: StardewValley.Tools.Hoe, IBasicItemInfoProvider
     {
         public BasicItemInformation info;
