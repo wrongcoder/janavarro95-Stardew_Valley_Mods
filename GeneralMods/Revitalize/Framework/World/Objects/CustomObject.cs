@@ -19,6 +19,7 @@ using StardewValley.Tools;
 using StardustCore.Animations;
 using Revitalize.Framework.Utilities;
 using Netcode;
+using Revitalize.Framework.Utilities.Extensions;
 
 namespace Revitalize.Framework.World.Objects
 {
@@ -46,8 +47,8 @@ namespace Revitalize.Framework.World.Objects
 
         public BasicItemInformation basicItemInfo;
 
-        public override string Name { get => this.basicItemInfo.name; set => this.basicItemInfo.name = value; }
-        public override string DisplayName { get => this.basicItemInfo.name; set => this.basicItemInfo.name = value; }
+        public override string Name { get => this.basicItemInfo.name.Value; set => this.basicItemInfo.name.Value = value; }
+        public override string DisplayName { get => this.basicItemInfo.name.Value; set => this.basicItemInfo.name.Value = value; }
 
         /// <summary>
         /// 
@@ -103,11 +104,13 @@ namespace Revitalize.Framework.World.Objects
             {
                 this.testNetString.Value = "Master World";
             }
+
+            this.initNetFieldsPostConstructor();
         }
 
-        public CustomObject(BasicItemInformation basicItemInfo)
+        public CustomObject(BasicItemInformation BasicItemInfo)
         {
-            this.basicItemInfo=basicItemInfo;
+            this.basicItemInfo=BasicItemInfo;
             this.bigCraftable.Value = true;
             this.furniture_type.Value = Furniture.other;
             this.Type = "interactive";
@@ -125,11 +128,13 @@ namespace Revitalize.Framework.World.Objects
             {
                 this.testNetString.Value = "Master World";
             }
+
+            this.initNetFieldsPostConstructor();
         }
 
-        public CustomObject(BasicItemInformation basicItemInfo, int StackSize=1)
+        public CustomObject(BasicItemInformation BasicItemInfo, int StackSize=1)
         {
-            this.basicItemInfo = basicItemInfo;
+            this.basicItemInfo = BasicItemInfo;
             this.TileLocation = Vector2.Zero;
             this.Stack = StackSize;
             this.bigCraftable.Value = true;
@@ -149,11 +154,13 @@ namespace Revitalize.Framework.World.Objects
             {
                 this.testNetString.Value = "Master World";
             }
+
+            this.initNetFieldsPostConstructor();
         }
 
-        public CustomObject(BasicItemInformation basicItemInfo, Vector2 TileLocation)
+        public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation)
         {
-            this.basicItemInfo = basicItemInfo;
+            this.basicItemInfo = BasicItemInfo;
             this.TileLocation = TileLocation;
             this.bigCraftable.Value = true;
             this.furniture_type.Value = Furniture.other;
@@ -172,10 +179,12 @@ namespace Revitalize.Framework.World.Objects
             {
                 this.testNetString.Value = "Master World";
             }
+
+            this.initNetFieldsPostConstructor();
         }
-        public CustomObject(BasicItemInformation basicItemInfo, Vector2 TileLocation, int StackSize=1)
+        public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation, int StackSize=1)
         {
-            this.basicItemInfo = basicItemInfo;
+            this.basicItemInfo = BasicItemInfo;
             this.TileLocation = TileLocation;
             this.Stack = StackSize;
             this.bigCraftable.Value = true;
@@ -195,12 +204,14 @@ namespace Revitalize.Framework.World.Objects
             {
                 this.testNetString.Value = "Master World";
             }
+
+            this.initNetFieldsPostConstructor();
         }
 
-        protected override void initNetFields()
+        protected virtual void initNetFieldsPostConstructor()
         {
-            base.initNetFields();
             base.NetFields.AddFields(this.testNetString);
+            this.NetFields.AddFields(this.basicItemInfo.getNetFields());
         }
 
         /// <summary>
@@ -915,6 +926,8 @@ namespace Revitalize.Framework.World.Objects
                     }
                     ModCore.log("Animation manager current animation key is: " + this.AnimationManager.currentAnimationName);
                     ModCore.log("Test string name is: " + this.testNetString.Value);
+
+                    ModCore.log("Test id for basic item info is: " + this.basicItemInfo.id.Value);
                 }
 
                 if (this.AnimationManager.getCurrentAnimation() == null)

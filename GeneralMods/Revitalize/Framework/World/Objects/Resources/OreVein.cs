@@ -43,6 +43,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 
         public OreVein(BasicItemInformation Info, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info)
         {
+            this.basicItemInfo = Info;
             this.healthValue = Health;
             this.resourceInfo = Resource;
             this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
@@ -52,7 +53,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 
         public OreVein(BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info, TileLocation)
         {
-
+            this.basicItemInfo = Info;
             this.healthValue = Health;
             this.resourceInfo = Resource;
             this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
