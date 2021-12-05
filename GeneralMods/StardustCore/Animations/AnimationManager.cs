@@ -14,7 +14,7 @@ namespace StardustCore.Animations
 
         public SerializableDictionary<string, Animation> animations = new SerializableDictionary<string, Animation>();
         public string currentAnimationName;
-        public Texture2DExtended objectTexture; ///Might not be necessary if I use the CoreObject texture sheet.
+        public Texture2DExtended objectTexture;
         public bool enabled;
 
         [JsonIgnore]

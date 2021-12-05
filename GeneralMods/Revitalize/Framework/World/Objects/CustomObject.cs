@@ -18,6 +18,7 @@ using StardewValley.Objects;
 using StardewValley.Tools;
 using StardustCore.Animations;
 using Revitalize.Framework.Utilities;
+using Netcode;
 
 namespace Revitalize.Framework.World.Objects
 {
@@ -47,6 +48,13 @@ namespace Revitalize.Framework.World.Objects
 
         public override string Name { get => this.basicItemInfo.name; set => this.basicItemInfo.name = value; }
         public override string DisplayName { get => this.basicItemInfo.name; set => this.basicItemInfo.name = value; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [XmlElement("testNetString")]
+        public readonly NetString testNetString = new NetString();
+
 
         [XmlIgnore]
         public AnimationManager AnimationManager
@@ -87,6 +95,14 @@ namespace Revitalize.Framework.World.Objects
             placementRestriction.SetValue(2);
             this.Fragility = 0;
 
+            if (Game1.IsClient)
+            {
+                this.testNetString.Value = "Hello World";
+            }
+            else if (Game1.IsMasterGame)
+            {
+                this.testNetString.Value = "Master World";
+            }
         }
 
         public CustomObject(BasicItemInformation basicItemInfo)
@@ -100,6 +116,15 @@ namespace Revitalize.Framework.World.Objects
             IReflectedField<int> placementRestriction= ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
             this.Fragility = 0;
+
+            if (Game1.IsClient)
+            {
+                this.testNetString.Value = "Hello World";
+            }
+            else if (Game1.IsMasterGame)
+            {
+                this.testNetString.Value = "Master World";
+            }
         }
 
         public CustomObject(BasicItemInformation basicItemInfo, int StackSize=1)
@@ -115,6 +140,15 @@ namespace Revitalize.Framework.World.Objects
 
             IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
+
+            if (Game1.IsClient)
+            {
+                this.testNetString.Value = "Hello World";
+            }
+            else if (Game1.IsMasterGame)
+            {
+                this.testNetString.Value = "Master World";
+            }
         }
 
         public CustomObject(BasicItemInformation basicItemInfo, Vector2 TileLocation)
@@ -129,6 +163,15 @@ namespace Revitalize.Framework.World.Objects
 
             IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
+
+            if (Game1.IsClient)
+            {
+                this.testNetString.Value = "Hello World";
+            }
+            else if (Game1.IsMasterGame)
+            {
+                this.testNetString.Value = "Master World";
+            }
         }
         public CustomObject(BasicItemInformation basicItemInfo, Vector2 TileLocation, int StackSize=1)
         {
@@ -143,6 +186,21 @@ namespace Revitalize.Framework.World.Objects
 
             IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
+
+            if (Game1.IsClient)
+            {
+                this.testNetString.Value = "Hello World";
+            }
+            else if(Game1.IsMasterGame)
+            {
+                this.testNetString.Value = "Master World";
+            }
+        }
+
+        protected override void initNetFields()
+        {
+            base.initNetFields();
+            base.NetFields.AddFields(this.testNetString);
         }
 
         /// <summary>
@@ -836,6 +894,34 @@ namespace Revitalize.Framework.World.Objects
             }
             else
             {
+                if (this.basicItemInfo == null)
+                {
+                    throw new Exception("Basic item info is null!");
+                }
+                if (this.AnimationManager == null)
+                {
+                    throw new Exception("Amimation manager is null?");
+                }
+
+                if (this.AnimationManager.animations == null)
+                {
+                    throw new Exception("Animation Manager animations list is null");
+                }
+                else
+                {
+                    foreach(string s in this.AnimationManager.animations.Keys)
+                    {
+                        ModCore.log("Animation manager has animation: " + s);
+                    }
+                    ModCore.log("Animation manager current animation key is: " + this.AnimationManager.currentAnimationName);
+                    ModCore.log("Test string name is: " + this.testNetString.Value);
+                }
+
+                if (this.AnimationManager.getCurrentAnimation() == null)
+                {
+                    throw new Exception("Current animation for animation manager is null");
+                }
+
                 this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
                 if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, 0);
             }

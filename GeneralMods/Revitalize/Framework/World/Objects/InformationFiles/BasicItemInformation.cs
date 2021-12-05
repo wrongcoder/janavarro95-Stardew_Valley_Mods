@@ -10,21 +10,23 @@ using Revitalize.Framework;
 using Revitalize.Framework.Managers;
 using Revitalize.Framework.Illuminate;
 using System.Xml.Serialization;
+using Netcode;
+using System.Collections.Generic;
 
 namespace Revitalize.Framework.World.Objects.InformationFiles
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
     public class BasicItemInformation
     {
-        public string name;
+        public readonly NetString name = new NetString();
 
-        public string id;
+        public readonly NetString id=new NetString();
 
-        public string description;
+        public readonly NetString description=new NetString();
 
-        public string categoryName;
+        public readonly NetString categoryName = new NetString();
 
-        public Color categoryColor;
+        public readonly NetColor categoryColor=new NetColor();
 
         public int price;
 
@@ -95,10 +97,10 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         public bool requiresUpdate;
         public BasicItemInformation()
         {
-            this.name = "";
-            this.description = "";
-            this.categoryName = "";
-            this.categoryColor = new Color(0, 0, 0);
+            this.name.Value = "";
+            this.description.Value = "";
+            this.categoryName.Value = "";
+            this.categoryColor.Value = new Color(0, 0, 0);
             this.price = 0;
             this.staminaRestoredOnEating = -300;
             this.healthRestoredOnEating = -300;
@@ -112,7 +114,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.lightManager = new LightManager();
 
             this.facingDirection = Enums.Direction.Down;
-            this.id = "";
+            this.id.Value = "";
             this.shakeTimer = 0;
             this.alwaysDrawAbovePlayer = false;
             this.colorManager = new ColorManager(Enums.DyeBlendMode.Blend, 0.5f);
@@ -123,11 +125,11 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null, ColorManager ColorManager = null)
         {
-            this.name = name;
-            this.id = id;
-            this.description = description;
-            this.categoryName = categoryName;
-            this.categoryColor = categoryColor;
+            this.name.Value = name;
+            this.id.Value = id;
+            this.description.Value = description;
+            this.categoryName.Value = categoryName;
+            this.categoryColor.Value = categoryColor;
             this.price = price;
             this.staminaRestoredOnEating = staminaRestoredOnEating;
             this.healthRestoredOnEating = healthRestoredOnEating;
@@ -198,7 +200,20 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             }
         }
 
-
+        /// <summary>
+        /// Gets the netfields that should be synced across server/clients.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<INetSerializable> getNetFields()
+        {
+            return new List<INetSerializable>() {
+                this.name,
+                this.id,
+                this.description,
+                this.categoryName,
+                this.categoryColor
+            };
+        }
 
     }
 }
