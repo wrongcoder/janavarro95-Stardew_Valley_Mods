@@ -19,6 +19,7 @@ using StardewValley;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds;
 
 namespace Revitalize.Framework.Objects
 {
@@ -115,8 +116,8 @@ namespace Revitalize.Framework.Objects
 
         private void loadInCraftingTables()
         {
-            CraftingTable WorkbenchObj = new CraftingTable(new BasicItemInformation("Workbench", CraftingStations.Workbench, "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), "Workbench");
-            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil, "An anvil that can be used for crafting different machines and other metalic objects.", "Crafting", Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new Animation(new Rectangle(0, 0, 32, 32))), Color.White, false, new Vector2(2, 2), null, null), "Anvil");
+            CraftingTable WorkbenchObj = new CraftingTable(new BasicItemInformation("Workbench", CraftingStations.Workbench, "A workbench that can be used for crafting different objects.", "Crafting", Color.Brown, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
+            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil, "An anvil that can be used for crafting different machines and other metalic objects.", "Crafting", Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new Animation(new Rectangle(0, 0, 32, 32))), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
 
             this.AddItem(CraftingStations.Workbench, WorkbenchObj);
             this.AddItem(CraftingStations.Anvil, AnvilObj);

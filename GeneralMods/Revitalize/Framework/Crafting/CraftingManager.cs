@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Revitalize.Framework.Utilities;
@@ -47,7 +48,7 @@ namespace Revitalize.Framework.Crafting
             //~~~~~~~~~~~~~~~~~~~~~~~//
             // Alloy Furnace Recipes //
             //~~~~~~~~~~~~~~~~~~~~~~~//
-            CraftingRecipeBook AlloyFurnaceRecipes = new CraftingRecipeBook("AlloyFurnace");
+            CraftingRecipeBook AlloyFurnaceRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes);
             AlloyFurnaceRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
 
 
@@ -90,7 +91,7 @@ namespace Revitalize.Framework.Crafting
             }
             else
             {
-                this.modCraftingRecipesByGroup.Add("AlloyFurnace", AlloyFurnaceRecipes);
+                this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes, AlloyFurnaceRecipes);
             }
         }
 
@@ -100,7 +101,7 @@ namespace Revitalize.Framework.Crafting
             //   Anvil Recipes  //
             //~~~~~~~~~~~~~~~~~~//
 
-            CraftingRecipeBook AnvilRecipes = new CraftingRecipeBook("Anvil");
+            CraftingRecipeBook AnvilRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AnvilCraftingRecipes);
             AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
 
             /*
@@ -147,20 +148,18 @@ namespace Revitalize.Framework.Crafting
             }
             else
             {
-                this.modCraftingRecipesByGroup.Add("Anvil", AnvilRecipes);
+                this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.AnvilCraftingRecipes, AnvilRecipes);
             }
         }
 
         protected virtual void addWorkbenchRecipes()
         {
 
-            ModCore.log("I'm adding in the crafting workbench recipes!");
-
             //~~~~~~~~~~~~~~~~~~~//
             // Workbench Recipes //
             //~~~~~~~~~~~~~~~~~~~//
 
-            CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook("Workbench");
+            CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook(CraftingRecipeBooks.WorkbenchCraftingRecipies);
             WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
             WorkbenchRecipes.addInCraftingTab("Furniture", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Furniture Tab", new Vector2(100 + 48, 100 + (24 * 4) * 2), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), false);
 
@@ -256,7 +255,7 @@ namespace Revitalize.Framework.Crafting
             }
             else
             {
-                this.modCraftingRecipesByGroup.Add("Workbench", WorkbenchRecipes);
+                this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipes);
             }
 
 
