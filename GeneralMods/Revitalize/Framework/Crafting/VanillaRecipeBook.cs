@@ -10,7 +10,6 @@ namespace Revitalize.Framework.Crafting
 {
     public class VanillaRecipeBook
     {
-        public static VanillaRecipeBook VanillaRecipes;
 
         public Dictionary<string,Dictionary<string,VanillaRecipe>> recipesByObjectName;
         /// <summary>
@@ -24,10 +23,6 @@ namespace Revitalize.Framework.Crafting
             this.recipesByObjectName = new Dictionary<string, Dictionary<string, VanillaRecipe>>();
             this.recipesByObjectPyTKID = new Dictionary<string, Dictionary<string, VanillaRecipe>>();
             this.recipesByObject = new Dictionary<string, Dictionary<Item, VanillaRecipe>>();
-            if (VanillaRecipes == null)
-            {
-                VanillaRecipes = this;
-            }
 
             this.recipesByObjectName = new Dictionary<string, Dictionary<string, VanillaRecipe>>();
             this.recipesByObjectName.Add("Furnace", new Dictionary<string, VanillaRecipe>());

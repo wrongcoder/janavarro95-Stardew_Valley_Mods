@@ -141,7 +141,7 @@ namespace Revitalize.Framework.Objects
                     true) }
             }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), new InventoryManager(new List<Item>(),18, 3, 6), null), ModCore.ObjectManager.resources.miningDrillResources.Values.ToList(), ModCore.Configs.machinesConfig.miningDrillEnergyConsumption, ModCore.Configs.machinesConfig.miningDrillTimeToMine, "");
 
-            this.AddItem("MiningDrillMachineV1", miningDrillMachine_0_0);
+            this.AddItem("MiningDrillV1", miningDrillMachine_0_0);
 
 
             Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("Windmill", "Revitalize.Objects.Machines.WindmillV1", "Generates power from the wind.", "Machine", Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "Windmill"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "Windmill"), new SerializableDictionary<string, Animation>() {

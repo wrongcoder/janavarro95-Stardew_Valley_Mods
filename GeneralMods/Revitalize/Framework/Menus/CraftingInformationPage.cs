@@ -69,14 +69,14 @@ namespace Revitalize.Framework.Menus
                 ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64+this.width, this.yPositionOnScreen+(i*64)+128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
-            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
+            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
             this.outputInventory = this.inventory;
 
             if (this.infoButton.recipe.statCost != null)
             {
                 if (this.infoButton.recipe.statCost.gold > 0)
                 {
-                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace Revitalize.Framework.Menus
                 ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64+this.width, this.yPositionOnScreen+(i*64)+128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
-            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
+            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
 
             if (OutputInventory == null)
             {
@@ -105,7 +105,7 @@ namespace Revitalize.Framework.Menus
             {
                 if (this.infoButton.recipe.statCost.gold > 0)
                 {
-                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
                 }
             }
             this.outputInventory = OutputInventory;

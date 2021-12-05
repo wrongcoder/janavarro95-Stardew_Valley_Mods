@@ -94,6 +94,7 @@ namespace Revitalize.Framework.Menus
 
         private Machine machine;
 
+        bool readyToCloseInternal;
         /// <summary>
         /// The maximum amount of pages to display.
         /// </summary>
@@ -184,6 +185,12 @@ namespace Revitalize.Framework.Menus
             this.playerInventory = false;
         }
 
+        public override bool readyToClose()
+        {
+
+            return this.readyToCloseInternal;
+        }
+
         /// <summary>
         /// Fix the display of menu elements when the menu is resized.
         /// </summary>
@@ -204,8 +211,8 @@ namespace Revitalize.Framework.Menus
         /// </summary>
         private void initializeButtons()
         {
-            this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
-            this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
 
             this.searchBox = new TextBox((Texture2D)null, (Texture2D)null, Game1.dialogueFont, Game1.textColor);
             this.searchBox.X = this.xPositionOnScreen + this.width + 96;
@@ -221,6 +228,13 @@ namespace Revitalize.Framework.Menus
         /// <param name="key"></param>
         public override void receiveKeyPress(Keys key)
         {
+
+            if(this.searchBox.Selected==false && key== Keys.Escape)
+            {
+                this.readyToCloseInternal = true;
+                return;
+            }
+
             if (this.searchBox.Selected && key != Keys.Escape)
             {
                 return;

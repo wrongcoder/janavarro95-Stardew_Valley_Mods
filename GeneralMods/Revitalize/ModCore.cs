@@ -206,7 +206,8 @@ namespace Revitalize
 
         public static Serializer Serializer;
 
-        public static VanillaRecipeBook VanillaRecipeBook;
+
+        public static CraftingManager CraftingManager;
 
         public static ConfigManager Configs;
         public override void Entry(IModHelper helper)
@@ -256,8 +257,8 @@ namespace Revitalize
         {
             ObjectManager.loadInItems();
             //Adds in recipes to the mod.
-            VanillaRecipeBook = new VanillaRecipeBook();
-            CraftingRecipeBook.CraftingRecipesByGroup = new Dictionary<string, CraftingRecipeBook>();
+            CraftingManager = new CraftingManager();
+            CraftingManager.initializeRecipeBooks();
 
             Revitalize.Framework.Utilities.Serializer.SerializeTypesForXMLUsingSpaceCore();
         }
@@ -379,13 +380,6 @@ namespace Revitalize
         {
             ObjectManager = new ObjectManager(Manifest);
         }
-        /// <summary>
-        /// Must be enabled for the tabled to be placed????
-        /// </summary>
-        private void loadContent()
-        {
-
-        }
 
         private void createDirectories()
         {
@@ -443,7 +437,7 @@ namespace Revitalize
                 ObjectManager.GetItem("SolarArrayTier1",1),
                 new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
                 new StardewValley.Object((int)Enums.SDVObject.CopperOre,10),
-                ObjectManager.GetItem("MiningDrillMachineV1"),
+                ObjectManager.GetItem("MiningDrillV1"),
                 new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
                 ObjectManager.GetItem("WindmillV1"),
             });

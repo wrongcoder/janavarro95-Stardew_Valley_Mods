@@ -52,7 +52,7 @@ namespace Revitalize.Framework.Hacks
                 if (obj == null) return;
                 if (ObjectUtilities.IsObjectFurnace(obj) && ObjectUtilities.IsObjectHoldingItem(obj)==false)
                 {
-                    bool crafted=VanillaRecipeBook.VanillaRecipes.TryToCraftRecipe(obj);
+                    bool crafted=ModCore.CraftingManager.vanillaCraftingRecipes.TryToCraftRecipe(obj);
                     if (crafted == false) return;
                     obj.initializeLightSource((Vector2)(obj.TileLocation), false);
                     obj.showNextIndex.Value = true;

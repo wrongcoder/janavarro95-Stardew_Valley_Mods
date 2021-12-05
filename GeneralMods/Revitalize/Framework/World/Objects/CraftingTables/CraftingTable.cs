@@ -40,13 +40,15 @@ namespace Revitalize.Framework.World.Objects.CraftingTables
         /// <returns></returns>
         public override bool rightClicked(Farmer who)
         {
-            if (CraftingRecipeBook.CraftingRecipesByGroup.ContainsKey(this.craftingBookName))
+            if (ModCore.CraftingManager.modCraftingRecipesByGroup.ContainsKey(this.craftingBookName))
             {
-                CraftingRecipeBook.CraftingRecipesByGroup[this.craftingBookName].openCraftingMenu();
+                ModCore.log("Right click the crafting table. And have the recipe book enabled.");
+                ModCore.CraftingManager.modCraftingRecipesByGroup[this.craftingBookName].openCraftingMenu();
                 return true;
             }
             else
             {
+                ModCore.log("Right click the crafting table. BUT DO NOT have the recipe book enabled: " + this.craftingBookName);
                 return true;
             }
         }

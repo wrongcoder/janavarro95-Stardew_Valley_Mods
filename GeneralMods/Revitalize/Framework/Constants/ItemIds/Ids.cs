@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Crafting
+namespace Revitalize.Framework.Constants.ItemIds
 {
-    public class MachineCraftingRecipe
+    public static class Ids
     {
     }
 }

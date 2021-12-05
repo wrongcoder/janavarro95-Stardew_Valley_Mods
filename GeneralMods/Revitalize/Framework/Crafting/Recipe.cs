@@ -52,6 +52,12 @@ namespace Revitalize.Framework.Crafting
         public Recipe(List<CraftingRecipeComponent> inputs, CraftingRecipeComponent output, StatCost StatCost = null,int TimeToCraft=0)
         {
             this.ingredients = inputs;
+
+            if (output.item == null)
+            {
+                throw new System.Exception("Output item can not be null for Revitalize crafting recipe!");
+            }
+
             this.outputDescription = output.item.getDescription();
             this.outputName = output.item.DisplayName;
             this.outputs = new List<CraftingRecipeComponent>()

@@ -102,6 +102,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         }
 
+        
 
         public override bool rightClicked(Farmer who)
         {
