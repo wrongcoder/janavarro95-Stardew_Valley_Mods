@@ -28,6 +28,7 @@ using xTile.Dimensions;
 using Animation = StardustCore.Animations.Animation;
 using SpaceShared.APIs;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 
 namespace Revitalize
 {
@@ -238,7 +239,6 @@ namespace Revitalize
 
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
-            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
 
             ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
@@ -359,24 +359,6 @@ namespace Revitalize
             TextureManager.GetTextureManager(Manifest, "Revitalize.Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
         }
 
-        private void Input_ButtonPressed(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
-        {
-            if (e.Button == SButton.U)
-            {
-                CraftingMenuV1 craft = new CraftingMenuV1(100, 100, 600, 800, Color.White, Game1.player.Items.ToList());
-                craft.addInCraftingPageTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite ("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Microsoft.Xna.Framework.Rectangle(0, 0, 24, 24), 2f));
-                craft.addInCraftingRecipe(new CraftingRecipeButton(new Recipe(new List<CraftingRecipeComponent>()
-                {
-                    //Inputs here
-                   new CraftingRecipeComponent(ObjectManager.GetItem("SteelIngot"),20)
-                }, new CraftingRecipeComponent(ObjectManager.GetItem("Anvil"), 1)), null, new Vector2(), new Microsoft.Xna.Framework.Rectangle(0, 0, 32, 32), 1f, false, Color.White), "Default");
-                craft.currentTab = "Default";
-                craft.sortRecipes();
-                Game1.activeClickableMenu = craft;
-            }
-
-        }
-
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
             ObjectManager = new ObjectManager(Manifest);
@@ -416,31 +398,21 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
-            ModCore.log("Load a save game!?!?");
-            Item i = ObjectManager.GetItem("SolarPanelTier1");
-            if (i == null)
-            {
-                ModCore.log("SOLAR PANEL IS NULL?!?!?!");
-            }
-            else
-            {
-                ModCore.log("SOLAR PANEL IS NOT NULL!?!?!?");
-            }
-            Game1.player.addItemToInventoryBool(ObjectManager.GetItem("SolarPanelTier1"));
 
-            Game1.player.addItemToInventoryBool(ObjectManager.GetItem("Workbench"));
+
+            Game1.player.addItemToInventoryBool(ObjectManager.GetItem(CraftingStations.Workbench));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                 new StardewValley.Object((int)Enums.SDVObject.Coal,100),
                 ObjectManager.GetItem(Ingots.SteelIngot, 20),
-                ObjectManager.GetItem("Anvil",1),
-                ObjectManager.GetItem("SolarPanelTier1",1),
-                ObjectManager.GetItem("SolarArrayTier1",1),
+                ObjectManager.GetItem(CraftingStations.Anvil,1),
+                ObjectManager.GetItem(Machines.AdvancedSolarPanelV1,1),
+                ObjectManager.GetItem(Machines.SolarArrayV1,1),
                 new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
                 new StardewValley.Object((int)Enums.SDVObject.CopperOre,10),
-                ObjectManager.GetItem("MiningDrillV1"),
+                ObjectManager.GetItem(Machines.MiningDrillV1),
                 new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
-                ObjectManager.GetItem("WindmillV1"),
+                ObjectManager.GetItem(Machines.WindmillV1),
             });
         }
 

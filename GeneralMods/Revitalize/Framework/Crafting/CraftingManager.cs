@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Revitalize.Framework.Utilities;
 using StardustCore.Animations;
@@ -117,7 +118,7 @@ namespace Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.SteelIngot,10),10),
                 new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.BrassIngot,10),10),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("MiningDrillV1"), 1)), true));
+            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Machines.MiningDrillV1), 1)), true));
 
             if (this.modCraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
@@ -167,7 +168,7 @@ namespace Revitalize.Framework.Crafting
                 {
                     //Inputs here
                    new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.SteelIngot),20)
-                }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Anvil"), 1)), true));
+                }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(CraftingStations.Anvil), 1)), true));
             WorkbenchRecipes.addCraftingRecipe("Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
