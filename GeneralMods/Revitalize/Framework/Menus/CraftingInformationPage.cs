@@ -166,12 +166,12 @@ namespace Revitalize.Framework.Menus
                         this.hoverText = "Crafting in progress...";
                         hovered = true;
                     }
-                    if (this.machine.MinutesUntilReady == 0 && this.machine.GetInventoryManager().hasItemsInBuffer)
+                    if (this.machine.MinutesUntilReady == 0 && this.machine.GetInventoryManager().hasItemsInBuffer())
                     {
                         this.hoverText = "Items in buffer. Please make room in the inventory for: " + System.Environment.NewLine + this.machine.GetInventoryManager() + " items.";
                         hovered = true;
                     }
-                    if (this.machine.GetInventoryManager().IsFull)
+                    if (this.machine.GetInventoryManager().isFull())
                     {
                         this.hoverText = "Inventory is full!";
                         hovered = true;
@@ -222,8 +222,8 @@ namespace Revitalize.Framework.Menus
 
             if (this.machine != null)
             {
-                if (this.machine.GetInventoryManager().hasItemsInBuffer) canCraft = false;
-                if (this.machine.GetInventoryManager().IsFull) canCraft = false;
+                if (this.machine.GetInventoryManager().hasItemsInBuffer()) canCraft = false;
+                if (this.machine.GetInventoryManager().isFull()) canCraft = false;
             }
 
             return canCraft;

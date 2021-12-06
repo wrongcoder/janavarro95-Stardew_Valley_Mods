@@ -12,7 +12,8 @@ using StardewValley;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using Revitalize.Framework.World.Objects.Resources.OreVeins;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
+using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
+using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 
 namespace Revitalize.Framework.Objects
 {
@@ -122,7 +123,7 @@ namespace Revitalize.Framework.Objects
         {
             //Tin
             List<OreVein> oreVeins = new List<OreVein>();
-            OreVein tinOre_0_0 = new OreVein(new BasicItemInformation("Tin Ore Vein", "Omegasis.Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein tinOre_0_0 = new OreVein(new BasicItemInformation("Tin Ore Vein", "Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.TinOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(1,20)
@@ -137,7 +138,7 @@ namespace Revitalize.Framework.Objects
             }, 0.80d, 0.20d, 0.25d, 1d, 1d, 1, 1, 1, 1), new List<ResourceInformation>(), 4);
 
             //Aluminum
-            OreVein bauxiteOre_0_0 = new OreVein(new BasicItemInformation("Bauxite Ore Vein", "Omegasis.Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein bauxiteOre_0_0 = new OreVein(new BasicItemInformation("Bauxite Ore Vein", "Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.BauxiteOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(20,50)
@@ -150,7 +151,7 @@ namespace Revitalize.Framework.Objects
             }, .70d, 0.16d, 0.20d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 5);
 
             //Silver
-            OreVein silverOre_0_0 = new OreVein(new BasicItemInformation("Silver Ore Vein", "Omegasis.Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein silverOre_0_0 = new OreVein(new BasicItemInformation("Silver Ore Vein", "Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.SilverOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,100)
@@ -163,7 +164,7 @@ namespace Revitalize.Framework.Objects
             }, .50d, 0.10d, 0.14d, 1d, 1d, 0, 0, 0, 0), new List<ResourceInformation>(), 6);
 
             //Lead
-            OreVein leadOre_0_0 = new OreVein(new BasicItemInformation("Lead Ore Vein", "Omegasis.Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
+            OreVein leadOre_0_0 = new OreVein(new BasicItemInformation("Lead Ore Vein", "Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
                 new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.LeadOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,70),

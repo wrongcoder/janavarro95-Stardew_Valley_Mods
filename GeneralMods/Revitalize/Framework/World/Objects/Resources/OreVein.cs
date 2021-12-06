@@ -77,7 +77,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
         {
             base.updateWhenCurrentLocation(time, environment);
             this.setHealth(this.healthValue);
-            this.basicItemInfo.shakeTimer -= time.ElapsedGameTime.Milliseconds;
+            this.basicItemInfo.shakeTimer.Value -= time.ElapsedGameTime.Milliseconds;
         }
 
         public override void DayUpdate(GameLocation location)
@@ -102,13 +102,13 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
                 {
                     this.getCurrentLocation().playSound("hammer");
                     //ModCore.log("Ore has this much health left and location is not null: "+this.healthValue);
-                    this.basicItemInfo.shakeTimer = 200;
+                    this.basicItemInfo.shakeTimer.Value = 200;
                 }
                 else
                 {
                     Game1.player.currentLocation.playSound("hammer");
                     //ModCore.log("Ore has this much health left and location is null!: "+this.healthValue);
-                    this.basicItemInfo.shakeTimer = 200;
+                    this.basicItemInfo.shakeTimer.Value = 200;
                 }
                 return false;
             }

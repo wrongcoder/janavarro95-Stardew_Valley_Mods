@@ -237,9 +237,9 @@ namespace StardustCore.UIUtilities
 
             //ModCore.log("Found texture: " + textureExtended.Name);
             
-            textureExtended.texture.Name = ModCore.Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.Name;
+            textureExtended.texture.Name = ModCore.Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.name;
 
-            this.addTexture(textureExtended.Name, textureExtended);
+            this.addTexture(textureExtended.name, textureExtended);
         }
 
         private void processFoundTexture(string file,string relativePath , IManifest Manifest)
@@ -248,16 +248,16 @@ namespace StardustCore.UIUtilities
 
             //ModCore.log("Found texture: " + textureExtended.Name);
 
-            textureExtended.texture.Name = Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.Name;
+            textureExtended.texture.Name = Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.name;
 
-            this.addTexture(textureExtended.Name, textureExtended);
+            this.addTexture(textureExtended.name, textureExtended);
         }
 
         private void processFoundTexture(string file, string relativePath, IContentPack ContentPack)
         {
             Texture2DExtended textureExtended = new Texture2DExtended(ContentPack, Path.Combine(relativePath, Path.GetFileName(file)),this.textureManagerId);
 
-            textureExtended.texture.Name = ContentPack.Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.Name;
+            textureExtended.texture.Name = ContentPack.Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.name;
             //ModCore.log("Found texture: " + textureExtended.Name);
 
             //this.addTexture(textureExtended.Name, textureExtended);
@@ -280,9 +280,9 @@ namespace StardustCore.UIUtilities
                 if (existingTexture != null)
                 {
                     existingTexture.setTexture(tex);
-                    if (this.extendedTextures.ContainsKey(existingTexture.Name) == false)
+                    if (this.extendedTextures.ContainsKey(existingTexture.name) == false)
                     {
-                        this.addTexture(existingTexture.Name, existingTexture);
+                        this.addTexture(existingTexture.name, existingTexture);
                     }
                 }
 

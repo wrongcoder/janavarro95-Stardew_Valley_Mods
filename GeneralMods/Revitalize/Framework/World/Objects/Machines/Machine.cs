@@ -141,7 +141,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         {
             if (this.machineStatusBubbleBox == null) this.createStatusBubble();
             if (this.GetInventoryManager() == null) return;
-            if (this.GetInventoryManager().IsFull && this.doesMachineProduceItems() && ModCore.Configs.machinesConfig.showMachineNotificationBubble_InventoryFull)
+            if (this.GetInventoryManager().isFull() && this.doesMachineProduceItems() && ModCore.Configs.machinesConfig.showMachineNotificationBubble_InventoryFull)
             {
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));

@@ -184,7 +184,7 @@ namespace Revitalize.Framework.Crafting
         public void craft(ref IList<Item> from, ref IList<Item> to, bool dropToGround = false, bool isPlayerInventory = false)
         {
             InventoryManager manager = new InventoryManager(to,Game1.player.MaxItems);
-            if (manager.ItemCount + this.outputs.Count >= manager.capacity)
+            if (manager.getNonNullItemCount() + this.outputs.Count >= manager.capacity)
             {
                 if (isPlayerInventory)
                     Game1.showRedMessage("Inventory Full");

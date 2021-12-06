@@ -27,8 +27,8 @@ using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using xTile.Dimensions;
 using Animation = StardustCore.Animations.Animation;
 using SpaceShared.APIs;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
+using Revitalize.Framework.Constants.ItemIds.Objects;
 
 namespace Revitalize
 {

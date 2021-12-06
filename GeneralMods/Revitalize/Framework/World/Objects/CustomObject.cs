@@ -41,7 +41,7 @@ namespace Revitalize.Framework.World.Objects
     /// Bounding boxes work, but not for clicking to remove. Why is that?
     /// </summary>
     [XmlType("Mods_Revitalize.Framework.World.Objects.CustomObject")]
-    public class CustomObject:StardewValley.Objects.Furniture, ICommonObjectInterface, ILightManagerProvider, IBasicItemInfoProvider
+    public class CustomObject : StardewValley.Objects.Furniture, ICommonObjectInterface, ILightManagerProvider, IBasicItemInfoProvider
     {
         public bool isCurrentLocationAStructure;
 
@@ -49,12 +49,6 @@ namespace Revitalize.Framework.World.Objects
 
         public override string Name { get => this.basicItemInfo.name.Value; set => this.basicItemInfo.name.Value = value; }
         public override string DisplayName { get => this.basicItemInfo.name.Value; set => this.basicItemInfo.name.Value = value; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [XmlElement("testNetString")]
-        public readonly NetString testNetString = new NetString();
 
 
         [XmlIgnore]
@@ -65,10 +59,6 @@ namespace Revitalize.Framework.World.Objects
                 if (this.basicItemInfo == null) return null;
                 if (this.basicItemInfo.animationManager == null) return null;
                 return this.basicItemInfo.animationManager;
-            }
-            set
-            {
-                this.basicItemInfo.animationManager = value;
             }
         }
 
@@ -96,43 +86,25 @@ namespace Revitalize.Framework.World.Objects
             placementRestriction.SetValue(2);
             this.Fragility = 0;
 
-            if (Game1.IsClient)
-            {
-                this.testNetString.Value = "Hello World";
-            }
-            else if (Game1.IsMasterGame)
-            {
-                this.testNetString.Value = "Master World";
-            }
-
             this.initNetFieldsPostConstructor();
         }
 
         public CustomObject(BasicItemInformation BasicItemInfo)
         {
-            this.basicItemInfo=BasicItemInfo;
+            this.basicItemInfo = BasicItemInfo;
             this.bigCraftable.Value = true;
             this.furniture_type.Value = Furniture.other;
             this.Type = "interactive";
             this.name = this.Name;
 
-            IReflectedField<int> placementRestriction= ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
+            IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
             this.Fragility = 0;
-
-            if (Game1.IsClient)
-            {
-                this.testNetString.Value = "Hello World";
-            }
-            else if (Game1.IsMasterGame)
-            {
-                this.testNetString.Value = "Master World";
-            }
 
             this.initNetFieldsPostConstructor();
         }
 
-        public CustomObject(BasicItemInformation BasicItemInfo, int StackSize=1)
+        public CustomObject(BasicItemInformation BasicItemInfo, int StackSize = 1)
         {
             this.basicItemInfo = BasicItemInfo;
             this.TileLocation = Vector2.Zero;
@@ -145,15 +117,6 @@ namespace Revitalize.Framework.World.Objects
 
             IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
-
-            if (Game1.IsClient)
-            {
-                this.testNetString.Value = "Hello World";
-            }
-            else if (Game1.IsMasterGame)
-            {
-                this.testNetString.Value = "Master World";
-            }
 
             this.initNetFieldsPostConstructor();
         }
@@ -171,18 +134,9 @@ namespace Revitalize.Framework.World.Objects
             IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
-            if (Game1.IsClient)
-            {
-                this.testNetString.Value = "Hello World";
-            }
-            else if (Game1.IsMasterGame)
-            {
-                this.testNetString.Value = "Master World";
-            }
-
             this.initNetFieldsPostConstructor();
         }
-        public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation, int StackSize=1)
+        public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation, int StackSize = 1)
         {
             this.basicItemInfo = BasicItemInfo;
             this.TileLocation = TileLocation;
@@ -196,21 +150,11 @@ namespace Revitalize.Framework.World.Objects
             IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
-            if (Game1.IsClient)
-            {
-                this.testNetString.Value = "Hello World";
-            }
-            else if(Game1.IsMasterGame)
-            {
-                this.testNetString.Value = "Master World";
-            }
-
             this.initNetFieldsPostConstructor();
         }
 
         protected virtual void initNetFieldsPostConstructor()
         {
-            base.NetFields.AddFields(this.testNetString);
             this.NetFields.AddFields(this.basicItemInfo.getNetFields());
         }
 
@@ -551,7 +495,7 @@ namespace Revitalize.Framework.World.Objects
 
 
             this.TileLocation = Vector2.Zero;
-            this.basicItemInfo.locationName = "";
+            this.basicItemInfo.locationName.Value = "";
             this.boundingBox.Value = this.getBoundingBox(Vector2.Zero);
 
             this.sittingFarmers.Clear();
@@ -563,7 +507,7 @@ namespace Revitalize.Framework.World.Objects
             //base.performRemoveAction(tileLocation, environment);
         }
 
-        
+
         /// <summary>
         /// Removes this from the game world, performs cleanup, and puts the object into the player's inventory. For similar logic, <see cref="CustomObject.AttemptRemoval(Action{Furniture})"/> for furniture removal logic as this is specific to the <see cref="StardewValley.Object"/> removal logic.
         /// </summary>
@@ -580,7 +524,7 @@ namespace Revitalize.Framework.World.Objects
             }
 
             this.removeFromGameWorld(tileLocation, environment);
-            this.performRemoveAction(tileLocation,environment);
+            this.performRemoveAction(tileLocation, environment);
 
             Farmer who = Game1.player;
             bool foundInToolbar = false;
@@ -633,7 +577,7 @@ namespace Revitalize.Framework.World.Objects
             }
             else
             {
-                ModCore.log("Player used tool: " +t.DisplayName);
+                ModCore.log("Player used tool: " + t.DisplayName);
             }
             return false;
             //False is returned if we signify no meaningul tool interactions?
@@ -664,7 +608,7 @@ namespace Revitalize.Framework.World.Objects
                 return false;
             }
 
-            CustomObject obj =(CustomObject) this.getOne();
+            CustomObject obj = (CustomObject)this.getOne();
 
             obj.boundingBox.Value = this.getBoundingBox(new Vector2((float)x / (float)64, (float)y / (float)64));
 
@@ -687,7 +631,7 @@ namespace Revitalize.Framework.World.Objects
             location.objects.Add(placementTile, obj);
             location.playSound("thudStep");
 
-            obj.basicItemInfo.locationName = location.NameOrUniqueName;
+            obj.basicItemInfo.locationName.Value = location.NameOrUniqueName;
             obj.updateDrawPosition();
 
             return true;
@@ -719,14 +663,14 @@ namespace Revitalize.Framework.World.Objects
         {
             if (this.shakeTimer > 0)
             {
-                this.basicItemInfo.shakeTimer-= time.ElapsedGameTime.Milliseconds;
+                this.basicItemInfo.shakeTimer.Value -= time.ElapsedGameTime.Milliseconds;
                 this.shakeTimer -= time.ElapsedGameTime.Milliseconds;
                 if (this.shakeTimer <= 0)
                 {
                     this.health = 10;
                 }
             }
-            
+
         }
 
 
@@ -746,7 +690,7 @@ namespace Revitalize.Framework.World.Objects
 
         public virtual void setGameLocation(string LocationName, bool IsStructure)
         {
-            this.basicItemInfo.locationName = LocationName;
+            this.basicItemInfo.locationName.Value = LocationName;
             this.isCurrentLocationAStructure = IsStructure;
         }
 
@@ -790,12 +734,12 @@ namespace Revitalize.Framework.World.Objects
         /// <param name="DyeColor"></param>
         public virtual void dyeColor(NamedColor DyeColor)
         {
-            this.basicItemInfo.dyedColor = DyeColor;
+            this.basicItemInfo.dyedColor.setFields(DyeColor);
         }
 
         public virtual void eraseDye()
         {
-            this.basicItemInfo.dyedColor = new NamedColor("", new Color(0, 0, 0, 0));
+            this.basicItemInfo.dyedColor.clearFields();
         }
 
         public override bool canStackWith(ISalable other)
@@ -804,14 +748,14 @@ namespace Revitalize.Framework.World.Objects
             CustomObject o = (CustomObject)other;
 
             if (this.basicItemInfo.dyedColor != o.basicItemInfo.dyedColor) return false;
-            if (this.basicItemInfo.id.Equals( o.basicItemInfo.id)==false) return false;
+            if (this.basicItemInfo.id.Equals(o.basicItemInfo.id) == false) return false;
 
             if (this.maximumStackSize() > this.Stack + other.Stack) return true;
 
             return false;
         }
 
-        
+
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
         //                            Rendering code                   //
@@ -827,7 +771,7 @@ namespace Revitalize.Framework.World.Objects
             if (this.AnimationManager == null)
             {
 
-                ModCore.log("Texture null for item: " + this.basicItemInfo.id);
+                ModCore.log("Animation Manager null for item: " + this.basicItemInfo.id);
                 return;
             }
             if (this.CurrentTextureToDisplay == null)
@@ -905,36 +849,6 @@ namespace Revitalize.Framework.World.Objects
             }
             else
             {
-                if (this.basicItemInfo == null)
-                {
-                    throw new Exception("Basic item info is null!");
-                }
-                if (this.AnimationManager == null)
-                {
-                    throw new Exception("Amimation manager is null?");
-                }
-
-                if (this.AnimationManager.animations == null)
-                {
-                    throw new Exception("Animation Manager animations list is null");
-                }
-                else
-                {
-                    foreach(string s in this.AnimationManager.animations.Keys)
-                    {
-                        ModCore.log("Animation manager has animation: " + s);
-                    }
-                    ModCore.log("Animation manager current animation key is: " + this.AnimationManager.currentAnimationName);
-                    ModCore.log("Test string name is: " + this.testNetString.Value);
-
-                    ModCore.log("Test id for basic item info is: " + this.basicItemInfo.id.Value);
-                }
-
-                if (this.AnimationManager.getCurrentAnimation() == null)
-                {
-                    throw new Exception("Current animation for animation manager is null");
-                }
-
                 this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
                 if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, 0);
             }
@@ -984,7 +898,7 @@ namespace Revitalize.Framework.World.Objects
             //base.AttemptRemoval(removal_action);
         }
 
-        
+
 
     }
 }

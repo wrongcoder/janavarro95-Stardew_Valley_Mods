@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -26,6 +27,7 @@ namespace StardustCore.Animations
 
         public Animation()
         {
+            this.animationFrames = new List<AnimationFrame>();
         }
 
         public Animation(int sourceRectX, int sourceRectY, int sourceRectWidth, int sourceRectHeight):this(new Rectangle(sourceRectX,sourceRectY,sourceRectWidth, sourceRectHeight))
@@ -117,6 +119,42 @@ namespace StardustCore.Animations
         public bool isFinished()
         {
             return this.currentAnimationFrameIndex == this.animationFrames.Count && this.getCurrentAnimationFrame().isFinished();
+        }
+
+        public virtual Animation readAnimation(BinaryReader reader)
+        {
+            int animationFramesCount = reader.ReadInt32();
+            if (this.animationFrames == null)
+            {
+                this.animationFrames = new List<AnimationFrame>();
+            }
+
+            if (this.animationFrames.Count != animationFramesCount)
+            {
+                this.animationFrames.Clear();
+                for (int i = 0; i < animationFramesCount; i++)
+                {
+                    AnimationFrame frame = new AnimationFrame();
+                    this.animationFrames.Add(frame.readAnimationFrame(reader));
+                }
+            }
+
+            this.shouldLoopAnimation = reader.ReadBoolean();
+            this.currentAnimationFrameIndex = reader.ReadInt32();
+            return this;
+        }
+
+        public virtual void writeAnimation(BinaryWriter writer)
+        {
+            writer.Write(this.animationFrames.Count);
+            foreach(AnimationFrame frame in this.animationFrames)
+            {
+                frame.writeAnimationFrame(writer);
+            }
+            writer.Write(this.shouldLoopAnimation);
+
+            //Maybe exclude this?
+            writer.Write(this.currentAnimationFrameIndex);
         }
     }
 }

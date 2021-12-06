@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
+using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Revitalize;
 using Revitalize.Framework;
 using StardewValley;

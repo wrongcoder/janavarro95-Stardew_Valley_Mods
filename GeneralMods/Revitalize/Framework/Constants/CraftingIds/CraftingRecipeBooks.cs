@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Omegasis.Revitalize.Framework.Constants.CraftingIds
+namespace Revitalize.Framework.Constants.CraftingIds
 {
     public static class CraftingRecipeBooks
     {

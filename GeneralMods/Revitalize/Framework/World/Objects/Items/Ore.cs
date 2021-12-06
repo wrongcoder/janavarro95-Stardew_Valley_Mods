@@ -28,7 +28,6 @@ namespace Revitalize.Framework.World.Objects.Items
         public Ore(BasicItemInformation BasicItemInfo, int StackSize) : base(BasicItemInfo, StackSize)
         {
             this.basicItemInfo = BasicItemInfo;
-
         }
 
         public Ore(BasicItemInformation BasicItemInfo, Vector2 TilePosition) : base(BasicItemInfo,TilePosition)

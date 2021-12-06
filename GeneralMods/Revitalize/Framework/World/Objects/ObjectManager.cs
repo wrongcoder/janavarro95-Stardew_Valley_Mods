@@ -18,8 +18,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
-using Omegasis.Revitalize.Framework.Constants.CraftingIds;
+using Revitalize.Framework.Constants.CraftingIds;
+using Revitalize.Framework.Constants.ItemIds.Objects;
 
 namespace Revitalize.Framework.Objects
 {
@@ -153,7 +153,7 @@ namespace Revitalize.Framework.Objects
                     new AnimationFrame(0,0,16,32,20),
                     new AnimationFrame(16,0,16,32,20) },true)
                 }
-            }, "Default", "Working"), Color.White, false, new Vector2(1, 2), null, null, false, null, null), Vector2.Zero);
+            }, "Default", "Working"), Color.White, false, new Vector2(1, 2), null, null, false, null), Vector2.Zero);
 
             this.AddItem(Machines.WindmillV1, windMillV1_0_0);
 
