@@ -18,6 +18,7 @@ using StardewValley;
 using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
+using Revitalize.Framework.Utilities.Extensions;
 
 namespace Revitalize.Framework.World.Objects.Machines
 {
@@ -39,13 +40,9 @@ namespace Revitalize.Framework.World.Objects.Machines
                 MachineUtilities.ResourcesForMachines.Add(this.basicItemInfo.id, value);
             }
         }
-        public int energyRequiredPer10Minutes;
-        public int timeToProduce;
-
-        public string craftingRecipeBook;
 
         [XmlIgnore]
-        protected AnimationManager machineStatusBubbleBox;
+        public AnimationManager machineStatusBubbleBox = new AnimationManager();
 
         public Machine()
         {
@@ -53,24 +50,22 @@ namespace Revitalize.Framework.World.Objects.Machines
         }
 
 
-        public Machine(BasicItemInformation info, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, string CraftingBook = "") : base(info)
+        public Machine(BasicItemInformation info, List<ResourceInformation> ProducedResources = null) : base(info)
         {
             this.producedResources = ProducedResources ?? new List<ResourceInformation>();
-            this.energyRequiredPer10Minutes = EnergyRequiredPer10Minutes;
-            this.timeToProduce = TimeToProduce;
-            this.MinutesUntilReady = TimeToProduce;
-            this.craftingRecipeBook = CraftingBook;
             this.createStatusBubble();
         }
 
-        public Machine(BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources = null, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0, string CraftingBook = "") : base(info, TileLocation)
+        public Machine(BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources = null) : base(info, TileLocation)
         {
             this.producedResources = ProducedResources ?? new List<ResourceInformation>();
-            this.energyRequiredPer10Minutes = EnergyRequiredPer10Minutes;
-            this.timeToProduce = TimeToProduce;
-            this.MinutesUntilReady = TimeToProduce;
-            this.craftingRecipeBook = CraftingBook;
             this.createStatusBubble();
+        }
+
+        protected override void initNetFieldsPostConstructor()
+        {
+            base.initNetFieldsPostConstructor();
+            this.NetFields.AddFields(this.machineStatusBubbleBox.getNetFields());
         }
 
         public virtual bool doesMachineProduceItems()
@@ -112,7 +107,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override Item getOne()
         {
-            Machine component = new Machine(this.basicItemInfo.Copy(), this.producedResources, this.energyRequiredPer10Minutes, this.timeToProduce, this.craftingRecipeBook);
+            Machine component = new Machine(this.basicItemInfo.Copy(), this.producedResources);
             return component;
         }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Revitalize.Framework.Utilities;
+using Revitalize.Framework.World.Objects.Items;
 using StardewValley;
 
 namespace Revitalize.Framework.Objects.InformationFiles
@@ -98,7 +99,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <param name="SpawnAmountLuckFactor"></param>
         /// <param name="DropChanceLuckFactor"></param>
         /// <param name="DropAmountLuckFactor"></param>
-        public OreResourceInformation(StardewValley.Item I, List<IntRange> FloorsToSpawnOn, List<IntRange> FloorsToExclude,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, double ChanceToSpawn = 1f, double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes, ChanceToSpawn, ChanceToDrop, SpawnChanceLuckFactor, SpawnAmountLuckFactor, DropChanceLuckFactor, DropAmountLuckFactor)
+        public OreResourceInformation(ItemReference ItemReference, List<IntRange> FloorsToSpawnOn, List<IntRange> FloorsToExclude,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, double ChanceToSpawn = 1f, double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(ItemReference, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes, ChanceToSpawn, ChanceToDrop, SpawnChanceLuckFactor, SpawnAmountLuckFactor, DropChanceLuckFactor, DropAmountLuckFactor)
         {
             this.spawnsOnFarm = false;
             this.spawnsInQuarry = false;
@@ -142,7 +143,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <param name="SpawnAmountLuckFactor"></param>
         /// <param name="DropChanceLuckFactor"></param>
         /// <param name="DropAmountLuckFactor"></param>
-        public OreResourceInformation(StardewValley.Item I,bool SpawnsOnFarm, bool SpawnsInQuarry, bool SpawnInRegularMine, bool SpawnInSkullCave,List<IntRange> FloorsToSpawnOn,List<IntRange>FloorsToExclude,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, IntRange FarmSpawnAmount,IntRange QuarrySpawnAmount,IntRange SkullCaveSpawnAmount,List<IntRange> FloorsToSpawnOnSkullCave,List<IntRange>FloorsToExludeSkullCave,double ChanceToSpawn = 1f,double FarmSpawnChance=1f,double QuarrySpawnChance=1f,double SkullCaveSpawnChance=1f,double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(I, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,ChanceToSpawn,ChanceToDrop,SpawnChanceLuckFactor,SpawnAmountLuckFactor,DropChanceLuckFactor,DropAmountLuckFactor)
+        public OreResourceInformation(ItemReference ItemReference,bool SpawnsOnFarm, bool SpawnsInQuarry, bool SpawnInRegularMine, bool SpawnInSkullCave,List<IntRange> FloorsToSpawnOn,List<IntRange>FloorsToExclude,int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes, IntRange FarmSpawnAmount,IntRange QuarrySpawnAmount,IntRange SkullCaveSpawnAmount,List<IntRange> FloorsToSpawnOnSkullCave,List<IntRange>FloorsToExludeSkullCave,double ChanceToSpawn = 1f,double FarmSpawnChance=1f,double QuarrySpawnChance=1f,double SkullCaveSpawnChance=1f,double ChanceToDrop = 1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f, double DropChanceLuckFactor = 0f, double DropAmountLuckFactor = 0f) : base(ItemReference, MinDropAmount, MaxDropAmount, MinNumberOfNodes, MaxNumberOfNodes,ChanceToSpawn,ChanceToDrop,SpawnChanceLuckFactor,SpawnAmountLuckFactor,DropChanceLuckFactor,DropAmountLuckFactor)
         {
             // Deals with setting where this ore can spawn.
             this.spawnsOnFarm = SpawnsOnFarm;

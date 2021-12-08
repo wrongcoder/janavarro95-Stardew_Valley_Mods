@@ -126,8 +126,8 @@ namespace Revitalize.Framework.Objects
         private void loadInMachines()
         {
 
-            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", "Machine", Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null), 2, 0);
-            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", "Machine", Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null), 8, 0);
+            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", "Machine", Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
+            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", "Machine", Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
 
             this.AddItem(Machines.AdvancedSolarPanelV1, solarP1);
             this.AddItem(Machines.SolarArrayV1, solarA1V1);
@@ -141,7 +141,7 @@ namespace Revitalize.Framework.Objects
                     new AnimationFrame(32,0,16,32,30),
                     new AnimationFrame(48,0,16,32,30)},
                     true) }
-            }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), new InventoryManager(new List<Item>(),18, 3, 6), null), ModCore.ObjectManager.resources.miningDrillResources.Values.ToList(), ModCore.Configs.machinesConfig.miningDrillEnergyConsumption, ModCore.Configs.machinesConfig.miningDrillTimeToMine, "");
+            }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), new InventoryManager(new List<Item>(),18, 3, 6), null), ModCore.ObjectManager.resources.miningDrillResources.Values.ToList());
 
             this.AddItem(Machines.MiningDrillV1, miningDrillMachine_0_0);
 

@@ -21,7 +21,7 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 
         public AdvancedSolarPanel() { }
 
-        public AdvancedSolarPanel(BasicItemInformation info, int EnergyRequiredPer10Minutes = 0, int TimeToProduce = 0) : base(info,null,EnergyRequiredPer10Minutes,TimeToProduce,"")
+        public AdvancedSolarPanel(BasicItemInformation info) : base(info,null)
         {
             this.maxDaysToGenerateBattery = 6;
             this.daysRemaining = this.maxDaysToGenerateBattery;
@@ -29,7 +29,7 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 
         public override Item getOne()
         {
-            AdvancedSolarPanel component = new AdvancedSolarPanel(this.basicItemInfo.Copy(), this.energyRequiredPer10Minutes, this.timeToProduce);
+            AdvancedSolarPanel component = new AdvancedSolarPanel(this.basicItemInfo.Copy());
             return component;
         }
 

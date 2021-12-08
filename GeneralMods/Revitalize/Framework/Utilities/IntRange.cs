@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Netcode;
 using StardewValley;
 
 namespace Revitalize.Framework.Utilities
@@ -15,11 +16,11 @@ namespace Revitalize.Framework.Utilities
         /// <summary>
         /// The min value for the range.
         /// </summary>
-        public int min;
+        public readonly NetInt min = new NetInt();
         /// <summary>
         /// The max value for the range.
         /// </summary>
-        public int max;
+        public readonly NetInt max = new NetInt();
 
         public IntRange()
         {
@@ -31,7 +32,7 @@ namespace Revitalize.Framework.Utilities
         /// <param name="SingleValue">The single value to be tested on for min and max. Note that this will fail every test except for ContainsInclusive.</param>
         public IntRange(int SingleValue)
         {
-            this.min = this.max = SingleValue;
+            this.min.Value = this.max.Value = SingleValue;
         }
 
         /// <summary>
@@ -41,8 +42,17 @@ namespace Revitalize.Framework.Utilities
         /// <param name="Max">The max value.</param>
         public IntRange(int Min, int Max)
         {
-            this.min = Min;
-            this.max = Max;
+            this.min.Value = Min;
+            this.max.Value = Max;
+        }
+
+        public virtual List<INetSerializable> getNetFields()
+        {
+            return new List<INetSerializable>()
+            {
+                this.min,
+                this.max
+            };
         }
 
         /// <summary>

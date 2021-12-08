@@ -9,13 +9,14 @@ using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.Crafting;
 using StardewValley;
 using System.Xml.Serialization;
+using Netcode;
 
 namespace Revitalize.Framework.World.Objects.CraftingTables
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.CraftingTables.CraftingTable")]
     public class CraftingTable : CustomObject
     {
-        public string craftingBookName;
+        public readonly NetString craftingBookName = new NetString();
 
 
         public CraftingTable()
@@ -25,12 +26,12 @@ namespace Revitalize.Framework.World.Objects.CraftingTables
 
         public CraftingTable(BasicItemInformation Info,string CraftingRecipeBookName):base(Info)
         {
-            this.craftingBookName = CraftingRecipeBookName;
+            this.craftingBookName.Value = CraftingRecipeBookName;
         }
 
         public CraftingTable(BasicItemInformation Info,Vector2 TilePosition ,string CraftingRecipeBookName) : base(Info,TilePosition)
         {
-            this.craftingBookName = CraftingRecipeBookName;
+            this.craftingBookName.Value = CraftingRecipeBookName;
         }
 
         /// <summary>
@@ -51,6 +52,12 @@ namespace Revitalize.Framework.World.Objects.CraftingTables
                 ModCore.log("Right click the crafting table. BUT DO NOT have the recipe book enabled: " + this.craftingBookName);
                 return true;
             }
+        }
+
+        protected override void initNetFieldsPostConstructor()
+        {
+            base.initNetFieldsPostConstructor();
+            this.NetFields.AddField(this.craftingBookName);
         }
 
 
