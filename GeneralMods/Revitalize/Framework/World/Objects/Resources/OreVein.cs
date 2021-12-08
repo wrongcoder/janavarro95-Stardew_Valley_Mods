@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Utilities;
 using Revitalize.Framework.World.Objects.InformationFiles;
@@ -18,22 +19,11 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
         /// <summary>
         /// Deals with information tied to the resource itself.
         /// </summary>
-        public OreResourceInformation resourceInfo;
-        public List<ResourceInformation> extraDrops;
+        public NetResourceInformation<OreResourceInformation> resourceInfo = new NetResourceInformation<OreResourceInformation>();
+        public readonly NetList<ResourceInformation,NetResourceInformation<ResourceInformation>> extraDrops = new NetList<ResourceInformation,NetResourceInformation<ResourceInformation>>();
 
 
-        private int _healthValue;
-        public int healthValue
-        {
-            get
-            {
-                return this._healthValue;
-            }
-            set
-            {
-                this._healthValue = value;
-            }
-        }
+        public readonly NetInt healthValue;
 
 
         public OreVein() : base()
@@ -44,9 +34,9 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
         public OreVein(BasicItemInformation Info, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info)
         {
             this.basicItemInfo = Info;
-            this.healthValue = Health;
-            this.resourceInfo = Resource;
-            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
+            this.healthValue.Value = Health;
+            this.resourceInfo.Value = Resource;
+            this.extraDrops.AddRange(ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>());
             this.setHealth(this.healthValue);
             this.Price = Info.price;
         }
@@ -54,11 +44,17 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
         public OreVein(BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info, TileLocation)
         {
             this.basicItemInfo = Info;
-            this.healthValue = Health;
-            this.resourceInfo = Resource;
-            this.extraDrops = ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>();
+            this.healthValue.Value = Health;
+            this.resourceInfo.Value = Resource;
+            this.extraDrops.AddRange(ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>());
             this.setHealth(this.healthValue);
             this.Price = Info.price;
+        }
+
+        protected override void initNetFieldsPostConstructor()
+        {
+            base.initNetFieldsPostConstructor();
+            this.NetFields.AddFields(this.resourceInfo, this.extraDrops);
         }
 
 
@@ -140,7 +136,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
             if (amount <= 0) return;
             else
             {
-                this.healthValue -= amount;
+                this.healthValue.Value -= amount;
                 if (this.healthValue <= 0)
                 {
                     this.destoryVein();
@@ -153,8 +149,8 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
         /// </summary>
         public void destoryVein()
         {
-            int amount = this.resourceInfo.getNumberOfDropsToSpawn();
-            Item newItem = this.resourceInfo.droppedItem.getOne();
+            int amount = this.resourceInfo.Value.getNumberOfDropsToSpawn();
+            Item newItem = this.resourceInfo.Value.droppedItem.getItem(1);
             GameLocation loc = this.getCurrentLocation();
             for (int i = 0; i < amount; i++)
             {
@@ -167,7 +163,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
                 {
                     if (extra.shouldDropResource())
                     {
-                        Item extraItem = extra.droppedItem.getOne();
+                        Item extraItem = extra.droppedItem.getItem(1);
                         int extraAmount = extra.getNumberOfDropsToSpawn();
                         for (int i = 0; i < amount; i++)
                         {
@@ -218,7 +214,14 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 
         public override Item getOne()
         {
-            OreVein component = new OreVein(this.basicItemInfo.Copy(), this.resourceInfo, this.extraDrops, this.healthValue);
+
+            List<ResourceInformation> resourceInformation = new List<ResourceInformation>();
+            foreach(ResourceInformation resources in this.extraDrops)
+            {
+                resourceInformation.Add(resources);
+            }
+
+            OreVein component = new OreVein(this.basicItemInfo.Copy(), this.resourceInfo.Value, resourceInformation, this.healthValue);
             return component;
         }
 

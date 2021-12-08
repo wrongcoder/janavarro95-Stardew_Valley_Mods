@@ -10,21 +10,28 @@ using Revitalize.Framework.Objects;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 using System.Xml.Serialization;
+using Netcode;
 
 namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.AdvancedSolarPanel")]
     public class AdvancedSolarPanel:Machine
     {
-        public int maxDaysToGenerateBattery;
-        public int daysRemaining;
+        public readonly NetInt maxDaysToProduceBattery = new NetInt();
+        public readonly NetInt daysRemainingToProduceBattery = new NetInt();
 
         public AdvancedSolarPanel() { }
 
         public AdvancedSolarPanel(BasicItemInformation info) : base(info,null)
         {
-            this.maxDaysToGenerateBattery = 6;
-            this.daysRemaining = this.maxDaysToGenerateBattery;
+            this.maxDaysToProduceBattery.Value = 6;
+            this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery.Value;
+        }
+
+        protected override void initNetFieldsPostConstructor()
+        {
+            base.initNetFieldsPostConstructor();
+            this.NetFields.AddFields(this.maxDaysToProduceBattery, this.daysRemainingToProduceBattery);
         }
 
         public override Item getOne()
@@ -39,10 +46,10 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             if (Game1.weatherIcon == Game1.weather_snow || Game1.weatherIcon == Game1.weather_rain || Game1.weatherIcon == Game1.weather_lightning) return;
             if (this.heldObject.Value != null) return;
 
-            this.daysRemaining -= 1;
-            if (this.daysRemaining == 0)
+            this.daysRemainingToProduceBattery.Value -= 1;
+            if (this.daysRemainingToProduceBattery.Value == 0)
             {
-                this.daysRemaining = this.maxDaysToGenerateBattery;
+                this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery.Value;
                 this.heldObject.Value = ObjectUtilities.getStardewObjectFromEnum(Enums.SDVObject.BatteryPack, 1);
             }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +11,19 @@ namespace Revitalize.Framework.World.Objects.Items
 {
     public class ItemReference
     {
+        /// <summary>
+        /// The default stack size for getting the item when using <see cref="getItem()"/>
+        /// </summary>
+        public readonly NetInt stackSize = new NetInt();
 
-        public ItemReference()
+        public ItemReference():this(1)
         {
 
+        }
+
+        public ItemReference(int StackSize=1)
+        {
+            this.stackSize.Value = StackSize;
         }
 
         public virtual Item getItem(int StackSize = 1)
@@ -21,9 +31,28 @@ namespace Revitalize.Framework.World.Objects.Items
             return null;
         }
 
+        public virtual Item getItem()
+        {
+            return null;
+        }
+
         public virtual List<INetSerializable> getNetFields()
         {
-            return new List<INetSerializable>(); 
+            return new List<INetSerializable>()
+            {
+                this.stackSize
+            };
+        }
+
+        public virtual ItemReference readItemReference(BinaryReader reader)
+        {
+            this.stackSize.Value = reader.ReadInt32();
+            return this;
+        }
+
+        public virtual void writeItemReference(BinaryWriter writer)
+        {
+            writer.Write(this.stackSize.Value);
         }
     }
 }

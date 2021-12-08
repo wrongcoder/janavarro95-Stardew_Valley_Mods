@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using Netcode;
 using Revitalize.Framework.World.Objects.Items;
 using StardewValley;
 
-namespace Revitalize.Framework.Objects.InformationFiles
+namespace Revitalize.Framework.World.Objects.InformationFiles
 {
     /// <summary>
     /// Deals with information reguarding resources.
@@ -22,42 +23,42 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <summary>
         /// The min amount of resources to drop given the getNumberOfDrops function.
         /// </summary>
-        public readonly NetInt minResourcePerDrop = new NetInt();
+        public int minResourcePerDrop;
         /// <summary>
         /// The max amount of resources to drop given the getNumberOfDrops function.
         /// </summary>
-        public readonly NetInt maxResourcePerDrop = new NetInt();
+        public int maxResourcePerDrop;
         /// <summary>
         /// The min amount of nodes that would be spawned given the getNumberOfNodesToSpawn function.
         /// </summary>
-        public readonly NetInt minNumberOfNodesSpawned = new NetInt();
+        public int minNumberOfNodesSpawned;
         /// <summary>
         /// The max amount of nodes that would be spawned given the getNumberOfNodesToSpawn function.
         /// </summary>
-        public readonly NetInt maxNumberOfNodesSpawned = new NetInt();
+        public int maxNumberOfNodesSpawned;
         /// <summary>
         /// The influence multiplier that luck has on how many nodes of this resource spawn.
         /// </summary>
-        public readonly NetDouble spawnAmountLuckFactor = new NetDouble();
+        public double spawnAmountLuckFactor;
         /// <summary>
         /// The influence multiplier that luck has on ensuring the resource spawns.
         /// </summary>
-        public readonly NetDouble spawnChanceLuckFactor = new NetDouble();
+        public double spawnChanceLuckFactor;
 
-        public readonly NetDouble dropAmountLuckFactor = new NetDouble();
+        public double dropAmountLuckFactor;
         /// <summary>
         /// The influence multiplier that luck has on ensuring the resource drops.
         /// </summary>
-        public readonly NetDouble dropChanceLuckFactor = new NetDouble();
+        public double dropChanceLuckFactor;
 
         /// <summary>
         /// The chance for the resource to spawn from 0.0 ~ 1.0
         /// </summary>
-        public readonly NetDouble chanceToSpawn = new NetDouble();
+        public double chanceToSpawn;
         /// <summary>
         /// The chance for the resource to drop from 0.0 ~ 1.0
         /// </summary>
-        public readonly NetDouble chanceToDrop = new NetDouble();
+        public double chanceToDrop;
 
         /// <summary>
         /// Empty constructor.
@@ -84,35 +85,59 @@ namespace Revitalize.Framework.Objects.InformationFiles
         public ResourceInformation(ItemReference ItemReference, int MinDropAmount, int MaxDropAmount, int MinNumberOfNodes, int MaxNumberOfNodes,double ChanceToSpawn=1f,double ChanceToDrop=1f, double SpawnChanceLuckFactor = 0f, double SpawnAmountLuckFactor = 0f,double DropChanceLuckFactor=0f, double DropAmountLuckFactor = 0f)
         {
             this.droppedItem = ItemReference;
-            this.minResourcePerDrop.Value = MinDropAmount;
-            this.maxResourcePerDrop.Value = MaxDropAmount;
-            this.minNumberOfNodesSpawned.Value = MinNumberOfNodes;
-            this.maxNumberOfNodesSpawned.Value = MaxNumberOfNodes;
-            this.spawnAmountLuckFactor.Value = SpawnAmountLuckFactor;
-            this.dropAmountLuckFactor.Value = DropAmountLuckFactor;
-            this.chanceToSpawn.Value = ChanceToSpawn;
-            this.chanceToDrop.Value = ChanceToDrop;
-            this.spawnChanceLuckFactor.Value = SpawnChanceLuckFactor;
-            this.dropChanceLuckFactor.Value = DropChanceLuckFactor;
+            this.minResourcePerDrop = MinDropAmount;
+            this.maxResourcePerDrop = MaxDropAmount;
+            this.minNumberOfNodesSpawned = MinNumberOfNodes;
+            this.maxNumberOfNodesSpawned = MaxNumberOfNodes;
+            this.spawnAmountLuckFactor = SpawnAmountLuckFactor;
+            this.dropAmountLuckFactor = DropAmountLuckFactor;
+            this.chanceToSpawn = ChanceToSpawn;
+            this.chanceToDrop = ChanceToDrop;
+            this.spawnChanceLuckFactor = SpawnChanceLuckFactor;
+            this.dropChanceLuckFactor = DropChanceLuckFactor;
         }
 
-        public virtual List<INetSerializable> getNetFields()
+        public virtual ResourceInformation readResourceInformation(BinaryReader reader)
         {
-            List<INetSerializable> netFields = new List<INetSerializable>()
+            this.minResourcePerDrop = reader.ReadInt32();
+            this.maxResourcePerDrop = reader.ReadInt32();
+            this.minNumberOfNodesSpawned = reader.ReadInt32();
+            this.maxNumberOfNodesSpawned = reader.ReadInt32();
+            this.spawnAmountLuckFactor = reader.ReadInt32();
+            this.dropAmountLuckFactor = reader.ReadInt32();
+            this.chanceToSpawn = reader.ReadInt32();
+            this.chanceToDrop = reader.ReadInt32();
+            this.spawnChanceLuckFactor = reader.ReadInt32();
+            this.dropAmountLuckFactor = reader.ReadInt32();
+
+            if (this.droppedItem == null)
             {
-                this.minResourcePerDrop,
-                this.maxResourcePerDrop,
-                this.minNumberOfNodesSpawned,
-                this.maxNumberOfNodesSpawned,
-                this.spawnAmountLuckFactor,
-                this.dropAmountLuckFactor,
-                this.chanceToSpawn,
-                this.chanceToDrop,
-                this.spawnChanceLuckFactor,
-                this.dropChanceLuckFactor
-            };
-            netFields.AddRange(this.droppedItem.getNetFields());
-            return netFields;
+                this.droppedItem = new ItemReference();
+            }
+            this.droppedItem.readItemReference(reader);
+
+            return this;
+
+        }
+
+        public virtual void writeResourceInformation(BinaryWriter writer)
+        {
+            writer.Write(this.minResourcePerDrop);
+            writer.Write(this.maxResourcePerDrop);
+            writer.Write(this.minNumberOfNodesSpawned);
+            writer.Write(this.maxNumberOfNodesSpawned);
+            writer.Write(this.spawnAmountLuckFactor);
+            writer.Write(this.dropAmountLuckFactor);
+            writer.Write(this.chanceToSpawn);
+            writer.Write(this.chanceToDrop);
+            writer.Write(this.spawnChanceLuckFactor);
+            writer.Write(this.dropAmountLuckFactor);
+
+            if (this.droppedItem == null)
+            {
+                this.droppedItem = new ItemReference();
+            }
+            this.droppedItem.writeItemReference(writer);
         }
 
 

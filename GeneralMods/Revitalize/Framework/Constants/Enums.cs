@@ -48,6 +48,11 @@ namespace Revitalize.Framework
         /// </summary>
         public enum SDVObject
         {
+            /// <summary>
+            /// Used for setting default enum values in code.
+            /// </summary>
+            NULL= int.MinValue,
+
             Weeds = 0,
 
             //Stone = 2,

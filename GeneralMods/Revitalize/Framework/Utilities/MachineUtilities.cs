@@ -8,6 +8,7 @@ using Revitalize;
 using Revitalize.Framework;
 using Revitalize.Framework.Constants.ItemIds.Objects;
 using Revitalize.Framework.Objects.InformationFiles;
+using Revitalize.Framework.World.Objects.InformationFiles;
 
 namespace Revitalize.Framework.Utilities
 {

@@ -12,6 +12,7 @@ using Revitalize.Framework.Utilities;
 using StardewValley;
 using StardustCore.Animations;
 using System.Xml.Serialization;
+using Netcode;
 
 namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
@@ -19,20 +20,26 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
     public class Windmill : Machine
     {
 
-        public int maxDaysToProduceBattery;
-        public int daysRemainingToProduceBattery;
+        public readonly NetInt maxDaysToProduceBattery = new NetInt();
+        public readonly NetInt daysRemainingToProduceBattery = new NetInt();
 
         public Windmill() { }
 
         public Windmill(BasicItemInformation info, Vector2 TileLocation) : base(info, TileLocation)
         {
-            this.maxDaysToProduceBattery = 12;
-            this.daysRemainingToProduceBattery = this.maxDaysToProduceBattery;
+            this.maxDaysToProduceBattery.Value = 12;
+            this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery;
         }
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
         {
             base.updateWhenCurrentLocation(time, environment);
+        }
+
+        protected override void initNetFieldsPostConstructor()
+        {
+            base.initNetFieldsPostConstructor();
+            this.NetFields.AddFields(this.maxDaysToProduceBattery, this.daysRemainingToProduceBattery);
         }
 
 
@@ -50,23 +57,23 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             if (this.heldObject.Value != null) return;
             if (Game1.weatherIcon == Game1.weather_rain)
             {
-                this.daysRemainingToProduceBattery -= 2;
+                this.daysRemainingToProduceBattery.Value -= 2;
             }
             else if (Game1.weatherIcon == Game1.weather_lightning)
             {
-                this.daysRemainingToProduceBattery -= 3;
+                this.daysRemainingToProduceBattery.Value -= 3;
             }
             else if (Game1.weatherIcon == Game1.weather_debris)
             {
-                this.daysRemainingToProduceBattery -= 4;
+                this.daysRemainingToProduceBattery.Value -= 4;
             }
             else
             {
-                this.daysRemainingToProduceBattery -= 1;
+                this.daysRemainingToProduceBattery.Value -= 1;
             }
             if (this.daysRemainingToProduceBattery <= 0)
             {
-                this.daysRemainingToProduceBattery = this.maxDaysToProduceBattery;
+                this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery;
                 this.heldObject.Value = ObjectUtilities.getStardewObjectFromEnum(Enums.SDVObject.BatteryPack, 1);
             }
         }

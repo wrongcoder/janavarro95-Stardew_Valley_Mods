@@ -85,23 +85,23 @@ namespace Revitalize.Framework.Objects
         }
         private void loadInMiningDrillLootTable()
         {
-            this.miningDrillResources.Add("Bauxite", new ResourceInformation(ModCore.ObjectManager.GetItem(Ores.BauxiteOre), ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.min, ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.bauxiteMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Tin", new ResourceInformation(ModCore.ObjectManager.GetItem(Ores.TinOre), ModCore.Configs.miningDrillConfig.amountOfTinToMine.min, ModCore.Configs.miningDrillConfig.amountOfTinToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.tinMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Lead", new ResourceInformation(ModCore.ObjectManager.GetItem(Ores.LeadOre), ModCore.Configs.miningDrillConfig.amountOfLeadToMine.min, ModCore.Configs.miningDrillConfig.amountOfLeadToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.leadMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Silver", new ResourceInformation(ModCore.ObjectManager.GetItem(Ores.SilverOre), ModCore.Configs.miningDrillConfig.amountOfSilverToMine.min, ModCore.Configs.miningDrillConfig.amountOfSilverToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.silverMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Titanium", new ResourceInformation(ModCore.ObjectManager.GetItem(Ores.TitaniumOre), ModCore.Configs.miningDrillConfig.amountOfTitaniumToMine.min, ModCore.Configs.miningDrillConfig.amountOfTitaniumToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.titaniumMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Prismatic", new ResourceInformation(ModCore.ObjectManager.GetItem(Gems.PrismaticNugget), ModCore.Configs.miningDrillConfig.amountOfPrismaticNuggetsToMine.min, ModCore.Configs.miningDrillConfig.amountOfPrismaticNuggetsToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.prismaticNuggetMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Copper", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.CopperOre, 1), ModCore.Configs.miningDrillConfig.amountOfCopperToMine.min, ModCore.Configs.miningDrillConfig.amountOfCopperToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.copperMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Iron", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.IronOre, 1), ModCore.Configs.miningDrillConfig.amountOfIronToMine.min, ModCore.Configs.miningDrillConfig.amountOfIronToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.ironMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Gold", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.GoldOre, 1), ModCore.Configs.miningDrillConfig.amountOfGoldToMine.min, ModCore.Configs.miningDrillConfig.amountOfGoldToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.goldMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Iridium", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.IridiumOre, 1), ModCore.Configs.miningDrillConfig.amountOfIridiumToMine.min, ModCore.Configs.miningDrillConfig.amountOfIridiumToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.iridiumMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Stone", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Stone, 1), ModCore.Configs.miningDrillConfig.amountOfStoneToMine.min, ModCore.Configs.miningDrillConfig.amountOfStoneToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.stoneMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Clay", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Clay, 1), ModCore.Configs.miningDrillConfig.amountOfClayToMine.min, ModCore.Configs.miningDrillConfig.amountOfClayToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.clayMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Sand", new ResourceInformation(ModCore.ObjectManager.GetItem(MiscEarthenResources.Sand), ModCore.Configs.miningDrillConfig.amountOfSandToMine.min, ModCore.Configs.miningDrillConfig.amountOfSandToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.sandMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("Geode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.Geode, 1), ModCore.Configs.miningDrillConfig.amountOfGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.geodeMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("FrozenGeode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.FrozenGeode, 1), ModCore.Configs.miningDrillConfig.amountOfFrozenGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfFrozenGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.frozenGeodeMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("MagmaGeode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.MagmaGeode, 1), ModCore.Configs.miningDrillConfig.amountOfMagmaGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfMagmaGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.magmaGeodeMineChance, 0, 0, 0, 0));
-            this.miningDrillResources.Add("OmniGeode", new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.OmniGeode, 1), ModCore.Configs.miningDrillConfig.amountOfOmniGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfOmniGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.omniGeodeMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Bauxite", new ResourceInformation(new ObjectManagerItemReference(Ores.BauxiteOre), ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.min, ModCore.Configs.miningDrillConfig.amountOfBauxiteToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.bauxiteMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Tin", new ResourceInformation(new ObjectManagerItemReference(Ores.TinOre), ModCore.Configs.miningDrillConfig.amountOfTinToMine.min, ModCore.Configs.miningDrillConfig.amountOfTinToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.tinMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Lead", new ResourceInformation(new ObjectManagerItemReference(Ores.LeadOre), ModCore.Configs.miningDrillConfig.amountOfLeadToMine.min, ModCore.Configs.miningDrillConfig.amountOfLeadToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.leadMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Silver", new ResourceInformation(new ObjectManagerItemReference(Ores.SilverOre), ModCore.Configs.miningDrillConfig.amountOfSilverToMine.min, ModCore.Configs.miningDrillConfig.amountOfSilverToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.silverMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Titanium", new ResourceInformation(new ObjectManagerItemReference(Ores.TinOre), ModCore.Configs.miningDrillConfig.amountOfTitaniumToMine.min, ModCore.Configs.miningDrillConfig.amountOfTitaniumToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.titaniumMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Prismatic", new ResourceInformation(new ObjectManagerItemReference(Gems.PrismaticNugget), ModCore.Configs.miningDrillConfig.amountOfPrismaticNuggetsToMine.min, ModCore.Configs.miningDrillConfig.amountOfPrismaticNuggetsToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.prismaticNuggetMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Copper", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.CopperOre, 1), ModCore.Configs.miningDrillConfig.amountOfCopperToMine.min, ModCore.Configs.miningDrillConfig.amountOfCopperToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.copperMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Iron", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.IronOre, 1), ModCore.Configs.miningDrillConfig.amountOfIronToMine.min, ModCore.Configs.miningDrillConfig.amountOfIronToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.ironMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Gold", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.GoldOre, 1), ModCore.Configs.miningDrillConfig.amountOfGoldToMine.min, ModCore.Configs.miningDrillConfig.amountOfGoldToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.goldMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Iridium", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.IridiumOre, 1), ModCore.Configs.miningDrillConfig.amountOfIridiumToMine.min, ModCore.Configs.miningDrillConfig.amountOfIridiumToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.iridiumMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Stone", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.Stone, 1), ModCore.Configs.miningDrillConfig.amountOfStoneToMine.min, ModCore.Configs.miningDrillConfig.amountOfStoneToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.stoneMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Clay", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.Clay, 1), ModCore.Configs.miningDrillConfig.amountOfClayToMine.min, ModCore.Configs.miningDrillConfig.amountOfClayToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.clayMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Sand", new ResourceInformation(new ObjectManagerItemReference(MiscEarthenResources.Sand), ModCore.Configs.miningDrillConfig.amountOfSandToMine.min, ModCore.Configs.miningDrillConfig.amountOfSandToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.sandMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("Geode", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.Geode, 1), ModCore.Configs.miningDrillConfig.amountOfGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.geodeMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("FrozenGeode", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.FrozenGeode, 1), ModCore.Configs.miningDrillConfig.amountOfFrozenGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfFrozenGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.frozenGeodeMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("MagmaGeode", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.MagmaGeode, 1), ModCore.Configs.miningDrillConfig.amountOfMagmaGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfMagmaGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.magmaGeodeMineChance, 0, 0, 0, 0));
+            this.miningDrillResources.Add("OmniGeode", new ResourceInformation(new StardewValleyItemReference(Enums.SDVObject.OmniGeode, 1), ModCore.Configs.miningDrillConfig.amountOfOmniGeodesToMine.min, ModCore.Configs.miningDrillConfig.amountOfOmniGeodesToMine.max, 1, 1, 1, ModCore.Configs.miningDrillConfig.omniGeodeMineChance, 0, 0, 0, 0));
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Revitalize.Framework.Objects
             //Tin
             List<OreVein> oreVeins = new List<OreVein>();
             OreVein tinOre_0_0 = new OreVein(new BasicItemInformation("Tin Ore Vein", "Revitalize.Resources.Ore.Tin", "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Tin"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
-                new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.TinOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ObjectManagerItemReference(Ores.TinOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(1,20)
             }, new List<IntRange>(),
@@ -139,7 +139,7 @@ namespace Revitalize.Framework.Objects
 
             //Aluminum
             OreVein bauxiteOre_0_0 = new OreVein(new BasicItemInformation("Bauxite Ore Vein", "Revitalize.Resources.Ore.Bauxite", "A ore vein that is full of bauxite ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Bauxite"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
-                new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.BauxiteOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ObjectManagerItemReference(Ores.BauxiteOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(20,50)
             }, new List<IntRange>(), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
@@ -152,7 +152,7 @@ namespace Revitalize.Framework.Objects
 
             //Silver
             OreVein silverOre_0_0 = new OreVein(new BasicItemInformation("Silver Ore Vein", "Revitalize.Resources.Ore.Silver", "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Silver"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
-                new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.SilverOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ObjectManagerItemReference(Ores.SilverOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,100)
             }, new List<IntRange>(), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
@@ -165,7 +165,7 @@ namespace Revitalize.Framework.Objects
 
             //Lead
             OreVein leadOre_0_0 = new OreVein(new BasicItemInformation("Lead Ore Vein", "Revitalize.Resources.Ore.Lead", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Lead"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
-                new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.LeadOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ObjectManagerItemReference(Ores.LeadOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,70),
                 new IntRange(90,120)
@@ -179,7 +179,7 @@ namespace Revitalize.Framework.Objects
 
             //Titanium
             OreVein titaniumOre_0_0 = new OreVein(new BasicItemInformation("Titanium Ore Vein", "Revitalize.Resources.Ore.Titanium", "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Titanium"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Titanium"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
-                new OreResourceInformation(ModCore.ObjectManager.GetItem(Ores.TitaniumOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ObjectManagerItemReference(Ores.TitaniumOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,70),
                 new IntRange(90,120)
@@ -193,7 +193,7 @@ namespace Revitalize.Framework.Objects
 
             //Prismatic nugget ore
             OreVein prismaticOre_0_0 = new OreVein(new BasicItemInformation("Prismatic Ore Vein", "Revitalize.Resources.Ore.Prismatic", "A ore vein that is full of prismatic ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Prismatic"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Resources.Ore", "Prismatic"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null),
-                new OreResourceInformation(ModCore.ObjectManager.GetItem(Gems.PrismaticNugget), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ObjectManagerItemReference(Gems.PrismaticNugget), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(110,120)
             }, new List<IntRange>(), 1, 3, 1, 1, new IntRange(1, 1), new IntRange(1, 1), new IntRange(1, 5), new List<IntRange>()
@@ -309,7 +309,7 @@ namespace Revitalize.Framework.Objects
         {
             if (this.oreVeins.ContainsKey(id))
             {
-                return this.oreVeins[id].extraDrops;
+                return this.oreVeins[id].extraDrops.ToList();
             }
             else
             {
@@ -400,7 +400,7 @@ namespace Revitalize.Framework.Objects
             //Get a list of all of the ores that can spawn on this mine level.
             foreach (KeyValuePair<string, OreVein> pair in this.oreVeins)
             {
-                if (pair.Value.resourceInfo.canSpawnAtLocation() && (pair.Value.resourceInfo as OreResourceInformation).canSpawnOnCurrentMineLevel())
+                if (pair.Value.resourceInfo.Value.canSpawnAtLocation() && (pair.Value.resourceInfo.Value as OreResourceInformation).canSpawnOnCurrentMineLevel())
                 {
                     spawnableOreVeins.Add(pair.Value);
                 }
@@ -408,9 +408,9 @@ namespace Revitalize.Framework.Objects
 
             foreach (OreVein ore in spawnableOreVeins)
             {
-                if (ore.resourceInfo.shouldSpawn())
+                if (ore.resourceInfo.Value.shouldSpawn())
                 {
-                    int amount = ore.resourceInfo.getNumberOfNodesToSpawn();
+                    int amount = ore.resourceInfo.Value.getNumberOfNodesToSpawn();
                     List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVein)ore.getOne());
                     amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
                     for (int i = 0; i < amount; i++)
@@ -470,7 +470,7 @@ namespace Revitalize.Framework.Objects
             //Get a list of all of the ores that can spawn on this mine level.
             foreach (KeyValuePair<string, OreVein> pair in this.oreVeins)
             {
-                if ((pair.Value.resourceInfo as OreResourceInformation).spawnsInQuarry)
+                if ((pair.Value.resourceInfo.Value as OreResourceInformation).spawnsInQuarry)
                 {
                     spawnableOreVeins.Add(pair.Value);
                     //ModCore.log("Found an ore that spawns in the quarry");
@@ -478,9 +478,9 @@ namespace Revitalize.Framework.Objects
             }
             foreach (OreVein ore in spawnableOreVeins)
             {
-                if ((ore.resourceInfo as OreResourceInformation).shouldSpawnInQuarry())
+                if ((ore.resourceInfo.Value as OreResourceInformation).shouldSpawnInQuarry())
                 {
-                    int amount = (ore.resourceInfo as OreResourceInformation).getNumberOfNodesToSpawnQuarry();
+                    int amount = (ore.resourceInfo.Value as OreResourceInformation).getNumberOfNodesToSpawnQuarry();
                     List<Vector2> openTiles = this.getOpenQuarryTiles(ore);
                     amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
                     for (int i = 0; i < amount; i++)
@@ -524,7 +524,7 @@ namespace Revitalize.Framework.Objects
             //Get a list of all of the ores that can spawn on this mine level.
             foreach (KeyValuePair<string, OreVein> pair in this.oreVeins)
             {
-                if ((pair.Value.resourceInfo as OreResourceInformation).spawnsOnFarm)
+                if ((pair.Value.resourceInfo.Value as OreResourceInformation).spawnsOnFarm)
                 {
                     spawnableOreVeins.Add(pair.Value);
                     //ModCore.log("Found an ore that spawns on the farm!");
@@ -532,9 +532,9 @@ namespace Revitalize.Framework.Objects
             }
             foreach (OreVein ore in spawnableOreVeins)
             {
-                if ((ore.resourceInfo as OreResourceInformation).shouldSpawnOnFarm())
+                if ((ore.resourceInfo.Value as OreResourceInformation).shouldSpawnOnFarm())
                 {
-                    int amount = (ore.resourceInfo as OreResourceInformation).getNumberOfNodesToSpawnFarm();
+                    int amount = (ore.resourceInfo.Value as OreResourceInformation).getNumberOfNodesToSpawnFarm();
                     List<Vector2> openTiles = this.getFarmQuarryOpenTiles(ore);
                     if (openTiles.Count == 0)
                     {

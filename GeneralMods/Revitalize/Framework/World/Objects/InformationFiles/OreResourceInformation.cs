@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Revitalize.Framework.Utilities;
+using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.World.Objects.Items;
 using StardewValley;
 
@@ -17,21 +19,21 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <summary>
         /// The floors of the mine that this resource should spawn in in the regular mine.
         /// </summary>
-        public List<IntRange> floorsToSpawnOn;
+        public List<IntRange> floorsToSpawnOn = new List<IntRange>();
 
         /// <summary>
         /// The list of floors to exclude spawning on in the regular mine.
         /// </summary>
-        public List<IntRange> floorsToExclude;
+        public List<IntRange> floorsToExclude = new List<IntRange>();
 
         /// <summary>
         /// The floors this resource should spawn on in skull cave.
         /// </summary>
-        public List<IntRange> floorsToSpawnOnSkullCave;
+        public List<IntRange> floorsToSpawnOnSkullCave = new List<IntRange>();
         /// <summary>
         /// The floors this resource should not spawn on in skull cave.
         /// </summary>
-        public List<IntRange> floorsToExcludeSkullCave;
+        public List<IntRange> floorsToExcludeSkullCave = new List<IntRange>();
 
         /// <summary>
         /// Should this resource spawn in the mine in the mountains?
@@ -53,15 +55,15 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <summary>
         /// The range of the number of nodes to spawn on the farm.
         /// </summary>
-        public IntRange farmSpawnAmount;
+        public IntRange farmSpawnAmount = new IntRange();
         /// <summary>
         /// The range of the number of nodes to spawn in the quarry.
         /// </summary>
-        public IntRange quarrySpawnAmount;
+        public IntRange quarrySpawnAmount = new IntRange();
         /// <summary>
         /// The range of the number of nodes to spawn in skull cave.
         /// </summary>
-        public IntRange skullCaveSpawnAmount;
+        public IntRange skullCaveSpawnAmount = new IntRange();
         /// <summary>
         /// The chance that this resource spawns on the farm.
         /// </summary>
@@ -168,6 +170,105 @@ namespace Revitalize.Framework.Objects.InformationFiles
             this.floorsToSpawnOnSkullCave = FloorsToSpawnOnSkullCave!=null? FloorsToSpawnOnSkullCave: new List<IntRange>();
 
 
+        }
+
+        public override ResourceInformation readResourceInformation(BinaryReader reader)
+        {
+            base.readResourceInformation(reader);
+
+            int floorsToSpawnOnCount = reader.ReadInt32();
+            for(int i = 0; i < floorsToSpawnOnCount; i++)
+            {
+                IntRange range = new IntRange();
+                range.readIntRange(reader);
+                this.floorsToSpawnOn.Add(range);
+            }
+
+
+            int floorsToExcludeCount = reader.ReadInt32();
+            for (int i = 0; i < floorsToExcludeCount; i++)
+            {
+                IntRange range = new IntRange();
+                range.readIntRange(reader);
+                this.floorsToExclude.Add(range);
+            }
+
+
+            int floorsToSpawnOnSkullCaveCount = reader.ReadInt32();
+            for (int i = 0; i < floorsToSpawnOnSkullCaveCount; i++)
+            {
+                IntRange range = new IntRange();
+                range.readIntRange(reader);
+                this.floorsToSpawnOnSkullCave.Add(range);
+            }
+
+
+            int floorsToExcludeSkullCaveCount = reader.ReadInt32();
+            for (int i = 0; i < floorsToExcludeSkullCaveCount; i++)
+            {
+                IntRange range = new IntRange();
+                range.readIntRange(reader);
+                this.floorsToExcludeSkullCave.Add(range);
+            }
+
+            this.spawnsOnFarm = reader.ReadBoolean();
+            this.spawnsInQuarry = reader.ReadBoolean();
+            this.spawnInRegularMine = reader.ReadBoolean();
+            this.spawnInSkullCavern = reader.ReadBoolean();
+
+            this.farmSpawnAmount.readIntRange(reader);
+            this.quarrySpawnAmount.readIntRange(reader);
+            this.skullCaveSpawnAmount.readIntRange(reader);
+
+            this.farmSpawnChance = reader.ReadDouble();
+            this.quarrySpawnChance = reader.ReadDouble();
+            this.skullCaveSpawnChance = reader.ReadDouble();
+
+            return this;
+        }
+
+        public override void writeResourceInformation(BinaryWriter writer)
+        {
+            base.writeResourceInformation(writer);
+
+
+            writer.Write(this.floorsToSpawnOn.Count);
+            foreach(IntRange range in this.floorsToSpawnOn)
+            {
+                range.writeIntRange(writer);
+            }
+
+            writer.Write(this.floorsToExclude.Count);
+            foreach (IntRange range in this.floorsToExclude)
+            {
+                range.writeIntRange(writer);
+            }
+
+            writer.Write(this.floorsToSpawnOnSkullCave.Count);
+            foreach (IntRange range in this.floorsToSpawnOnSkullCave)
+            {
+                range.writeIntRange(writer);
+            }
+
+            writer.Write(this.floorsToExcludeSkullCave.Count);
+            foreach (IntRange range in this.floorsToExcludeSkullCave)
+            {
+                range.writeIntRange(writer);
+            }
+
+
+            writer.Write(this.spawnsOnFarm);
+            writer.Write(this.spawnsInQuarry);
+            writer.Write(this.spawnInRegularMine);
+            writer.Write(this.spawnInSkullCavern);
+
+            this.farmSpawnAmount.writeIntRange(writer);
+            this.quarrySpawnAmount.writeIntRange(writer);
+            this.skullCaveSpawnAmount.writeIntRange(writer);
+
+            writer.Write(this.farmSpawnChance);
+            writer.Write(this.quarrySpawnChance);
+            writer.Write(this.skullCaveSpawnChance);
         }
 
         /// <summary>

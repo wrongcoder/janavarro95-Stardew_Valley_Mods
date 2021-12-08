@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -115,6 +116,19 @@ namespace Revitalize.Framework.Utilities
         {
             int number = Game1.random.Next(this.min, this.max);
             return number;
+        }
+
+        public virtual IntRange readIntRange (BinaryReader reader)
+        {
+            this.min.Value = reader.ReadInt32();
+            this.max.Value = reader.ReadInt32();
+            return this;
+        }
+
+        public virtual void writeIntRange(BinaryWriter writer)
+        {
+            writer.Write(this.min);
+            writer.Write(this.max);
         }
     }
 }
