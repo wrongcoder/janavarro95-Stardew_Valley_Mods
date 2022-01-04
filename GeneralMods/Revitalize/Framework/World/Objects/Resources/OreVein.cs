@@ -23,7 +23,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
         public readonly NetList<ResourceInformation,NetResourceInformation<ResourceInformation>> extraDrops = new NetList<ResourceInformation,NetResourceInformation<ResourceInformation>>();
 
 
-        public readonly NetInt healthValue;
+        public readonly NetInt healthValue = new NetInt();
 
 
         public OreVein() : base()

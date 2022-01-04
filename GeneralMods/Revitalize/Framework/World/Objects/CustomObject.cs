@@ -839,8 +839,12 @@ namespace Revitalize.Framework.World.Objects
         {
             if (x <= -1)
             {
-                return;
+                x = (int)this.TileLocation.X;
                 //spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.TileLocation), new Rectangle?(this.AnimationManager.currentAnimation.sourceRectangle), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
+            }
+            if (y <= -1)
+            {
+                y = (int)this.TileLocation.Y;
             }
 
             if (this.AnimationManager == null)

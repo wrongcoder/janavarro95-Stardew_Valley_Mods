@@ -123,6 +123,13 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.dyedColor = new NamedColor();
         }
 
+        
+        public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory=null, LightManager Lights=null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null):this(Name,Id,Description,CategoryName,CategoryColor,-300,-300,Fragility,IsLamp,Price,true,true,animationManager.getTexture(),animationManager,Color.White,IgnoreBoundingBox,BoundingBoxTileDimensions,Inventory,Lights,AlwaysDrawAbovePlayer,DyedColor)
+        {
+
+        }
+        
+
         public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
         {
             this.name.Value = name;

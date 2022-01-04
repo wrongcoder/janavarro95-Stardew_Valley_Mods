@@ -413,6 +413,8 @@ namespace Revitalize
                 ObjectManager.GetItem(Machines.MiningDrillV1),
                 new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
                 ObjectManager.GetItem(Machines.WindmillV1),
+                ObjectManager.GetItem(Machines.FeedThreasher),
+                new StardewValley.Object((int)Enums.SDVObject.Corn,10),
             });
         }
 

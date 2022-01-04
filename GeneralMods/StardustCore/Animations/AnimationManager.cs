@@ -15,7 +15,7 @@ namespace StardustCore.Animations
     public class AnimationManager
     {
         public readonly NetStringDictionary<Animation, NetAnimation> animations = new NetStringDictionary<Animation, NetAnimation>();
-        public readonly NetString currentAnimationName =new NetString();
+        public readonly NetString currentAnimationName = new NetString();
 
 
         public Texture2DExtended objectTexture = new Texture2DExtended();
@@ -51,7 +51,7 @@ namespace StardustCore.Animations
             this.enabled.Value = EnabledByDefault;
 
             this.animations = new NetStringDictionary<Animation, NetAnimation>();
-            foreach(var pair in Animations)
+            foreach (var pair in Animations)
             {
                 this.animations.Add(pair.Key, pair.Value);
             }
@@ -138,18 +138,11 @@ namespace StardustCore.Animations
         {
             if (this.animations.ContainsKey(AnimationName))
             {
-                if (this.animations.ContainsKey(AnimationName))
-                {
-                    this.getCurrentAnimation().reset();
-                    this.currentAnimationName.Value = AnimationName;
-                    this.getCurrentAnimation().startAnimation();
-                    return true;
-                }
-                else
-                {
-                    ModCore.ModMonitor.Log("Error setting animation: " + AnimationName + " animation does not exist in list of available animations. Did you make sure to add it in?");
-                    return false;
-                }
+                this.getCurrentAnimation().reset();
+                this.currentAnimationName.Value = AnimationName;
+                this.getCurrentAnimation().startAnimation();
+                return true;
+
             }
             else
             {
@@ -328,8 +321,8 @@ namespace StardustCore.Animations
         public AnimationManager Copy()
         {
             Dictionary<string, Animation> animations = new Dictionary<string, Animation>();
-            
-            foreach(var v in this.animations.Pairs)
+
+            foreach (var v in this.animations.Pairs)
             {
                 animations.Add(v.Key, v.Value);
             }

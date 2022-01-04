@@ -20,6 +20,7 @@ using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using Revitalize.Framework.Constants.CraftingIds;
 using Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.Constants;
 
 namespace Revitalize.Framework.Objects
 {
@@ -157,6 +158,29 @@ namespace Revitalize.Framework.Objects
 
             this.AddItem(Machines.WindmillV1, windMillV1_0_0);
 
+            this.AddItem(Machines.FeedThreasher,new FeedThreasher(new BasicItemInformation("Feed Threasher", Machines.FeedThreasher, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "FeedThreasher"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "FeedThreasher"), new SerializableDictionary<string, Animation>()
+            {
+                {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
+                    {"Hay",new Animation(new List<AnimationFrame>(){
+                       new AnimationFrame(16,0,16,32,20)}
+                    ,true)},
+                    {"Wheat",new Animation(new List<AnimationFrame>(){
+                       new AnimationFrame(80,0,16,32,20)}
+                    ,true)},
+                    {"Corn",new Animation(new List<AnimationFrame>(){
+                       new AnimationFrame(32,0,16,32,20)}
+                    ,true)
+                    },
+                    {"Amaranth",new Animation(new List<AnimationFrame>(){
+                       new AnimationFrame(48,0,16,32,20)}
+                    ,true)
+                    },
+                    {"Fiber",new Animation(new List<AnimationFrame>(){
+                       new AnimationFrame(64,0,16,32,20)}
+                    ,true)
+                    }
+            },"Default","Default"), Color.White, false, new Vector2(1, Game1.tileSize / 25), new InventoryManager(), new Illuminate.LightManager())));
+
         }
 
         /// <summary>
@@ -218,7 +242,7 @@ namespace Revitalize.Framework.Objects
         /// <param name="Key"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public Item GetItem(string Key, int Stack = 1)
+        public virtual Item GetItem(string Key, int Stack = 1)
         {
             if (this.ItemsByName.ContainsKey(Key))
             {
@@ -230,6 +254,38 @@ namespace Revitalize.Framework.Objects
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Gets a StardewValley vanilla item with the given id.
+        /// </summary>
+        /// <param name="sdvObjectId"></param>
+        /// <param name="Stack"></param>
+        /// <returns></returns>
+        public virtual Item GetItem(Enums.SDVObject sdvObjectId, int Stack = 1)
+        {
+            return new StardewValley.Object((int)sdvObjectId, Stack);
+        }
+
+        public virtual StardewValley.Object GetObject(Enums.SDVObject sdvId, int Stack)
+        {
+            return (StardewValley.Object)this.GetItem(sdvId, Stack);
+        }
+
+        public virtual StardewValley.Object GetObject(Enums.SDVBigCraftable sdvId, int Stack)
+        {
+            return (StardewValley.Object)this.GetItem(sdvId, Stack);
+        }
+
+        /// <summary>
+        /// Gets a Stardew Valley vanilla big craftable object with the given id.
+        /// </summary>
+        /// <param name="sdvBigCraftableId"></param>
+        /// <param name="Stack"></param>
+        /// <returns></returns>
+        public virtual Item GetItem(Enums.SDVBigCraftable sdvBigCraftableId, int Stack = 1)
+        {
+            return new StardewValley.Object(Vector2.Zero, (int)sdvBigCraftableId, Stack);
         }
 
         /// <summary>

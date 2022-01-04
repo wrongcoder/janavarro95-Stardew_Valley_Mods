@@ -86,7 +86,7 @@ namespace Revitalize.Framework.World.Objects.Machines
             this.machineStatusBubbleBox = new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation(0,0,20,24)},
-                {"Empty",new Animation(20,0,20,24)},
+                {"Blank",new Animation(20,0,20,24)},
                 {"InventoryFull",new Animation(40,0,20,24)}
             }, "Default","Default", 0);
         }

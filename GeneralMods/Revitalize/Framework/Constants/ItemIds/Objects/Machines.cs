@@ -8,14 +8,21 @@ namespace Revitalize.Framework.Constants.ItemIds.Objects
 {
     public static class Machines
     {
-        public const string AdvancedSolarPanelV1 = "Revitalize.Objects.Machines.AdvancedSolarPanelV1";
+        /// <summary>
+        /// Prefix for machine ids.
+        /// </summary>
+        public const string PREFIX = "Revitalize.Objects.Machines.";
 
-        public const string MiningDrillV1 = "Revitalize.Objects.Machines.MiningDrillV1";
 
-        public const string SolarArrayV1 = "Revitalize.Objects.Machines.SolarArrayV1";
+        public const string AdvancedSolarPanelV1 = PREFIX+"AdvancedSolarPanelV1";
 
-        public const string WindmillV1 = "Revitalize.Objects.Machines.WindmillV1";
+        public const string MiningDrillV1 = PREFIX+"MiningDrillV1";
 
+        public const string SolarArrayV1 = PREFIX+"SolarArrayV1";
+
+        public const string WindmillV1 = PREFIX+"WindmillV1";
+
+        public const string FeedThreasher = PREFIX + "FeedThreasher";
 
     }
 }

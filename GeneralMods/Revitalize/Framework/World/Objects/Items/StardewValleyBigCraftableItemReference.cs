@@ -10,17 +10,16 @@ using StardewValley;
 
 namespace Revitalize.Framework.World.Objects.Items
 {
-    public class StardewValleyItemReference:ItemReference
+    public class StardewValleyBigCraftableItemReference:ItemReference
     {
-
         public readonly NetEnum<Enums.SDVObject> objectId = new NetEnum<Enums.SDVObject>();
 
-        public StardewValleyItemReference()
+        public StardewValleyBigCraftableItemReference()
         {
-            this.objectId.Value =  Enums.SDVObject.NULL;
+            this.objectId.Value = Enums.SDVObject.NULL;
         }
 
-        public StardewValleyItemReference(Enums.SDVObject objectId, int StackSize = 1):base(StackSize)
+        public StardewValleyBigCraftableItemReference(Enums.SDVObject objectId, int StackSize = 1) : base(StackSize)
         {
             this.objectId.Value = objectId;
         }
