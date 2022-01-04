@@ -20,7 +20,7 @@ namespace Revitalize.Framework.Configs.ObjectsConfigs
         public int FiberToHayOutput = 1;
         public int AmaranthToHayOutput = 10;
 
-        public int MinutesToProcess = 10;
+        public int MinutesToProcess = 60;
 
         public FeedThreasherConfig()
         {
