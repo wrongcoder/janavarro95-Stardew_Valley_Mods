@@ -13,12 +13,12 @@ namespace Revitalize.Framework.Configs.ObjectsConfigs
     {
         public ObjectsConfig objectsConfig;
 
-        public FeedThreasherConfig feedThreasherConfig;
+        public HayMakerConfig hayMakerConfig;
 
         public ObjectConfigManager()
         {
             this.objectsConfig = ObjectsConfig.InitializeConfig();
-            this.feedThreasherConfig = FeedThreasherConfig.InitializeConfig();
+            this.hayMakerConfig = HayMakerConfig.InitializeConfig();
         }
 
     }

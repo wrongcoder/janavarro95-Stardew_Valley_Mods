@@ -13,18 +13,18 @@ using StardewValley;
 
 namespace Revitalize.Framework.World.Objects.Machines
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.FeedThreasher")]
-    public class FeedThreasher : Machine
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.HayMaker")]
+    public class HayMaker : Machine
     {
         public NetEnum<Enums.SDVObject> feedType = new NetEnum<Enums.SDVObject>(Enums.SDVObject.NULL);
         public NetBool lerpScaleIncreasing = new NetBool(true);
 
-        public FeedThreasher()
+        public HayMaker()
         {
 
         }
 
-        public FeedThreasher(BasicItemInformation info) : base(info)
+        public HayMaker(BasicItemInformation info) : base(info)
         {
 
         }
@@ -39,20 +39,31 @@ namespace Revitalize.Framework.World.Objects.Machines
         {
             if (this.heldObject.Value != null)
             {
-                this.cleanOutFeedThreasher();
+                if (who.IsLocalPlayer)
+                {
+                    this.cleanOutHayMaker(true);
+                }
             }
 
             return base.rightClicked(who);
         }
 
-        protected virtual void cleanOutFeedThreasher()
+        /// <summary>
+        /// Cleans out the hay maker to produce more hay.
+        /// </summary>
+        /// <param name="addToPlayersInventory"></param>
+        protected virtual void cleanOutHayMaker(bool addToPlayersInventory)
         {
-            bool added = Game1.player.addItemToInventoryBool(this.heldObject.Value);
-            if (added == false) return;
+            if (addToPlayersInventory)
+            {
+                Game1.playSound("coin");
+                bool added = Game1.player.addItemToInventoryBool(this.heldObject.Value);
+                if (added == false) return;
+            }
             this.heldObject.Value = null;
             this.AnimationManager.playDefaultAnimation();
             this.feedType.Value = Enums.SDVObject.NULL;
-            Game1.playSound("coin");
+
         }
 
         /// <summary>
@@ -70,43 +81,43 @@ namespace Revitalize.Framework.World.Objects.Machines
             if (this.MinutesUntilReady > 0) return false;
             if (this.heldObject.Value != null)
             {
-                this.cleanOutFeedThreasher();
+                this.cleanOutHayMaker(true);
             }
 
 
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Corn && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfCornRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Corn && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired)
             {
                 this.AnimationManager.playAnimation("Corn");
                 this.feedType.Value = Enums.SDVObject.Corn;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfCornRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.feedThreasherConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired;
+                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
                 return true;
             }
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Fiber && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfFiberRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Fiber && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired)
             {
                 this.AnimationManager.playAnimation("Fiber");
                 this.feedType.Value = Enums.SDVObject.Fiber;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfFiberRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.feedThreasherConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired;
+                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
                 return true;
             }
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Wheat && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfWheatRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Wheat && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired)
             {
                 this.AnimationManager.playAnimation("Wheat");
                 this.feedType.Value = Enums.SDVObject.Hay;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfWheatRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.feedThreasherConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired;
+                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
                 return true;
             }
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Amaranth && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfAmaranthRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Amaranth && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired)
             {
                 this.AnimationManager.playAnimation("Amaranth");
                 this.feedType.Value = Enums.SDVObject.Amaranth;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.feedThreasherConfig.NumberOfAmaranthRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.feedThreasherConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired;
+                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
                 return true;
             }
@@ -117,36 +128,57 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
+            if (this.heldObject.Value != null) return false;
             this.MinutesUntilReady -= minutes;
             if (this.MinutesUntilReady < 0) this.MinutesUntilReady = 0;
 
-            if (this.MinutesUntilReady == 0)
+            if (this.MinutesUntilReady == 0 && this.feedType.Value!= Enums.SDVObject.NULL)
             {
                 if (this.feedType.Value == Enums.SDVObject.Corn)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.feedThreasherConfig.CornToHayOutput);
-                    this.AnimationManager.playAnimation("Hay");
+                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.CornToHayOutput);
                 }
                 if (this.feedType.Value == Enums.SDVObject.Fiber)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.feedThreasherConfig.FiberToHayOutput);
-                    this.AnimationManager.playAnimation("Hay");
+                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.FiberToHayOutput);
                 }
                 if (this.feedType.Value == Enums.SDVObject.Wheat)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.feedThreasherConfig.WheatToHayOutput);
-                    this.AnimationManager.playAnimation("Hay");
+                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.WheatToHayOutput);
                 }
                 if (this.feedType.Value == Enums.SDVObject.Amaranth)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.feedThreasherConfig.AmaranthToHayOutput);
-                    this.AnimationManager.playAnimation("Hay");
+                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.AmaranthToHayOutput);
+                }
+                this.AnimationManager.playAnimation("Hay");
+                bool noHayRemainsInFeedMaker=this.attemptToFillFarmSilos();
+                if (noHayRemainsInFeedMaker == false)
+                {
+                    //swip and coin are valid sounds too.
+                    Game1.playSound("dwop");
                 }
 
             }
-
-
             return base.minutesElapsed(minutes, environment);
+        }
+
+        /// <summary>
+        /// Attempts to automatically remove hay in the hay maker and put it into farm's Silo.
+        /// </summary>
+        protected virtual bool attemptToFillFarmSilos()
+        {
+            if (this.heldObject.Value == null) return false;
+            int remainder=Game1.getFarm().tryToAddHay(this.heldObject.Value.Stack);
+            if (remainder == 0)
+            {
+                this.cleanOutHayMaker(false);
+                return true;
+            }
+            else
+            {
+                this.heldObject.Value.Stack = remainder;
+                return false;
+            }
         }
 
         protected override void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
@@ -159,8 +191,8 @@ namespace Revitalize.Framework.World.Objects.Machines
                 this.machineStatusBubbleBox.playAnimation("Blank");
                 this.machineStatusBubbleBox.draw(b, this.machineStatusBubbleBox.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.getCurrentAnimationFrameRectangle()), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
 
-                Rectangle itemSourceRectangle = GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex + 1);
-                this.machineStatusBubbleBox.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.getCurrentAnimationFrameRectangle()), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
+                Rectangle itemSourceRectangle = GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex);
+                this.machineStatusBubbleBox.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+8, y * Game1.tileSize + num+16)), new Rectangle?(itemSourceRectangle), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00002f);
 
             }
         }
@@ -171,7 +203,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         /// <returns></returns>
         public virtual float getScaleSizeForWorkingMachine()
         {
-
+            float zoomSpeed = 0.01f;
             if (this.Scale.X < Game1.pixelZoom)
             {
                 this.Scale = new Vector2(Game1.pixelZoom, Game1.pixelZoom);
@@ -181,15 +213,15 @@ namespace Revitalize.Framework.World.Objects.Machines
             {
                 if (this.lerpScaleIncreasing.Value == true)
                 {
-                    this.Scale = new Vector2(this.scale.X + .05f, this.scale.Y + .05f);
-                    if (this.Scale.X >= 6.0)
+                    this.Scale = new Vector2(this.scale.X + zoomSpeed, this.scale.Y + zoomSpeed);
+                    if (this.Scale.X >= 5.0)
                     {
                         this.lerpScaleIncreasing.Value = false;
                     }
                 }
                 else
                 {
-                    this.Scale = new Vector2(this.scale.X - .05f, this.scale.Y - .05f);
+                    this.Scale = new Vector2(this.scale.X - zoomSpeed, this.scale.Y - zoomSpeed);
                     if (this.Scale.X <= Game1.pixelZoom)
                     {
                         this.lerpScaleIncreasing.Value = true;
@@ -211,7 +243,6 @@ namespace Revitalize.Framework.World.Objects.Machines
             if (x <= -1)
             {
                 x = (int)this.TileLocation.X;
-                //spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.TileLocation), new Rectangle?(this.AnimationManager.currentAnimation.sourceRectangle), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
             }
             if (y <= -1)
             {
@@ -238,6 +269,10 @@ namespace Revitalize.Framework.World.Objects.Machines
                 }
             }
 
+            if(this.MinutesUntilReady==0 && this.heldObject.Value != null)
+            {
+                this.drawStatusBubble(spriteBatch, x, y, alpha);
+            }
 
         }
 
@@ -249,7 +284,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override Item getOne()
         {
-            return new FeedThreasher(this.basicItemInfo.Copy());
+            return new HayMaker(this.basicItemInfo.Copy());
         }
     }
 }

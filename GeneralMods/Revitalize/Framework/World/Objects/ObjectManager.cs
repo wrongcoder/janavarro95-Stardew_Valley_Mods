@@ -158,7 +158,7 @@ namespace Revitalize.Framework.Objects
 
             this.AddItem(Machines.WindmillV1, windMillV1_0_0);
 
-            this.AddItem(Machines.FeedThreasher,new FeedThreasher(new BasicItemInformation("Feed Threasher", Machines.FeedThreasher, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "FeedThreasher"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "FeedThreasher"), new SerializableDictionary<string, Animation>()
+            this.AddItem(Machines.HayMaker,new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "HayMaker"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "HayMaker"), new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                     {"Hay",new Animation(new List<AnimationFrame>(){

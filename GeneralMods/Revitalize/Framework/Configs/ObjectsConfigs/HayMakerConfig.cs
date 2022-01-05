@@ -8,7 +8,7 @@ using Revitalize;
 
 namespace Revitalize.Framework.Configs.ObjectsConfigs
 {
-    public class FeedThreasherConfig
+    public class HayMakerConfig
     {
         public int NumberOfCornRequired = 1;
         public int NumberOfWheatRequired = 1;
@@ -22,19 +22,19 @@ namespace Revitalize.Framework.Configs.ObjectsConfigs
 
         public int MinutesToProcess = 60;
 
-        public FeedThreasherConfig()
+        public HayMakerConfig()
         {
 
         }
 
-        public static FeedThreasherConfig InitializeConfig()
+        public static HayMakerConfig InitializeConfig()
         {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "ObjectConfigs", "FeedThreasherConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<FeedThreasherConfig>(Path.Combine("Configs", "ObjectConfigs", "FeedThreasherConfig.json"));
+            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "ObjectConfigs", "HayMakerConfig.json")))
+                return ModCore.ModHelper.Data.ReadJsonFile<HayMakerConfig>(Path.Combine("Configs", "ObjectConfigs", "HayMakerConfig.json"));
             else
             {
-                FeedThreasherConfig Config = new FeedThreasherConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "ObjectConfigs", "FeedThreasherConfig.json"), Config);
+                HayMakerConfig Config = new HayMakerConfig();
+                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "ObjectConfigs", "HayMakerConfig.json"), Config);
                 return Config;
             }
         }

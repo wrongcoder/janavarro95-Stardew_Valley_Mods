@@ -22,7 +22,7 @@ namespace Revitalize.Framework.Constants.ItemIds.Objects
 
         public const string WindmillV1 = PREFIX+"WindmillV1";
 
-        public const string FeedThreasher = PREFIX + "FeedThreasher";
+        public const string HayMaker = PREFIX + "HayMaker";
 
     }
 }

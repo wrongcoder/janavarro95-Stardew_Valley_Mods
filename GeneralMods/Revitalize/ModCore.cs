@@ -403,18 +403,21 @@ namespace Revitalize
             Game1.player.addItemToInventoryBool(ObjectManager.GetItem(CraftingStations.Workbench));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-                new StardewValley.Object((int)Enums.SDVObject.Coal,100),
-                ObjectManager.GetItem(Ingots.SteelIngot, 20),
-                ObjectManager.GetItem(CraftingStations.Anvil,1),
-                ObjectManager.GetItem(Machines.AdvancedSolarPanelV1,1),
-                ObjectManager.GetItem(Machines.SolarArrayV1,1),
-                new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
-                new StardewValley.Object((int)Enums.SDVObject.CopperOre,10),
-                ObjectManager.GetItem(Machines.MiningDrillV1),
-                new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
-                ObjectManager.GetItem(Machines.WindmillV1),
-                ObjectManager.GetItem(Machines.FeedThreasher),
+                //new StardewValley.Object((int)Enums.SDVObject.Coal,100),
+                //ObjectManager.GetItem(Ingots.SteelIngot, 20),
+                //ObjectManager.GetItem(CraftingStations.Anvil,1),
+                //ObjectManager.GetItem(Machines.AdvancedSolarPanelV1,1),
+                //ObjectManager.GetItem(Machines.SolarArrayV1,1),
+                //new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
+                //new StardewValley.Object((int)Enums.SDVObject.CopperOre,10),
+                //ObjectManager.GetItem(Machines.MiningDrillV1),
+                //new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
+                //ObjectManager.GetItem(Machines.WindmillV1),
+                ObjectManager.GetItem(Machines.HayMaker),
                 new StardewValley.Object((int)Enums.SDVObject.Corn,10),
+                ObjectManager.GetItem(Enums.SDVObject.Stone,100),
+                ObjectManager.GetItem(Enums.SDVObject.Clay,100),
+                ObjectManager.GetItem(Enums.SDVObject.CopperBar,100)
             });
         }
 
