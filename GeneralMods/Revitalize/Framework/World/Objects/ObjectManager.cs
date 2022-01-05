@@ -158,24 +158,24 @@ namespace Revitalize.Framework.Objects
 
             this.AddItem(Machines.WindmillV1, windMillV1_0_0);
 
-            this.AddItem(Machines.HayMaker,new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "HayMaker"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "HayMaker"), new SerializableDictionary<string, Animation>()
+            this.AddItem(Machines.HayMaker,new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Machines", "HayMaker"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Machines", "HayMaker"), new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
-                    {"Hay",new Animation(new List<AnimationFrame>(){
+                    {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
                        new AnimationFrame(16,0,16,32,20)}
                     ,true)},
-                    {"Wheat",new Animation(new List<AnimationFrame>(){
+                    {HayMaker.WheatAnimation,new Animation(new List<AnimationFrame>(){
                        new AnimationFrame(80,0,16,32,20)}
                     ,true)},
-                    {"Corn",new Animation(new List<AnimationFrame>(){
+                    {HayMaker.CornAnimation,new Animation(new List<AnimationFrame>(){
                        new AnimationFrame(32,0,16,32,20)}
                     ,true)
                     },
-                    {"Amaranth",new Animation(new List<AnimationFrame>(){
+                    {HayMaker.AmaranthAnimation,new Animation(new List<AnimationFrame>(){
                        new AnimationFrame(48,0,16,32,20)}
                     ,true)
                     },
-                    {"Fiber",new Animation(new List<AnimationFrame>(){
+                    {HayMaker.FiberAnimation,new Animation(new List<AnimationFrame>(){
                        new AnimationFrame(64,0,16,32,20)}
                     ,true)
                     }
@@ -244,16 +244,39 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         public virtual Item GetItem(string Key, int Stack = 1)
         {
+            return this.GetItem<Item>(Key, Stack);
+        }
+
+        public virtual T GetItem<T>(string Key, int Stack=1) where T : Item
+        {
+
             if (this.ItemsByName.ContainsKey(Key))
             {
                 Item I = this.ItemsByName[Key].getOne();
                 I.Stack = Stack;
-                return I;
+                return (T)I;
             }
             else
             {
                 return null;
             }
+
+        }
+
+        public virtual T GetObject<T>(string Key, int Stack = 1) where T : StardewValley.Object
+        {
+
+            if (this.ItemsByName.ContainsKey(Key))
+            {
+                Item I = this.ItemsByName[Key].getOne();
+                I.Stack = Stack;
+                return (T)I;
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         /// <summary>
@@ -267,12 +290,12 @@ namespace Revitalize.Framework.Objects
             return new StardewValley.Object((int)sdvObjectId, Stack);
         }
 
-        public virtual StardewValley.Object GetObject(Enums.SDVObject sdvId, int Stack)
+        public virtual StardewValley.Object GetObject(Enums.SDVObject sdvId, int Stack=1)
         {
             return (StardewValley.Object)this.GetItem(sdvId, Stack);
         }
 
-        public virtual StardewValley.Object GetObject(Enums.SDVBigCraftable sdvId, int Stack)
+        public virtual StardewValley.Object GetObject(Enums.SDVBigCraftable sdvId, int Stack=1)
         {
             return (StardewValley.Object)this.GetItem(sdvId, Stack);
         }

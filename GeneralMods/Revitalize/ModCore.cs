@@ -419,6 +419,25 @@ namespace Revitalize
                 ObjectManager.GetItem(Enums.SDVObject.Clay,100),
                 ObjectManager.GetItem(Enums.SDVObject.CopperBar,100)
             });
+
+
+            this.addModdedMachinesToGameWorld();
+
+        }
+
+        /// <summary>
+        /// Adds various machines and stuff to the game world.
+        /// </summary>
+        private void addModdedMachinesToGameWorld()
+        {
+          GameLocation cinderSapForestLocation=  Game1.getLocationFromName("Forest");
+          HayMaker hayMaker = (ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
+         bool wasAdded= hayMaker.placementActionAtTile(cinderSapForestLocation, 81, 14);
+            if (wasAdded == false)
+            {
+                ModCore.log("Hay maker was not placed!!!!!!!");
+            }
+
         }
 
         /// <summary>

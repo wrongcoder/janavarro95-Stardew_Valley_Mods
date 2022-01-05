@@ -19,24 +19,98 @@ namespace Revitalize.Framework.World.Objects.Machines
         public NetEnum<Enums.SDVObject> feedType = new NetEnum<Enums.SDVObject>(Enums.SDVObject.NULL);
         public NetBool lerpScaleIncreasing = new NetBool(true);
 
+        public const string AmaranthAnimation = "Amaranth";
+        public const string CornAnimation = "Corn";
+        public const string HayAnimation = "Hay";
+        public const string FiberAnimation = "Fiber";
+        public const string WheatAnimation = "Wheat";
+
+        public NetBool isUsedForBuyingHayAtAnyTime = new NetBool();
+
         public HayMaker()
         {
 
         }
 
-        public HayMaker(BasicItemInformation info) : base(info)
+        public HayMaker(BasicItemInformation info, bool isUsedForBuyingHayAtAnyTime=false) : base(info)
         {
+            this.isUsedForBuyingHayAtAnyTime.Value = isUsedForBuyingHayAtAnyTime;
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true)
+            {
+                this.basicItemInfo.boundingBoxTileDimensions.Value = new Vector2(1, 1);
+            }
 
+        }
+
+        public override bool performToolAction(Tool t, GameLocation location)
+        {
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true)
+            {
+                return false;
+            }
+
+            return base.performToolAction(t, location);
+        }
+
+        public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+        {
+            if (this.exceptionForPlacementIsValidForMarniesRanch(l, tile) == true) return true;
+            return base.canBePlacedHere(l, tile);
+        }
+
+        public override Rectangle getBoundingBox(Vector2 tileLocation)
+        {
+            Rectangle rect= base.getBoundingBox(tileLocation);
+
+            if (this.isUsedForBuyingHayAtAnyTime)
+            {
+                rect.Y += Game1.tileSize;
+            }
+            return rect;
+        }
+
+        protected virtual bool exceptionForPlacementIsValidForMarniesRanch(GameLocation location, Vector2 tile)
+        {
+            if(this.isUsedForBuyingHayAtAnyTime.Value==true && tile.X==81 && tile.Y==14 && location.Name.Equals("Forest"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public override bool canBeRemoved(Farmer who)
+        {
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true)
+            {
+                return false;
+            }
+
+            return base.canBeRemoved(who);
         }
 
         protected override void initNetFieldsPostConstructor()
         {
             base.initNetFieldsPostConstructor();
             this.NetFields.AddField(this.feedType);
+            this.NetFields.AddField(this.isUsedForBuyingHayAtAnyTime);
         }
 
         public override bool rightClicked(Farmer who)
         {
+
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true)
+            {
+                if (Game1.activeClickableMenu == null)
+                {
+                    Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(new Dictionary<ISalable, int[]>()
+                    {
+                        {ModCore.ObjectManager.GetItem(Enums.SDVObject.Hay,-1), new int[]{60,-1 } }
+                    });
+                }
+
+                return true;
+            }
+
             if (this.heldObject.Value != null)
             {
                 if (who.IsLocalPlayer)
@@ -67,6 +141,20 @@ namespace Revitalize.Framework.World.Objects.Machines
         }
 
         /// <summary>
+        /// Called when a new day is started. Attempt to refill the silos from the hay maker.
+        /// </summary>
+        /// <param name="location"></param>
+        public override void DayUpdate(GameLocation location)
+        {
+            if (this.heldObject.Value != null)
+            {
+                this.cleanOutHayMaker(false);
+            }
+
+            base.DayUpdate(location);
+        }
+
+        /// <summary>
         /// Performed when dropping in an object into this feeder.
         /// </summary>
         /// <param name="dropInItem"></param>
@@ -87,38 +175,54 @@ namespace Revitalize.Framework.World.Objects.Machines
 
             if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Corn && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired)
             {
-                this.AnimationManager.playAnimation("Corn");
+                this.AnimationManager.playAnimation(CornAnimation);
                 this.feedType.Value = Enums.SDVObject.Corn;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
+                if (who.ActiveObject.Stack == 0)
+                {
+                    who.removeItemFromInventory(who.ActiveObject);
+                }
                 return true;
             }
             if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Fiber && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired)
             {
-                this.AnimationManager.playAnimation("Fiber");
+                this.AnimationManager.playAnimation(FiberAnimation);
                 this.feedType.Value = Enums.SDVObject.Fiber;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
+                if (who.ActiveObject.Stack == 0)
+                {
+                    who.removeItemFromInventory(who.ActiveObject);
+                }
                 return true;
             }
             if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Wheat && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired)
             {
-                this.AnimationManager.playAnimation("Wheat");
+                this.AnimationManager.playAnimation(WheatAnimation);
                 this.feedType.Value = Enums.SDVObject.Hay;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
+                if (who.ActiveObject.Stack == 0)
+                {
+                    who.removeItemFromInventory(who.ActiveObject);
+                }
                 return true;
             }
             if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Amaranth && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired)
             {
-                this.AnimationManager.playAnimation("Amaranth");
+                this.AnimationManager.playAnimation(AmaranthAnimation);
                 this.feedType.Value = Enums.SDVObject.Amaranth;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 who.currentLocation.playSound("Ship");
+                if (who.ActiveObject.Stack == 0)
+                {
+                    who.removeItemFromInventory(who.ActiveObject);
+                }
                 return true;
             }
 
@@ -150,7 +254,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 {
                     this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.AmaranthToHayOutput);
                 }
-                this.AnimationManager.playAnimation("Hay");
+                this.AnimationManager.playAnimation(HayAnimation);
                 bool noHayRemainsInFeedMaker=this.attemptToFillFarmSilos();
                 if (noHayRemainsInFeedMaker == false)
                 {
@@ -284,7 +388,12 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override Item getOne()
         {
-            return new HayMaker(this.basicItemInfo.Copy());
+            return new HayMaker(this.basicItemInfo.Copy(),this.isUsedForBuyingHayAtAnyTime);
+        }
+
+        public virtual Item getOne(bool IsUsedForBuyingHayAtAnyTime)
+        {
+            return new HayMaker(this.basicItemInfo.Copy(), IsUsedForBuyingHayAtAnyTime);
         }
     }
 }

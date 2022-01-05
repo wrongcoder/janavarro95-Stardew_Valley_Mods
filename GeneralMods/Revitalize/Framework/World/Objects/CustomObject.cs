@@ -596,6 +596,19 @@ namespace Revitalize.Framework.World.Objects
             return base.performUseAction(location);
         }
 
+        /// <summary>
+        /// Places this object at a given TILE location for the game.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="TileX"></param>
+        /// <param name="TileY"></param>
+        /// <param name="who"></param>
+        /// <returns></returns>
+        public virtual bool placementActionAtTile(GameLocation location, int TileX, int TileY, Farmer who = null)
+        {
+          return this.placementAction(location, TileX * Game1.tileSize, TileY * Game1.tileSize, who);
+        }
+
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
         {
 
@@ -612,8 +625,6 @@ namespace Revitalize.Framework.World.Objects
 
             obj.boundingBox.Value = this.getBoundingBox(new Vector2((float)x / (float)64, (float)y / (float)64));
 
-
-
             Vector2 placementTile = new Vector2(x / 64, y / 64);
             obj.health = 10;
             if (who != null)
@@ -629,9 +640,18 @@ namespace Revitalize.Framework.World.Objects
 
             location.furniture.Add(obj);
             location.objects.Add(placementTile, obj);
-            location.playSound("thudStep");
+            if (who != null)
+            {
+                location.playSound("thudStep");
+            }
 
-            obj.basicItemInfo.locationName.Value = location.NameOrUniqueName;
+            string locationName = location.NameOrUniqueName;
+            if (string.IsNullOrEmpty(location.NameOrUniqueName))
+            {
+                locationName = location.Name;
+            }
+
+            obj.basicItemInfo.locationName.Value = locationName;
             obj.updateDrawPosition();
 
             return true;
@@ -696,13 +716,13 @@ namespace Revitalize.Framework.World.Objects
 
         public virtual GameLocation getCurrentLocation()
         {
-            if (string.IsNullOrEmpty(this.basicItemInfo.locationName))
+            if (string.IsNullOrEmpty(this.basicItemInfo.locationName.Value))
             {
                 return null;
             }
             else
             {
-                return Game1.getLocationFromName(this.basicItemInfo.locationName, this.isCurrentLocationAStructure);
+                return Game1.getLocationFromName(this.basicItemInfo.locationName.Value, this.isCurrentLocationAStructure);
             }
         }
 
