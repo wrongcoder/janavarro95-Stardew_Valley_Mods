@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Revitalize;
 
-namespace Revitalize.Framework.Configs
+namespace Revitalize.Framework.Configs.ShopConfigs
 {
     /// <summary>
     /// Deals with the sell prices for ores in the blacksmith shop.
     /// </summary>
-    public class Shops_BlacksmithConfig
+    public class BlacksmithShopConfig
     {
         /// <summary>
         /// The sell price for tin ore from the blacksmith.
@@ -37,7 +37,7 @@ namespace Revitalize.Framework.Configs
         /// <summary>
         /// Constructor.
         /// </summary>
-        public Shops_BlacksmithConfig()
+        public BlacksmithShopConfig()
         {
             this.tinOreSellPrice = 100;
             this.bauxiteOreSellPrice = 150;
@@ -50,13 +50,13 @@ namespace Revitalize.Framework.Configs
         /// Initializes the config for the blacksmith shop prices.
         /// </summary>
         /// <returns></returns>
-        public static Shops_BlacksmithConfig InitializeConfig()
+        public static BlacksmithShopConfig InitializeConfig()
         {
             if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "Shops", "BlacksmithShopPricesConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<Shops_BlacksmithConfig>(Path.Combine("Configs", "Shops", "BlacksmithShopPricesConfig.json"));
+                return ModCore.ModHelper.Data.ReadJsonFile<BlacksmithShopConfig>(Path.Combine("Configs", "Shops", "BlacksmithShopPricesConfig.json"));
             else
             {
-                Shops_BlacksmithConfig Config = new Shops_BlacksmithConfig();
+                BlacksmithShopConfig Config = new BlacksmithShopConfig();
                 ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "Shops", "BlacksmithShopPricesConfig.json"), Config);
                 return Config;
             }

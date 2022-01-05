@@ -10,6 +10,7 @@ using Netcode;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.World.Objects.InformationFiles;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Revitalize.Framework.World.Objects.Machines
 {
@@ -38,6 +39,7 @@ namespace Revitalize.Framework.World.Objects.Machines
             if (this.isUsedForBuyingHayAtAnyTime.Value == true)
             {
                 this.basicItemInfo.boundingBoxTileDimensions.Value = new Vector2(1, 1);
+                this.AnimationManager.playAnimation(HayAnimation);
             }
 
         }
@@ -51,6 +53,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
             return base.performToolAction(t, location);
         }
+
 
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {
@@ -102,10 +105,15 @@ namespace Revitalize.Framework.World.Objects.Machines
             {
                 if (Game1.activeClickableMenu == null)
                 {
-                    Game1.activeClickableMenu = new StardewValley.Menus.ShopMenu(new Dictionary<ISalable, int[]>()
+
+                    ShopMenu shopMenu = new StardewValley.Menus.ShopMenu(new Dictionary<ISalable, int[]>()
                     {
                         {ModCore.ObjectManager.GetItem(Enums.SDVObject.Hay,-1), new int[]{60,-1 } }
                     });
+
+                    shopMenu.potraitPersonDialogue = "I value the honor system. \n -Marnie";
+
+                    Game1.activeClickableMenu =shopMenu ;
                 }
 
                 return true;

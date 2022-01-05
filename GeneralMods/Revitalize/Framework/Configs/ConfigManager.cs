@@ -16,7 +16,7 @@ namespace Revitalize.Framework.Configs
         /// </summary>
         public VanillaMachineRecipeConfig vanillaMachineConfig;
 
-        public Shops_BlacksmithConfig shops_blacksmithConfig;
+        public ShopConfigs.ShopsConfigManager shopsConfigManager;
         public FurnitureConfig furnitureConfig;
 
         /// <summary>
@@ -31,12 +31,11 @@ namespace Revitalize.Framework.Configs
         public ConfigManager()
         {
             this.vanillaMachineConfig = VanillaMachineRecipeConfig.InitializeConfig();
-            this.shops_blacksmithConfig = Shops_BlacksmithConfig.InitializeConfig();
             this.furnitureConfig = FurnitureConfig.InitializeConfig();
             this.machinesConfig = GlobalMachineConfig.InitializeConfig();
             this.miningDrillConfig = MiningDrillConfig.InitializeConfig();
 
-
+            this.shopsConfigManager = new ShopConfigs.ShopsConfigManager();
             this.objectConfigManager = new ObjectsConfigs.ObjectConfigManager();
         }
     }

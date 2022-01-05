@@ -238,7 +238,7 @@ namespace Revitalize
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
-            ModHelper.Events.GameLoop.DayStarted += ObjectManager.resources.DailyResourceSpawn;
+            ModHelper.Events.GameLoop.DayStarted += this.GameLoop_DayStarted;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
 
             ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
@@ -263,7 +263,18 @@ namespace Revitalize
 
             Revitalize.Framework.Utilities.Serializer.SerializeTypesForXMLUsingSpaceCore();
         }
-        
+
+
+        /// <summary>
+        /// What happens when a new day starts.
+        /// </summary>
+        /// <param name="senderm"></param>
+        /// <param name="e"></param>
+        private void GameLoop_DayStarted(object senderm, StardewModdingAPI.Events.DayStartedEventArgs e)
+        {
+            ObjectManager.resources.DailyResourceSpawn(senderm, e);
+            ShopHacks.OnNewDay(senderm, e);
+        }
 
         private void Input_ButtonPressed1(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
         {
