@@ -279,7 +279,7 @@ namespace Revitalize
         private void Input_ButtonPressed1(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
         {
 
-            
+
             if (e.Button == SButton.MouseLeft)
             {
                 if (Game1.player != null)
@@ -288,7 +288,7 @@ namespace Revitalize
                     pressUseToolButtonCheckForCustomObjects();
                 }
             }
-            
+
         }
 
         public static bool pressUseToolButtonCheckForCustomObjects()
@@ -300,25 +300,25 @@ namespace Revitalize
             Vector2 c = Game1.player.GetToolLocation() / 64f;
             c.X = (int)c.X;
             c.Y = (int)c.Y;
-            Point p = new Point((int)(c.X*64f), (int)(c.Y*64f));
+            Point p = new Point((int)(c.X * 64f), (int)(c.Y * 64f));
 
             if (Game1.player.currentLocation.objects.ContainsKey(c))
             {
                 //ModCore.log("Spot is taken: " + p.ToString());
                 //Only want to check spots that might not be covered by the game.
-                return false ;
+                return false;
             }
 
             foreach (Furniture f in Game1.player.currentLocation.furniture)
             {
                 //ModCore.log("I see a furniture: " + f.DisplayName);
-                if(f is CustomObject)
+                if (f is CustomObject)
                 {
                     //ModCore.log("I see a custom furniture piece: " + f.DisplayName);
                     if (f.boundingBox.Value.Contains(p))
                     {
                         //ModCore.log("Found an object at a non object spot position: " + p.ToString());
-                       // ModCore.log("The name is: " + f.DisplayName);
+                        // ModCore.log("The name is: " + f.DisplayName);
                         f.performToolAction(Game1.player.CurrentTool, Game1.player.currentLocation);
                         return true;
                     }
@@ -339,7 +339,7 @@ namespace Revitalize
         /// </summary>
         private void loadInTextures()
         {
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath,Manifest, "Revitalize.Furniture");
+            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Furniture");
             TextureManager.GetTextureManager(Manifest, "Revitalize.Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Furniture"));
             TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Machines");
             TextureManager.GetTextureManager(Manifest, "Revitalize.Machines").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Machines"));
@@ -441,12 +441,11 @@ namespace Revitalize
         /// </summary>
         private void addModdedMachinesToGameWorld()
         {
-          GameLocation cinderSapForestLocation=  Game1.getLocationFromName("Forest");
-          HayMaker hayMaker = (ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
-         bool wasAdded= hayMaker.placementActionAtTile(cinderSapForestLocation, 81, 14);
-            if (wasAdded == false)
+            GameLocation cinderSapForestLocation = Game1.getLocationFromName("Forest");
+            HayMaker hayMaker = (ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
+            if (Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch)
             {
-                ModCore.log("Hay maker was not placed!!!!!!!");
+                hayMaker.placementActionAtTile(cinderSapForestLocation, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y);
             }
 
         }

@@ -33,10 +33,10 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         }
 
-        public HayMaker(BasicItemInformation info, bool isUsedForBuyingHayAtAnyTime=false) : base(info)
+        public HayMaker(BasicItemInformation info, bool isUsedForBuyingHayAtAnyTime = false) : base(info)
         {
             this.isUsedForBuyingHayAtAnyTime.Value = isUsedForBuyingHayAtAnyTime;
-            if (this.isUsedForBuyingHayAtAnyTime.Value == true)
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true && ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall)
             {
                 this.basicItemInfo.boundingBoxTileDimensions.Value = new Vector2(1, 1);
                 this.AnimationManager.playAnimation(HayAnimation);
@@ -63,9 +63,9 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override Rectangle getBoundingBox(Vector2 tileLocation)
         {
-            Rectangle rect= base.getBoundingBox(tileLocation);
+            Rectangle rect = base.getBoundingBox(tileLocation);
 
-            if (this.isUsedForBuyingHayAtAnyTime)
+            if (this.isUsedForBuyingHayAtAnyTime && ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall==true)
             {
                 rect.Y += Game1.tileSize;
             }
@@ -74,7 +74,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         protected virtual bool exceptionForPlacementIsValidForMarniesRanch(GameLocation location, Vector2 tile)
         {
-            if(this.isUsedForBuyingHayAtAnyTime.Value==true && tile.X==81 && tile.Y==14 && location.Name.Equals("Forest"))
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true && tile.Equals(ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation) && location.Name.Equals("Forest"))
             {
                 return true;
             }
@@ -108,12 +108,12 @@ namespace Revitalize.Framework.World.Objects.Machines
 
                     ShopMenu shopMenu = new StardewValley.Menus.ShopMenu(new Dictionary<ISalable, int[]>()
                     {
-                        {ModCore.ObjectManager.GetItem(Enums.SDVObject.Hay,-1), new int[]{60,-1 } }
+                        {ModCore.ObjectManager.GetItem(Enums.SDVObject.Hay,-1), new int[]{ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice,-1 } }
                     });
 
                     shopMenu.potraitPersonDialogue = "I value the honor system. \n -Marnie";
 
-                    Game1.activeClickableMenu =shopMenu ;
+                    Game1.activeClickableMenu = shopMenu;
                 }
 
                 return true;
@@ -244,7 +244,7 @@ namespace Revitalize.Framework.World.Objects.Machines
             this.MinutesUntilReady -= minutes;
             if (this.MinutesUntilReady < 0) this.MinutesUntilReady = 0;
 
-            if (this.MinutesUntilReady == 0 && this.feedType.Value!= Enums.SDVObject.NULL)
+            if (this.MinutesUntilReady == 0 && this.feedType.Value != Enums.SDVObject.NULL)
             {
                 if (this.feedType.Value == Enums.SDVObject.Corn)
                 {
@@ -263,7 +263,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                     this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.AmaranthToHayOutput);
                 }
                 this.AnimationManager.playAnimation(HayAnimation);
-                bool noHayRemainsInFeedMaker=this.attemptToFillFarmSilos();
+                bool noHayRemainsInFeedMaker = this.attemptToFillFarmSilos();
                 if (noHayRemainsInFeedMaker == false)
                 {
                     //swip and coin are valid sounds too.
@@ -280,7 +280,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         protected virtual bool attemptToFillFarmSilos()
         {
             if (this.heldObject.Value == null) return false;
-            int remainder=Game1.getFarm().tryToAddHay(this.heldObject.Value.Stack);
+            int remainder = Game1.getFarm().tryToAddHay(this.heldObject.Value.Stack);
             if (remainder == 0)
             {
                 this.cleanOutHayMaker(false);
@@ -304,7 +304,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 this.machineStatusBubbleBox.draw(b, this.machineStatusBubbleBox.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.getCurrentAnimationFrameRectangle()), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
 
                 Rectangle itemSourceRectangle = GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex);
-                this.machineStatusBubbleBox.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize)+8, y * Game1.tileSize + num+16)), new Rectangle?(itemSourceRectangle), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00002f);
+                this.machineStatusBubbleBox.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + 8, y * Game1.tileSize + num + 16)), new Rectangle?(itemSourceRectangle), Color.White * ModCore.Configs.machinesConfig.machineNotificationBubbleAlpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00002f);
 
             }
         }
@@ -340,7 +340,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                     }
                 }
                 return this.Scale.X * Game1.options.zoomLevel;
-               
+
             }
             else
             {
@@ -369,9 +369,9 @@ namespace Revitalize.Framework.World.Objects.Machines
             {
                 if (this.feedType.Value != Enums.SDVObject.NULL && base.MinutesUntilReady > 0)
                 {
-                    Vector2 origin = new Vector2(this.AnimationManager.getCurrentAnimationFrameRectangle().Width/2, this.AnimationManager.getCurrentAnimationFrameRectangle().Height);
-                    
-                    this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset()+(Game1.tileSize * origin.X/ this.AnimationManager.getCurrentAnimationFrameRectangle().Width) , (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset()+(Game1.tileSize * (origin.Y/ this.AnimationManager.getCurrentAnimationFrameRectangle().Height +1) ))), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, origin, this.getScaleSizeForWorkingMachine(), this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                    Vector2 origin = new Vector2(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2, this.AnimationManager.getCurrentAnimationFrameRectangle().Height);
+
+                    this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset() + (Game1.tileSize * origin.X / this.AnimationManager.getCurrentAnimationFrameRectangle().Width), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset() + (Game1.tileSize * (origin.Y / this.AnimationManager.getCurrentAnimationFrameRectangle().Height + 1)))), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, origin, this.getScaleSizeForWorkingMachine(), this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
                 }
 
                 else
@@ -381,7 +381,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 }
             }
 
-            if(this.MinutesUntilReady==0 && this.heldObject.Value != null)
+            if (this.MinutesUntilReady == 0 && this.heldObject.Value != null)
             {
                 this.drawStatusBubble(spriteBatch, x, y, alpha);
             }
@@ -396,7 +396,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override Item getOne()
         {
-            return new HayMaker(this.basicItemInfo.Copy(),this.isUsedForBuyingHayAtAnyTime);
+            return new HayMaker(this.basicItemInfo.Copy(), this.isUsedForBuyingHayAtAnyTime);
         }
 
         public virtual Item getOne(bool IsUsedForBuyingHayAtAnyTime)
