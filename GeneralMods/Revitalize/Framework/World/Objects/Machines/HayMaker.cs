@@ -39,6 +39,9 @@ namespace Revitalize.Framework.World.Objects.Machines
             if (this.isUsedForBuyingHayAtAnyTime.Value == true && ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall)
             {
                 this.basicItemInfo.boundingBoxTileDimensions.Value = new Vector2(1, 1);
+            }
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true)
+            {
                 this.AnimationManager.playAnimation(HayAnimation);
             }
 
@@ -175,6 +178,7 @@ namespace Revitalize.Framework.World.Objects.Machines
             if (who.ActiveObject == null) return false;
             if (dropInItem == null) return false;
             if (this.MinutesUntilReady > 0) return false;
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true) return false;
             if (this.heldObject.Value != null)
             {
                 this.cleanOutHayMaker(true);

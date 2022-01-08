@@ -29,6 +29,7 @@ using Animation = StardustCore.Animations.Animation;
 using SpaceShared.APIs;
 using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Revitalize.Framework.Constants.ItemIds.Objects;
+using Revitalize.Framework.SaveData;
 
 namespace Revitalize
 {
@@ -212,12 +213,16 @@ namespace Revitalize
         public static CraftingManager CraftingManager;
 
         public static ConfigManager Configs;
+
+        public static SaveDataManager SaveDataManager;
+
         public override void Entry(IModHelper helper)
         {
             ModHelper = helper;
             ModMonitor = this.Monitor;
             Manifest = this.ModManifest;
             Configs = new ConfigManager();
+            SaveDataManager = new SaveDataManager();
 
             this.createDirectories();
             this.initailizeComponents();
@@ -239,6 +244,8 @@ namespace Revitalize
 
             ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += this.GameLoop_DayStarted;
+            ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
+
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
 
             ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
@@ -252,6 +259,16 @@ namespace Revitalize
             ModHelper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
 
 
+        }
+
+        /// <summary>
+        /// Called when the day is ending. At this point the save data should all be saved.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
+        {
+            SaveDataManager.save();
         }
 
         private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
@@ -409,8 +426,11 @@ namespace Revitalize
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
+            SaveDataManager.loadOrCreateSaveData();
 
 
+            //HACKS
+            Game1.player.Money = 100_000;
             Game1.player.addItemToInventoryBool(ObjectManager.GetItem(CraftingStations.Workbench));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
@@ -426,7 +446,8 @@ namespace Revitalize
                 //ObjectManager.GetItem(Machines.WindmillV1),
                 ObjectManager.GetItem(Machines.HayMaker),
                 new StardewValley.Object((int)Enums.SDVObject.Corn,10),
-                ObjectManager.GetItem(Enums.SDVObject.Stone,100),
+                ObjectManager.GetItem(Enums.SDVObject.Stone,999),
+                                ObjectManager.GetItem(Enums.SDVObject.Wood,999),
                 ObjectManager.GetItem(Enums.SDVObject.Clay,100),
                 ObjectManager.GetItem(Enums.SDVObject.CopperBar,100)
             });
@@ -443,7 +464,8 @@ namespace Revitalize
         {
             GameLocation cinderSapForestLocation = Game1.getLocationFromName("Forest");
             HayMaker hayMaker = (ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
-            if (Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch)
+            if (Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch &&
+                cinderSapForestLocation.isObjectAtTile((int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y) == false)
             {
                 hayMaker.placementActionAtTile(cinderSapForestLocation, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y);
             }

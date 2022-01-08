@@ -8,6 +8,9 @@ using Revitalize;
 using Revitalize.Framework;
 using StardewValley;
 using StardewValley.Menus;
+using Revitalize.Framework.Constants.ItemIds.Objects;
+using Revitalize.Framework.World.Objects.Machines;
+using Revitalize.Framework.World.WorldUtilities;
 
 namespace Revitalize.Framework.Hacks
 {
@@ -72,6 +75,11 @@ namespace Revitalize.Framework.Hacks
                         {
                             AddGeodesToDwarfShop(menu);
                         }
+                        else if (npcName.Equals("Marnie"))
+                        {
+                            ModCore.log("Accessing marnies shop!");
+                            AddStockToMarniesShop(menu);
+                        }
                     }
                 }
             }
@@ -122,6 +130,20 @@ namespace Revitalize.Framework.Hacks
             if (OmniGeodesRemainingToday > 0)
             {
                 AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.OmniGeode, OmniGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.OmniGeodePrice, OmniGeodesRemainingToday);
+            }
+        }
+
+        /// <summary>
+        /// Adds stock to marnies shop based on various conditions.
+        /// </summary>
+        /// <param name="shopMenu"></param>
+        private static void AddStockToMarniesShop(ShopMenu shopMenu)
+        {
+            if (BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() || ModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop())
+            {
+                ModCore.log("Has built tier 2 or higher barn or coop!");
+                HayMaker hayMaker = ModCore.ObjectManager.GetItem<HayMaker>(Machines.HayMaker, 1);
+                AddItemToShop(shopMenu, hayMaker, ModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerPrice, -1);
             }
         }
 

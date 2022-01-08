@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
 using StardewValley;
 
 namespace Revitalize.Framework.World.Objects.Items
 {
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.StardewValleyBigCraftableItemReference")]
     public class StardewValleyBigCraftableItemReference:ItemReference
     {
         public readonly NetEnum<Enums.SDVObject> objectId = new NetEnum<Enums.SDVObject>();
