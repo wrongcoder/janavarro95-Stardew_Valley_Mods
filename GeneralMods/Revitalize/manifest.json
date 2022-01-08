@@ -9,6 +9,7 @@
   "UpdateKeys": [],
   "Dependencies": [
     { "UniqueID": "Omegasis.StardustCore" },
-    { "UniqueID": "spacechase0.SpaceCore" }
+    { "UniqueID": "spacechase0.SpaceCore" },
+	
   ]
 }

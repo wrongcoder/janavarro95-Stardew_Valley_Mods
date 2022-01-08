@@ -19,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StardustCore\StardustCore.csproj" />
+    <ProjectReference Include="..\StardustCore\StardustCore.csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
 
   <Import Project="..\common.targets" />

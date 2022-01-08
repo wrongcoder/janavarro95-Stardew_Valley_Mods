@@ -217,8 +217,6 @@ namespace Revitalize.Framework.Utilities
             {
                 if (Attribute.GetCustomAttribute(t, typeof(XmlTypeAttribute)) != null)
                 {
-
-                    ModCore.log(string.Format("Registering {0} for serialization using Space Core.", t.ToString()));
                     spaceCore.RegisterSerializerType(t);
                 }
 

@@ -11,6 +11,8 @@ using StardewValley.Menus;
 using Revitalize.Framework.Constants.ItemIds.Objects;
 using Revitalize.Framework.World.Objects.Machines;
 using Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.Utilities;
+using System.IO;
 
 namespace Revitalize.Framework.Hacks
 {
@@ -57,6 +59,7 @@ namespace Revitalize.Framework.Hacks
         {
             if (args.NewMenu != null)
             {
+
                 if (args.NewMenu is ShopMenu)
                 {
                     ShopMenu menu = (args.NewMenu as ShopMenu);

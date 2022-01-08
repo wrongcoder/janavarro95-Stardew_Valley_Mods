@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using Omegasis.Revitalize.Framework.Utilities;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.World.Objects.InformationFiles;
 using StardewValley;
@@ -114,7 +116,10 @@ namespace Revitalize.Framework.World.Objects.Machines
                         {ModCore.ObjectManager.GetItem(Enums.SDVObject.Hay,-1), new int[]{ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice,-1 } }
                     });
 
-                    shopMenu.potraitPersonDialogue = "I value the honor system. \n -Marnie";
+                    //Load the shop tetx file and select a random dialogue text from it.
+                    Dictionary<string, string> shopDialogue = JsonUtilities.loadStringDictionaryFile(Path.Combine("Content", "Strings", "ShopDialogue", "HayMakerShopDialogue.json"));
+                    int random = Game1.random.Next(0, shopDialogue.Count);
+                    shopMenu.potraitPersonDialogue = shopDialogue.ElementAt(random).Value;
 
                     Game1.activeClickableMenu = shopMenu;
                 }

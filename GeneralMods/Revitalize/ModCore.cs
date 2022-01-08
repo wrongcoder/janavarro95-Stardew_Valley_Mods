@@ -30,6 +30,9 @@ using SpaceShared.APIs;
 using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Revitalize.Framework.Constants.ItemIds.Objects;
 using Revitalize.Framework.SaveData;
+using Omegasis.Revitalize.Framework.Utilities;
+using Revitalize.Framework.World.WorldUtilities;
+using Revitalize.Framework.World;
 
 namespace Revitalize
 {
@@ -194,7 +197,7 @@ namespace Revitalize
             -Pendants
     */
 
-    public class ModCore : Mod
+    public class ModCore : Mod, IAssetEditor
     {
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
@@ -209,12 +212,13 @@ namespace Revitalize
 
         public static Serializer Serializer;
 
-
         public static CraftingManager CraftingManager;
 
         public static ConfigManager Configs;
 
         public static SaveDataManager SaveDataManager;
+
+        public static MailManager MailManager;
 
         public override void Entry(IModHelper helper)
         {
@@ -223,6 +227,7 @@ namespace Revitalize
             Manifest = this.ModManifest;
             Configs = new ConfigManager();
             SaveDataManager = new SaveDataManager();
+            MailManager = new MailManager();
 
             this.createDirectories();
             this.initailizeComponents();
@@ -251,6 +256,7 @@ namespace Revitalize
             ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             ModHelper.Events.Display.MenuChanged += ShopHacks.OnNewMenuOpened;
+            ModHelper.Events.Display.MenuChanged += MailManager.onNewMenuOpened ;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
 
@@ -259,17 +265,9 @@ namespace Revitalize
             ModHelper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
 
 
+
         }
 
-        /// <summary>
-        /// Called when the day is ending. At this point the save data should all be saved.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
-        {
-            SaveDataManager.save();
-        }
 
         private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
@@ -291,6 +289,17 @@ namespace Revitalize
         {
             ObjectManager.resources.DailyResourceSpawn(senderm, e);
             ShopHacks.OnNewDay(senderm, e);
+            MailManager.tryToAddMailToMailbox();
+        }
+
+        /// <summary>
+        /// Called when the day is ending. At this point the save data should all be saved.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
+        {
+            SaveDataManager.save();
         }
 
         private void Input_ButtonPressed1(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
@@ -427,6 +436,7 @@ namespace Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             SaveDataManager.loadOrCreateSaveData();
+            MailManager.tryToAddMailToMailbox();
 
 
             //HACKS
@@ -510,6 +520,16 @@ namespace Revitalize
             }
 
             return false;
+        }
+
+        public bool CanEdit<T>(IAssetInfo asset)
+        {
+            return MailManager.canEditAsset(asset);
+        }
+
+        public void Edit<T>(IAssetData asset)
+        {
+            MailManager.editMailAsset(asset);
         }
     }
 }
