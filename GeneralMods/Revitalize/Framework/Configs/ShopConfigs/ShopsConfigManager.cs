@@ -31,12 +31,15 @@ namespace Revitalize.Framework.Configs.ShopConfigs
         /// </summary>
         public HayMakerShopConfig hayMakerShopConfig;
 
+        public RobinsShopConfig robinsShopConfig;
+
         public ShopsConfigManager()
         {
             this.animalShopStockConfig = AnimalShopStockConfig.InitializeConfig();
             this.blacksmithShopsConfig = BlacksmithShopConfig.InitializeConfig();
             this.dwarfShopConfig = DwarfShopConfig.InitializeConfig();
             this.hayMakerShopConfig = HayMakerShopConfig.InitializeConfig();
+            this.robinsShopConfig = RobinsShopConfig.InitializeConfig();
         }
 
     }

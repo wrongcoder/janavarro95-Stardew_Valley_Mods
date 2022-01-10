@@ -9,6 +9,6 @@ namespace Revitalize.Framework.Constants.ItemIds.Objects
     public class CraftingStations
     {
         public const string Anvil = "Revitalize.Objects.Crafting.Anvil";
-        public const string Workbench = "Revitalize.Objects.Crafting.Workbench";
+        public const string WorkStation = "Revitalize.Objects.Crafting.Workbench";
     }
 }

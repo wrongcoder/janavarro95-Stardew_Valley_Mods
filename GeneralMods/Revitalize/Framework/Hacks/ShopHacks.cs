@@ -13,6 +13,7 @@ using Revitalize.Framework.World.Objects.Machines;
 using Revitalize.Framework.World.WorldUtilities;
 using Omegasis.Revitalize.Framework.Utilities;
 using System.IO;
+using Revitalize.Framework.Player;
 
 namespace Revitalize.Framework.Hacks
 {
@@ -22,36 +23,43 @@ namespace Revitalize.Framework.Hacks
     public class ShopHacks
     {
 
-        public static bool ShouldAddGeodesToDwarfShopToday;
+        public static int DwarfShop_NormalGeodesRemainingToday;
+        public static int DwarfShop_FrozenGeodesRemainingToday;
+        public static int DwarfShop_MagmaGeodesRemainingToday;
+        public static int DwarfShop_OmniGeodesRemainingToday;
 
-        public static int NormalGeodesRemainingToday;
-        public static int FrozenGeodesRemainingToday;
-        public static int MagmaGeodesRemainingToday;
-        public static int OmniGeodesRemainingToday;
+        public static Func<ISalable, Farmer, int, bool> DwarfShop_DefaultOnPurchaseMethod;
 
+
+        /// <summary>
+        /// Keeps track of the number of hardwood pieces to sell in Robin's shop for a given day.
+        /// </summary>
+        public static int RobinsShop_NumberOfHardwoodToSellToday;
+        public static Func<ISalable, Farmer, int, bool> RobinsShop_DefaultOnPurchaseMethod;
 
         public static void OnNewDay(object Sender, StardewModdingAPI.Events.DayStartedEventArgs args)
         {
-
-            ShouldAddGeodesToDwarfShopToday = true;
-            NormalGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfNormalGeodesToSell;
+            DwarfShop_NormalGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfNormalGeodesToSell;
             if (Game1.player.deepestMineLevel >= 40)
             {
-                FrozenGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfFrozenGeodesToSell;
+                DwarfShop_FrozenGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfFrozenGeodesToSell;
             }
             if (Game1.player.deepestMineLevel >= 80)
             {
-                MagmaGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfMagmaGeodesToSell;
+                DwarfShop_MagmaGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfMagmaGeodesToSell;
             }
-            if (Game1.player.hasSkullKey && (Game1.dayOfMonth % 7 == 0 ||  ModCore.Configs.shopsConfigManager.dwarfShopConfig.SellOmniGeodesEveryDayInsteadOnJustSundays))
+            if (Game1.player.hasSkullKey && (Game1.dayOfMonth % 7 == 0 || ModCore.Configs.shopsConfigManager.dwarfShopConfig.SellOmniGeodesEveryDayInsteadOnJustSundays))
             {
                 //Add 1 omni geode on sundays.
-                OmniGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfOmniGeodesToSell;
+                DwarfShop_OmniGeodesRemainingToday = ModCore.Configs.shopsConfigManager.dwarfShopConfig.NumberOfOmniGeodesToSell;
             }
             else
             {
-                OmniGeodesRemainingToday = 0;
+                DwarfShop_OmniGeodesRemainingToday = 0;
             }
+
+
+            RobinsShop_NumberOfHardwoodToSellToday = Game1.random.Next(ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMinStockAmount, ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMaxStockAmount + 1);
 
         }
 
@@ -96,9 +104,31 @@ namespace Revitalize.Framework.Hacks
 
         private static void AddItemsToRobinsShop(ShopMenu Menu)
         {
-            AddItemToShop(Menu, ModCore.ObjectManager.GetItem("Workbench", 1), 500, 1);
-            AddItemToShop(Menu, ModCore.ObjectManager.GetItem(MiscEarthenResources.Sand, 1), 50, -1);
-            AddItemToShop(Menu, new StardewValley.Object((int)Enums.SDVObject.Clay, 1), 50, -1);
+            RobinsShop_DefaultOnPurchaseMethod = Menu.onPurchase;
+            Menu.onPurchase = OnPurchaseFromRobinsShop;
+
+            Item workbench = ModCore.ObjectManager.GetItem(Constants.ItemIds.Objects.CraftingStations.WorkStation, 1);
+            if (workbench == null)
+            {
+                ModCore.log("Workbench is null!?!?!");
+            }
+            AddItemToShop(Menu, workbench, ModCore.Configs.shopsConfigManager.robinsShopConfig.CraftingTableSellPrice, 1);
+            //Currently unused.
+            //AddItemToShop(Menu, ModCore.ObjectManager.GetItem(MiscEarthenResources.Sand, 1), ModCore.Configs.shopsConfigManager.robinsShopConfig.SandSellPrice, -1);
+            AddItemToShop(Menu, new StardewValley.Object((int)Enums.SDVObject.Clay, 1), Game1.year < 2 ? ModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPrice : ModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPriceYear2AndBeyond, -1);
+
+            if (PlayerUtilities.HasCompletedHardwoodDonationSpecialOrderForRobin())
+            {
+                StardewValley.Item hardwood = ModCore.ObjectManager.GetItem(Enums.SDVObject.Hardwood, 1);
+                if (ModCore.Configs.shopsConfigManager.robinsShopConfig.SellsInfiniteHardWood)
+                {
+                    AddItemToShop(Menu, hardwood, ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, -1);
+                }
+                else
+                {
+                    AddItemToShop(Menu, hardwood, ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, RobinsShop_NumberOfHardwoodToSellToday);
+                }
+            }
 
         }
         /// <summary>
@@ -115,24 +145,24 @@ namespace Revitalize.Framework.Hacks
 
         private static void AddGeodesToDwarfShop(ShopMenu Menu)
         {
-
+            DwarfShop_DefaultOnPurchaseMethod = Menu.onPurchase;
             Menu.onPurchase = OnPurchaseFromDwarfShop;
 
-            if (NormalGeodesRemainingToday > 0)
+            if (DwarfShop_NormalGeodesRemainingToday > 0)
             {
-                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.Geode, NormalGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.NormalGeodePrice, NormalGeodesRemainingToday);
+                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.Geode, DwarfShop_NormalGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.NormalGeodePrice, DwarfShop_NormalGeodesRemainingToday);
             }
-            if (FrozenGeodesRemainingToday > 0)
+            if (DwarfShop_FrozenGeodesRemainingToday > 0)
             {
-                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.FrozenGeode, FrozenGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.FrozenGeodePrice, FrozenGeodesRemainingToday);
+                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.FrozenGeode, DwarfShop_FrozenGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.FrozenGeodePrice, DwarfShop_FrozenGeodesRemainingToday);
             }
-            if (MagmaGeodesRemainingToday > 0)
+            if (DwarfShop_MagmaGeodesRemainingToday > 0)
             {
-                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.MagmaGeode, MagmaGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.MagmaGeodePrice, MagmaGeodesRemainingToday);
+                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.MagmaGeode, DwarfShop_MagmaGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.MagmaGeodePrice, DwarfShop_MagmaGeodesRemainingToday);
             }
-            if (OmniGeodesRemainingToday > 0)
+            if (DwarfShop_OmniGeodesRemainingToday > 0)
             {
-                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.OmniGeode, OmniGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.OmniGeodePrice, OmniGeodesRemainingToday);
+                AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Enums.SDVObject.OmniGeode, DwarfShop_OmniGeodesRemainingToday), ModCore.Configs.shopsConfigManager.dwarfShopConfig.OmniGeodePrice, DwarfShop_OmniGeodesRemainingToday);
             }
         }
 
@@ -144,7 +174,6 @@ namespace Revitalize.Framework.Hacks
         {
             if (BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() || ModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop())
             {
-                ModCore.log("Has built tier 2 or higher barn or coop!");
                 HayMaker hayMaker = ModCore.ObjectManager.GetItem<HayMaker>(Machines.HayMaker, 1);
                 AddItemToShop(shopMenu, hayMaker, ModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerPrice, -1);
             }
@@ -157,25 +186,56 @@ namespace Revitalize.Framework.Hacks
                 StardewValley.Object itemForSale = (purchasedItem as StardewValley.Object);
                 if (itemForSale.parentSheetIndex == (int)Enums.SDVObject.Geode)
                 {
-                    NormalGeodesRemainingToday -= AmountPurchased;
+                    DwarfShop_NormalGeodesRemainingToday -= AmountPurchased;
                     return false;
                 }
                 if (itemForSale.parentSheetIndex == (int)Enums.SDVObject.FrozenGeode)
                 {
-                    FrozenGeodesRemainingToday -= AmountPurchased;
+                    DwarfShop_FrozenGeodesRemainingToday -= AmountPurchased;
                     return false;
                 }
                 if (itemForSale.parentSheetIndex == (int)Enums.SDVObject.MagmaGeode)
                 {
-                    MagmaGeodesRemainingToday -= AmountPurchased;
+                    DwarfShop_MagmaGeodesRemainingToday -= AmountPurchased;
                     return false;
                 }
                 if (itemForSale.parentSheetIndex == (int)Enums.SDVObject.OmniGeode)
                 {
-                    OmniGeodesRemainingToday -= AmountPurchased;
+                    DwarfShop_OmniGeodesRemainingToday -= AmountPurchased;
                     return false;
                 }
-                return false;
+            }
+
+            if (DwarfShop_DefaultOnPurchaseMethod != null)
+            {
+                return DwarfShop_DefaultOnPurchaseMethod.Invoke(purchasedItem, who, AmountPurchased);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Called when purchasing an item from robins shop.
+        /// </summary>
+        /// <param name="purchasedItem"></param>
+        /// <param name="who"></param>
+        /// <param name="AmountPurchased"></param>
+        /// <returns>A bool representing if the menu should be closed or not.</returns>
+        private static bool OnPurchaseFromRobinsShop(ISalable purchasedItem, Farmer who, int AmountPurchased)
+        {
+            if (purchasedItem is StardewValley.Object)
+            {
+                StardewValley.Object itemForSale = (purchasedItem as StardewValley.Object);
+                if (itemForSale.parentSheetIndex == (int)Enums.SDVObject.Hardwood)
+                {
+                    RobinsShop_NumberOfHardwoodToSellToday -= AmountPurchased;
+                    return false;
+                }
+            }
+
+            if (RobinsShop_DefaultOnPurchaseMethod != null)
+            {
+                return RobinsShop_DefaultOnPurchaseMethod.Invoke(purchasedItem, who, AmountPurchased);
             }
             return false;
         }

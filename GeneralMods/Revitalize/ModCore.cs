@@ -398,7 +398,6 @@ namespace Revitalize
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
-            ObjectManager = new ObjectManager(Manifest);
         }
 
         private void createDirectories()
@@ -441,7 +440,7 @@ namespace Revitalize
 
             //HACKS
             Game1.player.Money = 100_000;
-            Game1.player.addItemToInventoryBool(ObjectManager.GetItem(CraftingStations.Workbench));
+            Game1.player.addItemToInventoryBool(ObjectManager.GetItem(CraftingStations.WorkStation));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                 //new StardewValley.Object((int)Enums.SDVObject.Coal,100),
