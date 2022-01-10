@@ -437,6 +437,7 @@ namespace Revitalize
             SaveDataManager.loadOrCreateSaveData();
             MailManager.tryToAddMailToMailbox();
 
+            PlayerUtilities.HasCompletedSpecialOrder("ok");
 
             //HACKS
             Game1.player.Money = 100_000;

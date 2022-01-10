@@ -14,6 +14,7 @@ using Revitalize.Framework.World.WorldUtilities;
 using Omegasis.Revitalize.Framework.Utilities;
 using System.IO;
 using Revitalize.Framework.Player;
+using StardewValley.Objects;
 
 namespace Revitalize.Framework.Hacks
 {
@@ -22,6 +23,70 @@ namespace Revitalize.Framework.Hacks
     /// </summary>
     public class ShopHacks
     {
+
+        /// <summary>
+        /// Delegate method to find if a given item being searched matches a given condiiton.
+        /// </summary>
+        /// <param name="ItemForSale"></param>
+        /// <param name="ItemPrice"></param>
+        /// <param name="AmountForSale"></param>
+        /// <returns></returns>
+        public delegate bool ItemFoundInShopInventory(ISalable ItemForSale, int ItemPrice, int AmountForSale);
+        /// <summary>
+        /// Used to update the shop's inventory. Currently sued only to add, but not modifiy a shop's contents.
+        /// </summary>
+        /// <param name="initialShopInventory"></param>
+        /// <param name="currentItemForSale"></param>
+        /// <param name="price"></param>
+        /// <param name="amountForSale"></param>
+        /// <returns></returns>
+        public delegate ShopInventory UpdateShopInventory(ShopInventory initialShopInventory, ISalable currentItemForSale, int price, int amountForSale);
+
+
+        /// <summary>
+        /// Represents a shop's given inventiry at any time.
+        /// </summary>
+        public class ShopInventory
+        {
+
+            public Dictionary<ISalable, int[]> itemPriceAndStock;
+            public List<ISalable> itemsForSale;
+
+            public ShopInventory(Dictionary<ISalable, int[]> itemPriceAndStock, List<ISalable> itemsForSale)
+            {
+                this.itemPriceAndStock = itemPriceAndStock;
+                this.itemsForSale = itemsForSale;
+            }
+
+            public virtual void addItemForSale(ISalable itemForSale, int Price, int Stock)
+            {
+                this.itemsForSale.Add(itemForSale);
+                this.itemPriceAndStock.Add(itemForSale, new int[] { Price, Stock });
+            }
+
+        }
+
+        /// <summary>
+        /// Keeps track of methods to update a shop.
+        /// Used because I can't initialize a KeyValue pair with a {} constructor.
+        /// </summary>
+        public class ShopInventoryProbe
+        {
+
+            public ItemFoundInShopInventory searchCondition;
+            public UpdateShopInventory onSearchConditionMetAddItems;
+
+            public ShopInventoryProbe(ItemFoundInShopInventory SearchCondition, UpdateShopInventory OnSearchConditionMetAddItems)
+            {
+                this.searchCondition = SearchCondition;
+                this.onSearchConditionMetAddItems = OnSearchConditionMetAddItems;
+            }
+
+        }
+
+
+
+
 
         public static int DwarfShop_NormalGeodesRemainingToday;
         public static int DwarfShop_FrozenGeodesRemainingToday;
@@ -36,6 +101,9 @@ namespace Revitalize.Framework.Hacks
         /// </summary>
         public static int RobinsShop_NumberOfHardwoodToSellToday;
         public static Func<ISalable, Farmer, int, bool> RobinsShop_DefaultOnPurchaseMethod;
+
+
+
 
         public static void OnNewDay(object Sender, StardewModdingAPI.Events.DayStartedEventArgs args)
         {
@@ -102,33 +170,86 @@ namespace Revitalize.Framework.Hacks
             Menu.itemPriceAndStock.Add(Item, new int[2] { Price, Stock });
         }
 
+        /// <summary>
+        /// Updates a stock of a shop in a given order based on various conditions.
+        /// </summary>
+        /// <param name="Menu"></param>
+        /// <param name="shopPopulationMethods"></param>
+        /// <returns></returns>
+        public static void updateShopStockAndPriceInSortedOrder(ShopMenu Menu, List<ShopInventoryProbe> shopPopulationMethods)
+        {
+            Dictionary<ISalable, int[]> sortedPriceAndStock = new Dictionary<ISalable, int[]>();
+            List<ISalable> forSaleItems = new List<ISalable>();
+
+            foreach (KeyValuePair<ISalable, int[]> itemPriceAndStock in Menu.itemPriceAndStock)
+            {
+
+                ISalable currentItemForSaleInList = itemPriceAndStock.Key;
+                int price = itemPriceAndStock.Value[0];
+                int amountForSale = itemPriceAndStock.Value[1];
+                forSaleItems.Add(currentItemForSaleInList);
+                sortedPriceAndStock.Add(itemPriceAndStock.Key, itemPriceAndStock.Value);
+
+                foreach (var v in shopPopulationMethods)
+                {
+                    if (v.searchCondition.Invoke(currentItemForSaleInList, price, amountForSale))
+                    {
+                        ShopInventory shopInventory = new ShopInventory(sortedPriceAndStock, forSaleItems);
+                        ShopInventory updatedShopInventory = v.onSearchConditionMetAddItems.Invoke(shopInventory, currentItemForSaleInList, price, amountForSale);
+                        sortedPriceAndStock = updatedShopInventory.itemPriceAndStock;
+                        forSaleItems = updatedShopInventory.itemsForSale;
+                    }
+                }
+
+                Menu.forSale = forSaleItems;
+                Menu.itemPriceAndStock = sortedPriceAndStock;
+            }
+        }
+
         private static void AddItemsToRobinsShop(ShopMenu Menu)
         {
             RobinsShop_DefaultOnPurchaseMethod = Menu.onPurchase;
             Menu.onPurchase = OnPurchaseFromRobinsShop;
-
-            Item workbench = ModCore.ObjectManager.GetItem(Constants.ItemIds.Objects.CraftingStations.WorkStation, 1);
-            if (workbench == null)
+             updateShopStockAndPriceInSortedOrder(Menu, new List<ShopInventoryProbe>()
             {
-                ModCore.log("Workbench is null!?!?!");
-            }
-            AddItemToShop(Menu, workbench, ModCore.Configs.shopsConfigManager.robinsShopConfig.CraftingTableSellPrice, 1);
-            //Currently unused.
-            //AddItemToShop(Menu, ModCore.ObjectManager.GetItem(MiscEarthenResources.Sand, 1), ModCore.Configs.shopsConfigManager.robinsShopConfig.SandSellPrice, -1);
-            AddItemToShop(Menu, new StardewValley.Object((int)Enums.SDVObject.Clay, 1), Game1.year < 2 ? ModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPrice : ModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPriceYear2AndBeyond, -1);
 
-            if (PlayerUtilities.HasCompletedHardwoodDonationSpecialOrderForRobin())
-            {
-                StardewValley.Item hardwood = ModCore.ObjectManager.GetItem(Enums.SDVObject.Hardwood, 1);
-                if (ModCore.Configs.shopsConfigManager.robinsShopConfig.SellsInfiniteHardWood)
-                {
-                    AddItemToShop(Menu, hardwood, ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, -1);
+                new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price,Stock)=> itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex== (int)Enums.SDVObject.Stone),
+                    new UpdateShopInventory((ShopInventory,ItemForSale,Price,Stock)=>{
+                        Item clay = ModCore.ObjectManager.GetItem(Enums.SDVObject.Clay, -1);
+                        ShopInventory.addItemForSale(clay,Game1.year>1? ModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPriceYear2AndBeyond: ModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPrice, -1);
+                        return ShopInventory ;
                 }
-                else
-                {
-                    AddItemToShop(Menu, hardwood, ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, RobinsShop_NumberOfHardwoodToSellToday);
+                )),
+
+                new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price,Stock)=> itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex== (int)Enums.SDVObject.Stone && PlayerUtilities.HasCompletedHardwoodDonationSpecialOrderForRobin()),
+                    new UpdateShopInventory((ShopInventory,ItemForSale,Price,Stock)=>{
+                        StardewValley.Item hardwood = ModCore.ObjectManager.GetItem(Enums.SDVObject.Hardwood, 1);
+                        if (ModCore.Configs.shopsConfigManager.robinsShopConfig.SellsInfiniteHardWood)
+                        {
+                            ShopInventory.addItemForSale(hardwood,ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, -1);
+                        }
+                        else
+                        {
+                            hardwood.Stack = RobinsShop_NumberOfHardwoodToSellToday;
+                            ShopInventory.addItemForSale(hardwood,ModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, RobinsShop_NumberOfHardwoodToSellToday);
+                        }
+                        return ShopInventory;
                 }
-            }
+                )),
+
+                 new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price,Stock)=>itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex==(int)Enums.SDVBigCraftable.Workbench && (itemForSale as StardewValley.Object).bigCraftable == true),
+                    new UpdateShopInventory((ShopInventory,ItemForSale,Price,Stock)=>{
+                        Item workbench = ModCore.ObjectManager.GetItem(Constants.ItemIds.Objects.CraftingStations.WorkStation, 1);
+                        ShopInventory.addItemForSale(workbench,ModCore.Configs.shopsConfigManager.robinsShopConfig.WorkStationSellPrice, -1);
+                        return ShopInventory;
+                }
+                )),
+
+            });
+
 
         }
         /// <summary>

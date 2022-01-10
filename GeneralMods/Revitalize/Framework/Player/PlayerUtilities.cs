@@ -10,10 +10,11 @@ namespace Revitalize.Framework.Player
         /// Checks to see if the farmer team has completed a given special order.
         /// See Data/SpecialOrders and Strings/SpecialOrderStrings in the StardewValley Content folder for more info.
         /// </summary>
-        /// <param name="SpecialOrderName"></param>
+        /// <param name="SpecialOrderName">This is the name of the special order entry object, not the display name of the special order.</param>
         /// <returns></returns>
         public static bool HasCompletedSpecialOrder(string SpecialOrderName)
         {
+            bool hasCompletedSpecialRequest = Game1.player.team.completedSpecialOrders.ContainsKey(SpecialOrderName);
             return Game1.player.team.completedSpecialOrders.ContainsKey(SpecialOrderName);
         }
 
@@ -23,7 +24,7 @@ namespace Revitalize.Framework.Player
         /// <returns></returns>
         public static bool HasCompletedHardwoodDonationSpecialOrderForRobin()
         {
-            return HasCompletedSpecialOrder("[Robin_Name]") || HasCompletedSpecialOrder("Robin's Project");
+            return HasCompletedSpecialOrder("Robin");
         }
 
     }

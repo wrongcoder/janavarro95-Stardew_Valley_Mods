@@ -12,7 +12,7 @@ namespace Revitalize.Framework.Configs.ShopConfigs
     /// </summary>
     public class RobinsShopConfig
     {
-        public int CraftingTableSellPrice = 500;
+        public int WorkStationSellPrice = 500;
         public int HardwoodSellPrice = 1000;
 
         public bool SellsInfiniteHardWood = false;
