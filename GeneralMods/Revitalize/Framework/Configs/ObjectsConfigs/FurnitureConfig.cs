@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Revitalize;
 
-namespace Revitalize.Framework.Configs
+namespace Revitalize.Framework.Configs.ObjectsConfigs
 {
     /// <summary>
     /// Deals with config settings for furniture.

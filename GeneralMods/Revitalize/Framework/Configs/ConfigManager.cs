@@ -11,32 +11,19 @@ namespace Revitalize.Framework.Configs
     /// </summary>
     public class ConfigManager
     {
-        /// <summary>
-        /// The config file for vanilla machine recipes.
-        /// </summary>
-        public VanillaMachineRecipeConfig vanillaMachineConfig;
-
-        public ShopConfigs.ShopsConfigManager shopsConfigManager;
-        public FurnitureConfig furnitureConfig;
-
-        /// <summary>
-        /// The config file to be used for machines.
-        /// </summary>
-        public GlobalMachineConfig machinesConfig;
-
-        public MiningDrillConfig miningDrillConfig;
 
         public ObjectsConfigs.ObjectConfigManager objectConfigManager;
 
+        public ShopConfigs.ShopsConfigManager shopsConfigManager;
+
+        public WorldConfigs.WorldConfigManager worldConfigManager;
+
         public ConfigManager()
         {
-            this.vanillaMachineConfig = VanillaMachineRecipeConfig.InitializeConfig();
-            this.furnitureConfig = FurnitureConfig.InitializeConfig();
-            this.machinesConfig = GlobalMachineConfig.InitializeConfig();
-            this.miningDrillConfig = MiningDrillConfig.InitializeConfig();
 
-            this.shopsConfigManager = new ShopConfigs.ShopsConfigManager();
             this.objectConfigManager = new ObjectsConfigs.ObjectConfigManager();
+            this.shopsConfigManager = new ShopConfigs.ShopsConfigManager();
+            this.worldConfigManager = new WorldConfigs.WorldConfigManager();
         }
     }
 }

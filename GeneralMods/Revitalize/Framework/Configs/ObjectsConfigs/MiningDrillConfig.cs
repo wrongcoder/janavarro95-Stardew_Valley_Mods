@@ -8,7 +8,7 @@ using Revitalize;
 using Revitalize.Framework.Utilities;
 using StardewValley;
 
-namespace Revitalize.Framework.Configs
+namespace Revitalize.Framework.Configs.ObjectsConfigs
 {
     public class MiningDrillConfig
     {

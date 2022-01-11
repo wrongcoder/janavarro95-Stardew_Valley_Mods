@@ -231,7 +231,6 @@ namespace Revitalize
             MailManager = new MailManager();
 
             this.createDirectories();
-            this.initailizeComponents();
             Serializer = new Serializer();
             playerInfo = new PlayerInfo();
 
@@ -359,14 +358,6 @@ namespace Revitalize
         private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
         {
             SaveDataManager.save();
-        }
-
-        /// <summary>
-        /// Initialize all modular components for this mod.
-        /// </summary>
-        private void initailizeComponents()
-        {
-            DarkerNight.InitializeConfig();
         }
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)

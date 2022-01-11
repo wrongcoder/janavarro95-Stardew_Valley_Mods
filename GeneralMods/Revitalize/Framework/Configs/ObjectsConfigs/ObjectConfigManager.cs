@@ -11,14 +11,17 @@ namespace Revitalize.Framework.Configs.ObjectsConfigs
     /// </summary>
     public class ObjectConfigManager
     {
-        public ObjectsConfig objectsConfig;
-
+        public FurnitureConfig furnitureConfig;
         public HayMakerConfig hayMakerConfig;
+        public MiningDrillConfig miningDrillConfig;
+        public ObjectsConfig objectsConfig;
 
         public ObjectConfigManager()
         {
-            this.objectsConfig = ObjectsConfig.InitializeConfig();
+            this.furnitureConfig = FurnitureConfig.InitializeConfig();
             this.hayMakerConfig = HayMakerConfig.InitializeConfig();
+            this.miningDrillConfig = MiningDrillConfig.InitializeConfig();
+            this.objectsConfig = ObjectsConfig.InitializeConfig();
         }
 
     }
