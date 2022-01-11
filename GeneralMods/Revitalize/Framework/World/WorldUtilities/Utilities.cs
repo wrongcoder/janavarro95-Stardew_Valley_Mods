@@ -23,7 +23,7 @@ namespace Revitalize.Framework.World.WorldUtilities
         /// </summary>
         private static void AddModdedMachinesToGameWorld()
         {
-            GameLocation cinderSapForestLocation = Game1.getLocationFromName("Forest");
+            GameLocation cinderSapForestLocation = GameLocationUtilities.GetGameLocation(Enums.StardewLocation.Forest);
             HayMaker hayMaker = (ModCore.ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
             if (ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch &&
                 cinderSapForestLocation.isObjectAtTile((int)ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y) == false)

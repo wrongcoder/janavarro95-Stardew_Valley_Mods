@@ -394,7 +394,7 @@ namespace Revitalize
                 ObjectManager.GetItem(Machines.HayMaker),
                 new StardewValley.Object((int)Enums.SDVObject.Corn,10),
                 ObjectManager.GetItem(Enums.SDVObject.Stone,999),
-                                ObjectManager.GetItem(Enums.SDVObject.Wood,999),
+                ObjectManager.GetItem(Enums.SDVObject.Wood,999),
                 ObjectManager.GetItem(Enums.SDVObject.Clay,100),
                 ObjectManager.GetItem(Enums.SDVObject.CopperBar,100)
             });

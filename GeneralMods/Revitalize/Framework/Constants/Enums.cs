@@ -1499,6 +1499,226 @@ namespace Revitalize.Framework
             woodyStep
         }
 
+        /// <summary>
+        /// Keeps track of the static, non building, game locations.
+        /// </summary>
+        public enum StardewLocation
+        {
+            Farm,
+
+            /// <summary>
+            /// The main farm house.
+            /// </summary>
+            FarmHouse,
+
+            FarmCave,
+
+            Town,
+
+            JoshHouse,
+
+            HaleyHouse,
+
+            SamHouse,
+
+            Blacksmith,
+
+            ManorHouse,
+
+            /// <summary>
+            /// Pierre's Shop.
+            /// </summary>
+            SeedShop,
+
+            Saloon,
+
+            Trailer,
+
+            Hospital,
+
+            HarveyRoom,
+
+            Beach,
+
+            ElliottHouse,
+
+            /// <summary>
+            /// This is the location where the lake, robin's house, the mine is, etc.
+            /// </summary>
+            Mountain,
+
+            /// <summary>
+            /// This is Robin' house aka where the carpenter's shop is.
+            /// </summary>
+            ScienceHouse,
+
+            SebastianRoom,
+
+            /// <summary>
+            /// Linus's tent.
+            /// </summary>
+            Tent,
+
+            /// <summary>
+            /// This is CinderSap forest, aka where the Traveling Merchant normally sets up shop.
+            /// </summary>
+            Forest,
+
+            WizardHouse,
+
+            /// <summary>
+            /// Marnie's house.
+            /// </summary>
+            AnimalShop,
+
+            LeahHouse,
+
+            BusStop,
+
+            Mine,
+
+            Sewer,
+
+            /// <summary>
+            /// The area infested with bugs in the sewers.
+            /// </summary>
+            BugLand,
+
+            Desert,
+
+            /// <summary>
+            /// Mr qi's casino.
+            /// </summary>
+            Club,
+
+            SandyHouse,
+
+            /// <summary>
+            /// The museum.
+            /// </summary>
+            ArchaeologyHouse,
+
+            WizardHouseBasement,
+
+            AdventureGuild,
+
+            /// <summary>
+            /// The secret woods.
+            /// </summary>
+            Woods,
+
+            Railroad,
+
+            WitchSwamp,
+
+            WitchHut,
+
+            WitchWarpCave,
+
+            Summit,
+
+            FishShop,
+
+            BathHouse_Entry,
+
+            BathHouse_MensLocker,
+
+            BathHouse_WomensLocker,
+
+            BathHouse_Pool,
+
+            CommunityCenter,
+
+            JojaMart,
+
+            Greenhouse,
+
+            SkullCave,
+
+            /// <summary>
+            /// The path from the farm to the mountains, right above the bus stop.
+            /// </summary>
+            Backwoods,
+
+            Tunnel,
+
+            Trailer_Big,
+
+            /// <summary>
+            /// Farmhouse 1 cellar.
+            /// </summary>
+            Cellar,
+
+            /// <summary>
+            /// Farmhand 2's cellar.
+            /// </summary>
+            Cellar2,
+
+            /// <summary>
+            /// Farmhand 3's cellar.
+            /// </summary>
+            Cellar3,
+
+            /// <summary>
+            /// Farmhand 4's cellar.
+            /// </summary>
+            Cellar4,
+
+            BeachNightMarket,
+
+            /// <summary>
+            /// The mermaid show at the night market.
+            /// </summary>
+            MermaidHouse,
+
+            Submarine,
+
+            AbandonedJojaMart,
+
+            MovieTheater,
+
+            /// <summary>
+            /// Caroline's sunroom in her home.
+            /// </summary>
+            Sunroom,
+
+            BoatTunnel,
+
+            IslandSouth,
+
+            IslandSouthEast,
+
+            IslandSouthEastCave,
+
+            IslandEast,
+
+            IslandWest,
+
+            IslandNorth,
+
+            IslandHut,
+
+            IslandWestCave1,
+
+            IslandNorthCave1,
+
+            IslandFieldOffice,
+
+            IslandFarmHouse,
+
+            CaptainRoom,
+
+            IslandShrine,
+
+            IslandFarmCave,
+
+            Caldera,
+
+            LeoTreeHouse,
+
+            QiNutRoom,
+        }
+
         public enum DyeBlendMode
         {
             Multiplier,
