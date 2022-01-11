@@ -118,7 +118,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                     });
 
                     //Load the shop tetx file and select a random dialogue text from it.
-                    Dictionary<string, string> shopDialogue = JsonUtilities.loadStringDictionaryFile(Path.Combine("Content", "Strings", "ShopDialogue", "HayMakerShopDialogue.json"));
+                    Dictionary<string, string> shopDialogue = JsonUtilities.LoadStringDictionaryFile(Path.Combine("Content", "Strings", "ShopDialogue", "HayMakerShopDialogue.json"));
                     int random = Game1.random.Next(0, shopDialogue.Count);
                     shopMenu.potraitPersonDialogue = shopDialogue.ElementAt(random).Value;
 

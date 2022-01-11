@@ -13,7 +13,8 @@ using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using Revitalize.Framework.World.Objects.Resources.OreVeins;
 using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
-using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
+using Omegasis.Revitalize.Framework.Constants;
+using Revitalize.Framework.World.WorldUtilities;
 
 namespace Revitalize.Framework.Objects
 {
@@ -218,60 +219,60 @@ namespace Revitalize.Framework.Objects
         /// </summary>
         private void loadInOreItems()
         {
-            Ore tinOre = new Ore(new BasicItemInformation("Tin Ore", Ores.TinOre, "Tin ore that can be smelted into tin ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore tinOre = new Ore(new BasicItemInformation("Tin Ore", Ores.TinOre, "Tin ore that can be smelted into tin ingots for further use.",CategoryNames.Ore , Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add(Ores.TinOre, tinOre);
 
-            Ore bauxiteOre = new Ore(new BasicItemInformation("Bauxite Ore", Ores.BauxiteOre, "Bauxite ore that can be smelted into aluminum ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BauxiteOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore bauxiteOre = new Ore(new BasicItemInformation("Bauxite Ore", Ores.BauxiteOre, "Bauxite ore that can be smelted into aluminum ingots for further use.", CategoryNames.Ore, Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BauxiteOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add(Ores.BauxiteOre, bauxiteOre);
 
-            Ore leadOre = new Ore(new BasicItemInformation("Lead Ore", Ores.LeadOre, "Lead ore that can be smelted into lead ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore leadOre = new Ore(new BasicItemInformation("Lead Ore", Ores.LeadOre, "Lead ore that can be smelted into lead ingots for further use.", CategoryNames.Ore, Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add(Ores.LeadOre, leadOre);
 
-            Ore silverOre = new Ore(new BasicItemInformation("Silver Ore", Ores.SilverOre, "Silver ore that can be smelted into silver ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore silverOre = new Ore(new BasicItemInformation("Silver Ore", Ores.SilverOre, "Silver ore that can be smelted into silver ingots for further use.", CategoryNames.Ore, Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add(Ores.SilverOre, silverOre);
 
-            Ore titaniumOre = new Ore(new BasicItemInformation("Titanium Ore", Ores.TitaniumOre, "Titanium ore that can be smelted into titanium ingots for further use.", "Ore", Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore titaniumOre = new Ore(new BasicItemInformation("Titanium Ore", Ores.TitaniumOre, "Titanium ore that can be smelted into titanium ingots for further use.", CategoryNames.Ore, Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumOre"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add(Ores.TitaniumOre, titaniumOre);
 
-            Ore prismaticOre = new Ore(new BasicItemInformation("Prismatic Nugget", Gems.PrismaticNugget, "Rare prismatic ore that can be smelted into a prismatic shard when seven are gathered.", "Ore", Color.Silver, -300, -300, 0, false, 200, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "PrismaticNugget"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            Ore prismaticOre = new Ore(new BasicItemInformation("Prismatic Nugget", Gems.PrismaticNugget, "Rare prismatic ore that can be smelted into a prismatic shard when seven are gathered.", CategoryNames.Ore, Color.Silver, -300, -300, 0, false, 200, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "PrismaticNugget"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             this.ores.Add(Gems.PrismaticNugget, prismaticOre);
 
-            CustomObject tinIngot = new CustomObject(new BasicItemInformation("Tin Ingot", Ingots.TinIngot, "A tin ingot that can be used for crafting purposes.", "Metal", Color.Silver, -300, -300, 0, false, 75, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject tinIngot = new CustomObject(new BasicItemInformation("Tin Ingot", Ingots.TinIngot, "A tin ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 75, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.TinIngot, tinIngot);
 
-            CustomObject aluminumIngot = new CustomObject(new BasicItemInformation("Aluminum Ingot", Ingots.AluminumIngot, "An aluminum ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 120, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "AluminumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject aluminumIngot = new CustomObject(new BasicItemInformation("Aluminum Ingot", Ingots.AluminumIngot, "An aluminum ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 120, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "AluminumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.AluminumIngot, aluminumIngot);
 
-            CustomObject leadIngot = new CustomObject(new BasicItemInformation("Lead Ingot", Ingots.LeadIngot, "A lead ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 165, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject leadIngot = new CustomObject(new BasicItemInformation("Lead Ingot", Ingots.LeadIngot, "A lead ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 165, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.LeadIngot, leadIngot);
 
-            CustomObject silverIngot = new CustomObject(new BasicItemInformation("Silver Ingot", Ingots.SilverIngot, "A silver ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 220, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject silverIngot = new CustomObject(new BasicItemInformation("Silver Ingot", Ingots.SilverIngot, "A silver ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 220, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.SilverIngot, silverIngot);
 
-            CustomObject titaniumIngot = new CustomObject(new BasicItemInformation("Titanium Ingot", Ingots.TitaniumIngot, "A titanium ingot that can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 325, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject titaniumIngot = new CustomObject(new BasicItemInformation("Titanium Ingot", Ingots.TitaniumIngot, "A titanium ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 325, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.TitaniumIngot, titaniumIngot);
 
-            CustomObject brassIngot = new CustomObject(new BasicItemInformation("Brass Ingot", Ingots.BrassIngot, "A brass alloy ingot made from copper and aluminum. It can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 195, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BrassIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject brassIngot = new CustomObject(new BasicItemInformation("Brass Ingot", Ingots.BrassIngot, "A brass alloy ingot made from copper and aluminum. It can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 195, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BrassIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.BrassIngot, brassIngot);
 
-            CustomObject bronzeIngot = new CustomObject(new BasicItemInformation("Bronze Ingot", Ingots.BronzeIngot, "A bronze alloy ingot made from copper and tin. It can be used for crafting purposes.", "Ore", Color.Silver, -300, -300, 0, false, 150, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BronzeIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject bronzeIngot = new CustomObject(new BasicItemInformation("Bronze Ingot", Ingots.BronzeIngot, "A bronze alloy ingot made from copper and tin. It can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 150, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BronzeIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.BronzeIngot, bronzeIngot);
 
-            CustomObject electrumIngot = new CustomObject(new BasicItemInformation("Electrum Ingot", Ingots.ElectrumIngot, "A electrum alloy ingot made from gold and silver. It can be used for crafting purposes for things that use electricity.", "Ore", Color.Silver, -300, -300, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "ElectrumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject electrumIngot = new CustomObject(new BasicItemInformation("Electrum Ingot", Ingots.ElectrumIngot, "A electrum alloy ingot made from gold and silver. It can be used for crafting purposes for things that use electricity.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 500, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "ElectrumIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.ElectrumIngot, electrumIngot);
 
-            CustomObject steelIngot = new CustomObject(new BasicItemInformation("Steel Ingot", Ingots.SteelIngot, "A steel ingot that was made by processing iron again with more coal. It can be used for crafting purposes especially for making new machines.", "Ore", Color.Silver, -300, -300, 0, false, 180, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SteelIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject steelIngot = new CustomObject(new BasicItemInformation("Steel Ingot", Ingots.SteelIngot, "A steel ingot that was made by processing iron again with more coal. It can be used for crafting purposes especially for making new machines.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 180, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SteelIngot"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
             ModCore.ObjectManager.AddItem(Ingots.SteelIngot, steelIngot);
 
-            CustomObject bauxiteSand = new CustomObject(new BasicItemInformation("Bauxite Sand", OreSands.BauxiteSand, "Bauxite ore which has been crushed into sand. Smelt it to get aluminum ingots.", "Ore", Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BauxiteSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject copperSand = new CustomObject(new BasicItemInformation("Copper Sand", OreSands.CopperSand, "Copper ore which has been crushed into sand. Smelt it to get copper bars.", "Ore", Color.Silver, -300, -300, 0, false, 5, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "CopperSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject goldSand = new CustomObject(new BasicItemInformation("Gold Sand", OreSands.GoldSand, "Gold ore which has been crushed into sand. Smelt it to get gold bars.", "Ore", Color.Silver, -300, -300, 0, false, 25, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "GoldSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject ironSand = new CustomObject(new BasicItemInformation("Iron Sand", OreSands.IronSand, "Iron ore which has been crushed into sand. Smelt it to get iron bars.", "Ore", Color.Silver, -300, -300, 0, false, 10, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "IronSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject iridiumSand = new CustomObject(new BasicItemInformation("Iridium Sand", OreSands.IridiumSand, "Iridium ore which has been crushed into sand. Smelt it to get iridium bars.", "Ore", Color.Silver, -300, -300, 0, false, 100, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "IridiumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject leadSand = new CustomObject(new BasicItemInformation("Lead Sand", OreSands.LeadSand, "Lead ore which has been crushed into sand. Smelt it to get lead ingots.", "Ore", Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject silverSand = new CustomObject(new BasicItemInformation("Silver Sand", OreSands.SilverSand, "Silver ore which has been crushed into sand. Smelt it to get silver ingots.", "Ore", Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject tinSand = new CustomObject(new BasicItemInformation("Tin Sand", OreSands.TinSand, "Tin ore which has been crushed into sand. Smelt it to get tin ingots.", "Ore", Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
-            CustomObject titaniumSand = new CustomObject(new BasicItemInformation("Copper Sand", OreSands.TitaniumSand, "Titanium ore which has been crushed into sand. Smelt it to get titanium bars.", "Ore", Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject bauxiteSand = new CustomObject(new BasicItemInformation("Bauxite Sand", OreSands.BauxiteSand, "Bauxite ore which has been crushed into sand. Smelt it to get aluminum ingots.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 11, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "BauxiteSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject copperSand = new CustomObject(new BasicItemInformation("Copper Sand", OreSands.CopperSand, "Copper ore which has been crushed into sand. Smelt it to get copper bars.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 5, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "CopperSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject goldSand = new CustomObject(new BasicItemInformation("Gold Sand", OreSands.GoldSand, "Gold ore which has been crushed into sand. Smelt it to get gold bars.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 25, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "GoldSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject ironSand = new CustomObject(new BasicItemInformation("Iron Sand", OreSands.IronSand, "Iron ore which has been crushed into sand. Smelt it to get iron bars.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 10, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "IronSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject iridiumSand = new CustomObject(new BasicItemInformation("Iridium Sand", OreSands.IridiumSand, "Iridium ore which has been crushed into sand. Smelt it to get iridium bars.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 100, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "IridiumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject leadSand = new CustomObject(new BasicItemInformation("Lead Sand", OreSands.LeadSand, "Lead ore which has been crushed into sand. Smelt it to get lead ingots.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 15, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "LeadSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject silverSand = new CustomObject(new BasicItemInformation("Silver Sand", OreSands.SilverSand, "Silver ore which has been crushed into sand. Smelt it to get silver ingots.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "SilverSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject tinSand = new CustomObject(new BasicItemInformation("Tin Sand", OreSands.TinSand, "Tin ore which has been crushed into sand. Smelt it to get tin ingots.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 7, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TinSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
+            CustomObject titaniumSand = new CustomObject(new BasicItemInformation("Copper Sand", OreSands.TitaniumSand, "Titanium ore which has been crushed into sand. Smelt it to get titanium bars.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 35, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Ore", "TitaniumSand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null), 1);
 
             this.resources.Add(OreSands.BauxiteSand, bauxiteSand);
             this.resources.Add(OreSands.CopperSand, copperSand);
@@ -286,10 +287,10 @@ namespace Revitalize.Framework.Objects
 
         private void loadInResourceItems()
         {
-            CustomObject sand = new CustomObject(new BasicItemInformation("Sand", MiscEarthenResources.Sand, "Sand which is made from tiny rocks and can be used for smelting. Also unfun to have inside of swimwear.", "Resource", Color.Brown, -300, -300, 0, false, 2, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Misc", "Sand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
+            CustomObject sand = new CustomObject(new BasicItemInformation("Sand", MiscEarthenResources.Sand, "Sand which is made from tiny rocks and can be used for smelting. Also unfun to have inside of swimwear.", CategoryNames.Resource, Color.Brown, -300, -300, 0, false, 2, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Misc", "Sand"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
             this.resources.Add(MiscEarthenResources.Sand, sand);
 
-            CustomObject glass_normal = new CustomObject(new BasicItemInformation("Glass", MiscEarthenResources.Glass, "Glass smelted from sand. Used in decorations and glass objects.", "Resource", Color.Brown, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Misc", "Glass"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
+            CustomObject glass_normal = new CustomObject(new BasicItemInformation("Glass", MiscEarthenResources.Glass, "Glass smelted from sand. Used in decorations and glass objects.", CategoryNames.Resource, Color.Brown, -300, -300, 0, false, 20, false, false, TextureManager.GetTexture(ModCore.Manifest, "Revitalize.Items.Resources.Misc", "Glass"), new AnimationManager(), Color.White, true, new Vector2(1, 1), null, null));
             this.resources.Add(MiscEarthenResources.Glass, glass_normal);
         }
 
@@ -386,7 +387,7 @@ namespace Revitalize.Framework.Objects
         /// </summary>
         public void spawnOreInMine()
         {
-            int floorLevel = LocationUtilities.CurrentMineLevel();
+            int floorLevel = GameLocationUtilities.CurrentMineLevel();
             if (this.hasVisitedFloor(floorLevel))
             {
                 //Already has spawned ores for this visit.
@@ -411,7 +412,7 @@ namespace Revitalize.Framework.Objects
                 if (ore.resourceInfo.Value.shouldSpawn())
                 {
                     int amount = ore.resourceInfo.Value.getNumberOfNodesToSpawn();
-                    List<Vector2> openTiles = LocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVein)ore.getOne());
+                    List<Vector2> openTiles = GameLocationUtilities.GetOpenObjectTiles(Game1.player.currentLocation, (OreVein)ore.getOne());
                     amount = Math.Min(amount, openTiles.Count); //Only spawn for as many open tiles or the amount of nodes to spawn.
                     for (int i = 0; i < amount; i++)
                     {
@@ -455,7 +456,7 @@ namespace Revitalize.Framework.Objects
         /// <returns></returns>
         private bool isTileOpenForQuarryStone(int tileX, int tileY)
         {
-            GameLocation loc = Game1.getLocationFromName("Mountain");
+            GameLocation loc = GameLocationUtilities.GetGameLocation( Enums.StardewLocation.Mountain);
             if (loc.doesTileHaveProperty(tileX, tileY, "Diggable", "Back") != null)
                 return loc.isTileLocationTotallyClearAndPlaceable(new Vector2((float)tileX, (float)tileY));
             return false;
@@ -486,7 +487,7 @@ namespace Revitalize.Framework.Objects
                     for (int i = 0; i < amount; i++)
                     {
                         int position = Game1.random.Next(openTiles.Count);
-                        bool didSpawn = this.spawnOreVein(ore.getItemInformation().id, Game1.getLocationFromName("Mountain"), openTiles[position]);
+                        bool didSpawn = this.spawnOreVein(ore.getItemInformation().id, GameLocationUtilities.GetGameLocation( Enums.StardewLocation.Mountain), openTiles[position]);
                         if (didSpawn == false)
                         {
                             i--; //If the tile didn't spawn due to some odd reason ensure that the amount is spawned.
@@ -513,7 +514,7 @@ namespace Revitalize.Framework.Objects
         /// </summary>
         public void mountainFarmDayUpdate()
         {
-            if (LocationUtilities.Farm_IsFarmHiltopFarm() == false)
+            if (GameLocationUtilities.Farm_IsFarmHiltopFarm() == false)
             {
                 //ModCore.log("Farm is not hiltop farm!");
                 return;
@@ -579,7 +580,7 @@ namespace Revitalize.Framework.Objects
             {
                 for (int j = r.Y; j <= r.Y + r.Height; j++)
                 {
-                    if (this.isTileOpenForQuarryStone(i, j) && this.canResourceBeSpawnedHere(obj, Game1.getLocationFromName("Mountain"), new Vector2(i, j)))
+                    if (this.isTileOpenForQuarryStone(i, j) && this.canResourceBeSpawnedHere(obj, GameLocationUtilities.GetGameLocation( Enums.StardewLocation.Mountain), new Vector2(i, j)))
                     {
                         tiles.Add(new Vector2(i, j));
                     }
@@ -636,7 +637,7 @@ namespace Revitalize.Framework.Objects
         public void OnPlayerLocationChanged(object o, EventArgs playerWarped)
         {
             this.spawnOreInMine();
-            if (LocationUtilities.IsPlayerInMine() == false && LocationUtilities.IsPlayerInSkullCave() == false && LocationUtilities.IsPlayerInMineEnterance() == false)
+            if (GameLocationUtilities.IsPlayerInMine() == false && GameLocationUtilities.IsPlayerInSkullCave() == false && GameLocationUtilities.IsPlayerInMineEnterance() == false)
             {
                 this.visitedFloors.Clear();
             }

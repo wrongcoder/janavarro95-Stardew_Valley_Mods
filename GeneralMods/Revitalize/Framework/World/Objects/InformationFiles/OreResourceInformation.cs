@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Revitalize.Framework.Utilities;
 using Revitalize.Framework.World.Objects.InformationFiles;
 using Revitalize.Framework.World.Objects.Items;
+using Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 
 namespace Revitalize.Framework.Objects.InformationFiles
@@ -401,11 +402,11 @@ namespace Revitalize.Framework.Objects.InformationFiles
             {
                 return true;
             }
-            if (this.spawnInRegularMine && LocationUtilities.IsPlayerInMine())
+            if (this.spawnInRegularMine && GameLocationUtilities.IsPlayerInMine())
             {
                 return true;
             }
-            if (this.spawnInSkullCavern && LocationUtilities.IsPlayerInSkullCave())
+            if (this.spawnInSkullCavern && GameLocationUtilities.IsPlayerInSkullCave())
             {
                 return true;
             }
@@ -427,11 +428,11 @@ namespace Revitalize.Framework.Objects.InformationFiles
             {
                 return true;
             }
-            if(this.spawnInRegularMine && LocationUtilities.IsPlayerInMine())
+            if(this.spawnInRegularMine && GameLocationUtilities.IsPlayerInMine())
             {
                 return true;
             }
-            if(this.spawnInSkullCavern && LocationUtilities.IsPlayerInSkullCave())
+            if(this.spawnInSkullCavern && GameLocationUtilities.IsPlayerInSkullCave())
             {
                 return true;
             }
@@ -444,7 +445,7 @@ namespace Revitalize.Framework.Objects.InformationFiles
         /// <returns></returns>
         public bool canSpawnOnCurrentMineLevel()
         {
-            int level=LocationUtilities.CurrentMineLevel();
+            int level= GameLocationUtilities.CurrentMineLevel();
             if (level == -1) return false;
             bool compareFun = this.canSpawnOnThisFloor(level);
             return false;

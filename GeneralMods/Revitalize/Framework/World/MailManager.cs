@@ -80,7 +80,7 @@ namespace Revitalize.Framework.World
         /// <returns></returns>
         public virtual string getMailContentsFromTitle(string mailTitle)
         {
-            return JsonUtilities.loadStringDictionaryFile(this.getMailPathFromTitle(MailTitles.HayMakerAvailableForPurchase)).Values.First();
+            return JsonUtilities.LoadStringDictionaryFile(this.getMailPathFromTitle(MailTitles.HayMakerAvailableForPurchase)).Values.First();
         }
 
         /// <summary>
