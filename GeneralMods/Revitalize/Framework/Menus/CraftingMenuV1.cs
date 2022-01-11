@@ -13,6 +13,7 @@ using StardewValley.Menus;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Revitalize;
+using Revitalize.Framework.World.WorldUtilities;
 
 namespace Revitalize.Framework.Menus
 {
@@ -358,7 +359,7 @@ namespace Revitalize.Framework.Menus
                 else
                 {
                     this.currentPageIndex--;
-                    Game1.playSound("shwip");
+                    SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
             }
             if (this.rightButton.containsPoint(x, y))
@@ -366,7 +367,7 @@ namespace Revitalize.Framework.Menus
                 if (this.currentPageIndex < this.maxPages)
                 {
                     this.currentPageIndex++;
-                    Game1.playSound("shwip");
+                    SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
             }
 
@@ -408,7 +409,7 @@ namespace Revitalize.Framework.Menus
                         }
 
                         this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width + this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button, ref this.fromInventory,ref this.toInventory,this.playerInventory,this.machine);
-                        Game1.soundBank.PlayCue("coin");
+                        SoundUtilities.PlaySound(Enums.StardewSound.coin);
                         if (this.playerInventory)
                         {
                             Game1.player.Items = this.toInventory;

@@ -20,6 +20,7 @@ using StardustCore.Animations;
 using Revitalize.Framework.Utilities;
 using Netcode;
 using Revitalize.Framework.Utilities.Extensions;
+using Revitalize.Framework.World.WorldUtilities;
 
 namespace Revitalize.Framework.World.Objects
 {
@@ -642,7 +643,7 @@ namespace Revitalize.Framework.World.Objects
             location.objects.Add(placementTile, obj);
             if (who != null)
             {
-                location.playSound("thudStep");
+                SoundUtilities.PlaySound(location, Enums.StardewSound.woodyStep);
             }
 
             string locationName = location.NameOrUniqueName;

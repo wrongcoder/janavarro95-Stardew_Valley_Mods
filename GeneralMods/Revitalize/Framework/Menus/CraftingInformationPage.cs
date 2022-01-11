@@ -14,6 +14,7 @@ using StardewValley;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Revitalize;
+using Revitalize.Framework.World.WorldUtilities;
 
 namespace Revitalize.Framework.Menus
 {
@@ -118,7 +119,7 @@ namespace Revitalize.Framework.Menus
             {
                 if (this.canCraftRecipe())
                 {
-                    Game1.soundBank.PlayCue("coin");
+                    SoundUtilities.PlaySound(Enums.StardewSound.coin);
 
                     if (this.isPlayerInventory)
                     {

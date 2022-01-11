@@ -7,6 +7,7 @@ using Netcode;
 using Revitalize.Framework.Objects.InformationFiles;
 using Revitalize.Framework.Utilities;
 using Revitalize.Framework.World.Objects.InformationFiles;
+using Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 
 using CustomObject = Revitalize.Framework.World.Objects.CustomObject;
@@ -96,13 +97,13 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
                 this.damage((t as StardewValley.Tools.Pickaxe).UpgradeLevel + 1);
                 if (this.getCurrentLocation() != null)
                 {
-                    this.getCurrentLocation().playSound("hammer");
+                    SoundUtilities.PlaySound(this.getCurrentLocation(), Enums.StardewSound.hammer);
                     //ModCore.log("Ore has this much health left and location is not null: "+this.healthValue);
                     this.basicItemInfo.shakeTimer.Value = 200;
                 }
                 else
                 {
-                    Game1.player.currentLocation.playSound("hammer");
+                    SoundUtilities.PlaySound(this.getCurrentLocation(), Enums.StardewSound.hammer);
                     //ModCore.log("Ore has this much health left and location is null!: "+this.healthValue);
                     this.basicItemInfo.shakeTimer.Value = 200;
                 }
@@ -179,13 +180,13 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 
             if (loc != null)
             {
-                this.getCurrentLocation().playSound("stoneCrack");
+                SoundUtilities.PlaySound(this.getCurrentLocation(), Enums.StardewSound.stoneCrack);
                 Game1.createRadialDebris(this.getCurrentLocation(), 14, (int)this.TileLocation.X, (int)this.TileLocation.Y, Game1.random.Next(4, 10), false, -1, false, -1);
                 loc.removeObject(this.TileLocation, false);
             }
             else
             {
-                Game1.player.currentLocation.playSound("stoneCrack");
+                SoundUtilities.PlaySound(this.getCurrentLocation(), Enums.StardewSound.stoneCrack);
                 Game1.createRadialDebris(Game1.player.currentLocation, 14, (int)this.TileLocation.X, (int)this.TileLocation.Y, Game1.random.Next(4, 10), false, -1, false, -1);
                 Game1.player.currentLocation.removeObject(this.TileLocation, false);
             }

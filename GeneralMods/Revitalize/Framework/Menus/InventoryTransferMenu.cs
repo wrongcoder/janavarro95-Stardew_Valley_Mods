@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Revitalize;
+using Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 using StardewValley.Menus;
 using StardustCore.Animations;
@@ -95,12 +96,12 @@ namespace Revitalize.Framework.Menus
             if (this.transferButton.receiveLeftClick(x, y))
             {
                 this.currentMode = CurrentMode.TransferItems;
-                Game1.playSound("shwip");
+                SoundUtilities.PlaySound(Enums.StardewSound.shwip);
             }
             if (this.trashButton.receiveLeftClick(x, y))
             {
                 this.currentMode = CurrentMode.TrashItem;
-                Game1.playSound("shwip");
+                SoundUtilities.PlaySound(Enums.StardewSound.shwip);
             }
             if (this.trashedItem.receiveLeftClick(x, y))
             {

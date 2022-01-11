@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using StardewValley;
 
 namespace Revitalize.Framework
 {
@@ -1275,6 +1276,9 @@ namespace Revitalize.Framework
             UnknownItem = 930
         }
 
+        /// <summary>
+        /// References Stardew Valley BigCraftable ParentSheetIndicies for easier coding.
+        /// </summary>
         public enum SDVBigCraftable
         {
             NULL = short.MinValue,
@@ -1445,6 +1449,54 @@ namespace Revitalize.Framework
             Hopper = 275,
             Campfire2 = 278,
             StatueOfTruePerfection = 280,
+        }
+
+        public enum StardewSound
+        {
+            /// <summary>
+            /// The popping sound that is played when crafting an item from the crafting page.
+            /// </summary>
+            coin,
+
+            /// <summary>
+            /// The sound that plays when a machine finishes crafting and it displays the item in a hover bubble above it.
+            /// </summary>
+            dwop,
+
+            /// <summary>
+            /// The sound the furnace makes when it is smelting.
+            /// </summary>
+            furnace,
+
+            /// <summary>
+            /// The sound of the blacksmith's hammer being used or the sound of the pickaxe being used on a rock.
+            /// </summary>
+            hammer,
+
+            /// <summary>
+            /// The sound that is made when changing pages in a menu.
+            /// </summary>
+            shwip,
+
+            /// <summary>
+            /// The sound that plays when dropping an item into a machine or the shipping bin.
+            /// </summary>
+            ship,
+
+            /// <summary>
+            /// The sound that is played when a stone is craked open or an ore vein is broken.
+            /// </summary>
+            stoneCrack,
+
+            /// <summary>
+            /// The sound when dropping down a piece of wooded type furniture but it's deeper pitched?
+            /// </summary>
+            thudStep,
+
+            /// <summary>
+            /// The sound when dropping down a piece of wooded type furniture but it's lighter pitched/normal.
+            /// </summary>
+            woodyStep
         }
 
         public enum DyeBlendMode

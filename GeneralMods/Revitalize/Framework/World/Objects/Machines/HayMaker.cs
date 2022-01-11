@@ -11,6 +11,7 @@ using Netcode;
 using Omegasis.Revitalize.Framework.Utilities;
 using Revitalize.Framework.Objects;
 using Revitalize.Framework.World.Objects.InformationFiles;
+using Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -146,7 +147,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         {
             if (addToPlayersInventory)
             {
-                Game1.playSound("coin");
+                SoundUtilities.PlaySound(Enums.StardewSound.coin);
                 bool added = Game1.player.addItemToInventoryBool(this.heldObject.Value);
                 if (added == false) return;
             }
@@ -196,7 +197,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Corn;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.playSound("Ship");
+                SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
                     who.removeItemFromInventory(who.ActiveObject);
@@ -209,7 +210,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Fiber;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.playSound("Ship");
+                SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
                     who.removeItemFromInventory(who.ActiveObject);
@@ -222,7 +223,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Hay;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.playSound("Ship");
+                SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
                     who.removeItemFromInventory(who.ActiveObject);
@@ -235,7 +236,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Amaranth;
                 who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired;
                 this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.playSound("Ship");
+                SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
                     who.removeItemFromInventory(who.ActiveObject);
@@ -276,7 +277,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 if (noHayRemainsInFeedMaker == false)
                 {
                     //swip and coin are valid sounds too.
-                    Game1.playSound("dwop");
+                    SoundUtilities.PlaySound(Enums.StardewSound.dwop);
                 }
 
             }

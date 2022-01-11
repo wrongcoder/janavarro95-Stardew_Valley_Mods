@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Revitalize;
+using Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 using StardewValley.Menus;
 using StardustCore.Animations;
@@ -300,7 +301,7 @@ namespace Revitalize.Framework.Menus
                 if (this.pageIndex + 1 < this.pages.Count)
                 {
                     this.pageIndex++;
-                    Game1.soundBank.PlayCue("shwip");
+                    SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
             }
             if (this.previousPage.containsPoint(x, y))
@@ -309,7 +310,7 @@ namespace Revitalize.Framework.Menus
                 if (this.pageIndex > 0)
                 {
                     this.pageIndex--;
-                    Game1.soundBank.PlayCue("shwip");
+                    SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
             }
         }
