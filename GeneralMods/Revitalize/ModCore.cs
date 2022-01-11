@@ -33,6 +33,7 @@ using Revitalize.Framework.SaveData;
 using Omegasis.Revitalize.Framework.Utilities;
 using Revitalize.Framework.World.WorldUtilities;
 using Revitalize.Framework.World;
+using Revitalize.Framework.World.WorldUtilities.Shops;
 
 namespace Revitalize
 {
@@ -242,6 +243,7 @@ namespace Revitalize
 
             //Adds in event handling for the mod.
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
+            ModHelper.Events.GameLoop.SaveCreated += this.GameLoop_SaveCreated;
 
             ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
@@ -255,12 +257,11 @@ namespace Revitalize
 
             ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
-            ModHelper.Events.Display.MenuChanged += ShopHacks.OnNewMenuOpened;
+            ModHelper.Events.Display.MenuChanged += ShopUtilities.OnNewMenuOpened;
+
             ModHelper.Events.Display.MenuChanged += MailManager.onNewMenuOpened ;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
-
-            ModHelper.Events.Input.ButtonPressed += this.Input_ButtonPressed1;
 
             ModHelper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
 
@@ -268,97 +269,21 @@ namespace Revitalize
 
         }
 
-
-        private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+        ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~///
+        ///                     Initialize Mod Content                     ///
+        ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        #region
+        private void createDirectories()
         {
-            ObjectManager.loadInItems();
-            //Adds in recipes to the mod.
-            CraftingManager = new CraftingManager();
-            CraftingManager.initializeRecipeBooks();
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
 
-            Revitalize.Framework.Utilities.Serializer.SerializeTypesForXMLUsingSpaceCore();
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics"));
+            //Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Chairs"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Lamps"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Tables"));
         }
-
-
-        /// <summary>
-        /// What happens when a new day starts.
-        /// </summary>
-        /// <param name="senderm"></param>
-        /// <param name="e"></param>
-        private void GameLoop_DayStarted(object senderm, StardewModdingAPI.Events.DayStartedEventArgs e)
-        {
-            ObjectManager.resources.DailyResourceSpawn(senderm, e);
-            ShopHacks.OnNewDay(senderm, e);
-            MailManager.tryToAddMailToMailbox();
-        }
-
-        /// <summary>
-        /// Called when the day is ending. At this point the save data should all be saved.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
-        {
-            SaveDataManager.save();
-        }
-
-        private void Input_ButtonPressed1(object sender, StardewModdingAPI.Events.ButtonPressedEventArgs e)
-        {
-
-
-            if (e.Button == SButton.MouseLeft)
-            {
-                if (Game1.player != null)
-                {
-                    if (Game1.activeClickableMenu != null || Game1.eventUp || Game1.currentMinigame != null) return;
-                    pressUseToolButtonCheckForCustomObjects();
-                }
-            }
-
-        }
-
-        public static bool pressUseToolButtonCheckForCustomObjects()
-        {
-            Game1.player.toolPower = 0;
-            Game1.player.toolHold = 0;
-
-            //ModCore.log("Press the tool button!");
-            Vector2 c = Game1.player.GetToolLocation() / 64f;
-            c.X = (int)c.X;
-            c.Y = (int)c.Y;
-            Point p = new Point((int)(c.X * 64f), (int)(c.Y * 64f));
-
-            if (Game1.player.currentLocation.objects.ContainsKey(c))
-            {
-                //ModCore.log("Spot is taken: " + p.ToString());
-                //Only want to check spots that might not be covered by the game.
-                return false;
-            }
-
-            foreach (Furniture f in Game1.player.currentLocation.furniture)
-            {
-                //ModCore.log("I see a furniture: " + f.DisplayName);
-                if (f is CustomObject)
-                {
-                    //ModCore.log("I see a custom furniture piece: " + f.DisplayName);
-                    if (f.boundingBox.Value.Contains(p))
-                    {
-                        //ModCore.log("Found an object at a non object spot position: " + p.ToString());
-                        // ModCore.log("The name is: " + f.DisplayName);
-                        f.performToolAction(Game1.player.CurrentTool, Game1.player.currentLocation);
-                        return true;
-                    }
-                    else
-                    {
-                        //ModCore.log("BB is: " + f.boundingBox.Value.ToString());
-                        //ModCore.log("Point is: " + p.ToString());
-                    }
-                }
-            }
-            return false;
-        }
-
-
 
         /// <summary>
         /// Loads in textures to be used by the mod.
@@ -395,21 +320,45 @@ namespace Revitalize
             TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Objects.Crafting");
             TextureManager.GetTextureManager(Manifest, "Revitalize.Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
         }
+        #endregion
+
+
+        private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+        {
+            ObjectManager.loadInItems();
+            //Adds in recipes to the mod.
+            CraftingManager = new CraftingManager();
+            CraftingManager.initializeRecipeBooks();
+
+            Revitalize.Framework.Utilities.Serializer.SerializeTypesForXMLUsingSpaceCore();
+        }
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
         }
 
-        private void createDirectories()
-        {
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
 
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics"));
-            //Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Chairs"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Lamps"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Tables"));
+
+        /// <summary>
+        /// What happens when a new day starts.
+        /// </summary>
+        /// <param name="senderm"></param>
+        /// <param name="e"></param>
+        private void GameLoop_DayStarted(object senderm, StardewModdingAPI.Events.DayStartedEventArgs e)
+        {
+            ObjectManager.resources.DailyResourceSpawn(senderm, e);
+            ShopUtilities.OnNewDay(senderm, e);
+            MailManager.tryToAddMailToMailbox();
+        }
+
+        /// <summary>
+        /// Called when the day is ending. At this point the save data should all be saved.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GameLoop_DayEnding(object sender, StardewModdingAPI.Events.DayEndingEventArgs e)
+        {
+            SaveDataManager.save();
         }
 
         /// <summary>
@@ -418,18 +367,6 @@ namespace Revitalize
         private void initailizeComponents()
         {
             DarkerNight.InitializeConfig();
-        }
-
-        private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
-        {
-            if (playerInfo.justPlacedACustomObject == true) playerInfo.justPlacedACustomObject = false;
-            DarkerNight.SetDarkerColor();
-            playerInfo.update();
-        }
-
-        private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
-        {
-            DarkerNight.CalculateDarkerNightColor();
         }
 
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
@@ -463,24 +400,28 @@ namespace Revitalize
             });
 
 
-            this.addModdedMachinesToGameWorld();
+            Framework.World.WorldUtilities.Utilities.InitializeGameWorld();
 
         }
 
-        /// <summary>
-        /// Adds various machines and stuff to the game world.
-        /// </summary>
-        private void addModdedMachinesToGameWorld()
+        private void GameLoop_SaveCreated(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
         {
-            GameLocation cinderSapForestLocation = Game1.getLocationFromName("Forest");
-            HayMaker hayMaker = (ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
-            if (Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch &&
-                cinderSapForestLocation.isObjectAtTile((int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y) == false)
-            {
-                hayMaker.placementActionAtTile(cinderSapForestLocation, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y);
-            }
-
+            Framework.World.WorldUtilities.Utilities.InitializeGameWorld();
         }
+
+
+        private void GameLoop_UpdateTicked(object sender, StardewModdingAPI.Events.UpdateTickedEventArgs e)
+        {
+            DarkerNight.SetDarkerColor();
+            playerInfo.update();
+        }
+
+        private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)
+        {
+            DarkerNight.CalculateDarkerNightColor();
+        }
+
+
 
         /// <summary>
         ///Logs information to the console.
@@ -499,27 +440,6 @@ namespace Revitalize
             string currentFile = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileName();
             int currentLine = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileLineNumber();
             return currentFile + " line:" + currentLine;
-        }
-
-        public static bool IsNullOrDefault<T>(T argument)
-        {
-            // deal with normal scenarios
-            if (argument == null) return true;
-            if (Equals(argument, default(T))) return true;
-
-            // deal with non-null nullables
-            Type methodType = typeof(T);
-            if (Nullable.GetUnderlyingType(methodType) != null) return false;
-
-            // deal with boxed value types
-            Type argumentType = argument.GetType();
-            if (argumentType.IsValueType && argumentType != methodType)
-            {
-                object obj = Activator.CreateInstance(argument.GetType());
-                return obj.Equals(argument);
-            }
-
-            return false;
         }
 
         public bool CanEdit<T>(IAssetInfo asset)
