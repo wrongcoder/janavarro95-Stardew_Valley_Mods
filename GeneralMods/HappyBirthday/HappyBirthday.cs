@@ -14,6 +14,8 @@ using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardustCore.Utilities;
 using Omegasis.HappyBirthday.Framework.ContentPack;
+using Omegasis.HappyBirthday.Framework.Utilities;
+using Omegasis.HappyBirthday.Framework.Configs;
 
 namespace Omegasis.HappyBirthday
 {
@@ -29,8 +31,10 @@ namespace Omegasis.HappyBirthday
         /// <summary>The absolute path for the current player's legacy data file.</summary>
         private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "Player_Birthdays", $"HappyBirthday_{Game1.player.Name}.txt");
 
-        /// <summary>The mod configuration.</summary>
-        public static ModConfig Config;
+        /// <summary>
+        /// Manages all of the configs for Happy Birthday.
+        /// </summary>
+        public static ConfigManager Configs;
 
         /// <summary>The data for the current player.</summary>
         public static PlayerData PlayerBirthdayData;
@@ -94,25 +98,26 @@ namespace Omegasis.HappyBirthday
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-
-            Instance = this;
-            Config = helper.ReadConfig<ModConfig>();
-
-            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
-            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-            helper.Events.GameLoop.Saving += this.OnSaving;
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-            helper.Events.Display.MenuChanged += this.OnMenuChanged;
-            helper.Events.Display.RenderedActiveMenu += this.OnRenderedActiveMenu;
-            helper.Events.Display.RenderedHud += this.OnRenderedHud;
-            helper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
-            helper.Events.Multiplayer.PeerDisconnected += this.Multiplayer_PeerDisconnected;
-            helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
-            helper.Events.Player.Warped += this.Player_Warped;
-            helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
             ModHelper = this.Helper;
             ModMonitor = this.Monitor;
+
+            Instance = this;
+            Configs = new ConfigManager();
+            Configs.initializeConfigs();
+
+            ModHelper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            ModHelper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            ModHelper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            ModHelper.Events.GameLoop.Saving += this.OnSaving;
+            ModHelper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            ModHelper.Events.Display.MenuChanged += this.OnMenuChanged;
+            ModHelper.Events.Display.RenderedActiveMenu += this.OnRenderedActiveMenu;
+            ModHelper.Events.Display.RenderedHud += this.OnRenderedHud;
+            ModHelper.Events.Multiplayer.ModMessageReceived += this.Multiplayer_ModMessageReceived;
+            ModHelper.Events.Multiplayer.PeerDisconnected += this.Multiplayer_PeerDisconnected;
+            ModHelper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
+            ModHelper.Events.Player.Warped += this.Player_Warped;
+            ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
             this.othersBirthdays = new Dictionary<long, PlayerData>();
 
@@ -206,24 +211,10 @@ namespace Omegasis.HappyBirthday
         /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
         public void Edit<T>(IAssetData asset)
         {
-            IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
-
-            data["BirthdayMom"] = this.translationInfo.getMailString("BirthdayMom");
-            data["BirthdayDad"] = this.translationInfo.getMailString("BirthdayDad");
-            data["BirthdayJunimos"] = this.translationInfo.getMailString("BirthdayJunimos");
-            data["BirthdayDatingPenny"] = this.translationInfo.getMailString("BirthdayDatingPenny");
-            data["BirthdayDatingMaru"] = this.translationInfo.getMailString("BirthdayDatingMaru");
-            data["BirthdayDatingSebastian"] = this.translationInfo.getMailString("BirthdayDatingSebastian");
-            data["BirthdayDatingLeah"] = this.translationInfo.getMailString("BirthdayDatingLeah");
-            data["BirthdayDatingAbigail"] = this.translationInfo.getMailString("BirthdayDatingAbigail");
-            data["BirthdayDatingAbigail_Wednesday"] = this.translationInfo.getMailString("BirthdayDatingAbigail_Wednesday");
-            data["BirthdayDatingEmily"] = this.translationInfo.getMailString("BirthdayDatingEmily");
-            data["BirthdayDatingHaley"] = this.translationInfo.getMailString("BirthdayDatingHaley");
-            data["BirthdayDatingHarvey"] = this.translationInfo.getMailString("BirthdayDatingHarvey");
-            data["BirthdayDatingElliott"] = this.translationInfo.getMailString("BirthdayDatingElliott");
-            data["BirthdayDatingSam"] = this.translationInfo.getMailString("BirthdayDatingSam");
-            data["BirthdayDatingAlex"] = this.translationInfo.getMailString("BirthdayDatingAlex");
-            data["BirthdayDatingShane"] = this.translationInfo.getMailString("BirthdayDatingShane");
+            if (asset.AssetNameEquals(@"Data\mail"))
+            {
+                MailUtilities.EditMailAsset(asset);
+            }
         }
 
 
@@ -469,8 +460,8 @@ namespace Omegasis.HappyBirthday
                             this.lastSpeaker = Game1.currentSpeaker;
                             if (Game1.activeClickableMenu != null && this.IsBirthday() && this.VillagerQueue.ContainsKey(Game1.currentSpeaker.Name))
                             {
-                                if ((Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.Name) < Config.minimumFriendshipLevelForBirthdayWish)) return;
-                                if (Game1.activeClickableMenu is StardewValley.Menus.DialogueBox && this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish == false && (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.Name) >= Config.minimumFriendshipLevelForBirthdayWish))
+                                if ((Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.Name) < Configs.modConfig.minimumFriendshipLevelForBirthdayWish)) return;
+                                if (Game1.activeClickableMenu is StardewValley.Menus.DialogueBox && this.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish == false && (Game1.player.getFriendshipHeartLevelForNPC(Game1.currentSpeaker.Name) >= Configs.modConfig.minimumFriendshipLevelForBirthdayWish))
                                 {
                                     //IReflectedField < Dialogue > cDialogue= this.Helper.Reflection.GetField<Dialogue>((Game1.activeClickableMenu as DialogueBox), "characterDialogue", true);
                                     //IReflectedField<List<string>> dialogues = this.Helper.Reflection.GetField<List<string>>((Game1.activeClickableMenu as DialogueBox), "dialogues", true);
@@ -534,7 +525,7 @@ namespace Omegasis.HappyBirthday
         {
             // show birthday selection menu
             if (Game1.activeClickableMenu != null) return;
-            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.Button == Config.KeyBinding)
+            if (Context.IsPlayerFree && !this.HasChosenBirthday && e.Button == Configs.modConfig.KeyBinding)
                 Game1.activeClickableMenu = new BirthdayMenu(this.PlayerData.BirthdaySeason, this.PlayerData.BirthdayDay, this.SetBirthday);
         }
 
@@ -586,70 +577,8 @@ namespace Omegasis.HappyBirthday
                 MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
             }
 
-            if (Game1.player.mailReceived.Contains("BirthdayMom"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayMom");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDad"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDad");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayJunimos"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayJunimos");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingPenny"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingPenny");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingMaru"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingMaru");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingSebastian"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingSebastian");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingLeah"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingLeah");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingAbigail"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingAbigail");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingAbigail_Wednesday"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingAbigail_Wednesday");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingEmily"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingEmily");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingHaley"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingHaley");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingHarvey"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingHarvey");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingElliott"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingElliott");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingSam"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingSam");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingAlex"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingAlex");
-            }
-            if (Game1.player.mailReceived.Contains("BirthdayDatingShane"))
-            {
-                Game1.player.mailReceived.Remove("BirthdayDatingShane");
-            }
+
+            MailUtilities.RemoveAllBirthdayMail();
 
 
             EventHelper communityCenterJunimoBirthday = BirthdayEvents.CommunityCenterJunimoBirthday();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Omegasis.HappyBirthday.Framework;
+using Omegasis.HappyBirthday.Framework.Configs;
 using Omegasis.HappyBirthday.Framework.Gifts;
 using StardewValley;
 using static System.String;
@@ -12,7 +13,7 @@ namespace Omegasis.HappyBirthday
 {
     public class GiftManager
     {
-        public ModConfig Config => HappyBirthday.Config;
+        public ModConfig Config => HappyBirthday.Configs.modConfig;
 
         private Dictionary<string, string> defaultBirthdayGifts = new Dictionary<string, string>()
         {
