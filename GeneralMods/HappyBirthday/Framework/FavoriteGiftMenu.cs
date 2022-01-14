@@ -77,7 +77,7 @@ namespace Omegasis.HappyBirthday.Framework
             this._leftButton = new ClickableTextureComponent("LeftButton", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.ModHelper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "lastPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
             this._rightButton = new ClickableTextureComponent("RightButton", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize + 96, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.ModHelper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "nextPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
 
-            string title = HappyBirthday.Config.translationInfo.getTranslatedString("FavoriteGift");
+            string title = HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift");
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 128, this.yPositionOnScreen + 128, 1, 1), title));
 
             this.itemButtons.Clear();
@@ -166,7 +166,7 @@ namespace Omegasis.HappyBirthday.Framework
                     Item i = GiftIDS.RegisteredGifts[this.selectedGift];
                     Rectangle textureBounds = GameLocation.getSourceRectForObject(i.ParentSheetIndex);
                     float itemScale = 4f;
-                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (16 * itemScale) + Game1.tinyFont.MeasureString(HappyBirthday.Config.translationInfo.getTranslatedString("FavoriteGift")).X), (int)(this.yPositionOnScreen + (64) + (16 * itemScale)), 64, 64);
+                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (16 * itemScale) + Game1.tinyFont.MeasureString(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift")).X), (int)(this.yPositionOnScreen + (64) + (16 * itemScale)), 64, 64);
                     this.favoriteGiftButton = new ClickableTextureComponent(this.selectedGift, placementBounds, "", this.selectedGift, Game1.objectSpriteSheet, textureBounds, 4f, true);
                 }
             }

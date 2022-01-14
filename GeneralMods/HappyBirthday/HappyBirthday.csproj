@@ -16,5 +16,29 @@
     <Content Include="ModAssets\Graphics\nextPageButton.png" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Strings\BirthdayWishes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Strings\Events.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Strings\Mail.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Strings\SpouseBirthdayWishes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Strings\TranslatedStrings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\TranslationInfo.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Import Project="..\common.targets" />
 </Project>

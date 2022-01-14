@@ -47,7 +47,7 @@ namespace Omegasis.HappyBirthday.Framework
         public BirthdayMenu(string season, int day, Action<string, int> onChanged)
             : base(Game1.viewport.Width / 2 - (632 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2 - Game1.tileSize, 632 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2 + Game1.tileSize)
         {
-            this.BirthdaySeason = HappyBirthday.Config.translationInfo.getTranslatedString(season);
+            this.BirthdaySeason = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString(season);
             this.seasonName = season;
             this.BirthdayDay = day;
             this.OnChanged = onChanged;
@@ -76,8 +76,8 @@ namespace Omegasis.HappyBirthday.Framework
             this.DayButtons.Clear();
             this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - IClickableMenu.borderWidth - IClickableMenu.spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
 
-            string bdaySeason = HappyBirthday.Config.translationInfo.getTranslatedString("Birthday") + " " + HappyBirthday.Config.translationInfo.getTranslatedString("Season");
-            string bdayDay= HappyBirthday.Config.translationInfo.getTranslatedString("Birthday") + " " + HappyBirthday.Config.translationInfo.getTranslatedString("Date");
+            string bdaySeason = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Season");
+            string bdayDay= HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Date");
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 8, 1, 1), bdaySeason+": " + this.BirthdaySeason));
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + Game1.tileSize, Game1.tileSize * 2, Game1.tileSize), bdayDay+": " + this.BirthdayDay));
             this.SeasonButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSpringButton(), Game1.pixelZoom));
@@ -149,7 +149,7 @@ namespace Omegasis.HappyBirthday.Framework
                 case "Summer":
                 case "Fall":
                 case "Winter":
-                    this.BirthdaySeason = HappyBirthday.Config.translationInfo.getTranslatedString(name);
+                    this.BirthdaySeason = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString(name);
                     this.seasonName = name;
                     this.OnChanged(this.seasonName, this.BirthdayDay);
                     Game1.activeClickableMenu = new BirthdayMenu(this.seasonName, this.BirthdayDay, this.OnChanged);
@@ -210,9 +210,9 @@ namespace Omegasis.HappyBirthday.Framework
             {
                 if (this.isFestivalDay())
                 {
-                    if (string.IsNullOrEmpty(BirthdayMessages.GetTranslatedString("BirthdayError_FestivalDay")) == false)
+                    if (string.IsNullOrEmpty(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")) == false)
                     {
-                        Game1.addHUDMessage(new HUDMessage(BirthdayMessages.GetTranslatedString("BirthdayError_FestivalDay")));
+                        Game1.addHUDMessage(new HUDMessage(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")));
                     }
                     else
                     {
@@ -309,7 +309,7 @@ namespace Omegasis.HappyBirthday.Framework
         public Rectangle getSpringButton()
         {
             //For some reason turkish and italian don't use translated words for the seasons???
-            if (HappyBirthday.Config.translationInfo.CurrentTranslation == TranslationInfo.LanguageName.Chinese)
+            if (LocalizedContentManager.CurrentLanguageCode== LocalizedContentManager.LanguageCode.zh)
             {
                 return new Rectangle(188, 437, 32, 9);
             }
