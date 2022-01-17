@@ -4,7 +4,7 @@ using System.Linq;
 using StardewModdingAPI.Events;
 using StardewValley;
 
-namespace Omegasis.HappyBirthday.Framework
+namespace Omegasis.HappyBirthday.Framework.Utilities
 {
     public class MultiplayerUtilities
     {
@@ -19,30 +19,24 @@ namespace Omegasis.HappyBirthday.Framework
             str.Replace("@", Game1.player.Name);
             HUDMessage message = new HUDMessage(str, 1);
 
-
-
             foreach (KeyValuePair<long, Farmer> f in Game1.otherFarmers)
-            {
-                HappyBirthday.Instance.Helper.Multiplayer.SendMessage<string>(message.message, FSTRING_SendBirthdayMessageToOthers, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { f.Key });
-            }
+                HappyBirthday.Instance.Helper.Multiplayer.SendMessage(message.message, FSTRING_SendBirthdayMessageToOthers, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { f.Key });
         }
 
         public static void SendBirthdayInfoToOtherPlayers()
         {
             foreach (KeyValuePair<long, Farmer> f in Game1.otherFarmers)
-            {
-                HappyBirthday.Instance.Helper.Multiplayer.SendMessage<KeyValuePair<long, PlayerData>>(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.Instance.birthdayManager.playerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { f.Key });
-            }
+                HappyBirthday.Instance.Helper.Multiplayer.SendMessage(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.Instance.birthdayManager.playerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { f.Key });
         }
 
         public static void SendBirthdayInfoToConnectingPlayer(long id)
         {
-            HappyBirthday.Instance.Helper.Multiplayer.SendMessage<KeyValuePair<long, PlayerData>>(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.Instance.birthdayManager.playerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { id });
+            HappyBirthday.Instance.Helper.Multiplayer.SendMessage(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.Instance.birthdayManager.playerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { id });
         }
 
         public static void SendFarmandBirthdayInfoToPlayer(long id, PlayerData FarmhandBirthday)
         {
-            HappyBirthday.Instance.Helper.Multiplayer.SendMessage<KeyValuePair<long, PlayerData>>(new KeyValuePair<long, PlayerData>(id, FarmhandBirthday), FSTRING_SendFarmhandBirthdayInfoToPlayer, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { id });
+            HappyBirthday.Instance.Helper.Multiplayer.SendMessage(new KeyValuePair<long, PlayerData>(id, FarmhandBirthday), FSTRING_SendFarmhandBirthdayInfoToPlayer, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { id });
         }
         /// <summary>
         /// Requests the info from the server.
@@ -50,9 +44,8 @@ namespace Omegasis.HappyBirthday.Framework
         /// <param name="id">The id of the connecting farmhand.</param>
         public static void RequestFarmandBirthdayInfoFromServer()
         {
-            HappyBirthday.Instance.Helper.Multiplayer.SendMessage<KeyValuePair<long, string>>(new KeyValuePair<long, string>(Game1.player.UniqueMultiplayerID, ""), FSTRING_RequestBirthdayInfoFromServer, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { });
+            HappyBirthday.Instance.Helper.Multiplayer.SendMessage(new KeyValuePair<long, string>(Game1.player.UniqueMultiplayerID, ""), FSTRING_RequestBirthdayInfoFromServer, new string[] { HappyBirthday.Instance.Helper.Multiplayer.ModID }, new long[] { });
         }
-
 
         /// <summary>Used to check for player disconnections.</summary>
         /// <param name="sender">The event sender.</param>
@@ -64,25 +57,23 @@ namespace Omegasis.HappyBirthday.Framework
 
         public static void Multiplayer_ModMessageReceived(object sender, ModMessageReceivedEventArgs e)
         {
-            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type == MultiplayerUtilities.FSTRING_SendBirthdayMessageToOthers)
+            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type == FSTRING_SendBirthdayMessageToOthers)
             {
                 string message = e.ReadAs<string>();
                 Game1.hudMessages.Add(new HUDMessage(message, 1));
             }
 
-            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type == MultiplayerUtilities.FSTRING_SendBirthdayInfoToOthers)
+            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type == FSTRING_SendBirthdayInfoToOthers)
             {
                 KeyValuePair<long, PlayerData> message = e.ReadAs<KeyValuePair<long, PlayerData>>();
 
 
                 if (message.Key.Equals(Game1.player.UniqueMultiplayerID))
-                {
                     HappyBirthday.Instance.birthdayManager.playerBirthdayData = message.Value;
-                }
                 else if (!HappyBirthday.Instance.birthdayManager.othersBirthdays.ContainsKey(message.Key))
                 {
                     HappyBirthday.Instance.birthdayManager.addOtherPlayerBirthdayData(message);
-                    MultiplayerUtilities.SendBirthdayInfoToConnectingPlayer(e.FromPlayerID);
+                    SendBirthdayInfoToConnectingPlayer(e.FromPlayerID);
                     HappyBirthday.Instance.Monitor.Log("Got other player's birthday data from: " + Game1.getFarmer(e.FromPlayerID).Name);
                 }
                 else
@@ -93,11 +84,9 @@ namespace Omegasis.HappyBirthday.Framework
                 }
                 string p = Path.Combine("data", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID + "_" + "FarmhandBirthdays.json");
                 if (File.Exists(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, p)) == false)
-                {
                     HappyBirthday.Instance.Helper.Data.WriteJsonFile(p, HappyBirthday.Instance.birthdayManager.othersBirthdays);
-                }
             }
-            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type.Equals(MultiplayerUtilities.FSTRING_SendFarmhandBirthdayInfoToPlayer))
+            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type.Equals(FSTRING_SendFarmhandBirthdayInfoToPlayer))
             {
                 KeyValuePair<long, PlayerData> message = e.ReadAs<KeyValuePair<long, PlayerData>>();
                 if (Game1.player.UniqueMultiplayerID == message.Key)
@@ -106,13 +95,10 @@ namespace Omegasis.HappyBirthday.Framework
                     HappyBirthday.Instance.birthdayManager.playerBirthdayData = message.Value;
                 }
                 else
-                {
                     HappyBirthday.Instance.Monitor.Log("Picked up message for farmhand birthday but it was sent to the wrong player...");
-                }
 
             }
-            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type == MultiplayerUtilities.FSTRING_RequestBirthdayInfoFromServer)
-            {
+            if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type == FSTRING_RequestBirthdayInfoFromServer)
                 if (Game1.player.IsMainPlayer)
                 {
                     KeyValuePair<long, string> message = e.ReadAs<KeyValuePair<long, string>>();
@@ -120,14 +106,11 @@ namespace Omegasis.HappyBirthday.Framework
                     if (HappyBirthday.Instance.birthdayManager.othersBirthdays.ContainsKey(message.Key))
                     {
                         HappyBirthday.Instance.Monitor.Log("Sending requested farmhand info");
-                        MultiplayerUtilities.SendFarmandBirthdayInfoToPlayer(message.Key, HappyBirthday.Instance.birthdayManager.othersBirthdays[message.Key]);
+                        SendFarmandBirthdayInfoToPlayer(message.Key, HappyBirthday.Instance.birthdayManager.othersBirthdays[message.Key]);
                     }
                     else
-                    {
                         HappyBirthday.Instance.Monitor.Log("For some reason requested birthday info was not found...");
-                    }
                 }
-            }
         }
     }
 }

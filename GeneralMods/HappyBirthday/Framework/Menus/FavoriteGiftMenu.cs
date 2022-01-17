@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Omegasis.HappyBirthday.Framework.Gifts;
+using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 
