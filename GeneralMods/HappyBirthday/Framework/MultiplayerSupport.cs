@@ -28,13 +28,13 @@ namespace Omegasis.HappyBirthday.Framework
         {
             foreach (KeyValuePair<long, Farmer> f in Game1.otherFarmers)
             {
-                HappyBirthday.ModHelper.Multiplayer.SendMessage<KeyValuePair<long, PlayerData>>(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.PlayerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.ModHelper.Multiplayer.ModID }, new long[] { f.Key });
+                HappyBirthday.ModHelper.Multiplayer.SendMessage<KeyValuePair<long, PlayerData>>(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.Instance.birthdayManager.playerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.ModHelper.Multiplayer.ModID }, new long[] { f.Key });
             }
         }
 
         public static void SendBirthdayInfoToConnectingPlayer(long id)
         {
-            HappyBirthday.ModHelper.Multiplayer.SendMessage<KeyValuePair<long, PlayerData>>(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.PlayerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.ModHelper.Multiplayer.ModID }, new long[] { id });
+            HappyBirthday.ModHelper.Multiplayer.SendMessage<KeyValuePair<long, PlayerData>>(new KeyValuePair<long, PlayerData>(Game1.player.UniqueMultiplayerID, HappyBirthday.Instance.birthdayManager.playerBirthdayData), FSTRING_SendBirthdayInfoToOthers, new string[] { HappyBirthday.ModHelper.Multiplayer.ModID }, new long[] { id });
         }
 
         public static void SendFarmandBirthdayInfoToPlayer(long id,PlayerData FarmhandBirthday)

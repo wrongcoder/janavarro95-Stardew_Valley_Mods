@@ -23,7 +23,7 @@ namespace Omegasis.HappyBirthday.Framework.EventPreconditions
 
         public override bool meetsCondition()
         {
-            return HappyBirthday.Instance.IsBirthday();
+            return HappyBirthday.Instance.birthdayManager.isBirthday();
         }
 
     }

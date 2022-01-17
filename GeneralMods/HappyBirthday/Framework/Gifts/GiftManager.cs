@@ -840,42 +840,6 @@ namespace Omegasis.HappyBirthday
         /// <remarks>This returns gifts based on the speaker's heart level towards the player: neutral for 3-4, good for 5-6, and best for 7-10.</remarks>
         public void setNextBirthdayGift(string name)
         {
-            /*
-            Item gift;
-            if (this.BirthdayGifts.Count > 0)
-            {
-                Random random = new Random();
-                int index = random.Next(this.BirthdayGifts.Count);
-                gift = this.BirthdayGifts[index];
-                if (Game1.player.isInventoryFull())
-                    Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-                else
-                    this.BirthdayGiftToReceive = gift;
-                return;
-            }
-
-            this.BirthdayGifts.AddRange(this.GetDefaultBirthdayGifts(name));
-
-            Random rnd2 = new Random();
-            int r2 = rnd2.Next(this.BirthdayGifts.Count);
-            gift = this.BirthdayGifts.ElementAt(r2);
-            //Attempt to balance sapplings from being too OP as a birthday gift.
-            if (gift.Name.Contains("Sapling"))
-            {
-                gift.Stack = 1; //A good investment?
-            }
-            if (gift.Name.Contains("Rare Seed"))
-            {
-                gift.Stack = 2; //Still a little op but less so than 5.
-            }
-
-            if (Game1.player.isInventoryFull())
-                Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-            else
-                this.BirthdayGiftToReceive = gift;
-
-            this.BirthdayGifts.Clear();
-            */
 
             if (Game1.player.friendshipData.ContainsKey(name))
             {
@@ -966,9 +930,9 @@ namespace Omegasis.HappyBirthday
         public void getSpouseBirthdayGift(string name)
         {
 
-            if (string.IsNullOrEmpty(HappyBirthday.Instance.PlayerData.favoriteBirthdayGift) == false)
+            if (string.IsNullOrEmpty(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
             {
-                Item I = GiftIDS.RegisteredGifts[HappyBirthday.Instance.PlayerData.favoriteBirthdayGift];
+                Item I = GiftIDS.RegisteredGifts[HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift];
                 if (Game1.player.isInventoryFull())
                     Game1.createItemDebris(I.getOne(), Game1.player.getStandingPosition(), Game1.player.getDirection());
                 else
@@ -977,11 +941,11 @@ namespace Omegasis.HappyBirthday
             }
 
 
-            if (string.IsNullOrEmpty(HappyBirthday.PlayerBirthdayData.favoriteBirthdayGift) == false)
+            if (string.IsNullOrEmpty(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
             {
-                if (GiftIDS.RegisteredGifts.ContainsKey(HappyBirthday.PlayerBirthdayData.favoriteBirthdayGift))
+                if (GiftIDS.RegisteredGifts.ContainsKey(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift))
                 {
-                    GiftInformation info=new GiftInformation(HappyBirthday.PlayerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
+                    GiftInformation info=new GiftInformation(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
                     if (Game1.player.isInventoryFull())
                         Game1.createItemDebris(info.getOne(), Game1.player.getStandingPosition(), Game1.player.getDirection());
                     else

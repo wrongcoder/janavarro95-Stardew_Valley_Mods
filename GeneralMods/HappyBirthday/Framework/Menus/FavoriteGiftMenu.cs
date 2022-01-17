@@ -128,7 +128,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             {
                 // OK button
                 case "OK":
-                    HappyBirthday.Instance.PlayerData.favoriteBirthdayGift = this.selectedGift;
+                    HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift = this.selectedGift;
                     MultiplayerSupport.SendBirthdayInfoToOtherPlayers();
                     this.allFinished = true;
                     Game1.exitActiveMenu();
