@@ -56,6 +56,9 @@ namespace Omegasis.HappyBirthday
         /// <summary>Handles different translations of files.</summary>
         public TranslationInfo translationInfo;
 
+        /// <summary>
+        /// Utilities for checking if it's a player's birthday, seeing if npcs have given birthday wishes already, etc.
+        /// </summary>
         public BirthdayManager birthdayManager;
 
         /*********
