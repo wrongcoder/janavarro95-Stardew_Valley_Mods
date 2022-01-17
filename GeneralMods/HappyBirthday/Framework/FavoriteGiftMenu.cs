@@ -26,10 +26,14 @@ namespace Omegasis.HappyBirthday.Framework
         /// <summary>The OK button to draw.</summary>
         private ClickableTextureComponent OkButton;
 
+        /// <summary>
+        /// The item that is currently being hover overed.
+        /// </summary>
+        public ClickableTextureComponent currentHoverTextureItem;
+
         public bool allFinished;
 
         private int currentPageNumber;
-        private int maxPageNumber;
 
         private string selectedGift;
         private ClickableTextureComponent favoriteGiftButton;
@@ -96,6 +100,8 @@ namespace Omegasis.HappyBirthday.Framework
                     float itemScale = 4f;
                     Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + column * 16 * itemScale), (int)(this.yPositionOnScreen + (256) + row * 16 * itemScale), 64, 64);
                     ClickableTextureComponent item = new ClickableTextureComponent(info.objectID, placementBounds, "", info.objectID, Game1.objectSpriteSheet, textureBounds, 4f, true);
+                    item.item = info.getOne();
+                    item.name = GiftIDS.RegisteredGifts.ElementAt(value).Key;
                     this.itemButtons.Add(item);
                 }
             }
@@ -163,11 +169,12 @@ namespace Omegasis.HappyBirthday.Framework
                     this.selectedGift = button.name;
                     HappyBirthday.ModMonitor.Log(string.Format("Selected {0} as the favorited gift.", this.selectedGift));
 
-                    Item i = GiftIDS.RegisteredGifts[this.selectedGift];
+                    Item i = button.item;
                     Rectangle textureBounds = GameLocation.getSourceRectForObject(i.ParentSheetIndex);
                     float itemScale = 4f;
                     Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (16 * itemScale) + Game1.tinyFont.MeasureString(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift")).X), (int)(this.yPositionOnScreen + (64) + (16 * itemScale)), 64, 64);
                     this.favoriteGiftButton = new ClickableTextureComponent(this.selectedGift, placementBounds, "", this.selectedGift, Game1.objectSpriteSheet, textureBounds, 4f, true);
+                    this.favoriteGiftButton.item = i;
                 }
             }
 
@@ -198,17 +205,35 @@ namespace Omegasis.HappyBirthday.Framework
         /// <param name="y">The Y-position of the cursor.</param>
         public override void performHoverAction(int x, int y)
         {
-
+            bool hoverOverItemButtonThisFrame = false;
             foreach (ClickableTextureComponent button in this.itemButtons)
             {
-                button.scale = button.containsPoint(x, y)
-                    ? Math.Min(button.scale + 0.02f, button.baseScale + 0.1f)
-                    : Math.Max(button.scale - 0.02f, button.baseScale);
+                if (button.containsPoint(x, y))
+                {
+                    button.scale = button.containsPoint(x, y)
+                        ? Math.Min(button.scale + 0.02f, button.baseScale + 0.1f)
+                        : Math.Max(button.scale - 0.02f, button.baseScale);
+                    this.currentHoverTextureItem = button;
+                    hoverOverItemButtonThisFrame = true;
+                }
+            }
+
+            if (this.favoriteGiftButton!=null && this.favoriteGiftButton.containsPoint(x, y))
+            {
+                this.currentHoverTextureItem = this.favoriteGiftButton;
+                hoverOverItemButtonThisFrame = true;
+            }
+
+            if (hoverOverItemButtonThisFrame == false)
+            {
+                this.currentHoverTextureItem = null;
             }
 
             this.OkButton.scale = this.OkButton.containsPoint(x, y)
                 ? Math.Min(this.OkButton.scale + 0.02f, this.OkButton.baseScale + 0.1f)
                 : Math.Max(this.OkButton.scale - 0.02f, this.OkButton.baseScale);
+
+
 
         }
 
@@ -255,6 +280,12 @@ namespace Omegasis.HappyBirthday.Framework
             }
             this._leftButton.draw(b);
             this._rightButton.draw(b);
+
+            if (this.currentHoverTextureItem != null)
+            {
+                //Draws the item tooltip in the menu.
+                IClickableMenu.drawToolTip(b, this.currentHoverTextureItem.item.getDescription(), this.currentHoverTextureItem.item.DisplayName, this.currentHoverTextureItem.item);
+            }
 
             // draw cursor
             this.drawMouse(b);
