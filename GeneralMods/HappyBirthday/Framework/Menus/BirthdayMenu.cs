@@ -38,6 +38,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         public bool alllFinished;
 
+        public BirthdayHudMessage errorMessage;
+
         /*********
         ** Public methods
         *********/
@@ -80,6 +82,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         {
             this.Labels.Clear();
             this.DayButtons.Clear();
+            this.SeasonButtons.Clear();
             this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
 
             string bdaySeason = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Season");
@@ -211,9 +214,9 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 if (this.isFestivalDay())
                 {
                     if (string.IsNullOrEmpty(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")) == false)
-                        Game1.addHUDMessage(new HUDMessage(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")));
+                        Game1.addHUDMessage(new BirthdayHudMessage(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")));
                     else
-                        Game1.addHUDMessage(new HUDMessage("You can't have a birthday on this day. Sorry!"));
+                        Game1.addHUDMessage(new BirthdayHudMessage("You can't have a birthday on this day. Sorry!"));
                     return;
                 }
                 if (this.seasonName == "" || this.BirthdayDay == 0) return;
@@ -290,6 +293,19 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             {
                 this.OkButton.draw(b);
                 this.OkButton.draw(b, Color.Black * 0.5f, 0.97f);
+            }
+
+            if (Game1.hudMessages.Count > 0)
+            {
+                int position = 0;
+                foreach(HUDMessage message in Game1.hudMessages)
+                {
+                    if(message is BirthdayHudMessage)
+                    {
+                        message.draw(b, position);
+                    }
+                    position++;
+                }
             }
 
             // draw cursor
