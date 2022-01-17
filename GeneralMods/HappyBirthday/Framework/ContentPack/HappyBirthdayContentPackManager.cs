@@ -45,7 +45,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
                 this.contentPacks.Add(happyBirthdayContentPack.languageCode, new List<HappyBirthdayContentPack>() { happyBirthdayContentPack });
             }
             this.contentPackIdToLanguageCodes.Add(happyBirthdayContentPack.UniqueId, happyBirthdayContentPack.languageCode);
-            HappyBirthday.ModMonitor.Log(string.Format("Registering Happy Birthday Content Pack: {0}", happyBirthdayContentPack.UniqueId));
+            HappyBirthday.Instance.Monitor.Log(string.Format("Registering Happy Birthday Content Pack: {0}", happyBirthdayContentPack.UniqueId));
         }
 
         /// <summary>

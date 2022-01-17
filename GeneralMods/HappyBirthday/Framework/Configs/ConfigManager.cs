@@ -37,10 +37,10 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// <returns></returns>
         public string getConfigDirectory(bool GetFullPath)
         {
-            Directory.CreateDirectory(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Configs"));
+            Directory.CreateDirectory(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "Configs"));
             if (GetFullPath)
             {
-                return Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Configs");
+                return Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "Configs");
             }
             return "Configs";
         }
@@ -53,10 +53,10 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// <returns></returns>
         public string getConfigPath(bool GetFullPath, string ConfigFileName)
         {
-            Directory.CreateDirectory(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Configs"));
+            Directory.CreateDirectory(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "Configs"));
             if (GetFullPath)
             {
-                return Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "Configs",ConfigFileName);
+                return Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "Configs",ConfigFileName);
             }
             return Path.Combine("Configs",ConfigFileName);
         }
@@ -80,7 +80,7 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// <returns></returns>
         public virtual T ReadConfig<T>(string ConfigName) where T : class
         {
-            return HappyBirthday.ModHelper.Data.ReadJsonFile<T>(this.getConfigPath(false, ConfigName));
+            return HappyBirthday.Instance.Helper.Data.ReadJsonFile<T>(this.getConfigPath(false, ConfigName));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// <param name="Config"></param>
         public virtual void WriteConfig(string ConfigName, object Config)
         {
-            HappyBirthday.ModHelper.Data.WriteJsonFile(this.getConfigPath(false,ConfigName), Config);
+            HappyBirthday.Instance.Helper.Data.WriteJsonFile(this.getConfigPath(false,ConfigName), Config);
         }
 
     }

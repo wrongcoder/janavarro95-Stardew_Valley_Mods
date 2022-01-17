@@ -144,7 +144,7 @@ namespace Omegasis.HappyBirthday.Framework
             {
                 string starMessage = HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Happy Birthday: Star Message");
                 Messages.ShowStarMessage(starMessage);
-                MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
+                MultiplayerUtilities.SendBirthdayMessageToOtherPlayers();
 
                 MailUtilities.AddBirthdayMailToMailbox();
 

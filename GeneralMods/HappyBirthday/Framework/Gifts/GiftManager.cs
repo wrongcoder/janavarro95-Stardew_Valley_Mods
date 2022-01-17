@@ -108,18 +108,18 @@ namespace Omegasis.HappyBirthday
             {
                 Item i = new StardewValley.Object((int)v, 1);
                 string uniqueID = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.SDVObject), (int)v);
-                HappyBirthday.ModMonitor.Log("Added gift with id: " + uniqueID);
+                HappyBirthday.Instance.Monitor.Log("Added gift with id: " + uniqueID);
                 GiftIDS.RegisteredGifts.Add(uniqueID, i);
             }
-            HappyBirthday.ModHelper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),GiftIDS.RegisteredGifts.Keys.ToList());
+            HappyBirthday.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),GiftIDS.RegisteredGifts.Keys.ToList());
         }
 
         public void loadDefaultBirthdayGifts()
         {
 
-            if (File.Exists(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts", "DefaultGifts" + ".json")))
+            if (File.Exists(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "ModAssets", "Gifts", "DefaultGifts" + ".json")))
             {
-                DefaultBirthdayGifts = HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "DefaultGifts" + ".json"));
+                DefaultBirthdayGifts = HappyBirthday.Instance.Helper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "DefaultGifts" + ".json"));
             }
             else
             {
@@ -170,21 +170,21 @@ namespace Omegasis.HappyBirthday
                         }
                     }
                 }
-                HappyBirthday.ModHelper.Data.WriteJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "DefaultGifts" + ".json"), DefaultBirthdayGifts);
+                HappyBirthday.Instance.Helper.Data.WriteJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "DefaultGifts" + ".json"), DefaultBirthdayGifts);
             }
         }
 
         /// <summary>Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.</summary>
         public void loadVillagerBirthdayGifts()
         {
-            Directory.CreateDirectory(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts"));
-            string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts"));
+            Directory.CreateDirectory(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "ModAssets", "Gifts"));
+            string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "ModAssets", "Gifts"));
             foreach (string File in files)
             {
                 try
                 {
-                    NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(File) + ".json")));
-                    HappyBirthday.ModMonitor.Log("Loaded in gifts for npc: " + Path.GetFileNameWithoutExtension(File));
+                    NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.Instance.Helper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(File) + ".json")));
+                    HappyBirthday.Instance.Monitor.Log("Loaded in gifts for npc: " + Path.GetFileNameWithoutExtension(File));
                 }
                 catch(Exception err)
                 {
@@ -196,12 +196,12 @@ namespace Omegasis.HappyBirthday
         /// <summary>Used to load spouse birthday gifts from disk.</summary>
         public void loadSpouseBirthdayGifts()
         {
-            Directory.CreateDirectory(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
-            string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.ModHelper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
+            Directory.CreateDirectory(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
+            string[] files = Directory.GetFiles(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, "ModAssets", "Gifts", "Spouses"));
             foreach (string File in files)
             {
-                SpouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.ModHelper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
-                HappyBirthday.ModMonitor.Log("Loaded in spouse gifts for npc: " + Path.GetFileNameWithoutExtension(File));
+                SpouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.Instance.Helper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
+                HappyBirthday.Instance.Monitor.Log("Loaded in spouse gifts for npc: " + Path.GetFileNameWithoutExtension(File));
             }
         }
 
@@ -669,7 +669,7 @@ namespace Omegasis.HappyBirthday
 
             foreach(var v in NPCBirthdayGifts)
             {
-                HappyBirthday.ModHelper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(v.Key) + ".json"),v.Value);
+                HappyBirthday.Instance.Helper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(v.Key) + ".json"),v.Value);
             }
         }
 
@@ -831,7 +831,7 @@ namespace Omegasis.HappyBirthday
 
             foreach (var v in SpouseBirthdayGifts)
             {
-                HappyBirthday.ModHelper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts","Spouses" ,Path.GetFileNameWithoutExtension(v.Key) + ".json"), v.Value);
+                HappyBirthday.Instance.Helper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts","Spouses" ,Path.GetFileNameWithoutExtension(v.Key) + ".json"), v.Value);
             }
         }
 

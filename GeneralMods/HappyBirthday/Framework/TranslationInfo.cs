@@ -72,7 +72,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (!loadedDict.TryGetValue(key, out string loaded))
             {
-                Omegasis.HappyBirthday.HappyBirthday.ModMonitor.Log("Big issue: Key not found in file:" + xnb + " " + key);
+                Omegasis.HappyBirthday.HappyBirthday.Instance.Monitor.Log("Big issue: Key not found in file:" + xnb + " " + key);
                 return "";
             }
             return loaded;

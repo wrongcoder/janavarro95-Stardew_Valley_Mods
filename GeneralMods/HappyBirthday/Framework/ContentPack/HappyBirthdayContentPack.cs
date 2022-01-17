@@ -101,7 +101,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.ModMonitor.Log(string.Format("Error: Attempted to get a birthday wish with key {0} from Happy Birthday content pack, but the given birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a birthday wish with key {0} from Happy Birthday content pack, but the given birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -120,7 +120,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.ModMonitor.Log(string.Format("Error: Attempted to get a spouse birthday wish with key {0} from Happy Birthday content pack, but the given spouse birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a spouse birthday wish with key {0} from Happy Birthday content pack, but the given spouse birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -139,7 +139,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.ModMonitor.Log(string.Format("Error: Attempted to get an event string with key {0} from Happy Birthday content pack, but the given event string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get an event string with key {0} from Happy Birthday content pack, but the given event string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -158,7 +158,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.ModMonitor.Log(string.Format("Error: Attempted to get a mail string with key {0} from Happy Birthday content pack, but the given mail string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a mail string with key {0} from Happy Birthday content pack, but the given mail string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -177,7 +177,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.ModMonitor.Log(string.Format("Error: Attempted to get a translation string with key {0} from Happy Birthday content pack, but the given translation string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a translation string with key {0} from Happy Birthday content pack, but the given translation string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }

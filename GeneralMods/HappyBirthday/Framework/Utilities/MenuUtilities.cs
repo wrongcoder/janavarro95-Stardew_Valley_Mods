@@ -106,7 +106,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
         public static void OnMenuChangedToBillboard(Billboard billboard)
         {
-            IsDailyQuestBoard = HappyBirthday.ModHelper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
+            IsDailyQuestBoard = HappyBirthday.Instance.Helper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
             if (IsDailyQuestBoard)
                 return;
 
