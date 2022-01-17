@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using StardewValley;
 using static StardewValley.LocalizedContentManager;
 
-namespace Omegasis.HappyBirthday.Framework.Localization
+namespace Omegasis.HappyBirthday.Framework.Utilities
 {
     /// <summary>
     /// Utilities for dealing with localizaions for content packs.
@@ -20,10 +20,8 @@ namespace Omegasis.HappyBirthday.Framework.Localization
         /// <returns></returns>
         public static string GetLanguageCodeString(LanguageCode languageCode)
         {
-            if(languageCode== LanguageCode.en)
-            {
+            if (languageCode == LanguageCode.en)
                 return GetEnglishLanguageCode();
-            }
             return Game1.content.LanguageCodeString(languageCode);
         }
         /// <summary>
@@ -33,7 +31,7 @@ namespace Omegasis.HappyBirthday.Framework.Localization
         /// <returns></returns>
         public static string GetCurrentLanguageCodeString()
         {
-            return GetLanguageCodeString(LocalizedContentManager.CurrentLanguageCode);
+            return GetLanguageCodeString(CurrentLanguageCode);
         }
 
         public static string GetEnglishLanguageCode()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -75,7 +76,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         /// <returns></returns>
         public virtual List<HappyBirthdayContentPack> getHappyBirthdayContentPacksForCurrentLanguageCode()
         {
-            string currentLanguageCode = Localization.LocalizationUtilities.GetCurrentLanguageCodeString();
+            string currentLanguageCode = LocalizationUtilities.GetCurrentLanguageCodeString();
             if (this.contentPacks.ContainsKey(currentLanguageCode))
             {
                 return this.contentPacks[currentLanguageCode];

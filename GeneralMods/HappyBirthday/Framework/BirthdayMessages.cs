@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json;
 using Omegasis.HappyBirthday.Framework.ContentPack;
-using Omegasis.HappyBirthday.Framework.Localization;
+using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using static StardewValley.LocalizedContentManager;

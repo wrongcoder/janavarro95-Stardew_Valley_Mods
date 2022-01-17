@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Omegasis.HappyBirthday.Framework.ContentPack;
-using Omegasis.HappyBirthday.Framework.Localization;
+using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework
