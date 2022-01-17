@@ -37,14 +37,6 @@ namespace Omegasis.HappyBirthday
         /// </summary>
         public static ConfigManager Configs;
 
-        /// <summary>The queue of villagers who haven't given a gift yet.</summary>
-        public Dictionary<string, VillagerInfo> VillagerQueue;
-
-        /// <summary>Whether we've already checked for and (if applicable) set up the player's birthday today.</summary>
-        private bool CheckedForBirthday;
-        //private Dictionary<string, Dialogue> Dialogue;
-        //private bool SeenEvent;
-
         public static IModHelper ModHelper;
 
         public static IMonitor ModMonitor;
@@ -56,8 +48,6 @@ namespace Omegasis.HappyBirthday
         public GiftManager giftManager;
 
         public static HappyBirthday Instance;
-
-        public NPC lastSpeaker;
 
         private EventManager eventManager;
 
@@ -281,15 +271,8 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            try
-            {
-                this.ResetVillagerQueue();
-            }
-            catch (Exception ex)
-            {
-                this.Monitor.Log(ex.ToString(), LogLevel.Error);
-            }
-            this.CheckedForBirthday = false;
+            this.birthdayManager.ResetVillagerQueue();
+            this.birthdayManager.setCheckedForBirthday(false);
 
             foreach (KeyValuePair<string, EventHelper> v in this.eventManager.events)
             {
@@ -323,13 +306,7 @@ namespace Omegasis.HappyBirthday
             this.DataFilePath = Path.Combine("data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}.json");
 
             // reset state
-            this.VillagerQueue = new Dictionary<string, VillagerInfo>();
-            this.CheckedForBirthday = false;
-
-            // load settings
-            //
-            //this.MigrateLegacyData();
-
+            this.birthdayManager.setCheckedForBirthday(false);
 
             if (Game1.player.IsMainPlayer)
             {
@@ -447,24 +424,26 @@ namespace Omegasis.HappyBirthday
                 }
             }
 
+
+            //Below code sets up menus for selecting the new birthday for the player.
             if (!this.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null && Game1.player.Name.ToLower() != "unnamed farmhand")
             {
                 if (this.birthdayManager.playerBirthdayData != null)
                 {
                     Game1.activeClickableMenu = new BirthdayMenu(this.birthdayManager.playerBirthdayData.BirthdaySeason, this.birthdayManager.playerBirthdayData.BirthdayDay, this.birthdayManager.setBirthday);
-                    this.CheckedForBirthday = false;
+                    this.birthdayManager.setCheckedForBirthday(false);
                 }
                 else
                 {
                     this.birthdayManager.playerBirthdayData = new PlayerData();
                     Game1.activeClickableMenu = new BirthdayMenu("", 0, this.birthdayManager.setBirthday);
-                    this.CheckedForBirthday = false;
+                    this.birthdayManager.setCheckedForBirthday(false);
                 }
             }
 
-            if (!this.CheckedForBirthday && Game1.activeClickableMenu == null)
+            if (!this.birthdayManager.hasCheckedForBirthday() && Game1.activeClickableMenu == null)
             {
-                this.CheckedForBirthday = true;
+                this.birthdayManager.setCheckedForBirthday(true);
 
 
                 //Don't constantly set the birthday menu.
@@ -475,7 +454,7 @@ namespace Omegasis.HappyBirthday
                 if (!this.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null)
                 {
                     Game1.activeClickableMenu = new BirthdayMenu(this.birthdayManager.playerBirthdayData.BirthdaySeason, this.birthdayManager.playerBirthdayData.BirthdayDay, this.birthdayManager.setBirthday);
-                    this.CheckedForBirthday = false;
+                    this.birthdayManager.setCheckedForBirthday(false);
                 }
 
                 if (Game1.activeClickableMenu?.GetType() == typeof(FavoriteGiftMenu))
@@ -483,66 +462,17 @@ namespace Omegasis.HappyBirthday
                 if (this.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null && this.birthdayManager.hasChoosenFavoriteGift() == false)
                 {
                     Game1.activeClickableMenu = new FavoriteGiftMenu();
-                    this.CheckedForBirthday = false;
+                    this.birthdayManager.setCheckedForBirthday(false);
                     return;
                 }
 
-                if (this.birthdayManager.isBirthday())
-                {
-                    string starMessage = this.translationInfo.getTranslatedContentPackString("Happy Birthday: Star Message");
-                    Messages.ShowStarMessage(starMessage);
-                    MultiplayerSupport.SendBirthdayMessageToOtherPlayers();
-                }
-                // set up birthday
-                if (this.birthdayManager.isBirthday())
-                {
-                    MailUtilities.AddBirthdayMailToMailbox();
-
-                    foreach (NPC npc in NPCUtilities.GetAllNpcs())
-                    {
-                        if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
-                            continue;
-                        string message = this.birthdayMessages.getBirthdayMessage(npc.Name);
-                        Dialogue d = new Dialogue(message, npc);
-                        npc.CurrentDialogue.Push(d);
-                        if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
-                    }
-
-                }
+                this.birthdayManager.setUpPlayersBirthday();
             }
 
 
         }
 
-        /// <summary>Reset the queue of villager names.</summary>
-        private void ResetVillagerQueue()
-        {
 
-            if (this.VillagerQueue.Count > 0)
-            {
-                foreach (string npcName in this.VillagerQueue.Keys)
-                {
-                    if (NPCUtilities.ShouldGivePlayerBirthdayGift(npcName))
-                    {
-                        Game1.addHUDMessage(new HUDMessage("Didn't get birthday gift from npc:" + npcName));
-                    }
-                }
-            }
-
-            this.VillagerQueue.Clear();
-
-            foreach (GameLocation location in Game1.locations)
-            {
-                foreach (NPC npc in location.characters)
-                {
-                    if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
-                        continue;
-                    if (this.VillagerQueue.ContainsKey(npc.Name))
-                        continue;
-                    this.VillagerQueue.Add(npc.Name, new VillagerInfo());
-                }
-            }
-        }
 
 
     }

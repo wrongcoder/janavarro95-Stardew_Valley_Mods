@@ -36,6 +36,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     }
                 case DialogueBox dBox:
                     {
+                        OnMenuChangedToDialogueBox();
                         break;
                     }
             }
@@ -49,16 +50,16 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         {
             IsDailyQuestBoard = false;
             //Validate the gift and give it to the player.
-            if (HappyBirthday.Instance.lastSpeaker != null)
+            if (NPCUtilities.LastSpeaker != null)
             {
-                if (HappyBirthday.Instance.giftManager.BirthdayGiftToReceive != null && HappyBirthday.Instance.VillagerQueue[HappyBirthday.Instance.lastSpeaker.Name].hasGivenBirthdayGift == false)
+                if (HappyBirthday.Instance.giftManager.BirthdayGiftToReceive != null && HappyBirthday.Instance.birthdayManager.hasGivenBirthdayGift(NPCUtilities.LastSpeaker.Name) == false)
                 {
                     while (HappyBirthday.Instance.giftManager.BirthdayGiftToReceive.Name == "Error Item" || HappyBirthday.Instance.giftManager.BirthdayGiftToReceive.Name == "Rock" || HappyBirthday.Instance.giftManager.BirthdayGiftToReceive.Name == "???")
-                        HappyBirthday.Instance.giftManager.setNextBirthdayGift(HappyBirthday.Instance.lastSpeaker.Name);
+                        HappyBirthday.Instance.giftManager.setNextBirthdayGift(NPCUtilities.LastSpeaker.Name);
                     Game1.player.addItemByMenuIfNecessaryElseHoldUp(HappyBirthday.Instance.giftManager.BirthdayGiftToReceive);
                     HappyBirthday.Instance.giftManager.BirthdayGiftToReceive = null;
-                    HappyBirthday.Instance.VillagerQueue[HappyBirthday.Instance.lastSpeaker.Name].hasGivenBirthdayGift = true;
-                    HappyBirthday.Instance.lastSpeaker = null;
+                    HappyBirthday.Instance.birthdayManager.villagerQueue[NPCUtilities.LastSpeaker.Name].hasGivenBirthdayGift = true;
+                    NPCUtilities.LastSpeaker = null;
                 }
             }
         }
@@ -69,17 +70,17 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             //Hijack the dialogue box and ensure that birthday dialogue gets spoken.
             if (Game1.currentSpeaker != null)
             {
-                HappyBirthday.Instance.lastSpeaker = Game1.currentSpeaker;
-                if (Game1.activeClickableMenu != null && HappyBirthday.Instance.birthdayManager.isBirthday() && HappyBirthday.Instance.VillagerQueue.ContainsKey(Game1.currentSpeaker.Name))
+                NPCUtilities.LastSpeaker = Game1.currentSpeaker;
+                if (Game1.activeClickableMenu != null && HappyBirthday.Instance.birthdayManager.isBirthday())
                 {
                     if (NPCUtilities.ShouldWishPlayerHappyBirthday(Game1.currentSpeaker.Name) == false) return;
-                    if (Game1.activeClickableMenu is DialogueBox && NPCUtilities.ShouldWishPlayerHappyBirthday(Game1.currentSpeaker.Name))
+                    if (Game1.activeClickableMenu is DialogueBox)
                     {
                         Game1.currentSpeaker.resetCurrentDialogue();
                         Game1.currentSpeaker.resetSeasonalDialogue();
                         HappyBirthday.Instance.Helper.Reflection.GetMethod(Game1.currentSpeaker, "loadCurrentDialogue", true).Invoke();
                         Game1.npcDialogues[Game1.currentSpeaker.Name] = Game1.currentSpeaker.CurrentDialogue;
-                        if (HappyBirthday.Instance.birthdayManager.isBirthday() && HappyBirthday.Instance.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayGift == false)
+                        if (HappyBirthday.Instance.birthdayManager.isBirthday() && HappyBirthday.Instance.birthdayManager.hasGivenBirthdayGift(Game1.currentSpeaker.Name) == false)
                         {
                             try
                             {
@@ -93,7 +94,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                         }
 
                         Game1.activeClickableMenu = new DialogueBox(new Dialogue(HappyBirthday.Instance.birthdayMessages.getBirthdayMessage(Game1.currentSpeaker.Name), Game1.currentSpeaker));
-                        HappyBirthday.Instance.VillagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
+                        HappyBirthday.Instance.birthdayManager.villagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
 
                         // Set birthday gift for the player to recieve from the npc they are currently talking with.
 
