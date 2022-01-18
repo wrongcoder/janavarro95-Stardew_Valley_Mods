@@ -81,6 +81,7 @@ namespace Omegasis.HappyBirthday
             this.Helper.Events.Player.Warped += BirthdayEventUtilities.Player_Warped;
             this.Helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
+            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
             this.birthdayManager = new BirthdayManager();
 
             this.happyBirthdayContentPackManager = new HappyBirthdayContentPackManager();

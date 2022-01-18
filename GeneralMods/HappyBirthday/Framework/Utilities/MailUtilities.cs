@@ -103,7 +103,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             Game1.player.mailbox.Add(MailKeys.MomBirthdayMessageKey);
             Game1.player.mailbox.Add(MailKeys.DadBirthdayMessageKey);
 
-            foreach(NPC npc in NPCUtilities.GetAllNpcs())
+            foreach(NPC npc in NPCUtilities.GetAllHumanNpcs())
             {
                 string npcName = npc.Name;
                 if (Game1.player.friendshipData.ContainsKey(npcName))

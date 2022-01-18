@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
+using StardewValley.Characters;
+using StardewValley.Monsters;
 
 namespace Omegasis.HappyBirthday.Framework.Utilities
 {
@@ -20,6 +22,34 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 {
                     npcs.Add(npc);
                 }
+            }
+            return npcs;
+        }
+
+        /// <summary>
+        /// Gets all human npcs.
+        /// </summary>
+        /// <returns></returns>
+        public static List<NPC> GetAllHumanNpcs()
+        {
+            List<NPC> npcs = new List<NPC>();
+            foreach (NPC npc in GetAllNpcs())
+            {
+                if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
+                    continue;
+                npcs.Add(npc);
+            }
+            return npcs;
+        }
+
+        public static List<NPC> GetAllNonSpecialHumanNpcs()
+        {
+            List<NPC> npcs = new List<NPC>();
+            foreach (NPC npc in GetAllHumanNpcs())
+            {
+                if (npc.Name.Equals("Mr. Qi") || npc.Name.Equals("Birdie") || npc.Name.Equals("Henchman") || npc.Name.Equals("Gunther") || npc.Name.Equals("Bouncer") || npc.Name.Equals("Marlon"))
+                    continue;
+                npcs.Add(npc);
             }
             return npcs;
         }

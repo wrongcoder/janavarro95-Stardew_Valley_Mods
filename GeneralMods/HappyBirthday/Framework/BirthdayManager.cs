@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.HappyBirthday.Framework.Constants;
 using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewValley;
 using StardewValley.Characters;
@@ -122,16 +123,11 @@ namespace Omegasis.HappyBirthday.Framework
 
             this.villagerQueue.Clear();
 
-            foreach (GameLocation location in Game1.locations)
+            foreach (NPC npc in NPCUtilities.GetAllHumanNpcs())
             {
-                foreach (NPC npc in location.characters)
-                {
-                    if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
-                        continue;
-                    if (this.villagerQueue.ContainsKey(npc.Name))
-                        continue;
-                    this.villagerQueue.Add(npc.Name, new VillagerInfo());
-                }
+                if (this.villagerQueue.ContainsKey(npc.Name))
+                    continue;
+                this.villagerQueue.Add(npc.Name, new VillagerInfo());
             }
         }
 
@@ -148,10 +144,8 @@ namespace Omegasis.HappyBirthday.Framework
 
                 MailUtilities.AddBirthdayMailToMailbox();
 
-                foreach (NPC npc in NPCUtilities.GetAllNpcs())
+                foreach (NPC npc in NPCUtilities.GetAllHumanNpcs())
                 {
-                    if (npc is Child || npc is Horse || npc is Junimo || npc is Monster || npc is Pet)
-                        continue;
                     string message = HappyBirthday.Instance.birthdayMessages.getBirthdayMessage(npc.Name);
                     Dialogue d = new Dialogue(message, npc);
                     npc.CurrentDialogue.Push(d);
