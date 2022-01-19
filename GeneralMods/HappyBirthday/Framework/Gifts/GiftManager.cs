@@ -111,7 +111,7 @@ namespace Omegasis.HappyBirthday
                 HappyBirthday.Instance.Monitor.Log("Added gift with id: " + uniqueID);
                 GiftIDS.RegisteredGifts.Add(uniqueID, i);
             }
-            HappyBirthday.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),GiftIDS.RegisteredGifts.Keys.ToList());
+            HappyBirthday.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"), GiftIDS.RegisteredGifts.Keys.ToList());
         }
 
         public void loadDefaultBirthdayGifts()
@@ -186,9 +186,9 @@ namespace Omegasis.HappyBirthday
                     NPCBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), HappyBirthday.Instance.Helper.Data.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(File) + ".json")));
                     HappyBirthday.Instance.Monitor.Log("Loaded in gifts for npc: " + Path.GetFileNameWithoutExtension(File));
                 }
-                catch(Exception err)
+                catch (Exception err)
                 {
-                    
+
                 }
             }
         }
@@ -570,7 +570,7 @@ namespace Omegasis.HappyBirthday
                     new GiftInformation(GiftIDS.SDVObject.BasicFertilizer,0,10,10),
                 });
 
-                foreach(var v in GiftIDS.RegisteredGifts)
+                foreach (var v in GiftIDS.RegisteredGifts)
                 {
                     if (v.Value.Category == -74)
                     {
@@ -648,7 +648,7 @@ namespace Omegasis.HappyBirthday
                     //Linus gives forged goods
                     if (v.Value.Category == -4)
                     {
-                        if (v.Value.salePrice() <= 500 && v.Value.salePrice()>=150)
+                        if (v.Value.salePrice() <= 500 && v.Value.salePrice() >= 150)
                         {
                             NPCBirthdayGifts["Willy"].Add(new GiftInformation(v.Key, 0, 20, 1, 1));
                         }
@@ -667,9 +667,9 @@ namespace Omegasis.HappyBirthday
                 });
             }
 
-            foreach(var v in NPCBirthdayGifts)
+            foreach (var v in NPCBirthdayGifts)
             {
-                HappyBirthday.Instance.Helper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(v.Key) + ".json"),v.Value);
+                HappyBirthday.Instance.Helper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts", Path.GetFileNameWithoutExtension(v.Key) + ".json"), v.Value);
             }
         }
 
@@ -831,7 +831,7 @@ namespace Omegasis.HappyBirthday
 
             foreach (var v in SpouseBirthdayGifts)
             {
-                HappyBirthday.Instance.Helper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts","Spouses" ,Path.GetFileNameWithoutExtension(v.Key) + ".json"), v.Value);
+                HappyBirthday.Instance.Helper.Data.WriteJsonFile(Path.Combine("ModAssets", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(v.Key) + ".json"), v.Value);
             }
         }
 
@@ -840,7 +840,17 @@ namespace Omegasis.HappyBirthday
         /// <remarks>This returns gifts based on the speaker's heart level towards the player: neutral for 3-4, good for 5-6, and best for 7-10.</remarks>
         public void setNextBirthdayGift(string name)
         {
+            Item gift = this.getNextBirthdayGift(name);
+            this.setNextBirthdayGift(gift);
+        }
 
+        /// <summary>
+        /// Gets the next birthday gift that would be received by the given npc.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Item getNextBirthdayGift(string name)
+        {
             if (Game1.player.friendshipData.ContainsKey(name))
             {
                 if (Game1.player.getSpouse() != null)
@@ -848,50 +858,53 @@ namespace Omegasis.HappyBirthday
                     if (Game1.player.getSpouse().Name.Equals(name))
                     {
                         //Get spouse gift here
-                        this.getSpouseBirthdayGift(name);
+                        Item gift = this.getSpouseBirthdayGift(name);
+                        return gift;
                     }
                     else
                     {
-                        this.getNonSpouseBirthdayGift(name);
+                        Item gift = this.getNonSpouseBirthdayGift(name);
+                        return gift;
                     }
                 }
                 else
                 {
                     if (NPCBirthdayGifts.ContainsKey(name))
                     {
-                        this.getNonSpouseBirthdayGift(name);
+                        Item gift = this.getNonSpouseBirthdayGift(name);
+                        return gift;
                     }
                     else
                     {
-                        this.getDefaultBirthdayGift(name);
+                        Item gift = this.getDefaultBirthdayGift(name);
+                        return gift;
 
                     }
                 }
-
             }
             else
             {
                 if (NPCBirthdayGifts.ContainsKey(name))
                 {
-                    this.getNonSpouseBirthdayGift(name);
+
+                    Item gift = this.getNonSpouseBirthdayGift(name);
+                    return gift;
                 }
                 else
                 {
-                    this.getDefaultBirthdayGift(name);
+                    Item gift = this.getDefaultBirthdayGift(name);
+                    return gift;
                 }
             }
-
-
         }
 
         /// <summary>
         /// Tries to get a default spouse birthday gift.
         /// </summary>
         /// <param name="name"></param>
-        public void getNonSpouseBirthdayGift(string name)
+        public Item getNonSpouseBirthdayGift(string name)
         {
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
-
 
             List<Item> possibleItems = new List<Item>();
             if (NPCBirthdayGifts.ContainsKey(name))
@@ -899,7 +912,7 @@ namespace Omegasis.HappyBirthday
                 List<GiftInformation> npcPossibleGifts = NPCBirthdayGifts[name];
                 foreach (GiftInformation info in npcPossibleGifts)
                 {
-                    if (info.minRequiredHearts <= heartLevel && heartLevel<=info.maxRequiredHearts)
+                    if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
                     {
                         possibleItems.Add(info.getOne());
                     }
@@ -907,17 +920,14 @@ namespace Omegasis.HappyBirthday
 
                 Item gift;
                 int index = StardewValley.Game1.random.Next(possibleItems.Count);
-                gift = possibleItems[index];
-                if (Game1.player.isInventoryFull())
-                    Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-                else
-                    this.BirthdayGiftToReceive = gift;
+                gift = possibleItems[index].getOne();
+                return gift;
+
             }
             else
             {
-
-                this.getDefaultBirthdayGift(name);
-
+                Item gift = this.getDefaultBirthdayGift(name);
+                return gift;
             }
 
         }
@@ -927,34 +937,16 @@ namespace Omegasis.HappyBirthday
         /// Tries to get a spouse birthday gift.
         /// </summary>
         /// <param name="name"></param>
-        public void getSpouseBirthdayGift(string name)
+        public Item getSpouseBirthdayGift(string name)
         {
-
-            if (string.IsNullOrEmpty(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
-            {
-                Item I = GiftIDS.RegisteredGifts[HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift];
-                if (Game1.player.isInventoryFull())
-                    Game1.createItemDebris(I.getOne(), Game1.player.getStandingPosition(), Game1.player.getDirection());
-                else
-                    this.BirthdayGiftToReceive = I.getOne();
-                return;
-            }
-
-
             if (string.IsNullOrEmpty(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
             {
                 if (GiftIDS.RegisteredGifts.ContainsKey(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift))
                 {
-                    GiftInformation info=new GiftInformation(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
-                    if (Game1.player.isInventoryFull())
-                        Game1.createItemDebris(info.getOne(), Game1.player.getStandingPosition(), Game1.player.getDirection());
-                    else
-                        this.BirthdayGiftToReceive = info.getOne();
+                    GiftInformation info = new GiftInformation(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
+                    return info.getOne();
                 }
-
-                return;
             }
-
 
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
@@ -965,7 +957,7 @@ namespace Omegasis.HappyBirthday
                 List<GiftInformation> npcPossibleGifts = SpouseBirthdayGifts[name];
                 foreach (GiftInformation info in npcPossibleGifts)
                 {
-                    if (info.minRequiredHearts <= heartLevel && heartLevel<=info.maxRequiredHearts)
+                    if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
                     {
                         possibleItems.Add(info.getOne());
                     }
@@ -973,18 +965,12 @@ namespace Omegasis.HappyBirthday
 
                 Item gift;
                 int index = StardewValley.Game1.random.Next(possibleItems.Count);
-                gift = possibleItems[index];
-                if (Game1.player.isInventoryFull())
-                    Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
-                else
-                    this.BirthdayGiftToReceive = gift;
+                gift = possibleItems[index].getOne();
+                return gift;
             }
             else
             {
-
-                this.getNonSpouseBirthdayGift(name);
-
-
+                return this.getNonSpouseBirthdayGift(name);
             }
 
         }
@@ -993,7 +979,7 @@ namespace Omegasis.HappyBirthday
         /// Tries to get a default birthday gift.
         /// </summary>
         /// <param name="name"></param>
-        public void getDefaultBirthdayGift(string name)
+        public Item getDefaultBirthdayGift(string name)
         {
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
@@ -1008,16 +994,23 @@ namespace Omegasis.HappyBirthday
                 }
             }
 
-            //Should have atleast 1 default birthday gift!!!!
-
             Item gift;
             int index = StardewValley.Game1.random.Next(possibleItems.Count);
-            gift = possibleItems[index];
+            gift = possibleItems[index].getOne();
+            return gift;
+
+        }
+
+        /// <summary>
+        /// Actually sets the next birthday gift to receieve or drops it on the ground for the player to pick up afterwards.
+        /// </summary>
+        /// <param name="gift"></param>
+        public virtual void setNextBirthdayGift(Item gift)
+        {
             if (Game1.player.isInventoryFull())
                 Game1.createItemDebris(gift, Game1.player.getStandingPosition(), Game1.player.getDirection());
             else
                 this.BirthdayGiftToReceive = gift;
-
         }
     }
 

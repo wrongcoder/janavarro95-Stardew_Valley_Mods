@@ -19,9 +19,22 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             data[MailKeys.MomBirthdayMessageKey] = GetMomsMailMessage();
             data[MailKeys.DadBirthdayMessageKey] = GetDadsMailMessage();
 
-            foreach(string MailKey in MailKeys.GetAllMailKeysExcludingParents())
+            foreach(string MailKey in MailKeys.GetAllNonBelatedMailKeysExcludingParents())
             {
                 UpdateMailMessage(ref data, MailKey);
+            }
+
+            foreach(KeyValuePair<string,string> npcNameToMailKey in MailKeys.GetAllBelatedBirthdayMailKeys())
+            {
+                string npcName = npcNameToMailKey.Key;
+                string mailKey = npcNameToMailKey.Value;
+
+                Item gift= HappyBirthday.Instance.giftManager.getNextBirthdayGift(npcName);
+                int itemParentSheetIndex = gift.parentSheetIndex;
+                int stackSize = gift.Stack;
+                string formattedMailItemString = GetItemMailStringFormat(itemParentSheetIndex, stackSize);
+
+                UpdateMailMessage(ref data, mailKey, formattedMailItemString);
             }
         }
 
@@ -39,6 +52,17 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         }
 
         /// <summary>
+        /// Gets the proper mail string for getting items in the mail.
+        /// </summary>
+        /// <param name="ParentSheetIndex"></param>
+        /// <param name="StackSize"></param>
+        /// <returns></returns>
+        public static string GetItemMailStringFormat(int ParentSheetIndex, int StackSize)
+        {
+            return string.Format("%item object {0} {1} %%", ParentSheetIndex, StackSize);
+        }
+
+        /// <summary>
         /// Creates the mail message from mom.
         /// </summary>
         /// <returns></returns>
@@ -46,7 +70,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         {
             int itemToGet = HappyBirthday.Configs.mailConfig.momBirthdayItemGive;
             int stackSizeToGet = HappyBirthday.Configs.mailConfig.momBirthdayItemGiveStackSize;
-            string formattedString = string.Format("%item object {0} {1} %%",itemToGet,stackSizeToGet);
+            string formattedString = GetItemMailStringFormat(itemToGet, stackSizeToGet);
 
             return string.Format(HappyBirthday.Instance.translationInfo.getMailString(MailKeys.MomBirthdayMessageKey), formattedString);
         }
@@ -89,9 +113,10 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// </summary>
         /// <param name="MailData"></param>
         /// <param name="MailKey"></param>
-        public static void UpdateMailMessage(ref IDictionary<string,string> MailData, string MailKey)
+        /// <param name="FormattingArgs">The string args to be used in replacing the mail keys.</param>
+        public static void UpdateMailMessage(ref IDictionary<string,string> MailData, string MailKey, params string[] FormattingArgs)
         {
-            MailData[MailKey] = GetMailMessage(MailKey);
+            MailData[MailKey] = string.Format(GetMailMessage(MailKey),FormattingArgs);
         }
 
         /// <summary>
@@ -131,6 +156,23 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                             Game1.player.mailbox.Add(mailKey);
                         }
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the belated birthday mail to the player's mailbox.
+        /// </summary>
+        /// <param name="NpcsToReceieveMailFrom"></param>
+        public static void AddBelatedBirthdayMailToMailbox(List<string> NpcsToReceieveMailFrom)
+        {
+            foreach (string npcName in NpcsToReceieveMailFrom)
+            {
+                if (NPCUtilities.ShouldGivePlayerBirthdayGift(npcName))
+                {
+                    Game1.addHUDMessage(new HUDMessage("Didn't get birthday gift from npc:" + npcName));
+                    string mailKey = MailKeys.CreateBelatedBirthdayWishMailKey(npcName);
+                    Game1.player.mailbox.Add(mailKey);
                 }
             }
         }

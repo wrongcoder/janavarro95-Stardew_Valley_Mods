@@ -132,8 +132,7 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            this.birthdayManager.ResetVillagerQueue();
-            this.birthdayManager.setCheckedForBirthday(false);
+            this.birthdayManager.onDayStarted(sender, e);
 
             BirthdayEventUtilities.ClearEventsFromFarmer();
         }

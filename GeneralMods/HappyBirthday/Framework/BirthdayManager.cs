@@ -36,6 +36,14 @@ namespace Omegasis.HappyBirthday.Framework
             this.villagerQueue = new Dictionary<string, VillagerInfo>();
         }
 
+        public void onDayStarted(object sender, StardewModdingAPI.Events.DayStartedEventArgs args)
+        {
+
+            this.sendOutBelatedBirthdayMail();
+            this.resetVillagerQueue();
+            this.setCheckedForBirthday(false);
+        }
+
         /// <summary>Set the player's birthday/</summary>
         /// <param name="season">The birthday season.</param>
         /// <param name="day">The birthday day.</param>
@@ -52,9 +60,52 @@ namespace Omegasis.HappyBirthday.Framework
         /// <summary>Get whether today is the player's birthday.</summary>
         public bool isBirthday()
         {
+            return this.isBirthday(Game1.currentSeason, Game1.dayOfMonth);
+        }
+
+        /// <summary>
+        /// Checks to see if the player's birthday is on a given day of a given season.
+        /// </summary>
+        /// <param name="Season"></param>
+        /// <param name="Day"></param>
+        /// <returns></returns>
+        public bool isBirthday(string Season, int Day)
+        {
             return
-                this.playerBirthdayData.BirthdayDay == Game1.dayOfMonth
-                && this.playerBirthdayData.BirthdaySeason.ToLower().Equals(Game1.currentSeason.ToLower());
+                this.playerBirthdayData.BirthdayDay == Day
+                && this.playerBirthdayData.BirthdaySeason.ToLower().Equals(Season);
+        }
+
+        /// <summary>
+        /// Checks to see if a player's birthday was yesterday.
+        /// </summary>
+        /// <returns></returns>
+        public bool wasBirthdayYesterday()
+        {
+            if (Game1.dayOfMonth == 1)
+            {
+                int day = 28;
+                string season = "";
+                if (Game1.IsSpring)
+                {
+                    season = "spring";
+                }
+                else if (Game1.IsSummer)
+                {
+                    season = "summer";
+                }
+                else if (Game1.IsFall)
+                {
+                    season = "fall";
+                }
+                else
+                {
+                    season = "winter";
+                }
+                return this.isBirthday(season, day);
+
+            }
+            return this.isBirthday(Game1.currentSeason, Game1.dayOfMonth - 1);
         }
 
         /// <summary>
@@ -106,20 +157,28 @@ namespace Omegasis.HappyBirthday.Framework
             this.addOtherPlayerBirthdayData(birthdayData);
         }
 
-        /// <summary>Reset the queue of villager names.</summary>
-        public void ResetVillagerQueue()
+        /// <summary>
+        /// Sends out the belated birthday mail to the player for the gifts/messages that they did not receive the day before.
+        /// </summary>
+        protected virtual void sendOutBelatedBirthdayMail()
         {
-
-            if (this.villagerQueue.Count > 0)
+            if (this.wasBirthdayYesterday())
             {
-                foreach (string npcName in this.villagerQueue.Keys)
+                Game1.addHUDMessage(new HUDMessage("Your birthday was yesterday..."));
+                if (this.villagerQueue.Count > 0)
                 {
-                    if (NPCUtilities.ShouldGivePlayerBirthdayGift(npcName))
-                    {
-                        Game1.addHUDMessage(new HUDMessage("Didn't get birthday gift from npc:" + npcName));
-                    }
+                    MailUtilities.AddBelatedBirthdayMailToMailbox(this.villagerQueue.Keys.ToList());
+                }
+                else
+                {
+                    Game1.addHUDMessage(new HUDMessage("Need to keep track of villagers that did not give birthday gifts."));
                 }
             }
+        }
+
+        /// <summary>Reset the queue of villager names.</summary>
+        protected virtual void resetVillagerQueue()
+        {
 
             this.villagerQueue.Clear();
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.HappyBirthday.Framework.Utilities;
+using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Constants
 {
@@ -41,7 +43,7 @@ namespace Omegasis.HappyBirthday.Framework.Constants
         /// Returns all of the mail keys for all pieces of mail expect the player's parents since those have custom logic.
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetAllMailKeysExcludingParents()
+        public static List<string> GetAllNonBelatedMailKeysExcludingParents()
         {
             List<string> mailKeys = GetAllDatingBirthdayPartyInviteMailKeys();
             mailKeys.AddRange(new List<string>()
@@ -49,6 +51,22 @@ namespace Omegasis.HappyBirthday.Framework.Constants
                 JunimosBirthdayMessageKey
             });
             return mailKeys;
+        }
+
+        /// <summary>
+        /// Gets all of the mail keys for the belated birthday wishes mail.
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string,string> GetAllBelatedBirthdayMailKeys()
+        {
+            Dictionary<string, string> npcNameToMailKey = new Dictionary<string, string>();
+            foreach(NPC npc in NPCUtilities.GetAllNonSpecialHumanNpcs())
+            {
+                string mailKey = CreateBelatedBirthdayWishMailKey(npc.Name);
+                npcNameToMailKey.Add(npc.name,mailKey);
+            }
+            return npcNameToMailKey;
+
         }
 
         /// <summary>
@@ -80,13 +98,14 @@ namespace Omegasis.HappyBirthday.Framework.Constants
         /// <returns></returns>
         public static List<string> GetAllMailKeys()
         {
-            List<string> allMailKeys = GetAllMailKeysExcludingParents();
+            List<string> allMailKeys = GetAllNonBelatedMailKeysExcludingParents();
             allMailKeys.AddRange(new List<string>()
             {
                 MomBirthdayMessageKey,
                 DadBirthdayMessageKey
 
             });
+            allMailKeys.AddRange(GetAllBelatedBirthdayMailKeys().Values);
             return allMailKeys;
         }
 
