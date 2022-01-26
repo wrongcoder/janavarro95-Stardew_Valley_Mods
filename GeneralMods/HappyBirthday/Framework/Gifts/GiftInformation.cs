@@ -7,6 +7,9 @@ using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.Gifts
 {
+    /// <summary>
+    /// Information regarding gifts given to the player.
+    /// </summary>
     public class GiftInformation
     {
 
