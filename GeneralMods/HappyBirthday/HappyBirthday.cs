@@ -67,19 +67,28 @@ namespace Omegasis.HappyBirthday
             Configs = new ConfigManager();
             Configs.initializeConfigs();
 
+            this.Helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
+
             this.Helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            this.Helper.Events.GameLoop.DayEnding += this.OnDayEnded;
+
             this.Helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+
             this.Helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             this.Helper.Events.GameLoop.Saving += this.OnSaving;
+
             this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+
             this.Helper.Events.Display.MenuChanged += MenuUtilities.OnMenuChanged;
+            this.Helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
+
             this.Helper.Events.Display.RenderedActiveMenu += RenderUtilities.OnRenderedActiveMenu;
             this.Helper.Events.Display.RenderedHud += RenderUtilities.OnRenderedHud;
+
             this.Helper.Events.Multiplayer.ModMessageReceived += MultiplayerUtilities.Multiplayer_ModMessageReceived;
             this.Helper.Events.Multiplayer.PeerDisconnected += MultiplayerUtilities.Multiplayer_PeerDisconnected;
-            this.Helper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
+
             this.Helper.Events.Player.Warped += BirthdayEventUtilities.Player_Warped;
-            this.Helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
             BirthdayEventUtilities.BirthdayEventManager = new EventManager();
             this.birthdayManager = new BirthdayManager();
@@ -132,9 +141,15 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+            SaveManager.OnDayStarted(sender, e);
             this.birthdayManager.onDayStarted(sender, e);
 
             BirthdayEventUtilities.ClearEventsFromFarmer();
+        }
+
+        private void OnDayEnded(object sender, DayEndingEventArgs e)
+        {
+            SaveManager.OnDayEnded(sender, e);
         }
 
         /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
@@ -160,35 +175,7 @@ namespace Omegasis.HappyBirthday
             }
 
 
-            this.DataFilePath = Path.Combine("data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}.json");
-
-            // reset state
-            this.birthdayManager.setCheckedForBirthday(false);
-
-            if (Game1.player.IsMainPlayer)
-            {
-                if (File.Exists(Path.Combine(this.Helper.DirectoryPath, "data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}_FarmhandBirthdays.json")))
-                {
-                    this.birthdayManager.othersBirthdays = this.Helper.Data.ReadJsonFile<Dictionary<long, PlayerData>>(Path.Combine("data", $"{Game1.player.Name}_{Game1.player.UniqueMultiplayerID}_FarmhandBirthdays.json"));
-                    this.Monitor.Log("Loaded in farmhand birthdays for this session.");
-                }
-                else
-                {
-                    this.Monitor.Log("Unable to find farmhand birthdays for this session. Does the file exist or is this single player?");
-                }
-                this.birthdayManager.playerBirthdayData = this.Helper.Data.ReadJsonFile<PlayerData>(this.DataFilePath) ?? new PlayerData();
-            }
-            else
-            {
-                this.Monitor.Log("Requesting birthday info from host for player: " + Game1.player.Name);
-                MultiplayerUtilities.RequestFarmandBirthdayInfoFromServer();
-            }
-
-            if (this.birthdayManager.playerBirthdayData != null)
-            {
-                //ModMonitor.Log("Send all birthday information from " + Game1.player.Name);
-                MultiplayerUtilities.SendBirthdayInfoToOtherPlayers();
-            }
+            //SaveManager.Load(Game1.player.uniqueMultiplayerID);
 
 
             MailUtilities.RemoveAllBirthdayMail();
@@ -200,21 +187,7 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnSaving(object sender, SavingEventArgs e)
         {
-            if (this.birthdayManager.hasChosenBirthday())
-            {
-                this.Helper.Data.WriteJsonFile(this.DataFilePath, this.birthdayManager.playerBirthdayData);
-                if (Game1.IsMultiplayer)
-                {
-                    string p = Path.Combine("data", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID + "_" + "FarmhandBirthdays.json");
-                    this.Helper.Data.WriteJsonFile(p, this.birthdayManager.othersBirthdays);
-                }
-            }
-
-            if (Game1.player.IsMainPlayer == false)
-            {
-
-                //StardustCore.Utilities.Serialization.Serializer.JSONSerializer.Serialize(this.DataFilePath, this.PlayerData);
-            }
+            //SaveManager.Save(Game1.player.uniqueMultiplayerID);
         }
 
         /// <summary>Raised after the game state is updated (≈60 times per second).</summary>

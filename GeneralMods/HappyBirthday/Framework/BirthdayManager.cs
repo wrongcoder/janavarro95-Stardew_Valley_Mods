@@ -71,6 +71,8 @@ namespace Omegasis.HappyBirthday.Framework
         /// <returns></returns>
         public bool isBirthday(string Season, int Day)
         {
+            if (this.playerBirthdayData == null) return false;
+
             return
                 this.playerBirthdayData.BirthdayDay == Day
                 && this.playerBirthdayData.BirthdaySeason.ToLower().Equals(Season);
@@ -204,7 +206,7 @@ namespace Omegasis.HappyBirthday.Framework
                 MailUtilities.AddBirthdayMailToMailbox();
 
                 foreach (NPC npc in NPCUtilities.GetAllHumanNpcs())
-                {
+                {   
                     string message = HappyBirthday.Instance.birthdayMessages.getBirthdayMessage(npc.Name);
                     Dialogue d = new Dialogue(message, npc);
                     npc.CurrentDialogue.Push(d);

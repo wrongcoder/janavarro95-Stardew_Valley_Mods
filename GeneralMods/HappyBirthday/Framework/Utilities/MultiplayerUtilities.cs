@@ -16,7 +16,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         public static void SendBirthdayMessageToOtherPlayers()
         {
             string str = HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Happy Birthday: Farmhand Birthday Message");
-            str.Replace("@", Game1.player.Name);
+            str=str.Replace("@", Game1.player.Name);
             HUDMessage message = new HUDMessage(str, 1);
 
             foreach (KeyValuePair<long, Farmer> f in Game1.otherFarmers)
@@ -82,9 +82,6 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     HappyBirthday.Instance.birthdayManager.updateOtherPlayerBirthdayData(message);
                     HappyBirthday.Instance.Monitor.Log("Got other player's birthday data from: " + Game1.getFarmer(e.FromPlayerID).Name);
                 }
-                string p = Path.Combine("data", Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID + "_" + "FarmhandBirthdays.json");
-                if (File.Exists(Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, p)) == false)
-                    HappyBirthday.Instance.Helper.Data.WriteJsonFile(p, HappyBirthday.Instance.birthdayManager.othersBirthdays);
             }
             if (e.FromModID == HappyBirthday.Instance.Helper.Multiplayer.ModID && e.Type.Equals(FSTRING_SendFarmhandBirthdayInfoToPlayer))
             {
