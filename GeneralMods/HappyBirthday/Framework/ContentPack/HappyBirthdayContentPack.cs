@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.HappyBirthday.Framework.Gifts;
 using StardewModdingAPI;
 
 namespace Omegasis.HappyBirthday.Framework.ContentPack
@@ -48,6 +49,21 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         /// </summary>
         public Dictionary<string, string> translatedStrings;
 
+
+        /// <summary>
+        /// The npc birthday gifts added by the content pack.
+        /// </summary>
+        public Dictionary<string, List<GiftInformation>> npcBirthdayGifts;
+        /// <summary>
+        /// The spouse birthday gifts added by the content pack.
+        /// </summary>
+        public Dictionary<string, List<GiftInformation>> spouseBirthdayGifts;
+        /// <summary>
+        /// The default birthday gifts added by the content pack.
+        /// </summary>
+        public List<GiftInformation> defaultBirthdayGifts;
+
+
         /// <summary>
         /// The unique id for this content pack.
         /// </summary>
@@ -85,6 +101,14 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             this.mail = this.loadStringDictionary(this.getContentPackStringsPath(), "Mail.json");
             this.spouseBirthdayWishes = this.loadStringDictionary(this.getContentPackStringsPath(), "SpouseBirthdayWishes.json");
             this.translatedStrings = this.loadStringDictionary(this.getContentPackStringsPath(), "TranslatedStrings.json");
+
+            this.defaultBirthdayGifts = new List<GiftInformation>();
+            this.npcBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
+            this.spouseBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
+
+            this.loadDefaultBirthdayGifts();
+            this.loadVillagerBirthdayGifts();
+            this.loadSpouseBirthdayGifts();
         }
 
         /// <summary>
@@ -239,6 +263,96 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
                 throw new ArgumentException(string.Format("There are zero string keys in the the dictionary file for the given HappyBirthday content pack {0} at path {1}", this.UniqueId, RelativePathToFile));
             }
             return dictionaryContentFile.First().Value;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="GiftInformation"/> for a given <see cref="StardewValley.NPC"/>
+        /// </summary>
+        /// <param name="NpcName">The name of the npc</param>
+        /// <returns></returns>
+        public virtual List<GiftInformation> getGiftsForNpc(string NpcName)
+        {
+            if (this.npcBirthdayGifts.ContainsKey(NpcName))
+            {
+                return this.npcBirthdayGifts[NpcName];
+            }
+            return new List<GiftInformation>();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="GiftInformation"/> for a given <see cref="StardewValley.NPC"/> if they are the spouse.
+        /// </summary>
+        /// <param name="NpcName">The name of the npc</param>
+        /// <returns></returns>
+        public virtual List<GiftInformation> getGiftsForSpouse(string NpcName)
+        {
+            if (this.spouseBirthdayGifts.ContainsKey(NpcName))
+            {
+                return this.spouseBirthdayGifts[NpcName];
+            }
+            return new List<GiftInformation>();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="GiftInformation"/> if no npc specific gift was selected.
+        /// </summary>
+        /// <param name="NpcName">The name of the npc</param>
+        /// <returns></returns>
+        public virtual List<GiftInformation> getDefaultBirthdayGifts()
+        {
+            if (this.defaultBirthdayGifts == null)
+            {
+                return new List<GiftInformation>();
+            }
+            return this.defaultBirthdayGifts;
+        }
+
+
+
+        public void loadDefaultBirthdayGifts()
+        {
+
+            if (File.Exists(Path.Combine(this.baseContentPack.DirectoryPath,"Content", "Data", "Gifts", "DefaultGifts" + ".json")))
+            {
+                this.defaultBirthdayGifts = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", "DefaultGifts" + ".json"));
+            }
+
+        }
+
+        /// <summary>Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.</summary>
+        public void loadVillagerBirthdayGifts()
+        {
+            string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath,"Content" ,"Data", "Gifts"));
+            foreach (string File in files)
+            {
+                try
+                {
+                    List<GiftInformation> giftInfo = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", Path.GetFileNameWithoutExtension(File) +".json"));
+
+                    if (giftInfo == null)
+                    {
+                        throw new Exception("NPC GIFT INFO CAN NOT BE NULL!!!!");
+                    }
+
+                    this.npcBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File),giftInfo );
+                    HappyBirthday.Instance.Monitor.Log("Loaded in gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : " + this.UniqueId);
+                }
+                catch (Exception err)
+                {
+                    HappyBirthday.Instance.Monitor.Log(err.ToString(), LogLevel.Error);
+                }
+            }
+        }
+
+        /// <summary>Used to load spouse birthday gifts from disk.</summary>
+        public void loadSpouseBirthdayGifts()
+        {
+            string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath, "Content", "Data", "Gifts", "Spouses"));
+            foreach (string File in files)
+            {
+                this.spouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
+                HappyBirthday.Instance.Monitor.Log("Loaded in spouse gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : "+this.UniqueId);
+            }
         }
     }
 }

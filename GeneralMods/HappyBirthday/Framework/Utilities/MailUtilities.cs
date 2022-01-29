@@ -15,6 +15,8 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
         public static void EditMailAsset(StardewModdingAPI.IAssetData asset)
         {
+            //TODO: This seems to be called every time the mail asset is opened, which isn't super efficient. Find a way to optimize this?
+
             IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
             data[MailKeys.MomBirthdayMessageKey] = GetMomsMailMessage();
             data[MailKeys.DadBirthdayMessageKey] = GetDadsMailMessage();

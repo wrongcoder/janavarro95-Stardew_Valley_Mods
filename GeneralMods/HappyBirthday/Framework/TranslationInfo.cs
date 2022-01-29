@@ -180,11 +180,23 @@ namespace Omegasis.HappyBirthday.Framework
             }
         }
 
+        /// <summary>
+        /// Gets a translated string from a content pack.
+        /// </summary>
+        /// <param name="Key"></param>
+        /// <returns></returns>
         public virtual string getTranslatedContentPackString(string Key)
         {
             return this.getTranslatedContentPackString(Key, LocalizationUtilities.GetCurrentLanguageCodeString(), true);
         }
 
+        /// <summary>
+        /// Gets a translated string from a content pack.
+        /// </summary>
+        /// <param name="Key"></param>
+        /// <param name="LanguageCode"></param>
+        /// <param name="DefaultToEnglish"></param>
+        /// <returns></returns>
         public virtual string getTranslatedContentPackString(string Key, string LanguageCode, bool DefaultToEnglish)
         {
             if (LanguageCode == LocalizationUtilities.GetEnglishLanguageCode() && DefaultToEnglish == true)

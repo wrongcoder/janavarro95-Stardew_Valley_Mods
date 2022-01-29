@@ -17,6 +17,147 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Abigail.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Alex.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Caroline.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Clint.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\DefaultGifts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Demetrius.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Dwarf.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Elliott.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Emily.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Evelyn.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\George.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Gus.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Haley.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Harvey.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Jas.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Jodi.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Kent.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Krobus.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Leah.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Lewis.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Linus.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Marnie.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Maru.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Pam.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Penny.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Pierre.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\RegisteredGifts.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Robin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Sam.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Sandy.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Sebastian.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Shane.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Abigail.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Alex.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Elliott.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Emily.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Haley.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Harvey.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Leah.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Maru.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Penny.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Sam.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Sebastian.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Spouses\Shane.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Vincent.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Willy.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\Gifts\Wizard.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\Content\Strings\BirthdayWishes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -38,6 +179,11 @@
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\TranslationInfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ContentPacks\HappyBirthdayContentPack en-US\Content\Data\" />
+    <Folder Include="ModAssets\Gifts\" />
   </ItemGroup>
 
   <Import Project="..\common.targets" />

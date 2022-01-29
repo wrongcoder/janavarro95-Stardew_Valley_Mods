@@ -26,11 +26,6 @@ namespace Omegasis.HappyBirthday
         /*********
         ** Fields
         *********/
-        /// <summary>The relative path for the current player's data file.</summary>
-        private string DataFilePath;
-
-        /// <summary>The absolute path for the current player's legacy data file.</summary>
-        private string LegacyDataFilePath => Path.Combine(this.Helper.DirectoryPath, "Player_Birthdays", $"HappyBirthday_{Game1.player.Name}.txt");
 
         /// <summary>
         /// Manages all of the configs for Happy Birthday.
@@ -94,8 +89,17 @@ namespace Omegasis.HappyBirthday
             this.birthdayManager = new BirthdayManager();
 
             this.happyBirthdayContentPackManager = new HappyBirthdayContentPackManager();
+
             this.translationInfo = new TranslationInfo();
 
+            LocalizedContentManager.OnLanguageChange += this.LocalizedContentManager_OnLanguageChange;
+
+        }
+
+        private void LocalizedContentManager_OnLanguageChange(LocalizedContentManager.LanguageCode code)
+        {
+            //Reload the birthday gifts since they are local to the content packs.
+            this.giftManager.reloadBirthdayGifts();
         }
 
         private void GameLoop_ReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
@@ -173,6 +177,7 @@ namespace Omegasis.HappyBirthday
             {
                 this.happyBirthdayContentPackManager.registerNewContentPack(contentPack);
             }
+            this.giftManager.loadInGiftsFromContentPacks();
 
 
             //SaveManager.Load(Game1.player.uniqueMultiplayerID);

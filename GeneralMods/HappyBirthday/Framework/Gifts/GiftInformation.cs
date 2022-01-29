@@ -66,6 +66,5 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
             }
             return I;
         }
-
     }
 }
