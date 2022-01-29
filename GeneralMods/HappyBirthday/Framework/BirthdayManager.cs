@@ -166,14 +166,9 @@ namespace Omegasis.HappyBirthday.Framework
         {
             if (this.wasBirthdayYesterday())
             {
-                Game1.addHUDMessage(new HUDMessage("Your birthday was yesterday..."));
                 if (this.villagerQueue.Count > 0)
                 {
                     MailUtilities.AddBelatedBirthdayMailToMailbox(this.villagerQueue.Keys.ToList());
-                }
-                else
-                {
-                    Game1.addHUDMessage(new HUDMessage("Need to keep track of villagers that did not give birthday gifts."));
                 }
             }
         }
