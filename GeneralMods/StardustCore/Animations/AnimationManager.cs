@@ -12,20 +12,40 @@ using StardustCore.UIUtilities;
 namespace StardustCore.Animations
 {
     /// <summary>Used to play animations for Stardust.CoreObject type objects and all objects that extend from it. In draw code of object make sure to use this info instead.</summary>
-    public class AnimationManager
+    public class AnimationManager : INetObject<NetFields>
     {
         public readonly NetStringDictionary<Animation, NetAnimation> animations = new NetStringDictionary<Animation, NetAnimation>();
         public readonly NetString currentAnimationName = new NetString();
 
 
-        public Texture2DExtended objectTexture = new Texture2DExtended();
-
+        public NetRef<Texture2DExtended> netObjectTexture = new NetRef<Texture2DExtended>();
+        public Texture2DExtended objectTexture
+        {
+            get
+            {
+                if (this.netObjectTexture == null) return null;
+                return this.netObjectTexture.Value;
+            }
+            set
+            {
+                this.netObjectTexture.Value = value;
+            }
+        }
 
         public readonly NetBool enabled = new NetBool();
 
         [XmlIgnore]
-        public bool IsNull => this.objectTexture.getTexture() == null;
+        public bool IsNull
+        {
+            get
+            {
+                if (this.objectTexture == null) return true;
+                return this.objectTexture.getTexture() == null;
+            }
+        }
 
+        [XmlIgnore]
+        public NetFields NetFields { get; } = new NetFields();
 
         public readonly NetString defaultAnimationKey = new NetString();
 
@@ -34,7 +54,10 @@ namespace StardustCore.Animations
         public const int StaticAnimationFrameIndex = -1;
 
         /// <summary>Construct an instance.</summary>
-        public AnimationManager() { }
+        public AnimationManager() {
+            //Even empty constructors for net refs must init their net fields!
+            this.NetFields.AddFields(this.getNetFields().ToArray());
+        }
 
 
         /// <summary>Constructor for Animation Manager class.</summary>
@@ -47,6 +70,7 @@ namespace StardustCore.Animations
 
         public AnimationManager(Texture2DExtended ObjectTexture, Dictionary<string, Animation> Animations, string DefaultAnimationKey, string StartingAnimationKey, int startingAnimationFrame = 0, bool EnabledByDefault = true)
         {
+            this.objectTexture = new Texture2DExtended();
             this.objectTexture.setFields(ObjectTexture);
             this.enabled.Value = EnabledByDefault;
 
@@ -77,6 +101,24 @@ namespace StardustCore.Animations
 
             }
 
+            if (string.IsNullOrEmpty(this.currentAnimationName.Value))
+            {
+                throw new Exception("Current animation name empty!");
+            }
+
+            if (string.IsNullOrEmpty(this.defaultAnimationKey.Value))
+            {
+                throw new Exception("default animation name empty!");
+            }
+
+            if (string.IsNullOrEmpty(this.startingAnimationKey.Value))
+            {
+                throw new Exception("Current animation name empty!");
+            }
+
+            this.NetFields.AddFields(this.getNetFields().ToArray());
+
+
         }
 
         public virtual List<INetSerializable> getNetFields()
@@ -92,7 +134,8 @@ namespace StardustCore.Animations
 
 
             };
-            netFields.AddRange(this.objectTexture.getNetFields());
+
+            netFields.Add(this.netObjectTexture);
             return netFields;
 
         }

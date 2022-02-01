@@ -9,7 +9,7 @@ using StardewValley;
 
 namespace StardustCore.UIUtilities
 {
-    public class Texture2DExtended
+    public class Texture2DExtended:INetObject<NetFields>
     {
 
         public NetString name = new NetString();
@@ -37,6 +37,9 @@ namespace StardustCore.UIUtilities
             }
         }
 
+        [XmlIgnore]
+        public NetFields NetFields { get; } = new NetFields();
+
         /// <summary>Empty/null constructor.</summary>
         public Texture2DExtended()
         {
@@ -45,6 +48,7 @@ namespace StardustCore.UIUtilities
             this.path.Value = "";
             this.modID.Value = "";
             this.textureManagerId.Value = "";
+            this.NetFields.AddFields(this.getNetFields().ToArray());
         }
 
 
@@ -66,6 +70,7 @@ namespace StardustCore.UIUtilities
             this.modID.Value = modID;
             this.textureManagerId.Value = TextureManagerId;
             this.loadTexture();
+            this.NetFields.AddFields(this.getNetFields().ToArray());
         }
 
         public Texture2DExtended(IContentPack content, string path, string TextureManagerId)
@@ -75,6 +80,7 @@ namespace StardustCore.UIUtilities
             this.modID.Value = content.Manifest.UniqueID;
             this.textureManagerId.Value = TextureManagerId;
             this.loadTexture();
+            this.NetFields.AddFields(this.getNetFields().ToArray());
 
 
         }
@@ -88,7 +94,7 @@ namespace StardustCore.UIUtilities
             this.loadTexture();
         }
 
-        public virtual List<INetSerializable> getNetFields()
+        protected virtual List<INetSerializable> getNetFields()
         {
             return new List<INetSerializable>()
             {

@@ -846,6 +846,9 @@ namespace Revitalize.Framework.World.Objects
             if (this.CurrentTextureToDisplay == null)
             {
                 ModCore.log("Texture null for item: " + this.basicItemInformation.id);
+                ModCore.log("Expected path should be: " + this.basicItemInformation.animationManager.objectTexture.path);
+
+
                 return;
             }
 

@@ -44,7 +44,19 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public readonly NetString locationName = new NetString();
 
-        public AnimationManager animationManager = new AnimationManager();
+        public readonly NetRef<AnimationManager> netAnimationManager = new NetRef<AnimationManager>();
+
+        public AnimationManager animationManager
+        {
+            get
+            {
+                return this.netAnimationManager.Value;
+            }
+            set
+            {
+                this.netAnimationManager.Value = value;
+            }
+        }
 
         public readonly NetVector2 drawPosition = new NetVector2();
 
@@ -125,7 +137,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.boundingBoxTileDimensions.Value = new Vector2(1, 1);
             this.dyedColor = new NamedColor();
 
-            this.NetFields.AddFields(this.getNetFields());
+            this.addNetFields();
         }
 
         
@@ -178,7 +190,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
                 this.dyedColor = new NamedColor("", new Color(0, 0, 0, 0), Enums.DyeBlendMode.Blend, 0.5f);
             }
 
-            this.NetFields.AddFields(this.getNetFields());
+            this.addNetFields();
         }
 
         /// <summary>
@@ -224,12 +236,11 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         /// Gets the netfields that should be synced across server/clients.
         /// </summary>
         /// <returns></returns>
-        public virtual List<INetSerializable> getNetFields()
+
+        public virtual void addNetFields()
         {
-            List<INetSerializable> fields= new List<INetSerializable>() {
-                
-                this.name,
-                
+            this.NetFields.AddFields(this.name,
+
                 this.id,
                 this.description,
                 this.categoryName,
@@ -248,16 +259,13 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
                 this.facingDirection,
                 this.shakeTimer,
                 this.alwaysDrawAbovePlayer,
-                this.boundingBoxTileDimensions
-                
-            };
+                this.boundingBoxTileDimensions);
 
-            fields.AddRange(this.animationManager.getNetFields());
-            fields.AddRange(this.inventory.getNetFields());
-            fields.AddRange(this.lightManager.getNetFields());
-            fields.AddRange(this.dyedColor.getNetFields());
+            this.NetFields.AddField(this.netAnimationManager);
 
-            return fields;
+            this.NetFields.AddFields(this.inventory.getNetFields());
+            this.NetFields.AddFields(this.lightManager.getNetFields());
+            this.NetFields.AddFields(this.dyedColor.getNetFields());
         }
 
     }
