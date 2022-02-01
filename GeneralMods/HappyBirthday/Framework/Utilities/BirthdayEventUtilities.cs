@@ -24,54 +24,54 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             }
             if (e.NewLocation == Game1.getLocationFromName("Trailer"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Penny");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingPennyTrailer);
             }
             if (e.NewLocation == Game1.getLocationFromName("Trailer_Big"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Penny_BigHome");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingPennyHouse);
             }
 
             if (e.NewLocation == Game1.getLocationFromName("ScienceHouse"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Maru");
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Sebastian");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingMaru);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingSebastian);
             }
             if (e.NewLocation == Game1.getLocationFromName("LeahHouse"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Leah");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingLeah);
             }
             if (e.NewLocation == Game1.getLocationFromName("SeedShop"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Abigail");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAbigailSeedShop);
             }
             if (e.NewLocation == Game1.getLocationFromName("Mine"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Abigail_Mine");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAbigailMines);
             }
             if (e.NewLocation == Game1.getLocationFromName("HaleyHouse"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Emily");
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Haley");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingEmily);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingHaley);
             }
             if (e.NewLocation == Game1.getLocationFromName("HarveyRoom"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Harvey");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingHarvey);
             }
             if (e.NewLocation == Game1.getLocationFromName("ElliottHouse"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Elliott");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingElliott);
             }
             if (e.NewLocation == Game1.getLocationFromName("SamHouse"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Sam");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingSam);
             }
             if (e.NewLocation == Game1.getLocationFromName("JoshHouse"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Alex");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAlex);
             }
             if (e.NewLocation == Game1.getLocationFromName("AnimalShop"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible("BirthdayDating:Shane");
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingShane);
             }
 
         }
