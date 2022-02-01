@@ -34,7 +34,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 
         public OreVein(BasicItemInformation Info, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info)
         {
-            this.basicItemInfo = Info;
+            this.basicItemInformation = Info;
             this.healthValue.Value = Health;
             this.resourceInfo.Value = Resource;
             this.extraDrops.AddRange(ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>());
@@ -44,7 +44,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 
         public OreVein(BasicItemInformation Info, Vector2 TileLocation, OreResourceInformation Resource, List<ResourceInformation> ExtraDrops, int Health) : base(Info, TileLocation)
         {
-            this.basicItemInfo = Info;
+            this.basicItemInformation = Info;
             this.healthValue.Value = Health;
             this.resourceInfo.Value = Resource;
             this.extraDrops.AddRange(ExtraDrops != null ? ExtraDrops : new List<ResourceInformation>());
@@ -74,7 +74,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
         {
             base.updateWhenCurrentLocation(time, environment);
             this.setHealth(this.healthValue);
-            this.basicItemInfo.shakeTimer.Value -= time.ElapsedGameTime.Milliseconds;
+            this.basicItemInformation.shakeTimer.Value -= time.ElapsedGameTime.Milliseconds;
         }
 
         public override void DayUpdate(GameLocation location)
@@ -99,13 +99,13 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
                 {
                     SoundUtilities.PlaySound(this.getCurrentLocation(), Enums.StardewSound.hammer);
                     //ModCore.log("Ore has this much health left and location is not null: "+this.healthValue);
-                    this.basicItemInfo.shakeTimer.Value = 200;
+                    this.basicItemInformation.shakeTimer.Value = 200;
                 }
                 else
                 {
                     SoundUtilities.PlaySound(this.getCurrentLocation(), Enums.StardewSound.hammer);
                     //ModCore.log("Ore has this much health left and location is null!: "+this.healthValue);
-                    this.basicItemInfo.shakeTimer.Value = 200;
+                    this.basicItemInformation.shakeTimer.Value = 200;
                 }
                 return false;
             }
@@ -222,7 +222,7 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
                 resourceInformation.Add(resources);
             }
 
-            OreVein component = new OreVein(this.basicItemInfo.Copy(), this.resourceInfo.Value, resourceInformation, this.healthValue);
+            OreVein component = new OreVein(this.basicItemInformation.Copy(), this.resourceInfo.Value, resourceInformation, this.healthValue);
             return component;
         }
 
@@ -233,11 +233,11 @@ namespace Revitalize.Framework.World.Objects.Resources.OreVeins
 
             if (this.AnimationManager == null)
             {
-                spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
             }
             else
             {
-                this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
                 if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, 0);
             }
         }

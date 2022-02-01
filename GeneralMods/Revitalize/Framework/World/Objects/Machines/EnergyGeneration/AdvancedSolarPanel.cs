@@ -36,7 +36,7 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 
         public override Item getOne()
         {
-            AdvancedSolarPanel component = new AdvancedSolarPanel(this.basicItemInfo.Copy());
+            AdvancedSolarPanel component = new AdvancedSolarPanel(this.basicItemInformation.Copy());
             return component;
         }
 

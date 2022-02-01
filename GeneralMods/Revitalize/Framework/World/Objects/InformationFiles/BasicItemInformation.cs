@@ -12,26 +12,27 @@ using Revitalize.Framework.Illuminate;
 using System.Xml.Serialization;
 using Netcode;
 using System.Collections.Generic;
+using Revitalize.Framework.Utilities.Extensions;
 
 namespace Revitalize.Framework.World.Objects.InformationFiles
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
-    public class BasicItemInformation
+    public class BasicItemInformation : INetObject<NetFields>
     {
         public readonly NetString name = new NetString();
 
-        public readonly NetString id=new NetString();
+        public readonly NetString id = new NetString();
 
-        public readonly NetString description=new NetString();
+        public readonly NetString description = new NetString();
 
         public readonly NetString categoryName = new NetString();
 
-        public readonly NetColor categoryColor=new NetColor();
+        public readonly NetColor categoryColor = new NetColor();
 
-        public readonly NetInt price=new NetInt();
+        public readonly NetInt price = new NetInt();
 
-        public readonly NetInt healthRestoredOnEating=new NetInt();
-        public readonly NetInt staminaRestoredOnEating=new NetInt();
+        public readonly NetInt healthRestoredOnEating = new NetInt();
+        public readonly NetInt staminaRestoredOnEating = new NetInt();
 
         public readonly NetInt fragility = new NetInt();
 
@@ -47,7 +48,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public readonly NetVector2 drawPosition = new NetVector2();
 
-        public readonly NetColor _drawColorBase=new NetColor();
+        public readonly NetColor _drawColorBase = new NetColor();
 
         [XmlIgnore]
         public Color DrawColor
@@ -73,6 +74,8 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             }
         }
 
+        [XmlIgnore]
+        public NetFields NetFields { get; } = new NetFields();
 
         public readonly NetBool ignoreBoundingBox = new NetBool();
 
@@ -121,6 +124,8 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.ignoreBoundingBox.Value = false;
             this.boundingBoxTileDimensions.Value = new Vector2(1, 1);
             this.dyedColor = new NamedColor();
+
+            this.NetFields.AddFields(this.getNetFields());
         }
 
         
@@ -172,6 +177,8 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             {
                 this.dyedColor = new NamedColor("", new Color(0, 0, 0, 0), Enums.DyeBlendMode.Blend, 0.5f);
             }
+
+            this.NetFields.AddFields(this.getNetFields());
         }
 
         /// <summary>

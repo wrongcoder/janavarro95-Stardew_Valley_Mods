@@ -21,30 +21,30 @@ namespace Revitalize.Framework.World.Objects.Items
 
         public Ore(BasicItemInformation BasicItemInfo): base(BasicItemInfo)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
 
         }
 
         public Ore(BasicItemInformation BasicItemInfo, int StackSize) : base(BasicItemInfo, StackSize)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
         }
 
         public Ore(BasicItemInformation BasicItemInfo, Vector2 TilePosition) : base(BasicItemInfo,TilePosition)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
 
         }
 
         public Ore(BasicItemInformation BasicItemInfo, Vector2 TilePosition, int StackSize=1) : base(BasicItemInfo,TilePosition,StackSize)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
 
         }
 
         public override Item getOne()
         {
-            Ore component = new Ore(this.basicItemInfo.Copy(),Vector2.Zero,1);
+            Ore component = new Ore(this.basicItemInformation.Copy(),Vector2.Zero,1);
             return component;
         }
 

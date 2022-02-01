@@ -41,7 +41,7 @@ namespace Revitalize.Framework.World.Objects.Machines
             this.isUsedForBuyingHayAtAnyTime.Value = isUsedForBuyingHayAtAnyTime;
             if (this.isUsedForBuyingHayAtAnyTime.Value == true && ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall)
             {
-                this.basicItemInfo.boundingBoxTileDimensions.Value = new Vector2(1, 1);
+                this.basicItemInformation.boundingBoxTileDimensions.Value = new Vector2(1, 1);
             }
             if (this.isUsedForBuyingHayAtAnyTime.Value == true)
             {
@@ -373,7 +373,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
             if (this.AnimationManager == null)
             {
-                spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
             }
             else
             {
@@ -381,13 +381,13 @@ namespace Revitalize.Framework.World.Objects.Machines
                 {
                     Vector2 origin = new Vector2(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2, this.AnimationManager.getCurrentAnimationFrameRectangle().Height);
 
-                    this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset() + (Game1.tileSize * origin.X / this.AnimationManager.getCurrentAnimationFrameRectangle().Width), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset() + (Game1.tileSize * (origin.Y / this.AnimationManager.getCurrentAnimationFrameRectangle().Height + 1)))), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, origin, this.getScaleSizeForWorkingMachine(), this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                    this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset() + (Game1.tileSize * origin.X / this.AnimationManager.getCurrentAnimationFrameRectangle().Width), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset() + (Game1.tileSize * (origin.Y / this.AnimationManager.getCurrentAnimationFrameRectangle().Height + 1)))), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, origin, this.getScaleSizeForWorkingMachine(), this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
                 }
 
                 else
                 {
 
-                    this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                    this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
                 }
             }
 
@@ -406,12 +406,12 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override Item getOne()
         {
-            return new HayMaker(this.basicItemInfo.Copy(), this.isUsedForBuyingHayAtAnyTime);
+            return new HayMaker(this.basicItemInformation.Copy(), this.isUsedForBuyingHayAtAnyTime);
         }
 
         public virtual Item getOne(bool IsUsedForBuyingHayAtAnyTime)
         {
-            return new HayMaker(this.basicItemInfo.Copy(), IsUsedForBuyingHayAtAnyTime);
+            return new HayMaker(this.basicItemInformation.Copy(), IsUsedForBuyingHayAtAnyTime);
         }
     }
 }

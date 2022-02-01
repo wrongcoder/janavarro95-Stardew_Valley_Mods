@@ -46,20 +46,33 @@ namespace Revitalize.Framework.World.Objects
     {
         public bool isCurrentLocationAStructure;
 
-        public BasicItemInformation basicItemInfo;
+        public readonly NetRef<BasicItemInformation> netBasicItemInformation = new NetRef<BasicItemInformation>();
+
+        [XmlElement("basicItemInfo")]
+        public BasicItemInformation basicItemInformation
+        {
+            get
+            {
+                return this.netBasicItemInformation.Value;
+            }
+            set
+            {
+                this.netBasicItemInformation.Value = value;
+            }
+        }
 
         public override string Name
         {
             get
             {
-                if (this.basicItemInfo == null) return null;
-                return this.basicItemInfo.name.Value;
+                if (this.basicItemInformation == null) return null;
+                return this.basicItemInformation.name.Value;
             }
             set
             {
-                if (this.basicItemInfo != null)
+                if (this.basicItemInformation != null)
                 {
-                    this.basicItemInfo.name.Value = value;
+                    this.basicItemInformation.name.Value = value;
                 }
             }
 
@@ -69,14 +82,14 @@ namespace Revitalize.Framework.World.Objects
         {
             get
             {
-                if (this.basicItemInfo == null) return null;
-                return this.basicItemInfo.name.Value;
+                if (this.basicItemInformation == null) return null;
+                return this.basicItemInformation.name.Value;
             }
             set
             {
-                if (this.basicItemInfo != null)
+                if (this.basicItemInformation != null)
                 {
-                    this.basicItemInfo.name.Value = value;
+                    this.basicItemInformation.name.Value = value;
                 }
             }
         }
@@ -87,9 +100,9 @@ namespace Revitalize.Framework.World.Objects
         {
             get
             {
-                if (this.basicItemInfo == null) return null;
-                if (this.basicItemInfo.animationManager == null) return null;
-                return this.basicItemInfo.animationManager;
+                if (this.basicItemInformation == null) return null;
+                if (this.basicItemInformation.animationManager == null) return null;
+                return this.basicItemInformation.animationManager;
             }
         }
 
@@ -106,7 +119,7 @@ namespace Revitalize.Framework.World.Objects
 
         public CustomObject()
         {
-            this.basicItemInfo = new BasicItemInformation();
+            this.basicItemInformation = new BasicItemInformation();
 
             this.furniture_type.Value = Furniture.other;
             this.bigCraftable.Value = true;
@@ -123,7 +136,7 @@ namespace Revitalize.Framework.World.Objects
 
         public CustomObject(BasicItemInformation BasicItemInfo)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
             this.bigCraftable.Value = true;
             this.furniture_type.Value = Furniture.other;
             this.Type = "interactive";
@@ -138,7 +151,7 @@ namespace Revitalize.Framework.World.Objects
 
         public CustomObject(BasicItemInformation BasicItemInfo, int StackSize = 1)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
             this.TileLocation = Vector2.Zero;
             this.Stack = StackSize;
             this.bigCraftable.Value = true;
@@ -155,7 +168,7 @@ namespace Revitalize.Framework.World.Objects
 
         public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
             this.TileLocation = TileLocation;
             this.bigCraftable.Value = true;
             this.furniture_type.Value = Furniture.other;
@@ -170,7 +183,7 @@ namespace Revitalize.Framework.World.Objects
         }
         public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation, int StackSize = 1)
         {
-            this.basicItemInfo = BasicItemInfo;
+            this.basicItemInformation = BasicItemInfo;
             this.TileLocation = TileLocation;
             this.Stack = StackSize;
             this.bigCraftable.Value = true;
@@ -187,9 +200,9 @@ namespace Revitalize.Framework.World.Objects
 
         protected virtual void initNetFieldsPostConstructor()
         {
-            if (this.basicItemInfo != null)
+            if (this.basicItemInformation != null)
             {
-                this.NetFields.AddFields(this.basicItemInfo.getNetFields());
+                this.NetFields.AddFields(this.netBasicItemInformation);
             }
 
         }
@@ -352,7 +365,7 @@ namespace Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override Color getCategoryColor()
         {
-            return this.basicItemInfo.categoryColor;
+            return this.basicItemInformation.categoryColor;
         }
 
         /// <summary>
@@ -361,7 +374,7 @@ namespace Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override string getCategoryName()
         {
-            return this.basicItemInfo.categoryName;
+            return this.basicItemInformation.categoryName;
         }
 
         /// <summary>
@@ -380,7 +393,7 @@ namespace Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override string getDescription()
         {
-            return this.basicItemInfo.description;
+            return this.basicItemInformation.description;
         }
 
         public override StardewValley.Object GetDeconstructorOutput(Item item)
@@ -390,7 +403,7 @@ namespace Revitalize.Framework.World.Objects
 
         public override Item getOne()
         {
-            return new CustomObject(this.basicItemInfo.Copy());
+            return new CustomObject(this.basicItemInformation.Copy());
         }
 
         public override void _GetOneFrom(Item source)
@@ -400,7 +413,7 @@ namespace Revitalize.Framework.World.Objects
 
         public override int healthRecoveredOnConsumption()
         {
-            return this.basicItemInfo.healthRestoredOnEating;
+            return this.basicItemInformation.healthRestoredOnEating;
         }
 
         public override void hoverAction()
@@ -430,7 +443,7 @@ namespace Revitalize.Framework.World.Objects
 
         public override bool isPassable()
         {
-            if (this.basicItemInfo.ignoreBoundingBox) return true;
+            if (this.basicItemInformation.ignoreBoundingBox) return true;
             return false;
         }
 
@@ -442,8 +455,8 @@ namespace Revitalize.Framework.World.Objects
             newBounds.X = (int)tileLocation.X * Game1.tileSize;
             newBounds.Y = (int)tileLocation.Y * Game1.tileSize;
 
-            newBounds.Width = Game1.tileSize * (int)this.basicItemInfo.boundingBoxTileDimensions.X;
-            newBounds.Height = Game1.tileSize * (int)this.basicItemInfo.boundingBoxTileDimensions.Y;
+            newBounds.Width = Game1.tileSize * (int)this.basicItemInformation.boundingBoxTileDimensions.X;
+            newBounds.Height = Game1.tileSize * (int)this.basicItemInformation.boundingBoxTileDimensions.Y;
 
             return newBounds;
         }
@@ -531,7 +544,7 @@ namespace Revitalize.Framework.World.Objects
 
 
             this.TileLocation = Vector2.Zero;
-            this.basicItemInfo.locationName.Value = "";
+            this.basicItemInformation.locationName.Value = "";
             this.boundingBox.Value = this.getBoundingBox(Vector2.Zero);
 
             this.sittingFarmers.Clear();
@@ -687,7 +700,7 @@ namespace Revitalize.Framework.World.Objects
                 locationName = location.Name;
             }
 
-            obj.basicItemInfo.locationName.Value = locationName;
+            obj.basicItemInformation.locationName.Value = locationName;
             obj.updateDrawPosition();
 
             return true;
@@ -696,12 +709,12 @@ namespace Revitalize.Framework.World.Objects
 
         public override int salePrice()
         {
-            return this.basicItemInfo.price;
+            return this.basicItemInformation.price;
         }
 
         public override int sellToStorePrice(long specificPlayerID = -1)
         {
-            return this.basicItemInfo.price;
+            return this.basicItemInformation.price;
             return base.sellToStorePrice(specificPlayerID); //logic for when it's regarding the player's professions and such.
         }
 
@@ -712,14 +725,14 @@ namespace Revitalize.Framework.World.Objects
 
         public override int staminaRecoveredOnConsumption()
         {
-            return this.basicItemInfo.staminaRestoredOnEating;
+            return this.basicItemInformation.staminaRestoredOnEating;
         }
 
         public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
         {
             if (this.shakeTimer > 0)
             {
-                this.basicItemInfo.shakeTimer.Value -= time.ElapsedGameTime.Milliseconds;
+                this.basicItemInformation.shakeTimer.Value -= time.ElapsedGameTime.Milliseconds;
                 this.shakeTimer -= time.ElapsedGameTime.Milliseconds;
                 if (this.shakeTimer <= 0)
                 {
@@ -746,19 +759,19 @@ namespace Revitalize.Framework.World.Objects
 
         public virtual void setGameLocation(string LocationName, bool IsStructure)
         {
-            this.basicItemInfo.locationName.Value = LocationName;
+            this.basicItemInformation.locationName.Value = LocationName;
             this.isCurrentLocationAStructure = IsStructure;
         }
 
         public virtual GameLocation getCurrentLocation()
         {
-            if (string.IsNullOrEmpty(this.basicItemInfo.locationName.Value))
+            if (string.IsNullOrEmpty(this.basicItemInformation.locationName.Value))
             {
                 return null;
             }
             else
             {
-                return Game1.getLocationFromName(this.basicItemInfo.locationName.Value, this.isCurrentLocationAStructure);
+                return Game1.getLocationFromName(this.basicItemInformation.locationName.Value, this.isCurrentLocationAStructure);
             }
         }
 
@@ -770,12 +783,12 @@ namespace Revitalize.Framework.World.Objects
 
         public virtual BasicItemInformation getItemInformation()
         {
-            return this.basicItemInfo;
+            return this.basicItemInformation;
         }
 
         public virtual void setItemInformation(BasicItemInformation Info)
         {
-            this.basicItemInfo = Info;
+            this.basicItemInformation = Info;
         }
 
 
@@ -790,12 +803,12 @@ namespace Revitalize.Framework.World.Objects
         /// <param name="DyeColor"></param>
         public virtual void dyeColor(NamedColor DyeColor)
         {
-            this.basicItemInfo.dyedColor.setFields(DyeColor);
+            this.basicItemInformation.dyedColor.setFields(DyeColor);
         }
 
         public virtual void eraseDye()
         {
-            this.basicItemInfo.dyedColor.clearFields();
+            this.basicItemInformation.dyedColor.clearFields();
         }
 
         public override bool canStackWith(ISalable other)
@@ -803,8 +816,8 @@ namespace Revitalize.Framework.World.Objects
             if (other is CustomObject == false) return false;
             CustomObject o = (CustomObject)other;
 
-            if (this.basicItemInfo.dyedColor != o.basicItemInfo.dyedColor) return false;
-            if (this.basicItemInfo.id.Equals(o.basicItemInfo.id) == false) return false;
+            if (this.basicItemInformation.dyedColor != o.basicItemInformation.dyedColor) return false;
+            if (this.basicItemInformation.id.Equals(o.basicItemInformation.id) == false) return false;
 
             if (this.maximumStackSize() > this.Stack + other.Stack) return true;
 
@@ -827,20 +840,20 @@ namespace Revitalize.Framework.World.Objects
             if (this.AnimationManager == null)
             {
 
-                ModCore.log("Animation Manager null for item: " + this.basicItemInfo.id);
+                ModCore.log("Animation Manager null for item: " + this.basicItemInformation.id);
                 return;
             }
             if (this.CurrentTextureToDisplay == null)
             {
-                ModCore.log("Texture null for item: " + this.basicItemInfo.id);
+                ModCore.log("Texture null for item: " + this.basicItemInformation.id);
                 return;
             }
 
-            if (this.basicItemInfo == null) return;
+            if (this.basicItemInformation == null) return;
 
             int scaleNerfing = Math.Max(this.AnimationManager.getCurrentAnimationFrameRectangle().Width, this.AnimationManager.getCurrentAnimationFrameRectangle().Height) / 16;
 
-            spriteBatch.Draw(this.CurrentTextureToDisplay, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * transparency, 0f, new Vector2((float)(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2), (float)(this.AnimationManager.getCurrentAnimationFrameRectangle().Height)), (scaleSize * 4f) / scaleNerfing, SpriteEffects.None, layerDepth);
+            spriteBatch.Draw(this.CurrentTextureToDisplay, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * transparency, 0f, new Vector2((float)(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2), (float)(this.AnimationManager.getCurrentAnimationFrameRectangle().Height)), (scaleSize * 4f) / scaleNerfing, SpriteEffects.None, layerDepth);
 
             if (drawStackNumber.ShouldDrawFor(this) && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
                 Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
@@ -862,18 +875,18 @@ namespace Revitalize.Framework.World.Objects
             {
                 if (this.CurrentTextureToDisplay == null)
                 {
-                    ModCore.log("Texture null for item: " + this.basicItemInfo.id);
+                    ModCore.log("Texture null for item: " + this.basicItemInformation.id);
                     return;
                 }
             }
 
             if (f.ActiveObject.bigCraftable.Value)
             {
-                spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition, this.AnimationManager.getCurrentAnimationFrameRectangle(), this.basicItemInfo.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition, this.AnimationManager.getCurrentAnimationFrameRectangle(), this.basicItemInformation.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 return;
             }
 
-            spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition, this.AnimationManager.getCurrentAnimationFrameRectangle(), this.basicItemInfo.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition, this.AnimationManager.getCurrentAnimationFrameRectangle(), this.basicItemInformation.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
                 spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), this.AnimationManager.getCurrentAnimationFrameRectangle(), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
@@ -905,11 +918,11 @@ namespace Revitalize.Framework.World.Objects
 
             if (this.AnimationManager == null)
             {
-                spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
+                spriteBatch.Draw(this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
             }
             else
             {
-                this.basicItemInfo.animationManager.draw(spriteBatch, this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInfo.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
                 if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, 0);
             }
         }
@@ -926,20 +939,20 @@ namespace Revitalize.Framework.World.Objects
 
             if (this.AnimationManager == null)
             {
-                spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
+                spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
             }
 
             else
             {
                 //Log.AsyncC("Animation Manager is working!");
-                this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
+                this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
             }
         }
 
 
         public virtual LightManager GetLightManager()
         {
-            return this.basicItemInfo.lightManager;
+            return this.basicItemInformation.lightManager;
         }
 
         public override void AttemptRemoval(Action<Furniture> removal_action)

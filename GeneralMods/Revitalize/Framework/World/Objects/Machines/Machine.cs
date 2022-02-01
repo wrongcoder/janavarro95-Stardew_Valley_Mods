@@ -36,13 +36,13 @@ namespace Revitalize.Framework.World.Objects.Machines
         {
             get
             {
-                return MachineUtilities.GetResourcesProducedByThisMachine(this.basicItemInfo.id);
+                return MachineUtilities.GetResourcesProducedByThisMachine(this.basicItemInformation.id);
             }
             set
             {
                 if (MachineUtilities.ResourcesForMachines == null) MachineUtilities.InitializeResourceList();
-                if (MachineUtilities.ResourcesForMachines.ContainsKey(this.basicItemInfo.id)) return;
-                MachineUtilities.ResourcesForMachines.Add(this.basicItemInfo.id, value);
+                if (MachineUtilities.ResourcesForMachines.ContainsKey(this.basicItemInformation.id)) return;
+                MachineUtilities.ResourcesForMachines.Add(this.basicItemInformation.id, value);
             }
         }
 
@@ -112,7 +112,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public override Item getOne()
         {
-            Machine component = new Machine(this.basicItemInfo.Copy(), this.producedResources);
+            Machine component = new Machine(this.basicItemInformation.Copy(), this.producedResources);
             return component;
         }
 
@@ -153,16 +153,16 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         public virtual ref InventoryManager GetInventoryManager()
         {
-            if (this.basicItemInfo == null)
+            if (this.basicItemInformation == null)
             {
-                return ref this.basicItemInfo.inventory;
+                return ref this.basicItemInformation.inventory;
             }
-            return ref this.basicItemInfo.inventory;
+            return ref this.basicItemInformation.inventory;
         }
 
         public virtual void SetInventoryManager(InventoryManager Manager)
         {
-            this.basicItemInfo.inventory = Manager;
+            this.basicItemInformation.inventory = Manager;
         }
 
 

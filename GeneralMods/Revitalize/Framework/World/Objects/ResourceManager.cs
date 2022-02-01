@@ -112,7 +112,7 @@ namespace Revitalize.Framework.Objects
         {
             foreach (var v in this.createOreVeins())
             {
-                this.oreVeins.Add(v.basicItemInfo.id, v);
+                this.oreVeins.Add(v.basicItemInformation.id, v);
             }
         }
 

@@ -352,7 +352,7 @@ namespace Revitalize.Framework.Objects
 
             foreach (var v in this.ItemsByName)
             {
-                if (v.Value.GetType() == T && v.Value.basicItemInfo.id == ID)
+                if (v.Value.GetType() == T && v.Value.basicItemInformation.id == ID)
                 {
                     Item I = v.Value.getOne();
                     return I;
@@ -361,7 +361,7 @@ namespace Revitalize.Framework.Objects
 
             foreach (var v in this.resources.ores)
             {
-                if (v.Value.GetType() == T && v.Value.basicItemInfo.id == ID)
+                if (v.Value.GetType() == T && v.Value.basicItemInformation.id == ID)
                 {
                     Item I = v.Value.getOne();
                     return I;
@@ -370,7 +370,7 @@ namespace Revitalize.Framework.Objects
             }
             foreach (var v in this.resources.oreVeins)
             {
-                if (v.Value.GetType() == T && v.Value.basicItemInfo.id == ID)
+                if (v.Value.GetType() == T && v.Value.basicItemInformation.id == ID)
                 {
                     Item I = v.Value.getOne();
                     return I;
