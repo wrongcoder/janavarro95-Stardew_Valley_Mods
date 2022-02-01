@@ -127,7 +127,7 @@ namespace Revitalize.Framework.World.Objects
             this.name = this.Name;
 
 
-            IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
+            IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
             this.Fragility = 0;
 
@@ -142,7 +142,7 @@ namespace Revitalize.Framework.World.Objects
             this.Type = "interactive";
             this.name = this.Name;
 
-            IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
+            IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
             this.Fragility = 0;
 
@@ -160,7 +160,7 @@ namespace Revitalize.Framework.World.Objects
             this.name = this.Name;
             this.Fragility = 0;
 
-            IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
+            IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
             this.initNetFieldsPostConstructor();
@@ -176,7 +176,7 @@ namespace Revitalize.Framework.World.Objects
             this.name = this.Name;
             this.Fragility = 0;
 
-            IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
+            IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
             this.initNetFieldsPostConstructor();
@@ -192,7 +192,7 @@ namespace Revitalize.Framework.World.Objects
             this.name = this.Name;
             this.Fragility = 0;
 
-            IReflectedField<int> placementRestriction = ModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
+            IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
             this.initNetFieldsPostConstructor();
@@ -528,7 +528,7 @@ namespace Revitalize.Framework.World.Objects
 
             if (environment == null) return;
 
-            ModCore.log("Perform remove action for furniture!");
+            RevitalizeModCore.log("Perform remove action for furniture!");
 
             this.cleanUpLights();
 
@@ -619,14 +619,14 @@ namespace Revitalize.Framework.World.Objects
         {
             if (t == null)
             {
-                ModCore.log("Null tool used! Probably just the player's hands then.");
+                RevitalizeModCore.log("Null tool used! Probably just the player's hands then.");
                 this.shakeTimer = 200; //Milliseconds.
                 return false;
 
             }
             else
             {
-                ModCore.log("Player used tool: " + t.DisplayName);
+                RevitalizeModCore.log("Player used tool: " + t.DisplayName);
             }
             return false;
             //False is returned if we signify no meaningul tool interactions?
@@ -641,7 +641,7 @@ namespace Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override bool performUseAction(GameLocation location)
         {
-            ModCore.log("Perform use action");
+            RevitalizeModCore.log("Perform use action");
             return base.performUseAction(location);
         }
 
@@ -840,13 +840,13 @@ namespace Revitalize.Framework.World.Objects
             if (this.AnimationManager == null)
             {
 
-                ModCore.log("Animation Manager null for item: " + this.basicItemInformation.id);
+                RevitalizeModCore.log("Animation Manager null for item: " + this.basicItemInformation.id);
                 return;
             }
             if (this.CurrentTextureToDisplay == null)
             {
-                ModCore.log("Texture null for item: " + this.basicItemInformation.id);
-                ModCore.log("Expected path should be: " + this.basicItemInformation.animationManager.objectTexture.path);
+                RevitalizeModCore.log("Texture null for item: " + this.basicItemInformation.id);
+                RevitalizeModCore.log("Expected path should be: " + this.basicItemInformation.animationManager.objectTexture.path);
 
 
                 return;
@@ -878,7 +878,7 @@ namespace Revitalize.Framework.World.Objects
             {
                 if (this.CurrentTextureToDisplay == null)
                 {
-                    ModCore.log("Texture null for item: " + this.basicItemInformation.id);
+                    RevitalizeModCore.log("Texture null for item: " + this.basicItemInformation.id);
                     return;
                 }
             }
@@ -963,7 +963,7 @@ namespace Revitalize.Framework.World.Objects
 
             if (this.getCurrentLocation().furniture.Contains(this)) ;
             {
-                ModCore.log("Furniture is contained inside of game location. Need to update removal logic.");
+                RevitalizeModCore.log("Furniture is contained inside of game location. Need to update removal logic.");
             }
 
             this.pickupFromGameWorld(this.TileLocation, this.getCurrentLocation());

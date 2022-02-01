@@ -93,12 +93,12 @@ namespace Revitalize.Framework.Configs.ObjectsConfigs
 
         public static MiningDrillConfig InitializeConfig()
         {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "MiningDrillMachine.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<MiningDrillConfig>(Path.Combine("Configs", "MiningDrillMachine.json"));
+            if (File.Exists(Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, "Configs", "MiningDrillMachine.json")))
+                return RevitalizeModCore.ModHelper.Data.ReadJsonFile<MiningDrillConfig>(Path.Combine("Configs", "MiningDrillMachine.json"));
             else
             {
                 MiningDrillConfig Config = new MiningDrillConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "MiningDrillMachine.json"), Config);
+                RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "MiningDrillMachine.json"), Config);
                 return Config;
             }
         }

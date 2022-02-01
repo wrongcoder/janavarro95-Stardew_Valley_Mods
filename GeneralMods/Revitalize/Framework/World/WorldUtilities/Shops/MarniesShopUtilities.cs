@@ -17,10 +17,10 @@ namespace Revitalize.Framework.World.WorldUtilities.Shops
         /// <param name="shopMenu"></param>
         public static void AddStockToMarniesShop(ShopMenu shopMenu)
         {
-            if (BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() || ModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop())
+            if (BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() || RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop())
             {
-                HayMaker hayMaker = ModCore.ObjectManager.GetItem<HayMaker>(Machines.HayMaker, 1);
-               ShopUtilities.AddItemToShop(shopMenu, hayMaker, ModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerPrice, -1);
+                HayMaker hayMaker = RevitalizeModCore.ObjectManager.GetItem<HayMaker>(Machines.HayMaker, 1);
+               ShopUtilities.AddItemToShop(shopMenu, hayMaker, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerPrice, -1);
             }
         }
     }

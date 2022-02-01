@@ -7,6 +7,9 @@ using StardewValley;
 
 namespace StardustCore.Events.Preconditions.TimeSpecific
 {
+    /// <summary>
+    /// Says which days events can't occur. If a value is true, then the event can not occur on that day.
+    /// </summary>
     public class EventDayExclusionPrecondition:EventPrecondition
     {
 

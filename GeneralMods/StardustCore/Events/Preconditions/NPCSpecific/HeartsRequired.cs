@@ -9,7 +9,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
 {
     public class HeartsRequired:EventPrecondition
     {
-        public NPC npc;
+        public string npc;
         public int amount;
 
 
@@ -20,7 +20,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
 
         public HeartsRequired(NPC NPC, int Amount)
         {
-            this.npc = NPC;
+            this.npc = NPC.Name;
             this.amount = Amount;
         }
 
@@ -37,7 +37,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
         {
             StringBuilder b = new StringBuilder();
             b.Append("f ");
-            b.Append(this.npc.Name);
+            b.Append(this.npc);
             b.Append(" ");
             int hearts = this.amount * 250;
             b.Append(hearts.ToString());
@@ -46,7 +46,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
 
         public override bool meetsCondition()
         {
-            int hearts = Game1.player.friendshipData[this.npc.Name].Points / 250;
+            int hearts = Game1.player.friendshipData[this.npc].Points / 250;
             return  hearts >= this.amount;
         }
     }

@@ -89,7 +89,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         protected virtual void createStatusBubble()
         {
-            this.machineStatusBubbleBox.Value = new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
+            this.machineStatusBubbleBox.Value = new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
             {
                 {MachineStatusBubble_DefaultAnimationKey,new Animation(0,0,20,24)},
                 {MachineStatusBubble_BlankBubbleAnimationKey,new Animation(20,0,20,24)},

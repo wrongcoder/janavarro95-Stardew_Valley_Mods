@@ -32,7 +32,7 @@ namespace Revitalize.Framework.Utilities
         {
             if (GameMultiplayer == null)
             {
-                Multiplayer multiplayer = ModCore.ModHelper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer", true).GetValue();
+                Multiplayer multiplayer = RevitalizeModCore.ModHelper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer", true).GetValue();
                 if (multiplayer == null) return null;
                 else
                 {

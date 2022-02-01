@@ -46,7 +46,7 @@ namespace Revitalize.Framework.Utilities
 
                 (itemToDraw as StardewValley.Object).draw(spriteBatch, (int)obj.TileLocation.X * Game1.tileSize, (int)obj.TileLocation.Y * Game1.tileSize, Math.Max(0f, (obj.TileLocation.Y + 1 + addedDepth) * Game1.tileSize / 10000f) + .0001f, alpha);
             }
-            if (ModCore.Serializer.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
+            if (RevitalizeModCore.Serializer.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
                 (itemToDraw as CustomObject).draw(spriteBatch, (int)obj.TileLocation.X, (int)obj.TileLocation.Y);
         }
 

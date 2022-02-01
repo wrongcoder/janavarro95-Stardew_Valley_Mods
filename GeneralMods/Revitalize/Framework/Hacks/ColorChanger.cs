@@ -101,8 +101,8 @@ namespace Revitalize.Framework.Hacks
                         }
                         catch (Exception err)
                         {
-                            ModCore.log("Setting pixel color at: " + new Vector2(column, row));
-                            ModCore.log("That's position: " + (row * width + column).ToString());
+                            RevitalizeModCore.log("Setting pixel color at: " + new Vector2(column, row));
+                            RevitalizeModCore.log("That's position: " + (row * width + column).ToString());
                         }
                         //ModCore.log("Setting pixel color at: " + new Vector2(column, row));
                         //ModCore.log("That's position: " + (row * width + column).ToString());
@@ -200,8 +200,8 @@ namespace Revitalize.Framework.Hacks
                         }
                         catch (Exception err)
                         {
-                            ModCore.log("Setting pixel color at: " + new Vector2(column, row));
-                            ModCore.log("That's position: " + (row * width + column).ToString());
+                            RevitalizeModCore.log("Setting pixel color at: " + new Vector2(column, row));
+                            RevitalizeModCore.log("That's position: " + (row * width + column).ToString());
                         }
                         //ModCore.log("Setting pixel color at: " + new Vector2(column, row));
                         //ModCore.log("That's position: " + (row * width + column).ToString());
@@ -295,8 +295,8 @@ namespace Revitalize.Framework.Hacks
                         }
                         catch (Exception err)
                         {
-                            ModCore.log("Setting pixel color at: " + new Vector2(column, row));
-                            ModCore.log("That's position: " + (row * width + column).ToString());
+                            RevitalizeModCore.log("Setting pixel color at: " + new Vector2(column, row));
+                            RevitalizeModCore.log("That's position: " + (row * width + column).ToString());
                         }
                         //ModCore.log("Setting pixel color at: " + new Vector2(column, row));
                         //ModCore.log("That's position: " + (row * width + column).ToString());
@@ -390,8 +390,8 @@ namespace Revitalize.Framework.Hacks
                         }
                         catch (Exception err)
                         {
-                            ModCore.log("Setting pixel color at: " + new Vector2(column, row));
-                            ModCore.log("That's position: " + (row * width + column).ToString());
+                            RevitalizeModCore.log("Setting pixel color at: " + new Vector2(column, row));
+                            RevitalizeModCore.log("That's position: " + (row * width + column).ToString());
                         }
                         //ModCore.log("Setting pixel color at: " + new Vector2(column, row));
                         //ModCore.log("That's position: " + (row * width + column).ToString());
@@ -412,7 +412,7 @@ namespace Revitalize.Framework.Hacks
         /// </summary>
         public static void ResetPickaxeTexture()
         {
-            SwapPickaxeTextures(TextureManager.GetTexture(ModCore.Manifest, "Tools", "DefaultPickaxeWorking"));
+            SwapPickaxeTextures(TextureManager.GetTexture(RevitalizeModCore.Manifest, "Tools", "DefaultPickaxeWorking"));
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace Revitalize.Framework.Hacks
         /// </summary>
         public static void ResetHoeTexture()
         {
-            SwapHoeTextures(TextureManager.GetTexture(ModCore.Manifest, "Tools", "DefaultHoeWorking"));
+            SwapHoeTextures(TextureManager.GetTexture(RevitalizeModCore.Manifest, "Tools", "DefaultHoeWorking"));
         }
 
         /// <summary>
@@ -428,7 +428,7 @@ namespace Revitalize.Framework.Hacks
         /// </summary>
         public static void ResetAxeTexture()
         {
-            SwapAxeTextures(TextureManager.GetTexture(ModCore.Manifest, "Tools", "DefaultAxeWorking"));
+            SwapAxeTextures(TextureManager.GetTexture(RevitalizeModCore.Manifest, "Tools", "DefaultAxeWorking"));
         }
 
         /// <summary>
@@ -436,7 +436,7 @@ namespace Revitalize.Framework.Hacks
         /// </summary>
         public static void ResetWateringCanTexture()
         {
-            SwapAxeTextures(TextureManager.GetTexture(ModCore.Manifest, "Tools", "DefaultWateringCanWorking"));
+            SwapAxeTextures(TextureManager.GetTexture(RevitalizeModCore.Manifest, "Tools", "DefaultWateringCanWorking"));
         }
 
         /// <summary>

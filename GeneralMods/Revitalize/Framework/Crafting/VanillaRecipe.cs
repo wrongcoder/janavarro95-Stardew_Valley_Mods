@@ -122,7 +122,7 @@ namespace Revitalize.Framework.Crafting
                         else
                             item.Stack -= pair.Value; //or reduce the stack size.
 
-                        ModCore.log("Remove: " + pair.Key.Name);
+                        RevitalizeModCore.log("Remove: " + pair.Key.Name);
                     }
                 }
             }
@@ -182,7 +182,7 @@ namespace Revitalize.Framework.Crafting
             {
                 IList<Item> playerItems = Game1.player.Items;
                 List<Item> outPutItems = new List<Item>();
-                ModCore.log("Can craft recipe.");
+                RevitalizeModCore.log("Can craft recipe.");
                 this.craft(ref playerItems, ref o);
                 return true;
             }

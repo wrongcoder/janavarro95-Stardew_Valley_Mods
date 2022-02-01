@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using StardustCore.Events.Preconditions;
 using StardustCore.Events.Preconditions.TimeSpecific;
 using StardewValley;
+using System.Text.Json.Serialization;
 
 namespace StardustCore.Events
 {
@@ -56,27 +57,40 @@ namespace StardustCore.Events
         }
 
 
-        protected StringBuilder eventData;
-        protected StringBuilder eventPreconditionData;
-        protected List<EventPrecondition> eventPreconditions;
-        protected int eventID;
+        protected StringBuilder eventData = new StringBuilder();
 
-        public string eventName;
+        /// <summary>
+        /// The event data for a given event.
+        /// </summary>
+        public string EventData
+        {
+            get
+            {
+                return this.getEventString();
+            }
+            set
+            {
+                this.eventData.Clear();
+                this.eventData.Append(value);
+            }
+        }
+
+        public List<EventPrecondition> eventPreconditions;
+        public int stardewEventID;
+        public string eventStringId;
 
         public EventHelper()
         {
             this.eventData = new StringBuilder();
-            this.eventPreconditionData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
         public EventHelper(string EventName,int ID, LocationPrecondition Location, TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
         {
-            this.eventName = EventName;
+            this.eventStringId = EventName;
             this.eventData = new StringBuilder();
-            this.eventPreconditionData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
-            this.eventID = ID;
+            this.stardewEventID = ID;
             this.add(Location);
             this.add(Time);
             this.add(NotTheseDays);
@@ -85,11 +99,10 @@ namespace StardustCore.Events
 
         public EventHelper(string EventName,int ID,List<EventPrecondition> Conditions, EventStartData StartData)
         {
-            this.eventName = EventName;
-            this.eventID = ID;
+            this.eventStringId = EventName;
+            this.stardewEventID = ID;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
-            this.eventPreconditionData = new StringBuilder();
             foreach (var v in Conditions)
             {
                 this.add(v);
@@ -104,11 +117,6 @@ namespace StardustCore.Events
         public virtual void add(EventPrecondition Data)
         {
             this.eventPreconditions.Add(Data);
-            if (this.eventPreconditionData.Length > 0)
-            {
-                this.eventPreconditionData.Append(this.getSeperator());
-            }
-            this.eventPreconditionData.Append(Data.ToString());
         }
 
         /// <summary>
@@ -185,7 +193,7 @@ namespace StardustCore.Events
         /// <returns></returns>
         public virtual int getEventID()
         {
-            return Convert.ToInt32(this.getUniqueEventStartID() + this.eventID.ToString());
+            return Convert.ToInt32(this.getUniqueEventStartID() + this.stardewEventID.ToString());
         }
 
         /// <summary>
@@ -254,7 +262,11 @@ namespace StardustCore.Events
         {
             foreach (EventPrecondition eve in this.eventPreconditions)
             {
-                if (eve.meetsCondition() == false) return false;
+                if (eve.meetsCondition() == false)
+                {
+                    ModCore.log("Failed event precondition for precondition type: " + eve.GetType());
+                    return false;
+                }
             }
 
             return true;
@@ -1402,6 +1414,12 @@ namespace StardustCore.Events
             b.Append(Message);
             b.Append("\"");
             this.add(b);
+        }
+
+        public virtual void showTranslatedMessage(string MessageKey)
+        {
+            StringBuilder b = new StringBuilder();
+
         }
 
         /// <summary>

@@ -85,9 +85,9 @@ namespace Revitalize.Framework.Hacks
                 List<MoneyDial> categoryDials = new List<MoneyDial>();
                 List<List<Item>> categoryItems = new List<List<Item>>();
 
-                var CT_R=ModCore.ModHelper.Reflection.GetField<List<int>>(menu, "categoryTotals", true);
-                var CD_R= ModCore.ModHelper.Reflection.GetField<List<MoneyDial>>(menu, "categoryDials", true);
-                var CI_R= ModCore.ModHelper.Reflection.GetField<List<List<Item>>>(menu, "categoryItems", true);
+                var CT_R=RevitalizeModCore.ModHelper.Reflection.GetField<List<int>>(menu, "categoryTotals", true);
+                var CD_R= RevitalizeModCore.ModHelper.Reflection.GetField<List<MoneyDial>>(menu, "categoryDials", true);
+                var CI_R= RevitalizeModCore.ModHelper.Reflection.GetField<List<List<Item>>>(menu, "categoryItems", true);
 
                 categoryTotals = CT_R.GetValue();
                 categoryDials = CD_R.GetValue();
@@ -96,10 +96,10 @@ namespace Revitalize.Framework.Hacks
                 //Recalculate other category.
                 foreach (ICommonObjectInterface obj in categoryItems[4])
                 {
-                    ModCore.log(obj.Name);
+                    RevitalizeModCore.log(obj.Name);
                     if (obj is StardewValley.Object)
                     {
-                        ModCore.log(obj.sellToStorePrice());
+                        RevitalizeModCore.log(obj.sellToStorePrice());
                         categoryTotals[4] += obj.sellToStorePrice() * obj.Stack;
                         Game1.stats.itemsShipped += (uint)obj.Stack;
                         /*

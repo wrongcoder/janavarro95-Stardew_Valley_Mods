@@ -32,12 +32,12 @@ namespace Revitalize.Framework.Configs.ObjectsConfigs
         /// <returns></returns>
         public static FurnitureConfig InitializeConfig()
         {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "FurnitureConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<FurnitureConfig>(Path.Combine("Configs", "FurnitureConfig.json"));
+            if (File.Exists(Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, "Configs", "FurnitureConfig.json")))
+                return RevitalizeModCore.ModHelper.Data.ReadJsonFile<FurnitureConfig>(Path.Combine("Configs", "FurnitureConfig.json"));
             else
             {
                 FurnitureConfig Config = new FurnitureConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "FurnitureConfig.json"), Config);
+                RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "FurnitureConfig.json"), Config);
                 return Config;
             }
         }

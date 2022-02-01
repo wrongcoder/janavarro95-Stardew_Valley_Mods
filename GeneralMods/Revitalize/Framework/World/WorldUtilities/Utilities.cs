@@ -24,11 +24,11 @@ namespace Revitalize.Framework.World.WorldUtilities
         private static void AddModdedMachinesToGameWorld()
         {
             GameLocation cinderSapForestLocation = GameLocationUtilities.GetGameLocation(Enums.StardewLocation.Forest);
-            HayMaker hayMaker = (ModCore.ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
-            if (ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch &&
-                cinderSapForestLocation.isObjectAtTile((int)ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y) == false)
+            HayMaker hayMaker = (RevitalizeModCore.ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
+            if (RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch &&
+                cinderSapForestLocation.isObjectAtTile((int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y) == false)
             {
-                hayMaker.placementActionAtTile(cinderSapForestLocation, (int)ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y);
+                hayMaker.placementActionAtTile(cinderSapForestLocation, (int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y);
             }
 
         }

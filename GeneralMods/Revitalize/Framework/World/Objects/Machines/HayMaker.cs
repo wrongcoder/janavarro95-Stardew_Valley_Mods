@@ -39,7 +39,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         public HayMaker(BasicItemInformation info, bool isUsedForBuyingHayAtAnyTime = false) : base(info)
         {
             this.isUsedForBuyingHayAtAnyTime.Value = isUsedForBuyingHayAtAnyTime;
-            if (this.isUsedForBuyingHayAtAnyTime.Value == true && ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall)
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true && RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall)
             {
                 this.basicItemInformation.boundingBoxTileDimensions.Value = new Vector2(1, 1);
             }
@@ -71,7 +71,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         {
             Rectangle rect = base.getBoundingBox(tileLocation);
 
-            if (this.isUsedForBuyingHayAtAnyTime && ModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall==true)
+            if (this.isUsedForBuyingHayAtAnyTime && RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall==true)
             {
                 rect.Y += Game1.tileSize;
             }
@@ -80,7 +80,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         protected virtual bool exceptionForPlacementIsValidForMarniesRanch(GameLocation location, Vector2 tile)
         {
-            if (this.isUsedForBuyingHayAtAnyTime.Value == true && tile.Equals(ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation) && location.Name.Equals("Forest"))
+            if (this.isUsedForBuyingHayAtAnyTime.Value == true && tile.Equals(RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation) && location.Name.Equals("Forest"))
             {
                 return true;
             }
@@ -114,7 +114,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
                     ShopMenu shopMenu = new StardewValley.Menus.ShopMenu(new Dictionary<ISalable, int[]>()
                     {
-                        {ModCore.ObjectManager.GetItem(Enums.SDVObject.Hay,-1), new int[]{ModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice,-1 } }
+                        {RevitalizeModCore.ObjectManager.GetItem(Enums.SDVObject.Hay,-1), new int[]{RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice,-1 } }
                     });
 
                     //Load the shop tetx file and select a random dialogue text from it.
@@ -191,12 +191,12 @@ namespace Revitalize.Framework.World.Objects.Machines
             }
 
 
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Corn && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Corn && who.ActiveObject.Stack >= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired)
             {
                 this.AnimationManager.playAnimation(CornAnimation);
                 this.feedType.Value = Enums.SDVObject.Corn;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired;
+                this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
@@ -204,12 +204,12 @@ namespace Revitalize.Framework.World.Objects.Machines
                 }
                 return true;
             }
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Fiber && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Fiber && who.ActiveObject.Stack >= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired)
             {
                 this.AnimationManager.playAnimation(FiberAnimation);
                 this.feedType.Value = Enums.SDVObject.Fiber;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired;
+                this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
@@ -217,12 +217,12 @@ namespace Revitalize.Framework.World.Objects.Machines
                 }
                 return true;
             }
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Wheat && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Wheat && who.ActiveObject.Stack >= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired)
             {
                 this.AnimationManager.playAnimation(WheatAnimation);
                 this.feedType.Value = Enums.SDVObject.Hay;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired;
+                this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
@@ -230,12 +230,12 @@ namespace Revitalize.Framework.World.Objects.Machines
                 }
                 return true;
             }
-            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Amaranth && who.ActiveObject.Stack >= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired)
+            if (dropInItem.parentSheetIndex == (int)Enums.SDVObject.Amaranth && who.ActiveObject.Stack >= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired)
             {
                 this.AnimationManager.playAnimation(AmaranthAnimation);
                 this.feedType.Value = Enums.SDVObject.Amaranth;
-                who.ActiveObject.Stack -= ModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired;
-                this.MinutesUntilReady = ModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
+                who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired;
+                this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
                 SoundUtilities.PlaySound(who.currentLocation, Enums.StardewSound.ship);
                 if (who.ActiveObject.Stack == 0)
                 {
@@ -258,19 +258,19 @@ namespace Revitalize.Framework.World.Objects.Machines
             {
                 if (this.feedType.Value == Enums.SDVObject.Corn)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.CornToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.CornToHayOutput);
                 }
                 if (this.feedType.Value == Enums.SDVObject.Fiber)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.FiberToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.FiberToHayOutput);
                 }
                 if (this.feedType.Value == Enums.SDVObject.Wheat)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.WheatToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.WheatToHayOutput);
                 }
                 if (this.feedType.Value == Enums.SDVObject.Amaranth)
                 {
-                    this.heldObject.Value = ModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, ModCore.Configs.objectConfigManager.hayMakerConfig.AmaranthToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ObjectManager.GetObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.AmaranthToHayOutput);
                 }
                 this.AnimationManager.playAnimation(HayAnimation);
                 bool noHayRemainsInFeedMaker = this.attemptToFillFarmSilos();

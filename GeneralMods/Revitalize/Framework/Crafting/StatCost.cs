@@ -28,7 +28,7 @@ namespace Revitalize.Framework.Crafting
         /// <returns></returns>
         public bool canAffordCost() {
 
-            if (Game1.player.stamina >= this.stamina && Game1.player.health >= this.health && Game1.player.Money >= this.gold && ModCore.playerInfo.magicManager.currentMagic >= this.magic) return true;
+            if (Game1.player.stamina >= this.stamina && Game1.player.health >= this.health && Game1.player.Money >= this.gold && RevitalizeModCore.playerInfo.magicManager.currentMagic >= this.magic) return true;
             return false;
 
         }
@@ -39,7 +39,7 @@ namespace Revitalize.Framework.Crafting
         /// <returns></returns>
         public bool canSafelyAffordCost()
         {
-            if (Game1.player.stamina > this.stamina && Game1.player.health > this.health && Game1.player.Money >= this.gold && ModCore.playerInfo.magicManager.currentMagic >= this.magic) return true;
+            if (Game1.player.stamina > this.stamina && Game1.player.health > this.health && Game1.player.Money >= this.gold && RevitalizeModCore.playerInfo.magicManager.currentMagic >= this.magic) return true;
             return false;
         }
 
@@ -53,7 +53,7 @@ namespace Revitalize.Framework.Crafting
                 Game1.player.stamina -= this.stamina;
                 Game1.player.health -= this.health;
                 Game1.player.Money = Game1.player.Money - this.gold;
-                ModCore.playerInfo.magicManager.currentMagic -= this.magic;
+                RevitalizeModCore.playerInfo.magicManager.currentMagic -= this.magic;
             }
         }
     }

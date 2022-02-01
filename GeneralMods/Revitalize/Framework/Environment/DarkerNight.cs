@@ -17,7 +17,7 @@ namespace Revitalize.Framework.Environment
         /// <summary>Sets the color of darkness at night.</summary>
         public static void SetDarkerColor()
         {
-            if (!ModCore.Configs.worldConfigManager.darkerNightConfig.Enabled || Game1.player?.currentLocation == null)
+            if (!RevitalizeModCore.Configs.worldConfigManager.darkerNightConfig.Enabled || Game1.player?.currentLocation == null)
                 return;
 
             if (Game1.player.currentLocation.IsOutdoors && Game1.timeOfDay >= Game1.getStartingToGetDarkTime())
@@ -27,7 +27,7 @@ namespace Revitalize.Framework.Environment
         /// <summary>Calculates how dark it should be a night.</summary>
         public static void CalculateDarkerNightColor()
         {
-            if (!ModCore.Configs.worldConfigManager.darkerNightConfig.Enabled || Game1.player?.currentLocation == null)
+            if (!RevitalizeModCore.Configs.worldConfigManager.darkerNightConfig.Enabled || Game1.player?.currentLocation == null)
                 return;
 
             //Calculate original lighting.
@@ -48,7 +48,7 @@ namespace Revitalize.Framework.Environment
 
             if (Game1.player.currentLocation.IsOutdoors && Game1.timeOfDay >= Game1.getStartingToGetDarkTime())
                 //Game1.ambientLight = Game1.ambientLight.GreyScaleAverage();
-                CalculatedColor = Game1.ambientLight * ((red + 30) / 255f) * ModCore.Configs.worldConfigManager.darkerNightConfig.DarknessIntensity;
+                CalculatedColor = Game1.ambientLight * ((red + 30) / 255f) * RevitalizeModCore.Configs.worldConfigManager.darkerNightConfig.DarknessIntensity;
         }
     }
 }

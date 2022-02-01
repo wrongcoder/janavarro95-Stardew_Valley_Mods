@@ -85,7 +85,7 @@ namespace Omegasis.HappyBirthday
 
             this.Helper.Events.Player.Warped += BirthdayEventUtilities.Player_Warped;
 
-            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
+
             this.birthdayManager = new BirthdayManager();
 
             this.happyBirthdayContentPackManager = new HappyBirthdayContentPackManager();
@@ -111,6 +111,8 @@ namespace Omegasis.HappyBirthday
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
+            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
+
             this.birthdayMessages = new BirthdayMessages();
             this.giftManager = new GiftManager();
             MenuUtilities.IsDailyQuestBoard = false;

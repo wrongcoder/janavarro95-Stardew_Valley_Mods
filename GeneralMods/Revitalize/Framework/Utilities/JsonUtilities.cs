@@ -19,7 +19,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public static Dictionary<string,string> LoadStringDictionaryFile(string RelativePathToFile)
         {
-            return ModCore.ModHelper.Content.Load<Dictionary<string, string>>(RelativePathToFile);
+            return RevitalizeModCore.ModHelper.Content.Load<Dictionary<string, string>>(RelativePathToFile);
         }
 
         /// <summary>

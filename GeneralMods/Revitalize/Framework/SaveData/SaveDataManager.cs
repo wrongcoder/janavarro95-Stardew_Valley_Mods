@@ -35,7 +35,7 @@ namespace Revitalize.Framework.SaveData
         public virtual string getFullSaveDataPath()
         {
 
-            string save_directory = Path.Combine(ModCore.ModHelper.DirectoryPath, this.getRelativeSaveDataPath());
+            string save_directory = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, this.getRelativeSaveDataPath());
             Directory.CreateDirectory(save_directory);
             return save_directory;
         }

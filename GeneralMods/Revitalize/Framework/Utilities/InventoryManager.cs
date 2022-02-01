@@ -3,8 +3,8 @@ using System.Linq;
 using System.Xml.Serialization;
 using Netcode;
 using Newtonsoft.Json;
-using Omegasis.StardustCore.Networking;
 using StardewValley;
+using StardustCore.Networking;
 
 namespace Revitalize.Framework.Utilities
 {

@@ -30,12 +30,12 @@ namespace Revitalize.Framework.Configs.ObjectsConfigs
 
         public static HayMakerConfig InitializeConfig()
         {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "ObjectConfigs", "HayMakerConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<HayMakerConfig>(Path.Combine("Configs", "ObjectConfigs", "HayMakerConfig.json"));
+            if (File.Exists(Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, "Configs", "ObjectConfigs", "HayMakerConfig.json")))
+                return RevitalizeModCore.ModHelper.Data.ReadJsonFile<HayMakerConfig>(Path.Combine("Configs", "ObjectConfigs", "HayMakerConfig.json"));
             else
             {
                 HayMakerConfig Config = new HayMakerConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "ObjectConfigs", "HayMakerConfig.json"), Config);
+                RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "ObjectConfigs", "HayMakerConfig.json"), Config);
                 return Config;
             }
         }

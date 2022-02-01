@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
+using StardustCore.Compatibility.SpaceCore;
 
 namespace StardustCore.Events
 {
@@ -32,13 +33,24 @@ namespace StardustCore.Events
             this.seenEvents = new Dictionary<Farmer, HashSet<EventHelper>>();
 
             this.customEventLogic.Add("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
-            this.customEventLogic.Add("Omegasis.EventFramework.ViewportLerp", ExtraEventActions.ViewportLerp);
             this.customEventLogic.Add("Omegasis.EventFramework.AddInJunimoActor", ExtraEventActions.AddInJumimoActorForEvent);
             this.customEventLogic.Add("Omegasis.EventFramework.FlipJunimoActor", ExtraEventActions.FlipJunimoActor);
             this.customEventLogic.Add("Omegasis.EventFramework.SetUpAdvanceJunimoMovement", ExtraEventActions.SetUpAdvanceJunimoMovement);
+
             this.customEventLogic.Add("Omegasis.EventFramework.FinishAdvanceJunimoMovement", ExtraEventActions.FinishAdvanceJunimoMovement);
             this.customEventLogic.Add("Omegasis.EventFramework.AddInJunimoAdvanceMove", ExtraEventActions.AddInJunimoAdvanceMove);
             this.customEventLogic.Add("Omegasis.EventFramework.RemoveJunimoAdvanceMove", ExtraEventActions.RemoveAdvanceJunimoMovement);
+
+
+            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
+            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.AddInJunimoActor", ExtraEventActions.AddInJumimoActorForEvent);
+            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.FlipJunimoActor", ExtraEventActions.FlipJunimoActor);
+            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.SetUpAdvanceJunimoMovement", ExtraEventActions.SetUpAdvanceJunimoMovement);
+
+            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.FinishAdvanceJunimoMovement", ExtraEventActions.FinishAdvanceJunimoMovement);
+            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.AddInJunimoAdvanceMove", ExtraEventActions.AddInJunimoAdvanceMove);
+            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.RemoveJunimoAdvanceMove", ExtraEventActions.RemoveAdvanceJunimoMovement);
+
         }
 
         /// <summary>
@@ -47,7 +59,7 @@ namespace StardustCore.Events
         /// <param name="Event"></param>
         public void addEvent(EventHelper Event)
         {
-            this.events.Add(Event.eventName, Event);
+            this.events.Add(Event.eventStringId, Event);
         }
 
         /// <summary>

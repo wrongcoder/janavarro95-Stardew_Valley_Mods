@@ -26,7 +26,6 @@ using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using xTile.Dimensions;
 using Animation = StardustCore.Animations.Animation;
-using SpaceShared.APIs;
 using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Revitalize.Framework.Constants.ItemIds.Objects;
 using Revitalize.Framework.SaveData;
@@ -198,8 +197,11 @@ namespace Revitalize
             -Pendants
     */
 
-    public class ModCore : Mod, IAssetEditor
+    public class RevitalizeModCore : Mod, IAssetEditor
     {
+
+        public static RevitalizeModCore Instance;
+
         public static IModHelper ModHelper;
         public static IMonitor ModMonitor;
         public static IManifest Manifest;
@@ -223,6 +225,8 @@ namespace Revitalize
 
         public override void Entry(IModHelper helper)
         {
+            Instance = this;
+
             ModHelper = helper;
             ModMonitor = this.Monitor;
             Manifest = this.ModManifest;

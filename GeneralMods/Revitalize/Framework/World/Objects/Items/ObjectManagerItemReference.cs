@@ -28,7 +28,7 @@ namespace Revitalize.Framework.World.Objects.Items
 
         public override Item getItem(int StackSize = 1)
         {
-            return ModCore.ObjectManager.GetItem(this.itemId.Value, StackSize);
+            return RevitalizeModCore.ObjectManager.GetItem(this.itemId.Value, StackSize);
         }
 
         public override List<INetSerializable> getNetFields()

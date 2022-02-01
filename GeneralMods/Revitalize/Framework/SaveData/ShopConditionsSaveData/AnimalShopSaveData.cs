@@ -20,7 +20,7 @@ namespace Revitalize.Framework.SaveData.ShopConditionsSaveData
 
         public override void save()
         {
-            ModCore.ModHelper.Data.WriteJsonFile(Path.Combine(ModCore.SaveDataManager.getFullSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"), this);
+            RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine(RevitalizeModCore.SaveDataManager.getFullSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"), this);
             this.cleanUpPostSave();
         }
 
@@ -37,12 +37,12 @@ namespace Revitalize.Framework.SaveData.ShopConditionsSaveData
 
         public static AnimalShopSaveData LoadOrCreate()
         {
-            if (File.Exists(Path.Combine(ModCore.SaveDataManager.getFullSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<AnimalShopSaveData>(Path.Combine(ModCore.SaveDataManager.getRelativeSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"));
+            if (File.Exists(Path.Combine(RevitalizeModCore.SaveDataManager.getFullSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json")))
+                return RevitalizeModCore.ModHelper.Data.ReadJsonFile<AnimalShopSaveData>(Path.Combine(RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"));
             else
             {
                 AnimalShopSaveData Config = new AnimalShopSaveData();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine(ModCore.SaveDataManager.getRelativeSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"), Config);
+                RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine(RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"), Config);
                 return Config;
             }
         }

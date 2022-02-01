@@ -8,9 +8,9 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Revitalize;
 using Revitalize.Framework.Utilities.Serialization.Converters;
-using SpaceShared.APIs;
 using StardewValley;
 using StardewValley.Objects;
+using StardustCore.Compatibility.SpaceCore;
 
 namespace Revitalize.Framework.Utilities
 {
@@ -177,7 +177,7 @@ namespace Revitalize.Framework.Utilities
         /// <param name="extensionFolder">The sub folder path inside of the Content folder for this mod.</param>
         public void SerializeContentFile(string fileName, object obj, string extensionFolder)
         {
-            string path = Path.Combine(ModCore.ModHelper.DirectoryPath, "Content", extensionFolder, fileName + ".json");
+            string path = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, "Content", extensionFolder, fileName + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             if (File.Exists(path)) return;
             this.Serialize(path, obj);
@@ -211,31 +211,7 @@ namespace Revitalize.Framework.Utilities
 
         public static void SerializeTypesForXMLUsingSpaceCore()
         {
-            var spaceCore = ModCore.ModHelper.ModRegistry.GetApi<SpaceCoreAPI>("spacechase0.SpaceCore");
-
-            foreach (Type t in typeof(ModCore).Assembly.GetTypes())
-            {
-                if (Attribute.GetCustomAttribute(t, typeof(XmlTypeAttribute)) != null)
-                {
-                    spaceCore.RegisterSerializerType(t);
-                }
-
-            }
-            /*
-//Register core class
-spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.CustomObject));
-
-//Register crafting tables.
-spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.CraftingTables.CraftingTable));
-
-//Register machines.
-spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Machines.Machine));
-spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Machines.EnergyGeneration.AdvancedSolarPanel));
-spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Machines.EnergyGeneration.Windmill));
-
-//Register ore veins.
-spaceCore.RegisterSerializerType(typeof(Revitalize.Framework.World.Objects.Resources.OreVeins.OreVein));
-            */
+            SpaceCoreAPIUtil.RegisterTypesForMod(RevitalizeModCore.Instance);
         }
     }
 }

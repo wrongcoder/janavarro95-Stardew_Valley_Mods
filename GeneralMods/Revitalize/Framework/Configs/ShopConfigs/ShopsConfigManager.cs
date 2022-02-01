@@ -35,11 +35,11 @@ namespace Revitalize.Framework.Configs.ShopConfigs
 
         public ShopsConfigManager()
         {
-            this.animalShopStockConfig = Revitalize.ModCore.Configs.initializeConfig<AnimalShopStockConfig>("Configs", "Shops", "AnimalShopConfig.json");
-            this.blacksmithShopsConfig = Revitalize.ModCore.Configs.initializeConfig<BlacksmithShopConfig>("Configs", "Shops", "BlacksmithShopConfig.json");
-            this.dwarfShopConfig = Revitalize.ModCore.Configs.initializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");
-            this.hayMakerShopConfig = Revitalize.ModCore.Configs.initializeConfig<HayMakerShopConfig>("Configs", "Shops", "HayMakerShopConfig.json");
-            this.robinsShopConfig = Revitalize.ModCore.Configs.initializeConfig<RobinsShopConfig>("Configs", "Shops", "RobinsShopConfig.json");
+            this.animalShopStockConfig = ConfigManager.initializeConfig<AnimalShopStockConfig>("Configs", "Shops", "AnimalShopConfig.json");
+            this.blacksmithShopsConfig = ConfigManager.initializeConfig<BlacksmithShopConfig>("Configs", "Shops", "BlacksmithShopConfig.json");
+            this.dwarfShopConfig = ConfigManager.initializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");
+            this.hayMakerShopConfig = ConfigManager.initializeConfig<HayMakerShopConfig>("Configs", "Shops", "HayMakerShopConfig.json");
+            this.robinsShopConfig = ConfigManager.initializeConfig<RobinsShopConfig>("Configs", "Shops", "RobinsShopConfig.json");
         }
 
 

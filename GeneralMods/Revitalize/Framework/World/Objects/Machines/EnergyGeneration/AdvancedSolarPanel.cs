@@ -72,7 +72,7 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
                 }
                 catch (Exception err)
                 {
-                    ModCore.ModMonitor.Log(err.ToString());
+                    RevitalizeModCore.ModMonitor.Log(err.ToString());
                 }
             }
 

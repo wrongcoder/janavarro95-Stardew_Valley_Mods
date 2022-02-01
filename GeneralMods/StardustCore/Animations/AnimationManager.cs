@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Newtonsoft.Json;
-using Omegasis.StardustCore.Networking;
 using StardewValley;
 using StardewValley.Network;
+using StardustCore.Networking;
 using StardustCore.UIUtilities;
 
 namespace StardustCore.Animations

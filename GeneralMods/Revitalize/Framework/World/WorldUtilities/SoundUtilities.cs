@@ -28,14 +28,14 @@ namespace Revitalize.Framework.World.WorldUtilities
         public static void PlaySound(StardewSound stardewSound)
         {
             string soundName = GetSoundNameFromStardewSound(stardewSound);
-            ModCore.log("Sound name is: " + soundName);
+            RevitalizeModCore.log("Sound name is: " + soundName);
             Game1.playSound(soundName);
         }
 
         public static void PlaySound(this GameLocation GameLocation, StardewSound stardewSound)
         {
             string soundName = GetSoundNameFromStardewSound(stardewSound);
-            ModCore.log("Sound name is: " + soundName);
+            RevitalizeModCore.log("Sound name is: " + soundName);
             GameLocation.playSound(GetSoundNameFromStardewSound(stardewSound));
         }
 

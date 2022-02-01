@@ -32,7 +32,7 @@ namespace Revitalize.Framework.Utilities
             }
             else if (ID.Equals(Machines.MiningDrillV1))
             {
-                return ModCore.ObjectManager.resources.miningDrillResources.Values.ToList();
+                return RevitalizeModCore.ObjectManager.resources.miningDrillResources.Values.ToList();
             }
 
             return new List<ResourceInformation>();

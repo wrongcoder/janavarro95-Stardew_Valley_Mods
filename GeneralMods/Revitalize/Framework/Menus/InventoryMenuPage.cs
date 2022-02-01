@@ -99,8 +99,8 @@ namespace Revitalize.Framework.Menus
             Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.searchBox;
             this.searchBox.Selected = false;
 
-            this.nextPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Next Page", new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "NextPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
-            this.previousPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Previous Page", new Vector2(64 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.nextPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Next Page", new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "NextPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.previousPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Previous Page", new Vector2(64 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "PreviousPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
 
         }
 
@@ -161,14 +161,14 @@ namespace Revitalize.Framework.Menus
                         if (index > this.items.Count)
                         {
                             Vector2 pos2 = new Vector2(x * 64 + xPosition, y * 64 + yPosition);
-                            ItemDisplayButton b2 = new ItemDisplayButton(null, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos2, new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos2, new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
+                            ItemDisplayButton b2 = new ItemDisplayButton(null, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos2, new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos2, new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
                             this.pages[i].storageDisplay.Add(b2);
                             continue;
                         }
 
                         Item item = this.getItemFromList(index);
                         Vector2 pos = new Vector2(x * 64 + xPosition, y * 64 + yPosition);
-                        ItemDisplayButton b = new ItemDisplayButton(item, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos, new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos, new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
+                        ItemDisplayButton b = new ItemDisplayButton(item, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos, new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos, new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
                         this.pages[i].storageDisplay.Add(b);
                     }
                 }

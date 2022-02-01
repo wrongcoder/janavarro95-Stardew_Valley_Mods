@@ -33,7 +33,7 @@ namespace Revitalize.Framework.World
 
         public virtual void tryToAddMailToMailbox()
         {
-            if(Game1.player.mailReceived.Contains(MailTitles.HayMakerAvailableForPurchase)==false && (ModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop()==true  || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() == true))
+            if(Game1.player.mailReceived.Contains(MailTitles.HayMakerAvailableForPurchase)==false && (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop()==true  || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() == true))
             {
                 Game1.mailbox.Add(MailTitles.HayMakerAvailableForPurchase);
             }
@@ -113,7 +113,7 @@ namespace Revitalize.Framework.World
                             letterViewerMenu.mailMessage = this.parseMailMessage(this.getMailContentsFromTitle(letterViewerMenu.mailTitle)).Split("\n").ToList();
                             foreach(string s in letterViewerMenu.mailMessage)
                             {
-                                ModCore.log(s);
+                                RevitalizeModCore.log(s);
                             }
                         }
                     }

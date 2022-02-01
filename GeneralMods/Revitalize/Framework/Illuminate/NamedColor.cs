@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Netcode;
-using Omegasis.StardustCore.Networking;
+using StardustCore.Networking;
 
 namespace Revitalize.Framework.Illuminate
 {

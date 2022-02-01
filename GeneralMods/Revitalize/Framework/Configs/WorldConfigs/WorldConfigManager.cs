@@ -18,7 +18,7 @@ namespace Revitalize.Framework.Configs.WorldConfigs
 
         public WorldConfigManager()
         {
-            this.darkerNightConfig = Revitalize.ModCore.Configs.initializeConfig<DarkerNightConfig>("Configs", "WorldConfigs", "DarkerNightConfig.json");
+            this.darkerNightConfig = ConfigManager.initializeConfig<DarkerNightConfig>("Configs", "WorldConfigs", "DarkerNightConfig.json");
         }
     }
 }

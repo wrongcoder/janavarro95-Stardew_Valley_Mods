@@ -10,14 +10,14 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
     public class DatingNPC:EventPrecondition
     {
 
-        public NPC npc;
+        public string npc;
         public DatingNPC()
         {
 
         }
         public DatingNPC(NPC npc)
         {
-            this.npc = npc;
+            this.npc = npc.Name;
         }
 
         public override string ToString()
@@ -32,14 +32,14 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
         {
             StringBuilder b = new StringBuilder();
             b.Append("D ");
-            b.Append(this.npc.Name);
+            b.Append(this.npc);
             return b.ToString();
         }
 
         public override bool meetsCondition()
         {
-            if (Game1.player.friendshipData.ContainsKey(this.npc.Name)){
-                return Game1.player.friendshipData[this.npc.Name].IsDating();
+            if (Game1.player.friendshipData.ContainsKey(this.npc)){
+                return Game1.player.friendshipData[this.npc].IsDating();
             }
             else
             {

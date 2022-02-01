@@ -27,9 +27,9 @@ namespace Revitalize.Framework.World.WorldUtilities
                 "Big Coop", //Big coop
                 "Deluxe Coop" //Deluxe coop.
             });
-            if (hasBuiltBuilding == true && ModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() == false)
+            if (hasBuiltBuilding == true && RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() == false)
             {
-                ModCore.SaveDataManager.shopSaveData.animalShopSaveData.setHasBuiltTier2OrHigherBarnOrCoop();
+                RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.setHasBuiltTier2OrHigherBarnOrCoop();
             }
             return hasBuiltBuilding;
         }

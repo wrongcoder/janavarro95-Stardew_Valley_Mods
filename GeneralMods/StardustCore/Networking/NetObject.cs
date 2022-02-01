@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Netcode;
 
-namespace Omegasis.StardustCore.Networking
+namespace StardustCore.Networking
 {
     public class NetObject : INetObject<NetFields>
     {

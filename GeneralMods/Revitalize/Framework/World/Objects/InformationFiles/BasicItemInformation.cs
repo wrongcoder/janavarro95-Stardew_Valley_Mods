@@ -13,7 +13,7 @@ using System.Xml.Serialization;
 using Netcode;
 using System.Collections.Generic;
 using Revitalize.Framework.Utilities.Extensions;
-using Omegasis.StardustCore.Networking;
+using StardustCore.Networking;
 
 namespace Revitalize.Framework.World.Objects.InformationFiles
 {

@@ -156,7 +156,7 @@ namespace Revitalize.Framework.Crafting
                 }
                 else
                 {
-                    ModCore.log("Recipe is locked!");
+                    RevitalizeModCore.log("Recipe is locked!");
                 }
             }
             menu.currentTab = this.defaultTab;
@@ -183,7 +183,7 @@ namespace Revitalize.Framework.Crafting
                 }
                 else
                 {
-                    ModCore.log("Recipe is locked!");
+                    RevitalizeModCore.log("Recipe is locked!");
                 }
             }
             menu.currentTab = this.defaultTab;
@@ -210,7 +210,7 @@ namespace Revitalize.Framework.Crafting
                 }
                 else
                 {
-                    ModCore.log("Recipe is locked!");
+                    RevitalizeModCore.log("Recipe is locked!");
                 }
             }
             menu.currentTab = this.defaultTab;

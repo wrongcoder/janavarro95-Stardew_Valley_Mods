@@ -16,11 +16,11 @@ namespace Revitalize.Framework.World.WorldUtilities.Shops
         /// </summary>
         public static void AddOreToClintsShop(ShopMenu Menu)
         {
-            ShopUtilities.AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Ores.TinOre, 1), ModCore.Configs.shopsConfigManager.blacksmithShopsConfig.tinOreSellPrice, -1);
-            ShopUtilities.AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Ores.BauxiteOre, 1), ModCore.Configs.shopsConfigManager.blacksmithShopsConfig.bauxiteOreSellPrice, -1);
-            ShopUtilities.AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Ores.LeadOre, 1), ModCore.Configs.shopsConfigManager.blacksmithShopsConfig.leadOreSellPrice, -1);
-            ShopUtilities.AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Ores.SilverOre, 1), ModCore.Configs.shopsConfigManager.blacksmithShopsConfig.silverOreSellPrice, -1);
-            ShopUtilities.AddItemToShop(Menu, ModCore.ObjectManager.GetItem(Ores.TitaniumOre, 1), ModCore.Configs.shopsConfigManager.blacksmithShopsConfig.titaniumOreSellPrice, -1);
+            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.GetItem(Ores.TinOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.tinOreSellPrice, -1);
+            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.GetItem(Ores.BauxiteOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.bauxiteOreSellPrice, -1);
+            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.GetItem(Ores.LeadOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.leadOreSellPrice, -1);
+            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.GetItem(Ores.SilverOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.silverOreSellPrice, -1);
+            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.GetItem(Ores.TitaniumOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.titaniumOreSellPrice, -1);
         }
 
     }

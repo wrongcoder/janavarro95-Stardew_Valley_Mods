@@ -62,7 +62,7 @@ namespace Revitalize.Framework.World.WorldUtilities.Shops
                         }
                         else if (npcName.Equals("Marnie"))
                         {
-                            ModCore.log("Accessing marnies shop!");
+                            RevitalizeModCore.log("Accessing marnies shop!");
                             MarniesShopUtilities.AddStockToMarniesShop(menu);
                         }
                     }

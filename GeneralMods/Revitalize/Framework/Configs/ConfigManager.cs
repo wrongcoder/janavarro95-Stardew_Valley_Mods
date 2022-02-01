@@ -34,9 +34,9 @@ namespace Revitalize.Framework.Configs
         /// <typeparam name="T"></typeparam>
         /// <param name="RelativePathToConfig"></param>
         /// <returns></returns>
-        public virtual T initializeConfig<T>(params string[] RelativePathToConfig) where T : class
+        public static T initializeConfig<T>(params string[] RelativePathToConfig) where T : class
         {
-            return this.initializeConfig<T>(Revitalize.ModCore.ModHelper, RelativePathToConfig);
+            return initializeConfig<T>(Revitalize.RevitalizeModCore.ModHelper, RelativePathToConfig);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Revitalize.Framework.Configs
         /// <param name="helper">The mod helper to use to get the full path for file existence checking.</param>
         /// <param name="RelativePathToConfig"></param>
         /// <returns></returns>
-        public virtual T initializeConfig<T>(IModHelper helper, params string[] RelativePathToConfig) where T : class
+        public static T initializeConfig<T>(IModHelper helper, params string[] RelativePathToConfig) where T : class
         {
             string relativePath = Path.Combine(RelativePathToConfig);
             if (File.Exists(Path.Combine(helper.DirectoryPath,relativePath )))

@@ -11,6 +11,10 @@ using StardewValley;
 using Microsoft.Xna.Framework;
 using StardustCore.Events.Preconditions.PlayerSpecific;
 using StardustCore.Events.Preconditions.NPCSpecific;
+using StardustCore.IlluminateFramework;
+using StardustCore.Utilities;
+using Omegasis.HappyBirthday.Framework.Constants;
+using Omegasis.HappyBirthday.Framework.Utilities;
 
 namespace Omegasis.HappyBirthday.Framework
 {
@@ -27,21 +31,25 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
             conditions.Add(new TimePrecondition(600, 2600));
-            conditions.Add(new CanReadJunimo());
-            conditions.Add(new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(false));
-            conditions.Add(new CommunityCenterCompleted(false));
-            //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
-            EventHelper e = new EventHelper("CommunityCenterBirthday", 19950, conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
 
-            e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 10), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni2", new Microsoft.Xna.Framework.Vector2(30, 11), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni3", new Microsoft.Xna.Framework.Vector2(34, 11), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni4", new Microsoft.Xna.Framework.Vector2(26, 11), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni5", new Microsoft.Xna.Framework.Vector2(28, 11), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni6Tank", new Vector2(38, 10), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni7", new Vector2(27, 16), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni8", new Vector2(40, 15), StardustCore.IlluminateFramework.Colors.getRandomJunimoColor());
-            e.AddJunimoAdvanceMoveTiles(new StardustCore.Utilities.JunimoAdvanceMoveData("Juni6Tank", new List<Point>()
+
+            //   conditions.Add(new CanReadJunimo());
+         //   conditions.Add(new JojaMember(false));
+         //   conditions.Add(new CommunityCenterCompleted(false));
+
+
+            //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
+            EventHelper e = new EventHelper(EventIds.JunimoCommunityCenterBirthday, 19950, conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
+
+            e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 10), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni2", new Microsoft.Xna.Framework.Vector2(30, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni3", new Microsoft.Xna.Framework.Vector2(34, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni4", new Microsoft.Xna.Framework.Vector2(26, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni5", new Microsoft.Xna.Framework.Vector2(28, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni6Tank", new Vector2(38, 10), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni7", new Vector2(27, 16), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni8", new Vector2(40, 15), Colors.getRandomJunimoColor());
+            e.AddJunimoAdvanceMoveTiles(new JunimoAdvanceMoveData("Juni6Tank", new List<Point>()
             {
                 new Point(38,10),
                 new Point(38,11),
@@ -91,12 +99,12 @@ namespace Omegasis.HappyBirthday.Framework
             e.playSound("junimoMeep1");
 
             e.emoteFarmer_ExclamationMark();
-            e.showMessage(GetEventString("JunimoBirthdayParty_0"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"JunimoBirthdayParty_0");
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("JunimoBirthdayParty_1"));
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"JunimoBirthdayParty_1");
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.addObjectToPlayersInventory(220, 1, false);
 
             e.end();
@@ -120,7 +128,7 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Trailer")));
             conditions.Add(new TimePrecondition(600, 2600));
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(penny));
+            conditions.Add(new DatingNPC(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
             EventHelper e = new EventHelper("BirthdayDating:Penny", 19951, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
@@ -154,12 +162,12 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Penny");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingPennyBirthday_Finish:0")); //penny party finish 0
-            e.showMessage(GetEventString("DatingPennyBirthday_Finish:1"));// penny party finish 1
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:0"); //penny party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:1");// penny party finish 1
             e.addObjectToPlayersInventory(220, 1, false);
             e.addObjectToPlayersInventory(346, 1, false);
 
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
 
             e.end();
 
@@ -176,7 +184,7 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Trailer_Big")));
             conditions.Add(new TimePrecondition(600, 2600));
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(penny));
+            conditions.Add(new DatingNPC(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
             EventHelper e = new EventHelper("BirthdayDating:Penny_BigHome", 19951, conditions, new EventStartData("playful", 14, 8, new EventStartData.FarmerData(12, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
@@ -210,12 +218,12 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Penny");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingPennyBirthday_Finish:0")); //penny party finish 0
-            e.showMessage(GetEventString("DatingPennyBirthday_Finish:1"));// penny party finish 1
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:0"); //penny party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:1");// penny party finish 1
             e.addObjectToPlayersInventory(220, 1, false);
             e.addObjectToPlayersInventory(346, 1, false);
 
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
 
             e.end();
 
@@ -239,7 +247,7 @@ namespace Omegasis.HappyBirthday.Framework
             NPC robin = Game1.getCharacterFromName("Robin");
             NPC demetrius = Game1.getCharacterFromName("Demetrius");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(maru));
+            conditions.Add(new DatingNPC(maru));
 
             EventHelper e = new EventHelper("BirthdayDating:Maru", 19952, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
@@ -280,11 +288,11 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Maru");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingMaruBirthday_Finish:0")); //maru party finish 0
-            e.showMessage(GetEventString("DatingMaruBirthday_Finish:1")); //maru party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingMaruBirthday_Finish:0"); //maru party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingMaruBirthday_Finish:1"); //maru party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
 
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -303,7 +311,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC leah = Game1.getCharacterFromName("Leah");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(leah));
+            conditions.Add(new DatingNPC(leah));
 
             EventHelper e = new EventHelper("BirthdayDating:Leah", 19954, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(leah,14,11, EventHelper.FacingDirection.Left),
@@ -328,10 +336,10 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Leah");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingLeahBirthday_Finish:0")); //maru party finish 0
-            e.showMessage(GetEventString("DatingLeahBirthday_Finish:1")); //maru party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingLeahBirthday_Finish:0"); //maru party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingLeahBirthday_Finish:1"); //maru party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -350,14 +358,14 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (Game1.player.hasCompletedCommunityCenter() == false)
             {
-                conditions.Add(new StardustCore.Events.Preconditions.TimeSpecific.EventDayExclusionPrecondition(false, false, false, true, false, false, false));
+                conditions.Add(new EventDayExclusionPrecondition(false, false, false, true, false, false, false));
             }
 
             NPC abigail = Game1.getCharacterFromName("Abigail");
             NPC pierre = Game1.getCharacterFromName("Pierre");
             NPC caroline = Game1.getCharacterFromName("Caroline");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(abigail));
+            conditions.Add(new DatingNPC(abigail));
 
             EventHelper e = new EventHelper("BirthdayDating:Abigail", 19955, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,36,9, EventHelper.FacingDirection.Left),
@@ -390,10 +398,10 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Abigail");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingAbigailBirthday_Finish:0")); //abi party finish 0
-            e.showMessage(GetEventString("DatingAbigailBirthday_Finish:1")); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Finish:0"); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
 
@@ -407,22 +415,22 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Mine")));
             conditions.Add(new TimePrecondition(600, 2600));
 
-            var v=new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(true);
+            var v=new JojaMember(true);
             if (v.meetsCondition())
             {
-                conditions.Add(new StardustCore.Events.Preconditions.TimeSpecific.EventDayExclusionPrecondition(true, true, true, false, true, true, true));
+                conditions.Add(new EventDayExclusionPrecondition(true, true, true, false, true, true, true));
             }
             else
             {
                 if (Game1.player.hasCompletedCommunityCenter() == false)
                 {
-                    conditions.Add(new StardustCore.Events.Preconditions.TimeSpecific.EventDayExclusionPrecondition(true, true, true, false, true, true, true));
+                    conditions.Add(new EventDayExclusionPrecondition(true, true, true, false, true, true, true));
                 }
             }
 
             NPC abigail = Game1.getCharacterFromName("Abigail");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(abigail));
+            conditions.Add(new DatingNPC(abigail));
 
             EventHelper e = new EventHelper("BirthdayDating:Abigail_Mine", 19955, conditions, new EventStartData("playful", 18, 8, new EventStartData.FarmerData(18, 12, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,18,4, EventHelper.FacingDirection.Down),
@@ -445,10 +453,10 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Abigail");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingAbigailBirthday_Mine_Finish:0")); //abi party finish 0
-            e.showMessage(GetEventString("DatingAbigailBirthday_Mine_Finish:1")); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Mine_Finish:0"); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Mine_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
 
@@ -463,7 +471,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC emily = Game1.getCharacterFromName("Emily");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(emily));
+            conditions.Add(new DatingNPC(emily));
 
             EventHelper e = new EventHelper("BirthdayDating:Emily", 19956, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(emily,20,17, EventHelper.FacingDirection.Down),
@@ -487,10 +495,10 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Emily");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingEmilyBirthday_Finish:0")); //abi party finish 0
-            e.showMessage(GetEventString("DatingEmilyBirthday_Finish:1")); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingEmilyBirthday_Finish:0"); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingEmilyBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -506,7 +514,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC haley = Game1.getCharacterFromName("Haley");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(haley));
+            conditions.Add(new DatingNPC(haley));
 
             EventHelper e = new EventHelper("BirthdayDating:Haley", 19957, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(haley,20,17, EventHelper.FacingDirection.Down),
@@ -529,10 +537,10 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Haley");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingHaleyBirthday_Finish:0")); //abi party finish 0
-            e.showMessage(GetEventString("DatingHaleyBirthday_Finish:1")); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHaleyBirthday_Finish:0"); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHaleyBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(221, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
 
@@ -547,7 +555,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC sam = Game1.getCharacterFromName("Sam");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(sam));
+            conditions.Add(new DatingNPC(sam));
 
             EventHelper e = new EventHelper("BirthdayDating:Sam", 19959, conditions, new EventStartData("playful", 3, 6, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(sam,3,5, EventHelper.FacingDirection.Down),
@@ -567,11 +575,11 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Sam");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingSamBirthday_Finish:0")); //sam party finish 0
-            e.showMessage(GetEventString("DatingSamBirthday_Finish:1")); //sam party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSamBirthday_Finish:0"); //sam party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSamBirthday_Finish:1"); //sam party finish 0
             e.addObjectToPlayersInventory(206, 1, false);
             e.addObjectToPlayersInventory(167, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -593,7 +601,7 @@ namespace Omegasis.HappyBirthday.Framework
             NPC robin = Game1.getCharacterFromName("Robin");
             NPC demetrius = Game1.getCharacterFromName("Demetrius");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(sebastian));
+            conditions.Add(new DatingNPC(sebastian));
 
             EventHelper e = new EventHelper("BirthdayDating:Sebastian", 19952, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
@@ -633,11 +641,11 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Sebastian");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingSebastianBirthday_Finish:0")); //maru party finish 0
-            e.showMessage(GetEventString("DatingSebastianBirthday_Finish:1")); //maru party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSebastianBirthday_Finish:0"); //maru party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSebastianBirthday_Finish:1"); //maru party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
 
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -673,10 +681,10 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Elliott");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingElliottBirthday_Finish:0")); //abi party finish 0
-            e.showMessage(GetEventString("DatingElliottBirthday_Finish:1")); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingElliottBirthday_Finish:0"); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingElliottBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -692,7 +700,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC shane = Game1.getCharacterFromName("Shane");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(shane));
+            conditions.Add(new DatingNPC(shane));
 
             EventHelper e = new EventHelper("BirthdayDating:Shane", 19960, conditions, new EventStartData("playful", 26, 15, new EventStartData.FarmerData(19, 18, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(shane,25,16, EventHelper.FacingDirection.Down),
@@ -713,11 +721,11 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Shane");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingShaneBirthday_Finish:0")); //sam party finish 0
-            e.showMessage(GetEventString("DatingShaneBirthday_Finish:1")); //sam party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingShaneBirthday_Finish:0"); //sam party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingShaneBirthday_Finish:1"); //sam party finish 0
             e.addObjectToPlayersInventory(206, 1, false);
             e.addObjectToPlayersInventory(167, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -731,7 +739,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC harvey = Game1.getCharacterFromName("Harvey");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(harvey));
+            conditions.Add(new DatingNPC(harvey));
 
             EventHelper e = new EventHelper("BirthdayDating:Harvey", 19957, conditions, new EventStartData("playful", 6, 6, new EventStartData.FarmerData(6, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(harvey,3,6, EventHelper.FacingDirection.Down),
@@ -753,11 +761,11 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Harvey");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingHarveyBirthday_Finish:0")); //abi party finish 0
-            e.showMessage(GetEventString("DatingHarveyBirthday_Finish:1")); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHarveyBirthday_Finish:0"); //abi party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHarveyBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(237, 1, false);
             e.addObjectToPlayersInventory(348, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -772,7 +780,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC alex = Game1.getCharacterFromName("Alex");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(alex));
+            conditions.Add(new DatingNPC(alex));
 
             EventHelper e = new EventHelper("BirthdayDating:Alex", 19959, conditions, new EventStartData("playful", 3, 20, new EventStartData.FarmerData(7, 19, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(alex,3,19, EventHelper.FacingDirection.Down),
@@ -791,11 +799,11 @@ namespace Omegasis.HappyBirthday.Framework
             e.emote_Heart("Alex");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("DatingAlexBirthday_Finish:0")); //sam party finish 0
-            e.showMessage(GetEventString("DatingAlexBirthday_Finish:1")); //sam party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAlexBirthday_Finish:0"); //sam party finish 0
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAlexBirthday_Finish:1"); //sam party finish 0
             e.addObjectToPlayersInventory(206, 1, false);
             e.addObjectToPlayersInventory(167, 1, false);
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.end();
             return e;
         }
@@ -811,7 +819,7 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
             conditions.Add(new TimePrecondition(600, 2600));
-            conditions.Add(new StardustCore.Events.Preconditions.PlayerSpecific.JojaMember(false));
+            conditions.Add(new JojaMember(false));
             conditions.Add(new CommunityCenterCompleted(true));
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
             EventHelper e = new EventHelper("CommunityCenterBirthday_All", 19961, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
@@ -831,12 +839,12 @@ namespace Omegasis.HappyBirthday.Framework
 
 
             e.emoteFarmer_ExclamationMark();
-            e.showMessage(GetEventString("CommunityBirthdayParty_0"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"CommunityBirthdayParty_0");
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            e.showMessage(GetEventString("CommunityBirthdayParty_1"));
-            e.showMessage(GetEventString("PartyOver"));
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"CommunityBirthdayParty_1");
+            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
             e.addObjectToPlayersInventory(220, 1, false);
 
             e.end();

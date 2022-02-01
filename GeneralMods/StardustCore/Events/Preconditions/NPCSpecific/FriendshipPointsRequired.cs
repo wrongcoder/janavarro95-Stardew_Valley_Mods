@@ -9,7 +9,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
 {
     public class FriendshipPointsRequired:EventPrecondition
     {
-        public NPC npc;
+        public string npc;
         public int amount;
 
 
@@ -20,7 +20,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
 
         public FriendshipPointsRequired(NPC NPC, int Amount)
         {
-            this.npc = NPC;
+            this.npc = NPC.Name;
             this.amount = Amount;
         }
 
@@ -37,7 +37,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
         {
             StringBuilder b = new StringBuilder();
             b.Append("f ");
-            b.Append(this.npc.Name);
+            b.Append(this.npc);
             b.Append(" ");
             b.Append(this.amount.ToString());
             return b.ToString();
@@ -45,7 +45,7 @@ namespace StardustCore.Events.Preconditions.NPCSpecific
 
         public override bool meetsCondition()
         {
-            return Game1.player.friendshipData[this.npc.Name].Points >= this.amount;
+            return Game1.player.friendshipData[this.npc].Points >= this.amount;
         }
     }
 }

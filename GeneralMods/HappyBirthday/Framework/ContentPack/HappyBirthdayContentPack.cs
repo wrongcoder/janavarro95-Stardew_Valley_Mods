@@ -327,6 +327,11 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             {
                 try
                 {
+                    if (Path.GetFileNameWithoutExtension(File).Equals("RegisteredGifts"))
+                    {
+                        continue;
+                    }
+
                     List<GiftInformation> giftInfo = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", Path.GetFileNameWithoutExtension(File) +".json"));
 
                     if (giftInfo == null)

@@ -83,7 +83,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
             if (type == null)
             {
-                asm = typeof(Revitalize.ModCore).Assembly;
+                asm = typeof(Revitalize.RevitalizeModCore).Assembly;
                 type = asm.GetType(t);
             }
 

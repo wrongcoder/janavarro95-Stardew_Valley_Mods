@@ -49,31 +49,31 @@ namespace Revitalize.Framework.Crafting
             // Alloy Furnace Recipes //
             //~~~~~~~~~~~~~~~~~~~~~~~//
             CraftingRecipeBook AlloyFurnaceRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes);
-            AlloyFurnaceRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+            AlloyFurnaceRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
 
 
             AlloyFurnaceRecipes.addCraftingRecipe("BrassIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.AluminumIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.AluminumIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.BrassIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 3, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.BrassIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 3, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("BronzeIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.TinIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.TinIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.BronzeIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.BronzeIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("SteelIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,1),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.SteelIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 6, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SteelIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 6, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("ElectrumIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.GoldBar,1),1),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.SilverIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SilverIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.ElectrumIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.ElectrumIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
 
             if (this.modCraftingRecipesByGroup.ContainsKey(AlloyFurnaceRecipes.craftingGroup))
             {
@@ -102,7 +102,7 @@ namespace Revitalize.Framework.Crafting
             //~~~~~~~~~~~~~~~~~~//
 
             CraftingRecipeBook AnvilRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AnvilCraftingRecipes);
-            AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+            AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
 
             /*
             AnvilRecipes.addCraftingRecipe("Grinder", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
@@ -116,10 +116,10 @@ namespace Revitalize.Framework.Crafting
 
             AnvilRecipes.addCraftingRecipe("Mining Drill V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.SteelIngot,10),10),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.BrassIngot,10),10),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SteelIngot,10),10),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.BrassIngot,10),10),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Machines.MiningDrillV1), 1)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Machines.MiningDrillV1), 1)), true));
 
             if (this.modCraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
@@ -160,14 +160,14 @@ namespace Revitalize.Framework.Crafting
             //~~~~~~~~~~~~~~~~~~~//
 
             CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook(CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
-            WorkbenchRecipes.addInCraftingTab("Furniture", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Furniture Tab", new Vector2(100 + 48, 100 + (24 * 4) * 2), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), false);
+            WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+            WorkbenchRecipes.addInCraftingTab("Furniture", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Furniture Tab", new Vector2(100 + 48, 100 + (24 * 4) * 2), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), false);
 
             WorkbenchRecipes.addCraftingRecipe("Anvil", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
                 {
                     //Inputs here
-                   new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(Ingots.SteelIngot),20)
-                }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem(CraftingStations.Anvil), 1)), true));
+                   new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SteelIngot),20)
+                }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(CraftingStations.Anvil), 1)), true));
             WorkbenchRecipes.addCraftingRecipe("Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
