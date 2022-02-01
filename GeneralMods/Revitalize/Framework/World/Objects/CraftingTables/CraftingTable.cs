@@ -57,7 +57,7 @@ namespace Revitalize.Framework.World.Objects.CraftingTables
         protected override void initNetFieldsPostConstructor()
         {
             base.initNetFieldsPostConstructor();
-            this.NetFields.AddField(this.craftingBookName);
+            //this.NetFields.AddField(this.craftingBookName);
         }
 
 

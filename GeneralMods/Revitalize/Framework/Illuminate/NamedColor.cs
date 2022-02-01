@@ -114,5 +114,10 @@ namespace Revitalize.Framework.Illuminate
 
             return this.color;
         }
+
+        public NamedColor getCopy()
+        {
+            return new NamedColor(this.name, this.color, this.colorMixMode, this.blendInfluence);
+        }
     }
 }

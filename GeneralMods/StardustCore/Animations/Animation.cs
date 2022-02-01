@@ -129,14 +129,11 @@ namespace StardustCore.Animations
                 this.animationFrames = new List<AnimationFrame>();
             }
 
-            if (this.animationFrames.Count != animationFramesCount)
+            this.animationFrames.Clear();
+            for (int i = 0; i < animationFramesCount; i++)
             {
-                this.animationFrames.Clear();
-                for (int i = 0; i < animationFramesCount; i++)
-                {
-                    AnimationFrame frame = new AnimationFrame();
-                    this.animationFrames.Add(frame.readAnimationFrame(reader));
-                }
+                AnimationFrame frame = new AnimationFrame();
+                this.animationFrames.Add(frame.readAnimationFrame(reader));
             }
 
             this.shouldLoopAnimation = reader.ReadBoolean();

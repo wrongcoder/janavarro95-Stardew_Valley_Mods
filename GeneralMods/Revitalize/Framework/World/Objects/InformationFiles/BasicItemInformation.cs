@@ -86,7 +86,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public readonly NetBool alwaysDrawAbovePlayer = new NetBool();
 
-        public NamedColor dyedColor;
+        public readonly NamedColor dyedColor = new NamedColor();
 
         /// <summary>
         /// The dimensions for the game's bounding box in the number of TILES. So a Vector2(1,1) would have 1 tile width and 1 tile height.
@@ -164,7 +164,14 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
             this.alwaysDrawAbovePlayer.Value = AlwaysDrawAbovePlayer;
 
-            this.dyedColor = DyedColor ?? new NamedColor("", new Color(0, 0, 0, 0), Enums.DyeBlendMode.Blend,0.5f);
+            if (DyedColor != null)
+            {
+                this.dyedColor = DyedColor.getCopy();
+            }
+            else
+            {
+                this.dyedColor = new NamedColor("", new Color(0, 0, 0, 0), Enums.DyeBlendMode.Blend, 0.5f);
+            }
         }
 
         /// <summary>
@@ -182,7 +189,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor);
+            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor.getCopy());
         }
 
 
@@ -213,7 +220,9 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         public virtual List<INetSerializable> getNetFields()
         {
             List<INetSerializable> fields= new List<INetSerializable>() {
+                
                 this.name,
+                
                 this.id,
                 this.description,
                 this.categoryName,
@@ -233,6 +242,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
                 this.shakeTimer,
                 this.alwaysDrawAbovePlayer,
                 this.boundingBoxTileDimensions
+                
             };
 
             fields.AddRange(this.animationManager.getNetFields());

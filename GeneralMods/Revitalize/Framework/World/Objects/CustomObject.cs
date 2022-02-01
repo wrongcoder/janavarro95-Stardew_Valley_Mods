@@ -48,8 +48,38 @@ namespace Revitalize.Framework.World.Objects
 
         public BasicItemInformation basicItemInfo;
 
-        public override string Name { get => this.basicItemInfo.name.Value; set => this.basicItemInfo.name.Value = value; }
-        public override string DisplayName { get => this.basicItemInfo.name.Value; set => this.basicItemInfo.name.Value = value; }
+        public override string Name
+        {
+            get
+            {
+                if (this.basicItemInfo == null) return null;
+                return this.basicItemInfo.name.Value;
+            }
+            set
+            {
+                if (this.basicItemInfo != null)
+                {
+                    this.basicItemInfo.name.Value = value;
+                }
+            }
+
+
+        }
+        public override string DisplayName
+        {
+            get
+            {
+                if (this.basicItemInfo == null) return null;
+                return this.basicItemInfo.name.Value;
+            }
+            set
+            {
+                if (this.basicItemInfo != null)
+                {
+                    this.basicItemInfo.name.Value = value;
+                }
+            }
+        }
 
 
         [XmlIgnore]
@@ -77,6 +107,7 @@ namespace Revitalize.Framework.World.Objects
         public CustomObject()
         {
             this.basicItemInfo = new BasicItemInformation();
+
             this.furniture_type.Value = Furniture.other;
             this.bigCraftable.Value = true;
             this.Type = "interactive";
@@ -156,7 +187,11 @@ namespace Revitalize.Framework.World.Objects
 
         protected virtual void initNetFieldsPostConstructor()
         {
-            this.NetFields.AddFields(this.basicItemInfo.getNetFields());
+            if (this.basicItemInfo != null)
+            {
+                this.NetFields.AddFields(this.basicItemInfo.getNetFields());
+            }
+
         }
 
         /// <summary>
