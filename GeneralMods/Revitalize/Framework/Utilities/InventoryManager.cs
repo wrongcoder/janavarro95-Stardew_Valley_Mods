@@ -3,12 +3,13 @@ using System.Linq;
 using System.Xml.Serialization;
 using Netcode;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Networking;
 using StardewValley;
 
 namespace Revitalize.Framework.Utilities
 {
     /// <summary>Handles dealing with objects.</summary>
-    public class InventoryManager
+    public class InventoryManager: NetObject
     {
         /// <summary>How many items the inventory can hold.</summary>
         public readonly NetInt capacity = new NetInt();
@@ -27,11 +28,11 @@ namespace Revitalize.Framework.Utilities
         public readonly NetInt displayColumns = new NetInt();
         public readonly NetInt displayRows = new NetInt();
 
-
         public InventoryManager()
         {
             this.capacity.Value = 0;
             this.setMaxLimit(0);
+            this.initializeNetFields();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -48,6 +49,7 @@ namespace Revitalize.Framework.Utilities
             this.items.AddRange(items);
             this.displayRows.Value = DisplayRows;
             this.displayColumns.Value = DisplayColumns;
+            this.initializeNetFields();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -58,20 +60,18 @@ namespace Revitalize.Framework.Utilities
             this.items.AddRange(items);
             this.displayRows.Value = DisplayRows;
             this.displayColumns.Value = DisplayColumns;
+            this.initializeNetFields();
         }
 
-        public virtual List<INetSerializable> getNetFields()
+        protected override void initializeNetFields()
         {
-            return new List<INetSerializable>() {
-
+            this.NetFields.AddFields(
                 this.capacity,
                 this.maxCapacity,
                 this.items,
                 this.bufferItems,
                 this.displayColumns,
-                this.displayRows
-
-            };
+                this.displayRows);
         }
 
         /// <summary>Add the item to the inventory.</summary>

@@ -13,11 +13,12 @@ using System.Xml.Serialization;
 using Netcode;
 using System.Collections.Generic;
 using Revitalize.Framework.Utilities.Extensions;
+using Omegasis.StardustCore.Networking;
 
 namespace Revitalize.Framework.World.Objects.InformationFiles
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
-    public class BasicItemInformation : INetObject<NetFields>
+    public class BasicItemInformation : NetObject
     {
         public readonly NetString name = new NetString();
 
@@ -86,14 +87,35 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             }
         }
 
-        [XmlIgnore]
-        public NetFields NetFields { get; } = new NetFields();
-
         public readonly NetBool ignoreBoundingBox = new NetBool();
 
-        public InventoryManager inventory = new InventoryManager();
+        public NetRef<InventoryManager> netInventory = new NetRef<InventoryManager>();
 
-        public LightManager lightManager = new LightManager();
+        public InventoryManager inventory
+        {
+            get
+            {
+                return this.netInventory.Value;
+            }
+            set
+            {
+                this.netInventory.Value = value;
+            }
+        }
+
+        public NetRef<LightManager> netLightManager = new NetRef<LightManager>();
+
+        public LightManager lightManager
+        {
+            get
+            {
+                return this.netLightManager.Value;
+            }
+            set
+            {
+                this.netLightManager.Value = value;
+            }
+        }
 
         public readonly NetEnum<Enums.Direction> facingDirection = new NetEnum<Enums.Direction>();
 
@@ -101,7 +123,19 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public readonly NetBool alwaysDrawAbovePlayer = new NetBool();
 
-        public readonly NamedColor dyedColor = new NamedColor();
+        public readonly NetRef<NamedColor> netDyedColor = new NetRef<NamedColor>();
+
+        public NamedColor dyedColor
+        {
+            get
+            {
+                return this.netDyedColor.Value;
+            }
+            set
+            {
+                this.netDyedColor.Value = value;
+            }
+        }
 
         /// <summary>
         /// The dimensions for the game's bounding box in the number of TILES. So a Vector2(1,1) would have 1 tile width and 1 tile height.
@@ -137,7 +171,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.boundingBoxTileDimensions.Value = new Vector2(1, 1);
             this.dyedColor = new NamedColor();
 
-            this.addNetFields();
+            this.initializeNetFields();
         }
 
         
@@ -190,7 +224,8 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
                 this.dyedColor = new NamedColor("", new Color(0, 0, 0, 0), Enums.DyeBlendMode.Blend, 0.5f);
             }
 
-            this.addNetFields();
+
+            this.initializeNetFields();
         }
 
         /// <summary>
@@ -237,7 +272,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         /// </summary>
         /// <returns></returns>
 
-        public virtual void addNetFields()
+        protected override void initializeNetFields()
         {
             this.NetFields.AddFields(this.name,
 
@@ -262,10 +297,9 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
                 this.boundingBoxTileDimensions);
 
             this.NetFields.AddField(this.netAnimationManager);
-
-            this.NetFields.AddFields(this.inventory.getNetFields());
-            this.NetFields.AddFields(this.lightManager.getNetFields());
-            this.NetFields.AddFields(this.dyedColor.getNetFields());
+            this.NetFields.AddFields(this.netInventory);
+            this.NetFields.AddField(this.netLightManager);
+            this.NetFields.AddFields(this.netDyedColor);
         }
 
     }

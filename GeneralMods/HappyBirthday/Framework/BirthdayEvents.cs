@@ -10,6 +10,7 @@ using StardustCore.Events.Preconditions.TimeSpecific;
 using StardewValley;
 using Microsoft.Xna.Framework;
 using StardustCore.Events.Preconditions.PlayerSpecific;
+using StardustCore.Events.Preconditions.NPCSpecific;
 
 namespace Omegasis.HappyBirthday.Framework
 {
@@ -652,7 +653,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             NPC elliott = Game1.getCharacterFromName("Elliott");
 
-            conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(elliott));
+            conditions.Add(new DatingNPC(elliott));
 
             EventHelper e = new EventHelper("BirthdayDating:Elliott", 19958, conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(elliott,3,5, EventHelper.FacingDirection.Down),

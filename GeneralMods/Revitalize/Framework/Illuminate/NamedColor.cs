@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Netcode;
+using Omegasis.StardustCore.Networking;
 
 namespace Revitalize.Framework.Illuminate
 {
-    public class NamedColor
+    public class NamedColor : NetObject
     {
         public readonly NetString name = new NetString();
         public readonly NetColor color = new NetColor();
@@ -27,7 +28,7 @@ namespace Revitalize.Framework.Illuminate
 
         }
 
-        public NamedColor(string Name, Color Color, Enums.DyeBlendMode ColorMixMode= Enums.DyeBlendMode.Average, double BlendInfluence = 0d)
+        public NamedColor(string Name, Color Color, Enums.DyeBlendMode ColorMixMode = Enums.DyeBlendMode.Average, double BlendInfluence = 0d)
         {
             this.name.Value = Name;
             this.color.Value = Color;
@@ -78,21 +79,22 @@ namespace Revitalize.Framework.Illuminate
             return this.color.Value.Invert();
         }
 
-        public virtual List<INetSerializable> getNetFields()
+        protected override void initializeNetFields()
         {
-            return new List<INetSerializable>()
-            {
+            this.NetFields.AddFields(
+
                 this.name,
                 this.color,
                 this.colorMixMode,
                 this.blendInfluence
-            };
+
+                );
         }
 
         public Color getBlendedColor(Color other, int Alpha = 255)
         {
-            
-            
+
+
             //Used as reference.
             //https://stackoverflow.com/questions/3722307/is-there-an-easy-way-to-blend-two-system-drawing-color-values
             if (this.colorMixMode == Enums.DyeBlendMode.Blend)

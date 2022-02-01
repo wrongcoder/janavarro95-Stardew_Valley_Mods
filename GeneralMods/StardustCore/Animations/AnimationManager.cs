@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Networking;
 using StardewValley;
 using StardewValley.Network;
 using StardustCore.UIUtilities;
@@ -12,7 +13,7 @@ using StardustCore.UIUtilities;
 namespace StardustCore.Animations
 {
     /// <summary>Used to play animations for Stardust.CoreObject type objects and all objects that extend from it. In draw code of object make sure to use this info instead.</summary>
-    public class AnimationManager : INetObject<NetFields>
+    public class AnimationManager : NetObject
     {
         public readonly NetStringDictionary<Animation, NetAnimation> animations = new NetStringDictionary<Animation, NetAnimation>();
         public readonly NetString currentAnimationName = new NetString();
@@ -44,9 +45,6 @@ namespace StardustCore.Animations
             }
         }
 
-        [XmlIgnore]
-        public NetFields NetFields { get; } = new NetFields();
-
         public readonly NetString defaultAnimationKey = new NetString();
 
         public readonly NetString startingAnimationKey = new NetString();
@@ -56,7 +54,7 @@ namespace StardustCore.Animations
         /// <summary>Construct an instance.</summary>
         public AnimationManager() {
             //Even empty constructors for net refs must init their net fields!
-            this.NetFields.AddFields(this.getNetFields().ToArray());
+            this.initializeNetFields();
         }
 
 
@@ -116,27 +114,20 @@ namespace StardustCore.Animations
                 throw new Exception("Current animation name empty!");
             }
 
-            this.NetFields.AddFields(this.getNetFields().ToArray());
+            this.initializeNetFields();
 
 
         }
 
-        public virtual List<INetSerializable> getNetFields()
+        protected override void initializeNetFields()
         {
-
-            List<INetSerializable> netFields = new List<INetSerializable>()
-            {
-                this.animations,
+            this.NetFields.AddFields(this.animations,
                 this.currentAnimationName,
                 this.enabled,
                 this.defaultAnimationKey,
-                this.startingAnimationKey,
+                this.startingAnimationKey);
+            this.NetFields.AddField(this.netObjectTexture);
 
-
-            };
-
-            netFields.Add(this.netObjectTexture);
-            return netFields;
 
         }
 

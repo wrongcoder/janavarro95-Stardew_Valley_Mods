@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Networking;
 using StardewValley;
 using StardewValley.Network;
 
@@ -13,7 +14,7 @@ namespace Revitalize.Framework.Illuminate
     /// <summary>
     /// Deals with handling lights on custom objects.
     /// </summary>
-    public class LightManager
+    public class LightManager: NetObject
     {
         [XmlIgnore]
 
@@ -42,16 +43,14 @@ namespace Revitalize.Framework.Illuminate
             this.lights = new NetVector2Dictionary<LightSource, NetRef<LightSource>>();
             this.fakeLights = new NetVector2Dictionary<FakeLightSource, NetFakeLightSource>();
             this.lightsOn.Value = false;
+            this.initializeNetFields();
         }
 
-        public virtual List<INetSerializable> getNetFields()
+        protected override void initializeNetFields()
         {
-            return new List<INetSerializable>() {
-                this.lights,
+            this.NetFields.AddFields(this.lights,
                 this.fakeLights,
-                this.lightsOn
-
-            };
+                this.lightsOn);
 
         }
 

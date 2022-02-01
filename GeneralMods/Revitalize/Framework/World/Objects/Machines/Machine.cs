@@ -19,6 +19,7 @@ using StardustCore.Animations;
 using StardustCore.UIUtilities;
 using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Revitalize.Framework.Utilities.Extensions;
+using Netcode;
 
 namespace Revitalize.Framework.World.Objects.Machines
 {
@@ -47,7 +48,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         }
 
         [XmlIgnore]
-        public AnimationManager machineStatusBubbleBox = new AnimationManager();
+        public NetRef<AnimationManager> machineStatusBubbleBox = new NetRef<AnimationManager>();
 
         public Machine()
         {
@@ -70,7 +71,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         protected override void initNetFieldsPostConstructor()
         {
             base.initNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.machineStatusBubbleBox.getNetFields());
+            this.NetFields.AddFields(this.machineStatusBubbleBox);
         }
 
         public virtual bool doesMachineProduceItems()
@@ -88,7 +89,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         protected virtual void createStatusBubble()
         {
-            this.machineStatusBubbleBox = new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
+            this.machineStatusBubbleBox.Value = new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
             {
                 {MachineStatusBubble_DefaultAnimationKey,new Animation(0,0,20,24)},
                 {MachineStatusBubble_BlankBubbleAnimationKey,new Animation(20,0,20,24)},
@@ -145,19 +146,19 @@ namespace Revitalize.Framework.World.Objects.Machines
             {
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
-                this.machineStatusBubbleBox.playAnimation(MachineStatusBubble_InventoryFullAnimationKey);
-                this.machineStatusBubbleBox.draw(b, this.machineStatusBubbleBox.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.getCurrentAnimationFrameRectangle()), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
+                this.machineStatusBubbleBox.Value.playAnimation(MachineStatusBubble_InventoryFullAnimationKey);
+                this.machineStatusBubbleBox.Value.draw(b, this.machineStatusBubbleBox.Value.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.Value.getCurrentAnimationFrameRectangle()), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
             }
         }
 
 
-        public virtual ref InventoryManager GetInventoryManager()
+        public virtual InventoryManager GetInventoryManager()
         {
             if (this.basicItemInformation == null)
             {
-                return ref this.basicItemInformation.inventory;
+                return this.basicItemInformation.inventory;
             }
-            return ref this.basicItemInformation.inventory;
+            return this.basicItemInformation.inventory;
         }
 
         public virtual void SetInventoryManager(InventoryManager Manager)

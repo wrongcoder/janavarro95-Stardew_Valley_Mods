@@ -9,7 +9,7 @@ namespace Revitalize.Framework.World.Objects.Interfaces
 {
     public interface IInventoryManagerProvider
     {
-        public ref InventoryManager GetInventoryManager();
+        public InventoryManager GetInventoryManager();
         public void SetInventoryManager(InventoryManager Manager);
     }
 }
