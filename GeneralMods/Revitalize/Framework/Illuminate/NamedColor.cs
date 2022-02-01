@@ -25,7 +25,7 @@ namespace Revitalize.Framework.Illuminate
 
         public NamedColor()
         {
-
+            this.initializeNetFields();
         }
 
         public NamedColor(string Name, Color Color, Enums.DyeBlendMode ColorMixMode = Enums.DyeBlendMode.Average, double BlendInfluence = 0d)
@@ -34,6 +34,7 @@ namespace Revitalize.Framework.Illuminate
             this.color.Value = Color;
             this.colorMixMode.Value = ColorMixMode;
             this.blendInfluence.Value = BlendInfluence;
+            this.initializeNetFields();
         }
 
         public NamedColor(Color Color)
@@ -41,6 +42,7 @@ namespace Revitalize.Framework.Illuminate
             this.name.Value = "";
             this.color.Value = Color;
             this.colorMixMode.Value = Enums.DyeBlendMode.Average;
+            this.initializeNetFields();
         }
 
         public NamedColor(string Name, int r, int g, int b, int a = 255, bool Invert = false, Enums.DyeBlendMode ColorMixMode = Enums.DyeBlendMode.Average, double BlendInfluence = 0d)
@@ -51,6 +53,7 @@ namespace Revitalize.Framework.Illuminate
                 this.color.Value = this.color.Value.Invert();
             this.colorMixMode.Value = ColorMixMode;
             this.blendInfluence.Value = BlendInfluence;
+            this.initializeNetFields();
         }
 
         public virtual void setFields(NamedColor other)
