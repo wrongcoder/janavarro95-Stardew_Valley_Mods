@@ -31,17 +31,5 @@ namespace Revitalize.Framework.Configs.ShopConfigs
 
         }
 
-        public static RobinsShopConfig InitializeConfig()
-        {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "Shops", "RobinsShopConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<RobinsShopConfig>(Path.Combine("Configs", "Shops", "RobinsShopConfig.json"));
-            else
-            {
-                RobinsShopConfig Config = new RobinsShopConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "Shops", "RobinsShopConfig.json"), Config);
-                return Config;
-            }
-        }
-
     }
 }

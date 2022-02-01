@@ -21,17 +21,5 @@ namespace Revitalize.Framework.Configs.ShopConfigs
         {
 
         }
-
-        public static AnimalShopStockConfig InitializeConfig()
-        {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "Shops", "AnimalShopConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<AnimalShopStockConfig>(Path.Combine("Configs", "Shops", "AnimalShopConfig.json"));
-            else
-            {
-                AnimalShopStockConfig Config = new AnimalShopStockConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "Shops", "AnimalShopConfig.json"), Config);
-                return Config;
-            }
-        }
     }
 }

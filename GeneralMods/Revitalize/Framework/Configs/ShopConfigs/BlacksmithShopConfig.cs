@@ -46,21 +46,5 @@ namespace Revitalize.Framework.Configs.ShopConfigs
             this.titaniumOreSellPrice = 300;
         }
 
-        /// <summary>
-        /// Initializes the config for the blacksmith shop prices.
-        /// </summary>
-        /// <returns></returns>
-        public static BlacksmithShopConfig InitializeConfig()
-        {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "Shops", "BlacksmithShopPricesConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<BlacksmithShopConfig>(Path.Combine("Configs", "Shops", "BlacksmithShopPricesConfig.json"));
-            else
-            {
-                BlacksmithShopConfig Config = new BlacksmithShopConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "Shops", "BlacksmithShopPricesConfig.json"), Config);
-                return Config;
-            }
-        }
-
     }
 }

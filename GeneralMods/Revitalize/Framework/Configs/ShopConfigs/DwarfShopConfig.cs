@@ -39,22 +39,5 @@ namespace Revitalize.Framework.Configs.ShopConfigs
             this.SellOmniGeodesEveryDayInsteadOnJustSundays = false;
         }
 
-
-        /// <summary>
-        /// Initializes the config for the blacksmith shop prices.
-        /// </summary>
-        /// <returns></returns>
-        public static DwarfShopConfig InitializeConfig()
-        {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "Shops", "DwarfShopConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<DwarfShopConfig>(Path.Combine("Configs", "Shops", "DwarfShopConfig.json"));
-            else
-            {
-                DwarfShopConfig Config = new DwarfShopConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "Shops", "DwarfShopConfig.json"), Config);
-                return Config;
-            }
-        }
-
     }
 }

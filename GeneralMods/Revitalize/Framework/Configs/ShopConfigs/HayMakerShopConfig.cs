@@ -41,17 +41,5 @@ namespace Revitalize.Framework.Configs.ShopConfigs
 
         }
 
-        public static HayMakerShopConfig InitializeConfig()
-        {
-            if (File.Exists(Path.Combine(ModCore.ModHelper.DirectoryPath, "Configs", "Shops", "HayMakerShopConfig.json")))
-                return ModCore.ModHelper.Data.ReadJsonFile<HayMakerShopConfig>(Path.Combine("Configs", "Shops", "HayMakerShopConfig.json"));
-            else
-            {
-                HayMakerShopConfig Config = new HayMakerShopConfig();
-                ModCore.ModHelper.Data.WriteJsonFile(Path.Combine("Configs", "Shops", "HayMakerShopConfig.json"), Config);
-                return Config;
-            }
-        }
-
     }
 }

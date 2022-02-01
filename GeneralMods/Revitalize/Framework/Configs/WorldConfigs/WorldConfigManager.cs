@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewModdingAPI;
 
 namespace Revitalize.Framework.Configs.WorldConfigs
 {
@@ -16,7 +18,7 @@ namespace Revitalize.Framework.Configs.WorldConfigs
 
         public WorldConfigManager()
         {
-            this.darkerNightConfig = DarkerNightConfig.InitializeConfig();
+            this.darkerNightConfig = Revitalize.ModCore.Configs.initializeConfig<DarkerNightConfig>("Configs", "WorldConfigs", "DarkerNightConfig.json");
         }
     }
 }

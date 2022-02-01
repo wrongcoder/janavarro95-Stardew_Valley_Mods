@@ -35,12 +35,14 @@ namespace Revitalize.Framework.Configs.ShopConfigs
 
         public ShopsConfigManager()
         {
-            this.animalShopStockConfig = AnimalShopStockConfig.InitializeConfig();
-            this.blacksmithShopsConfig = BlacksmithShopConfig.InitializeConfig();
-            this.dwarfShopConfig = DwarfShopConfig.InitializeConfig();
-            this.hayMakerShopConfig = HayMakerShopConfig.InitializeConfig();
-            this.robinsShopConfig = RobinsShopConfig.InitializeConfig();
+            this.animalShopStockConfig = Revitalize.ModCore.Configs.initializeConfig<AnimalShopStockConfig>("Configs", "Shops", "AnimalShopConfig.json");
+            this.blacksmithShopsConfig = Revitalize.ModCore.Configs.initializeConfig<BlacksmithShopConfig>("Configs", "Shops", "BlacksmithShopConfig.json");
+            this.dwarfShopConfig = Revitalize.ModCore.Configs.initializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");
+            this.hayMakerShopConfig = Revitalize.ModCore.Configs.initializeConfig<HayMakerShopConfig>("Configs", "Shops", "HayMakerShopConfig.json");
+            this.robinsShopConfig = Revitalize.ModCore.Configs.initializeConfig<RobinsShopConfig>("Configs", "Shops", "RobinsShopConfig.json");
         }
+
+
 
     }
 }
