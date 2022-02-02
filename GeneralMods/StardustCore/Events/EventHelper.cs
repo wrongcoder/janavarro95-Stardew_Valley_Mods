@@ -19,6 +19,7 @@ namespace StardustCore.Events
     /// </summary>
     public class EventHelper
     {
+        public const string commandArgsSplitter = " ";
 
         /// <summary>
         /// Nexus user id for Omegasis (aka me).
@@ -58,6 +59,7 @@ namespace StardustCore.Events
 
 
         protected StringBuilder eventData = new StringBuilder();
+        protected StringBuilder eventPreconditionData = new StringBuilder();
 
         /// <summary>
         /// The event data for a given event.
@@ -75,7 +77,23 @@ namespace StardustCore.Events
             }
         }
 
-        public List<EventPrecondition> eventPreconditions;
+        /// <summary>
+        /// The event data for a given event.
+        /// </summary>
+        public string EventPreconditionData
+        {
+            get
+            {
+                return this.eventPreconditionData.ToString();
+            }
+            set
+            {
+                this.eventPreconditionData.Clear();
+                this.eventPreconditionData.Append(value);
+            }
+        }
+
+        protected List<EventPrecondition> eventPreconditions;
         public int stardewEventID;
         public string eventStringId;
 
@@ -85,7 +103,7 @@ namespace StardustCore.Events
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(string EventName,int ID, LocationPrecondition Location, TimePrecondition Time, EventDayExclusionPrecondition NotTheseDays, EventStartData StartData)
+        public EventHelper(string EventName,int ID, LocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.eventData = new StringBuilder();
@@ -117,6 +135,9 @@ namespace StardustCore.Events
         public virtual void add(EventPrecondition Data)
         {
             this.eventPreconditions.Add(Data);
+            this.eventPreconditionData.Append(Data.ToString());
+            this.eventPreconditionData.Append(this.getCommandSeperator());
+
         }
 
         /// <summary>
@@ -128,7 +149,7 @@ namespace StardustCore.Events
 
             if (this.eventData.Length > 0)
             {
-                this.eventData.Append(this.getSeperator());
+                this.eventData.Append(this.getCommandSeperator());
             }
             this.eventData.Append(Data);
         }
@@ -173,7 +194,7 @@ namespace StardustCore.Events
         /// Gets the even parsing seperator.
         /// </summary>
         /// <returns></returns>
-        public virtual string getSeperator()
+        public virtual string getCommandSeperator()
         {
             return "/";
         }

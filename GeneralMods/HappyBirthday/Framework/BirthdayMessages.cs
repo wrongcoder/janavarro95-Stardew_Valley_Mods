@@ -33,28 +33,28 @@ namespace Omegasis.HappyBirthday
             if (Game1.player.IsMale)
             {
 
-                words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4507"));
-                words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4509"));
-                words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4511"));
-                words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4514"));
-                words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4515"));
+                words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4507"));
+                words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4509"));
+                words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4511"));
+                words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4514"));
+                words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4515"));
 
 
             }
             else
             {
-                words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4512"));
-                words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4513"));
+                words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4512"));
+                words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4513"));
 
             }
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4508"));
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4510"));
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4516"));
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4517"));
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4518"));
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4519"));
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4522"));
-            words.Add(HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4523"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4508"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4510"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4516"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4517"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4518"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4519"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4522"));
+            words.Add(HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(dict, "NPC.cs.4523"));
 
             if (LocalizedContentManager.CurrentLanguageCode== LanguageCode.en)
             {
@@ -139,7 +139,7 @@ namespace Omegasis.HappyBirthday
                 //Prevent infinite recursion.
                 DefaultToEnglish = false;
             }
-            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthday.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
+            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
             List<string> potentialBirthdayWishes = new List<string>();
             foreach (HappyBirthdayContentPack contentPack in affectedContentPacks)
             {
@@ -189,7 +189,7 @@ namespace Omegasis.HappyBirthday
                 //Prevent infinite recursion.
                 DefaultToEnglish = false;
             }
-            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthday.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
+            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
             List<string> potentialBirthdayWishes = new List<string>();
             foreach (HappyBirthdayContentPack contentPack in affectedContentPacks)
             {
@@ -242,7 +242,7 @@ namespace Omegasis.HappyBirthday
                 //Prevent infinite recursion.
                 DefaultToEnglish = false;
             }
-            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthday.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
+            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
             List<string> potentialBirthdayWishes = new List<string>();
             foreach (HappyBirthdayContentPack contentPack in affectedContentPacks)
             {

@@ -113,7 +113,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 BirthdayEvents.DatingBirthday_Sebastian()
         };
             string relativePath = Path.Combine("ModAssets", "Data", "Events");
-            string abspath = Path.Combine(HappyBirthday.Instance.Helper.DirectoryPath, relativePath);
+            string abspath = Path.Combine(HappyBirthdayModCore.Instance.Helper.DirectoryPath, relativePath);
             if (!Directory.Exists(abspath))
             {
                 Directory.CreateDirectory(abspath);
@@ -122,7 +122,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             string[] files = Directory.GetFiles(abspath);
             foreach (string file in files)
             {
-                EventHelper eventHelper = HappyBirthday.Instance.Helper.Data.ReadJsonFile<EventHelper>(Path.Combine(relativePath, Path.GetFileName(file)));
+                EventHelper eventHelper = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<EventHelper>(Path.Combine(relativePath, Path.GetFileName(file)));
 
                 if (eventHelper == null)
                 {
@@ -149,7 +149,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 else
                 {
                     BirthdayEventManager.addEvent(eventHelper);
-                    HappyBirthday.Instance.Helper.Data.WriteJsonFile<EventHelper>(Path.Combine(relativePath, eventHelper.eventStringId + ".json"), eventHelper);
+                    HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile<EventHelper>(Path.Combine(relativePath, eventHelper.eventStringId + ".json"), eventHelper);
 
                 }
             }
@@ -182,7 +182,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
             foreach(string s in EventData)
             {
-                HappyBirthday.Instance.Monitor.Log("Event data param: " + s);
+                HappyBirthdayModCore.Instance.Monitor.Log("Event data param: " + s);
             }
 
             string translationKey = splits[1];
@@ -205,7 +205,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
         public static string GetEventString(string Key)
         {
-            return HappyBirthday.Instance.translationInfo.getEventString(Key);
+            return HappyBirthdayModCore.Instance.translationInfo.getEventString(Key);
         }
 
     }

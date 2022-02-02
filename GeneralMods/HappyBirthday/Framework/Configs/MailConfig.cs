@@ -36,14 +36,14 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// <returns></returns>
         public static MailConfig InitializeConfig()
         {
-            if (HappyBirthday.Configs.doesConfigExist("MailConfig.json"))
+            if (HappyBirthdayModCore.Configs.doesConfigExist("MailConfig.json"))
             {
-                return HappyBirthday.Configs.ReadConfig<MailConfig>("MailConfig.json");
+                return HappyBirthdayModCore.Configs.ReadConfig<MailConfig>("MailConfig.json");
             }
             else
             {
                 MailConfig Config = new MailConfig();
-                HappyBirthday.Configs.WriteConfig("MailConfig.json", Config);
+                HappyBirthdayModCore.Configs.WriteConfig("MailConfig.json", Config);
                 return Config;
             }
         }

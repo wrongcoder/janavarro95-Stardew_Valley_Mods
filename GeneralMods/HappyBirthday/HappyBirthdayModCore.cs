@@ -21,7 +21,7 @@ using Omegasis.HappyBirthday.Framework.Menus;
 namespace Omegasis.HappyBirthday
 {
     /// <summary>The mod entry point.</summary>
-    public class HappyBirthday : Mod, IAssetEditor
+    public class HappyBirthdayModCore : Mod, IAssetEditor
     {
         /*********
         ** Fields
@@ -38,7 +38,7 @@ namespace Omegasis.HappyBirthday
         /// <summary>Class to handle all birthday gifts for this mod.</summary>
         public GiftManager giftManager;
 
-        public static HappyBirthday Instance;
+        public static HappyBirthdayModCore Instance;
 
         public HappyBirthdayContentPackManager happyBirthdayContentPackManager;
 

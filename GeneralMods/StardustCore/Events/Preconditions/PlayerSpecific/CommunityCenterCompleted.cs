@@ -12,7 +12,7 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
         /// <summary>
         /// False means the community center doesn't need to be completed.
         /// </summary>
-        bool needsToBeCompleted;
+        public bool communityCenterNeedsToBeCompleted;
 
         public CommunityCenterCompleted()
         {
@@ -21,17 +21,17 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
 
         public CommunityCenterCompleted(bool NeedsToBeCompleted)
         {
-            this.needsToBeCompleted = NeedsToBeCompleted;
+            this.communityCenterNeedsToBeCompleted = NeedsToBeCompleted;
         }
 
         public override string ToString()
         {
-            return "Omegasis.EventFramework.Preconditions.Player.CommunityCenterCompleted?";
+            return "StardustCore.Events.Preconditions.Player.CommunityCenterCompleted "+this.communityCenterNeedsToBeCompleted;
         }
 
         public override bool meetsCondition()
         {
-            return this.needsToBeCompleted == Game1.player.hasCompletedCommunityCenter();
+            return this.communityCenterNeedsToBeCompleted == Game1.player.hasCompletedCommunityCenter();
         }
 
     }

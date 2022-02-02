@@ -13,36 +13,36 @@ namespace StardustCore.Events.Preconditions.TimeSpecific
     /// <param name="StartTime"></param>
     /// <param name="EndTime"></param>
     /// <returns></returns>
-    public class TimePrecondition:EventPrecondition
+    public class TimeOfDayPrecondition:EventPrecondition
     {
-        public int start;
-        public int end;
+        public int startTimeOfDay;
+        public int endTimeOfDay;
 
-        public TimePrecondition()
+        public TimeOfDayPrecondition()
         {
 
         }
 
-        public TimePrecondition(int Start, int End)
+        public TimeOfDayPrecondition(int Start, int End)
         {
-            this.start = Start;
-            this.end = End;
+            this.startTimeOfDay = Start;
+            this.endTimeOfDay = End;
         }
 
         public override string ToString()
         {
             StringBuilder b = new StringBuilder();
-            b.Append("t ");
-            b.Append(this.start.ToString());
+            b.Append("StardustCore.Events.Preconditions.TimeSpecific.TimeOfDayPrecondition ");
+            b.Append(this.startTimeOfDay.ToString());
             b.Append(" ");
-            b.Append(this.end.ToString());
+            b.Append(this.endTimeOfDay.ToString());
             return b.ToString();
 
         }
 
         public override bool meetsCondition()
         {
-            if (Game1.timeOfDay >= this.start && Game1.timeOfDay <= this.end) return true;
+            if (Game1.timeOfDay >= this.startTimeOfDay && Game1.timeOfDay <= this.endTimeOfDay) return true;
             else return false;
         }
 

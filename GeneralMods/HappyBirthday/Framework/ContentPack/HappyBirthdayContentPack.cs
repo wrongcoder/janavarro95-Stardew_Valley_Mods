@@ -10,7 +10,7 @@ using StardewModdingAPI;
 namespace Omegasis.HappyBirthday.Framework.ContentPack
 {
     /// <summary>
-    /// A wrapper class that wraps <see cref="IContentPack"/> for <see cref="HappyBirthday"/> loaded in from SMAPI.
+    /// A wrapper class that wraps <see cref="IContentPack"/> for <see cref="HappyBirthdayModCore"/> loaded in from SMAPI.
     /// </summary>
     public class HappyBirthdayContentPack
     {
@@ -125,7 +125,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a birthday wish with key {0} from Happy Birthday content pack, but the given birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Error: Attempted to get a birthday wish with key {0} from Happy Birthday content pack, but the given birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -144,7 +144,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a spouse birthday wish with key {0} from Happy Birthday content pack, but the given spouse birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Error: Attempted to get a spouse birthday wish with key {0} from Happy Birthday content pack, but the given spouse birthday wish key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -163,7 +163,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get an event string with key {0} from Happy Birthday content pack, but the given event string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Error: Attempted to get an event string with key {0} from Happy Birthday content pack, but the given event string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -182,7 +182,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a mail string with key {0} from Happy Birthday content pack, but the given mail string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Error: Attempted to get a mail string with key {0} from Happy Birthday content pack, but the given mail string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -201,7 +201,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             if (LogError)
             {
-                HappyBirthday.Instance.Monitor.Log(string.Format("Error: Attempted to get a translation string with key {0} from Happy Birthday content pack, but the given translation string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
+                HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Error: Attempted to get a translation string with key {0} from Happy Birthday content pack, but the given translation string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);
             }
             return "";
         }
@@ -340,11 +340,11 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
                     }
 
                     this.npcBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File),giftInfo );
-                    HappyBirthday.Instance.Monitor.Log("Loaded in gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : " + this.UniqueId);
+                    HappyBirthdayModCore.Instance.Monitor.Log("Loaded in gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : " + this.UniqueId);
                 }
                 catch (Exception err)
                 {
-                    HappyBirthday.Instance.Monitor.Log(err.ToString(), LogLevel.Error);
+                    HappyBirthdayModCore.Instance.Monitor.Log(err.ToString(), LogLevel.Error);
                 }
             }
         }
@@ -356,7 +356,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             foreach (string File in files)
             {
                 this.spouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
-                HappyBirthday.Instance.Monitor.Log("Loaded in spouse gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : "+this.UniqueId);
+                HappyBirthdayModCore.Instance.Monitor.Log("Loaded in spouse gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : "+this.UniqueId);
             }
         }
     }

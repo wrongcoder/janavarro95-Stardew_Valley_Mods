@@ -14,7 +14,7 @@ namespace Omegasis.HappyBirthday
 {
     public class GiftManager
     {
-        public ModConfig Config => HappyBirthday.Configs.modConfig;
+        public ModConfig Config => HappyBirthdayModCore.Configs.modConfig;
 
 
         /// <summary>The next birthday gift the player will receive.</summary>
@@ -76,12 +76,12 @@ namespace Omegasis.HappyBirthday
             {
                 Item i = new StardewValley.Object((int)v, 1);
                 string uniqueID = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.SDVObject), (int)v);
-                HappyBirthday.Instance.Monitor.Log("Added gift with id: " + uniqueID);
+                HappyBirthdayModCore.Instance.Monitor.Log("Added gift with id: " + uniqueID);
                 GiftIDS.RegisteredGifts.Add(uniqueID, i);
             }
             List<string> registeredGiftKeys = GiftIDS.RegisteredGifts.Keys.ToList();
             registeredGiftKeys.Sort();
-            HappyBirthday.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"), GiftIDS.RegisteredGifts.Keys.ToList());
+            HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"), GiftIDS.RegisteredGifts.Keys.ToList());
         }
 
 
@@ -818,9 +818,9 @@ namespace Omegasis.HappyBirthday
         {
 
             //Loads in all gifts across all content packs across all translations.
-            foreach (HappyBirthdayContentPack contentPack in HappyBirthday.Instance.happyBirthdayContentPackManager.contentPacks.Values.SelectMany(contentPackList=>contentPackList))
+            foreach (HappyBirthdayContentPack contentPack in HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.contentPacks.Values.SelectMany(contentPackList=>contentPackList))
             {
-                HappyBirthday.Instance.Monitor.Log("Adding default gifts for content pack: " + contentPack.baseContentPack.Manifest.UniqueID);
+                HappyBirthdayModCore.Instance.Monitor.Log("Adding default gifts for content pack: " + contentPack.baseContentPack.Manifest.UniqueID);
                 foreach (GiftInformation giftInfo in contentPack.getDefaultBirthdayGifts())
                 {
                     DefaultBirthdayGifts.Add(giftInfo);
@@ -829,12 +829,12 @@ namespace Omegasis.HappyBirthday
                 {
                     if (NPCBirthdayGifts.ContainsKey(giftInfo.Key))
                     {
-                        HappyBirthday.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         NPCBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
                     }
                     else
                     {
-                        HappyBirthday.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         NPCBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
                     }
                 }
@@ -842,12 +842,12 @@ namespace Omegasis.HappyBirthday
                 {
                     if (SpouseBirthdayGifts.ContainsKey(giftInfo.Key))
                     {
-                        HappyBirthday.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         SpouseBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
                     }
                     else
                     {
-                        HappyBirthday.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         SpouseBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
                     }
                 }
@@ -855,7 +855,7 @@ namespace Omegasis.HappyBirthday
 
             List<string> registeredGiftKeys = GiftIDS.RegisteredGifts.Keys.ToList();
             registeredGiftKeys.Sort();
-            HappyBirthday.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),registeredGiftKeys );
+            HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),registeredGiftKeys );
         }
 
         /// <summary>
@@ -920,7 +920,7 @@ namespace Omegasis.HappyBirthday
         {
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
-            HappyBirthday.Instance.Monitor.Log("Get non-spouse gift for npc" + name);
+            HappyBirthdayModCore.Instance.Monitor.Log("Get non-spouse gift for npc" + name);
 
             List<Item> possibleItems = new List<Item>();
             if (NPCBirthdayGifts.ContainsKey(name))
@@ -929,7 +929,7 @@ namespace Omegasis.HappyBirthday
 
                 if (npcPossibleGifts == null)
                 {
-                    HappyBirthday.Instance.Monitor.Log("NPC GIFTS ARE NULL: " + name);
+                    HappyBirthdayModCore.Instance.Monitor.Log("NPC GIFTS ARE NULL: " + name);
                 }
 
                 foreach (GiftInformation info in npcPossibleGifts)
@@ -938,7 +938,7 @@ namespace Omegasis.HappyBirthday
                     if (info == null)
                     {
 
-                        HappyBirthday.Instance.Monitor.Log("Gift info is null????: " + name);
+                        HappyBirthdayModCore.Instance.Monitor.Log("Gift info is null????: " + name);
                         continue;
                     }
 
@@ -969,11 +969,11 @@ namespace Omegasis.HappyBirthday
         /// <param name="name"></param>
         public Item getSpouseBirthdayGift(string name)
         {
-            if (string.IsNullOrEmpty(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
+            if (string.IsNullOrEmpty(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
             {
-                if (GiftIDS.RegisteredGifts.ContainsKey(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift))
+                if (GiftIDS.RegisteredGifts.ContainsKey(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift))
                 {
-                    GiftInformation info = new GiftInformation(HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
+                    GiftInformation info = new GiftInformation(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
                     return info.getOne();
                 }
             }

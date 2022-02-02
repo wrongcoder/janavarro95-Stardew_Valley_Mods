@@ -20,9 +20,9 @@ namespace Omegasis.HappyBirthday.Framework
         /// </summary>
         public static void OnDayStarted(object Sender, StardewModdingAPI.Events.DayStartedEventArgs args)
         {
-            if (HappyBirthday.Instance.birthdayManager.hasChosenBirthday() == false)
+            if (HappyBirthdayModCore.Instance.birthdayManager.hasChosenBirthday() == false)
             {
-                HappyBirthday.Instance.Monitor.Log("Loading player's birthday on new day started.");
+                HappyBirthdayModCore.Instance.Monitor.Log("Loading player's birthday on new day started.");
                 Load(Game1.player.uniqueMultiplayerID);
             }
         }
@@ -47,13 +47,13 @@ namespace Omegasis.HappyBirthday.Framework
             string dataFilePath = Path.Combine(dataDirectory,uniqueSaveName+".json");
             string villagerQueuePath = Path.Combine(dataDirectory , uniqueSaveName + "_VillagerBirthdayGiftsQueue.json");
 
-            if (HappyBirthday.Instance.birthdayManager.hasChosenBirthday())
+            if (HappyBirthdayModCore.Instance.birthdayManager.hasChosenBirthday())
             {
                 Directory.CreateDirectory(dataDirectory);
 
                 //Write birthday file to disk.
-                HappyBirthday.Instance.Helper.Data.WriteJsonFile(dataFilePath, HappyBirthday.Instance.birthdayManager.playerBirthdayData);
-                HappyBirthday.Instance.Helper.Data.WriteJsonFile(villagerQueuePath, HappyBirthday.Instance.birthdayManager.villagerQueue);
+                HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile(dataFilePath, HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData);
+                HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile(villagerQueuePath, HappyBirthdayModCore.Instance.birthdayManager.villagerQueue);
             }
         }
 
@@ -69,13 +69,13 @@ namespace Omegasis.HappyBirthday.Framework
             string dataFilePath = Path.Combine(dataDirectory, uniqueSaveName + ".json");
             string villagerQueuePath = Path.Combine(dataDirectory, uniqueSaveName + "_VillagerBirthdayGiftsQueue.json");
             // reset state
-            HappyBirthday.Instance.birthdayManager.setCheckedForBirthday(false);
+            HappyBirthdayModCore.Instance.birthdayManager.setCheckedForBirthday(false);
 
             //Loads the player's birthday from disk.
-            HappyBirthday.Instance.birthdayManager.playerBirthdayData = HappyBirthday.Instance.Helper.Data.ReadJsonFile<PlayerData>(dataFilePath) ?? new PlayerData();
-            HappyBirthday.Instance.birthdayManager.villagerQueue = HappyBirthday.Instance.Helper.Data.ReadJsonFile<Dictionary<string, VillagerInfo>>(villagerQueuePath) ?? new Dictionary<string, VillagerInfo>();
+            HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<PlayerData>(dataFilePath) ?? new PlayerData();
+            HappyBirthdayModCore.Instance.birthdayManager.villagerQueue = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<Dictionary<string, VillagerInfo>>(villagerQueuePath) ?? new Dictionary<string, VillagerInfo>();
 
-            if (HappyBirthday.Instance.birthdayManager.playerBirthdayData != null)
+            if (HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData != null)
             {
                 //This is still necessary to so that other players know when this player's birthday is.
                 MultiplayerUtilities.SendBirthdayInfoToOtherPlayers();

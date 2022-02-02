@@ -9,6 +9,7 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
 {
     public class CanReadJunimo:EventPrecondition
     {
+
         public CanReadJunimo()
         {
 
@@ -16,7 +17,7 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
 
         public override string ToString()
         {
-            return "StardewVally.Player.CanReadJunimo";
+            return "StardustCore.Events.Preconditions.Player.CanReadJunimo";
         }
 
         public override bool meetsCondition()

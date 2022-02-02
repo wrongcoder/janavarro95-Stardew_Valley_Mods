@@ -31,7 +31,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 string npcName = npcNameToMailKey.Key;
                 string mailKey = npcNameToMailKey.Value;
 
-                Item gift= HappyBirthday.Instance.giftManager.getNextBirthdayGift(npcName);
+                Item gift= HappyBirthdayModCore.Instance.giftManager.getNextBirthdayGift(npcName);
                 int itemParentSheetIndex = gift.parentSheetIndex;
                 int stackSize = gift.Stack;
                 string formattedMailItemString = GetItemMailStringFormat(itemParentSheetIndex, stackSize);
@@ -46,11 +46,11 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <returns></returns>
         public static string GetDadsMailMessage()
         {
-            int moneyToGet = Game1.year==1?  HappyBirthday.Configs.mailConfig.dadBirthdayYear1MoneyGivenAmount: HappyBirthday.Configs.mailConfig.dadBirthdayMoneyGivenAmount;
+            int moneyToGet = Game1.year==1?  HappyBirthdayModCore.Configs.mailConfig.dadBirthdayYear1MoneyGivenAmount: HappyBirthdayModCore.Configs.mailConfig.dadBirthdayMoneyGivenAmount;
 
             string formattedString = string.Format("%item money {0} %%",moneyToGet);
 
-            return string.Format(HappyBirthday.Instance.translationInfo.getMailString(MailKeys.DadBirthdayMessageKey), formattedString);
+            return string.Format(HappyBirthdayModCore.Instance.translationInfo.getMailString(MailKeys.DadBirthdayMessageKey), formattedString);
         }
 
         /// <summary>
@@ -70,11 +70,11 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <returns></returns>
         public static string GetMomsMailMessage()
         {
-            int itemToGet = HappyBirthday.Configs.mailConfig.momBirthdayItemGive;
-            int stackSizeToGet = HappyBirthday.Configs.mailConfig.momBirthdayItemGiveStackSize;
+            int itemToGet = HappyBirthdayModCore.Configs.mailConfig.momBirthdayItemGive;
+            int stackSizeToGet = HappyBirthdayModCore.Configs.mailConfig.momBirthdayItemGiveStackSize;
             string formattedString = GetItemMailStringFormat(itemToGet, stackSizeToGet);
 
-            return string.Format(HappyBirthday.Instance.translationInfo.getMailString(MailKeys.MomBirthdayMessageKey), formattedString);
+            return string.Format(HappyBirthdayModCore.Instance.translationInfo.getMailString(MailKeys.MomBirthdayMessageKey), formattedString);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <returns></returns>
         public static string GetMailMessage(string Key)
         {
-            return HappyBirthday.Instance.translationInfo.getMailString(Key);
+            return HappyBirthdayModCore.Instance.translationInfo.getMailString(Key);
         }
 
         /// <summary>

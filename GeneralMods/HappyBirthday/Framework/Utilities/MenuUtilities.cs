@@ -52,13 +52,13 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             //Validate the gift and give it to the player.
             if (NPCUtilities.LastSpeaker != null)
             {
-                if (HappyBirthday.Instance.giftManager.BirthdayGiftToReceive != null && HappyBirthday.Instance.birthdayManager.hasGivenBirthdayGift(NPCUtilities.LastSpeaker.Name) == false)
+                if (HappyBirthdayModCore.Instance.giftManager.BirthdayGiftToReceive != null && HappyBirthdayModCore.Instance.birthdayManager.hasGivenBirthdayGift(NPCUtilities.LastSpeaker.Name) == false)
                 {
-                    while (HappyBirthday.Instance.giftManager.BirthdayGiftToReceive.Name == "Error Item" || HappyBirthday.Instance.giftManager.BirthdayGiftToReceive.Name == "Rock" || HappyBirthday.Instance.giftManager.BirthdayGiftToReceive.Name == "???")
-                        HappyBirthday.Instance.giftManager.setNextBirthdayGift(NPCUtilities.LastSpeaker.Name);
-                    Game1.player.addItemByMenuIfNecessaryElseHoldUp(HappyBirthday.Instance.giftManager.BirthdayGiftToReceive);
-                    HappyBirthday.Instance.giftManager.BirthdayGiftToReceive = null;
-                    HappyBirthday.Instance.birthdayManager.villagerQueue[NPCUtilities.LastSpeaker.Name].hasGivenBirthdayGift = true;
+                    while (HappyBirthdayModCore.Instance.giftManager.BirthdayGiftToReceive.Name == "Error Item" || HappyBirthdayModCore.Instance.giftManager.BirthdayGiftToReceive.Name == "Rock" || HappyBirthdayModCore.Instance.giftManager.BirthdayGiftToReceive.Name == "???")
+                        HappyBirthdayModCore.Instance.giftManager.setNextBirthdayGift(NPCUtilities.LastSpeaker.Name);
+                    Game1.player.addItemByMenuIfNecessaryElseHoldUp(HappyBirthdayModCore.Instance.giftManager.BirthdayGiftToReceive);
+                    HappyBirthdayModCore.Instance.giftManager.BirthdayGiftToReceive = null;
+                    HappyBirthdayModCore.Instance.birthdayManager.villagerQueue[NPCUtilities.LastSpeaker.Name].hasGivenBirthdayGift = true;
                     NPCUtilities.LastSpeaker = null;
                 }
             }
@@ -71,30 +71,30 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             if (Game1.currentSpeaker != null)
             {
                 NPCUtilities.LastSpeaker = Game1.currentSpeaker;
-                if (Game1.activeClickableMenu != null && HappyBirthday.Instance.birthdayManager.isBirthday())
+                if (Game1.activeClickableMenu != null && HappyBirthdayModCore.Instance.birthdayManager.isBirthday())
                 {
                     if (NPCUtilities.ShouldWishPlayerHappyBirthday(Game1.currentSpeaker.Name) == false) return;
                     if (Game1.activeClickableMenu is DialogueBox)
                     {
                         Game1.currentSpeaker.resetCurrentDialogue();
                         Game1.currentSpeaker.resetSeasonalDialogue();
-                        HappyBirthday.Instance.Helper.Reflection.GetMethod(Game1.currentSpeaker, "loadCurrentDialogue", true).Invoke();
+                        HappyBirthdayModCore.Instance.Helper.Reflection.GetMethod(Game1.currentSpeaker, "loadCurrentDialogue", true).Invoke();
                         Game1.npcDialogues[Game1.currentSpeaker.Name] = Game1.currentSpeaker.CurrentDialogue;
-                        if (HappyBirthday.Instance.birthdayManager.isBirthday() && HappyBirthday.Instance.birthdayManager.hasGivenBirthdayGift(Game1.currentSpeaker.Name) == false)
+                        if (HappyBirthdayModCore.Instance.birthdayManager.isBirthday() && HappyBirthdayModCore.Instance.birthdayManager.hasGivenBirthdayGift(Game1.currentSpeaker.Name) == false)
                         {
                             try
                             {
-                                HappyBirthday.Instance.giftManager.setNextBirthdayGift(Game1.currentSpeaker.Name);
-                                HappyBirthday.Instance.Monitor.Log("Setting next birthday gift.");
+                                HappyBirthdayModCore.Instance.giftManager.setNextBirthdayGift(Game1.currentSpeaker.Name);
+                                HappyBirthdayModCore.Instance.Monitor.Log("Setting next birthday gift.");
                             }
                             catch (Exception ex)
                             {
-                                HappyBirthday.Instance.Monitor.Log(ex.ToString(), LogLevel.Error);
+                                HappyBirthdayModCore.Instance.Monitor.Log(ex.ToString(), LogLevel.Error);
                             }
                         }
 
-                        Game1.activeClickableMenu = new DialogueBox(new Dialogue(HappyBirthday.Instance.birthdayMessages.getBirthdayMessage(Game1.currentSpeaker.Name), Game1.currentSpeaker));
-                        HappyBirthday.Instance.birthdayManager.villagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
+                        Game1.activeClickableMenu = new DialogueBox(new Dialogue(HappyBirthdayModCore.Instance.birthdayMessages.getBirthdayMessage(Game1.currentSpeaker.Name), Game1.currentSpeaker));
+                        HappyBirthdayModCore.Instance.birthdayManager.villagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
 
                         // Set birthday gift for the player to recieve from the npc they are currently talking with.
 
@@ -106,7 +106,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
         public static void OnMenuChangedToBillboard(Billboard billboard)
         {
-            IsDailyQuestBoard = HappyBirthday.Instance.Helper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
+            IsDailyQuestBoard = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
             if (IsDailyQuestBoard)
                 return;
 
@@ -116,11 +116,11 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             text.SetData<Color>(col);
             //players birthday position rect=new ....
 
-            if (!string.IsNullOrEmpty(HappyBirthday.Instance.birthdayManager.playerBirthdayData.BirthdaySeason))
+            if (!string.IsNullOrEmpty(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.BirthdaySeason))
             {
-                if (HappyBirthday.Instance.birthdayManager.playerBirthdayData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
+                if (HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
                 {
-                    int index = HappyBirthday.Instance.birthdayManager.playerBirthdayData.BirthdayDay;
+                    int index = HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.BirthdayDay;
 
                     string bdayDisplay = Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
                     Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
@@ -129,7 +129,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 }
             }
 
-            foreach (var pair in HappyBirthday.Instance.birthdayManager.othersBirthdays)
+            foreach (var pair in HappyBirthdayModCore.Instance.birthdayManager.othersBirthdays)
             {
                 if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue;
                 int index = pair.Value.BirthdayDay;

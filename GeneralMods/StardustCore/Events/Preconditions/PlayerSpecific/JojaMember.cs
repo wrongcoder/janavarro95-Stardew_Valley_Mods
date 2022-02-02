@@ -10,7 +10,7 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
     public class JojaMember:EventPrecondition
     {
 
-        public bool isMember;
+        public bool isJojaMember;
 
         public JojaMember()
         {
@@ -19,12 +19,12 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
 
         public JojaMember(bool IsMember)
         {
-            this.isMember = IsMember;
+            this.isJojaMember = IsMember;
         }
 
         public override bool meetsCondition()
         {
-            if (this.isMember)
+            if (this.isJojaMember)
             {
                 return Game1.player.mailReceived.Contains("JojaMember") == true;
             }
@@ -32,6 +32,11 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
             {
                 return Game1.player.mailReceived.Contains("JojaMember") == false;
             }
+        }
+
+        public override string ToString()
+        {
+            return "StardustCore.Events.Preconditions.PlayerSpecific.JojaMemeber " + this.isJojaMember.ToString(); 
         }
     }
 }

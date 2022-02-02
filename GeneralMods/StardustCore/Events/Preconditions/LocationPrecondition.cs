@@ -9,8 +9,7 @@ namespace StardustCore.Events.Preconditions
 {
     public class LocationPrecondition:EventPrecondition
     {
-        private string locationName;
-        private GameLocation location;
+        public string locationName;
 
 
         public LocationPrecondition()
@@ -21,7 +20,6 @@ namespace StardustCore.Events.Preconditions
         public LocationPrecondition(GameLocation Location)
         {
             this.locationName = Location.NameOrUniqueName;
-            this.location = Location;
         }
 
         /// <summary>
@@ -32,17 +30,16 @@ namespace StardustCore.Events.Preconditions
         public LocationPrecondition(string Location, bool IsStructure=false)
         {
             this.locationName = Location;
-            this.location = Game1.getLocationFromName(Location,IsStructure);
         }
 
         public override bool meetsCondition()
         {
-            return Game1.player.currentLocation == this.location;
+            return Game1.player.currentLocation == Game1.getLocationFromName(this.locationName);
         }
 
         public override string ToString()
         {
-            return "Location " + this.locationName;
+            return "StardustCore.Events.Preconditions.GameLocationPrecondition " + this.locationName;
         }
     }
 }

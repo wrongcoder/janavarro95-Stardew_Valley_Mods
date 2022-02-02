@@ -102,10 +102,10 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         {
             this.Labels.Clear();
             this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
-            this._leftButton = new ClickableTextureComponent("LeftButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.Instance.Helper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "lastPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
-            this._rightButton = new ClickableTextureComponent("RightButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize + 96, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthday.Instance.Helper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "nextPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
+            this._leftButton = new ClickableTextureComponent("LeftButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthdayModCore.Instance.Helper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "lastPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
+            this._rightButton = new ClickableTextureComponent("RightButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize + 96, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, HappyBirthdayModCore.Instance.Helper.Content.Load<Texture2D>(Path.Combine("ModAssets", "Graphics", "nextPageButton.png")), new Rectangle(0, 0, 32, 32), 2f);
 
-            string title = HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift");
+            string title = HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift");
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 128, this.yPositionOnScreen + 128, 1, 1), title));
 
 
@@ -129,7 +129,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             {
                 // OK button
                 case "OK":
-                    HappyBirthday.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift = this.selectedGift;
+                    HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift = this.selectedGift;
                     MultiplayerUtilities.SendBirthdayInfoToOtherPlayers();
                     this.allFinished = true;
                     Game1.exitActiveMenu();
@@ -176,12 +176,12 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     button.scale -= 0.5f;
                     button.scale = Math.Max(3.5f, button.scale);
                     this.selectedGift = button.name;
-                    HappyBirthday.Instance.Monitor.Log(string.Format("Selected {0} as the favorited gift.", this.selectedGift));
+                    HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Selected {0} as the favorited gift.", this.selectedGift));
 
                     Item i = button.item;
                     Rectangle textureBounds = GameLocation.getSourceRectForObject(i.ParentSheetIndex);
                     float itemScale = 4f;
-                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + 16 * itemScale + Game1.tinyFont.MeasureString(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift")).X), (int)(this.yPositionOnScreen + 64 + 16 * itemScale), 64, 64);
+                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + 16 * itemScale + Game1.tinyFont.MeasureString(HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift")).X), (int)(this.yPositionOnScreen + 64 + 16 * itemScale), 64, 64);
                     this.favoriteGiftButton = new ClickableTextureComponent(this.selectedGift, placementBounds, "", this.selectedGift, Game1.objectSpriteSheet, textureBounds, 4f, true);
                     this.favoriteGiftButton.item = i;
                 }

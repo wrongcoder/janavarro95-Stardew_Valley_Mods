@@ -61,9 +61,9 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <returns></returns>
         public static bool ShouldWishPlayerHappyBirthday(string NpcName)
         {
-            if (HappyBirthday.Instance.birthdayManager.isVillagerInQueue(NpcName) == false) return false;
-            if (HappyBirthday.Instance.birthdayManager.hasGivenBirthdayWish(NpcName) == true) return false;
-            if (Game1.player.getFriendshipHeartLevelForNPC(NpcName) < HappyBirthday.Configs.modConfig.minimumFriendshipLevelForBirthdayWish)
+            if (HappyBirthdayModCore.Instance.birthdayManager.isVillagerInQueue(NpcName) == false) return false;
+            if (HappyBirthdayModCore.Instance.birthdayManager.hasGivenBirthdayWish(NpcName) == true) return false;
+            if (Game1.player.getFriendshipHeartLevelForNPC(NpcName) < HappyBirthdayModCore.Configs.modConfig.minimumFriendshipLevelForBirthdayWish)
             {
                 return false;
             }
@@ -77,9 +77,9 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <returns></returns>
         public static bool ShouldGivePlayerBirthdayGift(string NpcName)
         {
-            if (HappyBirthday.Instance.birthdayManager.isVillagerInQueue(NpcName) == false) return false;
-            if (HappyBirthday.Instance.birthdayManager.hasGivenBirthdayGift(NpcName) == true) return false;
-            if (Game1.player.getFriendshipHeartLevelForNPC(NpcName) < HappyBirthday.Configs.modConfig.minimumFriendshipLevelForBirthdayWish)
+            if (HappyBirthdayModCore.Instance.birthdayManager.isVillagerInQueue(NpcName) == false) return false;
+            if (HappyBirthdayModCore.Instance.birthdayManager.hasGivenBirthdayGift(NpcName) == true) return false;
+            if (Game1.player.getFriendshipHeartLevelForNPC(NpcName) < HappyBirthdayModCore.Configs.modConfig.minimumFriendshipLevelForBirthdayWish)
             {
                 return false;
             }

@@ -17,7 +17,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <param name="e">The event arguments.</param>
         public static void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
-            if (Game1.activeClickableMenu == null || HappyBirthday.Instance.birthdayManager.playerBirthdayData?.BirthdaySeason?.ToLower() != Game1.currentSeason.ToLower())
+            if (Game1.activeClickableMenu == null || HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData?.BirthdaySeason?.ToLower() != Game1.currentSeason.ToLower())
                 return;
 
             if (Game1.activeClickableMenu is Billboard billboard)
@@ -48,7 +48,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
                 if (!string.IsNullOrEmpty(hoverText))
                 {
-                    var oldText = HappyBirthday.Instance.Helper.Reflection.GetField<string>(Game1.activeClickableMenu, "hoverText");
+                    var oldText = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<string>(Game1.activeClickableMenu, "hoverText");
                     oldText.SetValue(hoverText);
                 }
             }
@@ -63,20 +63,20 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 return;
 
             //Don't do anything if birthday has not been chosen yet.
-            if (HappyBirthday.Instance.birthdayManager.playerBirthdayData == null)
+            if (HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData == null)
                 return;
 
             if (Game1.activeClickableMenu is Billboard)
             {
-                if (!string.IsNullOrEmpty(HappyBirthday.Instance.birthdayManager.playerBirthdayData.BirthdaySeason))
+                if (!string.IsNullOrEmpty(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.BirthdaySeason))
                 {
-                    if (HappyBirthday.Instance.birthdayManager.playerBirthdayData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
+                    if (HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.BirthdaySeason.ToLower() == Game1.currentSeason.ToLower())
                     {
-                        int index = HappyBirthday.Instance.birthdayManager.playerBirthdayData.BirthdayDay;
+                        int index = HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.BirthdayDay;
                         Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.player);
                         (Game1.activeClickableMenu as Billboard).drawMouse(e.SpriteBatch);
 
-                        string hoverText = HappyBirthday.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
+                        string hoverText = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
                         if (hoverText.Length > 0)
                         {
                             IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
@@ -84,7 +84,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     }
                 }
 
-                foreach (var pair in HappyBirthday.Instance.birthdayManager.othersBirthdays)
+                foreach (var pair in HappyBirthdayModCore.Instance.birthdayManager.othersBirthdays)
                 {
                     int index = pair.Value.BirthdayDay;
                     if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue; //Hide out of season birthdays.
@@ -92,7 +92,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     Game1.player.FarmerRenderer.drawMiniPortrat(Game1.spriteBatch, new Vector2(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 230 + (index - 1) / 7 * 32 * 4), 0.5f, 4f, 2, Game1.getFarmer(pair.Key));
                     (Game1.activeClickableMenu as Billboard).drawMouse(e.SpriteBatch);
 
-                    string hoverText = HappyBirthday.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
+                    string hoverText = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
                     if (hoverText.Length > 0)
                     {
                         IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);

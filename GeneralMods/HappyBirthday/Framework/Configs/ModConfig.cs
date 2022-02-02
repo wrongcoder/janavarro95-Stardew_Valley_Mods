@@ -28,14 +28,14 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// <returns></returns>
         public static ModConfig InitializeConfig()
         {
-            if (HappyBirthday.Configs.doesConfigExist("ModConfig.json"))
+            if (HappyBirthdayModCore.Configs.doesConfigExist("ModConfig.json"))
             {
-                return HappyBirthday.Configs.ReadConfig<ModConfig>("ModConfig.json");
+                return HappyBirthdayModCore.Configs.ReadConfig<ModConfig>("ModConfig.json");
             }
             else
             {
                 ModConfig Config = new ModConfig();
-                HappyBirthday.Configs.WriteConfig("ModConfig.json", Config);
+                HappyBirthdayModCore.Configs.WriteConfig("ModConfig.json", Config);
                 return Config;
             }
         }

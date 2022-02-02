@@ -11,10 +11,14 @@ namespace Omegasis.HappyBirthday.Framework.EventPreconditions
     public class SpouseBirthdayPrecondition:EventPrecondition
     {
 
-
         public SpouseBirthdayPrecondition()
         {
 
+        }
+
+        public override string ToString()
+        {
+            return "Omegasis.HappyBirthday.Framework.EventPreconditions.SpouseBirthdayPreconditon";
         }
 
         public override bool meetsCondition()

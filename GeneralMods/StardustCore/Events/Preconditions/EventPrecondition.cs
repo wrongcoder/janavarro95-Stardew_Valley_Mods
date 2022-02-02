@@ -9,10 +9,22 @@ namespace StardustCore.Events.Preconditions
     public class EventPrecondition
     {
 
+        public virtual string SerializedPrecondition
+        {
+            get
+            {
+                return this.ToString();
+            }
+        }
 
         public virtual bool meetsCondition()
         {
             return false;
+        }
+
+        public override string ToString()
+        {
+            return "StarducstCore.Events.Preconditions.EventPrecondition";
         }
     }
 }

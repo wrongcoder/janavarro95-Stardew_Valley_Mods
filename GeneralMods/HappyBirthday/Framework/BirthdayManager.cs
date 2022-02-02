@@ -194,7 +194,7 @@ namespace Omegasis.HappyBirthday.Framework
         {
             if (this.isBirthday())
             {
-                string starMessage = HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Happy Birthday: Star Message");
+                string starMessage = HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("Happy Birthday: Star Message");
                 Messages.ShowStarMessage(starMessage);
                 MultiplayerUtilities.SendBirthdayMessageToOtherPlayers();
 
@@ -202,7 +202,7 @@ namespace Omegasis.HappyBirthday.Framework
 
                 foreach (NPC npc in NPCUtilities.GetAllHumanNpcs())
                 {   
-                    string message = HappyBirthday.Instance.birthdayMessages.getBirthdayMessage(npc.Name);
+                    string message = HappyBirthdayModCore.Instance.birthdayMessages.getBirthdayMessage(npc.Name);
                     Dialogue d = new Dialogue(message, npc);
                     npc.CurrentDialogue.Push(d);
                     if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);

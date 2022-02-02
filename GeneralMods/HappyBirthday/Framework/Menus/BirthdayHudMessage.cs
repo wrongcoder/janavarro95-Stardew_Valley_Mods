@@ -11,7 +11,7 @@ using StardewValley.Menus;
 namespace Omegasis.HappyBirthday.Framework.Menus
 {
     /// <summary>
-    /// An override of the <see cref="StardewValley.HUDMessage"/> to be able to draw the hud message above the <see cref="HappyBirthday"/> menu.
+    /// An override of the <see cref="StardewValley.HUDMessage"/> to be able to draw the hud message above the <see cref="HappyBirthdayModCore"/> menu.
     /// </summary>
     public class BirthdayHudMessage : StardewValley.HUDMessage
     {

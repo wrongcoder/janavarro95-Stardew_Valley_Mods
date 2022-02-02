@@ -72,7 +72,7 @@ namespace Omegasis.HappyBirthday.Framework
 
             if (!loadedDict.TryGetValue(key, out string loaded))
             {
-                Omegasis.HappyBirthday.HappyBirthday.Instance.Monitor.Log("Big issue: Key not found in file:" + xnb + " " + key);
+                Omegasis.HappyBirthday.HappyBirthdayModCore.Instance.Monitor.Log("Big issue: Key not found in file:" + xnb + " " + key);
                 return "";
             }
             return loaded;
@@ -89,22 +89,22 @@ namespace Omegasis.HappyBirthday.Framework
             if (Key.Equals("Spring") || Key.Equals("spring"))
             {
                 string file = Path.Combine("Strings", "StringsFromCSFiles");
-                return HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5680");
+                return HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5680");
             }
             if (Key.Equals("Summer") || Key.Equals("summer"))
             {
                 string file = Path.Combine("Strings", "StringsFromCSFiles");
-                return HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5681");
+                return HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5681");
             }
             if (Key.Equals("Fall") || Key.Equals("fall"))
             {
                 string file = Path.Combine("Strings", "StringsFromCSFiles");
-                return HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5682");
+                return HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5682");
             }
             if (Key.Equals("Winter") || Key.Equals("winter"))
             {
                 string file = Path.Combine("Strings", "StringsFromCSFiles");
-                return HappyBirthday.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5683");
+                return HappyBirthdayModCore.Instance.translationInfo.loadStringFromXNBFile(file, "Utility.cs.5683");
             }
             return "";
         }
@@ -122,7 +122,7 @@ namespace Omegasis.HappyBirthday.Framework
                 //Prevent infinite recursion.
                 DefaultToEnglish = false;
             }
-            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthday.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
+            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
             List<string> potentialStrings = new List<string>();
             foreach (HappyBirthdayContentPack contentPack in affectedContentPacks)
             {
@@ -157,7 +157,7 @@ namespace Omegasis.HappyBirthday.Framework
                 //Prevent infinite recursion.
                 DefaultToEnglish = false;
             }
-            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthday.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
+            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
             List<string> potentialStrings = new List<string>();
             foreach (HappyBirthdayContentPack contentPack in affectedContentPacks)
             {
@@ -204,7 +204,7 @@ namespace Omegasis.HappyBirthday.Framework
                 //Prevent infinite recursion.
                 DefaultToEnglish = false;
             }
-            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthday.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
+            List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
             List<string> potentialStrings = new List<string>();
             foreach (HappyBirthdayContentPack contentPack in affectedContentPacks)
             {

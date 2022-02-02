@@ -55,7 +55,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         public virtual void updateMenu(string Season, int Day, Action<string,int > OnChanged)
         {
-            this.BirthdaySeason = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString(Season);
+            this.BirthdaySeason = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString(Season);
             this.seasonName = Season;
             this.BirthdayDay = Day;
             this.OnChanged = OnChanged;
@@ -85,8 +85,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             this.SeasonButtons.Clear();
             this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
 
-            string bdaySeason = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Season");
-            string bdayDay = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("Date");
+            string bdaySeason = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("Season");
+            string bdayDay = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("Date");
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder - Game1.tileSize / 8, 1, 1), bdaySeason + ": " + this.BirthdaySeason));
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize, Game1.tileSize * 2, Game1.tileSize), bdayDay + ": " + this.BirthdayDay));
             this.SeasonButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSpringButton(), Game1.pixelZoom));
@@ -158,7 +158,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 case "Summer":
                 case "Fall":
                 case "Winter":
-                    this.BirthdaySeason = HappyBirthday.Instance.translationInfo.getTranslatedBaseGameString(name);
+                    this.BirthdaySeason = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString(name);
                     this.seasonName = name;
                     this.OnChanged(this.seasonName, this.BirthdayDay);
                     this.updateMenu(this.seasonName, this.BirthdayDay, this.OnChanged);
@@ -213,8 +213,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             {
                 if (this.isFestivalDay())
                 {
-                    if (string.IsNullOrEmpty(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")) == false)
-                        Game1.addHUDMessage(new BirthdayHudMessage(HappyBirthday.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")));
+                    if (string.IsNullOrEmpty(HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")) == false)
+                        Game1.addHUDMessage(new BirthdayHudMessage(HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("BirthdayError_FestivalDay")));
                     else
                         Game1.addHUDMessage(new BirthdayHudMessage("You can't have a birthday on this day. Sorry!"));
                     return;

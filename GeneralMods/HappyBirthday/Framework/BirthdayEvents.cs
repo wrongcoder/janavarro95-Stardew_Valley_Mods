@@ -30,7 +30,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
 
             conditions.Add(new CanReadJunimo());
@@ -127,7 +127,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Trailer")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new DatingNPC(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
@@ -183,7 +183,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Trailer_Big")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new DatingNPC(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
@@ -240,7 +240,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("ScienceHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC maru = Game1.getCharacterFromName("Maru");
             NPC sebastian = Game1.getCharacterFromName("Sebastian");
@@ -307,7 +307,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("LeahHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC leah = Game1.getCharacterFromName("Leah");
 
@@ -354,11 +354,11 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("SeedShop")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             if (Game1.player.hasCompletedCommunityCenter() == false)
             {
-                conditions.Add(new EventDayExclusionPrecondition(false, false, false, true, false, false, false));
+                conditions.Add(new DayOfWeekPrecondition(true, true, true, false, true, true, true));
             }
 
             NPC abigail = Game1.getCharacterFromName("Abigail");
@@ -413,18 +413,18 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("Mine")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             var v=new JojaMember(true);
             if (v.meetsCondition())
             {
-                conditions.Add(new EventDayExclusionPrecondition(true, true, true, false, true, true, true));
+                conditions.Add(new DayOfWeekPrecondition(false, false, false, true, false, false, false));
             }
             else
             {
                 if (Game1.player.hasCompletedCommunityCenter() == false)
                 {
-                    conditions.Add(new EventDayExclusionPrecondition(true, true, true, false, true, true, true));
+                    conditions.Add(new DayOfWeekPrecondition(false, false, false, true, false, false, false));
                 }
             }
 
@@ -467,7 +467,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("HaleyHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC emily = Game1.getCharacterFromName("Emily");
 
@@ -510,7 +510,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("HaleyHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC haley = Game1.getCharacterFromName("Haley");
 
@@ -551,7 +551,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("SamHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC sam = Game1.getCharacterFromName("Sam");
 
@@ -594,7 +594,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("ScienceHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC maru = Game1.getCharacterFromName("Maru");
             NPC sebastian = Game1.getCharacterFromName("Sebastian");
@@ -657,7 +657,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("ElliottHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC elliott = Game1.getCharacterFromName("Elliott");
 
@@ -696,7 +696,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("AnimalShop")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC shane = Game1.getCharacterFromName("Shane");
 
@@ -735,7 +735,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("HarveyRoom")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC harvey = Game1.getCharacterFromName("Harvey");
 
@@ -776,7 +776,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("JoshHouse")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             NPC alex = Game1.getCharacterFromName("Alex");
 
@@ -818,7 +818,7 @@ namespace Omegasis.HappyBirthday.Framework
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new LocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
-            conditions.Add(new TimePrecondition(600, 2600));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new JojaMember(false));
             conditions.Add(new CommunityCenterCompleted(true));
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
@@ -871,7 +871,7 @@ namespace Omegasis.HappyBirthday.Framework
 
         public static string GetEventString(string Key)
         {
-            return HappyBirthday.Instance.translationInfo.getTranslatedContentPackString(Key);
+            return HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString(Key);
         }
 
     }

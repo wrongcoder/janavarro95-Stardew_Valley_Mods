@@ -10,7 +10,6 @@ namespace Omegasis.HappyBirthday.Framework.EventPreconditions
     public class FarmerBirthdayPrecondition:EventPrecondition
     {
 
-
         public FarmerBirthdayPrecondition()
         {
 
@@ -18,12 +17,12 @@ namespace Omegasis.HappyBirthday.Framework.EventPreconditions
 
         public override string ToString()
         {
-            return "Omegasis.HappyBirthday";
+            return "Omegasis.HappyBirthday.Framework.EventPreconditions.FarmerBirthdayPrecondition";
         }
 
         public override bool meetsCondition()
         {
-            return HappyBirthday.Instance.birthdayManager.isBirthday();
+            return HappyBirthdayModCore.Instance.birthdayManager.isBirthday();
         }
 
     }
