@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 using StardustCore.Compatibility.SpaceCore;
+using StardustCore.Events.Preconditions;
 
 namespace StardustCore.Events
 {
@@ -25,12 +26,17 @@ namespace StardustCore.Events
 
         public Dictionary<Farmer, HashSet<EventHelper>> seenEvents;
 
+        public Dictionary<string, Func<string[], EventPrecondition>> eventPreconditionParsingMethods;
+
         public EventManager()
         {
             this.events = new Dictionary<string, EventHelper>();
             this.customEventLogic = new Dictionary<string, Action<EventManager,string>>();
             this.concurrentEventActions = new Dictionary<string, ConcurrentEventInformation>();
             this.seenEvents = new Dictionary<Farmer, HashSet<EventHelper>>();
+            this.eventPreconditionParsingMethods = new Dictionary<string, Func<string[], EventPrecondition>>();
+
+            //ToDO Add a way to register event precondition parsing methods and return the preconditions back to the passed in event helpers.
 
             this.customEventLogic.Add("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
             this.customEventLogic.Add("Omegasis.EventFramework.AddInJunimoActor", ExtraEventActions.AddInJumimoActorForEvent);
