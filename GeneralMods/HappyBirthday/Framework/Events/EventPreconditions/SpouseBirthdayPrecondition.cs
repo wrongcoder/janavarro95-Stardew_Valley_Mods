@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Omegasis.StardustCore.Events.Preconditions;
 using StardewValley;
 
-namespace Omegasis.HappyBirthday.Framework.EventPreconditions
+namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 {
     public class SpouseBirthdayPrecondition:EventPrecondition
     {

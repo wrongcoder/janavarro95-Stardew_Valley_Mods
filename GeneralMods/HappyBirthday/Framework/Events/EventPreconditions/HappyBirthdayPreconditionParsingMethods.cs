@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Omegasis.HappyBirthday.Framework.EventPreconditions
+namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 {
     public static class HappyBirthdayPreconditionParsingMethods
     {
@@ -16,6 +16,11 @@ namespace Omegasis.HappyBirthday.Framework.EventPreconditions
         public static SpouseBirthdayPrecondition ParseSpouseBirthdayPrecondition(string[] preconditionData)
         {
             return new SpouseBirthdayPrecondition();
+        }
+
+        public static HasChosenBirthdayPrecondition ParseHasChosenBirthdayPrecondition(string[] preconditionData)
+        {
+            return new HasChosenBirthdayPrecondition(Convert.ToBoolean(preconditionData[1]));
         }
     }
 }

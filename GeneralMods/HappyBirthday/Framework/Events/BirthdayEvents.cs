@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Omegasis.HappyBirthday.Framework.EventPreconditions;
 using StardustCore.Events;
 using StardewValley;
 using Microsoft.Xna.Framework;
 using StardustCore.IlluminateFramework;
 using StardustCore.Utilities;
 using Omegasis.HappyBirthday.Framework.Constants;
-using Omegasis.HappyBirthday.Framework.Utilities;
 using Omegasis.StardustCore.Events.Preconditions.TimeSpecific;
 using Omegasis.StardustCore.Events.Preconditions;
 using Omegasis.StardustCore.Events.Preconditions.PlayerSpecific;
 using Omegasis.StardustCore.Events.Preconditions.NPCSpecific;
+using Omegasis.HappyBirthday.Framework.Events.EventPreconditions;
 
-namespace Omegasis.HappyBirthday.Framework
+namespace Omegasis.HappyBirthday.Framework.Events
 {
     public class BirthdayEvents
     {
@@ -40,11 +39,11 @@ namespace Omegasis.HappyBirthday.Framework
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
             EventHelper e = new EventHelper(EventIds.JunimoCommunityCenterBirthday, 19950, conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
 
-            e.AddInJunimoActor("Juni", new Microsoft.Xna.Framework.Vector2(32, 10), Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni2", new Microsoft.Xna.Framework.Vector2(30, 11), Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni3", new Microsoft.Xna.Framework.Vector2(34, 11), Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni4", new Microsoft.Xna.Framework.Vector2(26, 11), Colors.getRandomJunimoColor());
-            e.AddInJunimoActor("Juni5", new Microsoft.Xna.Framework.Vector2(28, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni", new Vector2(32, 10), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni2", new Vector2(30, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni3", new Vector2(34, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni4", new Vector2(26, 11), Colors.getRandomJunimoColor());
+            e.AddInJunimoActor("Juni5", new Vector2(28, 11), Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni6Tank", new Vector2(38, 10), Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni7", new Vector2(27, 16), Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni8", new Vector2(40, 15), Colors.getRandomJunimoColor());
@@ -98,12 +97,12 @@ namespace Omegasis.HappyBirthday.Framework
             e.playSound("junimoMeep1");
 
             e.emoteFarmer_ExclamationMark();
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"JunimoBirthdayParty_0");
+            e.addTranslatedMessageToBeShown("JunimoBirthdayParty_0");
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"JunimoBirthdayParty_1");
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("JunimoBirthdayParty_1");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.addObjectToPlayersInventory(220, 1, false);
 
             e.end();
@@ -141,32 +140,32 @@ namespace Omegasis.HappyBirthday.Framework
 
             e.actorFaceDirection("Penny", EventHelper.FacingDirection.Down);
             //starting = starting.Replace("@", Game1.player.Name);
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:0"));
-            e.speak(pam, GetEventString("DatingPennyBirthday_Pam:0"));
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:1"));
-            e.speak(pam, GetEventString("DatingPennyBirthday_Pam:1"));
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:0"));
+            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:0"));
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:1"));
+            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:1"));
             e.emote_Angry("Penny");
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:2")); //penny2
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:3")); //penny3
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:2")); //penny2
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:3")); //penny3
 
             e.moveActorLeft("Penny", 3, EventHelper.FacingDirection.Up, true);
             e.moveFarmerRight(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerUp(3, EventHelper.FacingDirection.Down, false);
             e.moveActorRight("Penny", 5, EventHelper.FacingDirection.Up, true);
             e.moveActorUp("Penny", 1, EventHelper.FacingDirection.Up, true);
-            e.speak(pam, GetEventString("DatingPennyBirthday_Pam:2")); //pam2
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:4"));//penny4
+            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:2")); //pam2
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:4"));//penny4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Penny");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:0"); //penny party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:1");// penny party finish 1
+            e.addTranslatedMessageToBeShown("DatingPennyBirthday_Finish:0"); //penny party finish 0
+            e.addTranslatedMessageToBeShown("DatingPennyBirthday_Finish:1");// penny party finish 1
             e.addObjectToPlayersInventory(220, 1, false);
             e.addObjectToPlayersInventory(346, 1, false);
 
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
 
             e.end();
 
@@ -197,32 +196,32 @@ namespace Omegasis.HappyBirthday.Framework
 
             e.actorFaceDirection("Penny", EventHelper.FacingDirection.Down);
             //starting = starting.Replace("@", Game1.player.Name);
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:0"));
-            e.speak(pam, GetEventString("DatingPennyBirthday_Pam:0"));
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:1"));
-            e.speak(pam, GetEventString("DatingPennyBirthday_Pam:1"));
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:0"));
+            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:0"));
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:1"));
+            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:1"));
             e.emote_Angry("Penny");
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:2")); //penny2
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:3")); //penny3
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:2")); //penny2
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:3")); //penny3
 
             e.moveActorLeft("Penny", 3, EventHelper.FacingDirection.Up, true);
             e.moveFarmerRight(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerUp(3, EventHelper.FacingDirection.Down, false);
             e.moveActorRight("Penny", 5, EventHelper.FacingDirection.Up, true);
             e.moveActorUp("Penny", 1, EventHelper.FacingDirection.Up, true);
-            e.speak(pam, GetEventString("DatingPennyBirthday_Pam:2")); //pam2
-            e.speak(penny, GetEventString("DatingPennyBirthday_Penny:4"));//penny4
+            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:2")); //pam2
+            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:4"));//penny4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Penny");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:0"); //penny party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingPennyBirthday_Finish:1");// penny party finish 1
+            e.addTranslatedMessageToBeShown("DatingPennyBirthday_Finish:0"); //penny party finish 0
+            e.addTranslatedMessageToBeShown("DatingPennyBirthday_Finish:1");// penny party finish 1
             e.addObjectToPlayersInventory(220, 1, false);
             e.addObjectToPlayersInventory(346, 1, false);
 
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
 
             e.end();
 
@@ -264,34 +263,34 @@ namespace Omegasis.HappyBirthday.Framework
 
             //Dialogue goes here.
             //Seriously improve dialogue lines. Maru is probably the NPC I know the least about.
-            e.speak(maru, GetEventString("DatingMaruBirthday_Maru:0")); //maru 0
-            e.speak(demetrius, GetEventString("DatingMaruBirthday_Demetrius:0")); //demetrius 0
-            e.speak(maru, GetEventString("DatingMaruBirthday_Maru:1"));//Maru 1 //Spoiler she doesn't.
-            e.speak(sebastian, GetEventString("DatingMaruBirthday_Sebastian:0")); //sebastian 0
-            e.speak(robin, GetEventString("DatingMaruBirthday_Robin:0")); //robin 0
-            e.speak(demetrius, GetEventString("DatingMaruBirthday_Demetrius:1")); //demetrius 1
+            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:0")); //maru 0
+            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingMaruBirthday_Demetrius:0")); //demetrius 0
+            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:1"));//Maru 1 //Spoiler she doesn't.
+            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingMaruBirthday_Sebastian:0")); //sebastian 0
+            e.speakWithTranslatedMessage(robin, GetEventString("DatingMaruBirthday_Robin:0")); //robin 0
+            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingMaruBirthday_Demetrius:1")); //demetrius 1
             e.emote_ExclamationMark("Robin");
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Up);
-            e.speak(robin, GetEventString("DatingMaruBirthday_Robin:1")); //robin 1
+            e.speakWithTranslatedMessage(robin, GetEventString("DatingMaruBirthday_Robin:1")); //robin 1
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
             e.moveActorDown("Robin", 1, EventHelper.FacingDirection.Down, false);
             e.addObject(27, 12, 220);
 
-            e.speak(maru, GetEventString("DatingMaruBirthday_Maru:2")); //maru 2
+            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:2")); //maru 2
             e.emoteFarmer_Thinking();
-            e.speak(sebastian, GetEventString("DatingMaruBirthday_Sebastian:1")); //Sebastian 1
-            e.speak(maru, GetEventString("DatingMaruBirthday_Maru:3")); //maru 3
+            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingMaruBirthday_Sebastian:1")); //Sebastian 1
+            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:3")); //maru 3
 
             //Event finish commands.
             e.emoteFarmer_Heart();
             e.emote_Heart("Maru");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingMaruBirthday_Finish:0"); //maru party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingMaruBirthday_Finish:1"); //maru party finish 0
+            e.addTranslatedMessageToBeShown("DatingMaruBirthday_Finish:0"); //maru party finish 0
+            e.addTranslatedMessageToBeShown("DatingMaruBirthday_Finish:1"); //maru party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
 
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -320,25 +319,25 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerUp(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerRight(5, EventHelper.FacingDirection.Down, false);
             e.npcFaceDirection(leah, EventHelper.FacingDirection.Up);
-            e.speak(leah, GetEventString("DatingLeahBirthday_Leah:0")); //0
+            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:0")); //0
             e.moveFarmerDown(2, EventHelper.FacingDirection.Down, false);
             e.moveFarmerRight(1, EventHelper.FacingDirection.Down, false);
             e.moveFarmerDown(1, EventHelper.FacingDirection.Down, false);
-            e.speak(leah, GetEventString("DatingLeahBirthday_Leah:1")); //1
+            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:1")); //1
             e.emoteFarmer_Happy();
-            e.speak(leah, GetEventString("DatingLeahBirthday_Leah:2"));//2
-            e.speak(leah, GetEventString("DatingLeahBirthday_Leah:3"));//3
-            e.speak(leah, GetEventString("DatingLeahBirthday_Leah:4"));//4
+            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:2"));//2
+            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:3"));//3
+            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:4"));//4
 
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Leah");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingLeahBirthday_Finish:0"); //maru party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingLeahBirthday_Finish:1"); //maru party finish 0
+            e.addTranslatedMessageToBeShown("DatingLeahBirthday_Finish:0"); //maru party finish 0
+            e.addTranslatedMessageToBeShown("DatingLeahBirthday_Finish:1"); //maru party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -356,9 +355,7 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
             if (Game1.player.hasCompletedCommunityCenter() == false)
-            {
                 conditions.Add(new DayOfWeekPrecondition(true, true, true, false, true, true, true));
-            }
 
             NPC abigail = Game1.getCharacterFromName("Abigail");
             NPC pierre = Game1.getCharacterFromName("Pierre");
@@ -377,30 +374,30 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerUp(2, EventHelper.FacingDirection.Right, false);
             e.moveFarmerRight(4, EventHelper.FacingDirection.Right, false);
 
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Abigail:0")); //abi 0
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:0")); //abi 0
 
             e.npcFaceDirection(caroline, EventHelper.FacingDirection.Down);
 
-            e.speak(pierre, GetEventString("DatingAbigailBirthday_Pierre:0")); //pie 0
-            e.speak(caroline, GetEventString("DatingAbigailBirthday_Caroline:0")); //car 0
+            e.speakWithTranslatedMessage(pierre, GetEventString("DatingAbigailBirthday_Pierre:0")); //pie 0
+            e.speakWithTranslatedMessage(caroline, GetEventString("DatingAbigailBirthday_Caroline:0")); //car 0
             e.addObject(35, 5, 220);
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Abigail:1")); //abi 1
-            e.speak(pierre, GetEventString("DatingAbigailBirthday_Pierre:1")); //pie 1
-            e.speak(caroline, GetEventString("DatingAbigailBirthday_Caroline:1")); //car 1
-            e.speak(caroline, GetEventString("DatingAbigailBirthday_Caroline:2")); //car 2
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Abigail:2")); //abi 2
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:1")); //abi 1
+            e.speakWithTranslatedMessage(pierre, GetEventString("DatingAbigailBirthday_Pierre:1")); //pie 1
+            e.speakWithTranslatedMessage(caroline, GetEventString("DatingAbigailBirthday_Caroline:1")); //car 1
+            e.speakWithTranslatedMessage(caroline, GetEventString("DatingAbigailBirthday_Caroline:2")); //car 2
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:2")); //abi 2
             e.emoteFarmer_Thinking();
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Abigail:3"));//abi 3
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Abigail:4"));///abi 4
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:3"));//abi 3
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:4"));///abi 4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Abigail");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Finish:0"); //abi party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Finish:1"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingAbigailBirthday_Finish:0"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingAbigailBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
 
@@ -414,18 +411,12 @@ namespace Omegasis.HappyBirthday.Framework
             conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("Mine")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
 
-            var v=new IsJojaMemberEventPrecondition(true);
+            var v = new IsJojaMemberEventPrecondition(true);
             if (v.meetsCondition())
-            {
                 conditions.Add(new DayOfWeekPrecondition(false, false, false, true, false, false, false));
-            }
             else
-            {
                 if (Game1.player.hasCompletedCommunityCenter() == false)
-                {
-                    conditions.Add(new DayOfWeekPrecondition(false, false, false, true, false, false, false));
-                }
-            }
+                conditions.Add(new DayOfWeekPrecondition(false, false, false, true, false, false, false));
 
             NPC abigail = Game1.getCharacterFromName("Abigail");
 
@@ -439,23 +430,23 @@ namespace Omegasis.HappyBirthday.Framework
             //Dialogue here.
             e.moveFarmerUp(7, EventHelper.FacingDirection.Up, false);
 
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:0")); //abi 0
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:0")); //abi 0
 
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:1")); //abi 1
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:1")); //abi 1
             e.emoteFarmer_QuestionMark();
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:2")); //abi 2
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:3"));//abi 3
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:2")); //abi 2
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:3"));//abi 3
             e.emoteFarmer_Thinking();
-            e.speak(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:4"));///abi 4
+            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:4"));///abi 4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Abigail");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Mine_Finish:0"); //abi party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAbigailBirthday_Mine_Finish:1"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingAbigailBirthday_Mine_Finish:0"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingAbigailBirthday_Mine_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
 
@@ -480,24 +471,24 @@ namespace Omegasis.HappyBirthday.Framework
             //Dialogue here.
             e.moveFarmerRight(9, EventHelper.FacingDirection.Up, false);
 
-            e.speak(emily, GetEventString("DatingEmilyBirthday_Emily:0")); //emi 0
-            e.speak(emily, GetEventString("DatingEmilyBirthday_Emily:1")); //emi 0
+            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:0")); //emi 0
+            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:1")); //emi 0
             e.emoteFarmer_Happy();
-            e.speak(emily, GetEventString("DatingEmilyBirthday_Emily:2")); //emi 0
-            e.speak(emily, GetEventString("DatingEmilyBirthday_Emily:3")); //emi 0
-            e.speak(emily, GetEventString("DatingEmilyBirthday_Emily:4")); //emi 0
+            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:2")); //emi 0
+            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:3")); //emi 0
+            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:4")); //emi 0
             e.emoteFarmer_Thinking();
-            e.speak(emily, GetEventString("DatingEmilyBirthday_Emily:5")); //emi 0
+            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:5")); //emi 0
 
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Emily");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingEmilyBirthday_Finish:0"); //abi party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingEmilyBirthday_Finish:1"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingEmilyBirthday_Finish:0"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingEmilyBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -523,23 +514,23 @@ namespace Omegasis.HappyBirthday.Framework
             //Dialogue here.
             e.moveFarmerRight(9, EventHelper.FacingDirection.Up, false);
 
-            e.speak(haley, GetEventString("DatingHaleyBirthday_Haley:0"));
-            e.speak(haley, GetEventString("DatingHaleyBirthday_Haley:1"));
+            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:0"));
+            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:1"));
             e.emoteFarmer_Happy();
-            e.speak(haley, GetEventString("DatingHaleyBirthday_Haley:2"));
-            e.speak(haley, GetEventString("DatingHaleyBirthday_Haley:3"));
+            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:2"));
+            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:3"));
             e.emoteFarmer_Thinking();
-            e.speak(haley, GetEventString("DatingHaleyBirthday_Haley:4"));
+            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:4"));
 
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Haley");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHaleyBirthday_Finish:0"); //abi party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHaleyBirthday_Finish:1"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingHaleyBirthday_Finish:0"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingHaleyBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(221, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
 
@@ -566,19 +557,19 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerLeft(3, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(sam, EventHelper.FacingDirection.Right);
 
-            e.speak(sam, GetEventString("DatingSamBirthday_Sam:0"));
-            e.speak(sam, GetEventString("DatingSamBirthday_Sam:1"));
-            e.speak(sam, GetEventString("DatingSamBirthday_Sam:2"));
-            e.speak(sam, GetEventString("DatingSamBirthday_Sam:3"));
+            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:0"));
+            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:1"));
+            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:2"));
+            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:3"));
             e.emoteFarmer_Heart();
             e.emote_Heart("Sam");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSamBirthday_Finish:0"); //sam party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSamBirthday_Finish:1"); //sam party finish 0
+            e.addTranslatedMessageToBeShown("DatingSamBirthday_Finish:0"); //sam party finish 0
+            e.addTranslatedMessageToBeShown("DatingSamBirthday_Finish:1"); //sam party finish 0
             e.addObjectToPlayersInventory(206, 1, false);
             e.addObjectToPlayersInventory(167, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -618,33 +609,33 @@ namespace Omegasis.HappyBirthday.Framework
 
             //Dialogue goes here.
             //Seriously improve dialogue lines. Maru is probably the NPC I know the least about.
-            e.speak(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:0")); //sebastian 0
-            e.speak(robin, GetEventString("DatingSebastianBirthday_Robin:0")); //maru 0
-            e.speak(maru, GetEventString("DatingSebastianBirthday_Maru:0"));//Maru 0
-            e.speak(robin, GetEventString("DatingSebastianBirthday_Robin:1")); //robin 0
-            e.speak(demetrius, GetEventString("DatingSebastianBirthday_Demetrius:0")); //demetrius 0
-            e.speak(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:1")); //Sebastian 1
+            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:0")); //sebastian 0
+            e.speakWithTranslatedMessage(robin, GetEventString("DatingSebastianBirthday_Robin:0")); //maru 0
+            e.speakWithTranslatedMessage(maru, GetEventString("DatingSebastianBirthday_Maru:0"));//Maru 0
+            e.speakWithTranslatedMessage(robin, GetEventString("DatingSebastianBirthday_Robin:1")); //robin 0
+            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingSebastianBirthday_Demetrius:0")); //demetrius 0
+            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:1")); //Sebastian 1
             e.emote_ExclamationMark("Robin");
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Up);
-            e.speak(robin, GetEventString("DatingSebastianBirthday_Robin:2")); //robin 1
+            e.speakWithTranslatedMessage(robin, GetEventString("DatingSebastianBirthday_Robin:2")); //robin 1
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
             e.moveActorDown("Robin", 1, EventHelper.FacingDirection.Down, false);
             e.addObject(27, 12, 220);
-            e.speak(demetrius, GetEventString("DatingSebastianBirthday_Demetrius:1")); //maru 2
+            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingSebastianBirthday_Demetrius:1")); //maru 2
             e.emoteFarmer_Thinking();
-            e.speak(maru, GetEventString("DatingSebastianBirthday_Maru:1")); //maru 3
-            e.speak(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:2")); //Sebastian 1
+            e.speakWithTranslatedMessage(maru, GetEventString("DatingSebastianBirthday_Maru:1")); //maru 3
+            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:2")); //Sebastian 1
 
             //Event finish commands.
             e.emoteFarmer_Heart();
             e.emote_Heart("Sebastian");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSebastianBirthday_Finish:0"); //maru party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingSebastianBirthday_Finish:1"); //maru party finish 0
+            e.addTranslatedMessageToBeShown("DatingSebastianBirthday_Finish:0"); //maru party finish 0
+            e.addTranslatedMessageToBeShown("DatingSebastianBirthday_Finish:1"); //maru party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
 
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -669,21 +660,21 @@ namespace Omegasis.HappyBirthday.Framework
 
             //Dialogue here.
             e.moveFarmerUp(2, EventHelper.FacingDirection.Up, false);
-            e.speak(elliott, GetEventString("DatingElliottBirthday_Elliott:0"));
-            e.speak(elliott, GetEventString("DatingElliottBirthday_Elliott:1"));
-            e.speak(elliott, GetEventString("DatingElliottBirthday_Elliott:2"));
-            e.speak(elliott, GetEventString("DatingElliottBirthday_Elliott:3"));
-            e.speak(elliott, GetEventString("DatingElliottBirthday_Elliott:4"));
+            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:0"));
+            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:1"));
+            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:2"));
+            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:3"));
+            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:4"));
             e.emoteFarmer_Thinking();
-            e.speak(elliott, GetEventString("DatingElliottBirthday_Elliott:5"));
+            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:5"));
             e.emoteFarmer_Heart();
             e.emote_Heart("Elliott");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingElliottBirthday_Finish:0"); //abi party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingElliottBirthday_Finish:1"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingElliottBirthday_Finish:0"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingElliottBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(220, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -712,19 +703,19 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerRight(2, EventHelper.FacingDirection.Right, false);
             e.npcFaceDirection(shane, EventHelper.FacingDirection.Left);
 
-            e.speak(shane, GetEventString("DatingShaneBirthday_Shane:0"));
-            e.speak(shane, GetEventString("DatingShaneBirthday_Shane:1"));
-            e.speak(shane, GetEventString("DatingShaneBirthday_Shane:2"));
-            e.speak(shane, GetEventString("DatingShaneBirthday_Shane:3"));
+            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:0"));
+            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:1"));
+            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:2"));
+            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:3"));
             e.emoteFarmer_Heart();
             e.emote_Heart("Shane");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingShaneBirthday_Finish:0"); //sam party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingShaneBirthday_Finish:1"); //sam party finish 0
+            e.addTranslatedMessageToBeShown("DatingShaneBirthday_Finish:0"); //sam party finish 0
+            e.addTranslatedMessageToBeShown("DatingShaneBirthday_Finish:1"); //sam party finish 0
             e.addObjectToPlayersInventory(206, 1, false);
             e.addObjectToPlayersInventory(167, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -749,22 +740,22 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerUp(5, EventHelper.FacingDirection.Up, false);
             e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(harvey, EventHelper.FacingDirection.Right);
-            e.speak(harvey, GetEventString("DatingHarveyBirthday_Harvey:0"));
-            e.speak(harvey, GetEventString("DatingHarveyBirthday_Harvey:1"));
+            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:0"));
+            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:1"));
             e.emoteFarmer_QuestionMark();
-            e.speak(harvey, GetEventString("DatingHarveyBirthday_Harvey:2"));
-            e.speak(harvey, GetEventString("DatingHarveyBirthday_Harvey:3"));
+            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:2"));
+            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:3"));
 
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Harvey");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHarveyBirthday_Finish:0"); //abi party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingHarveyBirthday_Finish:1"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingHarveyBirthday_Finish:0"); //abi party finish 0
+            e.addTranslatedMessageToBeShown("DatingHarveyBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(237, 1, false);
             e.addObjectToPlayersInventory(348, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown( "PartyOver");
             e.end();
             return e;
         }
@@ -790,19 +781,19 @@ namespace Omegasis.HappyBirthday.Framework
             e.moveFarmerLeft(3, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(alex, EventHelper.FacingDirection.Right);
 
-            e.speak(alex, GetEventString("DatingAlexBirthday_Alex:0"));
-            e.speak(alex, GetEventString("DatingAlexBirthday_Alex:1"));
-            e.speak(alex, GetEventString("DatingAlexBirthday_Alex:2"));
-            e.speak(alex, GetEventString("DatingAlexBirthday_Alex:3"));
+            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:0"));
+            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:1"));
+            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:2"));
+            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:3"));
             e.emoteFarmer_Heart();
             e.emote_Heart("Alex");
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAlexBirthday_Finish:0"); //sam party finish 0
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"DatingAlexBirthday_Finish:1"); //sam party finish 0
+            e.addTranslatedMessageToBeShown("DatingAlexBirthday_Finish:0"); //sam party finish 0
+            e.addTranslatedMessageToBeShown("DatingAlexBirthday_Finish:1"); //sam party finish 0
             e.addObjectToPlayersInventory(206, 1, false);
             e.addObjectToPlayersInventory(167, 1, false);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -824,7 +815,7 @@ namespace Omegasis.HappyBirthday.Framework
             EventHelper e = new EventHelper("CommunityCenterBirthday_All", 19961, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
             {
                 new EventStartData.NPCData(Game1.getCharacterFromName("Lewis"),32,12, EventHelper.FacingDirection.Down),
-                
+
 
             }));
 
@@ -838,12 +829,12 @@ namespace Omegasis.HappyBirthday.Framework
 
 
             e.emoteFarmer_ExclamationMark();
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"CommunityBirthdayParty_0");
+            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_0");
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"CommunityBirthdayParty_1");
-            BirthdayEventUtilities.addTranslatedMessageToBeShown(e,"PartyOver");
+            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_1");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.addObjectToPlayersInventory(220, 1, false);
 
             e.end();
@@ -873,6 +864,7 @@ namespace Omegasis.HappyBirthday.Framework
             //Need birthdayNotSelected precondition!!!!
             conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("Farm")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
+            conditions.Add(new HasChosenBirthdayPrecondition(false));
 
             NPC lewis = Game1.getCharacterFromName("Lewis");
 
@@ -881,18 +873,17 @@ namespace Omegasis.HappyBirthday.Framework
                 new EventStartData.NPCData(lewis,64,16, EventHelper.FacingDirection.Up),
 
 
-            },false));
+            }, false));
 
             e.globalFadeIn();
 
-            BirthdayEventUtilities.speakWithTranslatedMessage(e, lewis.Name, "Lewis_AskPlayerForBirthday_Intro");
-            BirthdayEventUtilities.addAskForBirthday(e);
+            e.speakWithTranslatedMessage( lewis.Name, "Lewis_AskPlayerForBirthday_Intro");
+            e.addAskForBirthday();
 
 
             //SpeakIfConditionIsMet
 
-            BirthdayEventUtilities.speakIfTodayIsPlayersBirthday(
-                e,
+            e.speakIfTodayIsPlayersBirthday(
                 lewis.Name,
                 "Lewis_AskPlayerForBirthday_TodayIsBirthday",
                 "Lewis_AskPlayerForBirthday_Confirmation");
@@ -921,12 +912,12 @@ namespace Omegasis.HappyBirthday.Framework
                 new EventStartData.NPCData(spouse,64,16, EventHelper.FacingDirection.Up),
 
 
-            },false));
+            }, false));
 
             e.globalFadeIn();
-            e.speak(spouse, "Hey @, I wanted to ask you what you would like for a gift for your birthday!");
-            BirthdayEventUtilities.addAskForFavoriteGift(e);
-            e.speak(spouse, "Ok thanks!");
+            e.speakWithTranslatedMessage(spouse, "Hey @, I wanted to ask you what you would like for a gift for your birthday!");
+            e.addAskForFavoriteGift();
+            e.speakWithTranslatedMessage(spouse, "Ok thanks!");
 
             e.globalFadeOut(0.010);
             e.end();
