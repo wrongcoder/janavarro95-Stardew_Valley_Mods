@@ -124,7 +124,7 @@ namespace StardustCore.Events
         /// <param name="CameraTileY">The starting y tile for the camera</param>
         /// <param name="Farmer">The farmer data for the event. If null then the farmer won't be in this event.</param>
         /// <param name="NPCS">The npc data for the event. If null then no npcs will be in the event.</param>
-        public EventStartData(MusicToPlayType MusicType, int CameraTileX, int CameraTileY, FarmerData Farmer, List<NPCData> NPCS)
+        public EventStartData(MusicToPlayType MusicType, int CameraTileX, int CameraTileY, FarmerData Farmer, List<NPCData> NPCS, bool Skippable=true)
         {
             this.builder = new StringBuilder();
             if(MusicType== MusicToPlayType.None)
@@ -156,7 +156,10 @@ namespace StardustCore.Events
                 }
             }
             this.add(npcData.ToString());
-            this.add("skippable");
+            if (Skippable)
+            {
+                this.add("skippable");
+            }
 
         }
 
@@ -168,10 +171,13 @@ namespace StardustCore.Events
         /// <param name="CameraTileY">The starting y tile for the camera</param>
         /// <param name="Farmer">The farmer data for the event. If null then the farmer won't be in this event.</param>
         /// <param name="NPCS">The npc data for the event. If null then no npcs will be in the event.</param>
-        public EventStartData(string SongToPlay, int CameraTileX, int CameraTileY, FarmerData Farmer, List<NPCData> NPCS)
+        public EventStartData(string SongToPlay, int CameraTileX, int CameraTileY, FarmerData Farmer, List<NPCData> NPCS, bool Skippable=true)
         {
             this.builder = new StringBuilder();
-            this.add(SongToPlay);
+            if (!string.IsNullOrEmpty(SongToPlay))
+            {
+                this.add(SongToPlay);
+            }
             this.add(CameraTileX.ToString());
             this.builder.Append(" ");
             this.builder.Append(CameraTileY.ToString());
@@ -190,7 +196,10 @@ namespace StardustCore.Events
                 }
             }
             this.add(npcData.ToString());
-            this.add("skippable");
+            if (Skippable == true)
+            {
+                this.add("skippable");
+            }
 
         }
 

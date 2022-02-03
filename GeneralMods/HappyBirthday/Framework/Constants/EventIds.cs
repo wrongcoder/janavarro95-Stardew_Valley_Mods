@@ -29,6 +29,9 @@ namespace Omegasis.HappyBirthday.Framework.Constants
         public static string BirthdayDatingShane = CreateEventId("BirthdayParty_Dating_Shane");
         public static string BirthdayDatingAlex = CreateEventId("BirthdayParty_Dating_Alex");
 
+        public static string AskPlayerForBirthday = CreateEventId("AskPlayerForBirthday");
+        public static string AskPlayerForFavoriteGift = CreateEventId("AskPlayerForFavoriteGift");
+
 
         public static string CreateEventId(string EventId)
         {

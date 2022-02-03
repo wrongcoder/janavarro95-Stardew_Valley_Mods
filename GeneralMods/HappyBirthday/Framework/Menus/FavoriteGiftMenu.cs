@@ -132,6 +132,10 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift = this.selectedGift;
                     MultiplayerUtilities.SendBirthdayInfoToOtherPlayers();
                     this.allFinished = true;
+                    if (Game1.CurrentEvent != null)
+                    {
+                        Game1.CurrentEvent.CurrentCommand++;
+                    }
                     Game1.exitActiveMenu();
                     break;
 

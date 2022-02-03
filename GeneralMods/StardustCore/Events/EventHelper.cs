@@ -1829,6 +1829,18 @@ namespace StardustCore.Events
             this.addEventData(b);
         }
 
+        public virtual void speak(string npcName, string Message)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("speak ");
+            b.Append(npcName);
+            b.Append(" ");
+            b.Append('"');
+            b.Append(Message);
+            b.Append('"');
+            this.addEventData(b);
+        }
+
         /// <summary>
         /// 	Make the player start jittering.
         /// </summary>

@@ -203,7 +203,7 @@ namespace Omegasis.HappyBirthday
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
 
-            if (!Context.IsWorldReady || Game1.isFestival())
+            if (!Context.IsWorldReady || Game1.isFestival() || Game1.CurrentEvent!=null)
             {
                 return;
             }
@@ -212,48 +212,15 @@ namespace Omegasis.HappyBirthday
 
 
             //Below code sets up menus for selecting the new birthday for the player.
-            if (!this.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null && Game1.player.Name.ToLower() != "unnamed farmhand")
-            {
-                if (this.birthdayManager.playerBirthdayData != null)
-                {
-                    Game1.activeClickableMenu = new BirthdayMenu(this.birthdayManager.playerBirthdayData.BirthdaySeason, this.birthdayManager.playerBirthdayData.BirthdayDay, this.birthdayManager.setBirthday);
-                    this.birthdayManager.setCheckedForBirthday(false);
-                }
-                else
-                {
-                    this.birthdayManager.playerBirthdayData = new PlayerData();
-                    Game1.activeClickableMenu = new BirthdayMenu("", 0, this.birthdayManager.setBirthday);
-                    this.birthdayManager.setCheckedForBirthday(false);
-                }
-            }
 
+            
             if (!this.birthdayManager.hasCheckedForBirthday() && Game1.activeClickableMenu == null)
             {
                 this.birthdayManager.setCheckedForBirthday(true);
 
-
-                //Don't constantly set the birthday menu.
-                if (Game1.activeClickableMenu?.GetType() == typeof(BirthdayMenu))
-                    return;
-
-                // ask for birthday date
-                if (!this.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null)
-                {
-                    Game1.activeClickableMenu = new BirthdayMenu(this.birthdayManager.playerBirthdayData.BirthdaySeason, this.birthdayManager.playerBirthdayData.BirthdayDay, this.birthdayManager.setBirthday);
-                    this.birthdayManager.setCheckedForBirthday(false);
-                }
-
-                if (Game1.activeClickableMenu?.GetType() == typeof(FavoriteGiftMenu))
-                    return;
-                if (this.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null && this.birthdayManager.hasChoosenFavoriteGift() == false)
-                {
-                    Game1.activeClickableMenu = new FavoriteGiftMenu();
-                    this.birthdayManager.setCheckedForBirthday(false);
-                    return;
-                }
-
                 this.birthdayManager.setUpPlayersBirthday();
             }
+            
         }
     }
 }

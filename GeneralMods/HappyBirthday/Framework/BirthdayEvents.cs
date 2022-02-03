@@ -867,6 +867,74 @@ namespace Omegasis.HappyBirthday.Framework
         }
         */
 
+        public static EventHelper LewisAsksPlayerForBirthday()
+        {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            //Need birthdayNotSelected precondition!!!!
+            conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("Farm")));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
+
+            NPC lewis = Game1.getCharacterFromName("Lewis");
+
+            EventHelper e = new EventHelper(EventIds.AskPlayerForBirthday, 19962, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 64, 14, new EventStartData.FarmerData(64, 14, EventHelper.FacingDirection.Down), new List<EventStartData.NPCData>()
+            {
+                new EventStartData.NPCData(lewis,64,16, EventHelper.FacingDirection.Up),
+
+
+            },false));
+
+            e.globalFadeIn();
+
+            BirthdayEventUtilities.speakWithTranslatedMessage(e, lewis.Name, "Lewis_AskPlayerForBirthday_Intro");
+            BirthdayEventUtilities.addAskForBirthday(e);
+
+
+            //SpeakIfConditionIsMet
+
+            BirthdayEventUtilities.speakIfTodayIsPlayersBirthday(
+                e,
+                lewis.Name,
+                "Lewis_AskPlayerForBirthday_TodayIsBirthday",
+                "Lewis_AskPlayerForBirthday_Confirmation");
+
+            e.end();
+
+            return e;
+
+        }
+
+
+        public static EventHelper SpouseAsksPlayerForFavoriteGift()
+        {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+
+            conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("FarmHouse")));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
+            //Need isMarried precondition!!!!
+            //Need precondition for checking what level the farmouse is upgraded to. Farmhouse lvl 2/3?
+
+
+            NPC spouse = Game1.getCharacterFromName(Game1.player.getSpouse().name);
+
+            EventHelper e = new EventHelper(EventIds.AskPlayerForFavoriteGift, 19900, conditions, new EventStartData("", -100, -100, new EventStartData.FarmerData(64, 15, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+            {
+                new EventStartData.NPCData(spouse,64,16, EventHelper.FacingDirection.Up),
+
+
+            },false));
+
+            e.globalFadeIn();
+            e.speak(spouse, "Hey @, I wanted to ask you what you would like for a gift for your birthday!");
+            BirthdayEventUtilities.addAskForFavoriteGift(e);
+            e.speak(spouse, "Ok thanks!");
+
+            e.globalFadeOut(0.010);
+            e.end();
+
+            return e;
+
+        }
+
 
         public static string GetEventString(string Key)
         {

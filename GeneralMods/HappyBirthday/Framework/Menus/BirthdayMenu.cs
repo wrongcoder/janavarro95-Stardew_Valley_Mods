@@ -173,6 +173,12 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     }
                     */
                     this.alllFinished = true;
+
+                    if (Game1.CurrentEvent != null)
+                    {
+                        Game1.CurrentEvent.CurrentCommand++;
+                    }
+
                     Game1.exitActiveMenu();
                     break;
 
