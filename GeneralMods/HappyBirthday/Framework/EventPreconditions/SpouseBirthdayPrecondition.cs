@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StardustCore.Events.Preconditions;
+using Omegasis.StardustCore.Events.Preconditions;
 using StardewValley;
 
 namespace Omegasis.HappyBirthday.Framework.EventPreconditions
 {
     public class SpouseBirthdayPrecondition:EventPrecondition
     {
+        public const string EventPreconditionId = "Omegasis.HappyBirthday.Framework.EventPreconditions.SpouseBirthdayPrecondition";
 
         public SpouseBirthdayPrecondition()
         {
@@ -18,7 +19,7 @@ namespace Omegasis.HappyBirthday.Framework.EventPreconditions
 
         public override string ToString()
         {
-            return "Omegasis.HappyBirthday.Framework.EventPreconditions.SpouseBirthdayPreconditon";
+            return EventPreconditionId;
         }
 
         public override bool meetsCondition()

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.HappyBirthday.Framework.Constants;
+using Omegasis.HappyBirthday.Framework.EventPreconditions;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardustCore.Events;
@@ -87,7 +88,11 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         public static void InitializeBirthdayEvents()
         {
             BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.ShowTranslatedMessage", showTranslatedMessage);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.ShowTranslatedMessage", showTranslatedMessage);
+            Omegasis.StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.ShowTranslatedMessage", showTranslatedMessage);
+
+
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmerBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmerBirthdayPrecondition);
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(SpouseBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseSpouseBirthdayPrecondition);
 
             List<EventHelper> defaultBirthdayEvents = new List<EventHelper>()
             {
@@ -123,6 +128,9 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             foreach (string file in files)
             {
                 EventHelper eventHelper = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<EventHelper>(Path.Combine(relativePath, Path.GetFileName(file)));
+                eventHelper.parseEventPreconditionsFromPreconditionStrings(BirthdayEventManager);
+
+
 
                 if (eventHelper == null)
                 {
@@ -200,7 +208,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             StringBuilder b = new StringBuilder();
             b.Append("Omegasis.HappyBirthday.Events.ShowTranslatedMessage ");
             b.Append(MessageKey);
-            eventHelper.add(b);
+            eventHelper.addEventData(b);
         }
 
         public static string GetEventString(string Key)

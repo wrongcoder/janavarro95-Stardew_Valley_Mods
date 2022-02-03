@@ -5,24 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardustCore.Events.Preconditions.NPCSpecific
+namespace Omegasis.StardustCore.Events.Preconditions.NPCSpecific
 {
-    public class DatingNPC:EventPrecondition
+    public class DatingNPCEventPrecondition:EventPrecondition
     {
+        public const string EventPreconditionId = "StardustCore.Events.Preconditions.NPCSpecific.DatingNPC";
 
         public string datingNpc;
-        public DatingNPC()
+        public DatingNPCEventPrecondition()
         {
 
         }
-        public DatingNPC(NPC npc)
+
+        public DatingNPCEventPrecondition(string datingNpcName)
+        {
+            this.datingNpc = datingNpcName;
+        }
+
+        public DatingNPCEventPrecondition(NPC npc)
         {
             this.datingNpc = npc.Name;
         }
 
         public override string ToString()
         {
-            return "StardustCore.Events.Preconditions.NPCSpecific.DatingNPC " + this.datingNpc;
+            return EventPreconditionId + " " + this.datingNpc;
         }
 
         public override bool meetsCondition()

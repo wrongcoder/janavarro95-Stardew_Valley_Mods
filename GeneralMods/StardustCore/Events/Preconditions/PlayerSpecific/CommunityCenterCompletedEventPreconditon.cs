@@ -5,28 +5,30 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardustCore.Events.Preconditions.PlayerSpecific
+namespace Omegasis.StardustCore.Events.Preconditions.PlayerSpecific
 {
-    public class CommunityCenterCompleted: EventPrecondition
+    public class CommunityCenterCompletedEventPreconditon: EventPrecondition
     {
+        public const string EventPreconditionId = "StardustCore.Events.Preconditions.Player.CommunityCenterCompleted";
+
         /// <summary>
         /// False means the community center doesn't need to be completed.
         /// </summary>
         public bool communityCenterNeedsToBeCompleted;
 
-        public CommunityCenterCompleted()
+        public CommunityCenterCompletedEventPreconditon()
         {
 
         }
 
-        public CommunityCenterCompleted(bool NeedsToBeCompleted)
+        public CommunityCenterCompletedEventPreconditon(bool NeedsToBeCompleted)
         {
             this.communityCenterNeedsToBeCompleted = NeedsToBeCompleted;
         }
 
         public override string ToString()
         {
-            return "StardustCore.Events.Preconditions.Player.CommunityCenterCompleted "+this.communityCenterNeedsToBeCompleted;
+            return EventPreconditionId + " " +this.communityCenterNeedsToBeCompleted;
         }
 
         public override bool meetsCondition()

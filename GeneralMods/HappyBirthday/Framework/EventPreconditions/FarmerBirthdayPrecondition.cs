@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StardustCore.Events.Preconditions;
+using Omegasis.StardustCore.Events.Preconditions;
 
 namespace Omegasis.HappyBirthday.Framework.EventPreconditions
 {
     public class FarmerBirthdayPrecondition:EventPrecondition
     {
+        public const string EventPreconditionId = "Omegasis.HappyBirthday.Framework.EventPreconditions.FarmerBirthdayPrecondition";
 
         public FarmerBirthdayPrecondition()
         {
@@ -17,7 +18,7 @@ namespace Omegasis.HappyBirthday.Framework.EventPreconditions
 
         public override string ToString()
         {
-            return "Omegasis.HappyBirthday.Framework.EventPreconditions.FarmerBirthdayPrecondition";
+            return EventPreconditionId;
         }
 
         public override bool meetsCondition()

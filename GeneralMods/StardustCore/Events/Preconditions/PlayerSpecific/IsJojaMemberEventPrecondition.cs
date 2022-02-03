@@ -5,19 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardustCore.Events.Preconditions.PlayerSpecific
+namespace Omegasis.StardustCore.Events.Preconditions.PlayerSpecific
 {
-    public class JojaMember:EventPrecondition
+    public class IsJojaMemberEventPrecondition:EventPrecondition
     {
+
+        public const string EventPreconditionId = "StardustCore.Events.Preconditions.PlayerSpecific.JojaMemeber";
 
         public bool isJojaMember;
 
-        public JojaMember()
+        public IsJojaMemberEventPrecondition()
         {
 
         }
 
-        public JojaMember(bool IsMember)
+        public IsJojaMemberEventPrecondition(bool IsMember)
         {
             this.isJojaMember = IsMember;
         }
@@ -36,7 +38,7 @@ namespace StardustCore.Events.Preconditions.PlayerSpecific
 
         public override string ToString()
         {
-            return "StardustCore.Events.Preconditions.PlayerSpecific.JojaMemeber " + this.isJojaMember.ToString(); 
+            return EventPreconditionId +" " + this.isJojaMember.ToString(); 
         }
     }
 }

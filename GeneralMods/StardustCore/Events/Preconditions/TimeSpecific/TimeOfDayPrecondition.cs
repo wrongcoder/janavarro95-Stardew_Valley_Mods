@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardustCore.Events.Preconditions.TimeSpecific
+namespace Omegasis.StardustCore.Events.Preconditions.TimeSpecific
 {
     /// <summary>
     /// The event will only happen between the given times.
@@ -15,6 +15,8 @@ namespace StardustCore.Events.Preconditions.TimeSpecific
     /// <returns></returns>
     public class TimeOfDayPrecondition:EventPrecondition
     {
+        public const string EventPreconditionId = "StardustCore.Events.Preconditions.TimeSpecific.TimeOfDayPrecondition";
+
         public int startTimeOfDay;
         public int endTimeOfDay;
 
@@ -32,7 +34,8 @@ namespace StardustCore.Events.Preconditions.TimeSpecific
         public override string ToString()
         {
             StringBuilder b = new StringBuilder();
-            b.Append("StardustCore.Events.Preconditions.TimeSpecific.TimeOfDayPrecondition ");
+            b.Append(EventPreconditionId);
+            b.Append(" ");
             b.Append(this.startTimeOfDay.ToString());
             b.Append(" ");
             b.Append(this.endTimeOfDay.ToString());

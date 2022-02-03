@@ -7,8 +7,9 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
+using StardustCore;
 
-namespace StardustCore.Compatibility.SpaceCore
+namespace Omegasis.StardustCore.Compatibility.SpaceCore
 {
     public static class SpaceCoreAPIUtil
     {

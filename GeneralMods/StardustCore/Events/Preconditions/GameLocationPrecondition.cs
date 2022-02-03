@@ -5,19 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardustCore.Events.Preconditions
+namespace Omegasis.StardustCore.Events.Preconditions
 {
-    public class LocationPrecondition:EventPrecondition
+    public class GameLocationPrecondition:EventPrecondition
     {
+        public const string EventPreconditionId = "StardustCore.Events.Preconditions.GameLocationPrecondition";
+
         public string locationName;
 
 
-        public LocationPrecondition()
+        public GameLocationPrecondition()
         {
 
         }
 
-        public LocationPrecondition(GameLocation Location)
+        public GameLocationPrecondition(GameLocation Location)
         {
             this.locationName = Location.NameOrUniqueName;
         }
@@ -27,7 +29,7 @@ namespace StardustCore.Events.Preconditions
         /// </summary>
         /// <param name="Location">The name of the location.</param>
         /// <param name="IsStructure">The location is a building on the farm.</param>
-        public LocationPrecondition(string Location, bool IsStructure=false)
+        public GameLocationPrecondition(string Location, bool IsStructure=false)
         {
             this.locationName = Location;
         }
@@ -39,7 +41,7 @@ namespace StardustCore.Events.Preconditions
 
         public override string ToString()
         {
-            return "StardustCore.Events.Preconditions.GameLocationPrecondition " + this.locationName;
+            return EventPreconditionId+ " " + this.locationName;
         }
     }
 }

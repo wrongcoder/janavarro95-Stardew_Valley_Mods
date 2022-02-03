@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardustCore.Compatibility.SpaceCore
+namespace Omegasis.StardustCore.Compatibility.SpaceCore
 {
     public interface SpaceCoreAPI
     {

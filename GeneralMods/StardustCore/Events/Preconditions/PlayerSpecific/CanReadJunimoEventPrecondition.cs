@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardustCore.Events.Preconditions.PlayerSpecific
+namespace Omegasis.StardustCore.Events.Preconditions.PlayerSpecific
 {
-    public class CanReadJunimo:EventPrecondition
+    public class CanReadJunimoEventPrecondition:EventPrecondition
     {
-
-        public CanReadJunimo()
+        public const string EventPreconditionId = "StardustCore.Events.Preconditions.Player.CanReadJunimo";
+        public CanReadJunimoEventPrecondition()
         {
 
         }
 
         public override string ToString()
         {
-            return "StardustCore.Events.Preconditions.Player.CanReadJunimo";
+            return EventPreconditionId;
         }
 
         public override bool meetsCondition()

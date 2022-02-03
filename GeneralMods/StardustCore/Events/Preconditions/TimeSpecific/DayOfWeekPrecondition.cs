@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardustCore.Events.Preconditions.TimeSpecific
+namespace Omegasis.StardustCore.Events.Preconditions.TimeSpecific
 {
     /// <summary>
     /// Says which days events can't occur. If a value is true, then the event can not occur on that day.
     /// </summary>
     public class DayOfWeekPrecondition:EventPrecondition
     {
+        public const string EventPreconditionId = "StardustCore.Events.Preconditions.TimeSpecific.DayOfWeekPrecondition";
 
         public bool canHappenOnSunday;
         public bool canHappenOnMonday;
@@ -75,8 +76,8 @@ namespace StardustCore.Events.Preconditions.TimeSpecific
         public override string ToString()
         {
             StringBuilder b = new StringBuilder();
-            string prefix = "StardustCore.Events.Preconditions.TimeSpecific.DayOfWeekPrecondition ";
-            b.Append(prefix);
+            b.Append(EventPreconditionId);
+            b.Append(" ");
 
             if (this.canHappenOnSunday)
             {

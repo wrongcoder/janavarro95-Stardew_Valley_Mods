@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StardustCore.Events.Preconditions
+namespace Omegasis.StardustCore.Events.Preconditions
 {
     public class EventPrecondition
     {

@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Compatibility.SpaceCore;
 using Revitalize;
 using Revitalize.Framework.Utilities.Serialization.Converters;
 using StardewValley;
 using StardewValley.Objects;
-using StardustCore.Compatibility.SpaceCore;
 
 namespace Revitalize.Framework.Utilities
 {

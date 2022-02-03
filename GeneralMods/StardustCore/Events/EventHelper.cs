@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
-using StardustCore.Events.Preconditions;
-using StardustCore.Events.Preconditions.TimeSpecific;
 using StardewValley;
 using System.Text.Json.Serialization;
+using Omegasis.StardustCore.Events.Preconditions;
+using Omegasis.StardustCore.Events.Preconditions.TimeSpecific;
 
 namespace StardustCore.Events
 {
@@ -103,19 +103,19 @@ namespace StardustCore.Events
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(string EventName,int ID, LocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
+        public EventHelper(string EventName, int ID, GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
             this.stardewEventID = ID;
-            this.add(Location);
-            this.add(Time);
-            this.add(NotTheseDays);
-            this.add(StartData.ToString());
+            this.addEventPrecondition(Location);
+            this.addEventPrecondition(Time);
+            this.addEventPrecondition(NotTheseDays);
+            this.addEventData(StartData.ToString());
         }
 
-        public EventHelper(string EventName,int ID,List<EventPrecondition> Conditions, EventStartData StartData)
+        public EventHelper(string EventName, int ID, List<EventPrecondition> Conditions, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.stardewEventID = ID;
@@ -123,20 +123,23 @@ namespace StardustCore.Events
             this.eventPreconditions = new List<EventPrecondition>();
             foreach (var v in Conditions)
             {
-                this.add(v);
+                this.addEventPrecondition(v);
             }
-            this.add(StartData.ToString());
+            this.addEventData(StartData.ToString());
         }
 
         /// <summary>
         /// Adds in the event precondition data to the string builder and appends seperators as necessary.
         /// </summary>
         /// <param name="Data"></param>
-        public virtual void add(EventPrecondition Data)
+        public virtual void addEventPrecondition(EventPrecondition Data, bool AddPreconditionData = true)
         {
             this.eventPreconditions.Add(Data);
-            this.eventPreconditionData.Append(Data.ToString());
-            this.eventPreconditionData.Append(this.getCommandSeperator());
+            if (AddPreconditionData)
+            {
+                this.eventPreconditionData.Append(Data.ToString());
+                this.eventPreconditionData.Append(this.getCommandSeperator());
+            }
 
         }
 
@@ -144,7 +147,7 @@ namespace StardustCore.Events
         /// Adds in the data to the event data.Aka what happens during the event.
         /// </summary>
         /// <param name="Data"></param>
-        public virtual void add(string Data)
+        public virtual void addEventData(string Data)
         {
 
             if (this.eventData.Length > 0)
@@ -158,9 +161,34 @@ namespace StardustCore.Events
         /// Adds in the data to the event data. Aka what happens during the event.
         /// </summary>
         /// <param name="Builder"></param>
-        public virtual void add(StringBuilder Builder)
+        public virtual void addEventData(StringBuilder Builder)
         {
-            this.add(Builder.ToString());
+            this.addEventData(Builder.ToString());
+        }
+
+        public virtual void parseEventPreconditionsFromPreconditionStrings(EventManager eventManager)
+        {
+            string[] preconditions = this.EventPreconditionData.Split(this.getCommandSeperator());
+            foreach (string precondition in preconditions)
+            {
+                string[] data = precondition.Split(" ");
+                string preconditionId = data[0];
+
+                if (string.IsNullOrEmpty(preconditionId))
+                {
+                    continue;
+                }
+
+                if (eventManager.eventPreconditionParsingMethods.ContainsKey(preconditionId))
+                {
+                    EventPrecondition condition = eventManager.eventPreconditionParsingMethods[preconditionId].Invoke(data);
+                    this.addEventPrecondition(condition, false);
+                }
+                else
+                {
+                    throw new Exception(string.Format("Unknown event precondition command {0}. Does it need to be registered in the EventManager?", precondition));
+                }
+            }
         }
 
 
@@ -269,7 +297,7 @@ namespace StardustCore.Events
             }
             return false;
         }
-        
+
 
         //~~~~~~~~~~~~~~~~//
         //   Validation   //
@@ -312,7 +340,7 @@ namespace StardustCore.Events
             b.Append(yTile.ToString());
             b.Append(" ");
             b.Append(ID.ToString());
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -324,7 +352,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("addBigProp ");
             b.Append(ID);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -336,7 +364,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("addCookingRecipe ");
             b.Append(Recipe);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -348,7 +376,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("addCraftingRecipe ");
             b.Append(Recipe);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -369,7 +397,7 @@ namespace StardustCore.Events
             b.Append(SolidHeight.ToString());
             b.Append(" ");
             b.Append(DisplayHeight.ToString());
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -390,7 +418,7 @@ namespace StardustCore.Events
             b.Append(YPosition.ToString());
             b.Append(" ");
             b.Append(LightRadius.ToString());
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -402,7 +430,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("addMailReceived ");
             b.Append(ID);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -421,7 +449,7 @@ namespace StardustCore.Events
             b.Append(YTile.ToString());
             b.Append(" ");
             b.Append(ParentSheetIndex);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -448,7 +476,7 @@ namespace StardustCore.Events
             b.Append(SolidHeight.ToString());
             b.Append(" ");
             b.Append(DisplayHeight.ToString());
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -460,7 +488,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("addQuest ");
             b.Append(QuestID.ToString());
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -492,7 +520,7 @@ namespace StardustCore.Events
             b.Append(Breather);
             b.Append(" ");
             b.Append("Character");
-            this.add(b);
+            this.addEventData(b);
         }
 
 
@@ -515,7 +543,7 @@ namespace StardustCore.Events
             b.Append(Breather);
             b.Append(" ");
             b.Append("Character");
-            this.add(b);
+            this.addEventData(b);
         }
         /// <summary>
         /// Add a temporary actor. 'breather' is boolean. The category determines where the texture will be loaded from, default is Character. Animal name only applies to animal.
@@ -549,7 +577,7 @@ namespace StardustCore.Events
             b.Append("Animal");
             b.Append(" ");
             b.Append(AnimalName);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -581,7 +609,7 @@ namespace StardustCore.Events
             b.Append(Breather);
             b.Append(" ");
             b.Append("Monster");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -599,7 +627,7 @@ namespace StardustCore.Events
             b.Append(YPosition);
             b.Append(" ");
             b.Append(ObjectParentSheetIndex);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -609,7 +637,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("addTool Wand");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -636,7 +664,7 @@ namespace StardustCore.Events
                     b.Append(" ");
                 }
             }
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void advanceMove(string Actor, bool Loop, List<Point> TilePoints)
@@ -660,7 +688,7 @@ namespace StardustCore.Events
 
             ModCore.ModMonitor.Log(b.ToString(), StardewModdingAPI.LogLevel.Info);
 
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -678,7 +706,7 @@ namespace StardustCore.Events
             builder.Append(g);
             builder.Append(" ");
             builder.Append(b);
-            this.add(builder);
+            this.addEventData(builder);
         }
 
         /// <summary>
@@ -696,7 +724,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("animalNaming");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -727,7 +755,7 @@ namespace StardustCore.Events
                     b.Append(" ");
                 }
             }
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -739,7 +767,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("attachCharacterToTempSprite ");
             b.Append(Actor);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -749,7 +777,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("awardFestivalPrize");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -790,7 +818,7 @@ namespace StardustCore.Events
                 b.Append("sword");
             }
 
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -800,7 +828,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("broadcastEvent");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -810,7 +838,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("catQuestion");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -820,7 +848,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("cave");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -832,7 +860,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("changeLocation ");
             b.Append(location.NameOrUniqueName);
-            this.add(b);
+            this.addEventData(b);
         }
 
 
@@ -845,7 +873,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("changeLocation ");
             b.Append(location);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -866,7 +894,7 @@ namespace StardustCore.Events
             b.Append(Y);
             b.Append(" ");
             b.Append(TileIndex);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -881,7 +909,7 @@ namespace StardustCore.Events
             b.Append(npc);
             b.Append(" ");
             b.Append(Portrait);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -896,7 +924,7 @@ namespace StardustCore.Events
             b.Append(npc);
             b.Append(" ");
             b.Append(Sprite);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -908,7 +936,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("changeToTemporaryMap ");
             b.Append(Map);
-            this.add(b);
+            this.addEventData(b);
         }
         /// <summary>
         /// 	Change the location to a temporary one loaded from the map file specified by <map>. The [pan] argument indicates the tile coordinates to pan to (defaults to 0, 0).
@@ -924,7 +952,7 @@ namespace StardustCore.Events
             b.Append(PanPosition.X);
             b.Append(" ");
             b.Append(PanPosition.Y);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -939,7 +967,7 @@ namespace StardustCore.Events
             b.Append(NPC);
             b.Append(" ");
             b.Append(YOffset);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -954,7 +982,7 @@ namespace StardustCore.Events
             b.Append(x);
             b.Append(" ");
             b.Append(y);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -968,8 +996,8 @@ namespace StardustCore.Events
             b.Append("emote ");
             b.Append(Actor);
             b.Append(" ");
-            b.Append(EmoteID*4);
-            this.add(b);
+            b.Append(EmoteID * 4);
+            this.addEventData(b);
         }
 
         public virtual void emoteFarmer(int EmoteID)
@@ -1023,7 +1051,7 @@ namespace StardustCore.Events
         }
         public virtual void emote_Pause(string Actor)
         {
-            this.emote(Actor,10);
+            this.emote(Actor, 10);
         }
         public virtual void emote_Thinking(string Actor)
         {
@@ -1143,7 +1171,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("end");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1158,7 +1186,7 @@ namespace StardustCore.Events
             b.Append(npc.Name);
             b.Append(" ");
             b.Append(Dialogue);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1173,7 +1201,7 @@ namespace StardustCore.Events
             b.Append(npc.Name);
             b.Append(" ");
             b.Append(Dialogue);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1187,7 +1215,7 @@ namespace StardustCore.Events
             b.Append("end invisible ");
             b.Append(npc.Name);
             b.Append(" ");
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void endInvisibleWarpOut(NPC npc)
@@ -1196,7 +1224,7 @@ namespace StardustCore.Events
             b.Append("end invisibleWarpOut ");
             b.Append(npc.Name);
             b.Append(" ");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1207,7 +1235,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("end newDay");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1222,19 +1250,19 @@ namespace StardustCore.Events
             b.Append(xTile);
             b.Append(" ");
             b.Append(yTile);
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void endWarpOut()
         {
             StringBuilder b = new StringBuilder();
             b.Append("end warpOut");
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void playerFaceDirection(FacingDirection Dir)
         {
-            this.actorFaceDirection("farmer",Dir);
+            this.actorFaceDirection("farmer", Dir);
         }
 
         public virtual void npcFaceDirection(NPC NPC, FacingDirection Dir)
@@ -1251,7 +1279,7 @@ namespace StardustCore.Events
             b.Append(this.getFacingDirectionNumber(Dir).ToString());
             b.Append(" ");
             b.Append(true);
-            this.add(b);
+            this.addEventData(b);
         }
 
 
@@ -1260,16 +1288,16 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="Actor">The name of the junimo actor.</param>
         /// <param name="Dir">The direction for the junimo to face.</param>
-        public virtual void junimoFaceDirection(string Actor,FacingDirection Dir)
+        public virtual void junimoFaceDirection(string Actor, FacingDirection Dir)
         {
             this.actorFaceDirection(Actor, Dir);
             int frame = 0;
             bool flip = false;
-            if(Dir.Equals(FacingDirection.Down))
+            if (Dir.Equals(FacingDirection.Down))
             {
                 frame = 0;
             }
-            else if(Dir.Equals(FacingDirection.Left))
+            else if (Dir.Equals(FacingDirection.Left))
             {
                 frame = 16;
                 flip = true;
@@ -1278,7 +1306,7 @@ namespace StardustCore.Events
             {
                 frame = 16;
             }
-            else if(Dir.Equals(FacingDirection.Up))
+            else if (Dir.Equals(FacingDirection.Up))
             {
                 frame = 32;
             }
@@ -1292,14 +1320,14 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("fade true");
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void fadeIn()
         {
             StringBuilder b = new StringBuilder();
             b.Append("fade");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1311,7 +1339,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("farmerEat ");
             b.Append(ID);
-            this.add(b);
+            this.addEventData(b);
         }
 
         //TODO: Support event forking.
@@ -1328,27 +1356,27 @@ namespace StardustCore.Events
             b.Append(NPC.Name);
             b.Append(" ");
             b.Append(Amount);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
         /// Fade to black at a particular speed (default 0.007). If no speed is specified, the event will continue immediately; otherwise, it will continue after the fade is finished. The fade effect disappears when this command is done; to avoid that, use the viewport command to move the camera off-screen.
         /// </summary>
         /// <param name="speed"></param>
-        public virtual void globalFadeOut(double speed=0.007)
+        public virtual void globalFadeOut(double speed = 0.007)
         {
             StringBuilder b = new StringBuilder();
             b.Append("globalFade ");
             b.Append(speed);
-            this.add(b);
+            this.addEventData(b);
         }
 
-        public virtual void globalFadeIn(double speed=0.007)
+        public virtual void globalFadeIn(double speed = 0.007)
         {
             StringBuilder b = new StringBuilder();
             b.Append("globalFadeToClear ");
             b.Append(speed);
-            this.add(b);
+            this.addEventData(b);
         }
         /// <summary>
         /// Fade to clear (unfade?) at a particular speed (default 0.007). If no speed is specified, the event will continue immediately; otherwise, it will continue after the fade is finished.
@@ -1359,7 +1387,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("globalFadeToClear ");
             b.Append(speed);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1378,7 +1406,7 @@ namespace StardustCore.Events
             b.Append(color.B);
             b.Append(" ");
             b.Append(Hold);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1388,7 +1416,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("halt");
-            this.add(b);
+            this.addEventData(b);
         }
         /// <summary>
         /// Stops npc movement.
@@ -1403,12 +1431,12 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="ActorName"></param>
         /// <param name="Intensity"></param>
-        public virtual void actorJump(string ActorName, int Intensity=8)
+        public virtual void actorJump(string ActorName, int Intensity = 8)
         {
             StringBuilder b = new StringBuilder();
             b.Append("jump ");
             b.Append(Intensity);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1420,7 +1448,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("mail ");
             b.Append(LetterID);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1431,10 +1459,10 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("message ");
-            b.Append("\\\""); 
+            b.Append("\\\"");
             b.Append(Message);
             b.Append("\"");
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void showTranslatedMessage(string MessageKey)
@@ -1464,7 +1492,7 @@ namespace StardustCore.Events
             b.Append(this.getFacingDirectionNumber(Dir));
             b.Append(" ");
             b.Append(Continue);
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void moveActorUp(string Actor, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
@@ -1508,10 +1536,10 @@ namespace StardustCore.Events
             b.Append(this.getFacingDirectionNumber(Dir));
             b.Append(" ");
             b.Append(Continue);
-            this.add(b);
+            this.addEventData(b);
         }
 
-        public virtual void moveNPCUp(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection,bool EventDoesntPause)
+        public virtual void moveNPCUp(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
         {
             this.moveNPC(npc, 0, -TileAmount, FinishingFacingDirection, EventDoesntPause);
         }
@@ -1523,12 +1551,12 @@ namespace StardustCore.Events
 
         public virtual void moveNPCLeft(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
         {
-            this.moveNPC(npc, -TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+            this.moveNPC(npc, -TileAmount, 0, FinishingFacingDirection, EventDoesntPause);
         }
 
         public virtual void moveNPCRight(NPC npc, int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
         {
-            this.moveNPC(npc,TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+            this.moveNPC(npc, TileAmount, 0, FinishingFacingDirection, EventDoesntPause);
         }
 
         public virtual void moveFarmer(int xOffset, int yOffset, FacingDirection Dir, bool Continue)
@@ -1544,7 +1572,7 @@ namespace StardustCore.Events
             b.Append(this.getFacingDirectionNumber(Dir));
             b.Append(" ");
             b.Append(Continue);
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void moveFarmerUp(int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
@@ -1558,12 +1586,12 @@ namespace StardustCore.Events
 
         public virtual void moveFarmerLeft(int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
         {
-            this.moveFarmer(-TileAmount,0,FinishingFacingDirection, EventDoesntPause);
+            this.moveFarmer(-TileAmount, 0, FinishingFacingDirection, EventDoesntPause);
         }
 
         public virtual void moveFarmerRight(int TileAmount, FacingDirection FinishingFacingDirection, bool EventDoesntPause)
         {
-            this.moveFarmer(TileAmount, 0,FinishingFacingDirection, EventDoesntPause);
+            this.moveFarmer(TileAmount, 0, FinishingFacingDirection, EventDoesntPause);
         }
 
 
@@ -1577,7 +1605,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("pause ");
             b.Append(Milliseconds);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1589,7 +1617,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("playMusic ");
             b.Append(id);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1601,7 +1629,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("playSound ");
             b.Append(id);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1611,7 +1639,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("playSound ");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1620,14 +1648,14 @@ namespace StardustCore.Events
         /// <param name="ActorName"></param>
         /// <param name="PixelsX"></param>
         /// <param name="PixelsY"></param>
-        public virtual void positionOffset(string ActorName,int PixelsX, int PixelsY)
+        public virtual void positionOffset(string ActorName, int PixelsX, int PixelsY)
         {
             StringBuilder b = new StringBuilder();
             b.Append("positionOffset ");
             b.Append(PixelsX);
             b.Append(" ");
             b.Append(PixelsY);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1645,19 +1673,20 @@ namespace StardustCore.Events
             b.Append(Answer1);
             b.Append("#");
             b.Append(Answer2);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
         /// Remove the first of an object from a player's inventory.
         /// </summary>
         /// <param name="ParentSheetIndex"></param>
-        public virtual void removeItem(int ParentSheetIndex) {
+        public virtual void removeItem(int ParentSheetIndex)
+        {
 
             StringBuilder b = new StringBuilder();
             b.Append("removeItem ");
             b.Append(ParentSheetIndex);
-            this.add(b);
+            this.addEventData(b);
         }
         /// <summary>
         /// 
@@ -1671,7 +1700,7 @@ namespace StardustCore.Events
             b.Append(TileX);
             b.Append(" ");
             b.Append(TileY);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1683,7 +1712,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("removeQuest ");
             b.Append(ID);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1699,7 +1728,7 @@ namespace StardustCore.Events
             b.Append(XTile);
             b.Append(" ");
             b.Append(YTile);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1709,7 +1738,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("removeTemporarySprites");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1721,24 +1750,24 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("screenFlash ");
             b.Append(Alpha);
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void setPlayerRunning()
         {
             StringBuilder b = new StringBuilder();
             b.Append("setRunning");
-            this.add(b);
+            this.addEventData(b);
         }
 
-        public virtual void shakeNPC(NPC npc,int Milliseconds)
+        public virtual void shakeNPC(NPC npc, int Milliseconds)
         {
             StringBuilder b = new StringBuilder();
             b.Append("shake ");
             b.Append(npc.Name);
             b.Append(" ");
             b.Append(Milliseconds);
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void shakeFarmer(int Milliseconds)
@@ -1748,7 +1777,7 @@ namespace StardustCore.Events
             b.Append("farmer");
             b.Append(" ");
             b.Append(Milliseconds);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1763,7 +1792,7 @@ namespace StardustCore.Events
             b.Append(npc.Name);
             b.Append(" ");
             b.Append(FrameIndex);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1771,13 +1800,13 @@ namespace StardustCore.Events
         /// </summary>
         /// <param name="Direction"></param>
         /// <param name="FrameIndex"></param>
-        public virtual void showFrameFarmer(FacingDirection Direction,int FrameIndex)
+        public virtual void showFrameFarmer(FacingDirection Direction, int FrameIndex)
         {
             this.playerFaceDirection(Direction);
             StringBuilder b = new StringBuilder();
             b.Append("showFrame ");
             b.Append(FrameIndex);
-            this.add(b);
+            this.addEventData(b);
         }
 
         //Skippable is enabled by default.
@@ -1797,7 +1826,7 @@ namespace StardustCore.Events
             b.Append('"');
             b.Append(Message);
             b.Append('"');
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1807,7 +1836,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("startJittering");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1817,7 +1846,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("stopAdvancedMoves");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1827,7 +1856,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("stopAnimation farmer");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1842,7 +1871,7 @@ namespace StardustCore.Events
             b.Append(npc.Name);
             b.Append(" ");
             b.Append(EndFrame);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1852,7 +1881,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("stopGlowing");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1862,7 +1891,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("stopJittering");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1872,7 +1901,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("stopMusic");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1882,7 +1911,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("stopRunning");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1892,7 +1921,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("stopSwimming farmer");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1903,7 +1932,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("stopSwimming ");
             b.Append(npc.Name);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1913,7 +1942,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("swimming farmer");
-            this.add(b);
+            this.addEventData(b);
         }
 
 
@@ -1926,7 +1955,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("swimming ");
             b.Append(npc.Name);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1938,7 +1967,7 @@ namespace StardustCore.Events
             StringBuilder b = new StringBuilder();
             b.Append("switchEvent ");
             b.Append(ID);
-            this.add(b);
+            this.addEventData(b);
         }
 
 
@@ -1969,7 +1998,7 @@ namespace StardustCore.Events
             b.Append(Looped);
             b.Append(" ");
             b.Append(LoopCount);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -1984,7 +2013,7 @@ namespace StardustCore.Events
             b.Append(npc.Name);
             b.Append(" ");
             b.Append(Message);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -2002,7 +2031,7 @@ namespace StardustCore.Events
             b.Append(yPixelAmount);
             b.Append(" ");
             b.Append(MillisecondDuration);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -2019,7 +2048,7 @@ namespace StardustCore.Events
             b.Append(YPosition);
             b.Append(" ");
             b.Append("true");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -2029,7 +2058,7 @@ namespace StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("waitForOtherPlayers");
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -2044,7 +2073,7 @@ namespace StardustCore.Events
             b.Append(x);
             b.Append(" ");
             b.Append(y);
-            this.add(b);
+            this.addEventData(b);
         }
 
         /// <summary>
@@ -2053,7 +2082,7 @@ namespace StardustCore.Events
         /// <param name="ActorName"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public virtual void warpActor(string ActorName,int x, int y)
+        public virtual void warpActor(string ActorName, int x, int y)
         {
             StringBuilder b = new StringBuilder();
             b.Append("warp ");
@@ -2062,7 +2091,7 @@ namespace StardustCore.Events
             b.Append(x);
             b.Append(" ");
             b.Append(y);
-            this.add(b);
+            this.addEventData(b);
         }
 
         public virtual void warpNPC(NPC NPC, int x, int y)
@@ -2074,7 +2103,7 @@ namespace StardustCore.Events
             b.Append(x);
             b.Append(" ");
             b.Append(y);
-            this.add(b);
+            this.addEventData(b);
         }
     }
 }
