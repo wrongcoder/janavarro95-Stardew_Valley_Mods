@@ -111,6 +111,10 @@
   "PartyOver": "That was a fun party. Back to work!",
   "Lewis_AskPlayerForBirthday_Intro": "Hey @, I forgot to ask you when your birthday is when you moved in. I wanted to make sure I knew so that I could make a record of it in the town's documents. Want to make sure you feel welcomed after all. Just fill out this form here and you'll be good to go! $h",
   "Lewis_AskPlayerForBirthday_TodayIsBirthday": "Ohh today is your birthday? Happy birthday @! I'll definitely make sure to remember it! $h",
-  "Lewis_AskPlayerForBirthday_Confirmation": "Ok {0}, {1} I'll make sure to remember that, see you soon @! $h"
+  "Lewis_AskPlayerForBirthday_Confirmation": "Ok {0}, {1} I'll make sure to remember that, see you soon @! $h",
+  "JojaPartyOver": "That was nice. Back to work!",
+  "JojaParty_0": "Welcome to Joja Mart esteemed member @!",
+  "JojaParty_1": "Our records indicate that today is your birthday. I'll have you know that we treat all of our members as if they are family under the Joja brand.",
+  "JojaParty_2": "Please, go ahead and take this complimentary treat as a gift from your Joja family to you."
 
 }

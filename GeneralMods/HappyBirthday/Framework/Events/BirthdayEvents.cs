@@ -852,11 +852,46 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
 
 
+
+        */
+
         public static EventHelper JojaBirthday()
         {
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            //Need birthdayNotSelected precondition!!!!
+            conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("JojaMart")));
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
+            conditions.Add(new IsJojaMemberEventPrecondition(true));
+
+            string morris = "Morris";
+            EventHelper e = new EventHelper(EventIds.JojaMartBirthday, 19901, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 21, 24, new EventStartData.FarmerData(14, 28, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+            {
+                new EventStartData.NPCData(morris,-100,-100, EventHelper.FacingDirection.Up)
+            }, false));
+
+            e.globalFadeIn();
+
+            e.moveFarmerUp(2, EventHelper.FacingDirection.Up,false);
+            e.moveFarmerRight(7, EventHelper.FacingDirection.Up, false);
+
+            //Morris -100 -100 0
+            //TODO: Finish this
+            e.speakWithTranslatedMessage(morris, "JojaParty_0");
+            e.speakWithTranslatedMessage(morris, "JojaParty_1");
+            e.speakWithTranslatedMessage(morris, "JojaParty_2");
+
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-400, -400);
+
+            e.showTranslatedMessage("JojaPartyOver");
+
+            e.addObjectToPlayersInventory((int)Gifts.GiftIDS.SDVObject.Cookie, 1, false);
+
+            e.end();
+
+            return e;
 
         }
-        */
 
         public static EventHelper LewisAsksPlayerForBirthday()
         {

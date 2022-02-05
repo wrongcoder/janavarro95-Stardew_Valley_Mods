@@ -17,6 +17,9 @@ namespace StardustCore.Events
         public class NPCData
         {
             private NPC npc;
+            private string npcName;
+
+
             int xPosition;
             int yPosition;
             EventHelper.FacingDirection direction;
@@ -32,11 +35,29 @@ namespace StardustCore.Events
                 this.direction = Direction;
             }
 
+            public NPCData(string NPC, int XTile, int YTile, EventHelper.FacingDirection Direction)
+            {
+                this.npcName = NPC;
+                this.xPosition = XTile;
+                this.yPosition = YTile;
+                this.direction = Direction;
+            }
+
             public override string ToString()
             {
                 StringBuilder b = new StringBuilder();
-                b.Append(this.npc.Name);
-                b.Append(" ");
+
+                if (this.npc != null)
+                {
+                    b.Append(this.npc.Name);
+                    b.Append(" ");
+                }
+                else
+                {
+                    b.Append(this.npcName);
+                    b.Append(" ");
+                }
+
                 b.Append(this.xPosition.ToString());
                 b.Append(" ");
                 b.Append(this.yPosition.ToString());

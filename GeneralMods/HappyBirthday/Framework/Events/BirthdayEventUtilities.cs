@@ -59,6 +59,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
             if (e.NewLocation == Game1.getLocationFromName("Farm"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForBirthday);
 
+            if (e.NewLocation == Game1.getLocationFromName("JojaMart"))
+            {
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.JojaMartBirthday);
+            }
+
         }
 
         public static void ClearEventsFromFarmer()
@@ -119,7 +124,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEvents.DatingBirthday_Sebastian(),
 
                 //Set up birthday events
-                BirthdayEvents.LewisAsksPlayerForBirthday()
+                BirthdayEvents.LewisAsksPlayerForBirthday(),
+
+                BirthdayEvents.JojaBirthday()
         };
             string relativePath = Path.Combine("ModAssets", "Data", "Events");
             string abspath = Path.Combine(HappyBirthdayModCore.Instance.Helper.DirectoryPath, relativePath);
