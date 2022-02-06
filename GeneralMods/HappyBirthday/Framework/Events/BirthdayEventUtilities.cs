@@ -64,6 +64,31 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.JojaMartBirthday);
             }
 
+            if (e.NewLocation.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
+            {
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_EmilyBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_EmilyBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HaleyBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HaleyBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_LeahBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_LeahBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_MaruBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_MaruBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_PennyBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_PennyBirthdayParty_Farmhouse_2);
+
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AlexBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AlexBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HarveyBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HarveyBirthdayParty_Farmhouse_2);
+
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ElliottBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ElliottBirthdayParty_Farmhouse_2);
+
+            }
+
         }
 
         public static void ClearEventsFromFarmer()
