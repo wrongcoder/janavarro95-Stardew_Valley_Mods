@@ -104,6 +104,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
             eventHelper.addEventData(b);
         }
 
+        public static void givePlayerFavoriteGift(this EventHelper eventHelper)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift");
+            eventHelper.addEventData(b);
+        }
+
         /// <summary>
         /// Creates the command to get a specific translation string and have a given npc speak that returned string.
         /// </summary>

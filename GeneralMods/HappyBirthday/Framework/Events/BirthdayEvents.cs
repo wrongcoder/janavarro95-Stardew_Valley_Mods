@@ -810,10 +810,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new FarmHouseLevelPrecondition(FarmHouseLevel));
             conditions.Add(new IsMarriedToPrecondition(SpouseName));
 
-            //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
 
-            Vector2 spouseStartTile = new Vector2();
-            Vector2 playerStartTile = new Vector2();
+            Vector2 spouseStartTile;
+            Vector2 playerStartTile;
             if (FarmHouseLevel == 2)
             {
                 spouseStartTile = new Vector2(7, 14);
@@ -839,9 +838,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_1");
 
             //Add player's favorite gift to inventory.
+            e.givePlayerFavoriteGift();
 
             e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_2");
             e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_3");
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart(spouse.Name);
 
             e.globalFadeOut(0.010);
             e.setViewportPosition(-400, -400);

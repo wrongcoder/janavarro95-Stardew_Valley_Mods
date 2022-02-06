@@ -234,5 +234,42 @@ namespace Omegasis.HappyBirthday.Framework.Events
             Event.CurrentCommand += 2;
         }
 
+
+
+        /// <summary>
+        /// Skips the next event command for the game. Necessary for branching.
+        /// </summary>
+        /// <param name="EventManager"></param>
+        /// <param name="data"></param>
+        public static void givePlayerFavoriteGift(EventManager EventManager, string data)
+        {
+
+            givePlayerFavoriteGift(Game1.CurrentEvent);
+        }
+
+        /// <summary>
+        /// Skips the next event command for the game. Necessary for branching.
+        /// </summary>
+        /// <param name="Event"></param>
+        /// <param name="gameLocation"></param>
+        /// <param name="Time"></param>
+        /// <param name="EventData"></param>
+        public static void givePlayerFavoriteGift(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
+        {
+            givePlayerFavoriteGift(Event);
+        }
+
+        /// <summary>
+        /// Skips the next event command for the game. Necessary for branching.
+        /// </summary>
+        /// <param name="Event"></param>
+        public static void givePlayerFavoriteGift(Event Event)
+        {
+
+            Item gift = HappyBirthdayModCore.Instance.giftManager.getSpouseBirthdayGift(Game1.player.spouse);
+            Game1.player.addItemByMenuIfNecessaryElseHoldUp(gift);
+
+        }
+
     }
 }

@@ -920,25 +920,16 @@ namespace Omegasis.HappyBirthday
         {
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
-            HappyBirthdayModCore.Instance.Monitor.Log("Get non-spouse gift for npc" + name);
-
             List<Item> possibleItems = new List<Item>();
             if (NPCBirthdayGifts.ContainsKey(name))
             {
                 List<GiftInformation> npcPossibleGifts = NPCBirthdayGifts[name];
-
-                if (npcPossibleGifts == null)
-                {
-                    HappyBirthdayModCore.Instance.Monitor.Log("NPC GIFTS ARE NULL: " + name);
-                }
 
                 foreach (GiftInformation info in npcPossibleGifts)
                 {
 
                     if (info == null)
                     {
-
-                        HappyBirthdayModCore.Instance.Monitor.Log("Gift info is null????: " + name);
                         continue;
                     }
 

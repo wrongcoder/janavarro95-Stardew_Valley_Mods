@@ -78,17 +78,19 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_MaruBirthdayParty_Farmhouse_2);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_PennyBirthdayParty_Farmhouse_1);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_PennyBirthdayParty_Farmhouse_2);
-
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AlexBirthdayParty_Farmhouse_1);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AlexBirthdayParty_Farmhouse_2);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HarveyBirthdayParty_Farmhouse_1);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HarveyBirthdayParty_Farmhouse_2);
-
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ElliottBirthdayParty_Farmhouse_1);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ElliottBirthdayParty_Farmhouse_2);
-
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ShaneBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ShaneBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SamBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SamBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SebastianBirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SebastianBirthdayParty_Farmhouse_2);
             }
-
         }
 
         public static void ClearEventsFromFarmer()
@@ -118,6 +120,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             //Utility Commands
             BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.SkipNextCommand", BirthdayEventCommands.skipNextCommand);
             StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.SkipNextCommand", BirthdayEventCommands.skipNextCommand);
+
+            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift", BirthdayEventCommands.givePlayerFavoriteGift);
+            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift", BirthdayEventCommands.givePlayerFavoriteGift);
 
 
             //Additional Preconditions
