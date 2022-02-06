@@ -22,5 +22,20 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
         {
             return new HasChosenBirthdayPrecondition(Convert.ToBoolean(preconditionData[1]));
         }
+
+        public static IsMarriedToPrecondition ParseIsMarriedToPrecondition(string[] preconditionData)
+        {
+            return new IsMarriedToPrecondition(preconditionData[1]);
+        }
+
+        public static GameLocationIsHomePrecondition ParseGameLocationIsHomePrecondition(string[] preconditionData)
+        {
+            return new GameLocationIsHomePrecondition();
+        }
+
+        public static FarmHouseLevelPrecondition ParseFarmHouseLevelPrecondition(string[] preconditionData)
+        {
+            return new FarmHouseLevelPrecondition(Convert.ToInt32(preconditionData[1]));
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace Omegasis.HappyBirthday
         /// Loads some strings from the StringsFromCS file for affectionate spouse words.
         /// </summary>
         /// <returns></returns>
-        protected virtual string getAffectionateSpouseWord()
+        public virtual string getAffectionateSpouseWord()
         {
 
             List<string> words = new List<string>();
@@ -70,7 +70,7 @@ namespace Omegasis.HappyBirthday
         /// Gets an appropriate time of day string depending on the time of day.
         /// </summary>
         /// <returns></returns>
-        protected virtual string getTimeOfDayString()
+        public virtual string getTimeOfDayString()
         { 
             if (Game1.timeOfDay >= 600 && Game1.timeOfDay < 1200)
             {

@@ -99,6 +99,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmerBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmerBirthdayPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(SpouseBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseSpouseBirthdayPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(HasChosenBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseHasChosenBirthdayPrecondition);
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(IsMarriedToPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseIsMarriedToPrecondition);
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(GameLocationIsHomePrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseGameLocationIsHomePrecondition);
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmHouseLevelPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmHouseLevelPrecondition);
 
             List<EventHelper> defaultBirthdayEvents = new List<EventHelper>()
             {
@@ -126,8 +129,35 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 //Set up birthday events
                 BirthdayEvents.LewisAsksPlayerForBirthday(),
 
-                BirthdayEvents.JojaBirthday()
+                BirthdayEvents.JojaBirthday(),
+
+                //Married birthday events.
+                BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_1(),
+                BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_2(),
+                BirthdayEvents.MarriedBirthday_Penny_farmhouseLevel_1(),
+                BirthdayEvents.MarriedBirthday_Penny_farmhouseLevel_2(),
+                BirthdayEvents.MarriedBirthday_Haley_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_Haley_farmhouseLevel2(),
+                BirthdayEvents.MarriedBirthday_Emily_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_Emily_farmhouseLevel2(),
+                BirthdayEvents.MarriedBirthday_Maru_farmhouseLevel_1(),
+                BirthdayEvents.MarriedBirthday_Maru_farmhouseLevel_2(),
+                BirthdayEvents.MarriedBirthday_Alex_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_Alex_farmhouseLevel2(),
+                BirthdayEvents.MarriedBirthday_Harvey_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_Harvey_farmhouseLevel2(),
+                BirthdayEvents.MarriedBirthday_Shane_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_Shane_farmhouseLevel2(),
+                BirthdayEvents.MarriedBirthday_Sam_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_Sam_farmhouseLevel2(),
+                BirthdayEvents.MarriedBirthday_Sebastian_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_Sebastian_farmhouseLevel2(),
+
         };
+
+
+
+
             string relativePath = Path.Combine("ModAssets", "Data", "Events");
             string abspath = Path.Combine(HappyBirthdayModCore.Instance.Helper.DirectoryPath, relativePath);
             if (!Directory.Exists(abspath))
@@ -179,9 +209,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
         public static string GetEventString(string Key)
         {
 
+            string eventString = HappyBirthdayModCore.Instance.translationInfo.getEventString(Key);
+            eventString = eventString.Replace("{AffectionateSpouseWord}", HappyBirthdayModCore.Instance.birthdayMessages.getAffectionateSpouseWord());
+            eventString = eventString.Replace("{TimeOfDay}", HappyBirthdayModCore.Instance.birthdayMessages.getTimeOfDayString());
 
-
-            return HappyBirthdayModCore.Instance.translationInfo.getEventString(Key);
+            return eventString;
         }
 
     }

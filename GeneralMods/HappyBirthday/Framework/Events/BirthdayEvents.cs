@@ -798,6 +798,184 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return e;
         }
 
+        public static EventHelper MarriedBirthday(string EventId, int EventIntId ,int FarmHouseLevel, string SpouseName)
+        {
+            NPC spouse = Game1.getCharacterFromName(SpouseName);
+
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
+            conditions.Add(new GameLocationIsHomePrecondition());
+
+            conditions.Add(new FarmHouseLevelPrecondition(FarmHouseLevel));
+            conditions.Add(new IsMarriedToPrecondition(SpouseName));
+
+            //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
+
+            Vector2 spouseStartTile = new Vector2();
+            Vector2 playerStartTile = new Vector2();
+            if (FarmHouseLevel == 2)
+            {
+                spouseStartTile = new Vector2(7, 14);
+                playerStartTile = new Vector2(10, 14);
+            }
+            else 
+            {
+                //Level 1
+                spouseStartTile = new Vector2(6, 5);
+                playerStartTile = new Vector2(9, 15);
+            }
+
+            EventHelper e = new EventHelper(EventId, EventIntId, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(spouse,12,7, EventHelper.FacingDirection.Up),
+            }));
+
+            e.globalFadeIn();
+
+            e.moveFarmerLeft(3, EventHelper.FacingDirection.Left, false);
+            e.npcFaceDirection(spouse, EventHelper.FacingDirection.Right);
+
+            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_0");
+            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_1");
+
+            //Add player's favorite gift to inventory.
+
+            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_2");
+            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_3");
+
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-400, -400);
+
+            e.addTranslatedMessageToBeShown("PartyOver");
+
+            e.end();
+
+            return e;
+
+        }
+
+
+        public static EventHelper MarriedBirthday_Abigail_farmHouseLevel_1()
+        {
+            return MarriedBirthday(EventIds.Married_AbigailBirthdayParty_Farmhouse_1, 19902, 1, "Abigail");
+        }
+
+        public static EventHelper MarriedBirthday_Abigail_farmHouseLevel_2()
+        {
+            return MarriedBirthday(EventIds.Married_AbigailBirthdayParty_Farmhouse_2, 19903, 2, "Abigail");
+        }
+
+        public static EventHelper MarriedBirthday_Penny_farmhouseLevel_1()
+        {
+            return MarriedBirthday(EventIds.Married_PennyBirthdayParty_Farmhouse_1, 19904, 1, "Penny");
+        }
+        public static EventHelper MarriedBirthday_Penny_farmhouseLevel_2()
+        {
+            return MarriedBirthday(EventIds.Married_PennyBirthdayParty_Farmhouse_1, 19905, 1, "Penny");
+        }
+
+        public static EventHelper MarriedBirthday_Maru_farmhouseLevel_1()
+        {
+            return MarriedBirthday(EventIds.Married_MaruBirthdayParty_Farmhouse_1, 19906, 1, "Maru");
+        }
+
+        public static EventHelper MarriedBirthday_Maru_farmhouseLevel_2()
+        {
+            return MarriedBirthday(EventIds.Married_MaruBirthdayParty_Farmhouse_2, 19907, 2, "Maru");
+        }
+
+        public static EventHelper MarriedBirthday_Leah_farmhouseLevel_1()
+        {
+            return MarriedBirthday(EventIds.Married_LeahBirthdayParty_Farmhouse_1, 19908, 1, "Leah");
+        }
+
+        public static EventHelper MarriedBirthday_Leah_farmhouseLevel_2()
+        {
+            return MarriedBirthday(EventIds.Married_LeahBirthdayParty_Farmhouse_2, 19909, 2, "Leah");
+        }
+
+        public static EventHelper MarriedBirthday_Emily_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_EmilyBirthdayParty_Farmhouse_1, 19910, 1, "Emily");
+        }
+
+        public static EventHelper MarriedBirthday_Emily_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_EmilyBirthdayParty_Farmhouse_2, 19911, 2, "Emily");
+        }
+
+        public static EventHelper MarriedBirthday_Haley_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_HaleyBirthdayParty_Farmhouse_1, 19912, 1, "Haley");
+        }
+
+        public static EventHelper MarriedBirthday_Haley_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_HaleyBirthdayParty_Farmhouse_2, 19913, 2, "Haley");
+        }
+
+        public static EventHelper MarriedBirthday_Sam_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_SamBirthdayParty_Farmhouse_1, 19914, 1, "Sam");
+        }
+
+        public static EventHelper MarriedBirthday_Sam_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_SamBirthdayParty_Farmhouse_2, 19915, 2, "Sam");
+        }
+
+        public static EventHelper MarriedBirthday_Sebastian_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_1, 19916, 1, "Sebastian");
+        }
+
+        public static EventHelper MarriedBirthday_Sebastian_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_2, 19917, 2, "Sebastian");
+        }
+
+        public static EventHelper MarriedBirthday_Harvey_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_1, 19918, 1, "Harvey");
+        }
+
+        public static EventHelper MarriedBirthday_Harvey_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_2, 19919, 2, "Harvey");
+        }
+
+        public static EventHelper MarriedBirthday_Elliott_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_ElliottBirthdayParty_Farmhouse_1, 19920, 1, "Elliott");
+        }
+
+        public static EventHelper MarriedBirthday_Elliott_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_ElliottBirthdayParty_Farmhouse_2, 19921, 2, "Elliott");
+        }
+
+        public static EventHelper MarriedBirthday_Shane_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_ShaneBirthdayParty_Farmhouse_1, 19922, 1, "Shane");
+        }
+
+        public static EventHelper MarriedBirthday_Shane_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_ShaneBirthdayParty_Farmhouse_1, 19923, 1, "Shane");
+        }
+
+        public static EventHelper MarriedBirthday_Alex_farmhouseLevel1()
+        {
+            return MarriedBirthday(EventIds.Married_AlexBirthdayParty_Farmhouse_1, 19924, 1, "Alex");
+        }
+
+        public static EventHelper MarriedBirthday_Alex_farmhouseLevel2()
+        {
+            return MarriedBirthday(EventIds.Married_AlexBirthdayParty_Farmhouse_2, 19925, 2, "Alex");
+        }
+
+
+
 
         /// <summary>
         /// Todo: Finish this.
@@ -841,19 +1019,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             return e;
         }
-
-        /*
-
-        public static EventHelper MarriedBirthday()
-        {
-
-        }
-
-
-
-
-
-        */
 
         public static EventHelper JojaBirthday()
         {
@@ -950,7 +1115,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             }, false));
 
             e.globalFadeIn();
-            e.speakWithTranslatedMessage(spouse, "Hey @, I wanted to ask you what you would like for a gift for your birthday!");
+            e.speakWithTranslatedMessage(spouse, "Hey @, I wanted to ask you what you would like for a gift for your birthday! I want you to feel special you know?");
             e.addAskForFavoriteGift();
             e.speakWithTranslatedMessage(spouse, "Ok thanks!");
 
