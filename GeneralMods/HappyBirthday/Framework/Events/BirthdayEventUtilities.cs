@@ -64,6 +64,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.JojaMartBirthday);
             }
 
+            if (e.NewLocation == Game1.getLocationFromName("Saloon"))
+            {
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty);
+            }
+
             if (e.NewLocation.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
             {
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_1);
@@ -160,6 +165,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEvents.LewisAsksPlayerForBirthday(),
 
                 BirthdayEvents.JojaBirthday(),
+                BirthdayEvents.SaloonBirthday_Year1(),
 
                 //Married birthday events.
                 BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_1(),
@@ -242,6 +248,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             string eventString = HappyBirthdayModCore.Instance.translationInfo.getEventString(Key);
             eventString = eventString.Replace("{AffectionateSpouseWord}", HappyBirthdayModCore.Instance.birthdayMessages.getAffectionateSpouseWord());
             eventString = eventString.Replace("{TimeOfDay}", HappyBirthdayModCore.Instance.birthdayMessages.getTimeOfDayString());
+            eventString = eventString.Replace("@", Game1.player.Name);
 
             return eventString;
         }

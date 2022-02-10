@@ -163,5 +163,12 @@
   "SpouseBirthdayEvent_Shane_0": "Hey {AffectionateSpouseWord}, {TimeOfDay}! $h",
   "SpouseBirthdayEvent_Shane_1": "Here, I got you something to help show just how much I appreciate you in my life. $h",
   "SpouseBirthdayEvent_Shane_2": "I'm so grateful that you came to be a part of my life. You really have been a huge support for me and I want to be the best version of myself for you as well.  $l",
-  "SpouseBirthdayEvent_Shane_3": "Happy Birthday @, here's hoping to many more years that we get to spend together. $l"
+  "SpouseBirthdayEvent_Shane_3": "Happy Birthday @, here's hoping to many more years that we get to spend together. $l",
+
+  "CommunityBirthdayParty_0": "Shhh. I think they are here.",
+  "CommunityBirthdayParty_1": "Somebody turn on the lights.",
+  "CommunityBirthdayParty_2": "Happy Birthday @!",
+  "CommunityBirthdayParty_3": "Happy Birthday @! You've become such a cornerstone of our community that when I talked with Gus about having a small party for you, the idea really took off. Everyone wanted to be a part of the celebration to make you feel special, just like you have touched all of our lives. $h",
+  "CommunityBirthdayParty_4": "Come on now, this party is for you, let's celebrate! $h",
+  "CommunityBirthdayParty_5": "The party was a lot of fun. It was great seeing everyone there. Ok, back to work!"
 }

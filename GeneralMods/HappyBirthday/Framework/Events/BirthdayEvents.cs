@@ -755,7 +755,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.addTranslatedMessageToBeShown("DatingHarveyBirthday_Finish:1"); //abi party finish 0
             e.addObjectToPlayersInventory(237, 1, false);
             e.addObjectToPlayersInventory(348, 1, false);
-            e.addTranslatedMessageToBeShown( "PartyOver");
+            e.addTranslatedMessageToBeShown("PartyOver");
             e.end();
             return e;
         }
@@ -798,7 +798,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return e;
         }
 
-        public static EventHelper MarriedBirthday(string EventId, int EventIntId ,int FarmHouseLevel, string SpouseName)
+        public static EventHelper MarriedBirthday(string EventId, int EventIntId, int FarmHouseLevel, string SpouseName)
         {
             NPC spouse = Game1.getCharacterFromName(SpouseName);
 
@@ -818,7 +818,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 spouseStartTile = new Vector2(7, 14);
                 playerStartTile = new Vector2(10, 14);
             }
-            else 
+            else
             {
                 //Level 1
                 spouseStartTile = new Vector2(6, 5);
@@ -978,43 +978,93 @@ namespace Omegasis.HappyBirthday.Framework.Events
         }
 
 
-
-
         /// <summary>
         /// Todo: Finish this.
         /// </summary>
         /// <returns></returns>
-        public static EventHelper CommunityBirthday()
+        public static EventHelper SaloonBirthday_Year1()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
-            conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("CommunityCenter")));
+            conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("Saloon")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
-            conditions.Add(new IsJojaMemberEventPrecondition(false));
-            conditions.Add(new CommunityCenterCompletedEventPreconditon(true));
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
-            EventHelper e = new EventHelper("CommunityCenterBirthday_All", 19961, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+
+            NPC lewis = Game1.getCharacterFromName("Lewis");
+
+
+            EventHelper e = new EventHelper(EventIds.SaloonBirthdayParty, 19926, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(14, 23, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
             {
-                new EventStartData.NPCData(Game1.getCharacterFromName("Lewis"),32,12, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(lewis,14,21, EventHelper.FacingDirection.Down),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Gus"),14,18, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Emily"),16,18, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Sandy"),18,18, EventHelper.FacingDirection.Down),
 
 
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Alex"),6,21, EventHelper.FacingDirection.Right),
+                new EventStartData.NPCData(Game1.getCharacterFromName("George"),7,2, EventHelper.FacingDirection.Right),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Evelyn"),6,22, EventHelper.FacingDirection.Right),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Harvey"),6,17, EventHelper.FacingDirection.Right),
+
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Marnie"),9,22, EventHelper.FacingDirection.Right),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Shane"),11,23, EventHelper.FacingDirection.Right),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Jas"),10,23, EventHelper.FacingDirection.Right),
+
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Pierre"),17,20, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Caroline"),18,20, EventHelper.FacingDirection.Down),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Penny"),10,20, EventHelper.FacingDirection.Down),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Pam"),11,20, EventHelper.FacingDirection.Down),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Abigail"),22,18, EventHelper.FacingDirection.Left),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Sebastian"),23,18, EventHelper.FacingDirection.Left),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Sam"),22,19, EventHelper.FacingDirection.Left),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Haley"),8,20, EventHelper.FacingDirection.Down),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Elliott"),4,18, EventHelper.FacingDirection.Right),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Leah"),5,19, EventHelper.FacingDirection.Right),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Robin"),19,22, EventHelper.FacingDirection.Left),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Demetrius"),19,23, EventHelper.FacingDirection.Left),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Maru"),18,21, EventHelper.FacingDirection.Left),
+
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Linus"),27,23, EventHelper.FacingDirection.Left),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Clint"),20,17, EventHelper.FacingDirection.Left),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Vincent"),2,21, EventHelper.FacingDirection.Right),
+                new EventStartData.NPCData(Game1.getCharacterFromName("Jodi"),3,22, EventHelper.FacingDirection.Right),
+                //new EventStartData.NPCData(Game1.getCharacterFromName("Kent"),3,23, EventHelper.FacingDirection.Right),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Willy"),20,20, EventHelper.FacingDirection.Left),
+
+                new EventStartData.NPCData(Game1.getCharacterFromName("Wizard"),34,17, EventHelper.FacingDirection.Down),
             }));
 
             e.globalFadeIn();
 
-            e.moveFarmerUp(10, EventHelper.FacingDirection.Up, true);
+            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_0");
+            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_1");
+            e.setViewportPosition(14, 23);
 
-            e.showMessage("Shhh. I think they are here.");
-            e.showMessage("Somebody turn on the lights.");
-            e.setViewportPosition(32, 12);
-
+            //Figure out real sound for this.
+            //e.playSound("furnace");
 
             e.emoteFarmer_ExclamationMark();
-            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_0");
+            e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_2");
+            e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_3");
+            e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_4");
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
+            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_5");
             e.setViewportPosition(-100, -100);
-            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_1");
             e.addTranslatedMessageToBeShown("PartyOver");
             e.addObjectToPlayersInventory(220, 1, false);
 
@@ -1039,7 +1089,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             e.globalFadeIn();
 
-            e.moveFarmerUp(2, EventHelper.FacingDirection.Up,false);
+            e.moveFarmerUp(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerRight(7, EventHelper.FacingDirection.Up, false);
 
             //Morris -100 -100 0
@@ -1080,7 +1130,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             e.globalFadeIn();
 
-            e.speakWithTranslatedMessage( lewis.Name, "Lewis_AskPlayerForBirthday_Intro");
+            e.speakWithTranslatedMessage(lewis.Name, "Lewis_AskPlayerForBirthday_Intro");
             e.addAskForBirthday();
 
 
