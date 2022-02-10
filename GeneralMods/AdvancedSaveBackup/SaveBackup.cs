@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 
 using System.Linq;
-using ICSharpCode.SharpZipLib.Zip;
 using Omegasis.SaveBackup.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -151,9 +150,11 @@ namespace Omegasis.SaveBackup
         /// <param name="folderPath">The folder path in which to generate saves.</param>
         private void BackupSaves(string folderPath)
         {
+            /*
+             Legacy code for SharpZipLib, but is probably not necessary anymore now that .Net is v5.0 across all platforms for SDV, but will keep this code here just in case I need to use it again at a later date.
             if (this.Config.UseZipCompression == false)
             {
-
+                
                 DirectoryCopy(Constants.TargetPlatform != GamePlatform.Android ? SaveBackup.SavesPath : SaveBackup.AndroidCurrentSavePath, Path.Combine(folderPath, $"backup-{DateTime.Now:yyyyMMdd'-'HHmmss}"), true);
                 new DirectoryInfo(folderPath)
                 .EnumerateDirectories()
@@ -161,9 +162,11 @@ namespace Omegasis.SaveBackup
                 .Skip(this.Config.SaveCount)
                 .ToList()
                 .ForEach(dir => dir.Delete(true));
+                
             }
             else
             {
+                
                 FastZip fastZip = new FastZip();
                 fastZip.UseZip64 = UseZip64.Off;
                 bool recurse = true;  // Include all files by recursing through the directory structure
@@ -175,10 +178,15 @@ namespace Omegasis.SaveBackup
                 .Skip(this.Config.SaveCount)
                 .ToList()
                 .ForEach(file => file.Delete());
+                
             }
+            */
+
+            System.IO.Compression.ZipFile.CreateFromDirectory(Constants.TargetPlatform != GamePlatform.Android ? SaveBackup.SavesPath : SaveBackup.AndroidCurrentSavePath, Path.Combine(folderPath, $"backup-{DateTime.Now:yyyyMMdd'-'HHmmss}.zip"));
 
         }
 
+        /*
         /// <summary>
         /// An uncompressed output method.
         /// </summary>
@@ -222,5 +230,6 @@ namespace Omegasis.SaveBackup
                 }
             }
         }
+        */
     }
 }
