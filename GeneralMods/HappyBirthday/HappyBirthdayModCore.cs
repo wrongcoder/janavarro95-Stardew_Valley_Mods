@@ -152,6 +152,7 @@ namespace Omegasis.HappyBirthday
             this.birthdayManager.onDayStarted(sender, e);
 
             BirthdayEventUtilities.ClearEventsFromFarmer();
+            BirthdayEventUtilities.OnDayStarted();
         }
 
         private void OnDayEnded(object sender, DayEndingEventArgs e)

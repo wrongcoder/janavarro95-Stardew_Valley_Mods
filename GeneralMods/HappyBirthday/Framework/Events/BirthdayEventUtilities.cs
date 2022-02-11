@@ -22,55 +22,65 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public static void Player_Warped(object sender, WarpedEventArgs e)
         {
-            if (e.NewLocation == Game1.getLocationFromName("CommunityCenter"))
+            StartEventAtLocationIfPossible(e.NewLocation);
+        }
+
+        public static void OnDayStarted()
+        {
+            StartEventAtLocationIfPossible(Game1.player.currentLocation);
+        }
+
+        public static void StartEventAtLocationIfPossible(GameLocation location)
+        {
+            if (location == Game1.getLocationFromName("CommunityCenter"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.JunimoCommunityCenterBirthday);
-            if (e.NewLocation == Game1.getLocationFromName("Trailer"))
+            if (location == Game1.getLocationFromName("Trailer"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingPennyTrailer);
-            if (e.NewLocation == Game1.getLocationFromName("Trailer_Big"))
+            if (location == Game1.getLocationFromName("Trailer_Big"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingPennyHouse);
 
-            if (e.NewLocation == Game1.getLocationFromName("ScienceHouse"))
+            if (location == Game1.getLocationFromName("ScienceHouse"))
             {
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingMaru);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingSebastian);
             }
-            if (e.NewLocation == Game1.getLocationFromName("LeahHouse"))
+            if (location == Game1.getLocationFromName("LeahHouse"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingLeah);
-            if (e.NewLocation == Game1.getLocationFromName("SeedShop"))
+            if (location == Game1.getLocationFromName("SeedShop"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAbigailSeedShop);
-            if (e.NewLocation == Game1.getLocationFromName("Mine"))
+            if (location == Game1.getLocationFromName("Mine"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAbigailMines);
-            if (e.NewLocation == Game1.getLocationFromName("HaleyHouse"))
+            if (location == Game1.getLocationFromName("HaleyHouse"))
             {
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingEmily);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingHaley);
             }
-            if (e.NewLocation == Game1.getLocationFromName("HarveyRoom"))
+            if (location == Game1.getLocationFromName("HarveyRoom"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingHarvey);
-            if (e.NewLocation == Game1.getLocationFromName("ElliottHouse"))
+            if (location == Game1.getLocationFromName("ElliottHouse"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingElliott);
-            if (e.NewLocation == Game1.getLocationFromName("SamHouse"))
+            if (location == Game1.getLocationFromName("SamHouse"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingSam);
-            if (e.NewLocation == Game1.getLocationFromName("JoshHouse"))
+            if (location == Game1.getLocationFromName("JoshHouse"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAlex);
-            if (e.NewLocation == Game1.getLocationFromName("AnimalShop"))
+            if (location == Game1.getLocationFromName("AnimalShop"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingShane);
 
-            if (e.NewLocation == Game1.getLocationFromName("Farm"))
+            if (location == Game1.getLocationFromName("Farm"))
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForBirthday);
 
-            if (e.NewLocation == Game1.getLocationFromName("JojaMart"))
+            if (location == Game1.getLocationFromName("JojaMart"))
             {
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.JojaMartBirthday);
             }
 
-            if (e.NewLocation == Game1.getLocationFromName("Saloon"))
+            if (location == Game1.getLocationFromName("Saloon"))
             {
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty_Year1);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty_Year2);
             }
 
-            if (e.NewLocation.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
+            if (location.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
             {
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_1);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_2);
