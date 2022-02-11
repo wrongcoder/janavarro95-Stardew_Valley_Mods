@@ -298,6 +298,11 @@ namespace StardustCore.Events
             return false;
         }
 
+        public static int GetOmegasisEventId(int eventId)
+        {
+          return Convert.ToInt32(3217.ToString() + eventId.ToString());
+        }
+
 
         //~~~~~~~~~~~~~~~~//
         //   Validation   //

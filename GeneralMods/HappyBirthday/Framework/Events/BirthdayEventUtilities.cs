@@ -66,7 +66,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             if (e.NewLocation == Game1.getLocationFromName("Saloon"))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty_Year1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty_Year2);
             }
 
             if (e.NewLocation.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
@@ -137,6 +138,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             BirthdayEventManager.eventPreconditionParsingMethods.Add(IsMarriedToPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseIsMarriedToPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(GameLocationIsHomePrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseGameLocationIsHomePrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmHouseLevelPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmHouseLevelPrecondition);
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(YearPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseYearGreaterThanOrEqualToPrecondition);
 
             List<EventHelper> defaultBirthdayEvents = new List<EventHelper>()
             {
@@ -166,6 +168,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
                 BirthdayEvents.JojaBirthday(),
                 BirthdayEvents.SaloonBirthday_Year1(),
+                BirthdayEvents.SaloonBirthday_Year2(),
 
                 //Married birthday events.
                 BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_1(),

@@ -977,12 +977,38 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return MarriedBirthday(EventIds.Married_AlexBirthdayParty_Farmhouse_2, 19925, 2, "Alex");
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        public static EventHelper SaloonBirthday_Year2()
+        {
+            EventHelper e= SaloonBirthday(new List<EventStartData.NPCData>()
+            {
+                new EventStartData.NPCData(Game1.getCharacterFromName("Kent"),3,23, EventHelper.FacingDirection.Right)
+            });
+            e.stardewEventID = 19927;
+            e.eventStringId = EventIds.SaloonBirthdayParty_Year2;
+            e.addEventPrecondition(new YearPrecondition(2, YearPrecondition.YearPreconditionType.GreaterThanOrEqualTo));
+
+            return e;
+        }
+
 
         /// <summary>
-        /// Todo: Finish this.
         /// </summary>
         /// <returns></returns>
         public static EventHelper SaloonBirthday_Year1()
+        {
+            EventHelper e = SaloonBirthday(new List<EventStartData.NPCData>());
+            e.addEventPrecondition(new YearPrecondition(1, YearPrecondition.YearPreconditionType.EqualTo));
+
+            return e;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
+        public static EventHelper SaloonBirthday(List<EventStartData.NPCData> additionalNpcs)
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
@@ -992,10 +1018,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             NPC lewis = Game1.getCharacterFromName("Lewis");
 
-
-            EventHelper e = new EventHelper(EventIds.SaloonBirthdayParty, 19926, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(14, 23, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+            List<EventStartData.NPCData> npcs = new List<EventStartData.NPCData>()
             {
-                new EventStartData.NPCData(lewis,14,21, EventHelper.FacingDirection.Down),
+
+                 new EventStartData.NPCData(lewis,14,21, EventHelper.FacingDirection.Down),
 
                 new EventStartData.NPCData(Game1.getCharacterFromName("Gus"),14,18, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(Game1.getCharacterFromName("Emily"),16,18, EventHelper.FacingDirection.Down),
@@ -1046,7 +1072,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 new EventStartData.NPCData(Game1.getCharacterFromName("Willy"),20,20, EventHelper.FacingDirection.Left),
 
                 new EventStartData.NPCData(Game1.getCharacterFromName("Wizard"),34,17, EventHelper.FacingDirection.Down),
-            }));
+            };
+            npcs.AddRange(additionalNpcs);
+
+            EventHelper e = new EventHelper(EventIds.SaloonBirthdayParty_Year1, 19926, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(14, 23, EventHelper.FacingDirection.Up), npcs));
 
             e.globalFadeIn();
 
@@ -1058,14 +1087,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
             //e.playSound("furnace");
 
             e.emoteFarmer_ExclamationMark();
-            e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_2");
+            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_2");
             e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_3");
             e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_4");
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
-            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_5");
             e.setViewportPosition(-100, -100);
-            e.addTranslatedMessageToBeShown("PartyOver");
+            e.addTranslatedMessageToBeShown("CommunityBirthdayParty_5");
             e.addObjectToPlayersInventory(220, 1, false);
 
             e.end();
@@ -1076,7 +1104,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
         public static EventHelper JojaBirthday()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
-            //Need birthdayNotSelected precondition!!!!
             conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("JojaMart")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new IsJojaMemberEventPrecondition(true));

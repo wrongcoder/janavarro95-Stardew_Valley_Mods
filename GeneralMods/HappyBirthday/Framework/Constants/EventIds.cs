@@ -37,7 +37,8 @@ namespace Omegasis.HappyBirthday.Framework.Constants
         public static string JojaMartBirthday = CreateEventId("JojaMartBirthday");
         public static string JunimoCommunityCenterBirthday = CreateEventId("JunimoCommunityCenterBirthday");
 
-        public static string SaloonBirthdayParty = CreateEventId("SaloonBirthdayParty");
+        public static string SaloonBirthdayParty_Year1 = CreateEventId("SaloonBirthdayParty_Year1");
+        public static string SaloonBirthdayParty_Year2 = CreateEventId("SaloonBirthdayParty_Year2");
 
 
         //Married birthday events.

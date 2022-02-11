@@ -37,5 +37,10 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
         {
             return new FarmHouseLevelPrecondition(Convert.ToInt32(preconditionData[1]));
         }
+
+        public static YearPrecondition ParseYearGreaterThanOrEqualToPrecondition(string[] preconditionData)
+        {
+            return new YearPrecondition(Convert.ToInt32(preconditionData[1]), Enum.Parse<YearPrecondition.YearPreconditionType>(preconditionData[2]));
+        }
     }
 }
