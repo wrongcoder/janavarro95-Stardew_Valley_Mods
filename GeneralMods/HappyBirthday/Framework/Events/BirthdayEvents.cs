@@ -850,7 +850,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.globalFadeOut(0.010);
             e.setViewportPosition(-400, -400);
 
-            e.addTranslatedMessageToBeShown("PartyOver");
+            e.addTranslatedMessageToBeShown("SpousePartyOver");
 
             e.end();
 
@@ -1161,9 +1161,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.speakWithTranslatedMessage(lewis.Name, "Lewis_AskPlayerForBirthday_Intro");
             e.addAskForBirthday();
 
-
-            //SpeakIfConditionIsMet
-
             e.speakIfTodayIsPlayersBirthday(
                 lewis.Name,
                 "Lewis_AskPlayerForBirthday_TodayIsBirthday",
@@ -1175,32 +1172,59 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         }
 
-
-        public static EventHelper SpouseAsksPlayerForFavoriteGift()
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1()
         {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1, 19928, 1, Game1.player.spouse);
+        }
+
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2, 19929, 2, Game1.player.spouse);
+        }
+
+        public static EventHelper SpouseAsksPlayerForFavoriteGift(string EventId, int EventIntId, int FarmHouseLevel, string SpouseName)
+        {
+            NPC spouse = Game1.getCharacterFromName(SpouseName);
+
             List<EventPrecondition> conditions = new List<EventPrecondition>();
-
-            conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("FarmHouse")));
+            conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
-            //Need isMarried precondition!!!!
-            //Need precondition for checking what level the farmouse is upgraded to. Farmhouse lvl 2/3?
+            conditions.Add(new GameLocationIsHomePrecondition());
+
+            conditions.Add(new FarmHouseLevelPrecondition(FarmHouseLevel));
+            conditions.Add(new IsMarriedToPrecondition(SpouseName));
 
 
-            NPC spouse = Game1.getCharacterFromName(Game1.player.getSpouse().name);
-
-            EventHelper e = new EventHelper(EventIds.AskPlayerForFavoriteGift, 19900, conditions, new EventStartData("", -100, -100, new EventStartData.FarmerData(64, 15, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+            Vector2 spouseStartTile;
+            Vector2 playerStartTile;
+            if (FarmHouseLevel == 2)
             {
-                new EventStartData.NPCData(spouse,64,16, EventHelper.FacingDirection.Up),
+                spouseStartTile = new Vector2(7, 14);
+                playerStartTile = new Vector2(10, 14);
+            }
+            else
+            {
+                //Level 1
+                spouseStartTile = new Vector2(6, 5);
+                playerStartTile = new Vector2(9, 5);
+            }
 
+            EventHelper e = new EventHelper(EventId, EventIntId, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
+            }));
+            e.playerFaceDirection(EventHelper.FacingDirection.Left);
 
-            }, false));
+            e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
+            e.npcFaceDirection(spouse, EventHelper.FacingDirection.Right);
+
 
             e.globalFadeIn();
-            e.speakWithTranslatedMessage(spouse, "Hey @, I wanted to ask you what you would like for a gift for your birthday! I want you to feel special you know?");
+            e.speakWithTranslatedMessage(spouse, "SpouseAskPlayerForFavoriteGift_0");
             e.addAskForFavoriteGift();
-            e.speakWithTranslatedMessage(spouse, "Ok thanks!");
+            e.speakWithTranslatedMessage(spouse, "SpouseAskPlayerForFavoriteGift_1");
 
             e.globalFadeOut(0.010);
+            e.setViewportPosition(-100, -100);
             e.end();
 
             return e;

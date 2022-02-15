@@ -82,6 +82,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             if (location.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
             {
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_1);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_2);
                 BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_EmilyBirthdayParty_Farmhouse_1);
@@ -181,6 +183,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEvents.SaloonBirthday_Year2(),
 
                 //Married birthday events.
+                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1(),
+                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2(),
                 BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_1(),
                 BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_2(),
                 BirthdayEvents.MarriedBirthday_Penny_farmhouseLevel_1(),

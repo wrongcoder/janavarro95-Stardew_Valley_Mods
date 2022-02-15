@@ -31,6 +31,8 @@ namespace Omegasis.HappyBirthday.Framework.Constants
 
         //Birthday setup events.
         public static string AskPlayerForBirthday = CreateEventId("AskPlayerForBirthday");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1 = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2 = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2");
 
 
         //Npc birthday events.
@@ -42,7 +44,6 @@ namespace Omegasis.HappyBirthday.Framework.Constants
 
 
         //Married birthday events.
-        public static string AskPlayerForFavoriteGift = CreateEventId("AskPlayerForFavoriteGift");
         public static string Married_AbigailBirthdayParty_Farmhouse_1 = CreateEventId("Married_BirthdayParty_Abigail_Farmhouse_1");
         public static string Married_AbigailBirthdayParty_Farmhouse_2 = CreateEventId("Married_BirthdayParty_Abigail_Farmhouse_2");
         public static string Married_EmilyBirthdayParty_Farmhouse_1 = CreateEventId("Married_BirthdayParty_Emily_Farmhouse_1");
