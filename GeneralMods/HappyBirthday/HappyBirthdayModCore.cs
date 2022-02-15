@@ -18,6 +18,7 @@ using Omegasis.HappyBirthday.Framework.Utilities;
 using Omegasis.HappyBirthday.Framework.Configs;
 using Omegasis.HappyBirthday.Framework.Menus;
 using Omegasis.HappyBirthday.Framework.Events;
+using Omegasis.HappyBirthday.Framework.Gifts;
 
 namespace Omegasis.HappyBirthday
 {

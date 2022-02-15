@@ -22,7 +22,7 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 
         public FarmHouseLevelPrecondition(int Level)
         {
-
+            this.farmHouseLevel = Level;
         }
 
 

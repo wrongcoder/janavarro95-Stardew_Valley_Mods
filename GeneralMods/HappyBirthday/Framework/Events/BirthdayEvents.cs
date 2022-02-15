@@ -822,16 +822,17 @@ namespace Omegasis.HappyBirthday.Framework.Events
             {
                 //Level 1
                 spouseStartTile = new Vector2(6, 5);
-                playerStartTile = new Vector2(9, 15);
+                playerStartTile = new Vector2(9, 5);
             }
 
             EventHelper e = new EventHelper(EventId, EventIntId, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
-                new EventStartData.NPCData(spouse,12,7, EventHelper.FacingDirection.Up),
+                new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
             }));
+            e.playerFaceDirection(EventHelper.FacingDirection.Left);
 
             e.globalFadeIn();
 
-            e.moveFarmerLeft(3, EventHelper.FacingDirection.Left, false);
+            e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(spouse, EventHelper.FacingDirection.Right);
 
             e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_0");
@@ -874,7 +875,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         }
         public static EventHelper MarriedBirthday_Penny_farmhouseLevel_2()
         {
-            return MarriedBirthday(EventIds.Married_PennyBirthdayParty_Farmhouse_1, 19905, 1, "Penny");
+            return MarriedBirthday(EventIds.Married_PennyBirthdayParty_Farmhouse_1, 19905, 2, "Penny");
         }
 
         public static EventHelper MarriedBirthday_Maru_farmhouseLevel_1()
@@ -964,7 +965,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public static EventHelper MarriedBirthday_Shane_farmhouseLevel2()
         {
-            return MarriedBirthday(EventIds.Married_ShaneBirthdayParty_Farmhouse_1, 19923, 1, "Shane");
+            return MarriedBirthday(EventIds.Married_ShaneBirthdayParty_Farmhouse_1, 19923, 2, "Shane");
         }
 
         public static EventHelper MarriedBirthday_Alex_farmhouseLevel1()

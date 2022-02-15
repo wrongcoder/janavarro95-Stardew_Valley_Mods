@@ -267,7 +267,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
         {
 
             Item gift = HappyBirthdayModCore.Instance.giftManager.getSpouseBirthdayGift(Game1.player.spouse);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(gift);
+            Game1.player.addItemByMenuIfNecessary(gift);
+            Event.CurrentCommand++;
 
         }
 

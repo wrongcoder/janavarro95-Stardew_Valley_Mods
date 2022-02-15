@@ -157,8 +157,6 @@ namespace StardustCore.Events
         /// <param name="EventName"></param>
         public virtual void startEventAtLocationIfPossible(string EventName)
         {
-            StardustCore.ModCore.ModMonitor.Log("Try to start event!");
-
             if (this.events.ContainsKey(EventName))
             {
                 if (this.seenEvents.ContainsKey(Game1.player)){
