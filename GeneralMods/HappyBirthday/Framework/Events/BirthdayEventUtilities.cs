@@ -152,6 +152,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             BirthdayEventManager.eventPreconditionParsingMethods.Add(GameLocationIsHomePrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseGameLocationIsHomePrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmHouseLevelPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmHouseLevelPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(YearPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseYearGreaterThanOrEqualToPrecondition);
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(VillagersHaveEnoughFriendshipBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseVillagersHaveEnoughFriendshipBirthdayPrecondition);
 
             List<EventHelper> defaultBirthdayEvents = new List<EventHelper>()
             {

@@ -47,5 +47,10 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
         {
             return new YearPrecondition(Convert.ToInt32(preconditionData[1]), Enum.Parse<YearPrecondition.YearPreconditionType>(preconditionData[2]));
         }
+
+        public static VillagersHaveEnoughFriendshipBirthdayPrecondition ParseVillagersHaveEnoughFriendshipBirthdayPrecondition(string[] preconditionData)
+        {
+            return new VillagersHaveEnoughFriendshipBirthdayPrecondition();
+        }
     }
 }

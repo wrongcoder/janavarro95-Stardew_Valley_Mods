@@ -1015,6 +1015,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("Saloon")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
+            conditions.Add(new VillagersHaveEnoughFriendshipBirthdayPrecondition());
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
 
             NPC lewis = Game1.getCharacterFromName("Lewis");
