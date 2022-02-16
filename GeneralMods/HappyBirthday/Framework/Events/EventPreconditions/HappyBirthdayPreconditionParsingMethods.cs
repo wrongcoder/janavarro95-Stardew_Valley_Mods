@@ -23,6 +23,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
             return new HasChosenBirthdayPrecondition(Convert.ToBoolean(preconditionData[1]));
         }
 
+        public static HasChosenFavoriteGiftPrecondition ParseHasChosenFavoriteGiftPrecondition(string[] preconditionData)
+        {
+            return new HasChosenFavoriteGiftPrecondition(Convert.ToBoolean(preconditionData[1]));
+        }
+
         public static IsMarriedToPrecondition ParseIsMarriedToPrecondition(string[] preconditionData)
         {
             return new IsMarriedToPrecondition(preconditionData[1]);

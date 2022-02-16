@@ -1190,6 +1190,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new GameLocationIsHomePrecondition());
+            conditions.Add(new HasChosenFavoriteGiftPrecondition(false));
 
             conditions.Add(new FarmHouseLevelPrecondition(FarmHouseLevel));
             conditions.Add(new IsMarriedToPrecondition(SpouseName));
@@ -1212,13 +1213,14 @@ namespace Omegasis.HappyBirthday.Framework.Events
             EventHelper e = new EventHelper(EventId, EventIntId, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
             }));
+
             e.playerFaceDirection(EventHelper.FacingDirection.Left);
+
+            e.globalFadeIn();
 
             e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(spouse, EventHelper.FacingDirection.Right);
 
-
-            e.globalFadeIn();
             e.speakWithTranslatedMessage(spouse, "SpouseAskPlayerForFavoriteGift_0");
             e.addAskForFavoriteGift();
             e.speakWithTranslatedMessage(spouse, "SpouseAskPlayerForFavoriteGift_1");
