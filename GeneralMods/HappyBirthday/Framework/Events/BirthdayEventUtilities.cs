@@ -142,6 +142,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift", BirthdayEventCommands.givePlayerFavoriteGift);
             StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift", BirthdayEventCommands.givePlayerFavoriteGift);
 
+            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.MakeObjectsTemporarilyInvisible", BirthdayEventCommands.makeObjectsTemporarilyInvisible);
+            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.MakeObjectsTemporarilyInvisible", BirthdayEventCommands.makeObjectsTemporarilyInvisible);
+
 
             //Additional Preconditions
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmerBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmerBirthdayPrecondition);

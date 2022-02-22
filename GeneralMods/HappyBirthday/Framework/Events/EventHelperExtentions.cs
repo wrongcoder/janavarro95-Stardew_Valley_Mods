@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using StardustCore.Events;
 
@@ -104,6 +105,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             eventHelper.addEventData(b);
         }
 
+        /// <summary>
+        /// Gives the player their favorite gift.
+        /// </summary>
+        /// <param name="eventHelper"></param>
         public static void givePlayerFavoriteGift(this EventHelper eventHelper)
         {
             StringBuilder b = new StringBuilder();
@@ -122,6 +127,31 @@ namespace Omegasis.HappyBirthday.Framework.Events
             speakWithTranslatedMessage(eventHelper, Speaker.Name, MessageKey);
         }
 
+        /// <summary>
+        /// Makes all objects at a game location temporarily invisible.
+        /// </summary>
+        /// <param name="eventHelper"></param>
+        public static void makeAllObjectsTemporarilyInvisible(this EventHelper eventHelper, List<Vector2> TilePositions)
+        {
+            StringBuilder b = new StringBuilder();
+            b.Append("Omegasis.HappyBirthday.Events.MakeObjectsTemporarilyInvisible ");
+
+            for(int i = 0; i < TilePositions.Count; i++)
+            {
+                Vector2 tile = TilePositions[i];
+                b.Append(tile.X);
+                b.Append(" ");
+                b.Append(tile.Y);
+                if (i != TilePositions.Count - 1)
+                {
+                    b.Append(" ");
+                }
+            }
+
+
+            eventHelper.addEventData(b);
+
+        }
 
     }
 }

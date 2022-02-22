@@ -272,5 +272,55 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         }
 
+        public static void makeObjectsTemporarilyInvisible(EventManager EventManager, string data)
+        {
+
+            string[] splits = data.Split(" ");
+
+            makeObjectsTemporarilyInvisible(Game1.CurrentEvent,splits);
+        }
+
+        public static void makeObjectsTemporarilyInvisible(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
+        {
+            makeObjectsTemporarilyInvisible(Event,EventData);
+        }
+
+        public static void makeObjectsTemporarilyInvisible(Event Event, string[] data)
+        {
+
+            List<Vector2> tilePositions = new List<Vector2>();
+            for(int i = 1; i < data.Length; i += 2)
+            {
+                if (string.IsNullOrEmpty(data[i]))
+                {
+                    continue;
+                }
+                int x = Convert.ToInt32(data[i]);
+                int y = Convert.ToInt32(data[i + 1]);
+
+                Vector2 tilePos = new Vector2(x, y);
+                tilePositions.Add(tilePos);
+            }
+
+            foreach(StardewValley.Object obj in Game1.currentLocation.Objects.Values)
+            {
+                if (tilePositions.Contains(obj.TileLocation))
+                {
+                    obj.isTemporarilyInvisible = true;
+                }
+
+            }
+            foreach (StardewValley.Objects.Furniture obj in Game1.currentLocation.furniture)
+            {
+                if (tilePositions.Contains(obj.TileLocation))
+                {
+                    obj.isTemporarilyInvisible = true;
+                }
+            }
+
+            Event.CurrentCommand++;
+
+        }
+
     }
 }

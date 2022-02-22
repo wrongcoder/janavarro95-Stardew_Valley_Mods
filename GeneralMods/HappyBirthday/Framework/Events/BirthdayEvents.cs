@@ -830,6 +830,27 @@ namespace Omegasis.HappyBirthday.Framework.Events
             }));
             e.playerFaceDirection(EventHelper.FacingDirection.Left);
 
+
+            if (FarmHouseLevel == 2)
+            {
+                e.makeAllObjectsTemporarilyInvisible(new List<Vector2>()
+                {
+                    new Vector2(7,14),
+                    new Vector2(8,14),
+                    new Vector2(9,14),
+                    new Vector2(10,14),
+                });
+            }
+            else
+            {
+                e.makeAllObjectsTemporarilyInvisible(new List<Vector2>()
+                {
+                    new Vector2(6,5),
+                    new Vector2(7,5),
+                    new Vector2(8,5),
+                    new Vector2(9,5),
+                });
+            }
             e.globalFadeIn();
 
             e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
