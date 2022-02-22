@@ -12,13 +12,15 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// <summary>The minimum amount of friendship needed to get a happy birthday greeting from an npc.</summary>
         public int minimumFriendshipLevelForBirthdayWish = 2;
 
-        public bool defaultToEnglishTranslation;
+        /// <summary>
+        /// The minimum amount of friendship needed with all villagers that would be present to get the saloon birthday party;
+        /// </summary>
+        public int minimumFriendshipLevelForCommunityBirthdayParty = 5;
         
 
         /// <summary>Construct an instance.</summary>
         public ModConfig()
         {
-            this.defaultToEnglishTranslation = true;
         }
 
 

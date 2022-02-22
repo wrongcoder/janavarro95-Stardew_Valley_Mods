@@ -84,7 +84,7 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
             foreach (NPC npc in npcs)
             {
                int heartLevel= Game1.player.getFriendshipHeartLevelForNPC(npc.Name);
-                if (heartLevel < 5) return false;
+                if (heartLevel < HappyBirthdayModCore.Configs.modConfig.minimumFriendshipLevelForCommunityBirthdayParty) return false;
             }
 
             return true;
