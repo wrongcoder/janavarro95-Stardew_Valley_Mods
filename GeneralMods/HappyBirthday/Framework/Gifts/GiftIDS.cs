@@ -387,7 +387,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             BokChoy = 278,
 
-            MagicRockCandy=279,
+            MagicRockCandy = 279,
 
             Yam = 280,
 
@@ -913,7 +913,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             Apple = 613,
 
-            GreenTea=614,
+            GreenTea = 614,
 
             Bruschetta = 618,
 
@@ -1137,11 +1137,11 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
             CactusSeeds = 802,
 
-            DinosaurMayonnaise= 807,
+            DinosaurMayonnaise = 807,
 
             //IridiumMilk = 803,
 
-            TeaLeaves =815,
+            TeaLeaves = 815,
 
 
             //TreeFertilizer = 805,
@@ -1244,8 +1244,43 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
         public static List<SDVObject> GetSDVObjects()
         {
-           SDVObject[] objIDS=(SDVObject[])Enum.GetValues(typeof(SDVObject));
+            SDVObject[] objIDS = (SDVObject[])Enum.GetValues(typeof(SDVObject));
             return objIDS.ToList();
+        }
+
+        public static bool RegisterGift(string UnqiueGiftId, Item item)
+        {
+            if (IsGiftRegistered(UnqiueGiftId))
+            {
+                return false;
+            }
+            RegisteredGifts.Add(UnqiueGiftId, item);
+            return true;
+        }
+
+        public static bool RemoveGift(string UniqueGiftId)
+        {
+            return RegisteredGifts.Remove(UniqueGiftId);
+        }
+
+        public static bool ModifyGift(string UniqueGiftId, Item ReplacementGift)
+        {
+            if (IsGiftRegistered(UniqueGiftId))
+            {
+                RegisteredGifts[UniqueGiftId] = ReplacementGift;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Is there a gift registered with the given unique id?
+        /// </summary>
+        /// <param name="UnqiueGiftId"></param>
+        /// <returns></returns>
+        public static bool IsGiftRegistered(string UnqiueGiftId)
+        {
+            return RegisteredGifts.ContainsKey(UnqiueGiftId);
         }
     }
 }
