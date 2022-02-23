@@ -13,6 +13,8 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
         public static Dictionary<string, Item> RegisteredGifts = new Dictionary<string, Item>();
 
+        public static event EventHandler<string> OnBirthdayGiftRegistered;
+
         public enum SDVObject
         {
             //Weeds = 0,
@@ -1255,6 +1257,12 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
                 return false;
             }
             RegisteredGifts.Add(UnqiueGiftId, item);
+
+            if (OnBirthdayGiftRegistered != null)
+            {
+                OnBirthdayGiftRegistered.Invoke(HappyBirthdayModCore.Instance,UnqiueGiftId);
+            }
+
             return true;
         }
 

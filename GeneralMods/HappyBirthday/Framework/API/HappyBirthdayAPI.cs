@@ -10,7 +10,21 @@ namespace Omegasis.HappyBirthday.Framework.API
     public class HappyBirthdayAPI
     {
 
-        public event EventHandler OnBirthdayGiftRegistered;
+        /// <summary>
+        /// Event hooks for when a birthday gift is registered.
+        /// </summary>
+        public event EventHandler<string> OnBirthdayGiftRegistered
+        {
+            add
+            {
+                GiftIDS.OnBirthdayGiftRegistered += value;
+            }
+            remove
+            {
+                GiftIDS.OnBirthdayGiftRegistered -= value;
+            }
+        }
+
         public event EventHandler PostAllBirthdayGiftsRegistered;
         public event EventHandler<StardewValley.Item> BeforeBirthdayGiftReceived;
 

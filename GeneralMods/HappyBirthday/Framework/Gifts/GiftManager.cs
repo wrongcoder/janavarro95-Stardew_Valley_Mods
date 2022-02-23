@@ -14,16 +14,14 @@ namespace Omegasis.HappyBirthday
 {
     public class GiftManager
     {
-        public ModConfig Config => HappyBirthdayModCore.Configs.modConfig;
-
 
         /// <summary>The next birthday gift the player will receive.</summary>
         public Item BirthdayGiftToReceive;
 
 
-        public static Dictionary<string, List<GiftInformation>> NPCBirthdayGifts;
-        public static Dictionary<string, List<GiftInformation>> SpouseBirthdayGifts;
-        public static List<GiftInformation> DefaultBirthdayGifts;
+        public Dictionary<string, List<GiftInformation>> npcBirthdayGifts;
+        public Dictionary<string, List<GiftInformation>> spouseBirthdayGifts;
+        public List<GiftInformation> defaultBirthdayGifts;
 
         /// <summary>Construct an instance.</summary>
         public GiftManager()
@@ -31,23 +29,11 @@ namespace Omegasis.HappyBirthday
             //this.BirthdayGifts = new List<Item>();
 
 
-            NPCBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
-            SpouseBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
-            DefaultBirthdayGifts = new List<GiftInformation>();
-
+            this.npcBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
+            this.spouseBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
+            this.defaultBirthdayGifts = new List<GiftInformation>();
 
             this.registerGiftIDS();
-
-            /*
-            this.loadDefaultBirthdayGifts();
-            this.loadVillagerBirthdayGifts();
-            this.loadSpouseBirthdayGifts();
-            */
-
-            //this.createNPCBirthdayGifts();
-            //this.createSpouseBirthdayGifts();
-
-
         }
 
         /// <summary>
@@ -56,15 +42,9 @@ namespace Omegasis.HappyBirthday
         public virtual void reloadBirthdayGifts()
         {
 
-            NPCBirthdayGifts.Clear();
-            SpouseBirthdayGifts.Clear();
-            DefaultBirthdayGifts.Clear();
-
-            /*
-            this.loadDefaultBirthdayGifts();
-            this.loadVillagerBirthdayGifts();
-            this.loadSpouseBirthdayGifts();
-            */
+            this.npcBirthdayGifts.Clear();
+            this.spouseBirthdayGifts.Clear();
+            this.defaultBirthdayGifts.Clear();
 
             this.loadInGiftsFromContentPacks();
         }
@@ -78,6 +58,13 @@ namespace Omegasis.HappyBirthday
                 string uniqueID = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.SDVObject), (int)v);
                 HappyBirthdayModCore.Instance.Monitor.Log("Added gift with id: " + uniqueID);
                 GiftIDS.RegisteredGifts.Add(uniqueID, i);
+
+
+                if (OnBirthdayGiftRegistered != null)
+                {
+                    OnBirthdayGiftRegistered.Invoke()
+                }
+
             }
             List<string> registeredGiftKeys = GiftIDS.RegisteredGifts.Keys.ToList();
             registeredGiftKeys.Sort();
@@ -94,32 +81,32 @@ namespace Omegasis.HappyBirthday
                 HappyBirthdayModCore.Instance.Monitor.Log("Adding default gifts for content pack: " + contentPack.baseContentPack.Manifest.UniqueID);
                 foreach (GiftInformation giftInfo in contentPack.getDefaultBirthdayGifts())
                 {
-                    DefaultBirthdayGifts.Add(giftInfo);
+                    this.defaultBirthdayGifts.Add(giftInfo);
                 }
                 foreach (KeyValuePair<string,List<GiftInformation>> giftInfo in contentPack.npcBirthdayGifts)
                 {
-                    if (NPCBirthdayGifts.ContainsKey(giftInfo.Key))
+                    if (this.npcBirthdayGifts.ContainsKey(giftInfo.Key))
                     {
                         HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
-                        NPCBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
+                        this.npcBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
                     }
                     else
                     {
                         HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
-                        NPCBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
+                        this.npcBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
                     }
                 }
                 foreach (KeyValuePair<string, List<GiftInformation>> giftInfo in contentPack.spouseBirthdayGifts)
                 {
-                    if (SpouseBirthdayGifts.ContainsKey(giftInfo.Key))
+                    if (this.spouseBirthdayGifts.ContainsKey(giftInfo.Key))
                     {
                         HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
-                        SpouseBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
+                        this.spouseBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
                     }
                     else
                     {
                         HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
-                        SpouseBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
+                        this.spouseBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
                     }
                 }
             }
@@ -138,7 +125,7 @@ namespace Omegasis.HappyBirthday
 
         public virtual bool registerDefaultBirthdayGift(GiftInformation giftInformation)
         {
-            DefaultBirthdayGifts.Add(giftInformation);
+            this.defaultBirthdayGifts.Add(giftInformation);
             return true;
         }
 
@@ -150,16 +137,16 @@ namespace Omegasis.HappyBirthday
         public virtual bool unregisterDefaultBirthdayGift(GiftInformation giftInformation)
         {
             List<GiftInformation> removalList = new();
-            for(int i = 0; i < DefaultBirthdayGifts.Count; i++)
+            for(int i = 0; i < this.defaultBirthdayGifts.Count; i++)
             {
-                if (giftInformation.Equals(DefaultBirthdayGifts[i]))
+                if (giftInformation.Equals(this.defaultBirthdayGifts[i]))
                 {
-                    removalList.Add(DefaultBirthdayGifts[i]);
+                    removalList.Add(this.defaultBirthdayGifts[i]);
                 }
             }
             foreach(GiftInformation info in removalList)
             {
-                DefaultBirthdayGifts.Remove(info);
+                this.defaultBirthdayGifts.Remove(info);
             }
             return removalList.Count > 0;
         }
@@ -171,13 +158,13 @@ namespace Omegasis.HappyBirthday
 
         public virtual bool registerNpcBirthdayGift(string NPC,GiftInformation giftInformation)
         {
-            if (NPCBirthdayGifts.ContainsKey(giftInformation.objectID))
+            if (this.npcBirthdayGifts.ContainsKey(giftInformation.objectID))
             {
-                NPCBirthdayGifts[NPC].Add(giftInformation);
+                this.npcBirthdayGifts[NPC].Add(giftInformation);
             }
             else
             {
-                NPCBirthdayGifts.Add(NPC, new List<GiftInformation>() { giftInformation });
+                this.npcBirthdayGifts.Add(NPC, new List<GiftInformation>() { giftInformation });
             }
             return true;
         }
@@ -189,18 +176,18 @@ namespace Omegasis.HappyBirthday
 
         public virtual bool unregisterNPCBirthdayGift(string NPC, GiftInformation giftInformation)
         {
-            if (!NPCBirthdayGifts.ContainsKey(NPC)) return false;
+            if (!this.npcBirthdayGifts.ContainsKey(NPC)) return false;
             List<GiftInformation> removalList = new();
-            for (int i = 0; i < NPCBirthdayGifts[NPC].Count; i++)
+            for (int i = 0; i < this.npcBirthdayGifts[NPC].Count; i++)
             {
-                if (giftInformation.Equals(NPCBirthdayGifts[NPC][i]))
+                if (giftInformation.Equals(this.npcBirthdayGifts[NPC][i]))
                 {
-                    removalList.Add(NPCBirthdayGifts[NPC][i]);
+                    removalList.Add(this.npcBirthdayGifts[NPC][i]);
                 }
             }
             foreach (GiftInformation info in removalList)
             {
-                NPCBirthdayGifts[NPC].Remove(info);
+                this.npcBirthdayGifts[NPC].Remove(info);
             }
             return removalList.Count > 0;
         }
@@ -212,13 +199,13 @@ namespace Omegasis.HappyBirthday
 
         public virtual bool registerSpouseBirthdayGift(string SpouseName, GiftInformation giftInformation)
         {
-            if (SpouseBirthdayGifts.ContainsKey(giftInformation.objectID))
+            if (this.spouseBirthdayGifts.ContainsKey(giftInformation.objectID))
             {
-                SpouseBirthdayGifts[SpouseName].Add(giftInformation);
+                this.spouseBirthdayGifts[SpouseName].Add(giftInformation);
             }
             else
             {
-                SpouseBirthdayGifts.Add(SpouseName, new List<GiftInformation>() { giftInformation });
+                this.spouseBirthdayGifts.Add(SpouseName, new List<GiftInformation>() { giftInformation });
             }
             return true;
         }
@@ -231,18 +218,18 @@ namespace Omegasis.HappyBirthday
 
         public virtual bool unregisterSpouseBirthdayGift(string Spouse, GiftInformation giftInformation)
         {
-            if (!SpouseBirthdayGifts.ContainsKey(Spouse)) return false;
+            if (!this.spouseBirthdayGifts.ContainsKey(Spouse)) return false;
             List<GiftInformation> removalList = new();
-            for (int i = 0; i < SpouseBirthdayGifts[Spouse].Count; i++)
+            for (int i = 0; i < this.spouseBirthdayGifts[Spouse].Count; i++)
             {
-                if (giftInformation.Equals(SpouseBirthdayGifts[Spouse][i]))
+                if (giftInformation.Equals(this.spouseBirthdayGifts[Spouse][i]))
                 {
-                    removalList.Add(SpouseBirthdayGifts[Spouse][i]);
+                    removalList.Add(this.spouseBirthdayGifts[Spouse][i]);
                 }
             }
             foreach (GiftInformation info in removalList)
             {
-                SpouseBirthdayGifts[Spouse].Remove(info);
+                this.spouseBirthdayGifts[Spouse].Remove(info);
             }
             return removalList.Count > 0;
         }
@@ -274,7 +261,7 @@ namespace Omegasis.HappyBirthday
                 }
                 else
                 {
-                    if (NPCBirthdayGifts.ContainsKey(name))
+                    if (this.npcBirthdayGifts.ContainsKey(name))
                     {
                         Item gift = this.getNonSpouseBirthdayGift(name);
                         return gift;
@@ -289,7 +276,7 @@ namespace Omegasis.HappyBirthday
             }
             else
             {
-                if (NPCBirthdayGifts.ContainsKey(name))
+                if (this.npcBirthdayGifts.ContainsKey(name))
                 {
 
                     Item gift = this.getNonSpouseBirthdayGift(name);
@@ -312,9 +299,9 @@ namespace Omegasis.HappyBirthday
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
             List<Item> possibleItems = new List<Item>();
-            if (NPCBirthdayGifts.ContainsKey(name))
+            if (this.npcBirthdayGifts.ContainsKey(name))
             {
-                List<GiftInformation> npcPossibleGifts = NPCBirthdayGifts[name];
+                List<GiftInformation> npcPossibleGifts = this.npcBirthdayGifts[name];
 
                 foreach (GiftInformation info in npcPossibleGifts)
                 {
@@ -364,9 +351,9 @@ namespace Omegasis.HappyBirthday
 
 
             List<Item> possibleItems = new List<Item>();
-            if (SpouseBirthdayGifts.ContainsKey(name))
+            if (this.spouseBirthdayGifts.ContainsKey(name))
             {
-                List<GiftInformation> npcPossibleGifts = SpouseBirthdayGifts[name];
+                List<GiftInformation> npcPossibleGifts = this.spouseBirthdayGifts[name];
                 foreach (GiftInformation info in npcPossibleGifts)
                 {
                     if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
@@ -397,7 +384,7 @@ namespace Omegasis.HappyBirthday
 
             List<Item> possibleItems = new List<Item>();
 
-            List<GiftInformation> npcPossibleGifts = DefaultBirthdayGifts;
+            List<GiftInformation> npcPossibleGifts = this.defaultBirthdayGifts;
             foreach (GiftInformation info in npcPossibleGifts)
             {
                 if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
