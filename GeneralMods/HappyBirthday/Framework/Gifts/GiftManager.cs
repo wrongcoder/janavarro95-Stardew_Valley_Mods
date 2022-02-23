@@ -142,6 +142,28 @@ namespace Omegasis.HappyBirthday
             return true;
         }
 
+        public virtual bool unregisterDefaultBirthdayGift(string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
+        {
+            return this.unregisterDefaultBirthdayGift(new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
+        }
+
+        public virtual bool unregisterDefaultBirthdayGift(GiftInformation giftInformation)
+        {
+            List<GiftInformation> removalList = new();
+            for(int i = 0; i < DefaultBirthdayGifts.Count; i++)
+            {
+                if (giftInformation.Equals(DefaultBirthdayGifts[i]))
+                {
+                    removalList.Add(DefaultBirthdayGifts[i]);
+                }
+            }
+            foreach(GiftInformation info in removalList)
+            {
+                DefaultBirthdayGifts.Remove(info);
+            }
+            return removalList.Count > 0;
+        }
+
         public virtual bool registerNpcBirthdayGift(string NPC,string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
         {
             return this.registerNpcBirthdayGift(NPC,new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
@@ -158,6 +180,29 @@ namespace Omegasis.HappyBirthday
                 NPCBirthdayGifts.Add(NPC, new List<GiftInformation>() { giftInformation });
             }
             return true;
+        }
+
+        public virtual bool unregisterNPCBirthdayGift(string NPC,string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
+        {
+            return this.unregisterNPCBirthdayGift(NPC,new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
+        }
+
+        public virtual bool unregisterNPCBirthdayGift(string NPC, GiftInformation giftInformation)
+        {
+            if (!NPCBirthdayGifts.ContainsKey(NPC)) return false;
+            List<GiftInformation> removalList = new();
+            for (int i = 0; i < NPCBirthdayGifts[NPC].Count; i++)
+            {
+                if (giftInformation.Equals(NPCBirthdayGifts[NPC][i]))
+                {
+                    removalList.Add(NPCBirthdayGifts[NPC][i]);
+                }
+            }
+            foreach (GiftInformation info in removalList)
+            {
+                NPCBirthdayGifts[NPC].Remove(info);
+            }
+            return removalList.Count > 0;
         }
 
         public virtual bool registerSpouseBirthdayGift(string SpouseName,string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
@@ -177,6 +222,32 @@ namespace Omegasis.HappyBirthday
             }
             return true;
         }
+
+
+        public virtual bool unregisterSpouseBirthdayGift(string Spouse, string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
+        {
+            return this.unregisterSpouseBirthdayGift(Spouse, new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
+        }
+
+        public virtual bool unregisterSpouseBirthdayGift(string Spouse, GiftInformation giftInformation)
+        {
+            if (!SpouseBirthdayGifts.ContainsKey(Spouse)) return false;
+            List<GiftInformation> removalList = new();
+            for (int i = 0; i < SpouseBirthdayGifts[Spouse].Count; i++)
+            {
+                if (giftInformation.Equals(SpouseBirthdayGifts[Spouse][i]))
+                {
+                    removalList.Add(SpouseBirthdayGifts[Spouse][i]);
+                }
+            }
+            foreach (GiftInformation info in removalList)
+            {
+                SpouseBirthdayGifts[Spouse].Remove(info);
+            }
+            return removalList.Count > 0;
+        }
+
+
 
         /// <summary>
         /// Gets the next birthday gift that would be received by the given npc.

@@ -66,5 +66,15 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
             }
             return I;
         }
+
+        public virtual bool Equals(GiftInformation other)
+        {
+            return
+                other.minRequiredHearts.Equals(this.minRequiredHearts) &&
+                other.maxRequiredHearts.Equals(this.maxRequiredHearts) &&
+                other.objectID.Equals(this.objectID) &&
+                other.minAmount.Equals(this.minAmount) &&
+                other.maxAmount.Equals(this.maxAmount);
+        }
     }
 }
