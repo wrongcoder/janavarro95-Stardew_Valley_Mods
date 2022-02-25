@@ -55,7 +55,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
         public Item getOne()
         {
-            Item I = GiftIDS.RegisteredGifts[this.objectID].getOne();
+            Item I = HappyBirthdayModCore.Instance.giftManager.registeredGifts[this.objectID].getOne();
             if (this.minAmount != this.maxAmount)
             {
                 I.Stack = StardewValley.Game1.random.Next(this.minAmount, this.maxAmount);

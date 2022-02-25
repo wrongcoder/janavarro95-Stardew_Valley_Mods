@@ -17,11 +17,11 @@ namespace Omegasis.HappyBirthday.Framework.API
         {
             add
             {
-                GiftIDS.OnBirthdayGiftRegistered += value;
+                HappyBirthdayModCore.Instance.giftManager.OnBirthdayGiftRegistered += value;
             }
             remove
             {
-                GiftIDS.OnBirthdayGiftRegistered -= value;
+                HappyBirthdayModCore.Instance.giftManager.OnBirthdayGiftRegistered -= value;
             }
         }
 
@@ -40,7 +40,7 @@ namespace Omegasis.HappyBirthday.Framework.API
         /// <returns>A boolean representing if registration was successful or not.</returns>
         public bool RegisterBirthdayGift(string UniqueGiftId, StardewValley.Item item)
         {
-           return GiftIDS.RegisterGift(UniqueGiftId, item);
+           return HappyBirthdayModCore.Instance.giftManager.registerGift(UniqueGiftId, item);
         }
 
 
@@ -51,7 +51,7 @@ namespace Omegasis.HappyBirthday.Framework.API
         /// <returns>A boolean representing if a gift was registered under a given id or not.</returns>
         public bool IsGiftRegistered(string UniqueGiftId)
         {
-            return GiftIDS.IsGiftRegistered(UniqueGiftId);
+            return HappyBirthdayModCore.Instance.giftManager.isGiftRegistered(UniqueGiftId);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Omegasis.HappyBirthday.Framework.API
         /// <returns>A boolean representing if a gift under a given id was removed or not.</returns>
         public bool UnRegisterGift(string UnqiueGiftId)
         {
-            return GiftIDS.RemoveGift(UnqiueGiftId);
+            return HappyBirthdayModCore.Instance.giftManager.removeGift(UnqiueGiftId);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Omegasis.HappyBirthday.Framework.API
         /// <returns></returns>
         public bool ModifyGift(string UnqiueGiftId, StardewValley.Item ReplacementGift)
         {
-            return GiftIDS.ModifyGift(UnqiueGiftId, ReplacementGift);
+            return HappyBirthdayModCore.Instance.giftManager.modifyGift(UnqiueGiftId, ReplacementGift);
         }
 
         /// <summary>

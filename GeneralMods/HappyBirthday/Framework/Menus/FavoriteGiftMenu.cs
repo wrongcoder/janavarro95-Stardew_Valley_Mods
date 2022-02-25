@@ -149,7 +149,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     break;
 
                 case "RightButton":
-                    List<Item> ids = GiftIDS.RegisteredGifts.Values.ToList();
+                    List<Item> ids = HappyBirthdayModCore.Instance.giftManager.registeredGifts.Values.ToList();
                     int value = (this.currentPageNumber + 1) * this._maxRowsToDisplay * this._maxColumnsToDisplay;
                     if (value >= ids.Count) break;
                     else
@@ -318,14 +318,14 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             this.itemButtons.Clear();
             Dictionary<string, Item> validItems = new Dictionary<string, Item>();
             if (string.IsNullOrEmpty(this.searchBox.Text) == false)
-                foreach (KeyValuePair<string, Item> pair in GiftIDS.RegisteredGifts)
+                foreach (KeyValuePair<string, Item> pair in HappyBirthdayModCore.Instance.giftManager.registeredGifts)
                 {
                     Item item = pair.Value;
                     if (item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()))
                         validItems.Add(pair.Key, pair.Value);
                 }
             else
-                validItems = GiftIDS.RegisteredGifts;
+                validItems = HappyBirthdayModCore.Instance.giftManager.registeredGifts;
 
 
             for (int row = 0; row < this._maxRowsToDisplay; row++)
@@ -341,7 +341,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + column * 16 * itemScale), (int)(this.yPositionOnScreen + 256 + row * 16 * itemScale), 64, 64);
                     ClickableTextureComponent item = new ClickableTextureComponent(info.objectID, placementBounds, "", info.objectID, Game1.objectSpriteSheet, textureBounds, 4f, true);
                     item.item = info.getOne();
-                    item.name = GiftIDS.RegisteredGifts.ElementAt(value).Key;
+                    item.name = HappyBirthdayModCore.Instance.giftManager.registeredGifts.ElementAt(value).Key;
                     this.itemButtons.Add(item);
                 }
         }
