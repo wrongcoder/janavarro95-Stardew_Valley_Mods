@@ -26,6 +26,7 @@ namespace Omegasis.HappyBirthday
         public Dictionary<string, Item> registeredGifts = new Dictionary<string, Item>();
 
         public event EventHandler<string> OnBirthdayGiftRegistered;
+        public event EventHandler PostAllBirthdayGiftsRegistered;
 
         /// <summary>Construct an instance.</summary>
         public GiftManager()
@@ -119,6 +120,8 @@ namespace Omegasis.HappyBirthday
             List<string> registeredGiftKeys = this.registeredGifts.Keys.ToList();
             registeredGiftKeys.Sort();
             HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),registeredGiftKeys );
+
+            PostAllBirthdayGiftsRegistered.Invoke(this, new EventArgs());
         }
 
         public virtual bool registerDefaultBirthdayGift(string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)

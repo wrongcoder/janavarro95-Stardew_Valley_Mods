@@ -25,8 +25,17 @@ namespace Omegasis.HappyBirthday.Framework.API
             }
         }
 
-        public event EventHandler PostAllBirthdayGiftsRegistered;
-        public event EventHandler<StardewValley.Item> BeforeBirthdayGiftReceived;
+        public event EventHandler PostAllBirthdayGiftsRegistered
+        {
+            add
+            {
+                HappyBirthdayModCore.Instance.giftManager.PostAllBirthdayGiftsRegistered += value;
+            }
+            remove
+            {
+                HappyBirthdayModCore.Instance.giftManager.PostAllBirthdayGiftsRegistered -= value;
+            }
+        }
 
         public HappyBirthdayAPI()
         {
