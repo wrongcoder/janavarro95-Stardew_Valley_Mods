@@ -177,23 +177,5 @@ namespace Omegasis.HappyBirthday.Framework.API
         */
 
 
-        /*
-
-        public bool AddEvent()
-        {
-
-        }
-
-        public bool ModifyEvent()
-        {
-
-        }
-
-        public bool RemoveEvent()
-        {
-
-        }
-        */
-
     }
 }
