@@ -1194,15 +1194,113 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         }
 
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1()
+
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Abigail()
         {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1, 19928, 1, Game1.player.spouse);
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Abigail, 19928, 1, "Abigail");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Maru()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Maru, 19929, 1, "Maru");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Leah()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Leah, 19930, 1, "Leah");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Penny()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Penny, 19931, 1, "Penny");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Emily()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Emily, 19932, 1, "Emily");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Haley()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Haley, 19933, 1, "Haley");
         }
 
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2()
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Alex()
         {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2, 19929, 2, Game1.player.spouse);
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Alex, 19934, 1, "Alex");
         }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Shane()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Shane, 19935, 1, "Shane");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Sam()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Sam, 19936, 1, "Sam");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Sebastian()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Sebastian, 19937, 1, "Sebastian");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Elliott()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Elliott, 19938, 1, "Elliott");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Harvey()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Harvey, 19939, 1, "Harvey");
+        }
+
+
+
+
+
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Abigail()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Abigail, 19940, 1, "Abigail");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Maru()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Maru, 19941, 1, "Maru");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Leah()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Leah, 19942, 1, "Leah");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Penny()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Penny, 19943, 1, "Penny");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Emily()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Emily, 19944, 1, "Emily");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Haley()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Haley, 19945, 1, "Haley");
+        }
+
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Alex()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Alex, 19946, 1, "Alex");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Shane()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Shane, 19947, 1, "Shane");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Sam()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Sam, 19948, 1, "Sam");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Sebastian()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Sebastian, 19949, 1, "Sebastian");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Elliott()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Elliott, 19950, 1, "Elliott");
+        }
+        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Harvey()
+        {
+            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Harvey, 19951, 1, "Harvey");
+        }
+
+
+
 
         public static EventHelper SpouseAsksPlayerForFavoriteGift(string EventId, int EventIntId, int FarmHouseLevel, string SpouseName)
         {

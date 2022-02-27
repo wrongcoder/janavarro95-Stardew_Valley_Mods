@@ -31,8 +31,35 @@ namespace Omegasis.HappyBirthday.Framework.Constants
 
         //Birthday setup events.
         public static string AskPlayerForBirthday = CreateEventId("AskPlayerForBirthday");
-        public static string AskPlayerForFavoriteGift_Farmhouse_1 = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1");
-        public static string AskPlayerForFavoriteGift_Farmhouse_2 = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2");
+
+
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Abigail = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Abigail");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Emily = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Emily");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Haley = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Haley");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Leah = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Leah");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Penny = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Penny");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Maru = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Maru");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Alex = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Alex");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Harvey = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Harvey");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Elliott = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Elliott");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Sebastian = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Sebastian");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Sam = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Sam");
+        public static string AskPlayerForFavoriteGift_Farmhouse_1_Shane = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_1_Shane");
+
+
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Abigail = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Abigail");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Emily = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Emily");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Haley = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Haley");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Leah = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Leah");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Penny = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Penny");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Maru = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Maru");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Alex = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Alex");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Harvey = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Harvey");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Elliott = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Elliott");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Sebastian = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Sebastian");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Sam = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Sam");
+        public static string AskPlayerForFavoriteGift_Farmhouse_2_Shane = CreateEventId("AskPlayerForFavoriteGift_Farmhouse_2_Shane");
+
 
 
         //Npc birthday events.

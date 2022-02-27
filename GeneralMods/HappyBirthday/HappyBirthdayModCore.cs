@@ -110,6 +110,11 @@ namespace Omegasis.HappyBirthday
         }
 
 
+        public override object GetApi()
+        {
+            return new HappyBirthday.Framework.API.HappyBirthdayAPI();
+        }
+
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
