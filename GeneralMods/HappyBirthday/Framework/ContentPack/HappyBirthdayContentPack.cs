@@ -212,7 +212,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         /// <returns></returns>
         public virtual string getContentPackStringsPath()
         {
-            return Path.Combine("Content", "Strings");
+            return Path.Combine("ModAssets", "Strings");
         }
 
         /// <summary>
@@ -312,9 +312,9 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         public void loadDefaultBirthdayGifts()
         {
 
-            if (File.Exists(Path.Combine(this.baseContentPack.DirectoryPath,"Content", "Data", "Gifts", "DefaultGifts" + ".json")))
+            if (File.Exists(Path.Combine(this.baseContentPack.DirectoryPath,"ModAssets", "Data", "Gifts", "DefaultGifts" + ".json")))
             {
-                this.defaultBirthdayGifts = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", "DefaultGifts" + ".json"));
+                this.defaultBirthdayGifts = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Data", "Gifts", "DefaultGifts" + ".json"));
             }
 
         }
@@ -322,7 +322,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         /// <summary>Load birthday gift information from disk. Preferably from BirthdayGift.json in the mod's directory.</summary>
         public void loadVillagerBirthdayGifts()
         {
-            string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath,"Content" ,"Data", "Gifts"));
+            string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath, "ModAssets", "Data", "Gifts"));
             foreach (string File in files)
             {
                 try
@@ -332,7 +332,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
                         continue;
                     }
 
-                    List<GiftInformation> giftInfo = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", Path.GetFileNameWithoutExtension(File) +".json"));
+                    List<GiftInformation> giftInfo = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Data", "Gifts", Path.GetFileNameWithoutExtension(File) +".json"));
 
                     if (giftInfo == null)
                     {
@@ -352,10 +352,10 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         /// <summary>Used to load spouse birthday gifts from disk.</summary>
         public void loadSpouseBirthdayGifts()
         {
-            string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath, "Content", "Data", "Gifts", "Spouses"));
+            string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath, "ModAssets", "Data", "Gifts", "Spouses"));
             foreach (string File in files)
             {
-                this.spouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("Content", "Data", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
+                this.spouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Data", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
                 HappyBirthdayModCore.Instance.Monitor.Log("Loaded in spouse gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : "+this.UniqueId);
             }
         }
