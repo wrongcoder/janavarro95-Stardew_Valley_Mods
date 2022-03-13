@@ -68,6 +68,8 @@ namespace Omegasis.HappyBirthday.Framework
             string dataDirectory = Path.Combine("data", uniqueSaveName);
             string dataFilePath = Path.Combine(dataDirectory, uniqueSaveName + ".json");
             string villagerQueuePath = Path.Combine(dataDirectory, uniqueSaveName + "_VillagerBirthdayGiftsQueue.json");
+
+            HappyBirthdayModCore.Instance.Monitor.Log("Loading player's birthday from: " + dataFilePath);
             // reset state
             HappyBirthdayModCore.Instance.birthdayManager.setCheckedForBirthday(false);
 

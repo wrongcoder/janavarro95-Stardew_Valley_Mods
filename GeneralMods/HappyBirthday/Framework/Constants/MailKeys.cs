@@ -63,6 +63,12 @@ namespace Omegasis.HappyBirthday.Framework.Constants
             foreach(NPC npc in NPCUtilities.GetAllNonSpecialHumanNpcs())
             {
                 string mailKey = CreateBelatedBirthdayWishMailKey(npc.Name);
+
+                if (npcNameToMailKey.ContainsKey(npc.name))
+                {
+                    continue;
+                }
+
                 npcNameToMailKey.Add(npc.name,mailKey);
             }
             return npcNameToMailKey;

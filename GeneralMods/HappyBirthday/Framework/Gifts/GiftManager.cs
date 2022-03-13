@@ -6,6 +6,7 @@ using Omegasis.HappyBirthday.Framework;
 using Omegasis.HappyBirthday.Framework.Configs;
 using Omegasis.HappyBirthday.Framework.ContentPack;
 using Omegasis.HappyBirthday.Framework.Gifts;
+using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewValley;
 using static System.String;
 using static Omegasis.HappyBirthday.Framework.Gifts.GiftIDS;
@@ -52,7 +53,7 @@ namespace Omegasis.HappyBirthday
             this.spouseBirthdayGifts.Clear();
             this.defaultBirthdayGifts.Clear();
 
-            this.loadInGiftsFromContentPacks();
+            this.addInGiftsFromLoadedContentPacks();
         }
 
 
@@ -63,6 +64,9 @@ namespace Omegasis.HappyBirthday
                 Item i = new StardewValley.Object((int)v, 1);
                 string uniqueID = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.SDVObject), (int)v);
                 HappyBirthdayModCore.Instance.Monitor.Log("Added gift with id: " + uniqueID);
+
+                if (this.registeredGifts.ContainsKey(uniqueID)) continue;
+
                 this.registeredGifts.Add(uniqueID, i);
 
 
@@ -78,7 +82,10 @@ namespace Omegasis.HappyBirthday
         }
 
 
-        public virtual void loadInGiftsFromContentPacks()
+        /// <summary>
+        /// Called after all content packs have been loaded. It then combines the gifts from all of the content packs into this singular gift pool.
+        /// </summary>
+        public virtual void addInGiftsFromLoadedContentPacks()
         {
 
             //Loads in all gifts across all content packs across all translations.
@@ -93,12 +100,12 @@ namespace Omegasis.HappyBirthday
                 {
                     if (this.npcBirthdayGifts.ContainsKey(giftInfo.Key))
                     {
-                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {1} gifts for content pack: {0}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         this.npcBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
                     }
                     else
                     {
-                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding npc {1} gifts for content pack: {0}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         this.npcBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
                     }
                 }
@@ -106,12 +113,12 @@ namespace Omegasis.HappyBirthday
                 {
                     if (this.spouseBirthdayGifts.ContainsKey(giftInfo.Key))
                     {
-                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {1} gifts for content pack: {0}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         this.spouseBirthdayGifts[giftInfo.Key].AddRange(giftInfo.Value);
                     }
                     else
                     {
-                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {0} gifts for content pack: {1}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Adding spouse {1} gifts for content pack: {0}", contentPack.baseContentPack.Manifest.UniqueID, giftInfo.Key));
                         this.spouseBirthdayGifts.Add(giftInfo.Key, giftInfo.Value);
                     }
                 }
@@ -395,6 +402,29 @@ namespace Omegasis.HappyBirthday
             List<Item> possibleItems = new List<Item>();
 
             List<GiftInformation> npcPossibleGifts = this.defaultBirthdayGifts;
+
+            //If no gifts are registered and there are 0 default gifts, we should throw an error.
+            if (this.registeredGifts.Count == 0 && this.defaultBirthdayGifts.Count==0)
+            {
+                throw new InvalidDataException("There are zero registered gifts and zero default birthday gifts for the game's gift manager as well as  {0} installed HappyBirthdayContentPacks." + HappyBirthdayModCore.Instance.Helper.ContentPacks.GetOwned().Count());
+            }
+            //Just give the player a random item if there are no default registered gifts.
+            if (this.defaultBirthdayGifts.Count == 0)
+            {
+                int randomItemIndex = Game1.random.Next(this.registeredGifts.Count);
+                Item randomItem = this.registeredGifts.ElementAt(randomItemIndex).Value.getOne();
+                return randomItem;
+            }
+
+            //If for some reason this given npc doesn't have a gift just keep picking random npcs until something happens.
+            if (npcPossibleGifts.Count == 0)
+            {
+                List<NPC> npcs = NPCUtilities.GetAllNonSpecialHumanNpcs();
+                int npcRandomDefault = Game1.random.Next(npcs.Count);
+                NPC npc = npcs[npcRandomDefault];
+                return this.getDefaultBirthdayGift(npc.Name);
+            }
+
             foreach (GiftInformation info in npcPossibleGifts)
             {
                 if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
@@ -403,10 +433,20 @@ namespace Omegasis.HappyBirthday
                 }
             }
 
+
+
             Item gift;
-            int index = StardewValley.Game1.random.Next(possibleItems.Count);
-            gift = possibleItems[index].getOne();
-            return gift;
+            try
+            {
+                int index = StardewValley.Game1.random.Next(possibleItems.Count);
+                gift = possibleItems[index].getOne();
+                return gift;
+            }
+            catch(Exception err)
+            {
+                throw new ArgumentOutOfRangeException(string.Format("There were no possible items in the list of possible items for this npc's birthday gift list. The Npcs name is {0} and the original error message is this {1}",name,err.ToString()));
+            }
+
 
         }
 

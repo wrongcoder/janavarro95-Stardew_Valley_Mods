@@ -140,6 +140,7 @@ namespace Omegasis.HappyBirthday
                 DefaultToEnglish = false;
             }
             List<HappyBirthdayContentPack> affectedContentPacks = HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode();
+
             List<string> potentialBirthdayWishes = new List<string>();
             foreach (HappyBirthdayContentPack contentPack in affectedContentPacks)
             {

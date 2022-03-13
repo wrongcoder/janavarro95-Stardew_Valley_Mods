@@ -16,6 +16,11 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// The minimum amount of friendship needed with all villagers that would be present to get the saloon birthday party;
         /// </summary>
         public int minimumFriendshipLevelForCommunityBirthdayParty = 5;
+
+        /// <summary>
+        /// Attempts to use the English content pack when a properly localized one does not exist.
+        /// </summary>
+        public bool fallbackToEnglishTranslationWhenPossible=false;
         
 
         /// <summary>Construct an instance.</summary>

@@ -146,7 +146,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEventManager.clearEventFromFarmer(v.Key);
         }
 
-        public static void InitializeBirthdayEvents()
+        public static void InitializeBirthdayEventCommands()
         {
             //Dialogue commands.
             BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.ShowTranslatedMessage", BirthdayEventCommands.showTranslatedMessage);
@@ -185,6 +185,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmHouseLevelPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmHouseLevelPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(YearPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseYearGreaterThanOrEqualToPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(VillagersHaveEnoughFriendshipBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseVillagersHaveEnoughFriendshipBirthdayPrecondition);
+        }
+
+        public static void InitializeBirthdayEvents()
+        {
+
 
             List<EventHelper> defaultBirthdayEvents = new List<EventHelper>()
             {
@@ -302,7 +307,17 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             foreach (EventHelper eventHelper in defaultBirthdayEvents)
                 if (BirthdayEventManager.events.ContainsKey(eventHelper.eventStringId))
+                {
+
+                    //auto update/replace outdated events.
+                    if(eventHelper.version> BirthdayEventManager.events[eventHelper.eventStringId].version)
+                    {
+                        BirthdayEventManager.events[eventHelper.eventStringId] = eventHelper;
+                        HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile(Path.Combine(relativePath, eventHelper.eventStringId + ".json"), eventHelper);
+                        HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Updating birthday event {0} to version {1}", eventHelper.eventStringId, eventHelper.version));
+                    }
                     continue;
+                }
                 else
                 {
                     BirthdayEventManager.addEvent(eventHelper);

@@ -260,5 +260,15 @@ namespace Omegasis.HappyBirthday.Framework
             if (this.isVillagerInQueue(NpcName) == false) return false;
             return this.villagerQueue[NpcName].hasGivenBirthdayGift;
         }
+
+        /// <summary>
+        /// Resets birthday information.
+        /// </summary>
+        public virtual void reset()
+        {
+            this.resetVillagerQueue();
+            this.playerBirthdayData = null;
+            this.othersBirthdays.Clear();
+        }
     }
 }

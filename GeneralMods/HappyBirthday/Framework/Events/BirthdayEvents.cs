@@ -37,7 +37,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
 
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
-            EventHelper e = new EventHelper(EventIds.JunimoCommunityCenterBirthday, 19950, conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
+            EventHelper e = new EventHelper(EventIds.JunimoCommunityCenterBirthday, 19950,1 ,conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
 
             e.AddInJunimoActor("Juni", new Vector2(32, 10), Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni2", new Vector2(30, 11), Colors.getRandomJunimoColor());
@@ -129,7 +129,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new DatingNPCEventPrecondition(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyTrailer, 19951, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyTrailer, 19951, 1 ,conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(penny,12,7, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(pam,15,4, EventHelper.FacingDirection.Down)
             }));
@@ -185,7 +185,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new DatingNPCEventPrecondition(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyHouse, 19951, conditions, new EventStartData("playful", 14, 8, new EventStartData.FarmerData(12, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyHouse, 19951, 1,conditions, new EventStartData("playful", 14, 8, new EventStartData.FarmerData(12, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(penny,12,7, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(pam,15,4, EventHelper.FacingDirection.Down)
             }));
@@ -247,7 +247,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(maru));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingMaru, 19952, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingMaru, 19952, 1 ,conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(sebastian,26,13, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(robin,28,9, EventHelper.FacingDirection.Up),
@@ -311,7 +311,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(leah));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingLeah, 19954, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingLeah, 19954, 1, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(leah,14,11, EventHelper.FacingDirection.Left),
             }));
             e.addObject(11, 11, 220);
@@ -363,7 +363,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(abigail));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailSeedShop, 19955, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailSeedShop, 19955, 1 ,conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,36,9, EventHelper.FacingDirection.Left),
                 new EventStartData.NPCData(pierre,33,6, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(caroline,35,5, EventHelper.FacingDirection.Up),
@@ -422,7 +422,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(abigail));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailMines, 19955, conditions, new EventStartData("playful", 18, 8, new EventStartData.FarmerData(18, 12, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailMines, 19955, 1 ,conditions, new EventStartData("playful", 18, 8, new EventStartData.FarmerData(18, 12, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,18,4, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -463,7 +463,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(emily));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingEmily, 19956, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingEmily, 19956, 1 ,conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(emily,20,17, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -506,7 +506,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(haley));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingHaley, 19957, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingHaley, 19957, 1 ,conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(haley,20,17, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -547,7 +547,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(sam));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingSam, 19959, conditions, new EventStartData("playful", 3, 6, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingSam, 19959, 1 ,conditions, new EventStartData("playful", 3, 6, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(sam,3,5, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -593,7 +593,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(sebastian));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingSebastian, 19952, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingSebastian, 19952,1 ,conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(sebastian,26,13, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(robin,28,9, EventHelper.FacingDirection.Up),
@@ -653,7 +653,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(elliott));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingElliott, 19958, conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingElliott, 19958, 1 ,conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(elliott,3,5, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -692,7 +692,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(shane));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingShane, 19960, conditions, new EventStartData("playful", 26, 15, new EventStartData.FarmerData(19, 18, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingShane, 19960, 1 ,conditions, new EventStartData("playful", 26, 15, new EventStartData.FarmerData(19, 18, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(shane,25,16, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -731,7 +731,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(harvey));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingHarvey, 19957, conditions, new EventStartData("playful", 6, 6, new EventStartData.FarmerData(6, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingHarvey, 19957,1, conditions, new EventStartData("playful", 6, 6, new EventStartData.FarmerData(6, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(harvey,3,6, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -772,7 +772,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(alex));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingAlex, 19959, conditions, new EventStartData("playful", 3, 20, new EventStartData.FarmerData(7, 19, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingAlex, 19959,1 ,conditions, new EventStartData("playful", 3, 20, new EventStartData.FarmerData(7, 19, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(alex,3,19, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -825,7 +825,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 playerStartTile = new Vector2(9, 5);
             }
 
-            EventHelper e = new EventHelper(EventId, EventIntId, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventId, EventIntId, 1,conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
             }));
             e.playerFaceDirection(EventHelper.FacingDirection.Left);
@@ -1098,7 +1098,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             };
             npcs.AddRange(additionalNpcs);
 
-            EventHelper e = new EventHelper(EventIds.SaloonBirthdayParty_Year1, 19926, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(14, 23, EventHelper.FacingDirection.Up), npcs));
+            EventHelper e = new EventHelper(EventIds.SaloonBirthdayParty_Year1, 19926, 1,conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(14, 23, EventHelper.FacingDirection.Up), npcs));
 
             e.globalFadeIn();
 
@@ -1130,9 +1130,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("JojaMart")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new IsJojaMemberEventPrecondition(true));
+            conditions.Add(new FarmerBirthdayPrecondition());
 
             string morris = "Morris";
-            EventHelper e = new EventHelper(EventIds.JojaMartBirthday, 19901, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 21, 24, new EventStartData.FarmerData(14, 28, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+            EventHelper e = new EventHelper(EventIds.JojaMartBirthday, 19901, 1,conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 21, 24, new EventStartData.FarmerData(14, 28, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
             {
                 new EventStartData.NPCData(morris,-100,-100, EventHelper.FacingDirection.Up)
             }, false));
@@ -1171,7 +1172,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             NPC lewis = Game1.getCharacterFromName("Lewis");
 
-            EventHelper e = new EventHelper(EventIds.AskPlayerForBirthday, 19962, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 64, 14, new EventStartData.FarmerData(64, 14, EventHelper.FacingDirection.Down), new List<EventStartData.NPCData>()
+            EventHelper e = new EventHelper(EventIds.AskPlayerForBirthday, 19962, 1,conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 64, 14, new EventStartData.FarmerData(64, 14, EventHelper.FacingDirection.Down), new List<EventStartData.NPCData>()
             {
                 new EventStartData.NPCData(lewis,64,16, EventHelper.FacingDirection.Up),
 
@@ -1307,7 +1308,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
             NPC spouse = Game1.getCharacterFromName(SpouseName);
 
             List<EventPrecondition> conditions = new List<EventPrecondition>();
-            conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new GameLocationIsHomePrecondition());
             conditions.Add(new HasChosenFavoriteGiftPrecondition(false));
@@ -1330,9 +1330,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 playerStartTile = new Vector2(9, 5);
             }
 
-            EventHelper e = new EventHelper(EventId, EventIntId, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventId, EventIntId, 1,conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
-            }));
+            },false));
 
             e.playerFaceDirection(EventHelper.FacingDirection.Left);
 

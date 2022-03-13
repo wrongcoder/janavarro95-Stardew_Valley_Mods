@@ -10,7 +10,6 @@ using Omegasis.StardustCore.Events.Preconditions.TimeSpecific;
 namespace StardustCore.Events
 {
     /// <summary>
-    ///TODO: Figure out forked dialogue
     /// 
     /// Helps in creating events based in code for stardew valley.
     /// https://stardewvalleywiki.com/Modding:Event_data
@@ -97,30 +96,34 @@ namespace StardustCore.Events
         public int stardewEventID;
         public string eventStringId;
 
+        public int version;
+
         public EventHelper()
         {
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(string EventName, int ID, GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
+        public EventHelper(string EventName, int ID, int version ,GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
             this.stardewEventID = ID;
+            this.version = version;
             this.addEventPrecondition(Location);
             this.addEventPrecondition(Time);
             this.addEventPrecondition(NotTheseDays);
             this.addEventData(StartData.ToString());
         }
 
-        public EventHelper(string EventName, int ID, List<EventPrecondition> Conditions, EventStartData StartData)
+        public EventHelper(string EventName, int ID, int version ,List<EventPrecondition> Conditions, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.stardewEventID = ID;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
+            this.version = version;
             foreach (var v in Conditions)
             {
                 this.addEventPrecondition(v);

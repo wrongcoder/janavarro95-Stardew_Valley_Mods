@@ -77,7 +77,6 @@ namespace Omegasis.HappyBirthday
             this.Helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
             this.Helper.Events.Display.MenuChanged += MenuUtilities.OnMenuChanged;
-            this.Helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
             this.Helper.Events.Display.RenderedActiveMenu += RenderUtilities.OnRenderedActiveMenu;
             this.Helper.Events.Display.RenderedHud += RenderUtilities.OnRenderedHud;
@@ -86,6 +85,8 @@ namespace Omegasis.HappyBirthday
             this.Helper.Events.Multiplayer.PeerDisconnected += MultiplayerUtilities.Multiplayer_PeerDisconnected;
 
             this.Helper.Events.Player.Warped += BirthdayEventUtilities.Player_Warped;
+
+            this.Helper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
 
             this.birthdayManager = new BirthdayManager();
@@ -98,17 +99,10 @@ namespace Omegasis.HappyBirthday
 
         }
 
-        private void LocalizedContentManager_OnLanguageChange(LocalizedContentManager.LanguageCode code)
-        {
-            //Reload the birthday gifts since they are local to the content packs.
-            this.giftManager.reloadBirthdayGifts();
-        }
-
         private void GameLoop_ReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
-            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
+            this.birthdayManager.reset();
         }
-
 
         public override object GetApi()
         {
@@ -116,15 +110,7 @@ namespace Omegasis.HappyBirthday
         }
 
 
-        private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
-        {
-            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
 
-            this.birthdayMessages = new BirthdayMessages();
-            this.giftManager = new GiftManager();
-            MenuUtilities.IsDailyQuestBoard = false;
-
-        }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
@@ -148,6 +134,23 @@ namespace Omegasis.HappyBirthday
         ** Private methods
         *********/
 
+        private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
+
+            this.birthdayMessages = new BirthdayMessages();
+            this.giftManager = new GiftManager();
+            MenuUtilities.IsDailyQuestBoard = false;
+
+            BirthdayEventUtilities.InitializeBirthdayEventCommands();
+
+        }
+
+        private void LocalizedContentManager_OnLanguageChange(LocalizedContentManager.LanguageCode code)
+        {
+            //Reload the birthday gifts since they are local to the content packs.
+            this.giftManager.reloadBirthdayGifts();
+        }
 
         /// <summary>Raised after the game begins a new day (including when the player loads a save).</summary>
         /// <param name="sender">The event sender.</param>
@@ -182,19 +185,20 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
+            if (this.Helper.ContentPacks.GetOwned().Count() == 0){
+                throw new InvalidDataException("There are ZERO Happy birthday content packs found for the mod. Without at least one installed there is no guaranteed that this mod will work due to missing dialogue errors. Please install at least one HappyBirthdayContent pack before continuing. One can be found at https://www.nexusmods.com/stardewvalley/mods/11148 for English dialogue. Thank you!");
+            }
 
             foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
             {
                 this.happyBirthdayContentPackManager.registerNewContentPack(contentPack);
             }
-            this.giftManager.loadInGiftsFromContentPacks();
-
-
-            //SaveManager.Load(Game1.player.uniqueMultiplayerID);
-
-
+            this.giftManager.addInGiftsFromLoadedContentPacks();
             MailUtilities.RemoveAllBirthdayMail();
+
             BirthdayEventUtilities.InitializeBirthdayEvents();
+
+
         }
 
         /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>
@@ -211,12 +215,15 @@ namespace Omegasis.HappyBirthday
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
 
-            if (!Context.IsWorldReady || Game1.isFestival() || Game1.CurrentEvent!=null)
+            if (Game1.CurrentEvent != null)
+            {
+                BirthdayEventUtilities.UpdateEventManager();
+            }
+
+            if (!Context.IsWorldReady || Game1.isFestival() || Game1.CurrentEvent==null)
             {
                 return;
             }
-
-            BirthdayEventUtilities.UpdateEventManager();
 
 
             //Below code sets up menus for selecting the new birthday for the player.

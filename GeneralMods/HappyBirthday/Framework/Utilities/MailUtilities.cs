@@ -15,8 +15,6 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
         public static void EditMailAsset(StardewModdingAPI.IAssetData asset)
         {
-            //TODO: This seems to be called every time the mail asset is opened, which isn't super efficient. Find a way to optimize this?
-
             IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
             data[MailKeys.MomBirthdayMessageKey] = GetMomsMailMessage();
             data[MailKeys.DadBirthdayMessageKey] = GetDadsMailMessage();
@@ -34,7 +32,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 Item gift= HappyBirthdayModCore.Instance.giftManager.getNextBirthdayGift(npcName);
                 int itemParentSheetIndex = gift.parentSheetIndex;
                 int stackSize = gift.Stack;
-                string formattedMailItemString = GetItemMailStringFormat(itemParentSheetIndex, stackSize);
+                string formattedMailItemString = GetItemMailStringFormat(itemParentSheetIndex, stackSize, npcName);
 
                 UpdateMailMessage(ref data, mailKey, formattedMailItemString);
             }
@@ -59,8 +57,19 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <param name="ParentSheetIndex"></param>
         /// <param name="StackSize"></param>
         /// <returns></returns>
-        public static string GetItemMailStringFormat(int ParentSheetIndex, int StackSize)
+        public static string GetItemMailStringFormat(int ParentSheetIndex, int StackSize, string NPCName)
         {
+            if (!string.IsNullOrEmpty(NPCName))
+            {
+                NPC npc = Game1.getCharacterFromName(NPCName);
+                if (npc == null) return "";
+
+                if (Game1.player.getFriendshipHeartLevelForNPC(NPCName) < HappyBirthdayModCore.Configs.modConfig.minimumFriendshipLevelForBirthdayWish)
+                {
+                    return "";
+                }
+            }
+
             return string.Format("%item object {0} {1} %%", ParentSheetIndex, StackSize);
         }
 
@@ -72,7 +81,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         {
             int itemToGet = HappyBirthdayModCore.Configs.mailConfig.momBirthdayItemGive;
             int stackSizeToGet = HappyBirthdayModCore.Configs.mailConfig.momBirthdayItemGiveStackSize;
-            string formattedString = GetItemMailStringFormat(itemToGet, stackSizeToGet);
+            string formattedString = GetItemMailStringFormat(itemToGet, stackSizeToGet,"");
 
             return string.Format(HappyBirthdayModCore.Instance.translationInfo.getMailString(MailKeys.MomBirthdayMessageKey), formattedString);
         }
@@ -170,9 +179,8 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         {
             foreach (string npcName in NpcsToReceieveMailFrom)
             {
-                if (NPCUtilities.ShouldGivePlayerBirthdayGift(npcName))
+                if (NPCUtilities.ShouldWishPlayerHappyBirthday(npcName))
                 {
-                    Game1.addHUDMessage(new HUDMessage("Didn't get birthday gift from npc:" + npcName));
                     string mailKey = MailKeys.CreateBelatedBirthdayWishMailKey(npcName);
                     Game1.player.mailbox.Add(mailKey);
                 }

@@ -300,10 +300,6 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         /// <returns></returns>
         public virtual List<GiftInformation> getDefaultBirthdayGifts()
         {
-            if (this.defaultBirthdayGifts == null)
-            {
-                return new List<GiftInformation>();
-            }
             return this.defaultBirthdayGifts;
         }
 
@@ -314,7 +310,13 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
 
             if (File.Exists(Path.Combine(this.baseContentPack.DirectoryPath,"ModAssets", "Data", "Gifts", "DefaultGifts" + ".json")))
             {
+                HappyBirthdayModCore.Instance.Monitor.Log("Loading in default birthday gifts for content pack: " + this.UniqueId);
                 this.defaultBirthdayGifts = this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Data", "Gifts", "DefaultGifts" + ".json"));
+
+                if (this.defaultBirthdayGifts == null)
+                {
+                    throw new Exception("Default birthday gifts file is null????");
+                }
             }
 
         }
@@ -325,6 +327,8 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath, "ModAssets", "Data", "Gifts"));
             foreach (string File in files)
             {
+                if (!Path.GetExtension(File).Contains("json")) continue;
+
                 try
                 {
                     if (Path.GetFileNameWithoutExtension(File).Equals("RegisteredGifts"))
@@ -336,7 +340,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
 
                     if (giftInfo == null)
                     {
-                        throw new Exception("NPC GIFT INFO CAN NOT BE NULL!!!!");
+                        throw new Exception("NPC GIFT INFO CAN NOT BE NULL!!!! Errored file: "+ Path.GetFileNameWithoutExtension(File) + ".json");
                     }
 
                     this.npcBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File),giftInfo );
@@ -355,6 +359,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             string[] files = Directory.GetFiles(Path.Combine(this.baseContentPack.DirectoryPath, "ModAssets", "Data", "Gifts", "Spouses"));
             foreach (string File in files)
             {
+                if (!Path.GetExtension(File).Contains("json")) continue;
                 this.spouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Data", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
                 HappyBirthdayModCore.Instance.Monitor.Log("Loaded in spouse gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : "+this.UniqueId);
             }

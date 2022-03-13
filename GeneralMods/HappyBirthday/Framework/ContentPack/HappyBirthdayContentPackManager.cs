@@ -44,6 +44,12 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             {
                 this.contentPacks.Add(happyBirthdayContentPack.languageCode, new List<HappyBirthdayContentPack>() { happyBirthdayContentPack });
             }
+
+            if (this.contentPackIdToLanguageCodes.ContainsKey(happyBirthdayContentPack.UniqueId))
+            {
+                return;
+            }
+
             this.contentPackIdToLanguageCodes.Add(happyBirthdayContentPack.UniqueId, happyBirthdayContentPack.languageCode);
             HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Registering Happy Birthday Content Pack: {0}", happyBirthdayContentPack.UniqueId));
         }
@@ -57,17 +63,17 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         {
             if (this.contentPackIdToLanguageCodes.ContainsKey(UniqueId) == false)
             {
-                throw new ArgumentException(string.Format("Content pack with unique id {0} has not been registered. This should have happened automatically, so is this a typo or is the content pack not installed?",UniqueId));
+                throw new ArgumentException(string.Format("Content pack with unique id {0} has not been registered. This should have happened automatically, so is this a typo or is the content pack not installed?", UniqueId));
             }
             string languageCode = this.contentPackIdToLanguageCodes[UniqueId];
-            foreach(HappyBirthdayContentPack contentPack in this.contentPacks[languageCode])
+            foreach (HappyBirthdayContentPack contentPack in this.contentPacks[languageCode])
             {
                 if (contentPack.UniqueId.Equals(UniqueId))
                 {
                     return contentPack;
                 }
             }
-            throw new ArgumentException(string.Format("Content pack with unique id {0} has not been registered to the list of available content packs. This should not have happened since there should be a check in place to prevent this...",UniqueId));
+            throw new ArgumentException(string.Format("Content pack with unique id {0} has not been registered to the list of available content packs. This should not have happened since there should be a check in place to prevent this...", UniqueId));
         }
 
         /// <summary>
@@ -79,15 +85,31 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             string currentLanguageCode = LocalizationUtilities.GetCurrentLanguageCodeString();
             if (this.contentPacks.ContainsKey(currentLanguageCode))
             {
-                return this.contentPacks[currentLanguageCode];
+                List<HappyBirthdayContentPack> contentPacks = this.contentPacks[currentLanguageCode];
+                if (contentPacks.Count > 0)
+                {
+                    return contentPacks;
+                }
+                if (contentPacks.Count == 0 && HappyBirthdayModCore.Configs.modConfig.fallbackToEnglishTranslationWhenPossible)
+                {
+                    return this.getHappyBirthdayContentPacksForEnglishLanguageCode();
+                }
             }
             else
             {
-                return new List<HappyBirthdayContentPack>();
+                HappyBirthdayModCore.Instance.Monitor.Log("Language code {0} not included in content pack manager???");
+                if (HappyBirthdayModCore.Configs.modConfig.fallbackToEnglishTranslationWhenPossible)
+                {
+
+                    return this.getHappyBirthdayContentPacksForEnglishLanguageCode();
+
+                }
             }
+            throw new Exception(string.Format("There were zero content packs for Happy Birthday for the given language code {0}. This is a fatal error as the modded cutscenes WILL NOT work without at least one proper content pack installed. Did you mean to install one? If one is installed, is the language code in TranslationInfo.json correct?", LocalizationUtilities.GetCurrentLanguageCodeString()));
+
         }
 
-        public virtual List<HappyBirthdayContentPack> getHappyBirthdayContentPacksForEnglishLanguageCode(string LanguageCode)
+        public virtual List<HappyBirthdayContentPack> getHappyBirthdayContentPacksForEnglishLanguageCode()
         {
             string currentLanguageCode = "en-US";
             if (this.contentPacks.ContainsKey(currentLanguageCode))
@@ -96,7 +118,7 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             }
             else
             {
-                return new List<HappyBirthdayContentPack>();
+                throw new Exception(string.Format("There were zero content packs for Happy Birthday for the English language code en-US. This is a fatal error as the modded cutscenes WILL NOT work without at least one proper content pack installed. Did you mean to install one? If one is installed, is the language code in TranslationInfo.json correct?", LocalizationUtilities.GetCurrentLanguageCodeString()));
             }
         }
 
