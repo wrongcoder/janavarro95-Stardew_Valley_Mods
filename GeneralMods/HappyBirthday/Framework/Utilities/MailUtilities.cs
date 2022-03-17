@@ -15,6 +15,8 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
         public static void EditMailAsset(StardewModdingAPI.IAssetData asset)
         {
+            if (HappyBirthdayModCore.Instance.contentPacksInitalized == false) return;
+
             IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
             data[MailKeys.MomBirthdayMessageKey] = GetMomsMailMessage();
             data[MailKeys.DadBirthdayMessageKey] = GetDadsMailMessage();

@@ -74,13 +74,13 @@ namespace Omegasis.HappyBirthday
         { 
             if (Game1.timeOfDay >= 600 && Game1.timeOfDay < 1200)
             {
-                return "morning";
+                return HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("TimeOfDay_Morning").ToLowerInvariant();
             }
             else if (Game1.timeOfDay >= 1200 && Game1.timeOfDay < 600)
             {
-                return "afternoon";
+                return HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("TimeOfDay_Afternoon").ToLowerInvariant();
             }
-            else return "evening";
+            else return HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("TimeOfDay_Night").ToLowerInvariant();
         }
 
         /// <summary>
@@ -217,7 +217,11 @@ namespace Omegasis.HappyBirthday
             else
             {
                 int randomWishIndex = Game1.random.Next(0, potentialBirthdayWishes.Count);
-                return potentialBirthdayWishes[randomWishIndex];
+                string spouseBirthdayWish = potentialBirthdayWishes[randomWishIndex];
+                spouseBirthdayWish = spouseBirthdayWish.Replace("{AffectionateSpouseWord}", this.getAffectionateSpouseWord());
+                spouseBirthdayWish = spouseBirthdayWish.Replace("{TimeOfDay}", this.getTimeOfDayString());
+                spouseBirthdayWish = spouseBirthdayWish.Replace("@", Game1.player.Name);
+                return spouseBirthdayWish;
             }
         }
 

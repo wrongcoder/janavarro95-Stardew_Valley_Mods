@@ -52,6 +52,8 @@ namespace Omegasis.HappyBirthday
         /// </summary>
         public BirthdayManager birthdayManager;
 
+        public bool contentPacksInitalized;
+
         /*********
         ** Public methods
         *********/
@@ -68,6 +70,8 @@ namespace Omegasis.HappyBirthday
 
             this.Helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             this.Helper.Events.GameLoop.DayEnding += this.OnDayEnded;
+
+            this.Helper.Events.GameLoop.SaveCreated += this.GameLoop_SaveCreated;
 
             this.Helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
 
@@ -97,6 +101,11 @@ namespace Omegasis.HappyBirthday
 
             LocalizedContentManager.OnLanguageChange += this.LocalizedContentManager_OnLanguageChange;
 
+        }
+
+        private void GameLoop_SaveCreated(object sender, SaveCreatedEventArgs e)
+        {
+            this.initalizeHappyBirthdayContent();
         }
 
         private void GameLoop_ReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
@@ -157,6 +166,9 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+
+            this.initalizeHappyBirthdayContent();
+
             SaveManager.OnDayStarted(sender, e);
             this.birthdayManager.onDayStarted(sender, e);
 
@@ -185,7 +197,14 @@ namespace Omegasis.HappyBirthday
         /// <param name="e">The event arguments.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            if (this.Helper.ContentPacks.GetOwned().Count() == 0){
+            this.initalizeHappyBirthdayContent();
+        }
+
+        protected virtual void initalizeHappyBirthdayContent()
+        {
+            if (this.contentPacksInitalized) return;
+            if (this.Helper.ContentPacks.GetOwned().Count() == 0)
+            {
                 throw new InvalidDataException("There are ZERO Happy birthday content packs found for the mod. Without at least one installed there is no guaranteed that this mod will work due to missing dialogue errors. Please install at least one HappyBirthdayContent pack before continuing. One can be found at https://www.nexusmods.com/stardewvalley/mods/11148 for English dialogue. Thank you!");
             }
 
@@ -197,8 +216,7 @@ namespace Omegasis.HappyBirthday
             MailUtilities.RemoveAllBirthdayMail();
 
             BirthdayEventUtilities.InitializeBirthdayEvents();
-
-
+            this.contentPacksInitalized = true;
         }
 
         /// <summary>Raised before the game begins writes data to the save file (except the initial save creation).</summary>

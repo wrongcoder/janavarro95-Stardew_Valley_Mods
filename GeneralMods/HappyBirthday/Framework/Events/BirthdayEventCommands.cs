@@ -123,7 +123,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         {
             HappyBirthdayModCore.Instance.Monitor.Log("OpenGiftSelectorMenuIs running!");
 
-            if (HappyBirthdayModCore.Instance.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null && HappyBirthdayModCore.Instance.birthdayManager.hasChoosenFavoriteGift() == false && BirthdayEventUtilities.ShouldAskPlayerForFavoriteGift)
+            if (Game1.activeClickableMenu == null && HappyBirthdayModCore.Instance.birthdayManager.hasChoosenFavoriteGift() == false && BirthdayEventUtilities.ShouldAskPlayerForFavoriteGift)
             {
                 Game1.activeClickableMenu = new FavoriteGiftMenu();
                 HappyBirthdayModCore.Instance.birthdayManager.setCheckedForBirthday(false);
