@@ -84,7 +84,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
                 {
                     anyUnlocked = true;
 
-                    Game1.showGlobalMessage(string.Format("You learned how to make {0}! You can make it on a {1} ", bookRecipePairToLearnedValues.Key.Value, Constants.ItemIds.Objects.CraftingStations.GetCraftingStationNameFromRecipeBookId(bookRecipePairToLearnedValues.Key.Key)));
+                    Game1.drawObjectDialogue(string.Format("You learned how to make {0}! You can make it on a {1}. ", bookRecipePairToLearnedValues.Key.Value, Constants.ItemIds.Objects.CraftingStations.GetCraftingStationNameFromRecipeBookId(bookRecipePairToLearnedValues.Key.Key)));
+
                 }
             }
             return anyUnlocked;
