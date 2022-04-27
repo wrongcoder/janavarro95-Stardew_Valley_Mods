@@ -1,0 +1,5 @@
+~~~~~~~~~~~~0.0.1 Revitalize 4-27-2022 xx.xx P.M~~~~~~~~~~~~~~
++Added changelog
++Rewrote TextureManagers to be more organized to access from code easier.
++Updated NampeSpaces to start with Omegasis.
++Added CraftingBook functionality.
