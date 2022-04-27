@@ -7,7 +7,7 @@ using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardustCore.UIUtilities
+namespace Omegasis.StardustCore.UIUtilities
 {
     public class Texture2DExtended:INetObject<NetFields>
     {

@@ -3,13 +3,13 @@ using System.Linq;
 using System.Xml.Serialization;
 using Netcode;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Networking;
 using StardewValley;
-using StardustCore.Networking;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities
 {
     /// <summary>Handles dealing with objects.</summary>
-    public class InventoryManager: NetObject
+    public class InventoryManager : NetObject
     {
         /// <summary>How many items the inventory can hold.</summary>
         public readonly NetInt capacity = new NetInt();
@@ -78,9 +78,7 @@ namespace Revitalize.Framework.Utilities
         public bool addItem(Item item)
         {
             if (this.isFull())
-            {
                 return false;
-            }
             else
             {
                 for (int i = 0; i < this.items.Count; i++)
@@ -107,10 +105,8 @@ namespace Revitalize.Framework.Utilities
         public Item getItem(Item item)
         {
             foreach (Item i in this.items)
-            {
                 if (item == i)
                     return item;
-            }
             return null;
         }
 
@@ -146,9 +142,7 @@ namespace Revitalize.Framework.Utilities
         public void resizeCapacity(int Amount)
         {
             if (this.capacity + Amount < this.maxCapacity)
-            {
                 this.capacity.Value += Amount;
-            }
         }
 
         /// <summary>Sets the upper limity of the capacity size for the inventory.</summary>
@@ -161,9 +155,7 @@ namespace Revitalize.Framework.Utilities
         {
             if (this.isFull()) return false;
             else
-            {
                 return true;
-            }
         }
 
         /// <summary>
@@ -178,9 +170,7 @@ namespace Revitalize.Framework.Utilities
         public void dumpBufferToItems()
         {
             foreach (Item I in this.bufferItems)
-            {
                 this.addItem(I);
-            }
             this.bufferItems.Clear();
         }
 

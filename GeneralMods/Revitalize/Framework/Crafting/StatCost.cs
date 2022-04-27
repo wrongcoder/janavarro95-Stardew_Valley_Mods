@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize;
 using StardewValley;
 
-namespace Revitalize.Framework.Crafting
+namespace Omegasis.Revitalize.Framework.Crafting
 {
     public class StatCost
     {
@@ -15,7 +14,8 @@ namespace Revitalize.Framework.Crafting
         public int magic;
         public int gold;
 
-        public StatCost(int Stamina = 0, int Health = 0, int Gold = 0, int Magic = 0){
+        public StatCost(int Stamina = 0, int Health = 0, int Gold = 0, int Magic = 0)
+        {
             this.stamina = Stamina;
             this.health = Health;
             this.gold = Gold;
@@ -26,7 +26,8 @@ namespace Revitalize.Framework.Crafting
         /// Checks if the player can afford the cost but allows for player to collapse.
         /// </summary>
         /// <returns></returns>
-        public bool canAffordCost() {
+        public bool canAffordCost()
+        {
 
             if (Game1.player.stamina >= this.stamina && Game1.player.health >= this.health && Game1.player.Money >= this.gold && RevitalizeModCore.playerInfo.magicManager.currentMagic >= this.magic) return true;
             return false;

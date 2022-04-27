@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Omegasis.HappyBirthday.Framework.Constants;
 using StardewValley;
-using StardustCore.Utilities;
 
 namespace Omegasis.HappyBirthday.Framework.Utilities
 {

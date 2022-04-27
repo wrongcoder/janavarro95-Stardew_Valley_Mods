@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.Delegates.Functionality;
 using StardewValley;
 using StardewValley.Menus;
-using StardustCore.UIUtilities.MenuComponents.Delegates.Functionality;
 
-namespace StardustCore.UIUtilities.MenuComponents.ComponentsV1
+namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV1
 {
     public class CycleButton : Button
     {

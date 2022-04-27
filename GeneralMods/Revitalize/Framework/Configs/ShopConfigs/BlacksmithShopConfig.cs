@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize;
 
-namespace Revitalize.Framework.Configs.ShopConfigs
+namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 {
     /// <summary>
     /// Deals with the sell prices for ores in the blacksmith shop.

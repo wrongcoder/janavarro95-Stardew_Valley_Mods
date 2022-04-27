@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Configs.ObjectsConfigs
+namespace Omegasis.Revitalize.Framework.Configs.ObjectsConfigs
 {
     /// <summary>
     /// A config manager that specifically deals with loading config files for objects.

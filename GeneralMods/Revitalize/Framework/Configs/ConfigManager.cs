@@ -4,9 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Configs.ObjectsConfigs;
+using Omegasis.Revitalize.Framework.Configs.ShopConfigs;
+using Omegasis.Revitalize.Framework.Configs.WorldConfigs;
 using StardewModdingAPI;
 
-namespace Revitalize.Framework.Configs
+namespace Omegasis.Revitalize.Framework.Configs
 {
     /// <summary>
     /// Handles holding all of the config information.
@@ -14,18 +17,18 @@ namespace Revitalize.Framework.Configs
     public class ConfigManager
     {
 
-        public ObjectsConfigs.ObjectConfigManager objectConfigManager;
+        public ObjectConfigManager objectConfigManager;
 
-        public ShopConfigs.ShopsConfigManager shopsConfigManager;
+        public ShopsConfigManager shopsConfigManager;
 
-        public WorldConfigs.WorldConfigManager worldConfigManager;
+        public WorldConfigManager worldConfigManager;
 
         public ConfigManager()
         {
 
-            this.objectConfigManager = new ObjectsConfigs.ObjectConfigManager();
-            this.shopsConfigManager = new ShopConfigs.ShopsConfigManager();
-            this.worldConfigManager = new WorldConfigs.WorldConfigManager();
+            this.objectConfigManager = new ObjectConfigManager();
+            this.shopsConfigManager = new ShopsConfigManager();
+            this.worldConfigManager = new WorldConfigManager();
         }
 
         /// <summary>
@@ -49,7 +52,7 @@ namespace Revitalize.Framework.Configs
         public static T initializeConfig<T>(IModHelper helper, params string[] RelativePathToConfig) where T : class
         {
             string relativePath = Path.Combine(RelativePathToConfig);
-            if (File.Exists(Path.Combine(helper.DirectoryPath,relativePath )))
+            if (File.Exists(Path.Combine(helper.DirectoryPath, relativePath)))
                 return helper.Data.ReadJsonFile<T>(relativePath);
             else
             {

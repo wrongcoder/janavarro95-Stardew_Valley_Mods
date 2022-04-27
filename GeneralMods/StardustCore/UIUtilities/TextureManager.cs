@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardustCore.UIUtilities
+namespace Omegasis.StardustCore.UIUtilities
 {
     public class TextureManager
     {
@@ -42,7 +42,7 @@ namespace StardustCore.UIUtilities
         }
 
         /// <summary>Returns a Texture2DExtended held by the manager.</summary>
-        public Texture2DExtended getTexture(string textureId,bool ThrowError=true)
+        public Texture2DExtended getExtendedTexture(string textureId,bool ThrowError=true)
         {
             if (this.extendedTextures.ContainsKey(textureId))
             {
@@ -57,6 +57,17 @@ namespace StardustCore.UIUtilities
             {
                 return null;
             }
+        }
+
+        /// <summary>Returns a <see cref="Texture2D"/> held by the manager.</summary>
+        public Texture2D getTexture(string textureId, bool ThrowError = true)
+        {
+            Texture2DExtended tex = this.getExtendedTexture(textureId, ThrowError);
+            if (tex == null)
+            {
+                return null;
+            }
+            return tex.texture;
         }
 
         /// <summary>
@@ -334,11 +345,13 @@ namespace StardustCore.UIUtilities
 
         public static Texture2D GetTexture(IManifest Manifest, string ManagerName, string TextureName)
         {
-            return GetTextureManager(Manifest, ManagerName).getTexture(TextureName).texture;
+            return GetTextureManager(Manifest, ManagerName).getExtendedTexture(TextureName).texture;
         }
+
+
         public static Texture2DExtended GetExtendedTexture(IManifest Manifest, string ManagerName, string TextureName)
         {
-            return GetTextureManager(Manifest, ManagerName).getTexture(TextureName);
+            return GetTextureManager(Manifest, ManagerName).getExtendedTexture(TextureName);
         }
 
 

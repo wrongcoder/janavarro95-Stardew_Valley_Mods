@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize.Framework.Constants.ItemIds.Objects;
-using Revitalize.Framework.Objects;
-using Revitalize.Framework.World.Objects.Machines;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using StardewValley;
 
-namespace Revitalize.Framework.World.WorldUtilities
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 {
     public class Utilities
     {
@@ -24,7 +24,7 @@ namespace Revitalize.Framework.World.WorldUtilities
         private static void AddModdedMachinesToGameWorld()
         {
             GameLocation cinderSapForestLocation = GameLocationUtilities.GetGameLocation(Enums.StardewLocation.Forest);
-            HayMaker hayMaker = (RevitalizeModCore.ObjectManager.GetObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
+            HayMaker hayMaker = (RevitalizeModCore.ObjectManager.getObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
             if (RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch &&
                 cinderSapForestLocation.isObjectAtTile((int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y) == false)
             {

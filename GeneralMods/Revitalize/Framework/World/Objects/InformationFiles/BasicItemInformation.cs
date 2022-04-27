@@ -1,21 +1,19 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardustCore.Animations;
-using Revitalize.Framework.Utilities;
 using StardewValley;
-using StardustCore.UIUtilities;
 using Newtonsoft.Json;
-using Revitalize.Framework;
-using Revitalize.Framework.Managers;
-using Revitalize.Framework.Illuminate;
 using System.Xml.Serialization;
 using Netcode;
 using System.Collections.Generic;
-using Revitalize.Framework.Utilities.Extensions;
-using StardustCore.Networking;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Illuminate;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.StardustCore.Networking;
+using Omegasis.StardustCore.Animations;
+using Omegasis.StardustCore.UIUtilities;
 
-namespace Revitalize.Framework.World.Objects.InformationFiles
+namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
     public class BasicItemInformation : NetObject
@@ -69,16 +67,9 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             get
             {
                 if (this.dyedColor != null)
-                {
 
                     if (this.dyedColor.color.A != 0)
-                    {
                         return this.dyedColor.getBlendedColor(this._drawColorBase);
-                        //return new Color( (this._drawColor.R + this._dyedColor.color.R)/2, (this._drawColor.G + this._dyedColor.color.G)/2, (this._drawColor.B + this._dyedColor.color.B)/2, 255);
-                        //return new Color(this._drawColor.R * this._dyedColor.color.R, this._drawColor.G * this._dyedColor.color.G, this._drawColor.B * this._dyedColor.color.B, 255);
-                    }
-
-                }
                 return this._drawColorBase;
             }
             set
@@ -89,7 +80,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public readonly NetBool ignoreBoundingBox = new NetBool();
 
-        public NetRef<InventoryManager> netInventory = new NetRef<InventoryManager>();
+        public NetRef<InventoryManager> netInventory = new();
 
         public InventoryManager inventory
         {
@@ -103,7 +94,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             }
         }
 
-        public NetRef<LightManager> netLightManager = new NetRef<LightManager>();
+        public NetRef<LightManager> netLightManager = new();
 
         public LightManager lightManager
         {
@@ -123,7 +114,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public readonly NetBool alwaysDrawAbovePlayer = new NetBool();
 
-        public readonly NetRef<NamedColor> netDyedColor = new NetRef<NamedColor>();
+        public readonly NetRef<NamedColor> netDyedColor = new();
 
         public NamedColor dyedColor
         {
@@ -174,12 +165,12 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.initializeNetFields();
         }
 
-        
-        public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory=null, LightManager Lights=null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null):this(Name,Id,Description,CategoryName,CategoryColor,-300,-300,Fragility,IsLamp,Price,true,true,animationManager.getTexture(),animationManager,Color.White,IgnoreBoundingBox,BoundingBoxTileDimensions,Inventory,Lights,AlwaysDrawAbovePlayer,DyedColor)
+
+        public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory = null, LightManager Lights = null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null) : this(Name, Id, Description, CategoryName, CategoryColor, -300, -300, Fragility, IsLamp, Price, true, true, animationManager.getTexture(), animationManager, Color.White, IgnoreBoundingBox, BoundingBoxTileDimensions, Inventory, Lights, AlwaysDrawAbovePlayer, DyedColor)
         {
 
         }
-        
+
 
         public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
         {
@@ -216,13 +207,9 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
             this.alwaysDrawAbovePlayer.Value = AlwaysDrawAbovePlayer;
 
             if (DyedColor != null)
-            {
                 this.dyedColor = DyedColor.getCopy();
-            }
             else
-            {
                 this.dyedColor = new NamedColor("", new Color(0, 0, 0, 0), Enums.DyeBlendMode.Blend, 0.5f);
-            }
 
 
             this.initializeNetFields();
@@ -234,7 +221,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public int shakeTimerOffset()
         {
-            return (this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0);
+            return this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0;
         }
 
         /// <summary>
@@ -254,17 +241,11 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         public string getDyedColorName()
         {
             if (this.dyedColor == null)
-            {
                 return "";
-            }
             if (this.dyedColor.color.A == 0)
-            {
                 return "";
-            }
             else
-            {
                 return this.dyedColor.name;
-            }
         }
 
         /// <summary>

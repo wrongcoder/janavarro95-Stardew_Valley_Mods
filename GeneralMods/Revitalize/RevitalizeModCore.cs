@@ -3,38 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Revitalize.Framework;
-using Revitalize.Framework.Configs;
-using Revitalize.Framework.Environment;
-using Revitalize.Framework.Objects;
-using Revitalize.Framework.World.Objects;
-using Revitalize.Framework.World.Objects.Machines;
-using Revitalize.Framework;
-using Revitalize.Framework.Crafting;
-using Revitalize.Framework.Hacks;
-using Revitalize.Framework.Menus;
-using Revitalize.Framework.Menus.MenuComponents;
-using Revitalize.Framework.Objects;
-using Revitalize.Framework.Player;
-using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
-using StardustCore.Animations;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using xTile.Dimensions;
-using Animation = StardustCore.Animations.Animation;
-using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
-using Revitalize.Framework.Constants.ItemIds.Objects;
-using Revitalize.Framework.SaveData;
 using Omegasis.Revitalize.Framework.Utilities;
-using Revitalize.Framework.World.WorldUtilities;
-using Revitalize.Framework.World;
-using Revitalize.Framework.World.WorldUtilities.Shops;
+using Omegasis.Revitalize.Framework.Managers;
+using Omegasis.Revitalize.Framework.Configs;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Environment;
+using Omegasis.Revitalize.Framework.Hacks;
+using Omegasis.Revitalize.Framework.Player;
+using Omegasis.Revitalize.Framework.SaveData;
+using Omegasis.Revitalize.Framework.Utilities.Serialization;
+using Omegasis.Revitalize.Framework.Objects;
+using Omegasis.Revitalize.Framework.World;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
 
-namespace Revitalize
+namespace Omegasis.Revitalize
 {
 
     // TODO:
@@ -239,7 +228,7 @@ namespace Revitalize
             playerInfo = new PlayerInfo();
 
             //Loads in textures to be used by the mod.
-            this.loadInTextures();
+            TextureManagers.loadInTextures();
 
             //Loads in objects to be use by the mod.
             ObjectManager = new ObjectManager(Manifest);
@@ -288,52 +277,18 @@ namespace Revitalize
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Tables"));
         }
 
-        /// <summary>
-        /// Loads in textures to be used by the mod.
-        /// </summary>
-        private void loadInTextures()
-        {
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Furniture");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Furniture").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Furniture"));
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Machines");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Machines").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Machines"));
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.InventoryMenu");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.InventoryMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Resources.Ore");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Items.Resources.Misc");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Items.Resources.Misc").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Misc"));
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Items.Resources.Ore");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Items.Resources.Ore").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Tools");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Tools").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Items", "Tools"));
 
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Menus");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Menus").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "Misc"));
-
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Menus.EnergyMenu");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Menus.EnergyMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "EnergyMenu"));
-
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.CraftingMenu");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.CraftingMenu").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
-
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.HUD");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.HUD").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "HUD"));
-
-            TextureManager.AddTextureManager(this.Helper.DirectoryPath, Manifest, "Revitalize.Objects.Crafting");
-            TextureManager.GetTextureManager(Manifest, "Revitalize.Objects.Crafting").searchForTextures(ModHelper, this.ModManifest, Path.Combine("Content", "Graphics", "Objects", "Crafting"));
-        }
         #endregion
 
 
         private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
-            ObjectManager.loadInItems();
+            ObjectManager.loadItemsFromDisk();
             //Adds in recipes to the mod.
             CraftingManager = new CraftingManager();
             CraftingManager.initializeRecipeBooks();
 
-            Revitalize.Framework.Utilities.Serializer.SerializeTypesForXMLUsingSpaceCore();
+            Serializer.SerializeTypesForXMLUsingSpaceCore();
         }
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
@@ -373,7 +328,7 @@ namespace Revitalize
 
             //HACKS
             Game1.player.Money = 100_000;
-            Game1.player.addItemToInventoryBool(ObjectManager.GetItem(CraftingStations.WorkStation));
+            Game1.player.addItemToInventoryBool(ObjectManager.getItem(CraftingStations.WorkStation_Id));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                 //new StardewValley.Object((int)Enums.SDVObject.Coal,100),
@@ -386,12 +341,13 @@ namespace Revitalize
                 //ObjectManager.GetItem(Machines.MiningDrillV1),
                 //new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
                 //ObjectManager.GetItem(Machines.WindmillV1),
-               ObjectManager.GetItem(Machines.HayMaker),
+               ObjectManager.getItem(Machines.HayMaker),
                 new StardewValley.Object((int)Enums.SDVObject.Corn,10),
-                ObjectManager.GetItem(Enums.SDVObject.Stone,999),
-                ObjectManager.GetItem(Enums.SDVObject.Wood,999),
-                ObjectManager.GetItem(Enums.SDVObject.Clay,100),
-                ObjectManager.GetItem(Enums.SDVObject.CopperBar,100)
+               // //ObjectManager.getItem(Enums.SDVObject.Stone,999),
+               // ObjectManager.getItem(Enums.SDVObject.Wood,999),
+               // ObjectManager.getItem(Enums.SDVObject.Clay,100),
+              //  ObjectManager.getItem(Enums.SDVObject.CopperBar,100)
+              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint)
             });
 
 

@@ -27,6 +27,7 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         {
             this.mailConfig = MailConfig.InitializeConfig();
             this.modConfig = ModConfig.InitializeConfig();
+            this.modConfig.fallbackToEnglishTranslationWhenPossible = true;
         }
 
 

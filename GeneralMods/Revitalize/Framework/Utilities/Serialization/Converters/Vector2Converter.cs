@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 
-namespace Revitalize.Framework.Utilities.Serialization.Converters
+namespace Omegasis.Revitalize.Framework.Utilities.Serialization.Converters
 {
     public class Vector2Converter : JsonConverter
     {

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Netcode;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities
 {
-    public class NetIntRange:NetField<IntRange,NetIntRange>
+    public class NetIntRange : NetField<IntRange, NetIntRange>
     {
         [XmlIgnore]
         public int Min
@@ -49,14 +49,12 @@ namespace Revitalize.Framework.Utilities
 
         public override void Set(IntRange newValue)
         {
-            if (base.canShortcutSet())
+            if (this.canShortcutSet())
+                this.value = newValue;
+            else if (newValue != this.value)
             {
-                base.value = newValue;
-            }
-            else if (newValue != base.value)
-            {
-                base.cleanSet(newValue);
-                base.MarkDirty();
+                this.cleanSet(newValue);
+                this.MarkDirty();
             }
         }
 
@@ -64,14 +62,12 @@ namespace Revitalize.Framework.Utilities
         {
 
             if (this.value == null)
-            {
                 this.value = new IntRange();
-            }
 
-            if (version.IsPriorityOver(base.ChangeVersion))
+            if (version.IsPriorityOver(this.ChangeVersion))
             {
                 this.value.readIntRange(reader);
-                base.setInterpolationTarget(this.value);
+                this.setInterpolationTarget(this.value);
             }
         }
 
@@ -79,9 +75,7 @@ namespace Revitalize.Framework.Utilities
         {
 
             if (this.value == null)
-            {
                 this.value = new IntRange();
-            }
             this.value.writeIntRange(writer);
         }
 

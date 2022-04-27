@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize;
-using Revitalize.Framework.World.Objects;
-using Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace Revitalize.Framework.Hacks
+namespace Omegasis.Revitalize.Framework.Hacks
 {
     /// <summary>
     /// Deals with hijacking menus for custom logic.
@@ -40,16 +38,12 @@ namespace Revitalize.Framework.Hacks
         {
             if (EndOfDay_IsShowingEndOfNightMenus())
             {
-                if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.ShippingMenu)) return true;
-                if (Game1.endOfNightMenus.Count == 0 && Game1.activeClickableMenu==null) return false;
-                if (Game1.endOfNightMenus.Peek().GetType() == typeof(StardewValley.Menus.ShippingMenu))
-                {
+                if (Game1.activeClickableMenu.GetType() == typeof(ShippingMenu)) return true;
+                if (Game1.endOfNightMenus.Count == 0 && Game1.activeClickableMenu == null) return false;
+                if (Game1.endOfNightMenus.Peek().GetType() == typeof(ShippingMenu))
                     return true;
-                }
                 else
-                {
                     return false;
-                }
             }
             else return false;
         }
@@ -62,10 +56,8 @@ namespace Revitalize.Framework.Hacks
         {
             if (EndOfDay_IsEndOfDayMenuShippingMenu())
             {
-                if (Game1.activeClickableMenu.GetType() == typeof(StardewValley.Menus.ShippingMenu))
-                {
+                if (Game1.activeClickableMenu.GetType() == typeof(ShippingMenu))
                     return (ShippingMenu)Game1.activeClickableMenu;
-                }
                 return (ShippingMenu)Game1.endOfNightMenus.Peek();
             }
             return null;
@@ -85,9 +77,9 @@ namespace Revitalize.Framework.Hacks
                 List<MoneyDial> categoryDials = new List<MoneyDial>();
                 List<List<Item>> categoryItems = new List<List<Item>>();
 
-                var CT_R=RevitalizeModCore.ModHelper.Reflection.GetField<List<int>>(menu, "categoryTotals", true);
-                var CD_R= RevitalizeModCore.ModHelper.Reflection.GetField<List<MoneyDial>>(menu, "categoryDials", true);
-                var CI_R= RevitalizeModCore.ModHelper.Reflection.GetField<List<List<Item>>>(menu, "categoryItems", true);
+                var CT_R = RevitalizeModCore.ModHelper.Reflection.GetField<List<int>>(menu, "categoryTotals", true);
+                var CD_R = RevitalizeModCore.ModHelper.Reflection.GetField<List<MoneyDial>>(menu, "categoryDials", true);
+                var CI_R = RevitalizeModCore.ModHelper.Reflection.GetField<List<List<Item>>>(menu, "categoryItems", true);
 
                 categoryTotals = CT_R.GetValue();
                 categoryDials = CD_R.GetValue();
@@ -114,14 +106,14 @@ namespace Revitalize.Framework.Hacks
                 for (int index = 0; index < 5; ++index)
                 {
                     categoryTotals[5] += categoryTotals[index];
-                    categoryItems[5].AddRange((IEnumerable<Item>)categoryItems[index]);
+                    categoryItems[5].AddRange(categoryItems[index]);
                     categoryDials[index].currentValue = categoryTotals[index];
                     categoryDials[index].previousTargetValue = categoryDials[index].currentValue;
                 }
                 categoryDials[5].currentValue = categoryTotals[5];
                 if (Game1.IsMasterGame)
                     Game1.player.Money += categoryTotals[5];
-                Game1.setRichPresence("earnings", (object)categoryTotals[5]);
+                Game1.setRichPresence("earnings", categoryTotals[5]);
 
             }
         }
@@ -133,7 +125,7 @@ namespace Revitalize.Framework.Hacks
         /// <param name="sender"></param>
         public static void EndOfDay_RenderCheck(object o, StardewModdingAPI.Events.RenderedEventArgs sender)
         {
-            if (EndOfDay_IsShowingEndOfNightMenus() && EndOfDay_HasProcessedModdedItems==false)
+            if (EndOfDay_IsShowingEndOfNightMenus() && EndOfDay_HasProcessedModdedItems == false)
             {
                 EndOfDay_HackShipping();
                 EndOfDay_HasProcessedModdedItems = true;

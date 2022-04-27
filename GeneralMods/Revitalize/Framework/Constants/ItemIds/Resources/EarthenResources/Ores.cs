@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources
+namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources
 {
     public class Ores
     {

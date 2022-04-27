@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Netcode;
 using StardewValley;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities
 {
     /// <summary>
     /// A class for dealing with integer value ranges.
@@ -118,7 +118,7 @@ namespace Revitalize.Framework.Utilities
             return number;
         }
 
-        public virtual IntRange readIntRange (BinaryReader reader)
+        public virtual IntRange readIntRange(BinaryReader reader)
         {
             this.min.Value = reader.ReadInt32();
             this.max.Value = reader.ReadInt32();

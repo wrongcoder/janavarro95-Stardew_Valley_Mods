@@ -5,23 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Revitalize.Framework.Crafting;
-using Revitalize.Framework.Menus.MenuComponents;
-using Revitalize.Framework.World.Objects;
-using Revitalize.Framework.World.Objects.Machines;
-using Revitalize.Framework.Utilities;
 using StardewValley;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
-using Revitalize;
-using Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Menus.MenuComponents;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.World.Objects.Machines;
+using Omegasis.StardustCore.UIUtilities;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
 
-namespace Revitalize.Framework.Menus
+namespace Omegasis.Revitalize.Framework.Menus
 {
     /// <summary>
     /// Also need to make the crafting menu scroll better.
     /// </summary>
-    public class CraftingInformationPage:IClickableMenuExtended
+    public class CraftingInformationPage : IClickableMenuExtended
     {
 
         public CraftingRecipeButton infoButton;
@@ -32,7 +31,7 @@ namespace Revitalize.Framework.Menus
         public IList<Item> inventory;
         public IList<Item> outputInventory;
 
-        private Dictionary<ItemDisplayButton,int> requiredItems;
+        private Dictionary<ItemDisplayButton, int> requiredItems;
 
         public AnimatedButton craftingButton;
         public AnimatedButton goldButton;
@@ -51,64 +50,54 @@ namespace Revitalize.Framework.Menus
             }
         }
 
-        public CraftingInformationPage():base()
+        public CraftingInformationPage() : base()
         {
 
         }
 
-        public CraftingInformationPage(int x, int y, int width, int height,Color BackgroundColor,CraftingRecipeButton ItemToDisplay,ref IList<Item> Inventory,bool IsPlayerInventory) : base(x, y, width, height, false)
+        public CraftingInformationPage(int x, int y, int width, int height, Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory, bool IsPlayerInventory) : base(x, y, width, height, false)
         {
             this.backgroundColor = BackgroundColor;
             this.infoButton = ItemToDisplay;
-            this.itemDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width / 2) - 32, this.yPositionOnScreen + (128));
+            this.itemDisplayLocation = new Vector2(this.xPositionOnScreen + this.width / 2 - 32, this.yPositionOnScreen + 128);
             this.inventory = Inventory;
             this.isPlayerInventory = IsPlayerInventory;
 
             this.requiredItems = new Dictionary<ItemDisplayButton, int>();
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
             {
-                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64+this.width, this.yPositionOnScreen+(i*64)+128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
+                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64 + this.width, this.yPositionOnScreen + i * 64 + 128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
-            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2-96, this.getCraftingButtonHeight()),new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "CraftButton"),new StardustCore.Animations.Animation(0,0,48,16)), Color.White),new Rectangle(0,0,48,16),4f);
+            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
             this.outputInventory = this.inventory;
 
             if (this.infoButton.recipe.statCost != null)
-            {
                 if (this.infoButton.recipe.statCost.gold > 0)
-                {
                     this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
-                }
-            }
         }
 
-        public CraftingInformationPage(int x, int y, int width, int height, Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory,ref IList<Item> OutputInventory ,bool IsPlayerInventory, Machine Machine) : base(x, y, width, height, false)
+        public CraftingInformationPage(int x, int y, int width, int height, Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory, ref IList<Item> OutputInventory, bool IsPlayerInventory, Machine Machine) : base(x, y, width, height, false)
         {
             this.backgroundColor = BackgroundColor;
             this.infoButton = ItemToDisplay;
-            this.itemDisplayLocation = new Vector2(this.xPositionOnScreen + (this.width / 2) - 32, this.yPositionOnScreen + (128));
+            this.itemDisplayLocation = new Vector2(this.xPositionOnScreen + this.width / 2 - 32, this.yPositionOnScreen + 128);
             this.inventory = Inventory;
             this.isPlayerInventory = IsPlayerInventory;
 
             this.requiredItems = new Dictionary<ItemDisplayButton, int>();
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
             {
-                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64+this.width, this.yPositionOnScreen+(i*64)+128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
+                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64 + this.width, this.yPositionOnScreen + i * 64 + 128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
             this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
 
             if (OutputInventory == null)
-            {
                 this.outputInventory = this.inventory;
-            }
             if (this.infoButton.recipe.statCost != null)
-            {
                 if (this.infoButton.recipe.statCost.gold > 0)
-                {
                     this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
-                }
-            }
             this.outputInventory = OutputInventory;
             this.machine = Machine;
         }
@@ -116,38 +105,23 @@ namespace Revitalize.Framework.Menus
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             if (this.craftingButton.containsPoint(x, y))
-            {
                 if (this.canCraftRecipe())
                 {
                     SoundUtilities.PlaySound(Enums.StardewSound.coin);
 
                     if (this.isPlayerInventory)
-                    {
                         this.infoButton.craftItem();
-                    }
                     else
-                    {
                         this.infoButton.craftItem(this.inventory, this.outputInventory);
-
-                    }
                     if (this.machine != null)
-                    {
                         if (this.infoButton.recipe.timeToCraft == 0)
-                        {
                             this.machine.GetInventoryManager().dumpBufferToItems();
-                        }
                         else
-                        {
                             this.machine.MinutesUntilReady = this.infoButton.recipe.timeToCraft;
-                        }
-                    }
 
                     if (this.isPlayerInventory)
-                    {
                         this.inventory = Game1.player.Items;
-                    }
                 }
-            }
         }
 
         public override void performHoverAction(int x, int y)
@@ -180,30 +154,28 @@ namespace Revitalize.Framework.Menus
                 }
             }
             if (hovered == false)
-            {
                 this.hoverText = "";
-            }
         }
 
         public override void draw(SpriteBatch b)
         {
             this.drawDialogueBoxBackground(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
-            this.drawDialogueBoxBackground(this.xPositionOnScreen+this.width, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
-            this.infoButton.draw(b,this.itemDisplayLocation);
+            this.drawDialogueBoxBackground(this.xPositionOnScreen + this.width, this.yPositionOnScreen, this.width, this.height, this.backgroundColor);
+            this.infoButton.draw(b, this.itemDisplayLocation);
 
-            b.DrawString(Game1.dialogueFont, this.actualItem.DisplayName,new Vector2(this.xPositionOnScreen+ (this.width/2),this.itemDisplayLocation.Y)+ this.getHeightOffsetFromItem()-this.getItemNameOffset(), this.getNameColor());
+            b.DrawString(Game1.dialogueFont, this.actualItem.DisplayName, new Vector2(this.xPositionOnScreen + this.width / 2, this.itemDisplayLocation.Y) + this.getHeightOffsetFromItem() - this.getItemNameOffset(), this.getNameColor());
 
-            b.DrawString(Game1.smallFont, Game1.parseText(this.actualItem.getDescription(), Game1.smallFont, this.width),new Vector2(this.xPositionOnScreen+64,this.getItemDescriptionOffset().Y), Color.Black);
+            b.DrawString(Game1.smallFont, Game1.parseText(this.actualItem.getDescription(), Game1.smallFont, this.width), new Vector2(this.xPositionOnScreen + 64, this.getItemDescriptionOffset().Y), Color.Black);
 
-            foreach(KeyValuePair<ItemDisplayButton,int> button in this.requiredItems)
+            foreach (KeyValuePair<ItemDisplayButton, int> button in this.requiredItems)
             {
                 button.Key.draw(b);
-                b.DrawString(Game1.smallFont, button.Key.item.DisplayName+ " x "+button.Value.ToString(), button.Key.Position + new Vector2(64, 16), this.getNameColor(button.Key.item, button.Value));
+                b.DrawString(Game1.smallFont, button.Key.item.DisplayName + " x " + button.Value.ToString(), button.Key.Position + new Vector2(64, 16), this.getNameColor(button.Key.item, button.Value));
             }
             if (this.goldButton != null)
             {
                 this.goldButton.draw(b);
-                b.DrawString(Game1.smallFont, this.infoButton.recipe.statCost.gold+" G", this.goldButton.Position +new Vector2(0,32),Color.Black);
+                b.DrawString(Game1.smallFont, this.infoButton.recipe.statCost.gold + " G", this.goldButton.Position + new Vector2(0, 32), Color.Black);
             }
 
             this.craftingButton.draw(b, this.getCraftableColor().A);
@@ -249,23 +221,18 @@ namespace Revitalize.Framework.Menus
         public Color getNameColor(Item I, int amount)
         {
             CraftingRecipeComponent Pair = new CraftingRecipeComponent(I, amount);
-               
+
             if (this.infoButton.recipe.InventoryContainsIngredient(this.inventory, Pair))
-            {
                 return Color.Black;
-            }
             else
-            {
                 return Color.Red;
-            }
-            
+
         }
 
         private Vector2 getHeightOffsetFromItem()
         {
-            if (ObjectUtilities.IsSameType(typeof(StardewValley.Object), this.actualItem.GetType())){
+            if (ObjectUtilities.IsSameType(typeof(StardewValley.Object), this.actualItem.GetType()))
                 return new Vector2(0, 64f);
-            }
 
             return new Vector2(0, 64f);
         }
@@ -280,7 +247,7 @@ namespace Revitalize.Framework.Menus
 
         private Vector2 getItemDescriptionOffset()
         {
-            return this.getHeightOffsetFromItem()+new Vector2(0,64)+new Vector2(0,this.itemDisplayLocation.Y);
+            return this.getHeightOffsetFromItem() + new Vector2(0, 64) + new Vector2(0, this.itemDisplayLocation.Y);
         }
 
         /// <summary>
@@ -289,12 +256,12 @@ namespace Revitalize.Framework.Menus
         /// <returns></returns>
         private Vector2 getMoneyRequiredOffset()
         {
-            return new Vector2(this.xPositionOnScreen+64+this.width,this.yPositionOnScreen+128);
+            return new Vector2(this.xPositionOnScreen + 64 + this.width, this.yPositionOnScreen + 128);
         }
 
         private float getCraftingButtonHeight()
         {
-            return this.yPositionOnScreen + this.height - 64*2;
+            return this.yPositionOnScreen + this.height - 64 * 2;
         }
 
     }

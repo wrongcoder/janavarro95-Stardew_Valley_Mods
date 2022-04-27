@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 using Netcode;
 using StardewValley;
 
-namespace Revitalize.Framework.World.Objects.Items
+namespace Omegasis.Revitalize.Framework.World.Objects.Items
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Items.ItemReference")]
     public class ItemReference
@@ -18,12 +18,12 @@ namespace Revitalize.Framework.World.Objects.Items
         /// </summary>
         public readonly NetInt stackSize = new NetInt();
 
-        public ItemReference():this(1)
+        public ItemReference() : this(1)
         {
 
         }
 
-        public ItemReference(int StackSize=1)
+        public ItemReference(int StackSize = 1)
         {
             this.stackSize.Value = StackSize;
         }

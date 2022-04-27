@@ -1,7 +1,7 @@
 using System.Linq;
 using StardewValley;
 
-namespace Revitalize.Framework.Player
+namespace Omegasis.Revitalize.Framework.Player
 {
     public class PlayerUtilities
     {

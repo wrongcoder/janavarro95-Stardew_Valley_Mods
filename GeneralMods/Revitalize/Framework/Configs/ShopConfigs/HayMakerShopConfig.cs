@@ -5,10 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize;
-using Revitalize.Framework.Configs.ShopConfigs;
 
-namespace Revitalize.Framework.Configs.ShopConfigs
+namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 {
     /// <summary>
     /// A config file used for adjusting the price and location of the hay maker shop used for buying Hay from Marnies ranch whenever.

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewValley;
 
-namespace Revitalize.Framework
+namespace Omegasis.Revitalize.Framework.Constants
 {
     /// <summary>
     /// Enums.

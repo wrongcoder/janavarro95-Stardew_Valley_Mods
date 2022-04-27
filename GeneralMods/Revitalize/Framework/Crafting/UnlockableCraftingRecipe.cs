@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Crafting
+namespace Omegasis.Revitalize.Framework.Crafting
 {
     public class UnlockableCraftingRecipe
     {
@@ -17,7 +17,7 @@ namespace Revitalize.Framework.Crafting
 
         }
 
-        public UnlockableCraftingRecipe(string WhichTab, Recipe recipe, bool HasUnlocked=false)
+        public UnlockableCraftingRecipe(string WhichTab, Recipe recipe, bool HasUnlocked = false)
         {
             this.recipe = recipe;
             this.hasUnlocked = HasUnlocked;

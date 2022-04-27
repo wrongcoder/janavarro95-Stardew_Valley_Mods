@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
-using static Revitalize.Framework.Enums;
+using static Omegasis.Revitalize.Framework.Constants.Enums;
 
-namespace Revitalize.Framework.World.WorldUtilities
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 {
 
     /// <summary>

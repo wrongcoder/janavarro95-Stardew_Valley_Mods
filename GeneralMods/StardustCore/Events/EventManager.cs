@@ -10,7 +10,7 @@ using Omegasis.StardustCore.Events.Preconditions.PlayerSpecific;
 using Omegasis.StardustCore.Events.Preconditions.TimeSpecific;
 using StardewValley;
 
-namespace StardustCore.Events
+namespace Omegasis.StardustCore.Events
 {
     public class EventManager
     {

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewValley;
-using static StardustCore.Events.EventHelper;
+using static Omegasis.StardustCore.Events.EventHelper;
 
-namespace StardustCore.Events
+namespace Omegasis.StardustCore.Events
 {
     public class EventStartData
     {

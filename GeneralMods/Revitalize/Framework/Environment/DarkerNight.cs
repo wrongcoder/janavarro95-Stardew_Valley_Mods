@@ -1,11 +1,9 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework;
-using Revitalize;
-using Revitalize.Framework.Configs;
 using StardewValley;
 
-namespace Revitalize.Framework.Environment
+namespace Omegasis.Revitalize.Framework.Environment
 {
     /// <summary>Deals with making night time darker in Stardew.</summary>
     public class DarkerNight

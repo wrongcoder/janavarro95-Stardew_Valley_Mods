@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Constants.Mail
+namespace Omegasis.Revitalize.Framework.Constants.Mail
 {
     public class MailTitles
     {
-        public const string HayMakerAvailableForPurchase="Revitalize_AnimalShop_HayMakerCanBePurchased";
+        public const string HayMakerAvailableForPurchase = "Revitalize_AnimalShop_HayMakerCanBePurchased";
 
     }
 }

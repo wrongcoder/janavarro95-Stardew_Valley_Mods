@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Configs.ShopConfigs
+namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 {
     /// <summary>
     /// Deals with adding stock and items to Robin's shop.
@@ -24,7 +24,7 @@ namespace Revitalize.Framework.Configs.ShopConfigs
 
 
         //Currently unused.
-       // public int SandSellPrice = 25;
+        // public int SandSellPrice = 25;
 
         public RobinsShopConfig()
         {

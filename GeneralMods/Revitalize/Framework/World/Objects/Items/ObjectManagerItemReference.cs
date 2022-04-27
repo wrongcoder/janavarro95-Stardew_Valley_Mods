@@ -8,10 +8,10 @@ using System.Xml.Serialization;
 using Netcode;
 using StardewValley;
 
-namespace Revitalize.Framework.World.Objects.Items
+namespace Omegasis.Revitalize.Framework.World.Objects.Items
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Items.ObjectManagerItemReference")]
-    public class ObjectManagerItemReference:ItemReference
+    public class ObjectManagerItemReference : ItemReference
     {
 
         public readonly NetString itemId = new NetString();
@@ -21,14 +21,14 @@ namespace Revitalize.Framework.World.Objects.Items
 
         }
 
-        public ObjectManagerItemReference(string ItemId, int StackSize=1):base(StackSize)
+        public ObjectManagerItemReference(string ItemId, int StackSize = 1) : base(StackSize)
         {
             this.itemId.Value = ItemId;
         }
 
         public override Item getItem(int StackSize = 1)
         {
-            return RevitalizeModCore.ObjectManager.GetItem(this.itemId.Value, StackSize);
+            return RevitalizeModCore.ObjectManager.getItem(this.itemId.Value, StackSize);
         }
 
         public override List<INetSerializable> getNetFields()

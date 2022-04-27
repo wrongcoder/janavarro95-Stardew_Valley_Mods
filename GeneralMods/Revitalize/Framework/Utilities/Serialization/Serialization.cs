@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Omegasis.StardustCore.Compatibility.SpaceCore;
-using Revitalize;
-using Revitalize.Framework.Utilities.Serialization.Converters;
 using StardewValley;
 using StardewValley.Objects;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities.Serialization
 {
     /// <summary>
     /// Handles serialization of all objects in existence.
@@ -46,14 +44,12 @@ namespace Revitalize.Framework.Utilities
             this.serializer.NullValueHandling = NullValueHandling.Include;
             this.serializer.TypeNameHandling = TypeNameHandling.All;
 
-            this.addConverter(new Framework.Utilities.Serialization.Converters.RectangleConverter());
-            this.addConverter(new Framework.Utilities.Serialization.Converters.Texture2DConverter());
+            this.addConverter(new Converters.RectangleConverter());
+            this.addConverter(new Converters.Texture2DConverter());
 
             this.settings = new JsonSerializerSettings();
             foreach (JsonConverter converter in this.serializer.Converters)
-            {
                 this.settings.Converters.Add(converter);
-            }
             this.settings.Formatting = Formatting.Indented;
             this.settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             this.settings.NullValueHandling = NullValueHandling.Include;
@@ -111,9 +107,7 @@ namespace Revitalize.Framework.Utilities
         {
             using (StreamWriter sw = new StreamWriter(path))
             using (JsonWriter writer = new JsonTextWriter(sw))
-            {
                 this.serializer.Serialize(writer, o);
-            }
         }
 
 
@@ -159,14 +153,10 @@ namespace Revitalize.Framework.Utilities
         public T DeserializeContentFile<T>(string pathToFile)
         {
             if (File.Exists(pathToFile))
-            {
 
                 return this.Deserialize<T>(pathToFile);
-            }
             else
-            {
-                return default(T);
-            }
+                return default;
         }
 
         /// <summary>

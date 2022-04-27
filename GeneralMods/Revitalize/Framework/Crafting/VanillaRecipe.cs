@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize;
-using Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.Utilities;
 using StardewValley;
 
-namespace Revitalize.Framework.Crafting
+namespace Omegasis.Revitalize.Framework.Crafting
 {
     /// <summary>
     /// A vanilla recipe to be used with standard stardew valley machines such as the furnace.
@@ -75,7 +74,7 @@ namespace Revitalize.Framework.Crafting
         public bool InventoryContainsAllIngredient(IList<Item> items)
         {
             foreach (KeyValuePair<Item, int> pair in this.requiredItems)
-                if (this.InventoryContainsIngredient(items, pair)==false) return false;
+                if (this.InventoryContainsIngredient(items, pair) == false) return false;
             return true;
         }
 
@@ -83,10 +82,8 @@ namespace Revitalize.Framework.Crafting
         public bool InventoryContainsIngredient(IList<Item> items, KeyValuePair<Item, int> pair)
         {
             foreach (Item i in items)
-            {
                 if (i != null && this.ItemEqualsOther(i, pair.Key) && pair.Value <= i.Stack)
                     return true;
-            }
             return false;
         }
 
@@ -111,7 +108,6 @@ namespace Revitalize.Framework.Crafting
             InventoryManager manager = new InventoryManager(from);
             List<Item> removalList = new List<Item>();
             foreach (KeyValuePair<Item, int> pair in this.requiredItems)
-            {
                 foreach (Item item in manager.items)
                 {
                     if (item == null) continue;
@@ -125,7 +121,6 @@ namespace Revitalize.Framework.Crafting
                         RevitalizeModCore.log("Remove: " + pair.Key.Name);
                     }
                 }
-            }
 
             foreach (var v in removalList)
                 manager.items.Remove(v);
@@ -147,16 +142,10 @@ namespace Revitalize.Framework.Crafting
                 obj.MinutesUntilReady = this.timeToMake;
             }
             else
-            {
                 if (Game1.player.isInventoryFull() == true)
-                {
-                    Game1.createItemDebris(I, Game1.player.getTileLocation(), Game1.random.Next(0, 4), Game1.player.currentLocation);
-                }
-                else
-                {
-                    Game1.player.addItemToInventory(I);
-                }
-            }
+                Game1.createItemDebris(I, Game1.player.getTileLocation(), Game1.random.Next(0, 4), Game1.player.currentLocation);
+            else
+                Game1.player.addItemToInventory(I);
 
             return;
         }

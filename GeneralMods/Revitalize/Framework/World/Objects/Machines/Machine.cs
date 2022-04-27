@@ -6,28 +6,21 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Revitalize.Framework.Objects.InformationFiles;
-using Revitalize.Framework.World.Objects.InformationFiles;
-using Revitalize.Framework.World.Objects.Interfaces;
-using Revitalize.Framework;
-using Revitalize.Framework.Crafting;
-using Revitalize.Framework.Menus;
-using Revitalize.Framework.Objects;
-using Revitalize.Framework.Utilities;
 using StardewValley;
-using StardustCore.Animations;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
-using Revitalize.Framework.Utilities.Extensions;
 using Netcode;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.StardustCore.Animations;
+using Omegasis.StardustCore.UIUtilities;
 
-namespace Revitalize.Framework.World.Objects.Machines
+namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Machine")]
     public class Machine : CustomObject, IInventoryManagerProvider
     {
 
-        public const string MachineStatusBubble_DefaultAnimationKey= "Default";
+        public const string MachineStatusBubble_DefaultAnimationKey = "Default";
         public const string MachineStatusBubble_BlankBubbleAnimationKey = "Blank";
         public const string MachineStatusBubble_InventoryFullAnimationKey = "InventoryFull";
 
@@ -103,7 +96,7 @@ namespace Revitalize.Framework.World.Objects.Machines
 
         }
 
-        
+
 
         public override bool rightClicked(Farmer who)
         {
@@ -120,21 +113,19 @@ namespace Revitalize.Framework.World.Objects.Machines
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            base.draw(spriteBatch,x, y, alpha);
+            base.draw(spriteBatch, x, y, alpha);
             this.drawStatusBubble(spriteBatch, x, y, alpha);
         }
 
         public virtual void produceItem()
         {
             foreach (ResourceInformation r in this.producedResources)
-            {
                 if (r.shouldDropResource())
                 {
                     Item i = r.getItemDrops();
                     this.GetInventoryManager().addItem(i);
                     //ModCore.log("Produced an item!");
                 }
-            }
 
         }
 
@@ -147,7 +138,7 @@ namespace Revitalize.Framework.World.Objects.Machines
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
                 this.machineStatusBubbleBox.Value.playAnimation(MachineStatusBubble_InventoryFullAnimationKey);
-                this.machineStatusBubbleBox.Value.draw(b, this.machineStatusBubbleBox.Value.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.Value.getCurrentAnimationFrameRectangle()), Color.White, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)((y + 2) * Game1.tileSize) / 10000f) + .00001f);
+                this.machineStatusBubbleBox.Value.draw(b, this.machineStatusBubbleBox.Value.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2(x * Game1.tileSize, y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.Value.getCurrentAnimationFrameRectangle()), Color.White, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 2) * Game1.tileSize / 10000f) + .00001f);
             }
         }
 
@@ -155,9 +146,7 @@ namespace Revitalize.Framework.World.Objects.Machines
         public virtual InventoryManager GetInventoryManager()
         {
             if (this.basicItemInformation == null)
-            {
                 return this.basicItemInformation.inventory;
-            }
             return this.basicItemInformation.inventory;
         }
 

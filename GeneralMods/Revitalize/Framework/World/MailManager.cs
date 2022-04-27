@@ -4,14 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Constants.Mail;
 using Omegasis.Revitalize.Framework.Utilities;
-using Revitalize.Framework.Constants.Mail;
-using Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Revitalize.Framework.World
+namespace Omegasis.Revitalize.Framework.World
 {
     /// <summary>
     /// Deals with adding custom mail to the game.

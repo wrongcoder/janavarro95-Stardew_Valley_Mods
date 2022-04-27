@@ -5,22 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Netcode;
+using Omegasis.StardustCore.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
-using StardustCore.Utilities;
 
-namespace StardustCore.Events
+namespace Omegasis.StardustCore.Events
 {
     /// <summary>
     /// Contains functions that are used to parse event data and do additional things.
     /// </summary>
     public class ExtraEventActions
     {
-
-        private static Point OldViewportPosition;
-        private static bool StartedLerp;
-        private static int CurrentViewportLerpAmount;
 
         public static Dictionary<string, JunimoAdvanceMoveData> junimoLerpData = new Dictionary<string, JunimoAdvanceMoveData>();
 

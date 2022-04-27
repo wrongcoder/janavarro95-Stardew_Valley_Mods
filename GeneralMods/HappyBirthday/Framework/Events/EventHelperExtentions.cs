@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Omegasis.StardustCore.Events;
 using StardewValley;
-using StardustCore.Events;
 
 namespace Omegasis.HappyBirthday.Framework.Events
 {

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
-using StardustCore.UIUtilities;
 
-namespace StardustCore.Animations
+namespace Omegasis.StardustCore.Animations
 {
     /// <summary>
     /// A class used to store animation information for a single frame.

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.SaveData.ShopConditionsSaveData
+namespace Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData
 {
     /// <summary>
     /// Unified class for storing all of the necessary save data that needs to be persisted for shops.
     /// </summary>
-    public class ShopSaveData:SaveDataBase
+    public class ShopSaveData : SaveDataBase
     {
         /// <summary>
         /// Deals with necessary save data regarding the animal shop.

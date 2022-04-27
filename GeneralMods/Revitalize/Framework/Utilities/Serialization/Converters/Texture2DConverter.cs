@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.UIUtilities;
 using StardewValley;
-using StardustCore.UIUtilities;
 
-namespace Revitalize.Framework.Utilities.Serialization.Converters
+namespace Omegasis.Revitalize.Framework.Utilities.Serialization.Converters
 {
     public class Texture2DConverter : JsonConverter
     {
@@ -30,7 +30,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             if (names.Length == 0) return null;
 
             if (!TextureManager.TextureManagers.ContainsKey(names[0])) return null;
-            return textureName == null ? null : TextureManager.TextureManagers[names[0]][names[1]].getTexture(names[2]).texture;
+            return textureName == null ? null : TextureManager.TextureManagers[names[0]][names[1]].getExtendedTexture(names[2]).texture;
         }
 
         public override bool CanConvert(Type objectType)

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StardustCore.Events;
 using StardewValley;
 using Microsoft.Xna.Framework;
-using StardustCore.IlluminateFramework;
-using StardustCore.Utilities;
 using Omegasis.HappyBirthday.Framework.Constants;
 using Omegasis.StardustCore.Events.Preconditions.TimeSpecific;
 using Omegasis.StardustCore.Events.Preconditions;
 using Omegasis.StardustCore.Events.Preconditions.PlayerSpecific;
 using Omegasis.StardustCore.Events.Preconditions.NPCSpecific;
 using Omegasis.HappyBirthday.Framework.Events.EventPreconditions;
+using Omegasis.StardustCore.Events;
+using Omegasis.StardustCore.IlluminateFramework;
+using Omegasis.StardustCore.Utilities;
 
 namespace Omegasis.HappyBirthday.Framework.Events
 {
@@ -139,6 +139,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerUp(1, EventHelper.FacingDirection.Up, false);
 
             e.actorFaceDirection("Penny", EventHelper.FacingDirection.Down);
+
             //starting = starting.Replace("@", Game1.player.Name);
             e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:0"));
             e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:0"));

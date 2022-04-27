@@ -4,11 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize;
-using Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.Utilities;
 using StardewValley;
 
-namespace Revitalize.Framework.Configs.ObjectsConfigs
+namespace Omegasis.Revitalize.Framework.Configs.ObjectsConfigs
 {
     public class MiningDrillConfig
     {

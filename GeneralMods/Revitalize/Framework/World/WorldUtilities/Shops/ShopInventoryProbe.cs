@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Revitalize.Framework.World.WorldUtilities.Shops.ShopUtilities;
+using static Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.ShopUtilities;
 
-namespace Revitalize.Framework.World.WorldUtilities.Shops
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 {
     /// <summary>
     /// Keeps track of methods to update a shop.

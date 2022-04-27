@@ -22,5 +22,15 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Framework\StaticValues\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Content\Graphics\Items\Crafting\Blueprint.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Import Project="..\common.targets" />
 </Project>

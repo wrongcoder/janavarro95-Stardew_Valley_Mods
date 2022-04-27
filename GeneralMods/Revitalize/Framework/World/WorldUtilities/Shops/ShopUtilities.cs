@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Revitalize.Framework.World.WorldUtilities.Shops
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 {
     public class ShopUtilities
     {

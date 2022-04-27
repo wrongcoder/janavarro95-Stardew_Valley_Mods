@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using Omegasis.StardustCore.Events.Preconditions;
 using Omegasis.StardustCore.Events.Preconditions.TimeSpecific;
 
-namespace StardustCore.Events
+namespace Omegasis.StardustCore.Events
 {
     /// <summary>
     /// 

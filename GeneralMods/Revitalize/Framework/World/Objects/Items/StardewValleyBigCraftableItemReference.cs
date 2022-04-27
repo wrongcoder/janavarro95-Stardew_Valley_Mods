@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
+using Omegasis.Revitalize.Framework.Constants;
 using StardewValley;
 
-namespace Revitalize.Framework.World.Objects.Items
+namespace Omegasis.Revitalize.Framework.World.Objects.Items
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Items.StardewValleyBigCraftableItemReference")]
-    public class StardewValleyBigCraftableItemReference:ItemReference
+    public class StardewValleyBigCraftableItemReference : ItemReference
     {
         public readonly NetEnum<Enums.SDVObject> objectId = new NetEnum<Enums.SDVObject>();
 
@@ -34,9 +35,7 @@ namespace Revitalize.Framework.World.Objects.Items
         public override Item getItem(int StackSize = 1)
         {
             if (this.objectId.Value != Enums.SDVObject.NULL)
-            {
                 return new StardewValley.Object(Vector2.Zero, (int)this.objectId.Value, StackSize);
-            }
             return null;
         }
 

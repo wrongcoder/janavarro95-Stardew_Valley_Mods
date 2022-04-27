@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Omegasis.StardustCore.UIUtilities;
+using Omegasis.StardustCore.UIUtilities.SpriteFonts;
 using StardewModdingAPI;
 using StardewValley;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.SpriteFonts;
 
-namespace StardustCore
+namespace Omegasis.StardustCore
 {
     public class ModCore : Mod
     {

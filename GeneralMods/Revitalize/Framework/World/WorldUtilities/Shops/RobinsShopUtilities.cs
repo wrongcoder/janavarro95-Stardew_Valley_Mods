@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize.Framework.Player;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.Player;
 using StardewValley;
 using StardewValley.Menus;
-using static Revitalize.Framework.World.WorldUtilities.Shops.ShopUtilities;
+using static Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.ShopUtilities;
 
-namespace Revitalize.Framework.World.WorldUtilities.Shops
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 {
     public static class RobinsShopUtilities
     {
@@ -35,7 +37,7 @@ namespace Revitalize.Framework.World.WorldUtilities.Shops
                 new ShopInventoryProbe(
                     new ItemFoundInShopInventory((itemForSale, Price,Stock)=> itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex== (int)Enums.SDVObject.Stone),
                     new UpdateShopInventory((ShopInventory,ItemForSale,Price,Stock)=>{
-                        Item clay = RevitalizeModCore.ObjectManager.GetItem(Enums.SDVObject.Clay, -1);
+                        Item clay = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Clay, -1);
                         ShopInventory.addItemForSale(clay,Game1.year>1? RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPriceYear2AndBeyond: RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.ClaySellPrice, -1);
                         return ShopInventory ;
                 }
@@ -44,7 +46,7 @@ namespace Revitalize.Framework.World.WorldUtilities.Shops
                 new ShopInventoryProbe(
                     new ItemFoundInShopInventory((itemForSale, Price,Stock)=> itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex== (int)Enums.SDVObject.Stone && PlayerUtilities.HasCompletedHardwoodDonationSpecialOrderForRobin()),
                     new UpdateShopInventory((ShopInventory,ItemForSale,Price,Stock)=>{
-                        StardewValley.Item hardwood = RevitalizeModCore.ObjectManager.GetItem(Enums.SDVObject.Hardwood, 1);
+                        StardewValley.Item hardwood = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Hardwood, 1);
                         if (RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.SellsInfiniteHardWood)
                         {
                             ShopInventory.addItemForSale(hardwood,RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, -1);
@@ -61,7 +63,7 @@ namespace Revitalize.Framework.World.WorldUtilities.Shops
                  new ShopInventoryProbe(
                     new ItemFoundInShopInventory((itemForSale, Price,Stock)=>itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex==(int)Enums.SDVBigCraftable.Workbench && (itemForSale as StardewValley.Object).bigCraftable == true),
                     new UpdateShopInventory((ShopInventory,ItemForSale,Price,Stock)=>{
-                        Item workbench = RevitalizeModCore.ObjectManager.GetItem(Constants.ItemIds.Objects.CraftingStations.WorkStation, 1);
+                        Item workbench = RevitalizeModCore.ObjectManager.getItem(CraftingStations.WorkStation_Id, 1);
                         ShopInventory.addItemForSale(workbench,RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.WorkStationSellPrice, -1);
                         return ShopInventory;
                 }

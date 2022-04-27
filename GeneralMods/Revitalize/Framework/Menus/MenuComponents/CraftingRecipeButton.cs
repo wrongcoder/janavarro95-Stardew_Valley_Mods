@@ -5,12 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using StardewValley;
-using StardustCore.Animations;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
-namespace Revitalize.Framework.Menus.MenuComponents
+namespace Omegasis.Revitalize.Framework.Menus.MenuComponents
 {
     public class CraftingRecipeButton
     {
@@ -18,7 +17,7 @@ namespace Revitalize.Framework.Menus.MenuComponents
         public ItemDisplayButton displayItem;
 
 
-        public CraftingRecipeButton(Recipe RecipeToCraft, StardustCore.Animations.AnimatedSprite Background,Vector2 Position,Rectangle BoundingBox,float Scale, bool DrawStackNumber, Color DrawColor)
+        public CraftingRecipeButton(Recipe RecipeToCraft, StardustCore.Animations.AnimatedSprite Background, Vector2 Position, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor)
         {
             this.recipe = RecipeToCraft;
             this.displayItem = new ItemDisplayButton(this.recipe.DisplayItem, Background, Position, BoundingBox, Scale, DrawStackNumber, DrawColor);
@@ -34,9 +33,9 @@ namespace Revitalize.Framework.Menus.MenuComponents
             this.displayItem.draw(B, 0.25f, 1f, false);
         }
 
-        public void draw(SpriteBatch B,Vector2 Position)
+        public void draw(SpriteBatch B, Vector2 Position)
         {
-            this.displayItem.draw(B,Position,0.25f, 1f, false);
+            this.displayItem.draw(B, Position, 0.25f, 1f, false);
         }
 
         /// <summary>
@@ -44,7 +43,7 @@ namespace Revitalize.Framework.Menus.MenuComponents
         /// </summary>
         /// <param name="B"></param>
         /// <param name="Alpha"></param>
-        public void draw(SpriteBatch B,float Alpha=1f)
+        public void draw(SpriteBatch B, float Alpha = 1f)
         {
             this.displayItem.draw(B, 0.25f, Alpha, false);
         }

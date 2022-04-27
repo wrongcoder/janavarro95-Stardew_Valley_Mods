@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Constants.ItemIds
+namespace Omegasis.Revitalize.Framework.Constants.ItemIds
 {
     public static class Ids
     {

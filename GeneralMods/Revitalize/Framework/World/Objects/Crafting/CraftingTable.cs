@@ -5,15 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Revitalize.Framework.World.Objects.InformationFiles;
-using Revitalize.Framework.Crafting;
 using StardewValley;
 using System.Xml.Serialization;
 using Netcode;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 
-namespace Revitalize.Framework.World.Objects.CraftingTables
+namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.CraftingTables.CraftingTable")]
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Crafting.CraftingTable")]
     public class CraftingTable : CustomObject
     {
         public readonly NetString craftingBookName = new NetString();
@@ -24,12 +23,12 @@ namespace Revitalize.Framework.World.Objects.CraftingTables
 
         }
 
-        public CraftingTable(BasicItemInformation Info,string CraftingRecipeBookName):base(Info)
+        public CraftingTable(BasicItemInformation Info, string CraftingRecipeBookName) : base(Info)
         {
             this.craftingBookName.Value = CraftingRecipeBookName;
         }
 
-        public CraftingTable(BasicItemInformation Info,Vector2 TilePosition ,string CraftingRecipeBookName) : base(Info,TilePosition)
+        public CraftingTable(BasicItemInformation Info, Vector2 TilePosition, string CraftingRecipeBookName) : base(Info, TilePosition)
         {
             this.craftingBookName.Value = CraftingRecipeBookName;
         }
@@ -57,13 +56,13 @@ namespace Revitalize.Framework.World.Objects.CraftingTables
         protected override void initNetFieldsPostConstructor()
         {
             base.initNetFieldsPostConstructor();
-            //this.NetFields.AddField(this.craftingBookName);
+            this.NetFields.AddField(this.craftingBookName);
         }
 
 
         public override Item getOne()
         {
-            CraftingTable component = new CraftingTable(this.getItemInformation().Copy(),this.craftingBookName);
+            CraftingTable component = new CraftingTable(this.getItemInformation().Copy(), this.craftingBookName);
             return component;
         }
     }

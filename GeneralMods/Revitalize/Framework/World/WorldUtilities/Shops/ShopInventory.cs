@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace Revitalize.Framework.World.WorldUtilities.Shops
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 {
     /// <summary>
     /// Represents a shop's given inventiry at any time.

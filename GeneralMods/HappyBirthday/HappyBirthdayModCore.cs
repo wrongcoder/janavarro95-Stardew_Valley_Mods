@@ -5,20 +5,19 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Omegasis.HappyBirthday.Framework;
-using StardustCore.Events;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Monsters;
-using StardustCore.Utilities;
 using Omegasis.HappyBirthday.Framework.ContentPack;
 using Omegasis.HappyBirthday.Framework.Utilities;
 using Omegasis.HappyBirthday.Framework.Configs;
 using Omegasis.HappyBirthday.Framework.Menus;
 using Omegasis.HappyBirthday.Framework.Events;
 using Omegasis.HappyBirthday.Framework.Gifts;
+using Omegasis.StardustCore.Events;
 
 namespace Omegasis.HappyBirthday
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using StardewValley;
 using StardewValley.Buildings;
 
-namespace Revitalize.Framework.World.WorldUtilities
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 {
     /// <summary>
     /// Utilities dealing with buildings.

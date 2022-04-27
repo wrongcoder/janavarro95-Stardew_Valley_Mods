@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Configs.ShopConfigs
+namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 {
     /// <summary>
     /// Config related to selling various items at Marnie's shop.

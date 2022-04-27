@@ -5,24 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Revitalize.Framework.World.Objects.InformationFiles;
-using Revitalize.Framework.Objects;
-using Revitalize.Framework.Utilities;
 using StardewValley;
 using System.Xml.Serialization;
 using Netcode;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 
-namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
+namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.AdvancedSolarPanel")]
-    public class AdvancedSolarPanel:Machine
+    public class AdvancedSolarPanel : Machine
     {
         public readonly NetInt maxDaysToProduceBattery = new NetInt();
         public readonly NetInt daysRemainingToProduceBattery = new NetInt();
 
         public AdvancedSolarPanel() { }
 
-        public AdvancedSolarPanel(BasicItemInformation info) : base(info,null)
+        public AdvancedSolarPanel(BasicItemInformation info) : base(info, null)
         {
             this.maxDaysToProduceBattery.Value = 6;
             this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery.Value;
@@ -58,14 +58,12 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             if (this.AnimationManager == null)
-            {
-                spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.getItemInformation().DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
-            }
+                spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * Game1.tileSize, y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.getItemInformation().DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, y * Game1.tileSize / 10000f));
 
             else
             {
                 float addedDepth = 0;
-                this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize), y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.getItemInformation().DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
+                this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2(x * Game1.tileSize, y * Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.getItemInformation().DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y + addedDepth) * Game1.tileSize) / 10000f) + .00001f);
                 try
                 {
                     this.AnimationManager.tickAnimation();

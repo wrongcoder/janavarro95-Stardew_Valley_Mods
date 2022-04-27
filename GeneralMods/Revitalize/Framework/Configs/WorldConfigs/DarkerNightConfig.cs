@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Revitalize.Framework.Configs.WorldConfigs
+namespace Omegasis.Revitalize.Framework.Configs.WorldConfigs
 {
     /// <summary>
     /// Deals with configurations for darker night.

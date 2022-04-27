@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Configs.ShopConfigs
+namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 {
     /// <summary>
     /// Deals with configs for shops.

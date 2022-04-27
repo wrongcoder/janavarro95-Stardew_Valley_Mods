@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Revitalize.Framework.Utilities.Serialization.ContractResolvers
+namespace Omegasis.Revitalize.Framework.Utilities.Serialization.ContractResolvers
 {
     public class NetFieldContract : DefaultContractResolver
     {
@@ -17,9 +17,7 @@ namespace Revitalize.Framework.Utilities.Serialization.ContractResolvers
         {
             JsonProperty property = base.CreateProperty(member, memberSerialization);
             if (member.Name == nameof(StardewValley.Item.NetFields))
-            {
                 property.Ignored = true;
-            }
             return property;
         }
     }

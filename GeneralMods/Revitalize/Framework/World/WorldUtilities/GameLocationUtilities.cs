@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize.Framework.World.Objects;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.World.Objects;
 using StardewValley;
 using StardewValley.Buildings;
 
-namespace Revitalize.Framework.World.WorldUtilities
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 {
     /// <summary>
     /// Utilities pertaining to the game locations in Stardew Valley.

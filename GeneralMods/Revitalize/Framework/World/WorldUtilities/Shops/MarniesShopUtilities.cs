@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize.Framework.Constants.ItemIds.Objects;
-using Revitalize.Framework.World.Objects.Machines;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using StardewValley.Menus;
 
-namespace Revitalize.Framework.World.WorldUtilities.Shops
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 {
     public class MarniesShopUtilities
     {

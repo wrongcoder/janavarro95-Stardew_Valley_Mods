@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
-using Revitalize.Framework.Constants.CraftingIds;
-using Revitalize.Framework.Constants.ItemIds.Objects;
-using Revitalize.Framework.Utilities;
-using StardustCore.Animations;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
+using Netcode;
+using StardewValley.Network;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
+using Omegasis.StardustCore.Animations;
+using Omegasis.StardustCore.UIUtilities;
 
-namespace Revitalize.Framework.Crafting
+namespace Omegasis.Revitalize.Framework.Crafting
 {
     public class CraftingManager
     {
@@ -34,6 +37,76 @@ namespace Revitalize.Framework.Crafting
         }
 
         /// <summary>
+        /// Checks to see if a given crafting book exists in the list of registered crafting books.
+        /// </summary>
+        /// <param name="CraftingBookName"></param>
+        /// <returns></returns>
+        public virtual bool craftingRecipeBookExists(string CraftingBookName)
+        {
+            return this.modCraftingRecipesByGroup.ContainsKey(CraftingBookName);
+        }
+
+        /// <summary>
+        /// Gets a crafting book that has been registered in <see cref="modCraftingRecipesByGroup"/>
+        /// </summary>
+        /// <param name="CraftingBookName">The name of the crafting book.</param>
+        /// <returns></returns>
+        public virtual CraftingRecipeBook getCraftingRecipeBook(string CraftingBookName)
+        {
+            if (this.craftingRecipeBookExists(CraftingBookName))
+                return this.modCraftingRecipesByGroup[CraftingBookName];
+            return null;
+        }
+
+        /// <summary>
+        /// Learns all of the passed in recipies.
+        /// </summary>
+        /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
+        /// <returns>A dictionary mapping with a keyvalue pair as the key representing the crafting book name and recipe, and a value representing if the recipe was learned or not.</returns>
+        public virtual Dictionary<KeyValuePair<string, string>, bool> learnCraftingRecipes(NetStringDictionary<string, NetString> CraftingRecipeBooksToRecipeNameMapping)
+        {
+            Dictionary<KeyValuePair<string, string>, bool> recipesLearned = new Dictionary<KeyValuePair<string, string>, bool>();
+            foreach (var craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
+            {
+                Dictionary<KeyValuePair<string, string>, bool> learnedRecipes = this.learnCraftingRecipes(craftingBookToRecipes);
+                foreach (var learnedRecipe in learnedRecipes)
+                    recipesLearned.Add(learnedRecipe.Key, learnedRecipe.Value);
+            }
+            return recipesLearned;
+        }
+
+        /// <summary>
+        /// Learns all of the passed in recipies.
+        /// </summary>
+        /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
+        /// <returns>A dictionary mapping with a keyvalue pair as the key representing the crafting book name and recipe, and a value representing if the recipe was learned or not.</returns>
+        public virtual Dictionary<KeyValuePair<string, string>, bool> learnCraftingRecipes(Dictionary<string, string> CraftingRecipeBooksToRecipeNameMapping)
+        {
+            Dictionary<KeyValuePair<string, string>, bool> recipesLearned = new Dictionary<KeyValuePair<string, string>, bool>();
+            foreach (KeyValuePair<string, string> craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
+            {
+                bool learned = this.learnCraftingRecipe(craftingBookToRecipes.Key, craftingBookToRecipes.Value);
+                recipesLearned.Add(craftingBookToRecipes, learned);
+            }
+            return recipesLearned;
+        }
+
+        /// <summary>
+        /// Unlocks a given crafting recipe.
+        /// </summary>
+        /// <param name="CraftingBookName"></param>
+        /// <param name="CraftingRecipeName"></param>
+        /// <returns></returns>
+        public virtual bool learnCraftingRecipe(string CraftingBookName, string CraftingRecipeName)
+        {
+            if (!this.craftingRecipeBookExists(CraftingBookName)) return false;
+            CraftingRecipeBook craftingBook = this.getCraftingRecipeBook(CraftingBookName);
+            if (!craftingBook.containsCraftingRecipe(CraftingRecipeName)) return false;
+            craftingBook.unlockRecipe(CraftingRecipeName);
+            return true;
+        }
+
+        /// <summary>
         /// Intitialize all Vanilla (aka machine override crafting recipes) and new modded crafting recipes to the game.
         /// </summary>
         public virtual void initializeRecipeBooks()
@@ -49,50 +122,42 @@ namespace Revitalize.Framework.Crafting
             // Alloy Furnace Recipes //
             //~~~~~~~~~~~~~~~~~~~~~~~//
             CraftingRecipeBook AlloyFurnaceRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes);
-            AlloyFurnaceRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+            AlloyFurnaceRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
 
 
             AlloyFurnaceRecipes.addCraftingRecipe("BrassIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.AluminumIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.AluminumIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.BrassIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 3, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.BrassIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 3, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("BronzeIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.TinIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.TinIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.BronzeIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.BronzeIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("SteelIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,1),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SteelIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 6, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SteelIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 6, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("ElectrumIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.GoldBar,1),1),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SilverIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SilverIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.ElectrumIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.ElectrumIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
 
             if (this.modCraftingRecipesByGroup.ContainsKey(AlloyFurnaceRecipes.craftingGroup))
-            {
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AlloyFurnaceRecipes.craftingRecipes)
-                {
                     if (this.modCraftingRecipesByGroup[AlloyFurnaceRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
                     {
 
                     }
                     else
-                    {
                         this.modCraftingRecipesByGroup[AlloyFurnaceRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
-                    }
-                }
-            }
             else
-            {
                 this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes, AlloyFurnaceRecipes);
-            }
         }
 
         protected virtual void addAnvilRecipies()
@@ -102,7 +167,7 @@ namespace Revitalize.Framework.Crafting
             //~~~~~~~~~~~~~~~~~~//
 
             CraftingRecipeBook AnvilRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AnvilCraftingRecipes);
-            AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+            AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
 
             /*
             AnvilRecipes.addCraftingRecipe("Grinder", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
@@ -116,40 +181,30 @@ namespace Revitalize.Framework.Crafting
 
             AnvilRecipes.addCraftingRecipe("Mining Drill V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SteelIngot,10),10),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.BrassIngot,10),10),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SteelIngot,10),10),
+                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.BrassIngot,10),10),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Machines.MiningDrillV1), 1)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Machines.MiningDrillV1), 1)), true));
 
             if (this.modCraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
                 foreach (KeyValuePair<string, AnimatedButton> pair in AnvilRecipes.craftingMenuTabs)
-                {
                     if (this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingMenuTabs.ContainsKey(pair.Key))
                     {
 
                     }
                     else
-                    {
                         this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingMenuTabs.Add(pair.Key, pair.Value);
-                    }
-                }
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AnvilRecipes.craftingRecipes)
-                {
                     if (this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
                     {
 
                     }
                     else
-                    {
                         this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
-                    }
-                }
             }
             else
-            {
                 this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.AnvilCraftingRecipes, AnvilRecipes);
-            }
         }
 
         protected virtual void addWorkbenchRecipes()
@@ -160,14 +215,14 @@ namespace Revitalize.Framework.Crafting
             //~~~~~~~~~~~~~~~~~~~//
 
             CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook(CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + (24 * 4)), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
-            WorkbenchRecipes.addInCraftingTab("Furniture", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Furniture Tab", new Vector2(100 + 48, 100 + (24 * 4) * 2), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), false);
+            WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
+            WorkbenchRecipes.addInCraftingTab("Furniture", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Furniture Tab", new Vector2(100 + 48, 100 + 24 * 4 * 2), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), false);
 
             WorkbenchRecipes.addCraftingRecipe("Anvil", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
                 {
                     //Inputs here
-                   new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(Ingots.SteelIngot),20)
-                }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.GetItem(CraftingStations.Anvil), 1)), true));
+                   new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SteelIngot),20)
+                }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(CraftingStations.Anvil_Id), 1)), false));
             WorkbenchRecipes.addCraftingRecipe("Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
@@ -231,32 +286,22 @@ namespace Revitalize.Framework.Crafting
             if (this.modCraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
             {
                 foreach (KeyValuePair<string, AnimatedButton> pair in WorkbenchRecipes.craftingMenuTabs)
-                {
                     if (this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingMenuTabs.ContainsKey(pair.Key))
                     {
 
                     }
                     else
-                    {
                         this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingMenuTabs.Add(pair.Key, pair.Value);
-                    }
-                }
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in WorkbenchRecipes.craftingRecipes)
-                {
                     if (this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
                     {
 
                     }
                     else
-                    {
                         this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
-                    }
-                }
             }
             else
-            {
                 this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipes);
-            }
 
 
 

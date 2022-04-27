@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Omegasis.StardustCore.Utilities;
 using StardewValley;
 using StardewValley.Characters;
-using StardustCore.Utilities;
 
-namespace StardustCore.Events
+namespace Omegasis.StardustCore.Events
 {
     public static class EventHelperExtensions
     {

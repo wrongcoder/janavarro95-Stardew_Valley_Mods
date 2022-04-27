@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewModdingAPI;
 
-namespace Revitalize.Framework.Configs.WorldConfigs
+namespace Omegasis.Revitalize.Framework.Configs.WorldConfigs
 {
     /// <summary>
     /// Deals with configurations that affect the game world.

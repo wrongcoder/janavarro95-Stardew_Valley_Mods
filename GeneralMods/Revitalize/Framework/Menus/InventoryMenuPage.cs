@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Revitalize;
-using Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.StardustCore.Animations;
+using Omegasis.StardustCore.UIUtilities;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using StardewValley;
 using StardewValley.Menus;
-using StardustCore.Animations;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.MenuComponents;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
-namespace Revitalize.Framework.Menus
+namespace Omegasis.Revitalize.Framework.Menus
 {
     /// <summary>
     /// Deals with displaying the internal contents of an inventory. Used mainly as a component for another menu that extends this functionality.
@@ -54,7 +53,7 @@ namespace Revitalize.Framework.Menus
         public int xOffset = 64;
         public int yOffset = 128;
 
-        public StardewValley.Menus.TextBox searchBox;
+        public TextBox searchBox;
 
         public Dictionary<int, InventoryMenuPage> pages;
         public int pageIndex = 0;
@@ -91,12 +90,12 @@ namespace Revitalize.Framework.Menus
             this.collumns = Collumns;
             this.populateClickableItems(this.rows, this.collumns, xPos + this.xOffset, yPos + this.yOffset);
 
-            this.searchBox = new TextBox((Texture2D)null, (Texture2D)null, Game1.dialogueFont, Game1.textColor);
+            this.searchBox = new TextBox(null, null, Game1.dialogueFont, Game1.textColor);
             this.searchBox.X = this.xPositionOnScreen;
             this.searchBox.Y = this.yPositionOnScreen;
             this.searchBox.Width = 256;
             this.searchBox.Height = 192;
-            Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.searchBox;
+            Game1.keyboardDispatcher.Subscriber = this.searchBox;
             this.searchBox.Selected = false;
 
             this.nextPage = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Next Page", new Vector2(128 + (this.searchBox.X + this.searchBox.Width), this.searchBox.Y), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "NextPageButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
@@ -138,7 +137,7 @@ namespace Revitalize.Framework.Menus
             int size = this.capacity;
             //ModCore.log("Hello World! SIZE IS: " + size);
 
-            int maxPages = ((size) / (this.rows * this.collumns)) + 1;
+            int maxPages = size / (this.rows * this.collumns) + 1;
             for (int i = 0; i < maxPages; i++)
             {
                 int amount = Math.Min(rows * collums, size);
@@ -146,17 +145,14 @@ namespace Revitalize.Framework.Menus
                 //ModCore.log("Added in a new page with size: " + size);
                 size -= amount;
                 for (int y = 0; y < collums; y++)
-                {
                     for (int x = 0; x < rows; x++)
                     {
-                        int index = ((y * rows) + x) + (rows * collums * i);
-                        if (index >= this.pages[i].amountToDisplay + (rows * collums * i))
-                        {
+                        int index = y * rows + x + rows * collums * i;
+                        if (index >= this.pages[i].amountToDisplay + rows * collums * i)
                             //ModCore.log("Break page creation.");
                             //ModCore.log("Index is: " + index);
                             //ModCore.log("Max display is: " + this.pages[i].amountToDisplay);
                             break;
-                        }
 
                         if (index > this.items.Count)
                         {
@@ -171,7 +167,6 @@ namespace Revitalize.Framework.Menus
                         ItemDisplayButton b = new ItemDisplayButton(item, new StardustCore.Animations.AnimatedSprite("ItemBackground", pos, new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), pos, new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
                         this.pages[i].storageDisplay.Add(b);
                     }
-                }
 
             }
         }
@@ -197,13 +192,9 @@ namespace Revitalize.Framework.Menus
         {
             bool hovered = false;
             foreach (ItemDisplayButton button in this.pages[this.pageIndex].storageDisplay)
-            {
                 if (button.Contains(x, y))
-                {
                     if (button.item == null)
-                    {
                         continue;
-                    }
                     else if (button.item != null)
                     {
                         this.displayItem = button.item;
@@ -211,12 +202,8 @@ namespace Revitalize.Framework.Menus
                         this.hoverText = this.displayItem.getDescription();
                         hovered = true;
                     }
-                }
-            }
             if (hovered == false)
-            {
                 this.displayItem = null;
-            }
         }
 
         /// <summary>
@@ -237,7 +224,7 @@ namespace Revitalize.Framework.Menus
         /// <param name="playSound"></param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            int index = 0 + (this.rows * this.collumns * this.pageIndex);
+            int index = 0 + this.rows * this.collumns * this.pageIndex;
             Item swap = null;
             foreach (ItemDisplayButton button in this.pages[this.pageIndex].storageDisplay)
             {
@@ -254,7 +241,6 @@ namespace Revitalize.Framework.Menus
                         return;
                     }
                     else if (this.activeItem != null)
-                    {
                         if (button.item == null)
                         {
                             //ModCore.log("Placed item: " + this.activeItem.DisplayName);
@@ -268,7 +254,6 @@ namespace Revitalize.Framework.Menus
                             //ModCore.log("Swap item: " + swap.DisplayName);
                             break;
                         }
-                    }
                 }
                 index++;
             }
@@ -291,28 +276,22 @@ namespace Revitalize.Framework.Menus
                 this.searchBox.SelectMe();
             }
             else
-            {
                 this.searchBox.Selected = false;
-            }
 
             if (this.nextPage.containsPoint(x, y))
-            {
                 //ModCore.log("Left click next page");
                 if (this.pageIndex + 1 < this.pages.Count)
                 {
                     this.pageIndex++;
                     SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
-            }
             if (this.previousPage.containsPoint(x, y))
-            {
                 //ModCore.log("Left click previous page");
                 if (this.pageIndex > 0)
                 {
                     this.pageIndex--;
                     SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
-            }
         }
 
         /// <summary>
@@ -323,10 +302,8 @@ namespace Revitalize.Framework.Menus
         public void swapItemPosition(int insertIndex, Item I)
         {
             if (I == null)
-            {
                 //ModCore.log("Odd item is null");
                 return;
-            }
             if (insertIndex + 1 > this.items.Count)
             {
                 this.items.Remove(I);
@@ -384,7 +361,7 @@ namespace Revitalize.Framework.Menus
             foreach (ItemDisplayButton button in this.pages[this.pageIndex].storageDisplay)
             {
                 index++;
-                float alpha = this.getItemDrawAlpha(button.item, index + this.pageIndex * this.rows*this.collumns);
+                float alpha = this.getItemDrawAlpha(button.item, index + this.pageIndex * this.rows * this.collumns);
                 button.draw(b, 0.25f, alpha, true);
 
             }
@@ -404,7 +381,7 @@ namespace Revitalize.Framework.Menus
 
         public void drawToolTip(SpriteBatch b)
         {
-            if (this.displayItem != null) IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, this.displayItem, false, -1, 0, -1, -1, (CraftingRecipe)null, -1);
+            if (this.displayItem != null) drawToolTip(b, this.hoverText, this.hoverTitle, this.displayItem, false, -1, 0, -1, -1, null, -1);
         }
 
         /// <summary>
@@ -421,9 +398,7 @@ namespace Revitalize.Framework.Menus
                 return I.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()) ? 1f : 0.25f;
             }
             else
-            {
                 return 1f;
-            }
         }
     }
 }

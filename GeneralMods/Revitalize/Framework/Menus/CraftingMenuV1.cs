@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Revitalize.Framework.Menus.MenuComponents;
-using Revitalize.Framework.World.Objects.Machines;
 using StardewValley;
 using StardewValley.Menus;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
-using Revitalize;
-using Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Menus.MenuComponents;
+using Omegasis.Revitalize.Framework.World.Objects.Machines;
+using Omegasis.StardustCore.UIUtilities;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
 
-namespace Revitalize.Framework.Menus
+namespace Omegasis.Revitalize.Framework.Menus
 {
     /// <summary>
     /// A simple menu for displaying craftable objects.
@@ -91,7 +91,7 @@ namespace Revitalize.Framework.Menus
         /// <summary>
         /// The search box used for looking for specific items.
         /// </summary>
-        public StardewValley.Menus.TextBox searchBox;
+        public TextBox searchBox;
 
         private Machine machine;
 
@@ -106,14 +106,10 @@ namespace Revitalize.Framework.Menus
                 if (string.IsNullOrEmpty(this.currentTab)) return 0;
                 List<CraftingRecipeButton> searchSelection;
                 if (string.IsNullOrEmpty(this.searchBox.Text) == false)
-                {
                     searchSelection = this.craftingItemsToDisplay[this.currentTab].FindAll(i => i.displayItem.item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()));
-                }
                 else
-                {
                     searchSelection = this.craftingItemsToDisplay[this.currentTab];
-                }
-                return (int)(Math.Ceiling((double)(searchSelection.Count / this.amountOfRecipesToShow)));
+                return (int)Math.Ceiling((double)(searchSelection.Count / this.amountOfRecipesToShow));
             }
         }
 
@@ -173,7 +169,7 @@ namespace Revitalize.Framework.Menus
         /// <param name="BackgroundColor"></param>
         /// <param name="FromInventory"></param>
         /// <param name="ToInventory"></param>
-        public CraftingMenuV1(int X, int Y, int Width, int Height, Color BackgroundColor, ref IList<Item> FromInventory, ref IList<Item> ToInventory,Machine Machine) : base(X, Y, Width, Height, false)
+        public CraftingMenuV1(int X, int Y, int Width, int Height, Color BackgroundColor, ref IList<Item> FromInventory, ref IList<Item> ToInventory, Machine Machine) : base(X, Y, Width, Height, false)
         {
             this.backgroundColor = BackgroundColor;
             this.CraftingTabs = new Dictionary<string, AnimatedButton>();
@@ -201,10 +197,7 @@ namespace Revitalize.Framework.Menus
         {
             base.gameWindowSizeChanged(oldBounds, newBounds);
             if (this.craftingInfo != null)
-            {
                 this.craftingInfo.gameWindowSizeChanged(oldBounds, newBounds);
-
-            }
         }
 
         /// <summary>
@@ -215,12 +208,12 @@ namespace Revitalize.Framework.Menus
             this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
             this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
 
-            this.searchBox = new TextBox((Texture2D)null, (Texture2D)null, Game1.dialogueFont, Game1.textColor);
+            this.searchBox = new TextBox(null, null, Game1.dialogueFont, Game1.textColor);
             this.searchBox.X = this.xPositionOnScreen + this.width + 96;
             this.searchBox.Y = this.yPositionOnScreen;
             this.searchBox.Width = 256;
             this.searchBox.Height = 192;
-            Game1.keyboardDispatcher.Subscriber = (IKeyboardSubscriber)this.searchBox;
+            Game1.keyboardDispatcher.Subscriber = this.searchBox;
             this.searchBox.Selected = false;
         }
         /// <summary>
@@ -230,20 +223,16 @@ namespace Revitalize.Framework.Menus
         public override void receiveKeyPress(Keys key)
         {
 
-            if(this.searchBox.Selected==false && key== Keys.Escape)
+            if (this.searchBox.Selected == false && key == Keys.Escape)
             {
                 this.readyToCloseInternal = true;
                 return;
             }
 
             if (this.searchBox.Selected && key != Keys.Escape)
-            {
                 return;
-            }
             else
-            {
                 base.receiveKeyPress(key);
-            }
         }
         /// <summary>
         /// Sorts all of the recipes for the menu.
@@ -257,9 +246,7 @@ namespace Revitalize.Framework.Menus
 
                 copy = copy.OrderBy(x => x.displayItem.item.DisplayName).ToList();
                 foreach (CraftingRecipeButton b in copy)
-                {
                     this.addInCraftingRecipe(b, pair.Key);
-                }
             }
 
 
@@ -274,12 +261,10 @@ namespace Revitalize.Framework.Menus
             int count = this.CraftingTabs.Count;
 
             if (this.CraftingTabs.ContainsKey(name))
-            {
                 return;
-            }
             else
             {
-                Vector2 newPos = new Vector2(100 + (48), (this.yPositionOnScreen+24) + ((24 * 4) * (count + 1)));
+                Vector2 newPos = new Vector2(100 + 48, this.yPositionOnScreen + 24 + 24 * 4 * (count + 1));
                 RevitalizeModCore.log("newPos: " + newPos.ToString());
                 Button.Position = newPos;
                 this.CraftingTabs.Add(name, Button);
@@ -298,14 +283,12 @@ namespace Revitalize.Framework.Menus
             if (this.craftingItemsToDisplay.ContainsKey(WhichTab))
             {
                 int count = this.craftingItemsToDisplay[WhichTab].Count % this.amountOfRecipesToShow;
-                Vector2 newPos = new Vector2(this.xPositionOnScreen + (128), (this.yPositionOnScreen + 64) + (64 * (count + 1)));
+                Vector2 newPos = new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen + 64 + 64 * (count + 1));
                 Button.displayItem.Position = newPos;
                 this.craftingItemsToDisplay[WhichTab].Add(Button);
             }
             else
-            {
                 throw new Exception("Tab: " + WhichTab + " doesn't exist!");
-            }
         }
 
         /// <summary>
@@ -317,13 +300,11 @@ namespace Revitalize.Framework.Menus
         {
             bool hovered = false;
             foreach (KeyValuePair<string, AnimatedButton> pair in this.CraftingTabs)
-            {
                 if (pair.Value.containsPoint(x, y))
                 {
                     this.hoverText = pair.Key;
                     hovered = true;
                 }
-            }
 
             //get range of buttons to show
 
@@ -331,18 +312,14 @@ namespace Revitalize.Framework.Menus
             {
                 List<CraftingRecipeButton> buttonsToDraw = this.getRecipeButtonsToDisplay();
                 foreach (CraftingRecipeButton button in buttonsToDraw)
-                {
                     if (button.containsPoint(x, y))
                     {
                         this.hoverText = button.recipe.outputName;
                         hovered = true;
                     }
-                }
             }
             if (hovered == false)
-            {
                 this.hoverText = "";
-            }
         }
 
         /// <summary>
@@ -354,22 +331,18 @@ namespace Revitalize.Framework.Menus
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             if (this.leftButton.containsPoint(x, y))
-            {
                 if (this.currentPageIndex <= 0) this.currentPageIndex = 0;
                 else
                 {
                     this.currentPageIndex--;
                     SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
-            }
             if (this.rightButton.containsPoint(x, y))
-            {
                 if (this.currentPageIndex < this.maxPages)
                 {
                     this.currentPageIndex++;
                     SoundUtilities.PlaySound(Enums.StardewSound.shwip);
                 }
-            }
 
             Rectangle r = new Rectangle(this.searchBox.X, this.searchBox.Y, this.searchBox.Width, this.searchBox.Height / 2);
             if (r.Contains(x, y))
@@ -378,19 +351,15 @@ namespace Revitalize.Framework.Menus
                 this.searchBox.SelectMe();
             }
             else
-            {
                 this.searchBox.Selected = false;
-            }
 
             foreach (KeyValuePair<string, AnimatedButton> pair in this.CraftingTabs)
-            {
                 if (pair.Value.containsPoint(x, y))
                 {
                     this.currentTab = pair.Key;
                     this.currentPageIndex = 0;
                     return;
                 }
-            }
 
             //get range of buttons to show
 
@@ -398,17 +367,14 @@ namespace Revitalize.Framework.Menus
             {
                 List<CraftingRecipeButton> buttonsToDraw = this.getRecipeButtonsToDisplay();
                 foreach (CraftingRecipeButton button in buttonsToDraw)
-                {
                     if (button.containsPoint(x, y))
                     {
                         //button.craftItem(this.fromInventory, this.toInventory);
 
                         if (this.playerInventory)
-                        {
                             this.fromInventory = Game1.player.Items;
-                        }
 
-                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width + this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button, ref this.fromInventory,ref this.toInventory,this.playerInventory,this.machine);
+                        this.craftingInfo = new CraftingInformationPage(this.xPositionOnScreen + this.width + this.xOffset, this.yPositionOnScreen, 400, this.height, this.backgroundColor, button, ref this.fromInventory, ref this.toInventory, this.playerInventory, this.machine);
                         SoundUtilities.PlaySound(Enums.StardewSound.coin);
                         if (this.playerInventory)
                         {
@@ -418,7 +384,6 @@ namespace Revitalize.Framework.Menus
                         //ModCore.log("Button has been clicked!");
                         return;
                     }
-                }
             }
             //ModCore.log("Menu has been clicked");
 
@@ -444,23 +409,19 @@ namespace Revitalize.Framework.Menus
             this.leftButton.draw(b);
             //Draw page numbers here.
             //b.DrawString(Game1.smallFont,"Page: "+this.currentPageIndex.ToString()/)
-            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + (this.maxPages + 1)).ToString(), new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen+32), Color.White);
+            b.DrawString(Game1.dialogueFont, ("Page: " + (this.currentPageIndex + 1) + " / " + (this.maxPages + 1)).ToString(), new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen + 32), Color.White);
             this.rightButton.draw(b);
 
             this.searchBox.Draw(b, true);
 
             //this.drawDialogueBoxBackground();
             foreach (KeyValuePair<string, AnimatedButton> pair in this.CraftingTabs)
-            {
                 pair.Value.draw(b);
-            }
 
             if (string.IsNullOrEmpty(this.currentTab))
             {
                 if (string.IsNullOrEmpty(this.hoverText) == false)
-                {
-                    IClickableMenuExtended.drawHoverText(b, this.hoverText, Game1.dialogueFont);
-                }
+                    drawHoverText(b, this.hoverText, Game1.dialogueFont);
                 this.drawMouse(b);
                 return;
             }
@@ -470,26 +431,18 @@ namespace Revitalize.Framework.Menus
             foreach (CraftingRecipeButton button in buttonsToDraw)
             {
                 if (button.recipe.CanCraft(this.fromInventory))
-                {
                     button.draw(b);
-                }
                 else
-                {
                     button.draw(b, .25f);
-                }
 
                 b.DrawString(Game1.smallFont, button.displayItem.item.DisplayName, button.displayItem.Position + new Vector2(64, 0), Color.Brown);
             }
 
             if (this.craftingInfo != null)
-            {
                 this.craftingInfo.draw(b);
-            }
 
             if (string.IsNullOrEmpty(this.hoverText) == false)
-            {
-                IClickableMenuExtended.drawHoverText(b, this.hoverText, Game1.dialogueFont);
-            }
+                drawHoverText(b, this.hoverText, Game1.dialogueFont);
 
             this.drawMouse(b);
         }
@@ -502,13 +455,9 @@ namespace Revitalize.Framework.Menus
         {
             List<CraftingRecipeButton> searchSelection;
             if (string.IsNullOrEmpty(this.searchBox.Text) == false)
-            {
                 searchSelection = this.craftingItemsToDisplay[this.currentTab].FindAll(i => i.displayItem.item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()));
-            }
             else
-            {
                 searchSelection = this.craftingItemsToDisplay[this.currentTab];
-            }
             searchSelection = this.searchSort(searchSelection);
 
             int amount = searchSelection.Count / this.amountOfRecipesToShow;
@@ -532,7 +481,7 @@ namespace Revitalize.Framework.Menus
             for (int i = 0; i < Unsorted.Count; i++)
             {
                 int count = i % this.amountOfRecipesToShow;
-                copy[i].displayItem.Position = new Vector2(this.xPositionOnScreen + (128), (this.yPositionOnScreen + 64) + (64 * (count + 1)));
+                copy[i].displayItem.Position = new Vector2(this.xPositionOnScreen + 128, this.yPositionOnScreen + 64 + 64 * (count + 1));
             }
             return copy;
         }

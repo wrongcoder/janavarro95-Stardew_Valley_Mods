@@ -5,17 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Netcode;
 
-namespace Revitalize.Framework.Utilities.Extensions
+namespace Omegasis.Revitalize.Framework.Utilities.Extensions
 {
     public static class NetFieldsExtension
     {
 
-        public static void AddFields(this Netcode.NetFields netFields, List<INetSerializable> netSerializables)
+        public static void AddFields(this NetFields netFields, List<INetSerializable> netSerializables)
         {
-            foreach(INetSerializable netSerializable in netSerializables)
-            {
+            foreach (INetSerializable netSerializable in netSerializables)
                 netFields.AddField(netSerializable);
-            }
         }
     }
 }

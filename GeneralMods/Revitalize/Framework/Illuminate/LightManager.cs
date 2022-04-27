@@ -5,16 +5,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Networking;
 using StardewValley;
 using StardewValley.Network;
-using StardustCore.Networking;
 
-namespace Revitalize.Framework.Illuminate
+namespace Omegasis.Revitalize.Framework.Illuminate
 {
     /// <summary>
     /// Deals with handling lights on custom objects.
     /// </summary>
-    public class LightManager: NetObject
+    public class LightManager : NetObject
     {
         [XmlIgnore]
 
@@ -23,7 +23,7 @@ namespace Revitalize.Framework.Illuminate
         /// <summary>
         /// Used to recreate lights at run time.
         /// </summary>
-        public readonly NetVector2Dictionary<FakeLightSource,NetFakeLightSource> fakeLights;
+        public readonly NetVector2Dictionary<FakeLightSource, NetFakeLightSource> fakeLights;
         /// <summary>
         /// Are the lights on this object on?
         /// </summary>
@@ -142,9 +142,7 @@ namespace Revitalize.Framework.Illuminate
         public virtual void turnOnLights(GameLocation environment, StardewValley.Object gameObject)
         {
             if (this.lights.Count() < this.fakeLights.Count())
-            {
                 this.regenerateRealLightsFromFakeLights();
-            }
             foreach (KeyValuePair<Vector2, LightSource> pair in this.lights.Pairs)
                 this.turnOnLight(pair.Key, environment, gameObject);
             this.repositionLights(gameObject);
@@ -155,9 +153,7 @@ namespace Revitalize.Framework.Illuminate
         public void turnOffLights(GameLocation environment)
         {
             if (this.lights.Count() < this.fakeLights.Count())
-            {
                 this.regenerateRealLightsFromFakeLights();
-            }
             foreach (KeyValuePair<Vector2, LightSource> pair in this.lights.Pairs)
                 this.turnOffLight(pair.Key, environment);
         }
@@ -169,9 +165,7 @@ namespace Revitalize.Framework.Illuminate
         public void repositionLights(StardewValley.Object gameObject)
         {
             if (this.lights.Count() < this.fakeLights.Count())
-            {
                 this.regenerateRealLightsFromFakeLights();
-            }
             foreach (KeyValuePair<Vector2, LightSource> pair in this.lights.Pairs)
                 this.repositionLight(pair.Value, pair.Key, gameObject);
         }
@@ -196,9 +190,7 @@ namespace Revitalize.Framework.Illuminate
         public virtual void toggleLights(GameLocation location, StardewValley.Object gameObject)
         {
             if (this.lights.Count() < this.fakeLights.Count())
-            {
                 this.regenerateRealLightsFromFakeLights();
-            }
             if (!this.lightsOn)
             {
                 this.turnOnLights(location, gameObject);

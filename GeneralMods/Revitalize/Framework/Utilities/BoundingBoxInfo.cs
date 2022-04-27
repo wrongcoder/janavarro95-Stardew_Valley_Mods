@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize.Framework.Objects;
 using StardewValley;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities
 {
     /// <summary>
     /// Deals with calculating bounding boxes on objects.
@@ -43,7 +42,7 @@ namespace Revitalize.Framework.Utilities
         /// </summary>
         /// <param name="TileSize">How big in tiles this bounding box is.</param>
         /// <param name="PixelOffsets">The offset in size and position in pixels.</param>
-        public BoundingBoxInfo(Rectangle TileSize,Rectangle PixelOffsets)
+        public BoundingBoxInfo(Rectangle TileSize, Rectangle PixelOffsets)
         {
             this.tileSize = TileSize;
             this.pixelOffsets = PixelOffsets;

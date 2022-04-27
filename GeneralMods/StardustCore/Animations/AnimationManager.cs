@@ -5,12 +5,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Networking;
+using Omegasis.StardustCore.UIUtilities;
 using StardewValley;
 using StardewValley.Network;
-using StardustCore.Networking;
-using StardustCore.UIUtilities;
 
-namespace StardustCore.Animations
+namespace Omegasis.StardustCore.Animations
 {
     /// <summary>Used to play animations for Stardust.CoreObject type objects and all objects that extend from it. In draw code of object make sure to use this info instead.</summary>
     public class AnimationManager : NetObject

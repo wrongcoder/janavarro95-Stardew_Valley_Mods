@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
-using Revitalize.Framework.Objects.InformationFiles;
-using Revitalize.Framework.World.Objects.InformationFiles;
-using Revitalize.Framework.Utilities;
 using StardewValley;
-using StardustCore.Animations;
 using System.Xml.Serialization;
 using Netcode;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 
-namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
+namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.Windmill")]
     public class Windmill : Machine
@@ -56,21 +55,13 @@ namespace Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             if (!this.getCurrentLocation().IsOutdoors) return;
             if (this.heldObject.Value != null) return;
             if (Game1.weatherIcon == Game1.weather_rain)
-            {
                 this.daysRemainingToProduceBattery.Value -= 2;
-            }
             else if (Game1.weatherIcon == Game1.weather_lightning)
-            {
                 this.daysRemainingToProduceBattery.Value -= 3;
-            }
             else if (Game1.weatherIcon == Game1.weather_debris)
-            {
                 this.daysRemainingToProduceBattery.Value -= 4;
-            }
             else
-            {
                 this.daysRemainingToProduceBattery.Value -= 1;
-            }
             if (this.daysRemainingToProduceBattery <= 0)
             {
                 this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery;

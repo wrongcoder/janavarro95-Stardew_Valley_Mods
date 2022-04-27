@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
 
-namespace StardustCore.Animations
+namespace Omegasis.StardustCore.Animations
 {
     /// <summary>A custom class used to deal with custom animations/</summary>
     public class Animation

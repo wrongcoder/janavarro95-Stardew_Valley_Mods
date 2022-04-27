@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Revitalize.Framework.Player;
+using Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData;
 using StardewValley;
 
-namespace Revitalize.Framework.SaveData
+namespace Omegasis.Revitalize.Framework.SaveData
 {
     /// <summary>
     /// Save data manager for managing custom save data for the Revitalize mod.
@@ -17,7 +17,7 @@ namespace Revitalize.Framework.SaveData
         /// <summary>
         /// Save data persisting to shop conditions.
         /// </summary>
-        public ShopConditionsSaveData.ShopSaveData shopSaveData;
+        public ShopSaveData shopSaveData;
 
         public SaveDataManager()
         {
@@ -25,7 +25,7 @@ namespace Revitalize.Framework.SaveData
 
         public virtual void loadOrCreateSaveData()
         {
-            this.shopSaveData = new ShopConditionsSaveData.ShopSaveData();
+            this.shopSaveData = new ShopSaveData();
         }
 
         /// <summary>
@@ -55,9 +55,7 @@ namespace Revitalize.Framework.SaveData
         public virtual void save()
         {
             if (this.shopSaveData.getShouldSaveData())
-            {
                 this.shopSaveData.save();
-            }
 
         }
     }

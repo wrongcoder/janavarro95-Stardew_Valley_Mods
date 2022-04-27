@@ -1,6 +1,6 @@
-using Revitalize.Framework.Player.Managers;
+using Omegasis.Revitalize.Framework.Player.Managers;
 
-namespace Revitalize.Framework.Player
+namespace Omegasis.Revitalize.Framework.Player
 {
     public class PlayerInfo
     {

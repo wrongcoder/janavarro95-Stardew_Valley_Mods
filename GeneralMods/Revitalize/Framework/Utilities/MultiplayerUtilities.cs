@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize;
-using Revitalize.Framework.Objects;
 using StardewValley;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities
 {
     /// <summary>
     /// Deals with syncing objects in multiplayer.

@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Netcode;
 
-namespace Revitalize.Framework.Illuminate
+namespace Omegasis.Revitalize.Framework.Illuminate
 {
-    public class NetFakeLightSource:NetField<FakeLightSource,NetFakeLightSource>
+    public class NetFakeLightSource : NetField<FakeLightSource, NetFakeLightSource>
     {
 
         public NetFakeLightSource()
@@ -23,14 +23,12 @@ namespace Revitalize.Framework.Illuminate
 
         public override void Set(FakeLightSource newValue)
         {
-            if (base.canShortcutSet())
+            if (this.canShortcutSet())
+                this.value = newValue;
+            else if (newValue != this.value)
             {
-                base.value = newValue;
-            }
-            else if (newValue != base.value)
-            {
-                base.cleanSet(newValue);
-                base.MarkDirty();
+                this.cleanSet(newValue);
+                this.MarkDirty();
             }
         }
 
@@ -38,14 +36,12 @@ namespace Revitalize.Framework.Illuminate
         {
 
             if (this.value == null)
-            {
                 this.value = new FakeLightSource();
-            }
 
-            if (version.IsPriorityOver(base.ChangeVersion))
+            if (version.IsPriorityOver(this.ChangeVersion))
             {
                 this.value.readFakeLightSource(reader);
-                base.setInterpolationTarget(this.value);
+                this.setInterpolationTarget(this.value);
             }
         }
 
@@ -53,9 +49,7 @@ namespace Revitalize.Framework.Illuminate
         {
 
             if (this.value == null)
-            {
                 this.value = new FakeLightSource();
-            }
             this.value.writeFakeLightSource(writer);
         }
     }

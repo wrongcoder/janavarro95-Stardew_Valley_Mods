@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Netcode;
 
-namespace Revitalize.Framework.Illuminate
+namespace Omegasis.Revitalize.Framework.Illuminate
 {
     /// <summary>
     /// Deals with recreating light sources in SDV.

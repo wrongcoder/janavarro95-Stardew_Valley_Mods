@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Netcode;
-using StardustCore.Networking;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.StardustCore.Networking;
 
-namespace Revitalize.Framework.Illuminate
+namespace Omegasis.Revitalize.Framework.Illuminate
 {
     public class NamedColor : NetObject
     {
@@ -108,14 +109,10 @@ namespace Revitalize.Framework.Illuminate
                 return new Color(r, g, b, Alpha);
             }
             if (this.colorMixMode == Enums.DyeBlendMode.Average)
-            {
                 return new Color((this.color.R + other.R) / 2, (this.color.G + other.G) / 2, (this.color.B + other.B) / 2, Alpha);
-            }
 
             if (this.colorMixMode == Enums.DyeBlendMode.Multiplier)
-            {
                 return new Color(this.color.R * other.R, this.color.G * other.G, this.color.B * other.B, Alpha);
-            }
 
             return this.color;
         }

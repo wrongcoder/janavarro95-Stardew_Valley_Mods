@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.SaveData
+namespace Omegasis.Revitalize.Framework.SaveData
 {
     /// <summary>
     /// Base class for handling persistent save data for the game for individual saves.

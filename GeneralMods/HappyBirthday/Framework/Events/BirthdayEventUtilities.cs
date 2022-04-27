@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework;
 using Omegasis.HappyBirthday.Framework.Constants;
 using Omegasis.HappyBirthday.Framework.Events.EventPreconditions;
 using Omegasis.HappyBirthday.Framework.Menus;
+using Omegasis.StardustCore.Events;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardustCore.Events;
 
 namespace Omegasis.HappyBirthday.Framework.Events
 {

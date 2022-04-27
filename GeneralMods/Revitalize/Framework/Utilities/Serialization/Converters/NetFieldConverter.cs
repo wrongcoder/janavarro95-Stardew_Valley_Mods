@@ -8,10 +8,10 @@ using Netcode;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Revitalize.Framework.Utilities.Serialization.Converters
+namespace Omegasis.Revitalize.Framework.Utilities.Serialization.Converters
 {
 
-    public class NetFieldConverter:JsonConverter
+    public class NetFieldConverter : JsonConverter
     {
         public static Dictionary<string, Type> AllTypes = new Dictionary<string, Type>();
 
@@ -22,8 +22,8 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             {
                 Converters = new List<JsonConverter>()
                 {
-                    new Framework.Utilities.Serialization.Converters.RectangleConverter(),
-                    new Framework.Utilities.Serialization.Converters.Texture2DConverter(),
+                    new Converters.RectangleConverter(),
+                    new Converters.Texture2DConverter(),
                     this
                     //new NetFieldConverter()
                 },
@@ -58,9 +58,7 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
-            {
                 return null;
-            }
 
             JObject jo = null;
             if (reader == null) return null;
@@ -71,10 +69,8 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
 
             //See if the type has already been cached and if so return it for deserialization.
             if (AllTypes.ContainsKey(t))
-            {
 
                 return JsonConvert.DeserializeObject(jo["Item"].ToString(), AllTypes[t], this.settings);
-            }
 
             Assembly asm = typeof(StardewValley.Object).Assembly;
             Type type = null;
@@ -88,19 +84,15 @@ namespace Revitalize.Framework.Utilities.Serialization.Converters
             }
 
             if (type == null)
-            {
                 foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     asm = assembly;
                     type = asm.GetType(t);
                     if (t != null) break;
                 }
-            }
 
             if (type == null)
-            {
                 throw new Exception("Unsupported type found when Deserializing Unsure what to do so we can;t deserialize this thing!: " + t);
-            }
 
             //Cache the newly found type.
             AllTypes.Add(t, type);

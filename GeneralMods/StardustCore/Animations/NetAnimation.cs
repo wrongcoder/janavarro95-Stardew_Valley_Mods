@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Netcode;
 
-namespace StardustCore.Animations
+namespace Omegasis.StardustCore.Animations
 {
     public class NetAnimation : NetField<Animation, NetAnimation>
     {

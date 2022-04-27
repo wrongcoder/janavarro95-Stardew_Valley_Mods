@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Netcode;
 
-namespace Revitalize.Framework.World.Objects.InformationFiles
+namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
 {
-    public class NetResourceInformation<T>:NetField<T,NetResourceInformation<T>> where T:ResourceInformation, new()
+    public class NetResourceInformation<T> : NetField<T, NetResourceInformation<T>> where T : ResourceInformation, new()
     {
 
         public NetResourceInformation()
@@ -23,14 +23,12 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
 
         public override void Set(T newValue)
         {
-            if (base.canShortcutSet())
+            if (this.canShortcutSet())
+                this.value = newValue;
+            else if (newValue != this.value)
             {
-                base.value = newValue;
-            }
-            else if (newValue != base.value)
-            {
-                base.cleanSet(newValue);
-                base.MarkDirty();
+                this.cleanSet(newValue);
+                this.MarkDirty();
             }
         }
 
@@ -38,14 +36,12 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         {
 
             if (this.value == null)
-            {
                 this.value = new T();
-            }
 
-            if (version.IsPriorityOver(base.ChangeVersion))
+            if (version.IsPriorityOver(this.ChangeVersion))
             {
                 this.value.readResourceInformation(reader);
-                base.setInterpolationTarget(this.value);
+                this.setInterpolationTarget(this.value);
             }
         }
 
@@ -53,9 +49,7 @@ namespace Revitalize.Framework.World.Objects.InformationFiles
         {
 
             if (this.value == null)
-            {
                 this.value = new T();
-            }
             this.value.writeResourceInformation(writer);
         }
     }

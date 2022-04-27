@@ -4,25 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize.Framework.Objects;
-using Revitalize.Framework.Objects.InformationFiles;
-using Revitalize.Framework.World.Objects;
-using Revitalize.Framework.World.Objects.CraftingTables;
-using Revitalize.Framework.World.Objects.InformationFiles;
-using Revitalize.Framework.World.Objects.Interfaces;
-using Revitalize.Framework.World.Objects.Machines;
-using Revitalize.Framework.World.Objects.Machines.EnergyGeneration;
-using Revitalize.Framework.Objects.Items.Tools;
-using Revitalize.Framework.Utilities;
 using StardewModdingAPI;
 using StardewValley;
-using StardustCore.Animations;
-using StardustCore.UIUtilities;
-using Revitalize.Framework.Constants.CraftingIds;
-using Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.World.Objects.Crafting;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration;
+using Omegasis.Revitalize.Framework.World.Objects.Machines;
+using Omegasis.Revitalize.Framework.World.Objects;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.StardustCore.UIUtilities;
+using Omegasis.StardustCore.Animations;
+using Omegasis.Revitalize.Framework.Managers;
 
-namespace Revitalize.Framework.Objects
+namespace Omegasis.Revitalize.Framework.Objects
 {
     /// <summary>
     /// Deals with handling all objects for the mod.
@@ -42,9 +41,7 @@ namespace Revitalize.Framework.Objects
 
         public ResourceManager resources;
 
-        public Dictionary<string, CustomObject> ItemsByName;
-
-        public Dictionary<string, StardewValley.Tool> Tools;
+        public Dictionary<string, Item> ItemsByName;
 
         /// <summary>
         /// Constructor.
@@ -71,9 +68,7 @@ namespace Revitalize.Framework.Objects
         {
 
             this.resources = new ResourceManager();
-            this.ItemsByName = new Dictionary<string, CustomObject>();
-
-            this.Tools = new Dictionary<string, Tool>();
+            this.ItemsByName = new Dictionary<string, Item>();
 
             //Load in furniture again!
         }
@@ -81,9 +76,11 @@ namespace Revitalize.Framework.Objects
         /// <summary>
         /// Loads in the items for the object and resource managers.
         /// </summary>
-        public void loadInItems()
+        public void loadItemsFromDisk()
         {
             this.resources.loadInItems(); //Must be first.
+
+            this.loadInItems();
             this.loadInCraftingTables();
             this.loadInMachines();
             this.loadInAestheticsObjects();
@@ -115,13 +112,24 @@ namespace Revitalize.Framework.Objects
             */
         }
 
+        private void loadInItems()
+        {
+            Blueprint craftingBlueprint_anvilForWorkbench = new Blueprint(new BasicItemInformation("Blueprint", Blueprints.Workbench_AnvilCraftingRecipeBlueprint, "A blueprint used on how to craft an anvil at a workbench!", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, false, false, TextureManagers.Items_Crafting.getTexture("Blueprint"), new AnimationManager(TextureManagers.Items_Crafting.getExtendedTexture("Blueprint"), new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), new Dictionary<string, string>()
+            {
+                {Constants.CraftingIds.CraftingRecipeBooks.WorkbenchCraftingRecipies,"Anvil" }
+
+            });
+
+            this.addItem(Blueprints.Workbench_AnvilCraftingRecipeBlueprint, craftingBlueprint_anvilForWorkbench);
+        }
+
         private void loadInCraftingTables()
         {
-            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("Work Station", CraftingStations.WorkStation, "A workbench that can be used for crafting different objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil, "An anvil that can be used for crafting different machines and other metalic objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new Animation(new Rectangle(0, 0, 32, 32))), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
+            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("Work Station", CraftingStations.WorkStation_Id, "A workbench that can be used for crafting different objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
+            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil_Id, "An anvil that can be used for crafting different machines and other metalic objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new Animation(new Rectangle(0, 0, 32, 32))), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
 
-            this.AddItem(CraftingStations.WorkStation, WorkStationObject);
-            this.AddItem(CraftingStations.Anvil, AnvilObj);
+            this.addItem(CraftingStations.WorkStation_Id, WorkStationObject);
+            this.addItem(CraftingStations.Anvil_Id, AnvilObj);
         }
 
         private void loadInMachines()
@@ -130,8 +138,8 @@ namespace Revitalize.Framework.Objects
             AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
             AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
 
-            this.AddItem(Machines.AdvancedSolarPanelV1, solarP1);
-            this.AddItem(Machines.SolarArrayV1, solarA1V1);
+            this.addItem(Machines.AdvancedSolarPanelV1, solarP1);
+            this.addItem(Machines.SolarArrayV1, solarA1V1);
 
 
             Machine miningDrillMachine_0_0 = new Machine(new BasicItemInformation("Mining Drill", Machines.MiningDrillV1, "Digs up rocks and ores. Requires energy to run.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "MiningDrillMachine"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "MiningDrillMachine"), new SerializableDictionary<string, Animation>() {
@@ -144,7 +152,7 @@ namespace Revitalize.Framework.Objects
                     true) }
             }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), new InventoryManager(new List<Item>(),18, 3, 6), null), RevitalizeModCore.ObjectManager.resources.miningDrillResources.Values.ToList());
 
-            this.AddItem(Machines.MiningDrillV1, miningDrillMachine_0_0);
+            this.addItem(Machines.MiningDrillV1, miningDrillMachine_0_0);
 
 
             Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("Windmill", Machines.WindmillV1, "Generates power from the wind.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "Windmill"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "Windmill"), new SerializableDictionary<string, Animation>() {
@@ -156,9 +164,9 @@ namespace Revitalize.Framework.Objects
                 }
             }, "Default", "Working"), Color.White, false, new Vector2(1, 2), null, null, false, null), Vector2.Zero);
 
-            this.AddItem(Machines.WindmillV1, windMillV1_0_0);
+            this.addItem(Machines.WindmillV1, windMillV1_0_0);
 
-            this.AddItem(Machines.HayMaker,new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "HayMaker"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "HayMaker"), new SerializableDictionary<string, Animation>()
+            this.addItem(Machines.HayMaker,new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "HayMaker"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "HayMaker"), new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
@@ -224,7 +232,7 @@ namespace Revitalize.Framework.Objects
         /// </summary>
         /// <param name="key"></param>
         /// <param name="I"></param>
-        public void AddItem(string key, CustomObject I)
+        public void addItem(string key, Item I)
         {
             if (this.ItemsByName.ContainsKey(key))
             {
@@ -242,7 +250,7 @@ namespace Revitalize.Framework.Objects
         /// <param name="Key"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public virtual Item GetItem(string Key, int Stack = 1)
+        public virtual Item getItem(string Key, int Stack = 1)
         {
             return this.GetItem<Item>(Key, Stack);
         }
@@ -263,7 +271,7 @@ namespace Revitalize.Framework.Objects
 
         }
 
-        public virtual T GetObject<T>(string Key, int Stack = 1) where T : StardewValley.Object
+        public virtual T getObject<T>(string Key, int Stack = 1) where T : StardewValley.Object
         {
 
             if (this.ItemsByName.ContainsKey(Key))
@@ -285,19 +293,19 @@ namespace Revitalize.Framework.Objects
         /// <param name="sdvObjectId"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public virtual Item GetItem(Enums.SDVObject sdvObjectId, int Stack = 1)
+        public virtual Item getItem(Enums.SDVObject sdvObjectId, int Stack = 1)
         {
             return new StardewValley.Object((int)sdvObjectId, Stack);
         }
 
-        public virtual StardewValley.Object GetObject(Enums.SDVObject sdvId, int Stack=1)
+        public virtual StardewValley.Object getObject(Enums.SDVObject sdvId, int Stack=1)
         {
-            return (StardewValley.Object)this.GetItem(sdvId, Stack);
+            return (StardewValley.Object)this.getItem(sdvId, Stack);
         }
 
-        public virtual StardewValley.Object GetObject(Enums.SDVBigCraftable sdvId, int Stack=1)
+        public virtual StardewValley.Object getObject(Enums.SDVBigCraftable sdvId, int Stack=1)
         {
-            return (StardewValley.Object)this.GetItem(sdvId, Stack);
+            return (StardewValley.Object)this.getItem(sdvId, Stack);
         }
 
         /// <summary>
@@ -306,27 +314,16 @@ namespace Revitalize.Framework.Objects
         /// <param name="sdvBigCraftableId"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public virtual Item GetItem(Enums.SDVBigCraftable sdvBigCraftableId, int Stack = 1)
+        public virtual Item getItem(Enums.SDVBigCraftable sdvBigCraftableId, int Stack = 1)
         {
             return new StardewValley.Object(Vector2.Zero, (int)sdvBigCraftableId, Stack);
-        }
-
-        /// <summary>
-        /// Gets a tool from the list of managed tools.
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <returns></returns>
-        public Item GetTool(string Name)
-        {
-            if (this.Tools.ContainsKey(Name)) return this.Tools[Name].getOne();
-            else return null;
         }
 
         /// <summary>
         /// Adds a new object manager to the master pool of managers.
         /// </summary>
         /// <param name="Manifest"></param>
-        public static void AddObjectManager(IManifest Manifest)
+        public static void addObjectManager(IManifest Manifest)
         {
             if (ObjectPools == null) ObjectPools = new Dictionary<string, ObjectManager>();
             ObjectPools.Add(Manifest.UniqueID, new ObjectManager(Manifest));
@@ -339,53 +336,6 @@ namespace Revitalize.Framework.Objects
         public void returnToTitleCleanUp()
         {
 
-        }
-
-        /// <summary>
-        /// Scans all mod items to try to find a match.
-        /// </summary>
-        /// <param name="ID"></param>
-        /// <param name="T"></param>
-        /// <returns></returns>
-        public Item getItemByIDAndType(string ID, Type T)
-        {
-
-            foreach (var v in this.ItemsByName)
-            {
-                if (v.Value.GetType() == T && v.Value.basicItemInformation.id == ID)
-                {
-                    Item I = v.Value.getOne();
-                    return I;
-                }
-            }
-
-            foreach (var v in this.resources.ores)
-            {
-                if (v.Value.GetType() == T && v.Value.basicItemInformation.id == ID)
-                {
-                    Item I = v.Value.getOne();
-                    return I;
-                }
-
-            }
-            foreach (var v in this.resources.oreVeins)
-            {
-                if (v.Value.GetType() == T && v.Value.basicItemInformation.id == ID)
-                {
-                    Item I = v.Value.getOne();
-                    return I;
-                }
-            }
-            foreach (var v in this.Tools)
-            {
-                if (v.Value.GetType() == T && (v.Value as IBasicItemInfoProvider).getItemInformation().id == ID)
-                {
-                    Item I = v.Value.getOne();
-                    return I;
-                }
-            }
-
-            return null;
         }
 
     }

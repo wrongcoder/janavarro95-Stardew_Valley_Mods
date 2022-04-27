@@ -7,22 +7,20 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Revitalize.Framework.Illuminate;
-using Revitalize.Framework.World.Objects.InformationFiles;
-using Revitalize.Framework.World.Objects.Interfaces;
-using Revitalize.Framework;
-using Revitalize.Framework.Objects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
-using StardustCore.Animations;
-using Revitalize.Framework.Utilities;
 using Netcode;
-using Revitalize.Framework.Utilities.Extensions;
-using Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Illuminate;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.StardustCore.Animations;
 
-namespace Revitalize.Framework.World.Objects
+namespace Omegasis.Revitalize.Framework.World.Objects
 {
 
     /*
@@ -198,6 +196,9 @@ namespace Revitalize.Framework.World.Objects
             this.initNetFieldsPostConstructor();
         }
 
+        /// <summary>
+        /// Initializes NetFields to send information for multiplayer after all of the constructor initialization for this object has taken place.
+        /// </summary>
         protected virtual void initNetFieldsPostConstructor()
         {
             if (this.basicItemInformation != null)
