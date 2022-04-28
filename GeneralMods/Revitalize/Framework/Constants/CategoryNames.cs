@@ -25,6 +25,14 @@ namespace Omegasis.Revitalize.Framework.Constants
             }
         }
 
+        public static string Farming
+        {
+            get
+            {
+                return GetCategoryName("Farming", "Farming");
+            }
+        }
+
         /// <summary>
         /// The category name for machines.
         /// </summary>

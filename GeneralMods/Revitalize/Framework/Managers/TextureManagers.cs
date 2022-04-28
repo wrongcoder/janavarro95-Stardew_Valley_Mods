@@ -19,6 +19,7 @@ namespace Omegasis.Revitalize.Framework.Managers
         public static TextureManager Items_Crafting;
 
         public static TextureManager Objects_Crafting;
+        public static TextureManager Objects_Farming;
         public static TextureManager Objects_Furniture;
         public static TextureManager Objects_Machines;
 
@@ -41,23 +42,30 @@ namespace Omegasis.Revitalize.Framework.Managers
 
             if (HasLoadedTextureManagers) return;
 
+            //HUD
             HUD = InitializeTextureManager("Revitalize.HUD", Path.Combine("Content", "Graphics", "HUD"));
 
+            //Items
             Items_Resources_Ore = InitializeTextureManager("Revitalize.Items.Resources.Ore", Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
             Items_Crafting = InitializeTextureManager("Revitalize.Items.Crafting", Path.Combine("Content", "Graphics", "Items", "Crafting"));
 
+            //World Objects
             Objects_Crafting = InitializeTextureManager("Revitalize.Objects.Crafting", Path.Combine("Content", "Graphics", "Objects", "Crafting"));
-            Objects_Furniture = InitializeTextureManager("Revitalize.Furniture", Path.Combine("Content", "Graphics", "Objects", "Furniture"));
-            Objects_Machines = InitializeTextureManager("Revitalize.Machines", Path.Combine("Content", "Graphics", "Objects", "Machines"));
+            Objects_Farming = InitializeTextureManager("Revitalize.Objects.Farming", Path.Combine("Content", "Graphics", "Objects", "Farming"));
+            Objects_Furniture = InitializeTextureManager("Revitalize.Objects.Furniture", Path.Combine("Content", "Graphics", "Objects", "Furniture"));
+            Objects_Machines = InitializeTextureManager("Revitalize.Objects.Machines", Path.Combine("Content", "Graphics", "Objects", "Machines"));
 
+            //Menus
             Menus_Misc = InitializeTextureManager("Revitalize.Menus", Path.Combine("Content", "Graphics", "Menus", "Misc"));
-            Menus_CraftingMenu = InitializeTextureManager("Revitalize.CraftingMenu", Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
+            Menus_CraftingMenu = InitializeTextureManager("Revitalize.Menus.CraftingMenu", Path.Combine("Content", "Graphics", "Menus", "CraftingMenu"));
             Menus_EnergyMenu = InitializeTextureManager("Revitalize.Menus.EnergyMenu", Path.Combine("Content", "Graphics", "Menus", "EnergyMenu"));
-            Menus_InventoryMenu = InitializeTextureManager("Revitalize.InventoryMenu", Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
+            Menus_InventoryMenu = InitializeTextureManager("Revitalize.Menus.InventoryMenu", Path.Combine("Content", "Graphics", "Menus", "InventoryMenu"));
 
+            //Resources
             Resources_Ore = InitializeTextureManager("Revitalize.Resources.Ore", Path.Combine("Content", "Graphics", "Objects", "Resources", "Ore"));
             Resources_Misc = InitializeTextureManager("Revitalize.Items.Resources.Misc", Path.Combine("Content", "Graphics", "Items", "Resources", "Misc"));
 
+            //Tools
             Tools = InitializeTextureManager("Revitalize.Tools", Path.Combine("Content", "Graphics", "Items", "Tools"));
 
             HasLoadedTextureManagers = true;

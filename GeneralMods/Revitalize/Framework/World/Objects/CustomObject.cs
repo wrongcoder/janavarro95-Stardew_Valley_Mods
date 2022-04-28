@@ -688,7 +688,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
 
             location.furniture.Add(obj);
-            location.objects.Add(placementTile, obj);
+
+            //DO NOT ADD BACK IN, as doing so WILL CAUSE PROBLEMS!
+           // location.objects.Add(placementTile, obj);
             if (who != null)
             {
                 SoundUtilities.PlaySound(location, Enums.StardewSound.woodyStep);
@@ -853,7 +855,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            this.DrawICustomModObject(spriteBatch, x, y, this.flipped, 1f,this.heldObject);
+            this.DrawICustomModObject(spriteBatch, alpha);
         }
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
@@ -887,7 +889,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public override void AttemptRemoval(Action<Furniture> removal_action)
         {
 
-            if (this.getCurrentLocation().furniture.Contains(this)) ;
+            if (this.getCurrentLocation().furniture.Contains(this))
             {
                 RevitalizeModCore.log("Furniture is contained inside of game location. Need to update removal logic.");
             }

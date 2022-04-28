@@ -13,6 +13,6 @@ namespace Omegasis.Revitalize.Framework.Constants
     public static class CategoryColors
     {
         public static Color Machines = Color.SteelBlue;
-
+        public static Color Farming = Color.SaddleBrown;
     }
 }

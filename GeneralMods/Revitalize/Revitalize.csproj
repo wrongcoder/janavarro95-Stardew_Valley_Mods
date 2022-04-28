@@ -30,6 +30,9 @@
     <None Update="Content\Graphics\Items\Crafting\Blueprint.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Graphics\Objects\Farming\IrrigatedGardenPot.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Import Project="..\common.targets" />

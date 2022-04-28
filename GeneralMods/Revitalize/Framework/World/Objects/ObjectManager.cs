@@ -20,6 +20,7 @@ using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.StardustCore.UIUtilities;
 using Omegasis.StardustCore.Animations;
 using Omegasis.Revitalize.Framework.Managers;
+using Omegasis.Revitalize.Framework.World.Objects.Farming;
 
 namespace Omegasis.Revitalize.Framework.Objects
 {
@@ -114,7 +115,7 @@ namespace Omegasis.Revitalize.Framework.Objects
 
         private void loadInItems()
         {
-            Blueprint craftingBlueprint_anvilForWorkbench = new Blueprint(new BasicItemInformation("Blueprint", Blueprints.Workbench_AnvilCraftingRecipeBlueprint, "A blueprint used on how to craft an anvil at a workbench!", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, false, false, TextureManagers.Items_Crafting.createAnimationManager("Blueprint", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), new Dictionary<string, string>()
+            Blueprint craftingBlueprint_anvilForWorkbench = new Blueprint(new BasicItemInformation("Blueprint", Blueprints.Workbench_AnvilCraftingRecipeBlueprint, "A blueprint used on how to craft an anvil at a workbench!", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, false, false, TextureManagers.Items_Crafting.createAnimationManager("Blueprint", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2),Vector2.Zero ,null, null), new Dictionary<string, string>()
             {
                 {Constants.CraftingIds.CraftingRecipeBooks.WorkbenchCraftingRecipies,"Anvil" }
 
@@ -125,8 +126,8 @@ namespace Omegasis.Revitalize.Framework.Objects
 
         private void loadInCraftingTables()
         {
-            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("Work Station", CraftingStations.WorkStation_Id, "A workbench that can be used for crafting different objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true,  TextureManagers.Objects_Crafting.createAnimationManager("Workbench",new Animation(0,0,32,32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil_Id, "An anvil that can be used for crafting different machines and other metalic objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Anvil", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
+            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("Work Station", CraftingStations.WorkStation_Id, "A workbench that can be used for crafting different objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true,  TextureManagers.Objects_Crafting.createAnimationManager("Workbench",new Animation(0,0,32,32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
+            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil_Id, "An anvil that can be used for crafting different machines and other metalic objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Anvil", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
 
             this.addItem(CraftingStations.WorkStation_Id, WorkStationObject);
             this.addItem(CraftingStations.Anvil_Id, AnvilObj);
@@ -135,8 +136,8 @@ namespace Omegasis.Revitalize.Framework.Objects
         private void loadInMachines()
         {
 
-            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager( "SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
-            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarArrayTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
+            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager( "SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarArrayTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
 
             this.addItem(Machines.AdvancedSolarPanelV1, solarP1);
             this.addItem(Machines.SolarArrayV1, solarA1V1);
@@ -150,7 +151,7 @@ namespace Omegasis.Revitalize.Framework.Objects
                     new AnimationFrame(32,0,16,32,30),
                     new AnimationFrame(48,0,16,32,30)},
                     true) }
-            }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), new InventoryManager(new List<Item>(),18, 3, 6), null), RevitalizeModCore.ObjectManager.resources.miningDrillResources.Values.ToList());
+            }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), Vector2.Zero, new InventoryManager(new List<Item>(),18, 3, 6), null), RevitalizeModCore.ObjectManager.resources.miningDrillResources.Values.ToList());
 
             this.addItem(Machines.MiningDrillV1, miningDrillMachine_0_0);
 
@@ -162,7 +163,7 @@ namespace Omegasis.Revitalize.Framework.Objects
                     new AnimationFrame(0,0,16,32,20),
                     new AnimationFrame(16,0,16,32,20) },true)
                 }
-            }, "Default", "Working"), Color.White, false, new Vector2(1, 2), null, null, false, null), Vector2.Zero);
+            }, "Default", "Working"), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null, false, null), Vector2.Zero);
 
             this.addItem(Machines.WindmillV1, windMillV1_0_0);
 
@@ -187,7 +188,14 @@ namespace Omegasis.Revitalize.Framework.Objects
                        new AnimationFrame(64,0,16,32,20)}
                     ,true)
                     }
-            },"Default","Default"), Color.White, false, new Vector2(1, Game1.tileSize / 25), new InventoryManager(), new Illuminate.LightManager())));
+            },"Default","Default"), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0,-1), new InventoryManager(), new Illuminate.LightManager())));
+
+
+            this.addItem(FarmingObjects.IrrigatedGardenPot, new IrrigatedGardenPot(new BasicItemInformation("Irrigated Garden Pot", FarmingObjects.IrrigatedGardenPot, "A garden pot with an irrigation system attached. Waters your crops for you!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, true, true, TextureManagers.Objects_Farming.createAnimationManager("IrrigatedGardenPot", new SerializableDictionary<string, Animation>()
+            {
+                {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
+                    {"Dripping",Animation.CreateAnimationFromTextureSequence(0,0,16,32,13, 6)}
+            }, "Default", "Dripping"), Color.White, false, new Vector2(1,1), new Vector2(0,-1), new InventoryManager(), new Illuminate.LightManager())));
 
         }
 

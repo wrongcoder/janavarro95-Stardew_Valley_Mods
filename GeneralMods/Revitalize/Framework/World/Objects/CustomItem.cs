@@ -226,7 +226,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            this.DrawICustomModObject(spriteBatch, x, y, this.flipped, 1f, this.heldObject);
+            this.DrawICustomModObject(spriteBatch, alpha);
         }
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)

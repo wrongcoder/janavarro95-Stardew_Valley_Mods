@@ -60,7 +60,11 @@ namespace Omegasis.StardustCore.Animations
         {
             if (this.animationFrames.Count == 0) return null;
 
-            if (this.currentAnimationFrameIndex >= this.animationFrames.Count) return this.animationFrames[this.animationFrames.Count - 1];
+            if (this.currentAnimationFrameIndex >= this.animationFrames.Count)
+            {
+
+                return this.animationFrames[this.animationFrames.Count - 1];
+            }
 
             return this.animationFrames[this.currentAnimationFrameIndex];
         }
@@ -94,14 +98,15 @@ namespace Omegasis.StardustCore.Animations
 
             if (this.getCurrentAnimationFrame().isFinished())
             {
+                //Reset old animation frame.
+                this.getCurrentAnimationFrame().reset();
+                //Move to the next frame.
                 this.currentAnimationFrameIndex++;
+                //Reset the new frame just in case.
+                this.getCurrentAnimationFrame().reset();
                 if (this.currentAnimationFrameIndex >= this.animationFrames.Count && this.shouldLoopAnimation)
                 {
                     this.reset();
-                }
-                else
-                {
-                    this.currentAnimationFrameIndex = this.animationFrames.Count; //Prevent out of bounds index exception.
                 }
             }
         }
@@ -152,6 +157,29 @@ namespace Omegasis.StardustCore.Animations
 
             //Maybe exclude this?
             writer.Write(this.currentAnimationFrameIndex);
+        }
+
+        /// <summary>
+        /// Creates a list of animation frames starting at a given position and generates the frame position data from left to right.
+        /// </summary>
+        /// <param name="startingPosX">The starting x position on the texture.</param>
+        /// <param name="startingPosY">The starting Y position on the texture.</param>
+        /// <param name="FrameWidth">The width of a given frame/</param>
+        /// <param name="FrameHeight">The height of a given frame.</param>
+        /// <param name="NumberOfFrames">The number of frames. Must be 1 or greater!</param>
+        /// <returns></returns>
+        public static Animation CreateAnimationFromTextureSequence(int startingPosX, int startingPosY, int FrameWidth, int FrameHeight, int NumberOfFrames, int ExistsForXFrames=-1, bool shouldLoop=true)
+        {
+            List<AnimationFrame> frames=new List<AnimationFrame>();
+
+            for(int i=0; i < NumberOfFrames; i++)
+            {
+                AnimationFrame frame = new AnimationFrame(startingPosX + (FrameWidth * i), startingPosY, FrameWidth, FrameHeight, ExistsForXFrames);
+                ModCore.log(string.Format("Frame information Rect: {0} ExistsForXFrames: {1} ", frame.sourceRectangle.ToString(), frame.frameDuration));
+
+                frames.Add(frame);
+            }
+            return new Animation(frames,shouldLoop);
         }
     }
 }

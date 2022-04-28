@@ -18,6 +18,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
     [XmlType("Mods_Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
     public class BasicItemInformation : NetObject
     {
+
         public readonly NetString name = new NetString();
 
         public readonly NetString id = new NetString();
@@ -129,9 +130,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         }
 
         /// <summary>
-        /// The dimensions for the game's bounding box in the number of TILES. So a Vector2(1,1) would have 1 tile width and 1 tile height.
+        /// The dimensions for the game's bounding box in the number of TILES. So a Vector2(1,1) would have 1 tile width and 1 tile height. There are also no "fractional" vounding boxes as the game counts whole tiles, so work (aka math) is needed to be done to ensure that the player can properly go infront of and behind objects.
         /// </summary>
         public readonly NetVector2 boundingBoxTileDimensions = new NetVector2();
+
+        /// <summary>
+        /// The drawing offset of the object IN TILES.
+        /// </summary>
+        public readonly NetVector2 drawOffset = new NetVector2();
 
         [JsonIgnore]
         public bool requiresUpdate;
@@ -160,19 +166,21 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
 
             this.ignoreBoundingBox.Value = false;
             this.boundingBoxTileDimensions.Value = new Vector2(1, 1);
+            this.drawOffset.Value = new Vector2(0, 0);
             this.dyedColor = new NamedColor();
 
             this.initializeNetFields();
         }
 
 
-        public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory = null, LightManager Lights = null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null) : this(Name, Id, Description, CategoryName, CategoryColor, -300, -300, Fragility, IsLamp, Price, true, true, animationManager, Color.White, IgnoreBoundingBox, BoundingBoxTileDimensions, Inventory, Lights, AlwaysDrawAbovePlayer, DyedColor)
+       
+        public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, Vector2 BoundingBoxTileOffset ,InventoryManager Inventory = null, LightManager Lights = null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null) : this(Name, Id, Description, CategoryName, CategoryColor, -300, -300, Fragility, IsLamp, Price, true, true, animationManager, Color.White, IgnoreBoundingBox, BoundingBoxTileDimensions, BoundingBoxTileOffset,Inventory, Lights, AlwaysDrawAbovePlayer, DyedColor)
         {
 
         }
 
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, Vector2 BoundingBoxTileOffset ,InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
         {
             this.name.Value = name;
             this.id.Value = id;
@@ -194,6 +202,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             this.DrawColor = drawColor;
             this.ignoreBoundingBox.Value = ignoreBoundingBox;
             this.boundingBoxTileDimensions.Value = BoundingBoxTileDimensions;
+            this.drawOffset.Value = BoundingBoxTileOffset;
             this.inventory = Inventory ?? new InventoryManager();
             this.lightManager = Lights ?? new LightManager();
             this.facingDirection.Value = Enums.Direction.Down;
@@ -225,7 +234,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor.getCopy());
+            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.drawOffset ,this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor.getCopy());
         }
 
 
@@ -270,7 +279,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
                 this.facingDirection,
                 this.shakeTimer,
                 this.alwaysDrawAbovePlayer,
-                this.boundingBoxTileDimensions);
+                this.boundingBoxTileDimensions,
+                this.drawOffset
+                );
 
             this.NetFields.AddField(this.netAnimationManager);
             this.NetFields.AddFields(this.netInventory);

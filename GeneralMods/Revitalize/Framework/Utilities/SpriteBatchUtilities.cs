@@ -38,6 +38,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
                 spriteBatch.Draw(Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, obj.TileLocation * Game1.tileSize), Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, itemToDraw.ParentSheetIndex, 16, 16), Color.White * alpha, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, (obj.boundingBox.Bottom + 1) / 10000f + addedDepth);
 
                 (itemToDraw as StardewValley.Object).draw(spriteBatch, (int)obj.TileLocation.X * Game1.tileSize, (int)obj.TileLocation.Y * Game1.tileSize, Math.Max(0f, (obj.TileLocation.Y + 1 + addedDepth) * Game1.tileSize / 10000f) + .0001f, alpha);
+                return;
             }
             if (RevitalizeModCore.Serializer.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
                 (itemToDraw as CustomObject).draw(spriteBatch, (int)obj.TileLocation.X, (int)obj.TileLocation.Y);
@@ -64,6 +65,29 @@ namespace Omegasis.Revitalize.Framework.Utilities
             else
             {
                 obj.basicItemInformation.animationManager.draw(spriteBatch, obj.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + obj.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + obj.basicItemInformation.shakeTimerOffset())), new Rectangle?(obj.basicItemInformation.animationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), obj.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
+                if (heldObject != null) SpriteBatchUtilities.Draw(spriteBatch, obj, heldObject, alpha, 0);
+            }
+        }
+
+        public static void DrawICustomModObject<T>(this T obj, SpriteBatch spriteBatch, float alpha = 1f) where T : StardewValley.Object, ICustomModObject
+        {
+            obj.DrawICustomModObject(spriteBatch, (int)obj.TileLocation.X + (int)obj.basicItemInformation.drawOffset.X, (int)obj.TileLocation.Y + (int)obj.basicItemInformation.drawOffset.Y, alpha,obj.heldObject, (int)obj.TileLocation.Y - (int)obj.basicItemInformation.drawOffset.Y);
+        }
+
+        public static void DrawICustomModObject<T>(this T obj, SpriteBatch spriteBatch, int x, int y, float alpha = 1f, StardewValley.Object heldObject = null, int YTileDepth=0) where T : StardewValley.Object, ICustomModObject
+        {
+            if (YTileDepth == 0)
+            {
+                YTileDepth = y;
+            }
+
+            if (obj.basicItemInformation.animationManager == null)
+            {
+                spriteBatch.Draw(obj.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + obj.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + obj.basicItemInformation.shakeTimerOffset())), new Rectangle?(obj.basicItemInformation.animationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), obj.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, obj.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(YTileDepth * Game1.tileSize) / 10000f));
+            }
+            else
+            {
+                obj.basicItemInformation.animationManager.draw(spriteBatch, obj.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + obj.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + obj.basicItemInformation.shakeTimerOffset())), new Rectangle?(obj.basicItemInformation.animationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), obj.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, obj.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((YTileDepth) * Game1.tileSize) / 10000f) + .00001f);
                 if (heldObject != null) SpriteBatchUtilities.Draw(spriteBatch, obj, heldObject, alpha, 0);
             }
         }

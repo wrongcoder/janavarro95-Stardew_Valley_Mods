@@ -347,8 +347,10 @@ namespace Omegasis.Revitalize
                // ObjectManager.getItem(Enums.SDVObject.Wood,999),
                // ObjectManager.getItem(Enums.SDVObject.Clay,100),
               //  ObjectManager.getItem(Enums.SDVObject.CopperBar,100)
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint)
-            });
+              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
+              ObjectManager.getItem(FarmingObjects.IrrigatedGardenPot),
+              ObjectManager.getItem(Enums.SDVBigCraftable.GardenPot)
+            }) ;
 
 
             Framework.World.WorldUtilities.Utilities.InitializeGameWorld();
