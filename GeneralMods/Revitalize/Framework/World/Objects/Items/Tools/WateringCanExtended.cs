@@ -23,6 +23,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         public BasicItemInformation info;
         public Texture2DExtended workingTexture;
 
+        public BasicItemInformation basicItemInformation { get => this.info; set => this.info = value; }
+
         /// <summary>
         /// Used only for accessibility for casting.
         /// </summary>

@@ -9,8 +9,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Interfaces
 {
     public interface IBasicItemInfoProvider
     {
-
-        public BasicItemInformation getItemInformation();
-        public void setItemInformation(BasicItemInformation Info);
+        public BasicItemInformation basicItemInformation { get; set; }
     }
 }

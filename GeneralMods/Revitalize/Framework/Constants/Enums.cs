@@ -1481,7 +1481,7 @@ namespace Omegasis.Revitalize.Framework.Constants
             /// <summary>
             /// The sound that plays when dropping an item into a machine or the shipping bin.
             /// </summary>
-            ship,
+            Ship,
 
             /// <summary>
             /// The sound that is played when a stone is craked open or an ore vein is broken.

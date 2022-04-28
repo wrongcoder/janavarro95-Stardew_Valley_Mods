@@ -5,3 +5,6 @@
 +Added CraftingBook functionality.
 +Cleanedup ObjectManager and ResourceManager to use cleaner code for setting AnimationManagers.
 -Removed texture2D param for BasicItemInformation.
+~Reduced duplicate draw code across custom objects.
+~Fixed HayMaker not playing a sound when dropping in an object.
++Started work on IrrigatedWaterPot.

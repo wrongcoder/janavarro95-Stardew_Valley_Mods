@@ -40,7 +40,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
     /// Bounding boxes work, but not for clicking to remove. Why is that?
     /// </summary>
     [XmlType("Mods_Revitalize.Framework.World.Objects.CustomObject")]
-    public class CustomObject : StardewValley.Objects.Furniture, ICommonObjectInterface, ILightManagerProvider, IBasicItemInfoProvider
+    public class CustomObject : StardewValley.Objects.Furniture, ICommonObjectInterface, ILightManagerProvider, ICustomModObject
     {
         public bool isCurrentLocationAStructure;
 
@@ -56,6 +56,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             set
             {
                 this.netBasicItemInformation.Value = value;
+            }
+        }
+
+        [XmlIgnore]
+        public AnimationManager AnimationManager
+        {
+            get
+            {
+                if (this.basicItemInformation == null) return null;
+                if (this.basicItemInformation.animationManager == null) return null;
+                return this.basicItemInformation.animationManager;
+            }
+        }
+
+        [XmlIgnore]
+        public Texture2D CurrentTextureToDisplay
+        {
+
+            get
+            {
+                if (this.AnimationManager == null) return null;
+                return this.AnimationManager.getTexture();
             }
         }
 
@@ -89,29 +111,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     this.basicItemInformation.name.Value = value;
                 }
-            }
-        }
-
-
-        [XmlIgnore]
-        public AnimationManager AnimationManager
-        {
-            get
-            {
-                if (this.basicItemInformation == null) return null;
-                if (this.basicItemInformation.animationManager == null) return null;
-                return this.basicItemInformation.animationManager;
-            }
-        }
-
-        [XmlIgnore]
-        public Texture2D CurrentTextureToDisplay
-        {
-
-            get
-            {
-                if (this.AnimationManager == null) return null;
-                return this.AnimationManager.getTexture();
             }
         }
 
@@ -838,34 +837,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
-            if (this.AnimationManager == null)
-            {
-
-                RevitalizeModCore.log("Animation Manager null for item: " + this.basicItemInformation.id);
-                return;
-            }
-            if (this.CurrentTextureToDisplay == null)
-            {
-                RevitalizeModCore.log("Texture null for item: " + this.basicItemInformation.id);
-                RevitalizeModCore.log("Expected path should be: " + this.basicItemInformation.animationManager.objectTexture.path);
-
-
-                return;
-            }
-
-            if (this.basicItemInformation == null) return;
-
-            int scaleNerfing = Math.Max(this.AnimationManager.getCurrentAnimationFrameRectangle().Width, this.AnimationManager.getCurrentAnimationFrameRectangle().Height) / 16;
-
-            spriteBatch.Draw(this.CurrentTextureToDisplay, location + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * transparency, 0f, new Vector2((float)(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2), (float)(this.AnimationManager.getCurrentAnimationFrameRectangle().Height)), (scaleSize * 4f) / scaleNerfing, SpriteEffects.None, layerDepth);
-
-            if (drawStackNumber.ShouldDrawFor(this) && this.maximumStackSize() > 1 && ((double)scaleSize > 0.3 && this.Stack != int.MaxValue) && this.Stack > 1)
-                Utility.drawTinyDigits(this.Stack, spriteBatch, location + new Vector2((float)(Game1.tileSize - Utility.getWidthOfTinyDigitString(this.Stack, 3f * scaleSize)) + 3f * scaleSize, (float)((double)Game1.tileSize - 18.0 * (double)scaleSize + 2.0)), 3f * scaleSize, 1f, Color.White);
-            if (drawStackNumber.ShouldDrawFor(this) && this.Quality > 0)
-            {
-                float num = this.Quality < 4 ? 0.0f : (float)((Math.Cos((double)Game1.currentGameTime.TotalGameTime.Milliseconds * Math.PI / 512.0) + 1.0) * 0.0500000007450581);
-                spriteBatch.Draw(Game1.mouseCursors, location + new Vector2(12f, (float)(Game1.tileSize - 12) + num), new Microsoft.Xna.Framework.Rectangle?(this.Quality < 4 ? new Microsoft.Xna.Framework.Rectangle(338 + (this.Quality - 1) * 8, 400, 8, 8) : new Microsoft.Xna.Framework.Rectangle(346, 392, 8, 8)), Color.White * transparency, 0.0f, new Vector2(4f, 4f), (float)(3.0 * (double)scaleSize * (1.0 + (double)num)), SpriteEffects.None, layerDepth);
-            }
+            this.DrawICustomModObjectInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, color, drawShadow);
         }
 
         public override void drawAttachments(SpriteBatch b, int x, int y)
@@ -875,60 +847,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f)
         {
-            if (this.AnimationManager == null)
-            {
-                if (this.CurrentTextureToDisplay == null)
-                {
-                    RevitalizeModCore.log("Texture null for item: " + this.basicItemInformation.id);
-                    return;
-                }
-            }
-
-            if (f.ActiveObject.bigCraftable.Value)
-            {
-                spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition, this.AnimationManager.getCurrentAnimationFrameRectangle(), this.basicItemInformation.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
-                return;
-            }
-
-            spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition, this.AnimationManager.getCurrentAnimationFrameRectangle(), this.basicItemInformation.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
-            if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
-            {
-                spriteBatch.Draw(this.CurrentTextureToDisplay, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), this.AnimationManager.getCurrentAnimationFrameRectangle(), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
-                if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
-                {
-                    return;
-                }
-                Game1.starCropShimmerPause += 0.04f;
-                if (Game1.starCropShimmerPause >= 0.8f)
-                {
-                    Game1.starCropShimmerPause = -0.8f;
-                }
-            }
-            //base.drawWhenHeld(spriteBatch, objectPosition, f);
+            this.DrawICustomModObjectWhenHeld(spriteBatch, objectPosition, f);
         }
 
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            if (x <= -1)
-            {
-                x = (int)this.TileLocation.X;
-                //spriteBatch.Draw(this.basicItemInfo.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, this.TileLocation), new Rectangle?(this.AnimationManager.currentAnimation.sourceRectangle), this.basicItemInfo.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(this.TileLocation.Y * Game1.tileSize) / 10000f));
-            }
-            if (y <= -1)
-            {
-                y = (int)this.TileLocation.Y;
-            }
-
-            if (this.AnimationManager == null)
-            {
-                spriteBatch.Draw(this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)(y * Game1.tileSize) / 10000f));
-            }
-            else
-            {
-                this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (float)((y) * Game1.tileSize) / 10000f) + .00001f);
-                if (this.heldObject.Value != null) SpriteBatchUtilities.Draw(spriteBatch, this, this.heldObject.Value, alpha, 0);
-            }
+            this.DrawICustomModObject(spriteBatch, x, y, this.flipped, 1f,this.heldObject);
         }
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)

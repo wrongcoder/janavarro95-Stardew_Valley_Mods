@@ -211,7 +211,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Corn;
                 who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfCornRequired;
                 this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.PlaySound(Enums.StardewSound.ship);
+                who.currentLocation.PlaySound(Enums.StardewSound.Ship);
                 if (who.ActiveObject.Stack == 0)
                     who.removeItemFromInventory(who.ActiveObject);
                 return true;
@@ -222,7 +222,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Fiber;
                 who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfFiberRequired;
                 this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.PlaySound(Enums.StardewSound.ship);
+                who.currentLocation.PlaySound(Enums.StardewSound.Ship);
                 if (who.ActiveObject.Stack == 0)
                     who.removeItemFromInventory(who.ActiveObject);
                 return true;
@@ -233,7 +233,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Hay;
                 who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfWheatRequired;
                 this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.PlaySound(Enums.StardewSound.ship);
+                who.currentLocation.PlaySound(Enums.StardewSound.Ship);
                 if (who.ActiveObject.Stack == 0)
                     who.removeItemFromInventory(who.ActiveObject);
                 return true;
@@ -244,7 +244,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 this.feedType.Value = Enums.SDVObject.Amaranth;
                 who.ActiveObject.Stack -= RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.NumberOfAmaranthRequired;
                 this.MinutesUntilReady = RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.MinutesToProcess;
-                who.currentLocation.PlaySound(Enums.StardewSound.ship);
+                who.currentLocation.PlaySound(Enums.StardewSound.Ship);
                 if (who.ActiveObject.Stack == 0)
                     who.removeItemFromInventory(who.ActiveObject);
                 return true;
