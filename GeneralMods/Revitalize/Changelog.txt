@@ -3,3 +3,5 @@
 +Rewrote TextureManagers to be more organized to access from code easier.
 +Updated NampeSpaces to start with Omegasis.
 +Added CraftingBook functionality.
++Cleanedup ObjectManager and ResourceManager to use cleaner code for setting AnimationManagers.
+-Removed texture2D param for BasicItemInformation.

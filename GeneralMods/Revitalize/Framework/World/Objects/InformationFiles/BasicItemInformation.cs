@@ -166,13 +166,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         }
 
 
-        public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory = null, LightManager Lights = null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null) : this(Name, Id, Description, CategoryName, CategoryColor, -300, -300, Fragility, IsLamp, Price, true, true, animationManager.getTexture(), animationManager, Color.White, IgnoreBoundingBox, BoundingBoxTileDimensions, Inventory, Lights, AlwaysDrawAbovePlayer, DyedColor)
+        public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory = null, LightManager Lights = null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null) : this(Name, Id, Description, CategoryName, CategoryColor, -300, -300, Fragility, IsLamp, Price, true, true, animationManager, Color.White, IgnoreBoundingBox, BoundingBoxTileDimensions, Inventory, Lights, AlwaysDrawAbovePlayer, DyedColor)
         {
 
         }
 
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, Texture2D texture, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
         {
             this.name.Value = name;
             this.id.Value = id;
@@ -189,11 +189,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             this.isLamp.Value = isLamp;
 
             this.animationManager = animationManager;
-            if (this.animationManager.IsNull)
-            {
-                this.animationManager = new AnimationManager(new Texture2DExtended(), new Animation(new Rectangle(0, 0, 16, 16)), false);
-                this.animationManager.getExtendedTexture().texture = texture;
-            }
 
             this.drawPosition.Value = Vector2.Zero;
             this.DrawColor = drawColor;
@@ -230,7 +225,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.getTexture(), this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor.getCopy());
+            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor.getCopy());
         }
 
 

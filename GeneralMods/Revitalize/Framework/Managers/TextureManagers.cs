@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.StardustCore.Animations;
 using Omegasis.StardustCore.UIUtilities;
 
 namespace Omegasis.Revitalize.Framework.Managers
@@ -68,6 +69,29 @@ namespace Omegasis.Revitalize.Framework.Managers
             TextureManager textureManager = TextureManager.GetTextureManager(RevitalizeModCore.Instance.ModManifest, TextureManagerId);
             textureManager.searchForTextures(RevitalizeModCore.ModHelper, RevitalizeModCore.Manifest, TextureManagerPathToSearch);
             return textureManager;
+        }
+
+
+
+
+        public static AnimationManager createOreResourceAnimationManager(string TextureName)
+        {
+            return createOreResourceAnimationManager(TextureName, new Animation(0, 0, 16, 16));
+        }
+
+        public static AnimationManager createOreResourceAnimationManager(string TextureName, Animation DefaultAnimation)
+        {
+            return TextureManagers.Items_Resources_Ore.createAnimationManager(TextureName, DefaultAnimation);
+        }
+
+        public static AnimationManager createMiscResourceAnimationManager(string TextureName)
+        {
+            return createMiscResourceAnimationManager(TextureName, new Animation(0, 0, 16, 16));
+        }
+
+        public static AnimationManager createMiscResourceAnimationManager(string TextureName, Animation DefaultAnimation)
+        {
+            return TextureManagers.Resources_Misc.createAnimationManager(TextureName, DefaultAnimation);
         }
 
     }

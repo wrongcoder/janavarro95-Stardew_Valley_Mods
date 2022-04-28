@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
+using Omegasis.StardustCore.Animations;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -302,6 +303,32 @@ namespace Omegasis.StardustCore.UIUtilities
             return null;
         }
 
+        /// <summary>
+        /// Creates a new animation manager with the given parameters.
+        /// </summary>
+        /// <param name="TextureName"></param>
+        /// <param name="DefaultAnimation"></param>
+        /// <returns></returns>
+        public AnimationManager createAnimationManager(string TextureName, Animation DefaultAnimation)
+        {
+            return new AnimationManager(this.getExtendedTexture(TextureName), DefaultAnimation);
+        }
+
+        /// <summary>
+        /// Creates a new animation manager with the given parameters.
+        /// </summary>
+        /// <param name="TextureName"></param>
+        /// <param name="Animations"></param>
+        /// <param name="DefaultAnimationKey"></param>
+        /// <param name="StartingAnimationKey"></param>
+        /// <param name="startingAnimationFrame"></param>
+        /// <param name="EnabledByDefault"></param>
+        /// <returns></returns>
+        public AnimationManager createAnimationManager(string TextureName, Dictionary<string, Animation> Animations, string DefaultAnimationKey, string StartingAnimationKey, int startingAnimationFrame = 0, bool EnabledByDefault = true)
+        {
+            return new AnimationManager(this.getExtendedTexture(TextureName), Animations, DefaultAnimationKey, StartingAnimationKey, startingAnimationFrame, EnabledByDefault);
+        }
+
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
         //                      Static Functions                 //
@@ -353,7 +380,6 @@ namespace Omegasis.StardustCore.UIUtilities
         {
             return GetTextureManager(Manifest, ManagerName).getExtendedTexture(TextureName);
         }
-
 
 
     }

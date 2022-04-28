@@ -114,7 +114,7 @@ namespace Omegasis.Revitalize.Framework.Objects
 
         private void loadInItems()
         {
-            Blueprint craftingBlueprint_anvilForWorkbench = new Blueprint(new BasicItemInformation("Blueprint", Blueprints.Workbench_AnvilCraftingRecipeBlueprint, "A blueprint used on how to craft an anvil at a workbench!", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, false, false, TextureManagers.Items_Crafting.getTexture("Blueprint"), new AnimationManager(TextureManagers.Items_Crafting.getExtendedTexture("Blueprint"), new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), new Dictionary<string, string>()
+            Blueprint craftingBlueprint_anvilForWorkbench = new Blueprint(new BasicItemInformation("Blueprint", Blueprints.Workbench_AnvilCraftingRecipeBlueprint, "A blueprint used on how to craft an anvil at a workbench!", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, false, false, TextureManagers.Items_Crafting.createAnimationManager("Blueprint", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), new Dictionary<string, string>()
             {
                 {Constants.CraftingIds.CraftingRecipeBooks.WorkbenchCraftingRecipies,"Anvil" }
 
@@ -125,8 +125,8 @@ namespace Omegasis.Revitalize.Framework.Objects
 
         private void loadInCraftingTables()
         {
-            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("Work Station", CraftingStations.WorkStation_Id, "A workbench that can be used for crafting different objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Workbench"), new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil_Id, "An anvil that can be used for crafting different machines and other metalic objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Objects.Crafting", "Anvil"), new Animation(new Rectangle(0, 0, 32, 32))), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
+            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("Work Station", CraftingStations.WorkStation_Id, "A workbench that can be used for crafting different objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true,  TextureManagers.Objects_Crafting.createAnimationManager("Workbench",new Animation(0,0,32,32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
+            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil_Id, "An anvil that can be used for crafting different machines and other metalic objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Anvil", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
 
             this.addItem(CraftingStations.WorkStation_Id, WorkStationObject);
             this.addItem(CraftingStations.Anvil_Id, AnvilObj);
@@ -135,14 +135,14 @@ namespace Omegasis.Revitalize.Framework.Objects
         private void loadInMachines()
         {
 
-            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarPanelTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
-            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "SolarArrayTier1"), new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
+            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager( "SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
+            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarArrayTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), null, null));
 
             this.addItem(Machines.AdvancedSolarPanelV1, solarP1);
             this.addItem(Machines.SolarArrayV1, solarA1V1);
 
 
-            Machine miningDrillMachine_0_0 = new Machine(new BasicItemInformation("Mining Drill", Machines.MiningDrillV1, "Digs up rocks and ores. Requires energy to run.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "MiningDrillMachine"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "MiningDrillMachine"), new SerializableDictionary<string, Animation>() {
+            Machine miningDrillMachine_0_0 = new Machine(new BasicItemInformation("Mining Drill", Machines.MiningDrillV1, "Digs up rocks and ores. Requires energy to run.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MiningDrillMachine", new SerializableDictionary<string, Animation>() {
                 {"Default",new Animation(new AnimationFrame(0,0,16,16))  },
                 { "Mining",new Animation(new List<AnimationFrame>(){
                     new AnimationFrame(0,0,16,32,30),
@@ -155,7 +155,7 @@ namespace Omegasis.Revitalize.Framework.Objects
             this.addItem(Machines.MiningDrillV1, miningDrillMachine_0_0);
 
 
-            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("Windmill", Machines.WindmillV1, "Generates power from the wind.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "Windmill"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "Windmill"), new SerializableDictionary<string, Animation>() {
+            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("Windmill", Machines.WindmillV1, "Generates power from the wind.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
 
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                 {"Working",new Animation(new List<AnimationFrame>(){
@@ -166,7 +166,7 @@ namespace Omegasis.Revitalize.Framework.Objects
 
             this.addItem(Machines.WindmillV1, windMillV1_0_0);
 
-            this.addItem(Machines.HayMaker,new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManager.GetTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "HayMaker"), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Machines", "HayMaker"), new SerializableDictionary<string, Animation>()
+            this.addItem(Machines.HayMaker,new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Machines.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
