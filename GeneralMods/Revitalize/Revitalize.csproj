@@ -30,6 +30,9 @@
     <None Update="Content\Graphics\Items\Crafting\Blueprint.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Graphics\Items\Farming\AutoHarvesterGardenPotAttachment.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Graphics\Items\Farming\AutoPlanterGardenPotAttachment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

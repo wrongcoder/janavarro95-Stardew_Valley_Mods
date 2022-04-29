@@ -915,6 +915,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         }
 
 
+        public override void dropItem(GameLocation location, Vector2 origin, Vector2 destination)
+        {
+            WorldUtilities.WorldUtility.CreateItemDebrisAtTileLocation(location,this ,origin / Game1.tileSize, destination / Game1.tileSize);
+        }
+
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
         //                            Rendering code                   //

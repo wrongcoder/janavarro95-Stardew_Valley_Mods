@@ -42,6 +42,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         public const string DRIPPING_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY = "Dripping_With_Enricher_Attachment";
         public const string DEFAULT_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY = "Default_With_Enricher_Attachment";
 
+
+        public const string DEFAULT_WITH_AUTO_HARVESTER_ANIMATION_KEY = "Default_With_Auto_Harvester_Attachment";
+        public const string DRIPPING_WITH_AUTO_HARVESTER_ANIMATION_KEY = "Dripping_With_Auto_Harvester_Attachment";
+        public const string DEFAULT_WITH_AUTO_HARVESTER_ENRICHER_ANIMATION_KEY = "Default_With_Auto_Harvester_Enricher_Attachments";
+        public const string DRIPPING_WITH_AUTO_HARVESTER_ENRICHER_ANIMATION_KEY = "Dripping_With_Auto_Harvester_Enricher_Attachments";
+        public const string DEFAULT_WITH_AUTO_HARVESTER_PLANTER_ANIMATION_KEY = "Default_With_Auto_Harvester_Planter_Attachments";
+        public const string DRIPPING_WITH_AUTO_HARVESTER_PLANTER_ANIMATION_KEY = "Dripping_With_Auto_Harvester_Planter_Attachments";
+
+        public const string DEFAULT_WITH_ALL_ATTACHMENTS_ANIMATION_KEY = "Default_With_All_Attachments";
+        public const string DRIPPING_WITH_ALL_ATTACHMENTS_ANIMATION_KEY = "Dripping_With_All_Attachments";
+
+
         [XmlElement("hoeDirt")]
         public readonly NetRef<HoeDirt> hoeDirt = new NetRef<HoeDirt>();
         [XmlIgnore]
@@ -65,6 +77,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         public readonly NetBool hasPlanterAttachment = new NetBool(false);
         public readonly NetBool hasEnricherAttachment = new NetBool(false);
+        public readonly NetBool hasAutoHarvestAttachment = new NetBool(false);
 
 
         public IrrigatedGardenPot()
@@ -148,21 +161,27 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             if (!probe && dropInItem != null)
             {
 
-                if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.Enricher)
+                if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.Enricher && this.hasEnricherAttachment.Value==false)
                 {
                     this.hasEnricherAttachment.Value = true;
                     this.updateAnimation(true);
-                    Game1.player.reduceActiveItemByOne();
                     return true;
                 }
 
-                if (dropInItem is AutoPlanterGardenPotAttachment)
+                if (dropInItem is AutoPlanterGardenPotAttachment && this.hasPlanterAttachment.Value==false)
                 {
                     this.hasPlanterAttachment.Value = true;
                     this.updateAnimation(true);
-                    Game1.player.reduceActiveItemByOne();
                     return true;
                 }
+
+                if (dropInItem is AutoHarvesterGardenPotAttachment && this.hasAutoHarvestAttachment.Value==false)
+                {
+                    this.hasAutoHarvestAttachment.Value = true;
+                    this.updateAnimation(true);
+                    return true;
+                }
+
             }
 
 
@@ -174,17 +193,31 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             bool canPickupGardenPot = base.pickupFromGameWorld(tileLocation, environment, who);
             if (canPickupGardenPot == false) return false;
 
+            if (this.hasAutoHarvestAttachment.Value)
+            {
+                Item autoHarvester = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoHarvesterGardenPotAttachment);
+                if (Game1.player.isInventoryFull())
+                {
+                    WorldUtility.CreateItemDebrisAtTileLocation(environment, autoHarvester, tileLocation, tileLocation);
+                }
+                else
+                {
+                    Game1.player.addItemToInventoryBool(autoHarvester);
+                    this.hasAutoHarvestAttachment.Value = false;
+                    this.updateAnimation(true);
+                }
+            }
             if (this.hasPlanterAttachment.Value)
             {
                 Item autoPlanter = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment);
                 if (Game1.player.isInventoryFull())
                 {
-                    Game1.createItemDebris(autoPlanter, Game1.player.getTileLocation() * 64, Game1.player.FacingDirection);
+                    WorldUtility.CreateItemDebrisAtTileLocation(environment, autoPlanter, tileLocation, tileLocation);
                 }
                 else
                 {
                     Game1.player.addItemToInventoryBool(autoPlanter);
-                    this.hasEnricherAttachment.Value = false;
+                    this.hasPlanterAttachment.Value = false;
                     this.updateAnimation(true);
                 }
             }
@@ -193,7 +226,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 Item enricher = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Enricher);
                 if (Game1.player.isInventoryFull())
                 {
-                    Game1.createItemDebris(enricher, Game1.player.getTileLocation() * 64, Game1.player.FacingDirection);
+                    WorldUtility.CreateItemDebrisAtTileLocation(environment, enricher, tileLocation, tileLocation);
                 }
                 else
                 {
@@ -202,6 +235,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                     this.updateAnimation(true);
                 }
             }
+
+
+
+
             return canPickupGardenPot;
 
         }
@@ -307,7 +344,60 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         protected virtual void updateAnimation(bool ShowDrippingAnimation)
         {
-            if (this.hasEnricherAttachment.Value && this.hasPlanterAttachment.Value)
+
+            if (this.hasEnricherAttachment.Value == true && this.hasPlanterAttachment.Value == true && this.hasAutoHarvestAttachment)
+            {
+                if (ShowDrippingAnimation)
+                {
+                    this.AnimationManager.playAnimation(DRIPPING_WITH_ALL_ATTACHMENTS_ANIMATION_KEY, true);
+                }
+                else
+                {
+                    this.AnimationManager.playAnimation(DEFAULT_WITH_ALL_ATTACHMENTS_ANIMATION_KEY, true);
+                }
+                return;
+            }
+
+            if (this.hasEnricherAttachment.Value==false && this.hasPlanterAttachment.Value==false && this.hasAutoHarvestAttachment)
+            {
+                if (ShowDrippingAnimation)
+                {
+                    this.AnimationManager.playAnimation(DRIPPING_WITH_AUTO_HARVESTER_ANIMATION_KEY, true);
+                }
+                else
+                {
+                    this.AnimationManager.playAnimation(DEFAULT_WITH_AUTO_HARVESTER_ANIMATION_KEY, true);
+                }
+                return;
+            }
+
+            if (this.hasEnricherAttachment.Value == false && this.hasPlanterAttachment.Value == true && this.hasAutoHarvestAttachment)
+            {
+                if (ShowDrippingAnimation)
+                {
+                    this.AnimationManager.playAnimation(DRIPPING_WITH_AUTO_HARVESTER_PLANTER_ANIMATION_KEY, true);
+                }
+                else
+                {
+                    this.AnimationManager.playAnimation(DEFAULT_WITH_AUTO_HARVESTER_PLANTER_ANIMATION_KEY, true);
+                }
+                return;
+            }
+
+            if (this.hasEnricherAttachment.Value == true && this.hasPlanterAttachment.Value == false && this.hasAutoHarvestAttachment)
+            {
+                if (ShowDrippingAnimation)
+                {
+                    this.AnimationManager.playAnimation(DRIPPING_WITH_AUTO_HARVESTER_ENRICHER_ANIMATION_KEY, true);
+                }
+                else
+                {
+                    this.AnimationManager.playAnimation(DEFAULT_WITH_AUTO_HARVESTER_ENRICHER_ANIMATION_KEY, true);
+                }
+                return;
+            }
+
+            if (this.hasEnricherAttachment.Value && this.hasPlanterAttachment.Value && this.hasAutoHarvestAttachment==false)
             {
                 if (ShowDrippingAnimation)
                 {
@@ -319,7 +409,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 }
                 return;
             }
-            if (this.hasEnricherAttachment.Value && !this.hasPlanterAttachment.Value)
+            if (this.hasEnricherAttachment.Value && !this.hasPlanterAttachment.Value && this.hasAutoHarvestAttachment == false)
             {
                 if (ShowDrippingAnimation)
                 {
@@ -331,7 +421,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 }
                 return;
             }
-            if (!this.hasEnricherAttachment.Value && this.hasPlanterAttachment.Value)
+            if (!this.hasEnricherAttachment.Value && this.hasPlanterAttachment.Value && this.hasAutoHarvestAttachment == false)
             {
                 if (ShowDrippingAnimation)
                 {
@@ -344,6 +434,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 return;
             }
 
+            //Default everything is false.
             if (ShowDrippingAnimation)
             {
                 this.AnimationManager.playAnimation(DRIPPING_ANIMATION_KEY, true);

@@ -325,19 +325,21 @@ namespace Omegasis.Revitalize
             SaveDataManager.loadOrCreateSaveData();
             MailManager.tryToAddMailToMailbox();
 
-            PlayerUtilities.HasCompletedSpecialOrder("ok");
+
+
 
             //HACKS
-            Game1.player.Money = 100_000;
+            //Game1.player.Money = 100_000;
             Game1.player.addItemToInventoryBool(ObjectManager.getItem(CraftingStations.WorkStation_Id));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
               //ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
               ObjectManager.getItem(FarmingObjects.IrrigatedGardenPot,5),
+              ObjectManager.getItem(FarmingItems.AutoHarvesterGardenPotAttachment),
               ObjectManager.getItem(Enums.SDVObject.Enricher),
-              //ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment),
-              ObjectManager.getItem(Enums.SDVBigCraftable.Chest),
-              ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
+              ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment),
+              //ObjectManager.getItem(Enums.SDVBigCraftable.Chest),
+              //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             }) ;
 
 

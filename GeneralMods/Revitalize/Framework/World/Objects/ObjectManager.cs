@@ -117,9 +117,11 @@ namespace Omegasis.Revitalize.Framework.Objects
         private void loadInItems()
         {
 
-            AutoPlanterGardenPotAttachment autoPlanterGardenPotAttachment = new AutoPlanterGardenPotAttachment(new BasicItemInformation("Auto Planter Attachment", FarmingItems.AutoPlanterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to plan seeds automatically into the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoPlanterGardenPotAttachment", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AutoPlanterGardenPotAttachment autoPlanterGardenPotAttachment = new AutoPlanterGardenPotAttachment(new BasicItemInformation("Auto Planter Attachment", FarmingItems.AutoPlanterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to planr seeds automatically into the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoPlanterGardenPotAttachment", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
             this.addItem(FarmingItems.AutoPlanterGardenPotAttachment, autoPlanterGardenPotAttachment);
 
+            AutoHarvesterGardenPotAttachment autoHarvesterGardenPotAttachment = new AutoHarvesterGardenPotAttachment(new BasicItemInformation("Auto Harvester Attachment", FarmingItems.AutoHarvesterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to automatically harvest crops from the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoHarvesterGardenPotAttachment", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            this.addItem(FarmingItems.AutoHarvesterGardenPotAttachment, autoHarvesterGardenPotAttachment);
 
 
 
@@ -217,6 +219,21 @@ namespace Omegasis.Revitalize.Framework.Objects
 
                 {IrrigatedGardenPot.DEFAULT_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,96,16,32,1, 6)},
                 {IrrigatedGardenPot.DRIPPING_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,96,16,32,13, 6)},
+
+
+                {IrrigatedGardenPot.DEFAULT_WITH_AUTO_HARVESTER_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,128,16,32,1, 6)},
+                {IrrigatedGardenPot.DRIPPING_WITH_AUTO_HARVESTER_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,128,16,32,13, 6)},
+
+                {IrrigatedGardenPot.DEFAULT_WITH_ALL_ATTACHMENTS_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,160,16,32,1, 6)},
+                {IrrigatedGardenPot.DRIPPING_WITH_ALL_ATTACHMENTS_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,160,16,32,13, 6)},
+
+                {IrrigatedGardenPot.DEFAULT_WITH_AUTO_HARVESTER_PLANTER_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,192,16,32,1, 6)},
+                {IrrigatedGardenPot.DRIPPING_WITH_AUTO_HARVESTER_PLANTER_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,192,16,32,13, 6)},
+
+                {IrrigatedGardenPot.DEFAULT_WITH_AUTO_HARVESTER_ENRICHER_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,224,16,32,1, 6)},
+                {IrrigatedGardenPot.DRIPPING_WITH_AUTO_HARVESTER_ENRICHER_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,224,16,32,13, 6)},
+
+
 
             }, IrrigatedGardenPot.DEFAULT_ANIMATION_KEY, IrrigatedGardenPot.DRIPPING_ANIMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
 

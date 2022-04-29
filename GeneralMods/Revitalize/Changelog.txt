@@ -1,5 +1,10 @@
 ~~~~~~~~~~~~0.0.1 Revitalize 4-29-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed CraftingMenu not showing up due to retooling the TextureManagers.
+~Fixed IrrigatedGardenPots taking an extra enricher, when adding the attachment.
+~Fixed IrrigatedGardenPots not gicing an enricher back if there were any other attachments on the pot.
+~Fixed being able to put multiple of the same type of attachment on an IrrigatedGardenPot, effectively wasting the items.
++Added the AutoPlanterGardenPot attachment, which will allow an AdvanceFarmingSystem to harvest crops automatically from pots with the attachment.
+    ~Additionally added more animations to the garden pot to reflect these changes.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 4-28-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed Animation Managers not restarting their animations when entering into a GameLocation.
