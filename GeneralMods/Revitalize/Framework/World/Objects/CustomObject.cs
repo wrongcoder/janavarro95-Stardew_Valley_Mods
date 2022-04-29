@@ -904,6 +904,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             //base.AttemptRemoval(removal_action);
         }
 
+        public override int getTilesHigh()
+        {
+            return (int)this.basicItemInformation.boundingBoxTileDimensions.Y;
+        }
+
+        public override int getTilesWide()
+        {
+            return (int)this.basicItemInformation.boundingBoxTileDimensions.X;
+        }
+
 
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -938,8 +948,37 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)
         {
-            //Need to update this????
-            base.drawPlacementBounds(spriteBatch, location);
+            if (!this.isPlaceable())
+            {
+                return;
+            }
+            int X = (int)Game1.GetPlacementGrabTile().X * 64;
+            int Y = (int)Game1.GetPlacementGrabTile().Y * 64;
+            Game1.isCheckingNonMousePlacement = !Game1.IsPerformingMousePlacement();
+            if (Game1.isCheckingNonMousePlacement)
+            {
+                Vector2 nearbyValidPlacementPosition = Utility.GetNearbyValidPlacementPosition(Game1.player, location, this, X, Y);
+                X = (int)nearbyValidPlacementPosition.X;
+                Y = (int)nearbyValidPlacementPosition.Y;
+            }
+            /*
+            if (Utility.isThereAnObjectHereWhichAcceptsThisItem(location, this, X, Y))
+            {
+                return;
+            }
+            */
+            bool canPlaceHere = Utility.playerCanPlaceItemHere(location, this, X, Y, Game1.player) || (Utility.isThereAnObjectHereWhichAcceptsThisItem(location, this, X, Y) && Utility.withinRadiusOfPlayer(X, Y, 1, Game1.player));
+            Game1.isCheckingNonMousePlacement = false;
+            int width = this.getTilesWide();
+            int height = this.getTilesHigh();
+            for (int x_offset = 0; x_offset < width; x_offset++)
+            {
+                for (int y_offset = 0; y_offset < height; y_offset++)
+                {
+                    spriteBatch.Draw(Game1.mouseCursors, new Vector2((X / 64 + x_offset) * 64 - Game1.viewport.X, (Y / 64 + y_offset) * 64 - Game1.viewport.Y), new Microsoft.Xna.Framework.Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.01f);
+                }
+            }
+            this.DrawICustomModObject(spriteBatch, X/64, Y/64 ,0.5f);
         }
 
         /// <summary>Draw the game object at a non-tile spot. Aka like debris.</summary>

@@ -7,6 +7,7 @@
 +Fixed CustomObjects not being properly collected when turned into debris.
 +Added utility code for generating item debris at a given tile location.
 ~Fixed AnimationManagers speeding up when placing the same object down multiple times.
+~Fixed CustomObject.DrawPlacementBounds code to properly draw the objects and their placement bounds.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 4-27-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added changelog
