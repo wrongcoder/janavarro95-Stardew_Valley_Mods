@@ -376,7 +376,7 @@ namespace Omegasis.StardustCore.Animations
 
             foreach (var v in this.animations.Pairs)
             {
-                animations.Add(v.Key, v.Value);
+                animations.Add(v.Key, v.Value.Copy());
             }
 
             return new AnimationManager(this.objectTexture, animations, this.defaultAnimationKey, this.startingAnimationKey, 0, this.enabled);

@@ -159,6 +159,19 @@ namespace Omegasis.StardustCore.Animations
             writer.Write(this.currentAnimationFrameIndex);
         }
 
+        public virtual Animation Copy()
+        {
+            List<AnimationFrame> copyFrames = new List<AnimationFrame>();
+
+            foreach(AnimationFrame frame in this.animationFrames)
+            {
+                copyFrames.Add(frame.Copy());
+            }
+
+            return new Animation(copyFrames, this.shouldLoopAnimation, 0);
+
+        }
+
         /// <summary>
         /// Creates a list of animation frames starting at a given position and generates the frame position data from left to right.
         /// </summary>

@@ -90,6 +90,11 @@ namespace Omegasis.StardustCore.Animations
             this.frameCountUntilNextAnimation = this.frameDuration;
         }
 
+        public virtual AnimationFrame Copy()
+        {
+            return new AnimationFrame(this.sourceRectangle.X, this.sourceRectangle.Y, this.sourceRectangle.Width,this.sourceRectangle.Height, this.frameDuration);
+        }
+
         public virtual AnimationFrame readAnimationFrame(BinaryReader reader)
         {
             this.sourceRectangle = reader.ReadRectangle();
