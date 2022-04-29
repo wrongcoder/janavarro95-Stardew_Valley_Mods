@@ -1,3 +1,6 @@
+~~~~~~~~~~~~0.0.1 Revitalize 4-29-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Fixed CraftingMenu not showing up due to retooling the TextureManagers.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 4-28-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed Animation Managers not restarting their animations when entering into a GameLocation.
 +Added more animation manager variants to the irrigated water pot.

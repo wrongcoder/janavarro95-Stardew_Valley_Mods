@@ -14,6 +14,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.StardustCore.UIUtilities;
 using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.Managers;
 
 namespace Omegasis.Revitalize.Framework.Menus
 {
@@ -205,8 +206,8 @@ namespace Omegasis.Revitalize.Framework.Menus
         /// </summary>
         private void initializeButtons()
         {
-            this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.InventoryMenu", "PreviousPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
-            this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.InventoryMenu", "NextPageButton"), new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.leftButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Left Button", new Vector2(this.xPositionOnScreen, this.yPositionOnScreen), TextureManagers.Menus_InventoryMenu.createAnimationManager("PreviousPageButton", new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.rightButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Right Button", new Vector2(this.xPositionOnScreen + this.width, this.yPositionOnScreen), TextureManagers.Menus_InventoryMenu.createAnimationManager("NextPageButton", new StardustCore.Animations.Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
 
             this.searchBox = new TextBox(null, null, Game1.dialogueFont, Game1.textColor);
             this.searchBox.X = this.xPositionOnScreen + this.width + 96;
