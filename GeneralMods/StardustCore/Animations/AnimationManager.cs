@@ -186,6 +186,24 @@ namespace Omegasis.StardustCore.Animations
         }
 
         /// <summary>
+        /// Resets the current animation for the Animation Manager. Used mainly to restart animations for when the player walks into a <see cref="GameLocation"/> or when a save is loaded.
+        /// </summary>
+        /// <returns></returns>
+        public bool resetCurrentAnimation()
+        {
+            return this.playAnimation(this.currentAnimationName.Value, true, 0);
+        }
+
+        /// <summary>
+        /// Used to resume the current animation at the given frame index.
+        /// </summary>
+        /// <returns></returns>
+        public bool resumeCurrentAnimation()
+        {
+            return this.playAnimation(this.currentAnimationName.Value, true, this.getCurrentAnimation().currentAnimationFrameIndex);
+        }
+
+        /// <summary>
         /// Plays the default animation.
         /// </summary>
         public void playDefaultAnimation()

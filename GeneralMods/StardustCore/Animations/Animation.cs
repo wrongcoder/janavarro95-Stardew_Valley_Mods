@@ -175,7 +175,6 @@ namespace Omegasis.StardustCore.Animations
             for(int i=0; i < NumberOfFrames; i++)
             {
                 AnimationFrame frame = new AnimationFrame(startingPosX + (FrameWidth * i), startingPosY, FrameWidth, FrameHeight, ExistsForXFrames);
-                ModCore.log(string.Format("Frame information Rect: {0} ExistsForXFrames: {1} ", frame.sourceRectangle.ToString(), frame.frameDuration));
 
                 frames.Add(frame);
             }

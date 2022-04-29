@@ -22,6 +22,7 @@ using Omegasis.Revitalize.Framework.Utilities.Serialization;
 using Omegasis.Revitalize.Framework.Objects;
 using Omegasis.Revitalize.Framework.World;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 
 namespace Omegasis.Revitalize
 {
@@ -331,35 +332,22 @@ namespace Omegasis.Revitalize
             Game1.player.addItemToInventoryBool(ObjectManager.getItem(CraftingStations.WorkStation_Id));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-                //new StardewValley.Object((int)Enums.SDVObject.Coal,100),
-                //ObjectManager.GetItem(Ingots.SteelIngot, 20),
-                //ObjectManager.GetItem(CraftingStations.Anvil,1),
-                //ObjectManager.GetItem(Machines.AdvancedSolarPanelV1,1),
-                //ObjectManager.GetItem(Machines.SolarArrayV1,1),
-                //new StardewValley.Object(Vector2.Zero,(int)Enums.SDVBigCraftable.Furnace,false),
-                //new StardewValley.Object((int)Enums.SDVObject.CopperOre,10),
-                //ObjectManager.GetItem(Machines.MiningDrillV1),
-                //new StardewValley.Object((int)Enums.SDVObject.IronBar,100),
-                //ObjectManager.GetItem(Machines.WindmillV1),
-               ObjectManager.getItem(Machines.HayMaker),
-                new StardewValley.Object((int)Enums.SDVObject.Corn,10),
-               // //ObjectManager.getItem(Enums.SDVObject.Stone,999),
-               // ObjectManager.getItem(Enums.SDVObject.Wood,999),
-               // ObjectManager.getItem(Enums.SDVObject.Clay,100),
-              //  ObjectManager.getItem(Enums.SDVObject.CopperBar,100)
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
-              ObjectManager.getItem(FarmingObjects.IrrigatedGardenPot),
-              ObjectManager.getItem(Enums.SDVBigCraftable.GardenPot)
+              //ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
+              ObjectManager.getItem(FarmingObjects.IrrigatedGardenPot,5),
+              ObjectManager.getItem(Enums.SDVObject.Enricher),
+              //ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment),
+              ObjectManager.getItem(Enums.SDVBigCraftable.Chest),
+              ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             }) ;
 
 
-            Framework.World.WorldUtilities.Utilities.InitializeGameWorld();
+            Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
 
         }
 
         private void GameLoop_SaveCreated(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
         {
-            Framework.World.WorldUtilities.Utilities.InitializeGameWorld();
+            Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
         }
 
 
@@ -388,11 +376,33 @@ namespace Omegasis.Revitalize
                 ModMonitor.Log(message.ToString());
         }
 
-        public static string getFileDebugInfo()
+        public static void logWithFullStackTrace(object message)
         {
-            string currentFile = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileName();
-            int currentLine = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileLineNumber();
-            return currentFile + " line:" + currentLine;
+            ModMonitor.Log(message.ToString() + " " + getFileDebugInfo(true));
+        }
+
+        public static void log(object message, bool StackTrace, params string[] strs)
+        {
+            message = string.Format(message.ToString(),strs);
+            if (StackTrace)
+                ModMonitor.Log(message.ToString() + " " + getFileDebugInfo());
+            else
+                ModMonitor.Log(message.ToString());
+        }
+
+        public static string getFileDebugInfo(bool fullStackTrace=false)
+        {
+            if (fullStackTrace)
+            {
+                return new System.Diagnostics.StackTrace(true).ToString();
+            }
+            else
+            {
+                string currentFile = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileName();
+                int currentLine = new System.Diagnostics.StackTrace(true).GetFrame(2).GetFileLineNumber();
+                return currentFile + " line:" + currentLine;
+            }
+
         }
 
         public bool CanEdit<T>(IAssetInfo asset)

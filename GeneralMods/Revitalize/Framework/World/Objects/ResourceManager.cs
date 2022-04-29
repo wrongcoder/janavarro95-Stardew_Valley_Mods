@@ -357,7 +357,7 @@ namespace Omegasis.Revitalize.Framework.Objects
                     if (spawnable)
                     {
                         //ModCore.log("Location is: " + Location.Name);
-                        spawn.placementAction(Location, (int)TilePosition.X * Game1.tileSize, (int)TilePosition.Y * Game1.tileSize, Game1.player);
+                        spawn.placementAction(Location, (int)TilePosition.X * Game1.tileSize, (int)TilePosition.Y * Game1.tileSize, null);
                     }
                     else
                     {

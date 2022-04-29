@@ -1,3 +1,11 @@
+~~~~~~~~~~~~0.0.1 Revitalize 4-28-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Fixed Animation Managers not restarting their animations when entering into a GameLocation.
++Added more animation manager variants to the irrigated water pot.
+~Fixed an issue where objects and furniture would be duplicated when loading a save by simply removing all duplicates.
++Fixed multiplayer issue where item duplication could occur when one player removes an item another player placed.
++Fixed CustomObject Stacking code.
++Fixed CustomObjects not being properly collected when turned into debris.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 4-27-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added changelog
 +Rewrote TextureManagers to be more organized to access from code easier.
@@ -11,3 +19,5 @@
 +Added IrrigatedGardenPot
 ~Fixed AnimationManager not properly displaying animations with more than 2 frames.
 ~Fixed not being able to walk behind objects where there should be space by messing with draw positions and bounding boxes.
++ Finished IrrigatedGardenPot and fixed a ton of drawing issues.
+

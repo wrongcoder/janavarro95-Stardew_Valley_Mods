@@ -7,7 +7,6 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
-using Omegasis.Revitalize.Framework.World.Objects.Items.Tools;
 using StardewValley;
 using StardewValley.Network;
 

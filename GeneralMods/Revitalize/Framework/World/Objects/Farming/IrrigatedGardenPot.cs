@@ -8,14 +8,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Objects;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Farming;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.StardustCore.Animations;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 {
@@ -26,6 +30,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
     public class IrrigatedGardenPot : CustomObject, ICustomModObject
     {
 
+        public const string DEFAULT_ANIMATION_KEY = "Default";
+        public const string DRIPPING_ANIMATION_KEY = "Dripping";
+
+        public const string DRIPPING_WITH_ENRICHER_AND_PLANTER_ATTACHMENT_ANIMATION_KEY = "Dripping_With_Enricher_And_Planter_Attachments";
+        public const string DEFAULT_WITH_ENRICHER_AND_PLANTER_ATTACHMENT_ANIMATION_KEY = "Default_With_Enricher_And_Planter_Attachments";
+
+        public const string DRIPPING_WITH_PLANTER_ATTACHMENT_ANIMATION_KEY = "Dripping_With_Planter_Attachment";
+        public const string DEFAULT_WITH_PLANTER_ATTACHMENT_ANIMATION_KEY = "Default_With_Planter_Attachment";
+
+        public const string DRIPPING_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY = "Dripping_With_Enricher_Attachment";
+        public const string DEFAULT_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY = "Default_With_Enricher_Attachment";
+
         [XmlElement("hoeDirt")]
         public readonly NetRef<HoeDirt> hoeDirt = new NetRef<HoeDirt>();
         [XmlIgnore]
@@ -35,6 +51,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             {
                 return this.hoeDirt.Value.crop;
             }
+            set
+            {
+                this.hoeDirt.Value.crop = value;
+            }
         }
 
         [XmlElement("bush")]
@@ -43,8 +63,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         [XmlIgnore]
         private readonly NetBool bushLoadDirty = new NetBool(value: true);
 
+        public readonly NetBool hasPlanterAttachment = new NetBool(false);
+        public readonly NetBool hasEnricherAttachment = new NetBool(false);
 
-        public IrrigatedGardenPot() 
+
+        public IrrigatedGardenPot()
         {
         }
 
@@ -120,13 +143,74 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 }
                 return true;
             }
+
+            //Probe is always checking regardless of actioning.
+            if (!probe && dropInItem != null)
+            {
+
+                if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.Enricher)
+                {
+                    this.hasEnricherAttachment.Value = true;
+                    this.updateAnimation(true);
+                    Game1.player.reduceActiveItemByOne();
+                    return true;
+                }
+
+                if (dropInItem is AutoPlanterGardenPotAttachment)
+                {
+                    this.hasPlanterAttachment.Value = true;
+                    this.updateAnimation(true);
+                    Game1.player.reduceActiveItemByOne();
+                    return true;
+                }
+            }
+
+
             return false;
+        }
+
+        public override bool pickupFromGameWorld(Vector2 tileLocation, GameLocation environment, Farmer who)
+        {
+            bool canPickupGardenPot = base.pickupFromGameWorld(tileLocation, environment, who);
+            if (canPickupGardenPot == false) return false;
+
+            if (this.hasPlanterAttachment.Value)
+            {
+                Item autoPlanter = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment);
+                if (Game1.player.isInventoryFull())
+                {
+                    Game1.createItemDebris(autoPlanter, Game1.player.getTileLocation(), Game1.player.FacingDirection);
+                }
+                else
+                {
+                    Game1.player.addItemToInventoryBool(autoPlanter);
+                    this.hasEnricherAttachment.Value = false;
+                    this.updateAnimation(true);
+                }
+            }
+            if (this.hasEnricherAttachment.Value)
+            {
+                Item enricher = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Enricher);
+                if (Game1.player.isInventoryFull())
+                {
+                    Game1.createItemDebris(enricher, Game1.player.getTileLocation(), Game1.player.FacingDirection);
+                }
+                else
+                {
+                    Game1.player.addItemToInventoryBool(enricher);
+                    this.hasEnricherAttachment.Value = false;
+                    this.updateAnimation(true);
+                }
+            }
+            return canPickupGardenPot;
+
         }
 
         public override bool performToolAction(Tool t, GameLocation location)
         {
             if (t != null)
             {
+
                 this.hoeDirt.Value.performToolAction(t, -1, base.tileLocation, location);
                 if (this.bush.Value != null)
                 {
@@ -136,12 +220,35 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                     }
                     return false;
                 }
+
             }
             if ((int)this.hoeDirt.Value.state == 1)
             {
                 base.showNextIndex.Value = true;
             }
+
+
             return base.performToolAction(t, location);
+        }
+
+        public override bool canBePlacedHere(GameLocation l, Vector2 tile)
+        {
+            return base.canBePlacedHere(l, tile);
+        }
+
+        public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
+        {
+            bool placed = base.placementAction(location, x, y, who);
+
+            if (placed)
+            {
+                StardewValley.Object obj = location.getObjectAtTile(x, y);
+                if (obj is IrrigatedGardenPot)
+                {
+                    (obj as IrrigatedGardenPot).Crop = this.Crop;
+                }
+            }
+            return placed;
         }
 
         public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
@@ -198,9 +305,61 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             return false;
         }
 
+        protected virtual void updateAnimation(bool ShowDrippingAnimation)
+        {
+            if (this.hasEnricherAttachment.Value && this.hasPlanterAttachment.Value)
+            {
+                if (ShowDrippingAnimation)
+                {
+                    this.AnimationManager.playAnimation(DRIPPING_WITH_ENRICHER_AND_PLANTER_ATTACHMENT_ANIMATION_KEY, true);
+                }
+                else
+                {
+                    this.AnimationManager.playAnimation(DEFAULT_WITH_ENRICHER_AND_PLANTER_ATTACHMENT_ANIMATION_KEY, true);
+                }
+                return;
+            }
+            if (this.hasEnricherAttachment.Value && !this.hasPlanterAttachment.Value)
+            {
+                if (ShowDrippingAnimation)
+                {
+                    this.AnimationManager.playAnimation(DRIPPING_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY, true);
+                }
+                else
+                {
+                    this.AnimationManager.playAnimation(DEFAULT_WITH_ENRICHER_ATTACHMENT_ANIMATION_KEY, true);
+                }
+                return;
+            }
+            if (!this.hasEnricherAttachment.Value && this.hasPlanterAttachment.Value)
+            {
+                if (ShowDrippingAnimation)
+                {
+                    this.AnimationManager.playAnimation(DRIPPING_WITH_PLANTER_ATTACHMENT_ANIMATION_KEY, true);
+                }
+                else
+                {
+                    this.AnimationManager.playAnimation(DEFAULT_WITH_PLANTER_ATTACHMENT_ANIMATION_KEY, true);
+                }
+                return;
+            }
+
+            if (ShowDrippingAnimation)
+            {
+                this.AnimationManager.playAnimation(DRIPPING_ANIMATION_KEY, true);
+            }
+            else
+            {
+                this.AnimationManager.playAnimation(DEFAULT_ANIMATION_KEY, true);
+            }
+            return;
+
+        }
+
         public override void actionOnPlayerEntry()
         {
             //base.actionOnPlayerEntry();
+            this.updateAnimation(true);
             if (this.hoeDirt.Value != null)
             {
                 this.hoeDirt.Value.performPlayerEntryAction(base.tileLocation);
@@ -228,8 +387,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         public override void DayUpdate(GameLocation location)
         {
-            // base.DayUpdate(location);
-            Revitalize.RevitalizeModCore.log("Day update for garden pot!");
+            // base.DayUpdate(location)
+
             this.hoeDirt.Value.dayUpdate(location, base.tileLocation);
             this.makeSoilWet();
             base.showNextIndex.Value = (int)this.hoeDirt.Value.state == 1;
@@ -272,9 +431,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             }
             if (this.hoeDirt.Value.crop != null)
             {
-              //  this.hoeDirt.Value.crop.drawWithOffset(spriteBatch, base.tileLocation, ((int)this.hoeDirt.Value.state == 1 && (int)this.hoeDirt.Value.crop.currentPhase == 0 && !this.hoeDirt.Value.crop.raisedSeeds) ? (new Color(180, 100, 200) * 1f) : Color.White, this.hoeDirt.Value.getShakeRotation(), new Vector2(32f, 8f));
+                //  this.hoeDirt.Value.crop.drawWithOffset(spriteBatch, base.tileLocation, ((int)this.hoeDirt.Value.state == 1 && (int)this.hoeDirt.Value.crop.currentPhase == 0 && !this.hoeDirt.Value.crop.raisedSeeds) ? (new Color(180, 100, 200) * 1f) : Color.White, this.hoeDirt.Value.getShakeRotation(), new Vector2(32f, 8f));
 
-                this.drawCropWithOffset(spriteBatch, this.TileLocation, ((int)this.hoeDirt.Value.state == 1 && (int)this.hoeDirt.Value.crop.currentPhase == 0 && !this.hoeDirt.Value.crop.raisedSeeds) ? (new Color(180, 100, 200) * 1f) : Color.White, this.hoeDirt.Value.getShakeRotation(), new Vector2(32f, 8f),(this.TileLocation.Y- this.basicItemInformation.drawOffset.Y));
+                this.drawCropWithOffset(spriteBatch, this.TileLocation, ((int)this.hoeDirt.Value.state == 1 && (int)this.hoeDirt.Value.crop.currentPhase == 0 && !this.hoeDirt.Value.crop.raisedSeeds) ? (new Color(180, 100, 200) * 1f) : Color.White, this.hoeDirt.Value.getShakeRotation(), new Vector2(32f, 8f), (this.TileLocation.Y - this.basicItemInformation.drawOffset.Y));
             }
             if (base.heldObject.Value != null)
             {
@@ -294,14 +453,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 b.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, offset + new Vector2(tileLocation.X * 64f, tileLocation.Y * 64f)), this.sourceRect, Color.White, 0f, new Vector2(8f, 8f), 4f, SpriteEffects.None, (tileLocation.Y + 0.66f) * 64f / 10000f + tileLocation.X * 1E-05f);
                 return;
             }
-            Rectangle coloredSourceRect= new Rectangle(((!this.Crop.fullyGrown) ? ((int)this.Crop.currentPhase + 1 + 1) : (((int)this.Crop.dayOfCurrentPhase <= 0) ? 6 : 7)) * 16 + (((int)this.Crop.rowInSpriteSheet % 2 != 0) ? 128 : 0), (int)this.Crop.rowInSpriteSheet / 2 * 16 * 2, 16, 32); ;
+            Rectangle coloredSourceRect = new Rectangle(((!this.Crop.fullyGrown) ? ((int)this.Crop.currentPhase + 1 + 1) : (((int)this.Crop.dayOfCurrentPhase <= 0) ? 6 : 7)) * 16 + (((int)this.Crop.rowInSpriteSheet % 2 != 0) ? 128 : 0), (int)this.Crop.rowInSpriteSheet / 2 * 16 * 2, 16, 32); ;
 
-            float originalDepth= (YTileDepthOffset -.5f + 0.66f) * 64f / 10000f + tileLocation.X * 1E-05f;
+            float originalDepth = (YTileDepthOffset - .5f + 0.66f) * 64f / 10000f + tileLocation.X * 1E-05f;
             float modDepth = Math.Max(0f, (float)((YTileDepthOffset) * Game1.tileSize) / 10000f) + .00001f;
 
             float depth = originalDepth;//Math.Max(originalDepth, modDepth);
 
-            b.Draw(Game1.cropSpriteSheet, Game1.GlobalToLocal(Game1.viewport, offset + new Vector2(tileLocation.X * 64f, tileLocation.Y * 64f)), this.Crop.getSourceRect((int)tileLocation.X * 7 + (int)tileLocation.Y * 11), toTint, rotation, new Vector2(8f, 24f), 4f, this.Crop.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth+ .00001f);
+            b.Draw(Game1.cropSpriteSheet, Game1.GlobalToLocal(Game1.viewport, offset + new Vector2(tileLocation.X * 64f, tileLocation.Y * 64f)), this.Crop.getSourceRect((int)tileLocation.X * 7 + (int)tileLocation.Y * 11), toTint, rotation, new Vector2(8f, 24f), 4f, this.Crop.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth + .00001f);
             if (!this.Crop.tintColor.Equals(Color.White) && (int)this.Crop.currentPhase == this.Crop.phaseDays.Count - 1 && !this.Crop.dead)
             {
                 b.Draw(Game1.cropSpriteSheet, Game1.GlobalToLocal(Game1.viewport, offset + new Vector2(tileLocation.X * 64f, tileLocation.Y * 64f)), coloredSourceRect, this.Crop.tintColor, rotation, new Vector2(8f, 24f), 4f, this.Crop.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth + .00002f);
@@ -310,7 +469,68 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         public override Item getOne()
         {
-            return new IrrigatedGardenPot(this.basicItemInformation.Copy(), Vector2.Zero);
+            IrrigatedGardenPot pot = new IrrigatedGardenPot(this.basicItemInformation.Copy(), Vector2.Zero);
+            pot.Crop = this.Crop;
+            return pot;
+        }
+
+
+        public override bool canStackWith(ISalable other)
+        {
+            if (other is IrrigatedGardenPot)
+            {
+
+                IrrigatedGardenPot otherPot = (IrrigatedGardenPot)other;
+                if (this.Crop != null && otherPot.Crop != null)
+                {
+
+                    if (this.Crop.GetType() == typeof(Crop) && otherPot.Crop.GetType() == typeof(Crop))
+                    {
+
+                        if (this.Crop.netSeedIndex.Value == otherPot.Crop.netSeedIndex.Value)
+                        {
+                            if (this.Crop.dayOfCurrentPhase.Value == otherPot.Crop.dayOfCurrentPhase.Value)
+                            {
+                                if (this.Crop.currentPhase.Value == otherPot.Crop.currentPhase.Value)
+                                {
+                                    if (this.hoeDirt.Value.fertilizer.Value == otherPot.hoeDirt.Value.fertilizer.Value)
+                                    {
+                                        if (this.Crop.dead == otherPot.Crop.dead)
+                                        {
+
+                                            return true;
+                                        }
+                                        else
+                                        {
+                                            return false;
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        return false;
+                                    }
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+
+            return base.canStackWith(other);
         }
     }
 }

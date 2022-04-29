@@ -19,6 +19,8 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.StardustCore.Animations;
+using Omegasis.Revitalize.Framework.Player;
+using Omegasis.Revitalize.Framework.World.Debris;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -217,6 +219,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             return false;
         }
 
+
         public override void actionOnPlayerEntry()
         {
             base.actionOnPlayerEntry();
@@ -328,17 +331,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override bool clicked(Farmer who)
         {
-            if (Game1.player.isInventoryFull())
-            {
-                //Full inventory message.
-                Game1.showRedMessage(Game1.content.LoadString("Strings\\StringsFromCSFiles:Crop.cs.588"));
-                return false;
-            }
-
-
             if (Game1.didPlayerJustLeftClick())
             {
-                this.pickupFromGameWorld(this.TileLocation, who.currentLocation);
+                return this.attemptToPickupFromGameWorld(this.TileLocation, who.currentLocation, who);
             }
             return true;
 
@@ -528,7 +523,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             if (environment == null) return;
 
-            RevitalizeModCore.log("Perform remove action for furniture!");
+            RevitalizeModCore.logWithFullStackTrace("Perform remove action for furniture!");
 
             this.cleanUpLights();
 
@@ -549,11 +544,26 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             this.sittingFarmers.Clear();
 
-            //Add this back in??
-            //this.removeAndAddToPlayersInventory();
+            this.removeFromGameWorld(tileLocation, environment);
+        }
 
-            //base.performRemoveAction(tileLocation, environment) ;
-            //base.performRemoveAction(tileLocation, environment);
+
+        /// <summary>
+        /// Attempts to pickup the object from the game world, but will show a message if the player's inventory is full.
+        /// </summary>
+        /// <param name="TileLocation"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public virtual bool attemptToPickupFromGameWorld(Vector2 TileLocation, GameLocation location, Farmer who)
+        {
+            if (!this.canBeRemoved(who)) return false;
+
+            if ( who == Game1.player && who.isInventoryFull() && who.couldInventoryAcceptThisItem(this)==false)
+            {
+                Game1.showRedMessage("Inventory full.");
+                return false;
+            }
+            return this.pickupFromGameWorld(TileLocation, location, who);
         }
 
 
@@ -563,37 +573,20 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <param name="tileLocation"></param>
         /// <param name="environment"></param>
         /// <returns></returns>
-        public virtual bool pickupFromGameWorld(Vector2 tileLocation, GameLocation environment)
+        public virtual bool pickupFromGameWorld(Vector2 tileLocation, GameLocation environment, Farmer who)
         {
 
-            if (Game1.player.isInventoryFull())
-            {
-                Game1.showRedMessage("Inventory full.");
-                return false;
-            }
 
-            this.removeFromGameWorld(tileLocation, environment);
+
             this.performRemoveAction(tileLocation, environment);
 
-            Farmer who = Game1.player;
-            bool foundInToolbar = false;
-            for (int i = 0; i < 12; i++)
-            {
-                if (Game1.player.items[i] == null)
-                {
-                    who.items[i] = this;
-                    who.CurrentToolIndex = i;
-                    foundInToolbar = true;
-                    break;
-                }
-            }
-            if (!foundInToolbar)
-            {
-                Item item = who.addItemToInventory(this, 11);
-                who.addItemToInventory(item);
-                who.CurrentToolIndex = 11;
-            }
 
+            bool pickedUp=PlayerUtilities.AddItemToInventory(who, this);
+
+            if (pickedUp && who!=null)
+            {
+                SoundUtilities.PlaySound(environment, Enums.StardewSound.coin);
+            }
 
             return true;
         }
@@ -604,9 +597,36 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public virtual void removeFromGameWorld(Vector2 TileLocation, GameLocation environment)
         {
 
-            if (environment != null) ;
-            environment.objects.Remove(TileLocation);
-            environment.furniture.Remove(this);
+            if (environment != null)
+            {
+                environment.objects.Remove(TileLocation);
+                this.boundingBox.Value = new Rectangle(0, 0, 0, 0);
+
+                environment.furniture.Remove(this);
+                WorldUtility.RemoveFurnitureAtTileLocation(environment, TileLocation);
+            }
+        }
+
+        /// <summary>
+        /// A hack method to quickly readd an object to a game world if it wasn't actually needed to be fully removed.
+        /// </summary>
+        /// <param name="TileLocation"></param>
+        /// <param name="environment"></param>
+        public virtual void reAddToGameWorld(Vector2 TileLocation, GameLocation environment)
+        {
+            if (environment != null)
+            {
+                environment.objects.Add(TileLocation, this);
+                environment.furniture.Add(this);
+            }
+        }
+
+        public override void resetOnPlayerEntry(GameLocation environment, bool dropDown = false)
+        {
+
+
+            this.AnimationManager.resetCurrentAnimation();
+            base.resetOnPlayerEntry(environment, dropDown);
         }
 
         /// <summary>
@@ -627,11 +647,25 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             else
             {
                 RevitalizeModCore.log("Player used tool: " + t.DisplayName);
+
+                if (t is Pickaxe || t is Axe)
+                {
+                    RevitalizeModCore.log("Player used pickaxe!: ");
+                    this.createItemDebris(location, this.TileLocation * Game1.tileSize, this.TileLocation * Game1.tileSize);
+                    return true;
+                }
+
+
             }
             return false;
             //False is returned if we signify no meaningul tool interactions?
             //True is returned when something significant happens
 
+        }
+
+        public virtual void createItemDebris(GameLocation location, Vector2 Origin, Vector2 Destination)
+        {
+            location.debris.Add(new CustomObjectDebris(this, Origin, Destination));
         }
 
         /// <summary>
@@ -655,7 +689,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public virtual bool placementActionAtTile(GameLocation location, int TileX, int TileY, Farmer who = null)
         {
-          return this.placementAction(location, TileX * Game1.tileSize, TileY * Game1.tileSize, who);
+            return this.placementAction(location, TileX * Game1.tileSize, TileY * Game1.tileSize, who);
         }
 
         public override bool placementAction(GameLocation location, int x, int y, Farmer who = null)
@@ -690,7 +724,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             location.furniture.Add(obj);
 
             //DO NOT ADD BACK IN, as doing so WILL CAUSE PROBLEMS!
-           // location.objects.Add(placementTile, obj);
+            location.objects.Add(placementTile, obj);
             if (who != null)
             {
                 SoundUtilities.PlaySound(location, Enums.StardewSound.woodyStep);
@@ -704,6 +738,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             obj.basicItemInformation.locationName.Value = locationName;
             obj.updateDrawPosition();
+
+            if (who == Game1.player)
+            {
+                this.Stack--;
+                if (this.Stack == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
+
 
             return true;
             //Base code throws and error so I have to do it this way.
@@ -794,7 +844,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         }
 
 
-        public override bool canBeRemoved(Farmer who)
+        public override bool canBeRemoved(Farmer who = null)
         {
             return true;
         }
@@ -818,12 +868,39 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             if (other is CustomObject == false) return false;
             CustomObject o = (CustomObject)other;
 
-            if (this.basicItemInformation.dyedColor != o.basicItemInformation.dyedColor) return false;
-            if (this.basicItemInformation.id.Equals(o.basicItemInformation.id) == false) return false;
+            if (this.basicItemInformation.id.Value.Equals(o.basicItemInformation.id.Value) == false) return false;
 
-            if (this.maximumStackSize() > this.Stack + other.Stack) return true;
+
+            if (this.maximumStackSize() >= this.Stack + other.Stack)
+            {
+                return true;
+            }
+
+            //if (this.basicItemInformation.id.Equals(o.basicItemInformation.id) == true) return true;
 
             return false;
+        }
+
+
+        public virtual LightManager GetLightManager()
+        {
+            return this.basicItemInformation.lightManager;
+        }
+
+        public override void AttemptRemoval(Action<Furniture> removal_action)
+        {
+
+            if (this.getCurrentLocation().furniture.Contains(this))
+            {
+                RevitalizeModCore.log("Furniture is contained inside of game location. Need to update removal logic.");
+            }
+
+            this.attemptToPickupFromGameWorld(this.TileLocation, this.getCurrentLocation(), Game1.player);
+
+
+            Game1.player.currentLocation.localSound("coin");
+
+            //base.AttemptRemoval(removal_action);
         }
 
 
@@ -881,26 +958,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         }
 
 
-        public virtual LightManager GetLightManager()
-        {
-            return this.basicItemInformation.lightManager;
-        }
 
-        public override void AttemptRemoval(Action<Furniture> removal_action)
-        {
-
-            if (this.getCurrentLocation().furniture.Contains(this))
-            {
-                RevitalizeModCore.log("Furniture is contained inside of game location. Need to update removal logic.");
-            }
-
-            this.pickupFromGameWorld(this.TileLocation, this.getCurrentLocation());
-
-
-            Game1.player.currentLocation.localSound("coin");
-
-            //base.AttemptRemoval(removal_action);
-        }
 
 
 

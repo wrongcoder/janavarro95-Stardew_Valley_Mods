@@ -3,7 +3,7 @@ using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Player
 {
-    public class PlayerUtilities
+    public static class PlayerUtilities
     {
 
         /// <summary>
@@ -25,6 +25,49 @@ namespace Omegasis.Revitalize.Framework.Player
         public static bool HasCompletedHardwoodDonationSpecialOrderForRobin()
         {
             return HasCompletedSpecialOrder("Robin");
+        }
+
+        /// <summary>
+        /// Adds an item to the player's inventory by a new slot, or stackable equivalent.
+        /// </summary>
+        /// <param name="Who"></param>
+        /// <param name="I"></param>
+        public static bool AddItemToInventory(this Farmer Who, Item I)
+        {
+            if (Who != null)
+            {
+                int emptyIndex = -1;
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null && emptyIndex == -1)
+                    {
+                        emptyIndex = i;
+                        continue;
+                    }
+                    //Check to see if the items can stack. If they can simply add them together and then continue on.
+                    if (Who.items[i]!=null && Who.items[i].canStackWith(I))
+                    {
+                        Who.items[i].Stack += I.Stack;
+                        return true;
+                    }
+                }
+
+                if (emptyIndex != -1)
+                {
+                    Who.items[emptyIndex] = I;
+
+                    //Set as active toolbar item.
+                    if (emptyIndex < 12)
+                    {
+                        Who.CurrentToolIndex = emptyIndex;
+                    }
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
 
     }

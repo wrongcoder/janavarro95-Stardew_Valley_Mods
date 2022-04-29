@@ -14,13 +14,14 @@ using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.StardustCore.Animations;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
+namespace Omegasis.Revitalize.Framework.World.Objects
 {
-    public class CustomItem: StardewValley.Object, ICustomModObject
+    [XmlType("Mods_Revitalize.Framework.World.Objects.CustomItem")]
+    public class CustomItem : StardewValley.Object, ICustomModObject
     {
         public readonly NetRef<BasicItemInformation> netBasicItemInformation = new NetRef<BasicItemInformation>();
 
-        [XmlElement("basicItemInfo")]
+        [XmlIgnore]
         public BasicItemInformation basicItemInformation
         {
             get
@@ -65,9 +66,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
             set
             {
                 if (this.basicItemInformation != null)
-                {
                     this.basicItemInformation.name.Value = value;
-                }
             }
 
 
@@ -82,9 +81,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
             set
             {
                 if (this.basicItemInformation != null)
-                {
                     this.basicItemInformation.name.Value = value;
-                }
             }
         }
 
@@ -94,11 +91,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
 
         }
 
-        public CustomItem(BasicItemInformation info):base(Vector2.Zero,0)
+        public CustomItem(BasicItemInformation info) : base(Vector2.Zero, 0)
         {
             this.basicItemInformation = info;
             this.initNetFieldsPostConstructor();
-            
+
         }
 
         /// <summary>
@@ -119,7 +116,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         /// <returns></returns>
         public override bool performUseAction(GameLocation location)
         {
-          //  Game1.showRedMessage("Use action");
+            //  Game1.showRedMessage("Use action");
             return base.performUseAction(location);
         }
 
@@ -130,7 +127,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         /// <returns></returns>
         public override bool performDropDownAction(Farmer who)
         {
-         //   Game1.showRedMessage("DropDown");
+            //   Game1.showRedMessage("DropDown");
             return base.performDropDownAction(who);
         }
 
@@ -143,7 +140,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         /// <returns></returns>
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
-           // Game1.showRedMessage("Drop-in");
+            // Game1.showRedMessage("Drop-in");
             return base.performObjectDropInAction(dropInItem, probe, who);
         }
 
@@ -155,7 +152,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         /// <returns></returns>
         public override bool performToolAction(Tool t, GameLocation location)
         {
-           // Game1.showRedMessage("Tool action");
+            // Game1.showRedMessage("Tool action");
             return base.performToolAction(t, location);
         }
 
@@ -166,7 +163,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         /// <param name="environment"></param>
         public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)
         {
-           // Game1.showRedMessage("Remove action");
+            // Game1.showRedMessage("Remove action");
             base.performRemoveAction(tileLocation, environment);
         }
 
@@ -176,9 +173,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         protected virtual void initNetFieldsPostConstructor()
         {
             if (this.basicItemInformation != null)
-            {
                 this.NetFields.AddFields(this.netBasicItemInformation);
-            }
 
         }
 
@@ -240,15 +235,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
         {
 
             if (this.AnimationManager == null)
-            {
-                spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
-            }
+                spriteBatch.Draw(this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile, yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
 
             else
-            {
                 //Log.AsyncC("Animation Manager is working!");
-                this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(xNonTile), yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, (float)Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
-            }
+                this.AnimationManager.draw(spriteBatch, this.CurrentTextureToDisplay, Game1.GlobalToLocal(Game1.viewport, new Vector2(xNonTile, yNonTile)), new Rectangle?(this.AnimationManager.getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, layerDepth));
         }
 
         public override int maximumStackSize()
