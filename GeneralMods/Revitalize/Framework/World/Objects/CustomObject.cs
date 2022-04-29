@@ -651,7 +651,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 if (t is Pickaxe || t is Axe)
                 {
                     RevitalizeModCore.log("Player used pickaxe!: ");
-                    this.createItemDebris(location, this.TileLocation * Game1.tileSize, this.TileLocation * Game1.tileSize);
+                    this.createItemDebris(location, this.TileLocation, this.TileLocation);
                     return true;
                 }
 
@@ -663,9 +663,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         }
 
-        public virtual void createItemDebris(GameLocation location, Vector2 Origin, Vector2 Destination)
+        public virtual void createItemDebris(GameLocation location, Vector2 OriginTile, Vector2 DestinationTile)
         {
-            location.debris.Add(new CustomObjectDebris(this, Origin, Destination));
+            location.debris.Add(new CustomObjectDebris(this, OriginTile, DestinationTile));
+            WorldUtility.CreateItemDebrisAtTileLocation(location,this ,OriginTile, DestinationTile);
         }
 
         /// <summary>

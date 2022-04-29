@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.World.Debris;
 using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using StardewValley;
@@ -13,7 +14,7 @@ using StardewValley.Objects;
 
 namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 {
-    public class WorldUtility
+    public static class WorldUtility
     {
 
         public static void InitializeGameWorld()
@@ -89,7 +90,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         }
 
 
-        public static Furniture GetFurnitureEquivalentPieceAtLocation(GameLocation environment, CustomObject obj)
+        public static Furniture GetFurnitureEquivalentPieceAtLocation(this GameLocation environment, CustomObject obj)
         {
             foreach (Furniture f in environment.furniture)
             {
@@ -108,7 +109,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             return null;
         }
 
-        public static void RemoveFurnitureAtTileLocation(GameLocation environment, Vector2 TileLocation)
+        public static void RemoveFurnitureAtTileLocation(this GameLocation environment, Vector2 TileLocation)
         {
             List<Furniture> furnitureToRemove = new List<Furniture>();
             foreach (Furniture f in environment.furniture)
@@ -171,6 +172,29 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                 hayMaker.placementActionAtTile(cinderSapForestLocation, (int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y);
             }
 
+        }
+
+        /// <summary>
+        /// Creates <see cref="CustomObjectDebris"/> at the given location.
+        /// </summary>
+        /// <param name="Location"></param>
+        /// <param name="item"></param>
+        /// <param name="OriginTile"></param>
+        public static void CreateItemDebrisAtTileLocation(this GameLocation Location, Item item, Vector2 OriginTile)
+        {
+            Location.debris.Add(new CustomObjectDebris(item, OriginTile));
+        }
+
+        /// <summary>
+        /// Creates <see cref="CustomObjectDebris"/> at the given location.
+        /// </summary>
+        /// <param name="Location"></param>
+        /// <param name="item"></param>
+        /// <param name="OriginTile"></param>
+        /// <param name="DestinationTile"></param>
+        public static void CreateItemDebrisAtTileLocation(this GameLocation Location, Item item, Vector2 OriginTile, Vector2 DestinationTile)
+        {
+            Location.debris.Add(new CustomObjectDebris(item, OriginTile, DestinationTile));
         }
 
     }

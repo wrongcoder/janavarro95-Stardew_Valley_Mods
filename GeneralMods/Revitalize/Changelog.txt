@@ -5,6 +5,7 @@
 +Fixed multiplayer issue where item duplication could occur when one player removes an item another player placed.
 +Fixed CustomObject Stacking code.
 +Fixed CustomObjects not being properly collected when turned into debris.
++Added utility code for generating item debris at a given tile location.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 4-27-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added changelog

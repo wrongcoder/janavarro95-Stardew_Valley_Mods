@@ -179,7 +179,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 Item autoPlanter = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment);
                 if (Game1.player.isInventoryFull())
                 {
-                    Game1.createItemDebris(autoPlanter, Game1.player.getTileLocation(), Game1.player.FacingDirection);
+                    Game1.createItemDebris(autoPlanter, Game1.player.getTileLocation() * 64, Game1.player.FacingDirection);
                 }
                 else
                 {
@@ -193,7 +193,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 Item enricher = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Enricher);
                 if (Game1.player.isInventoryFull())
                 {
-                    Game1.createItemDebris(enricher, Game1.player.getTileLocation(), Game1.player.FacingDirection);
+                    Game1.createItemDebris(enricher, Game1.player.getTileLocation() * 64, Game1.player.FacingDirection);
                 }
                 else
                 {
