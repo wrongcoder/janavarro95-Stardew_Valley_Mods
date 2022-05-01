@@ -35,9 +35,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             base.updateWhenCurrentLocation(time, environment);
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
+            base.initializeNetFieldsPostConstructor();
             this.NetFields.AddFields(this.maxDaysToProduceBattery, this.daysRemainingToProduceBattery);
         }
 

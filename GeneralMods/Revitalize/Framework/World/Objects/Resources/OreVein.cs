@@ -50,9 +50,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
             this.Price = Info.price;
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
+            base.initializeNetFieldsPostConstructor();
             this.NetFields.AddFields(this.resourceInfo, this.extraDrops);
         }
 

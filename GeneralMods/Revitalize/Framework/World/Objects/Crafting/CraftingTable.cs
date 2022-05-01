@@ -53,9 +53,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
             }
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
+            base.initializeNetFieldsPostConstructor();
             this.NetFields.AddField(this.craftingBookName);
         }
 

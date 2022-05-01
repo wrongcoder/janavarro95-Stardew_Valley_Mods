@@ -28,9 +28,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery.Value;
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
+            base.initializeNetFieldsPostConstructor();
             this.NetFields.AddFields(this.maxDaysToProduceBattery, this.daysRemainingToProduceBattery);
         }
 

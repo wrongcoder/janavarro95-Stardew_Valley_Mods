@@ -61,9 +61,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.createStatusBubble();
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
+            base.initializeNetFieldsPostConstructor();
             this.NetFields.AddFields(this.machineStatusBubbleBox);
         }
 

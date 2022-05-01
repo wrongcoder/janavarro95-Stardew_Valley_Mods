@@ -46,9 +46,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
+            base.initializeNetFieldsPostConstructor();
             this.NetFields.AddField(this.feedType);
             this.NetFields.AddField(this.isUsedForBuyingHayAtAnyTime);
         }

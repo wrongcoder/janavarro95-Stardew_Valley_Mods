@@ -98,10 +98,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             base.showNextIndex.Value = (int)this.hoeDirt.Value.state == 1;
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.bush, this.hoeDirt, this.bushLoadDirty);
+            base.initializeNetFieldsPostConstructor();
+            this.NetFields.AddFields(this.bush, this.hoeDirt, this.bushLoadDirty, this.hasPlanterAttachment,this.hasEnricherAttachment,this.hasAutoHarvestAttachment);
         }
 
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)

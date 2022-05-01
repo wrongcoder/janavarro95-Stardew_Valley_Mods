@@ -130,7 +130,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             placementRestriction.SetValue(2);
             this.Fragility = 0;
 
-            this.initNetFieldsPostConstructor();
+            this.initializeNetFieldsPostConstructor();
         }
 
         public CustomObject(BasicItemInformation BasicItemInfo)
@@ -145,7 +145,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             placementRestriction.SetValue(2);
             this.Fragility = 0;
 
-            this.initNetFieldsPostConstructor();
+            this.initializeNetFieldsPostConstructor();
         }
 
         public CustomObject(BasicItemInformation BasicItemInfo, int StackSize = 1)
@@ -162,7 +162,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
-            this.initNetFieldsPostConstructor();
+            this.initializeNetFieldsPostConstructor();
         }
 
         public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation)
@@ -178,7 +178,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
-            this.initNetFieldsPostConstructor();
+            this.initializeNetFieldsPostConstructor();
         }
         public CustomObject(BasicItemInformation BasicItemInfo, Vector2 TileLocation, int StackSize = 1)
         {
@@ -194,13 +194,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             IReflectedField<int> placementRestriction = RevitalizeModCore.ModHelper.Reflection.GetField<int>(this, "_placementRestriction");
             placementRestriction.SetValue(2);
 
-            this.initNetFieldsPostConstructor();
+            this.initializeNetFieldsPostConstructor();
         }
 
         /// <summary>
         /// Initializes NetFields to send information for multiplayer after all of the constructor initialization for this object has taken place.
         /// </summary>
-        protected virtual void initNetFieldsPostConstructor()
+        protected virtual void initializeNetFieldsPostConstructor()
         {
             if (this.basicItemInformation != null)
             {
