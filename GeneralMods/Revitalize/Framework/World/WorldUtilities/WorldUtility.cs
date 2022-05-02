@@ -187,7 +187,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         /// <param name="OriginTile"></param>
         public static void CreateItemDebrisAtTileLocation(this GameLocation Location, Item item, Vector2 OriginTile)
         {
-            Location.debris.Add(new CustomObjectDebris(item, OriginTile));
+            Location.debris.Add(new CustomObjectDebris(item, OriginTile * 64));
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         /// <param name="DestinationTile"></param>
         public static void CreateItemDebrisAtTileLocation(this GameLocation Location, Item item, Vector2 OriginTile, Vector2 DestinationTile)
         {
-            Location.debris.Add(new CustomObjectDebris(item, OriginTile, DestinationTile));
+            Location.debris.Add(new CustomObjectDebris(item, OriginTile *64, DestinationTile * 64));
         }
 
     }

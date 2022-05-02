@@ -487,48 +487,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             bool canPickupGardenPot = base.pickupFromGameWorld(tileLocation, environment, who);
             if (canPickupGardenPot == false) return false;
 
-            if (this.hasAutoHarvestAttachment.Value)
-            {
-                Item autoHarvester = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoHarvesterGardenPotAttachment);
-                if (Game1.player.isInventoryFull())
-                {
-                    WorldUtility.CreateItemDebrisAtTileLocation(environment, autoHarvester, tileLocation, tileLocation);
-                }
-                else
-                {
-                    Game1.player.addItemToInventoryBool(autoHarvester);
-                    this.hasAutoHarvestAttachment.Value = false;
-                    this.updateAnimation(true);
-                }
-            }
-            if (this.hasPlanterAttachment.Value)
-            {
-                Item autoPlanter = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment);
-                if (Game1.player.isInventoryFull())
-                {
-                    WorldUtility.CreateItemDebrisAtTileLocation(environment, autoPlanter, tileLocation, tileLocation);
-                }
-                else
-                {
-                    Game1.player.addItemToInventoryBool(autoPlanter);
-                    this.hasPlanterAttachment.Value = false;
-                    this.updateAnimation(true);
-                }
-            }
-            if (this.hasEnricherAttachment.Value)
-            {
-                Item enricher = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Enricher);
-                if (Game1.player.isInventoryFull())
-                {
-                    WorldUtility.CreateItemDebrisAtTileLocation(environment, enricher, tileLocation, tileLocation);
-                }
-                else
-                {
-                    Game1.player.addItemToInventoryBool(enricher);
-                    this.hasEnricherAttachment.Value = false;
-                    this.updateAnimation(true);
-                }
-            }
+            this.removeAttachments(environment, who);
 
 
 
@@ -536,6 +495,60 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             return canPickupGardenPot;
 
         }
+        public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)
+        {
+            this.removeAttachments(environment, Game1.player);
+            base.performRemoveAction(tileLocation, environment);
+        }
+
+        protected virtual void removeAttachments(GameLocation environment,Farmer farmer)
+        {
+            if (this.hasAutoHarvestAttachment.Value)
+            {
+                Item autoHarvester = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoHarvesterGardenPotAttachment);
+                if (farmer!=null && farmer.isInventoryFull())
+                {
+                    WorldUtility.CreateItemDebrisAtTileLocation(environment, autoHarvester, this.TileLocation, this.TileLocation);
+                    this.hasAutoHarvestAttachment.Value = false;
+                    this.updateAnimation(true);
+                }
+                else
+                {
+                    farmer.addItemToInventoryBool(autoHarvester);
+                }
+                this.hasAutoHarvestAttachment.Value = false;
+                this.updateAnimation(true);
+            }
+            if (this.hasPlanterAttachment.Value)
+            {
+                Item autoPlanter = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment);
+                if (farmer!=null && farmer.isInventoryFull())
+                {
+                    WorldUtility.CreateItemDebrisAtTileLocation(environment, autoPlanter, this.TileLocation, this.TileLocation);
+                }
+                else
+                {
+                    farmer.addItemToInventoryBool(autoPlanter);
+                }
+                this.hasPlanterAttachment.Value = false;
+                this.updateAnimation(true);
+            }
+            if (this.hasEnricherAttachment.Value)
+            {
+                Item enricher = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Enricher);
+                if (farmer!=null && farmer.isInventoryFull())
+                {
+                    WorldUtility.CreateItemDebrisAtTileLocation(environment, enricher, this.TileLocation, this.TileLocation);
+                }
+                else
+                {
+                    farmer.addItemToInventoryBool(enricher);
+                }
+                this.hasEnricherAttachment.Value = false;
+                this.updateAnimation(true);
+            }
+        }
+
 
         public override bool performToolAction(Tool t, GameLocation location)
         {
@@ -557,7 +570,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             {
                 base.showNextIndex.Value = true;
             }
-
+            this.removeAttachments(location, Game1.player);
 
             return base.performToolAction(t, location);
         }

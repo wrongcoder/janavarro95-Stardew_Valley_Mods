@@ -2,7 +2,8 @@
 ~Fixed drawing bounds on items that have offset draw positions.
 ~Fixed CustomObjects updating twice as fast, which wasn't intentional.
 +Finished AdvancedFarmingSystem which harvests, plants, and fertilizes crops that reside in IrrigatedGardenPots!
-
+~CustomObjects now shake when hit with a pickaxe.
+~CustomObjects can now be removed with a Pickaxe and properly drop their respective item.
 ~~~~~~~~~~~~0.0.1 Revitalize 4-29-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed CraftingMenu not showing up due to retooling the TextureManagers.
 ~Fixed IrrigatedGardenPots taking an extra enricher, when adding the attachment.

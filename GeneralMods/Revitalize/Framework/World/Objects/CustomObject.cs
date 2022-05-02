@@ -544,7 +544,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         */
 
         /// <summary>
-        /// Performs cleanup that should happen related to an object's removal, but DOES NOT perform the actual removing from the game world.
+        /// Performs cleanup that should happen related to an object's removal and removes it properly from the game world.
         /// </summary>
         /// <param name="tileLocation"></param>
         /// <param name="environment"></param>
@@ -669,6 +669,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             {
                 RevitalizeModCore.log("Null tool used! Probably just the player's hands then.");
                 this.shakeTimer = 200; //Milliseconds.
+                this.basicItemInformation.shakeTimer.Value = 200;
                 return false;
 
             }
@@ -676,10 +677,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             {
                 RevitalizeModCore.log("Player used tool: " + t.DisplayName);
 
-                if (t is Pickaxe || t is Axe)
+                if (t is Pickaxe)
                 {
                     RevitalizeModCore.log("Player used pickaxe!: ");
-                    this.createItemDebris(location, this.TileLocation, this.TileLocation);
+                    this.createItemDebris(location, this.TileLocation, Game1.player.getTileLocation());
+                    this.performRemoveAction(this.TileLocation, location);
+                    this.shakeTimer = 200;
+                    this.basicItemInformation.shakeTimer.Value = 200;
+                    SoundUtilities.PlaySound(Enums.StardewSound.hammer);
                     return false;
                 }
 
@@ -840,6 +845,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     this.health = 10;
                 }
             }
+            if (this.basicItemInformation.shakeTimer.Value > 0)
+            {
+                
+            }
 
         }
 
@@ -945,6 +954,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             //base.AttemptRemoval(removal_action);
         }
+
+
 
         public override int getTilesHigh()
         {
