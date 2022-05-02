@@ -116,6 +116,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
         }
 
+        public NetInt dayUpdateCounter = new NetInt();
+
         public CustomObject()
         {
             this.basicItemInformation = new BasicItemInformation();
@@ -342,6 +344,34 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public override void DayUpdate(GameLocation location)
         {
             base.DayUpdate(location);
+            this.dayUpdateCounter.Value++;
+            if (this.shouldDoDayUpdate())
+            {
+                this.doActualDayUpdateLogic(location);
+                this.resetDayUpdateCounter();
+            }
+        }
+
+        public virtual void doActualDayUpdateLogic(GameLocation location)
+        {
+
+        }
+
+        /// <summary>
+        /// Since <see cref="Furniture"/> and <see cref="StardewValley.Object"/> each do a seperate day update tick, we need to actually not do a day update for one of them.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool shouldDoDayUpdate()
+        {
+            return this.dayUpdateCounter.Value >= 2;
+        }
+
+        /// <summary>
+        /// Resets the day update counter on this Object.
+        /// </summary>
+        public virtual void resetDayUpdateCounter()
+        {
+            this.dayUpdateCounter.Value = 0;
         }
 
         public override void farmerAdjacentAction(GameLocation location)
@@ -523,8 +553,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             if (environment == null) return;
 
-            RevitalizeModCore.logWithFullStackTrace("Perform remove action for furniture!");
-
             this.cleanUpLights();
 
 
@@ -652,7 +680,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     RevitalizeModCore.log("Player used pickaxe!: ");
                     this.createItemDebris(location, this.TileLocation, this.TileLocation);
-                    return true;
+                    return false;
                 }
 
 
@@ -665,7 +693,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public virtual void createItemDebris(GameLocation location, Vector2 OriginTile, Vector2 DestinationTile)
         {
-            location.debris.Add(new CustomObjectDebris(this, OriginTile, DestinationTile));
+            //location.debris.Add(new CustomObjectDebris(this, OriginTile, DestinationTile));
             WorldUtility.CreateItemDebrisAtTileLocation(location,this ,OriginTile, DestinationTile);
         }
 
@@ -723,8 +751,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
 
             location.furniture.Add(obj);
-
-            //DO NOT ADD BACK IN, as doing so WILL CAUSE PROBLEMS!
             location.objects.Add(placementTile, obj);
             if (who != null)
             {
@@ -758,6 +784,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             return true;
             //Base code throws and error so I have to do it this way.
+        }
+
+
+        /// <summary>
+        /// Gets a reference to the actual owner for this object.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Farmer getOwner()
+        {
+            if (this.owner.Value == Game1.player.UniqueMultiplayerID)
+            {
+                return Game1.player;
+            }
+
+            foreach(Farmer farmer in Game1.getAllFarmers())
+            {
+                if (farmer.uniqueMultiplayerID.Value.Equals(this.owner.Value))
+                {
+                    return farmer;
+                }
+            }
+            return null;
         }
 
         public override int salePrice()
@@ -890,12 +938,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override void AttemptRemoval(Action<Furniture> removal_action)
         {
-
-            if (this.getCurrentLocation().furniture.Contains(this))
-            {
-                RevitalizeModCore.log("Furniture is contained inside of game location. Need to update removal logic.");
-            }
-
             this.attemptToPickupFromGameWorld(this.TileLocation, this.getCurrentLocation(), Game1.player);
 
 
@@ -983,7 +1025,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     spriteBatch.Draw(Game1.mouseCursors, new Vector2((X / 64 + x_offset) * 64 - Game1.viewport.X, (Y / 64 + y_offset) * 64 - Game1.viewport.Y), new Microsoft.Xna.Framework.Rectangle(canPlaceHere ? 194 : 210, 388, 16, 16), Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, 0.01f);
                 }
             }
-            this.DrawICustomModObject(spriteBatch, X/64, Y/64 ,0.5f);
+            this.DrawICustomModObject(spriteBatch, X/64+(int)this.basicItemInformation.drawOffset.X, Y/64+(int)this.basicItemInformation.drawOffset.Y ,0.5f);
         }
 
         /// <summary>Draw the game object at a non-tile spot. Aka like debris.</summary>

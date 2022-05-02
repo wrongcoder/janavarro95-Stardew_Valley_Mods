@@ -69,6 +69,34 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             }
         }
 
+        [XmlIgnore]
+        public HoeDirt HoeDirt
+        {
+            get
+            {
+                return this.hoeDirt.Value;
+            }
+            set
+            {
+                this.hoeDirt.Value = value;
+            }
+        }
+
+        /// <summary>
+        /// The fertilizer applied to this garden pot, referenced by the parentSheetIndex in the game.
+        /// </summary>
+        public int Fertilizer
+        {
+            get
+            {
+                return this.HoeDirt.fertilizer.Value;
+            }
+            set
+            {
+                this.HoeDirt.fertilizer.Value = value;
+            }
+        }
+
         [XmlElement("bush")]
         public readonly NetRef<Bush> bush = new NetRef<Bush>();
 
@@ -186,6 +214,272 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
 
             return false;
+        }
+
+        public virtual bool isCropReadyForHarvest()
+        {
+            return this.HoeDirt.readyForHarvest();
+        }
+
+        /// <summary>
+        /// Plants a StardewValley vanilla crop.
+        /// </summary>
+        /// <param name="index">The parent sheet index for the seeds.</param>
+        /// <param name="tileX">The tile x position to plant at</param>
+        /// <param name="tileY">The tile y position to plant at.</param>
+        /// <param name="farmerForSpeedIncreases">Who planted the seeds.</param>
+        /// <param name="isFertilizer">Is this actually fertilizer?</param>
+        /// <param name="location">The location to plant at.</param>
+        /// <returns></returns>
+        public virtual bool plant(int index, int tileX, int tileY, Farmer farmerForSpeedIncreases, Farmer farmerActuallyPlantingThisCrop ,bool isFertilizer, GameLocation location)
+        {
+            if (isFertilizer)
+            {
+                if (this.Crop != null && (int)this.Crop.currentPhase != 0 && (index == (int)Enums.SDVObject.BasicFertilizer || index == (int)Enums.SDVObject.DeluxeFertilizer))
+                {
+                    return false;
+                }
+                if ((int)this.Fertilizer != 0)
+                {
+                    return false;
+                }
+                this.Fertilizer = index;
+                this.applySpeedIncreases(farmerForSpeedIncreases);
+                if (farmerActuallyPlantingThisCrop != null)
+                {
+                    location.playSound("dirtyHit");
+                }
+                return true;
+            }
+            Crop c = new Crop(index, tileX, tileY);
+            if (c.seasonsToGrowIn.Count == 0)
+            {
+                return false;
+            }
+            this.Crop = c;
+            if ((bool)c.raisedSeeds && farmerActuallyPlantingThisCrop!=null)
+            {
+                location.playSound("stoneStep");
+            }
+            if (farmerActuallyPlantingThisCrop != null)
+            {
+                location.playSound("dirtyHit");
+            }
+            this.applySpeedIncreases(farmerForSpeedIncreases);
+            return true;
+        }
+
+        public virtual bool plant(Crop crop, Farmer farmerToApplySpeedIncreasesToCrop, Farmer farmerActuallyHarvestingThisCrop, GameLocation location)
+        {
+            if (crop.seasonsToGrowIn.Count == 0)
+            {
+                return false;
+            }
+            this.Crop = crop;
+            if (farmerActuallyHarvestingThisCrop != null)
+            {
+                location.playSound("dirtyHit");
+            }
+            this.applySpeedIncreases(farmerToApplySpeedIncreasesToCrop);
+            return true;
+        }
+
+        protected void applySpeedIncreases(Farmer who)
+        {
+            if (this.Crop == null)
+            {
+                return;
+            }
+            if (!((int)this.Fertilizer == (int)Enums.SDVObject.SpeedGrow || (int)this.Fertilizer == (int)Enums.SDVObject.DeluxeSpeedGrow || (int)this.Fertilizer ==(int)Enums.SDVObject.HyperSpeedGro || who.professions.Contains(5)))
+            {
+                return;
+            }
+            this.Crop.ResetPhaseDays();
+            int totalDaysOfCropGrowth = 0;
+            for (int j = 0; j < this.Crop.phaseDays.Count - 1; j++)
+            {
+                totalDaysOfCropGrowth += this.Crop.phaseDays[j];
+            }
+            float speedIncrease = 0f;
+            if ((int)this.Fertilizer == (int)Enums.SDVObject.SpeedGrow)
+            {
+                speedIncrease += 0.1f;
+            }
+            else if ((int)this.Fertilizer == (int)Enums.SDVObject.DeluxeSpeedGrow)
+            {
+                speedIncrease += 0.25f;
+            }
+            else if ((int)this.Fertilizer == (int)Enums.SDVObject.HyperSpeedGro)
+            {
+                speedIncrease += 0.33f;
+            }
+            if (who.professions.Contains(5))
+            {
+                speedIncrease += 0.1f;
+            }
+            int daysToRemove = (int)Math.Ceiling((float)totalDaysOfCropGrowth * speedIncrease);
+            int tries = 0;
+            while (daysToRemove > 0 && tries < 3)
+            {
+                for (int i = 0; i < this.Crop.phaseDays.Count; i++)
+                {
+                    if ((i > 0 || this.Crop.phaseDays[i] > 1) && this.Crop.phaseDays[i] != 99999)
+                    {
+                        this.Crop.phaseDays[i]--;
+                        daysToRemove--;
+                    }
+                    if (daysToRemove <= 0)
+                    {
+                        break;
+                    }
+                }
+                tries++;
+            }
+        }
+
+
+        public virtual List<StardewValley.Item> harvest()
+        {
+            if ((bool)this.Crop.dead)
+            {
+                return null;
+            }
+            if ((bool)this.Crop.forageCrop)
+            {
+                StardewValley.Object o = null;
+                Random r2 = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + (int)this.TileLocation.X * 1000 + (int)this.TileLocation.Y * 2000);
+                switch ((int)this.Crop.whichForageCrop)
+                {
+                    case 1:
+                        o = new StardewValley.Object(399, 1);
+                        break;
+                    case 2:
+                        this.HoeDirt.shake((float)Math.PI / 48f, (float)Math.PI / 40f, (float)((int)this.TileLocation.X * 64) < Game1.player.Position.X);
+                        return null;
+                }
+                if (this.getOwner().professions.Contains(16))
+                {
+                    o.Quality = 4;
+                }
+                else if (r2.NextDouble() < (double)((float)this.getOwner().ForagingLevel / 30f))
+                {
+                    o.Quality = 2;
+                }
+                else if (r2.NextDouble() < (double)((float)this.getOwner().ForagingLevel / 15f))
+                {
+                    o.Quality = 1;
+                }
+                //Game1.stats.ItemsForaged += (uint)o.Stack;
+                return new List<Item>{ o};
+            }
+            else if ((int)this.Crop.currentPhase >= this.Crop.phaseDays.Count - 1 && (!this.Crop.fullyGrown || (int)this.Crop.dayOfCurrentPhase <= 0))
+            {
+                int numToHarvest = 1;
+                int cropQuality = 0;
+                int fertilizerQualityLevel = 0;
+                if ((int)this.Crop.indexOfHarvest == 0)
+                {
+                    return null;
+                }
+                Random r = new Random((int)this.TileLocation.X * 7 + (int)this.TileLocation.Y * 11 + (int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame);
+                switch ((int)this.Fertilizer)
+                {
+                    case 368:
+                        fertilizerQualityLevel = 1;
+                        break;
+                    case 369:
+                        fertilizerQualityLevel = 2;
+                        break;
+                    case 919:
+                        fertilizerQualityLevel = 3;
+                        break;
+                }
+                double chanceForGoldQuality = 0.2 * ((double)this.getOwner().FarmingLevel / 10.0) + 0.2 * (double)fertilizerQualityLevel * (((double)Game1.player.FarmingLevel + 2.0) / 12.0) + 0.01;
+                double chanceForSilverQuality = Math.Min(0.75, chanceForGoldQuality * 2.0);
+                if (fertilizerQualityLevel >= 3 && r.NextDouble() < chanceForGoldQuality / 2.0)
+                {
+                    cropQuality = 4;
+                }
+                else if (r.NextDouble() < chanceForGoldQuality)
+                {
+                    cropQuality = 2;
+                }
+                else if (r.NextDouble() < chanceForSilverQuality || fertilizerQualityLevel >= 3)
+                {
+                    cropQuality = 1;
+                }
+                if ((int)this.Crop.minHarvest > 1 || (int)this.Crop.maxHarvest > 1)
+                {
+                    int max_harvest_increase = 0;
+                    if (this.Crop.maxHarvestIncreasePerFarmingLevel.Value > 0)
+                    {
+                            max_harvest_increase = this.getOwner().FarmingLevel / (int)this.Crop.maxHarvestIncreasePerFarmingLevel;
+                        
+                    }
+                    numToHarvest = r.Next(this.Crop.minHarvest, Math.Max((int)this.Crop.minHarvest + 1, (int)this.Crop.maxHarvest + 1 + max_harvest_increase));
+                }
+                if ((double)this.Crop.chanceForExtraCrops > 0.0)
+                {
+                    while (r.NextDouble() < Math.Min(0.9, this.Crop.chanceForExtraCrops))
+                    {
+                        numToHarvest++;
+                    }
+                }
+                if ((int)this.Crop.indexOfHarvest == 771 || (int)this.Crop.indexOfHarvest == 889)
+                {
+                    cropQuality = 0;
+                }
+                StardewValley.Object harvestedItem = (this.Crop.programColored ? new ColoredObject(this.Crop.indexOfHarvest, 1, this.Crop.tintColor)
+                {
+                    Quality = cropQuality
+                } : new StardewValley.Object(this.Crop.indexOfHarvest, 1, isRecipe: false, -1, cropQuality));
+
+                harvestedItem.Stack = numToHarvest;
+
+                List<Item> harvestedObjects = new List<Item>();
+                harvestedObjects.Add(harvestedItem);
+
+                ///FIX THIS TO COME BEFORE THE RETURN!!!!
+                if ((int)this.Crop.indexOfHarvest == 421)
+                {
+                    this.Crop.indexOfHarvest.Value = 431;
+                    numToHarvest = r.Next(1, 4);
+                }
+                harvestedItem = (this.Crop.programColored ? new ColoredObject(this.Crop.indexOfHarvest, 1, this.Crop.tintColor) : new StardewValley.Object(this.Crop.indexOfHarvest, 1));
+
+
+                if ((int)this.Crop.indexOfHarvest == 262 && r.NextDouble() < 0.4)
+                {
+                    StardewValley.Object hay_item = new StardewValley.Object(178, 1);
+                    harvestedObjects.Add(hay_item.getOne());
+                }
+                else if ((int)this.Crop.indexOfHarvest == 771)
+                {
+                    if (r.NextDouble() < 0.1)
+                    {
+                        StardewValley.Object mixedSeeds_item = new StardewValley.Object(770, 1);
+                        harvestedObjects.Add(mixedSeeds_item.getOne());
+                    }
+                }
+                this.Crop.fullyGrown.Value = true;
+                if (this.Crop.dayOfCurrentPhase.Value == (int)this.Crop.regrowAfterHarvest)
+                {
+                    this.Crop.updateDrawMath(this.TileLocation);
+                }
+                this.Crop.dayOfCurrentPhase.Value = this.Crop.regrowAfterHarvest;
+
+                if (this.Crop.regrowAfterHarvest == -1)
+                {
+                    this.Crop = null;
+                }
+
+
+                return harvestedObjects;
+
+
+                }
+            
+            return new List<Item>();
         }
 
         public override bool pickupFromGameWorld(Vector2 tileLocation, GameLocation environment, Farmer who)
@@ -475,8 +769,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             this.hoeDirt.Value.state.Value = 1;
         }
 
-
-        public override void DayUpdate(GameLocation location)
+        public override void doActualDayUpdateLogic(GameLocation location)
         {
             // base.DayUpdate(location)
 
@@ -518,7 +811,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 Rectangle fertilizer_rect = this.hoeDirt.Value.GetFertilizerSourceRect(this.hoeDirt.Value.fertilizer);
                 fertilizer_rect.Width = 13;
                 fertilizer_rect.Height = 13;
-                spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2(base.tileLocation.X * 64f + 4f, base.tileLocation.Y * 64f - 12f)), fertilizer_rect, Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, (base.tileLocation.Y + 0.65f) * 64f / 10000f + (float)x * 1E-05f);
+                float depth = (base.tileLocation.Y - this.basicItemInformation.drawOffset.Y+ 0.65f) * 64f / 10000f + (float)x * 1E-05f;
+                spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2(base.tileLocation.X * 64f + 4f, base.tileLocation.Y * 64f - 12f)), fertilizer_rect, Color.White, 0f, Vector2.Zero, 4f, SpriteEffects.None, depth+ .00001f);
             }
             if (this.hoeDirt.Value.crop != null)
             {
@@ -547,7 +841,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             Rectangle coloredSourceRect = new Rectangle(((!this.Crop.fullyGrown) ? ((int)this.Crop.currentPhase + 1 + 1) : (((int)this.Crop.dayOfCurrentPhase <= 0) ? 6 : 7)) * 16 + (((int)this.Crop.rowInSpriteSheet % 2 != 0) ? 128 : 0), (int)this.Crop.rowInSpriteSheet / 2 * 16 * 2, 16, 32); ;
 
             float originalDepth = (YTileDepthOffset - .5f + 0.66f) * 64f / 10000f + tileLocation.X * 1E-05f;
-            float modDepth = Math.Max(0f, (float)((YTileDepthOffset) * Game1.tileSize) / 10000f) + .00001f;
 
             float depth = originalDepth;//Math.Max(originalDepth, modDepth);
 

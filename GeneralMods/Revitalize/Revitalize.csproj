@@ -36,6 +36,12 @@
     <None Update="Content\Graphics\Items\Farming\AutoPlanterGardenPotAttachment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Graphics\Objects\Farming\AdvancedFarmingSystem.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Graphics\Objects\Farming\HayMaker.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Graphics\Objects\Farming\IrrigatedGardenPot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

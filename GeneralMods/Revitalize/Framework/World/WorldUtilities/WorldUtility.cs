@@ -31,10 +31,9 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                     {
                         CustomObject customObj = (CustomObject)obj;
 
-                        RevitalizeModCore.log("Clean up from loading: {0}", true, customObj.basicItemInformation.id);
-
                         if (location.objects.ContainsKey(customObj.TileLocation))
                         {
+                            //RevitalizeModCore.log("Clean up from loading: {0}", true, customObj.basicItemInformation.id);
                             objectsToCleanUp.Add(customObj);
                             customObj.removeFromGameWorld(customObj.TileLocation, location);
 
@@ -47,26 +46,32 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                     bool furnitureContains = f != null;
                     if (location.objects.ContainsKey(obj.TileLocation) == false && furnitureContains==false)
                     {
+
+                        //RevitalizeModCore.log("Add object back to game world since it doesn't exist in object or furniture list: {0}", false, obj.basicItemInformation.id);
+
                         obj.reAddToGameWorld(obj.TileLocation, location);
-                        return;
+                        continue;
                     }
 
-                    else if(location.objects.ContainsKey(obj.TileLocation)==false && furnitureContains)
+                    else if(location.objects.ContainsKey(obj.TileLocation)==false && furnitureContains==true)
                     {
+                        //RevitalizeModCore.log("Add object back to game world since it doesn't exist in object list but it does exist in the furniture list: {0}", false, obj.basicItemInformation.id);
                         location.furniture.Remove(f);
                         obj.reAddToGameWorld(obj.TileLocation, location);
-                        return;
+                        continue;
 
                     }
 
                     else if (location.objects.ContainsKey(obj.TileLocation) == true && furnitureContains==false)
                     {
-                        RevitalizeModCore.log("Object was NOT removed, but DOES NOT exist in the furniture's database: {0}", true, obj.basicItemInformation.id);
+                        //RevitalizeModCore.log("Object was NOT removed, but DOES NOT exist in the furniture's database: {0}", true, obj.basicItemInformation.id);
                     }
+
+
 
                     else
                     {
-
+                        //RevitalizeModCore.log("Unsure what should happen here", true, obj.basicItemInformation.id);
                         StardewValley.Object overlappedObject = location.objects[obj.TileLocation];
                         if(overlappedObject is CustomObject)
                         {
@@ -74,8 +79,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                             if (overlappedCustomObject.basicItemInformation.id.Equals(obj.basicItemInformation.id))
                             {
 
-                                RevitalizeModCore.log("Purge due to duplication: {0}", true, obj.basicItemInformation.id);
-                                return; 
+                                //RevitalizeModCore.log("Purge due to duplication: {0}", true, obj.basicItemInformation.id);
+                                continue; 
                             }
                             else
                             {

@@ -9,6 +9,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
     public class FarmingObjects
     {
 
+        public const string AdvancedFarmingSystem = "Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
         public const string IrrigatedGardenPot = "Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";
     }
 }

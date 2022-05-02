@@ -182,7 +182,7 @@ namespace Omegasis.Revitalize.Framework.Objects
 
             this.addItem(Machines.WindmillV1, windMillV1_0_0);
 
-            this.addItem(Machines.HayMaker, new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Machines.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
+            this.addItem(Machines.HayMaker, new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
@@ -236,6 +236,9 @@ namespace Omegasis.Revitalize.Framework.Objects
 
 
             }, IrrigatedGardenPot.DEFAULT_ANIMATION_KEY, IrrigatedGardenPot.DRIPPING_ANIMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
+
+
+            this.addItem(FarmingObjects.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("Advanced Farming System", FarmingObjects.AdvancedFarmingSystem, "An advanced farming system that interfaces irrigated gardening pots and does various tasks depending if there are enrichers, auto harvesters, or auto planter attachments on them!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)),Color.White,false,new Vector2(1,1),new Vector2(0,-1),null,null)));
 
         }
 

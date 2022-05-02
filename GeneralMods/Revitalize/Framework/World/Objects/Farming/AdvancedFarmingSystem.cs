@@ -47,64 +47,155 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         /// <returns></returns>
         public override bool rightClicked(Farmer who)
         {
-            this.doWorkOnIrrigatedWaterPots();
+            this.doWorkOnIrrigatedWaterPots(who);
             SoundUtilities.PlaySound(Enums.StardewSound.Ship);
             return true;
         }
 
-        public override void DayUpdate(GameLocation location)
+        public override void doActualDayUpdateLogic(GameLocation location)
         {
-            base.DayUpdate(location);
+            this.doWorkOnIrrigatedWaterPots(null);
         }
 
-        public virtual void doWorkOnIrrigatedWaterPots()
+        public override void resetOnPlayerEntry(GameLocation environment, bool dropDown = false)
         {
-            Dictionary<Vector2, StardewValley.Object> connectedObjects = WorldUtilities.ObjectUtilities.GetAllConnectedObjectsStartingAtTilePosition(this.getCurrentLocation(),this.TileLocation, true);
+            base.resetOnPlayerEntry(environment, dropDown);
+            this.doWorkOnIrrigatedWaterPots(Game1.player);
+        }
+
+        public virtual void doWorkOnIrrigatedWaterPots(Farmer farmerActuallyDoingWork)
+        {
+            Dictionary<Vector2, StardewValley.Object> connectedObjects = WorldUtilities.ObjectUtilities.GetAllConnectedObjectsStartingAtTilePosition(this.getCurrentLocation(), this.TileLocation);
 
 
             List<IrrigatedGardenPot> gardenPots = new List<IrrigatedGardenPot>();
             List<Chest> chests = new List<Chest>();
 
-            foreach(KeyValuePair<Vector2,StardewValley.Object> tileToObject in connectedObjects)
+            foreach (KeyValuePair<Vector2, StardewValley.Object> tileToObject in connectedObjects)
             {
 
                 //Filter out unnecessary items.
-                if(tileToObject.Value is Chest)
+                if (tileToObject.Value is Chest)
                 {
                     chests.Add((Chest)tileToObject.Value);
                 }
 
-                if(tileToObject.Value is IrrigatedGardenPot)
+                if (tileToObject.Value is IrrigatedGardenPot)
                 {
                     gardenPots.Add((IrrigatedGardenPot)tileToObject.Value);
                 }
-
-
             }
 
+            Queue<Item> overflowItems = new Queue<Item>();
+
             //This will only output to chests, it is up to the player to decide what to do from there, or if Automate is installed, then Automate will take over with it's processing system.
-            foreach(IrrigatedGardenPot gardenPot in gardenPots)
+            foreach (IrrigatedGardenPot gardenPot in gardenPots)
             {
+
+                if (gardenPot.hasAutoHarvestAttachment && gardenPot.Crop != null && gardenPot.isCropReadyForHarvest()==true)
+                {
+                    //find the first chest that has an inventory that can accept this crop and then break.
+                    //Will probably need to adjust my code that adds items to the player's inventory to do the same with other inventories.
+
+                    //Need to have a harvest crop method on the irrigated watering pot.
+
+                    //List of harvested items, but need to make sure chests can actually accept them.
+
+                    List<Item> harvestedItems = gardenPot.harvest();
+
+                    foreach (Item item2 in harvestedItems)
+                    {
+                        overflowItems.Enqueue(item2);
+                    }
+                }
+
+                if (gardenPot.Crop != null)
+                {
+                    //if pot has a crop that is not a seed and not ready to be harvested, it can be skipped!
+                    if (gardenPot.Crop.currentPhase.Value != 0 && gardenPot.isCropReadyForHarvest() == false)
+                    {
+                        continue;
+                    }
+                    //if pot has a crop that is a seed and is fertilized, it can be skipped!
+                    if (gardenPot.Crop.currentPhase.Value == 0 && gardenPot.hoeDirt.Value.fertilizer.Value != 0)
+                    {
+                        continue;
+                    }
+                }
+
 
                 foreach (Chest chest in chests)
                 {
-                    if (gardenPot.hasAutoHarvestAttachment)
+                    //Only grab items from regular chests.
+                    if (chest.SpecialChestType != Chest.SpecialChestTypes.None)
                     {
-                        //find the first chest that has an inventory that can accept this crop and then break.
-                        //Will probably need to adjust my code that adds items to the player's inventory to do the same with other inventories.
+                        continue;
                     }
-                    if (gardenPot.hasEnricherAttachment)
+
+                    if (gardenPot.Crop != null)
                     {
-                        //find the first chest with fertilizer and use here only if crop is null, or seeds are in the first stage.
+                        //if pot has a crop that is not a seed and not ready to be harvested, it can be skipped!
+                        if (gardenPot.Crop.currentPhase.Value != 0 && gardenPot.isCropReadyForHarvest() == false)
+                        {
+                            continue;
+                        }
+                        //if pot has a crop that is a seed and is fertilized, it can be skipped!
+                        if (gardenPot.Crop.currentPhase.Value == 0 && gardenPot.hoeDirt.Value.fertilizer.Value != 0)
+                        {
+                            continue;
+                        }
                     }
-                    if (gardenPot.hasPlanterAttachment)
+
+                    for (int i = 0; i < chest.GetActualCapacity(); i++)
                     {
-                        //ALSO MAKE SURE THE CROP IS NULL.
-                        //find first chest with seeds and plant here.
+
+                        if (i >= chest.items.Count)
+                        {
+                            break;
+                        }
+
+                        Item item = chest.items[i];
+
+
+                        if (item == null) continue;
+
+                        if (gardenPot.hasEnricherAttachment && gardenPot.Fertilizer == 0 && item.Category == StardewValley.Object.fertilizerCategory)
+                        {
+                            //find the first chest with fertilizer and use here only if crop is null, or seeds are in the first stage.
+                            gardenPot.plant(item.parentSheetIndex, (int)gardenPot.tileLocation.X, (int)gardenPot.tileLocation.Y, this.getOwner(), farmerActuallyDoingWork, true, this.getCurrentLocation());
+                            ObjectUtilities.ReduceChestItemStackByAmountAndRemoveIfNecessary(chest, i, 1);
+                        }
+                        if (gardenPot.hasPlanterAttachment && gardenPot.Crop == null && item.Category == StardewValley.Object.SeedsCategory)
+                        {
+                            gardenPot.plant(item.parentSheetIndex, (int)gardenPot.tileLocation.X, (int)gardenPot.tileLocation.Y, this.getOwner(), farmerActuallyDoingWork, false, this.getCurrentLocation());
+                            ObjectUtilities.ReduceChestItemStackByAmountAndRemoveIfNecessary(chest, i,1);
+                        }
                     }
 
 
 
+
+                }
+            }
+
+            //Try to put all harvest items into chests or drop them to the ground.
+            while (overflowItems.Count > 0)
+            {
+
+                Item item = overflowItems.Dequeue();
+                bool added = false;
+                foreach (Chest chest in chests)
+                {
+                    added = ObjectUtilities.addItemToChest(chest, item);
+                    if (added) break;
+                }
+                if (added == true)
+                {
+                    continue;
+                }
+                else
+                {
+                    WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
                 }
 
             }

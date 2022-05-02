@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 {
@@ -17,26 +18,19 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         /// <param name="StartingPosition"></param>
         /// <param name="IncludeStartingTilePosition"></param>
         /// <returns></returns>
-        public static Dictionary<Vector2,StardewValley.Object> GetAllAdjacentObjectsOrNull(GameLocation location, Vector2 StartingPosition, bool IncludeStartingTilePosition=true)
+        public static Dictionary<Vector2,StardewValley.Object> GetAllAdjacentObjectsOrNull(GameLocation location, Vector2 StartingPosition)
         {
             Dictionary<Vector2, StardewValley.Object> adjacentObjects = new Dictionary<Vector2, StardewValley.Object>();
 
             //Can return null if no object at position.
             for (int x = (int)StartingPosition.X - 1; x <= (int)StartingPosition.X + 1; x++)
             {
-                for (int y = (int)StartingPosition.Y - 1; y <= StartingPosition.Y + 1; y++)
+                for (int y = (int)StartingPosition.Y - 1; y <= (int)StartingPosition.Y + 1; y++)
                 {
 
                     StardewValley.Object obj = location.getObjectAtTile(x, y);
                     Vector2 tilePosition = new Vector2(x, y);
-                    if (tilePosition.X == StartingPosition.X && tilePosition.Y == StartingPosition.Y && IncludeStartingTilePosition)
-                    {
-                        adjacentObjects.Add(tilePosition, obj);
-                    }
-                    else
-                    {
-                        adjacentObjects.Add(tilePosition, obj);
-                    }
+                    adjacentObjects.Add(tilePosition, obj);
 
                 }
             }
@@ -44,7 +38,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 
         }
 
-        public static Dictionary<Vector2, StardewValley.Object> GetAllConnectedObjectsStartingAtTilePosition(GameLocation location,Vector2 TilePosition, bool IncludeStartingTilePosition)
+        public static Dictionary<Vector2, StardewValley.Object> GetAllConnectedObjectsStartingAtTilePosition(GameLocation location,Vector2 TilePosition)
         {
 
             HashSet<Vector2> exploredTiles = new HashSet<Vector2>();
@@ -65,27 +59,98 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                     continue;
                 }
 
-                Dictionary<Vector2, StardewValley.Object> objects = GetAllAdjacentObjectsOrNull(location, tileToExplore, true);
+                Dictionary<Vector2, StardewValley.Object> objects = GetAllAdjacentObjectsOrNull(location, tileToExplore);
                 foreach(KeyValuePair<Vector2,StardewValley.Object> tileToObject in objects)
                 {
-
-                    if (exploredTiles.Contains(tileToExplore))
-                    {
-                        continue;
-                    }
                     if (tileToObject.Value == null)
                     {
                         continue;
                     }
+                    if (exploredTiles.Contains(tileToExplore))
+                    {
+                        continue;
+                    }
+                    if (connectedObjects.ContainsKey(tileToObject.Key)){
+                        continue;
+                    }
 
-                    exploredTiles.Add(tileToObject.Key);
                     connectedObjects.Add(tileToObject.Key,tileToObject.Value);
                     tilesToExplore.Enqueue(tileToObject.Key);
 
                 }
+                exploredTiles.Add(tileToExplore);
 
             }
             return connectedObjects;
+
+
+        }
+
+        /// <summary>
+        /// Adds an item to a chest. Returns true if the item was added, or false if it was not added.
+        /// </summary>
+        /// <param name="chest">The chest to add the item to.</param>
+        /// <param name="item">The item to add.</param>
+        /// <returns></returns>
+        public static bool addItemToChest(Chest chest, Item item)
+        {
+
+            for(int i = 0; i < chest.GetActualCapacity(); i++)
+            {
+
+                if (i >= chest.items.Count())
+                {
+                    chest.addItem(item);
+                    return true;
+                }
+
+
+                Item chestItemSlot = chest.items[i];
+                if (chestItemSlot == null)
+                {
+                    chest.items[i] = item;
+                    return true;
+                }
+
+                if (item.canStackWith(chestItemSlot))
+                {
+                    chestItemSlot.Stack += item.Stack;
+                    return true;
+                }
+
+            }
+
+            return false;
+
+        }
+
+        /// <summary>
+        /// Reduces a given item in a chest and cleans up the chest as necessary.
+        /// </summary>
+        /// <param name="chest">The chest to modify.</param>
+        /// <param name="itemIndex">The index of the item in the chest.</param>
+        /// <returns>True if the operation was suscessful. False if there was no item to modify.</returns>
+        public static bool ReduceChestItemStackByAmountAndRemoveIfNecessary(Chest chest, int itemIndex, int AmountToSubtract)
+        {
+            if(itemIndex>=chest.GetActualCapacity() || itemIndex>= chest.items.Count)
+            {
+                return false;
+            }
+
+            Item item = chest.items[itemIndex];
+            if (item == null)
+            {
+                return false;
+            }
+
+            item.Stack-=AmountToSubtract;
+
+            if (item.Stack <= 0)
+            {
+                chest.items[itemIndex] = null;
+                chest.clearNulls();
+            }
+            return true;
 
 
         }

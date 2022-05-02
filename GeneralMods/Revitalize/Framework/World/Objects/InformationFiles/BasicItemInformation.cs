@@ -180,7 +180,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         }
 
 
-        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, Vector2 BoundingBoxTileOffset ,InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
+        public BasicItemInformation(string name, string id, string description, string categoryName, Color categoryColor, int staminaRestoredOnEating, int healthRestoredOnEating, int fragility, bool isLamp, int price, bool canBeSetOutdoors, bool canBeSetIndoors, AnimationManager animationManager, Color drawColor, bool ignoreBoundingBox, Vector2 BoundingBoxTileDimensions, Vector2 DrawTileOffset ,InventoryManager Inventory, LightManager Lights, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null)
         {
             this.name.Value = name;
             this.id.Value = id;
@@ -202,7 +202,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             this.DrawColor = drawColor;
             this.ignoreBoundingBox.Value = ignoreBoundingBox;
             this.boundingBoxTileDimensions.Value = BoundingBoxTileDimensions;
-            this.drawOffset.Value = BoundingBoxTileOffset;
+            this.drawOffset.Value = DrawTileOffset;
             this.inventory = Inventory ?? new InventoryManager();
             this.lightManager = Lights ?? new LightManager();
             this.facingDirection.Value = Enums.Direction.Down;

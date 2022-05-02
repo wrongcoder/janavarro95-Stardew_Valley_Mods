@@ -50,7 +50,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             return component;
         }
 
-        public override void DayUpdate(GameLocation location)
+        public override void doActualDayUpdateLogic(GameLocation location)
         {
             if (!this.getCurrentLocation().IsOutdoors) return;
             if (this.heldObject.Value != null) return;

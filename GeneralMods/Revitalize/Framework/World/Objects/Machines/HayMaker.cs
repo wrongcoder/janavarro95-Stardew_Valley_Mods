@@ -162,15 +162,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// Called when a new day is started. Attempt to refill the silos from the hay maker.
         /// </summary>
         /// <param name="location"></param>
-        public override void DayUpdate(GameLocation location)
+        public override void doActualDayUpdateLogic(GameLocation location)
         {
             if (this.heldObject.Value != null)
             {
                 this.attemptToFillFarmSilos();
                 this.cleanOutHayMaker(false);
             }
-
-            base.DayUpdate(location);
         }
 
         /// <summary>

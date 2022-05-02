@@ -75,9 +75,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
             this.basicItemInformation.shakeTimer.Value -= time.ElapsedGameTime.Milliseconds;
         }
 
-        public override void DayUpdate(GameLocation location)
+        public override void doActualDayUpdateLogic(GameLocation location)
         {
-            base.DayUpdate(location);
             this.setHealth(this.healthValue);
         }
 
