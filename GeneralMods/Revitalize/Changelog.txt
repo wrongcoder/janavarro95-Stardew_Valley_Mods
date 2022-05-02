@@ -4,6 +4,8 @@
 +Finished AdvancedFarmingSystem which harvests, plants, and fertilizes crops that reside in IrrigatedGardenPots!
 ~CustomObjects now shake when hit with a pickaxe.
 ~CustomObjects can now be removed with a Pickaxe and properly drop their respective item.
+~CustomObjects now properly display their tooltip at a proper width in menus.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 4-29-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed CraftingMenu not showing up due to retooling the TextureManagers.
 ~Fixed IrrigatedGardenPots taking an extra enricher, when adding the attachment.

@@ -21,6 +21,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.StardustCore.Animations;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.World.Debris;
+using StardewValley.Menus;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -418,7 +419,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override string getDescription()
         {
-            return this.basicItemInformation.description;
+            return Game1.parseText(this.basicItemInformation.description, Game1.smallFont, this.getDescriptionWidth());
         }
 
         public override StardewValley.Object GetDeconstructorOutput(Item item)
@@ -701,6 +702,46 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             //location.debris.Add(new CustomObjectDebris(this, OriginTile, DestinationTile));
             WorldUtility.CreateItemDebrisAtTileLocation(location,this ,OriginTile, DestinationTile);
         }
+
+        public override void drawTooltip(SpriteBatch spriteBatch, ref int x, ref int y, SpriteFont font, float alpha, StringBuilder overrideText)
+        {
+            base.drawTooltip(spriteBatch, ref x, ref y, font, alpha, overrideText);
+
+
+            /*
+            overrideText = new StringBuilder();
+            overrideText.Append(this.getActualDescription());
+            Vector2 small_text_size = Vector2.Zero;
+            int width = Math.Max( 0, Math.Max((int)font.MeasureString(this.getActualDescription()).X, ((int)Game1.dialogueFont.MeasureString(this.DisplayName).X))) + 32;
+            int height = Math.Max(20 * 3, (int)font.MeasureString(this.getActualDescription()).Y + 32 +  (int)((this.DisplayName != null) ? (Game1.dialogueFont.MeasureString(this.DisplayName).Y + 16f) : 0f));
+
+            IClickableMenu.drawTextureBox(spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), x, y, width +  0, height, Color.White * alpha);
+            if (this.DisplayName != null)
+            { string boldTitleText = this.DisplayName;
+                SpriteBatch b = spriteBatch;
+
+                Vector2 bold_text_size = Game1.dialogueFont.MeasureString(this.DisplayName);
+                IClickableMenu.drawTextureBox(b, Game1.menuTexture, new Rectangle(0, 256, 60, 60), x, y, width + 0, (int)Game1.dialogueFont.MeasureString(boldTitleText).Y + 32 + (int)(font.MeasureString("asd").Y) - 4, Color.White * alpha, 1f, false);
+                b.Draw(Game1.menuTexture, new Rectangle(x + 12, y + (int)Game1.dialogueFont.MeasureString(boldTitleText).Y + 32 + (int)( font.MeasureString("asd").Y) - 4, width - 4 * (6), 4), new Rectangle(44, 300, 4, 4), Color.White);
+                b.DrawString(Game1.dialogueFont, boldTitleText, new Vector2(x + 16, y + 16 + 4) + new Vector2(2f, 2f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, boldTitleText, new Vector2(x + 16, y + 16 + 4) + new Vector2(0f, 2f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, boldTitleText, new Vector2(x + 16, y + 16 + 4), Game1.textColor);
+                y += (int)Game1.dialogueFont.MeasureString(boldTitleText).Y;
+            }
+
+
+            if (overrideText != null && overrideText.Length != 0 && (overrideText.Length != 1 || overrideText[0] != ' '))
+            {
+                spriteBatch.DrawString(font, overrideText, new Vector2(x + 16, y + 16 + 4) + new Vector2(2f, 2f), Game1.textShadowColor * alpha);
+                spriteBatch.DrawString(font, overrideText, new Vector2(x + 16, y + 16 + 4) + new Vector2(0f, 2f), Game1.textShadowColor * alpha);
+                spriteBatch.DrawString(font, overrideText, new Vector2(x + 16, y + 16 + 4) + new Vector2(2f, 0f), Game1.textShadowColor * alpha);
+                spriteBatch.DrawString(font, overrideText, new Vector2(x + 16, y + 16 + 4), Game1.textColor * 0.9f * alpha);
+                y += (int)font.MeasureString(overrideText).Y + 4;
+            }
+            */
+        }
+
+        
 
         /// <summary>
         /// When this item is used. (Left clicked)
