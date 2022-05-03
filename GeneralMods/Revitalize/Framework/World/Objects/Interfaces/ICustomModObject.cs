@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Omegasis.StardustCore.Animations;
+using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Interfaces
 {
@@ -32,5 +34,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Interfaces
                 return this.AnimationManager.getTexture();
             }
         }
+
+        Item getOne();
+
+        void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f, float transparency, float Scale);
     }
 }

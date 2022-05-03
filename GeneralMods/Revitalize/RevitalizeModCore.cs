@@ -333,7 +333,7 @@ namespace Omegasis.Revitalize
             //Game1.player.addItemToInventoryBool(ObjectManager.getItem(CraftingStations.WorkStation_Id));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-              //ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
+              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
               ObjectManager.getItem(Machines.ElectricFurnace),
               ObjectManager.getItem(Machines.NuclearFurnace),
               ObjectManager.getItem(Machines.MagicalFurnace),

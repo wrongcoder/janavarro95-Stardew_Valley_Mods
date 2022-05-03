@@ -227,6 +227,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.DrawICustomModObjectWhenHeld(spriteBatch, objectPosition, f);
         }
 
+        public virtual void drawWhenHeld(SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f, float Transparency, float Scale)
+        {
+            this.DrawICustomModObjectWhenHeld(spriteBatch, objectPosition, f, Transparency, Scale);
+        }
+
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {

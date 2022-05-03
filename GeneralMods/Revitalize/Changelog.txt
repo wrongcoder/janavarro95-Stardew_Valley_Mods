@@ -4,6 +4,8 @@
 +Added in Magical Furnace
 +Added in Radioactive Fuel
 ~Fixed crash where machines would fail to draw their status boxes when loading from a save.
+~Updated blueprints code to be able to properly display a sillouette of the item that would be learned from the blueprints.
+~Added Drawable.cs which helps to interface different kinds of Items that can be drawn.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 5-2-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed drawing bounds on items that have offset draw positions.

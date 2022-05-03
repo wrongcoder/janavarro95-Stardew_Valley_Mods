@@ -87,32 +87,13 @@ namespace Omegasis.Revitalize.Framework.Objects
             this.loadInCraftingTables();
             this.loadInMachines();
             this.loadInAestheticsObjects();
+
+            //Should load blueprints last due to the fact that they can draw references to objects.
+            this.loadInBlueprints();
         }
 
         private void loadInAestheticsObjects()
         {
-            /*
-            LampMultiTiledObject lighthouse = new LampMultiTiledObject(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(MultiTiledObject), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(), Color.White, false, null, null));
-            LampTileComponent lighthouse_0_0 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(0, 0, 16, 16)), Color.White, true, null, new Illuminate.LightManager(),null,true));
-            LampTileComponent lighthouse_1_0 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(16, 0, 16, 16)), Color.White, true, null, new Illuminate.LightManager(), null, true));
-            LampTileComponent lighthouse_0_1 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(0, 16, 16, 16)), Color.White, true, null, new Illuminate.LightManager(), null, true));
-            LampTileComponent lighthouse_1_1 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(16, 16, 16, 16)), Color.White, true, null, new Illuminate.LightManager(), null, true));
-            LampTileComponent lighthouse_0_2 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(0, 32, 16, 16)), Color.White, true, null, new Illuminate.LightManager(), null, false));
-            LampTileComponent lighthouse_1_2 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(16, 32, 16, 16)), Color.White, true, null, new Illuminate.LightManager(), null, false));
-            LampTileComponent lighthouse_0_3 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(0, 48, 16, 16)), Color.White, false, null, new Illuminate.LightManager()));
-            LampTileComponent lighthouse_1_3 = new LampTileComponent(PyTKHelper.CreateOBJData("Revitalize.Objects.Furniture.Misc.Lighthouse", TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), typeof(LampTileComponent), Color.White, true), new BasicItemInformation("LightHouse", "Revitalize.Objects.Furniture.Misc.Lighthouse", "A minuture lighthouse that provides a decent amount of light.", "Furniture", Color.Brown, -300, 0, false, 2500, true, true, TextureManager.GetTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "Furniture", "Lighthouse"), new Animation(16, 48, 16, 16)), Color.White, false, null, new Illuminate.LightManager()));
-            lighthouse_0_0.lightManager.addLight(new Vector2(16, 16), LightManager.CreateLightSource(10f, Color.White), lighthouse_0_0);
-            lighthouse.addComponent(new Vector2(0,-3),lighthouse_0_0);
-            lighthouse.addComponent(new Vector2(1, -3), lighthouse_1_0);
-            lighthouse.addComponent(new Vector2(0, -2), lighthouse_0_1);
-            lighthouse.addComponent(new Vector2(1, -2), lighthouse_1_1);
-            lighthouse.addComponent(new Vector2(0, -1), lighthouse_0_2);
-            lighthouse.addComponent(new Vector2(1, -1), lighthouse_1_2);
-            lighthouse.addComponent(new Vector2(0, 0), lighthouse_0_3);
-            lighthouse.addComponent(new Vector2(1, 0), lighthouse_1_3);
-
-            this.AddItem("Lighthouse", lighthouse);
-            */
         }
 
         private void loadInItems()
@@ -125,8 +106,6 @@ namespace Omegasis.Revitalize.Framework.Objects
             this.addItem(FarmingItems.AutoHarvesterGardenPotAttachment, autoHarvesterGardenPotAttachment);
 
             this.addItem(MiscItemIds.RadioactiveFuel, new CustomItem(new BasicItemInformation("Radioactive Fuel", MiscItemIds.RadioactiveFuel, "A radioactive fuel cell used to power various machines!", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Misc.createAnimationManager("RadioactiveFuel", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
-
-            this.loadInBlueprints();
         }
 
         private void loadInBlueprints()
@@ -135,7 +114,7 @@ namespace Omegasis.Revitalize.Framework.Objects
             {
                 {Constants.CraftingIds.CraftingRecipeBooks.WorkbenchCraftingRecipies,"Anvil" }
 
-            });
+            },new Drawable(this.getItem(CraftingStations.Anvil_Id)));
 
             this.addItem(Blueprints.Workbench_AnvilCraftingRecipeBlueprint, craftingBlueprint_anvilForWorkbench);
         }
@@ -290,25 +269,6 @@ namespace Omegasis.Revitalize.Framework.Objects
             }
             int rand = Game1.random.Next(0, objs.Count);
             return objs[rand].getOne();
-        }
-
-
-        /// <summary>
-        /// Gets an object from the dictionary that is passed in.
-        /// </summary>
-        /// <param name="objectName"></param>
-        /// <param name="dictionary"></param>
-        /// <returns></returns>
-        public Item getObject(string objectName, Dictionary<string, CustomObject> dictionary)
-        {
-            if (dictionary.ContainsKey(objectName))
-            {
-                return dictionary[objectName].getOne();
-            }
-            else
-            {
-                throw new Exception("Object pool doesn't contain said object.");
-            }
         }
 
         /// <summary>

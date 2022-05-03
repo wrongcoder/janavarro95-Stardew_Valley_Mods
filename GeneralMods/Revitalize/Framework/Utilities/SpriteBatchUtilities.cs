@@ -118,6 +118,32 @@ namespace Omegasis.Revitalize.Framework.Utilities
             //base.drawWhenHeld(spriteBatch, objectPosition, f);
         }
 
+        public static void DrawICustomModObjectWhenHeld<T>(this T obj, SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f, float transparency, float Scale ) where T : ICustomModObject
+        {
+
+            if (f.ActiveObject.bigCraftable.Value)
+            {
+                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition, obj.AnimationManager.getCurrentAnimationFrameRectangle(), obj.basicItemInformation.DrawColor * transparency, 0f, Vector2.Zero, (float)Game1.pixelZoom * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                return;
+            }
+
+            spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition, obj.AnimationManager.getCurrentAnimationFrameRectangle(), obj.basicItemInformation.DrawColor * transparency, 0f, Vector2.Zero, (float)Game1.pixelZoom * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+            if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
+            {
+                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), obj.AnimationManager.getCurrentAnimationFrameRectangle(), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
+                {
+                    return;
+                }
+                Game1.starCropShimmerPause += 0.04f;
+                if (Game1.starCropShimmerPause >= 0.8f)
+                {
+                    Game1.starCropShimmerPause = -0.8f;
+                }
+            }
+            //base.drawWhenHeld(spriteBatch, objectPosition, f);
+        }
+
         public static void DrawICustomModObjectInMenu<T>(this T obj,SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow) where T : StardewValley.Object, ICustomModObject
         {
 
