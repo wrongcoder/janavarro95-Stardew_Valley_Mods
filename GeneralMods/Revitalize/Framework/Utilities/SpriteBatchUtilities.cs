@@ -95,42 +95,27 @@ namespace Omegasis.Revitalize.Framework.Utilities
         public static void DrawICustomModObjectWhenHeld<T>(this T obj, SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f) where T : StardewValley.Object, ICustomModObject
         {
 
-            if (f.ActiveObject.bigCraftable.Value)
-            {
-                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition, obj.AnimationManager.getCurrentAnimationFrameRectangle(), obj.basicItemInformation.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
-                return;
-            }
-
-            spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition, obj.AnimationManager.getCurrentAnimationFrameRectangle(), obj.basicItemInformation.DrawColor, 0f, Vector2.Zero, (float)Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
-            if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
-            {
-                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), obj.AnimationManager.getCurrentAnimationFrameRectangle(), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
-                if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
-                {
-                    return;
-                }
-                Game1.starCropShimmerPause += 0.04f;
-                if (Game1.starCropShimmerPause >= 0.8f)
-                {
-                    Game1.starCropShimmerPause = -0.8f;
-                }
-            }
-            //base.drawWhenHeld(spriteBatch, objectPosition, f);
+            DrawICustomModObjectWhenHeld(obj, spriteBatch, objectPosition, f, 1f, 1f);
         }
 
         public static void DrawICustomModObjectWhenHeld<T>(this T obj, SpriteBatch spriteBatch, Vector2 objectPosition, Farmer f, float transparency, float Scale ) where T : ICustomModObject
         {
 
+            int baseObjectTileHeight = 32 * Game1.pixelZoom;
+            int objHight = obj.AnimationManager.getCurrentAnimationFrameRectangle().Height * Game1.pixelZoom;
+
+            int hightOffset = baseObjectTileHeight - objHight;
+
             if (f.ActiveObject.bigCraftable.Value)
             {
-                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition, obj.AnimationManager.getCurrentAnimationFrameRectangle(), obj.basicItemInformation.DrawColor * transparency, 0f, Vector2.Zero, (float)Game1.pixelZoom * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition+new Vector2(0,hightOffset), obj.AnimationManager.getCurrentAnimationFrameRectangle(), obj.basicItemInformation.DrawColor * transparency, 0f, Vector2.Zero, (float)Game1.pixelZoom * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 return;
             }
 
             spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition, obj.AnimationManager.getCurrentAnimationFrameRectangle(), obj.basicItemInformation.DrawColor * transparency, 0f, Vector2.Zero, (float)Game1.pixelZoom * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
             if (f.ActiveObject != null && f.ActiveObject.Name.Contains("="))
             {
-                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), obj.AnimationManager.getCurrentAnimationFrameRectangle(), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
+                spriteBatch.Draw(obj.CurrentTextureToDisplay, objectPosition + new Vector2(0,hightOffset) + new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), obj.AnimationManager.getCurrentAnimationFrameRectangle(), Color.White, 0f, new Vector2((float)(Game1.tileSize / 2), (float)(Game1.tileSize / 2)), (float)Game1.pixelZoom + Math.Abs(Game1.starCropShimmerPause) / 8f * Scale, SpriteEffects.None, Math.Max(0f, (float)(f.getStandingY() + 2) / 10000f));
                 if (Math.Abs(Game1.starCropShimmerPause) <= 0.05f && Game1.random.NextDouble() < 0.97)
                 {
                     return;
