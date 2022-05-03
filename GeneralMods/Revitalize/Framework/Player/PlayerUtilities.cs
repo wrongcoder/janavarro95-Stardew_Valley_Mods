@@ -1,4 +1,5 @@
 using System.Linq;
+using Omegasis.Revitalize.Framework.Constants;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Player
@@ -69,6 +70,100 @@ namespace Omegasis.Revitalize.Framework.Player
             }
             return false;
         }
+
+        public static bool InventoryContainsItem(this Farmer Who, Enums.SDVObject obj)
+        {
+            return InventoryContainsItem(Who, (int)obj);
+        }
+        public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, Enums.SDVObject obj, int MinStackSize=1)
+        {
+            return InventoryContainsEnoughOfAnItem(Who, (int)obj,MinStackSize);
+        }
+
+        public static bool ReduceInventoryItemIfEnoughFound(this Farmer Who, Enums.SDVObject obj, int MinStackSize)
+        {
+            if (InventoryContainsEnoughOfAnItem(Who, obj, MinStackSize))
+            {
+                return ReduceInventoryItemStackSize(Who, obj, MinStackSize);
+            }
+            return false;
+        }
+
+        public static bool InventoryContainsItem(this Farmer Who,int ParentSheetIndex)
+        {
+            if (Who != null)
+            {
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null)
+                    {
+                        continue;
+                    }
+                    //Check to see if the items can stack. If they can simply add them together and then continue on.
+                    if (Who.items[i].ParentSheetIndex==ParentSheetIndex)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool ReduceInventoryItemStackSize(this Farmer Who, Enums.SDVObject ParentSheetIndex, int StackSize=1)
+        {
+            return ReduceInventoryItemStackSize(Who, (int)ParentSheetIndex, StackSize);
+        }
+
+        public static bool ReduceInventoryItemStackSize(this Farmer Who, int ParentSheetIndex, int StackSizeToReduce=1)
+        {
+            if (Who != null)
+            {
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null)
+                    {
+                        continue;
+                    }
+                    //Check to see if the items can stack. If they can simply add them together and then continue on.
+                    if (Who.items[i].ParentSheetIndex == ParentSheetIndex)
+                    {
+                        Who.items[i].Stack -= StackSizeToReduce;
+
+                        if (Who.items[i].Stack <= 0) Who.items[i] = null;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, int ParentSheetIndex, int MinStackSize=1)
+        {
+            if (Who != null)
+            {
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null)
+                    {
+                        continue;
+                    }
+                    //Check to see if the items can stack. If they can simply add them together and then continue on.
+                    if (Who.items[i].ParentSheetIndex == ParentSheetIndex && Who.items[i].Stack>=MinStackSize)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+
 
     }
 }

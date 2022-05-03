@@ -424,6 +424,8 @@ namespace Omegasis.Revitalize.Framework.Constants
 
             Pumpkin = 276,
 
+            WiltedBouquet = 277,
+
             BokChoy = 278,
 
             Yam = 280,

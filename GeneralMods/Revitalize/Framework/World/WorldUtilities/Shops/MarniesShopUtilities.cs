@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
-using Omegasis.Revitalize.Framework.World.Objects.Machines;
+using Omegasis.Revitalize.Framework.World.Objects.Farming;
 using StardewValley.Menus;
 
 namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
