@@ -18,6 +18,7 @@ namespace Omegasis.Revitalize.Framework.Managers
         public static TextureManager Items_Resources_Ore;
         public static TextureManager Items_Crafting;
         public static TextureManager Items_Farming;
+        public static TextureManager Items_Misc;
 
         public static TextureManager Objects_Crafting;
         public static TextureManager Objects_Farming;
@@ -50,6 +51,7 @@ namespace Omegasis.Revitalize.Framework.Managers
             Items_Resources_Ore = InitializeTextureManager("Revitalize.Items.Resources.Ore", Path.Combine("Content", "Graphics", "Items", "Resources", "Ore"));
             Items_Crafting = InitializeTextureManager("Revitalize.Items.Crafting", Path.Combine("Content", "Graphics", "Items", "Crafting"));
             Items_Farming = InitializeTextureManager("Revitalize.Items.Farming", Path.Combine("Content", "Graphics", "Items", "Farming"));
+            Items_Misc = InitializeTextureManager("Revitalize.Items.Misc", Path.Combine("Content", "Graphics", "Items", "Misc"));
 
             //World Objects
             Objects_Crafting = InitializeTextureManager("Revitalize.Objects.Crafting", Path.Combine("Content", "Graphics", "Objects", "Crafting"));

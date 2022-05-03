@@ -22,6 +22,7 @@ using Omegasis.StardustCore.Animations;
 using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.World.Objects.Farming;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Farming;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 
 namespace Omegasis.Revitalize.Framework.Objects
 {
@@ -123,7 +124,7 @@ namespace Omegasis.Revitalize.Framework.Objects
             AutoHarvesterGardenPotAttachment autoHarvesterGardenPotAttachment = new AutoHarvesterGardenPotAttachment(new BasicItemInformation("Auto Harvester Attachment", FarmingItems.AutoHarvesterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to automatically harvest crops from the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoHarvesterGardenPotAttachment", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
             this.addItem(FarmingItems.AutoHarvesterGardenPotAttachment, autoHarvesterGardenPotAttachment);
 
-
+            this.addItem(MiscItemIds.RadioactiveFuel, new CustomItem(new BasicItemInformation("Radioactive Fuel", MiscItemIds.RadioactiveFuel, "A radioactive fuel cell used to power various machines!", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Misc.createAnimationManager("RadioactiveFuel", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
 
             this.loadInBlueprints();
         }
@@ -240,6 +241,38 @@ namespace Omegasis.Revitalize.Framework.Objects
 
             this.addItem(FarmingObjects.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("Advanced Farming System", FarmingObjects.AdvancedFarmingSystem, "An advanced farming system that interfaces irrigated gardening pots and does various tasks depending if there are enrichers, auto harvesters, or auto planter attachments on them!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)),Color.White,false,new Vector2(1,1),new Vector2(0,-1),null,null)));
 
+
+            this.addItem(Machines.ElectricFurnace, new ElectricFurnace(new BasicItemInformation("Electric Furnace", Machines.ElectricFurnace, "An advanced furnace that smelts objects 25 percent faster and uses battery packs instead of coal.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2500, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+                new Dictionary<string, Animation>()
+                {
+                    {ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {ElectricFurnace.ELECTRIC_WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
+
+                },ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY
+
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Electric));
+
+
+            this.addItem(Machines.NuclearFurnace, new ElectricFurnace(new BasicItemInformation("Nuclear Furnace", Machines.ElectricFurnace, "An advanced furnace that smelts objects twice as fast as a normal furnace and uses nuclear fuel.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+                new Dictionary<string, Animation>()
+                {
+                    {ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,32,16,32)) },
+                    {ElectricFurnace.NUCLEAR_WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,32,16,32)) }
+
+                }, ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY, ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY
+
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Nuclear));
+
+
+            this.addItem(Machines.MagicalFurnace, new ElectricFurnace(new BasicItemInformation("Magical Furnace", Machines.ElectricFurnace, "An advanced furnace that smelts objects 75 percent faster than a normal furnace, and thanks to magical reactor technology, requires no fuel to operate.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 50000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+                new Dictionary<string, Animation>()
+                {
+                    {ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,64,16,32)) },
+                    {ElectricFurnace.MAGICAL_WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,64,16,32)) }
+
+                }, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY
+
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Magical));
         }
 
         /// <summary>

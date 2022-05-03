@@ -22,7 +22,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
     public class HayMaker : Machine
     {
         public NetEnum<Enums.SDVObject> feedType = new NetEnum<Enums.SDVObject>(Enums.SDVObject.NULL);
-        public NetBool lerpScaleIncreasing = new NetBool(true);
 
         public const string AmaranthAnimation = "Amaranth";
         public const string CornAnimation = "Corn";
@@ -297,7 +296,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         protected override void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
-            if (this.machineStatusBubbleBox == null) this.createStatusBubble();
+            if (this.machineStatusBubbleBox == null || this.machineStatusBubbleBox.Value == null) this.createStatusBubble();
             if (this.MinutesUntilReady == 0 && this.heldObject.Value != null)
             {
                 y--;
@@ -353,10 +352,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
             y = (int)this.TileLocation.Y;
 
-            if (this.AnimationManager == null)
-                spriteBatch.Draw(this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), y * Game1.tileSize + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, y * Game1.tileSize / 10000f));
-            else
-                if (this.feedType.Value != Enums.SDVObject.NULL && this.MinutesUntilReady > 0)
+
+            if (this.feedType.Value != Enums.SDVObject.NULL && this.MinutesUntilReady > 0)
             {
                 Vector2 origin = new Vector2(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2, this.AnimationManager.getCurrentAnimationFrameRectangle().Height);
 
@@ -366,7 +363,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((x + this.basicItemInformation.drawOffset.X) * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y + this.basicItemInformation.drawOffset.Y) * Game1.tileSize + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y - this.basicItemInformation.drawOffset.Y) * Game1.tileSize / 10000f) + .00001f);
 
             if (this.MinutesUntilReady == 0 && this.heldObject.Value != null)
-                this.drawStatusBubble(spriteBatch, x, y, alpha);
+                this.drawStatusBubble(spriteBatch, x + (int)this.basicItemInformation.drawOffset.X, y + (int)this.basicItemInformation.drawOffset.Y, alpha);
 
         }
 

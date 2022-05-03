@@ -1,3 +1,10 @@
+~~~~~~~~~~~~0.0.1 Revitalize 5-3-2022 xx.xx P.M~~~~~~~~~~~~~~
++Finished work on Electric Furnaces
++Added in Nuclear Furnace
++Added in Magical Furnace
++Added in Radioactive Fuel
+~Fixed crash where machines would fail to draw their status boxes when loading from a save.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 5-2-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed drawing bounds on items that have offset draw positions.
 ~Fixed CustomObjects updating twice as fast, which wasn't intentional.

@@ -24,5 +24,10 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
 
         public const string HayMaker = PREFIX + "HayMaker";
 
+
+        public const string ElectricFurnace = PREFIX + "ElectricFurnace";
+        public const string NuclearFurnace = PREFIX + "NuclearFurnace";
+        public const string MagicalFurnace = PREFIX + "MagicalFurnace";
+
     }
 }

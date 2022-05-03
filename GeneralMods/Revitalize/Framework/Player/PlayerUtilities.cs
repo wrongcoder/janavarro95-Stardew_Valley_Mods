@@ -1,5 +1,6 @@
 using System.Linq;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Player
@@ -89,26 +90,25 @@ namespace Omegasis.Revitalize.Framework.Player
             return false;
         }
 
-        public static bool InventoryContainsItem(this Farmer Who,int ParentSheetIndex)
+        /// <summary>
+        /// Reduces a custom object in the inventory by a certain amount if found.
+        /// </summary>
+        /// <param name="Who"></param>
+        /// <param name="BasicItemInfoId"></param>
+        /// <param name="MinStackSize"></param>
+        /// <returns></returns>
+        public static bool ReduceInventoryItemIfEnoughFound(this Farmer Who, string BasicItemInfoId, int MinStackSize)
         {
-            if (Who != null)
+            if (InventoryContainsEnoughOfAnItem(Who, BasicItemInfoId, MinStackSize))
             {
-                for (int i = 0; i < Who.MaxItems; i++)
-                {
-
-                    //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null)
-                    {
-                        continue;
-                    }
-                    //Check to see if the items can stack. If they can simply add them together and then continue on.
-                    if (Who.items[i].ParentSheetIndex==ParentSheetIndex)
-                    {
-                        return true;
-                    }
-                }
+                return ReduceInventoryItemStackSize(Who, BasicItemInfoId, MinStackSize);
             }
             return false;
+        }
+
+        public static bool InventoryContainsItem(this Farmer Who,int ParentSheetIndex)
+        {
+            return InventoryContainsEnoughOfAnItem(Who, ParentSheetIndex);
         }
 
         public static bool ReduceInventoryItemStackSize(this Farmer Who, Enums.SDVObject ParentSheetIndex, int StackSize=1)
@@ -116,6 +116,13 @@ namespace Omegasis.Revitalize.Framework.Player
             return ReduceInventoryItemStackSize(Who, (int)ParentSheetIndex, StackSize);
         }
 
+        /// <summary>
+        /// Reduces the given stack size of a given vanilla item by a certain amount.
+        /// </summary>
+        /// <param name="Who"></param>
+        /// <param name="ParentSheetIndex"></param>
+        /// <param name="StackSizeToReduce"></param>
+        /// <returns></returns>
         public static bool ReduceInventoryItemStackSize(this Farmer Who, int ParentSheetIndex, int StackSizeToReduce=1)
         {
             if (Who != null)
@@ -141,6 +148,51 @@ namespace Omegasis.Revitalize.Framework.Player
             return false;
         }
 
+        /// <summary>
+        /// Reduces a <see cref="IBasicItemInfoProvider"/>'s stack size by a certain amount.
+        /// </summary>
+        /// <param name="Who"></param>
+        /// <param name="BasicItemInfoId"></param>
+        /// <param name="StackSizeToReduce"></param>
+        /// <returns></returns>
+        public static bool ReduceInventoryItemStackSize(this Farmer Who, string BasicItemInfoId, int StackSizeToReduce = 1)
+        {
+            if (Who != null)
+            {
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null)
+                    {
+                        continue;
+                    }
+
+                    Item item = Who.items[i];
+                    if (item is IBasicItemInfoProvider)
+                    {
+                        IBasicItemInfoProvider infoProvider = (IBasicItemInfoProvider)item;
+                        //Check to see if the items can stack. If they can simply add them together and then continue on.
+                        if (infoProvider.Id.Equals(BasicItemInfoId))
+                        {
+                            Who.items[i].Stack -= StackSizeToReduce;
+
+                            if (Who.items[i].Stack <= 0) Who.items[i] = null;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Used to determine if a Player's inventory has enough of a given vanilla game item for Stardew Valley.
+        /// </summary>
+        /// <param name="Who"></param>
+        /// <param name="ParentSheetIndex"></param>
+        /// <param name="MinStackSize"></param>
+        /// <returns></returns>
         public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, int ParentSheetIndex, int MinStackSize=1)
         {
             if (Who != null)
@@ -157,6 +209,37 @@ namespace Omegasis.Revitalize.Framework.Player
                     if (Who.items[i].ParentSheetIndex == ParentSheetIndex && Who.items[i].Stack>=MinStackSize)
                     {
                         return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, string BasicItemInfoId, int MinStackSize)
+        {
+            if (Who != null)
+            {
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null)
+                    {
+                        continue;
+                    }
+
+
+                    Item item = Who.items[i];
+
+                    if (item is IBasicItemInfoProvider)
+                    {
+                        IBasicItemInfoProvider infoProvider = (IBasicItemInfoProvider)item;
+                        //Check to see if the items can stack. If they can simply add them together and then continue on.
+                        if (infoProvider.Id.Equals(BasicItemInfoId) && Who.items[i].Stack >= MinStackSize)
+                        {
+                            return true;
+                        }
                     }
                 }
             }

@@ -45,6 +45,17 @@ namespace Omegasis.Revitalize.Framework.Constants
         }
 
         /// <summary>
+        /// The category for miscelaneous objects.
+        /// </summary>
+        public static string Misc
+        {
+            get
+            {
+                return GetCategoryName("Misc", "Misc");
+            }
+        }
+
+        /// <summary>
         /// The category name for Ore.
         /// </summary>
         public static string Ore

@@ -10,5 +10,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Interfaces
     public interface IBasicItemInfoProvider
     {
         public BasicItemInformation basicItemInformation { get; set; }
+
+        public string Id { get; }
     }
 }

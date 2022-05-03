@@ -63,6 +63,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         }
 
         [XmlIgnore]
+        public string Id
+        {
+            get
+            {
+                return this.basicItemInformation.id.Value;
+            }
+        }
+
+        [XmlIgnore]
         public AnimationManager AnimationManager
         {
             get

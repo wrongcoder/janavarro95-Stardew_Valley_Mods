@@ -40,6 +40,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
                 this.info = value;
             }
         }
+        [XmlIgnore]
+        public string Id
+        {
+            get
+            {
+                return this.basicItemInformation.id.Value;
+            }
+        }
+
 
         public WateringCanExtended()
         {

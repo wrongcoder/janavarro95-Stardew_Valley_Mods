@@ -23,7 +23,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public const string MachineStatusBubble_DefaultAnimationKey = "Default";
         public const string MachineStatusBubble_BlankBubbleAnimationKey = "Blank";
         public const string MachineStatusBubble_InventoryFullAnimationKey = "InventoryFull";
-
+        public NetBool lerpScaleIncreasing = new NetBool(true);
 
         [XmlIgnore]
         public List<ResourceInformation> producedResources
@@ -64,7 +64,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         protected override void initializeNetFieldsPostConstructor()
         {
             base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.machineStatusBubbleBox);
+            this.NetFields.AddFields(this.machineStatusBubbleBox, this.lerpScaleIncreasing);
         }
 
         public virtual bool doesMachineProduceItems()
@@ -80,6 +80,39 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             //return base.minutesElapsed(minutes, environment);
         }
 
+        /// <summary>
+        /// A simple method for calculating the scale size for showing a machine working.
+        /// </summary>
+        /// <returns></returns>
+        public virtual float getScaleSizeForWorkingMachine()
+        {
+            float zoomSpeed = 0.01f;
+            if (this.Scale.X < Game1.pixelZoom)
+                this.Scale = new Vector2(Game1.pixelZoom, Game1.pixelZoom);
+
+            if (this.MinutesUntilReady > 0)
+            {
+                if (this.lerpScaleIncreasing.Value == true)
+                {
+                    this.Scale = new Vector2(this.scale.X + zoomSpeed, this.scale.Y + zoomSpeed);
+                    if (this.Scale.X >= 5.0)
+                        this.lerpScaleIncreasing.Value = false;
+                }
+                else
+                {
+                    this.Scale = new Vector2(this.scale.X - zoomSpeed, this.scale.Y - zoomSpeed);
+                    if (this.Scale.X <= Game1.pixelZoom)
+                        this.lerpScaleIncreasing.Value = true;
+                }
+                return this.Scale.X * Game1.options.zoomLevel;
+
+            }
+            else
+            {
+                float zoom = Game1.pixelZoom * Game1.options.zoomLevel;
+                return zoom;
+            }
+        }
 
         protected virtual void createStatusBubble()
         {
@@ -132,7 +165,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         protected virtual void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
-            if (this.machineStatusBubbleBox == null) this.createStatusBubble();
+            if (this.machineStatusBubbleBox == null || this.machineStatusBubbleBox.Value == null) this.createStatusBubble();
             if (this.GetInventoryManager() == null) return;
             if (this.GetInventoryManager().isFull() && this.doesMachineProduceItems())
             {
@@ -156,7 +189,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.basicItemInformation.inventory = Manager;
         }
 
-
+        public virtual bool finishedProduction()
+        {
+            return this.MinutesUntilReady == 0 && this.heldObject.Value != null;
+        }
 
     }
 }

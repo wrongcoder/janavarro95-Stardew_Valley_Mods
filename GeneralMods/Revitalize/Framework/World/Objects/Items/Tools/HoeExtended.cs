@@ -41,6 +41,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
             }
         }
 
+        [XmlIgnore]
+        public string Id
+        {
+            get
+            {
+                return this.basicItemInformation.id.Value;
+            }
+        }
+
 
         public HoeExtended()
         {

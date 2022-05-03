@@ -25,6 +25,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Tools
 
         public BasicItemInformation basicItemInformation { get => this.info; set => this.info=value; }
 
+        [XmlIgnore]
+        public string Id
+        {
+            get
+            {
+                return this.basicItemInformation.id.Value;
+            }
+        }
+
         public AxeExtended()
         {
 
