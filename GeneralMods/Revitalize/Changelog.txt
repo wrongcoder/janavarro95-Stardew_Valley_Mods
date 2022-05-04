@@ -5,6 +5,9 @@
     +Added GoldOreBush: Grows 1 gold ore every 3 days!
     +Added IridiumOreBush: Grows 1 iridium ore every 7 days!
     +Added RadioactiveOreBush: Grows 1 radioactive ore every 14 days!
+~Fixed CustomItems causing crashes in multiplayer.
+~Fixed SaveGameManager crashing when creating a new Save.
+~Fixed MailManager crashing when starting the game.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 5-3-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Finished work on Electric Furnaces

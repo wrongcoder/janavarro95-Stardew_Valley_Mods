@@ -96,7 +96,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public CustomItem()
         {
-
+            this.basicItemInformation = new BasicItemInformation();
+            this.initNetFieldsPostConstructor();
 
         }
 
@@ -181,8 +182,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// </summary>
         protected virtual void initNetFieldsPostConstructor()
         {
-            if (this.basicItemInformation != null)
-                this.NetFields.AddFields(this.netBasicItemInformation);
+            this.NetFields.AddFields(this.netBasicItemInformation);
 
         }
 

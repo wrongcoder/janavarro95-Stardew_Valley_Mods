@@ -333,11 +333,7 @@ namespace Omegasis.Revitalize
             //Game1.player.addItemToInventoryBool(ObjectManager.getItem(CraftingStations.WorkStation_Id));
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Objects.ResourceObjectIds.CopperOreBush),
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Objects.ResourceObjectIds.IronOreBush),
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Objects.ResourceObjectIds.GoldOreBush),
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Objects.ResourceObjectIds.IridiumOreBush),
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Objects.ResourceObjectIds.RadioactiveOreBush),
+              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
 
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             }) ;
@@ -349,6 +345,8 @@ namespace Omegasis.Revitalize
 
         private void GameLoop_SaveCreated(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
         {
+            SaveDataManager.loadOrCreateSaveData();
+            MailManager.tryToAddMailToMailbox();
             Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
         }
 
@@ -409,12 +407,20 @@ namespace Omegasis.Revitalize
 
         public bool CanEdit<T>(IAssetInfo asset)
         {
-            return MailManager.canEditAsset(asset);
+            if (MailManager != null)
+            {
+                return MailManager.canEditAsset(asset);
+            }
+            return false;
         }
 
         public void Edit<T>(IAssetData asset)
         {
-            MailManager.editMailAsset(asset);
+            if (MailManager != null)
+            {
+                MailManager.editMailAsset(asset);
+            }
+
         }
     }
 }

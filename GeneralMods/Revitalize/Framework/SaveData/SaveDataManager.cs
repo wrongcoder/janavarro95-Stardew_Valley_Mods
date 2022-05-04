@@ -21,6 +21,7 @@ namespace Omegasis.Revitalize.Framework.SaveData
 
         public SaveDataManager()
         {
+
         }
 
         public virtual void loadOrCreateSaveData()
