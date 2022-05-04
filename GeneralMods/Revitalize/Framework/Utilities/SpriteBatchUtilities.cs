@@ -44,6 +44,24 @@ namespace Omegasis.Revitalize.Framework.Utilities
                 (itemToDraw as CustomObject).draw(spriteBatch, (int)obj.TileLocation.X, (int)obj.TileLocation.Y);
         }
 
+        /// <summary>
+        /// Code to draw items as held objects to be shown above a different given item.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="itemToDraw"></param>
+        /// <param name="TileLocation"></param>
+        /// <param name="alpha"></param>
+        /// <param name="addedDepth"></param>
+        public static void DrawHeldObject(SpriteBatch spriteBatch, Item itemToDraw, Vector2 TileLocation ,float alpha, float addedDepth)
+        {
+            if (itemToDraw.GetType() == typeof(StardewValley.Object))
+            {
+                (itemToDraw as StardewValley.Object).draw(spriteBatch, (int)(TileLocation.X * Game1.tileSize), (int)(TileLocation.Y * Game1.tileSize), Math.Max(0f, (TileLocation.Y + 1 + addedDepth) * Game1.tileSize / 10000f) + .0001f, alpha);
+                return;
+            }
+            if (RevitalizeModCore.Serializer.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
+                (itemToDraw as CustomObject).draw(spriteBatch, (int)TileLocation.X, (int)TileLocation.Y,alpha);
+        }
 
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public static void DrawICustomModObject<T>(this T obj,SpriteBatch spriteBatch, int x, int y, bool flipped ,float alpha = 1f, StardewValley.Object heldObject=null) where T: StardewValley.Object, ICustomModObject

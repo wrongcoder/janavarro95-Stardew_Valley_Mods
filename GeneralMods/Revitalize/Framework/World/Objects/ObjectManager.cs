@@ -23,6 +23,7 @@ using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.World.Objects.Farming;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Farming;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
+using Omegasis.Revitalize.Framework.World.Objects.Resources;
 
 namespace Omegasis.Revitalize.Framework.Objects
 {
@@ -88,6 +89,8 @@ namespace Omegasis.Revitalize.Framework.Objects
             this.loadInMachines();
             this.loadInAestheticsObjects();
 
+            this.loadInResourcePlants();
+
             //Should load blueprints last due to the fact that they can draw references to objects.
             this.loadInBlueprints();
         }
@@ -96,10 +99,28 @@ namespace Omegasis.Revitalize.Framework.Objects
         {
         }
 
+        private void loadInResourcePlants()
+        {
+            ResourceBush copperOreBush = new ResourceBush(new BasicItemInformation("Copper Ore Bush", ResourceObjectIds.CopperOreBush, "A magical bush that grows a piece of copper ore every day!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 2000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("CopperOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.CopperOre),1);
+            this.addItem(ResourceObjectIds.CopperOreBush, copperOreBush);
+
+            ResourceBush ironOreBush = new ResourceBush(new BasicItemInformation("Iron Ore Bush", ResourceObjectIds.IronOreBush, "A magical bush that grows a piece of iron ore every 2 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IronOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IronOre), 2);
+            this.addItem(ResourceObjectIds.IronOreBush, ironOreBush);
+
+            ResourceBush goldOreBush = new ResourceBush(new BasicItemInformation("Gold Ore Bush", ResourceObjectIds.GoldOreBush, "A magical bush that grows a piece of gold ore every 3 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 7500, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("GoldOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.GoldOre), 3);
+            this.addItem(ResourceObjectIds.GoldOreBush, goldOreBush);
+
+            ResourceBush iridiumResourceBush = new ResourceBush(new BasicItemInformation("Iridium Ore Bush", ResourceObjectIds.IridiumOreBush, "A magical bush that grows a piece of iridium ore every 7 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 10000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IridiumOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IridiumOre), 7);
+            this.addItem(ResourceObjectIds.IridiumOreBush, iridiumResourceBush);
+
+            ResourceBush radioactiveOreBush = new ResourceBush(new BasicItemInformation("Radioactive Ore Bush", ResourceObjectIds.RadioactiveOreBush, "A magical bush that grows a piece of radioactive ore every 14 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 25000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("RadioactiveOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0,-1), null, null), this.getObject(Enums.SDVObject.RadioactiveOre), 14);
+            this.addItem(ResourceObjectIds.RadioactiveOreBush, radioactiveOreBush);
+        }
+
         private void loadInItems()
         {
 
-            AutoPlanterGardenPotAttachment autoPlanterGardenPotAttachment = new AutoPlanterGardenPotAttachment(new BasicItemInformation("Auto Planter Attachment", FarmingItems.AutoPlanterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to planr seeds automatically into the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoPlanterGardenPotAttachment", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AutoPlanterGardenPotAttachment autoPlanterGardenPotAttachment = new AutoPlanterGardenPotAttachment(new BasicItemInformation("Auto Planter Attachment", FarmingItems.AutoPlanterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to plant seeds automatically into the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoPlanterGardenPotAttachment", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
             this.addItem(FarmingItems.AutoPlanterGardenPotAttachment, autoPlanterGardenPotAttachment);
 
             AutoHarvesterGardenPotAttachment autoHarvesterGardenPotAttachment = new AutoHarvesterGardenPotAttachment(new BasicItemInformation("Auto Harvester Attachment", FarmingItems.AutoHarvesterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to automatically harvest crops from the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoHarvesterGardenPotAttachment", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));

@@ -24,15 +24,16 @@ namespace Omegasis.Revitalize.Framework.Managers
         public static TextureManager Objects_Farming;
         public static TextureManager Objects_Furniture;
         public static TextureManager Objects_Machines;
+        public static TextureManager Objects_Resources_ResourcePlants;
 
         public static TextureManager Menus_Misc;
         public static TextureManager Menus_CraftingMenu;
         public static TextureManager Menus_EnergyMenu;
         public static TextureManager Menus_InventoryMenu;
 
+        public static TextureManager Resources_Misc;
         public static TextureManager Resources_Ore;
 
-        public static TextureManager Resources_Misc;
 
         public static TextureManager Tools;
 
@@ -58,6 +59,7 @@ namespace Omegasis.Revitalize.Framework.Managers
             Objects_Farming = InitializeTextureManager("Revitalize.Objects.Farming", Path.Combine("Content", "Graphics", "Objects", "Farming"));
             Objects_Furniture = InitializeTextureManager("Revitalize.Objects.Furniture", Path.Combine("Content", "Graphics", "Objects", "Furniture"));
             Objects_Machines = InitializeTextureManager("Revitalize.Objects.Machines", Path.Combine("Content", "Graphics", "Objects", "Machines"));
+            Objects_Resources_ResourcePlants = InitializeTextureManager("Revitalize.Objects.Resources.ResourcePlants", Path.Combine("Content", "Graphics", "Objects", "Resources", "ResourcePlants"));
 
             //Menus
             Menus_Misc = InitializeTextureManager("Revitalize.Menus", Path.Combine("Content", "Graphics", "Menus", "Misc"));

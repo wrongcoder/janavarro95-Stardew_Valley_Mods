@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Framework\Constants\ItemIds\Objects\Resources\" />
     <Folder Include="Framework\StaticValues\" />
   </ItemGroup>
 
@@ -52,6 +53,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Content\Graphics\Objects\Machines\ElectricFurnace.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Graphics\Objects\Resources\ResourcePlants\CopperOreBush.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Graphics\Objects\Resources\ResourcePlants\GoldOreBush.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Graphics\Objects\Resources\ResourcePlants\IridiumOreBush.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Graphics\Objects\Resources\ResourcePlants\IronOreBush.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Graphics\Objects\Resources\ResourcePlants\RadioactiveOreBush.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

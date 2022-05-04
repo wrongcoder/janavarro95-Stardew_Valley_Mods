@@ -1,3 +1,11 @@
+~~~~~~~~~~~~0.0.1 Revitalize 5-4-2022 xx.xx P.M~~~~~~~~~~~~~~
++Added new ResourceBushes
+    +Added CopperOreBush: Grows 1 copper ore every day!
+    +Added IronOreBush: Grows 1 iron ore every 2 days!
+    +Added GoldOreBush: Grows 1 gold ore every 3 days!
+    +Added IridiumOreBush: Grows 1 iridium ore every 7 days!
+    +Added RadioactiveOreBush: Grows 1 radioactive ore every 14 days!
+
 ~~~~~~~~~~~~0.0.1 Revitalize 5-3-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Finished work on Electric Furnaces
 +Added in Nuclear Furnace

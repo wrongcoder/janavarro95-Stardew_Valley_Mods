@@ -72,6 +72,36 @@ namespace Omegasis.Revitalize.Framework.Utilities
             }
         }
 
+        /// <summary>
+        /// Draws an object in the game world.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="alpha"></param>
+        public virtual void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
+        {
+            if (this.item.Value != null && this.item.Value is StardewValley.Object)
+            {
+                StardewValley.Object obj = (StardewValley.Object)this.item.Value;
+                obj.draw(spriteBatch, x, y, alpha);
+            }
+        }
+
+        /// <summary>
+        /// Draws this give
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="itemToDraw"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="alpha"></param>
+        /// <param name="AddedDepth"></param>
+        public virtual void drawAsHeldObject( SpriteBatch spriteBatch ,Vector2 TileLocation, float alpha = 1f, float AddedDepth=0f)
+        {
+            SpriteBatchUtilities.DrawHeldObject(spriteBatch, this.item, TileLocation, alpha, AddedDepth);
+        }
+
         public virtual Drawable Copy()
         {
             if (this.item.Value != null)
