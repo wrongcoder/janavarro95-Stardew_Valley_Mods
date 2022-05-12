@@ -125,7 +125,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// Cleans out the furnace to produce more items.
         /// </summary>
         /// <param name="addToPlayersInventory"></param>
-        protected virtual void cleanOutFurnace(bool addToPlayersInventory)
+        public virtual void cleanOutFurnace(bool addToPlayersInventory)
         {
             if (addToPlayersInventory)
             {
@@ -144,9 +144,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             if (probe == true || this.MinutesUntilReady > 0) return false;
 
             //Cleans out the furnace as necessary to ensure it works properly when dropping in another item.
-            if(this.finishedProduction())
+            if (this.finishedProduction())
             {
-                this.cleanOutFurnace(who!=null);
+                this.cleanOutFurnace(who != null);
             }
 
             //Smelting times are about 25% faster than normal.
@@ -154,7 +154,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (dropInItem.Stack >= 5)
                 {
-                    return this.smeltItem(who, Enums.SDVObject.CopperOre, 5);
+                    return this.smeltItem(who, Enums.SDVObject.CopperOre);
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (dropInItem.Stack >= 5)
                 {
-                    return this.smeltItem(who, Enums.SDVObject.IronOre, 5);
+                    return this.smeltItem(who, Enums.SDVObject.IronOre);
                 }
                 else
                 {
@@ -178,7 +178,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (dropInItem.Stack >= 5)
                 {
-                    return this.smeltItem(who, Enums.SDVObject.GoldOre, 5);
+                    return this.smeltItem(who, Enums.SDVObject.GoldOre);
                 }
                 else
                 {
@@ -190,7 +190,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (dropInItem.Stack >= 5)
                 {
-                    return this.smeltItem(who, Enums.SDVObject.IridiumOre, 5);
+                    return this.smeltItem(who, Enums.SDVObject.IridiumOre);
                 }
                 else
                 {
@@ -202,7 +202,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (dropInItem.Stack >= 5)
                 {
-                    return this.smeltItem(who, Enums.SDVObject.RadioactiveOre, 5);
+                    return this.smeltItem(who, Enums.SDVObject.RadioactiveOre);
                 }
                 else
                 {
@@ -212,19 +212,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
             if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.Quartz)
             {
-                return this.smeltItem(who, Enums.SDVObject.Quartz, 1);
+                return this.smeltItem(who, Enums.SDVObject.Quartz);
 
             }
 
 
             if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.FireQuartz)
             {
-                return this.smeltItem(who, Enums.SDVObject.FireQuartz, 1);
+                return this.smeltItem(who, Enums.SDVObject.FireQuartz);
             }
 
             if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.Bouquet)
             {
-                return this.smeltItem(who, Enums.SDVObject.Bouquet, 1);
+                return this.smeltItem(who, Enums.SDVObject.Bouquet);
             }
             this.updateAnimation();
 
@@ -303,14 +303,23 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
         }
 
-        public virtual bool smeltItem(Farmer who, Enums.SDVObject sdvObjectToSmelt, int requiredAmount, bool showRedMessage = true)
+        public virtual int getStackSizeNecessaryForSmelting(Enums.SDVObject obj)
         {
-            if (this.chargesRemaining.Value <= 0)
+            if(obj== Enums.SDVObject.CopperOre || obj== Enums.SDVObject.IronOre || obj== Enums.SDVObject.GoldOre || obj== Enums.SDVObject.IridiumOre || obj== Enums.SDVObject.RadioactiveOre)
             {
-                this.chargesRemaining.Value = 0;
+                return 5;
             }
+            if(obj== Enums.SDVObject.Quartz || obj== Enums.SDVObject.FireQuartz || obj== Enums.SDVObject.WiltedBouquet)
+            {
+                return 1;
+            }
+            return 0;
+        }
 
-            bool success = this.chargesRemaining.Value == 0 ? this.consumeFuelItemFromFarmersInventory(who) : true;
+        public virtual bool smeltItem(Farmer who, Enums.SDVObject sdvObjectToSmelt, bool showRedMessage = true)
+        {
+
+            bool success = this.chargesRemaining.Value <= 0 ? this.consumeFuelItemFromFarmersInventory(who) : true;
 
             if (success == false && showRedMessage)
             {
@@ -318,21 +327,31 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                 return false;
             }
 
-            if (this.chargesRemaining.Value == 0)
-            {
-                this.increaseFuelCharges();
-            }
-            PlayerUtilities.ReduceInventoryItemIfEnoughFound(who, sdvObjectToSmelt, requiredAmount);
-            this.smeltingItem.Value = sdvObjectToSmelt;
-            this.MinutesUntilReady = this.getTimeToSmelt(sdvObjectToSmelt);
-            this.updateAnimation();
+            this.smeltItem(sdvObjectToSmelt);
+
             if (who != null)
             {
                 SoundUtilities.PlaySound(Enums.StardewSound.furnace);
+                PlayerUtilities.ReduceInventoryItemIfEnoughFound(who, sdvObjectToSmelt, this.getStackSizeNecessaryForSmelting(sdvObjectToSmelt));
             }
 
             return false;
 
+        }
+
+        public virtual bool smeltItem(Enums.SDVObject sdvObjectToSmelt)
+        {
+
+            if (this.chargesRemaining.Value <= 0)
+            {
+                this.increaseFuelCharges();
+            }
+
+            this.smeltingItem.Value = sdvObjectToSmelt;
+            this.MinutesUntilReady = this.getTimeToSmelt(sdvObjectToSmelt);
+            this.updateAnimation();
+
+            return false;
         }
 
         /// <summary>
@@ -389,6 +408,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// <returns></returns>
         protected virtual bool consumeFuelItemFromFarmersInventory(Farmer who)
         {
+            if (this.furnaceType.Value == FurnaceType.Magical)
+            {
+                return true;
+            }
             if (this.furnaceType.Value == FurnaceType.Electric)
             {
                 return PlayerUtilities.ReduceInventoryItemIfEnoughFound(who, Enums.SDVObject.BatteryPack, 1);
@@ -454,7 +477,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
         protected override void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
-            if (this.machineStatusBubbleBox == null || this.machineStatusBubbleBox.Value==null) this.createStatusBubble();
+            if (this.machineStatusBubbleBox == null || this.machineStatusBubbleBox.Value == null) this.createStatusBubble();
             if (this.finishedProduction())
             {
                 y--;
@@ -486,7 +509,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                 this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((x + this.basicItemInformation.drawOffset.X) * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y + this.basicItemInformation.drawOffset.Y) * Game1.tileSize + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y - this.basicItemInformation.drawOffset.Y) * Game1.tileSize / 10000f) + .00001f);
 
             if (this.finishedProduction())
-                this.drawStatusBubble(spriteBatch, x+(int)this.basicItemInformation.drawOffset.X, y+(int)this.basicItemInformation.drawOffset.Y, alpha);
+                this.drawStatusBubble(spriteBatch, x + (int)this.basicItemInformation.drawOffset.X, y + (int)this.basicItemInformation.drawOffset.Y, alpha);
 
         }
 
@@ -494,6 +517,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         public override Item getOne()
         {
             return new ElectricFurnace(this.basicItemInformation.Copy(), this.furnaceType.Value);
+        }
+
+        public override bool canStackWith(ISalable other)
+        {
+            if (!(other is ElectricFurnace)) return false;
+            ElectricFurnace otherFurnace = (ElectricFurnace)other;
+            return base.canStackWith(other) && otherFurnace.furnaceType.Value == this.furnaceType.Value;
         }
 
 

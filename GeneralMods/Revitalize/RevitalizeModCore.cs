@@ -335,6 +335,14 @@ namespace Omegasis.Revitalize
             {
               ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
 
+                            ObjectManager.getItem(Machines.ElectricFurnace),
+                            ObjectManager.getItem(Machines.NuclearFurnace),
+                            ObjectManager.getItem(Machines.MagicalFurnace),
+                            ObjectManager.getItem(Enums.SDVObject.CopperOre,999),
+                            ObjectManager.getItem(Enums.SDVObject.BatteryPack,999),
+                            ObjectManager.getItem(MiscItemIds.RadioactiveFuel,999),
+                            ObjectManager.getItem(Enums.SDVBigCraftable.Chest,1),
+
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             }) ;
 

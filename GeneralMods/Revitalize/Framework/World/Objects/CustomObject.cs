@@ -1017,6 +1017,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             return (int)this.basicItemInformation.boundingBoxTileDimensions.X;
         }
 
+        /// <summary>
+        /// Gets the bounding box position and dimensions for this object IN TILES.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Rectangle getBoundingBoxTiles()
+        {
+            return new Rectangle(this.boundingBox.Value.X / Game1.tileSize, this.boundingBox.Value.Y / Game1.tileSize, this.getTilesWide(), this.getTilesHigh());
+        }
 
         public override void dropItem(GameLocation location, Vector2 origin, Vector2 destination)
         {

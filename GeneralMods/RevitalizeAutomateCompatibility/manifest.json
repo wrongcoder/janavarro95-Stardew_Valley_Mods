@@ -1,0 +1,17 @@
+{
+  "Name": "RevitalizeAutomateCompatibility",
+  "Author": "Alpha_Omegasis",
+  "Version": "0.0.1",
+  "Description": "A mod that adds Automate compatibility to Revitalize.",
+  "UniqueID": "Omegasis.RevitalizeAutomateCompatibility",
+  "EntryDll": "RevitalizeAutomateCompatibility.dll",
+  "MinimumApiVersion": "2.10.1",
+  "UpdateKeys": [],
+  "Dependencies": [
+    { "UniqueID": "Pathoschild.Automate" },
+    { "UniqueID": "Omegasis.StardustCore" },
+    { "UniqueID": "Omegasis.Revitalize" },
+    { "UniqueID": "spacechase0.SpaceCore" }
+
+  ]
+}

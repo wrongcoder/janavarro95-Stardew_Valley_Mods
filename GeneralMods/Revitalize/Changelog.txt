@@ -1,3 +1,6 @@
+~~~~~~~~~~~~0.0.1 Revitalize 5-12-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Updated some aspects of the ElectricFurnace object to support Automate compatibility.
+~Fixed ElectricFurnaces incorrectly stacking with each other when of different furnace types.
 ~~~~~~~~~~~~0.0.1 Revitalize 5-4-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added new ResourceBushes
     +Added CopperOreBush: Grows 1 copper ore every day!
