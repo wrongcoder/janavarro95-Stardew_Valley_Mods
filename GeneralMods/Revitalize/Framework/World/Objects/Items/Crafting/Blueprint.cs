@@ -86,7 +86,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
         protected virtual bool learnRecipes()
         {
             bool anyUnlocked = false;
-            Dictionary<KeyValuePair<string, string>, bool> recipiesLearned = RevitalizeModCore.CraftingManager.learnCraftingRecipes(this.craftingRecipesToUnlock);
+            Dictionary<KeyValuePair<string, string>, bool> recipiesLearned = RevitalizeModCore.ModContentManager.craftingManager.learnCraftingRecipes(this.craftingRecipesToUnlock);
 
             foreach(var bookRecipePairToLearnedValues in recipiesLearned) {
                 if (bookRecipePairToLearnedValues.Value == true)

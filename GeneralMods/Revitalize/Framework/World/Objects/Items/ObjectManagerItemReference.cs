@@ -28,7 +28,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items
 
         public override Item getItem(int StackSize = 1)
         {
-            return RevitalizeModCore.ObjectManager.getItem(this.itemId.Value, StackSize);
+            return RevitalizeModCore.ModContentManager.objectManager.getItem(this.itemId.Value, StackSize);
         }
 
         public override List<INetSerializable> getNetFields()

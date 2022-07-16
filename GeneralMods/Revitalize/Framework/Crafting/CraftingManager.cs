@@ -127,26 +127,26 @@ namespace Omegasis.Revitalize.Framework.Crafting
 
             AlloyFurnaceRecipes.addCraftingRecipe("BrassIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.AluminumIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.AluminumIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.BrassIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 3, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.BrassIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 3, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("BronzeIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.TinIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.TinIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.BronzeIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.BronzeIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("SteelIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,1),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SteelIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 6, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.SteelIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 6, 0)), true));
 
             AlloyFurnaceRecipes.addCraftingRecipe("ElectrumIngot", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>() {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.GoldBar,1),1),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SilverIngot),1),
+                new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.SilverIngot),1),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.ElectrumIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.ElectrumIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
 
             if (this.modCraftingRecipesByGroup.ContainsKey(AlloyFurnaceRecipes.craftingGroup))
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AlloyFurnaceRecipes.craftingRecipes)
@@ -181,10 +181,10 @@ namespace Omegasis.Revitalize.Framework.Crafting
 
             AnvilRecipes.addCraftingRecipe("Mining Drill V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SteelIngot,10),10),
-                new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.BrassIngot,10),10),
+                new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.SteelIngot,10),10),
+                new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.BrassIngot,10),10),
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Machines.MiningDrillV1), 1)), true));
+            }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Machines.MiningDrillV1), 1)), true));
 
             if (this.modCraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
             {
@@ -221,8 +221,8 @@ namespace Omegasis.Revitalize.Framework.Crafting
             WorkbenchRecipes.addCraftingRecipe("Anvil", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
                 {
                     //Inputs here
-                   new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(Ingots.SteelIngot),20)
-                }, new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(CraftingStations.Anvil_Id), 1)), false));
+                   new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.SteelIngot),20)
+                }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(CraftingStations.Anvil_Id), 1)), false));
             WorkbenchRecipes.addCraftingRecipe("Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
             {
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),

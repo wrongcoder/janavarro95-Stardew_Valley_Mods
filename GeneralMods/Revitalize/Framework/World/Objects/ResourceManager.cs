@@ -239,31 +239,31 @@ namespace Omegasis.Revitalize.Framework.Objects
             this.ores.Add(Gems.PrismaticNugget, prismaticOre);
 
             CustomObject tinIngot = new CustomObject(new BasicItemInformation("Tin Ingot", Ingots.TinIngot, "A tin ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 75, false, false, TextureManagers.createOreResourceAnimationManager("TinIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.TinIngot, tinIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.TinIngot, tinIngot);
 
             CustomObject aluminumIngot = new CustomObject(new BasicItemInformation("Aluminum Ingot", Ingots.AluminumIngot, "An aluminum ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 120, false, false, TextureManagers.createOreResourceAnimationManager("AluminumIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.AluminumIngot, aluminumIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.AluminumIngot, aluminumIngot);
 
             CustomObject leadIngot = new CustomObject(new BasicItemInformation("Lead Ingot", Ingots.LeadIngot, "A lead ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 165, false, false, TextureManagers.createOreResourceAnimationManager("LeadIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.LeadIngot, leadIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.LeadIngot, leadIngot);
 
             CustomObject silverIngot = new CustomObject(new BasicItemInformation("Silver Ingot", Ingots.SilverIngot, "A silver ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 220, false, false, TextureManagers.createOreResourceAnimationManager("SilverIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.SilverIngot, silverIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.SilverIngot, silverIngot);
 
             CustomObject titaniumIngot = new CustomObject(new BasicItemInformation("Titanium Ingot", Ingots.TitaniumIngot, "A titanium ingot that can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 325, false, false, TextureManagers.createOreResourceAnimationManager("TitaniumIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.TitaniumIngot, titaniumIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.TitaniumIngot, titaniumIngot);
 
             CustomObject brassIngot = new CustomObject(new BasicItemInformation("Brass Ingot", Ingots.BrassIngot, "A brass alloy ingot made from copper and aluminum. It can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 195, false, false, TextureManagers.createOreResourceAnimationManager("BrassIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.BrassIngot, brassIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.BrassIngot, brassIngot);
 
             CustomObject bronzeIngot = new CustomObject(new BasicItemInformation("Bronze Ingot", Ingots.BronzeIngot, "A bronze alloy ingot made from copper and tin. It can be used for crafting purposes.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 150, false, false, TextureManagers.createOreResourceAnimationManager("BronzeIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.BronzeIngot, bronzeIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.BronzeIngot, bronzeIngot);
 
             CustomObject electrumIngot = new CustomObject(new BasicItemInformation("Electrum Ingot", Ingots.ElectrumIngot, "A electrum alloy ingot made from gold and silver. It can be used for crafting purposes for things that use electricity.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 500, false, false, TextureManagers.createOreResourceAnimationManager("ElectrumIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.ElectrumIngot, electrumIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.ElectrumIngot, electrumIngot);
 
             CustomObject steelIngot = new CustomObject(new BasicItemInformation("Steel Ingot", Ingots.SteelIngot, "A steel ingot that was made by processing iron again with more coal. It can be used for crafting purposes especially for making new machines.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 180, false, false, TextureManagers.createOreResourceAnimationManager("SteelIngot"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
-            RevitalizeModCore.ObjectManager.addItem(Ingots.SteelIngot, steelIngot);
+            RevitalizeModCore.ModContentManager.objectManager.addItem(Ingots.SteelIngot, steelIngot);
 
             CustomObject bauxiteSand = new CustomObject(new BasicItemInformation("Bauxite Sand", OreSands.BauxiteSand, "Bauxite ore which has been crushed into sand. Smelt it to get aluminum ingots.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 11, false, false, TextureManagers.createOreResourceAnimationManager("BauxiteSand"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);
             CustomObject copperSand = new CustomObject(new BasicItemInformation("Copper Sand", OreSands.CopperSand, "Copper ore which has been crushed into sand. Smelt it to get copper bars.", CategoryNames.Resource, Color.Silver, -300, -300, 0, false, 5, false, false, TextureManagers.createOreResourceAnimationManager("CopperSand"), Color.White, true, new Vector2(1, 1), Vector2.Zero, null, null), 1);

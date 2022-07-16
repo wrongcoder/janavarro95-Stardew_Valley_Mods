@@ -66,15 +66,15 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
             this.validate();
             if (this.stardewValleyItemId > 0)
             {
-                return new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(this.stardewValleyItemId, 1), this.amountNeeded);
+                return new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(this.stardewValleyItemId, 1), this.amountNeeded);
             }
             if (this.stardewValleyBigCraftableId > 0)
             {
-                return new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(this.stardewValleyBigCraftableId, 1), this.amountNeeded);
+                return new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(this.stardewValleyBigCraftableId, 1), this.amountNeeded);
             }
             if (!string.IsNullOrEmpty(this.registeredObjectId))
             {
-                return new CraftingRecipeComponent(RevitalizeModCore.ObjectManager.getItem(this.registeredObjectId, 1), this.amountNeeded);
+                return new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(this.registeredObjectId, 1), this.amountNeeded);
             }
             throw new InvalidJsonCraftingComponentException("A json crafting component must have one one of the following: a stardewValleyItemId, a stardewValleyBigCraftableId or a registeredObjectId set to be valid!");
         }

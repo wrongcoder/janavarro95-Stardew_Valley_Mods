@@ -47,7 +47,7 @@ namespace Omegasis.Revitalize.Framework.Hacks
                 if (obj == null) return;
                 if (ObjectUtilities.IsObjectFurnace(obj) && ObjectUtilities.IsObjectHoldingItem(obj) == false)
                 {
-                    bool crafted = RevitalizeModCore.CraftingManager.vanillaCraftingRecipes.TryToCraftRecipe(obj);
+                    bool crafted = RevitalizeModCore.ModContentManager.craftingManager.vanillaCraftingRecipes.TryToCraftRecipe(obj);
                     if (crafted == false) return;
                     obj.initializeLightSource(obj.TileLocation, false);
                     obj.showNextIndex.Value = true;

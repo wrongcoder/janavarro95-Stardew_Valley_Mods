@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.StardustCore.Compatibility.SpaceCore;
 using StardewValley;
 using StardewValley.Objects;
@@ -167,9 +168,13 @@ namespace Omegasis.Revitalize.Framework.Utilities.Serialization
         /// <param name="extensionFolder">The sub folder path inside of the Content folder for this mod.</param>
         public void SerializeContentFile(string fileName, object obj, string extensionFolder)
         {
-            string path = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, "ModAssets", extensionFolder, fileName + ".json");
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
-            if (File.Exists(path)) return;
+            string directoryPath = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, extensionFolder);
+            string path = Path.Combine(directoryPath, fileName + ".json");
+            Directory.CreateDirectory(directoryPath);
+            if (File.Exists(path))
+            {
+                return;
+            }
             this.Serialize(path, obj);
         }
 

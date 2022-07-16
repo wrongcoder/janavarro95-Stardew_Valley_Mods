@@ -25,6 +25,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Graphics;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
+using Omegasis.Revitalize.Framework.Content;
 
 namespace Omegasis.Revitalize
 {
@@ -198,22 +199,17 @@ namespace Omegasis.Revitalize
         public static IMonitor ModMonitor;
         public static IManifest Manifest;
 
-        /// <summary>
-        /// Keeps track of custom objects.
-        /// </summary>
-        public static ObjectManager ObjectManager;
-
         public static PlayerInfo playerInfo;
 
         public static Serializer Serializer;
-
-        public static CraftingManager CraftingManager;
 
         public static ConfigManager Configs;
 
         public static SaveDataManager SaveDataManager;
 
-        public static MailManager MailManager;
+
+
+        public static ModContentManager ModContentManager;
 
         public override void Entry(IModHelper helper)
         {
@@ -222,19 +218,16 @@ namespace Omegasis.Revitalize
             ModHelper = helper;
             ModMonitor = this.Monitor;
             Manifest = this.ModManifest;
+            ModContentManager = new ModContentManager();
             Configs = new ConfigManager();
             SaveDataManager = new SaveDataManager();
-            MailManager = new MailManager();
 
-            this.createDirectories();
             Serializer = new Serializer();
             playerInfo = new PlayerInfo();
 
-            //Loads in textures to be used by the mod.
-            TextureManagers.loadInTextures();
 
-            //Loads in objects to be use by the mod.
-            ObjectManager = new ObjectManager(Manifest);
+
+            ModContentManager.initializeModContent(this.ModManifest);
 
             //Adds in event handling for the mod.
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
@@ -244,7 +237,7 @@ namespace Omegasis.Revitalize
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
-            ModHelper.Events.Player.Warped += ObjectManager.resources.OnPlayerLocationChanged;
+            ModHelper.Events.Player.Warped +=ModContentManager.objectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += this.GameLoop_DayStarted;
             ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
 
@@ -254,7 +247,7 @@ namespace Omegasis.Revitalize
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             ModHelper.Events.Display.MenuChanged += ShopUtilities.OnNewMenuOpened;
 
-            ModHelper.Events.Display.MenuChanged += MailManager.onNewMenuOpened ;
+            ModHelper.Events.Display.MenuChanged += ModContentManager.mailManager.onNewMenuOpened ;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
 
@@ -267,29 +260,13 @@ namespace Omegasis.Revitalize
         ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~///
         ///                     Initialize Mod Content                     ///
         ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-        #region
-        private void createDirectories()
-        {
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
-
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, RelativePaths.ModAssetsFolder));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, RelativePaths.Graphics_Folder));
-            //Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, ObjectsGraphicsPaths.Furniture, "Chairs"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, ObjectsGraphicsPaths.Furniture, "Lamps"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, ObjectsGraphicsPaths.Furniture, "Tables"));
-        }
-
-
-        #endregion
 
 
         private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
-            ObjectManager.loadItemsFromDisk();
-            //Adds in recipes to the mod.
-            CraftingManager = new CraftingManager();
-            CraftingManager.initializeRecipeBooks();
+            RevitalizeModCore.log("Hello world!");
+
+            ModContentManager.loadContentOnGameLaunched();
 
             Serializer.SerializeTypesForXMLUsingSpaceCore();
         }
@@ -307,9 +284,9 @@ namespace Omegasis.Revitalize
         /// <param name="e"></param>
         private void GameLoop_DayStarted(object senderm, StardewModdingAPI.Events.DayStartedEventArgs e)
         {
-            ObjectManager.resources.DailyResourceSpawn(senderm, e);
+            ModContentManager.objectManager.resources.DailyResourceSpawn(senderm, e);
             ShopUtilities.OnNewDay(senderm, e);
-            MailManager.tryToAddMailToMailbox();
+            ModContentManager.mailManager.tryToAddMailToMailbox();
         }
 
         /// <summary>
@@ -325,11 +302,11 @@ namespace Omegasis.Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             SaveDataManager.loadOrCreateSaveData();
-            MailManager.tryToAddMailToMailbox();
+            ModContentManager.mailManager.tryToAddMailToMailbox();
 
 
 
-
+            /*
             //HACKS
             //Game1.player.Money = 100_000;
             //Game1.player.addItemToInventoryBool(ObjectManager.getItem(CraftingStations.WorkStation_Id));
@@ -347,6 +324,7 @@ namespace Omegasis.Revitalize
 
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             }) ;
+            */
 
 
             Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
@@ -356,7 +334,7 @@ namespace Omegasis.Revitalize
         private void GameLoop_SaveCreated(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
         {
             SaveDataManager.loadOrCreateSaveData();
-            MailManager.tryToAddMailToMailbox();
+            ModContentManager.mailManager.tryToAddMailToMailbox();
             Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
         }
 
@@ -417,18 +395,18 @@ namespace Omegasis.Revitalize
 
         public bool CanEdit<T>(IAssetInfo asset)
         {
-            if (MailManager != null)
+            if (ModContentManager.mailManager != null)
             {
-                return MailManager.canEditAsset(asset);
+                return ModContentManager.mailManager.canEditAsset(asset);
             }
             return false;
         }
 
         public void Edit<T>(IAssetData asset)
         {
-            if (MailManager != null)
+            if (ModContentManager.mailManager != null)
             {
-                MailManager.editMailAsset(asset);
+                ModContentManager.mailManager.editMailAsset(asset);
             }
 
         }

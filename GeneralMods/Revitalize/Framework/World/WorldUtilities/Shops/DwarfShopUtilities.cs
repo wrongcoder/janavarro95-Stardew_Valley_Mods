@@ -48,19 +48,19 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
             if (DwarfShop_NormalGeodesRemainingToday > 0)
             {
-               ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Geode, DwarfShop_NormalGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.NormalGeodePrice, DwarfShop_NormalGeodesRemainingToday);
+               ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Geode, DwarfShop_NormalGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.NormalGeodePrice, DwarfShop_NormalGeodesRemainingToday);
             }
             if (DwarfShop_FrozenGeodesRemainingToday > 0)
             {
-                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.FrozenGeode, DwarfShop_FrozenGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.FrozenGeodePrice, DwarfShop_FrozenGeodesRemainingToday);
+                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.FrozenGeode, DwarfShop_FrozenGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.FrozenGeodePrice, DwarfShop_FrozenGeodesRemainingToday);
             }
             if (DwarfShop_MagmaGeodesRemainingToday > 0)
             {
-                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.MagmaGeode, DwarfShop_MagmaGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.MagmaGeodePrice, DwarfShop_MagmaGeodesRemainingToday);
+                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.MagmaGeode, DwarfShop_MagmaGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.MagmaGeodePrice, DwarfShop_MagmaGeodesRemainingToday);
             }
             if (DwarfShop_OmniGeodesRemainingToday > 0)
             {
-                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.OmniGeode, DwarfShop_OmniGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.OmniGeodePrice, DwarfShop_OmniGeodesRemainingToday);
+                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode, DwarfShop_OmniGeodesRemainingToday), RevitalizeModCore.Configs.shopsConfigManager.dwarfShopConfig.OmniGeodePrice, DwarfShop_OmniGeodesRemainingToday);
             }
         }
 

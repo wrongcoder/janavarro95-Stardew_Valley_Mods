@@ -168,7 +168,7 @@ namespace Omegasis.Revitalize.Framework.Objects
                     new AnimationFrame(32,0,16,32,30),
                     new AnimationFrame(48,0,16,32,30)},
                     true) }
-            }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), Vector2.Zero, new InventoryManager(new List<Item>(), 18, 3, 6), null), RevitalizeModCore.ObjectManager.resources.miningDrillResources.Values.ToList());
+            }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), Vector2.Zero, new InventoryManager(new List<Item>(), 18, 3, 6), null), RevitalizeModCore.ModContentManager.objectManager.resources.miningDrillResources.Values.ToList());
 
             this.addItem(Machines.MiningDrillV1, miningDrillMachine_0_0);
 

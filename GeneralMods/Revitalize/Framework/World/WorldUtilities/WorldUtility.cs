@@ -170,7 +170,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         private static void AddModdedMachinesToGameWorld()
         {
             GameLocation cinderSapForestLocation = GameLocationUtilities.GetGameLocation(Enums.StardewLocation.Forest);
-            HayMaker hayMaker = (RevitalizeModCore.ObjectManager.getObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
+            HayMaker hayMaker = (RevitalizeModCore.ModContentManager.objectManager.getObject<HayMaker>(Machines.HayMaker, 1).getOne(true) as HayMaker);
             if (RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopSetUpOutsideOfMarniesRanch &&
                 cinderSapForestLocation.isObjectAtTile((int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.X, (int)RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerTileLocation.Y) == false)
             {

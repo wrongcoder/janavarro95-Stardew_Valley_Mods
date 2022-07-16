@@ -505,7 +505,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         {
             if (this.hasAutoHarvestAttachment.Value)
             {
-                Item autoHarvester = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoHarvesterGardenPotAttachment);
+                Item autoHarvester = RevitalizeModCore.ModContentManager.objectManager.getItem(FarmingItems.AutoHarvesterGardenPotAttachment);
                 if (farmer!=null && farmer.isInventoryFull())
                 {
                     WorldUtility.CreateItemDebrisAtTileLocation(environment, autoHarvester, this.TileLocation, this.TileLocation);
@@ -521,7 +521,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             }
             if (this.hasPlanterAttachment.Value)
             {
-                Item autoPlanter = RevitalizeModCore.ObjectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment);
+                Item autoPlanter = RevitalizeModCore.ModContentManager.objectManager.getItem(FarmingItems.AutoPlanterGardenPotAttachment);
                 if (farmer!=null && farmer.isInventoryFull())
                 {
                     WorldUtility.CreateItemDebrisAtTileLocation(environment, autoPlanter, this.TileLocation, this.TileLocation);
@@ -535,7 +535,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             }
             if (this.hasEnricherAttachment.Value)
             {
-                Item enricher = RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Enricher);
+                Item enricher = RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Enricher);
                 if (farmer!=null && farmer.isInventoryFull())
                 {
                     WorldUtility.CreateItemDebrisAtTileLocation(environment, enricher, this.TileLocation, this.TileLocation);

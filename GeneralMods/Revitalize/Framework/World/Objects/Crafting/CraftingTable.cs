@@ -40,15 +40,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
         /// <returns></returns>
         public override bool rightClicked(Farmer who)
         {
-            if (RevitalizeModCore.CraftingManager.modCraftingRecipesByGroup.ContainsKey(this.craftingBookName))
+            if (RevitalizeModCore.ModContentManager.craftingManager.modCraftingRecipesByGroup.ContainsKey(this.craftingBookName))
             {
-                RevitalizeModCore.log("Right click the crafting table. And have the recipe book enabled.");
-                RevitalizeModCore.CraftingManager.modCraftingRecipesByGroup[this.craftingBookName].openCraftingMenu();
+                //RevitalizeModCore.log("Right click the crafting table. And have the recipe book enabled.");
+                RevitalizeModCore.ModContentManager.craftingManager.modCraftingRecipesByGroup[this.craftingBookName].openCraftingMenu();
                 return true;
             }
             else
             {
-                RevitalizeModCore.log("Right click the crafting table. BUT DO NOT have the recipe book enabled: " + this.craftingBookName);
+                //RevitalizeModCore.log("Right click the crafting table. BUT DO NOT have the recipe book enabled: " + this.craftingBookName);
                 return true;
             }
         }

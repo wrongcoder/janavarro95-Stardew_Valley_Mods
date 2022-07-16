@@ -1,3 +1,9 @@
+~~~~~~~~~~~~0.0.1 Revitalize 7-16-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Cleaned up all references to "Content" folder and migrated to "ModAssets" folder.
++Started work on JsonContentRecipes for not having to hard code the recipes into the code.
++Cleaned up content managers into a single ContentManager.
+~Started work on JsonItemInformation files to help load in object files from disk.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 5-12-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Updated some aspects of the ElectricFurnace object to support Automate compatibility.
 ~Fixed ElectricFurnaces incorrectly stacking with each other when of different furnace types.

@@ -120,7 +120,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
                     ShopMenu shopMenu = new ShopMenu(new Dictionary<ISalable, int[]>()
                     {
-                        {RevitalizeModCore.ObjectManager.getItem(Enums.SDVObject.Hay,-1), new int[]{RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice,-1 } }
+                        {RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay,-1), new int[]{RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice,-1 } }
                     });
 
                     //Load the shop tetx file and select a random dialogue text from it.
@@ -259,13 +259,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             if (this.MinutesUntilReady == 0 && this.feedType.Value != Enums.SDVObject.NULL)
             {
                 if (this.feedType.Value == Enums.SDVObject.Corn)
-                    this.heldObject.Value = RevitalizeModCore.ObjectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.CornToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ModContentManager.objectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.CornToHayOutput);
                 if (this.feedType.Value == Enums.SDVObject.Fiber)
-                    this.heldObject.Value = RevitalizeModCore.ObjectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.FiberToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ModContentManager.objectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.FiberToHayOutput);
                 if (this.feedType.Value == Enums.SDVObject.Wheat)
-                    this.heldObject.Value = RevitalizeModCore.ObjectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.WheatToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ModContentManager.objectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.WheatToHayOutput);
                 if (this.feedType.Value == Enums.SDVObject.Amaranth)
-                    this.heldObject.Value = RevitalizeModCore.ObjectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.AmaranthToHayOutput);
+                    this.heldObject.Value = RevitalizeModCore.ModContentManager.objectManager.getObject(Enums.SDVObject.Hay, RevitalizeModCore.Configs.objectConfigManager.hayMakerConfig.AmaranthToHayOutput);
                 this.AnimationManager.playAnimation(HayAnimation);
                 bool noHayRemainsInFeedMaker = this.attemptToFillFarmSilos();
                 if (noHayRemainsInFeedMaker == false)
