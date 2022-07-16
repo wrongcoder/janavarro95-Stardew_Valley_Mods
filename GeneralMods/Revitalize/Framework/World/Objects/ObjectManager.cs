@@ -24,6 +24,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Farming;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Farming;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 using Omegasis.Revitalize.Framework.World.Objects.Resources;
+using Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation;
 
 namespace Omegasis.Revitalize.Framework.Objects
 {

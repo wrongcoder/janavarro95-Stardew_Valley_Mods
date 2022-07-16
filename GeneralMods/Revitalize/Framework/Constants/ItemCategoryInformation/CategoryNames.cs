@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Utilities;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.Constants
+namespace Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation
 {
     /// <summary>
     /// A list of category names for objects.
@@ -85,7 +86,7 @@ namespace Omegasis.Revitalize.Framework.Constants
         /// <returns></returns>
         public static string GetCategoryName(string Key, string DefaultName)
         {
-            string catrgoryName= JsonUtilities.LoadStringFromDictionaryFile(Key, LocalizationUtilities.GetLocalizationFilePath(Path.Combine("Content", "Strings", "Objects", "CategoryNames.json")));
+            string catrgoryName= JsonUtilities.LoadStringFromDictionaryFile(Key, LocalizationUtilities.GetLocalizationFilePath(Path.Combine(StringsPaths.Objects, "CategoryNames.json")));
             if (string.IsNullOrEmpty(catrgoryName))
             {
                 return DefaultName;

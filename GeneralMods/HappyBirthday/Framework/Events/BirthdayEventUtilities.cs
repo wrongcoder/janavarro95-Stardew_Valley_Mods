@@ -290,7 +290,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
             string[] files = Directory.GetFiles(abspath);
             foreach (string file in files)
             {
-                EventHelper eventHelper = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<EventHelper>(Path.Combine(relativePath, Path.GetFileName(file)));
+                string pathToFile = Path.Combine(relativePath, Path.GetFileName(file));
+                //Exclude non json files and directories that may exist here due to Vortex or some sort of mistakes.
+                if (!pathToFile.EndsWith(".json")) continue;
+                
+                EventHelper eventHelper = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<EventHelper>(pathToFile);
                 eventHelper.parseEventPreconditionsFromPreconditionStrings(BirthdayEventManager);
 
 

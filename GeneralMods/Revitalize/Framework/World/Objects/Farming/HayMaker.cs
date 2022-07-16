@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
@@ -123,7 +124,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                     });
 
                     //Load the shop tetx file and select a random dialogue text from it.
-                    Dictionary<string, string> shopDialogue = JsonUtilities.LoadStringDictionaryFile(Path.Combine("Content", "Strings", "ShopDialogue", "HayMakerShopDialogue.json"));
+                    Dictionary<string, string> shopDialogue = JsonUtilities.LoadStringDictionaryFile(Path.Combine(StringsPaths.ShopDialogue, "HayMakerShopDialogue.json"));
                     int random = Game1.random.Next(0, shopDialogue.Count);
                     shopMenu.potraitPersonDialogue = shopDialogue.ElementAt(random).Value;
 

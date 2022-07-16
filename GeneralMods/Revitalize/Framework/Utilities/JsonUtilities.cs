@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Crafting.JsonContent;
 
 namespace Omegasis.Revitalize.Framework.Utilities
 {
@@ -11,6 +12,12 @@ namespace Omegasis.Revitalize.Framework.Utilities
     /// </summary>
     public class JsonUtilities
     {
+        public static void saveToRevitaliveModContentFolder(object objectToSave, string RelativePathToSaveTo, string FileName)
+        {
+            RevitalizeModCore.Serializer.SerializeContentFile(FileName,objectToSave,RelativePathToSaveTo);
+        }
+
+
         /// <summary>
         /// Loads a string dictionary from a path relative to the Mod folder's location.
         /// </summary>
@@ -35,6 +42,27 @@ namespace Omegasis.Revitalize.Framework.Utilities
                 return dictFile[Key];
             }
             return null;
+        }
+
+        /// <summary>
+        /// Loads a content file containing json information from disk.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="RelativePathToFile"></param>
+        /// <returns></returns>
+        public static T LoadContentFile<T>(string RelativePathToFile)
+        {
+            return RevitalizeModCore.ModHelper.Content.Load<T>(RelativePathToFile);
+        }
+
+        /// <summary>
+        /// Loads a json crafting recipe from disk.
+        /// </summary>
+        /// <param name="RelativePathToFile"></param>
+        /// <returns></returns>
+        public static JsonCraftingRecipe LoadCraftingRecipe(string RelativePathToFile)
+        {
+            return RevitalizeModCore.ModHelper.Content.Load<JsonCraftingRecipe>(RelativePathToFile);
         }
 
     }

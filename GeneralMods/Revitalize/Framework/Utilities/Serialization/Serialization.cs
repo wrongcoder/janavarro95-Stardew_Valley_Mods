@@ -167,7 +167,7 @@ namespace Omegasis.Revitalize.Framework.Utilities.Serialization
         /// <param name="extensionFolder">The sub folder path inside of the Content folder for this mod.</param>
         public void SerializeContentFile(string fileName, object obj, string extensionFolder)
         {
-            string path = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, "Content", extensionFolder, fileName + ".json");
+            string path = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, "ModAssets", extensionFolder, fileName + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             if (File.Exists(path)) return;
             this.Serialize(path, obj);

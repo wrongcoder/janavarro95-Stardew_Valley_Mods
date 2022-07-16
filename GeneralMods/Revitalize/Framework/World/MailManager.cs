@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants.Mail;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewModdingAPI;
@@ -24,7 +25,7 @@ namespace Omegasis.Revitalize.Framework.World
 
         public Dictionary<string, string> mailTitles = new Dictionary<string, string>()
         {
-            { MailTitles.HayMakerAvailableForPurchase ,Path.Combine("Content", "Strings", "Mail", "AnimalShopHayMakerCanBePurchased.json")}
+            { MailTitles.HayMakerAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AnimalShopHayMakerCanBePurchased.json")}
         };
 
         public MailManager()
@@ -41,12 +42,12 @@ namespace Omegasis.Revitalize.Framework.World
 
         public virtual bool canEditAsset(IAssetInfo asset)
         {
-            return asset.AssetNameEquals("Data/mail");
+            return asset.NameWithoutLocale.IsEquivalentTo("Data/mail");
         }
 
         public virtual void editMailAsset(IAssetData asset)
         {
-            if (asset.AssetNameEquals("Data/mail"))
+            if (asset.NameWithoutLocale.IsEquivalentTo("Data/mail"))
             {
                 IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
                 string mailContents = this.getMailContentsFromTitle(MailTitles.HayMakerAvailableForPurchase);

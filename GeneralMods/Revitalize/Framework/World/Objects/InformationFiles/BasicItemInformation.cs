@@ -12,6 +12,7 @@ using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.StardustCore.Networking;
 using Omegasis.StardustCore.Animations;
 using Omegasis.StardustCore.UIUtilities;
+using Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
 {
@@ -172,7 +173,53 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             this.initializeNetFields();
         }
 
+        public BasicItemInformation(string PathToBasicItemInformationFile, AnimationManager animationManager, Color drawColor, InventoryManager Inventory = null, LightManager Lights = null, NamedColor DyedColor = null):this(JsonUtilities.LoadContentFile<JsonItemInformation>(PathToBasicItemInformationFile),animationManager,drawColor, Inventory, Lights,DyedColor)
+        {
 
+        }
+
+        public BasicItemInformation(JsonItemInformation jsonItemInformation,AnimationManager animationManager, Color drawColor, InventoryManager Inventory = null, LightManager Lights = null, NamedColor DyedColor = null)
+        {
+            this.name.Value = jsonItemInformation.name;
+            this.id.Value = jsonItemInformation.id;
+            this.description.Value = jsonItemInformation.description;
+
+            //TODO: Create a lookup table of categoryId to categoryColor!
+            ItemCategory itemCategory = ItemCategories.GetItemCategory(jsonItemInformation.categoryId);
+            this.categoryName.Value = itemCategory.name;
+            this.categoryColor.Value = itemCategory.color;
+
+            this.price.Value = jsonItemInformation.sellingPrice;
+
+            this.staminaRestoredOnEating.Value = jsonItemInformation.staminaRestoredOnEating;
+            this.healthRestoredOnEating.Value = jsonItemInformation.healthRestoredOnEating;
+
+            this.canBeSetIndoors.Value = jsonItemInformation.canBeSetIndoors;
+            this.canBeSetOutdoors.Value = jsonItemInformation.canBeSetOutdoors;
+            this.fragility.Value = jsonItemInformation.fraglility;
+            this.isLamp.Value = false;
+
+            this.animationManager = animationManager;
+
+            this.drawPosition.Value = Vector2.Zero;
+            this.DrawColor = drawColor;
+            this.drawOffset.Value = jsonItemInformation.drawTileOffset;
+
+            this.ignoreBoundingBox.Value = jsonItemInformation.ignoreBoundingBox;
+            this.boundingBoxTileDimensions.Value = jsonItemInformation.boundingBoxTileDimensions;
+
+
+
+            this.inventory = Inventory ?? new InventoryManager();
+            this.lightManager = Lights ?? new LightManager();
+
+            this.facingDirection.Value = Enums.Direction.Down;
+            this.shakeTimer.Value = 0;
+
+            this.alwaysDrawAbovePlayer.Value = false;
+
+            this.initializeNetFields();
+        }
        
         public BasicItemInformation(string Name, string Id, string Description, string CategoryName, Color CategoryColor, int Fragility, bool IsLamp, int Price, AnimationManager animationManager, bool IgnoreBoundingBox, Vector2 BoundingBoxTileDimensions, Vector2 BoundingBoxTileOffset ,InventoryManager Inventory = null, LightManager Lights = null, bool AlwaysDrawAbovePlayer = false, NamedColor DyedColor = null) : this(Name, Id, Description, CategoryName, CategoryColor, -300, -300, Fragility, IsLamp, Price, true, true, animationManager, Color.White, IgnoreBoundingBox, BoundingBoxTileDimensions, BoundingBoxTileOffset,Inventory, Lights, AlwaysDrawAbovePlayer, DyedColor)
         {

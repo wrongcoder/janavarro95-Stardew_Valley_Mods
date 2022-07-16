@@ -15,6 +15,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.StardustCore.UIUtilities;
 using Omegasis.StardustCore.Animations;
 using Omegasis.Revitalize.Framework.Managers;
+using Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation;
 
 namespace Omegasis.Revitalize.Framework.Objects
 {

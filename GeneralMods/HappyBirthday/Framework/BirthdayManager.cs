@@ -90,19 +90,19 @@ namespace Omegasis.HappyBirthday.Framework
                 string season = "";
                 if (Game1.IsSpring)
                 {
-                    season = "spring";
+                    season = "winter";
                 }
                 else if (Game1.IsSummer)
                 {
-                    season = "summer";
+                    season = "spring";
                 }
                 else if (Game1.IsFall)
                 {
-                    season = "fall";
+                    season = "summer";
                 }
                 else
                 {
-                    season = "winter";
+                    season = "fall";
                 }
                 return this.isBirthday(season, day);
 

@@ -23,6 +23,8 @@ using Omegasis.Revitalize.Framework.Objects;
 using Omegasis.Revitalize.Framework.World;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Constants.PathConstants.Graphics;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
 
 namespace Omegasis.Revitalize
 {
@@ -270,12 +272,12 @@ namespace Omegasis.Revitalize
         {
             Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Configs"));
 
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, RelativePaths.ModAssetsFolder));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, RelativePaths.Graphics_Folder));
             //Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics","Furniture"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Chairs"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Lamps"));
-            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, "Content", "Graphics", "Furniture", "Tables"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, ObjectsGraphicsPaths.Furniture, "Chairs"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, ObjectsGraphicsPaths.Furniture, "Lamps"));
+            Directory.CreateDirectory(Path.Combine(this.Helper.DirectoryPath, ObjectsGraphicsPaths.Furniture, "Tables"));
         }
 
 

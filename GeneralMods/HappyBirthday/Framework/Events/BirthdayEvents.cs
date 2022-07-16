@@ -37,7 +37,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
 
             //conditions.Add(new HasUnlockedCommunityCenter()); //Infered by the fact that you must enter the community center to trigger this event anyways.
-            EventHelper e = new EventHelper(EventIds.JunimoCommunityCenterBirthday, 19950,1 ,conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
+            EventHelper e = new EventHelper(EventIds.JunimoCommunityCenterBirthday, 19950, 2, conditions, new EventStartData("playful", 32, 12, new EventStartData.FarmerData(32, 22, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()));
 
             e.AddInJunimoActor("Juni", new Vector2(32, 10), Colors.getRandomJunimoColor());
             e.AddInJunimoActor("Juni2", new Vector2(30, 11), Colors.getRandomJunimoColor());
@@ -129,7 +129,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new DatingNPCEventPrecondition(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyTrailer, 19951, 1 ,conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyTrailer, 19951, 2, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(penny,12,7, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(pam,15,4, EventHelper.FacingDirection.Down)
             }));
@@ -141,21 +141,21 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.actorFaceDirection("Penny", EventHelper.FacingDirection.Down);
 
             //starting = starting.Replace("@", Game1.player.Name);
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:0"));
-            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:0"));
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:1"));
-            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:1"));
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:0");
+            e.speakWithTranslatedMessage(pam, "DatingPennyBirthday_Pam:0");
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:1");
+            e.speakWithTranslatedMessage(pam, "DatingPennyBirthday_Pam:1");
             e.emote_Angry("Penny");
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:2")); //penny2
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:3")); //penny3
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:2"); //penny2
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:3"); //penny3
 
             e.moveActorLeft("Penny", 3, EventHelper.FacingDirection.Up, true);
             e.moveFarmerRight(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerUp(3, EventHelper.FacingDirection.Down, false);
             e.moveActorRight("Penny", 5, EventHelper.FacingDirection.Up, true);
             e.moveActorUp("Penny", 1, EventHelper.FacingDirection.Up, true);
-            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:2")); //pam2
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:4"));//penny4
+            e.speakWithTranslatedMessage(pam, "DatingPennyBirthday_Pam:2"); //pam2
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:4");//penny4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Penny");
@@ -186,7 +186,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new DatingNPCEventPrecondition(penny));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyHouse, 19951, 1,conditions, new EventStartData("playful", 14, 8, new EventStartData.FarmerData(12, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingPennyHouse, 19951, 2, conditions, new EventStartData("playful", 14, 8, new EventStartData.FarmerData(12, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(penny,12,7, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(pam,15,4, EventHelper.FacingDirection.Down)
             }));
@@ -197,21 +197,21 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             e.actorFaceDirection("Penny", EventHelper.FacingDirection.Down);
             //starting = starting.Replace("@", Game1.player.Name);
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:0"));
-            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:0"));
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:1"));
-            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:1"));
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:0");
+            e.speakWithTranslatedMessage(pam, "DatingPennyBirthday_Pam:0");
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:1");
+            e.speakWithTranslatedMessage(pam, "DatingPennyBirthday_Pam:1");
             e.emote_Angry("Penny");
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:2")); //penny2
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:3")); //penny3
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:2"); //penny2
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:3"); //penny3
 
             e.moveActorLeft("Penny", 3, EventHelper.FacingDirection.Up, true);
             e.moveFarmerRight(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerUp(3, EventHelper.FacingDirection.Down, false);
             e.moveActorRight("Penny", 5, EventHelper.FacingDirection.Up, true);
             e.moveActorUp("Penny", 1, EventHelper.FacingDirection.Up, true);
-            e.speakWithTranslatedMessage(pam, GetEventString("DatingPennyBirthday_Pam:2")); //pam2
-            e.speakWithTranslatedMessage(penny, GetEventString("DatingPennyBirthday_Penny:4"));//penny4
+            e.speakWithTranslatedMessage(pam, "DatingPennyBirthday_Pam:2"); //pam2
+            e.speakWithTranslatedMessage(penny, "DatingPennyBirthday_Penny:4");//penny4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Penny");
@@ -248,7 +248,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(maru));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingMaru, 19952, 1 ,conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingMaru, 19952, 2, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(sebastian,26,13, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(robin,28,9, EventHelper.FacingDirection.Up),
@@ -264,23 +264,23 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             //Dialogue goes here.
             //Seriously improve dialogue lines. Maru is probably the NPC I know the least about.
-            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:0")); //maru 0
-            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingMaruBirthday_Demetrius:0")); //demetrius 0
-            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:1"));//Maru 1 //Spoiler she doesn't.
-            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingMaruBirthday_Sebastian:0")); //sebastian 0
-            e.speakWithTranslatedMessage(robin, GetEventString("DatingMaruBirthday_Robin:0")); //robin 0
-            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingMaruBirthday_Demetrius:1")); //demetrius 1
+            e.speakWithTranslatedMessage(maru, "DatingMaruBirthday_Maru:0"); //maru 0
+            e.speakWithTranslatedMessage(demetrius, "DatingMaruBirthday_Demetrius:0"); //demetrius 0
+            e.speakWithTranslatedMessage(maru, "DatingMaruBirthday_Maru:1");//Maru 1 //Spoiler she doesn't.
+            e.speakWithTranslatedMessage(sebastian, "DatingMaruBirthday_Sebastian:0"); //sebastian 0
+            e.speakWithTranslatedMessage(robin, "DatingMaruBirthday_Robin:0"); //robin 0
+            e.speakWithTranslatedMessage(demetrius, "DatingMaruBirthday_Demetrius:1"); //demetrius 1
             e.emote_ExclamationMark("Robin");
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Up);
-            e.speakWithTranslatedMessage(robin, GetEventString("DatingMaruBirthday_Robin:1")); //robin 1
+            e.speakWithTranslatedMessage(robin, "DatingMaruBirthday_Robin:1"); //robin 1
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
             e.moveActorDown("Robin", 1, EventHelper.FacingDirection.Down, false);
             e.addObject(27, 12, 220);
 
-            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:2")); //maru 2
+            e.speakWithTranslatedMessage(maru, "DatingMaruBirthday_Maru:2"); //maru 2
             e.emoteFarmer_Thinking();
-            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingMaruBirthday_Sebastian:1")); //Sebastian 1
-            e.speakWithTranslatedMessage(maru, GetEventString("DatingMaruBirthday_Maru:3")); //maru 3
+            e.speakWithTranslatedMessage(sebastian, "DatingMaruBirthday_Sebastian:1"); //Sebastian 1
+            e.speakWithTranslatedMessage(maru, "DatingMaruBirthday_Maru:3"); //maru 3
 
             //Event finish commands.
             e.emoteFarmer_Heart();
@@ -312,7 +312,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(leah));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingLeah, 19954, 1, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingLeah, 19954, 2, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(leah,14,11, EventHelper.FacingDirection.Left),
             }));
             e.addObject(11, 11, 220);
@@ -320,15 +320,15 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerUp(2, EventHelper.FacingDirection.Up, false);
             e.moveFarmerRight(5, EventHelper.FacingDirection.Down, false);
             e.npcFaceDirection(leah, EventHelper.FacingDirection.Up);
-            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:0")); //0
+            e.speakWithTranslatedMessage(leah, "DatingLeahBirthday_Leah:0"); //0
             e.moveFarmerDown(2, EventHelper.FacingDirection.Down, false);
             e.moveFarmerRight(1, EventHelper.FacingDirection.Down, false);
             e.moveFarmerDown(1, EventHelper.FacingDirection.Down, false);
-            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:1")); //1
+            e.speakWithTranslatedMessage(leah, "DatingLeahBirthday_Leah:1"); //1
             e.emoteFarmer_Happy();
-            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:2"));//2
-            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:3"));//3
-            e.speakWithTranslatedMessage(leah, GetEventString("DatingLeahBirthday_Leah:4"));//4
+            e.speakWithTranslatedMessage(leah, "DatingLeahBirthday_Leah:2");//2
+            e.speakWithTranslatedMessage(leah, "DatingLeahBirthday_Leah:3");//3
+            e.speakWithTranslatedMessage(leah, "DatingLeahBirthday_Leah:4");//4
 
 
             e.emoteFarmer_Heart();
@@ -364,7 +364,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(abigail));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailSeedShop, 19955, 1 ,conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailSeedShop, 19955, 2, conditions, new EventStartData("playful", 35, 7, new EventStartData.FarmerData(31, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,36,9, EventHelper.FacingDirection.Left),
                 new EventStartData.NPCData(pierre,33,6, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(caroline,35,5, EventHelper.FacingDirection.Up),
@@ -375,21 +375,21 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerUp(2, EventHelper.FacingDirection.Right, false);
             e.moveFarmerRight(4, EventHelper.FacingDirection.Right, false);
 
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:0")); //abi 0
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Abigail:0"); //abi 0
 
             e.npcFaceDirection(caroline, EventHelper.FacingDirection.Down);
 
-            e.speakWithTranslatedMessage(pierre, GetEventString("DatingAbigailBirthday_Pierre:0")); //pie 0
-            e.speakWithTranslatedMessage(caroline, GetEventString("DatingAbigailBirthday_Caroline:0")); //car 0
+            e.speakWithTranslatedMessage(pierre, "DatingAbigailBirthday_Pierre:0"); //pie 0
+            e.speakWithTranslatedMessage(caroline, "DatingAbigailBirthday_Caroline:0"); //car 0
             e.addObject(35, 5, 220);
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:1")); //abi 1
-            e.speakWithTranslatedMessage(pierre, GetEventString("DatingAbigailBirthday_Pierre:1")); //pie 1
-            e.speakWithTranslatedMessage(caroline, GetEventString("DatingAbigailBirthday_Caroline:1")); //car 1
-            e.speakWithTranslatedMessage(caroline, GetEventString("DatingAbigailBirthday_Caroline:2")); //car 2
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:2")); //abi 2
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Abigail:1"); //abi 1
+            e.speakWithTranslatedMessage(pierre, "DatingAbigailBirthday_Pierre:1"); //pie 1
+            e.speakWithTranslatedMessage(caroline, "DatingAbigailBirthday_Caroline:1"); //car 1
+            e.speakWithTranslatedMessage(caroline, "DatingAbigailBirthday_Caroline:2"); //car 2
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Abigail:2"); //abi 2
             e.emoteFarmer_Thinking();
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:3"));//abi 3
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Abigail:4"));///abi 4
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Abigail:3");//abi 3
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Abigail:4");///abi 4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Abigail");
@@ -423,7 +423,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(abigail));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailMines, 19955, 1 ,conditions, new EventStartData("playful", 18, 8, new EventStartData.FarmerData(18, 12, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingAbigailMines, 19955, 2, conditions, new EventStartData("playful", 18, 8, new EventStartData.FarmerData(18, 12, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(abigail,18,4, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -431,14 +431,14 @@ namespace Omegasis.HappyBirthday.Framework.Events
             //Dialogue here.
             e.moveFarmerUp(7, EventHelper.FacingDirection.Up, false);
 
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:0")); //abi 0
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Mine_Abigail:0"); //abi 0
 
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:1")); //abi 1
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Mine_Abigail:1"); //abi 1
             e.emoteFarmer_QuestionMark();
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:2")); //abi 2
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:3"));//abi 3
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Mine_Abigail:2"); //abi 2
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Mine_Abigail:3");//abi 3
             e.emoteFarmer_Thinking();
-            e.speakWithTranslatedMessage(abigail, GetEventString("DatingAbigailBirthday_Mine_Abigail:4"));///abi 4
+            e.speakWithTranslatedMessage(abigail, "DatingAbigailBirthday_Mine_Abigail:4");///abi 4
 
             e.emoteFarmer_Heart();
             e.emote_Heart("Abigail");
@@ -464,7 +464,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(emily));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingEmily, 19956, 1 ,conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingEmily, 19956, 2, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(emily,20,17, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -472,14 +472,14 @@ namespace Omegasis.HappyBirthday.Framework.Events
             //Dialogue here.
             e.moveFarmerRight(9, EventHelper.FacingDirection.Up, false);
 
-            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:0")); //emi 0
-            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:1")); //emi 0
+            e.speakWithTranslatedMessage(emily, "DatingEmilyBirthday_Emily:0"); //emi 0
+            e.speakWithTranslatedMessage(emily, "DatingEmilyBirthday_Emily:1"); //emi 0
             e.emoteFarmer_Happy();
-            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:2")); //emi 0
-            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:3")); //emi 0
-            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:4")); //emi 0
+            e.speakWithTranslatedMessage(emily, "DatingEmilyBirthday_Emily:2"); //emi 0
+            e.speakWithTranslatedMessage(emily, "DatingEmilyBirthday_Emily:3"); //emi 0
+            e.speakWithTranslatedMessage(emily, "DatingEmilyBirthday_Emily:4"); //emi 0
             e.emoteFarmer_Thinking();
-            e.speakWithTranslatedMessage(emily, GetEventString("DatingEmilyBirthday_Emily:5")); //emi 0
+            e.speakWithTranslatedMessage(emily, "DatingEmilyBirthday_Emily:5"); //emi 0
 
 
             e.emoteFarmer_Heart();
@@ -507,7 +507,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(haley));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingHaley, 19957, 1 ,conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingHaley, 19957, 2, conditions, new EventStartData("playful", 20, 18, new EventStartData.FarmerData(11, 20, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(haley,20,17, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -515,13 +515,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
             //Dialogue here.
             e.moveFarmerRight(9, EventHelper.FacingDirection.Up, false);
 
-            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:0"));
-            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:1"));
+            e.speakWithTranslatedMessage(haley, "DatingHaleyBirthday_Haley:0");
+            e.speakWithTranslatedMessage(haley, "DatingHaleyBirthday_Haley:1");
             e.emoteFarmer_Happy();
-            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:2"));
-            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:3"));
+            e.speakWithTranslatedMessage(haley, "DatingHaleyBirthday_Haley:2");
+            e.speakWithTranslatedMessage(haley, "DatingHaleyBirthday_Haley:3");
             e.emoteFarmer_Thinking();
-            e.speakWithTranslatedMessage(haley, GetEventString("DatingHaleyBirthday_Haley:4"));
+            e.speakWithTranslatedMessage(haley, "DatingHaleyBirthday_Haley:4");
 
 
             e.emoteFarmer_Heart();
@@ -548,7 +548,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(sam));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingSam, 19959, 1 ,conditions, new EventStartData("playful", 3, 6, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingSam, 19959, 2, conditions, new EventStartData("playful", 3, 6, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(sam,3,5, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -558,10 +558,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerLeft(3, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(sam, EventHelper.FacingDirection.Right);
 
-            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:0"));
-            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:1"));
-            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:2"));
-            e.speakWithTranslatedMessage(sam, GetEventString("DatingSamBirthday_Sam:3"));
+            e.speakWithTranslatedMessage(sam, "DatingSamBirthday_Sam:0");
+            e.speakWithTranslatedMessage(sam, "DatingSamBirthday_Sam:1");
+            e.speakWithTranslatedMessage(sam, "DatingSamBirthday_Sam:2");
+            e.speakWithTranslatedMessage(sam, "DatingSamBirthday_Sam:3");
             e.emoteFarmer_Heart();
             e.emote_Heart("Sam");
             e.globalFadeOut(0.010);
@@ -594,7 +594,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(sebastian));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingSebastian, 19952,1 ,conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingSebastian, 19952, 2, conditions, new EventStartData("playful", 28, 12, new EventStartData.FarmerData(23, 12, EventHelper.FacingDirection.Right), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(maru,27,11, EventHelper.FacingDirection.Down),
                 new EventStartData.NPCData(sebastian,26,13, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(robin,28,9, EventHelper.FacingDirection.Up),
@@ -610,22 +610,22 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             //Dialogue goes here.
             //Seriously improve dialogue lines. Maru is probably the NPC I know the least about.
-            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:0")); //sebastian 0
-            e.speakWithTranslatedMessage(robin, GetEventString("DatingSebastianBirthday_Robin:0")); //maru 0
-            e.speakWithTranslatedMessage(maru, GetEventString("DatingSebastianBirthday_Maru:0"));//Maru 0
-            e.speakWithTranslatedMessage(robin, GetEventString("DatingSebastianBirthday_Robin:1")); //robin 0
-            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingSebastianBirthday_Demetrius:0")); //demetrius 0
-            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:1")); //Sebastian 1
+            e.speakWithTranslatedMessage(sebastian, "DatingSebastianBirthday_Sebastian:0"); //sebastian 0
+            e.speakWithTranslatedMessage(robin, "DatingSebastianBirthday_Robin:0"); //maru 0
+            e.speakWithTranslatedMessage(maru, "DatingSebastianBirthday_Maru:0");//Maru 0
+            e.speakWithTranslatedMessage(robin, "DatingSebastianBirthday_Robin:1"); //robin 0
+            e.speakWithTranslatedMessage(demetrius, "DatingSebastianBirthday_Demetrius:0"); //demetrius 0
+            e.speakWithTranslatedMessage(sebastian, "DatingSebastianBirthday_Sebastian:1"); //Sebastian 1
             e.emote_ExclamationMark("Robin");
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Up);
-            e.speakWithTranslatedMessage(robin, GetEventString("DatingSebastianBirthday_Robin:2")); //robin 1
+            e.speakWithTranslatedMessage(robin, "DatingSebastianBirthday_Robin:2"); //robin 1
             e.npcFaceDirection(robin, EventHelper.FacingDirection.Down);
             e.moveActorDown("Robin", 1, EventHelper.FacingDirection.Down, false);
             e.addObject(27, 12, 220);
-            e.speakWithTranslatedMessage(demetrius, GetEventString("DatingSebastianBirthday_Demetrius:1")); //maru 2
+            e.speakWithTranslatedMessage(demetrius, "DatingSebastianBirthday_Demetrius:1"); //maru 2
             e.emoteFarmer_Thinking();
-            e.speakWithTranslatedMessage(maru, GetEventString("DatingSebastianBirthday_Maru:1")); //maru 3
-            e.speakWithTranslatedMessage(sebastian, GetEventString("DatingSebastianBirthday_Sebastian:2")); //Sebastian 1
+            e.speakWithTranslatedMessage(maru, "DatingSebastianBirthday_Maru:1"); //maru 3
+            e.speakWithTranslatedMessage(sebastian, "DatingSebastianBirthday_Sebastian:2"); //Sebastian 1
 
             //Event finish commands.
             e.emoteFarmer_Heart();
@@ -654,20 +654,20 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(elliott));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingElliott, 19958, 1 ,conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingElliott, 19958, 2, conditions, new EventStartData("playful", 3, 5, new EventStartData.FarmerData(3, 8, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(elliott,3,5, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
 
             //Dialogue here.
             e.moveFarmerUp(2, EventHelper.FacingDirection.Up, false);
-            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:0"));
-            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:1"));
-            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:2"));
-            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:3"));
-            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:4"));
+            e.speakWithTranslatedMessage(elliott, "DatingElliottBirthday_Elliott:0");
+            e.speakWithTranslatedMessage(elliott, "DatingElliottBirthday_Elliott:1");
+            e.speakWithTranslatedMessage(elliott, "DatingElliottBirthday_Elliott:2");
+            e.speakWithTranslatedMessage(elliott, "DatingElliottBirthday_Elliott:3");
+            e.speakWithTranslatedMessage(elliott, "DatingElliottBirthday_Elliott:4");
             e.emoteFarmer_Thinking();
-            e.speakWithTranslatedMessage(elliott, GetEventString("DatingElliottBirthday_Elliott:5"));
+            e.speakWithTranslatedMessage(elliott, "DatingElliottBirthday_Elliott:5");
             e.emoteFarmer_Heart();
             e.emote_Heart("Elliott");
             e.globalFadeOut(0.010);
@@ -693,7 +693,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(shane));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingShane, 19960, 1 ,conditions, new EventStartData("playful", 26, 15, new EventStartData.FarmerData(19, 18, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingShane, 19960, 2, conditions, new EventStartData("playful", 26, 15, new EventStartData.FarmerData(19, 18, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(shane,25,16, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -704,10 +704,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerRight(2, EventHelper.FacingDirection.Right, false);
             e.npcFaceDirection(shane, EventHelper.FacingDirection.Left);
 
-            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:0"));
-            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:1"));
-            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:2"));
-            e.speakWithTranslatedMessage(shane, GetEventString("DatingShaneBirthday_Shane:3"));
+            e.speakWithTranslatedMessage(shane, "DatingShaneBirthday_Shane:0");
+            e.speakWithTranslatedMessage(shane, "DatingShaneBirthday_Shane:1");
+            e.speakWithTranslatedMessage(shane, "DatingShaneBirthday_Shane:2");
+            e.speakWithTranslatedMessage(shane, "DatingShaneBirthday_Shane:3");
             e.emoteFarmer_Heart();
             e.emote_Heart("Shane");
             e.globalFadeOut(0.010);
@@ -732,7 +732,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(harvey));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingHarvey, 19957,1, conditions, new EventStartData("playful", 6, 6, new EventStartData.FarmerData(6, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingHarvey, 19957, 2, conditions, new EventStartData("playful", 6, 6, new EventStartData.FarmerData(6, 11, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(harvey,3,6, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -741,11 +741,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerUp(5, EventHelper.FacingDirection.Up, false);
             e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(harvey, EventHelper.FacingDirection.Right);
-            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:0"));
-            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:1"));
+            e.speakWithTranslatedMessage(harvey, "DatingHarveyBirthday_Harvey:0");
+            e.speakWithTranslatedMessage(harvey, "DatingHarveyBirthday_Harvey:1");
             e.emoteFarmer_QuestionMark();
-            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:2"));
-            e.speakWithTranslatedMessage(harvey, GetEventString("DatingHarveyBirthday_Harvey:3"));
+            e.speakWithTranslatedMessage(harvey, "DatingHarveyBirthday_Harvey:2");
+            e.speakWithTranslatedMessage(harvey, "DatingHarveyBirthday_Harvey:3");
 
 
             e.emoteFarmer_Heart();
@@ -773,7 +773,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             conditions.Add(new DatingNPCEventPrecondition(alex));
 
-            EventHelper e = new EventHelper(EventIds.BirthdayDatingAlex, 19959,1 ,conditions, new EventStartData("playful", 3, 20, new EventStartData.FarmerData(7, 19, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventIds.BirthdayDatingAlex, 19959, 2, conditions, new EventStartData("playful", 3, 20, new EventStartData.FarmerData(7, 19, EventHelper.FacingDirection.Left), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(alex,3,19, EventHelper.FacingDirection.Down),
             }));
             e.globalFadeIn();
@@ -782,10 +782,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerLeft(3, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(alex, EventHelper.FacingDirection.Right);
 
-            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:0"));
-            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:1"));
-            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:2"));
-            e.speakWithTranslatedMessage(alex, GetEventString("DatingAlexBirthday_Alex:3"));
+            e.speakWithTranslatedMessage(alex, "DatingAlexBirthday_Alex:0");
+            e.speakWithTranslatedMessage(alex, "DatingAlexBirthday_Alex:1");
+            e.speakWithTranslatedMessage(alex, "DatingAlexBirthday_Alex:2");
+            e.speakWithTranslatedMessage(alex, "DatingAlexBirthday_Alex:3");
             e.emoteFarmer_Heart();
             e.emote_Heart("Alex");
             e.globalFadeOut(0.010);
@@ -826,7 +826,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 playerStartTile = new Vector2(9, 5);
             }
 
-            EventHelper e = new EventHelper(EventId, EventIntId, 1,conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventId, EventIntId, 2, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
             }));
             e.playerFaceDirection(EventHelper.FacingDirection.Left);
@@ -1005,7 +1005,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <returns></returns>
         public static EventHelper SaloonBirthday_Year2()
         {
-            EventHelper e= SaloonBirthday(new List<EventStartData.NPCData>()
+            EventHelper e = SaloonBirthday(new List<EventStartData.NPCData>()
             {
                 new EventStartData.NPCData(Game1.getCharacterFromName("Kent"),3,23, EventHelper.FacingDirection.Right)
             });
@@ -1099,7 +1099,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             };
             npcs.AddRange(additionalNpcs);
 
-            EventHelper e = new EventHelper(EventIds.SaloonBirthdayParty_Year1, 19926, 1,conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(14, 23, EventHelper.FacingDirection.Up), npcs));
+            EventHelper e = new EventHelper(EventIds.SaloonBirthdayParty_Year1, 19926, 2, conditions, new EventStartData("playful", -100, -100, new EventStartData.FarmerData(14, 23, EventHelper.FacingDirection.Up), npcs));
 
             e.globalFadeIn();
 
@@ -1112,8 +1112,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             e.emoteFarmer_ExclamationMark();
             e.addTranslatedMessageToBeShown("CommunityBirthdayParty_2");
-            e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_3");
-            e.speakWithTranslatedMessage(lewis,"CommunityBirthdayParty_4");
+            e.speakWithTranslatedMessage(lewis, "CommunityBirthdayParty_3");
+            e.speakWithTranslatedMessage(lewis, "CommunityBirthdayParty_4");
             e.emoteFarmer_Heart();
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);
@@ -1134,7 +1134,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new FarmerBirthdayPrecondition());
 
             string morris = "Morris";
-            EventHelper e = new EventHelper(EventIds.JojaMartBirthday, 19901, 1,conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 21, 24, new EventStartData.FarmerData(14, 28, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
+            EventHelper e = new EventHelper(EventIds.JojaMartBirthday, 19901, 2, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 21, 24, new EventStartData.FarmerData(14, 28, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>()
             {
                 new EventStartData.NPCData(morris,-100,-100, EventHelper.FacingDirection.Up)
             }, false));
@@ -1173,7 +1173,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             NPC lewis = Game1.getCharacterFromName("Lewis");
 
-            EventHelper e = new EventHelper(EventIds.AskPlayerForBirthday, 19962, 1,conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 64, 14, new EventStartData.FarmerData(64, 14, EventHelper.FacingDirection.Down), new List<EventStartData.NPCData>()
+            EventHelper e = new EventHelper(EventIds.AskPlayerForBirthday, 19962, 2, conditions, new EventStartData(EventStartData.MusicToPlayType.Continue, 64, 14, new EventStartData.FarmerData(64, 14, EventHelper.FacingDirection.Down), new List<EventStartData.NPCData>()
             {
                 new EventStartData.NPCData(lewis,64,16, EventHelper.FacingDirection.Up),
 
@@ -1246,10 +1246,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
         {
             return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Harvey, 19939, 1, "Harvey");
         }
-
-
-
-
 
         public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Abigail()
         {
@@ -1331,9 +1327,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 playerStartTile = new Vector2(9, 5);
             }
 
-            EventHelper e = new EventHelper(EventId, EventIntId, 1,conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            EventHelper e = new EventHelper(EventId, EventIntId, 2, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
-            },false));
+            }, false));
 
             e.playerFaceDirection(EventHelper.FacingDirection.Left);
 
@@ -1352,12 +1348,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             return e;
 
-        }
-
-
-        public static string GetEventString(string Key)
-        {
-            return HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString(Key);
         }
 
     }
