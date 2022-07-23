@@ -39,22 +39,6 @@ namespace Omegasis.Revitalize.Framework.Utilities
             else return false;
         }
 
-        public static bool IsSameOrSubclass(Type potentialBase, Type potentialDescendant)
-        {
-            return potentialDescendant.IsSubclassOf(potentialBase)
-                   || potentialDescendant == potentialBase;
-        }
-
-        public static bool IsSameType(Type potentialBase, Type potentialDescendant)
-        {
-            return potentialDescendant == potentialBase;
-        }
-
-        public static bool IsSubclass(Type potentialBase, Type potentialDescendant)
-        {
-            return potentialDescendant.IsSubclassOf(potentialBase);
-        }
-
         /// <summary>
         /// Gets a dimension offset depending on the size of the object passed in.
         /// </summary>
@@ -62,7 +46,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public static Vector2 GetDimensionOffsetFromItem(StardewValley.Object obj)
         {
-            if (IsSameType(typeof(StardewValley.Object), obj.GetType()))
+            if (TypeUtilities.IsSameType(typeof(StardewValley.Object), obj.GetType()))
                 return new Vector2(64f, 64f);
 
             return new Vector2(64f, 64f);

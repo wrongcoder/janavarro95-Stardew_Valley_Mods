@@ -28,21 +28,30 @@ namespace Omegasis.Revitalize.Framework.Utilities
         public readonly NetInt displayColumns = new NetInt();
         public readonly NetInt displayRows = new NetInt();
 
-        public InventoryManager()
+        public InventoryManager():this(6,6)
         {
-            this.capacity.Value = 0;
-            this.setMaxLimit(0);
+        }
+
+        public InventoryManager(int DisplayRows = 6, int DisplayColumns = 6)
+        {
+            this.capacity.Value = int.MaxValue;
+            this.setMaxLimit(int.MaxValue);
+            this.displayRows.Value = DisplayRows;
+            this.displayColumns.Value = DisplayColumns;
+            this.initializeNetFields();
+        }
+
+        public InventoryManager(int capacity, int MaxCapacty, int DisplayRows=6, int DisplayColumns = 6)
+        {
+            this.capacity.Value = capacity;
+            this.setMaxLimit(MaxCapacty);
+            this.displayRows.Value = DisplayRows;
+            this.displayColumns.Value = DisplayColumns;
             this.initializeNetFields();
         }
 
         /// <summary>Construct an instance.</summary>
-        public InventoryManager(IList<Item> items, int DisplayRows = 6, int DisplayColumns = 6) : this((List<Item>)items, DisplayRows, DisplayColumns)
-        {
-
-        }
-
-        /// <summary>Construct an instance.</summary>
-        public InventoryManager(List<Item> items, int DisplayRows = 6, int DisplayColumns = 6)
+        public InventoryManager(IList<Item> items, int DisplayRows = 6, int DisplayColumns = 6)
         {
             this.capacity.Value = int.MaxValue;
             this.setMaxLimit(int.MaxValue);
@@ -53,7 +62,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         }
 
         /// <summary>Construct an instance.</summary>
-        public InventoryManager(List<Item> items, int capacity, int MaxCapacity, int DisplayRows = 6, int DisplayColumns = 6)
+        public InventoryManager(IList<Item> items, int capacity, int MaxCapacity, int DisplayRows = 6, int DisplayColumns = 6)
         {
             this.capacity.Value = capacity;
             this.setMaxLimit(MaxCapacity);
@@ -164,7 +173,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public InventoryManager Copy()
         {
-            return new InventoryManager(new List<Item>(), this.capacity, this.maxCapacity, this.displayRows, this.displayColumns);
+            return new InventoryManager(this.capacity, this.maxCapacity, this.displayRows, this.displayColumns);
         }
 
         public void dumpBufferToItems()

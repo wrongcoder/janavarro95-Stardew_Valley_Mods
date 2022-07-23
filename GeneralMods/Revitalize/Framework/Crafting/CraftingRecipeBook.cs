@@ -9,6 +9,7 @@ using StardewValley;
 using Omegasis.Revitalize.Framework.Menus;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
+using Omegasis.Revitalize.Framework.Crafting.JsonContent;
 
 namespace Omegasis.Revitalize.Framework.Crafting
 {
@@ -30,7 +31,7 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// <summary>
         /// Which group of crafting recipes this book belongs to.
         /// </summary>
-        public string craftingGroup;
+        public string craftingRecipeBookId;
 
         public string defaultTab;
 
@@ -39,9 +40,33 @@ namespace Omegasis.Revitalize.Framework.Crafting
 
         }
 
+        /// <summary>
+        /// Constructor used when loading crafting recipes from disk.
+        /// </summary>
+        /// <param name="CraftingBookId"></param>
+        /// <param name="CraftingTabs"></param>
+        /// <param name="CraftingRecipes"></param>
+        public CraftingRecipeBook(JsonCraftingRecipeBookDefinition CraftingBookId, List<JsonCraftingMenuTab> CraftingTabs, List<UnlockableJsonCraftingRecipe> CraftingRecipes)
+        {
+
+            this.craftingRecipeBookId = CraftingBookId.craftingRecipeBookId;
+
+            this.craftingRecipes = new Dictionary<string, UnlockableCraftingRecipe>();
+            this.craftingMenuTabs = new Dictionary<string, AnimatedButton>();
+
+            foreach (JsonCraftingMenuTab menuTab in CraftingTabs)
+            {
+                this.addInCraftingTab(menuTab.craftingTabName, menuTab.getAnimatedButton(), menuTab.isDefaultTab);
+            }
+            foreach(UnlockableJsonCraftingRecipe craftingRecipe in CraftingRecipes)
+            {
+                this.addCraftingRecipe(craftingRecipe.recipe.craftingRecipeId, craftingRecipe.toUnlockableCraftingRecipe());
+            }
+        }
+
         public CraftingRecipeBook(string CraftingGroup)
         {
-            this.craftingGroup = CraftingGroup;
+            this.craftingRecipeBookId = CraftingGroup;
             this.craftingRecipes = new Dictionary<string, UnlockableCraftingRecipe>();
             this.craftingMenuTabs = new Dictionary<string, AnimatedButton>();
         }
@@ -49,26 +74,26 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// <summary>
         /// Adds in a new crafting recipe.
         /// </summary>
-        /// <param name="Name"></param>
+        /// <param name="Id"></param>
         /// <param name="Recipe"></param>
-        public void addCraftingRecipe(string Name, UnlockableCraftingRecipe Recipe)
+        public void addCraftingRecipe(string Id, UnlockableCraftingRecipe Recipe)
         {
-            if (this.craftingRecipes.ContainsKey(Name) == false)
-                this.craftingRecipes.Add(Name, Recipe);
+            if (this.craftingRecipes.ContainsKey(Id) == false)
+                this.craftingRecipes.Add(Id, Recipe);
             else
-                throw new Exception("This crafting book already contains a recipe with the same id!");
+                throw new Exception(string.Format("This crafting book already contains a recipe with the same id! RecipeBookId: {0} ExistingRecipeId {1}",this.craftingRecipeBookId,Id));
         }
 
         /// <summary>
         /// Adds in a crafting recipe.
         /// </summary>
-        /// <param name="Name"></param>
+        /// <param name="Id"></param>
         /// <param name="Recipe"></param>
         /// <param name="Unlocked">Is this recipe already unlocked?</param>
-        public void addCraftingRecipe(string Name, Recipe Recipe, bool Unlocked)
+        public void addCraftingRecipe(string Id, Recipe Recipe, bool Unlocked)
         {
-            UnlockableCraftingRecipe recipe = new UnlockableCraftingRecipe(this.craftingGroup, Recipe, Unlocked);
-            this.addCraftingRecipe(Name, recipe);
+            UnlockableCraftingRecipe recipe = new UnlockableCraftingRecipe(this.craftingRecipeBookId, Recipe, Unlocked);
+            this.addCraftingRecipe(Id, recipe);
         }
 
         /// <summary>

@@ -1,4 +1,46 @@
-~~~~~~~~~~~~0.0.1 Revitalize 7-16-2022 xx.xx P.M~~~~~~~~~~~~~~
+~~~~~~~~~~~~0.0.1 Revitalize 7-23-2022 xx.xx P.M~~~~~~~~~~~~~~
++Added Electric Furnace blueprints, which can be bought from Robin for 5000g.
+~Made it so the mod's crafting menu displays descriptions about the items hovered over for better details.
+~Fixed the InventoryManager (and by extention) the Crafting Menu so that crafting actually works again!
+
+
++added config prices for tool blueprints sold in Clint's shop.
++added anvil blueprints to be sold in Clint's shop. Price is also added to the config.
++made it so that tier 1 tools can be also crafted on a workbench so the player doesn't have to wait for an anvil.
+
+
+~Changed the structure of JsonCraftingComponents to use JsonItemReference instead which changed the nature of UnlockableJsonCraftingRecipes which required a rewrite of the existing json recipes.
++Added JsonCraftingBlueprint so that new blueprint items can be created in json format to be added into the game.
++Added objectid dump for all stardew valley items.
++Added object id dump for all StardewValley big craftable items.
+~Workbench no longer accidentally has every crafting recipe assigned to it.
+~Workbench no longer accidentally has every crafting tab assigned to it.
+
++Added crafting recipes for axe, hoe, pickaxe, and watering can at the anvil which allow for making more farm tools.
++Added blueprint items for axe, hoe, pickaxe, and watering can which can be bought from clint once that respective upgrade level has been met for the tool, the tool is present in the inventory, and the player doesn't already know it. 
+
+
++Finished the ability to load in json crafting books from disk.
++Added ObjectIds dump to Objects folder of the mod.
+~Made it so that ResourceManager.cs registeres all of it's item and object itds to the ObjectManager so that way there is a unified dump of all registered items for the mod.
++Added validation to JsonCraftingComponent when using registered item ids to ensure that invalid ids are not used.
++Added validation to JsonCraftingRecipes to ensure that they have at least 1 input, 1 output, and that all components they ise are valid.
++Migrated all Workbench crafting recipes from code to .json files.
+-Removed many unused recipes from a previous experimental version of this mod.
+~AnimalShopSaveData no longer crashes due to trying to save to the full path and not the relative path.
++Crafting recipes are now persisent per save file, so now they don't have to be remembered when loading the game again.
+~Blueprints are no longer consumed if the recipe is already known.
+~Blueprints will now tell you if you already know how to make them when used.
+
+
++Made json template files for AnimationManager, Animation, and AnimationFrame
++Made json template files for JsonCraftingRecipe, JsonCraftingRecipeBookDefinition, UnlockableJsonCraftingRecipe and JsonCraftingComponent
+~Cleaned up old serializer code as it is no longer necessary.
+    ~Migrated to SMAPI writeJson and readJson methods.
+~Started work migrating Workbench crafting recipes
+~Fixed CraftingInformationPage not displaying.
+
+
 ~Cleaned up all references to "Content" folder and migrated to "ModAssets" folder.
 +Started work on JsonContentRecipes for not having to hard code the recipes into the code.
 +Cleaned up content managers into a single ContentManager.

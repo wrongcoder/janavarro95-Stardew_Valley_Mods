@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Framework\Constants\ItemIds\Objects\Resources\" />
-    <Folder Include="Framework\StaticValues\" />
   </ItemGroup>
   
   <ItemGroup>

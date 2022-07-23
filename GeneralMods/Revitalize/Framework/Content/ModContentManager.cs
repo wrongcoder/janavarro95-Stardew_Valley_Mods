@@ -4,15 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Data;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Graphics;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Managers;
-using Omegasis.Revitalize.Framework.Objects;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World;
+using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
 using StardewModdingAPI;
 
 namespace Omegasis.Revitalize.Framework.Content
@@ -48,6 +52,7 @@ namespace Omegasis.Revitalize.Framework.Content
             this.mailManager = new MailManager();
 
             this.craftingManager = new CraftingManager();
+
         }
 
         public virtual void loadContentOnGameLaunched()
@@ -57,6 +62,8 @@ namespace Omegasis.Revitalize.Framework.Content
 
             //Once all objects have been initialized, then we can add references to them for recipes and initialize all of the crafting recipes for the mod.
             this.craftingManager.initializeRecipeBooks();
+
+            this.dumpAllObjectIdsToJsonFile();
         }
 
         private void createDirectories()
@@ -75,14 +82,71 @@ namespace Omegasis.Revitalize.Framework.Content
         /// </summary>
         protected virtual void createJsonDataTemplates()
         {
-            Crafting.JsonContent.JsonCraftingComponent jsonCraftingComponent = new Crafting.JsonContent.JsonCraftingComponent();
-            JsonUtilities.saveToRevitaliveModContentFolder(jsonCraftingComponent, CraftingRecipesDataPaths.CraftingRecipesTemplatesPath, "JsonCraftingComponentTemplate");
+            Content.JsonContent.Animations.JsonAnimationFrame jsonAnimationFrame = new JsonContent.Animations.JsonAnimationFrame();
+            JsonUtilities.WriteJsonFile(jsonAnimationFrame, DataPaths.AnimationTemplatesPath, "AnimationFrame.json");
 
-            JsonItemInformation jsonItemInformationFile = new JsonItemInformation();
-            JsonUtilities.saveToRevitaliveModContentFolder(jsonItemInformationFile, ObjectsDataPaths.ObjectsDataTemplatesPath,"JsonItemInformationTemplate");
-            JsonUtilities.saveToRevitaliveModContentFolder(jsonItemInformationFile, ItemsDataPaths.ItemsDataTemplatesPath, "JsonItemInformationTemplate");
+            Content.JsonContent.Animations.JsonAnimation jsonAnimation = new JsonContent.Animations.JsonAnimation();
+            JsonUtilities.WriteJsonFile(jsonAnimation, DataPaths.AnimationTemplatesPath, "Animation.json");
+
+            Content.JsonContent.Animations.JsonAnimationManager jsonAnimationManager = new JsonContent.Animations.JsonAnimationManager();
+            JsonUtilities.WriteJsonFile(jsonAnimationManager, DataPaths.AnimationTemplatesPath, "AnimationManager.json");
+
+            //Crafting components, recipes. books, and menu tabs.
+            Crafting.JsonContent.JsonCraftingComponent jsonCraftingComponent = new Crafting.JsonContent.JsonCraftingComponent();
+            JsonUtilities.WriteJsonFile(jsonCraftingComponent, CraftingDataPaths.CraftingStationTemplatesPath, "CraftingComponentTemplate.json");
+
+            Crafting.JsonContent.UnlockableJsonCraftingRecipe jsonUnlockableCraftingRecipe = new Crafting.JsonContent.UnlockableJsonCraftingRecipe();
+            JsonUtilities.WriteJsonFile(jsonUnlockableCraftingRecipe, CraftingDataPaths.CraftingStationTemplatesPath, "UnlockableCraftingRecipeTemplate.json");
+
+            Crafting.JsonContent.JsonCraftingMenuTab jsonCraftingTab = new Crafting.JsonContent.JsonCraftingMenuTab();
+            JsonUtilities.WriteJsonFile(jsonCraftingTab, CraftingDataPaths.CraftingStationTemplatesPath, "CraftingTabTemplate.json");
+
+            Crafting.JsonContent.JsonCraftingRecipeBookDefinition jsonRecipeBookDefinition = new Crafting.JsonContent.JsonCraftingRecipeBookDefinition();
+            JsonUtilities.WriteJsonFile(jsonRecipeBookDefinition, CraftingDataPaths.CraftingStationTemplatesPath, "RecipeBookDefinition.json");
+
+
+            JsonBasicItemInformation jsonItemInformationFile = new JsonBasicItemInformation();
+            JsonUtilities.WriteJsonFile(jsonItemInformationFile, ObjectsDataPaths.ObjectsDataTemplatesPath,"ItemInformationTemplate.json");
+
+            JsonCraftingBlueprint jsonCraftingBlueprint = new JsonCraftingBlueprint();
+            JsonUtilities.WriteJsonFile(jsonCraftingBlueprint, ObjectsDataPaths.ObjectsDataTemplatesPath, "JsonCraftingBlueprintItemTemplate.json");
         }
 
+        protected virtual void dumpAllObjectIdsToJsonFile()
+        {
+            List<string> objectIds = new List<string>();
+            foreach (string objectId in this.objectManager.itemsById.Keys)
+            {
+                objectIds.Add(objectId);
+            }
+            objectIds.Sort();
+            JsonUtilities.WriteJsonFile(objectIds, ObjectsDataPaths.ObjectsDataDumpPath, "RegisteredObjectIds.json");
+
+
+            List<string> sdvObjectIds = new List<string>();
+            foreach (Enums.SDVObject sdvId in Enum.GetValues(typeof(Enums.SDVObject)))
+            {
+                sdvObjectIds.Add(Enum.GetName(typeof(Enums.SDVObject), sdvId));
+            }
+            sdvObjectIds.Sort();
+            JsonUtilities.WriteJsonFile(sdvObjectIds, ObjectsDataPaths.ObjectsDataDumpPath, "StardewValleyObjectIds.json");
+
+            List<string> sdvBigCraftableIds = new List<string>();
+            foreach (Enums.SDVBigCraftable sdvId in Enum.GetValues(typeof(Enums.SDVBigCraftable)))
+            {
+                sdvBigCraftableIds.Add(Enum.GetName(typeof(Enums.SDVBigCraftable), sdvId));
+            }
+            sdvBigCraftableIds.Sort();
+            JsonUtilities.WriteJsonFile(sdvBigCraftableIds, ObjectsDataPaths.ObjectsDataDumpPath, "StardewValleyBigCraftableIds.json");
+
+            List<string> categoryIds = new List<string>();
+            foreach(string id in ItemCategories.CategoriesById.Keys)
+            {
+                categoryIds.Add(id);
+            }
+            categoryIds.Sort();
+            JsonUtilities.WriteJsonFile(categoryIds, ObjectsDataPaths.ObjectsDataDumpPath, "ItemCategories.json");
+        }
 
 
 

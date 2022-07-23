@@ -28,7 +28,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility
             if (obj is ICustomModObject)
             {
                 ICustomModObject modObj = (obj as ICustomModObject);
-                if (modObj.Id.Equals(Machines.ElectricFurnace) || modObj.Id.Equals(Machines.NuclearFurnace) || modObj.Id.Equals(Machines.MagicalFurnace))
+                if (modObj.Id.Equals(MachineIds.ElectricFurnace) || modObj.Id.Equals(MachineIds.NuclearFurnace) || modObj.Id.Equals(MachineIds.MagicalFurnace))
                 {
                     return new ElectricFurnaceWrapper((ElectricFurnace)obj, location, tile);
                 }

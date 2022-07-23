@@ -11,7 +11,7 @@ namespace Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData
     public class AnimalShopSaveData : SaveDataBase
     {
         [JsonProperty]
-        protected bool hasBuiltTier2BarnOrCoop;
+        public bool hasBuiltTier2BarnOrCoop;
 
         public AnimalShopSaveData()
         {
@@ -20,14 +20,12 @@ namespace Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData
 
         public override void save()
         {
-            RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine(RevitalizeModCore.SaveDataManager.getFullSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"), this);
-            this.cleanUpPostSave();
+            RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine(RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "ShopConditionsSaveData", "AnimalShopSaveData.json"), this);
         }
 
         public virtual void setHasBuiltTier2OrHigherBarnOrCoop()
         {
             this.hasBuiltTier2BarnOrCoop = true;
-            this.shouldSaveData = true;
         }
 
         public virtual bool getHasBuiltTier2OrHigherBarnOrCoop()

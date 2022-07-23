@@ -87,7 +87,20 @@ namespace Omegasis.Revitalize.Framework.Managers
             return textureManager;
         }
 
+        public static TextureManager GetTextureManager(string TextureManagerId)
+        {
+            return TextureManager.GetTextureManager(RevitalizeModCore.Manifest, TextureManagerId) ;
+        }
 
+        public static AnimationManager CreateAnimationManager(string TextureManagerId, string TextureName ,Animation DefaultAnimation)
+        {
+            return TextureManager.GetTextureManager(RevitalizeModCore.Manifest, TextureManagerId).createAnimationManager(TextureName,DefaultAnimation);
+        }
+
+        public static AnimationManager CreateAnimationManager(string ModId,string TextureManagerId, string TextureName, Dictionary<string,Animation> Animations, string DefaultAnimationKey, string StartingAnimationKey)
+        {
+            return TextureManager.GetTextureManager(ModId, TextureManagerId).createAnimationManager(TextureName, Animations,DefaultAnimationKey,StartingAnimationKey);
+        }
 
 
         public static AnimationManager createOreResourceAnimationManager(string TextureName)

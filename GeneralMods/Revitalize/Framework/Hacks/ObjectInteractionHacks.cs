@@ -148,7 +148,7 @@ namespace Omegasis.Revitalize.Framework.Hacks
         {
             if (e.Button == SButton.MouseLeft)
                 if (Game1.player.CurrentTool != null)
-                    if (ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Pickaxe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Axe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Hoe)) || ObjectUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(WateringCan)))
+                    if (TypeUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Pickaxe)) || TypeUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Axe)) || TypeUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(Hoe)) || TypeUtilities.IsSameType(Game1.player.CurrentTool.GetType(), typeof(WateringCan)))
                         ColorChanger.ResetToolColorSwaps();
         }
     }

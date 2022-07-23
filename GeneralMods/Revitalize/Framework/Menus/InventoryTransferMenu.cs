@@ -145,7 +145,7 @@ namespace Omegasis.Revitalize.Framework.Menus
             else
                 this.hoverText = "";
 
-            if (this.trashedItem.Contains(x, y))
+            if (this.trashedItem.ContainsPoint(x, y))
                 if (this.trashedItem.item != null)
                     this.displayTrashedItem = true;
                 else

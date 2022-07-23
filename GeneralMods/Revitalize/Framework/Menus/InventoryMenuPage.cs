@@ -192,7 +192,7 @@ namespace Omegasis.Revitalize.Framework.Menus
         {
             bool hovered = false;
             foreach (ItemDisplayButton button in this.pages[this.pageIndex].storageDisplay)
-                if (button.Contains(x, y))
+                if (button.ContainsPoint(x, y))
                     if (button.item == null)
                         continue;
                     else if (button.item != null)

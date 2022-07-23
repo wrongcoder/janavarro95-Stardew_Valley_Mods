@@ -14,7 +14,6 @@ using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
-using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.StardustCore.UIUtilities;
@@ -25,8 +24,11 @@ using Omegasis.Revitalize.Framework.World.Objects.Items.Farming;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 using Omegasis.Revitalize.Framework.World.Objects.Resources;
 using Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation;
+using Omegasis.Revitalize.Framework.Constants.PathConstants.Data;
+using System.IO;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
 
-namespace Omegasis.Revitalize.Framework.Objects
+namespace Omegasis.Revitalize.Framework.World.Objects
 {
     /// <summary>
     /// Deals with handling all objects for the mod.
@@ -46,7 +48,10 @@ namespace Omegasis.Revitalize.Framework.Objects
 
         public ResourceManager resources;
 
-        public Dictionary<string, Item> ItemsByName;
+        /// <summary>
+        /// The list of registered items for this object manager.
+        /// </summary>
+        public Dictionary<string, Item> itemsById;
 
         /// <summary>
         /// Constructor.
@@ -73,7 +78,7 @@ namespace Omegasis.Revitalize.Framework.Objects
         {
 
             this.resources = new ResourceManager();
-            this.ItemsByName = new Dictionary<string, Item>();
+            this.itemsById = new Dictionary<string, Item>();
 
             //Load in furniture again!
         }
@@ -83,7 +88,9 @@ namespace Omegasis.Revitalize.Framework.Objects
         /// </summary>
         public void loadItemsFromDisk()
         {
-            this.resources.loadInItems(); //Must be first.
+            this.registerStardewValleyItems();
+
+            this.resources.loadInItems(); //Should take priority over other modded content.
 
             this.loadInItems();
             this.loadInCraftingTables();
@@ -96,13 +103,37 @@ namespace Omegasis.Revitalize.Framework.Objects
             this.loadInBlueprints();
         }
 
+        protected virtual void registerStardewValleyItems()
+        {
+            this.addItem("StardewValley.Tools.Pickaxe", new StardewValley.Tools.Pickaxe());
+            this.addItem("StardewValley.Tools.Axe", new StardewValley.Tools.Axe());
+            this.addItem("StardewValley.Tools.WateringCan", new StardewValley.Tools.WateringCan());
+            this.addItem("StardewValley.Tools.Hoe", new StardewValley.Tools.Hoe());
+            this.addItem("StardewValley.Tools.CopperPickaxe", new StardewValley.Tools.Pickaxe() {UpgradeLevel=Tool.copper });
+            this.addItem("StardewValley.Tools.CopperAxe", new StardewValley.Tools.Axe() { UpgradeLevel = Tool.copper });
+            this.addItem("StardewValley.Tools.CopperWateringCan", new StardewValley.Tools.WateringCan() { UpgradeLevel = Tool.copper });
+            this.addItem("StardewValley.Tools.CopperHoe", new StardewValley.Tools.Hoe() { UpgradeLevel = Tool.copper });
+            this.addItem("StardewValley.Tools.SteelPickaxe", new StardewValley.Tools.Pickaxe() { UpgradeLevel = Tool.steel });
+            this.addItem("StardewValley.Tools.SteelAxe", new StardewValley.Tools.Axe() { UpgradeLevel = Tool.steel });
+            this.addItem("StardewValley.Tools.SteelWateringCan", new StardewValley.Tools.WateringCan() { UpgradeLevel = Tool.steel });
+            this.addItem("StardewValley.Tools.SteelHoe", new StardewValley.Tools.Hoe() { UpgradeLevel = Tool.steel });
+            this.addItem("StardewValley.Tools.GoldPickaxe", new StardewValley.Tools.Pickaxe() { UpgradeLevel = Tool.gold });
+            this.addItem("StardewValley.Tools.GoldAxe", new StardewValley.Tools.Axe() { UpgradeLevel = Tool.gold });
+            this.addItem("StardewValley.Tools.GoldWateringCan", new StardewValley.Tools.WateringCan() { UpgradeLevel = Tool.gold });
+            this.addItem("StardewValley.Tools.GoldHoe", new StardewValley.Tools.Hoe() { UpgradeLevel = Tool.gold });
+            this.addItem("StardewValley.Tools.IridiumPickaxe", new StardewValley.Tools.Pickaxe() { UpgradeLevel = Tool.iridium });
+            this.addItem("StardewValley.Tools.IridiumAxe", new StardewValley.Tools.Axe() { UpgradeLevel = Tool.iridium });
+            this.addItem("StardewValley.Tools.IridiumWateringCan", new StardewValley.Tools.WateringCan() { UpgradeLevel = Tool.iridium });
+            this.addItem("StardewValley.Tools.IridiumHoe", new StardewValley.Tools.Hoe() { UpgradeLevel = Tool.iridium });
+        }
+
         private void loadInAestheticsObjects()
         {
         }
 
         private void loadInResourcePlants()
         {
-            ResourceBush copperOreBush = new ResourceBush(new BasicItemInformation("Copper Ore Bush", ResourceObjectIds.CopperOreBush, "A magical bush that grows a piece of copper ore every day!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 2000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("CopperOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.CopperOre),1);
+            ResourceBush copperOreBush = new ResourceBush(new BasicItemInformation("Copper Ore Bush", ResourceObjectIds.CopperOreBush, "A magical bush that grows a piece of copper ore every day!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 2000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("CopperOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.CopperOre), 1);
             this.addItem(ResourceObjectIds.CopperOreBush, copperOreBush);
 
             ResourceBush ironOreBush = new ResourceBush(new BasicItemInformation("Iron Ore Bush", ResourceObjectIds.IronOreBush, "A magical bush that grows a piece of iron ore every 2 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IronOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IronOre), 2);
@@ -114,7 +145,7 @@ namespace Omegasis.Revitalize.Framework.Objects
             ResourceBush iridiumResourceBush = new ResourceBush(new BasicItemInformation("Iridium Ore Bush", ResourceObjectIds.IridiumOreBush, "A magical bush that grows a piece of iridium ore every 7 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 10000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IridiumOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IridiumOre), 7);
             this.addItem(ResourceObjectIds.IridiumOreBush, iridiumResourceBush);
 
-            ResourceBush radioactiveOreBush = new ResourceBush(new BasicItemInformation("Radioactive Ore Bush", ResourceObjectIds.RadioactiveOreBush, "A magical bush that grows a piece of radioactive ore every 14 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 25000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("RadioactiveOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0,-1), null, null), this.getObject(Enums.SDVObject.RadioactiveOre), 14);
+            ResourceBush radioactiveOreBush = new ResourceBush(new BasicItemInformation("Radioactive Ore Bush", ResourceObjectIds.RadioactiveOreBush, "A magical bush that grows a piece of radioactive ore every 14 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 25000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("RadioactiveOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.RadioactiveOre), 14);
             this.addItem(ResourceObjectIds.RadioactiveOreBush, radioactiveOreBush);
         }
 
@@ -132,13 +163,13 @@ namespace Omegasis.Revitalize.Framework.Objects
 
         private void loadInBlueprints()
         {
-            Blueprint craftingBlueprint_anvilForWorkbench = new Blueprint(new BasicItemInformation("Blueprint", Blueprints.Workbench_AnvilCraftingRecipeBlueprint, "A blueprint used on how to craft an anvil at a workbench!", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, false, false, TextureManagers.Items_Crafting.createAnimationManager("Blueprint", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), new Dictionary<string, string>()
+
+            //Make sure that all blueprints registered here have a id reference in Blueprints.cs for easier access via code.
+            foreach(JsonCraftingBlueprint jsonBlueprint in JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingBlueprint>(ObjectsDataPaths.CraftingBlueprintsPath))
             {
-                {Constants.CraftingIds.CraftingRecipeBooks.WorkbenchCraftingRecipies,"Anvil" }
+                this.addItem(jsonBlueprint.id, jsonBlueprint.toBlueprint());
+            }
 
-            },new Drawable(this.getItem(CraftingStations.Anvil_Id)));
-
-            this.addItem(Blueprints.Workbench_AnvilCraftingRecipeBlueprint, craftingBlueprint_anvilForWorkbench);
         }
 
         private void loadInCraftingTables()
@@ -153,14 +184,14 @@ namespace Omegasis.Revitalize.Framework.Objects
         private void loadInMachines()
         {
 
-            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", Machines.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
-            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", Machines.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarArrayTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", MachineIds.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", MachineIds.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarArrayTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
 
-            this.addItem(Machines.AdvancedSolarPanelV1, solarP1);
-            this.addItem(Machines.SolarArrayV1, solarA1V1);
+            this.addItem(MachineIds.AdvancedSolarPanelV1, solarP1);
+            this.addItem(MachineIds.SolarArrayV1, solarA1V1);
 
-
-            Machine miningDrillMachine_0_0 = new Machine(new BasicItemInformation("Mining Drill", Machines.MiningDrillV1, "Digs up rocks and ores. Requires energy to run.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MiningDrillMachine", new SerializableDictionary<string, Animation>() {
+            /*
+            Machine miningDrillMachine_0_0 = new Machine(new BasicItemInformation("Mining Drill", MachineIds.MiningDrillV1, "Digs up rocks and ores. Requires energy to run.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MiningDrillMachine", new SerializableDictionary<string, Animation>() {
                 {"Default",new Animation(new AnimationFrame(0,0,16,16))  },
                 { "Mining",new Animation(new List<AnimationFrame>(){
                     new AnimationFrame(0,0,16,32,30),
@@ -170,10 +201,10 @@ namespace Omegasis.Revitalize.Framework.Objects
                     true) }
             }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), Vector2.Zero, new InventoryManager(new List<Item>(), 18, 3, 6), null), RevitalizeModCore.ModContentManager.objectManager.resources.miningDrillResources.Values.ToList());
 
-            this.addItem(Machines.MiningDrillV1, miningDrillMachine_0_0);
+            this.addItem(MachineIds.MiningDrillV1, miningDrillMachine_0_0);
+            */
 
-
-            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("Windmill", Machines.WindmillV1, "Generates power from the wind.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
+            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("Windmill", MachineIds.WindmillV1, "Generates power from the wind.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
 
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                 {"Working",new Animation(new List<AnimationFrame>(){
@@ -182,9 +213,9 @@ namespace Omegasis.Revitalize.Framework.Objects
                 }
             }, "Default", "Working"), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null, false, null), Vector2.Zero);
 
-            this.addItem(Machines.WindmillV1, windMillV1_0_0);
+            this.addItem(MachineIds.WindmillV1, windMillV1_0_0);
 
-            this.addItem(Machines.HayMaker, new HayMaker(new BasicItemInformation("Hay Maker", Machines.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
+            this.addItem(MachineIds.HayMaker, new HayMaker(new BasicItemInformation("Hay Maker", MachineIds.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
@@ -240,21 +271,21 @@ namespace Omegasis.Revitalize.Framework.Objects
             }, IrrigatedGardenPot.DEFAULT_ANIMATION_KEY, IrrigatedGardenPot.DRIPPING_ANIMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
 
 
-            this.addItem(FarmingObjects.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("Advanced Farming System", FarmingObjects.AdvancedFarmingSystem, "An advanced farming system that interfaces irrigated gardening pots and does various tasks depending if there are enrichers, auto harvesters, or auto planter attachments on them!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)),Color.White,false,new Vector2(1,1),new Vector2(0,-1),null,null)));
+            this.addItem(FarmingObjects.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("Advanced Farming System", FarmingObjects.AdvancedFarmingSystem, "An advanced farming system that interfaces irrigated gardening pots and does various tasks depending if there are enrichers, auto harvesters, or auto planter attachments on them!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
 
 
-            this.addItem(Machines.ElectricFurnace, new ElectricFurnace(new BasicItemInformation("Electric Furnace", Machines.ElectricFurnace, "An advanced furnace that smelts objects 25 percent faster and uses battery packs instead of coal.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2500, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+            this.addItem(MachineIds.ElectricFurnace, new ElectricFurnace(new BasicItemInformation("Electric Furnace", MachineIds.ElectricFurnace, "An advanced furnace that smelts objects 25 percent faster and uses battery packs instead of coal.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2500, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
                 new Dictionary<string, Animation>()
                 {
                     {ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {ElectricFurnace.ELECTRIC_WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
 
-                },ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY
+                }, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY
 
                 ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Electric));
 
 
-            this.addItem(Machines.NuclearFurnace, new ElectricFurnace(new BasicItemInformation("Nuclear Furnace", Machines.ElectricFurnace, "An advanced furnace that smelts objects twice as fast as a normal furnace and uses nuclear fuel.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+            this.addItem(MachineIds.NuclearFurnace, new ElectricFurnace(new BasicItemInformation("Nuclear Furnace", MachineIds.ElectricFurnace, "An advanced furnace that smelts objects twice as fast as a normal furnace and uses nuclear fuel.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
                 new Dictionary<string, Animation>()
                 {
                     {ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,32,16,32)) },
@@ -265,7 +296,7 @@ namespace Omegasis.Revitalize.Framework.Objects
                 ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Nuclear));
 
 
-            this.addItem(Machines.MagicalFurnace, new ElectricFurnace(new BasicItemInformation("Magical Furnace", Machines.ElectricFurnace, "An advanced furnace that smelts objects 75 percent faster than a normal furnace, and thanks to magical reactor technology, requires no fuel to operate.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 50000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+            this.addItem(MachineIds.MagicalFurnace, new ElectricFurnace(new BasicItemInformation("Magical Furnace", MachineIds.ElectricFurnace, "An advanced furnace that smelts objects 75 percent faster than a normal furnace, and thanks to magical reactor technology, requires no fuel to operate.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 50000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
                 new Dictionary<string, Animation>()
                 {
                     {ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,64,16,32)) },
@@ -286,9 +317,7 @@ namespace Omegasis.Revitalize.Framework.Objects
             if (dictionary.Count == 0) return null;
             List<CustomObject> objs = new List<CustomObject>();
             foreach (KeyValuePair<string, CustomObject> pair in dictionary)
-            {
                 objs.Add(pair.Value);
-            }
             int rand = Game1.random.Next(0, objs.Count);
             return objs[rand].getOne();
         }
@@ -300,14 +329,10 @@ namespace Omegasis.Revitalize.Framework.Objects
         /// <param name="I"></param>
         public void addItem(string key, Item I)
         {
-            if (this.ItemsByName.ContainsKey(key))
-            {
+            if (this.itemsById.ContainsKey(key))
                 throw new Exception("Item with the same key has already been added into the mod!");
-            }
             else
-            {
-                this.ItemsByName.Add(key, I);
-            }
+                this.itemsById.Add(key, I);
         }
 
         /// <summary>
@@ -324,32 +349,28 @@ namespace Omegasis.Revitalize.Framework.Objects
         public virtual T GetItem<T>(string Key, int Stack = 1) where T : Item
         {
 
-            if (this.ItemsByName.ContainsKey(Key))
+            if (this.itemsById.ContainsKey(Key))
             {
-                Item I = this.ItemsByName[Key].getOne();
+                Item I = this.itemsById[Key].getOne();
                 I.Stack = Stack;
                 return (T)I;
             }
             else
-            {
                 return null;
-            }
 
         }
 
         public virtual T getObject<T>(string Key, int Stack = 1) where T : StardewValley.Object
         {
 
-            if (this.ItemsByName.ContainsKey(Key))
+            if (this.itemsById.ContainsKey(Key))
             {
-                Item I = this.ItemsByName[Key].getOne();
+                Item I = this.itemsById[Key].getOne();
                 I.Stack = Stack;
                 return (T)I;
             }
             else
-            {
                 return null;
-            }
 
         }
 
@@ -382,7 +403,7 @@ namespace Omegasis.Revitalize.Framework.Objects
         /// <returns></returns>
         public virtual Item getItem(Enums.SDVBigCraftable sdvBigCraftableId, int Stack = 1)
         {
-            StardewValley.Object obj= new StardewValley.Object(Vector2.Zero,(int)sdvBigCraftableId);
+            StardewValley.Object obj = new StardewValley.Object(Vector2.Zero, (int)sdvBigCraftableId);
             obj.Stack = Stack;
             return obj;
         }

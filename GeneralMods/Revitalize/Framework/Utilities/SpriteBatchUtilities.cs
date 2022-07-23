@@ -40,7 +40,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
                 (itemToDraw as StardewValley.Object).draw(spriteBatch, (int)obj.TileLocation.X * Game1.tileSize, (int)obj.TileLocation.Y * Game1.tileSize, Math.Max(0f, (obj.TileLocation.Y + 1 + addedDepth) * Game1.tileSize / 10000f) + .0001f, alpha);
                 return;
             }
-            if (RevitalizeModCore.Serializer.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
+            if (TypeUtilities.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
                 (itemToDraw as CustomObject).draw(spriteBatch, (int)obj.TileLocation.X, (int)obj.TileLocation.Y);
         }
 
@@ -59,7 +59,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
                 (itemToDraw as StardewValley.Object).draw(spriteBatch, (int)(TileLocation.X * Game1.tileSize), (int)(TileLocation.Y * Game1.tileSize), Math.Max(0f, (TileLocation.Y + 1 + addedDepth) * Game1.tileSize / 10000f) + .0001f, alpha);
                 return;
             }
-            if (RevitalizeModCore.Serializer.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
+            if (TypeUtilities.IsSameOrSubclass(typeof(CustomObject), itemToDraw.GetType()))
                 (itemToDraw as CustomObject).draw(spriteBatch, (int)TileLocation.X, (int)TileLocation.Y,alpha);
         }
 

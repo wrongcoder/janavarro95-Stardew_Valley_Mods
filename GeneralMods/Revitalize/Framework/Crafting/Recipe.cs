@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Omegasis.Revitalize.Framework.Crafting.JsonContent;
 using Omegasis.Revitalize.Framework.Utilities;
 using StardewValley;
 
@@ -74,6 +75,60 @@ namespace Omegasis.Revitalize.Framework.Crafting
             this.outputDescription = OutputDescription;
             this.statCost = StatCost;
             this.timeToCraft = TimeToCraft;
+        }
+
+        public Recipe(JsonCraftingRecipe jsonRecipe)
+        {
+            List<CraftingRecipeComponent> newInputs = new List<CraftingRecipeComponent>();
+
+            if (jsonRecipe.inputs.Count == 0)
+            {
+                throw new InvalidJsonCraftingRecipeException("An error has occured for json crafting recipe {0} as it has no input items.");
+            }
+
+            if (jsonRecipe.outputs.Count == 0)
+            {
+                throw new InvalidJsonCraftingRecipeException("An error has occured for json crafting recipe {0} as it has no output items.");
+            }
+
+            foreach (JsonCraftingComponent jcc in jsonRecipe.inputs)
+            {
+
+                try
+                {
+                    jcc.validate();
+                }
+                catch (InvalidJsonCraftingComponentException err)
+                {
+                    throw new InvalidJsonCraftingRecipeException(string.Format("An error has occured for json crafting recipe {0} when trying to validate one of it's input json crafting recipe components: {1}", jsonRecipe.craftingRecipeId, err.Message));
+                }
+
+                newInputs.Add(jcc.createCraftingRecipeComponent());
+            }
+
+            List<CraftingRecipeComponent> newOutputs = new List<CraftingRecipeComponent>();
+            foreach (JsonCraftingComponent jcc in jsonRecipe.outputs)
+            {
+                try
+                {
+                    jcc.validate();
+                }
+                catch (InvalidJsonCraftingComponentException err)
+                {
+                    throw new InvalidJsonCraftingRecipeException(string.Format("An error has occured for json crafting recipe {0} when trying to validate one of it's output json crafting recipe components: {1}", jsonRecipe.craftingRecipeId, err.Message));
+                }
+
+                newOutputs.Add(jcc.createCraftingRecipeComponent());
+            }
+
+            this.ingredients = newInputs;
+            this.outputs = newOutputs;
+            this.outputName = !string.IsNullOrEmpty(jsonRecipe.outputName) ? jsonRecipe.outputName : this.outputs[0].item.DisplayName;
+            this.outputDescription = !string.IsNullOrEmpty(jsonRecipe.outputDescription) ? jsonRecipe.outputDescription : this.outputs[0].item.getDescription();
+
+            this.statCost = jsonRecipe.statCost;
+            this.timeToCraft = jsonRecipe.MinutesToCraft;
+
         }
 
         /// <summary>Checks if a player contains all recipe ingredients.</summary>

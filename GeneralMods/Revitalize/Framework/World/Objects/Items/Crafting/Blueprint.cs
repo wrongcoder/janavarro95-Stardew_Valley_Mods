@@ -10,6 +10,7 @@ using Netcode;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.StardustCore.Animations;
 using StardewValley;
@@ -53,6 +54,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
             this.itemToDraw.Value = itemToDraw;
         }
 
+        public Blueprint(JsonCraftingBlueprint jsonBlueprint) : this(jsonBlueprint.toBasicItemInformation(),jsonBlueprint.recipesToUnlock,new Drawable(jsonBlueprint.itemToDraw.getItem()))
+        {
+
+        }
+
         protected virtual void addCraftingRecipe(Dictionary<string,string> CraftingRecipes)
         {
             foreach (KeyValuePair<string, string> craftingBookNameToCraftingRecipeName in CraftingRecipes)
@@ -86,17 +92,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
         protected virtual bool learnRecipes()
         {
             bool anyUnlocked = false;
-            Dictionary<KeyValuePair<string, string>, bool> recipiesLearned = RevitalizeModCore.ModContentManager.craftingManager.learnCraftingRecipes(this.craftingRecipesToUnlock);
+            Dictionary<KeyValuePair<string, string>, bool> recipesLearned = RevitalizeModCore.ModContentManager.craftingManager.learnCraftingRecipes(this.craftingRecipesToUnlock);
 
-            foreach(var bookRecipePairToLearnedValues in recipiesLearned) {
+            foreach(var bookRecipePairToLearnedValues in recipesLearned) {
+
+                string itemToCraftOutputName = RevitalizeModCore.ModContentManager.craftingManager.getCraftingRecipeBook(bookRecipePairToLearnedValues.Key.Key).getCraftingRecipe(bookRecipePairToLearnedValues.Key.Value).recipe.outputName;
+                string craftingStationName = Constants.ItemIds.Objects.CraftingStations.GetCraftingStationNameFromRecipeBookId(bookRecipePairToLearnedValues.Key.Key);
+
+                bool isPlural = itemToCraftOutputName.ToLowerInvariant().StartsWith("a") || itemToCraftOutputName.ToLowerInvariant().StartsWith("e") || itemToCraftOutputName.ToLowerInvariant().StartsWith("i") || itemToCraftOutputName.ToLowerInvariant().StartsWith("o") || itemToCraftOutputName.ToLowerInvariant().StartsWith("u");
+
                 if (bookRecipePairToLearnedValues.Value == true)
                 {
                     anyUnlocked = true;
 
-                    Game1.drawObjectDialogue(string.Format("You learned how to make {0}! You can make it on a {1}. ", bookRecipePairToLearnedValues.Key.Value, Constants.ItemIds.Objects.CraftingStations.GetCraftingStationNameFromRecipeBookId(bookRecipePairToLearnedValues.Key.Key)));
+                    Game1.drawObjectDialogue(string.Format("You learned how to make {2} {0}! You can make it on {2} {1}. ",itemToCraftOutputName, craftingStationName, isPlural? "an":"a"));
 
                 }
+                else
+                {
+                    Game1.drawObjectDialogue(string.Format("You already know how to make {2} {0} on {2} {1}. ", itemToCraftOutputName, craftingStationName, isPlural ? "an" : "a"));
+                }
             }
+
             return anyUnlocked;
         }
 
@@ -132,6 +149,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
                 return true;
             }
             return false;
+        }
+
+        public override string getDescription()
+        {
+            if (RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipes(this.craftingRecipesToUnlock))
+            {
+                return "(Learned) \n" + this.basicItemInformation.description.Value;
+            }
+            return base.getDescription();
         }
     }
 }

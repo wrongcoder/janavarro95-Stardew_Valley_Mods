@@ -462,12 +462,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         {
             if (this.furnaceType.Value == FurnaceType.Electric)
             {
-                Game1.showRedMessage("Need a battery pack to operate!");
+                Game1.showRedMessage("Needs a battery pack to operate!");
                 return;
             }
             if (this.furnaceType.Value == FurnaceType.Nuclear)
             {
-                Game1.showRedMessage("Need nuclear fuel to operate!");
+                Game1.showRedMessage("Needs nuclear fuel to operate!");
                 return;
             }
             Game1.showRedMessage("Magical furnace failure! Please contact Omegasis to address this issue!");

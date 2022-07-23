@@ -174,7 +174,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             return this.boundingBox.Contains(new Point(x, y));
         }
 
-        public bool Contains(int x, int y)
+        public bool ContainsPoint(int x, int y)
         {
             return this.boundingBox.Contains(new Point(x, y));
         }

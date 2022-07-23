@@ -15,6 +15,8 @@ using Omegasis.StardustCore.UIUtilities;
 using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using ObjectUtilities = Omegasis.Revitalize.Framework.Utilities.ObjectUtilities;
+using Omegasis.Revitalize.Framework.Managers;
+using StardewValley.Menus;
 
 namespace Omegasis.Revitalize.Framework.Menus
 {
@@ -43,6 +45,8 @@ namespace Omegasis.Revitalize.Framework.Menus
 
         string hoverText;
 
+        public ItemDisplayButton currentHoverOverItemComponent;
+
         public Item actualItem
         {
             get
@@ -58,27 +62,28 @@ namespace Omegasis.Revitalize.Framework.Menus
 
         public CraftingInformationPage(int x, int y, int width, int height, Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory, bool IsPlayerInventory) : base(x, y, width, height, false)
         {
-            this.backgroundColor = BackgroundColor;
-            this.infoButton = ItemToDisplay;
-            this.itemDisplayLocation = new Vector2(this.xPositionOnScreen + this.width / 2 - 32, this.yPositionOnScreen + 128);
-            this.inventory = Inventory;
-            this.isPlayerInventory = IsPlayerInventory;
+            this.initializeMenu(BackgroundColor,ItemToDisplay,ref Inventory,IsPlayerInventory);
 
-            this.requiredItems = new Dictionary<ItemDisplayButton, int>();
-            for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
-            {
-                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64 + this.width, this.yPositionOnScreen + i * 64 + 128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
-                this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
-            }
-            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
             this.outputInventory = this.inventory;
 
             if (this.infoButton.recipe.statCost != null)
                 if (this.infoButton.recipe.statCost.gold > 0)
-                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), TextureManagers.Menus_CraftingMenu.createAnimationManager("GoldButton", new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
         }
 
         public CraftingInformationPage(int x, int y, int width, int height, Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory, ref IList<Item> OutputInventory, bool IsPlayerInventory, Machine Machine) : base(x, y, width, height, false)
+        {
+            this.initializeMenu(BackgroundColor, ItemToDisplay, ref Inventory, IsPlayerInventory);
+            if (OutputInventory == null)
+                this.outputInventory = this.inventory;
+            if (this.infoButton.recipe.statCost != null)
+                if (this.infoButton.recipe.statCost.gold > 0)
+                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), TextureManagers.Menus_CraftingMenu.createAnimationManager("GoldButton", new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
+            this.outputInventory = OutputInventory;
+            this.machine = Machine;
+        }
+
+        protected virtual void initializeMenu(Color BackgroundColor, CraftingRecipeButton ItemToDisplay, ref IList<Item> Inventory, bool IsPlayerInventory)
         {
             this.backgroundColor = BackgroundColor;
             this.infoButton = ItemToDisplay;
@@ -89,18 +94,11 @@ namespace Omegasis.Revitalize.Framework.Menus
             this.requiredItems = new Dictionary<ItemDisplayButton, int>();
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
             {
-                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64 + this.width, this.yPositionOnScreen + i * 64 + 128), new Rectangle(0, 0, 64, 64), 2f, true, Color.White);
+                ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64 + this.width, this.yPositionOnScreen + i * 64 + 128), new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
                 this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
             }
-            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "CraftButton"), new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
+            this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), TextureManagers.Menus_CraftingMenu.createAnimationManager("CraftButton", new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
 
-            if (OutputInventory == null)
-                this.outputInventory = this.inventory;
-            if (this.infoButton.recipe.statCost != null)
-                if (this.infoButton.recipe.statCost.gold > 0)
-                    this.goldButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("GoldButton", this.getMoneyRequiredOffset(), new StardustCore.Animations.AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.CraftingMenu", "GoldButton"), new StardustCore.Animations.Animation(0, 0, 16, 16)), Color.White), new Rectangle(0, 0, 16, 16), 2f);
-            this.outputInventory = OutputInventory;
-            this.machine = Machine;
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
@@ -154,8 +152,22 @@ namespace Omegasis.Revitalize.Framework.Menus
                     }
                 }
             }
+
+            foreach(ItemDisplayButton itemDisplayButton in this.requiredItems.Keys)
+            {
+                if (itemDisplayButton.ContainsPoint(x, y))
+                {
+                    this.currentHoverOverItemComponent = itemDisplayButton;
+                    hovered = true;
+                }
+            }
+
             if (hovered == false)
+            {
+                this.currentHoverOverItemComponent = null;
                 this.hoverText = "";
+                
+            }
         }
 
         public override void draw(SpriteBatch b)
@@ -180,6 +192,15 @@ namespace Omegasis.Revitalize.Framework.Menus
             }
 
             this.craftingButton.draw(b, this.getCraftableColor().A);
+
+            if (string.IsNullOrEmpty(this.hoverText) == false)
+                drawHoverText(b, this.hoverText, Game1.dialogueFont);
+
+            if (this.currentHoverOverItemComponent != null)
+            {
+                IClickableMenu.drawToolTip(b, this.currentHoverOverItemComponent.item.getDescription(), this.currentHoverOverItemComponent.item.DisplayName, this.currentHoverOverItemComponent.item, false);
+            }
+
             this.drawMouse(b);
         }
 
@@ -232,7 +253,7 @@ namespace Omegasis.Revitalize.Framework.Menus
 
         private Vector2 getHeightOffsetFromItem()
         {
-            if (ObjectUtilities.IsSameType(typeof(StardewValley.Object), this.actualItem.GetType()))
+            if (TypeUtilities.IsSameType(typeof(StardewValley.Object), this.actualItem.GetType()))
                 return new Vector2(0, 64f);
 
             return new Vector2(0, 64f);

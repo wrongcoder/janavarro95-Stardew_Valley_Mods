@@ -20,14 +20,14 @@ namespace Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData
             this.animalShopSaveData = AnimalShopSaveData.LoadOrCreate();
         }
 
-        public override bool getShouldSaveData()
-        {
-            return this.animalShopSaveData.getShouldSaveData();
-        }
-
         public override void save()
         {
             this.animalShopSaveData.save();
+        }
+
+        public override void load()
+        {
+            this.animalShopSaveData.load();
         }
 
 

@@ -17,19 +17,6 @@ namespace Omegasis.Revitalize.Framework.Utilities
         public static Dictionary<string, List<ResourceInformation>> ResourcesForMachines;
 
 
-        public static List<ResourceInformation> GetResourcesProducedByThisMachine(string ID)
-        {
-
-            if (ResourcesForMachines == null) InitializeResourceList();
-
-            if (ResourcesForMachines.ContainsKey(ID))
-                return ResourcesForMachines[ID];
-            else if (ID.Equals(Machines.MiningDrillV1))
-                return RevitalizeModCore.ModContentManager.objectManager.resources.miningDrillResources.Values.ToList();
-
-            return new List<ResourceInformation>();
-        }
-
         public static void InitializeResourceList()
         {
 

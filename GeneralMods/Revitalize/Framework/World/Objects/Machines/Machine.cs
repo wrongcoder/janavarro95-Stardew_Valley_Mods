@@ -26,21 +26,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public NetBool lerpScaleIncreasing = new NetBool(true);
 
         [XmlIgnore]
-        public List<ResourceInformation> producedResources
-        {
-            get
-            {
-                return MachineUtilities.GetResourcesProducedByThisMachine(this.basicItemInformation.id);
-            }
-            set
-            {
-                if (MachineUtilities.ResourcesForMachines == null) MachineUtilities.InitializeResourceList();
-                if (MachineUtilities.ResourcesForMachines.ContainsKey(this.basicItemInformation.id)) return;
-                MachineUtilities.ResourcesForMachines.Add(this.basicItemInformation.id, value);
-            }
-        }
-
-        [XmlIgnore]
         public NetRef<AnimationManager> machineStatusBubbleBox = new NetRef<AnimationManager>();
 
         public Machine()
@@ -49,15 +34,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         }
 
 
-        public Machine(BasicItemInformation info, List<ResourceInformation> ProducedResources = null) : base(info)
+        public Machine(BasicItemInformation info) : base(info)
         {
-            this.producedResources = ProducedResources ?? new List<ResourceInformation>();
             this.createStatusBubble();
         }
 
-        public Machine(BasicItemInformation info, Vector2 TileLocation, List<ResourceInformation> ProducedResources = null) : base(info, TileLocation)
+        public Machine(BasicItemInformation info, Vector2 TileLocation) : base(info, TileLocation)
         {
-            this.producedResources = ProducedResources ?? new List<ResourceInformation>();
             this.createStatusBubble();
         }
 
@@ -67,10 +50,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.NetFields.AddFields(this.machineStatusBubbleBox, this.lerpScaleIncreasing);
         }
 
-        public virtual bool doesMachineProduceItems()
-        {
-            return this.producedResources.Count > 0;
-        }
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
@@ -140,7 +119,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         public override Item getOne()
         {
-            Machine component = new Machine(this.basicItemInformation.Copy(), this.producedResources);
+            Machine component = new Machine(this.basicItemInformation.Copy());
             return component;
         }
 
@@ -151,23 +130,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.drawStatusBubble(spriteBatch, x, y, alpha);
         }
 
-        public virtual void produceItem()
-        {
-            foreach (ResourceInformation r in this.producedResources)
-                if (r.shouldDropResource())
-                {
-                    Item i = r.getItemDrops();
-                    this.GetInventoryManager().addItem(i);
-                    //ModCore.log("Produced an item!");
-                }
-
-        }
-
         protected virtual void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
             if (this.machineStatusBubbleBox == null || this.machineStatusBubbleBox.Value == null) this.createStatusBubble();
             if (this.GetInventoryManager() == null) return;
-            if (this.GetInventoryManager().isFull() && this.doesMachineProduceItems())
+            if (this.GetInventoryManager().isFull())
             {
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));

@@ -368,11 +368,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         }
 
-        public override bool doesMachineProduceItems()
-        {
-            return true;
-        }
-
 
         public override Item getOne()
         {

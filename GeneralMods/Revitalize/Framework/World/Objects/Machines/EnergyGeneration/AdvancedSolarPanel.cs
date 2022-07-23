@@ -22,7 +22,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 
         public AdvancedSolarPanel() { }
 
-        public AdvancedSolarPanel(BasicItemInformation info) : base(info, null)
+        public AdvancedSolarPanel(BasicItemInformation info) : base(info)
         {
             this.maxDaysToProduceBattery.Value = 6;
             this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery.Value;

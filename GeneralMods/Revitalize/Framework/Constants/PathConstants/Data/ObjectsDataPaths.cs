@@ -14,7 +14,11 @@ namespace Omegasis.Revitalize.Framework.Constants.PathConstants.Data
     {
         public static string ObjectsDataPath = Path.Combine(RelativePaths.Content_Data_Folder, "Objects");
 
-        public static string ObjectsDataTemplatesPath = Path.Combine(ObjectsDataPath, "Templates");
+
+        public static string CraftingBlueprintsPath = Path.Combine(ObjectsDataPath, "CraftingBlueprints");
+
+        public static string ObjectsDataTemplatesPath = Path.Combine(ObjectsDataPath, RelativePaths.TemplatesFoldersName);
+        public static string ObjectsDataDumpPath = Path.Combine(ObjectsDataPath, "DataDump");
 
     }
 }

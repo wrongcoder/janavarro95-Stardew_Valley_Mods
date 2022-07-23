@@ -13,6 +13,7 @@ using Omegasis.StardustCore.Networking;
 using Omegasis.StardustCore.Animations;
 using Omegasis.StardustCore.UIUtilities;
 using Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation;
+using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
 {
@@ -173,18 +174,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             this.initializeNetFields();
         }
 
-        public BasicItemInformation(string PathToBasicItemInformationFile, AnimationManager animationManager, Color drawColor, InventoryManager Inventory = null, LightManager Lights = null, NamedColor DyedColor = null):this(JsonUtilities.LoadContentFile<JsonItemInformation>(PathToBasicItemInformationFile),animationManager,drawColor, Inventory, Lights,DyedColor)
+        public BasicItemInformation(string PathToBasicItemInformationFile, InventoryManager Inventory = null, LightManager Lights = null, NamedColor DyedColor = null):this(JsonUtilities.ReadJsonFile<JsonBasicItemInformation>(PathToBasicItemInformationFile), Inventory, Lights,DyedColor)
         {
 
         }
 
-        public BasicItemInformation(JsonItemInformation jsonItemInformation,AnimationManager animationManager, Color drawColor, InventoryManager Inventory = null, LightManager Lights = null, NamedColor DyedColor = null)
+        public BasicItemInformation(JsonBasicItemInformation jsonItemInformation, InventoryManager Inventory = null, LightManager Lights = null, NamedColor DyedColor = null)
         {
             this.name.Value = jsonItemInformation.name;
             this.id.Value = jsonItemInformation.id;
             this.description.Value = jsonItemInformation.description;
 
-            //TODO: Create a lookup table of categoryId to categoryColor!
             ItemCategory itemCategory = ItemCategories.GetItemCategory(jsonItemInformation.categoryId);
             this.categoryName.Value = itemCategory.name;
             this.categoryColor.Value = itemCategory.color;
@@ -199,10 +199,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             this.fragility.Value = jsonItemInformation.fraglility;
             this.isLamp.Value = false;
 
-            this.animationManager = animationManager;
+            this.animationManager = jsonItemInformation.animationManager.toAnimationManager();
 
             this.drawPosition.Value = Vector2.Zero;
-            this.DrawColor = drawColor;
+            this.DrawColor = jsonItemInformation.drawColor;
             this.drawOffset.Value = jsonItemInformation.drawTileOffset;
 
             this.ignoreBoundingBox.Value = jsonItemInformation.ignoreBoundingBox;
@@ -217,6 +217,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             this.shakeTimer.Value = 0;
 
             this.alwaysDrawAbovePlayer.Value = false;
+
+            if (DyedColor != null)
+                this.dyedColor = DyedColor.getCopy();
+            else
+                this.dyedColor = new NamedColor("", new Color(0, 0, 0, 0), Enums.DyeBlendMode.Blend, 0.5f);
 
             this.initializeNetFields();
         }
@@ -281,7 +286,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(this.name, this.id, this.description, this.categoryName, this.categoryColor, this.staminaRestoredOnEating, this.healthRestoredOnEating, this.fragility, this.isLamp, this.price, this.canBeSetOutdoors, this.canBeSetIndoors, this.animationManager.Copy(), this.DrawColor, this.ignoreBoundingBox, this.boundingBoxTileDimensions, this.drawOffset ,this.inventory.Copy(), this.lightManager.Copy(), this.alwaysDrawAbovePlayer, this.dyedColor.getCopy());
+            return new BasicItemInformation(
+                this.name,
+                this.id,
+                this.description,
+                this.categoryName,
+                this.categoryColor,
+                this.staminaRestoredOnEating,
+                this.healthRestoredOnEating,
+                this.fragility,
+                this.isLamp,
+                this.price,
+                this.canBeSetOutdoors,
+                this.canBeSetIndoors,
+                this.animationManager.Copy(),
+                this.DrawColor,
+                this.ignoreBoundingBox,
+                this.boundingBoxTileDimensions,
+                this.drawOffset ,
+                this.inventory.Copy(),
+                this.lightManager.Copy(),
+                this.alwaysDrawAbovePlayer,
+                this.dyedColor.getCopy());
         }
 
 

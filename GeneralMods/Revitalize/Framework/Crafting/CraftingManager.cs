@@ -14,6 +14,9 @@ using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Omegasis.StardustCore.Animations;
 using Omegasis.StardustCore.UIUtilities;
+using Omegasis.Revitalize.Framework.Managers;
+using Omegasis.Revitalize.Framework.Crafting.JsonContent;
+using System.IO;
 
 namespace Omegasis.Revitalize.Framework.Crafting
 {
@@ -102,8 +105,69 @@ namespace Omegasis.Revitalize.Framework.Crafting
             if (!this.craftingRecipeBookExists(CraftingBookName)) return false;
             CraftingRecipeBook craftingBook = this.getCraftingRecipeBook(CraftingBookName);
             if (!craftingBook.containsCraftingRecipe(CraftingRecipeName)) return false;
+            if (craftingBook.craftingRecipes[CraftingRecipeName].hasUnlocked) return false;
             craftingBook.unlockRecipe(CraftingRecipeName);
+
+            //The player save data will only be null when loading from a .json file when starting up the game.
+            if (RevitalizeModCore.SaveDataManager.playerSaveData != null)
+            {
+                RevitalizeModCore.SaveDataManager.playerSaveData.addUnlockedCraftingRecipe(CraftingBookName, CraftingRecipeName);
+            }
             return true;
+        }
+
+
+        /// <summary>
+        /// Checks to see if a dictionary of crafting recipes have already been learned. Returns false if even a single crafting recipe hasn't been learned.
+        /// </summary>
+        /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
+        /// <returns></returns>
+        public virtual bool knowsCraftingRecipes(NetStringDictionary<string, NetString> CraftingRecipeBooksToRecipeNameMapping)
+        {
+            bool allRecipesLearned = true;
+            foreach (var craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
+            {
+                bool learned = this.knowsCraftingRecipes(craftingBookToRecipes);
+                if (learned == false)
+                {
+                    allRecipesLearned = false;
+                }
+            }
+            return allRecipesLearned;
+        }
+
+
+        /// <summary>
+        /// Checks to see if a dictionary of crafting recipes have already been learned. Returns false if even a single crafting recipe hasn't been learned.
+        /// </summary>
+        /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
+        /// <returns></returns>
+        public virtual bool knowsCraftingRecipes(Dictionary<string, string> CraftingRecipeBooksToRecipeNameMapping)
+        {
+            bool allRecipesLearned = true;
+            foreach (KeyValuePair<string, string> craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
+            {
+                bool learned = this.knowsCraftingRecipe(craftingBookToRecipes.Key, craftingBookToRecipes.Value);
+                if (learned == false)
+                {
+                    allRecipesLearned = false;
+                }
+            }
+            return allRecipesLearned;
+        }
+
+        /// <summary>
+        /// Checks to see if a specific crafting recipe is already learned.
+        /// </summary>
+        /// <param name="CraftingBookName"></param>
+        /// <param name="CraftingRecipeName"></param>
+        /// <returns></returns>
+        public virtual bool knowsCraftingRecipe(string CraftingBookName, string CraftingRecipeName)
+        {
+            if (!this.craftingRecipeBookExists(CraftingBookName)) return false;
+            CraftingRecipeBook craftingBook = this.getCraftingRecipeBook(CraftingBookName);
+            if (!craftingBook.containsCraftingRecipe(CraftingRecipeName)) return false;
+            return craftingBook.craftingRecipes[CraftingRecipeName].hasUnlocked;
         }
 
         /// <summary>
@@ -111,9 +175,12 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// </summary>
         public virtual void initializeRecipeBooks()
         {
-            this.addAlloyFurnaceRecipes();
-            this.addAnvilRecipies();
-            this.addWorkbenchRecipes();
+
+            this.addInCraftingRecipesForCraftingStationsFromJsonFiles();
+
+           // this.addAlloyFurnaceRecipes();
+           // this.addAnvilRecipies();
+           // this.addWorkbenchRecipes();
         }
 
         protected virtual void addAlloyFurnaceRecipes()
@@ -148,162 +215,92 @@ namespace Omegasis.Revitalize.Framework.Crafting
                 new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Coal,5),1)
             }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.ElectrumIngot), 1), null, TimeUtilities.GetMinutesFromTime(0, 4, 0)), true));
 
-            if (this.modCraftingRecipesByGroup.ContainsKey(AlloyFurnaceRecipes.craftingGroup))
+            if (this.modCraftingRecipesByGroup.ContainsKey(AlloyFurnaceRecipes.craftingRecipeBookId))
                 foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AlloyFurnaceRecipes.craftingRecipes)
-                    if (this.modCraftingRecipesByGroup[AlloyFurnaceRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
+                    if (this.modCraftingRecipesByGroup[AlloyFurnaceRecipes.craftingRecipeBookId].craftingRecipes.ContainsKey(recipe.Key))
                     {
 
                     }
                     else
-                        this.modCraftingRecipesByGroup[AlloyFurnaceRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
+                        this.modCraftingRecipesByGroup[AlloyFurnaceRecipes.craftingRecipeBookId].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
             else
                 this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes, AlloyFurnaceRecipes);
         }
 
-        protected virtual void addAnvilRecipies()
-        {
-            //~~~~~~~~~~~~~~~~~~//
-            //   Anvil Recipes  //
-            //~~~~~~~~~~~~~~~~~~//
-
-            CraftingRecipeBook AnvilRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AnvilCraftingRecipes);
-            AnvilRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
-
-            /*
-            AnvilRecipes.addCraftingRecipe("Grinder", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,10),10),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SteelIngot"),30),
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,10), 10),
-                new CraftingRecipeComponent(new StardewValley.Objects.Chest(true),1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Grinder"), 1)), true));
-            */
-
-            AnvilRecipes.addCraftingRecipe("Mining Drill V1", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.SteelIngot,10),10),
-                new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.BrassIngot,10),10),
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1)
-            }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Machines.MiningDrillV1), 1)), true));
-
-            if (this.modCraftingRecipesByGroup.ContainsKey(AnvilRecipes.craftingGroup))
-            {
-                foreach (KeyValuePair<string, AnimatedButton> pair in AnvilRecipes.craftingMenuTabs)
-                    if (this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingMenuTabs.ContainsKey(pair.Key))
-                    {
-
-                    }
-                    else
-                        this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingMenuTabs.Add(pair.Key, pair.Value);
-                foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in AnvilRecipes.craftingRecipes)
-                    if (this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
-                    {
-
-                    }
-                    else
-                        this.modCraftingRecipesByGroup[AnvilRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
-            }
-            else
-                this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.AnvilCraftingRecipes, AnvilRecipes);
-        }
-
-        protected virtual void addWorkbenchRecipes()
+        /// <summary>
+        /// Adds in crafting recipes from json files.
+        /// </summary>
+        protected virtual void addInCraftingRecipesForCraftingStationsFromJsonFiles()
         {
 
-            //~~~~~~~~~~~~~~~~~~~//
-            // Workbench Recipes //
-            //~~~~~~~~~~~~~~~~~~~//
-
-            CraftingRecipeBook WorkbenchRecipes = new CraftingRecipeBook(CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            WorkbenchRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
-            WorkbenchRecipes.addInCraftingTab("Furniture", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Furniture Tab", new Vector2(100 + 48, 100 + 24 * 4 * 2), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), false);
-
-            WorkbenchRecipes.addCraftingRecipe("Anvil", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
+            string craftingDirectoryPath =Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath,Constants.PathConstants.Data.CraftingDataPaths.CraftingStationsPath);
+            string relativeCraftingDirectoryPath = Constants.PathConstants.Data.CraftingDataPaths.CraftingStationsPath;
+            foreach (string craftingStationPath in Directory.GetDirectories(craftingDirectoryPath))
+            {
+                if (Path.GetFileName(craftingStationPath).Equals("_Templates") || Path.GetFileName(craftingStationPath).Equals("Templates"))
                 {
-                    //Inputs here
-                   new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(Ingots.SteelIngot),20)
-                }, new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(CraftingStations.Anvil_Id), 1)), false));
-            WorkbenchRecipes.addCraftingRecipe("Pickaxe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,10),10)
-            }, new CraftingRecipeComponent(new StardewValley.Tools.Pickaxe() { UpgradeLevel = 0 }, 1)), true));
-            WorkbenchRecipes.addCraftingRecipe("Axe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,10),10)
-            }, new CraftingRecipeComponent(new StardewValley.Tools.Axe() { UpgradeLevel = 0 }, 1)), true));
-            WorkbenchRecipes.addCraftingRecipe("Hoe", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,10),10)
-            }, new CraftingRecipeComponent(new StardewValley.Tools.Hoe() { UpgradeLevel = 0 }, 1)), true));
-            WorkbenchRecipes.addCraftingRecipe("Watering Can", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Stone,20),20),
-            }, new CraftingRecipeComponent(new StardewValley.Tools.WateringCan() { UpgradeLevel = 0 }, 1)), true));
+                    //Ignore templates folder.
+                    continue;
+                }
 
-            /*
-            WorkbenchRecipes.addCraftingRecipe("Copper Wire", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,1),1),
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("CopperWire"), 2), null, 0), true));
-            */
-            /*
-            WorkbenchRecipes.addCraftingRecipe("Alloy Furnace", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Clay,20),10),
-                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 10)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("AlloyFurnace"), 1), null, 0), true));
-            WorkbenchRecipes.addCraftingRecipe("Sand Box", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
-                new CraftingRecipeComponent(ModCore.ObjectManager.resources.getResource("Sand"), 25)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("SandBox"), 1), null, 0), true));
-            */
-            /*
-            WorkbenchRecipes.addCraftingRecipe("Battery Bin", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ElectrumIngot"),10)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("BatteryBin"), 1), null, 0), true));
-            WorkbenchRecipes.addCraftingRecipe("Capacitor", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,50),50),
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.CopperBar,10),10)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Capacitor"), 1), null, 0), true));
-            WorkbenchRecipes.addCraftingRecipe("Charging Station", new UnlockableCraftingRecipe("Default", new Recipe(new List<CraftingRecipeComponent>()
-            {
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.Wood,100),100),
-                new CraftingRecipeComponent(new StardewValley.Object((int)Enums.SDVObject.IronBar,10),10),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("CopperWire"), 20),
-                new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Capacitor"), 1)
-            }, new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("ChargingStation"), 1), null, 0), true));
-            */
 
-            //WorkbenchRecipes.addCraftingRecipe("Oak Chair", new UnlockableCraftingRecipe("Furniture", new Recipe(new List<CraftingRecipeComponent>(), new CraftingRecipeComponent(ModCore.ObjectManager.GetItem("Oak Chair"), 1), new StatCost(0, 0, 100, 0), 0), true));
+                string relativeCraftingStationPath = Path.Combine(relativeCraftingDirectoryPath,Path.GetFileName(craftingStationPath));
+                JsonCraftingRecipeBookDefinition recipeBookDefinition = JsonUtilities.ReadJsonFile<JsonCraftingRecipeBookDefinition>(relativeCraftingStationPath, "RecipeBookDefinition.json");
 
-            if (this.modCraftingRecipesByGroup.ContainsKey(WorkbenchRecipes.craftingGroup))
-            {
-                foreach (KeyValuePair<string, AnimatedButton> pair in WorkbenchRecipes.craftingMenuTabs)
-                    if (this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingMenuTabs.ContainsKey(pair.Key))
-                    {
+                string CraftingTabsPath = Path.Combine(craftingStationPath, "CraftingMenuTabs");
+                string relativeCratingTabsPath= Path.Combine(relativeCraftingStationPath, "CraftingMenuTabs");
 
-                    }
-                    else
-                        this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingMenuTabs.Add(pair.Key, pair.Value);
-                foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in WorkbenchRecipes.craftingRecipes)
-                    if (this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingRecipes.ContainsKey(recipe.Key))
-                    {
+                /*
+                List<JsonCraftingMenuTab> craftingMenuTabs = new List<JsonCraftingMenuTab>();
+                foreach (string craftingTabJsonFile in Directory.GetFiles(CraftingTabsPath))
+                {
+                    craftingMenuTabs.Add(JsonUtilities.ReadJsonFile<JsonCraftingMenuTab>(Path.Combine(relativeCratingTabsPath,Path.GetFileName(craftingTabJsonFile))));
+                }
+                */
 
-                    }
-                    else
-                        this.modCraftingRecipesByGroup[WorkbenchRecipes.craftingGroup].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
+                string craftingRecipesPath = Path.Combine(craftingStationPath, "Recipes");
+                string relativeCraftingRecipesPath = Path.Combine(relativeCraftingStationPath, "Recipes");
+
+                if (!Directory.Exists(craftingRecipesPath))
+                {
+                    continue;
+                }
+
+                /*
+                 foreach (string craftingRecipeJsonFile in Directory.GetFiles(craftingRecipesPath))
+                 {
+
+
+                     craftingRecipes.Add(JsonUtilities.ReadJsonFile<UnlockableJsonCraftingRecipe>(Path.Combine(relativeCraftingRecipesPath,Path.GetFileName(craftingRecipeJsonFile))));
+                 }
+                */
+
+
+                RevitalizeModCore.logWarning("Attempting to load recipes from "+ relativeCraftingRecipesPath);
+                CraftingRecipeBook craftingRecipeBook = new CraftingRecipeBook(recipeBookDefinition, JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingMenuTab>(relativeCratingTabsPath), JsonUtilities.LoadJsonFilesFromDirectories<UnlockableJsonCraftingRecipe>(relativeCraftingRecipesPath));
+
+                //Add validation + add in recipies that may or may not be added specifically from json to the already existing data.
+                if (this.modCraftingRecipesByGroup.ContainsKey(recipeBookDefinition.craftingRecipeBookId))
+                {
+                    foreach (KeyValuePair<string, AnimatedButton> pair in craftingRecipeBook.craftingMenuTabs)
+                        if (this.modCraftingRecipesByGroup[craftingRecipeBook.craftingRecipeBookId].craftingMenuTabs.ContainsKey(pair.Key))
+                        {
+
+                        }
+                        else
+                            this.modCraftingRecipesByGroup[craftingRecipeBook.craftingRecipeBookId].craftingMenuTabs.Add(pair.Key, pair.Value);
+                    foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in craftingRecipeBook.craftingRecipes)
+                        if (this.modCraftingRecipesByGroup[craftingRecipeBook.craftingRecipeBookId].craftingRecipes.ContainsKey(recipe.Key))
+                        {
+
+                        }
+                        else
+                            this.modCraftingRecipesByGroup[craftingRecipeBook.craftingRecipeBookId].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
+                }
+                else
+                    this.modCraftingRecipesByGroup.Add(craftingRecipeBook.craftingRecipeBookId, craftingRecipeBook);
+
             }
-            else
-                this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipes);
-
-
 
         }
     }

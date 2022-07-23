@@ -36,7 +36,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation
         {
             if (CategoriesById.ContainsKey(CategoryId))
             {
-
+                return CategoriesById[CategoryId];
             }
             throw new Exception(string.Format("Revitalize category exception! Category with the given id has not been registered! {0}", CategoryId));
         }

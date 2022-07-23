@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.Player;
 using StardewValley;
@@ -31,7 +34,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         {
             RobinsShop_DefaultOnPurchaseMethod = Menu.onPurchase;
             Menu.onPurchase = OnPurchaseFromRobinsShop;
-           ShopUtilities.UpdateShopStockAndPriceInSortedOrder(Menu, new List<ShopInventoryProbe>()
+
+            List<ShopInventoryProbe> shopInventoryProbes = new List<ShopInventoryProbe>()
             {
 
                 new ShopInventoryProbe(
@@ -69,7 +73,26 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                 }
                 )),
 
-            });
+            };
+
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, WorkbenchRecipeIds.ElectricFurnaceRecipeId))
+            {
+                shopInventoryProbes.Add(
+                  new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price, Stock) => itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex == (int)Enums.SDVObject.Stone),
+                    new UpdateShopInventory((ShopInventory, ItemForSale, Price, Stock) =>
+                    {
+                        Item electricFurnaceBlueprint = RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_ElectricFurnaceCraftingRecipeBlueprint);
+                        ShopInventory.addItemForSale(electricFurnaceBlueprint, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.ElectricFurnaceBlueprintPrice, 1);
+                        return ShopInventory;
+                    }
+                ))
+
+
+                    );
+            }
+
+            ShopUtilities.UpdateShopStockAndPriceInSortedOrder(Menu, shopInventoryProbes);
 
 
         }

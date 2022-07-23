@@ -97,6 +97,13 @@ namespace Omegasis.Revitalize.Framework.Menus
         private Machine machine;
 
         bool readyToCloseInternal;
+
+        /// <summary>
+        /// The current crafting recipe that is being hovered over.
+        /// </summary>
+        public CraftingRecipeButton currentHoverRecipe;
+
+
         /// <summary>
         /// The maximum amount of pages to display.
         /// </summary>
@@ -266,7 +273,6 @@ namespace Omegasis.Revitalize.Framework.Menus
             else
             {
                 Vector2 newPos = new Vector2(100 + 48, this.yPositionOnScreen + 24 + 24 * 4 * (count + 1));
-                RevitalizeModCore.log("newPos: " + newPos.ToString());
                 Button.Position = newPos;
                 this.CraftingTabs.Add(name, Button);
                 this.craftingItemsToDisplay.Add(name, new List<CraftingRecipeButton>());
@@ -316,11 +322,23 @@ namespace Omegasis.Revitalize.Framework.Menus
                     if (button.containsPoint(x, y))
                     {
                         this.hoverText = button.recipe.outputName;
+                        this.currentHoverRecipe = button;
                         hovered = true;
+
+
                     }
             }
             if (hovered == false)
+            {
                 this.hoverText = "";
+                this.currentHoverRecipe = null;
+            }
+
+            if (this.craftingInfo != null)
+            {
+                this.craftingInfo.performHoverAction(x, y);
+            }
+
         }
 
         /// <summary>
@@ -444,6 +462,11 @@ namespace Omegasis.Revitalize.Framework.Menus
 
             if (string.IsNullOrEmpty(this.hoverText) == false)
                 drawHoverText(b, this.hoverText, Game1.dialogueFont);
+
+            if (this.currentHoverRecipe != null)
+            {
+                IClickableMenu.drawToolTip(b, this.currentHoverRecipe.displayItem.item.getDescription(), this.hoverText , this.currentHoverRecipe.displayItem.item,false);
+            }
 
             this.drawMouse(b);
         }

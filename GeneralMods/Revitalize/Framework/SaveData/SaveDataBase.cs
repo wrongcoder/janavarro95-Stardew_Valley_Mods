@@ -12,8 +12,6 @@ namespace Omegasis.Revitalize.Framework.SaveData
     public class SaveDataBase
     {
 
-        protected bool shouldSaveData;
-
         public SaveDataBase()
         {
 
@@ -24,17 +22,10 @@ namespace Omegasis.Revitalize.Framework.SaveData
 
         }
 
-        public void cleanUpPostSave()
+        public virtual void load()
         {
-            this.shouldSaveData = false;
+
         }
-
-        public virtual bool getShouldSaveData()
-        {
-            return this.shouldSaveData;
-        }
-
-
 
     }
 }

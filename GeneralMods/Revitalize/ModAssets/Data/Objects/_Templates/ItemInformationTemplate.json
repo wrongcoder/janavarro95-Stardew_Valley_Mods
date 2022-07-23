@@ -1,0 +1,15 @@
+{
+  "id": null,
+  "name": null,
+  "description": null,
+  "categoryId": null,
+  "healthRestoredOnEating": 0,
+  "staminaRestoredOnEating": 0,
+  "fraglility": 0,
+  "sellingPrice": 0,
+  "canBeSetIndoors": false,
+  "canBeSetOutdoors": false,
+  "ignoreBoundingBox": false,
+  "boundingBoxTileDimensions": "0, 0",
+  "drawTileOffset": "0, 0"
+}

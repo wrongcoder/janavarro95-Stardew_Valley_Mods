@@ -31,6 +31,10 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         /// </summary>
         public HayMakerShopConfig hayMakerShopConfig;
 
+
+        /// <summary>
+        /// Config file for things sold in robin's shop.
+        /// </summary>
         public RobinsShopConfig robinsShopConfig;
 
         public ShopsConfigManager()

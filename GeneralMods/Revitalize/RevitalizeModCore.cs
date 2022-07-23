@@ -18,14 +18,13 @@ using Omegasis.Revitalize.Framework.Environment;
 using Omegasis.Revitalize.Framework.Hacks;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.SaveData;
-using Omegasis.Revitalize.Framework.Utilities.Serialization;
-using Omegasis.Revitalize.Framework.Objects;
 using Omegasis.Revitalize.Framework.World;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Graphics;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Content;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds;
 
 namespace Omegasis.Revitalize
 {
@@ -201,8 +200,6 @@ namespace Omegasis.Revitalize
 
         public static PlayerInfo playerInfo;
 
-        public static Serializer Serializer;
-
         public static ConfigManager Configs;
 
         public static SaveDataManager SaveDataManager;
@@ -220,12 +217,6 @@ namespace Omegasis.Revitalize
             Manifest = this.ModManifest;
             ModContentManager = new ModContentManager();
             Configs = new ConfigManager();
-            SaveDataManager = new SaveDataManager();
-
-            Serializer = new Serializer();
-            playerInfo = new PlayerInfo();
-
-
 
             ModContentManager.initializeModContent(this.ModManifest);
 
@@ -254,7 +245,8 @@ namespace Omegasis.Revitalize
             ModHelper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
 
 
-
+            SaveDataManager = new SaveDataManager();
+            playerInfo = new PlayerInfo();
         }
 
         ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~///
@@ -309,10 +301,10 @@ namespace Omegasis.Revitalize
             /*
             //HACKS
             //Game1.player.Money = 100_000;
-            //Game1.player.addItemToInventoryBool(ObjectManager.getItem(CraftingStations.WorkStation_Id));
+
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-              ObjectManager.getItem(Revitalize.Framework.Constants.ItemIds.Items.Blueprints.Workbench_AnvilCraftingRecipeBlueprint),
+
 
                             ObjectManager.getItem(Machines.ElectricFurnace),
                             ObjectManager.getItem(Machines.NuclearFurnace),
@@ -325,7 +317,9 @@ namespace Omegasis.Revitalize
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             }) ;
             */
-
+            Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(CraftingStations.WorkStation_Id));
+            Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));
+            Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(Enums.SDVObject.IronBar, 20));
 
             Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
 
@@ -350,7 +344,10 @@ namespace Omegasis.Revitalize
             DarkerNight.CalculateDarkerNightColor();
         }
 
-
+        public static void logWarning(object message)
+        {
+            ModMonitor.Log(message.ToString(), LogLevel.Warn);
+        }
 
         /// <summary>
         ///Logs information to the console.

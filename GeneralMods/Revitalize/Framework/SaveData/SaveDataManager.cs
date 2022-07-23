@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.SaveData.Player;
 using Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData;
 using StardewValley;
 
@@ -19,6 +20,11 @@ namespace Omegasis.Revitalize.Framework.SaveData
         /// </summary>
         public ShopSaveData shopSaveData;
 
+        /// <summary>
+        /// Save data persistent to the actual player.
+        /// </summary>
+        public PlayerSaveData playerSaveData;
+
         public SaveDataManager()
         {
 
@@ -27,6 +33,7 @@ namespace Omegasis.Revitalize.Framework.SaveData
         public virtual void loadOrCreateSaveData()
         {
             this.shopSaveData = new ShopSaveData();
+            this.playerSaveData = PlayerSaveData.LoadOrCreate();
         }
 
         /// <summary>
@@ -55,8 +62,8 @@ namespace Omegasis.Revitalize.Framework.SaveData
         /// </summary>
         public virtual void save()
         {
-            if (this.shopSaveData.getShouldSaveData())
                 this.shopSaveData.save();
+            this.playerSaveData.save();
 
         }
     }

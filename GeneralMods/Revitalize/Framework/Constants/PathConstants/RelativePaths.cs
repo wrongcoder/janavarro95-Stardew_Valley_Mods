@@ -10,6 +10,7 @@ namespace Omegasis.Revitalize.Framework.Constants.PathConstants
     public static class RelativePaths
     {
         public static string ModAssetsFolder = "ModAssets";
+        public static string TemplatesFoldersName = "_Templates";
 
 
         public static string Graphics_Folder = Path.Combine(RelativePaths.ModAssetsFolder, "Graphics");

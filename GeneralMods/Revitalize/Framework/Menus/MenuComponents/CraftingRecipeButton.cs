@@ -50,7 +50,7 @@ namespace Omegasis.Revitalize.Framework.Menus.MenuComponents
 
         public bool containsPoint(int x, int y)
         {
-            return this.displayItem.Contains(x, y);
+            return this.displayItem.ContainsPoint(x, y);
         }
 
         public void craftItem()

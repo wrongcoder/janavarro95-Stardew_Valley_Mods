@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
@@ -214,6 +216,56 @@ namespace Omegasis.Revitalize.Framework.Player
             }
             return false;
         }
+
+        public static bool InventoryContainsTool<T>(this Farmer Who) where T:StardewValley.Tool
+        {
+            return GetToolsFromInventory<T>(Who).Count > 0;
+        }
+
+        public static List<T> GetToolsFromInventory<T>(this Farmer Who) where T : StardewValley.Tool
+        {
+            List<T> validTools = new List<T>();
+            if (Who != null)
+            {
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null)
+                    {
+                        continue;
+                    }
+                    //Check to see if the items can stack. If they can simply add them together and then continue on.
+                    if ((Who.items[i] is T))
+                    {
+                        validTools.Add((T)Who.items[i]);
+                    }
+                }
+            }
+            return validTools;
+        }
+
+        /// <summary>
+        /// Gets the current level of a tool if it is present, or -1 if the tool is not present.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static int GetToolLevel<T>() where T : StardewValley.Tool
+        {
+            int toolLevel = 0;
+            bool toolIsPresent = false;
+            foreach (T axe in PlayerUtilities.GetToolsFromInventory<T>(Game1.player))
+            {
+                toolLevel = Math.Max(toolLevel, axe.UpgradeLevel);
+                toolIsPresent = true;
+            }
+            if (toolIsPresent == false)
+            {
+                toolLevel = -1;
+            }
+            return toolLevel;
+        }
+
 
 
         public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, string BasicItemInfoId, int MinStackSize)

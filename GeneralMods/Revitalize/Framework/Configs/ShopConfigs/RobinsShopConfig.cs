@@ -22,6 +22,7 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public int ClaySellPrice = 50;
         public int ClaySellPriceYear2AndBeyond = 100;
 
+        public int ElectricFurnaceBlueprintPrice = 5000;
 
         //Currently unused.
         // public int SandSellPrice = 25;
