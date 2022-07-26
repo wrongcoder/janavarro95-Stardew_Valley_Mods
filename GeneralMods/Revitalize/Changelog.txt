@@ -1,3 +1,10 @@
+~~~~~~~~~~~~0.0.1 Revitalize 7-25-2022 xx.xx P.M~~~~~~~~~~~~~~
++Made blueprints for irrigated garden pot, and it's attachments
++made blueprints for automatic farming system
++Added mail for Maru stating when the automatic farming system, and irrigated garden pot become available for sale.
++Added blueprints for automatic farming system and irrigatd garden pot to robin's shop stock.
+
+
 ~~~~~~~~~~~~0.0.1 Revitalize 7-23-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added Electric Furnace blueprints, which can be bought from Robin for 5000g.
 ~Made it so the mod's crafting menu displays descriptions about the items hovered over for better details.

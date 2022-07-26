@@ -25,7 +25,9 @@ namespace Omegasis.Revitalize.Framework.World
 
         public Dictionary<string, string> mailTitles = new Dictionary<string, string>()
         {
-            { MailTitles.HayMakerAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AnimalShopHayMakerCanBePurchased.json")}
+            { MailTitles.HayMakerAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AnimalShopHayMakerCanBePurchased.json")},
+            { MailTitles.AutomaticFarmingSystemAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AutomaticFarmingSystemCanBePurchased.json")},
+
         };
 
         public MailManager()
@@ -37,6 +39,11 @@ namespace Omegasis.Revitalize.Framework.World
             if(Game1.player.mailReceived.Contains(MailTitles.HayMakerAvailableForPurchase)==false && (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop()==true  || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() == true))
             {
                 Game1.mailbox.Add(MailTitles.HayMakerAvailableForPurchase);
+            }
+
+            if(Game1.player.mailReceived.Contains(MailTitles.AutomaticFarmingSystemAvailableForPurchase)==false && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            {
+                Game1.mailbox.Add(MailTitles.AutomaticFarmingSystemAvailableForPurchase);
             }
         }
 
@@ -50,8 +57,8 @@ namespace Omegasis.Revitalize.Framework.World
             if (asset.NameWithoutLocale.IsEquivalentTo("Data/mail"))
             {
                 IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
-                string mailContents = this.getMailContentsFromTitle(MailTitles.HayMakerAvailableForPurchase);
-                data[MailTitles.HayMakerAvailableForPurchase] = mailContents;
+                data[MailTitles.HayMakerAvailableForPurchase] = this.getMailContentsFromTitle(MailTitles.HayMakerAvailableForPurchase);
+                data[MailTitles.AutomaticFarmingSystemAvailableForPurchase] = this.getMailContentsFromTitle(MailTitles.AutomaticFarmingSystemAvailableForPurchase);
             }
         }
 
@@ -81,7 +88,7 @@ namespace Omegasis.Revitalize.Framework.World
         /// <returns></returns>
         public virtual string getMailContentsFromTitle(string mailTitle)
         {
-            return JsonUtilities.LoadStringDictionaryFile(this.getMailPathFromTitle(MailTitles.HayMakerAvailableForPurchase)).Values.First();
+            return JsonUtilities.LoadStringDictionaryFile(this.getMailPathFromTitle(mailTitle)).Values.First();
         }
 
         /// <summary>
@@ -112,10 +119,6 @@ namespace Omegasis.Revitalize.Framework.World
                         if (this.mailTitles.ContainsKey(letterViewerMenu.mailTitle))
                         {
                             letterViewerMenu.mailMessage = this.parseMailMessage(this.getMailContentsFromTitle(letterViewerMenu.mailTitle)).Split("\n").ToList();
-                            foreach(string s in letterViewerMenu.mailMessage)
-                            {
-                                RevitalizeModCore.log(s);
-                            }
                         }
                     }
                 }

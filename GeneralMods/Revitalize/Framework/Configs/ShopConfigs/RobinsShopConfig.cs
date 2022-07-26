@@ -24,6 +24,11 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 
         public int ElectricFurnaceBlueprintPrice = 5000;
 
+        public int IrrigatedWateringPotBlueprintPrice = 25000;
+        public int AutoPlanterIrrigatedWateringPotAttachmentBlueprintPrice = 10000;
+        public int AutoHarvesterIrrigatedGardenPotAttachmentBlueprintPrice = 10000;
+        public int AutomaticFarmingSystemBlueprintPrice = 50000;
+
         //Currently unused.
         // public int SandSellPrice = 25;
 

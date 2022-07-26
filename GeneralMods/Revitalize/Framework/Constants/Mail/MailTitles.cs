@@ -10,5 +10,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Mail
     {
         public const string HayMakerAvailableForPurchase = "Revitalize_AnimalShop_HayMakerCanBePurchased";
 
+        public const string AutomaticFarmingSystemAvailableForPurchase = "Revitalize.CarpentersShop.AutomaticFarmingSystemAndIrrigatedGardenPotCanBePurchased";
+
     }
 }

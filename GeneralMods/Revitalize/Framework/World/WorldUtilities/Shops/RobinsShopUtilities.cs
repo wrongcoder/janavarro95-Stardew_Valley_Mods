@@ -75,7 +75,9 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
             };
 
-            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, WorkbenchRecipeIds.ElectricFurnaceRecipeId))
+            //Add in blueprits below.
+
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricFurnaceRecipeId))
             {
                 shopInventoryProbes.Add(
                   new ShopInventoryProbe(
@@ -86,14 +88,67 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                         ShopInventory.addItemForSale(electricFurnaceBlueprint, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.ElectricFurnaceBlueprintPrice, 1);
                         return ShopInventory;
                     }
-                ))
+                )));
+            }
 
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.IrrigatedWateringPotRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            {
+                shopInventoryProbes.Add(
+                  new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price, Stock) => itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex == (int)Enums.SDVObject.Stone),
+                    new UpdateShopInventory((ShopInventory, ItemForSale, Price, Stock) =>
+                    {
+                        Item irrigatedWateringPotBlueprints = RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_IrrigatedGardenPotCraftingRecipeBlueprint);
+                        ShopInventory.addItemForSale(irrigatedWateringPotBlueprints, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.IrrigatedWateringPotBlueprintPrice, 1);
+                        return ShopInventory;
+                    }
+                )));
+            }
 
-                    );
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoPlanterIrrigatedWateringPotAttachmentRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            {
+                shopInventoryProbes.Add(
+                  new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price, Stock) => itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex == (int)Enums.SDVObject.Stone),
+                    new UpdateShopInventory((ShopInventory, ItemForSale, Price, Stock) =>
+                    {
+                        Item autoPlanterBlueprints = RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AutoPlanterGardenPotCraftingRecipeBlueprint);
+                        ShopInventory.addItemForSale(autoPlanterBlueprints, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.AutoPlanterIrrigatedWateringPotAttachmentBlueprintPrice, 1);
+                        return ShopInventory;
+                    }
+                )));
+            }
+
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoHarvesterIrrigatedWateringPotAttachmentRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            {
+
+                shopInventoryProbes.Add(
+                  new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price, Stock) => itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex == (int)Enums.SDVObject.Stone),
+                    new UpdateShopInventory((ShopInventory, ItemForSale, Price, Stock) =>
+                    {
+                        Item autoHarvesterBlueprints = RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AutoHarvesterGardenPotAttachmentCraftingRecipeBlueprint);
+                        ShopInventory.addItemForSale(autoHarvesterBlueprints, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.AutoHarvesterIrrigatedGardenPotAttachmentBlueprintPrice, 1);
+                        return ShopInventory;
+                    }
+                )));
+            }
+
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomatedFarmingSystemRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            {
+                shopInventoryProbes.Add(
+                  new ShopInventoryProbe(
+                    new ItemFoundInShopInventory((itemForSale, Price, Stock) => itemForSale.GetType().Equals(typeof(StardewValley.Object)) && (itemForSale as StardewValley.Object).parentSheetIndex == (int)Enums.SDVObject.Stone),
+                    new UpdateShopInventory((ShopInventory, ItemForSale, Price, Stock) =>
+                    {
+                        Item automaticFarmingSystemBlueprints = RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AutomaticFarmingSystemCraftingRecipeBlueprint);
+                        ShopInventory.addItemForSale(automaticFarmingSystemBlueprints, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.AutomaticFarmingSystemBlueprintPrice, 1);
+                        return ShopInventory;
+                    }
+                )));
             }
 
             ShopUtilities.UpdateShopStockAndPriceInSortedOrder(Menu, shopInventoryProbes);
-
 
         }
 
