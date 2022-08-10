@@ -82,61 +82,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
             if (location.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
             {
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Abigail);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Emily);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Haley);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Leah);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Penny);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Maru);
-
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Alex);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Harvey);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Elliott);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Sebastian);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Sam);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Shane);
-
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Abigail);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Emily);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Haley);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Leah);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Penny);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Maru);
-
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Alex);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Harvey);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Elliott);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Sebastian);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Sam);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Shane);
-
-
-
-
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AbigailBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_EmilyBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_EmilyBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HaleyBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HaleyBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_LeahBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_LeahBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_MaruBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_MaruBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_PennyBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_PennyBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AlexBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_AlexBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HarveyBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_HarveyBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ElliottBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ElliottBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ShaneBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_ShaneBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SamBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SamBirthdayParty_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SebastianBirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_SebastianBirthdayParty_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_BirthdayParty_Farmhouse_1);
+                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_BirthdayParty_Farmhouse_2);
             }
         }
 
@@ -222,60 +171,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEvents.SaloonBirthday_Year2(),
 
                 //Married birthday events.
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Abigail(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Leah(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Penny(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Haley(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Emily(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Maru(),
-
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Alex(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Shane(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Sam(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Sebastian(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Elliott(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Harvey(),
-
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Abigail(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Leah(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Penny(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Haley(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Emily(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Maru(),
-
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Alex(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Shane(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Sam(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Sebastian(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Elliott(),
-                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Harvey(),
-
-
-                BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_1(),
-                BirthdayEvents.MarriedBirthday_Abigail_farmHouseLevel_2(),
-                BirthdayEvents.MarriedBirthday_Penny_farmhouseLevel_1(),
-                BirthdayEvents.MarriedBirthday_Penny_farmhouseLevel_2(),
-                BirthdayEvents.MarriedBirthday_Haley_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Haley_farmhouseLevel2(),
-                BirthdayEvents.MarriedBirthday_Emily_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Emily_farmhouseLevel2(),
-                BirthdayEvents.MarriedBirthday_Maru_farmhouseLevel_1(),
-                BirthdayEvents.MarriedBirthday_Maru_farmhouseLevel_2(),
-                BirthdayEvents.MarriedBirthday_Leah_farmhouseLevel_1(),
-                BirthdayEvents.MarriedBirthday_Leah_farmhouseLevel_2(),
-
-                BirthdayEvents.MarriedBirthday_Alex_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Alex_farmhouseLevel2(),
-                BirthdayEvents.MarriedBirthday_Harvey_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Harvey_farmhouseLevel2(),
-                BirthdayEvents.MarriedBirthday_Shane_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Shane_farmhouseLevel2(),
-                BirthdayEvents.MarriedBirthday_Sam_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Sam_farmhouseLevel2(),
-                BirthdayEvents.MarriedBirthday_Sebastian_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Sebastian_farmhouseLevel2(),
-                BirthdayEvents.MarriedBirthday_Elliott_farmhouseLevel1(),
-                BirthdayEvents.MarriedBirthday_Elliott_farmhouseLevel2(),
+                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel1(),
+                BirthdayEvents.SpouseAsksPlayerForFavoriteGift_farmhouseLevel2(),
+                BirthdayEvents.MarriedBirthday_farmhouseLevel1(),
+                BirthdayEvents.MarriedBirthday_farmhouseLevel2(),
 
         };
 

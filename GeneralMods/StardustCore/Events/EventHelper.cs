@@ -1278,6 +1278,11 @@ namespace Omegasis.StardustCore.Events
             this.actorFaceDirection(NPC.Name, Dir);
         }
 
+        public virtual void npcFaceDirection(string NPC, FacingDirection Dir)
+        {
+            this.actorFaceDirection(NPC, Dir);
+        }
+
         public virtual void actorFaceDirection(string Actor, FacingDirection Dir)
         {
             StringBuilder b = new StringBuilder();

@@ -17,6 +17,7 @@ using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
 using StardewModdingAPI;
 
 namespace Omegasis.Revitalize.Framework.Content
@@ -29,6 +30,9 @@ namespace Omegasis.Revitalize.Framework.Content
         /// </summary>
         public ObjectManager objectManager;
         public MailManager mailManager;
+
+
+        public BuildingAssetLoader buildingAssetLoader;
 
         public ModContentManager()
         {
@@ -52,6 +56,9 @@ namespace Omegasis.Revitalize.Framework.Content
             this.mailManager = new MailManager();
 
             this.craftingManager = new CraftingManager();
+
+            this.buildingAssetLoader = new BuildingAssetLoader();
+            this.buildingAssetLoader.registerEvents();
 
         }
 

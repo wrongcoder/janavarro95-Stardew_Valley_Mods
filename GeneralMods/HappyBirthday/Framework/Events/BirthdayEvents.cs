@@ -799,207 +799,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return e;
         }
 
-        public static EventHelper MarriedBirthday(string EventId, int EventIntId, int FarmHouseLevel, string SpouseName)
-        {
-            NPC spouse = Game1.getCharacterFromName(SpouseName);
-
-            List<EventPrecondition> conditions = new List<EventPrecondition>();
-            conditions.Add(new FarmerBirthdayPrecondition());
-            conditions.Add(new TimeOfDayPrecondition(600, 2600));
-            conditions.Add(new GameLocationIsHomePrecondition());
-
-            conditions.Add(new FarmHouseLevelPrecondition(FarmHouseLevel));
-            conditions.Add(new IsMarriedToPrecondition(SpouseName));
-
-
-            Vector2 spouseStartTile;
-            Vector2 playerStartTile;
-            if (FarmHouseLevel == 2)
-            {
-                spouseStartTile = new Vector2(7, 14);
-                playerStartTile = new Vector2(10, 14);
-            }
-            else
-            {
-                //Level 1
-                spouseStartTile = new Vector2(6, 5);
-                playerStartTile = new Vector2(9, 5);
-            }
-
-            EventHelper e = new EventHelper(EventId, EventIntId, 2, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
-                new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
-            }));
-            e.playerFaceDirection(EventHelper.FacingDirection.Left);
-
-
-            if (FarmHouseLevel == 2)
-            {
-                e.makeAllObjectsTemporarilyInvisible(new List<Vector2>()
-                {
-                    new Vector2(7,14),
-                    new Vector2(8,14),
-                    new Vector2(9,14),
-                    new Vector2(10,14),
-                });
-            }
-            else
-            {
-                e.makeAllObjectsTemporarilyInvisible(new List<Vector2>()
-                {
-                    new Vector2(6,5),
-                    new Vector2(7,5),
-                    new Vector2(8,5),
-                    new Vector2(9,5),
-                });
-            }
-            e.globalFadeIn();
-
-            e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
-            e.npcFaceDirection(spouse, EventHelper.FacingDirection.Right);
-
-            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_0");
-            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_1");
-
-            //Add player's favorite gift to inventory.
-            e.givePlayerFavoriteGift();
-
-            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_2");
-            e.speakWithTranslatedMessage(spouse, "SpouseBirthdayEvent_" + spouse.Name + "_3");
-
-            e.emoteFarmer_Heart();
-            e.emote_Heart(spouse.Name);
-
-            e.globalFadeOut(0.010);
-            e.setViewportPosition(-400, -400);
-
-            e.addTranslatedMessageToBeShown("SpousePartyOver");
-
-            e.end();
-
-            return e;
-
-        }
-
-
-        public static EventHelper MarriedBirthday_Abigail_farmHouseLevel_1()
-        {
-            return MarriedBirthday(EventIds.Married_AbigailBirthdayParty_Farmhouse_1, 19902, 1, "Abigail");
-        }
-
-        public static EventHelper MarriedBirthday_Abigail_farmHouseLevel_2()
-        {
-            return MarriedBirthday(EventIds.Married_AbigailBirthdayParty_Farmhouse_2, 19903, 2, "Abigail");
-        }
-
-        public static EventHelper MarriedBirthday_Penny_farmhouseLevel_1()
-        {
-            return MarriedBirthday(EventIds.Married_PennyBirthdayParty_Farmhouse_1, 19904, 1, "Penny");
-        }
-        public static EventHelper MarriedBirthday_Penny_farmhouseLevel_2()
-        {
-            return MarriedBirthday(EventIds.Married_PennyBirthdayParty_Farmhouse_1, 19905, 2, "Penny");
-        }
-
-        public static EventHelper MarriedBirthday_Maru_farmhouseLevel_1()
-        {
-            return MarriedBirthday(EventIds.Married_MaruBirthdayParty_Farmhouse_1, 19906, 1, "Maru");
-        }
-
-        public static EventHelper MarriedBirthday_Maru_farmhouseLevel_2()
-        {
-            return MarriedBirthday(EventIds.Married_MaruBirthdayParty_Farmhouse_2, 19907, 2, "Maru");
-        }
-
-        public static EventHelper MarriedBirthday_Leah_farmhouseLevel_1()
-        {
-            return MarriedBirthday(EventIds.Married_LeahBirthdayParty_Farmhouse_1, 19908, 1, "Leah");
-        }
-
-        public static EventHelper MarriedBirthday_Leah_farmhouseLevel_2()
-        {
-            return MarriedBirthday(EventIds.Married_LeahBirthdayParty_Farmhouse_2, 19909, 2, "Leah");
-        }
-
-        public static EventHelper MarriedBirthday_Emily_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_EmilyBirthdayParty_Farmhouse_1, 19910, 1, "Emily");
-        }
-
-        public static EventHelper MarriedBirthday_Emily_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_EmilyBirthdayParty_Farmhouse_2, 19911, 2, "Emily");
-        }
-
-        public static EventHelper MarriedBirthday_Haley_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_HaleyBirthdayParty_Farmhouse_1, 19912, 1, "Haley");
-        }
-
-        public static EventHelper MarriedBirthday_Haley_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_HaleyBirthdayParty_Farmhouse_2, 19913, 2, "Haley");
-        }
-
-        public static EventHelper MarriedBirthday_Sam_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_SamBirthdayParty_Farmhouse_1, 19914, 1, "Sam");
-        }
-
-        public static EventHelper MarriedBirthday_Sam_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_SamBirthdayParty_Farmhouse_2, 19915, 2, "Sam");
-        }
-
-        public static EventHelper MarriedBirthday_Sebastian_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_1, 19916, 1, "Sebastian");
-        }
-
-        public static EventHelper MarriedBirthday_Sebastian_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_2, 19917, 2, "Sebastian");
-        }
-
-        public static EventHelper MarriedBirthday_Harvey_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_1, 19918, 1, "Harvey");
-        }
-
-        public static EventHelper MarriedBirthday_Harvey_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_SebastianBirthdayParty_Farmhouse_2, 19919, 2, "Harvey");
-        }
-
-        public static EventHelper MarriedBirthday_Elliott_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_ElliottBirthdayParty_Farmhouse_1, 19920, 1, "Elliott");
-        }
-
-        public static EventHelper MarriedBirthday_Elliott_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_ElliottBirthdayParty_Farmhouse_2, 19921, 2, "Elliott");
-        }
-
-        public static EventHelper MarriedBirthday_Shane_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_ShaneBirthdayParty_Farmhouse_1, 19922, 1, "Shane");
-        }
-
-        public static EventHelper MarriedBirthday_Shane_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_ShaneBirthdayParty_Farmhouse_1, 19923, 2, "Shane");
-        }
-
-        public static EventHelper MarriedBirthday_Alex_farmhouseLevel1()
-        {
-            return MarriedBirthday(EventIds.Married_AlexBirthdayParty_Farmhouse_1, 19924, 1, "Alex");
-        }
-
-        public static EventHelper MarriedBirthday_Alex_farmhouseLevel2()
-        {
-            return MarriedBirthday(EventIds.Married_AlexBirthdayParty_Farmhouse_2, 19925, 2, "Alex");
-        }
-
         /// <summary>
         /// </summary>
         /// <returns></returns>
@@ -1125,6 +924,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             return e;
         }
 
+        /// <summary>
+        /// Birthday event for Joja member.
+        /// </summary>
+        /// <returns></returns>
         public static EventHelper JojaBirthday()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
@@ -1163,6 +966,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         }
 
+        /// <summary>
+        /// The event where Lewis will ask the player for their birthday.
+        /// </summary>
+        /// <returns></returns>
         public static EventHelper LewisAsksPlayerForBirthday()
         {
             List<EventPrecondition> conditions = new List<EventPrecondition>();
@@ -1197,120 +1004,61 @@ namespace Omegasis.HappyBirthday.Framework.Events
         }
 
 
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Abigail()
+
+        /// <summary>
+        /// An event wrapper that manages the birthday party event for the player for when they are married for when the farmhouse is level 1.
+        /// </summary>
+        /// <returns></returns>
+        public static MarriedEventHelper MarriedBirthday_farmhouseLevel1()
         {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Abigail, 19928, 1, "Abigail");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Maru()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Maru, 19929, 1, "Maru");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Leah()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Leah, 19930, 1, "Leah");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Penny()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Penny, 19931, 1, "Penny");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Emily()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Emily, 19932, 1, "Emily");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Haley()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Haley, 19933, 1, "Haley");
+            return MarriedBirthday_AllSpouses(EventIds.Married_BirthdayParty_Farmhouse_2, 19952, 1);
         }
 
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Alex()
+        /// <summary>
+        /// An event wrapper that manages the birthday party event for the player for when they are married for when the farmhouse is level 2.
+        /// </summary>
+        /// <returns></returns>
+        public static MarriedEventHelper MarriedBirthday_farmhouseLevel2()
         {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Alex, 19934, 1, "Alex");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Shane()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Shane, 19935, 1, "Shane");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Sam()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Sam, 19936, 1, "Sam");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Sebastian()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Sebastian, 19937, 1, "Sebastian");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Elliott()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Elliott, 19938, 1, "Elliott");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1_Harvey()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1_Harvey, 19939, 1, "Harvey");
+            return MarriedBirthday_AllSpouses(EventIds.Married_BirthdayParty_Farmhouse_2, 19953, 2);
         }
 
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Abigail()
+        /// <summary>
+        /// An event wrapper for the birthday event when the spouse asks the player for their prefered birthday gift when the farmhouse is level 1.
+        /// </summary>
+        /// <returns></returns>
+        public static MarriedEventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel1()
         {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Abigail, 19940, 1, "Abigail");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Maru()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Maru, 19941, 1, "Maru");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Leah()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Leah, 19942, 1, "Leah");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Penny()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Penny, 19943, 1, "Penny");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Emily()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Emily, 19944, 1, "Emily");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Haley()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Haley, 19945, 1, "Haley");
+            return AnySpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_1, 19954, 1);
         }
 
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Alex()
+        /// <summary>
+        /// An event wrapper for the birthday event when the spouse asks the player for their prefered birthday gift when the farmhouse is level 2.
+        /// </summary>
+        /// <returns></returns>
+        public static MarriedEventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2()
         {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Alex, 19946, 1, "Alex");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Shane()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Shane, 19947, 1, "Shane");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Sam()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Sam, 19948, 1, "Sam");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Sebastian()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Sebastian, 19949, 1, "Sebastian");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Elliott()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Elliott, 19950, 1, "Elliott");
-        }
-        public static EventHelper SpouseAsksPlayerForFavoriteGift_farmhouseLevel2_Harvey()
-        {
-            return SpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2_Harvey, 19951, 1, "Harvey");
+            return AnySpouseAsksPlayerForFavoriteGift(EventIds.AskPlayerForFavoriteGift_Farmhouse_2, 19955, 1);
         }
 
-
-
-
-        public static EventHelper SpouseAsksPlayerForFavoriteGift(string EventId, int EventIntId, int FarmHouseLevel, string SpouseName)
+        /// <summary>
+        /// The actual creation of the event data for the birthday party for when the player is married.
+        /// </summary>
+        /// <param name="EventId"></param>
+        /// <param name="EventIntId"></param>
+        /// <param name="FarmHouseLevel"></param>
+        /// <returns></returns>
+        public static MarriedEventHelper MarriedBirthday_AllSpouses(string EventId, int EventIntId, int FarmHouseLevel)
         {
-            NPC spouse = Game1.getCharacterFromName(SpouseName);
+            string spouseName = MarriedEventHelper.SPOUSE_IDENTIFIER_TOKEN;
 
             List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new GameLocationIsHomePrecondition());
-            conditions.Add(new HasChosenFavoriteGiftPrecondition(false));
 
             conditions.Add(new FarmHouseLevelPrecondition(FarmHouseLevel));
-            conditions.Add(new IsMarriedToPrecondition(SpouseName));
+            conditions.Add(new IsMarriedPrecondition());
 
 
             Vector2 spouseStartTile;
@@ -1327,8 +1075,96 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 playerStartTile = new Vector2(9, 5);
             }
 
-            EventHelper e = new EventHelper(EventId, EventIntId, 2, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
-                new EventStartData.NPCData(spouse,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
+            MarriedEventHelper e = new MarriedEventHelper(EventId, EventIntId, 2, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(spouseName,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
+            }));
+            e.playerFaceDirection(EventHelper.FacingDirection.Left);
+
+
+            if (FarmHouseLevel == 2)
+            {
+                e.makeAllObjectsTemporarilyInvisible(new List<Vector2>()
+                {
+                    new Vector2(7,14),
+                    new Vector2(8,14),
+                    new Vector2(9,14),
+                    new Vector2(10,14),
+                });
+            }
+            else
+            {
+                e.makeAllObjectsTemporarilyInvisible(new List<Vector2>()
+                {
+                    new Vector2(6,5),
+                    new Vector2(7,5),
+                    new Vector2(8,5),
+                    new Vector2(9,5),
+                });
+            }
+            e.globalFadeIn();
+
+            e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
+            e.npcFaceDirection(spouseName, EventHelper.FacingDirection.Right);
+
+            e.speakWithTranslatedMessage(spouseName, "SpouseBirthdayEvent_" + spouseName + "_0");
+            e.speakWithTranslatedMessage(spouseName, "SpouseBirthdayEvent_" + spouseName + "_1");
+
+            //Add player's favorite gift to inventory.
+            e.givePlayerFavoriteGift();
+
+            e.speakWithTranslatedMessage(spouseName, "SpouseBirthdayEvent_" + spouseName + "_2");
+            e.speakWithTranslatedMessage(spouseName, "SpouseBirthdayEvent_" + spouseName + "_3");
+
+            e.emoteFarmer_Heart();
+            e.emote_Heart(spouseName);
+
+            e.globalFadeOut(0.010);
+            e.setViewportPosition(-400, -400);
+
+            e.addTranslatedMessageToBeShown("SpousePartyOver");
+
+            e.end();
+
+            return e;
+
+        }
+
+        /// <summary>
+        /// The actual creation of the event where the player's spouse will ask them what their favorite gift is.
+        /// </summary>
+        /// <param name="EventId"></param>
+        /// <param name="EventIntId"></param>
+        /// <param name="FarmHouseLevel"></param>
+        /// <returns></returns>
+        public static MarriedEventHelper AnySpouseAsksPlayerForFavoriteGift(string EventId, int EventIntId, int FarmHouseLevel)
+        {
+            string spouseName = MarriedEventHelper.SPOUSE_IDENTIFIER_TOKEN;
+
+            List<EventPrecondition> conditions = new List<EventPrecondition>();
+            conditions.Add(new TimeOfDayPrecondition(600, 2600));
+            conditions.Add(new GameLocationIsHomePrecondition());
+            conditions.Add(new HasChosenFavoriteGiftPrecondition(false));
+
+            conditions.Add(new FarmHouseLevelPrecondition(FarmHouseLevel));
+            conditions.Add(new IsMarriedPrecondition());
+
+
+            Vector2 spouseStartTile;
+            Vector2 playerStartTile;
+            if (FarmHouseLevel == 2)
+            {
+                spouseStartTile = new Vector2(7, 14);
+                playerStartTile = new Vector2(10, 14);
+            }
+            else
+            {
+                //Level 1
+                spouseStartTile = new Vector2(6, 5);
+                playerStartTile = new Vector2(9, 5);
+            }
+
+            MarriedEventHelper e = new MarriedEventHelper(EventId, EventIntId, 2, conditions, new EventStartData("playful", (int)spouseStartTile.X, (int)spouseStartTile.Y, new EventStartData.FarmerData((int)playerStartTile.X, (int)playerStartTile.Y, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+                new EventStartData.NPCData(spouseName,(int)spouseStartTile.X,(int)spouseStartTile.Y, EventHelper.FacingDirection.Up),
             }, false));
 
             e.playerFaceDirection(EventHelper.FacingDirection.Left);
@@ -1336,11 +1172,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.globalFadeIn();
 
             e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
-            e.npcFaceDirection(spouse, EventHelper.FacingDirection.Right);
+            e.npcFaceDirection(spouseName, EventHelper.FacingDirection.Right);
 
-            e.speakWithTranslatedMessage(spouse, "SpouseAskPlayerForFavoriteGift_0");
+            e.speakWithTranslatedMessage(spouseName, "SpouseAskPlayerForFavoriteGift_0");
             e.addAskForFavoriteGift();
-            e.speakWithTranslatedMessage(spouse, "SpouseAskPlayerForFavoriteGift_1");
+            e.speakWithTranslatedMessage(spouseName, "SpouseAskPlayerForFavoriteGift_1");
 
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);

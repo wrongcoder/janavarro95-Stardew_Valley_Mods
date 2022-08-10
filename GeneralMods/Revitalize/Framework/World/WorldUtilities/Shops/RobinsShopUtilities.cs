@@ -9,6 +9,8 @@ using Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.Player;
+using Omegasis.Revitalize.Framework.World.Structures;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using static Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.ShopUtilities;
@@ -29,6 +31,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         {
             RobinsShop_NumberOfHardwoodToSellToday = Game1.random.Next(RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMinStockAmount, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMaxStockAmount + 1);
         }
+
+
 
         public static void AddItemsToRobinsShop(ShopMenu Menu)
         {
