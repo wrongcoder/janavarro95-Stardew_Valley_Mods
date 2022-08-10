@@ -52,10 +52,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public override string getEventString()
         {
+            
             string eventData = base.getEventString();
 
             //We need to keep this check here so that we can write the .json string data to disk. Otherwise with the correct preconiditions, this check will never occur when running the actual event.
-            if (Game1.player.getSpouse() == null)
+            if (Game1.player.getSpouse() == null || BirthdayEventUtilities.NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON)
             {
                 return eventData;
             }

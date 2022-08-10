@@ -109,12 +109,23 @@ namespace Omegasis.HappyBirthday.Framework
             return "";
         }
 
-
+        /// <summary>
+        /// Gets an event string from a Happy Birthday content pack.
+        /// </summary>
+        /// <param name="Key"></param>
+        /// <returns></returns>
         public virtual string getEventString(string Key)
         {
             return this.getEventString(Key, LocalizationUtilities.GetCurrentLanguageCodeString(), true);
         }
 
+        /// <summary>
+        /// Gets an event string from a Happy Birthday content pack.
+        /// </summary>
+        /// <param name="Key">The key in the .json file for the dialogue to load.</param>
+        /// <param name="LanguageCode">The language code to check against content packs to appropriately match translations./</param>
+        /// <param name="DefaultToEnglish">Should the mod default to the english localization if no content packs are found for the current mod translation?</param>
+        /// <returns></returns>
         public virtual string getEventString(string Key, string LanguageCode, bool DefaultToEnglish)
         {
             if (LanguageCode == LocalizationUtilities.GetEnglishLanguageCode() && DefaultToEnglish == true)

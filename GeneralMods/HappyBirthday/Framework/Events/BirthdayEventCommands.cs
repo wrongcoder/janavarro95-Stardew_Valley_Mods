@@ -89,6 +89,27 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         }
 
+        /// <summary>
+        /// Speaks with a specific dialogue line loaded from a specific dialogue file.
+        /// </summary>
+        /// <param name="Event"></param>
+        /// <param name="EventData"></param>
+        public static void speakWithTranslatedMessageFromFile(Event Event, string[] EventData)
+        {
+            string fileName = EventData[1];
+            string speakerName = EventData[2];
+            string dialogueKey = EventData[3];
+
+            string finalMessage = BirthdayEventUtilities.GetEventString(dialogueKey);
+            List<string> eventCommands = Game1.CurrentEvent.eventCommands.ToList();
+            EventHelper helper = new EventHelper();
+            helper.speak(speakerName, finalMessage);
+            eventCommands.Insert(Game1.CurrentEvent.CurrentCommand + 1, helper.EventData);
+            Event.eventCommands = eventCommands.ToArray();
+            Event.CurrentCommand++;
+
+        }
+
         public static void setShouldShowChooseBirthdayMenu(EventManager EventManager, string EventData)
         {
             BirthdayEventUtilities.ShouldAskPlayerForBirthday = true;

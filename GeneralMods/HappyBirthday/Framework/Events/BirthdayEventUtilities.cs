@@ -16,6 +16,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
 {
     public static class BirthdayEventUtilities
     {
+
+        public static bool NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON;
+
         public static EventManager BirthdayEventManager;
         public static bool ShouldAskPlayerForBirthday;
         public static bool ShouldAskPlayerForFavoriteGift;
@@ -138,7 +141,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public static void InitializeBirthdayEvents()
         {
-
+            NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON = true;
 
             List<EventHelper> defaultBirthdayEvents = new List<EventHelper>()
             {
@@ -227,6 +230,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
                     HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile(Path.Combine(relativePath, eventHelper.eventStringId + ".json"), eventHelper);
 
                 }
+            NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON = false;
         }
 
         public static void UpdateEventManager()
@@ -245,13 +249,17 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <returns></returns>
         public static string GetEventString(string Key)
         {
-
             string eventString = HappyBirthdayModCore.Instance.translationInfo.getEventString(Key);
-            eventString = eventString.Replace("{AffectionateSpouseWord}", HappyBirthdayModCore.Instance.birthdayMessages.getAffectionateSpouseWord());
-            eventString = eventString.Replace("{TimeOfDay}", HappyBirthdayModCore.Instance.birthdayMessages.getTimeOfDayString());
-            eventString = eventString.Replace("@", Game1.player.Name);
+            return ReplaceSpecialDialogueTokens(eventString);
+        }
 
-            return eventString;
+        public static string ReplaceSpecialDialogueTokens(string originalString)
+        {
+            string modifiedString = originalString;
+            modifiedString = modifiedString.Replace("{AffectionateSpouseWord}", HappyBirthdayModCore.Instance.birthdayMessages.getAffectionateSpouseWord());
+            modifiedString = modifiedString.Replace("{TimeOfDay}", HappyBirthdayModCore.Instance.birthdayMessages.getTimeOfDayString());
+            modifiedString = modifiedString.Replace("@", Game1.player.Name);
+            return modifiedString;
         }
 
     }
